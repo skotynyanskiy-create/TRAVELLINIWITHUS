@@ -1,0 +1,34 @@
+export const DESTINATION_GROUPS = ['Italia', 'Europa', 'Asia', 'Americhe', 'Africa', 'Oceania'] as const;
+
+export const EXPERIENCE_TYPES = [
+  'Posti particolari',
+  'Food & Ristoranti',
+  'Locali insoliti',
+  'Hotel con carattere',
+  'Weekend romantici',
+  'Borghi e città d\'arte',
+  'Passeggiate panoramiche',
+  'Relax, terme e spa',
+  'Esperienze insolite',
+  'Gite e day trip',
+] as const;
+
+export type DestinationGroup = (typeof DESTINATION_GROUPS)[number];
+export type ExperienceType = (typeof EXPERIENCE_TYPES)[number];
+
+export function slugifyExperienceType(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/&/g, 'e')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+export function getExperienceTypeFromQuery(rawValue: string | null) {
+  if (!rawValue) {
+    return null;
+  }
+
+  return EXPERIENCE_TYPES.find((item) => slugifyExperienceType(item) === rawValue) || null;
+}
+

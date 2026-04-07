@@ -1,0 +1,32 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Travelliniwithus: Dev Server",
+      "type": "npm",
+      "script": "dev",
+      "isBackground": true,
+      "options": {
+        "env": {
+          "PORT": "3001"
+        }
+      },
+      "problemMatcher": {
+        "owner": "custom",
+        "pattern": {
+          "regexp": "."
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*npm run dev.*",
+          "endsPattern": ".*Server running on http://localhost:3001.*"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": false
+      }
+    }
+  ]
+}
