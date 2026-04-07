@@ -90,8 +90,8 @@ export default function Newsletter({ variant = 'sand', source = 'newsletter_form
           <motion.div key="success-compact" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-3 rounded-2xl bg-[var(--color-accent-soft)] px-5 py-4">
             <CheckCircle className="text-[var(--color-accent)] shrink-0" size={20} />
             <div>
-              <p className="text-sm font-semibold text-zinc-800">Sei ufficialmente un Travellino!</p>
-              <p className="text-xs text-zinc-500">Controlla la tua email per il PDF gratuito.</p>
+              <p className="text-sm font-semibold text-zinc-800">Iscrizione confermata.</p>
+              <p className="text-xs text-zinc-500">Ti aggiorneremo con i prossimi contenuti utili.</p>
             </div>
           </motion.div>
         )}
@@ -121,8 +121,8 @@ export default function Newsletter({ variant = 'sand', source = 'newsletter_form
               <div className="flex items-start gap-4 bg-[var(--color-gold-soft)] border border-[var(--color-gold)]/20 rounded-2xl px-6 py-5 mb-8">
                 <Gift className="text-[var(--color-gold)] shrink-0 mt-0.5" size={22} />
                 <div>
-                  <p className="text-sm font-semibold text-zinc-800 mb-1">Gratis per te: La Checklist del Viaggiatore Perfetto</p>
-                  <p className="text-xs text-zinc-500 leading-relaxed">App, siti, trucchi e packing list che usiamo ogni viaggio. PDF scaricabile subito dopo l'iscrizione.</p>
+                  <p className="text-sm font-semibold text-zinc-800 mb-1">Solo contenuti utili, senza rumore.</p>
+                  <p className="text-xs text-zinc-500 leading-relaxed">Idee viaggio, strumenti testati e aggiornamenti sui nuovi contenuti del progetto. Quando prepariamo risorse bonus, le condividiamo prima qui.</p>
                 </div>
               </div>
 
@@ -180,7 +180,7 @@ export default function Newsletter({ variant = 'sand', source = 'newsletter_form
                         </>
                       ) : (
                         <>
-                          Iscriviti e ricevi il PDF gratis <Mail size={16} />
+                          Iscriviti alla newsletter <Mail size={16} />
                         </>
                       )}
                     </Button>
@@ -204,13 +204,13 @@ export default function Newsletter({ variant = 'sand', source = 'newsletter_form
                       <CheckCircle size={40} />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-serif mb-3 text-zinc-900">Sei ufficialmente un Travellino!</h3>
+                      <h3 className="text-2xl font-serif mb-3 text-zinc-900">Iscrizione confermata.</h3>
                       <p className="text-zinc-600 text-sm leading-relaxed">
-                        Controlla la tua email — ti abbiamo inviato il PDF gratuito e i link ai nostri contenuti migliori.
+                        Da ora ti aggiorneremo con i prossimi contenuti utili, le novita del progetto e le risorse che decidiamo di condividere.
                       </p>
                     </div>
                     <div className="bg-[var(--color-accent)]/8 rounded-xl p-4 text-xs text-zinc-600">
-                      Non vedi l'email? Controlla nello spam e aggiungici ai contatti.
+                      Puoi disiscriverti quando vuoi direttamente dalle email della newsletter.
                     </div>
                   </motion.div>
                 )}

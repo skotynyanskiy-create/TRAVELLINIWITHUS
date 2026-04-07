@@ -104,11 +104,11 @@ export default function ExitIntentPopup() {
                 </span>
               </div>
               <h2 className="text-2xl font-serif leading-snug md:text-3xl">
-                Hai sentito parlare della nostra{' '}
-                <span className="italic text-[var(--color-accent)]">Checklist del Viaggiatore</span>?
+                Vuoi ricevere i nostri{' '}
+                <span className="italic text-[var(--color-accent)]">prossimi contenuti utili</span>?
               </h2>
               <p className="mt-3 text-sm font-normal leading-relaxed text-white/85">
-                Scaricala gratis. Solo posti veri, budget travel e food experience — direttamente in inbox.
+                Posti veri, budget travel, food experience e aggiornamenti sul progetto direttamente in inbox.
               </p>
             </div>
 

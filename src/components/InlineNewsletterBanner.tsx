@@ -56,7 +56,7 @@ export default function InlineNewsletterBanner({ source = 'article_inline' }: In
               <div className="flex-1 sm:min-w-[220px]">
                 <p className="text-sm font-bold text-[var(--color-ink)]">Ti è piaciuto questo articolo?</p>
                 <p className="mt-0.5 text-xs leading-relaxed text-black/55">
-                  Ricevi i prossimi in inbox + la Checklist del Viaggiatore in PDF, gratis.
+                  Ricevi i prossimi contenuti utili direttamente in inbox, senza spam e senza rumore.
                 </p>
               </div>
             </div>
@@ -80,7 +80,7 @@ export default function InlineNewsletterBanner({ source = 'article_inline' }: In
                 ) : (
                   <>
                     <Mail size={14} />
-                    Iscriviti gratis
+                    Iscriviti
                   </>
                 )}
               </button>
@@ -96,8 +96,8 @@ export default function InlineNewsletterBanner({ source = 'article_inline' }: In
           >
             <CheckCircle className="shrink-0 text-[var(--color-accent)]" size={28} />
             <div>
-              <p className="font-bold text-[var(--color-ink)]">Sei ufficialmente un Travellino!</p>
-              <p className="text-sm text-black/50">Controlla la tua email — il PDF è in arrivo.</p>
+              <p className="font-bold text-[var(--color-ink)]">Iscrizione confermata.</p>
+              <p className="text-sm text-black/50">Ti aggiorneremo con i prossimi contenuti utili.</p>
             </div>
           </motion.div>
         )}

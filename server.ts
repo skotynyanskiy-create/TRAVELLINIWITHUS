@@ -330,8 +330,8 @@ async function fetchArticle(slug: string): Promise<ArticleMeta | null> {
 async function fetchDemoSettings(): Promise<DemoSettings> {
   if (!firebaseConfig.projectId || !firebaseConfig.firestoreDatabaseId) {
     return {
-      showEditorialDemo: true,
-      showShopDemo: true,
+      showEditorialDemo: false,
+      showShopDemo: false,
     };
   }
 
@@ -342,14 +342,14 @@ async function fetchDemoSettings(): Promise<DemoSettings> {
     const showShopDemo = fields?.showShopDemo?.booleanValue;
 
     return {
-      showEditorialDemo: typeof showEditorialDemo === 'boolean' ? showEditorialDemo : true,
-      showShopDemo: typeof showShopDemo === 'boolean' ? showShopDemo : true,
+      showEditorialDemo: typeof showEditorialDemo === 'boolean' ? showEditorialDemo : false,
+      showShopDemo: typeof showShopDemo === 'boolean' ? showShopDemo : false,
     };
   } catch (error) {
     console.error('Error fetching demo settings:', error);
     return {
-      showEditorialDemo: true,
-      showShopDemo: true,
+      showEditorialDemo: false,
+      showShopDemo: false,
     };
   }
 }
@@ -967,6 +967,7 @@ async function startServer() {
     }
 
     const brevoApiKey = process.env.BREVO_API_KEY;
+    let savedSubscription = false;
 
     if (brevoApiKey) {
       try {
@@ -987,6 +988,8 @@ async function startServer() {
         if (!response.ok && response.status !== 204) {
           const errorBody = await response.text();
           console.error('Brevo API error:', response.status, errorBody);
+        } else {
+          savedSubscription = true;
         }
       } catch (err) {
         console.error('Brevo request failed:', err);
@@ -999,8 +1002,16 @@ async function startServer() {
         type: 'newsletter',
         source,
       });
+      savedSubscription = true;
     } catch (err) {
       console.error('Firestore newsletter save failed:', err);
+    }
+
+    if (!savedSubscription) {
+      res.status(503).json({
+        error: 'Iscrizione temporaneamente non disponibile. Riprova tra poco.',
+      });
+      return;
     }
 
     res.json({ success: true });
