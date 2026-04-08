@@ -8,15 +8,11 @@ import {
   ArrowRight,
   Globe,
   Instagram,
-  MousePointerClick,
   Clapperboard,
   BriefcaseBusiness,
-  Star,
-  TrendingUp,
   ChevronDown,
 } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
-import { Link } from 'react-router-dom';
 import Breadcrumbs from '../components/Breadcrumbs';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
@@ -27,28 +23,28 @@ import JsonLd from '../components/JsonLd';
 import { fetchStats, SiteStats } from '../services/firebaseService';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
-import { BRAND_STATS } from '../config/site';
+import { BRAND_STATS, SITE_URL } from '../config/site';
 
 const FAQ_ITEMS = [
   {
     q: 'Quanto costa una collaborazione?',
-    a: 'Dipende dal formato e dalla complessità. Il nostro Starter Package parte da un singolo articolo, mentre le campagne Destination Focus e Bespoke sono costruite su misura. Contattaci con il tuo budget indicativo e troveremo la soluzione migliore.',
+    a: 'Dipende da formato, obiettivo e complessita. Partiamo da una base chiara, poi definiamo il progetto sul contesto reale.',
   },
   {
     q: 'Quali sono le tempistiche?',
-    a: 'Dalla conferma della collaborazione, servono generalmente 2-4 settimane per la produzione e pubblicazione. Per press trip o campagne complesse, i tempi possono variare — li definiamo insieme in fase di briefing.',
+    a: 'Di solito servono da due a quattro settimane dalla conferma. Per press trip o progetti piu ampi i tempi vengono definiti insieme.',
   },
   {
     q: 'Chi detiene i diritti sui contenuti?',
-    a: 'I contenuti pubblicati sui nostri canali restano di nostra proprietà. Per uso esterno (sito, ADV, stampa) prevediamo licenze specifiche incluse nel pacchetto Bespoke o negoziabili separatamente.',
+    a: 'I contenuti pubblicati sui nostri canali restano nostri. Se serve utilizzo esterno, definiamo la licenza nel progetto.',
   },
   {
-    q: "C'è un processo di approvazione?",
-    a: 'Manteniamo totale libertà editoriale — è il nostro valore principale. Il partner può verificare la correttezza dei dati fattuali, ma non interveniamo sul tono o sulle opinioni. È così che manteniamo la fiducia della community.',
+    q: "C'e un processo di approvazione?",
+    a: 'Manteniamo liberta editoriale piena. Il partner puo controllare i dati fattuali, non il giudizio o il tono del racconto.',
   },
   {
     q: 'Posso vedere esempi di lavori precedenti?',
-    a: 'Certo. Richiedi il nostro Media Kit dalla pagina dedicata: include case study, metriche reali e campioni di contenuti prodotti per partner nei settori travel, food e hospitality.',
+    a: 'Si. Quando il contatto e in linea condividiamo il materiale utile dal media kit e apriamo il confronto con piu contesto.',
   },
 ];
 
@@ -62,21 +58,24 @@ const faqStructuredData = {
   })),
 };
 
-function FaqSection() {
+function FaqSection({ title, description }: { title: string; description: string }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
     <Section>
       <div className="mx-auto max-w-3xl">
-        <div className="text-center mb-12">
-          <span className="font-script text-xl text-[var(--color-accent-warm)] mb-2 block">
-            Domande frequenti
+        <div className="mb-12 text-center">
+          <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+            FAQ
           </span>
-          <h2 className="text-4xl font-serif">Tutto quello che devi sapere</h2>
+          <h2 className="text-4xl font-serif">{title}</h2>
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-black/65">
+            {description}
+          </p>
         </div>
         <div className="space-y-4">
           {FAQ_ITEMS.map((item, idx) => (
-            <div key={idx} className="rounded-2xl border border-black/5 bg-white overflow-hidden">
+            <div key={idx} className="overflow-hidden rounded-2xl border border-black/5 bg-white">
               <button
                 onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
                 className="flex w-full items-center justify-between gap-4 p-6 text-left transition-colors hover:bg-[var(--color-sand)]"
@@ -110,14 +109,6 @@ function FaqSection() {
   );
 }
 
-function TikTokIcon({ size = 20 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.79 1.53V6.78a4.85 4.85 0 0 1-1.02-.09z" />
-    </svg>
-  );
-}
-
 export default function Collaborazioni() {
   const breadcrumbItems = [{ label: 'Collaborazioni' }];
   const [stats, setStats] = useState<SiteStats | null>(null);
@@ -145,7 +136,6 @@ export default function Collaborazioni() {
 
   const statsCards = [
     { icon: Instagram, value: resolvedStats.igFollowers, label: 'Follower Instagram' },
-    { icon: TikTokIcon, value: BRAND_STATS.tiktokFollowers, label: 'Follower TikTok' },
     { icon: Users, value: resolvedStats.monthlyReach, label: 'Reach mensile stimata' },
     { icon: BarChart, value: resolvedStats.engagementRate, label: 'Engagement rate' },
   ];
@@ -154,7 +144,8 @@ export default function Collaborazioni() {
     <PageLayout>
       <SEO
         title="Collaborazioni"
-        description="Collaboriamo con destinazioni, locali, brand e prodotti travel per creare contenuti visivi autentici, utili e credibili, coerenti con lo stile Travelliniwithus."
+        description="Collaboriamo con destinazioni, hospitality e brand travel per creare contenuti autentici, utili e coerenti con lo stile Travelliniwithus."
+        canonical={`${SITE_URL}/collaborazioni`}
       />
       <JsonLd data={faqStructuredData} />
 
@@ -174,23 +165,20 @@ export default function Collaborazioni() {
                 {pageContent.heroEyebrow}
               </span>
             </div>
-            <div className="relative mb-8 inline-block">
+
+            <div className="mb-8 inline-block">
               <h1 className="text-5xl font-serif leading-tight md:text-7xl">
                 {pageContent.heroTitleMain} <br />
                 <span className="italic text-black/60">{pageContent.heroTitleAccent}</span>
               </h1>
-              <motion.span
-                initial={{ opacity: 0, rotate: -10, scale: 0.8 }}
-                animate={{ opacity: 1, rotate: -5, scale: 1 }}
-                transition={{ delay: 1.1, duration: 0.8 }}
-                aria-hidden="true"
-                className="absolute -bottom-6 right-10 hidden font-script text-2xl text-[var(--color-accent)] opacity-80 sm:block md:text-3xl"
-              >
-                lavoriamo insieme
-              </motion.span>
             </div>
-            <p className="mb-10 text-lg font-light leading-relaxed text-black/70">
+
+            <p className="mb-8 text-lg font-light leading-relaxed text-black/70">
               {pageContent.heroDescription}
+            </p>
+
+            <p className="mb-8 max-w-2xl text-sm font-medium leading-relaxed text-[var(--color-accent-text)]">
+              {pageContent.heroProofLine}
             </p>
 
             <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -231,10 +219,9 @@ export default function Collaborazioni() {
             className="relative"
           >
             <div className="aspect-[4/5] overflow-hidden rounded-3xl shadow-2xl transition-transform duration-700 hover:rotate-0 lg:-rotate-2">
-              {/* TODO(@travelliniwithus): PLACEHOLDER — servono foto hero collaborazioni — coppia al lavoro con brand */}
               <OptimizedImage
                 src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1000&auto=format&fit=crop"
-                alt="Collaborazioni Travelliniwithus"
+                alt={pageContent.heroImageAlt}
                 className="h-full w-full object-cover"
               />
             </div>
@@ -243,25 +230,24 @@ export default function Collaborazioni() {
               <div className="mb-2 flex items-center gap-4">
                 <BriefcaseBusiness className="text-[var(--color-accent)]" size={24} />
                 <span className="text-2xl font-serif font-medium text-[var(--color-ink)]">
-                  Travel, hospitality, lifestyle
+                  Progetti selezionati
                 </span>
               </div>
               <p className="text-[10px] font-bold uppercase tracking-widest text-black/50">
-                Ambiti con cui lavoriamo meglio
+                Partnership con fit editoriale reale
               </p>
             </div>
           </motion.div>
         </div>
       </Section>
 
-      {/* Stats Section */}
       <Section className="my-20 rounded-[3rem] bg-[var(--color-accent-soft)] p-12 md:p-20">
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <h2 className="mb-6 text-4xl font-serif">{pageContent.statsTitle}</h2>
           <p className="text-lg font-normal text-black/70">{pageContent.statsDescription}</p>
         </div>
 
-        <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {statsCards.map((item, index) => (
             <motion.div
               key={item.label}
@@ -283,24 +269,20 @@ export default function Collaborazioni() {
         </div>
       </Section>
 
-      {/* Settori con cui lavoriamo */}
       <Section>
         <div className="mx-auto max-w-4xl text-center">
-          <span className="font-script text-xl text-[var(--color-accent-warm)] mb-2 block">
-            I nostri settori
+          <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+            Partner ideali
           </span>
-          <h2 className="mb-6 text-4xl font-serif">Con chi lavoriamo meglio</h2>
-          <p className="mb-12 text-lg font-normal text-black/70">
-            Collaboriamo con realtà nei settori travel, hospitality, food e lifestyle che
-            condividono i nostri valori di autenticità.
-          </p>
+          <h2 className="mb-6 text-4xl font-serif">{pageContent.partnerTitle}</h2>
+          <p className="mb-12 text-lg font-normal text-black/70">{pageContent.partnerDescription}</p>
         </div>
         <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
           {[
             { name: 'Travel & Tourism', sector: 'Destinazioni ed enti', icon: Globe },
             { name: 'Food & Dining', sector: 'Ristoranti e locali', icon: Camera },
             { name: 'Hospitality', sector: 'Hotel, B&B, agriturismi', icon: BriefcaseBusiness },
-            { name: 'Lifestyle', sector: 'Brand e prodotti travel', icon: Star },
+            { name: 'Lifestyle', sector: 'Brand e prodotti travel', icon: PenTool },
           ].map((brand, idx) => (
             <motion.div
               key={brand.name}
@@ -319,70 +301,6 @@ export default function Collaborazioni() {
               </p>
             </motion.div>
           ))}
-        </div>
-      </Section>
-
-      {/* Case Study */}
-      <Section className="my-16 rounded-[3rem] bg-[var(--color-ink)] p-12 text-white md:p-20">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 items-center">
-          <div>
-            <div className="mb-4 flex items-center gap-2">
-              <Star size={14} className="text-[var(--color-accent-warm)]" />
-              <span className="font-script text-xl text-[var(--color-accent-warm)]">
-                Case Study
-              </span>
-            </div>
-            <h2 className="mb-6 text-4xl font-serif leading-tight">
-              Contenuti autentici che generano risultati reali.
-            </h2>
-            <p className="mb-8 text-lg font-normal leading-relaxed text-white/85">
-              Ogni collaborazione segue il nostro approccio: visitiamo, testiamo, creiamo. Niente
-              contenuti generici — solo esperienze vissute che la nostra community riconosce come
-              autentiche.
-            </p>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <TrendingUp className="mb-3 text-[var(--color-accent)]" size={24} />
-                <div className="text-3xl font-serif text-[var(--color-accent)]">
-                  {BRAND_STATS.engagementRate}
-                </div>
-                <p className="mt-1 text-xs font-medium text-white/50">Engagement rate medio</p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <MousePointerClick className="mb-3 text-[var(--color-accent)]" size={24} />
-                <div className="text-3xl font-serif text-[var(--color-accent)]">
-                  {BRAND_STATS.monthlyReach}
-                </div>
-                <p className="mt-1 text-xs font-medium text-white/50">Reach mensile</p>
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col justify-center space-y-6">
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="rounded-2xl border border-white/10 bg-white/5 p-8"
-            >
-              <div className="mb-4 text-4xl font-serif text-[var(--color-accent)] opacity-30">
-                "
-              </div>
-              <p className="mb-6 text-base font-light italic leading-relaxed text-white/80">
-                Questi numeri non sono teoria: sono il risultato di anni di contenuti autentici,
-                community reale e collaborazioni costruite con criterio.
-              </p>
-              <p className="mb-8 text-sm font-normal leading-relaxed text-white/80">
-                Nel media kit trovi i dati completi, i case study e i feedback dei brand che hanno
-                già lavorato con noi.
-              </p>
-              <Link
-                to="/media-kit"
-                className="inline-flex items-center gap-2 rounded-xl bg-[var(--color-gold)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
-              >
-                Richiedi il media kit <ArrowRight size={14} />
-              </Link>
-            </motion.div>
-          </div>
         </div>
       </Section>
 
@@ -445,10 +363,11 @@ export default function Collaborazioni() {
             {pageContent.collaborationFormats.map((pkg, pkgIdx) => {
               const isHighlighted = pkg.highlight === 'true';
               const ctaLabels = [
-                'Richiedi preventivo Base',
-                'Richiedi preventivo Pro',
-                'Contattaci per un progetto',
+                'Apri un confronto base',
+                'Apri il confronto completo',
+                'Parliamone insieme',
               ];
+
               return (
                 <div
                   key={pkg.title}
@@ -459,8 +378,8 @@ export default function Collaborazioni() {
                   }`}
                 >
                   {isHighlighted && (
-                    <div className="mb-4 font-script text-lg text-[var(--color-accent-warm)]">
-                      Formato più completo
+                    <div className="mb-4 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-warm)]">
+                      Formato centrale
                     </div>
                   )}
                   <h3 className="mb-2 text-2xl font-serif">{pkg.title}</h3>
@@ -470,7 +389,7 @@ export default function Collaborazioni() {
                   <ul className="mb-10 flex-grow space-y-4">
                     {pkg.features.map((feature) => (
                       <li key={feature} className="flex items-center gap-3 text-sm text-white/80">
-                        <CheckCircle size={16} className="shrink-0 text-[var(--color-accent)]" />{' '}
+                        <CheckCircle size={16} className="shrink-0 text-[var(--color-accent)]" />
                         {feature}
                       </li>
                     ))}
@@ -489,22 +408,18 @@ export default function Collaborazioni() {
         </div>
       </Section>
 
-      {/* FAQ */}
-      <FaqSection />
+      <FaqSection title={pageContent.faqTitle} description={pageContent.faqDescription} />
 
-      {/* Final CTA */}
       <Section className="my-16">
         <div className="mx-auto max-w-3xl text-center">
-          <h2 className="mb-6 text-4xl font-serif">Pronto a creare qualcosa di autentico?</h2>
-          <p className="mb-10 text-lg font-normal text-black/70">
-            Raccontaci il tuo progetto. Ti rispondiamo entro 48 ore con una proposta su misura.
-          </p>
+          <h2 className="mb-6 text-4xl font-serif">{pageContent.finalCtaTitle}</h2>
+          <p className="mb-10 text-lg font-normal text-black/70">{pageContent.finalCtaDescription}</p>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            <Button to="/media-kit" variant="cta" size="lg" className="px-10 py-5">
-              Richiedi il Media Kit <ArrowRight size={18} />
+            <Button to={pageContent.finalPrimaryCtaLink} variant="cta" size="lg" className="px-10 py-5">
+              {pageContent.finalPrimaryCtaLabel} <ArrowRight size={18} />
             </Button>
-            <Button to="/contatti" variant="outline" size="lg" className="px-10 py-5">
-              Contattaci direttamente
+            <Button to={pageContent.finalSecondaryCtaLink} variant="outline" size="lg" className="px-10 py-5">
+              {pageContent.finalSecondaryCtaLabel}
             </Button>
           </div>
         </div>

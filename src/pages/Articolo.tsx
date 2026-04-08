@@ -74,10 +74,27 @@ function toIsoDateString(value: unknown): string | null {
   return null;
 }
 
-function getCategoryPath(category: string) {
-  if (category === 'Esperienze') return '/esperienze';
-  if (category === 'Destinazioni') return '/destinazioni';
-  return '/guide';
+function getCategoryContext(article: {
+  category?: string;
+  experienceTypes?: string[];
+  destinationGroup?: string;
+  country?: string;
+  region?: string;
+  city?: string;
+}) {
+  if (article.category === 'Esperienze') {
+    return { label: 'Esperienze', path: '/esperienze' };
+  }
+
+  if (article.category === 'Destinazioni') {
+    return { label: 'Destinazioni', path: '/destinazioni' };
+  }
+
+  if (article.experienceTypes && article.experienceTypes.length > 0) {
+    return { label: 'Esperienze', path: '/esperienze' };
+  }
+
+  return { label: 'Destinazioni', path: '/destinazioni' };
 }
 
 const articlesData: Record<string, ArticleData> = {
@@ -297,7 +314,7 @@ export default function Articolo() {
   })();
 
   const authorName = isDemoArticle ? BRAND_AUTHOR : article.author || BRAND_AUTHOR;
-  const categoryPath = getCategoryPath(article.category);
+  const categoryContext = getCategoryContext(article);
 
   const handleShare = async () => {
     const url = window.location.href;
@@ -363,7 +380,7 @@ export default function Articolo() {
   }
 
   const breadcrumbItems = [
-    { label: article.category, href: categoryPath },
+    { label: categoryContext.label, href: categoryContext.path },
     { label: article.location.split(',')[0], href: '/destinazioni' },
     { label: article.title.split(':')[0] }
   ];
@@ -402,9 +419,9 @@ export default function Articolo() {
         <article className="relative bg-white rounded-[2.5rem] overflow-hidden shadow-xl shadow-black/5 border border-black/5 mx-4 md:mx-8 lg:mx-12 my-8 pb-24">
           {/* Navigation Header */}
           <div className="absolute top-8 left-8 z-50 hidden md:block">
-            <Link to={categoryPath} className="flex items-center gap-2 text-white/60 hover:text-white transition-colors text-xs uppercase tracking-widest font-bold">
+            <Link to={categoryContext.path} className="flex items-center gap-2 text-white/60 hover:text-white transition-colors text-xs uppercase tracking-widest font-bold">
               <ArrowRight size={16} className="rotate-180" />
-              Torna ai Racconti
+              Torna a {categoryContext.label}
             </Link>
           </div>
 
@@ -412,7 +429,7 @@ export default function Articolo() {
             article={article}
             authorName={authorName}
             readingTime={readingTime}
-            categoryPath={categoryPath}
+            categoryPath={categoryContext.path}
             isSaved={isSaved}
             copied={copied}
             onToggleFavorite={() => toggleFavorite(currentSlug)}
@@ -713,19 +730,19 @@ export default function Articolo() {
 
             <SocialFollowCTA />
 
-            {/* Premium Shop Cross-Selling */}
+            {/* Editorial continuity */}
             <div className="mt-24 p-12 bg-ink rounded-3xl text-white flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden group shadow-2xl">
               <div className="absolute inset-0 bg-linear-to-r from-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
               <div className="relative z-10 max-w-xl">
                 <div className="flex items-center gap-3 mb-4 text-[10px] font-bold uppercase tracking-[0.24em] text-accent">
-                  Guide Premium
+                  Continuita editoriale
                 </div>
-                <h3 className="text-3xl font-serif md:text-4xl mb-4 leading-tight">Parti preparato davvero.</h3>
-                <p className="text-white/70 font-light text-lg">Itinerari pratici, consigli budget e guide scritte dopo averle vissute. Niente teoria — solo quello che funziona.</p>
+                <h3 className="text-3xl font-serif md:text-4xl mb-4 leading-tight">Continua da cio che ti serve davvero.</h3>
+                <p className="text-white/70 font-light text-lg">Se vuoi strumenti pratici apri le risorse. Se invece vuoi restare nel flusso editoriale, torna negli archivi e scegli il prossimo posto dal luogo o dall esperienza.</p>
               </div>
               <div className="relative z-10 shrink-0">
-                <Link to="/shop" className="inline-flex items-center justify-center bg-accent text-ink hover:bg-white px-8 py-4 rounded-full font-bold uppercase tracking-[0.2em] text-xs transition-colors shadow-lg">
-                  Esplora lo Shop <ArrowRight size={16} className="ml-2" />
+                <Link to="/risorse" className="inline-flex items-center justify-center bg-accent text-ink hover:bg-white px-8 py-4 rounded-full font-bold uppercase tracking-[0.2em] text-xs transition-colors shadow-lg">
+                  Apri le risorse <ArrowRight size={16} className="ml-2" />
                 </Link>
               </div>
             </div>

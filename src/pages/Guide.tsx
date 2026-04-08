@@ -114,6 +114,7 @@ function Guide() {
       <SEO
         title="Guide di Viaggio"
         description="Guide, idee e consigli pratici per organizzare meglio i viaggi, capire se un posto merita davvero e trovare spunti utili da salvare."
+        canonical={`${SITE_URL}/guide`}
       />
       <JsonLd
         data={{
@@ -132,26 +133,20 @@ function Guide() {
           <div>
             <div className="mb-6 flex items-center gap-4">
               <div className="h-[1px] w-12 bg-[var(--color-accent)]"></div>
-              <span className="font-script text-xl text-[var(--color-accent-warm)]">
-                Consigli pratici
+              <span className="text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)]">
+                Libreria editoriale
               </span>
             </div>
 
-            <div className="relative inline-block">
+            <div className="inline-block">
               <h1 className="text-display-1">
-                Tutte le <br className="md:hidden" />
-                <span className="italic text-black/60">Guide</span>
+                Guide per <br className="md:hidden" />
+                <span className="italic text-black/60">decidere meglio</span>
               </h1>
-              <motion.span
-                initial={{ opacity: 0, rotate: -10, scale: 0.8 }}
-                animate={{ opacity: 1, rotate: -5, scale: 1 }}
-                transition={{ delay: 0.8, duration: 0.8 }}
-                aria-hidden="true"
-                className="absolute -right-12 -bottom-6 hidden font-script text-2xl text-[var(--color-accent)] opacity-80 sm:block md:text-3xl"
-              >
-                scopri di più
-              </motion.span>
             </div>
+            <p className="mt-6 max-w-2xl text-base leading-relaxed text-black/65">
+              Qui trovi il lato piu ordinato del progetto: una libreria di guide, idee e articoli pensata per aiutarti a capire in fretta cosa vale il tuo tempo, cosa approfondire e da dove partire.
+            </p>
           </div>
 
           <div className="flex w-full flex-col items-center gap-6 rounded-[var(--radius-xl)] border border-black/5 bg-[var(--color-sand)] p-4 shadow-sm md:w-auto md:flex-row md:justify-between">
@@ -216,6 +211,10 @@ function Guide() {
               </select>
             </div>
           </div>
+        </div>
+
+        <div className="mb-10 rounded-[1.8rem] border border-[var(--color-accent)]/15 bg-[var(--color-accent-soft)] px-6 py-5 text-sm leading-relaxed text-[var(--color-accent-text)]">
+          Parti dalla categoria se stai cercando un tipo preciso di lettura. Usa la ricerca quando hai gia in mente un luogo, una guida o un tema da riaprire.
         </div>
 
         {!isLoading && filteredAndSortedGuides.length > 0 && (

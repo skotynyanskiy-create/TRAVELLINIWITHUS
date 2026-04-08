@@ -11,7 +11,6 @@ import {
   MessageCircle,
   Search,
   ShieldCheck,
-  ShoppingCart,
   User as UserIcon,
   X,
 } from 'lucide-react';
@@ -24,7 +23,6 @@ import {
 } from '../config/contentTaxonomy';
 import { siteContentDefaults } from '../config/siteContent';
 import { useAuth } from '../context/AuthContext';
-import { useCart } from '../context/CartContext';
 import { useFavorites } from '../context/FavoritesContext';
 import { useSiteContent } from '../hooks/useSiteContent';
 
@@ -46,7 +44,6 @@ export default function Navbar() {
   const location = useLocation();
   const { favorites } = useFavorites();
   const { user, isAdmin, signIn, signOut } = useAuth();
-  const { items: cartItems, setIsCartOpen } = useCart();
   const { data: navigationContent } = useSiteContent('navigation');
   const navigation = navigationContent ?? siteContentDefaults.navigation;
 
@@ -85,8 +82,6 @@ export default function Navbar() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
-
   const destinationLinks = useMemo(
     () =>
       DESTINATION_GROUPS.map((group) => ({
@@ -120,12 +115,7 @@ export default function Navbar() {
         href: '/esperienze',
         subLinks: [{ name: 'Tutte le esperienze', href: '/esperienze' }, ...experienceLinks],
       },
-      {
-        name: navigation.guidesLabel,
-        href: '/guide',
-      },
       { name: navigation.resourcesLabel, href: '/risorse' },
-      { name: navigation.shopLabel, href: '/shop' },
       {
         name: navigation.collaborationsLabel,
         href: '/collaborazioni',
@@ -262,19 +252,6 @@ export default function Navbar() {
               )}
             </Link>
 
-            <button
-              onClick={() => setIsCartOpen(true)}
-              className="relative transition-colors hover:text-[var(--color-accent)]"
-              aria-label="Carrello"
-            >
-              <ShoppingCart size={18} strokeWidth={1.5} />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[9px] font-bold text-white">
-                  {cartCount}
-                </span>
-              )}
-            </button>
-
             <div className="relative">
               {user ? (
                 <button
@@ -329,7 +306,7 @@ export default function Navbar() {
                       onClick={() => setIsUserMenuOpen(false)}
                       className="flex w-full items-center gap-2 px-4 py-2 text-left text-[10px] uppercase tracking-wider text-[var(--color-ink)] transition-colors hover:bg-zinc-50"
                     >
-                      <ShoppingCart size={12} /> I miei acquisti
+                      <UserIcon size={12} /> I miei acquisti
                     </Link>
                     {isAdmin && (
                       <Link
@@ -542,21 +519,6 @@ export default function Navbar() {
                     >
                       <Mail size={24} />
                     </a>
-                    <button
-                      onClick={() => {
-                        setIsCartOpen(true);
-                        setIsMobileMenuOpen(false);
-                      }}
-                      className="relative text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
-                      aria-label="Carrello"
-                    >
-                      <ShoppingCart size={24} />
-                      {cartCount > 0 && (
-                        <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-accent)] text-[10px] font-bold text-white">
-                          {cartCount}
-                        </span>
-                      )}
-                    </button>
                   </div>
                   <div>
                     {user ? (

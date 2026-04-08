@@ -27,16 +27,16 @@ const statusConfig = {
   pending: {
     label: 'In attesa',
     icon: Clock,
-    color: 'text-amber-600',
-    bg: 'bg-amber-50',
-    border: 'border-amber-200',
+    color: 'text-[var(--color-pending)]',
+    bg: 'bg-[var(--color-pending-soft)]',
+    border: 'border-[var(--color-pending-border)]',
   },
   cancelled: {
     label: 'Annullato',
     icon: AlertCircle,
-    color: 'text-red-500',
-    bg: 'bg-red-50',
-    border: 'border-red-200',
+    color: 'text-[var(--color-error)]',
+    bg: 'bg-[var(--color-error-soft)]',
+    border: 'border-[var(--color-error-border)]',
   },
 };
 
@@ -198,14 +198,14 @@ export default function MieiAcquisti() {
             <ShoppingBag size={48} className="mx-auto mb-6 text-black/20" />
             <h2 className="font-serif text-2xl mb-4">Nessun acquisto ancora</h2>
             <p className="text-black/60 font-light mb-8">
-              Non hai ancora effettuato acquisti. Esplora il nostro shop per trovare guide e
-              contenuti premium.
+              Non hai ancora effettuato acquisti. Nel frattempo puoi esplorare guide, destinazioni
+              e risorse utili del progetto.
             </p>
             <Link
-              to="/shop"
+              to="/risorse"
               className="inline-flex items-center gap-2 bg-[var(--color-accent)] text-[var(--color-ink)] hover:opacity-90 transition-opacity px-8 py-3.5 rounded-full font-bold text-xs uppercase tracking-widest"
             >
-              Vai allo shop
+              Apri le risorse
             </Link>
           </div>
         ) : (

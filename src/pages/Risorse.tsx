@@ -9,8 +9,8 @@ import {
   Smartphone,
   CheckCircle2,
   Shield,
-  ShoppingBag,
   BadgePercent,
+  NotebookPen,
 } from 'lucide-react';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Button from '../components/Button';
@@ -19,8 +19,10 @@ import Section from '../components/Section';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import { SITE_URL } from '../config/site';
+import { siteContentDefaults } from '../config/siteContent';
 import { fetchResources } from '../services/firebaseService';
 import { trackEvent } from '../services/analytics';
+import { useSiteContent } from '../hooks/useSiteContent';
 
 const resourceCategories = [
   {
@@ -143,13 +145,15 @@ const resourceHighlights = [
     text: 'Alcuni link sono affiliati. Se acquisti da quelli, per noi arriva una commissione senza costi extra per te.',
   },
   {
-    icon: <ShoppingBag className="text-[var(--color-accent)]" size={20} />,
-    title: 'Poche risorse, ben scelte',
+    icon: <NotebookPen className="text-[var(--color-accent)]" size={20} />,
+    title: 'Poche risorse, spiegate meglio',
     text: 'Preferiamo consigliarti meno cose, ma più chiare, più sensate e più in linea con il progetto.',
   },
 ];
 
 export default function Risorse() {
+  const { data: content } = useSiteContent('resources');
+  const pageContent = content ?? siteContentDefaults.resources;
   const [copied, setCopied] = useState(false);
 
   // Carica risorse da Firestore; fallback all'array hardcoded se la collection è vuota o assente
@@ -213,7 +217,7 @@ export default function Risorse() {
           >
             <div className="w-12 h-[1px] bg-[var(--color-accent)]"></div>
             <span className="uppercase tracking-widest text-sm font-semibold text-[var(--color-accent)]">
-              Travel toolkit
+              {pageContent.heroEyebrow}
             </span>
             <div className="w-12 h-[1px] bg-[var(--color-accent)]"></div>
           </motion.div>
@@ -224,7 +228,7 @@ export default function Risorse() {
             transition={{ delay: 0.1 }}
             className="text-display-1 mb-8"
           >
-            Risorse che <span className="italic text-black/60">usiamo davvero</span>
+            {pageContent.heroTitleMain} <span className="italic text-black/60">{pageContent.heroTitleAccent}</span>
           </motion.h1>
 
           <motion.p
@@ -233,8 +237,7 @@ export default function Risorse() {
             transition={{ delay: 0.2 }}
             className="text-lg text-black/70 font-light leading-relaxed"
           >
-            Questa non è una pagina piena di link a caso. È la nostra selezione di strumenti utili per organizzare
-            meglio un viaggio, risparmiare tempo, creare contenuti e muoversi con meno stress.
+            {pageContent.heroDescription}
           </motion.p>
 
           <motion.div
@@ -243,7 +246,7 @@ export default function Risorse() {
             transition={{ delay: 0.3 }}
             className="mx-auto mt-8 max-w-2xl rounded-[var(--radius-xl)] border border-black/5 bg-white px-6 py-5 text-sm leading-relaxed text-black/55 shadow-sm"
           >
-            Alcuni link presenti qui sono affiliati e ci permettono di sostenere il progetto senza costi extra per te.
+            {pageContent.disclosureText}{' '}
             Trovi i dettagli nella nostra{' '}
             <Link to="/disclaimer" className="font-medium text-[var(--color-accent)] underline underline-offset-2">
               informativa affiliazioni
@@ -350,19 +353,17 @@ export default function Risorse() {
           <div className="lg:w-1/2 relative z-10">
             <div className="flex items-center gap-4 mb-8">
               <div className="w-12 h-12 rounded-full bg-[var(--color-accent)]/10 flex items-center justify-center">
-                <ShoppingBag className="text-[var(--color-accent)]" size={24} />
+                <NotebookPen className="text-[var(--color-accent)]" size={24} />
               </div>
               <span className="uppercase tracking-widest text-sm font-bold text-[var(--color-accent)]">
-                Risorse selezionate
+                {pageContent.collageEyebrow}
               </span>
             </div>
             <h2 className="text-4xl md:text-5xl font-serif mb-6 leading-tight">
-              Pochi link, <br />
-              <span className="italic text-black/60">scelti meglio</span>
+              {pageContent.collageTitle}
             </h2>
             <p className="text-lg text-black/70 font-light mb-10 leading-relaxed">
-              Questa pagina non vuole sembrare uno shop pieno di prodotti. Vuole essere una raccolta ordinata di
-              strumenti, partner e servizi che hanno davvero un senso dentro il progetto e possono essere utili a chi viaggia.
+              {pageContent.collageDescription}
             </p>
             <Button to="/disclaimer" variant="primary" className="px-8 py-4 text-lg">
               Come gestiamo le affiliazioni
@@ -411,15 +412,14 @@ export default function Risorse() {
             <div className="flex items-center gap-4 mb-6">
               <BadgePercent className="text-[var(--color-accent)]" size={24} />
               <span className="uppercase tracking-widest text-xs font-semibold text-[var(--color-accent)]">
-                Vantaggi utili
+                {pageContent.benefitsEyebrow}
               </span>
             </div>
             <h2 className="text-4xl md:text-5xl font-serif mb-8 leading-tight">
-              Due vantaggi che usiamo <span className="italic text-white/60">anche noi</span>
+              {pageContent.benefitsTitle}
             </h2>
             <p className="text-lg text-white/70 font-light leading-relaxed mb-10">
-              Non vogliamo sommergerti di codici. Qui trovi solo due benefit semplici, chiari e davvero coerenti con
-              il viaggio.
+              {pageContent.benefitsDescription}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="bg-[#1C1C1C] p-8 rounded-[var(--radius-xl)] border border-white/8 hover:bg-[#242424] transition-colors group">
@@ -467,7 +467,7 @@ export default function Risorse() {
             </div>
           </div>
           <div className="absolute top-1/2 -right-20 -translate-y-1/2 opacity-10 pointer-events-none hidden lg:block">
-            <ShoppingBag size={500} strokeWidth={0.5} />
+            <NotebookPen size={500} strokeWidth={0.5} />
           </div>
         </motion.div>
 

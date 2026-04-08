@@ -7,7 +7,7 @@ import Button from '../components/Button';
 import PageLayout from '../components/PageLayout';
 import Section from '../components/Section';
 import SEO from '../components/SEO';
-import { CONTACTS, SOCIAL_COLORS } from '../config/site';
+import { CONTACTS, SOCIAL_COLORS, SITE_URL } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 
@@ -137,6 +137,7 @@ export default function Contatti() {
       <SEO
         title="Contatti"
         description="Scrivici per collaborazioni, proposte, media kit o richieste legate a Travelliniwithus. Qui trovi il canale giusto per contattarci."
+        canonical={`${SITE_URL}/contatti`}
       />
 
       <Section className="pt-8">
@@ -155,20 +156,11 @@ export default function Contatti() {
               </span>
               <div className="h-[1px] w-12 bg-[var(--color-accent)]"></div>
             </div>
-            <div className="relative mb-8 inline-block">
+            <div className="mb-8 inline-block">
               <h1 className="text-display-1">
                 {pageContent.heroTitleMain} <br />
                 <span className="italic text-black/60">{pageContent.heroTitleAccent}</span>
               </h1>
-              <motion.span
-                initial={{ opacity: 0, rotate: -10, scale: 0.8 }}
-                animate={{ opacity: 1, rotate: -5, scale: 1 }}
-                transition={{ delay: 0.8, duration: 0.8 }}
-                aria-hidden="true"
-                className="absolute -right-12 -bottom-6 hidden font-script text-2xl text-[var(--color-accent)] opacity-80 sm:block md:text-3xl"
-              >
-                scrivici!
-              </motion.span>
             </div>
             <p className="mt-8 text-lg font-light leading-relaxed text-black/70">
               {pageContent.heroDescription}
@@ -178,7 +170,12 @@ export default function Contatti() {
 
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-5">
           <div className="space-y-8 lg:col-span-2">
-            <h3 className="mb-6 text-2xl font-serif">I nostri recapiti</h3>
+            <div className="mb-6">
+              <h3 className="text-2xl font-serif">{pageContent.directChannelsTitle}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-black/55">
+                Prima scegli il canale piu adatto. I social restano secondari: sono utili per seguire il progetto, non per gestire richieste operative.
+              </p>
+            </div>
 
             <div className="group flex items-start gap-4 rounded-[var(--radius-xl)] border border-black/5 bg-[var(--color-sand)] p-6 transition-all duration-500 hover:shadow-[var(--shadow-premium)]">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-xl)] bg-white text-[var(--color-accent)] shadow-sm transition-transform duration-500 group-hover:scale-110">
@@ -227,12 +224,16 @@ export default function Contatti() {
               </div>
             </a>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="rounded-[var(--radius-xl)] border border-black/5 bg-white p-5 shadow-sm">
+              <div className="mb-4 text-[10px] font-bold uppercase tracking-[0.22em] text-black/42">
+                Presenza creator
+              </div>
+              <div className="grid grid-cols-2 gap-4">
               <a
                 href={CONTACTS.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-col items-center justify-center gap-3 rounded-[var(--radius-xl)] border border-black/5 bg-[var(--color-sand)] p-6 transition-all duration-500 hover:shadow-[var(--shadow-premium)]"
+                className="group flex flex-col items-center justify-center gap-3 rounded-[var(--radius-xl)] border border-black/5 bg-[var(--color-sand)] p-5 transition-all duration-500 hover:shadow-[var(--shadow-premium)]"
               >
                 <Instagram
                   size={28}
@@ -244,7 +245,7 @@ export default function Contatti() {
                 href={CONTACTS.tiktokUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-col items-center justify-center gap-3 rounded-[var(--radius-xl)] border border-black/5 bg-[var(--color-sand)] p-6 transition-all duration-500 hover:shadow-[var(--shadow-premium)]"
+                className="group flex flex-col items-center justify-center gap-3 rounded-[var(--radius-xl)] border border-black/5 bg-[var(--color-sand)] p-5 transition-all duration-500 hover:shadow-[var(--shadow-premium)]"
               >
                 <svg
                   className="h-7 w-7 text-black/60 transition-colors duration-500 group-hover:scale-110 group-hover:text-black"
@@ -255,6 +256,10 @@ export default function Contatti() {
                 </svg>
                 <span className="text-xs font-bold uppercase tracking-widest">TikTok</span>
               </a>
+              </div>
+              <p className="mt-4 text-sm leading-relaxed text-black/55">
+                Se vuoi seguirci o capire il tono del progetto, questi sono i canali giusti. Per collaborazioni, richieste o materiali usa email, WhatsApp o il form.
+              </p>
             </div>
 
             <div className="rounded-[var(--radius-xl)] border border-black/5 bg-white p-6 shadow-sm">
@@ -277,7 +282,10 @@ export default function Contatti() {
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.4 }}
                 >
-                  <h3 className="mb-8 text-3xl font-serif">{pageContent.formTitle}</h3>
+                  <h3 className="mb-3 text-3xl font-serif">{pageContent.formTitle}</h3>
+                  <p className="mb-8 max-w-2xl text-sm leading-relaxed text-black/55">
+                    {pageContent.formIntro}
+                  </p>
                   <form className="space-y-8" onSubmit={handleSubmit} noValidate>
                     <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
                       <div className="space-y-2">
@@ -351,7 +359,7 @@ export default function Contatti() {
                         </option>
                         <option value="press">Press trip / fam trip</option>
                         <option value="content">Richiesta creazione contenuti</option>
-                        <option value="article">Domanda su guide, articoli o risorse</option>
+                        <option value="article">Domanda su articoli, destinazioni o risorse</option>
                         <option value="other">Altro / informazioni generali</option>
                       </select>
                       {errors.topic && <p className="mt-1 text-xs text-red-500">{errors.topic}</p>}
@@ -429,10 +437,9 @@ export default function Contatti() {
                   <div className="mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-[var(--color-sand)] text-[var(--color-accent)] shadow-inner">
                     <CheckCircle size={48} />
                   </div>
-                  <h3 className="mb-4 text-4xl font-serif">Messaggio inviato</h3>
+                  <h3 className="mb-4 text-4xl font-serif">{pageContent.successTitle}</h3>
                   <p className="mx-auto mb-10 max-w-md text-lg font-normal leading-relaxed text-black/70">
-                    Grazie per averci contattato. Abbiamo ricevuto il tuo messaggio e ti
-                    risponderemo appena possibile, in genere entro 24-48 ore lavorative.
+                    {pageContent.successDescription}
                   </p>
                   <button
                     onClick={() => {

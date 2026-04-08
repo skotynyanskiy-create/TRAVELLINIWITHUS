@@ -42,6 +42,15 @@ const groupVisuals: Record<string, string> = {
     'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?q=80&w=1200&auto=format&fit=crop',
 };
 
+const groupDescriptions: Record<string, string> = {
+  Italia: 'Regioni, citta e tappe da usare quando vuoi scendere subito nel dettaglio.',
+  Europa: 'Capitali, city break e itinerari facili da confrontare tra loro.',
+  Asia: 'Mete, atmosfere e indirizzi da aprire quando vuoi uscire dai percorsi piu ovvi.',
+  Americhe: 'Viaggi lunghi, grandi citta e tappe da valutare con piu criterio.',
+  Africa: 'Paesaggi, strutture e spunti da leggere con taglio piu selettivo.',
+  Oceania: 'Ispirazioni piu rare, da aprire quando vuoi mete lontane ma ben filtrate.',
+};
+
 export default function Destinazioni() {
   const { data: demoContent } = useSiteContent('demo');
   const demoSettings = demoContent ?? siteContentDefaults.demo;
@@ -132,6 +141,24 @@ export default function Destinazioni() {
   }, [filteredItems, currentPage]);
 
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+  const featuredItem = paginatedItems[0];
+  const secondaryItems = paginatedItems.slice(1);
+  const activeGeoLabel =
+    selectedCity !== 'Tutti'
+      ? selectedCity
+      : selectedRegion !== 'Tutti'
+        ? selectedRegion
+        : selectedGroup !== 'Tutti'
+          ? selectedGroup
+          : 'Tutte le aree';
+  const activeGeoNote =
+    selectedCity !== 'Tutti'
+      ? 'Stai guardando il livello piu preciso del filtro geografico.'
+      : selectedRegion !== 'Tutti'
+        ? 'Hai ristretto la selezione a una regione o area italiana.'
+        : selectedGroup !== 'Tutti'
+          ? 'Hai scelto una macro-area geografica come punto di ingresso.'
+          : 'Parti da una macro-area e lascia che il filtro restringa solo quando serve.';
 
   const updateSearch = (updates: Record<string, string | null>) => {
     setCurrentPage(1);
@@ -160,7 +187,7 @@ export default function Destinazioni() {
     <PageLayout>
       <SEO
         title="Destinazioni"
-        description="Esplora il cuore editoriale di Travelliniwithus: destinazioni, regioni e citta raccontate attraverso articoli, guide e filtri utili."
+        description="Esplora l archivio geografico di Travelliniwithus: destinazioni, regioni e citta da filtrare in modo chiaro per arrivare subito ai contenuti giusti."
         canonical={`${SITE_URL}/destinazioni`}
       />
 
@@ -196,17 +223,16 @@ export default function Destinazioni() {
               className="[&_a]:text-white/60 [&_span]:text-white/40 [&_svg]:text-white/30"
             />
           </div>
-          <span className="mb-4 block font-script text-xl text-[var(--color-accent)] md:text-2xl">
-            Archivio principale
+          <span className="mb-4 block text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)] md:text-xs">
+            Archivio per luogo
           </span>
           <h1 className="mb-6 text-5xl font-serif font-medium leading-none text-white md:text-7xl lg:text-8xl">
-            Destinazioni, regioni
+            Parti da un luogo,
             <br />
-            <span className="italic text-white/60">e citta da esplorare</span>
+            <span className="italic text-white/60">poi restringi bene</span>
           </h1>
           <p className="max-w-xl text-lg font-normal leading-relaxed text-white/85">
-            Tutto quello che abbiamo visitato, mangiato e vissuto - organizzato per farti trovare
-            subito il posto giusto.
+            Questo e l ingresso geografico del progetto: gruppi, regioni e citta per capire in fretta dove approfondire, senza perderti in listing troppo ampi o poco leggibili.
           </p>
 
           {/* Discovery counter */}
@@ -222,12 +248,28 @@ export default function Destinazioni() {
               contenuti trovati
             </span>
           </motion.div>
+
+          <div className="mt-8 grid gap-3 md:max-w-3xl md:grid-cols-3">
+            {[
+              ['1', 'Scegli la macro-area', 'Italia, Europa o un gruppo geografico piu ampio.'],
+              ['2', 'Restringi se serve', 'In Italia puoi scendere a regione e localita.'],
+              ['3', 'Apri solo i contenuti giusti', 'Ogni card ti porta al contenuto gia filtrato dal luogo.'],
+            ].map(([step, title, text]) => (
+              <div key={step} className="rounded-2xl border border-white/12 bg-black/18 px-5 py-4 backdrop-blur-md">
+                <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+                  Step {step}
+                </div>
+                <div className="mt-2 text-sm font-semibold text-white">{title}</div>
+                <p className="mt-2 text-sm leading-relaxed text-white/72">{text}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* --- CONTINENT "PASSPORT STAMP" CARDS --- */}
       <Section>
-        <div className="mb-16 grid grid-cols-2 gap-5 md:grid-cols-3 xl:grid-cols-6">
+        <div className="mb-16 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
           {DESTINATION_GROUPS.map((group, idx) => {
             const isActive = selectedGroup === group;
             const count = archiveItems.filter((i) => i.destinationGroup === group).length;
@@ -239,27 +281,32 @@ export default function Destinazioni() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.08, duration: 0.5 }}
-                className={`group relative flex flex-col items-center overflow-hidden rounded-[1.8rem] border-2 bg-white p-5 pb-6 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl ${
-                  idx % 2 === 0 ? 'rotate-[0.5deg]' : '-rotate-[0.5deg]'
-                } hover:rotate-0 ${
+                className={`group relative flex flex-col overflow-hidden rounded-[1.8rem] border-2 bg-white p-4 text-left shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl md:p-5 md:pb-6 ${
+                  idx % 2 === 0 ? 'md:rotate-[0.5deg]' : 'md:-rotate-[0.5deg]'
+                } md:hover:rotate-0 ${
                   isActive ? 'border-[var(--color-accent)] shadow-lg' : 'border-black/5'
                 }`}
               >
-                {/* Photo */}
-                <div className="relative mb-4 aspect-square w-full overflow-hidden rounded-2xl">
-                  <img
+                <div className="relative mb-4 aspect-[4/4.6] w-full overflow-hidden rounded-[1.4rem]">
+                  <OptimizedImage
                     src={groupVisuals[group]}
                     alt={group}
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    loading="lazy"
-                    referrerPolicy="no-referrer"
                   />
                 </div>
+                <div className="pr-8">
+                  <span className="block text-xl font-serif leading-none text-[var(--color-ink)]">{group}</span>
+                  <p className="mt-2 text-sm leading-relaxed text-black/58">
+                    {groupDescriptions[group]}
+                  </p>
+                </div>
+                <div className="mt-4 flex items-center justify-between gap-3 text-[10px] font-bold uppercase tracking-[0.2em] text-black/42">
+                  <span>{count} {count === 1 ? 'contenuto' : 'contenuti'}</span>
+                  <span className="text-[var(--color-accent)] transition-colors group-hover:text-[var(--color-ink)]">
+                    Apri area
+                  </span>
+                </div>
 
-                {/* Name */}
-                <span className="mb-1 text-lg font-serif text-[var(--color-ink)]">{group}</span>
-
-                {/* Stamp badge */}
                 <div
                   className={`absolute -right-2 -top-2 flex h-10 w-10 items-center justify-center rounded-full border-2 border-dashed text-xs font-bold transition-all ${
                     isActive
@@ -275,18 +322,17 @@ export default function Destinazioni() {
           })}
         </div>
 
-        <div className="mb-16 rounded-[2rem] border border-[var(--color-accent)]/15 bg-[var(--color-accent-soft)] p-8 shadow-sm">
+        <div className="mb-10 rounded-[2rem] border border-[var(--color-accent)]/15 bg-[var(--color-accent-soft)] p-8 shadow-sm">
           <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div className="max-w-2xl">
-              <span className="font-script text-lg text-[var(--color-accent)]">
+              <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
                 Esplora meglio
               </span>
               <h2 className="mt-3 text-3xl font-serif text-[var(--color-ink)]">
-                Esplora le destinazioni con filtri chiari e percorsi utili.
+                Qui il filtro principale e il luogo. Tutto il resto viene dopo.
               </h2>
               <p className="mt-4 text-base leading-relaxed text-[var(--color-accent-text)]">
-                Qui trovi filtri geografici chiari e una lettura editoriale piu ordinata. Se vuoi
-                partire dal tipo di esperienza, passa alla sezione dedicata.
+                Prima scegli l area geografica, poi se serve scendi di dettaglio. Se invece non hai ancora una meta chiara e vuoi partire dal tipo di viaggio, conviene andare su Esperienze.
               </p>
             </div>
             <Link
@@ -298,8 +344,34 @@ export default function Destinazioni() {
           </div>
         </div>
 
+        <div className="mb-12 grid gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(280px,0.85fr)]">
+          <div className="archive-panel-light">
+            <div className="mb-3 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+              Percorso attivo
+            </div>
+            <div className="flex flex-wrap items-end gap-4">
+              <h2 className="text-3xl font-serif text-[var(--color-ink)]">{activeGeoLabel}</h2>
+              <span className="rounded-full bg-[var(--color-accent-soft)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent-text)]">
+                {filteredItems.length} {filteredItems.length === 1 ? 'contenuto' : 'contenuti'}
+              </span>
+            </div>
+            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-black/62">{activeGeoNote}</p>
+          </div>
+
+          <div className="archive-panel-dark">
+            <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+              Uso rapido
+            </div>
+            <ul className="mt-4 space-y-3 text-sm leading-relaxed text-white/78">
+              <li>Usa la macro-area per togliere subito rumore.</li>
+              <li>Scendi a regione e localita solo quando sei gia in Italia.</li>
+              <li>Se la meta non e chiara, passa a Esperienze.</li>
+            </ul>
+          </div>
+        </div>
+
         {/* --- FILTERS --- */}
-        <div className="mb-12 flex w-full flex-col gap-6 rounded-[var(--radius-xl)] border border-[var(--color-ink)]/5 bg-[var(--color-surface)] p-6 shadow-sm">
+        <div className="archive-filter-shell mb-12 flex w-full flex-col gap-6">
           {/* Active filters strip */}
           {(selectedGroup !== 'Tutti' ||
             selectedRegion !== 'Tutti' ||
@@ -341,34 +413,45 @@ export default function Destinazioni() {
             </div>
           )}
 
-          <div className="flex flex-col gap-4">
-            <span className="text-xs font-bold uppercase tracking-widest text-black/50">
-              Area geografica
-            </span>
-            <div className="flex gap-2 overflow-x-auto pb-2 hide-scrollbar">
-              {groups.map((group) => (
-                <button
-                  key={group}
-                  onClick={() => updateSearch({ group, region: null, area: null, city: null })}
-                  className={`whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-widest transition-colors ${
-                    selectedGroup === group
-                      ? 'bg-black text-white'
-                      : 'bg-white text-black/60 hover:bg-black/5'
-                  }`}
-                >
-                  {group}
-                </button>
-              ))}
+          <div className="grid gap-4 lg:grid-cols-[minmax(0,1.25fr)_minmax(280px,0.75fr)]">
+            <div className="archive-filter-panel bg-[var(--color-sand)]">
+              <div className="mb-3 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+                Step 1 · Macro-area
+              </div>
+              <div className="archive-filter-track">
+                {groups.map((group) => (
+                  <button
+                    key={group}
+                    onClick={() => updateSearch({ group, region: null, area: null, city: null })}
+                    className={`whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-widest transition-colors ${
+                      selectedGroup === group
+                        ? 'bg-black text-white'
+                        : 'bg-white text-black/60 hover:bg-black/5'
+                    }`}
+                  >
+                    {group}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="archive-filter-panel bg-white">
+              <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.24em] text-black/45">
+                Criterio
+              </div>
+              <p className="text-sm leading-relaxed text-black/62">
+                In questa pagina il luogo comanda la navigazione. Ogni step serve a restringere senza duplicare pagine o creare percorsi confusi.
+              </p>
             </div>
           </div>
 
           {selectedGroup === 'Italia' && (
             <div className="grid gap-4 md:grid-cols-2">
-              <div className="flex flex-col gap-4">
-                <span className="text-xs font-bold uppercase tracking-widest text-black/50">
-                  Regione
-                </span>
-                <div className="flex gap-2 overflow-x-auto pb-2 hide-scrollbar">
+              <div className="archive-filter-panel bg-[var(--color-sand)]">
+                <div className="mb-3 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+                  Step 2 · Regione
+                </div>
+                <div className="archive-filter-track">
                   {availableRegions.map((region) => (
                     <button
                       key={region}
@@ -386,11 +469,11 @@ export default function Destinazioni() {
               </div>
 
               {availableCities.length > 1 && (
-                <div className="flex flex-col gap-4">
-                  <span className="text-xs font-bold uppercase tracking-widest text-black/50">
-                    Citta / localita
-                  </span>
-                  <div className="flex gap-2 overflow-x-auto pb-2 hide-scrollbar">
+                <div className="archive-filter-panel bg-white">
+                  <div className="mb-3 text-[10px] font-bold uppercase tracking-[0.24em] text-black/45">
+                    Step 3 · Localita
+                  </div>
+                  <div className="archive-filter-track">
                     {availableCities.map((city) => (
                       <button
                         key={city}
@@ -419,7 +502,7 @@ export default function Destinazioni() {
             >
               Esperienze
             </Link>
-            .
+            : lo stesso archivio, ma ordinato per mood e tipo di esperienza.
           </div>
         </div>
 
@@ -437,96 +520,146 @@ export default function Destinazioni() {
           />
         ) : (
           <>
-            <motion.div layout className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-              <AnimatePresence mode="popLayout">
-                {paginatedItems.map((item, index) => {
-                  const visual = item.primaryExperience
-                    ? getExperienceVisual(item.primaryExperience)
-                    : null;
-                  const ExpIcon = visual?.icon;
-                  return (
-                    <motion.div
-                      key={item.id}
-                      layout
-                      initial={{ opacity: 0, y: 30 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      transition={{
-                        duration: 0.5,
-                        delay: index * 0.08,
-                        ease: [0.21, 0.47, 0.32, 0.98],
-                      }}
-                      className={index % 3 === 1 ? 'md:mt-10' : index % 3 === 2 ? 'md:mt-5' : ''}
+            <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+              <div>
+                <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+                  Archivio filtrato
+                </div>
+                <h2 className="mt-3 text-3xl font-serif text-[var(--color-ink)]">
+                  Destinazioni ordinate dal luogo
+                </h2>
+              </div>
+              <p className="max-w-xl text-sm leading-relaxed text-black/58">
+                Un contenuto in evidenza per orientarti subito, poi una selezione piu compatta da aprire in base all area che hai scelto.
+              </p>
+            </div>
+            <div className="space-y-8">
+              {featuredItem && (() => {
+                const visual = featuredItem.primaryExperience
+                  ? getExperienceVisual(featuredItem.primaryExperience)
+                  : null;
+                const ExpIcon = visual?.icon;
+
+                return (
+                  <motion.div layout initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="archive-featured-card">
+                    <Link
+                      to={featuredItem.link}
+                      className="archive-featured-link group lg:grid-cols-[1.15fr_minmax(0,0.85fr)]"
                     >
-                      <Link
-                        to={item.link}
-                        className="group relative block aspect-[3/4] overflow-hidden rounded-[var(--radius-xl)] border border-black/5 transition-all duration-500 hover:scale-[1.02] hover:shadow-[var(--shadow-premium)] md:h-[420px] md:aspect-auto"
-                      >
-                        <img
-                          src={item.image}
-                          alt={item.title}
-                          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                          referrerPolicy="no-referrer"
-                          loading="lazy"
+                      <div className="archive-featured-media">
+                        <OptimizedImage
+                          src={featuredItem.image}
+                          alt={featuredItem.title}
+                          className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500 md:group-hover:opacity-0" />
-
-                        {/* Experience icon badge */}
-                        {ExpIcon && (
-                          <div
-                            className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-xl border border-white/20 backdrop-blur-md"
-                            style={{ backgroundColor: `${visual.color}20`, color: visual.color }}
-                          >
-                            <ExpIcon size={18} />
-                          </div>
-                        )}
-
-                        <div className="absolute bottom-8 left-8 right-8 transition-all duration-500 md:group-hover:translate-y-4 md:group-hover:opacity-0">
-                          <div className="mb-3 flex flex-wrap items-center gap-2">
-                            <span className="rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur-md">
-                              {getArchiveLocationLabel(item)}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+                        <div className="absolute bottom-6 left-6 right-6 flex flex-wrap items-center gap-2">
+                          <span className="rounded-full bg-white/18 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-white backdrop-blur-md">
+                            {getArchiveLocationLabel(featuredItem)}
+                          </span>
+                          {featuredItem.primaryExperience && (
+                            <span
+                              className="rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-white"
+                              style={{ backgroundColor: `${visual?.color ?? 'var(--color-accent)'}CC` }}
+                            >
+                              {featuredItem.primaryExperience}
                             </span>
-                            {item.primaryExperience && (
-                              <span
-                                className="rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur-md"
-                                style={{
-                                  backgroundColor: `${visual?.color ?? 'var(--color-accent)'}CC`,
-                                }}
-                              >
-                                {item.primaryExperience}
-                              </span>
-                            )}
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="archive-featured-body">
+                        <div>
+                          <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+                            Contenuto in evidenza
                           </div>
-                          <h3 className="mb-4 text-2xl font-serif leading-tight text-white md:text-3xl">
-                            {item.title}
-                          </h3>
-                          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white md:hidden">
-                            Apri il contenuto <ArrowRight size={14} />
-                          </div>
+                          <h2 className="mt-4 text-3xl font-serif leading-[1.02] text-[var(--color-ink)] md:text-4xl">
+                            {featuredItem.title}
+                          </h2>
+                          <p className="mt-5 text-base leading-relaxed text-black/65">
+                            Apri questo contenuto se vuoi partire da <strong>{getArchiveLocationLabel(featuredItem)}</strong> e vedere subito un esempio chiaro di come il sito ordina le destinazioni.
+                          </p>
                         </div>
 
-                        <div className="absolute inset-0 hidden flex-col items-center justify-center bg-black/40 p-8 text-center opacity-0 backdrop-blur-[2px] transition-all duration-500 group-hover:opacity-100 md:flex">
-                          <h3 className="mb-6 translate-y-4 text-4xl font-serif leading-tight text-white transition-transform duration-500 group-hover:translate-y-0">
-                            {item.title}
-                          </h3>
-                          <div className="flex translate-y-4 items-center gap-2 rounded-full border border-white/30 px-6 py-3 text-sm font-bold uppercase tracking-widest text-white transition-all duration-500 delay-75 group-hover:translate-y-0 hover:bg-white hover:text-black">
-                            Apri il contenuto <ArrowRight size={16} />
+                        <div className="archive-featured-support">
+                          <div className="text-sm leading-relaxed text-black/60">
+                            {ExpIcon && featuredItem.primaryExperience
+                              ? `Ha anche un taglio esperienza: ${featuredItem.primaryExperience}.`
+                              : 'Ingresso geografico puro, pensato per farti partire dal posto.'}
+                          </div>
+                          <div className="shrink-0 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]">
+                            Apri <ArrowRight size={14} className="inline ml-1" />
                           </div>
                         </div>
+                      </div>
+                    </Link>
+                  </motion.div>
+                );
+              })()}
 
-                        {/* Bottom accent line */}
-                        {visual && (
-                          <div
-                            className="absolute bottom-0 left-0 h-1 w-0 transition-all duration-500 group-hover:w-full"
-                            style={{ backgroundColor: visual.color }}
-                          />
-                        )}
-                      </Link>
-                    </motion.div>
-                  );
-                })}
-              </AnimatePresence>
-            </motion.div>
+              {secondaryItems.length > 0 && (
+                <motion.div layout className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+                  <AnimatePresence mode="popLayout">
+                    {secondaryItems.map((item, index) => {
+                      const visual = item.primaryExperience
+                        ? getExperienceVisual(item.primaryExperience)
+                        : null;
+                      const ExpIcon = visual?.icon;
+
+                      return (
+                        <motion.div
+                          key={item.id}
+                          layout
+                          initial={{ opacity: 0, y: 30 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.95 }}
+                          transition={{
+                            duration: 0.45,
+                            delay: index * 0.06,
+                            ease: [0.21, 0.47, 0.32, 0.98],
+                          }}
+                        >
+                          <Link to={item.link} className="archive-grid-card group">
+                            <div className="archive-grid-card-media">
+                              <OptimizedImage
+                                src={item.image}
+                                alt={item.title}
+                                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                              />
+                            </div>
+                            <div className="archive-grid-card-body">
+                              <div className="mb-3 flex flex-wrap items-center gap-2">
+                                <span className="rounded-full bg-black/5 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-black/50">
+                                  {getArchiveLocationLabel(item)}
+                                </span>
+                                {item.primaryExperience && ExpIcon && (
+                                  <span
+                                    className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white"
+                                    style={{ backgroundColor: visual.color }}
+                                  >
+                                    <ExpIcon size={11} />
+                                    {item.primaryExperience}
+                                  </span>
+                                )}
+                              </div>
+                              <h3 className="text-2xl font-serif leading-tight text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]">
+                                {item.title}
+                              </h3>
+                              <p className="mt-4 text-sm leading-relaxed text-black/62">
+                                Parti da qui se vuoi capire in fretta se questa area merita davvero una deviazione o un approfondimento.
+                              </p>
+                              <div className="mt-5 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent)]">
+                                Apri il contenuto
+                              </div>
+                            </div>
+                          </Link>
+                        </motion.div>
+                      );
+                    })}
+                  </AnimatePresence>
+                </motion.div>
+              )}
+            </div>
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}

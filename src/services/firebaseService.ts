@@ -192,47 +192,67 @@ export interface SiteStats {
 }
 
 export async function fetchStats(): Promise<SiteStats | null> {
-  const docRef = doc(db, 'settings', 'stats');
-  const docSnap = await getDoc(docRef);
-  if (docSnap.exists()) {
-    return docSnap.data() as SiteStats;
+  try {
+    const docRef = doc(db, 'settings', 'stats');
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return docSnap.data() as SiteStats;
+    }
+    return null;
+  } catch (error) {
+    console.error('Error fetching stats:', error);
+    return null;
   }
-  return null;
 }
 
 export async function updateStats(stats: SiteStats) {
-  const docRef = doc(db, 'settings', 'stats');
-  await setDoc(docRef, {
-    ...stats,
-    updatedAt: serverTimestamp(),
-  });
+  try {
+    const docRef = doc(db, 'settings', 'stats');
+    await setDoc(docRef, {
+      ...stats,
+      updatedAt: serverTimestamp(),
+    });
+  } catch (error) {
+    console.error('Error updating stats:', error);
+    throw error;
+  }
 }
 
 export async function fetchSiteContent<K extends SiteContentKey>(
   key: K
 ): Promise<Partial<SiteContentMap[K]> | null> {
-  const docRef = doc(db, 'siteContent', key);
-  const docSnap = await getDoc(docRef);
+  try {
+    const docRef = doc(db, 'siteContent', key);
+    const docSnap = await getDoc(docRef);
 
-  if (!docSnap.exists()) {
+    if (!docSnap.exists()) {
+      return null;
+    }
+
+    const data = docSnap.data() as Partial<SiteContentMap[K]> & { updatedAt?: unknown };
+    const { updatedAt: _updatedAt, ...content } = data;
+    void _updatedAt;
+    return content as Partial<SiteContentMap[K]>;
+  } catch (error) {
+    console.error(`Error fetching site content for key "${key}":`, error);
     return null;
   }
-
-  const data = docSnap.data() as Partial<SiteContentMap[K]> & { updatedAt?: unknown };
-  const { updatedAt: _updatedAt, ...content } = data;
-  void _updatedAt;
-  return content as Partial<SiteContentMap[K]>;
 }
 
 export async function saveSiteContent<K extends SiteContentKey>(
   key: K,
   content: SiteContentMap[K]
 ) {
-  const docRef = doc(db, 'siteContent', key);
-  await setDoc(docRef, {
-    ...content,
-    updatedAt: serverTimestamp(),
-  });
+  try {
+    const docRef = doc(db, 'siteContent', key);
+    await setDoc(docRef, {
+      ...content,
+      updatedAt: serverTimestamp(),
+    });
+  } catch (error) {
+    console.error(`Error saving site content for key "${key}":`, error);
+    throw error;
+  }
 }
 
 export async function saveMediaKitLead({
@@ -320,13 +340,25 @@ export async function logActivity(action: string, userEmail: string, details: st
 }
 
 export async function fetchLogs() {
-  const querySnapshot = await getDocs(collection(db, 'logs'));
-  return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  try {
+    const q = query(collection(db, 'logs'), orderBy('timestamp', 'desc'), limit(200));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    console.error('Error fetching logs:', error);
+    return [];
+  }
 }
 
 export async function fetchCoupons() {
-  const querySnapshot = await getDocs(collection(db, 'coupons'));
-  return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  try {
+    const q = query(collection(db, 'coupons'), limit(100));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    console.error('Error fetching coupons:', error);
+    return [];
+  }
 }
 
 export async function addCoupon(coupon: Record<string, unknown>) {
@@ -561,14 +593,20 @@ export interface Resource {
 }
 
 export async function fetchResources(): Promise<Resource[]> {
-  const q = query(
-    collection(db, 'resources'),
-    where('published', '==', true),
-    orderBy('order', 'asc')
-  );
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map((docSnap) => ({
-    id: docSnap.id,
-    ...(docSnap.data() as Omit<Resource, 'id'>),
-  }));
+  try {
+    const q = query(
+      collection(db, 'resources'),
+      where('published', '==', true),
+      orderBy('order', 'asc'),
+      limit(200)
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map((docSnap) => ({
+      id: docSnap.id,
+      ...(docSnap.data() as Omit<Resource, 'id'>),
+    }));
+  } catch (error) {
+    console.error('Error fetching resources:', error);
+    return [];
+  }
 }

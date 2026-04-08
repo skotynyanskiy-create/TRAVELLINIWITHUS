@@ -36,8 +36,8 @@ export default function Footer() {
               >
                 Travellini<span className="font-bold text-[var(--color-accent)]">with</span>us
               </Link>
-              <span className="mb-8 block font-script text-lg text-white/30">
-                Posti particolari, esperienze vere.
+              <span className="mb-8 block text-[10px] font-bold uppercase tracking-[0.24em] text-white/40">
+                {footer.tagline}
               </span>
               <p className="mb-6 max-w-sm text-base font-light leading-relaxed text-zinc-400">
                 {footer.description}
@@ -114,26 +114,10 @@ export default function Footer() {
                 </li>
                 <li>
                   <Link
-                    to="/guide"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
-                    {navigation.guidesLabel}
-                  </Link>
-                </li>
-                <li>
-                  <Link
                     to="/risorse"
                     className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                   >
                     {navigation.resourcesLabel}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/shop"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
-                    Shop Premium
                   </Link>
                 </li>
               </ul>
@@ -165,7 +149,7 @@ export default function Footer() {
                     to="/risorse"
                     className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                   >
-                    Toolkit di viaggio
+                    Toolkit editoriale
                   </Link>
                 </li>
                 <li>
@@ -239,13 +223,13 @@ export default function Footer() {
           {/* Brand collaboration card */}
           <div className="mb-12 flex flex-col items-center justify-between gap-4 rounded-2xl border border-white/8 bg-[#1C1C1C] px-8 py-6 sm:flex-row">
             <p className="text-sm font-medium text-white/70">
-              Sei un brand? Scopri come collaborare con i Travellini.
+              {footer.brandCtaText}
             </p>
             <Link
-              to="/collaborazioni"
+              to={footer.brandCtaLink}
               className="inline-flex items-center gap-2 rounded-full bg-[var(--color-gold)] px-6 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
             >
-              Collabora con noi <ArrowRight size={14} />
+              {footer.brandCtaLabel} <ArrowRight size={14} />
             </Link>
           </div>
 

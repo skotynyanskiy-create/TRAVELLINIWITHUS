@@ -307,10 +307,10 @@ export default function Club() {
                         nostri viaggi, pronti per i tuoi.
                       </p>
                       <Button
-                        to="/shop"
+                        to="/risorse"
                         className="bg-[var(--color-ink)] text-white hover:bg-[var(--color-ink)]/85 rounded-full px-6 py-2"
                       >
-                        Vai allo Shop Premium
+                        Apri le risorse
                       </Button>
                     </div>
                   )}

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, X, MapPin, BookOpen, Compass, ShoppingBag, Mail } from 'lucide-react';
+import { Search, X, MapPin, BookOpen, Compass, NotebookPen, Mail } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { LucideIcon } from 'lucide-react';
 import Skeleton from './Skeleton';
@@ -43,7 +43,7 @@ const STATIC_PAGE_RESULTS: SearchResult[] = [
     title: 'Risorse',
     category: 'Pagina',
     link: '/risorse',
-    icon: ShoppingBag,
+    icon: NotebookPen,
   },
   {
     id: 'page-collaborazioni',
@@ -64,7 +64,7 @@ const STATIC_PAGE_RESULTS: SearchResult[] = [
     title: 'Media Kit',
     category: 'Pagina',
     link: '/media-kit',
-    icon: ShoppingBag,
+    icon: Mail,
   },
   {
     id: 'page-contatti',

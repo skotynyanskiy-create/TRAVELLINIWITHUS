@@ -17,7 +17,7 @@ import { fetchProducts } from '../services/firebaseService';
 import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_PRODUCT } from '../config/demoContent';
 import { useSiteContent } from '../hooks/useSiteContent';
-import { BRAND_STATS } from '../config/site';
+import { BRAND_STATS, SITE_URL } from '../config/site';
 import { DEMO_CONTENT_ENABLED } from '../config/runtime';
 
 interface Product {
@@ -144,6 +144,7 @@ function Shop() {
         <SEO
           title="Contenuti Premium"
           description="Guide premium, itinerari pronti, planner e contenuti pratici Travelliniwithus pensati per aiutarti a viaggiare meglio."
+          canonical={`${SITE_URL}/shop`}
         />
 
         <AnimatePresence>
@@ -178,8 +179,8 @@ function Shop() {
                   </>
                 ) : (
                   <>
-                    <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                      <XCircle className="text-red-600" size={32} />
+                    <div className="w-16 h-16 bg-[var(--color-error-soft)] rounded-full flex items-center justify-center mx-auto mb-6">
+                      <XCircle className="text-[var(--color-error)]" size={32} />
                     </div>
                     <h3 className="text-2xl font-serif mb-2 text-zinc-900">Pagamento annullato</h3>
                     <p className="text-zinc-600 mb-8">
@@ -215,8 +216,8 @@ function Shop() {
             </div>
             <div className="relative mb-8 inline-block z-10">
               <h1 className="text-5xl font-serif leading-tight md:text-7xl">
-                Strumenti per il viaggio <br />
-                <span className="italic text-accent">che immagini</span>
+                Guide e strumenti <br />
+                <span className="italic text-accent">che servono davvero</span>
               </h1>
               <motion.span
                 initial={{ opacity: 0, rotate: -10, scale: 0.8 }}
@@ -230,8 +231,7 @@ function Shop() {
             </div>
             <p className="text-lg text-zinc-600 font-light leading-relaxed mt-10 max-w-2xl mx-auto relative z-10">
               Queste guide e risorse nascono da {BRAND_STATS.yearsOfTravel} anni di viaggi reali.
-              Non sono template generici. Ogni pagina e testata sul campo, ogni consiglio e
-              autentico. Quando li usiamo noi, funzionano.
+              Non sono template decorativi: ogni pagina serve a chiarire una scelta, preparare meglio una partenza o evitare tempo perso.
             </p>
           </div>
 
@@ -477,5 +477,4 @@ function Shop() {
     </PageLayout>
   );
 }
-
 

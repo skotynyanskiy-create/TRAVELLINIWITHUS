@@ -6,6 +6,7 @@ import PageLayout from '../../components/PageLayout';
 import Section from '../../components/Section';
 import SEO from '../../components/SEO';
 import {
+  resolveSiteContent,
   siteContentDefaults,
   siteContentDefinitionsById,
   type SiteContentFieldDefinition,
@@ -18,6 +19,36 @@ type EditableState = Record<string, unknown>;
 
 function cloneDefaults<K extends SiteContentKey>(key: K) {
   return JSON.parse(JSON.stringify(siteContentDefaults[key])) as EditableState;
+}
+
+function getValueAtPath(source: EditableState | null, path: string): unknown {
+  return path.split('.').reduce<unknown>((current, part) => {
+    if (current && typeof current === 'object' && part in (current as Record<string, unknown>)) {
+      return (current as Record<string, unknown>)[part];
+    }
+
+    return undefined;
+  }, source);
+}
+
+function setValueAtPath(source: EditableState, path: string, value: unknown): EditableState {
+  const parts = path.split('.');
+  const nextState = { ...source } as EditableState;
+  let current: EditableState = nextState;
+
+  for (let index = 0; index < parts.length - 1; index += 1) {
+    const part = parts[index];
+    const existing = current[part];
+    const nextBranch =
+      existing && typeof existing === 'object' && !Array.isArray(existing)
+        ? { ...(existing as EditableState) }
+        : {};
+    current[part] = nextBranch;
+    current = nextBranch;
+  }
+
+  current[parts[parts.length - 1]] = value;
+  return nextState;
 }
 
 function createEmptyObject(field: SiteContentFieldDefinition) {
@@ -57,10 +88,7 @@ export default function SiteContentEditor() {
       setLoading(true);
       try {
         const remoteContent = await fetchSiteContent(validPageId);
-        setFormState({
-          ...cloneDefaults(validPageId),
-          ...(remoteContent ?? {}),
-        });
+        setFormState(resolveSiteContent(validPageId, remoteContent) as unknown as EditableState);
       } finally {
         setLoading(false);
       }
@@ -70,66 +98,69 @@ export default function SiteContentEditor() {
   }, [validPageId]);
 
   const updateField = (key: string, value: unknown) => {
-    setFormState((prev) => ({
-      ...(prev ?? {}),
-      [key]: value,
-    }));
+    setFormState((prev) => setValueAtPath((prev ?? {}) as EditableState, key, value));
   };
 
   const handleStringListChange = (key: string, index: number, value: string) => {
     setFormState((prev) => {
-      const currentList = Array.isArray(prev?.[key]) ? ([...(prev?.[key] as string[])] as string[]) : [];
+      const currentValue = getValueAtPath(prev, key);
+      const currentList = Array.isArray(currentValue) ? ([...currentValue] as string[]) : [];
       currentList[index] = value;
-      return { ...(prev ?? {}), [key]: currentList };
+      return setValueAtPath((prev ?? {}) as EditableState, key, currentList);
     });
   };
 
   const handleAddStringItem = (field: SiteContentFieldDefinition) => {
     setFormState((prev) => {
-      const currentList = Array.isArray(prev?.[field.key]) ? ([...(prev?.[field.key] as string[])] as string[]) : [];
+      const currentValue = getValueAtPath(prev, field.key);
+      const currentList = Array.isArray(currentValue) ? ([...currentValue] as string[]) : [];
       currentList.push('');
-      return { ...(prev ?? {}), [field.key]: currentList };
+      return setValueAtPath((prev ?? {}) as EditableState, field.key, currentList);
     });
   };
 
   const handleRemoveStringItem = (key: string, index: number) => {
     setFormState((prev) => {
-      const currentList = Array.isArray(prev?.[key]) ? ([...(prev?.[key] as string[])] as string[]) : [];
+      const currentValue = getValueAtPath(prev, key);
+      const currentList = Array.isArray(currentValue) ? ([...currentValue] as string[]) : [];
       currentList.splice(index, 1);
-      return { ...(prev ?? {}), [key]: currentList };
+      return setValueAtPath((prev ?? {}) as EditableState, key, currentList);
     });
   };
 
   const handleObjectListChange = (key: string, index: number, fieldKey: string, value: string) => {
     setFormState((prev) => {
-      const currentList = Array.isArray(prev?.[key])
-        ? ([...(prev?.[key] as Array<Record<string, string>>)] as Array<Record<string, string>>)
+      const currentValue = getValueAtPath(prev, key);
+      const currentList = Array.isArray(currentValue)
+        ? ([...currentValue] as Array<Record<string, string>>)
         : [];
       currentList[index] = {
         ...(currentList[index] ?? {}),
         [fieldKey]: value,
       };
-      return { ...(prev ?? {}), [key]: currentList };
+      return setValueAtPath((prev ?? {}) as EditableState, key, currentList);
     });
   };
 
   const handleAddObjectItem = (field: SiteContentFieldDefinition) => {
     setFormState((prev) => {
-      const currentList = Array.isArray(prev?.[field.key])
-        ? ([...(prev?.[field.key] as Array<Record<string, string>>)] as Array<Record<string, string>>)
+      const currentValue = getValueAtPath(prev, field.key);
+      const currentList = Array.isArray(currentValue)
+        ? ([...currentValue] as Array<Record<string, string>>)
         : [];
       currentList.push(createEmptyObject(field));
-      return { ...(prev ?? {}), [field.key]: currentList };
+      return setValueAtPath((prev ?? {}) as EditableState, field.key, currentList);
     });
   };
 
   const handleRemoveObjectItem = (key: string, index: number) => {
     setFormState((prev) => {
-      const currentList = Array.isArray(prev?.[key])
-        ? ([...(prev?.[key] as Array<Record<string, string>>)] as Array<Record<string, string>>)
+      const currentValue = getValueAtPath(prev, key);
+      const currentList = Array.isArray(currentValue)
+        ? ([...currentValue] as Array<Record<string, string>>)
         : [];
       currentList.splice(index, 1);
-      return { ...(prev ?? {}), [key]: currentList };
+      return setValueAtPath((prev ?? {}) as EditableState, key, currentList);
     });
   };
 
@@ -246,7 +277,7 @@ export default function SiteContentEditor() {
           ) : (
             <div className="space-y-8">
               {definition.fields.map((field) => {
-                const value = formState[field.key];
+                const value = getValueAtPath(formState, field.key);
 
                 if (field.type === 'text' || field.type === 'url') {
                   return (

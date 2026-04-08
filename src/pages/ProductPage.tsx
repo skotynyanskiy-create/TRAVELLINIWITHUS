@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import Button from '../components/Button';
 import Section from '../components/Section';
+import PageLayout from '../components/PageLayout';
 import Breadcrumbs from '../components/Breadcrumbs';
 import SEO from '../components/SEO';
 import { fetchProductBySlug } from '../services/firebaseService';
@@ -75,7 +76,7 @@ export default function ProductPage() {
   if (isLoading) return <ProductPageSkeleton />;
   if (error || !product) {
     return (
-      <div className="min-h-screen bg-sand pt-32">
+      <PageLayout>
         <SEO
           title="Prodotto non disponibile"
           description="Questa scheda prodotto non è disponibile in questo momento."
@@ -99,12 +100,12 @@ export default function ProductPage() {
             </div>
           </div>
         </Section>
-      </div>
+      </PageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-sand pt-32">
+    <PageLayout>
       <SEO
         title={product.name}
         description={
@@ -295,6 +296,6 @@ export default function ProductPage() {
           </div>
         </motion.div>
       )}
-    </div>
+    </PageLayout>
   );
 }

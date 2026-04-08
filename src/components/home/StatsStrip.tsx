@@ -1,54 +1,36 @@
-import { useEffect, useState } from 'react';
-import { useInView } from 'react-intersection-observer';
-import { Instagram, Music, TrendingUp, MapPin, type LucideIcon } from 'lucide-react';
-import { BRAND_STATS } from '../../config/site';
+import { MapPin } from 'lucide-react';
+import type { HomeProofItem } from '../../config/siteContent';
 
-function useAnimatedCounter(target: string, inView: boolean) {
-  const [count, setCount] = useState(0);
-  const numericTarget = parseInt(target.replace(/[^\d]/g, ''), 10) || 0;
-
-  useEffect(() => {
-    if (!inView || numericTarget === 0) return;
-    let start = 0;
-    const duration = 1800;
-    const step = Math.ceil(numericTarget / (duration / 16));
-    const timer = setInterval(() => {
-      start += step;
-      if (start >= numericTarget) {
-        setCount(numericTarget);
-        clearInterval(timer);
-      } else {
-        setCount(start);
-      }
-    }, 16);
-    return () => clearInterval(timer);
-  }, [inView, numericTarget]);
-
-  const suffix = target.replace(/[\d.,]/g, '');
-  return inView ? `${count.toLocaleString('it-IT')}${suffix}` : '0';
+interface StatsStripProps {
+  eyebrow: string;
+  items: HomeProofItem[];
 }
 
-function AnimatedStat({ value, label, icon: Icon }: { value: string; label: string; icon: LucideIcon }) {
-  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.3 });
-  const display = useAnimatedCounter(value, inView);
-
+export default function StatsStrip({ eyebrow, items }: StatsStripProps) {
   return (
-    <div ref={ref} className="flex items-center justify-center gap-3 px-6 py-6 text-center">
-      <Icon size={16} className="text-[var(--color-gold)]/60" />
-      <div className="text-2xl font-serif text-[var(--color-gold)] md:text-3xl">{display}</div>
-      <div className="text-[10px] font-bold uppercase tracking-widest text-white/80">{label}</div>
-    </div>
-  );
-}
+    <div className="rounded-[2rem] border border-white/10 bg-[var(--color-ink)]/95 px-6 py-6 text-white shadow-2xl backdrop-blur-xl md:px-8 md:py-8">
+      <div className="mb-5 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-gold)]/80">
+        {eyebrow}
+      </div>
 
-export default function StatsStrip() {
-  return (
-    <div className="rounded-2xl bg-[var(--color-ink)]/95 backdrop-blur-xl border border-white/10 border-t-2 border-t-[var(--color-gold)]/30 py-6 px-6 shadow-2xl text-white">
-      <div className="flex flex-wrap items-center justify-center divide-x divide-white/10 gap-4">
-        <AnimatedStat value={BRAND_STATS.instagramFollowers} label="Instagram" icon={Instagram} />
-        <AnimatedStat value={BRAND_STATS.tiktokFollowers} label="TikTok" icon={Music} />
-        <AnimatedStat value={BRAND_STATS.engagementRate} label="Engagement" icon={TrendingUp} />
-        <AnimatedStat value={BRAND_STATS.destinationsExplored} label="Destinazioni" icon={MapPin} />
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {items.map((item) => (
+          <div
+            key={`${item.label}-${item.value}`}
+            className="rounded-[1.75rem] border border-white/10 bg-white/[0.03] px-5 py-5 text-left"
+          >
+            <div className="mb-4 flex items-center gap-3 text-[var(--color-gold)]">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[var(--color-gold)]/10">
+                <MapPin size={16} />
+              </div>
+              <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-white/55">
+                {item.label}
+              </span>
+            </div>
+            <div className="text-3xl font-serif text-white">{item.value}</div>
+            <p className="mt-3 text-sm leading-relaxed text-white/68">{item.context}</p>
+          </div>
+        ))}
       </div>
     </div>
   );

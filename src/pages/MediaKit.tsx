@@ -16,7 +16,9 @@ import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import Section from '../components/Section';
 import Breadcrumbs from '../components/Breadcrumbs';
-import { CONTACTS, BRAND_STATS } from '../config/site';
+import { CONTACTS, SITE_URL } from '../config/site';
+import { siteContentDefaults } from '../config/siteContent';
+import { useSiteContent } from '../hooks/useSiteContent';
 
 const includes = [
   {
@@ -28,7 +30,7 @@ const includes = [
   {
     title: 'Metriche e audience',
     description:
-      'Dati aggiornati e panoramica utile per valutare compatibilità, potenziale e taglio della collaborazione.',
+      'Dati aggiornati e panoramica utile per valutare compatibilita, potenziale e taglio della collaborazione.',
     icon: BarChart3,
   },
   {
@@ -40,14 +42,14 @@ const includes = [
   {
     title: 'Asset e riferimenti',
     description:
-      'Informazioni operative, linee guida e dettagli utili per aprire un confronto in modo più serio.',
+      'Informazioni operative, linee guida e dettagli utili per aprire un confronto in modo piu serio.',
     icon: Download,
   },
 ];
 
 const idealPartners = [
-  'Strutture ricettive — hotel, agriturismi, glamping e hospitality — con una forte identità di luogo.',
-  'Destinazioni, enti turismo, territori, esperienze e progetti travel da raccontare con più personalità.',
+  'Strutture ricettive, hotel, agriturismi e hospitality con una forte identita di luogo.',
+  'Destinazioni, enti turismo, territori ed esperienze che meritano un racconto piu curato e meno brochure.',
   'Brand lifestyle o utility coerenti con il modo reale in cui viviamo e consigliamo il viaggio.',
 ];
 
@@ -58,11 +60,11 @@ const nextSteps = [
   },
   {
     title: '2. Valutazione',
-    text: "Valutiamo se c'è allineamento reale tra il vostro progetto, il nostro pubblico e il tipo di contenuto che ha senso costruire.",
+    text: "Valutiamo se c'e allineamento reale tra il vostro progetto, il nostro pubblico e il tipo di contenuto che ha senso costruire.",
   },
   {
     title: '3. Contatto',
-    text: "Se c'è match, condividiamo il materiale giusto e apriamo un confronto operativo più concreto.",
+    text: "Se c'e match, condividiamo il materiale giusto e apriamo un confronto operativo piu concreto.",
   },
 ];
 
@@ -76,6 +78,8 @@ const projectFocusOptions = [
 ];
 
 export default function MediaKit() {
+  const { data: content } = useSiteContent('mediaKit');
+  const pageContent = content ?? siteContentDefaults.mediaKit;
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
   const [website, setWebsite] = useState('');
@@ -131,6 +135,7 @@ export default function MediaKit() {
         const payload = (await response.json().catch(() => null)) as { error?: string } | null;
         throw new Error(payload?.error || 'Invio non riuscito');
       }
+
       setIsSuccess(true);
     } catch (error) {
       console.error('Error saving media kit lead:', error);
@@ -146,7 +151,8 @@ export default function MediaKit() {
     <PageLayout>
       <SEO
         title="Media Kit"
-        description="Richiedi il media kit Travelliniwithus per valutare collaborazioni, formati, pubblico e possibilità di racconto."
+        description="Richiedi il media kit Travelliniwithus per valutare collaborazioni, formati, pubblico e possibilita di racconto."
+        canonical={`${SITE_URL}/media-kit`}
       />
 
       <Section className="pt-8">
@@ -156,30 +162,20 @@ export default function MediaKit() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <div className="mb-6 flex items-center justify-center gap-4">
               <div className="h-[1px] w-12 bg-[var(--color-accent)]"></div>
-              <span className="font-script text-xl text-[var(--color-accent-warm)]">Media kit</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+                {pageContent.heroEyebrow}
+              </span>
               <div className="h-[1px] w-12 bg-[var(--color-accent)]"></div>
             </div>
             <h1 className="mb-8 text-5xl font-serif md:text-7xl">
-              La base giusta per capire <br />
-              <span className="italic text-black/60">se ha senso lavorare insieme</span>
+              {pageContent.heroTitleMain} <br />
+              <span className="italic text-black/60">{pageContent.heroTitleAccent}</span>
             </h1>
             <p className="mx-auto max-w-3xl text-xl font-normal leading-relaxed text-black/70">
-              Questa pagina non serve a scaricare un PDF generico. Serve a darti un punto di accesso
-              serio per capire chi siamo, come lavoriamo e che tipo di collaborazione possiamo
-              costruire in modo credibile.
+              {pageContent.heroDescription}
             </p>
-            <div className="mt-8 inline-flex items-center gap-6 rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent-soft)] px-8 py-3">
-              <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">
-                {BRAND_STATS.instagramFollowers} follower
-              </span>
-              <span className="h-4 w-px bg-[var(--color-accent)]/20"></span>
-              <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">
-                {BRAND_STATS.engagementRate} engagement
-              </span>
-              <span className="h-4 w-px bg-[var(--color-accent)]/20"></span>
-              <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">
-                {BRAND_STATS.monthlyReach} reach
-              </span>
+            <div className="mt-8 inline-flex max-w-2xl items-center rounded-[1.4rem] border border-[var(--color-accent)]/15 bg-[var(--color-accent-soft)] px-6 py-4 text-left text-sm leading-relaxed text-[var(--color-accent-text)]">
+              {pageContent.heroProofLine}
             </div>
           </motion.div>
         </div>
@@ -189,11 +185,9 @@ export default function MediaKit() {
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-[1.15fr_0.85fr]">
           <div>
             <div className="mb-10 rounded-[2rem] border border-black/5 bg-[var(--color-sand)] p-8 md:p-10">
-              <h2 className="mb-4 text-3xl font-serif">Cosa riceverai dopo la richiesta</h2>
+              <h2 className="mb-4 text-3xl font-serif">{pageContent.includesTitle}</h2>
               <p className="font-normal leading-relaxed text-black/70">
-                Se il contatto è coerente con il progetto, condividiamo il materiale utile per
-                valutare seriamente una possibile collaborazione: posizionamento, audience, formati,
-                modalità di lavoro e riferimenti operativi.
+                {pageContent.includesDescription}
               </p>
             </div>
 
@@ -225,10 +219,9 @@ export default function MediaKit() {
             >
               <div className="absolute left-0 top-0 h-2 w-full bg-[var(--color-accent)]"></div>
               <div className="mb-8">
-                <h2 className="mb-2 text-2xl font-serif">Richiedi il media kit</h2>
+                <h2 className="mb-2 text-2xl font-serif">{pageContent.formTitle}</h2>
                 <p className="text-sm leading-relaxed text-zinc-500">
-                  Lascia i dati essenziali del brand o del progetto. In questo modo possiamo capire
-                  subito se il contatto è allineato e risponderti con materiali davvero utili.
+                  {pageContent.formDescription}
                 </p>
               </div>
 
@@ -344,7 +337,7 @@ export default function MediaKit() {
                 {submitError && <p className="text-sm text-red-600">{submitError}</p>}
 
                 <p className="mt-4 text-center text-xs font-medium text-[var(--color-accent)]">
-                  Valutiamo ogni richiesta entro 48 ore lavorative.
+                  Valutiamo ogni richiesta entro 48 ore lavorative, con priorita ai messaggi gia contestualizzati.
                 </p>
 
                 <p className="text-center text-xs leading-relaxed text-zinc-400">
@@ -370,8 +363,8 @@ export default function MediaKit() {
                 Richiesta ricevuta
               </h2>
               <p className="font-light leading-relaxed text-[var(--color-accent-text)]">
-                Grazie per l&apos;interesse. Ti ricontatteremo via email con il materiale più
-                rilevante per capire se esistono le condizioni giuste per una collaborazione.
+                Grazie per l&apos;interesse. Ti ricontatteremo via email con il materiale piu rilevante
+                per capire se esistono le condizioni giuste per una collaborazione.
               </p>
             </motion.div>
           )}
@@ -380,10 +373,9 @@ export default function MediaKit() {
 
       <Section className="rounded-[3rem] bg-[var(--color-sand)] p-12 md:p-20">
         <div className="mb-12 text-center">
-          <h2 className="mb-4 text-4xl font-serif">Collaboriamo meglio con</h2>
+          <h2 className="mb-4 text-4xl font-serif">{pageContent.fitTitle}</h2>
           <p className="mx-auto max-w-2xl font-normal leading-relaxed text-black/70">
-            Non vogliamo aprire contatti generici. Preferiamo progetti allineati, in cui contenuto,
-            brand e utilità per il pubblico possano stare davvero bene insieme.
+            {pageContent.fitDescription}
           </p>
         </div>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
@@ -395,7 +387,7 @@ export default function MediaKit() {
         </div>
       </Section>
 
-      <Section title="Come funziona" subtitle="Processo">
+      <Section title={pageContent.processTitle} subtitle={pageContent.processSubtitle}>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {nextSteps.map((item) => (
             <div
@@ -414,11 +406,9 @@ export default function MediaKit() {
           <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-[var(--color-accent)]">
             <Mail size={24} />
           </div>
-          <h2 className="mb-4 text-3xl font-serif md:text-4xl">Hai una richiesta più diretta?</h2>
+          <h2 className="mb-4 text-3xl font-serif md:text-4xl">{pageContent.directTitle}</h2>
           <p className="mb-8 font-normal leading-relaxed text-white/80">
-            Se preferisci partire da un contatto diretto invece che dal form, puoi scriverci via
-            email o aprire una prima conversazione su WhatsApp. Il criterio resta lo stesso:
-            allineamento, chiarezza e poi eventuale approfondimento.
+            {pageContent.directDescription}
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a

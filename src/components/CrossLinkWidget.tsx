@@ -22,7 +22,7 @@ export default function CrossLinkWidget({ variant }: CrossLinkWidgetProps) {
     >
       <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2">
         <div>
-          <span className="mb-2 block font-script text-xl text-[var(--color-accent)]">
+          <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
             Stessi contenuti, altra prospettiva
           </span>
           <h3 className="mb-4 text-3xl font-serif leading-tight text-[var(--color-ink)] md:text-4xl">

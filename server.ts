@@ -728,7 +728,10 @@ async function startServer() {
   const app = express();
   const PORT = Number(process.env.PORT) || 3000;
 
-  app.use(cors());
+  app.use(cors({
+    origin: process.env.APP_URL || 'http://localhost:3000',
+    credentials: true,
+  }));
 
   // Rate limiting — protegge da abuse e spam
   const newsletterLimiter = rateLimit({
@@ -857,6 +860,37 @@ async function startServer() {
       };
 
       if (firebaseConfig.projectId && firebaseConfig.firestoreDatabaseId) {
+        // Idempotency check: skip if order with this stripeSessionId already exists
+        try {
+          const existingCheck = await fetch(
+            `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/${firebaseConfig.firestoreDatabaseId}/documents:runQuery`,
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                structuredQuery: {
+                  from: [{ collectionId: 'orders' }],
+                  where: {
+                    fieldFilter: {
+                      field: { fieldPath: 'stripeSessionId' },
+                      op: 'EQUAL',
+                      value: { stringValue: session.id },
+                    },
+                  },
+                  limit: 1,
+                },
+              }),
+            }
+          );
+          const existingDocs = await existingCheck.json();
+          if (Array.isArray(existingDocs) && existingDocs[0]?.document) {
+            console.log('Order already exists for session', session.id, '— skipping duplicate.');
+            res.json({ received: true });
+            return;
+          }
+        } catch (dupCheckErr) {
+          console.error('Idempotency check failed, proceeding with save:', dupCheckErr);
+        }
         try {
           const response = await fetch(
             `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/${firebaseConfig.firestoreDatabaseId}/documents/orders`,
@@ -902,8 +936,6 @@ async function startServer() {
               response.status,
               await response.text()
             );
-          } else {
-            console.log('Order saved to Firestore successfully with items.');
           }
         } catch (e) {
           console.error('Failed to save order to Firestore:', e);
