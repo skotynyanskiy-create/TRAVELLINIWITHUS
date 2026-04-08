@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Travelliniwithus</title>
+  <desc id="desc">Posti particolari, esperienze reali e consigli di viaggio.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#10212b" />
+      <stop offset="60%" stop-color="#23424d" />
+      <stop offset="100%" stop-color="#50717d" />
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#f4d8a4" stop-opacity="0.32" />
+      <stop offset="100%" stop-color="#f4d8a4" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <rect width="1200" height="630" fill="url(#glow)" />
+  <path d="M0 520C150 470 282 446 396 448c173 2 301 72 459 72 120 0 235-35 345-92v202H0Z" fill="#0c1a22" opacity="0.7" />
+  <circle cx="965" cy="118" r="48" fill="#c49c63" />
+  <text x="92" y="202" fill="#f7f0e5" font-family="'Cormorant Garamond', Georgia, serif" font-size="84" font-weight="600">
+    Travellini
+  </text>
+  <text x="470" y="202" fill="#c49c63" font-family="'Cormorant Garamond', Georgia, serif" font-size="84" font-weight="700">
+    with
+  </text>
+  <text x="664" y="202" fill="#f7f0e5" font-family="'Cormorant Garamond', Georgia, serif" font-size="84" font-weight="600">
+    us
+  </text>
+  <text x="94" y="300" fill="#f7f0e5" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="48" font-weight="700">
+    Posti particolari.
+  </text>
+  <text x="94" y="362" fill="#f7f0e5" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="48" font-weight="700">
+    Esperienze reali.
+  </text>
+  <text x="94" y="424" fill="#f7f0e5" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="48" font-weight="700">
+    Consigli da vivere davvero.
+  </text>
+  <text x="96" y="506" fill="#d5c5aa" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="24" letter-spacing="4">
+    TRAVEL BLOG • GUIDE • RISORSE • COLLABORAZIONI
+  </text>
+</svg>
