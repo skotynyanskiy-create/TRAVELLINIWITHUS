@@ -3,20 +3,20 @@ import { AnimatePresence, motion } from 'motion/react';
 import { ArrowUp } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import SEO from '../components/SEO';
+import Newsletter from '../components/Newsletter';
 import { SITE_URL } from '../config/site';
-import { normalizeHomeContent, siteContentDefaults } from '../config/siteContent';
-import { useSiteContent } from '../hooks/useSiteContent';
 
 import HeroSection from '../components/home/HeroSection';
+import StatsStrip from '../components/home/StatsStrip';
 import LatestArticles from '../components/home/LatestArticles';
 import DestinationsGrid from '../components/home/DestinationsGrid';
 import AboutPreview from '../components/home/AboutPreview';
-import UtilityPreview from '../components/home/ShopPreview';
+import CommunitySection from '../components/home/CommunitySection';
+import ShopPreview from '../components/home/ShopPreview';
+import InstagramFeed from '../components/home/InstagramFeed';
 
 export default function Home() {
   const [showBackToTop, setShowBackToTop] = useState(false);
-  const { data: content } = useSiteContent('home');
-  const pageContent = content ? normalizeHomeContent(content) : siteContentDefaults.home;
 
   useEffect(() => {
     const handleScroll = () => setShowBackToTop(window.scrollY > 500);
@@ -63,15 +63,36 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      <HeroSection content={pageContent.hero} proofRail={pageContent.proofRail} />
+      {/* 1. Hero — impatto visivo immediato */}
+      <HeroSection />
 
-      <LatestArticles content={pageContent.editorial} />
+      {/* 2. Stats Strip — barra flottante overlap */}
+      <div className="relative z-20 -mt-8 mx-auto max-w-5xl px-6">
+        <StatsStrip />
+      </div>
 
-      <DestinationsGrid content={pageContent.archive} />
+      <div className="h-8 md:h-12" />
 
-      <AboutPreview content={pageContent.project} />
+      {/* 3. Articoli — contenuto prima, dimostra il valore */}
+      <LatestArticles />
 
-      <UtilityPreview content={pageContent.utility} />
+      {/* 4. Destinazioni/Esperienze — navigazione utile */}
+      <DestinationsGrid />
+
+      {/* 5. Chi Siamo — conoscere il brand */}
+      <AboutPreview />
+
+      {/* 6. Community/Social — dopo aver dimostrato valore */}
+      <CommunitySection />
+
+      {/* 7. Shop — dopo credibilita */}
+      <ShopPreview />
+
+      {/* 8. Newsletter */}
+      <Newsletter variant="sand" />
+
+      {/* 9. Instagram Feed — chiusura visual */}
+      <InstagramFeed />
     </div>
   );
 }

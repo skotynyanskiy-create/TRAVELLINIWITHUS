@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, MotionValue } from 'motion/react';
-import { Clock, Heart, Share2, CheckCircle } from 'lucide-react';
+import { Clock, ArrowRight, Heart, Share2, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import OptimizedImage from '../OptimizedImage';
 import { heartPulse } from '../../lib/animations';
@@ -59,16 +59,9 @@ export default function ArticleHero({
           className="max-w-3xl"
         >
           <div className="flex flex-wrap items-center gap-4 mb-8 text-[10px] uppercase tracking-[0.2em] font-bold">
-            <Link
-              to={categoryPath}
-              className="bg-accent text-white px-4 py-1.5 rounded-full shadow-lg shadow-accent/20"
-            >
-              {article.category}
-            </Link>
+            <Link to={categoryPath} className="bg-accent text-white px-4 py-1.5 rounded-full shadow-lg shadow-accent/20">{article.category}</Link>
             <span className="w-8 h-px bg-white/30"></span>
-            <span className="flex items-center gap-2 text-white/80">
-              <Clock size={14} /> {readingTime} di lettura
-            </span>
+            <span className="flex items-center gap-2 text-white/80"><Clock size={14} /> {readingTime} di lettura</span>
           </div>
 
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif leading-[1.1] mb-8 tracking-tight">
@@ -80,9 +73,7 @@ export default function ArticleHero({
               <div className="w-10 h-10 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-xs font-semibold uppercase tracking-widest">
                 TWU
               </div>
-              <span>
-                Di <strong className="font-medium text-white">{authorName}</strong>
-              </span>
+              <span>Di <strong className="font-medium text-white">{authorName}</strong></span>
             </div>
             <div className="w-[1px] h-4 bg-white/20 hidden sm:block"></div>
             <span>{article.date}</span>
@@ -97,12 +88,7 @@ export default function ArticleHero({
           aria-label={isSaved ? 'Rimuovi dai preferiti' : 'Salva nei preferiti'}
           className={`w-14 h-14 rounded-full backdrop-blur-xl border flex items-center justify-center transition-all duration-500 ${isSaved ? 'bg-accent text-white border-[var(--color-accent)]' : 'bg-white/10 text-white border-white/20 hover:bg-white/20'}`}
         >
-          <motion.span
-            key={pulseKey}
-            variants={heartPulse}
-            animate="beat"
-            className="flex items-center justify-center"
-          >
+          <motion.span key={pulseKey} variants={heartPulse} animate="beat" className="flex items-center justify-center">
             <Heart size={24} className={isSaved ? 'fill-current' : ''} />
           </motion.span>
         </button>

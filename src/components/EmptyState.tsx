@@ -26,9 +26,7 @@ export default function EmptyState({ variant, onReset }: EmptyStateProps) {
             className="absolute -left-2 bottom-6 text-[var(--color-accent)] -rotate-12 opacity-60"
           />
         </div>
-        <h3 className="mb-3 text-2xl font-serif text-[var(--color-ink)]">
-          L'archivio geografico e ancora vuoto
-        </h3>
+        <h3 className="mb-3 text-2xl font-serif text-[var(--color-ink)]">La mappa è ancora vuota</h3>
         <p className="font-normal leading-relaxed text-black/65">
           I contenuti sono in arrivo. Iscriviti alla newsletter per essere tra i primi a scoprirli.
         </p>

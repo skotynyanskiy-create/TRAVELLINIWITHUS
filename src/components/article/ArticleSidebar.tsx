@@ -42,7 +42,7 @@ export default function ArticleSidebar({
         <div className="absolute top-0 right-0 w-48 h-48 bg-accent/20 rounded-full blur-3xl -mr-16 -mt-16" />
         <h4 className="font-serif text-2xl mb-4 relative z-10 text-accent">Travel Insights</h4>
         <p className="text-white/80 text-sm font-light mb-8 relative z-10 leading-relaxed">
-          Ricevi idee viaggio, storie e risorse utili per organizzare al meglio le tue prossime partenze.
+          Ricevi idee viaggio, guide e risorse premium per organizzare al meglio le tue prossime partenze.
         </p>
         <button
           onClick={() => document.getElementById('newsletter')?.scrollIntoView({ behavior: 'smooth' })}

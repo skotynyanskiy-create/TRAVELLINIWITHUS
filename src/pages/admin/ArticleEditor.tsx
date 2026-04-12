@@ -42,6 +42,7 @@ export default function ArticleEditor() {
   const [tips, setTips] = useState('');
   const [packingList, setPackingList] = useState('');
   const [highlights, setHighlights] = useState('');
+  const [mapUrl, setMapUrl] = useState('');
   const [duration, setDuration] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
   const [published, setPublished] = useState(false);
@@ -77,6 +78,7 @@ export default function ArticleEditor() {
           setTips(Array.isArray(data.tips) ? data.tips.join('\n') : '');
           setPackingList(Array.isArray(data.packingList) ? data.packingList.join('\n') : '');
           setHighlights(Array.isArray(data.highlights) ? data.highlights.join('\n') : '');
+          setMapUrl(data.mapUrl || '');
           setDuration(data.duration || '');
           setVideoUrl(data.videoUrl || '');
           setPublished(data.published || false);
@@ -151,6 +153,7 @@ export default function ArticleEditor() {
       tips: splitLines(tips),
       packingList: splitLines(packingList),
       highlights: splitLines(highlights),
+      mapUrl,
       duration: duration || null,
       videoUrl: videoUrl || null,
       published,
@@ -360,6 +363,16 @@ export default function ArticleEditor() {
               placeholder="https://www.tiktok.com/@travelliniwithus/video/..."
             />
             <p className="text-xs text-zinc-400 mt-1.5">Incolla il link TikTok o YouTube — apparirà nell'articolo come video embed.</p>
+          </div>
+          <div>
+            <label htmlFor="mapUrl" className="block text-sm font-medium mb-2">Mappa embed URL</label>
+            <input
+              id="mapUrl"
+              type="url"
+              value={mapUrl} onChange={e => setMapUrl(e.target.value)}
+              className="w-full p-3 border border-zinc-200 rounded-lg focus:outline-none focus:border-[var(--color-accent)]"
+              placeholder="https://www.google.com/maps/embed?..."
+            />
           </div>
         </div>
 

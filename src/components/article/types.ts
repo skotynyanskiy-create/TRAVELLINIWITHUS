@@ -25,6 +25,10 @@ export interface ArticleData {
   hiddenGems?: { title: string; description: string }[];
   localFood?: { name: string; description: string; image?: string }[];
   gear?: { title: string; description: string; link: string; image: string; cta?: string }[];
+  mapUrl?: string;
+  mapMarkers?: { id: string | number; name: string; coordinates: [number, number]; title?: string; category?: string }[];
+  mapCenter?: [number, number];
+  mapZoom?: number;
   duration?: string;
   videoUrl?: string;
 }

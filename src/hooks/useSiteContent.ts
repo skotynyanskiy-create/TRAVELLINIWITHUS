@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchSiteContent } from '../services/firebaseService';
 import {
-  resolveSiteContent,
+  siteContentDefaults,
   type SiteContentKey,
   type SiteContentMap,
 } from '../config/siteContent';
@@ -11,7 +11,10 @@ export function useSiteContent<K extends SiteContentKey>(key: K) {
     queryKey: ['site-content', key],
     queryFn: async () => {
       const remoteContent = await fetchSiteContent(key);
-      return resolveSiteContent(key, remoteContent);
+      return {
+        ...siteContentDefaults[key],
+        ...(remoteContent ?? {}),
+      } as SiteContentMap[K];
     },
     staleTime: 1000 * 60 * 5,
   });

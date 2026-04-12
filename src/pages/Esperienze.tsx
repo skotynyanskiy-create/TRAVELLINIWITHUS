@@ -21,7 +21,6 @@ import { useSiteContent } from '../hooks/useSiteContent';
 import { DESTINATION_GROUPS, EXPERIENCE_TYPES, getExperienceTypeFromQuery, slugifyExperienceType } from '../config/contentTaxonomy';
 import { getArchiveLocationLabel, mapArticleToArchiveItem, type ArchiveItem } from '../utils/contentArchive';
 import { getExperienceVisual, EXPERIENCE_VISUALS } from '../config/experienceVisuals';
-import { DEMO_CONTENT_ENABLED } from '../config/runtime';
 
 const experienceDescriptions: Record<string, string> = {
   'Posti particolari': 'Luoghi fuori dall\'ordinario, indirizzi curiosi e scorci che danno personalità al viaggio.',
@@ -36,28 +35,14 @@ const experienceDescriptions: Record<string, string> = {
   'Gite e day trip': 'Uscite facili da organizzare per una giornata o un weekend vicino.',
 };
 
-const experienceUseCases: Record<string, string> = {
-  'Posti particolari': 'Quando cerchi qualcosa che dia subito personalita al viaggio.',
-  'Food & Ristoranti': 'Quando scegli dove mangiare prima ancora del resto.',
-  'Locali insoliti': 'Quando conta piu l atmosfera del posto che la checklist classica.',
-  'Hotel con carattere': 'Quando la struttura fa parte dell esperienza, non solo del pernottamento.',
-  'Weekend romantici': 'Quando vuoi filtrare subito idee da vivere in coppia.',
-  'Borghi e cittÃ  d\'arte': 'Quando vuoi un taglio piu culturale e meno casuale.',
-  'Passeggiate panoramiche': 'Quando il viaggio ruota attorno a viste, percorsi e aria aperta.',
-  'Relax, terme e spa': 'Quando ti serve rallentare e trovare posti in cui fermarti davvero.',
-  'Esperienze insolite': 'Quando cerchi attivita o luoghi fuori dai soliti itinerari.',
-  'Gite e day trip': 'Quando vuoi idee pratiche da fare in poco tempo.',
-};
-
 /* Mood board span pattern for 10 types */
 const spanPattern = [2, 2, 1, 1, 1, 2, 1, 1, 1, 2];
 
 export default function Esperienze() {
   const { data: demoContent } = useSiteContent('demo');
   const demoSettings = demoContent ?? siteContentDefaults.demo;
-  const editorialDemoEnabled = DEMO_CONTENT_ENABLED && demoSettings.showEditorialDemo;
   const { data: articles = [], isLoading } = useQuery({
-    queryKey: ['experience-archive', editorialDemoEnabled],
+    queryKey: ['experience-archive', demoSettings.showEditorialDemo],
     queryFn: fetchArticles,
   });
 
@@ -73,7 +58,7 @@ export default function Esperienze() {
   const archiveItems = useMemo<ArchiveItem[]>(() => {
     const mapped = articles.map((article) => mapArticleToArchiveItem(article)).filter((item) => item.experienceTypes.length > 0);
     if (mapped.length > 0) return mapped;
-    return editorialDemoEnabled
+    return demoSettings.showEditorialDemo
       ? [{
           id: DEMO_DESTINATION_CARD.id,
           title: DEMO_DESTINATION_CARD.title,
@@ -90,7 +75,7 @@ export default function Esperienze() {
           primaryExperience: 'Posti particolari',
         }]
       : [];
-  }, [articles, editorialDemoEnabled]);
+  }, [articles, demoSettings.showEditorialDemo]);
 
   const availableExperiences = useMemo(() => {
     const types = new Set<string>();
@@ -135,13 +120,6 @@ export default function Esperienze() {
     const startIndex = (currentPage - 1) * itemsPerPage;
     return filteredItems.slice(startIndex, startIndex + itemsPerPage);
   }, [filteredItems, currentPage]);
-  const featuredItem = paginatedItems[0];
-  const secondaryItems = paginatedItems.slice(1);
-  const activeExperienceLabel = selectedExperience !== 'Tutti' ? selectedExperience : 'Tutti i mood';
-  const activeExperienceNote =
-    selectedExperience !== 'Tutti'
-      ? 'Hai gia scelto il tipo di esperienza. La geografia ora serve solo a stringere.'
-      : 'Parti dal mood che vuoi vivere. Il luogo entra dopo, solo se serve restringere meglio.';
 
   const updateSearch = (updates: Record<string, string | null>) => {
     setCurrentPage(1);
@@ -166,7 +144,7 @@ export default function Esperienze() {
     <PageLayout>
       <SEO
         title="Esperienze"
-        description="Filtra l archivio Travelliniwithus per esperienza: food, hotel con carattere, posti particolari, weekend romantici e altri ingressi tematici chiari."
+        description="Filtra lo stesso archivio Travelliniwithus per tipologia: posti particolari, food, hotel con carattere, weekend romantici e molto altro."
         canonical={`${SITE_URL}/esperienze`}
       />
 
@@ -177,13 +155,13 @@ export default function Esperienze() {
 
           <div className="mt-8 grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-              <span className="mb-4 block text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">Archivio per mood</span>
+              <span className="mb-4 block font-script text-xl text-[var(--color-accent)]">Filtro tematico</span>
               <h1 className="mb-6 text-5xl font-serif font-medium leading-none text-[var(--color-ink)] md:text-7xl">
-                Parti dal tipo di viaggio<br />
-                <span className="italic text-black/50">che vuoi vivere</span>
+                Parti dal tipo<br />
+                <span className="italic text-black/50">di esperienza</span>
               </h1>
               <p className="mb-8 max-w-lg text-lg font-normal leading-relaxed text-black/70">
-                Lo stesso archivio di Destinazioni, ma aperto dal lato dell esperienza: food, hotel con carattere, weekend romantici e altri ingressi utili quando la meta non e ancora chiara.
+                Lo stesso archivio di Destinazioni, aperto dal lato delle esperienze: food, posti particolari, weekend romantici e molto altro.
               </p>
 
               {/* Discovery counter */}
@@ -197,22 +175,6 @@ export default function Esperienze() {
                 <span className="text-2xl font-serif text-[var(--color-ink)]">{filteredItems.length}</span>
                 <span className="text-xs font-bold uppercase tracking-widest text-black/40">esperienze trovate</span>
               </motion.div>
-
-              <div className="mb-8 grid gap-3 md:max-w-3xl md:grid-cols-3">
-                {[
-                  ['1', 'Scegli il mood', 'Parti dal tipo di esperienza che vuoi vivere.'],
-                  ['2', 'Usa il luogo solo se ti serve', 'La geografia qui serve a restringere, non a guidare la pagina.'],
-                  ['3', 'Apri i contenuti piu coerenti', 'Ogni risultato resta nello stesso archivio, ma ordinato dal lato giusto.'],
-                ].map(([step, title, text]) => (
-                  <div key={step} className="rounded-2xl border border-black/5 bg-white px-5 py-4 shadow-sm">
-                    <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
-                      Step {step}
-                    </div>
-                    <div className="mt-2 text-sm font-semibold text-[var(--color-ink)]">{title}</div>
-                    <p className="mt-2 text-sm leading-relaxed text-black/62">{text}</p>
-                  </div>
-                ))}
-              </div>
 
               <div className="flex flex-col gap-4 sm:flex-row">
                 <Link
@@ -278,7 +240,7 @@ export default function Esperienze() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.06, duration: 0.5 }}
-                className={`archive-card-thematic border-l-[3px] px-5 py-5 text-left md:px-6 md:py-6 ${
+                className={`rounded-[1.8rem] border border-l-[3px] px-6 py-6 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
                   span === 2 ? 'md:col-span-2' : ''
                 } ${
                   isActive
@@ -305,46 +267,13 @@ export default function Esperienze() {
                   <span className="text-xs font-bold text-black/30">{count} {count === 1 ? 'articolo' : 'articoli'}</span>
                 </div>
                 <p className="text-sm font-normal leading-relaxed text-black/65">{experienceDescriptions[experience]}</p>
-                <p className="mt-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-black/42">
-                  {experienceUseCases[experience]}
-                </p>
               </motion.button>
             );
           })}
         </div>
 
-        <div className="mb-12 grid gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(280px,0.85fr)]">
-          <div className="archive-panel-light">
-            <div className="mb-3 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
-              Mood attivo
-            </div>
-            <div className="flex flex-wrap items-end gap-4">
-              <h2 className="text-3xl font-serif text-[var(--color-ink)]">{activeExperienceLabel}</h2>
-              <span className="rounded-full bg-[var(--color-accent-soft)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent-text)]">
-                {filteredItems.length} {filteredItems.length === 1 ? 'contenuto' : 'contenuti'}
-              </span>
-            </div>
-            <p className="mt-4 max-w-2xl text-sm leading-relaxed text-black/62">{activeExperienceNote}</p>
-          </div>
-
-          <div className="archive-panel-dark">
-            <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
-              Uso rapido
-            </div>
-            <ul className="mt-4 space-y-3 text-sm leading-relaxed text-white/78">
-              <li>Scegli il tipo di esperienza prima di guardare il luogo.</li>
-              <li>Usa area, regione o localita solo per stringere il risultato.</li>
-              <li>Se hai gia una meta chiara, passa a Destinazioni.</li>
-            </ul>
-          </div>
-        </div>
-
         {/* --- GEOGRAPHIC FILTERS --- */}
-        <div className="archive-filter-shell mb-12 bg-[var(--color-sand)]">
-          <div className="mb-6 rounded-2xl border border-[var(--color-accent)]/15 bg-white px-5 py-4 text-sm leading-relaxed text-black/60">
-            In questa pagina il filtro principale e <strong>l esperienza</strong>. I filtri geografici servono solo a restringere meglio il risultato dopo che hai gia scelto il tipo di viaggio.
-          </div>
-
+        <div className="mb-12 rounded-[var(--radius-xl)] border border-black/5 bg-[var(--color-sand)] p-6 shadow-sm">
           {/* Active filters strip */}
           {(selectedExperience !== 'Tutti' || selectedGroup !== 'Tutti' || selectedRegion !== 'Tutti' || selectedCity !== 'Tutti') && (
             <div className="mb-6 flex flex-wrap items-center gap-2">
@@ -378,7 +307,7 @@ export default function Esperienze() {
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             <div className="flex flex-col gap-3 xl:col-span-2">
               <span className="text-xs font-bold uppercase tracking-widest text-black/50">Area geografica</span>
-              <div className="archive-filter-track">
+              <div className="flex gap-2 overflow-x-auto pb-2 hide-scrollbar">
                 {availableGroups.map((group) => (
                   <button
                     key={group}
@@ -397,7 +326,7 @@ export default function Esperienze() {
               <>
                 <div className="flex flex-col gap-3">
                   <span className="text-xs font-bold uppercase tracking-widest text-black/50">Regione</span>
-                  <div className="archive-filter-track">
+                  <div className="flex gap-2 overflow-x-auto pb-2 hide-scrollbar">
                     {availableRegions.map((region) => (
                       <button
                         key={region}
@@ -415,7 +344,7 @@ export default function Esperienze() {
                 {availableCities.length > 1 && (
                   <div className="flex flex-col gap-3">
                     <span className="text-xs font-bold uppercase tracking-widest text-black/50">Città / località</span>
-                    <div className="archive-filter-track">
+                    <div className="flex gap-2 overflow-x-auto pb-2 hide-scrollbar">
                       {availableCities.map((city) => (
                         <button
                           key={city}
@@ -449,88 +378,69 @@ export default function Esperienze() {
           />
         ) : (
           <>
-            <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-              <div>
-                <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
-                  Archivio filtrato
-                </div>
-                <h2 className="mt-3 text-3xl font-serif text-[var(--color-ink)]">
-                  Esperienze ordinate per mood
-                </h2>
-              </div>
-              <p className="max-w-xl text-sm leading-relaxed text-black/58">
-                Prima un contenuto che chiarisce il taglio del mood scelto, poi una selezione piu compatta da aprire con precisione.
-              </p>
-            </div>
             <div className="space-y-8">
-              {featuredItem && (() => {
-                const visual = featuredItem.primaryExperience ? getExperienceVisual(featuredItem.primaryExperience) : null;
+              {/* First 2 items: horizontal editorial cards */}
+              {paginatedItems.slice(0, 2).map((item, index) => {
+                const visual = item.primaryExperience ? getExperienceVisual(item.primaryExperience) : null;
                 const ExpIcon = visual?.icon;
-
                 return (
                   <motion.div
+                    key={item.id}
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="archive-featured-card"
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
                   >
                     <Link
-                      to={featuredItem.link}
-                      className="archive-featured-link group lg:grid-cols-[0.9fr_minmax(0,1.1fr)]"
+                      to={item.link}
+                      className="group block overflow-hidden rounded-[var(--radius-xl)] border border-black/5 bg-white shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
                     >
-                      <div className="archive-featured-media">
-                        <OptimizedImage
-                          src={featuredItem.image}
-                          alt={featuredItem.title}
-                          className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                        <div className="absolute bottom-6 left-6 right-6 flex flex-wrap items-center gap-2">
-                          {featuredItem.primaryExperience && ExpIcon && (
-                            <span
-                              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-white"
-                              style={{ backgroundColor: visual.color }}
-                            >
-                              <ExpIcon size={12} />
-                              {featuredItem.primaryExperience}
+                      {/* Accent top line */}
+                      {visual && <div className="h-1 w-full" style={{ backgroundColor: visual.color }} />}
+
+                      <div className="grid grid-cols-1 md:grid-cols-[2fr_3fr]">
+                        <div className="aspect-[4/3] overflow-hidden md:aspect-auto md:min-h-[280px]">
+                          <OptimizedImage
+                            src={item.image}
+                            alt={item.title}
+                            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                          />
+                        </div>
+                        <div className="flex flex-col justify-center p-8 md:p-10">
+                          <div className="mb-4 flex flex-wrap items-center gap-2">
+                            {item.primaryExperience && ExpIcon && (
+                              <span
+                                className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white"
+                                style={{ backgroundColor: visual.color }}
+                              >
+                                <ExpIcon size={12} />
+                                {item.primaryExperience}
+                              </span>
+                            )}
+                            <span className="rounded-full bg-black/5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-black/50">
+                              {getArchiveLocationLabel(item)}
                             </span>
-                          )}
-                          <span className="rounded-full bg-white/18 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-white backdrop-blur-md">
-                            {getArchiveLocationLabel(featuredItem)}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="archive-featured-body">
-                        <div>
-                          <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
-                            Mood in evidenza
                           </div>
-                          <h2 className="mt-4 text-3xl font-serif leading-[1.02] text-[var(--color-ink)] md:text-4xl">
-                            {featuredItem.title}
-                          </h2>
-                          <p className="mt-5 text-base leading-relaxed text-black/65">
-                            Apri questo contenuto se vuoi capire in fretta cosa significa <strong>{featuredItem.primaryExperience ?? 'questo mood'}</strong> dentro il progetto, senza partire da una meta precisa.
+                          <h3 className="mb-3 text-3xl font-serif leading-tight text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)] md:text-4xl">
+                            {item.title}
+                          </h3>
+                          <p className="mb-6 font-normal leading-relaxed text-black/65">
+                            {getArchiveLocationLabel(item)}
                           </p>
-                        </div>
-
-                        <div className="archive-featured-support">
-                          <div className="text-sm leading-relaxed text-black/60">
-                            {getArchiveLocationLabel(featuredItem)} e il contesto geografico. Il punto di ingresso, qui, resta il tipo di esperienza.
-                          </div>
-                          <div className="shrink-0 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]">
-                            Apri <ArrowRight size={14} className="inline ml-1" />
+                          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
+                            Leggi il contenuto <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
                           </div>
                         </div>
                       </div>
                     </Link>
                   </motion.div>
                 );
-              })()}
+              })}
 
-              {secondaryItems.length > 0 && (
+              {/* Remaining items: standard vertical cards */}
+              {paginatedItems.length > 2 && (
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                  {secondaryItems.map((item, index) => {
+                  {paginatedItems.slice(2).map((item, index) => {
                     const visual = item.primaryExperience ? getExperienceVisual(item.primaryExperience) : null;
                     const ExpIcon = visual?.icon;
                     return (
@@ -541,16 +451,19 @@ export default function Esperienze() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: index * 0.08 }}
                       >
-                        <Link to={item.link} className="archive-grid-card group">
+                        <Link
+                          to={item.link}
+                          className="group block overflow-hidden rounded-[var(--radius-xl)] border border-black/5 bg-white shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--shadow-premium)]"
+                        >
                           {visual && <div className="h-1 w-full" style={{ backgroundColor: visual.color }} />}
-                          <div className="archive-grid-card-media">
+                          <div className="aspect-[4/3] overflow-hidden">
                             <OptimizedImage
                               src={item.image}
                               alt={item.title}
                               className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                             />
                           </div>
-                          <div className="archive-grid-card-body">
+                          <div className="p-6">
                             <div className="mb-3 flex flex-wrap gap-2">
                               {item.primaryExperience && ExpIcon && (
                                 <span
@@ -568,10 +481,7 @@ export default function Esperienze() {
                             <h3 className="text-2xl font-serif leading-tight text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]">
                               {item.title}
                             </h3>
-                            <p className="mt-4 text-sm leading-relaxed text-black/62">
-                              Aprilo quando il tipo di esperienza conta piu della meta e vuoi usare il luogo solo per rifinire.
-                            </p>
-                            <p className="mt-5 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
+                            <p className="mt-4 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
                               Apri il contenuto
                             </p>
                           </div>

@@ -1,164 +1,77 @@
 import { motion } from 'motion/react';
-import { ArrowRight, Instagram, ShieldCheck, Sparkles, Video } from 'lucide-react';
+import { ArrowRight, Compass } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import OptimizedImage from '../OptimizedImage';
 import Section from '../Section';
-import type { HomeContent } from '../../config/siteContent';
-import { CONTACTS } from '../../config/site';
+import { BRAND_STATS } from '../../config/site';
 
-const creatorIcons = [Instagram, Video, Sparkles];
-
-function isExternalLink(link: string) {
-  return /^https?:\/\//.test(link);
-}
-
-interface AboutPreviewProps {
-  content: HomeContent['project'];
-}
-
-export default function AboutPreview({ content }: AboutPreviewProps) {
+export default function AboutPreview() {
   return (
-    <Section className="bg-[var(--color-sand)]" spacing="spacious">
-      <div className="mb-12 grid gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(280px,0.8fr)] lg:items-end">
-        <div>
-          <span className="text-[10px] font-bold uppercase tracking-[0.26em] text-[var(--color-accent)]">
-            {content.eyebrow}
-          </span>
-          <h2 className="mt-4 max-w-4xl text-4xl font-serif leading-[1.02] text-[var(--color-ink)] md:text-5xl lg:text-[3.7rem]">
-            {content.titleMain}
-            <span className="mt-2 block text-[var(--color-accent-warm)]">{content.titleAccent}</span>
-          </h2>
-        </div>
-
-        <p className="max-w-xl text-base leading-relaxed text-black/65">{content.description}</p>
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-[minmax(320px,0.92fr)_minmax(0,1.18fr)]">
+    <Section className="bg-white">
+      <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: -30 }}
+          whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.65 }}
-          className="relative overflow-hidden rounded-[2.2rem] bg-[var(--color-ink)] p-8 text-white shadow-[var(--shadow-editorial)] md:p-10"
+          transition={{ duration: 0.8 }}
+          className="relative"
         >
-          <div className="absolute inset-0 bg-topo opacity-14" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(196,164,124,0.22),transparent_30%)]" />
-
-          <div className="relative z-10">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.24em] text-white/72">
-              <ShieldCheck size={14} className="text-[var(--color-gold)]" />
-              {content.methodLabel}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-4 pt-12">
+              {/* TODO: sostituire con foto reale di Rodrigo */}
+              <OptimizedImage
+                // TODO(@travelliniwithus): PLACEHOLDER — servono ritratto Rodrigo
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=600&auto=format&fit=crop"
+                alt="Rodrigo — Travelliniwithus"
+                className="aspect-4/5 w-full rounded-tr-[3rem] rounded-bl-[3rem] object-cover shadow-lg ring-1 ring-[var(--color-gold)]/10"
+              />
             </div>
-
-            <h3 className="mt-6 max-w-sm text-3xl font-serif leading-tight md:text-4xl">
-              {content.methodTitle}
-            </h3>
-            <p className="mt-4 max-w-md text-base leading-relaxed text-white/78">
-              {content.methodDescription}
-            </p>
-
-            <div className="mt-8 space-y-4">
-              {content.methodPoints.map((point) => (
-                <div
-                  key={point}
-                  className="rounded-[1.4rem] border border-white/10 bg-white/5 px-5 py-4 text-sm leading-relaxed text-white/78 backdrop-blur-sm"
-                >
-                  {point}
-                </div>
-              ))}
+            <div className="space-y-4">
+              {/* TODO: sostituire con foto reale di Betta */}
+              <OptimizedImage
+                // TODO(@travelliniwithus): PLACEHOLDER — servono ritratto Betta
+                src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=600&auto=format&fit=crop"
+                alt="Betta — Travelliniwithus"
+                className="aspect-4/5 w-full rounded-tl-[3rem] rounded-br-[3rem] object-cover shadow-lg ring-1 ring-[var(--color-gold)]/10"
+              />
             </div>
-
-            <Link
-              to={content.primaryCta.link}
-              className="mt-8 inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/10 px-6 py-3 text-xs font-bold uppercase tracking-[0.22em] text-white transition-all hover:border-transparent hover:bg-[var(--color-gold)]"
-            >
-              {content.primaryCta.label}
-              <ArrowRight size={14} />
-            </Link>
+          </div>
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-[var(--color-gold)]/30 bg-[var(--color-gold-soft)] p-5 backdrop-blur-md shadow-[0_0_30px_rgba(196,164,124,0.15)]">
+            <Compass className="h-8 w-8 text-[var(--color-gold)]" />
           </div>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: 30 }}
+          whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.06, duration: 0.65 }}
-          className="trust-panel bg-white p-6 shadow-sm md:p-8"
+          transition={{ duration: 0.8 }}
         >
-          <div className="overflow-hidden rounded-[1.7rem] border border-black/5 bg-[linear-gradient(180deg,#f9f7f3_0%,#f3ede3_100%)]">
-            <div className="relative aspect-[16/8] overflow-hidden">
-              <img
-                src="/hero-adventure.jpg"
-                alt={content.artDirection.imageAlt}
-                className="h-full w-full object-cover"
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(12,12,12,0.05)_0%,rgba(12,12,12,0.14)_55%,rgba(12,12,12,0.62)_100%)]" />
-              <div className="absolute left-5 top-5 rounded-full bg-white/88 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)] backdrop-blur-md">
-                {content.artDirection.shotIntent}
-              </div>
-              <div className="absolute bottom-5 left-5 right-5 text-sm leading-relaxed text-white/84">
-                {content.artDirection.imageCaption}
-              </div>
-            </div>
+          <span className="mb-3 block font-script text-xl text-[var(--color-accent)]">Chi siamo</span>
+          <h2 className="text-3xl font-serif leading-tight text-ink md:text-4xl">
+            Viaggiamo per scoprire posti <span className="text-[var(--color-accent-warm)]">che valgono.</span>
+          </h2>
+          <p className="mt-5 text-lg font-normal leading-relaxed text-black/70">
+            Siamo Gaetano Rodrigo & Betta, travel couple con {BRAND_STATS.yearsOfTravel} anni di viaggi in coppia.
+            Budget travel, food experience, posti veri — solo luoghi che abbiamo testato di persona.
+          </p>
+          <p className="mt-6 font-script text-lg text-[var(--color-gold)]">
+            "Viaggiare bene non serve spendere tanto."
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            {['Budget travel', 'Food experience', 'Weekend in coppia', 'Posti particolari'].map((tag) => (
+              <span key={tag} className="rounded-lg border border-[var(--color-ink)]/5 border-l-2 border-l-[var(--color-gold)] bg-[var(--color-accent-soft)] px-5 py-2.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)]">
+                {tag}
+              </span>
+            ))}
           </div>
-
-          <div className="mt-7">
-            <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-black/42">
-              {content.creatorLabel}
-            </div>
-            <h3 className="mt-3 text-3xl font-serif leading-tight text-[var(--color-ink)]">
-              {content.creatorTitle}
-            </h3>
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/66">
-              {content.creatorDescription}
-            </p>
-
-            <div className="mt-5 flex flex-wrap items-center gap-3 text-[11px] uppercase tracking-[0.2em] text-black/45">
-              <span>{CONTACTS.instagramHandle}</span>
-              <span className="h-1 w-1 rounded-full bg-black/20" />
-              <span>{CONTACTS.tiktokHandle}</span>
-            </div>
-
-            <div className="mt-7 grid gap-4 md:grid-cols-3">
-              {content.creatorBenefits.map((item, index) => {
-                const Icon = creatorIcons[index] ?? Sparkles;
-                return (
-                  <div
-                    key={item.title}
-                    className="rounded-[1.5rem] border border-black/5 bg-[var(--color-sand)] px-5 py-5"
-                  >
-                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-[var(--color-accent)] shadow-sm">
-                      <Icon size={18} />
-                    </div>
-                    <h4 className="text-lg font-serif text-[var(--color-ink)]">{item.title}</h4>
-                    <p className="mt-2 text-sm leading-relaxed text-black/62">{item.text}</p>
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              {isExternalLink(content.secondaryCta.link) ? (
-                <a
-                  href={content.secondaryCta.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-ink)] transition-all hover:gap-3 hover:text-[var(--color-accent-warm)]"
-                >
-                  {content.secondaryCta.label}
-                  <ArrowRight size={14} />
-                </a>
-              ) : (
-                <Link
-                  to={content.secondaryCta.link}
-                  className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-ink)] transition-all hover:gap-3 hover:text-[var(--color-accent-warm)]"
-                >
-                  {content.secondaryCta.label}
-                  <ArrowRight size={14} />
-                </Link>
-              )}
-            </div>
-          </div>
+          <Link
+            to="/chi-siamo"
+            className="mt-8 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-ink transition-all hover:text-[var(--color-accent-warm)] hover:gap-4"
+          >
+            Scopri la nostra storia
+            <ArrowRight size={14} />
+          </Link>
         </motion.div>
       </div>
     </Section>

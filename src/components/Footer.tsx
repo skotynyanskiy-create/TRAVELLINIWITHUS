@@ -30,22 +30,12 @@ export default function Footer() {
         <div className="mx-auto max-w-7xl px-6 md:px-12">
           <div className="mb-16 grid grid-cols-1 gap-16 md:grid-cols-4 lg:grid-cols-5">
             <div className="md:col-span-2 lg:col-span-2">
-              <Link
-                to="/"
-                className="mb-3 inline-block text-3xl font-serif font-medium tracking-tight text-white"
-              >
+              <Link to="/" className="mb-3 inline-block text-3xl font-serif font-medium tracking-tight text-white">
                 Travellini<span className="font-bold text-[var(--color-accent)]">with</span>us
               </Link>
-              <span className="mb-8 block text-[10px] font-bold uppercase tracking-[0.24em] text-white/40">
-                {footer.tagline}
-              </span>
-              <p className="mb-6 max-w-sm text-base font-light leading-relaxed text-zinc-400">
-                {footer.description}
-              </p>
-              <a
-                href={CONTACTS.mailto}
-                className="mb-8 block text-sm font-light text-zinc-400 transition-colors hover:text-white"
-              >
+              <span className="mb-8 block font-script text-lg text-white/30">Posti particolari, esperienze vere.</span>
+              <p className="mb-6 max-w-sm text-base font-light leading-relaxed text-zinc-400">{footer.description}</p>
+              <a href={CONTACTS.mailto} className="mb-8 block text-sm font-light text-zinc-400 transition-colors hover:text-white">
                 {CONTACTS.email}
               </a>
 
@@ -92,41 +82,38 @@ export default function Footer() {
             </div>
 
             <div>
-              <h4 className="mb-10 text-sm font-bold uppercase tracking-[0.3em] text-white">
-                {footer.discoverTitle}
-              </h4>
+              <h4 className="mb-10 text-sm font-bold uppercase tracking-[0.3em] text-white">{footer.discoverTitle}</h4>
               <ul className="space-y-5">
                 <li>
-                  <Link
-                    to="/destinazioni"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
+                  <Link to="/destinazioni" className="inline-block text-base transition-colors hover:text-[var(--color-accent)]">
                     {navigation.destinationsLabel}
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    to="/esperienze"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
+                  <Link to="/esperienze" className="inline-block text-base transition-colors hover:text-[var(--color-accent)]">
                     {navigation.experiencesLabel}
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    to="/risorse"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
+                  <Link to="/risorse" className="inline-block text-base transition-colors hover:text-[var(--color-accent)]">
                     {navigation.resourcesLabel}
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/shop" className="inline-block text-base transition-colors hover:text-[var(--color-accent)]">
+                    Shop Premium
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/mappa" className="inline-block text-base transition-colors hover:text-[var(--color-accent)]">
+                    Mappa Interattiva
                   </Link>
                 </li>
               </ul>
             </div>
 
             <div>
-              <h4 className="mb-10 text-sm font-bold uppercase tracking-[0.3em] text-white">
-                {footer.resourcesTitle}
-              </h4>
+              <h4 className="mb-10 text-sm font-bold uppercase tracking-[0.3em] text-white">{footer.resourcesTitle}</h4>
               <ul className="space-y-5">
                 <li>
                   <button
@@ -137,26 +124,12 @@ export default function Footer() {
                   </button>
                 </li>
                 <li>
-                  <Link
-                    to="/preferiti"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
+                  <Link to="/preferiti" className="inline-block text-base transition-colors hover:text-[var(--color-accent)]">
                     {navigation.favoritesLabel}
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    to="/risorse"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
-                    Toolkit editoriale
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/disclaimer"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
+                  <Link to="/disclaimer" className="inline-block text-base transition-colors hover:text-[var(--color-accent)]">
                     Affiliazioni
                   </Link>
                 </li>
@@ -164,15 +137,10 @@ export default function Footer() {
             </div>
 
             <div className="md:col-span-4 lg:col-span-1">
-              <h4 className="mb-10 text-sm font-bold uppercase tracking-[0.3em] text-white">
-                {footer.projectTitle}
-              </h4>
+              <h4 className="mb-10 text-sm font-bold uppercase tracking-[0.3em] text-white">{footer.projectTitle}</h4>
               <ul className="mb-10 space-y-5">
                 <li>
-                  <Link
-                    to="/chi-siamo"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
+                  <Link to="/chi-siamo" className="inline-block text-base transition-colors hover:text-[var(--color-accent)]">
                     {navigation.aboutLabel}
                   </Link>
                 </li>
@@ -185,18 +153,12 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    to="/media-kit"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
+                  <Link to="/media-kit" className="inline-block text-base transition-colors hover:text-[var(--color-accent)]">
                     {navigation.mediaKitLabel}
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    to="/contatti"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
+                  <Link to="/contatti" className="inline-block text-base transition-colors hover:text-[var(--color-accent)]">
                     {navigation.contactsLabel}
                   </Link>
                 </li>
@@ -223,13 +185,13 @@ export default function Footer() {
           {/* Brand collaboration card */}
           <div className="mb-12 flex flex-col items-center justify-between gap-4 rounded-2xl border border-white/8 bg-[#1C1C1C] px-8 py-6 sm:flex-row">
             <p className="text-sm font-medium text-white/70">
-              {footer.brandCtaText}
+              Sei un brand? Scopri come collaborare con i Travellini.
             </p>
             <Link
-              to={footer.brandCtaLink}
+              to="/collaborazioni"
               className="inline-flex items-center gap-2 rounded-full bg-[var(--color-gold)] px-6 py-2.5 text-xs font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
             >
-              {footer.brandCtaLabel} <ArrowRight size={14} />
+              Collabora con noi <ArrowRight size={14} />
             </Link>
           </div>
 

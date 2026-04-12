@@ -42,7 +42,6 @@ export const DEMO_PRODUCT = {
   slug: DEMO_PRODUCT_SLUG,
   name: 'Guida Premium Dolomiti',
   price: 24.9,
-  isDigital: true,
   imageUrl:
     'https://images.unsplash.com/photo-1517842645767-c639042777db?q=80&w=1400&auto=format&fit=crop',
   category: 'Guida premium',

@@ -1,4 +1,8 @@
-import { REMOTE_MONITORING_ENABLED } from '../config/runtime';
+/**
+ * Error tracking and monitoring setup
+ * Currently configured for console logging in development
+ * Ready to integrate Sentry, Rollbar, or LogRocket in production
+ */
 
 interface ErrorEvent {
   message: string;
@@ -10,28 +14,6 @@ interface ErrorEvent {
 
 const isDevelopment = import.meta.env.DEV;
 const errorLog: ErrorEvent[] = [];
-let handlersRegistered = false;
-
-async function sendRemoteEvent(event: ErrorEvent) {
-  if (!REMOTE_MONITORING_ENABLED) {
-    return;
-  }
-
-  try {
-    await fetch('/api/client-error', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(event),
-      keepalive: true,
-    });
-  } catch (error) {
-    if (isDevelopment) {
-      console.warn('Remote monitoring request failed', error);
-    }
-  }
-}
 
 export function captureException(error: unknown, context?: Record<string, unknown>) {
   const message = error instanceof Error ? error.message : String(error);
@@ -52,18 +34,18 @@ export function captureException(error: unknown, context?: Record<string, unknow
   errorLog.push(event);
 
   if (isDevelopment) {
-    console.error('Error captured:', event);
+    console.error('🔴 Error captured:', event);
   }
 
-  void sendRemoteEvent(event);
+  // TODO: Send to Sentry/Rollbar in production
+  // if (import.meta.env.PROD && window.Sentry) {
+  //   Sentry.captureException(error, { contexts: { ...context } });
+  // }
+
   return event;
 }
 
-export function captureMessage(
-  message: string,
-  level: 'error' | 'warning' | 'info' = 'info',
-  context?: Record<string, unknown>
-) {
+export function captureMessage(message: string, level: 'error' | 'warning' | 'info' = 'info', context?: Record<string, unknown>) {
   const event: ErrorEvent = {
     message,
     level,
@@ -75,42 +57,24 @@ export function captureMessage(
   errorLog.push(event);
 
   if (isDevelopment) {
-    console.log(`[${level.toUpperCase()}]`, message, context);
+    console.log(`🟡 [${level.toUpperCase()}]`, message, context);
   }
 
-  void sendRemoteEvent(event);
+  // TODO: Send to monitoring service in production
   return event;
 }
 
 export function trackUserAction(action: string, data?: Record<string, unknown>) {
   const timestamp = new Date().toISOString();
-
+  
   if (isDevelopment) {
-    console.log(`Action: ${action}`, { timestamp, ...data });
-  }
-}
-
-export function setupGlobalErrorHandlers() {
-  if (handlersRegistered) {
-    return;
+    console.log(`✅ Action: ${action}`, { timestamp, ...data });
   }
 
-  handlersRegistered = true;
-
-  window.addEventListener('error', (event) => {
-    captureException(event.error ?? event.message, {
-      source: 'window.error',
-      filename: event.filename,
-      lineno: event.lineno,
-      colno: event.colno,
-    });
-  });
-
-  window.addEventListener('unhandledrejection', (event) => {
-    captureException(event.reason, {
-      source: 'window.unhandledrejection',
-    });
-  });
+  // TODO: Send to analytics in production
+  // - Add to Firebase Analytics
+  // - Add to Mixpanel / Amplitude
+  // - Add to GA4
 }
 
 export function getErrorLog() {

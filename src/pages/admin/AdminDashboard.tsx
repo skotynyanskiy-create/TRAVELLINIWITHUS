@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { collection, getDocs, deleteDoc, doc, query, limit } from 'firebase/firestore';
+import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../../lib/firebaseDb';
 import { Link } from 'react-router-dom';
 import { Users as UsersIcon, Plus, Edit, Trash2, Package, FileText, BarChart3, Save, Loader2, TrendingUp, Image as ImageIcon, ShoppingBag, Database, LayoutDashboard, Search, Mail, Ticket, History, Download, ArrowRight } from 'lucide-react';
@@ -16,7 +16,6 @@ import Users from './Users';
 import CouponManager from '../../components/CouponManager';
 import AuditLog from '../../components/AuditLog';
 import { siteContentDefinitions } from '../../config/siteContent';
-import { BRAND_STATS } from '../../config/site';
 
 // Mock data for analytics
 const data = [
@@ -80,10 +79,10 @@ export default function AdminDashboard() {
   const [users, setUsers] = useState<UserDoc[]>([]);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [stats, setStats] = useState<SiteStats>({
-    igFollowers: BRAND_STATS.instagramFollowers,
-    monthlyReach: BRAND_STATS.monthlyReach,
-    uniqueUsers: BRAND_STATS.totalFollowers,
-    engagementRate: BRAND_STATS.engagementRate,
+    igFollowers: '250K+',
+    monthlyReach: '500K+',
+    uniqueUsers: '50K+',
+    engagementRate: '8.5%'
   });
   const [loading, setLoading] = useState(true);
   const [savingStats, setSavingStats] = useState(false);
@@ -98,45 +97,40 @@ export default function AdminDashboard() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      // Fetch Articles (limited to 500)
-      const articlesQ = query(collection(db, 'articles'), limit(500));
-      const articlesSnapshot = await getDocs(articlesQ);
+      // Fetch Articles
+      const articlesSnapshot = await getDocs(collection(db, 'articles'));
       const fetchedArticles: Article[] = [];
       articlesSnapshot.forEach((doc) => {
         fetchedArticles.push({ id: doc.id, ...doc.data() } as Article);
       });
       setArticles(fetchedArticles);
 
-      // Fetch Products (limited to 200)
-      const productsQ = query(collection(db, 'products'), limit(200));
-      const productsSnapshot = await getDocs(productsQ);
+      // Fetch Products
+      const productsSnapshot = await getDocs(collection(db, 'products'));
       const fetchedProducts: Product[] = [];
       productsSnapshot.forEach((doc) => {
         fetchedProducts.push({ id: doc.id, ...doc.data() } as Product);
       });
       setProducts(fetchedProducts);
 
-      // Fetch Orders (limited to 500, most recent)
-      const ordersQ = query(collection(db, 'orders'), limit(500));
-      const ordersSnapshot = await getDocs(ordersQ);
+      // Fetch Orders
+      const ordersSnapshot = await getDocs(collection(db, 'orders'));
       const fetchedOrders: Order[] = [];
       ordersSnapshot.forEach((doc) => {
         fetchedOrders.push({ id: doc.id, ...doc.data() } as Order);
       });
       setOrders(fetchedOrders);
 
-      // Fetch Users (limited to 500)
-      const usersQ = query(collection(db, 'users'), limit(500));
-      const usersSnapshot = await getDocs(usersQ);
+      // Fetch Users
+      const usersSnapshot = await getDocs(collection(db, 'users'));
       const fetchedUsers: UserDoc[] = [];
       usersSnapshot.forEach((doc) => {
         fetchedUsers.push({ id: doc.id, ...doc.data() } as UserDoc);
       });
       setUsers(fetchedUsers);
 
-      // Fetch Leads (limited to 500)
-      const leadsQ = query(collection(db, 'leads'), limit(500));
-      const leadsSnapshot = await getDocs(leadsQ);
+      // Fetch Leads
+      const leadsSnapshot = await getDocs(collection(db, 'leads'));
       const fetchedLeads: Lead[] = [];
       leadsSnapshot.forEach((doc) => {
         fetchedLeads.push({ id: doc.id, ...doc.data() } as Lead);
@@ -594,7 +588,7 @@ export default function AdminDashboard() {
                   />
                 </div>
                 <div>
-                  <label htmlFor="uniqueUsers" className="block text-sm font-medium text-zinc-700 mb-2">Audience totale dichiarata</label>
+                  <label htmlFor="uniqueUsers" className="block text-sm font-medium text-zinc-700 mb-2">Utenti Unici Mensili (Blog)</label>
                   <input 
                     id="uniqueUsers"
                     type="text" 

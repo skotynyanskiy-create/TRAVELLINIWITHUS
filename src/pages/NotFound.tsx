@@ -24,12 +24,12 @@ export default function NotFound() {
             <Compass className="text-[var(--color-accent)]" size={32} />
           </div>
 
-          <span className="mb-4 block text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">Percorso interrotto</span>
+          <span className="font-script text-3xl text-[var(--color-accent-warm)] mb-4 block">Ops, ci siamo persi!</span>
           <h1 className="text-display-1 mb-6">
             Pagina <span className="italic opacity-60">non trovata</span>
           </h1>
           <p className="max-w-2xl mx-auto mb-10 text-lg font-light leading-relaxed text-black/70">
-            Il contenuto che stai cercando non e disponibile a questo indirizzo. Puoi tornare alla home oppure ripartire dai due ingressi principali del sito: destinazioni ed esperienze.
+            Il contenuto che stai cercando non e disponibile a questo indirizzo. Puoi tornare alla home oppure ripartire da guide, destinazioni e shop.
           </p>
 
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -46,10 +46,10 @@ export default function NotFound() {
               Esplora i contenuti
             </Link>
             <Link
-              to="/esperienze"
+              to="/shop"
               className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-8 py-4 text-xs font-semibold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
             >
-              Apri esperienze
+              Vai allo shop
             </Link>
           </div>
         </div>

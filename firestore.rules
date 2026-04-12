@@ -116,7 +116,7 @@ service cloud.firestore {
     }
 
     function isValidArticle() {
-      return hasOnlyAllowedFields(['title', 'slug', 'excerpt', 'content', 'coverImage', 'category', 'author', 'location', 'country', 'region', 'city', 'continent', 'experienceTypes', 'period', 'budget', 'readTime', 'tips', 'packingList', 'highlights', 'mapUrl', 'duration', 'videoUrl', 'published', 'authorId', 'createdAt', 'updatedAt']) &&
+      return hasOnlyAllowedFields(['title', 'slug', 'excerpt', 'content', 'coverImage', 'category', 'author', 'location', 'region', 'continent', 'period', 'budget', 'readTime', 'tips', 'packingList', 'highlights', 'mapUrl', 'published', 'authorId', 'createdAt', 'updatedAt']) &&
              request.resource.data.title is string && request.resource.data.title.size() > 0 && request.resource.data.title.size() < 200 &&
              request.resource.data.slug is string && request.resource.data.slug.size() > 0 && request.resource.data.slug.size() < 200 &&
              request.resource.data.content is string && request.resource.data.content.size() > 0 && request.resource.data.content.size() < 100000 &&
@@ -126,11 +126,8 @@ service cloud.firestore {
              (!('category' in request.resource.data) || (request.resource.data.category is string && request.resource.data.category.size() < 100)) &&
              (!('author' in request.resource.data) || (request.resource.data.author is string && request.resource.data.author.size() < 150)) &&
              (!('location' in request.resource.data) || (request.resource.data.location is string && request.resource.data.location.size() < 200)) &&
-             (!('country' in request.resource.data) || (request.resource.data.country is string && request.resource.data.country.size() < 120)) &&
              (!('region' in request.resource.data) || (request.resource.data.region is string && request.resource.data.region.size() < 150)) &&
-             (!('city' in request.resource.data) || (request.resource.data.city is string && request.resource.data.city.size() < 150)) &&
              (!('continent' in request.resource.data) || (request.resource.data.continent is string && request.resource.data.continent.size() < 100)) &&
-             (!('experienceTypes' in request.resource.data) || isValidStringList(request.resource.data.experienceTypes, 20, 80)) &&
              (!('period' in request.resource.data) || (request.resource.data.period is string && request.resource.data.period.size() < 150)) &&
              (!('budget' in request.resource.data) || (request.resource.data.budget is string && request.resource.data.budget.size() < 100)) &&
              (!('readTime' in request.resource.data) || (request.resource.data.readTime is string && request.resource.data.readTime.size() < 50)) &&
@@ -138,26 +135,21 @@ service cloud.firestore {
              (!('packingList' in request.resource.data) || isValidStringList(request.resource.data.packingList, 50, 200)) &&
              (!('highlights' in request.resource.data) || isValidStringList(request.resource.data.highlights, 20, 200)) &&
              (!('mapUrl' in request.resource.data) || (request.resource.data.mapUrl is string && request.resource.data.mapUrl.size() < 2000)) &&
-             (!('duration' in request.resource.data) || request.resource.data.duration == null || (request.resource.data.duration is string && request.resource.data.duration.size() < 100)) &&
-             (!('videoUrl' in request.resource.data) || request.resource.data.videoUrl == null || (request.resource.data.videoUrl is string && request.resource.data.videoUrl.size() < 2000)) &&
              (!('published' in request.resource.data) || request.resource.data.published is bool) &&
              (!('createdAt' in request.resource.data) || request.resource.data.createdAt is timestamp) &&
              (!('updatedAt' in request.resource.data) || request.resource.data.updatedAt is timestamp);
     }
 
     function isValidProduct() {
-      return hasOnlyAllowedFields(['name', 'slug', 'description', 'price', 'imageUrl', 'category', 'isDigital', 'downloadUrl', 'published', 'createdAt', 'updatedAt']) &&
+      return hasOnlyAllowedFields(['name', 'slug', 'description', 'price', 'imageUrl', 'category', 'published', 'createdAt']) &&
              request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() < 200 &&
              request.resource.data.slug is string && request.resource.data.slug.size() > 0 && request.resource.data.slug.size() < 200 &&
              request.resource.data.price is number && request.resource.data.price >= 0 &&
-             request.resource.data.category is string && request.resource.data.category.size() > 0 && request.resource.data.category.size() < 100 &&
+             request.resource.data.category is string && request.resource.data.category in ['preset', 'guide', 'planner', 'digital-planner', 'bundle', 'map'] &&
              (!('description' in request.resource.data) || (request.resource.data.description is string && request.resource.data.description.size() < 2000)) &&
              (!('imageUrl' in request.resource.data) || (request.resource.data.imageUrl is string && request.resource.data.imageUrl.size() < 1000)) &&
-             (!('isDigital' in request.resource.data) || request.resource.data.isDigital is bool) &&
-             (!('downloadUrl' in request.resource.data) || request.resource.data.downloadUrl == null || (request.resource.data.downloadUrl is string && request.resource.data.downloadUrl.size() < 2000)) &&
              (!('published' in request.resource.data) || request.resource.data.published is bool) &&
-             (!('createdAt' in request.resource.data) || request.resource.data.createdAt is timestamp) &&
-             (!('updatedAt' in request.resource.data) || request.resource.data.updatedAt is timestamp);
+             (!('createdAt' in request.resource.data) || request.resource.data.createdAt is timestamp);
     }
 
     function isValidSettings() {
@@ -184,23 +176,19 @@ service cloud.firestore {
     }
 
     function isValidOrder() {
-      return hasOnlyAllowedFields(['customerName', 'email', 'total', 'status', 'createdAt', 'items', 'userId', 'stripeSessionId']) &&
+      return hasOnlyAllowedFields(['customerName', 'email', 'total', 'status', 'createdAt']) &&
              request.resource.data.customerName is string && request.resource.data.customerName.size() > 0 && request.resource.data.customerName.size() < 200 &&
              request.resource.data.email is string && request.resource.data.email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$") &&
              request.resource.data.total is number && request.resource.data.total >= 0 &&
              request.resource.data.status is string && request.resource.data.status in ['pending', 'completed', 'cancelled'] &&
-             (!('items' in request.resource.data) || isValidList(request.resource.data.items, 50)) &&
-             (!('userId' in request.resource.data) || request.resource.data.userId == null || (request.resource.data.userId is string && request.resource.data.userId.size() < 128)) &&
-             (!('stripeSessionId' in request.resource.data) || (request.resource.data.stripeSessionId is string && request.resource.data.stripeSessionId.size() < 255)) &&
              (!('createdAt' in request.resource.data) || request.resource.data.createdAt is timestamp);
     }
 
     function isValidCoupon() {
-      return hasOnlyAllowedFields(['code', 'type', 'value', 'description', 'active', 'expiryDate', 'createdAt']) &&
+      return hasOnlyAllowedFields(['code', 'discountType', 'value', 'active', 'expiryDate', 'createdAt']) &&
              request.resource.data.code is string && request.resource.data.code.size() > 0 && request.resource.data.code.size() < 50 &&
-             request.resource.data.type is string && request.resource.data.type in ['percent', 'fixed'] &&
+             request.resource.data.discountType is string && request.resource.data.discountType in ['percentage', 'fixed'] &&
              request.resource.data.value is number && request.resource.data.value >= 0 &&
-             (!('description' in request.resource.data) || (request.resource.data.description is string && request.resource.data.description.size() < 200)) &&
              request.resource.data.active is bool &&
              (!('expiryDate' in request.resource.data) || request.resource.data.expiryDate is timestamp) &&
              (!('createdAt' in request.resource.data) || request.resource.data.createdAt is timestamp);
@@ -255,17 +243,14 @@ service cloud.firestore {
     }
 
     match /orders/{orderId} {
-      allow read: if isAdmin() || (isAuthenticated() && (
-        (resource.data.userId is string && resource.data.userId == request.auth.uid) ||
-        (resource.data.email is string && request.auth.token.email == resource.data.email)
-      ));
+      allow read: if isAdmin();
       allow create: if isValidOrder();
       allow update: if isAdmin() && isValidOrder();
       allow delete: if isAdmin();
     }
 
     match /coupons/{couponId} {
-      allow read: if true;
+      allow read: if isAuthenticated();
       allow write: if isAdmin() && isValidCoupon();
     }
 

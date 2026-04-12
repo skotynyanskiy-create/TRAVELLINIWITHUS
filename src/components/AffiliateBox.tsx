@@ -18,37 +18,37 @@ interface AffiliateBoxProps {
 
 const providerConfig = {
   booking: {
-    icon: <Hotel className="text-[var(--color-affiliate-booking)]" size={24} />,
-    color: 'var(--color-affiliate-booking)',
-    bgLight: 'bg-[var(--color-affiliate-booking-soft)]',
+    icon: <Hotel className="text-[#003580]" size={24} />,
+    color: '#003580',
+    bgLight: 'bg-blue-50',
     defaultCta: 'Vedi su Booking.com',
     logo: 'Booking.com'
   },
   heymondo: {
-    icon: <Shield className="text-[var(--color-affiliate-heymondo)]" size={24} />,
-    color: 'var(--color-affiliate-heymondo)',
+    icon: <Shield className="text-[#00d084]" size={24} />,
+    color: '#00d084',
     bgLight: 'bg-[var(--color-accent-soft)]',
     defaultCta: 'Calcola Preventivo (-10%)',
     logo: 'Heymondo'
   },
   skyscanner: {
-    icon: <Plane className="text-[var(--color-affiliate-skyscanner)]" size={24} />,
-    color: 'var(--color-affiliate-skyscanner)',
-    bgLight: 'bg-[var(--color-affiliate-skyscanner-soft)]',
+    icon: <Plane className="text-[#0770e3]" size={24} />,
+    color: '#0770e3',
+    bgLight: 'bg-sky-50',
     defaultCta: 'Cerca Voli',
     logo: 'Skyscanner'
   },
   getyourguide: {
-    icon: <MapPin className="text-[var(--color-affiliate-getyourguide)]" size={24} />,
-    color: 'var(--color-affiliate-getyourguide)',
-    bgLight: 'bg-[var(--color-affiliate-getyourguide-soft)]',
+    icon: <MapPin className="text-[#ff523b]" size={24} />,
+    color: '#ff523b',
+    bgLight: 'bg-red-50',
     defaultCta: 'Prenota Attività',
     logo: 'GetYourGuide'
   },
   amazon: {
-    icon: <Tag className="text-[var(--color-affiliate-amazon)]" size={24} />,
-    color: 'var(--color-affiliate-amazon)',
-    bgLight: 'bg-[var(--color-affiliate-amazon-soft)]',
+    icon: <Tag className="text-[#ff9900]" size={24} />,
+    color: '#ff9900',
+    bgLight: 'bg-orange-50',
     defaultCta: 'Acquista su Amazon',
     logo: 'Amazon'
   },

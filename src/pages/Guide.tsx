@@ -5,6 +5,7 @@ import { ArrowDownUp, ArrowRight, Calendar, Clock, Filter, Search } from 'lucide
 import { cardContainer, cardItem } from '../lib/animations';
 import { useQuery } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
+import { Timestamp } from 'firebase/firestore';
 import Breadcrumbs from '../components/Breadcrumbs';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
@@ -19,8 +20,6 @@ import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_ARTICLE_PREVIEW } from '../config/demoContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { SITE_URL } from '../config/site';
-import { formatDateValue, toMillis, type DateValue } from '../utils/dateValue';
-import { DEMO_CONTENT_ENABLED } from '../config/runtime';
 
 interface GuideArticle {
   id: string;
@@ -28,15 +27,13 @@ interface GuideArticle {
   category: string;
   image: string;
   slug: string;
-  createdAt?: DateValue;
+  createdAt?: Timestamp;
   readTime?: string;
 }
 
 export default function GuideWrapper() {
   return (
-    <ErrorBoundary
-      fallback={<div className="py-20 text-center text-red-500">Impossibile caricare le guide</div>}
-    >
+    <ErrorBoundary fallback={<div className="py-20 text-center text-red-500">Impossibile caricare le guide</div>}>
       <Guide />
     </ErrorBoundary>
   );
@@ -45,21 +42,16 @@ export default function GuideWrapper() {
 function Guide() {
   const { data: demoContent } = useSiteContent('demo');
   const demoSettings = demoContent ?? siteContentDefaults.demo;
-  const editorialDemoEnabled = DEMO_CONTENT_ENABLED && demoSettings.showEditorialDemo;
 
-  const {
-    data: guides = [],
-    isLoading,
-    error,
-  } = useQuery<GuideArticle[]>({
-    queryKey: ['articles', 'guides-page', editorialDemoEnabled],
+  const { data: guides = [], isLoading, error } = useQuery<GuideArticle[]>({
+    queryKey: ['articles', 'guides-page', demoSettings.showEditorialDemo],
     queryFn: async () => {
       const fetchedGuides = await fetchArticles();
       if (fetchedGuides.length > 0) {
         return fetchedGuides as GuideArticle[];
       }
 
-      return editorialDemoEnabled ? [DEMO_ARTICLE_PREVIEW] : [];
+      return demoSettings.showEditorialDemo ? ([DEMO_ARTICLE_PREVIEW] as GuideArticle[]) : [];
     },
   });
 
@@ -81,9 +73,7 @@ function Guide() {
 
   const filteredAndSortedGuides = useMemo(() => {
     let filtered =
-      selectedCategory === 'Tutti'
-        ? [...guides]
-        : guides.filter((guide) => guide.category === selectedCategory);
+      selectedCategory === 'Tutti' ? [...guides] : guides.filter((guide) => guide.category === selectedCategory);
 
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
@@ -91,8 +81,8 @@ function Guide() {
     }
 
     filtered.sort((a, b) => {
-      const dateA = toMillis(a.createdAt);
-      const dateB = toMillis(b.createdAt);
+      const dateA = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
+      const dateB = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
 
       if (sortBy === 'newest') return dateB - dateA;
       if (sortBy === 'oldest') return dateA - dateB;
@@ -114,17 +104,14 @@ function Guide() {
       <SEO
         title="Guide di Viaggio"
         description="Guide, idee e consigli pratici per organizzare meglio i viaggi, capire se un posto merita davvero e trovare spunti utili da salvare."
-        canonical={`${SITE_URL}/guide`}
       />
-      <JsonLd
-        data={{
-          '@context': 'https://schema.org',
-          '@type': 'CollectionPage',
-          name: 'Guide di Viaggio — Travelliniwithus',
-          description: 'Guide, idee e consigli pratici per organizzare meglio i viaggi.',
-          url: `${SITE_URL}/guide`,
-        }}
-      />
+      <JsonLd data={{
+        '@context': 'https://schema.org',
+        '@type': 'CollectionPage',
+        name: 'Guide di Viaggio — Travelliniwithus',
+        description: 'Guide, idee e consigli pratici per organizzare meglio i viaggi.',
+        url: `${SITE_URL}/guide`,
+      }} />
 
       <Section className="pt-8">
         <Breadcrumbs items={breadcrumbItems} />
@@ -133,20 +120,24 @@ function Guide() {
           <div>
             <div className="mb-6 flex items-center gap-4">
               <div className="h-[1px] w-12 bg-[var(--color-accent)]"></div>
-              <span className="text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)]">
-                Libreria editoriale
-              </span>
+              <span className="font-script text-xl text-[var(--color-accent-warm)]">Consigli pratici</span>
             </div>
 
-            <div className="inline-block">
+            <div className="relative inline-block">
               <h1 className="text-display-1">
-                Guide per <br className="md:hidden" />
-                <span className="italic text-black/60">decidere meglio</span>
+                Tutte le <br className="md:hidden" />
+                <span className="italic text-black/60">Guide</span>
               </h1>
+              <motion.span
+                initial={{ opacity: 0, rotate: -10, scale: 0.8 }}
+                animate={{ opacity: 1, rotate: -5, scale: 1 }}
+                transition={{ delay: 0.8, duration: 0.8 }}
+                aria-hidden="true"
+                className="absolute -right-12 -bottom-6 hidden font-script text-2xl text-[var(--color-accent)] opacity-80 sm:block md:text-3xl"
+              >
+                scopri di più
+              </motion.span>
             </div>
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-black/65">
-              Qui trovi il lato piu ordinato del progetto: una libreria di guide, idee e articoli pensata per aiutarti a capire in fretta cosa vale il tuo tempo, cosa approfondire e da dove partire.
-            </p>
           </div>
 
           <div className="flex w-full flex-col items-center gap-6 rounded-[var(--radius-xl)] border border-black/5 bg-[var(--color-sand)] p-4 shadow-sm md:w-auto md:flex-row md:justify-between">
@@ -173,17 +164,11 @@ function Guide() {
             </div>
 
             <div className="relative w-full md:w-48">
-              <Search
-                size={14}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-black/30"
-              />
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-black/30" />
               <input
                 type="text"
                 value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  setCurrentPage(1);
-                }}
+                onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
                 placeholder="Cerca guida..."
                 className="w-full rounded-full border border-black/5 bg-white py-2 pl-9 pr-4 text-sm text-zinc-700 placeholder:text-black/30 focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
               />
@@ -213,15 +198,10 @@ function Guide() {
           </div>
         </div>
 
-        <div className="mb-10 rounded-[1.8rem] border border-[var(--color-accent)]/15 bg-[var(--color-accent-soft)] px-6 py-5 text-sm leading-relaxed text-[var(--color-accent-text)]">
-          Parti dalla categoria se stai cercando un tipo preciso di lettura. Usa la ricerca quando hai gia in mente un luogo, una guida o un tema da riaprire.
-        </div>
-
         {!isLoading && filteredAndSortedGuides.length > 0 && (
           <div className="mb-10 flex flex-col gap-3 text-sm text-black/50 md:flex-row md:items-center md:justify-between">
             <p>
-              {filteredAndSortedGuides.length}{' '}
-              {filteredAndSortedGuides.length === 1 ? 'guida trovata' : 'guide trovate'}
+              {filteredAndSortedGuides.length} {filteredAndSortedGuides.length === 1 ? 'guida trovata' : 'guide trovate'}
               {selectedCategory !== 'Tutti' ? ` in ${selectedCategory}` : ''}.
             </p>
             <p>
@@ -238,12 +218,8 @@ function Guide() {
           </div>
         ) : filteredAndSortedGuides.length === 0 ? (
           <div className="py-20 text-center">
-            <p className="text-sm uppercase tracking-widest font-bold text-black/30 mb-2">
-              Nessun risultato
-            </p>
-            <p className="text-base font-normal text-black/65">
-              Prova a cambiare categoria o a cercare con parole diverse.
-            </p>
+            <p className="text-sm uppercase tracking-widest font-bold text-black/30 mb-2">Nessun risultato</p>
+            <p className="text-base font-normal text-black/65">Prova a cambiare categoria o a cercare con parole diverse.</p>
           </div>
         ) : (
           <>
@@ -264,10 +240,7 @@ function Guide() {
                       variants={cardItem}
                       className="group col-span-full cursor-pointer overflow-hidden rounded-[var(--radius-2xl)] border border-zinc-100 bg-white transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl"
                     >
-                      <Link
-                        to={`/articolo/${guide.slug || guide.id}`}
-                        className="flex flex-col md:flex-row"
-                      >
+                      <Link to={`/articolo/${guide.slug || guide.id}`} className="flex flex-col md:flex-row">
                         <div className="relative md:w-[60%] aspect-[16/9] overflow-hidden">
                           <OptimizedImage
                             src={guide.image}
@@ -286,7 +259,11 @@ function Guide() {
                           <div className="mb-6 flex items-center gap-4 text-[9px] font-bold uppercase tracking-[0.2em] text-black/30">
                             <div className="flex items-center gap-1.5">
                               <Calendar size={12} className="text-[var(--color-accent)]" />
-                              <span>{formatDateValue(guide.createdAt) || 'Recente'}</span>
+                              <span>
+                                {guide.createdAt?.toDate
+                                  ? guide.createdAt.toDate().toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })
+                                  : 'Recente'}
+                              </span>
                             </div>
                             <span className="h-1 w-1 rounded-full bg-black/10"></span>
                             <div className="flex items-center gap-1.5">
@@ -302,10 +279,7 @@ function Guide() {
                           <div className="mt-auto">
                             <span className="relative inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/40 transition-colors group-hover:text-[var(--color-accent)] after:absolute after:bottom-0 after:left-0 after:h-[1.5px] after:w-full after:bg-[var(--color-accent)] after:origin-left after:scale-x-0 group-hover:after:scale-x-100 after:transition-transform after:duration-300">
                               Leggi articolo
-                              <ArrowRight
-                                size={16}
-                                className="transition-transform group-hover:translate-x-2"
-                              />
+                              <ArrowRight size={16} className="transition-transform group-hover:translate-x-2" />
                             </span>
                           </div>
                         </div>
@@ -320,10 +294,7 @@ function Guide() {
                     variants={cardItem}
                     className="group flex h-full cursor-pointer flex-col overflow-hidden rounded-[var(--radius-xl)] border border-zinc-100 bg-white transition-all duration-500 hover:-translate-y-2 hover:border-zinc-200 hover:shadow-2xl"
                   >
-                    <Link
-                      to={`/articolo/${guide.slug || guide.id}`}
-                      className="relative block aspect-[16/10] overflow-hidden"
-                    >
+                    <Link to={`/articolo/${guide.slug || guide.id}`} className="relative block aspect-[16/10] overflow-hidden">
                       <OptimizedImage
                         src={guide.image}
                         alt={guide.title}
@@ -341,7 +312,11 @@ function Guide() {
                       <div className="mb-4 flex items-center gap-4 text-[9px] font-bold uppercase tracking-[0.2em] text-black/30">
                         <div className="flex items-center gap-1.5">
                           <Calendar size={12} className="text-[var(--color-accent)]" />
-                          <span>{formatDateValue(guide.createdAt) || 'Recente'}</span>
+                          <span>
+                            {guide.createdAt?.toDate
+                              ? guide.createdAt.toDate().toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })
+                              : 'Recente'}
+                          </span>
                         </div>
                         <span className="h-1 w-1 rounded-full bg-black/10"></span>
                         <div className="flex items-center gap-1.5">
@@ -362,10 +337,7 @@ function Guide() {
                           className="group/btn relative inline-flex items-center justify-between w-full text-[10px] font-bold uppercase tracking-[0.2em] text-black/40 transition-colors hover:text-[var(--color-accent)] after:absolute after:bottom-0 after:left-0 after:h-[1.5px] after:w-full after:bg-[var(--color-accent)] after:origin-left after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300"
                         >
                           <span>Leggi articolo</span>
-                          <ArrowRight
-                            size={16}
-                            className="transition-transform group-hover/btn:translate-x-2"
-                          />
+                          <ArrowRight size={16} className="transition-transform group-hover/btn:translate-x-2" />
                         </Link>
                       </div>
                     </div>
@@ -374,11 +346,7 @@ function Guide() {
               })}
             </motion.div>
 
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-            />
+            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
           </>
         )}
 

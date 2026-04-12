@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Trash2, ShoppingBag, CheckCircle, Tag, Loader2 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-import { useAuth } from '../context/AuthContext';
 
 interface AppliedCoupon {
   code: string;
@@ -12,17 +11,7 @@ interface AppliedCoupon {
 }
 
 export default function CartDrawer() {
-  const {
-    items,
-    isCartOpen,
-    setIsCartOpen,
-    removeFromCart,
-    updateQuantity,
-    total,
-    clearCart,
-    getCheckoutItems,
-  } = useCart();
-  const { user } = useAuth();
+  const { items, isCartOpen, setIsCartOpen, removeFromCart, updateQuantity, total, clearCart, getCheckoutItems } = useCart();
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [couponInput, setCouponInput] = useState('');
@@ -48,21 +37,9 @@ export default function CartDrawer() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code }),
       });
-      const data = (await response.json()) as {
-        valid: boolean;
-        code?: string;
-        type?: string;
-        value?: number;
-        description?: string;
-        error?: string;
-      };
+      const data = (await response.json()) as { valid: boolean; code?: string; type?: string; value?: number; description?: string; error?: string };
       if (data.valid && data.code && data.type && data.value !== undefined) {
-        setAppliedCoupon({
-          code: data.code,
-          type: data.type as 'percent' | 'fixed',
-          value: data.value,
-          description: data.description || '',
-        });
+        setAppliedCoupon({ code: data.code, type: data.type as 'percent' | 'fixed', value: data.value, description: data.description || '' });
         setCouponInput('');
       } else {
         setCouponError(data.error || 'Codice non valido.');
@@ -82,12 +59,7 @@ export default function CartDrawer() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          items: getCheckoutItems(),
-          couponCode: appliedCoupon?.code,
-          userId: user?.uid,
-          userEmail: user?.email,
-        }),
+        body: JSON.stringify({ items: getCheckoutItems(), couponCode: appliedCoupon?.code }),
       });
 
       const data = await response.json();
@@ -184,11 +156,7 @@ export default function CartDrawer() {
                       >
                         <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-zinc-100">
                           {item.imageUrl ? (
-                            <img
-                              src={item.imageUrl}
-                              alt={item.name}
-                              className="h-full w-full object-cover"
-                            />
+                            <img src={item.imageUrl} alt={item.name} className="h-full w-full object-cover" />
                           ) : (
                             <div className="flex h-full w-full items-center justify-center text-zinc-400">
                               <ShoppingBag size={24} />
@@ -197,9 +165,7 @@ export default function CartDrawer() {
                         </div>
                         <div className="flex flex-1 flex-col justify-between">
                           <div>
-                            <h3 className="line-clamp-1 font-semibold text-zinc-900">
-                              {item.name}
-                            </h3>
+                            <h3 className="line-clamp-1 font-semibold text-zinc-900">{item.name}</h3>
                             <p className="font-medium text-accent">EUR {item.price.toFixed(2)}</p>
                           </div>
                           <div className="mt-2 flex items-center justify-between">
@@ -260,17 +226,11 @@ export default function CartDrawer() {
                   <div className="space-y-1.5">
                     <div className="flex gap-2">
                       <div className="relative flex-1">
-                        <Tag
-                          size={14}
-                          className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400"
-                        />
+                        <Tag size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
                         <input
                           type="text"
                           value={couponInput}
-                          onChange={(e) => {
-                            setCouponInput(e.target.value.toUpperCase());
-                            setCouponError('');
-                          }}
+                          onChange={(e) => { setCouponInput(e.target.value.toUpperCase()); setCouponError(''); }}
                           onKeyDown={(e) => e.key === 'Enter' && handleApplyCoupon()}
                           placeholder="Codice sconto"
                           className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-8 pr-3 text-sm outline-none focus:border-accent focus:ring-1 focus:ring-accent"
@@ -290,12 +250,8 @@ export default function CartDrawer() {
                   <div className="flex items-center justify-between rounded-lg border border-[var(--color-accent)]/20 bg-[var(--color-accent-soft)] px-3 py-2">
                     <div className="flex items-center gap-2">
                       <CheckCircle size={14} className="text-[var(--color-accent)]" />
-                      <span className="text-sm font-semibold text-[var(--color-accent-text)]">
-                        {appliedCoupon.code}
-                      </span>
-                      <span className="text-xs text-[var(--color-accent)]">
-                        {appliedCoupon.description}
-                      </span>
+                      <span className="text-sm font-semibold text-[var(--color-accent-text)]">{appliedCoupon.code}</span>
+                      <span className="text-xs text-[var(--color-accent)]">{appliedCoupon.description}</span>
                     </div>
                     <button
                       onClick={() => setAppliedCoupon(null)}
@@ -316,12 +272,8 @@ export default function CartDrawer() {
                         <span className="text-zinc-700">EUR {total.toFixed(2)}</span>
                       </div>
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-[var(--color-accent)]">
-                          Sconto ({appliedCoupon.code})
-                        </span>
-                        <span className="font-medium text-[var(--color-accent)]">
-                          - EUR {discountAmount.toFixed(2)}
-                        </span>
+                        <span className="text-[var(--color-accent)]">Sconto ({appliedCoupon.code})</span>
+                        <span className="font-medium text-[var(--color-accent)]">- EUR {discountAmount.toFixed(2)}</span>
                       </div>
                     </>
                   )}
@@ -380,8 +332,7 @@ export default function CartDrawer() {
                   </div>
                   <h3 className="mb-2 text-2xl font-serif text-zinc-900">Ordine completato</h3>
                   <p className="mb-8 text-zinc-600">
-                    Questa e una simulazione di acquisto. Grazie per aver provato lo shop di
-                    Travelliniwithus.
+                    Questa e una simulazione di acquisto. Grazie per aver provato lo shop di Travelliniwithus.
                   </p>
                   <button
                     onClick={confirmCheckout}

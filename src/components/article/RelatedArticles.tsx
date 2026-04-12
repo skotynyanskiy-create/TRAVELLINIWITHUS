@@ -76,10 +76,10 @@ export default function RelatedArticles({ relatedArticles, demoRelatedArticles }
               più preciso per tema, luogo o intento di lettura.
             </p>
             <Link
-              to="/destinazioni"
+              to="/guide"
               className="mt-6 inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-bold text-ink transition-colors hover:text-accent"
             >
-              Vai a destinazioni
+              Vai alle guide
               <ArrowRight size={14} />
             </Link>
           </div>

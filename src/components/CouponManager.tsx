@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, deleteDoc, doc, serverTimestamp, setDoc } from 'firebase/firestore';
+import { collection, getDocs, addDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../lib/firebaseDb';
 import { Plus, Trash2, Ticket, Loader2, CheckCircle2, XCircle } from 'lucide-react';
 import { handleFirestoreError, OperationType } from '../utils/firestoreErrorHandler';
@@ -9,10 +9,9 @@ import { useAuth } from '../context/AuthContext';
 interface Coupon {
   id: string;
   code: string;
-  type: 'percent' | 'fixed';
+  discountType: 'percentage' | 'fixed';
   value: number;
   active: boolean;
-  description?: string;
   expiryDate?: { seconds: number; nanoseconds: number };
 }
 
@@ -21,10 +20,10 @@ export default function CouponManager() {
   const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
-
+  
   // New coupon form
   const [newCode, setNewCode] = useState('');
-  const [newType, setNewType] = useState<'percent' | 'fixed'>('percent');
+  const [newType, setNewType] = useState<'percentage' | 'fixed'>('percentage');
   const [newValue, setNewValue] = useState<number>(0);
   const [newExpiry, setNewExpiry] = useState('');
 
@@ -37,28 +36,7 @@ export default function CouponManager() {
     try {
       const querySnapshot = await getDocs(collection(db, 'coupons'));
       const fetched: Coupon[] = [];
-      querySnapshot.forEach((docSnap) => {
-        const data = docSnap.data() as Record<string, unknown>;
-        fetched.push({
-          id: docSnap.id,
-          code: typeof data.code === 'string' ? data.code : docSnap.id,
-          type:
-            data.type === 'fixed'
-              ? 'fixed'
-              : data.type === 'percent'
-                ? 'percent'
-                : data.discountType === 'fixed'
-                  ? 'fixed'
-                  : 'percent',
-          value: typeof data.value === 'number' ? data.value : 0,
-          active: data.active !== false,
-          description: typeof data.description === 'string' ? data.description : undefined,
-          expiryDate:
-            data.expiryDate && typeof data.expiryDate === 'object'
-              ? (data.expiryDate as { seconds: number; nanoseconds: number })
-              : undefined,
-        });
-      });
+      querySnapshot.forEach(doc => fetched.push({ id: doc.id, ...doc.data() } as Coupon));
       setCoupons(fetched);
     } catch (error) {
       handleFirestoreError(error, OperationType.LIST, 'coupons');
@@ -74,17 +52,13 @@ export default function CouponManager() {
     try {
       const couponData = {
         code: newCode.toUpperCase(),
-        type: newType,
+        discountType: newType,
         value: Number(newValue),
         active: true,
-        description:
-          newType === 'percent'
-            ? `Sconto ${Number(newValue)}%`
-            : `Sconto €${Number(newValue).toFixed(2)}`,
         expiryDate: newExpiry ? new Date(newExpiry) : null,
-        createdAt: serverTimestamp(),
+        createdAt: serverTimestamp()
       };
-      await setDoc(doc(db, 'coupons', newCode.toUpperCase()), couponData, { merge: true });
+      await addDoc(collection(db, 'coupons'), couponData);
       await logActivity('Coupon Creato', user.email || 'Admin', `Codice: ${newCode.toUpperCase()}`);
       setNewCode('');
       setNewValue(0);
@@ -119,63 +93,45 @@ export default function CouponManager() {
             </h3>
             <form onSubmit={handleAddCoupon} className="space-y-4">
               <div>
-                <label htmlFor="coupon-code" className="block text-sm font-medium mb-1">
-                  Codice
-                </label>
-                <input
+                <label htmlFor="coupon-code" className="block text-sm font-medium mb-1">Codice</label>
+                <input 
                   id="coupon-code"
-                  type="text"
-                  required
-                  value={newCode}
-                  onChange={(e) => setNewCode(e.target.value)}
+                  type="text" required value={newCode} onChange={e => setNewCode(e.target.value)}
                   placeholder="ES: ESTATE20"
                   className="w-full p-3 border border-zinc-200 rounded-xl focus:outline-none focus:border-[var(--color-accent)] uppercase"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="coupon-type" className="block text-sm font-medium mb-1">
-                    Tipo
-                  </label>
-                  <select
+                  <label htmlFor="coupon-type" className="block text-sm font-medium mb-1">Tipo</label>
+                  <select 
                     id="coupon-type"
-                    value={newType}
-                    onChange={(e) => setNewType(e.target.value as 'percent' | 'fixed')}
+                    value={newType} onChange={e => setNewType(e.target.value as 'percentage' | 'fixed')}
                     className="w-full p-3 border border-zinc-200 rounded-xl focus:outline-none focus:border-[var(--color-accent)] bg-white"
                   >
-                    <option value="percent">% Percentuale</option>
+                    <option value="percentage">% Percentuale</option>
                     <option value="fixed">€ Fisso</option>
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="coupon-value" className="block text-sm font-medium mb-1">
-                    Valore
-                  </label>
-                  <input
+                  <label htmlFor="coupon-value" className="block text-sm font-medium mb-1">Valore</label>
+                  <input 
                     id="coupon-value"
-                    type="number"
-                    required
-                    value={newValue}
-                    onChange={(e) => setNewValue(Number(e.target.value))}
+                    type="number" required value={newValue} onChange={e => setNewValue(Number(e.target.value))}
                     className="w-full p-3 border border-zinc-200 rounded-xl focus:outline-none focus:border-[var(--color-accent)]"
                   />
                 </div>
               </div>
               <div>
-                <label htmlFor="coupon-expiry" className="block text-sm font-medium mb-1">
-                  Scadenza (Opzionale)
-                </label>
-                <input
+                <label htmlFor="coupon-expiry" className="block text-sm font-medium mb-1">Scadenza (Opzionale)</label>
+                <input 
                   id="coupon-expiry"
-                  type="date"
-                  value={newExpiry}
-                  onChange={(e) => setNewExpiry(e.target.value)}
+                  type="date" value={newExpiry} onChange={e => setNewExpiry(e.target.value)}
                   className="w-full p-3 border border-zinc-200 rounded-xl focus:outline-none focus:border-[var(--color-accent)]"
                 />
               </div>
-              <button
-                type="submit"
-                disabled={adding}
+              <button 
+                type="submit" disabled={adding}
                 className="w-full bg-[var(--color-ink)] text-white py-3 rounded-xl font-medium hover:bg-[var(--color-accent)] transition-colors disabled:opacity-50"
               >
                 {adding ? <Loader2 size={20} className="animate-spin mx-auto" /> : 'Crea Coupon'}
@@ -188,17 +144,12 @@ export default function CouponManager() {
         <div className="lg:col-span-2">
           <div className="space-y-4">
             {loading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="animate-spin text-zinc-300" size={32} />
-              </div>
+              <div className="flex justify-center py-12"><Loader2 className="animate-spin text-zinc-300" size={32} /></div>
             ) : coupons.length === 0 ? (
               <p className="text-zinc-500 text-center py-12">Nessun coupon attivo.</p>
             ) : (
-              coupons.map((coupon) => (
-                <div
-                  key={coupon.id}
-                  className="bg-white p-5 rounded-2xl border border-zinc-100 flex items-center justify-between shadow-sm"
-                >
+              coupons.map(coupon => (
+                <div key={coupon.id} className="bg-white p-5 rounded-2xl border border-zinc-100 flex items-center justify-between shadow-sm">
                   <div className="flex items-center gap-4">
                     <div className="p-3 bg-zinc-50 text-zinc-400 rounded-xl">
                       <Ticket size={24} />
@@ -213,16 +164,12 @@ export default function CouponManager() {
                         )}
                       </div>
                       <p className="text-sm text-zinc-500">
-                        Sconto:{' '}
-                        {coupon.type === 'percent'
-                          ? `${coupon.value}%`
-                          : `€${coupon.value.toFixed(2)}`}
-                        {coupon.expiryDate &&
-                          ` • Scade il: ${new Date(coupon.expiryDate.seconds * 1000).toLocaleDateString()}`}
+                        Sconto: {coupon.discountType === 'percentage' ? `${coupon.value}%` : `€${coupon.value.toFixed(2)}`}
+                        {coupon.expiryDate && ` • Scade il: ${new Date(coupon.expiryDate.seconds * 1000).toLocaleDateString()}`}
                       </p>
                     </div>
                   </div>
-                  <button
+                  <button 
                     onClick={() => handleDelete(coupon.id, coupon.code)}
                     className="p-2 text-zinc-400 hover:text-red-500 transition-colors"
                   >

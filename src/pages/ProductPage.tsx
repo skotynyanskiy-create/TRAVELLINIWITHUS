@@ -1,10 +1,9 @@
 import { motion } from 'motion/react';
-import { Smartphone, Map, Shield, CheckCircle } from 'lucide-react';
+import { Star, Smartphone, Map, Shield, CheckCircle } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import Button from '../components/Button';
 import Section from '../components/Section';
-import PageLayout from '../components/PageLayout';
 import Breadcrumbs from '../components/Breadcrumbs';
 import SEO from '../components/SEO';
 import { fetchProductBySlug } from '../services/firebaseService';
@@ -15,23 +14,22 @@ import { SITE_URL } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_PRODUCT } from '../config/demoContent';
 import { useSiteContent } from '../hooks/useSiteContent';
-import { DEMO_CONTENT_ENABLED } from '../config/runtime';
 
 const trustPoints = [
   {
     icon: <Smartphone className="text-accent" size={20} />,
-    title: 'Consultazione semplice',
-    text: 'Pensato per essere letto al volo prima di partire e riaperto facilmente anche durante il viaggio.',
+    title: 'Formato chiaro',
+    text: 'Pensato per essere consultato facilmente prima della partenza e anche durante il viaggio.',
   },
   {
     icon: <Map className="text-accent" size={20} />,
-    title: 'Uso reale, non decorativo',
-    text: 'Ogni sezione nasce per aiutarti a scegliere, organizzare o muoverti meglio, non per fare scena.',
+    title: 'Orientato all\'uso reale',
+    text: 'Non un contenuto decorativo, ma un supporto pratico per organizzare meglio il viaggio.',
   },
   {
     icon: <Shield className="text-accent" size={20} />,
     title: 'Curato dal progetto',
-    text: 'La struttura segue il modo Travelliniwithus di selezionare, ordinare e raccontare un viaggio.',
+    text: 'Nasce dal modo Travelliniwithus di selezionare, organizzare e raccontare i viaggi.',
   },
 ];
 
@@ -40,13 +38,8 @@ export default function ProductPage() {
   const { addToCart, setIsCartOpen } = useCart();
   const { data: demoContent } = useSiteContent('demo');
   const demoSettings = demoContent ?? siteContentDefaults.demo;
-  const shopDemoEnabled = DEMO_CONTENT_ENABLED && demoSettings.showShopDemo;
 
-  const {
-    data: fetchedProduct,
-    isLoading,
-    error,
-  } = useQuery<Product | null>({
+  const { data: fetchedProduct, isLoading, error } = useQuery<Product | null>({
     queryKey: ['product', slug],
     queryFn: async () => {
       const fetchedProduct = await fetchProductBySlug(slug!);
@@ -56,8 +49,7 @@ export default function ProductPage() {
   });
 
   const product =
-    fetchedProduct ||
-    (shopDemoEnabled && slug === DEMO_PRODUCT.slug ? (DEMO_PRODUCT as Product) : null);
+    fetchedProduct || (demoSettings.showShopDemo && slug === DEMO_PRODUCT.slug ? (DEMO_PRODUCT as Product) : null);
   const isDemoProduct = !fetchedProduct && product?.slug === DEMO_PRODUCT.slug;
 
   const handleAddToCart = () => {
@@ -68,7 +60,6 @@ export default function ProductPage() {
       name: product.name,
       price: product.price,
       imageUrl: product.imageUrl,
-      isDigital: product.isDigital,
     });
     setIsCartOpen(true);
   };
@@ -76,7 +67,7 @@ export default function ProductPage() {
   if (isLoading) return <ProductPageSkeleton />;
   if (error || !product) {
     return (
-      <PageLayout>
+      <div className="min-h-screen bg-sand pt-32">
         <SEO
           title="Prodotto non disponibile"
           description="Questa scheda prodotto non è disponibile in questo momento."
@@ -90,8 +81,8 @@ export default function ProductPage() {
             </p>
             <h1 className="mt-4 text-4xl font-serif">Questa scheda non è disponibile</h1>
             <p className="mx-auto mt-6 max-w-2xl text-base font-normal leading-relaxed text-black/70">
-              Il prodotto che stai cercando non è pubblico oppure non è ancora stato pubblicato.
-              Puoi tornare alla sezione shop e continuare a esplorare i contenuti disponibili.
+              Il prodotto che stai cercando non è pubblico oppure non è ancora stato pubblicato. Puoi tornare alla
+              sezione shop e continuare a esplorare i contenuti disponibili.
             </p>
             <div className="mt-8">
               <Button to="/shop" variant="primary" size="lg">
@@ -100,18 +91,15 @@ export default function ProductPage() {
             </div>
           </div>
         </Section>
-      </PageLayout>
+      </div>
     );
   }
 
   return (
-    <PageLayout>
+    <div className="min-h-screen bg-sand pt-32">
       <SEO
         title={product.name}
-        description={
-          product.description ||
-          'Un contenuto premium Travelliniwithus pensato per aiutarti a organizzare meglio il viaggio.'
-        }
+        description={product.description || 'Un contenuto premium Travelliniwithus pensato per aiutarti a organizzare meglio il viaggio.'}
         canonical={`${SITE_URL}/shop/${product.slug}`}
         noindex={isDemoProduct}
       />
@@ -128,38 +116,17 @@ export default function ProductPage() {
             className="lg:col-span-7 space-y-6"
           >
             <div className="relative aspect-4/5 md:aspect-3/2 lg:aspect-4/5 rounded-3xl overflow-hidden bg-zinc-100 shadow-2xl group">
-              {product.imageUrl ? (
-                <img
-                  src={product.imageUrl}
-                  alt={product.name}
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
-                  referrerPolicy="no-referrer"
-                />
-              ) : (
-                <div className="flex h-full w-full items-end bg-[radial-gradient(circle_at_top_right,rgba(196,164,124,0.30),transparent_28%),linear-gradient(180deg,#f5f2ed_0%,#efe8dd_42%,#e4d7c4_100%)] p-8">
-                  <div className="w-full rounded-[2rem] border border-black/5 bg-white/70 p-6 backdrop-blur-md">
-                    <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
-                      Travelliniwithus
-                    </span>
-                    <h2 className="mt-3 text-3xl font-serif leading-tight text-ink">
-                      Contenuto digitale
-                    </h2>
-                    <p className="mt-3 text-sm leading-relaxed text-black/60">
-                      Scheda editoriale Travelliniwithus pensata per mantenere chiaro e leggibile il
-                      prodotto anche quando non c&apos;è una cover fotografica dedicata.
-                    </p>
-                  </div>
-                </div>
-              )}
-              <div className="absolute top-8 left-8 flex flex-wrap gap-2">
-                <span className="rounded-full bg-white/95 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black shadow-lg backdrop-blur-md">
+              <img
+                // TODO(@travelliniwithus): PLACEHOLDER — servono foto fallback prodotto shop
+                src={product.imageUrl || 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=1000'}
+                alt={product.name}
+                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute top-8 left-8">
+                <span className="bg-white/95 backdrop-blur-md px-4 py-2 rounded-full text-[10px] uppercase tracking-[0.2em] font-bold text-black shadow-lg">
                   {product.category}
                 </span>
-                {product.isDigital && (
-                  <span className="rounded-full border border-white/20 bg-black/70 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white backdrop-blur-md">
-                    Digitale
-                  </span>
-                )}
               </div>
             </div>
 
@@ -167,15 +134,8 @@ export default function ProductPage() {
             {product.gallery && product.gallery.length > 0 && (
               <div className="grid grid-cols-3 gap-4">
                 {product.gallery.slice(0, 3).map((img, idx) => (
-                  <div
-                    key={idx}
-                    className="aspect-square rounded-2xl overflow-hidden bg-zinc-100 border border-black/5 hover:border-accent/30 transition-colors cursor-pointer"
-                  >
-                    <img
-                      src={img}
-                      alt={`Gallery ${idx + 1}`}
-                      className="w-full h-full object-cover"
-                    />
+                  <div key={idx} className="aspect-square rounded-2xl overflow-hidden bg-zinc-100 border border-black/5 hover:border-accent/30 transition-colors cursor-pointer">
+                    <img src={img} alt={`Gallery ${idx + 1}`} className="w-full h-full object-cover" />
                   </div>
                 ))}
               </div>
@@ -192,17 +152,14 @@ export default function ProductPage() {
             <h1 className="text-5xl md:text-7xl font-serif font-light tracking-tighter leading-[1.05] mb-8">
               {product.name}
             </h1>
-
-            <div className="mb-10 flex flex-wrap items-center gap-4">
-              <div className="text-4xl font-serif text-accent">EUR {product.price.toFixed(2)}</div>
-              <span className="rounded-full border border-black/10 bg-white px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/55">
-                Contenuto curato da Travelliniwithus
-              </span>
-              {product.isDigital && (
-                <span className="rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent-soft)] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent-text)]">
-                  Accesso digitale dopo l&apos;acquisto
-                </span>
-              )}
+            
+            <div className="flex items-center gap-6 mb-10">
+               <div className="text-4xl font-serif text-accent">EUR {product.price.toFixed(2)}</div>
+               <div className="h-8 w-px bg-black/10"></div>
+               <div className="flex items-center gap-1">
+                 {[1, 2, 3, 4, 5].map(i => <Star key={i} size={14} className="fill-accent text-accent" />)}
+                 <span className="text-[10px] font-bold uppercase tracking-widest text-black/30 ml-2">4.9 (24)</span>
+               </div>
             </div>
 
             <p className="text-xl font-light text-black/70 mb-10 leading-relaxed">
@@ -211,39 +168,31 @@ export default function ProductPage() {
             </p>
 
             <div className="space-y-4 mb-12">
-              {trustPoints.map((item, idx) => (
-                <div key={idx} className="flex gap-4 items-start">
-                  <div className="mt-1 text-accent">{item.icon}</div>
-                  <div>
-                    <h4 className="text-xs font-bold uppercase tracking-widest leading-none mb-1">
-                      {item.title}
-                    </h4>
-                    <p className="text-sm text-black/40 font-light">{item.text}</p>
-                  </div>
-                </div>
-              ))}
+               {trustPoints.map((item, idx) => (
+                 <div key={idx} className="flex gap-4 items-start">
+                    <div className="mt-1 text-accent">{item.icon}</div>
+                    <div>
+                      <h4 className="text-xs font-bold uppercase tracking-widest leading-none mb-1">{item.title}</h4>
+                      <p className="text-sm text-black/40 font-light">{item.text}</p>
+                    </div>
+                 </div>
+               ))}
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
               {isDemoProduct ? (
                 <div className="w-full rounded-2xl border border-accent/20 bg-white px-8 py-4 text-center text-xs font-bold uppercase tracking-[0.18em] text-accent">
-                  Demo staging non acquistabile
+                  In uscita prossimamente
                 </div>
               ) : (
-                <Button
-                  variant="primary"
-                  size="lg"
-                  className="w-full rounded-full h-16 shadow-2xl"
-                  onClick={handleAddToCart}
-                >
+                <Button variant="primary" size="lg" className="w-full rounded-full h-16 shadow-2xl" onClick={handleAddToCart}>
                   Aggiungi al carrello
                 </Button>
               )}
             </div>
-
-            <p className="mt-6 text-center text-[10px] font-bold uppercase tracking-widest text-black/30">
-              Pagamento sicuro tramite Stripe
-              {product.isDigital ? ' • contenuto disponibile in formato digitale' : ''}
+            
+            <p className="mt-6 text-[10px] text-center text-black/30 uppercase tracking-widest font-bold">
+              Pagamento sicuro tramite Stripe &bull; Download istantaneo
             </p>
           </motion.div>
         </div>
@@ -278,24 +227,17 @@ export default function ProductPage() {
           className="fixed bottom-10 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl bg-ink/90 backdrop-blur-xl border border-white/10 p-4 z-50 rounded-full flex justify-between items-center px-10 shadow-2xl"
         >
           <div className="hidden sm:block">
-            <p className="text-[10px] uppercase tracking-widest font-bold text-white/40 leading-none mb-1">
-              Stai visualizzando
-            </p>
+            <p className="text-[10px] uppercase tracking-widest font-bold text-white/40 leading-none mb-1">Stai visualizzando</p>
             <h4 className="text-sm font-serif text-white truncate max-w-[200px]">{product.name}</h4>
           </div>
           <div className="flex items-center gap-6">
             <span className="font-serif text-xl text-accent">EUR {product.price.toFixed(2)}</span>
-            <Button
-              variant="primary"
-              size="sm"
-              className="rounded-full h-12 px-8 min-w-[140px] shadow-lg"
-              onClick={handleAddToCart}
-            >
+            <Button variant="primary" size="sm" className="rounded-full h-12 px-8 min-w-[140px] shadow-lg" onClick={handleAddToCart}>
               Acquista ora
             </Button>
           </div>
         </motion.div>
       )}
-    </PageLayout>
+    </div>
   );
 }

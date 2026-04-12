@@ -1,148 +1,32 @@
-import {
-  collection,
-  getDocs,
-  doc,
-  getDoc,
-  setDoc,
-  addDoc,
-  serverTimestamp,
-  query,
-  where,
-  orderBy,
-  limit,
-} from 'firebase/firestore';
+import { collection, getDocs, doc, getDoc, setDoc, addDoc, serverTimestamp, query, where, orderBy, limit } from 'firebase/firestore';
 import { db } from '../lib/firebaseDb';
 import { normalizeFirestoreArticle, type NormalizedArticle } from '../utils/articleData';
 import type { SiteContentKey, SiteContentMap } from '../config/siteContent';
 import { DEMO_PRODUCT, DEMO_ARTICLE_PREVIEW } from '../config/demoContent';
-import type { Product } from '../types';
-import { isTimestamp } from '../utils/dateValue';
 
-type FirestoreProductData = Partial<Omit<Product, 'id'>> & Record<string, unknown>;
-
-const PRODUCT_COLLECTION_READ_LIMIT = 100;
-const ARTICLE_COLLECTION_READ_LIMIT = 250;
-
-const asString = (value: unknown) =>
-  typeof value === 'string' && value.trim() ? value.trim() : undefined;
-
-const asNumber = (value: unknown) => {
-  if (typeof value === 'number' && Number.isFinite(value)) {
-    return value;
-  }
-
-  if (typeof value === 'string') {
-    const parsed = Number(value);
-    return Number.isFinite(parsed) ? parsed : null;
-  }
-
-  return null;
-};
-
-const asStringArray = (value: unknown) =>
-  Array.isArray(value)
-    ? value.filter((item): item is string => typeof item === 'string' && item.trim().length > 0)
-    : undefined;
-
-const asStringRecord = (value: unknown) => {
-  if (!value || typeof value !== 'object' || Array.isArray(value)) {
-    return undefined;
-  }
-
-  const entries = Object.entries(value).filter(
-    (entry): entry is [string, string] => typeof entry[1] === 'string'
-  );
-  return entries.length > 0 ? Object.fromEntries(entries) : undefined;
-};
-
-function normalizeFirestoreProduct(id: string, data: FirestoreProductData): Product | null {
-  const name = asString(data.name);
-  const slug = asString(data.slug);
-  const category = asString(data.category);
-  const price = asNumber(data.price);
-
-  if (!name || !slug || !category || price === null) {
-    return null;
-  }
-
-  return {
-    id,
-    name,
-    slug,
-    price,
-    category,
-    published: data.published === true,
-    imageUrl: asString(data.imageUrl),
-    isDigital: data.isDigital === true,
-    downloadUrl: asString(data.downloadUrl),
-    isBestseller: data.isBestseller === true,
-    description: asString(data.description),
-    features: asStringArray(data.features),
-    gallery: asStringArray(data.gallery),
-    specifications: asStringRecord(data.specifications),
-    relatedProductIds: asStringArray(data.relatedProductIds),
-    reviews: Array.isArray(data.reviews)
-      ? data.reviews
-          .map((review) => {
-            if (!review || typeof review !== 'object') return null;
-            const candidate = review as Record<string, unknown>;
-            const rating = asNumber(candidate.rating);
-            const comment = asString(candidate.comment);
-            const author = asString(candidate.author);
-
-            if (rating === null || !comment || !author) {
-              return null;
-            }
-
-            return { rating, comment, author };
-          })
-          .filter((review): review is NonNullable<Product['reviews']>[number] => review !== null)
-      : undefined,
-  };
-}
-
-export async function fetchProducts(): Promise<Product[]> {
-  const productsQuery = query(
-    collection(db, 'products'),
-    where('published', '==', true),
-    limit(PRODUCT_COLLECTION_READ_LIMIT)
-  );
-  const querySnapshot = await getDocs(productsQuery);
+export async function fetchProducts() {
+  const querySnapshot = await getDocs(collection(db, 'products'));
   return querySnapshot.docs
-    .map((docSnap) => normalizeFirestoreProduct(docSnap.id, docSnap.data() as FirestoreProductData))
-    .filter((product): product is Product => product !== null);
+    .map(doc => ({ id: doc.id, ...doc.data() }))
+    .filter((product) => product.published === true);
 }
 
-export async function fetchProductBySlug(slug: string): Promise<Product | null> {
-  const q = query(
-    collection(db, 'products'),
-    where('slug', '==', slug),
-    where('published', '==', true),
-    limit(1)
-  );
+export async function fetchProductBySlug(slug: string) {
+  const q = query(collection(db, 'products'), where('slug', '==', slug), where('published', '==', true));
   const querySnapshot = await getDocs(q);
   if (querySnapshot.empty) return null;
-  const productDoc = querySnapshot.docs[0];
-  return normalizeFirestoreProduct(productDoc.id, productDoc.data() as FirestoreProductData);
+  const doc = querySnapshot.docs[0];
+  return { id: doc.id, ...doc.data() };
 }
 
 export async function fetchArticles() {
-  const publicArticlesQuery = query(
-    collection(db, 'articles'),
-    where('published', '==', true),
-    limit(ARTICLE_COLLECTION_READ_LIMIT)
-  );
+  const publicArticlesQuery = query(collection(db, 'articles'), where('published', '==', true));
   const querySnapshot = await getDocs(publicArticlesQuery);
   return querySnapshot.docs.map((doc) => normalizeFirestoreArticle(doc.id, doc.data()));
 }
 
 export async function fetchArticleBySlug(slug: string): Promise<NormalizedArticle | null> {
-  const slugQuery = query(
-    collection(db, 'articles'),
-    where('slug', '==', slug),
-    where('published', '==', true),
-    limit(1)
-  );
+  const slugQuery = query(collection(db, 'articles'), where('slug', '==', slug), where('published', '==', true));
   const slugSnapshot = await getDocs(slugQuery);
 
   if (!slugSnapshot.empty) {
@@ -165,8 +49,7 @@ export async function fetchArticleBySlug(slug: string): Promise<NormalizedArticl
     }
 
     return normalizeFirestoreArticle(docSnap.id, data);
-  } catch (error) {
-    console.error(`Error fetching article by slug fallback for "${slug}":`, error);
+  } catch {
     return null;
   }
 }
@@ -174,7 +57,7 @@ export async function fetchArticleBySlug(slug: string): Promise<NormalizedArticl
 export async function fetchContinents() {
   const articles = await fetchArticles();
   const continents = new Set<string>();
-  articles.forEach((article) => {
+  articles.forEach((article: Record<string, unknown>) => {
     if (typeof article.country === 'string' && article.country) {
       continents.add(article.country);
     } else if (typeof article.continent === 'string' && article.continent) {
@@ -192,67 +75,42 @@ export interface SiteStats {
 }
 
 export async function fetchStats(): Promise<SiteStats | null> {
-  try {
-    const docRef = doc(db, 'settings', 'stats');
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      return docSnap.data() as SiteStats;
-    }
-    return null;
-  } catch (error) {
-    console.error('Error fetching stats:', error);
-    return null;
+  const docRef = doc(db, 'settings', 'stats');
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    return docSnap.data() as SiteStats;
   }
+  return null;
 }
 
 export async function updateStats(stats: SiteStats) {
-  try {
-    const docRef = doc(db, 'settings', 'stats');
-    await setDoc(docRef, {
-      ...stats,
-      updatedAt: serverTimestamp(),
-    });
-  } catch (error) {
-    console.error('Error updating stats:', error);
-    throw error;
-  }
+  const docRef = doc(db, 'settings', 'stats');
+  await setDoc(docRef, {
+    ...stats,
+    updatedAt: serverTimestamp()
+  });
 }
 
-export async function fetchSiteContent<K extends SiteContentKey>(
-  key: K
-): Promise<Partial<SiteContentMap[K]> | null> {
-  try {
-    const docRef = doc(db, 'siteContent', key);
-    const docSnap = await getDoc(docRef);
+export async function fetchSiteContent<K extends SiteContentKey>(key: K): Promise<Partial<SiteContentMap[K]> | null> {
+  const docRef = doc(db, 'siteContent', key);
+  const docSnap = await getDoc(docRef);
 
-    if (!docSnap.exists()) {
-      return null;
-    }
-
-    const data = docSnap.data() as Partial<SiteContentMap[K]> & { updatedAt?: unknown };
-    const { updatedAt: _updatedAt, ...content } = data;
-    void _updatedAt;
-    return content as Partial<SiteContentMap[K]>;
-  } catch (error) {
-    console.error(`Error fetching site content for key "${key}":`, error);
+  if (!docSnap.exists()) {
     return null;
   }
+
+  const data = docSnap.data() as Partial<SiteContentMap[K]> & { updatedAt?: unknown };
+  const { updatedAt: _updatedAt, ...content } = data;
+  void _updatedAt;
+  return content as Partial<SiteContentMap[K]>;
 }
 
-export async function saveSiteContent<K extends SiteContentKey>(
-  key: K,
-  content: SiteContentMap[K]
-) {
-  try {
-    const docRef = doc(db, 'siteContent', key);
-    await setDoc(docRef, {
-      ...content,
-      updatedAt: serverTimestamp(),
-    });
-  } catch (error) {
-    console.error(`Error saving site content for key "${key}":`, error);
-    throw error;
-  }
+export async function saveSiteContent<K extends SiteContentKey>(key: K, content: SiteContentMap[K]) {
+  const docRef = doc(db, 'siteContent', key);
+  await setDoc(docRef, {
+    ...content,
+    updatedAt: serverTimestamp(),
+  });
 }
 
 export async function saveMediaKitLead({
@@ -293,7 +151,7 @@ interface LeadPayload {
 export async function saveLead(payload: LeadPayload) {
   await addDoc(collection(db, 'leads'), {
     ...payload,
-    createdAt: serverTimestamp(),
+    createdAt: serverTimestamp()
   });
 }
 
@@ -301,7 +159,7 @@ export async function saveNewsletterLead(email: string) {
   await saveLead({
     type: 'newsletter',
     source: 'newsletter-form',
-    email,
+    email
   });
 }
 
@@ -309,7 +167,7 @@ export async function saveContactLead({
   name,
   email,
   topic,
-  message,
+  message
 }: {
   name: string;
   email: string;
@@ -322,7 +180,7 @@ export async function saveContactLead({
     name,
     email,
     topic,
-    message,
+    message
   });
 }
 
@@ -332,7 +190,7 @@ export async function logActivity(action: string, userEmail: string, details: st
       action,
       userEmail,
       details,
-      timestamp: serverTimestamp(),
+      timestamp: serverTimestamp()
     });
   } catch (error) {
     console.error('Error logging activity:', error);
@@ -340,42 +198,20 @@ export async function logActivity(action: string, userEmail: string, details: st
 }
 
 export async function fetchLogs() {
-  try {
-    const q = query(collection(db, 'logs'), orderBy('timestamp', 'desc'), limit(200));
-    const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-  } catch (error) {
-    console.error('Error fetching logs:', error);
-    return [];
-  }
+  const querySnapshot = await getDocs(collection(db, 'logs'));
+  return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 }
 
 export async function fetchCoupons() {
-  try {
-    const q = query(collection(db, 'coupons'), limit(100));
-    const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-  } catch (error) {
-    console.error('Error fetching coupons:', error);
-    return [];
-  }
+  const querySnapshot = await getDocs(collection(db, 'coupons'));
+  return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 }
 
 export async function addCoupon(coupon: Record<string, unknown>) {
-  const code = typeof coupon.code === 'string' ? coupon.code.trim().toUpperCase() : '';
-  if (!code) {
-    throw new Error('Coupon code is required');
-  }
-
-  await setDoc(
-    doc(db, 'coupons', code),
-    {
-      ...coupon,
-      code,
-      createdAt: serverTimestamp(),
-    },
-    { merge: true }
-  );
+  await addDoc(collection(db, 'coupons'), {
+    ...coupon,
+    createdAt: serverTimestamp()
+  });
 }
 
 export function exportToCSV<T extends object>(data: T[], filename: string) {
@@ -385,20 +221,18 @@ export function exportToCSV<T extends object>(data: T[], filename: string) {
   const headers = Object.keys(rows[0]);
   const csvRows = [
     headers.join(','),
-    ...rows.map((row) =>
-      headers
-        .map((header) => {
-          const val = row[header];
-          // Handle timestamps or objects
-          if (isTimestamp(val)) {
-            return `"${val.toDate().toISOString()}"`;
-          }
-          return `"${String(val).replace(/"/g, '""')}"`;
-        })
-        .join(',')
-    ),
+    ...rows.map(row => 
+      headers.map(header => {
+        const val = row[header];
+        // Handle timestamps or objects
+        if (val && typeof val === 'object' && 'toDate' in val && typeof (val as { toDate: () => Date }).toDate === 'function') {
+          return `"${(val as { toDate: () => Date }).toDate().toISOString()}"`;
+        }
+        return `"${String(val).replace(/"/g, '""')}"`;
+      }).join(',')
+    )
   ];
-
+  
   const csvContent = csvRows.join('\n');
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
   const link = document.createElement('a');
@@ -414,27 +248,9 @@ export function exportToCSV<T extends object>(data: T[], filename: string) {
 export async function seedTestData(authorId: string) {
   // Seed Orders
   const orders = [
-    {
-      customerName: 'Mario Rossi',
-      email: 'mario.rossi@example.com',
-      total: 49.9,
-      status: 'completed',
-      createdAt: serverTimestamp(),
-    },
-    {
-      customerName: 'Giulia Bianchi',
-      email: 'giulia.b@example.com',
-      total: 25.0,
-      status: 'pending',
-      createdAt: serverTimestamp(),
-    },
-    {
-      customerName: 'Luca Verdi',
-      email: 'luca.verdi@test.it',
-      total: 120.5,
-      status: 'cancelled',
-      createdAt: serverTimestamp(),
-    },
+    { customerName: 'Mario Rossi', email: 'mario.rossi@example.com', total: 49.90, status: 'completed', createdAt: serverTimestamp() },
+    { customerName: 'Giulia Bianchi', email: 'giulia.b@example.com', total: 25.00, status: 'pending', createdAt: serverTimestamp() },
+    { customerName: 'Luca Verdi', email: 'luca.verdi@test.it', total: 120.50, status: 'cancelled', createdAt: serverTimestamp() }
   ];
 
   for (const order of orders) {
@@ -442,7 +258,7 @@ export async function seedTestData(authorId: string) {
   }
 
   // Seed Products if none exist
-  const productsSnapshot = await getDocs(query(collection(db, 'products'), limit(1)));
+  const productsSnapshot = await getDocs(collection(db, 'products'));
   if (productsSnapshot.empty) {
     const products = [
       {
@@ -462,7 +278,7 @@ export async function seedTestData(authorId: string) {
   }
 
   // Seed Articles if none exist
-  const articlesSnapshot = await getDocs(query(collection(db, 'articles'), limit(1)));
+  const articlesSnapshot = await getDocs(collection(db, 'articles'));
   if (articlesSnapshot.empty) {
     const articles = [
       {
@@ -487,15 +303,6 @@ export async function seedTestData(authorId: string) {
 
 // ─── Orders ───────────────────────────────────────────────────────────────────
 
-export interface OrderItem {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  downloadUrl?: string | null;
-  isDigital?: boolean;
-}
-
 export interface Order {
   id: string;
   customerName: string;
@@ -503,50 +310,21 @@ export interface Order {
   total: number;
   status: 'completed' | 'pending' | 'cancelled';
   createdAt: unknown;
-  items?: OrderItem[];
+  items?: { id: string; name: string; price: number; quantity: number }[];
   userId?: string;
   stripeSessionId?: string;
 }
 
-const mapOrderSnapshot = (querySnapshot: Awaited<ReturnType<typeof getDocs>>) =>
-  querySnapshot.docs.map((docSnap) => {
-    const data = docSnap.data() as Omit<Order, 'id'>;
-    return { id: docSnap.id, ...data };
-  });
-
-export async function fetchUserOrders({
-  uid,
-  email,
-}: {
-  uid?: string | null;
-  email?: string | null;
-}): Promise<Order[]> {
+export async function fetchUserOrders(userEmail: string): Promise<Order[]> {
   try {
-    if (uid) {
-      const ordersByUid = query(
-        collection(db, 'orders'),
-        where('userId', '==', uid),
-        orderBy('createdAt', 'desc'),
-        limit(50)
-      );
-      const snapshot = await getDocs(ordersByUid);
-      if (!snapshot.empty || !email) {
-        return mapOrderSnapshot(snapshot);
-      }
-    }
-
-    if (!email) {
-      return [];
-    }
-
-    const ordersByEmail = query(
+    const q = query(
       collection(db, 'orders'),
-      where('email', '==', email),
+      where('email', '==', userEmail),
       orderBy('createdAt', 'desc'),
       limit(50)
     );
-    const snapshot = await getDocs(ordersByEmail);
-    return mapOrderSnapshot(snapshot);
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Order));
   } catch (error) {
     console.error('Error fetching user orders:', error);
     return [];
@@ -557,10 +335,7 @@ export async function fetchAllOrders(): Promise<Order[]> {
   try {
     const q = query(collection(db, 'orders'), orderBy('createdAt', 'desc'));
     const snapshot = await getDocs(q);
-    return snapshot.docs.map((docSnap) => {
-      const data = docSnap.data() as Omit<Order, 'id'>;
-      return { id: docSnap.id, ...data };
-    });
+    return snapshot.docs.map(d => ({ id: d.id, ...d.data() } as Order));
   } catch (error) {
     console.error('Error fetching all orders:', error);
     return [];
@@ -593,20 +368,14 @@ export interface Resource {
 }
 
 export async function fetchResources(): Promise<Resource[]> {
-  try {
-    const q = query(
-      collection(db, 'resources'),
-      where('published', '==', true),
-      orderBy('order', 'asc'),
-      limit(200)
-    );
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map((docSnap) => ({
-      id: docSnap.id,
-      ...(docSnap.data() as Omit<Resource, 'id'>),
-    }));
-  } catch (error) {
-    console.error('Error fetching resources:', error);
-    return [];
-  }
+  const q = query(
+    collection(db, 'resources'),
+    where('published', '==', true),
+    orderBy('order', 'asc'),
+  );
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((docSnap) => ({
+    id: docSnap.id,
+    ...(docSnap.data() as Omit<Resource, 'id'>),
+  }));
 }

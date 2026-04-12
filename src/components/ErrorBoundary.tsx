@@ -1,6 +1,5 @@
 import { type ReactNode } from 'react';
 import { ErrorBoundary as ReactErrorBoundary, type FallbackProps } from 'react-error-boundary';
-import { captureException } from '../lib/errorTracking';
 
 function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
   const message = error instanceof Error ? error.message : 'Errore imprevisto';
@@ -23,12 +22,6 @@ export default function ErrorBoundary({ children }: { children: ReactNode }) {
   return (
     <ReactErrorBoundary
       FallbackComponent={ErrorFallback}
-      onError={(error, info) => {
-        captureException(error, {
-          source: 'react-error-boundary',
-          componentStack: info.componentStack,
-        });
-      }}
       onReset={() => {
         // Intentionally empty for now.
       }}

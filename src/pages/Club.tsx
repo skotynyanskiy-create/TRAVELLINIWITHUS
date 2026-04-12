@@ -1,44 +1,64 @@
-import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CheckCircle, LogIn, MapPin, Heart, ShoppingBag, LogOut, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
-import { fetchArticles, fetchUserOrders, type Order } from '../services/firebaseService';
+import { fetchArticles } from '../services/firebaseService';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '../lib/firebaseDb';
 import SEO from '../components/SEO';
 import PageLayout from '../components/PageLayout';
 import OptimizedImage from '../components/OptimizedImage';
 import Button from '../components/Button';
 import ClubSkeleton from '../components/ClubSkeleton';
-import type { NormalizedArticle } from '../utils/articleData';
 
 export default function Club() {
-  const { user, loading, signIn, signOut } = useAuth();
+  const { user, profile, loading, signIn, signOut } = useAuth();
   const { favorites } = useFavorites();
   const [activeTab, setActiveTab] = useState<'favorites' | 'purchases'>('favorites');
+  const [savedArticles, setSavedArticles] = useState<any[]>([]);
+  const [orders, setOrders] = useState<any[]>([]);
+  const [isLoadingData, setIsLoadingData] = useState(false);
 
-  const favoritesQuery = useQuery<NormalizedArticle[]>({
-    queryKey: ['club', 'favorites', user?.uid, favorites],
-    enabled: !!user && activeTab === 'favorites' && favorites.length > 0,
-    queryFn: async () => {
-      const allArticles = await fetchArticles();
-      return allArticles.filter((article) => favorites.includes(article.slug || article.id));
-    },
-  });
+  useEffect(() => {
+    if (user && activeTab === 'favorites') {
+      const loadFavorites = async () => {
+        setIsLoadingData(true);
+        try {
+          const allArticles = await fetchArticles();
+          const filtered = allArticles.filter(a => favorites.includes(a.slug || a.id));
+          setSavedArticles(filtered);
+        } catch (error) {
+          console.error("Error fetching favorites", error);
+        }
+        setIsLoadingData(false);
+      };
+      if (favorites.length > 0) {
+        loadFavorites();
+      } else {
+        setSavedArticles([]);
+      }
+    }
+  }, [user, activeTab, favorites]);
 
-  const ordersQuery = useQuery<Order[]>({
-    queryKey: ['club', 'orders', user?.uid, user?.email],
-    enabled: !!user && activeTab === 'purchases',
-    queryFn: async () => fetchUserOrders({ uid: user?.uid, email: user?.email }),
-  });
-
-  const savedArticles = favoritesQuery.data ?? [];
-  const orders = ordersQuery.data ?? [];
-  const isLoadingData =
-    activeTab === 'favorites'
-      ? favorites.length > 0 && favoritesQuery.isLoading
-      : ordersQuery.isLoading;
+  useEffect(() => {
+    if (user && activeTab === 'purchases') {
+      const loadOrders = async () => {
+        setIsLoadingData(true);
+        try {
+          const q = query(collection(db, 'orders'), where('email', '==', user.email));
+          const snapshot = await getDocs(q);
+          const userOrders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          setOrders(userOrders);
+        } catch (error) {
+          console.error("Error fetching orders", error);
+        }
+        setIsLoadingData(false);
+      };
+      loadOrders();
+    }
+  }, [user, activeTab]);
 
   if (loading) {
     return <ClubSkeleton />;
@@ -48,7 +68,7 @@ export default function Club() {
     return (
       <div className="min-h-screen bg-[var(--color-sand)] pt-32 pb-24 px-4 flex flex-col justify-center items-center">
         <SEO title="The Travel Club" description="Accedi al club esclusivo Travelliniwithus" />
-
+        
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -65,23 +85,11 @@ export default function Club() {
 
           <div className="space-y-3 mb-10 text-left">
             {[
-              {
-                label: 'Salva gli articoli',
-                text: 'Cuori roaming — tieni da parte gli itinerari che vuoi vivere.',
-              },
-              {
-                label: 'I tuoi acquisti',
-                text: 'Accedi e scarica subito le guide premium che hai comprato.',
-              },
-              {
-                label: 'Sincronizzato ovunque',
-                text: 'Tutto disponibile su ogni dispositivo, sempre.',
-              },
+              { label: 'Salva gli articoli', text: 'Cuori roaming — tieni da parte gli itinerari che vuoi vivere.' },
+              { label: 'I tuoi acquisti', text: 'Accedi e scarica subito le guide premium che hai comprato.' },
+              { label: 'Sincronizzato ovunque', text: 'Tutto disponibile su ogni dispositivo, sempre.' },
             ].map((b) => (
-              <div
-                key={b.label}
-                className="flex items-start gap-4 rounded-2xl bg-[var(--color-sand)] px-5 py-4"
-              >
+              <div key={b.label} className="flex items-start gap-4 rounded-2xl bg-[var(--color-sand)] px-5 py-4">
                 <CheckCircle size={18} className="text-[var(--color-accent)] shrink-0 mt-0.5" />
                 <div>
                   <p className="text-sm font-bold text-[var(--color-ink)]">{b.label}</p>
@@ -91,16 +99,11 @@ export default function Club() {
             ))}
           </div>
 
-          <Button
-            onClick={signIn}
-            className="w-full bg-[var(--color-ink)] text-white hover:bg-[var(--color-ink)]/85 py-4 rounded-full shadow-lg transition-all hover:-translate-y-1"
-          >
+          <Button onClick={signIn} className="w-full bg-[var(--color-ink)] text-white hover:bg-[var(--color-ink)]/85 py-4 rounded-full shadow-lg transition-all hover:-translate-y-1">
             <LogIn size={20} className="mr-3" />
             Accedi con Google
           </Button>
-          <p className="mt-6 text-xs text-black/40 font-light">
-            Accesso rapido, nessun form noioso da compilare.
-          </p>
+          <p className="mt-6 text-xs text-black/40 font-light">Accesso rapido, nessun form noioso da compilare.</p>
         </motion.div>
       </div>
     );
@@ -108,10 +111,7 @@ export default function Club() {
 
   return (
     <PageLayout>
-      <SEO
-        title="La mia Dashboard | Travel Club"
-        description="La tua dashboard personale Travelliniwithus"
-      />
+      <SEO title="La mia Dashboard | Travel Club" description="La tua dashboard personale Travelliniwithus" />
 
       <div className="max-w-[1200px] mx-auto px-4 md:px-8 pt-8">
         {/* HEADER DASHBOARD */}
@@ -119,28 +119,14 @@ export default function Club() {
           <div className="absolute inset-0 bg-gradient-to-tr from-transparent to-[var(--color-accent)]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
           <div className="relative z-10 flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
             <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-[var(--color-accent)]/30 p-1">
-              <img
-                src={
-                  user.photoURL ||
-                  `https://ui-avatars.com/api/?name=${user.displayName}&background=random`
-                }
-                alt="Avatar"
-                className="w-full h-full rounded-full object-cover"
-              />
+              <img src={user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName}&background=random`} alt="Avatar" className="w-full h-full rounded-full object-cover" />
             </div>
             <div className="flex-1">
-              <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--color-accent)] mb-2">
-                Membro del Club
-              </div>
-              <h1 className="text-4xl md:text-5xl font-serif">
-                Benvenuto, {user.displayName?.split(' ')[0] || 'Viaggiatore'}
-              </h1>
+              <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--color-accent)] mb-2">Membro del Club</div>
+              <h1 className="text-4xl md:text-5xl font-serif">Benvenuto, {user.displayName?.split(' ')[0] || 'Viaggiatore'}</h1>
               <p className="text-white/60 font-light mt-2">{user.email}</p>
             </div>
-            <button
-              onClick={signOut}
-              className="mt-4 md:mt-0 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-white/50 hover:text-white transition-colors"
-            >
+            <button onClick={signOut} className="mt-4 md:mt-0 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-white/50 hover:text-white transition-colors">
               <LogOut size={16} /> Esci
             </button>
           </div>
@@ -174,144 +160,69 @@ export default function Club() {
           <div className="p-8 md:p-12">
             <AnimatePresence mode="wait">
               {isLoadingData ? (
-                <motion.div
-                  key="loading"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="py-20 flex justify-center"
-                >
+                <motion.div key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="py-20 flex justify-center">
                   <div className="w-6 h-6 border-2 border-[var(--color-accent)] border-t-transparent rounded-full animate-spin"></div>
                 </motion.div>
               ) : activeTab === 'favorites' ? (
-                <motion.div
-                  key="favs"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.3 }}
-                >
+                <motion.div key="favs" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }}>
                   {savedArticles.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                       {savedArticles.map((article) => (
-                        <Link
-                          key={article.id}
-                          to={`/articolo/${article.slug || article.id}`}
-                          className="group block"
-                        >
-                          <div className="relative aspect-[4/3] rounded-[2rem] overflow-hidden shadow-sm transition-all duration-500 group-hover:shadow-lg mb-4">
-                            <OptimizedImage
-                              src={article.image}
-                              alt={article.title}
-                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                            />
-                            <div className="absolute top-4 left-4">
-                              <span className="bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest text-[var(--color-ink)]">
-                                {article.category}
-                              </span>
-                            </div>
-                          </div>
-                          <h3 className="font-serif text-2xl text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors leading-snug">
-                            {article.title}
-                          </h3>
+                        <Link key={article.id} to={`/articolo/${article.slug || article.id}`} className="group block">
+                           <div className="relative aspect-[4/3] rounded-[2rem] overflow-hidden shadow-sm transition-all duration-500 group-hover:shadow-lg mb-4">
+                              <OptimizedImage
+                                src={article.image}
+                                alt={article.title}
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                              />
+                              <div className="absolute top-4 left-4">
+                                <span className="bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest text-[var(--color-ink)]">{article.category}</span>
+                              </div>
+                           </div>
+                           <h3 className="font-serif text-2xl text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors leading-snug">{article.title}</h3>
                         </Link>
                       ))}
                     </div>
                   ) : (
                     <div className="text-center py-24">
                       <Heart size={48} className="mx-auto text-black/10 mb-6" />
-                      <h3 className="text-2xl font-serif text-[var(--color-ink)] mb-2">
-                        Nessun articolo salvato.
-                      </h3>
-                      <p className="text-black/50 font-light mb-8 max-w-sm mx-auto">
-                        Esplora i contenuti e usa l'icona del cuore per salvare gli itinerari e le
-                        guide che vuoi tenere da parte.
-                      </p>
-                      <Button
-                        to="/destinazioni"
-                        className="bg-white text-[var(--color-ink)] border border-black/10 hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] rounded-full px-6 py-2"
-                      >
-                        Esplora i Contenuti
-                      </Button>
+                      <h3 className="text-2xl font-serif text-[var(--color-ink)] mb-2">Nessun articolo salvato.</h3>
+                      <p className="text-black/50 font-light mb-8 max-w-sm mx-auto">Esplora i contenuti e usa l'icona del cuore per salvare gli itinerari e le guide che vuoi tenere da parte.</p>
+                      <Button to="/destinazioni" className="bg-white text-[var(--color-ink)] border border-black/10 hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] rounded-full px-6 py-2">Esplora i Contenuti</Button>
                     </div>
                   )}
                 </motion.div>
               ) : (
-                <motion.div
-                  key="purchases"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.3 }}
-                >
+                <motion.div key="purchases" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }}>
                   {orders.length > 0 ? (
                     <div className="space-y-6">
                       {orders.map((order) => (
-                        <div
-                          key={order.id}
-                          className="flex flex-col md:flex-row md:items-center gap-6 p-6 rounded-[2rem] border border-black/5 bg-zinc-50/50 hover:bg-zinc-50 transition-colors"
-                        >
-                          <div className="w-16 h-16 rounded-[1rem] bg-[var(--color-accent)]/10 text-[var(--color-accent)] flex items-center justify-center shrink-0">
-                            <ShoppingBag size={24} />
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-1">
-                              <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink)]">
-                                Ordine #{order.id.slice(-6).toUpperCase()}
-                              </span>
-                              <span
-                                className={`px-2 py-0.5 rounded-full text-[9px] uppercase tracking-widest font-bold ${order.status === 'completed' ? 'bg-[var(--color-accent-soft)] text-[var(--color-accent-text)]' : 'bg-yellow-100 text-yellow-700'}`}
-                              >
-                                {order.status}
-                              </span>
-                            </div>
-                            <p className="font-light text-sm text-black/60">
-                              {(() => {
-                                const createdAt = order.createdAt as
-                                  | { toDate?: () => Date; seconds?: number }
-                                  | undefined;
-                                const date = createdAt?.toDate
-                                  ? createdAt.toDate()
-                                  : createdAt?.seconds
-                                    ? new Date(createdAt.seconds * 1000)
-                                    : null;
-                                return date
-                                  ? date.toLocaleDateString('it-IT')
-                                  : 'Data non disponibile';
-                              })()}
-                            </p>
-                            <p className="font-serif text-xl text-[var(--color-ink)] mt-2">
-                              Totale: €{order.total.toFixed(2)}
-                            </p>
-                          </div>
-                          <div>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="rounded-full flex items-center gap-2"
-                            >
-                              <Download size={14} /> Ricevuta PDF
-                            </Button>
-                          </div>
+                        <div key={order.id} className="flex flex-col md:flex-row md:items-center gap-6 p-6 rounded-[2rem] border border-black/5 bg-zinc-50/50 hover:bg-zinc-50 transition-colors">
+                           <div className="w-16 h-16 rounded-[1rem] bg-[var(--color-accent)]/10 text-[var(--color-accent)] flex items-center justify-center shrink-0">
+                              <ShoppingBag size={24} />
+                           </div>
+                           <div className="flex-1">
+                             <div className="flex items-center gap-3 mb-1">
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink)]">Ordine #{order.id.slice(-6).toUpperCase()}</span>
+                                <span className={`px-2 py-0.5 rounded-full text-[9px] uppercase tracking-widest font-bold ${order.status === 'completed' ? 'bg-[var(--color-accent-soft)] text-[var(--color-accent-text)]' : 'bg-yellow-100 text-yellow-700'}`}>{order.status}</span>
+                             </div>
+                             <p className="font-light text-sm text-black/60">{new Date(order.createdAt?.seconds * 1000).toLocaleDateString('it-IT')}</p>
+                             <p className="font-serif text-xl text-[var(--color-ink)] mt-2">Totale: €{order.total.toFixed(2)}</p>
+                           </div>
+                           <div>
+                             <Button variant="outline" size="sm" className="rounded-full flex items-center gap-2">
+                               <Download size={14} /> Ricevuta PDF
+                             </Button>
+                           </div>
                         </div>
                       ))}
                     </div>
                   ) : (
                     <div className="text-center py-24">
                       <ShoppingBag size={48} className="mx-auto text-black/10 mb-6" />
-                      <h3 className="text-2xl font-serif text-[var(--color-ink)] mb-2">
-                        Nessun acquisto ancora.
-                      </h3>
-                      <p className="text-black/50 font-light mb-8 max-w-sm mx-auto">
-                        Scopri le nostre guide e i planner digitali — strumenti reali testati sui
-                        nostri viaggi, pronti per i tuoi.
-                      </p>
-                      <Button
-                        to="/risorse"
-                        className="bg-[var(--color-ink)] text-white hover:bg-[var(--color-ink)]/85 rounded-full px-6 py-2"
-                      >
-                        Apri le risorse
-                      </Button>
+                      <h3 className="text-2xl font-serif text-[var(--color-ink)] mb-2">Nessun acquisto ancora.</h3>
+                      <p className="text-black/50 font-light mb-8 max-w-sm mx-auto">Scopri le nostre guide e i planner digitali — strumenti reali testati sui nostri viaggi, pronti per i tuoi.</p>
+                      <Button to="/shop" className="bg-[var(--color-ink)] text-white hover:bg-[var(--color-ink)]/85 rounded-full px-6 py-2">Vai allo Shop Premium</Button>
                     </div>
                   )}
                 </motion.div>

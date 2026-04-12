@@ -37,10 +37,7 @@ describe('Button Component', () => {
   });
 
   it('applies correct variant classes', () => {
-    const { getByRole } = render(<Button variant="secondary">Secondary</Button>);
-    expect(getByRole('button', { name: /secondary/i })).toHaveClass(
-      'bg-[var(--color-surface)]',
-      'border'
-    );
+    const { container } = render(<Button variant="secondary">Secondary</Button>);
+    expect(container.firstChild).toHaveClass('bg-white');
   });
 });

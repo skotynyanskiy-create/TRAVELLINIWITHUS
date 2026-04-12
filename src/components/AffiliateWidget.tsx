@@ -1,4 +1,4 @@
-﻿import { ExternalLink, Shield, Plane, Hotel, Smartphone } from 'lucide-react';
+import { ExternalLink, Shield, Plane, Hotel, Smartphone } from 'lucide-react';
 import Button from './Button';
 import { trackEvent } from '../services/analytics';
 
@@ -17,7 +17,7 @@ export default function AffiliateWidget({ type, title, description, link, cta, d
     insurance: {
       icon: <Shield className="text-[var(--color-accent)]" size={24} />,
       defaultTitle: 'Assicurazione Viaggio',
-      defaultDescription: 'Non partire mai senza protezione. Abbiamo scelto Heymondo per la sua affidabilita e copertura completa.',
+      defaultDescription: 'Non partire mai senza protezione. Abbiamo scelto Heymondo per la sua affidabilità e copertura completa.',
       defaultLink: 'https://heymondo.it',
       defaultCta: 'Ottieni Sconto 10%',
       defaultDiscount: '10% Sconto Esclusivo'
@@ -110,4 +110,3 @@ function LinkIconLink({ href, label }: { href: string; label: string }) {
     </a>
   );
 }
-

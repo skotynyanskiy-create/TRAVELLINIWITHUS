@@ -20,8 +20,6 @@ export default function ProductEditor() {
   const [price, setPrice] = useState<number | ''>('');
   const [imageUrl, setImageUrl] = useState('');
   const [category, setCategory] = useState('preset');
-  const [isDigital, setIsDigital] = useState(true);
-  const [downloadUrl, setDownloadUrl] = useState('');
   const [published, setPublished] = useState(false);
   const [loading, setLoading] = useState(id ? true : false);
   const [saving, setSaving] = useState(false);
@@ -39,8 +37,6 @@ export default function ProductEditor() {
           setPrice(data.price || '');
           setImageUrl(data.imageUrl || '');
           setCategory(data.category || 'preset');
-          setIsDigital(data.isDigital !== false);
-          setDownloadUrl(data.downloadUrl || '');
           setPublished(data.published === true);
         }
       } catch (error) {
@@ -70,10 +66,7 @@ export default function ProductEditor() {
       price: Number(price),
       imageUrl,
       category,
-      isDigital,
-      downloadUrl: downloadUrl || null,
       published,
-      updatedAt: serverTimestamp(),
       ...(id ? {} : { createdAt: serverTimestamp() }),
     };
 
@@ -154,9 +147,8 @@ export default function ProductEditor() {
                 <option value="guide">Guida premium</option>
                 <option value="itinerary">Itinerario premium</option>
                 <option value="planner">Planner digitale</option>
-                <option value="digital-planner">Digital planner</option>
                 <option value="bundle">Bundle</option>
-                <option value="travel-kit">Travel kit digitale</option>
+                <option value="map">Mappa digitale</option>
               </select>
             </div>
             <div>
@@ -173,50 +165,8 @@ export default function ProductEditor() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
-              <label
-                htmlFor="isDigital"
-                className="flex items-center justify-between gap-6 cursor-pointer"
-              >
-                <div>
-                  <span className="block text-sm font-medium text-zinc-900">Prodotto digitale</span>
-                  <span className="block text-xs text-zinc-500 mt-1">
-                    Se attivo, il prodotto può prevedere un link di download associato
-                    all&apos;ordine.
-                  </span>
-                </div>
-                <input
-                  id="isDigital"
-                  type="checkbox"
-                  aria-label="Prodotto digitale"
-                  checked={isDigital}
-                  onChange={(event) => setIsDigital(event.target.checked)}
-                  className="h-5 w-5 rounded border-zinc-300 text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
-                />
-              </label>
-            </div>
-
-            <div>
-              <label htmlFor="downloadUrl" className="block text-sm font-medium mb-2">
-                Link download
-              </label>
-              <input
-                id="downloadUrl"
-                type="url"
-                value={downloadUrl}
-                onChange={(e) => setDownloadUrl(e.target.value)}
-                placeholder="https://..."
-                className="w-full p-3 border border-zinc-200 rounded-lg focus:outline-none focus:border-[var(--color-accent)]"
-              />
-            </div>
-          </div>
-
           <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
-            <label
-              htmlFor="published"
-              className="flex items-center justify-between gap-6 cursor-pointer"
-            >
+            <label htmlFor="published" className="flex items-center justify-between gap-6 cursor-pointer">
               <div>
                 <span className="block text-sm font-medium text-zinc-900">Prodotto pubblicato</span>
                 <span className="block text-xs text-zinc-500 mt-1">
@@ -266,13 +216,7 @@ export default function ProductEditor() {
         </form>
 
         <div className="mt-12 pt-12 border-t border-zinc-100">
-          <SEOPreview
-            title={name}
-            description={description}
-            slug={slug}
-            imageUrl={imageUrl}
-            type="product"
-          />
+          <SEOPreview title={name} description={description} slug={slug} imageUrl={imageUrl} type="product" />
         </div>
       </Section>
     </PageLayout>

@@ -11,18 +11,16 @@ import {
   MessageCircle,
   Search,
   ShieldCheck,
+  ShoppingCart,
   User as UserIcon,
   X,
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { CONTACTS } from '../config/site';
-import {
-  DESTINATION_GROUPS,
-  EXPERIENCE_TYPES,
-  slugifyExperienceType,
-} from '../config/contentTaxonomy';
+import { DESTINATION_GROUPS, EXPERIENCE_TYPES, slugifyExperienceType } from '../config/contentTaxonomy';
 import { siteContentDefaults } from '../config/siteContent';
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 import { useFavorites } from '../context/FavoritesContext';
 import { useSiteContent } from '../hooks/useSiteContent';
 
@@ -44,6 +42,7 @@ export default function Navbar() {
   const location = useLocation();
   const { favorites } = useFavorites();
   const { user, isAdmin, signIn, signOut } = useAuth();
+  const { items: cartItems, setIsCartOpen } = useCart();
   const { data: navigationContent } = useSiteContent('navigation');
   const navigation = navigationContent ?? siteContentDefaults.navigation;
 
@@ -82,12 +81,10 @@ export default function Navbar() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+
   const destinationLinks = useMemo(
-    () =>
-      DESTINATION_GROUPS.map((group) => ({
-        name: group,
-        href: `/destinazioni?group=${encodeURIComponent(group)}`,
-      })),
+    () => DESTINATION_GROUPS.map((group) => ({ name: group, href: `/destinazioni?group=${encodeURIComponent(group)}` })),
     []
   );
 
@@ -105,17 +102,19 @@ export default function Navbar() {
       {
         name: navigation.destinationsLabel,
         href: '/destinazioni',
-        subLinks: [
-          { name: navigation.destinationsAllLabel, href: '/destinazioni' },
-          ...destinationLinks,
-        ],
+        subLinks: [{ name: navigation.destinationsAllLabel, href: '/destinazioni' }, { name: 'Mappa Interattiva', href: '/mappa' }, ...destinationLinks],
       },
       {
         name: navigation.experiencesLabel,
         href: '/esperienze',
         subLinks: [{ name: 'Tutte le esperienze', href: '/esperienze' }, ...experienceLinks],
       },
-      { name: navigation.resourcesLabel, href: '/risorse' },
+      { name: 'Shop', href: '/shop' },
+      {
+        name: navigation.resourcesLabel,
+        href: '/risorse',
+        subLinks: [{ name: 'Guide di Viaggio', href: '/guide' }],
+      },
       {
         name: navigation.collaborationsLabel,
         href: '/collaborazioni',
@@ -150,10 +149,7 @@ export default function Navbar() {
       return true;
     }
 
-    if (
-      (href.startsWith('/destinazioni?') || href.startsWith('/esperienze?')) &&
-      location.pathname === item.href
-    ) {
+    if ((href.startsWith('/destinazioni?') || href.startsWith('/esperienze?')) && location.pathname === item.href) {
       return true;
     }
 
@@ -192,9 +188,7 @@ export default function Navbar() {
                 <Link
                   to={item.href || '/'}
                   className={`relative flex items-center gap-1 whitespace-nowrap text-[11px] font-bold uppercase tracking-[0.15em] transition-all duration-300 xl:text-[12px] xl:tracking-[0.2em] hover:text-[var(--color-accent)] after:absolute after:-bottom-1 after:left-0 after:h-[1.5px] after:w-full after:bg-[var(--color-accent)] after:origin-left after:transition-transform after:duration-300 ${
-                    isItemActive(item)
-                      ? 'text-[var(--color-accent)] after:scale-x-100'
-                      : 'text-zinc-600 after:scale-x-0 hover:after:scale-x-100'
+                    isItemActive(item) ? 'text-[var(--color-accent)] after:scale-x-100' : 'text-zinc-600 after:scale-x-0 hover:after:scale-x-100'
                   }`}
                 >
                   {item.name}
@@ -214,9 +208,7 @@ export default function Navbar() {
                           key={subLink.name}
                           to={subLink.href}
                           className={`block px-8 py-3 text-[10px] uppercase tracking-[0.2em] transition-all duration-200 hover:bg-[var(--color-sand)] hover:text-[var(--color-accent)] ${
-                            isSubLinkActive(item, subLink.href)
-                              ? 'text-[var(--color-accent)]'
-                              : 'text-[var(--color-ink)]/50'
+                            isSubLinkActive(item, subLink.href) ? 'text-[var(--color-accent)]' : 'text-[var(--color-ink)]/50'
                           }`}
                         >
                           {subLink.name}
@@ -239,11 +231,7 @@ export default function Navbar() {
               <span className="hidden xl:inline">{navigation.searchLabel}</span>
             </button>
 
-            <Link
-              to="/preferiti"
-              className="relative transition-colors hover:text-[var(--color-accent)]"
-              aria-label={navigation.favoritesLabel}
-            >
+            <Link to="/preferiti" className="relative transition-colors hover:text-[var(--color-accent)]" aria-label={navigation.favoritesLabel}>
               <Heart size={18} strokeWidth={1.5} />
               {favorites.length > 0 && (
                 <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[9px] font-bold text-white">
@@ -251,6 +239,19 @@ export default function Navbar() {
                 </span>
               )}
             </Link>
+
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="relative transition-colors hover:text-[var(--color-accent)]"
+              aria-label="Carrello"
+            >
+              <ShoppingCart size={18} strokeWidth={1.5} />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[9px] font-bold text-white">
+                  {cartCount}
+                </span>
+              )}
+            </button>
 
             <div className="relative">
               {user ? (
@@ -272,10 +273,7 @@ export default function Navbar() {
                   )}
                 </button>
               ) : (
-                <button
-                  onClick={signIn}
-                  className="flex items-center gap-1 transition-colors hover:text-[var(--color-accent)]"
-                >
+                <button onClick={signIn} className="flex items-center gap-1 transition-colors hover:text-[var(--color-accent)]">
                   <UserIcon size={18} strokeWidth={1.5} />
                 </button>
               )}
@@ -289,9 +287,7 @@ export default function Navbar() {
                     className="absolute right-0 z-50 mt-3 w-52 overflow-hidden rounded-xl border border-zinc-100 bg-white py-2 text-[var(--color-ink)] shadow-xl"
                   >
                     <div className="mb-2 border-b border-zinc-100 px-4 py-2">
-                      <p className="truncate text-[10px] font-semibold text-zinc-900">
-                        {user.displayName}
-                      </p>
+                      <p className="truncate text-[10px] font-semibold text-zinc-900">{user.displayName}</p>
                       <p className="truncate text-[9px] text-zinc-500">{user.email}</p>
                     </div>
                     <Link
@@ -306,7 +302,7 @@ export default function Navbar() {
                       onClick={() => setIsUserMenuOpen(false)}
                       className="flex w-full items-center gap-2 px-4 py-2 text-left text-[10px] uppercase tracking-wider text-[var(--color-ink)] transition-colors hover:bg-zinc-50"
                     >
-                      <UserIcon size={12} /> I miei acquisti
+                      <ShoppingCart size={12} /> I miei acquisti
                     </Link>
                     {isAdmin && (
                       <Link
@@ -400,20 +396,14 @@ export default function Navbar() {
                             to={item.href || '/'}
                             onClick={() => setIsMobileMenuOpen(false)}
                             className={`block text-3xl font-serif uppercase tracking-widest transition-colors ${
-                              isItemActive(item)
-                                ? 'text-[var(--color-accent)]'
-                                : 'text-[var(--color-ink)]'
+                              isItemActive(item) ? 'text-[var(--color-accent)]' : 'text-[var(--color-ink)]'
                             }`}
                           >
                             {item.name}
                           </Link>
                           <button
                             type="button"
-                            onClick={() =>
-                              setOpenMobileSection((prev) =>
-                                prev === item.name ? null : item.name
-                              )
-                            }
+                            onClick={() => setOpenMobileSection((prev) => (prev === item.name ? null : item.name))}
                             aria-expanded={openMobileSection === item.name}
                             aria-label={`Apri sottomenu ${item.name}`}
                             className="pt-2 text-xl opacity-40 transition-opacity hover:opacity-100"
@@ -448,9 +438,7 @@ export default function Navbar() {
                         to={item.href || '/'}
                         onClick={() => setIsMobileMenuOpen(false)}
                         className={`block text-3xl font-serif uppercase tracking-widest transition-colors ${
-                          isItemActive(item)
-                            ? 'text-[var(--color-accent)]'
-                            : 'text-[var(--color-ink)]'
+                          isItemActive(item) ? 'text-[var(--color-accent)]' : 'text-[var(--color-ink)]'
                         }`}
                       >
                         {item.name}
@@ -500,8 +488,8 @@ export default function Navbar() {
                       className="text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
                     >
                       <svg viewBox="0 0 24 24" className="h-6 w-6 fill-current" aria-hidden="true">
-                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.2 8.2 0 0 0 4.77 1.52V6.78a4.85 4.85 0 0 1-1-.09z" />
-                      </svg>
+                      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.2 8.2 0 0 0 4.77 1.52V6.78a4.85 4.85 0 0 1-1-.09z" />
+                    </svg>
                     </a>
                     <a
                       href={CONTACTS.whatsappUrl}
@@ -519,20 +507,29 @@ export default function Navbar() {
                     >
                       <Mail size={24} />
                     </a>
+                    <button
+                      onClick={() => {
+                        setIsCartOpen(true);
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="relative text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+                      aria-label="Carrello"
+                    >
+                      <ShoppingCart size={24} />
+                      {cartCount > 0 && (
+                        <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-accent)] text-[10px] font-bold text-white">
+                          {cartCount}
+                        </span>
+                      )}
+                    </button>
                   </div>
                   <div>
                     {user ? (
-                      <button
-                        onClick={signOut}
-                        className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-red-600"
-                      >
+                      <button onClick={signOut} className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-red-600">
                         <LogOut size={20} /> Esci
                       </button>
                     ) : (
-                      <button
-                        onClick={signIn}
-                        className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[var(--color-ink)]"
-                      >
+                      <button onClick={signIn} className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[var(--color-ink)]">
                         <UserIcon size={20} /> Accedi
                       </button>
                     )}

@@ -9,9 +9,9 @@ describe('Navbar Component', () => {
   });
 
   it('renders navigation links', () => {
-    const { getAllByText } = render(<Navbar />);
-    expect(getAllByText(/Destinazioni/i).length).toBeGreaterThan(0);
-    expect(getAllByText(/Esperienze/i).length).toBeGreaterThan(0);
-    expect(getAllByText(/Risorse/i).length).toBeGreaterThan(0);
+    const { getByText } = render(<Navbar />);
+    expect(getByText(/Home/i)).toBeInTheDocument();
+    expect(getByText(/Destinazioni/i)).toBeInTheDocument();
+    expect(getByText(/Esperienze/i)).toBeInTheDocument();
   });
 });

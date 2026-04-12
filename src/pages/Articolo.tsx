@@ -13,6 +13,7 @@ import Newsletter from '../components/Newsletter';
 import InlineNewsletterBanner from '../components/InlineNewsletterBanner';
 import OptimizedImage from '../components/OptimizedImage';
 import PageLayout from '../components/PageLayout';
+import InteractiveMap from '../components/InteractiveMap';
 import SEO from '../components/SEO';
 import ArticlePageSkeleton from '../components/ArticlePageSkeleton';
 import NotFound from './NotFound';
@@ -21,7 +22,6 @@ import { SITE_URL } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_ARTICLE_SLUG } from '../config/demoContent';
 import { useSiteContent } from '../hooks/useSiteContent';
-import { DEMO_CONTENT_ENABLED } from '../config/runtime';
 
 import {
   ArticleHero,
@@ -74,27 +74,10 @@ function toIsoDateString(value: unknown): string | null {
   return null;
 }
 
-function getCategoryContext(article: {
-  category?: string;
-  experienceTypes?: string[];
-  destinationGroup?: string;
-  country?: string;
-  region?: string;
-  city?: string;
-}) {
-  if (article.category === 'Esperienze') {
-    return { label: 'Esperienze', path: '/esperienze' };
-  }
-
-  if (article.category === 'Destinazioni') {
-    return { label: 'Destinazioni', path: '/destinazioni' };
-  }
-
-  if (article.experienceTypes && article.experienceTypes.length > 0) {
-    return { label: 'Esperienze', path: '/esperienze' };
-  }
-
-  return { label: 'Destinazioni', path: '/destinazioni' };
+function getCategoryPath(category: string) {
+  if (category === 'Esperienze') return '/esperienze';
+  if (category === 'Destinazioni') return '/destinazioni';
+  return '/guide';
 }
 
 const articlesData: Record<string, ArticleData> = {
@@ -188,6 +171,7 @@ function buildTocItems(article: ArticleData): TocItem[] {
     { id: 'highlights', label: 'Highlights', show: !!(article.highlights && article.highlights.length > 0) },
     { id: 'itinerario', label: 'Itinerario', show: !!(article.itinerary && article.itinerary.length > 0) },
     { id: 'sapori-locali', label: 'Sapori Locali', show: !!(article.localFood && article.localFood.length > 0) },
+    { id: 'mappa', label: 'Mappa', show: !!(article.mapUrl || (article.mapMarkers && article.mapMarkers.length > 0)) },
     { id: 'budget', label: 'Budget Indicativo', show: !!article.costs },
     { id: 'tips-packing', label: 'Tips & Packing', show: !!((article.tips && article.tips.length > 0) || (article.packingList && article.packingList.length > 0)) },
     { id: 'gallery', label: 'Gallery', show: !!(article.gallery && article.gallery.length > 0) },
@@ -201,7 +185,6 @@ export default function Articolo() {
   const { isFavorite, toggleFavorite } = useFavorites();
   const { data: demoContent } = useSiteContent('demo');
   const demoSettings = demoContent ?? siteContentDefaults.demo;
-  const editorialDemoEnabled = DEMO_CONTENT_ENABLED && demoSettings.showEditorialDemo;
   const [dynamicArticle, setDynamicArticle] = useState<ArticleData | null>(null);
   const [loading, setLoading] = useState(true);
   const [relatedArticles, setRelatedArticles] = useState<RelatedArticleSummary[]>([]);
@@ -223,7 +206,7 @@ export default function Articolo() {
           return;
         }
 
-        if (editorialDemoEnabled && currentSlug === DEMO_ARTICLE_SLUG && articlesData[currentSlug]) {
+        if (demoSettings.showEditorialDemo && currentSlug === DEMO_ARTICLE_SLUG && articlesData[currentSlug]) {
           currentArticle = articlesData[currentSlug];
           setArticleSource('demo');
           setDynamicArticle(currentArticle);
@@ -273,10 +256,10 @@ export default function Articolo() {
     };
 
     fetchArticle();
-  }, [currentSlug, editorialDemoEnabled]);
+  }, [currentSlug, demoSettings.showEditorialDemo]);
 
   const article =
-    dynamicArticle || (editorialDemoEnabled ? articlesData[DEMO_ARTICLE_SLUG] : null);
+    dynamicArticle || (demoSettings.showEditorialDemo ? articlesData[DEMO_ARTICLE_SLUG] : null);
   const isSaved = isFavorite(currentSlug);
   const isDemoArticle = articleSource === 'demo';
   const demoRelatedArticles = isDemoArticle
@@ -314,7 +297,7 @@ export default function Articolo() {
   })();
 
   const authorName = isDemoArticle ? BRAND_AUTHOR : article.author || BRAND_AUTHOR;
-  const categoryContext = getCategoryContext(article);
+  const categoryPath = getCategoryPath(article.category);
 
   const handleShare = async () => {
     const url = window.location.href;
@@ -380,7 +363,7 @@ export default function Articolo() {
   }
 
   const breadcrumbItems = [
-    { label: categoryContext.label, href: categoryContext.path },
+    { label: article.category, href: categoryPath },
     { label: article.location.split(',')[0], href: '/destinazioni' },
     { label: article.title.split(':')[0] }
   ];
@@ -419,9 +402,9 @@ export default function Articolo() {
         <article className="relative bg-white rounded-[2.5rem] overflow-hidden shadow-xl shadow-black/5 border border-black/5 mx-4 md:mx-8 lg:mx-12 my-8 pb-24">
           {/* Navigation Header */}
           <div className="absolute top-8 left-8 z-50 hidden md:block">
-            <Link to={categoryContext.path} className="flex items-center gap-2 text-white/60 hover:text-white transition-colors text-xs uppercase tracking-widest font-bold">
+            <Link to={categoryPath} className="flex items-center gap-2 text-white/60 hover:text-white transition-colors text-xs uppercase tracking-widest font-bold">
               <ArrowRight size={16} className="rotate-180" />
-              Torna a {categoryContext.label}
+              Torna ai Racconti
             </Link>
           </div>
 
@@ -429,7 +412,7 @@ export default function Articolo() {
             article={article}
             authorName={authorName}
             readingTime={readingTime}
-            categoryPath={categoryContext.path}
+            categoryPath={categoryPath}
             isSaved={isSaved}
             copied={copied}
             onToggleFavorite={() => toggleFavorite(currentSlug)}
@@ -628,6 +611,36 @@ export default function Articolo() {
                   </div>
                 )}
 
+                {/* Map Section */}
+                {(article.mapUrl || (article.mapMarkers && article.mapMarkers.length > 0)) && (
+                  <div id="mappa" className="my-20 scroll-mt-32">
+                    <h2 className="text-3xl font-serif mb-8">Mappa del Viaggio</h2>
+                    <div className="w-full rounded-[2.5rem] overflow-hidden border border-black/5 shadow-sm transition-all">
+                      {article.mapMarkers && article.mapMarkers.length > 0 ? (
+                        <InteractiveMap
+                          markers={article.mapMarkers}
+                          center={article.mapCenter || [0, 30]}
+                          zoom={article.mapZoom || 1}
+                          className="w-full h-[450px]"
+                        />
+                      ) : (
+                        <div className="w-full h-[450px] grayscale-[0.2] hover:grayscale-0 transition-all">
+                          <iframe
+                            src={article.mapUrl}
+                            width="100%"
+                            height="100%"
+                            style={{ border: 0 }}
+                            allowFullScreen
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            title="Mappa del viaggio"
+                          ></iframe>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 {/* Budget Breakdown */}
                 {article.costs && (
                   <div id="budget" className="my-20 p-10 bg-ink text-white rounded-[2.5rem] scroll-mt-32">
@@ -730,19 +743,19 @@ export default function Articolo() {
 
             <SocialFollowCTA />
 
-            {/* Editorial continuity */}
+            {/* Premium Shop Cross-Selling */}
             <div className="mt-24 p-12 bg-ink rounded-3xl text-white flex flex-col md:flex-row items-center justify-between gap-8 relative overflow-hidden group shadow-2xl">
               <div className="absolute inset-0 bg-linear-to-r from-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
               <div className="relative z-10 max-w-xl">
                 <div className="flex items-center gap-3 mb-4 text-[10px] font-bold uppercase tracking-[0.24em] text-accent">
-                  Continuita editoriale
+                  Guide Premium
                 </div>
-                <h3 className="text-3xl font-serif md:text-4xl mb-4 leading-tight">Continua da cio che ti serve davvero.</h3>
-                <p className="text-white/70 font-light text-lg">Se vuoi strumenti pratici apri le risorse. Se invece vuoi restare nel flusso editoriale, torna negli archivi e scegli il prossimo posto dal luogo o dall esperienza.</p>
+                <h3 className="text-3xl font-serif md:text-4xl mb-4 leading-tight">Parti preparato davvero.</h3>
+                <p className="text-white/70 font-light text-lg">Itinerari pratici, consigli budget e guide scritte dopo averle vissute. Niente teoria — solo quello che funziona.</p>
               </div>
               <div className="relative z-10 shrink-0">
-                <Link to="/risorse" className="inline-flex items-center justify-center bg-accent text-ink hover:bg-white px-8 py-4 rounded-full font-bold uppercase tracking-[0.2em] text-xs transition-colors shadow-lg">
-                  Apri le risorse <ArrowRight size={16} className="ml-2" />
+                <Link to="/shop" className="inline-flex items-center justify-center bg-accent text-ink hover:bg-white px-8 py-4 rounded-full font-bold uppercase tracking-[0.2em] text-xs transition-colors shadow-lg">
+                  Esplora lo Shop <ArrowRight size={16} className="ml-2" />
                 </Link>
               </div>
             </div>

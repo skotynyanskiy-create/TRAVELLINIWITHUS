@@ -12,6 +12,66 @@ const asStringArray = (value: unknown) =>
 const asTimestamp = (value: unknown) =>
   value && typeof value === 'object' && 'toDate' in value ? (value as Timestamp) : undefined;
 
+type NumberTuple = [number, number];
+type ArticleMapMarker = {
+  id: string | number;
+  name: string;
+  coordinates: NumberTuple;
+  title?: string;
+  category?: string;
+};
+
+const asNumberTuple = (value: unknown): NumberTuple | undefined => {
+  if (!Array.isArray(value) || value.length !== 2 || !value.every((item) => typeof item === 'number')) {
+    return undefined;
+  }
+
+  return [value[0], value[1]];
+};
+
+const asMarkerArray = (value: unknown) => {
+  if (!Array.isArray(value)) {
+    return undefined;
+  }
+
+  const markers: ArticleMapMarker[] = [];
+
+  for (const item of value) {
+    if (!item || typeof item !== 'object') {
+      continue;
+    }
+
+    const marker = item as Record<string, unknown>;
+    const coordinates = asNumberTuple(marker.coordinates);
+    const name = asString(marker.name);
+
+    if (!coordinates || !name) {
+      continue;
+    }
+
+    const markerData: ArticleMapMarker = {
+      id: typeof marker.id === 'string' || typeof marker.id === 'number' ? marker.id : name,
+      name,
+      coordinates,
+    };
+
+    const title = asString(marker.title);
+    const category = asString(marker.category);
+
+    if (title) {
+      markerData.title = title;
+    }
+
+    if (category) {
+      markerData.category = category;
+    }
+
+    markers.push(markerData);
+  }
+
+  return markers.length > 0 ? markers : undefined;
+};
+
 const asObjectArray = <T>(value: unknown, mapper: (item: Record<string, unknown>) => T | null) => {
   if (!Array.isArray(value)) {
     return undefined;
@@ -59,6 +119,10 @@ export interface NormalizedArticle {
   seasonality?: { month: string; rating: number }[];
   hiddenGems?: { title: string; description: string }[];
   localFood?: { name: string; description: string; image?: string }[];
+  mapUrl?: string;
+  mapMarkers?: ArticleMapMarker[];
+  mapCenter?: NumberTuple;
+  mapZoom?: number;
   duration?: string;
   videoUrl?: string;
 }
@@ -181,6 +245,10 @@ export function normalizeFirestoreArticle(id: string, data: Record<string, unkno
         image: asString(item.image) || undefined,
       };
     }),
+    mapUrl: asString(data.mapUrl) || undefined,
+    mapMarkers: asMarkerArray(data.mapMarkers),
+    mapCenter: asNumberTuple(data.mapCenter),
+    mapZoom: typeof data.mapZoom === 'number' ? data.mapZoom : undefined,
     duration: asString(data.duration) || undefined,
     videoUrl: asString(data.videoUrl) || undefined,
   };

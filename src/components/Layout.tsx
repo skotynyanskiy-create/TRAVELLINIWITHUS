@@ -5,6 +5,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 
 const CartDrawer = lazy(() => import('./CartDrawer'));
+const ExitIntentPopup = lazy(() => import('./ExitIntentPopup'));
 
 export default function Layout() {
   const location = useLocation();
@@ -30,6 +31,9 @@ export default function Layout() {
       <Navbar />
       <Suspense fallback={null}>
         <CartDrawer />
+      </Suspense>
+      <Suspense fallback={null}>
+        <ExitIntentPopup />
       </Suspense>
       <main id="main-content" className="flex-grow">
         <AnimatePresence mode="popLayout">

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, X, MapPin, BookOpen, Compass, NotebookPen, Mail } from 'lucide-react';
+import { Search, X, MapPin, BookOpen, Compass, ShoppingBag, Mail } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { LucideIcon } from 'lucide-react';
 import Skeleton from './Skeleton';
@@ -8,7 +8,6 @@ import { fetchArticles } from '../services/firebaseService';
 import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_ARTICLE_PREVIEW, DEMO_ARTICLE_PATH } from '../config/demoContent';
 import { useSiteContent } from '../hooks/useSiteContent';
-import { DEMO_CONTENT_ENABLED } from '../config/runtime';
 
 interface SearchResult {
   id: string;
@@ -43,7 +42,7 @@ const STATIC_PAGE_RESULTS: SearchResult[] = [
     title: 'Risorse',
     category: 'Pagina',
     link: '/risorse',
-    icon: NotebookPen,
+    icon: ShoppingBag,
   },
   {
     id: 'page-collaborazioni',
@@ -64,7 +63,7 @@ const STATIC_PAGE_RESULTS: SearchResult[] = [
     title: 'Media Kit',
     category: 'Pagina',
     link: '/media-kit',
-    icon: Mail,
+    icon: ShoppingBag,
   },
   {
     id: 'page-contatti',
@@ -83,11 +82,10 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const navigate = useNavigate();
   const { data: demoContent } = useSiteContent('demo');
   const demoSettings = demoContent ?? siteContentDefaults.demo;
-  const editorialDemoEnabled = DEMO_CONTENT_ENABLED && demoSettings.showEditorialDemo;
 
   useEffect(() => {
     setAllData([]);
-  }, [editorialDemoEnabled]);
+  }, [demoSettings.showEditorialDemo]);
 
   useEffect(() => {
     const fetchSearchData = async () => {
@@ -107,7 +105,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
           });
         });
 
-        if (articles.length === 0 && editorialDemoEnabled) {
+        if (articles.length === 0 && demoSettings.showEditorialDemo) {
           fetchedData.push({
             id: DEMO_ARTICLE_PREVIEW.id,
             title: DEMO_ARTICLE_PREVIEW.title,
@@ -128,7 +126,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     if (isOpen && allData.length === 0) {
       fetchSearchData();
     }
-  }, [isOpen, allData.length, editorialDemoEnabled]);
+  }, [isOpen, allData.length, demoSettings.showEditorialDemo]);
 
   useEffect(() => {
     if (isOpen) {
