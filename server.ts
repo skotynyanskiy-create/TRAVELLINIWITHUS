@@ -1523,9 +1523,21 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
+  if (!process.env.VERCEL) {
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  }
+
+  return app;
 }
 
-startServer();
+// Cache the initialized app across warm Vercel invocations
+let _app: ReturnType<typeof express> | undefined;
+const _ready = startServer().then(a => { _app = a; });
+
+// Vercel serverless handler
+export default async function handler(req: any, res: any) {
+  if (!_app) await _ready;
+  _app!(req, res);
+}

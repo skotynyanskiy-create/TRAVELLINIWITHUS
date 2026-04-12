@@ -1,0 +1,21 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": null,
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/server.ts" },
+    { "src": "/sitemap.xml", "dest": "/server.ts" },
+    { "src": "/rss.xml", "dest": "/server.ts" },
+    { "src": "/articolo/(.*)", "dest": "/server.ts" },
+    { "src": "/shop/(.*)", "dest": "/server.ts" },
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ],
+  "functions": {
+    "server.ts": {
+      "memory": 1024,
+      "maxDuration": 30,
+      "includeFiles": "dist/index.html,firebase-applet-config.json"
+    }
+  }
+}
