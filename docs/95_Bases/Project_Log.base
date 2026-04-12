@@ -1,0 +1,34 @@
+filters:
+  and:
+    - 'file.ext == "md"'
+    - 'file.inFolder("10_Projects")'
+properties:
+  file.name:
+    displayName: Project
+  status:
+    displayName: Status
+  priority:
+    displayName: Priority
+  area:
+    displayName: Area
+  owner:
+    displayName: Owner
+  route:
+    displayName: Route
+  repo_path:
+    displayName: Repo Path
+  file.mtime:
+    displayName: Updated
+views:
+  - type: table
+    name: Active Projects
+    filters:
+      or:
+        - 'status == "open"'
+        - 'status == "in-progress"'
+        - 'status == "active"'
+        - 'status == "blocked"'
+    order:
+      - priority
+      - status
+      - file.mtime

@@ -1,93 +1,84 @@
-# Travelliniwithus
+# TRAVELLINIWITHUS
 
-Sito editoriale e commerciale costruito con `React`, `Vite`, `Express` e `Firebase` per il progetto Travelliniwithus.
+Website and marketing operating system for the influencer brand `@travelliniwithus`.
 
-## Stack
+This repository is used to build and operate:
 
-- Frontend: `React 19`, `React Router`, `TanStack Query`, `Tailwind CSS`
-- Backend runtime: `Express` + `Vite` server
-- Dati: `Firebase / Firestore`
-- Commerce: `Stripe`
-- Lead capture: endpoint server + eventuale sync `Brevo`
-- QA: `Vitest`, `Playwright`, audit custom del repo
+- public website
+- editorial content and destination storytelling
+- affiliate / shop flows
+- collaborations and media kit conversion
+- project, marketing and release operations through the Obsidian vault in `docs/`
 
-## Requisiti
+## Core stack
 
-- `Node.js` 22+
-- accesso al progetto Firebase collegato
-- chiavi env solo se usi le relative integrazioni
+- React 19
+- TypeScript
+- Vite 6
+- Tailwind CSS 4
+- Express
+- Firebase / Firestore
+- Stripe
+- Vitest + Playwright
 
-## Avvio locale
-
-1. Installa le dipendenze:
-
-```bash
-npm ci
-```
-
-2. Crea il file `.env.local` partendo da `.env.example`.
-
-3. Avvia il server locale:
+## Run locally
 
 ```bash
+npm install
 npm run dev
 ```
 
-4. Apri `http://localhost:3000`.
-
-## Variabili ambiente
-
-Le variabili supportate sono documentate in [.env.example](/c:/Users/admin/Downloads/TRAVELLINIWITHUS-codex-local-import-20260408/.env.example).
-
-Le più importanti:
-
-- `APP_URL`: URL canonico dell'app
-- `STRIPE_SECRET_KEY`: chiave server Stripe
-- `STRIPE_WEBHOOK_SECRET`: secret webhook Stripe
-- `ALLOW_MOCK_CHECKOUT`: abilita checkout mock in locale
-- `BREVO_API_KEY`: sync contatti newsletter
-- `VITE_GEMINI_API_KEY`: chiave client per gli strumenti AI interni
-- `VITE_ENABLE_DEMO_CONTENT`: abilita contenuti demo solo in dev/staging
-- `ENABLE_DEMO_CONTENT`: equivalente server-side per route demo e SSR
-
-## Config Firebase
-
-Il frontend legge la configurazione da `firebase-applet-config.json`.
-
-Il backend usa lo stesso file per costruire le chiamate Firestore REST. Se cambi progetto o database, aggiorna quel file in modo coerente.
-
-## Comandi utili
+## Main commands
 
 ```bash
+npm run dev
 npm run typecheck
 npm run lint
 npm run test
 npm run build
+npm run audit:ui
+npm run audit:firebase
+npm run audit:stripe
 npm run audit:all
 npm run predeploy
-npm run e2e
 ```
 
-## Gate consigliati prima di pubblicare
+## AI collaboration
 
-Esegui almeno:
+This repo is configured to work cleanly across multiple AI tools.
 
-```bash
-npm run typecheck
-npm run lint
-npm run test
-npm run build
-npm run predeploy
-npm run e2e
-```
+Read in this order:
 
-## Policy operative del progetto
+1. `AGENTS.md`
+2. `CLAUDE.md`
+3. `docs/AI_COLLABORATION_PROTOCOL.md`
+4. `docs/OBSIDIAN_HOME.md`
+5. `docs/MARKETING_OPERATIONS_HUB.md`
 
-- nessun contenuto demo deve comparire in produzione
-- le CTA pubbliche devono puntare solo a flussi reali
-- `previewAdmin=1` è una scorciatoia locale di sviluppo, non un accesso di produzione
-- gli errori runtime client vengono inviati a `/api/client-error` quando il monitoring remoto è attivo
+For Claude Code session startup:
 
-## Stato del progetto
+- `.claude/CLAUDE_CODE_START_PROMPT.md`
 
-Questo repo è pensato per una `V1` pubblica del sito Travelliniwithus: priorità a brand coherence, funnel pubblico, lead capture, shop reale e QA di rilascio.
+## Obsidian
+
+Open this folder as vault:
+
+`docs/`
+
+Main notes:
+
+- `docs/OBSIDIAN_HOME.md`
+- `docs/OBSIDIAN_DASHBOARD.md`
+- `docs/MARKETING_OPERATIONS_HUB.md`
+
+## Main working notes
+
+- `docs/10_Projects/PROJECT_TRAVELLINIWITHUS_SITE.md`
+- `docs/10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT.md`
+- `docs/10_Projects/PROJECT_DESTINATIONS_SECTION_REVIEW.md`
+- `docs/10_Projects/PROJECT_RELEASE_READINESS.md`
+
+## Public references
+
+- Instagram: https://www.instagram.com/travelliniwithus/?hl=it
+- Website: https://www.travelliniwithus.it/

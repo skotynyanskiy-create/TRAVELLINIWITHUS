@@ -1,0 +1,26 @@
+filters:
+  and:
+    - 'file.ext == "md"'
+    - 'type == "partner"'
+properties:
+  file.name:
+    displayName: Partner
+  company:
+    displayName: Company
+  stage:
+    displayName: Stage
+  offer_type:
+    displayName: Offer
+  owner:
+    displayName: Owner
+  priority:
+    displayName: Priority
+  file.mtime:
+    displayName: Updated
+views:
+  - type: table
+    name: Partner Pipeline
+    order:
+      - stage
+      - priority
+      - file.mtime

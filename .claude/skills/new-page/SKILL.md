@@ -41,7 +41,9 @@ The user should provide: page name (e.g., "Podcast", "Blog", "Partners")
    - Add route inside `<Routes>`: `<Route path="route-name" element={<PageName />} />`
    - Place before the catch-all `*` route
 
-3. **Add to navigation** if needed — update `src/components/NavigationMenu.tsx` or `Header.tsx`
+3. **Add to navigation** if needed — update `src/components/Navbar.tsx`:
+   - Add a new entry to the `navItems` array inside the `useMemo` block
+   - If the page has subpages, add a `subLinks` array
 
 4. **Add to sitemap** — if it's a static public page, add the URL to the sitemap generation logic
 

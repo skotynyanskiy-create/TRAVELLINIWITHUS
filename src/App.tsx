@@ -4,7 +4,7 @@
  */
 
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Layout from './components/Layout';
@@ -39,6 +39,8 @@ const Risorse = lazy(() => import('./pages/Risorse'));
 const Shop = lazy(() => import('./pages/Shop'));
 const ProductPage = lazy(() => import('./pages/ProductPage'));
 const Club = lazy(() => import('./pages/Club'));
+const Guide = lazy(() => import('./pages/Guide'));
+const Mappa = lazy(() => import('./pages/Mappa'));
 const MieiAcquisti = lazy(() => import('./pages/MieiAcquisti'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
@@ -47,8 +49,8 @@ const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
 const ArticleEditor = lazy(() => import('./pages/admin/ArticleEditor'));
 const ProductEditor = lazy(() => import('./pages/admin/ProductEditor'));
 const SiteContentEditor = lazy(() => import('./pages/admin/SiteContentEditor'));
-const AdminOrders = lazy(() => import('./pages/admin/Orders'));
 const AdminUsers = lazy(() => import('./pages/admin/Users'));
+const AdminOrders = lazy(() => import('./pages/admin/Orders'));
 
 // Legal pages (to be created)
 const Privacy = lazy(() => import('./pages/legal/Privacy'));
@@ -85,7 +87,7 @@ export default function App() {
                       <Route index element={<Home />} />
                       <Route path="destinazioni" element={<Destinazioni />} />
                       <Route path="esperienze" element={<Esperienze />} />
-                      <Route path="guide" element={<Navigate to="/destinazioni" replace />} />
+                      <Route path="guide" element={<Guide />} />
                       <Route path="chi-siamo" element={<ChiSiamo />} />
                       <Route path="collaborazioni" element={<Collaborazioni />} />
                       <Route path="media-kit" element={<MediaKit />} />
@@ -96,6 +98,7 @@ export default function App() {
                       <Route path="shop" element={<Shop />} />
                       <Route path="shop/:slug" element={<ProductPage />} />
                       <Route path="club" element={<Club />} />
+                      <Route path="mappa" element={<Mappa />} />
                       <Route path="account/acquisti" element={<MieiAcquisti />} />
                       
                       {/* Admin Routes */}
@@ -105,8 +108,8 @@ export default function App() {
                       <Route path="admin/editor/:id" element={<ProtectedRoute><ArticleEditor /></ProtectedRoute>} />
                       <Route path="admin/product-editor" element={<ProtectedRoute><ProductEditor /></ProtectedRoute>} />
                       <Route path="admin/product-editor/:id" element={<ProtectedRoute><ProductEditor /></ProtectedRoute>} />
-                      <Route path="admin/orders" element={<ProtectedRoute><AdminOrders /></ProtectedRoute>} />
                       <Route path="admin/users" element={<ProtectedRoute><AdminUsers /></ProtectedRoute>} />
+                      <Route path="admin/orders" element={<ProtectedRoute><AdminOrders /></ProtectedRoute>} />
                       
                       {/* Legal Routes */}
                       <Route path="privacy" element={<Privacy />} />

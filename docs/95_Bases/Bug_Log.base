@@ -1,0 +1,32 @@
+filters:
+  and:
+    - 'file.ext == "md"'
+    - or:
+      - 'file.inFolder("10_Projects")'
+      - 'type == "bug"'
+properties:
+  file.name:
+    displayName: Bug
+  status:
+    displayName: Status
+  priority:
+    displayName: Priority
+  severity:
+    displayName: Severity
+  owner:
+    displayName: Owner
+  route:
+    displayName: Route
+  repo_path:
+    displayName: Repo Path
+  file.mtime:
+    displayName: Updated
+views:
+  - type: table
+    name: Open Bugs
+    filters:
+      - 'type == "bug"'
+    order:
+      - priority
+      - severity
+      - file.mtime

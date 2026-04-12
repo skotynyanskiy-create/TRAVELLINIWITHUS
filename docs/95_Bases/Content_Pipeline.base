@@ -1,0 +1,26 @@
+filters:
+  and:
+    - 'file.ext == "md"'
+    - 'type == "content-brief"'
+properties:
+  file.name:
+    displayName: Content
+  status:
+    displayName: Status
+  pillar:
+    displayName: Pillar
+  channel:
+    displayName: Channel
+  route:
+    displayName: Route
+  owner:
+    displayName: Owner
+  file.mtime:
+    displayName: Updated
+views:
+  - type: table
+    name: Content Pipeline
+    order:
+      - status
+      - pillar
+      - file.mtime

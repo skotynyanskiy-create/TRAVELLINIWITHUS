@@ -1,0 +1,11 @@
+{
+  "alwaysUpdateLinks": true,
+  "newLinkFormat": "shortest",
+  "useMarkdownLinks": false,
+  "showInlineTitle": true,
+  "promptDelete": true,
+  "newFileLocation": "current",
+  "attachmentFolderPath": "70_Assets",
+  "spellcheck": true,
+  "homePath": "OBSIDIAN_HOME"
+}

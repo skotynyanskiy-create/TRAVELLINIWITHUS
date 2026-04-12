@@ -1,0 +1,20 @@
+filters:
+  and:
+    - 'file.ext == "md"'
+    - 'file.inFolder("20_Decisions")'
+properties:
+  file.name:
+    displayName: Decision
+  status:
+    displayName: Status
+  area:
+    displayName: Area
+  owner:
+    displayName: Owner
+  file.mtime:
+    displayName: Updated
+views:
+  - type: table
+    name: Recent Decisions
+    order:
+      - file.mtime

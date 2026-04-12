@@ -1,0 +1,44 @@
+filters:
+  and:
+    - 'file.ext == "md"'
+    - or:
+      - 'file.inFolder("10_Projects")'
+      - 'file.inFolder("20_Decisions")'
+      - 'file.inFolder("30_Meetings")'
+      - 'file.inFolder("40_Daily")'
+      - 'file.inFolder("50_Scratch")'
+properties:
+  file.name:
+    displayName: Note
+  type:
+    displayName: Type
+  status:
+    displayName: Status
+  priority:
+    displayName: Priority
+  area:
+    displayName: Area
+  owner:
+    displayName: Owner
+  due:
+    displayName: Due
+  route:
+    displayName: Route
+  repo_path:
+    displayName: Repo Path
+  file.mtime:
+    displayName: Updated
+views:
+  - type: table
+    name: Open Work
+    filters:
+      or:
+        - 'status == "open"'
+        - 'status == "in-progress"'
+        - 'status == "blocked"'
+        - 'status == "active"'
+    order:
+      - status
+      - priority
+      - due
+      - file.mtime
