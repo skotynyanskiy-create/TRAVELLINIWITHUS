@@ -12,7 +12,7 @@ interface SEOProps {
 }
 
 const DEFAULT_SITE_NAME = 'Travelliniwithus';
-const DEFAULT_OG_IMAGE = `${SITE_URL}/og-default.svg`;
+const DEFAULT_OG_IMAGE = `${SITE_URL}/og-default.png`;
 
 export default function SEO({
   title,

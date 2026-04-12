@@ -19,6 +19,7 @@ Audit the UI consistency of the TRAVELLINIWITHUS project.
    - Missing `aria-*` attributes on interactive elements
 
 6. **Icon Usage** — Verify all icons come from `lucide-react`. Flag any other icon libraries or inline SVGs.
+   - Exception: the TikTok SVG path in `src/components/Navbar.tsx` is intentional (no lucide icon available) — do not flag it.
 
 7. **Component Structure** — Verify pages use `<PageLayout>` and `<Section>` wrappers.
 

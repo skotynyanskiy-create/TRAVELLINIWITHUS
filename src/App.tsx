@@ -49,6 +49,8 @@ const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
 const ArticleEditor = lazy(() => import('./pages/admin/ArticleEditor'));
 const ProductEditor = lazy(() => import('./pages/admin/ProductEditor'));
 const SiteContentEditor = lazy(() => import('./pages/admin/SiteContentEditor'));
+const AdminUsers = lazy(() => import('./pages/admin/Users'));
+const AdminOrders = lazy(() => import('./pages/admin/Orders'));
 
 // Legal pages (to be created)
 const Privacy = lazy(() => import('./pages/legal/Privacy'));
@@ -106,6 +108,8 @@ export default function App() {
                       <Route path="admin/editor/:id" element={<ProtectedRoute><ArticleEditor /></ProtectedRoute>} />
                       <Route path="admin/product-editor" element={<ProtectedRoute><ProductEditor /></ProtectedRoute>} />
                       <Route path="admin/product-editor/:id" element={<ProtectedRoute><ProductEditor /></ProtectedRoute>} />
+                      <Route path="admin/users" element={<ProtectedRoute><AdminUsers /></ProtectedRoute>} />
+                      <Route path="admin/orders" element={<ProtectedRoute><AdminOrders /></ProtectedRoute>} />
                       
                       {/* Legal Routes */}
                       <Route path="privacy" element={<Privacy />} />

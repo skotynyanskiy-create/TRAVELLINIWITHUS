@@ -1,61 +1,66 @@
 # TRAVELLINIWITHUS
 
+Claude should treat `AGENTS.md` as the root operating guide for this repository.
+
+## Required reading order
+
+1. `AGENTS.md`
+2. `README.md`
+3. `docs/OBSIDIAN_HOME.md`
+4. `docs/OBSIDIAN_DASHBOARD.md`
+5. `docs/MARKETING_OPERATIONS_HUB.md`
+
+## Project summary
+
 Travel media brand, affiliate shop and B2B partnership site by Rodrigo & Betta.
-Primary language is Italian. The repository mixes editorial pages, ecommerce flows, admin tooling and a small Express server.
+Primary language is Italian. The repository combines website code, marketing operations and project memory.
 
-## Actual Stack
+## Core truths
 
-- Frontend: React 19 + TypeScript + Vite 6
-- Styling: Tailwind CSS 4 + brand CSS variables in `src/index.css`
-- Routing: `react-router-dom` with route-level `lazy()` imports in `src/App.tsx`
-- Server state: React Query with 5 minute default `staleTime`
-- Global client state: Auth, Cart and Favorites contexts
-- Backend: Express in `server.ts`
-- Data: Firebase client SDK + Firestore
-- Payments: Stripe Checkout + webhook handling in `server.ts`
-- SEO: `react-helmet-async` via `src/components/SEO.tsx`
-- Tests: Vitest + Playwright
+- `docs/` is not optional documentation: it is the shared operating vault.
+- important website or marketing work should update both code and the relevant operational note.
+- the owner is acting as marketing lead / website builder for the influencer brand.
 
-## Project Truths
+## Stack
 
-- TypeScript is not currently in `strict` mode. Prefer explicit typing and avoid introducing new `any`, but do not assume compiler strictness that does not exist.
-- Brand colors should prefer CSS variables such as `var(--color-accent)` and `var(--color-ink)`, but the codebase already uses neutral Tailwind utilities like `text-black/70`, `bg-white` and `border-zinc-200`.
-- React Query is the default choice for read-heavy page data. Raw `fetch('/api/...')` is already used for form submissions, checkout and mutation-like browser flows.
-- Firebase web config is intentionally client-visible through `firebase-applet-config.json`. Never treat the public web config as a secret, and never expose admin credentials or Stripe secrets client-side.
-- Most content pages use `PageLayout` + `Section` + `SEO`, but special pages can compose directly when needed.
+- React 19 + TypeScript + Vite 6
+- Tailwind CSS 4
+- Express
+- Firebase / Firestore
+- Stripe
+- Vitest + Playwright
 
-## Editing Conventions
+## Important conventions
 
-- Keep route components in `src/pages/` and lazy-load them from `src/App.tsx`.
-- Prefer typed props via interfaces or local type aliases.
-- Keep Firestore access centralized in `src/services/firebaseService.ts` unless there is a clear reason to stay close to an auth or admin flow.
-- Preserve the current visual language instead of forcing a brand-new design system.
-- Treat `firestore.rules`, `src/config/admin.ts` and `server.ts` as high-risk files. Change them deliberately.
+- TypeScript is not in strict mode
+- prefer explicit typing and avoid new `any`
+- preserve current visual language unless redesign is requested
+- treat `server.ts`, `firestore.rules` and `src/config/admin.ts` as high-risk
 
-## Operational Commands
+## Operational commands
 
 ```bash
 npm run dev
 npm run typecheck
-npm run lint
-npm run test
 npm run build
 npm run audit:ui
 npm run audit:firebase
 npm run audit:stripe
-npm run audit:all
-npm run scaffold:page -- MyPage my-route
 npm run predeploy
 ```
 
-## Codex Alignment
+## Shared workflows
 
-The `.claude/` directory is retained as reference material for Claude Code, but Codex uses the npm workflows above as the executable equivalents for:
+See `docs/AGENT_WORKFLOWS.md` and `docs/AI_COLLABORATION_PROTOCOL.md`.
 
-- `/audit-ui` -> `npm run audit:ui`
-- `/firebase-check` -> `npm run audit:firebase`
-- `/stripe-flow` -> `npm run audit:stripe`
-- `/new-page` -> `npm run scaffold:page -- PageName route-slug`
-- `/predeploy` -> `npm run predeploy`
+## Claude Code session start
 
-See `docs/AGENT_WORKFLOWS.md` for the shared mapping and caveats.
+For new Claude Code sessions, use:
+
+- `.claude/CLAUDE_CODE_START_PROMPT.md`
+
+And keep these notes in scope when relevant:
+
+- `docs/10_Projects/PROJECT_TRAVELLINIWITHUS_SITE.md`
+- `docs/MARKETING_OPERATIONS_HUB.md`
+- `docs/10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT.md`

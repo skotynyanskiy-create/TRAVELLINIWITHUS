@@ -32,6 +32,11 @@ Run pre-deployment checks for the TRAVELLINIWITHUS project before shipping to pr
    - No hardcoded API keys or secrets in `src/`
    - `firestore.rules` has no `allow read, write: if true`
 
+9. **Obsidian Release Note** — Remind the user to update `docs/10_Projects/PROJECT_RELEASE_READINESS.md`:
+   - Mark completed checklist items
+   - If all checks pass, suggest creating a release note from `docs/90_Templates/TPL_Release_Note.md`
+
 ## Output
 
 Report each check as PASS/FAIL/WARN with details. If any FAIL, do NOT recommend deploying.
+If all pass, print: "✓ Ready to deploy. Run /deploy to ship."

@@ -1,0 +1,31 @@
+filters:
+  and:
+    - 'file.ext == "md"'
+    - 'type == "campaign"'
+properties:
+  file.name:
+    displayName: Campaign
+  status:
+    displayName: Status
+  priority:
+    displayName: Priority
+  owner:
+    displayName: Owner
+  channel:
+    displayName: Channel
+  goal:
+    displayName: Goal
+  start:
+    displayName: Start
+  end:
+    displayName: End
+  file.mtime:
+    displayName: Updated
+views:
+  - type: table
+    name: Active Campaigns
+    order:
+      - status
+      - priority
+      - start
+      - file.mtime

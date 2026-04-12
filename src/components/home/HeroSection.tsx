@@ -32,6 +32,7 @@ export default function HeroSection() {
           src={HERO_IMAGE}
           alt=""
           aria-hidden="true"
+          fetchPriority="high"
           className="h-full w-full object-cover object-center brightness-[0.94] saturate-[1.05]"
           referrerPolicy="no-referrer"
         />
