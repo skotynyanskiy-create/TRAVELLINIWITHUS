@@ -4,8 +4,8 @@ area: delivery
 status: open
 priority: p1
 owner: team
-repo: TRAVELLINIWITHUS-codex-local-import-20260408
-related: "[[10_Projects/PROJECT_TRAVELLINIWITHUS_SITE]]"
+repo: TRAVELLINIWITHUS
+related: '[[10_Projects/PROJECT_TRAVELLINIWITHUS_SITE]]'
 source: release preparation
 tags:
   - project

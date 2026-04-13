@@ -4,7 +4,7 @@ area: product
 status: active
 priority: p1
 owner: team
-repo: TRAVELLINIWITHUS-codex-local-import-20260408
+repo: TRAVELLINIWITHUS
 canonical_repo: https://github.com/skotynyanskiy-create/TRAVELLINIWITHUS
 tags:
   - project

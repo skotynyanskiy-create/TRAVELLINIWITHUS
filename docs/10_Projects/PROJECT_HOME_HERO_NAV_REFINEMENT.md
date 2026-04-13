@@ -4,7 +4,7 @@ area: product
 status: in-progress
 priority: p1
 owner: codex
-repo: TRAVELLINIWITHUS-codex-local-import-20260408
+repo: TRAVELLINIWITHUS
 route: /home
 repo_path: src/components/home/HeroSection.tsx
 related: '[[10_Projects/PROJECT_TRAVELLINIWITHUS_SITE]]'
@@ -35,19 +35,19 @@ La homepage precedente aveva troppe sezioni, statistiche duplicate e tre voci di
 - repo_path: `src/components/home/HeroSection.tsx`
 - repo_path secondario: `src/components/Navbar.tsx`
 - repo_path secondario: `src/components/home/CoupleIntro.tsx`
-- repo_path secondario: `src/components/home/DestinationsGrid.tsx`
+- repo_path secondario: `src/components/home/HomeDiscoveryCards.tsx`
 
 ## Focus attuale
 
 - [x] rimuovere stat cards e trust pills dalla hero
 - [x] rifinire hero con promessa editoriale piu precisa
-- [x] aggiungere sezione `HomeStartHere` subito dopo hero
-- [x] sostituire `HomeStartHere` con `HomeDiscoveryCards` premium
+- [x] aggiungere sezione di orientamento subito dopo hero
+- [x] sostituire la vecchia sezione di orientamento con `HomeDiscoveryCards` premium
 - [x] inserire `CoupleIntro` dopo la hero
 - [x] trasformare `CoupleIntro` in manifesto del metodo Travellini
 - [x] aggiungere standard del metodo: provato sul posto, foto reali, consigli utili
 - [x] spostare newsletter a meta pagina dentro wrapper dark
-- [x] rimuovere `StatsStrip`, `AboutPreview` e `ShopPreview` dalla homepage
+- [x] rimuovere i componenti homepage legacy non piu usati
 - [x] semplificare la nav principale in `Esplora`, `Risorse`, `Collaborazioni`, `Chi siamo`
 - [x] nascondere il carrello quando non ci sono item
 - [x] pass grafico senior: radius piu controllati, meno ombre, gerarchia editoriale piu netta
@@ -121,7 +121,7 @@ Decisione: mantenere il carattere visuale, ma togliere ogni elemento che sembra 
 Direzione: editoriale pulita, utile all'utente finale e coerente con un brand creator people-led.
 
 - la hero deve rispondere subito a chi siete, cosa raccontate e perche fidarsi
-- `HomeStartHere` diventa il primo strumento utile: luogo, esperienza, ricerca
+- `HomeDiscoveryCards` diventa il primo strumento utile: luogo, esperienza, ricerca
 - `CoupleIntro` spiega il metodo, non solo la biografia
 - gli articoli arrivano dopo l'orientamento, in stile magazine
 - la newsletter resta umana e leggera
