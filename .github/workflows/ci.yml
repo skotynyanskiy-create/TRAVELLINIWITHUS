@@ -2,38 +2,46 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, 'codex/**', 'feat/**', 'fix/**' ]
   pull_request:
     branches: [ main ]
 
 jobs:
-  build-and-test:
+  quality:
+    name: Typecheck · Lint · Test · Build
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x]
-
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: Check types
-      run: npm run lint
-      
-    - name: Run ESLint
-      run: npx eslint src --ext .ts,.tsx
-      
-    - name: Run Unit Tests
-      run: npx vitest run
-      
-    - name: Build Project
-      run: npm run build
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript check
+        run: npm run typecheck
+
+      - name: ESLint
+        run: npm run lint
+
+      - name: Unit tests
+        run: npm run test
+
+      - name: Production build
+        run: npm run build
+        env:
+          VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
+
+      - name: Audit UI
+        run: npm run audit:ui
+
+      - name: Audit Firebase
+        run: npm run audit:firebase
+
+      - name: Audit Stripe
+        run: npm run audit:stripe

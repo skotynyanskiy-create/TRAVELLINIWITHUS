@@ -1,136 +1,80 @@
-# TRAVELLINIWITHUS — AI Agent Instructions
+# TRAVELLINIWITHUS — GitHub Copilot Instructions
 
-**Project**: Travel media brand + affiliate shop + B2B partnerships  
-**Tech**: React 19 + Node.js/Express + Firebase + Stripe  
-**Team**: Rodrigo & Betta (founders)  
-**Status**: Launch-ready with operational improvements (2026-03-20)
+Use `AGENTS.md` as the main repository instruction file.
 
----
+## Required context
 
-## 🎯 Core Principles
+- `README.md`
+- `CLAUDE.md`
+- `docs/OBSIDIAN_HOME.md`
+- `docs/OBSIDIAN_DASHBOARD.md`
+- `docs/MARKETING_OPERATIONS_HUB.md`
 
-1. **Type Safety First** — Strict TypeScript, no `any`, proper Zod/type validation
-2. **Firebase as Single Source** — All data lives in Firestore (articles, products, leads, users)
-3. **Security by Default** — Admin routes protected, published-only public reads, leads allow anonymous writes
-4. **Performance Conscious** — Lazy-load routes, React Query for server state, optimize images
-5. **Test Before Deploy** — E2E tests for critical flows (checkout, newsletter, contact)
+## Repository purpose
 
----
+This repo is the website and marketing operating system for the influencer brand `@travelliniwithus`.
 
-## 📁 File Structure & Conventions
+It combines:
 
-### Pages (Route-level components)
+- public website
+- editorial content
+- affiliate / shop flows
+- collaborations and media kit conversion
+- project and marketing operations in `docs/`
 
-**Location**: `src/pages/`
+## Non-negotiable rules
 
-**Naming**:
-- PascalCase: `Shop.tsx`, `ProductPage.tsx`, `CustomPage.tsx`
-- Use page name = route name (mostly)
-- Exception: `/shop/:slug` → both `Shop.tsx` and `ProductPage.tsx`
+- `docs/` is part of the operating system, not optional docs
+- important work should update the relevant note in `docs/`
+- prefer explicit types and avoid new `any`
+- preserve the existing visual language unless redesign is requested
+- do not assume strict TypeScript
+- treat `server.ts`, `firestore.rules` and `src/config/admin.ts` as high-risk
 
-**Structure**:
-```tsx
-import { Helmet } from 'react-helmet-async';
-import SEO from '../components/SEO';
-import PageLayout from '../components/PageLayout';
-import Section from '../components/Section';
+## Important locations
 
-export default function MyPage() {
-  return (
-    <>
-      <Helmet>
-        <title>Page Title | Travelliniwithus</title>
-      </Helmet>
-      <SEO 
-        title="Page Title"
-        description="..."
-        canonical={`${SITE_URL}/my-route`}
-      />
-      <PageLayout>
-        <Section>
-          {/* Content here */}
-        </Section>
-      </PageLayout>
-    </>
-  );
-}
+- homepage / hero: `src/components/home/HeroSection.tsx`
+- navbar: `src/components/Navbar.tsx`
+- destinations section: `src/components/home/DestinationsGrid.tsx`
+- project hub: `docs/10_Projects/PROJECT_TRAVELLINIWITHUS_SITE.md`
+- marketing hub: `docs/MARKETING_OPERATIONS_HUB.md`
+
+## Commands
+
+```bash
+npm run dev
+npm run typecheck
+npm run build
+npm run audit:ui
+npm run audit:firebase
+npm run audit:stripe
+npm run predeploy
 ```
 
-**Data Fetching**:
-- Use React Query: `useQuery()` from `@tanstack/react-query`
-- Fetch data from `services/firebaseService.ts`
-- Set staleTime: 5min for editorial, custom for real-time
-- Always handle loading + error states
+## Documentation update policy
 
-**Admin Routes**:
-- Wrap with `<ProtectedRoute>` in `App.tsx`
-- Verify user auth via `useAuth()` hook
-- Check `isAdmin` flag
-
-### Components (Reusable)
-
-**Location**: `src/components/`
-
-**Naming**: PascalCase, descriptive: `ProductCard.tsx`, `NewsletterForm.tsx`
-
-**Rules**:
-- ✅ Props should be typed (`interface ComponentProps { ... }`)
-- ✅ Use error boundaries for risky components
-- ✅ Memoize if expensive (`React.memo`)
-- ✅ Use Lucide icons from `lucide-react`
-- ✅ Tailwind only (no CSS files except `index.css`)
-- ❌ No inline styles
-- ❌ No hardcoded colors (use CSS variables: `var(--color-accent)`, `var(--color-sand)`)
-
-**Example**:
-```tsx
-interface ButtonProps {
-  variant?: 'primary' | 'secondary';
-  onClick: () => void;
-  children: React.ReactNode;
-  disabled?: boolean;
-}
-
-export default function Button({ 
-  variant = 'primary', 
-  onClick, 
-  children, 
-  disabled 
-}: ButtonProps) {
-  return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={`
-        px-6 py-3 rounded-full transition-colors
-        ${variant === 'primary' 
-          ? 'bg-[var(--color-ink)] text-white hover:bg-[var(--color-accent)]'
-          : 'border border-black/10 hover:border-black/30'
-        }
-        ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
-      `}
-    >
-      {children}
-    </button>
-  );
-}
-```
-
-### Context (State Management)
+- UI changes: use project / task / ui-change notes
+- bugs: use bug notes
+- campaigns: use campaign notes
+- partnerships: use partner notes
+- content planning: use content brief notes
 
 **Location**: `src/context/`
 
 **Use When**:
+
 - Global UI state (cart, favorites, auth)
 - Shallow state tree (avoid deep nesting)
 - ≤ 3 context providers total
 
 **Don't Use For**:
+
 - Server state → Use React Query instead
 - Complex derived state → Memoize selectors
 - Frequently changing data → Use Firestore subscriptions
 
 **Example**:
+
 ```tsx
 interface CartContextType {
   items: CartItem[];
@@ -157,11 +101,13 @@ export function useCart() {
 **Location**: `src/services/`
 
 **Files**:
+
 - `firebaseService.ts` — All Firestore/Firebase operations
 - `analytics.ts` — Event tracking
 - `aiVerificationService.ts` — AI verification logic
 
 **Rules**:
+
 - ✅ Pure functions, no side effects
 - ✅ Type all parameters and returns
 - ✅ Handle errors explicitly (don't swallow them)
@@ -169,19 +115,20 @@ export function useCart() {
 - ❌ Never expose Firebase config or keys client-side
 
 **Example**:
+
 ```tsx
 export async function fetchProductBySlug(slug: string): Promise<Product | null> {
   if (!slug) throw new Error('Slug is required');
-  
+
   const q = query(
     collection(db, 'products'),
     where('slug', '==', slug),
     where('published', '==', true)
   );
-  
+
   const snapshot = await getDocs(q);
   if (snapshot.empty) return null;
-  
+
   const doc = snapshot.docs[0];
   return { id: doc.id, ...doc.data() } as Product;
 }
@@ -192,11 +139,13 @@ export async function fetchProductBySlug(slug: string): Promise<Product | null> 
 **Location**: `src/utils/`, `src/hooks/`
 
 **Hooks**:
+
 - Name with `use` prefix: `useSiteContent()`, `useAuth()`
 - Return named object (object destructuring friendly)
 - Include cleanup (useEffect return)
 
 **Utils**:
+
 - Standalone, pure functions
 - No React imports unless necessary
 - Examples: `slugify()`, `formatDate()`, `validateEmail()`
@@ -266,29 +215,25 @@ siteContent/
 ### Query Patterns
 
 **Always filter by published**:
+
 ```tsx
-const q = query(
-  collection(db, 'articles'),
-  where('published', '==', true)
-);
+const q = query(collection(db, 'articles'), where('published', '==', true));
 ```
 
 **Use serverTimestamp() for dates**:
+
 ```tsx
 await setDoc(docRef, {
   title: 'Article',
   createdAt: serverTimestamp(),
-  updatedAt: serverTimestamp()
+  updatedAt: serverTimestamp(),
 });
 ```
 
 **Limit results**:
+
 ```tsx
-const q = query(
-  collection(db, 'articles'),
-  where('published', '==', true),
-  limit(10)
-);
+const q = query(collection(db, 'articles'), where('published', '==', true), limit(10));
 ```
 
 ---
@@ -300,12 +245,14 @@ const q = query(
 **File**: `src/App.tsx`
 
 **Rules**:
+
 - Lazy-load all pages with `lazy()`
 - Use `Suspense` with `PageLoader` fallback
 - Admin routes must use `<ProtectedRoute>`
 - Order: specific routes first, then catch-all
 
 **Example**:
+
 ```tsx
 const MyPage = lazy(() => import('./pages/MyPage'));
 
@@ -313,15 +260,23 @@ const MyPage = lazy(() => import('./pages/MyPage'));
   <Route path="/" element={<Layout />}>
     <Route index element={<Home />} />
     <Route path="my-route" element={<MyPage />} />
-    <Route path="admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+    <Route
+      path="admin"
+      element={
+        <ProtectedRoute>
+          <AdminDashboard />
+        </ProtectedRoute>
+      }
+    />
     <Route path="*" element={<NotFound />} />
   </Route>
-</Routes>
+</Routes>;
 ```
 
 ### Navigation Parameters
 
 **Use query params for filters**:
+
 ```tsx
 // /destinazioni?group=Europa&sort=newest
 const [searchParams] = useSearchParams();
@@ -330,6 +285,7 @@ const sort = searchParams.get('sort');
 ```
 
 **Use route params for IDs**:
+
 ```tsx
 // /articolo/:slug or /shop/:slug
 const { slug } = useParams<{ slug: string }>();
@@ -346,10 +302,10 @@ import { useAuth } from '../context/AuthContext';
 
 function AdminComponent() {
   const { isAdmin, user, loading } = useAuth();
-  
+
   if (loading) return <Spinner />;
   if (!isAdmin) return <div>Access denied</div>;
-  
+
   return <AdminPanel />;
 }
 ```
@@ -370,8 +326,16 @@ export function isAdminEmail(email?: string | null) {
 ### Protected Routes
 
 **In App.tsx**:
+
 ```tsx
-<Route path="admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+<Route
+  path="admin"
+  element={
+    <ProtectedRoute>
+      <AdminDashboard />
+    </ProtectedRoute>
+  }
+/>
 ```
 
 ---
@@ -381,12 +345,13 @@ export function isAdminEmail(email?: string | null) {
 ### React Query Setup
 
 **In App.tsx**:
+
 ```tsx
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5,        // 5 minutes
-      gcTime: 1000 * 60 * 30,          // 30 minutes (was cacheTime)
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      gcTime: 1000 * 60 * 30, // 30 minutes (was cacheTime)
       refetchOnWindowFocus: false,
       retry: 1,
     },
@@ -431,6 +396,7 @@ async function handleSave() {
 **Run**: `npm run test`
 
 **Pattern**:
+
 ```tsx
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
@@ -451,6 +417,7 @@ describe('Button', () => {
 **Run**: `npm run e2e`
 
 **Critical Flows to Test**:
+
 - [ ] Home page loads
 - [ ] Article page renders
 - [ ] Product page loads and shows slug in URL
@@ -460,6 +427,7 @@ describe('Button', () => {
 - [ ] Admin login
 
 **Pattern**:
+
 ```typescript
 test('should load product page', async ({ page }) => {
   await page.goto('/shop/my-product');
@@ -481,6 +449,7 @@ test('should load product page', async ({ page }) => {
 ### Environment Variables
 
 **Required**:
+
 ```bash
 VITE_FIREBASE_PROJECT_ID=...
 VITE_FIREBASE_API_KEY=...
@@ -492,6 +461,7 @@ NODE_ENV=production
 ```
 
 **Development**:
+
 ```bash
 ALLOW_MOCK_CHECKOUT=true  # Don't require real Stripe
 PORT=3000
@@ -502,6 +472,7 @@ PORT=3000
 **Build**: `npm run build` (generates sitemap, Vite bundle)
 
 **Deploy Options**:
+
 - **Vercel**: `vercel --prod`
 - **Firebase Hosting**: `firebase deploy --only hosting`
 - **Self-hosted**: Node.js + PM2
@@ -545,16 +516,18 @@ See `docs/DEPLOYMENT_RUNBOOK.md` for detailed steps.
 
 ## ⚠️ Anti-Patterns (Don't Do This)
 
-❌ **Hardcode colors**  
+❌ **Hardcode colors**
+
 ```tsx
 // BAD
-className="text-blue-500"
+className = 'text-blue-500';
 
 // GOOD
-className="text-[var(--color-accent)]"
+className = 'text-[var(--color-accent)]';
 ```
 
-❌ **Inline Firebase queries in components**  
+❌ **Inline Firebase queries in components**
+
 ```tsx
 // BAD
 const [data, setData] = useState([]);
@@ -566,7 +539,8 @@ useEffect(() => {
 const { data } = useQuery({ queryKey: ['articles'], queryFn: fetchArticles });
 ```
 
-❌ **Props without types**  
+❌ **Props without types**
+
 ```tsx
 // BAD
 function MyComponent(props) { ... }
@@ -576,7 +550,8 @@ interface MyComponentProps { title: string; }
 function MyComponent({ title }: MyComponentProps) { ... }
 ```
 
-❌ **Untracked API calls**  
+❌ **Untracked API calls**
+
 ```tsx
 // BAD
 fetch('/api/checkout').then(...)
@@ -593,24 +568,28 @@ const { mutate: checkout } = useMutation({
 ## 🆘 Debugging Tips
 
 **Check Firebase Auth**:
+
 ```
 Firebase Console → Authentication → Users
 See logged-in users and their roles
 ```
 
 **Check Firestore Data**:
+
 ```
 Firebase Console → Firestore → collections
 View/edit articles, products, leads
 ```
 
 **Server Logs**:
+
 ```bash
 npm run dev
 # Shows [vite], [server], [firebase] logs
 ```
 
 **Browser DevTools**:
+
 ```
 F12 → Console: React + JS errors
 F12 → Network: API calls

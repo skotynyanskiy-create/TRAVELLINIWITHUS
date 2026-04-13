@@ -20,7 +20,8 @@
     "audit:stripe": "node scripts/check-stripe.mjs",
     "audit:all": "npm run audit:ui && npm run audit:firebase && npm run audit:stripe",
     "scaffold:page": "node scripts/scaffold-page.mjs",
-    "predeploy": "node scripts/predeploy.mjs"
+    "predeploy": "node scripts/predeploy.mjs",
+    "prepare": "husky"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",
@@ -56,6 +57,10 @@
     "stripe": "^20.4.1",
     "vite": "^6.2.0"
   },
+  "lint-staged": {
+    "*.{ts,tsx}": "eslint --max-warnings=0",
+    "*.{ts,tsx,css,md,json}": "prettier --write"
+  },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
     "@testing-library/dom": "^10.4.1",
@@ -74,7 +79,9 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.4.0",
+    "husky": "^9.1.7",
     "jsdom": "^29.0.0",
+    "lint-staged": "^16.4.0",
     "node-cache": "^5.1.2",
     "prettier": "^3.8.1",
     "tailwindcss": "^4.1.14",
