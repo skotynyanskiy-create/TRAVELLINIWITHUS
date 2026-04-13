@@ -5,6 +5,7 @@ status: active
 priority: p1
 owner: team
 repo: TRAVELLINIWITHUS-codex-local-import-20260408
+canonical_repo: https://github.com/skotynyanskiy-create/TRAVELLINIWITHUS
 tags:
   - project
   - product
@@ -16,6 +17,31 @@ tags:
 ## Missione
 
 Portare il sito Travelliniwithus verso una V1 pubblicabile con funnel reali, brand coerente e operativita stabile.
+
+## Repository canonico
+
+Decisione operativa: `skotynyanskiy-create/TRAVELLINIWITHUS` e il repository ufficiale e unico da usare per Travelliniwithus.
+
+- codice sito, funnel e homepage vivono qui
+- `docs/` e il vault Obsidian operativo ufficiale
+- lavoro da secondo PC: clonare questo repo, aprire `docs/` in Obsidian, eseguire `npm install`
+- repo duplicati o esperimenti vanno archiviati o rimossi dopo verifica, per evitare confusione
+- nuove modifiche devono partire da branch di questo repo e rientrare con commit/PR
+
+## Setup secondo PC
+
+```bash
+git clone https://github.com/skotynyanskiy-create/TRAVELLINIWITHUS.git
+cd TRAVELLINIWITHUS
+npm install
+npm run dev
+```
+
+Aprire Obsidian su:
+
+```txt
+docs/
+```
 
 ## Note madri
 

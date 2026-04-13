@@ -2,6 +2,21 @@
 
 Website and marketing operating system for the influencer brand `@travelliniwithus`.
 
+## Canonical repository
+
+This is the official and canonical Travelliniwithus repository:
+
+`https://github.com/skotynyanskiy-create/TRAVELLINIWITHUS`
+
+Use this repository as the only source of truth for:
+
+- website source code
+- homepage, navigation and public funnel work
+- Obsidian vault and marketing operations in `docs/`
+- release, campaign, partnership and content planning notes
+
+Do not create or continue parallel Travelliniwithus repositories unless they are explicitly marked as archived experiments. New work should branch from this repository and return here through commits or pull requests.
+
 This repository is used to build and operate:
 
 - public website
@@ -27,6 +42,38 @@ This repository is used to build and operate:
 npm install
 npm run dev
 ```
+
+## Setup on a second PC
+
+Clone only the canonical repository:
+
+```bash
+git clone https://github.com/skotynyanskiy-create/TRAVELLINIWITHUS.git
+cd TRAVELLINIWITHUS
+npm install
+npm run dev
+```
+
+Then open Obsidian with this folder as the vault:
+
+```txt
+docs/
+```
+
+The `docs/` folder is part of the repository on purpose. It contains the operational vault, project notes, marketing hub and release tracking. Obsidian settings that are useful for keeping the working environment consistent across computers are also versioned.
+
+## Git workflow
+
+Use this repo as the only upstream project:
+
+```bash
+git remote -v
+git pull
+git checkout -b codex/short-description
+git push -u origin codex/short-description
+```
+
+Before switching computers, commit or push your work here. On the second PC, run `git pull` before editing.
 
 ## Main commands
 
