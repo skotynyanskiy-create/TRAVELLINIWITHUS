@@ -7,12 +7,10 @@ import Newsletter from '../components/Newsletter';
 import { SITE_URL } from '../config/site';
 
 import HeroSection from '../components/home/HeroSection';
-import StatsStrip from '../components/home/StatsStrip';
+import HomeDiscoveryCards from '../components/home/HomeDiscoveryCards';
+import CoupleIntro from '../components/home/CoupleIntro';
 import LatestArticles from '../components/home/LatestArticles';
-import DestinationsGrid from '../components/home/DestinationsGrid';
-import AboutPreview from '../components/home/AboutPreview';
 import CommunitySection from '../components/home/CommunitySection';
-import ShopPreview from '../components/home/ShopPreview';
 
 export default function Home() {
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -62,33 +60,25 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* 1. Hero — impatto visivo immediato */}
+      {/* 1. Hero — impatto visivo + reel preview */}
       <HeroSection />
 
-      {/* 2. Stats Strip — barra flottante overlap */}
-      <div className="relative z-20 -mt-8 mx-auto max-w-5xl px-6">
-        <StatsStrip />
-      </div>
+      {/* 2. Esplora subito — card premium per luogo e per esperienza */}
+      <HomeDiscoveryCards />
 
-      <div className="h-8 md:h-12" />
+      {/* 3. Chi siamo — la coppia, umano e credibile */}
+      <CoupleIntro />
 
-      {/* 3. Articoli — contenuto prima, dimostra il valore */}
+      {/* 4. Articoli — contenuto editoriale recente */}
       <LatestArticles />
 
-      {/* 4. Destinazioni/Esperienze — navigazione utile */}
-      <DestinationsGrid />
+      {/* 5. Newsletter — conversione principale, posizionata a metà pagina */}
+      <div className="bg-[var(--color-ink)] py-4">
+        <Newsletter variant="sand" source="homepage_mid" />
+      </div>
 
-      {/* 5. Chi Siamo — conoscere il brand */}
-      <AboutPreview />
-
-      {/* 6. Community/Social — dopo aver dimostrato valore */}
+      {/* 6. Social — strip compatta */}
       <CommunitySection />
-
-      {/* 7. Shop — dopo credibilita */}
-      <ShopPreview />
-
-      {/* 8. Newsletter */}
-      <Newsletter variant="sand" />
     </div>
   );
 }

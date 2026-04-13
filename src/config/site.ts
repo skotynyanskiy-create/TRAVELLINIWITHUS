@@ -24,6 +24,16 @@ export const BRAND_STATS = {
   totalFollowers: '250K+',
 } as const;
 
+/** Aggiornare url con lo shortcode del reel più recente pubblicato su Instagram.
+ *  Nessuna API key necessaria — aggiornamento manuale dopo ogni nuovo reel.
+ *  Esempio: url: 'https://www.instagram.com/reel/ABC123XYZ/'
+ */
+export const FEATURED_REEL = {
+  url: '', // lasciare vuoto → mostra hero-adventure.jpg come fallback
+  thumbnail: '',
+  caption: 'Ultimo reel',
+} as const;
+
 export const SOCIAL_COLORS = {
   whatsapp: '#25D366',
   instagram: '#E1306C',

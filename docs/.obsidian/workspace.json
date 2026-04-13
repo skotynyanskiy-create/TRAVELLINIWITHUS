@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "f9195f0ac4df6010",
+        "id": "fe8ecb858144a020",
         "type": "tabs",
         "children": [
           {
-            "id": "6da5f02863b716e6",
+            "id": "b7865f52ea78a74b",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -35,36 +35,6 @@
         "type": "tabs",
         "children": [
           {
-            "id": "042fb276e9b340f7",
-            "type": "leaf",
-            "state": {
-              "type": "file-explorer",
-              "state": {
-                "sortOrder": "alphabetical",
-                "autoReveal": false
-              },
-              "icon": "lucide-folder-closed",
-              "title": "Esplora risorse"
-            }
-          },
-          {
-            "id": "5dcea1c89cd0c121",
-            "type": "leaf",
-            "state": {
-              "type": "search",
-              "state": {
-                "query": "",
-                "matchingCase": false,
-                "explainSearch": false,
-                "collapseAll": false,
-                "extraContext": false,
-                "sortOrder": "alphabetical"
-              },
-              "icon": "lucide-search",
-              "title": "Ricerca"
-            }
-          },
-          {
             "id": "fdc90af0c3225163",
             "type": "leaf",
             "state": {
@@ -78,7 +48,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "1ccb3daf892e5f63",
@@ -162,26 +133,29 @@
               "title": "Struttura"
             }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Apri selezione rapida": false,
-      "graph:Apri vista grafo": false,
+      "workspaces:Gestisci layout delle aree di lavoro": false,
       "canvas:Crea nuova lavagna": false,
       "daily-notes:Apri nota del giorno": false,
       "templates:Inserisci modello": false,
-      "command-palette:Apri riquadro comandi": false,
       "bases:Crea nuova Base": false
     }
   },
-  "active": "6da5f02863b716e6",
+  "active": "b7865f52ea78a74b",
   "lastOpenFiles": [
+    "OBSIDIAN_HOME.md",
+    "Senza nome.md",
+    "40_Daily/Senza nome.base",
+    "40_Daily/2026-04-13.md",
+    "Senza nome 2.canvas",
     "20_Decisions/DECISION_0003_CLAUDE_CODE_SESSION_PROTOCOL.md",
     "TRAVELLINIWITHUS_BRAND_MEMORY.md",
     "Senza nome 1.canvas",
@@ -209,16 +183,12 @@
     "OBSIDIAN_TAXONOMY.md",
     "OBSIDIAN_DASHBOARD.md",
     "95_Bases/Task_Log.base",
-    "95_Bases/Project_Log.base",
     "90_Templates/TPL_Release_Note.md",
     "90_Templates/TPL_UI_Change.md",
     "90_Templates/TPL_Task.md",
     "90_Templates/TPL_Project.md",
     "90_Templates/TPL_Daily.md",
     "90_Templates/TPL_Bug.md",
-    "90_Templates/TPL_Decision.md",
-    "90_Templates/TPL_Meeting.md",
-    "50_Scratch/INBOX.md",
-    "40_Daily/2026-04-12.md"
+    "90_Templates/TPL_Decision.md"
   ]
 }

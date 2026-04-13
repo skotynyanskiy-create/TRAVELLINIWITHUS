@@ -30,10 +30,22 @@ import { useSiteContent } from '../hooks/useSiteContent';
 
 const SearchModal = lazy(() => import('./SearchModal'));
 
+interface NavSubLink {
+  name: string;
+  href: string;
+}
+
+interface NavSubGroup {
+  label: string;
+  href: string;
+  links: NavSubLink[];
+}
+
 interface NavItem {
   name: string;
   href?: string;
-  subLinks?: Array<{ name: string; href: string }>;
+  subLinks?: NavSubLink[];
+  subGroups?: NavSubGroup[];
 }
 
 export default function Navbar() {
@@ -105,28 +117,30 @@ export default function Navbar() {
     []
   );
 
+  const exploreGroups = useMemo<NavSubGroup[]>(
+    () => [
+      {
+        label: 'Per luogo',
+        href: '/destinazioni',
+        links: [{ name: 'Tutte le destinazioni', href: '/destinazioni' }, ...destinationLinks],
+      },
+      {
+        label: 'Per esperienza',
+        href: '/esperienze',
+        links: [{ name: 'Tutte le esperienze', href: '/esperienze' }, ...experienceLinks],
+      },
+    ],
+    [destinationLinks, experienceLinks]
+  );
+
   const navItems = useMemo<NavItem[]>(
     () => [
       {
-        name: navigation.destinationsLabel,
+        name: 'Esplora',
         href: '/destinazioni',
-        subLinks: [
-          { name: navigation.destinationsAllLabel, href: '/destinazioni' },
-          { name: 'Mappa Interattiva', href: '/mappa' },
-          ...destinationLinks,
-        ],
-      },
-      {
-        name: navigation.experiencesLabel,
-        href: '/esperienze',
-        subLinks: [{ name: 'Tutte le esperienze', href: '/esperienze' }, ...experienceLinks],
-      },
-      {
-        name: navigation.guidesLabel,
-        href: '/guide',
+        subGroups: exploreGroups,
       },
       { name: navigation.resourcesLabel, href: '/risorse' },
-      { name: navigation.shopLabel, href: '/shop' },
       {
         name: navigation.collaborationsLabel,
         href: '/collaborazioni',
@@ -138,12 +152,23 @@ export default function Navbar() {
         subLinks: [{ name: navigation.contactsLabel, href: '/contatti' }],
       },
     ],
-    [destinationLinks, experienceLinks, navigation]
+    [exploreGroups, navigation]
   );
 
   const isItemActive = (item: NavItem) => {
+    if (item.name === 'Esplora') {
+      return location.pathname === '/destinazioni' || location.pathname === '/esperienze';
+    }
+
     if (item.href && item.href !== '#' && location.pathname === item.href) {
       return true;
+    }
+
+    if (item.subGroups) {
+      return item.subGroups.some((group) => {
+        if (location.pathname === group.href) return true;
+        return group.links.some((subLink) => location.pathname === subLink.href);
+      });
     }
 
     if (!item.subLinks) return false;
@@ -157,18 +182,13 @@ export default function Navbar() {
   };
 
   const isSubLinkActive = (item: NavItem, href: string) => {
-    if (location.pathname === href) {
-      return true;
+    const [subLinkPath, subLinkSearch] = href.split('?');
+
+    if (href.startsWith('/destinazioni?') || href.startsWith('/esperienze?')) {
+      return location.pathname === subLinkPath && location.search === `?${subLinkSearch}`;
     }
 
-    if (
-      (href.startsWith('/destinazioni?') || href.startsWith('/esperienze?')) &&
-      location.pathname === item.href
-    ) {
-      return true;
-    }
-
-    return false;
+    return location.pathname === href || location.pathname === subLinkPath || item.href === href;
   };
 
   return (
@@ -209,30 +229,62 @@ export default function Navbar() {
                   }`}
                 >
                   {item.name}
-                  {item.subLinks && <ChevronDown size={12} className="opacity-50" />}
+                  {(item.subLinks || item.subGroups) && (
+                    <ChevronDown size={12} className="opacity-50" />
+                  )}
                 </Link>
 
-                {item.subLinks && (
+                {(item.subLinks || item.subGroups) && (
                   <div className="invisible absolute top-full left-1/2 -translate-x-1/2 pt-6 opacity-0 transition-all duration-300 group-hover:visible group-hover:opacity-100">
                     <div
                       className={`relative overflow-hidden rounded-3xl border border-[var(--color-ink)]/5 bg-[var(--color-surface)] py-4 shadow-2xl ${
-                        item.href === '/esperienze' ? 'w-72' : 'w-60'
+                        item.subGroups ? 'w-[34rem]' : 'w-60'
                       }`}
                     >
                       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full bg-[var(--color-accent)]" />
-                      {item.subLinks.map((subLink) => (
-                        <Link
-                          key={subLink.name}
-                          to={subLink.href}
-                          className={`block px-8 py-3 text-[10px] uppercase tracking-[0.2em] transition-all duration-200 hover:bg-[var(--color-sand)] hover:text-[var(--color-accent)] ${
-                            isSubLinkActive(item, subLink.href)
-                              ? 'text-[var(--color-accent)]'
-                              : 'text-[var(--color-ink)]/50'
-                          }`}
-                        >
-                          {subLink.name}
-                        </Link>
-                      ))}
+                      {item.subGroups ? (
+                        <div className="grid grid-cols-2 gap-3 px-4 py-2">
+                          {item.subGroups.map((group) => (
+                            <div key={group.label}>
+                              <Link
+                                to={group.href}
+                                className="mb-2 block rounded-2xl bg-[var(--color-sand)] px-4 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+                              >
+                                {group.label}
+                              </Link>
+                              <div className="space-y-1">
+                                {group.links.map((subLink) => (
+                                  <Link
+                                    key={subLink.name}
+                                    to={subLink.href}
+                                    className={`block rounded-xl px-4 py-2 text-[10px] uppercase tracking-[0.16em] transition-all duration-200 hover:bg-[var(--color-sand)] hover:text-[var(--color-accent)] ${
+                                      isSubLinkActive(item, subLink.href)
+                                        ? 'text-[var(--color-accent)]'
+                                        : 'text-[var(--color-ink)]/50'
+                                    }`}
+                                  >
+                                    {subLink.name}
+                                  </Link>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        item.subLinks?.map((subLink) => (
+                          <Link
+                            key={subLink.name}
+                            to={subLink.href}
+                            className={`block px-8 py-3 text-[10px] uppercase tracking-[0.2em] transition-all duration-200 hover:bg-[var(--color-sand)] hover:text-[var(--color-accent)] ${
+                              isSubLinkActive(item, subLink.href)
+                                ? 'text-[var(--color-accent)]'
+                                : 'text-[var(--color-ink)]/50'
+                            }`}
+                          >
+                            {subLink.name}
+                          </Link>
+                        ))
+                      )}
                     </div>
                   </div>
                 )}
@@ -241,6 +293,13 @@ export default function Navbar() {
           </div>
 
           <div className="hidden shrink-0 items-center space-x-4 text-zinc-600 lg:flex xl:space-x-6">
+            <Link
+              to="/collaborazioni"
+              className="hidden items-center gap-1 rounded-full border border-[var(--color-gold)]/30 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-colors hover:bg-[var(--color-gold-soft)] xl:inline-flex"
+            >
+              Lavora con noi
+            </Link>
+
             <button
               onClick={() => setIsSearchOpen(true)}
               className="flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50 px-3 py-2 text-[9px] font-bold uppercase tracking-[0.2em] transition-all hover:border-zinc-300 xl:px-4 whitespace-nowrap"
@@ -263,18 +322,18 @@ export default function Navbar() {
               )}
             </Link>
 
-            <button
-              onClick={() => setIsCartOpen(true)}
-              className="relative transition-colors hover:text-[var(--color-accent)]"
-              aria-label="Carrello"
-            >
-              <ShoppingCart size={18} strokeWidth={1.5} />
-              {cartCount > 0 && (
+            {cartCount > 0 && (
+              <button
+                onClick={() => setIsCartOpen(true)}
+                className="relative transition-colors hover:text-[var(--color-accent)]"
+                aria-label="Carrello"
+              >
+                <ShoppingCart size={18} strokeWidth={1.5} />
                 <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[9px] font-bold text-white">
                   {cartCount}
                 </span>
-              )}
-            </button>
+              </button>
+            )}
 
             <div className="relative">
               {user ? (
@@ -417,7 +476,7 @@ export default function Navbar() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05 }}
                   >
-                    {item.subLinks ? (
+                    {item.subLinks || item.subGroups ? (
                       <div className="space-y-4">
                         <div className="flex items-start justify-between gap-4">
                           <Link
@@ -453,16 +512,40 @@ export default function Navbar() {
                               exit={{ height: 0, opacity: 0 }}
                               className="space-y-4 border-l border-[var(--color-accent)]/20 pl-4"
                             >
-                              {item.subLinks.map((subLink) => (
-                                <Link
-                                  key={subLink.name}
-                                  to={subLink.href}
-                                  onClick={() => setIsMobileMenuOpen(false)}
-                                  className="block text-xl text-[var(--color-ink)]/60 transition-colors hover:text-[var(--color-accent)]"
-                                >
-                                  {subLink.name}
-                                </Link>
-                              ))}
+                              {item.subGroups
+                                ? item.subGroups.map((group) => (
+                                    <div key={group.label} className="space-y-3">
+                                      <Link
+                                        to={group.href}
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                        className="block text-sm font-bold uppercase tracking-widest text-[var(--color-accent)]"
+                                      >
+                                        {group.label}
+                                      </Link>
+                                      <div className="space-y-3 pl-3">
+                                        {group.links.map((subLink) => (
+                                          <Link
+                                            key={subLink.name}
+                                            to={subLink.href}
+                                            onClick={() => setIsMobileMenuOpen(false)}
+                                            className="block text-lg text-[var(--color-ink)]/60 transition-colors hover:text-[var(--color-accent)]"
+                                          >
+                                            {subLink.name}
+                                          </Link>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  ))
+                                : item.subLinks?.map((subLink) => (
+                                    <Link
+                                      key={subLink.name}
+                                      to={subLink.href}
+                                      onClick={() => setIsMobileMenuOpen(false)}
+                                      className="block text-xl text-[var(--color-ink)]/60 transition-colors hover:text-[var(--color-accent)]"
+                                    >
+                                      {subLink.name}
+                                    </Link>
+                                  ))}
                             </motion.div>
                           )}
                         </AnimatePresence>
@@ -543,21 +626,21 @@ export default function Navbar() {
                     >
                       <Mail size={24} />
                     </a>
-                    <button
-                      onClick={() => {
-                        setIsCartOpen(true);
-                        setIsMobileMenuOpen(false);
-                      }}
-                      className="relative text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
-                      aria-label="Carrello"
-                    >
-                      <ShoppingCart size={24} />
-                      {cartCount > 0 && (
+                    {cartCount > 0 && (
+                      <button
+                        onClick={() => {
+                          setIsCartOpen(true);
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className="relative text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+                        aria-label="Carrello"
+                      >
+                        <ShoppingCart size={24} />
                         <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-accent)] text-[10px] font-bold text-white">
                           {cartCount}
                         </span>
-                      )}
-                    </button>
+                      </button>
+                    )}
                   </div>
                   <div>
                     {user ? (
