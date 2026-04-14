@@ -1,46 +1,181 @@
-import { useMemo, useRef, useState } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
+import { type ReactNode, useMemo, useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { ArrowRight, MapPin } from 'lucide-react';
+import {
+  ArrowRight,
+  CalendarDays,
+  Clock3,
+  Compass,
+  Filter,
+  MapPin,
+  ShieldCheck,
+  Wallet,
+  X,
+} from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import Breadcrumbs from '../components/Breadcrumbs';
-import Newsletter from '../components/Newsletter';
-import InteractiveMap from '../components/InteractiveMap';
-import Pagination from '../components/Pagination';
-import PageLayout from '../components/PageLayout';
-import OptimizedImage from '../components/OptimizedImage';
-import Section from '../components/Section';
 import ArticleSkeleton from '../components/ArticleSkeleton';
-import EmptyState from '../components/EmptyState';
+import Breadcrumbs from '../components/Breadcrumbs';
 import CrossLinkWidget from '../components/CrossLinkWidget';
+import EmptyState from '../components/EmptyState';
+import InteractiveMap from '../components/InteractiveMap';
+import JsonLd from '../components/JsonLd';
+import Newsletter from '../components/Newsletter';
+import OptimizedImage from '../components/OptimizedImage';
+import PageLayout from '../components/PageLayout';
+import Pagination from '../components/Pagination';
+import Section from '../components/Section';
 import SEO from '../components/SEO';
-import { fetchArticles } from '../services/firebaseService';
-import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_DESTINATION_CARD } from '../config/demoContent';
+import {
+  DESTINATION_GROUPS,
+  EXPERIENCE_TYPES,
+  getExperienceTypeFromQuery,
+  slugifyExperienceType,
+} from '../config/contentTaxonomy';
+import { getExperienceVisual } from '../config/experienceVisuals';
+import { siteContentDefaults } from '../config/siteContent';
 import { SITE_URL } from '../config/site';
 import { useSiteContent } from '../hooks/useSiteContent';
-import { DESTINATION_GROUPS } from '../config/contentTaxonomy';
+import { fetchArticles } from '../services/firebaseService';
 import {
   getArchiveLocationLabel,
   mapArticleToArchiveItem,
   type ArchiveItem,
 } from '../utils/contentArchive';
-import { getExperienceVisual } from '../config/experienceVisuals';
 
-// TODO(@travelliniwithus): PLACEHOLDER — servono foto rappresentative per ogni gruppo geografico (una per continente/area)
-const groupVisuals: Record<string, string> = {
+const ITEMS_PER_PAGE = 6;
+
+const GROUP_VISUALS: Record<string, string> = {
   Italia:
-    'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?q=80&w=1200&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?q=80&w=1600&auto=format&fit=crop',
   Europa:
-    'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?q=80&w=1200&auto=format&fit=crop',
-  Asia: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1200&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?q=80&w=1600&auto=format&fit=crop',
+  Asia: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1600&auto=format&fit=crop',
   Americhe:
-    'https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?q=80&w=1200&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?q=80&w=1600&auto=format&fit=crop',
   Africa:
-    'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?q=80&w=1200&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?q=80&w=1600&auto=format&fit=crop',
   Oceania:
-    'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?q=80&w=1200&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?q=80&w=1600&auto=format&fit=crop',
 };
+
+const TRUST_STRIP = [
+  'Luoghi vissuti o verificati',
+  "Dettagli pratici prima dell'ispirazione",
+  'Filtri pensati per decidere',
+  'Nessun contenuto spacciato per proof',
+];
+
+function uniqueValues(items: Array<string | undefined>) {
+  return Array.from(new Set(items.filter((item): item is string => Boolean(item && item !== 'Da definire'))));
+}
+
+function getDemoArchiveItem(): ArchiveItem {
+  return {
+    id: DEMO_DESTINATION_CARD.id,
+    title: DEMO_DESTINATION_CARD.title,
+    excerpt:
+      'Una preview editoriale temporanea per mostrare come appariranno le destinazioni quando saranno pubblicati contenuti reali.',
+    image: DEMO_DESTINATION_CARD.image,
+    link: DEMO_DESTINATION_CARD.link,
+    category: DEMO_DESTINATION_CARD.category,
+    country: 'Italia',
+    region: 'Trentino-Alto Adige',
+    city: 'Dolomiti',
+    continent: 'Europa',
+    location: 'Italia, Trentino-Alto Adige, Dolomiti',
+    destinationGroup: 'Italia',
+    experienceTypes: ['Posti particolari', 'Passeggiate panoramiche'],
+    primaryExperience: 'Posti particolari',
+    period: 'Giugno - Settembre',
+    budget: 'Medio',
+    duration: 'Weekend lungo',
+  };
+}
+
+function FilterButton({
+  active,
+  children,
+  onClick,
+}: {
+  active: boolean;
+  children: ReactNode;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`whitespace-nowrap rounded-full px-4 py-2 text-xs font-bold uppercase tracking-widest transition-colors ${
+        active
+          ? 'bg-[var(--color-ink)] text-white'
+          : 'border border-black/5 bg-white text-black/55 hover:border-black/15 hover:text-black'
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function ArchiveCard({ item, isDemo }: { item: ArchiveItem; isDemo: boolean }) {
+  const visual = item.primaryExperience ? getExperienceVisual(item.primaryExperience) : null;
+  const ExpIcon = visual?.icon;
+
+  return (
+    <Link
+      to={item.link}
+      className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-xl)] border border-black/5 bg-white shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--shadow-premium)]"
+    >
+      <div className="relative aspect-[4/3] overflow-hidden">
+        <OptimizedImage
+          src={item.image}
+          alt={item.title}
+          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/5 to-transparent" />
+        <div className="absolute left-4 top-4 flex flex-wrap gap-2">
+          {isDemo && (
+            <span className="rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-black/60 backdrop-blur">
+              Preview
+            </span>
+          )}
+          {item.primaryExperience && ExpIcon && (
+            <span
+              className="inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-black/70 backdrop-blur"
+            >
+              <ExpIcon size={12} style={{ color: visual.color }} />
+              {item.primaryExperience}
+            </span>
+          )}
+        </div>
+        <div className="absolute bottom-4 left-4 right-4">
+          <span className="inline-flex items-center gap-2 rounded-full bg-black/45 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur">
+            <MapPin size={12} />
+            {getArchiveLocationLabel(item)}
+          </span>
+        </div>
+      </div>
+
+      <div className="flex flex-1 flex-col p-6">
+        <div className="mb-3 flex flex-wrap gap-2 text-[10px] font-bold uppercase tracking-widest text-black/40">
+          {item.period && <span>{item.period}</span>}
+          {item.duration && <span>{item.duration}</span>}
+          {item.budget && <span>{item.budget}</span>}
+        </div>
+        <h2 className="text-2xl font-serif leading-tight text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]">
+          {item.title}
+        </h2>
+        <p className="mt-4 line-clamp-3 text-sm leading-relaxed text-black/65">
+          {item.excerpt ||
+            'Un contenuto da salvare per capire atmosfera, logistica e dettagli utili prima di partire.'}
+        </p>
+        <div className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">
+          Leggi e salva <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+        </div>
+      </div>
+    </Link>
+  );
+}
 
 export default function Destinazioni() {
   const { data: demoContent } = useSiteContent('demo');
@@ -52,17 +187,14 @@ export default function Destinazioni() {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(1);
+
   const selectedGroup = searchParams.get('group') || searchParams.get('region') || 'Tutti';
+  const selectedExperience = getExperienceTypeFromQuery(searchParams.get('type')) || 'Tutti';
   const selectedRegion = searchParams.get('area') || 'Tutti';
   const selectedCity = searchParams.get('city') || 'Tutti';
-
-  /* Hero parallax */
-  const heroRef = useRef<HTMLElement>(null);
-  const { scrollYProgress: heroScroll } = useScroll({
-    target: heroRef,
-    offset: ['start start', 'end start'],
-  });
-  const heroScale = useTransform(heroScroll, [0, 1], [1, 1.12]);
+  const selectedPeriod = searchParams.get('period') || 'Tutti';
+  const selectedBudget = searchParams.get('budget') || 'Tutti';
+  const selectedDuration = searchParams.get('duration') || 'Tutti';
 
   const archiveItems = useMemo<ArchiveItem[]>(() => {
     const mapped = articles
@@ -70,67 +202,96 @@ export default function Destinazioni() {
       .filter((item) => item.destinationGroup !== 'Altro');
 
     if (mapped.length > 0) return mapped;
-
-    return demoSettings.showDestinationDemo
-      ? [
-          {
-            id: DEMO_DESTINATION_CARD.id,
-            title: DEMO_DESTINATION_CARD.title,
-            image: DEMO_DESTINATION_CARD.image,
-            link: DEMO_DESTINATION_CARD.link,
-            category: DEMO_DESTINATION_CARD.category,
-            country: 'Italia',
-            region: 'Trentino-Alto Adige',
-            city: 'Dolomiti',
-            continent: 'Europa',
-            location: 'Italia, Trentino-Alto Adige, Dolomiti',
-            destinationGroup: 'Italia',
-            experienceTypes: ['Posti particolari', 'Passeggiate panoramiche'],
-            primaryExperience: 'Posti particolari',
-          },
-        ]
-      : [];
+    return demoSettings.showDestinationDemo ? [getDemoArchiveItem()] : [];
   }, [articles, demoSettings.showDestinationDemo]);
 
-  const itemsPerPage = 6;
-  const breadcrumbItems = [{ label: 'Destinazioni' }];
-  const groups = useMemo(() => ['Tutti', ...DESTINATION_GROUPS], []);
+  const mapMarkers = useMemo(
+    () =>
+      articles.flatMap((article) =>
+        (article.mapMarkers ?? []).map((marker) => ({
+          id: marker.id,
+          name: marker.name,
+          coordinates: marker.coordinates,
+          title: marker.title || article.title,
+          category: marker.category || article.category,
+          image: article.image,
+          link: `/articolo/${article.slug || article.id}`,
+        }))
+      ),
+    [articles]
+  );
 
   const availableRegions = useMemo(() => {
     if (selectedGroup !== 'Italia') return ['Tutti'];
-    const regions = new Set(
-      archiveItems
-        .filter((item) => item.country === 'Italia' && item.region)
-        .map((item) => item.region as string)
-    );
-    return ['Tutti', ...Array.from(regions)];
+    return ['Tutti', ...uniqueValues(archiveItems.filter((item) => item.country === 'Italia').map((item) => item.region))];
   }, [archiveItems, selectedGroup]);
 
   const availableCities = useMemo(() => {
     if (selectedGroup !== 'Italia' || selectedRegion === 'Tutti') return ['Tutti'];
-    const cities = new Set(
-      archiveItems
-        .filter((item) => item.country === 'Italia' && item.region === selectedRegion && item.city)
-        .map((item) => item.city as string)
-    );
-    return ['Tutti', ...Array.from(cities)];
+    return [
+      'Tutti',
+      ...uniqueValues(
+        archiveItems
+          .filter((item) => item.country === 'Italia' && item.region === selectedRegion)
+          .map((item) => item.city)
+      ),
+    ];
   }, [archiveItems, selectedGroup, selectedRegion]);
 
-  const filteredItems = useMemo(() => {
-    return archiveItems.filter((item) => {
-      const matchGroup = selectedGroup === 'Tutti' || item.destinationGroup === selectedGroup;
-      const matchRegion = selectedRegion === 'Tutti' || item.region === selectedRegion;
-      const matchCity = selectedCity === 'Tutti' || item.city === selectedCity;
-      return matchGroup && matchRegion && matchCity;
-    });
-  }, [archiveItems, selectedCity, selectedGroup, selectedRegion]);
+  const availablePeriods = useMemo(() => ['Tutti', ...uniqueValues(archiveItems.map((item) => item.period))], [archiveItems]);
+  const availableBudgets = useMemo(() => ['Tutti', ...uniqueValues(archiveItems.map((item) => item.budget))], [archiveItems]);
+  const availableDurations = useMemo(() => ['Tutti', ...uniqueValues(archiveItems.map((item) => item.duration))], [archiveItems]);
 
+  const filteredItems = useMemo(
+    () =>
+      archiveItems.filter((item) => {
+        const matchGroup = selectedGroup === 'Tutti' || item.destinationGroup === selectedGroup;
+        const matchExperience =
+          selectedExperience === 'Tutti' || item.experienceTypes.includes(selectedExperience);
+        const matchRegion = selectedRegion === 'Tutti' || item.region === selectedRegion;
+        const matchCity = selectedCity === 'Tutti' || item.city === selectedCity;
+        const matchPeriod = selectedPeriod === 'Tutti' || item.period === selectedPeriod;
+        const matchBudget = selectedBudget === 'Tutti' || item.budget === selectedBudget;
+        const matchDuration = selectedDuration === 'Tutti' || item.duration === selectedDuration;
+
+        return (
+          matchGroup &&
+          matchExperience &&
+          matchRegion &&
+          matchCity &&
+          matchPeriod &&
+          matchBudget &&
+          matchDuration
+        );
+      }),
+    [
+      archiveItems,
+      selectedBudget,
+      selectedCity,
+      selectedDuration,
+      selectedExperience,
+      selectedGroup,
+      selectedPeriod,
+      selectedRegion,
+    ]
+  );
+
+  const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
   const paginatedItems = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return filteredItems.slice(startIndex, startIndex + itemsPerPage);
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredItems.slice(startIndex, startIndex + ITEMS_PER_PAGE);
   }, [filteredItems, currentPage]);
 
-  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+  const activeGroupImage = GROUP_VISUALS[selectedGroup === 'Tutti' ? 'Italia' : selectedGroup] || GROUP_VISUALS.Italia;
+  const hasActiveFilters =
+    selectedGroup !== 'Tutti' ||
+    selectedExperience !== 'Tutti' ||
+    selectedRegion !== 'Tutti' ||
+    selectedCity !== 'Tutti' ||
+    selectedPeriod !== 'Tutti' ||
+    selectedBudget !== 'Tutti' ||
+    selectedDuration !== 'Tutti';
+  const usingDemo = archiveItems.length === 1 && archiveItems[0]?.id === DEMO_DESTINATION_CARD.id;
 
   const updateSearch = (updates: Record<string, string | null>) => {
     setCurrentPage(1);
@@ -152,284 +313,281 @@ export default function Destinazioni() {
     setSearchParams({}, { replace: true });
   };
 
-  const activeGroupImage =
-    groupVisuals[selectedGroup === 'Tutti' ? 'Italia' : selectedGroup] || groupVisuals.Italia;
-
   return (
     <PageLayout>
       <SEO
         title="Destinazioni"
-        description="Esplora il cuore editoriale di Travelliniwithus: destinazioni, regioni, città e articoli filtrabili anche per tipo di esperienza."
+        description="Trova posti particolari da salvare e vivere davvero: destinazioni, regioni, esperienze e guide Travelliniwithus filtrabili con criterio."
         canonical={`${SITE_URL}/destinazioni`}
       />
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'CollectionPage',
+          name: 'Destinazioni Travelliniwithus',
+          url: `${SITE_URL}/destinazioni`,
+          description:
+            'Archivio editoriale di destinazioni, regioni e posti particolari selezionati da Travelliniwithus.',
+          breadcrumb: {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+              { '@type': 'ListItem', position: 2, name: 'Destinazioni', item: `${SITE_URL}/destinazioni` },
+            ],
+          },
+        }}
+      />
 
-      {/* --- IMMERSIVE HERO --- */}
-      <section
-        ref={heroRef}
-        className="relative flex min-h-[60vh] items-end overflow-hidden bg-ink pb-16 pt-32 md:min-h-[70vh] md:pt-40"
-      >
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeGroupImage}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.8 }}
-            className="absolute inset-0 z-0"
-          >
-            <motion.div style={{ scale: heroScale }} className="h-full w-full">
-              <OptimizedImage
-                src={activeGroupImage}
-                alt="Destinazioni Travelliniwithus"
-                className="h-full w-full object-cover"
-              />
-            </motion.div>
-            <div className="absolute inset-0 bg-gradient-to-t from-ink via-black/40 to-black/20" />
-          </motion.div>
-        </AnimatePresence>
+      <section className="relative overflow-hidden bg-[var(--color-ink)] pb-16 pt-32 text-white md:pb-20 md:pt-40">
+        <div className="absolute inset-0">
+          <OptimizedImage
+            src={activeGroupImage}
+            alt=""
+            aria-hidden="true"
+            priority
+            className="h-full w-full object-cover opacity-70"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-ink)] via-transparent to-transparent" />
+        </div>
 
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-6 md:px-12">
-          <div className="mb-6">
-            <Breadcrumbs
-              items={breadcrumbItems}
-              className="[&_a]:text-white/60 [&_span]:text-white/40 [&_svg]:text-white/30"
-            />
-          </div>
-          <span className="mb-4 block font-script text-xl text-[var(--color-accent)] md:text-2xl">
-            Archivio principale
-          </span>
-          <h1 className="mb-6 text-5xl font-serif font-medium leading-none text-white md:text-7xl lg:text-8xl">
-            Destinazioni, regioni
-            <br />
-            <span className="italic text-white/60">e città da esplorare</span>
-          </h1>
-          <p className="max-w-xl text-lg font-normal leading-relaxed text-white/85">
-            Tutto quello che abbiamo visitato, mangiato e vissuto — organizzato per farti trovare
-            subito il posto giusto.
-          </p>
-
-          {/* Discovery counter */}
-          <motion.div
-            key={filteredItems.length}
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="mt-8 inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/10 px-6 py-3 backdrop-blur-md"
-          >
-            <MapPin size={16} className="text-[var(--color-accent)]" />
-            <span className="text-2xl font-serif text-white">{filteredItems.length}</span>
-            <span className="text-xs font-bold uppercase tracking-widest text-white/60">
-              contenuti trovati
+        <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-12">
+          <Breadcrumbs
+            items={[{ label: 'Destinazioni' }]}
+            className="[&_a]:text-white/70 [&_span]:text-white/45 [&_svg]:text-white/35"
+          />
+          <div className="mt-10 max-w-4xl">
+            <span className="mb-4 inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.24em] text-white/75 backdrop-blur">
+              Archivio discovery
             </span>
-          </motion.div>
+            <h1 className="text-5xl font-serif font-medium leading-[0.95] md:text-7xl lg:text-8xl">
+              Trova posti particolari
+              <span className="block italic text-white/62">da salvare e vivere davvero</span>
+            </h1>
+            <p className="mt-7 max-w-2xl text-lg leading-relaxed text-white/82 md:text-xl">
+              Parti da un luogo, da uno stile di viaggio o da un vincolo pratico. Ogni scheda deve
+              aiutarti a capire se quel posto merita davvero spazio nei tuoi piani.
+            </p>
+          </div>
+
+          <div className="mt-10 grid max-w-4xl gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {TRUST_STRIP.map((item) => (
+              <div key={item} className="rounded-2xl border border-white/12 bg-white/10 p-4 backdrop-blur">
+                <ShieldCheck size={16} className="mb-3 text-[var(--color-gold)]" />
+                <p className="text-xs font-semibold leading-relaxed text-white/75">{item}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* --- CONTINENT "PASSPORT STAMP" CARDS --- */}
       <Section>
-        <div className="mb-16 grid grid-cols-2 gap-5 md:grid-cols-3 xl:grid-cols-6">
-          {DESTINATION_GROUPS.map((group, idx) => {
-            const isActive = selectedGroup === group;
-            const count = archiveItems.filter((i) => i.destinationGroup === group).length;
+        <div className="-mt-24 mb-14 rounded-[2rem] border border-black/5 bg-white p-5 shadow-[var(--shadow-premium)] md:p-8">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.4fr)] lg:items-center">
+            <div>
+              <span className="mb-3 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+                <Compass size={14} /> Mappa + archivio
+              </span>
+              <h2 className="text-3xl font-serif leading-tight text-[var(--color-ink)] md:text-4xl">
+                Orientati prima sulla mappa, poi restringi con i filtri.
+              </h2>
+              <p className="mt-4 text-sm leading-relaxed text-black/65">
+                La V1 funziona anche con pochi contenuti: se non ci sono pin reali, la mappa resta
+                un orientamento visuale e la griglia diventa il punto di scelta principale.
+              </p>
+              <Link
+                to="/mappa"
+                className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-5 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-black"
+              >
+                Apri mappa completa <ArrowRight size={14} />
+              </Link>
+            </div>
+            <div className="overflow-hidden rounded-[1.5rem] border border-black/5">
+              <InteractiveMap markers={mapMarkers} className="h-[360px] w-full md:h-[430px]" />
+            </div>
+          </div>
+        </div>
+
+        <div className="mb-12 grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
+          {DESTINATION_GROUPS.map((group) => {
+            const count = archiveItems.filter((item) => item.destinationGroup === group).length;
+            const active = selectedGroup === group;
             return (
-              <motion.button
+              <button
                 key={group}
-                onClick={() => updateSearch({ group, region: null, area: null, city: null })}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.08, duration: 0.5 }}
-                className={`group relative flex flex-col items-center overflow-hidden rounded-[1.8rem] border-2 bg-white p-5 pb-6 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl ${
-                  idx % 2 === 0 ? 'rotate-[0.5deg]' : '-rotate-[0.5deg]'
-                } hover:rotate-0 ${
-                  isActive ? 'border-[var(--color-accent)] shadow-lg' : 'border-black/5'
+                type="button"
+                onClick={() => updateSearch({ group, area: null, city: null })}
+                className={`group overflow-hidden rounded-[1.4rem] border bg-white text-left shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg ${
+                  active ? 'border-[var(--color-accent)]' : 'border-black/5'
                 }`}
               >
-                {/* Photo */}
-                <div className="relative mb-4 aspect-square w-full overflow-hidden rounded-2xl">
-                  <img
-                    src={groupVisuals[group]}
+                <div className="aspect-[4/3] overflow-hidden">
+                  <OptimizedImage
+                    src={GROUP_VISUALS[group]}
                     alt={group}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    loading="lazy"
-                    referrerPolicy="no-referrer"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
-
-                {/* Name */}
-                <span className="mb-1 text-lg font-serif text-[var(--color-ink)]">{group}</span>
-
-                {/* Stamp badge */}
-                <div
-                  className={`absolute -right-2 -top-2 flex h-10 w-10 items-center justify-center rounded-full border-2 border-dashed text-xs font-bold transition-all ${
-                    isActive
-                      ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white scale-110'
-                      : 'border-[var(--color-accent)]/40 bg-white text-[var(--color-accent)]'
-                  }`}
-                  style={{ transform: `rotate(${12 + idx * 5}deg)` }}
-                >
-                  {count}
+                <div className="flex items-center justify-between gap-3 p-4">
+                  <span className="font-serif text-lg text-[var(--color-ink)]">{group}</span>
+                  <span className="rounded-full bg-[var(--color-accent-soft)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)]">
+                    {count}
+                  </span>
                 </div>
-              </motion.button>
+              </button>
             );
           })}
         </div>
 
-        {/* Map Section */}
-        <div className="mb-16 hidden md:block">
-          <div className="relative overflow-hidden rounded-[2rem] border border-black/5 shadow-sm">
-            <div className="absolute left-0 top-0 z-10 rounded-br-2xl bg-white/90 px-6 py-3 backdrop-blur-md">
-              <span className="font-script text-lg text-[var(--color-accent)]">
-                Esplora la mappa
-              </span>
-            </div>
-            <InteractiveMap />
-          </div>
-        </div>
-
-        {/* Mobile map teaser */}
-        <div className="mb-16 block md:hidden">
-          <Link
-            to="/mappa"
-            className="flex items-center justify-between rounded-2xl border border-black/5 bg-[var(--color-accent-soft)] p-6 shadow-sm transition-shadow hover:shadow-md"
-          >
+        <div className="mb-12 rounded-[var(--radius-xl)] border border-black/5 bg-[var(--color-surface)] p-5 shadow-sm md:p-7">
+          <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div>
-              <span className="block font-script text-lg text-[var(--color-accent)]">
-                Mappa interattiva
+              <span className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+                <Filter size={14} /> Filtri per decidere
               </span>
-              <span className="text-sm font-light text-black/60">
-                Scopri tutti i contenuti sulla mappa
-              </span>
+              <h2 className="mt-2 text-2xl font-serif text-[var(--color-ink)]">
+                Luogo, esperienza, periodo, budget e durata.
+              </h2>
             </div>
-            <ArrowRight className="text-[var(--color-accent)]" size={20} />
-          </Link>
-        </div>
-
-        {/* --- FILTERS --- */}
-        <div className="mb-12 flex w-full flex-col gap-6 rounded-[var(--radius-xl)] border border-[var(--color-ink)]/5 bg-[var(--color-surface)] p-6 shadow-sm">
-          {/* Active filters strip */}
-          {(selectedGroup !== 'Tutti' ||
-            selectedRegion !== 'Tutti' ||
-            selectedCity !== 'Tutti') && (
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-black/40 mr-2">
-                Filtri attivi:
-              </span>
-              {selectedGroup !== 'Tutti' && (
-                <button
-                  onClick={() => updateSearch({ group: null, area: null, city: null })}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-ink)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white"
-                >
-                  {selectedGroup} <span className="ml-1 opacity-70">&times;</span>
-                </button>
-              )}
-              {selectedRegion !== 'Tutti' && (
-                <button
-                  onClick={() => updateSearch({ area: null, city: null })}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-ink)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white"
-                >
-                  {selectedRegion} <span className="ml-1 opacity-70">&times;</span>
-                </button>
-              )}
-              {selectedCity !== 'Tutti' && (
-                <button
-                  onClick={() => updateSearch({ city: null })}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-ink)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white"
-                >
-                  {selectedCity} <span className="ml-1 opacity-70">&times;</span>
-                </button>
-              )}
+            {hasActiveFilters && (
               <button
+                type="button"
                 onClick={resetFilters}
-                className="ml-2 text-[10px] font-bold uppercase tracking-widest text-black/40 underline transition-colors hover:text-[var(--color-accent)]"
+                className="inline-flex items-center gap-2 rounded-full border border-black/10 px-4 py-2 text-xs font-bold uppercase tracking-widest text-black/55 transition-colors hover:border-black/25 hover:text-black"
               >
-                Resetta tutto
+                <X size={14} /> Resetta
               </button>
-            </div>
-          )}
-
-          <div className="flex flex-col gap-4">
-            <span className="text-xs font-bold uppercase tracking-widest text-black/50">
-              Area geografica
-            </span>
-            <div className="flex gap-2 overflow-x-auto pb-2 hide-scrollbar">
-              {groups.map((group) => (
-                <button
-                  key={group}
-                  onClick={() => updateSearch({ group, region: null, area: null, city: null })}
-                  className={`whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-widest transition-colors ${
-                    selectedGroup === group
-                      ? 'bg-black text-white'
-                      : 'bg-white text-black/60 hover:bg-black/5'
-                  }`}
-                >
-                  {group}
-                </button>
-              ))}
-            </div>
+            )}
           </div>
 
-          {selectedGroup === 'Italia' && (
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="flex flex-col gap-4">
-                <span className="text-xs font-bold uppercase tracking-widest text-black/50">
-                  Regione
-                </span>
-                <div className="flex gap-2 overflow-x-auto pb-2 hide-scrollbar">
-                  {availableRegions.map((region) => (
-                    <button
-                      key={region}
-                      onClick={() => updateSearch({ area: region, city: null })}
-                      className={`whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-widest transition-colors ${
-                        selectedRegion === region
-                          ? 'bg-[var(--color-accent)] text-white'
-                          : 'bg-white text-black/60 hover:bg-black/5'
-                      }`}
-                    >
-                      {region}
-                    </button>
-                  ))}
-                </div>
+          <div className="space-y-5">
+            <div>
+              <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/45">Area</span>
+              <div className="flex gap-2 overflow-x-auto pb-1">
+                {['Tutti', ...DESTINATION_GROUPS].map((group) => (
+                  <FilterButton
+                    key={group}
+                    active={selectedGroup === group}
+                    onClick={() => updateSearch({ group, area: null, city: null })}
+                  >
+                    {group}
+                  </FilterButton>
+                ))}
               </div>
+            </div>
 
-              {availableCities.length > 1 && (
-                <div className="flex flex-col gap-4">
-                  <span className="text-xs font-bold uppercase tracking-widest text-black/50">
-                    Città / località
+            <div>
+              <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/45">
+                Esperienza
+              </span>
+              <div className="flex gap-2 overflow-x-auto pb-1">
+                {['Tutti', ...EXPERIENCE_TYPES].map((experience) => (
+                  <FilterButton
+                    key={experience}
+                    active={selectedExperience === experience}
+                    onClick={() =>
+                      updateSearch({
+                        type: experience === 'Tutti' ? null : slugifyExperienceType(experience),
+                      })
+                    }
+                  >
+                    {experience}
+                  </FilterButton>
+                ))}
+              </div>
+            </div>
+
+            {selectedGroup === 'Italia' && availableRegions.length > 1 && (
+              <div className="grid gap-5 md:grid-cols-2">
+                <div>
+                  <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/45">
+                    Regione
                   </span>
-                  <div className="flex gap-2 overflow-x-auto pb-2 hide-scrollbar">
-                    {availableCities.map((city) => (
-                      <button
-                        key={city}
-                        onClick={() => updateSearch({ city })}
-                        className={`whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-widest transition-colors ${
-                          selectedCity === city
-                            ? 'bg-[var(--color-accent)] text-white'
-                            : 'bg-white text-black/60 hover:bg-black/5'
-                        }`}
+                  <div className="flex gap-2 overflow-x-auto pb-1">
+                    {availableRegions.map((region) => (
+                      <FilterButton
+                        key={region}
+                        active={selectedRegion === region}
+                        onClick={() => updateSearch({ area: region, city: null })}
                       >
-                        {city}
-                      </button>
+                        {region}
+                      </FilterButton>
                     ))}
                   </div>
                 </div>
-              )}
-            </div>
-          )}
 
-          <div className="rounded-2xl border border-[var(--color-accent)]/15 bg-[var(--color-accent-soft)] px-5 py-4 text-sm text-[var(--color-accent-text)]">
-            Qui stai filtrando i contenuti per <strong>luogo</strong>. Se vuoi partire dallo stile
-            di viaggio, usa la sezione{' '}
-            <Link
-              to="/esperienze"
-              className="font-semibold underline underline-offset-4 transition-colors hover:text-[var(--color-accent)]"
-            >
-              Esperienze
-            </Link>
-            .
+                {availableCities.length > 1 && (
+                  <div>
+                    <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/45">
+                      Citta / localita
+                    </span>
+                    <div className="flex gap-2 overflow-x-auto pb-1">
+                      {availableCities.map((city) => (
+                        <FilterButton
+                          key={city}
+                          active={selectedCity === city}
+                          onClick={() => updateSearch({ city })}
+                        >
+                          {city}
+                        </FilterButton>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div className="grid gap-5 lg:grid-cols-3">
+              {[
+                { label: 'Periodo', key: 'period', value: selectedPeriod, values: availablePeriods, icon: CalendarDays },
+                { label: 'Budget', key: 'budget', value: selectedBudget, values: availableBudgets, icon: Wallet },
+                { label: 'Durata', key: 'duration', value: selectedDuration, values: availableDurations, icon: Clock3 },
+              ].map(({ label, key, value, values, icon: Icon }) => (
+                <div key={key}>
+                  <span className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-black/45">
+                    <Icon size={14} /> {label}
+                  </span>
+                  <div className="flex gap-2 overflow-x-auto pb-1">
+                    {values.map((item) => (
+                      <FilterButton
+                        key={item}
+                        active={value === item}
+                        onClick={() => updateSearch({ [key]: item })}
+                      >
+                        {item}
+                      </FilterButton>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* --- ARTICLE GRID --- */}
+        <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <div>
+            <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+              {filteredItems.length} contenuti trovati
+            </span>
+            <h2 className="mt-2 text-3xl font-serif text-[var(--color-ink)]">
+              {hasActiveFilters ? 'Risultati filtrati con criterio' : 'Ultimi luoghi da esplorare'}
+            </h2>
+          </div>
+          <Link
+            to="/esperienze"
+            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]"
+          >
+            Cerca per esperienza <ArrowRight size={14} />
+          </Link>
+        </div>
+
+        {usingDemo && (
+          <div className="mb-8 rounded-2xl border border-[var(--color-accent)]/25 bg-[var(--color-accent-soft)] px-5 py-4 text-sm leading-relaxed text-[var(--color-accent-text)]">
+            Questa e una preview editoriale temporanea: serve a mostrare il layout finche non ci
+            sono contenuti reali pubblicati. Prima del deploy pubblico va sostituita o disattivata.
+          </div>
+        )}
+
         {isLoading ? (
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3, 4, 5, 6].map((item) => (
@@ -445,99 +603,21 @@ export default function Destinazioni() {
           <>
             <motion.div layout className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
               <AnimatePresence mode="popLayout">
-                {paginatedItems.map((item, index) => {
-                  const visual = item.primaryExperience
-                    ? getExperienceVisual(item.primaryExperience)
-                    : null;
-                  const ExpIcon = visual?.icon;
-                  return (
-                    <motion.div
-                      key={item.id}
-                      layout
-                      initial={{ opacity: 0, y: 30 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      transition={{
-                        duration: 0.5,
-                        delay: index * 0.08,
-                        ease: [0.21, 0.47, 0.32, 0.98],
-                      }}
-                      className={index % 3 === 1 ? 'md:mt-10' : index % 3 === 2 ? 'md:mt-5' : ''}
-                    >
-                      <Link
-                        to={item.link}
-                        className="group relative block aspect-[3/4] overflow-hidden rounded-[var(--radius-xl)] border border-black/5 transition-all duration-500 hover:scale-[1.02] hover:shadow-[var(--shadow-premium)] md:h-[420px] md:aspect-auto"
-                      >
-                        <img
-                          src={item.image}
-                          alt={item.title}
-                          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                          referrerPolicy="no-referrer"
-                          loading="lazy"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500 md:group-hover:opacity-0" />
-
-                        {/* Experience icon badge */}
-                        {ExpIcon && (
-                          <div
-                            className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-xl border border-white/20 backdrop-blur-md"
-                            style={{ backgroundColor: `${visual.color}20`, color: visual.color }}
-                          >
-                            <ExpIcon size={18} />
-                          </div>
-                        )}
-
-                        <div className="absolute bottom-8 left-8 right-8 transition-all duration-500 md:group-hover:translate-y-4 md:group-hover:opacity-0">
-                          <div className="mb-3 flex flex-wrap items-center gap-2">
-                            <span className="rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur-md">
-                              {getArchiveLocationLabel(item)}
-                            </span>
-                            {item.primaryExperience && (
-                              <span
-                                className="rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur-md"
-                                style={{
-                                  backgroundColor: `${visual?.color ?? 'var(--color-accent)'}CC`,
-                                }}
-                              >
-                                {item.primaryExperience}
-                              </span>
-                            )}
-                          </div>
-                          <h3 className="mb-4 text-2xl font-serif leading-tight text-white md:text-3xl">
-                            {item.title}
-                          </h3>
-                          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white md:hidden">
-                            Apri il contenuto <ArrowRight size={14} />
-                          </div>
-                        </div>
-
-                        <div className="absolute inset-0 hidden flex-col items-center justify-center bg-black/40 p-8 text-center opacity-0 backdrop-blur-[2px] transition-all duration-500 group-hover:opacity-100 md:flex">
-                          <h3 className="mb-6 translate-y-4 text-4xl font-serif leading-tight text-white transition-transform duration-500 group-hover:translate-y-0">
-                            {item.title}
-                          </h3>
-                          <div className="flex translate-y-4 items-center gap-2 rounded-full border border-white/30 px-6 py-3 text-sm font-bold uppercase tracking-widest text-white transition-all duration-500 delay-75 group-hover:translate-y-0 hover:bg-white hover:text-black">
-                            Apri il contenuto <ArrowRight size={16} />
-                          </div>
-                        </div>
-
-                        {/* Bottom accent line */}
-                        {visual && (
-                          <div
-                            className="absolute bottom-0 left-0 h-1 w-0 transition-all duration-500 group-hover:w-full"
-                            style={{ backgroundColor: visual.color }}
-                          />
-                        )}
-                      </Link>
-                    </motion.div>
-                  );
-                })}
+                {paginatedItems.map((item) => (
+                  <motion.div
+                    key={item.id}
+                    layout
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.96 }}
+                    transition={{ duration: 0.35 }}
+                  >
+                    <ArchiveCard item={item} isDemo={usingDemo && item.id === DEMO_DESTINATION_CARD.id} />
+                  </motion.div>
+                ))}
               </AnimatePresence>
             </motion.div>
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-            />
+            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
           </>
         )}
 

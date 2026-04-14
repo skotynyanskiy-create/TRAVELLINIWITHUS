@@ -1,76 +1,72 @@
 import { useState, type FormEvent } from 'react';
 import { motion } from 'motion/react';
 import {
-  Download,
-  CheckCircle,
-  Loader2,
-  BriefcaseBusiness,
+  ArrowRight,
   BarChart3,
+  BriefcaseBusiness,
+  CheckCircle,
   Clapperboard,
-  Mail,
+  Download,
   Globe,
+  Loader2,
+  Mail,
+  ShieldCheck,
   Target,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Breadcrumbs from '../components/Breadcrumbs';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import Section from '../components/Section';
-import Breadcrumbs from '../components/Breadcrumbs';
-import { CONTACTS, BRAND_STATS } from '../config/site';
+import { BRAND_STATS, CONTACTS } from '../config/site';
 
-const includes = [
+const MEDIA_KIT_PREVIEW = [
   {
+    step: '01',
     title: 'Profilo del progetto',
-    description:
-      'Posizionamento, tono, pubblico di riferimento e modo in cui Travelliniwithus lavora e comunica.',
+    description: 'Chi sono Rodrigo e Betta, come nasce Travelliniwithus e quale tono rende il progetto riconoscibile.',
     icon: BriefcaseBusiness,
   },
   {
-    title: 'Metriche e audience',
-    description:
-      'Dati aggiornati e panoramica utile per valutare compatibilità, potenziale e taglio della collaborazione.',
+    step: '02',
+    title: 'Audience e segnali utili',
+    description: 'Numeri, reach, contesto editoriale e lettura corretta del pubblico, senza cosmetica da brochure.',
     icon: BarChart3,
   },
   {
-    title: 'Formati e deliverable',
-    description:
-      'Panoramica dei contenuti che possiamo creare: reel, stories, foto, UGC, articoli o attivazioni su misura.',
+    step: '03',
+    title: 'Format e contesto operativo',
+    description: 'Come lavoriamo, che tipo di attivazioni hanno senso e quali collaborazioni non prendiamo in considerazione.',
     icon: Clapperboard,
   },
-  {
-    title: 'Asset e riferimenti',
-    description:
-      'Informazioni operative, linee guida e dettagli utili per aprire un confronto in modo più serio.',
-    icon: Download,
-  },
 ];
 
-const idealPartners = [
-  'Strutture ricettive — hotel, agriturismi, glamping e hospitality — con una forte identità di luogo.',
-  'Destinazioni, enti turismo, territori, esperienze e progetti travel da raccontare con più personalità.',
-  'Brand lifestyle o utility coerenti con il modo reale in cui viviamo e consigliamo il viaggio.',
+const QUALIFYING_POINTS = [
+  'Hotel, hospitality e soggiorni con una forte identita.',
+  'Destinazioni, territori e progetti travel con una storia da raccontare bene.',
+  'Brand lifestyle e utility coerenti con il nostro modo di viaggiare e consigliare.',
 ];
 
-const nextSteps = [
+const NEXT_STEPS = [
   {
-    title: '1. Richiesta',
-    text: 'Ci lasci i dati essenziali e ci fai capire chi sei o che tipo di progetto vuoi proporre.',
+    title: '1. Richiesta qualificata',
+    text: 'Ci lasci brand, contesto e focus del progetto. Non ci interessa il giro largo: ci interessa capire subito il fit.',
   },
   {
-    title: '2. Valutazione',
-    text: "Valutiamo se c'è allineamento reale tra il vostro progetto, il nostro pubblico e il tipo di contenuto che ha senso costruire.",
+    title: '2. Valutazione editoriale',
+    text: 'Capiamo se il progetto e coerente con il pubblico, con il tono del brand e con il tipo di contenuto che sappiamo fare bene.',
   },
   {
-    title: '3. Contatto',
-    text: "Se c'è match, condividiamo il materiale giusto e apriamo un confronto operativo più concreto.",
+    title: '3. Invio materiali e dialogo',
+    text: 'Se c e allineamento, ricevi il media kit e apriamo il confronto operativo con basi piu serie e pulite.',
   },
 ];
 
 const projectFocusOptions = [
   'Hotel / hospitality',
   'Destinazione / ente turismo',
-  'Brand lifestyle / utility',
-  'Evento / experience',
+  'Brand travel / lifestyle',
+  'Experience / locale / evento',
   'UGC / contenuti per canali brand',
   'Altro',
 ];
@@ -98,9 +94,7 @@ export default function MediaKit() {
     const normalizedBrief = brief.trim();
 
     if (!normalizedEmail || !normalizedCompany || !projectFocus || !normalizedBrief) {
-      setSubmitError(
-        'Inserisci azienda, email lavorativa, focus del progetto e un breve brief per inviare la richiesta.'
-      );
+      setSubmitError('Inserisci azienda, email lavorativa, focus del progetto e un contesto breve ma utile.');
       return;
     }
 
@@ -131,11 +125,12 @@ export default function MediaKit() {
         const payload = (await response.json().catch(() => null)) as { error?: string } | null;
         throw new Error(payload?.error || 'Invio non riuscito');
       }
+
       setIsSuccess(true);
     } catch (error) {
       console.error('Error saving media kit lead:', error);
       setSubmitError(
-        `Non siamo riusciti a registrare la richiesta. Puoi scriverci direttamente a ${CONTACTS.email}.`
+        `Non siamo riusciti a registrare la richiesta. Puoi scriverci direttamente a ${CONTACTS.email}.`,
       );
     } finally {
       setIsSubmitting(false);
@@ -146,7 +141,7 @@ export default function MediaKit() {
     <PageLayout>
       <SEO
         title="Media Kit"
-        description="Richiedi il media kit Travelliniwithus per valutare collaborazioni, formati, pubblico e possibilità di racconto."
+        description="Richiedi il media kit Travelliniwithus per capire audience, format, tono editoriale e condizioni giuste per una collaborazione coerente."
       />
 
       <Section className="pt-8">
@@ -155,64 +150,79 @@ export default function MediaKit() {
         <div className="mx-auto mt-8 max-w-5xl text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <div className="mb-6 flex items-center justify-center gap-4">
-              <div className="h-[1px] w-12 bg-[var(--color-accent)]"></div>
+              <div className="h-px w-12 bg-[var(--color-accent)]" />
               <span className="font-script text-xl text-[var(--color-accent-warm)]">Media kit</span>
-              <div className="h-[1px] w-12 bg-[var(--color-accent)]"></div>
+              <div className="h-px w-12 bg-[var(--color-accent)]" />
             </div>
             <h1 className="mb-8 text-5xl font-serif md:text-7xl">
-              La base giusta per capire <br />
-              <span className="italic text-black/60">se ha senso lavorare insieme</span>
+              Non un PDF qualsiasi.
+              <br />
+              <span className="italic text-black/60">Una porta di accesso qualificata.</span>
             </h1>
-            <p className="mx-auto max-w-3xl text-xl font-normal leading-relaxed text-black/70">
-              Questa pagina non serve a scaricare un PDF generico. Serve a darti un punto di accesso
-              serio per capire chi siamo, come lavoriamo e che tipo di collaborazione possiamo
-              costruire in modo credibile.
+            <p className="mx-auto max-w-3xl text-xl leading-relaxed text-black/70">
+              Il media kit serve a capire se il progetto ha senso per entrambe le parti. Pubblico,
+              posizionamento, format e modo di lavorare: tutto il necessario per parlare con basi piu serie.
             </p>
-            <div className="mt-8 inline-flex items-center gap-6 rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent-soft)] px-8 py-3">
-              <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">
-                {BRAND_STATS.instagramFollowers} follower
-              </span>
-              <span className="h-4 w-px bg-[var(--color-accent)]/20"></span>
-              <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">
-                {BRAND_STATS.engagementRate} engagement
-              </span>
-              <span className="h-4 w-px bg-[var(--color-accent)]/20"></span>
-              <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">
-                {BRAND_STATS.monthlyReach} reach
-              </span>
+            <div className="mt-8 inline-flex flex-wrap items-center justify-center gap-4 rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent-soft)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] md:gap-6 md:px-8">
+              <span>{BRAND_STATS.instagramFollowers} Instagram</span>
+              <span className="h-4 w-px bg-[var(--color-accent)]/20" />
+              <span>{BRAND_STATS.tiktokFollowers} TikTok</span>
+              <span className="h-4 w-px bg-[var(--color-accent)]/20" />
+              <span>{BRAND_STATS.monthlyReach} reach</span>
             </div>
           </motion.div>
         </div>
       </Section>
 
       <Section>
-        <div className="grid grid-cols-1 gap-16 lg:grid-cols-[1.15fr_0.85fr]">
+        <div className="grid grid-cols-1 gap-16 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
             <div className="mb-10 rounded-[2rem] border border-black/5 bg-[var(--color-sand)] p-8 md:p-10">
-              <h2 className="mb-4 text-3xl font-serif">Cosa riceverai dopo la richiesta</h2>
-              <p className="font-normal leading-relaxed text-black/70">
-                Se il contatto è coerente con il progetto, condividiamo il materiale utile per
-                valutare seriamente una possibile collaborazione: posizionamento, audience, formati,
-                modalità di lavoro e riferimenti operativi.
+              <h2 className="mb-4 text-3xl font-serif">Cosa troverai nel media kit</h2>
+              <p className="leading-relaxed text-black/70">
+                Non una presentazione gonfiata. Una sintesi ordinata di chi siamo, a chi parliamo, che cosa
+                sappiamo fare bene e quando una collaborazione conviene davvero.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              {includes.map((item, index) => (
+            <div className="space-y-4">
+              {MEDIA_KIT_PREVIEW.map((item, index) => (
                 <motion.div
                   key={item.title}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.08 }}
-                  className="rounded-[2rem] border border-black/5 bg-white p-8 shadow-sm"
+                  className="rounded-[2rem] border border-black/5 bg-white p-7 shadow-sm"
                 >
-                  <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-accent)]/10 text-[var(--color-accent)]">
-                    <item.icon size={24} />
+                  <div className="flex items-start gap-5">
+                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
+                      <item.icon size={24} />
+                    </div>
+                    <div className="flex-1">
+                      <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.24em] text-black/40">
+                        Pagina {item.step}
+                      </p>
+                      <h3 className="mb-3 text-2xl font-serif">{item.title}</h3>
+                      <p className="leading-relaxed text-black/68">{item.description}</p>
+                    </div>
                   </div>
-                  <h3 className="mb-3 text-2xl font-serif">{item.title}</h3>
-                  <p className="font-normal leading-relaxed text-black/70">{item.description}</p>
                 </motion.div>
               ))}
+            </div>
+
+            <div className="mt-10 rounded-[2rem] border border-black/5 bg-white p-8 shadow-sm">
+              <div className="mb-4 flex items-center gap-3">
+                <ShieldCheck size={18} className="text-[var(--color-accent)]" />
+                <h3 className="text-2xl font-serif">Quando conviene scriverci</h3>
+              </div>
+              <div className="space-y-4">
+                {QUALIFYING_POINTS.map((item) => (
+                  <div key={item} className="flex gap-3">
+                    <CheckCircle size={18} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
+                    <p className="leading-relaxed text-black/68">{item}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -223,12 +233,12 @@ export default function MediaKit() {
               transition={{ delay: 0.2 }}
               className="relative h-fit overflow-hidden rounded-[2rem] border border-zinc-100 bg-white p-8 shadow-xl md:p-10"
             >
-              <div className="absolute left-0 top-0 h-2 w-full bg-[var(--color-accent)]"></div>
+              <div className="absolute left-0 top-0 h-2 w-full bg-[var(--color-accent)]" />
               <div className="mb-8">
                 <h2 className="mb-2 text-2xl font-serif">Richiedi il media kit</h2>
                 <p className="text-sm leading-relaxed text-zinc-500">
-                  Lascia i dati essenziali del brand o del progetto. In questo modo possiamo capire
-                  subito se il contatto è allineato e risponderti con materiali davvero utili.
+                  Ti chiediamo poche informazioni, ma utili. Servono a capire se il progetto e allineato e
+                  a risponderti con materiale davvero rilevante.
                 </p>
               </div>
 
@@ -244,7 +254,7 @@ export default function MediaKit() {
                     value={company}
                     onChange={(e) => setCompany(e.target.value)}
                     className="w-full rounded-xl border border-zinc-200 px-4 py-3 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-[var(--color-accent)]"
-                    placeholder="Es. Travel PR Agency"
+                    placeholder="Es. boutique hotel, agenzia travel, destination office"
                   />
                 </div>
 
@@ -284,10 +294,7 @@ export default function MediaKit() {
                 </div>
 
                 <div>
-                  <label
-                    htmlFor="project-focus"
-                    className="mb-2 block text-sm font-medium text-zinc-700"
-                  >
+                  <label htmlFor="project-focus" className="mb-2 block text-sm font-medium text-zinc-700">
                     Focus della richiesta
                   </label>
                   <div className="relative">
@@ -313,15 +320,15 @@ export default function MediaKit() {
 
                 <div>
                   <label htmlFor="brief" className="mb-2 block text-sm font-medium text-zinc-700">
-                    Due righe di contesto *
+                    Contesto breve ma utile
                   </label>
                   <textarea
                     id="brief"
-                    rows={4}
+                    rows={5}
                     value={brief}
                     onChange={(e) => setBrief(e.target.value)}
                     className="w-full rounded-xl border border-zinc-200 px-4 py-3 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-[var(--color-accent)]"
-                    placeholder="Obiettivo, tempistiche o tipo di attivazione che hai in mente."
+                    placeholder="Obiettivo, periodo, tipo di attivazione o perche pensi che ci sia un fit reale."
                   />
                 </div>
 
@@ -332,24 +339,24 @@ export default function MediaKit() {
                 >
                   {isSubmitting ? (
                     <>
-                      <Loader2 size={20} className="animate-spin" /> Elaborazione...
+                      <Loader2 size={20} className="animate-spin" /> Invio in corso...
                     </>
                   ) : (
                     <>
-                      <Download size={20} /> Invia richiesta
+                      <Download size={20} /> Richiedi il media kit
                     </>
                   )}
                 </button>
 
                 {submitError && <p className="text-sm text-red-600">{submitError}</p>}
 
-                <p className="mt-4 text-center text-xs font-medium text-[var(--color-accent)]">
-                  Valutiamo ogni richiesta entro 48 ore lavorative.
+                <p className="text-center text-xs font-medium text-[var(--color-accent)]">
+                  Se il contatto e coerente, ricevi il link al media kit e un riscontro entro 48 ore lavorative.
                 </p>
 
                 <p className="text-center text-xs leading-relaxed text-zinc-400">
-                  Inviando questa richiesta accetti di essere ricontattato in merito a possibili
-                  collaborazioni e al trattamento dei dati secondo la nostra{' '}
+                  Inviando la richiesta accetti di essere ricontattato in merito a possibili collaborazioni e
+                  al trattamento dei dati secondo la nostra{' '}
                   <Link to="/privacy" className="underline underline-offset-2 hover:text-zinc-600">
                     privacy policy
                   </Link>
@@ -361,18 +368,52 @@ export default function MediaKit() {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="h-fit rounded-[2rem] border border-[var(--color-accent)]/15 bg-[var(--color-accent-soft)] p-8 text-center shadow-sm md:p-10"
+              className="h-fit rounded-[2rem] border border-[var(--color-accent)]/15 bg-[var(--color-accent-soft)] p-8 shadow-sm md:p-10"
             >
               <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-accent)]/15 text-[var(--color-accent)]">
                 <CheckCircle size={32} />
               </div>
-              <h2 className="mb-4 text-2xl font-serif text-[var(--color-ink)]">
+              <h2 className="mb-4 text-center text-2xl font-serif text-[var(--color-ink)]">
                 Richiesta ricevuta
               </h2>
-              <p className="font-light leading-relaxed text-[var(--color-accent-text)]">
-                Grazie per l&apos;interesse. Ti ricontatteremo via email con il materiale più
-                rilevante per capire se esistono le condizioni giuste per una collaborazione.
+              <p className="text-center leading-relaxed text-[var(--color-accent-text)]">
+                Grazie. Se vediamo un allineamento reale, ti inviamo il media kit e ti rispondiamo con i
+                prossimi passi piu utili.
               </p>
+              <div className="mt-8 space-y-4 rounded-[1.5rem] border border-[var(--color-accent)]/10 bg-white/70 p-6">
+                <div className="flex gap-3">
+                  <CheckCircle size={18} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
+                  <p className="text-sm leading-relaxed text-black/70">
+                    Ti scriviamo entro 48 ore lavorative se il progetto e in linea.
+                  </p>
+                </div>
+                <div className="flex gap-3">
+                  <CheckCircle size={18} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
+                  <p className="text-sm leading-relaxed text-black/70">
+                    Il media kit arriva via email insieme al contesto giusto per continuare la conversazione.
+                  </p>
+                </div>
+                <div className="flex gap-3">
+                  <CheckCircle size={18} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
+                  <p className="text-sm leading-relaxed text-black/70">
+                    Se vuoi accelerare, puoi anche scriverci direttamente con un brief piu dettagliato.
+                  </p>
+                </div>
+              </div>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Link
+                  to="/contatti"
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-[var(--color-ink)] px-6 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-ink)]/85"
+                >
+                  Vai ai contatti <ArrowRight size={14} />
+                </Link>
+                <a
+                  href={CONTACTS.mailto}
+                  className="inline-flex h-12 items-center justify-center rounded-xl border border-black/10 px-6 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+                >
+                  Scrivi a {CONTACTS.email}
+                </a>
+              </div>
             </motion.div>
           )}
         </div>
@@ -380,30 +421,17 @@ export default function MediaKit() {
 
       <Section className="rounded-[3rem] bg-[var(--color-sand)] p-12 md:p-20">
         <div className="mb-12 text-center">
-          <h2 className="mb-4 text-4xl font-serif">Collaboriamo meglio con</h2>
-          <p className="mx-auto max-w-2xl font-normal leading-relaxed text-black/70">
-            Non vogliamo aprire contatti generici. Preferiamo progetti allineati, in cui contenuto,
-            brand e utilità per il pubblico possano stare davvero bene insieme.
+          <h2 className="mb-4 text-4xl font-serif">Come funziona dopo il primo contatto</h2>
+          <p className="mx-auto max-w-2xl leading-relaxed text-black/70">
+            Questo passaggio serve a filtrare meglio, non a complicare. Preferiamo meno richieste ma piu
+            coerenti, con una conversazione pulita fin dall inizio.
           </p>
         </div>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {idealPartners.map((item) => (
-            <div key={item} className="rounded-[2rem] border border-black/5 bg-white p-8 shadow-sm">
-              <p className="font-normal leading-relaxed text-black/70">{item}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      <Section title="Come funziona" subtitle="Processo">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-          {nextSteps.map((item) => (
-            <div
-              key={item.title}
-              className="rounded-[2rem] border border-black/5 bg-white p-8 shadow-sm"
-            >
+          {NEXT_STEPS.map((item) => (
+            <div key={item.title} className="rounded-[2rem] border border-black/5 bg-white p-8 shadow-sm">
               <h3 className="mb-3 text-2xl font-serif">{item.title}</h3>
-              <p className="font-normal leading-relaxed text-black/70">{item.text}</p>
+              <p className="leading-relaxed text-black/70">{item.text}</p>
             </div>
           ))}
         </div>
@@ -414,16 +442,15 @@ export default function MediaKit() {
           <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-[var(--color-accent)]">
             <Mail size={24} />
           </div>
-          <h2 className="mb-4 text-3xl font-serif md:text-4xl">Hai una richiesta più diretta?</h2>
-          <p className="mb-8 font-normal leading-relaxed text-white/80">
-            Se preferisci partire da un contatto diretto invece che dal form, puoi scriverci via
-            email o aprire una prima conversazione su WhatsApp. Il criterio resta lo stesso:
-            allineamento, chiarezza e poi eventuale approfondimento.
+          <h2 className="mb-4 text-3xl font-serif md:text-4xl">Vuoi partire da un contatto diretto?</h2>
+          <p className="mb-8 leading-relaxed text-white/80">
+            Se hai gia un brief chiaro o una proposta ben impostata, puoi scriverci direttamente. Il criterio
+            resta lo stesso: allineamento, chiarezza e poi approfondimento.
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a
               href={CONTACTS.mailto}
-              className="inline-block rounded-xl bg-[var(--color-ink)] px-8 py-4 text-xs font-bold uppercase tracking-widest text-white transition-all hover:bg-[var(--color-ink)]/85"
+              className="inline-flex h-12 items-center justify-center rounded-xl bg-[var(--color-gold)] px-8 text-xs font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
             >
               Scrivi a {CONTACTS.email}
             </a>
@@ -431,7 +458,7 @@ export default function MediaKit() {
               href={CONTACTS.whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block rounded-xl border border-white/20 bg-white/5 px-8 py-4 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:border-white/40 hover:bg-white/10"
+              className="inline-flex h-12 items-center justify-center rounded-xl border border-white/20 bg-white/5 px-8 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:border-white/40 hover:bg-white/10"
             >
               Apri WhatsApp
             </a>

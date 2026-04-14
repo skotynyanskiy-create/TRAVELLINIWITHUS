@@ -4,6 +4,7 @@ import { DESTINATION_GROUPS } from '../config/contentTaxonomy';
 export interface ArchiveItem {
   id: string;
   title: string;
+  excerpt?: string;
   image: string;
   link: string;
   category: string;
@@ -15,6 +16,9 @@ export interface ArchiveItem {
   destinationGroup: string;
   experienceTypes: string[];
   primaryExperience?: string;
+  period?: string;
+  budget?: string;
+  duration?: string;
 }
 
 export function getDestinationGroup(article: Pick<NormalizedArticle, 'country' | 'continent'>) {
@@ -35,6 +39,7 @@ export function mapArticleToArchiveItem(article: NormalizedArticle): ArchiveItem
   return {
     id: article.id,
     title: article.title,
+    excerpt: article.excerpt || article.description,
     image: article.image,
     link: `/articolo/${article.slug || article.id}`,
     category: article.category,
@@ -46,13 +51,18 @@ export function mapArticleToArchiveItem(article: NormalizedArticle): ArchiveItem
     destinationGroup: getDestinationGroup(article),
     experienceTypes,
     primaryExperience: experienceTypes[0],
+    period: article.period,
+    budget: article.budget,
+    duration: article.duration,
   };
 }
 
-export function getArchiveLocationLabel(item: Pick<ArchiveItem, 'country' | 'region' | 'city' | 'destinationGroup'>) {
+export function getArchiveLocationLabel(
+  item: Pick<ArchiveItem, 'country' | 'region' | 'city' | 'destinationGroup'>
+) {
   if (item.country === 'Italia') {
-    return [item.region, item.city].filter(Boolean).join(' · ') || 'Italia';
+    return [item.region, item.city].filter(Boolean).join(' / ') || 'Italia';
   }
 
-  return [item.country, item.city].filter(Boolean).join(' · ') || item.destinationGroup;
+  return [item.country, item.city].filter(Boolean).join(' / ') || item.destinationGroup;
 }

@@ -1,9 +1,3 @@
-/**
- * Error tracking and monitoring setup
- * Currently configured for console logging in development
- * Ready to integrate Sentry, Rollbar, or LogRocket in production
- */
-
 interface ErrorEvent {
   message: string;
   level: 'error' | 'warning' | 'info';
@@ -12,8 +6,37 @@ interface ErrorEvent {
   url: string;
 }
 
+interface SentryLike {
+  captureException: (err: unknown, hint?: { contexts?: Record<string, unknown> }) => void;
+  captureMessage: (msg: string, level?: string) => void;
+}
+
 const isDevelopment = import.meta.env.DEV;
 const errorLog: ErrorEvent[] = [];
+const MAX_LOG = 100;
+
+function getSentry(): SentryLike | null {
+  if (typeof window === 'undefined') return null;
+  const sentry = (window as unknown as { Sentry?: SentryLike }).Sentry;
+  return sentry ?? null;
+}
+
+export function initErrorTracking() {
+  const dsn = import.meta.env.VITE_SENTRY_DSN;
+  if (!dsn) {
+    if (isDevelopment) {
+      console.info('[errorTracking] VITE_SENTRY_DSN mancante — Sentry init skipped (predisposizione mode)');
+    }
+    return;
+  }
+
+  if (typeof window === 'undefined') return;
+  const existing = (window as unknown as { Sentry?: SentryLike }).Sentry;
+  if (existing) return;
+
+  console.info('[errorTracking] Sentry DSN presente ma @sentry/react non ancora installato. ' +
+    'Installa la dipendenza e completa l\'init in fase finale pre-deploy.');
+}
 
 export function captureException(error: unknown, context?: Record<string, unknown>) {
   const message = error instanceof Error ? error.message : String(error);
@@ -25,62 +48,60 @@ export function captureException(error: unknown, context?: Record<string, unknow
     context: {
       ...context,
       stack,
-      userAgent: navigator.userAgent,
+      userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'server',
     },
     timestamp: new Date().toISOString(),
-    url: window.location.href,
+    url: typeof window !== 'undefined' ? window.location.href : '',
   };
 
-  errorLog.push(event);
+  pushLog(event);
+  if (isDevelopment) console.error('[error]', event);
 
-  if (isDevelopment) {
-    console.error('🔴 Error captured:', event);
+  const sentry = getSentry();
+  if (sentry) {
+    sentry.captureException(error, { contexts: { app: context ?? {} } });
   }
-
-  // TODO: Send to Sentry/Rollbar in production
-  // if (import.meta.env.PROD && window.Sentry) {
-  //   Sentry.captureException(error, { contexts: { ...context } });
-  // }
 
   return event;
 }
 
-export function captureMessage(message: string, level: 'error' | 'warning' | 'info' = 'info', context?: Record<string, unknown>) {
+export function captureMessage(
+  message: string,
+  level: 'error' | 'warning' | 'info' = 'info',
+  context?: Record<string, unknown>,
+) {
   const event: ErrorEvent = {
     message,
     level,
     context,
     timestamp: new Date().toISOString(),
-    url: window.location.href,
+    url: typeof window !== 'undefined' ? window.location.href : '',
   };
 
-  errorLog.push(event);
+  pushLog(event);
+  if (isDevelopment) console.log(`[${level}]`, message, context);
 
-  if (isDevelopment) {
-    console.log(`🟡 [${level.toUpperCase()}]`, message, context);
-  }
+  const sentry = getSentry();
+  if (sentry) sentry.captureMessage(message, level);
 
-  // TODO: Send to monitoring service in production
   return event;
 }
 
 export function trackUserAction(action: string, data?: Record<string, unknown>) {
-  const timestamp = new Date().toISOString();
-  
   if (isDevelopment) {
-    console.log(`✅ Action: ${action}`, { timestamp, ...data });
+    console.log(`[action] ${action}`, data);
   }
-
-  // TODO: Send to analytics in production
-  // - Add to Firebase Analytics
-  // - Add to Mixpanel / Amplitude
-  // - Add to GA4
 }
 
 export function getErrorLog() {
-  return errorLog;
+  return errorLog.slice();
 }
 
 export function clearErrorLog() {
   errorLog.length = 0;
+}
+
+function pushLog(event: ErrorEvent) {
+  errorLog.push(event);
+  if (errorLog.length > MAX_LOG) errorLog.shift();
 }

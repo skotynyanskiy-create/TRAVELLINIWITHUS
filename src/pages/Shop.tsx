@@ -1,6 +1,15 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowRight, Smartphone, Map, CheckCircle, XCircle, Shield, Sparkles } from 'lucide-react';
+import {
+  ArrowRight,
+  CheckCircle,
+  FileText,
+  Map,
+  Shield,
+  Sparkles,
+  Smartphone,
+  XCircle,
+} from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -12,12 +21,14 @@ import Section from '../components/Section';
 import ProductSkeleton from '../components/ProductSkeleton';
 import Newsletter from '../components/Newsletter';
 import ProductCard from '../components/ProductCard';
+import DemoContentNotice from '../components/DemoContentNotice';
+import FinalCtaSection from '../components/FinalCtaSection';
 import { useCart } from '../context/CartContext';
 import { fetchProducts } from '../services/firebaseService';
 import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_PRODUCT } from '../config/demoContent';
 import { useSiteContent } from '../hooks/useSiteContent';
-import { BRAND_STATS } from '../config/site';
+import { BRAND_STATS, SITE_URL } from '../config/site';
 
 interface Product {
   id: string;
@@ -29,32 +40,31 @@ interface Product {
   category: string;
   isDigital?: boolean;
   features?: string[];
+  isBestseller?: boolean;
 }
 
-const reasons = [
+const shopPrinciples = [
   {
-    icon: <Sparkles className="text-accent" size={22} />,
-    title: `${BRAND_STATS.yearsOfTravel} anni sul campo`,
-    text: 'Non stiamo vendendo file decorativi. Stiamo raccogliendo ciò che ci ha aiutato davvero a viaggiare meglio.',
+    icon: <Map className="text-[var(--color-accent)]" size={22} />,
+    title: 'Nati dal viaggio',
+    text: 'Guide, planner e toolkit devono nascere da problemi reali incontrati sul campo.',
   },
   {
-    icon: <Map className="text-accent" size={22} />,
-    title: "Nati dall'esperienza",
-    text: 'Guide e planner costruiti dopo aver vissuto quei luoghi in prima persona, non solo dopo averli cercati online.',
+    icon: <FileText className="text-[var(--color-accent)]" size={22} />,
+    title: 'Pratici da usare',
+    text: 'Il formato deve aiutarti prima e durante il viaggio, soprattutto da smartphone.',
   },
   {
-    icon: <Shield className="text-accent" size={22} />,
-    title: 'Selezione stretta',
-    text: 'Preferiamo pochi prodotti chiari e utili, invece di uno shop pieno di materiale generico.',
+    icon: <Shield className="text-[var(--color-accent)]" size={22} />,
+    title: 'Pochi, non generici',
+    text: 'Meglio pochi prodotti chiari che uno shop pieno di file senza identita.',
   },
 ];
 
 export default function ShopWrapper() {
   return (
     <ErrorBoundary
-      fallback={
-        <div className="text-center py-20 text-red-500">Impossibile caricare i prodotti</div>
-      }
+      fallback={<div className="py-20 text-center text-red-500">Impossibile caricare i prodotti</div>}
     >
       <Shop />
     </ErrorBoundary>
@@ -67,7 +77,7 @@ function Shop() {
   const demoSettings = demoContent ?? siteContentDefaults.demo;
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState('Tutti');
-  const [sortBy, setSortBy] = useState('newest');
+  const [sortBy, setSortBy] = useState('featured');
 
   const paymentStatus: 'success' | 'canceled' | null = searchParams.get('success')
     ? 'success'
@@ -93,39 +103,40 @@ function Shop() {
         return fetchedProducts as Product[];
       }
 
-      return demoSettings.showShopDemo ? [DEMO_PRODUCT as Product] : [];
+      return [DEMO_PRODUCT as Product];
     },
   });
-
-  const breadcrumbItems = [{ label: 'Shop' }];
 
   if (error) {
     throw new Error('Impossibile caricare i prodotti');
   }
 
+  const usingShopDemo = products.length === 1 && products[0]?.slug === DEMO_PRODUCT.slug;
   const categories = useMemo(() => {
-    const cats = new Set(products.map((p) => p.category));
+    const cats = new Set(products.map((product) => product.category).filter(Boolean));
     return ['Tutti', ...Array.from(cats)];
   }, [products]);
-  const usingShopDemo = products.length === 1 && products[0]?.slug === DEMO_PRODUCT.slug;
 
   const filteredAndSortedProducts = useMemo(() => {
     let result = [...products];
 
     if (selectedCategory !== 'Tutti') {
-      result = result.filter((p) => p.category === selectedCategory);
+      result = result.filter((product) => product.category === selectedCategory);
     }
 
     result.sort((a, b) => {
       if (sortBy === 'price-asc') return a.price - b.price;
       if (sortBy === 'price-desc') return b.price - a.price;
-      return 0;
+      if (sortBy === 'name') return a.name.localeCompare(b.name);
+      return Number(b.isBestseller) - Number(a.isBestseller);
     });
 
     return result;
   }, [products, selectedCategory, sortBy]);
 
   const handleAddToCart = (product: Product) => {
+    if (usingShopDemo) return;
+
     addToCart({
       id: product.id,
       name: product.name,
@@ -140,8 +151,10 @@ function Shop() {
     <PageLayout>
       <>
         <SEO
-          title="Contenuti Premium"
-          description="Guide premium, itinerari pronti, planner e contenuti pratici Travelliniwithus pensati per aiutarti a viaggiare meglio."
+          title="Shop editoriale"
+          description="Guide premium, planner e toolkit Travelliniwithus pensati per organizzare viaggi con piu criterio. Catalogo reale in preparazione."
+          canonical={`${SITE_URL}/shop`}
+          noindex={usingShopDemo || products.length === 0}
         />
 
         <AnimatePresence>
@@ -161,34 +174,33 @@ function Shop() {
                 role="dialog"
                 aria-modal="true"
                 aria-label="Stato del pagamento"
-                className="relative bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center z-[160]"
+                className="relative z-[160] w-full max-w-sm rounded-3xl bg-white p-8 text-center shadow-2xl"
               >
                 {paymentStatus === 'success' ? (
                   <>
-                    <div className="w-16 h-16 bg-[var(--color-accent)]/15 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-accent)]/15">
                       <CheckCircle className="text-[var(--color-accent)]" size={32} />
                     </div>
-                    <h3 className="text-2xl font-serif mb-2 text-zinc-900">Pagamento completato</h3>
-                    <p className="text-zinc-600 mb-8">
-                      Grazie per il tuo acquisto. Riceverai a breve i dettagli dell'ordine e le
-                      istruzioni per accedere ai contenuti acquistati.
+                    <h3 className="mb-2 text-2xl font-serif text-zinc-900">Pagamento completato</h3>
+                    <p className="mb-8 text-zinc-600">
+                      Ordine ricevuto. Riceverai i dettagli e le istruzioni di accesso secondo il
+                      flusso configurato.
                     </p>
                   </>
                 ) : (
                   <>
-                    <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
                       <XCircle className="text-red-600" size={32} />
                     </div>
-                    <h3 className="text-2xl font-serif mb-2 text-zinc-900">Pagamento annullato</h3>
-                    <p className="text-zinc-600 mb-8">
-                      Il processo di pagamento è stato interrotto. Nessun addebito è stato
-                      effettuato.
+                    <h3 className="mb-2 text-2xl font-serif text-zinc-900">Pagamento annullato</h3>
+                    <p className="mb-8 text-zinc-600">
+                      Il processo e stato interrotto. Nessun addebito e stato effettuato.
                     </p>
                   </>
                 )}
                 <button
                   onClick={() => setSearchParams({})}
-                  className="w-full bg-ink text-white py-3 rounded-xl font-semibold hover:bg-[var(--color-ink)]/85 transition-colors"
+                  className="w-full rounded-xl bg-[var(--color-ink)] py-3 font-semibold text-white transition-colors hover:bg-[var(--color-ink)]/85"
                 >
                   Chiudi
                 </button>
@@ -197,268 +209,175 @@ function Shop() {
           )}
         </AnimatePresence>
 
-        <Section className="pt-8">
-          <Breadcrumbs items={breadcrumbItems} />
+        <Section className="pt-8" spacing="tight">
+          <Breadcrumbs items={[{ label: 'Shop' }]} />
 
-          <div className="relative text-center max-w-5xl mx-auto mb-24 mt-8 p-12 md:p-20 bg-zinc-50/50 rounded-3xl border border-accent/10 shadow-sm overflow-hidden">
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[var(--color-accent)]/10 rounded-full blur-[100px] -mr-[250px] -mt-[250px] pointer-events-none"></div>
-            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-sand rounded-full blur-[100px] -ml-[250px] -mb-[250px] pointer-events-none"></div>
-
-            <div className="relative z-10 flex items-center justify-center gap-4 mb-8">
-              <div className="w-12 h-[1px] bg-[var(--color-accent)]"></div>
-              <span className="font-script text-xl text-[var(--color-accent-warm)]">
-                Contenuti premium
+          <div className="mt-8 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
+            <div>
+              <span className="mb-6 block text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
+                Boutique editoriale
               </span>
-              <div className="w-12 h-[1px] bg-[var(--color-accent)]"></div>
-            </div>
-            <div className="relative mb-8 inline-block z-10">
-              <h1 className="text-5xl font-serif leading-tight md:text-7xl">
-                Strumenti per il viaggio <br />
-                <span className="italic text-accent">che immagini</span>
+              <h1 className="text-display-1">
+                Guide e toolkit <span className="italic text-black/55">per partire meglio</span>
               </h1>
-              <motion.span
-                initial={{ opacity: 0, rotate: -10, scale: 0.8 }}
-                animate={{ opacity: 1, rotate: -5, scale: 1 }}
-                transition={{ delay: 0.8, duration: 0.8 }}
-                aria-hidden="true"
-                className="absolute -bottom-6 -right-16 font-script text-zinc-900/30 text-2xl md:text-3xl hidden sm:block"
-              >
-                pensati per partire meglio
-              </motion.span>
+              <p className="mt-8 max-w-2xl text-lg leading-relaxed text-black/68">
+                Lo shop deve essere una continuazione del progetto editoriale: pochi prodotti,
+                utili, leggibili da telefono e costruiti per ridurre incertezza prima del viaggio.
+              </p>
             </div>
-            <p className="text-lg text-zinc-600 font-light leading-relaxed mt-10 max-w-2xl mx-auto relative z-10">
-              Queste guide e risorse nascono da {BRAND_STATS.yearsOfTravel} anni di viaggi reali.
-              Non sono template generici. Ogni pagina è testata sul campo, ogni consiglio è
-              autentico. Quando li usiamo noi, funzionano.
-            </p>
+
+            <div className="rounded-[2rem] border border-black/5 bg-white p-7 shadow-sm">
+              <div className="mb-5 flex items-center gap-3">
+                <Sparkles className="text-[var(--color-accent)]" size={22} />
+                <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-black/42">
+                  Standard minimo
+                </p>
+              </div>
+              <p className="text-2xl font-serif leading-relaxed">
+                Ogni prodotto deve risolvere una scelta reale: dove andare, come organizzare o cosa
+                portare.
+              </p>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-            {reasons.map((item) => (
-              <div
-                key={item.title}
-                className="bg-white p-8 rounded-4xl border border-black/5 shadow-sm"
-              >
-                <div className="w-12 h-12 rounded-full bg-sand flex items-center justify-center mb-5">
+          <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-3">
+            {shopPrinciples.map((item) => (
+              <div key={item.title} className="rounded-[2rem] border border-black/5 bg-white p-7 shadow-sm">
+                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-sand)]">
                   {item.icon}
                 </div>
-                <h2 className="text-xl font-serif mb-3">{item.title}</h2>
-                <p className="text-black/60 font-light leading-relaxed">{item.text}</p>
+                <h2 className="font-serif text-xl">{item.title}</h2>
+                <p className="mt-3 text-sm leading-relaxed text-black/60">{item.text}</p>
               </div>
             ))}
           </div>
 
-          <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-16 bg-white/50 backdrop-blur-md p-6 rounded-4xl border border-black/5">
-            <div className="flex items-center gap-6 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/30 shrink-0 ml-2">
+          {usingShopDemo && (
+            <DemoContentNotice
+              className="mt-12"
+              title="Shop in preview interna"
+              message="Il prodotto mostrato e una preview controllata per vedere formato e percezione finale. Il carrello resta disabilitato finche catalogo, file e flusso di vendita non sono reali."
+            />
+          )}
+
+          <div className="mt-12 flex flex-col gap-4 rounded-[2rem] border border-black/5 bg-white/75 p-4 shadow-sm backdrop-blur-md md:flex-row md:items-center md:justify-between md:p-6">
+            <div className="flex min-w-0 items-center gap-3 overflow-x-auto pb-1 hide-scrollbar">
+              <span className="shrink-0 text-[10px] font-bold uppercase tracking-[0.22em] text-black/35">
                 Filtra
               </span>
-              {categories.map((cat) => (
+              {categories.map((category) => (
                 <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`whitespace-nowrap px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all duration-300 ${
-                    selectedCategory === cat
-                      ? 'bg-[var(--color-ink)] text-white border-[var(--color-ink)]'
-                      : 'bg-white/50 text-black/40 border border-black/5 hover:border-accent/30 hover:bg-sand'
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`whitespace-nowrap rounded-full px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] transition-all ${
+                    selectedCategory === category
+                      ? 'bg-[var(--color-ink)] text-white'
+                      : 'bg-white text-black/50 hover:bg-[var(--color-sand)] hover:text-black/75'
                   }`}
                 >
-                  {cat}
+                  {category}
                 </button>
               ))}
             </div>
 
-            <div className="flex items-center gap-4 w-full md:w-auto shrink-0 pr-2">
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/30 shrink-0">
-                Ordina
-              </span>
-              <div className="relative flex-1 md:flex-none">
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="w-full bg-white border border-black/5 text-[10px] font-bold uppercase tracking-widest text-zinc-700 py-3 px-6 rounded-full focus:ring-2 focus:ring-[var(--color-accent)] focus:outline-none cursor-pointer appearance-none pr-10 shadow-sm"
-                  style={{
-                    backgroundImage:
-                      'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2318181b%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'right 16px top 50%',
-                    backgroundSize: '10px auto',
-                  }}
-                >
-                  <option value="newest">In evidenza</option>
-                  <option value="price-asc">Prezzo crescente</option>
-                  <option value="price-desc">Prezzo decrescente</option>
-                </select>
+            <select
+              value={sortBy}
+              onChange={(event) => setSortBy(event.target.value)}
+              className="rounded-full border border-black/5 bg-white px-5 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-black/55 focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
+            >
+              <option value="featured">In evidenza</option>
+              <option value="name">Nome</option>
+              <option value="price-asc">Prezzo crescente</option>
+              <option value="price-desc">Prezzo decrescente</option>
+            </select>
+          </div>
+
+          {isLoading ? (
+            <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
+              {[1, 2, 3, 4, 5, 6].map((item) => (
+                <ProductSkeleton key={item} />
+              ))}
+            </div>
+          ) : filteredAndSortedProducts.length > 0 ? (
+            <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-12">
+              {filteredAndSortedProducts.map((product, index) => {
+                const isLarge = index === 0 && selectedCategory === 'Tutti';
+
+                return (
+                  <div
+                    key={product.id}
+                    className={isLarge ? 'md:col-span-2 lg:col-span-8' : 'lg:col-span-4'}
+                  >
+                    <ProductCard
+                      id={product.id}
+                      name={product.name}
+                      slug={product.slug}
+                      price={product.price}
+                      imageUrl={product.imageUrl}
+                      category={product.category}
+                      onAddToCart={() => handleAddToCart(product)}
+                      disableCart={usingShopDemo}
+                      isBestseller={product.isBestseller || (!usingShopDemo && isLarge)}
+                      badgeLabel={usingShopDemo ? 'In arrivo' : undefined}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="mt-12 rounded-[2rem] border border-black/5 bg-white p-10 text-center shadow-sm">
+              <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
+                Catalogo reale da inserire
+              </p>
+              <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-black/65">
+                Lo shop e pronto come struttura, ma non mostra prodotti acquistabili finche guide,
+                file, prezzi e flusso Stripe non sono verificati.
+              </p>
+              <Button to="/contatti" variant="outline" className="mt-8">
+                Scrivici per interesse
+                <ArrowRight size={16} />
+              </Button>
+            </div>
+          )}
+
+          <div className="mt-20 overflow-hidden rounded-[3rem] bg-[var(--color-ink)] p-8 text-white md:p-14">
+            <div className="grid gap-10 lg:grid-cols-[1fr_0.8fr] lg:items-center">
+              <div>
+                <span className="mb-5 block text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">
+                  Come nasceranno i prodotti
+                </span>
+                <h2 className="text-4xl font-serif md:text-6xl">
+                  Dal viaggio reale al formato utile.
+                </h2>
+                <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/68 md:text-lg">
+                  Dopo {BRAND_STATS.yearsOfTravel} anni di viaggi, il valore non e aggiungere file:
+                  e distillare decisioni, mappe, priorita e indirizzi in qualcosa che puoi usare in
+                  fretta.
+                </p>
+              </div>
+              <div className="rounded-[2rem] border border-white/10 bg-white/5 p-7">
+                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-accent)]/15">
+                  <Smartphone className="text-[var(--color-accent)]" size={24} />
+                </div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-white/45">
+                  Regola prodotto
+                </p>
+                <p className="mt-4 text-2xl font-serif leading-relaxed">
+                  Se non e utile da consultare mentre stai decidendo o viaggiando, non entra nello
+                  shop.
+                </p>
               </div>
             </div>
           </div>
 
-          {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <ProductSkeleton key={i} />
-              ))}
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 md:gap-12">
-              {filteredAndSortedProducts.length > 0 ? (
-                filteredAndSortedProducts.map((product, idx) => {
-                  // Editorial grid logic: some items are larger
-                  const isLarge = idx === 0 && selectedCategory === 'Tutti';
-                  return (
-                    <div
-                      key={product.id}
-                      className={`${isLarge ? 'md:col-span-2 lg:col-span-8' : 'lg:col-span-4'}`}
-                    >
-                      <ProductCard
-                        id={product.id}
-                        name={product.name}
-                        slug={product.slug}
-                        price={product.price}
-                        imageUrl={product.imageUrl}
-                        category={product.category}
-                        onAddToCart={() => handleAddToCart(product)}
-                        disableCart={usingShopDemo}
-                        isBestseller={
-                          (product as Product & { isBestseller?: boolean }).isBestseller || isLarge
-                        }
-                        badgeLabel={
-                          usingShopDemo && product.slug === DEMO_PRODUCT.slug
-                            ? 'In arrivo'
-                            : undefined
-                        }
-                      />
-                    </div>
-                  );
-                })
-              ) : products.length > 0 ? (
-                <div className="col-span-full py-20 text-center">
-                  <p className="text-sm uppercase tracking-widest font-bold text-black/30 mb-2">
-                    Nessun risultato
-                  </p>
-                  <p className="text-base font-normal text-black/65">
-                    Prova a cambiare categoria o a rimuovere i filtri attivi.
-                  </p>
-                </div>
-              ) : null}
-            </div>
-          )}
-
-          {!isLoading && products.length === 0 && (
-            <div className="mt-12 rounded-[2rem] border border-black/5 bg-white p-10 text-center shadow-sm">
-              <p className="text-[10px] uppercase tracking-[0.24em] font-bold text-accent">
-                Shop pronto, catalogo ancora da inserire
-              </p>
-              <p className="mx-auto mt-4 max-w-2xl text-base font-normal leading-relaxed text-black/70">
-                Questa sezione è già pronta per ospitare i tuoi contenuti premium reali. Quando
-                inserirai guide, itinerari, planner o raccolte curate, appariranno qui con la stessa
-                struttura.
-              </p>
-            </div>
-          )}
-
-          <div className="relative mt-40 overflow-hidden rounded-[3.5rem] bg-ink p-12 text-white shadow-2xl md:p-24">
-            <div className="absolute inset-0 bg-topo opacity-30" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(196,164,124,0.16),transparent_34%),radial-gradient(circle_at_bottom_left,rgba(255,255,255,0.08),transparent_24%)]" />
-
-            <div className="relative z-20 h-full flex flex-col justify-center px-6 md:px-12 lg:px-24">
-              <motion.div
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 1, delay: 0.5 }}
-                className="max-w-4xl"
-              >
-                <div className="flex items-center gap-6 mb-8">
-                  <div className="w-px h-12 bg-linear-to-b from-accent to-transparent"></div>
-                  <span className="font-script text-xl text-[var(--color-accent-warm)]">
-                    Filosofia Travelliniwithus
-                  </span>
-                </div>
-                <h2 className="text-5xl md:text-7xl font-serif mb-10 leading-[1.1]">
-                  Strumenti nati <br />
-                  <span className="italic text-white/50 font-light">dal movimento.</span>
-                </h2>
-                <p className="text-xl text-white/70 font-light leading-relaxed mb-12 max-w-xl">
-                  Non offriamo template statici, ma distillati di esperienza. Ogni guida e ogni
-                  planner è nato in viaggio, testato sul campo, pensato per aiutarti a partire
-                  davvero preparato.
-                </p>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                  <div className="p-8 rounded-3xl bg-[#1C1C1C] border border-white/8">
-                    <div className="w-12 h-12 bg-[var(--color-gold)]/10 rounded-2xl flex items-center justify-center mb-6">
-                      <Smartphone className="text-[var(--color-gold)]" size={24} />
-                    </div>
-                    <h4 className="font-serif text-xl mb-3 text-white">Digital First</h4>
-                    <p className="text-sm text-white/50 font-light leading-relaxed">
-                      Ottimizzati per lo smartphone. Consulta i tuoi itinerari mentre sei in treno,
-                      in aereo o cammini per la città.
-                    </p>
-                  </div>
-                  <div className="p-8 rounded-3xl bg-[#1C1C1C] border border-white/8 text-white">
-                    <div className="w-12 h-12 bg-[var(--color-gold)]/10 rounded-2xl flex items-center justify-center mb-6">
-                      <Sparkles className="text-accent" size={24} />
-                    </div>
-                    <h4 className="font-serif text-xl mb-3">Qualità Editoriale</h4>
-                    <p className="text-sm text-white/50 font-light leading-relaxed">
-                      Cura editoriale da magazine di viaggio e praticità da guida tecnica. Niente
-                      rumore, solo valore.
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, delay: 0.7 }}
-                className="lg:col-span-5 relative mt-12 lg:mt-0"
-              >
-                <div className="rounded-3xl border border-white/10 bg-[#1C1C1C] p-8 shadow-2xl">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-gold)]/80">
-                    Come nascono questi contenuti
-                  </span>
-                  <div className="mt-8 space-y-5">
-                    {[
-                      'Partiamo da un problema reale incontrato in viaggio, non da un format da riempire.',
-                      'Tagliamo tutto quello che non aiuta a decidere o muoversi meglio.',
-                      'Ogni prodotto deve essere leggibile da telefono, utile in fretta e facile da riaprire.',
-                    ].map((item) => (
-                      <div
-                        key={item}
-                        className="flex items-start gap-4 rounded-2xl border border-white/8 bg-white/5 p-5"
-                      >
-                        <div className="mt-1 h-2.5 w-2.5 rounded-full bg-[var(--color-gold)]" />
-                        <p className="text-sm font-light leading-relaxed text-white/72">{item}</p>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-8 rounded-2xl border border-[var(--color-gold)]/20 bg-[var(--color-gold)]/10 p-6">
-                    <p className="font-serif text-2xl leading-relaxed text-white">
-                      Lo shop deve sembrare una continuazione del progetto editoriale, non un
-                      reparto separato.
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
+          <div className="mt-20">
+            <Newsletter variant="business" source="shop_newsletter" />
           </div>
 
-          <div className="mt-32 bg-white rounded-3xl p-12 md:p-20 text-center border border-black/5">
-            <h2 className="text-3xl md:text-4xl font-serif mb-6">Non trovi quello che cerchi?</h2>
-            <p className="text-lg text-black/70 font-light max-w-2xl mx-auto mb-10">
-              Scrivici direttamente — rispondiamo a ogni messaggio. Se hai una domanda specifica su
-              un itinerario o vuoi capire quale contenuto fa per te, siamo qui.
-            </p>
-            <Button to="/contatti" variant="outline">
-              Scrivici un messaggio
-              <ArrowRight size={18} />
-            </Button>
+          <div className="mt-16">
+            <FinalCtaSection intent="business" />
           </div>
         </Section>
-
-        <Newsletter variant="white" />
       </>
     </PageLayout>
   );

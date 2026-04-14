@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, X, MapPin, BookOpen, Compass, ShoppingBag, Mail } from 'lucide-react';
+import { Search, X, MapPin, BookOpen, Compass, Mail } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { LucideIcon } from 'lucide-react';
 import Skeleton from './Skeleton';
@@ -38,11 +38,18 @@ const STATIC_PAGE_RESULTS: SearchResult[] = [
     icon: Compass,
   },
   {
+    id: 'page-guide',
+    title: 'Guide',
+    category: 'Pagina',
+    link: '/guide',
+    icon: BookOpen,
+  },
+  {
     id: 'page-risorse',
     title: 'Risorse',
     category: 'Pagina',
     link: '/risorse',
-    icon: ShoppingBag,
+    icon: BookOpen,
   },
   {
     id: 'page-collaborazioni',
@@ -63,7 +70,7 @@ const STATIC_PAGE_RESULTS: SearchResult[] = [
     title: 'Media Kit',
     category: 'Pagina',
     link: '/media-kit',
-    icon: ShoppingBag,
+    icon: BookOpen,
   },
   {
     id: 'page-contatti',
@@ -227,6 +234,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   <div className="mt-6 flex flex-wrap justify-center gap-2">
                     <button type="button" className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10" onClick={() => setQuery('Destinazioni')}>Destinazioni</button>
                     <button type="button" className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10" onClick={() => setQuery('Esperienze')}>Esperienze</button>
+                    <button type="button" className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10" onClick={() => setQuery('Guide')}>Guide</button>
                     <button type="button" className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10" onClick={() => setQuery('Risorse')}>Risorse</button>
                     <button type="button" className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10" onClick={() => setQuery('Contatti')}>Contatti</button>
                     <button type="button" className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10" onClick={() => setQuery('Collaborazioni')}>Collaborazioni</button>

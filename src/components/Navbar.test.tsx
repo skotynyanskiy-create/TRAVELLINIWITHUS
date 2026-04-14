@@ -12,6 +12,6 @@ describe('Navbar Component', () => {
     const { getAllByText } = render(<Navbar />);
     expect(getAllByText(/Destinazioni/i).length).toBeGreaterThan(0);
     expect(getAllByText(/Esperienze/i).length).toBeGreaterThan(0);
-    expect(getAllByText(/Shop/i).length).toBeGreaterThan(0);
+    expect(getAllByText(/Guide/i).length).toBeGreaterThan(0);
   });
 });

@@ -1,0 +1,53 @@
+{
+  "hero.headline": "Posti particolari che valgono davvero",
+  "hero.sub": "Guide pratiche scritte da chi ha vissuto il viaggio. Niente filtri, niente finto.",
+  "hero.cta.primary": "Scopri destinazioni",
+  "hero.cta.secondary": "Ultime storie",
+
+  "manifesto.verified": "Verificato",
+  "manifesto.visited": "Visitato davvero",
+  "manifesto.authored": "Scritto da noi",
+  "manifesto.noSponsor": "Senza sponsor mascherati",
+  "manifesto.couple": "Una coppia",
+  "manifesto.years": "5 anni di ricerca",
+
+  "nav.discover": "Scopri",
+  "nav.travel": "Travel",
+  "nav.shop": "Shop",
+  "nav.club": "Club",
+  "nav.contacts": "Contatti",
+  "nav.search": "Cerca",
+
+  "footer.tagline": "Posti particolari, vissuti davvero.",
+  "footer.rights": "© {year} Travelliniwithus — Tutti i diritti riservati",
+
+  "newsletter.title": "I posti più belli direttamente nella tua inbox",
+  "newsletter.copy": "Una volta a settimana. Niente marketing, niente rumore. Solo posti che meritano.",
+  "newsletter.cta": "Iscriviti gratis",
+  "newsletter.placeholder": "La tua email",
+  "newsletter.success": "Controlla la tua casella per confermare l'iscrizione.",
+  "newsletter.error": "Qualcosa è andato storto. Riprova tra poco.",
+
+  "collab.cta.headline": "Lavoriamo con brand che amano i posti belli",
+  "collab.cta.button": "Scopri come collaborare",
+
+  "consent.title": "Cookie e privacy",
+  "consent.body": "Usiamo cookie tecnici necessari al funzionamento del sito e, con il tuo consenso, cookie analitici e di marketing per migliorare l'esperienza.",
+  "consent.acceptAll": "Accetta tutti",
+  "consent.rejectAll": "Rifiuta",
+  "consent.customize": "Personalizza",
+  "consent.save": "Salva preferenze",
+  "consent.category.necessary": "Necessari",
+  "consent.category.analytics": "Analitici",
+  "consent.category.marketing": "Marketing",
+
+  "article.relatedSemantic": "Trova posti come questo",
+  "article.share": "Condividi",
+  "article.readingTime": "{minutes} min di lettura",
+
+  "contact.success": "Messaggio ricevuto. Ti rispondiamo entro 48 ore.",
+  "contact.error": "Invio non riuscito. Riprova tra poco.",
+
+  "media.success": "Richiesta ricevuta. Controlla la tua casella per il media kit.",
+  "media.error": "Invio non riuscito. Riprova tra poco."
+}

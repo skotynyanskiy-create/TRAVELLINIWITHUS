@@ -1,10 +1,11 @@
-import { lazy, Suspense } from 'react';
+import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion, useScroll, useSpring } from 'motion/react';
 import Navbar from './Navbar';
 import Footer from './Footer';
-
-const CartDrawer = lazy(() => import('./CartDrawer'));
+import ConsentBanner from './ConsentBanner';
+import { initAnalytics, trackPageview } from '../services/analytics';
+import { initErrorTracking } from '../lib/errorTracking';
 
 export default function Layout() {
   const location = useLocation();
@@ -14,6 +15,15 @@ export default function Layout() {
     damping: 30,
     restDelta: 0.001
   });
+
+  useEffect(() => {
+    initErrorTracking();
+    initAnalytics();
+  }, []);
+
+  useEffect(() => {
+    trackPageview(location.pathname + location.search);
+  }, [location.pathname, location.search]);
 
   return (
     <div className="min-h-screen bg-[var(--color-sand)] text-[var(--color-ink)] font-sans selection:bg-[var(--color-accent)] selection:text-white flex flex-col">
@@ -28,9 +38,6 @@ export default function Layout() {
         style={{ scaleX }}
       />
       <Navbar />
-      <Suspense fallback={null}>
-        <CartDrawer />
-      </Suspense>
       <main id="main-content" className="flex-grow">
         <AnimatePresence mode="popLayout">
           <motion.div
@@ -45,6 +52,7 @@ export default function Layout() {
         </AnimatePresence>
       </main>
       <Footer />
+      <ConsentBanner />
     </div>
   );
 }

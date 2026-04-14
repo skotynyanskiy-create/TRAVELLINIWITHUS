@@ -47,7 +47,7 @@ export default function Club() {
   if (!user) {
     return (
       <div className="min-h-screen bg-[var(--color-sand)] pt-32 pb-24 px-4 flex flex-col justify-center items-center">
-        <SEO title="The Travel Club" description="Accedi al club esclusivo Travelliniwithus" />
+        <SEO title="The Travel Club" description="Accedi al club esclusivo Travelliniwithus" noindex />
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -111,6 +111,7 @@ export default function Club() {
       <SEO
         title="La mia Dashboard | Travel Club"
         description="La tua dashboard personale Travelliniwithus"
+        noindex
       />
 
       <div className="max-w-[1200px] mx-auto px-4 md:px-8 pt-8">

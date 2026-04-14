@@ -7,8 +7,18 @@ import Stripe from 'stripe';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
+import {
+  sendEmail,
+  renderContactNotification,
+  renderContactAutoReply,
+  renderMediaKitNotification,
+  renderMediaKitAutoReply,
+} from './src/lib/email';
 
 dotenv.config();
+
+const OWNER_EMAIL = process.env.MAIL_TO_OWNER || 'hello@travelliniwithus.it';
+const MEDIA_KIT_URL = process.env.MEDIA_KIT_URL || `${process.env.APP_URL || 'https://travelliniwithus.it'}/media-kit.pdf`;
 
 const ssrCache = new NodeCache({ stdTTL: 300, checkperiod: 600 });
 
@@ -967,9 +977,11 @@ async function startServer() {
     }
 
     const brevoApiKey = process.env.BREVO_API_KEY;
+    const brevoListIdRaw = process.env.BREVO_LIST_ID;
+    const brevoListId = brevoListIdRaw ? Number(brevoListIdRaw) : null;
     let savedSubscription = false;
 
-    if (brevoApiKey) {
+    if (brevoApiKey && Number.isInteger(brevoListId) && brevoListId && brevoListId > 0) {
       try {
         const response = await fetch('https://api.brevo.com/v3/contacts', {
           method: 'POST',
@@ -979,7 +991,7 @@ async function startServer() {
           },
           body: JSON.stringify({
             email,
-            listIds: [2],
+            listIds: [brevoListId],
             updateEnabled: true,
             attributes: { SOURCE: source, SIGNUP_DATE: new Date().toISOString().split('T')[0] },
           }),
@@ -994,6 +1006,11 @@ async function startServer() {
       } catch (err) {
         console.error('Brevo request failed:', err);
       }
+    } else if (brevoApiKey && process.env.NODE_ENV !== 'production') {
+      console.warn(
+        '[newsletter] BREVO_API_KEY presente ma BREVO_LIST_ID mancante o non valido. ' +
+          'Newsletter in save-lead-only mode.',
+      );
     }
 
     try {
@@ -1035,20 +1052,38 @@ async function startServer() {
       return;
     }
 
+    const lead = {
+      name: name.trim(),
+      email: email.trim(),
+      topic: topic.trim(),
+      message: message.trim(),
+    };
+
     try {
       await saveLeadBackup({
         type: 'contact',
         source: 'contact-form',
-        name: name.trim(),
-        email: email.trim(),
-        topic: topic.trim(),
-        message: message.trim(),
+        ...lead,
       });
-      res.json({ success: true });
     } catch (error) {
       console.error('Contact lead save failed:', error);
       res.status(500).json({ error: 'Impossibile salvare la richiesta.' });
+      return;
     }
+
+    const notification = renderContactNotification(lead);
+    const autoReply = renderContactAutoReply({ name: lead.name });
+
+    void Promise.allSettled([
+      sendEmail({ to: OWNER_EMAIL, replyTo: lead.email, ...notification }),
+      sendEmail({ to: lead.email, ...autoReply }),
+    ]).then((results) => {
+      results.forEach((r) => {
+        if (r.status === 'rejected') console.error('Contact email failed:', r.reason);
+      });
+    });
+
+    res.json({ success: true });
   });
 
   app.post('/api/media-kit-lead', async (req, res) => {
@@ -1070,21 +1105,46 @@ async function startServer() {
       return;
     }
 
+    const lead = {
+      email: email.trim(),
+      company: company.trim(),
+      website: website?.trim(),
+      focus: topic.trim(),
+      brief: message.trim(),
+    };
+
     try {
       await saveLeadBackup({
         type: 'media-kit',
         source: 'media-kit-page',
-        email: email.trim(),
-        company: company.trim(),
-        website: website?.trim(),
-        topic: topic.trim(),
-        message: message.trim(),
+        email: lead.email,
+        company: lead.company,
+        website: lead.website,
+        topic: lead.focus,
+        message: lead.brief,
       });
-      res.json({ success: true });
     } catch (error) {
       console.error('Media kit lead save failed:', error);
       res.status(500).json({ error: 'Impossibile salvare la richiesta.' });
+      return;
     }
+
+    const notification = renderMediaKitNotification(lead);
+    const autoReply = renderMediaKitAutoReply({
+      company: lead.company,
+      mediaKitUrl: MEDIA_KIT_URL,
+    });
+
+    void Promise.allSettled([
+      sendEmail({ to: OWNER_EMAIL, replyTo: lead.email, ...notification }),
+      sendEmail({ to: lead.email, ...autoReply }),
+    ]).then((results) => {
+      results.forEach((r) => {
+        if (r.status === 'rejected') console.error('Media kit email failed:', r.reason);
+      });
+    });
+
+    res.json({ success: true });
   });
 
   app.post('/api/create-checkout-session', async (req, res) => {

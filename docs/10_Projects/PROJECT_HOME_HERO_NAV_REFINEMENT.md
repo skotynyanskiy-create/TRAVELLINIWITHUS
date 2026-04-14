@@ -67,6 +67,14 @@ La homepage precedente aveva troppe sezioni, statistiche duplicate e tre voci di
 - eseguire `npm run build`
 - eseguire `npm run audit:ui`
 
+## Snapshot 2026-04-14
+
+- hero home resa piu netta sulla promessa: posti particolari, informazioni utili, prova reale
+- aggiunto sotto-hero con tre traiettorie chiare: scoperta, strumenti, collaborazioni
+- `CoupleIntro` spostata ancora di piu sul metodo e meno sulla semplice biografia
+- newsletter home resa piu desiderabile e meno marketing-driven nel tono
+- CTA finale B2B della home allineata al nuovo funnel `Collaborazioni` -> `Media Kit`
+
 ## Architettura homepage definitiva
 
 Ordine sezioni:

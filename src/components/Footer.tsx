@@ -128,22 +128,6 @@ export default function Footer() {
                     {navigation.resourcesLabel}
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    to="/shop"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
-                    Shop Premium
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/mappa"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
-                    Mappa Interattiva
-                  </Link>
-                </li>
               </ul>
             </div>
 

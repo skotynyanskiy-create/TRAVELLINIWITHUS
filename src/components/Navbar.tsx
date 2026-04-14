@@ -11,7 +11,6 @@ import {
   MessageCircle,
   Search,
   ShieldCheck,
-  ShoppingCart,
   User as UserIcon,
   X,
 } from 'lucide-react';
@@ -24,7 +23,6 @@ import {
 } from '../config/contentTaxonomy';
 import { siteContentDefaults } from '../config/siteContent';
 import { useAuth } from '../context/AuthContext';
-import { useCart } from '../context/CartContext';
 import { useFavorites } from '../context/FavoritesContext';
 import { useSiteContent } from '../hooks/useSiteContent';
 
@@ -58,7 +56,6 @@ export default function Navbar() {
   const location = useLocation();
   const { favorites } = useFavorites();
   const { user, isAdmin, signIn, signOut } = useAuth();
-  const { items: cartItems, setIsCartOpen } = useCart();
   const { data: navigationContent } = useSiteContent('navigation');
   const navigation = navigationContent ?? siteContentDefaults.navigation;
 
@@ -97,8 +94,6 @@ export default function Navbar() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
-
   const destinationLinks = useMemo(
     () =>
       DESTINATION_GROUPS.map((group) => ({
@@ -129,6 +124,11 @@ export default function Navbar() {
         href: '/esperienze',
         links: [{ name: 'Tutte le esperienze', href: '/esperienze' }, ...experienceLinks],
       },
+      {
+        label: 'Guide',
+        href: '/guide',
+        links: [{ name: 'Tutte le guide', href: '/guide' }],
+      },
     ],
     [destinationLinks, experienceLinks]
   );
@@ -157,7 +157,11 @@ export default function Navbar() {
 
   const isItemActive = (item: NavItem) => {
     if (item.name === 'Esplora') {
-      return location.pathname === '/destinazioni' || location.pathname === '/esperienze';
+      return (
+        location.pathname === '/destinazioni' ||
+        location.pathname === '/esperienze' ||
+        location.pathname === '/guide'
+      );
     }
 
     if (item.href && item.href !== '#' && location.pathname === item.href) {
@@ -238,12 +242,20 @@ export default function Navbar() {
                   <div className="invisible absolute top-full left-1/2 -translate-x-1/2 pt-6 opacity-0 transition-all duration-300 group-hover:visible group-hover:opacity-100">
                     <div
                       className={`relative overflow-hidden rounded-3xl border border-[var(--color-ink)]/5 bg-[var(--color-surface)] py-4 shadow-2xl ${
-                        item.subGroups ? 'w-[34rem]' : 'w-60'
+                        item.subGroups
+                          ? item.subGroups.length >= 3
+                            ? 'w-[46rem]'
+                            : 'w-[34rem]'
+                          : 'w-60'
                       }`}
                     >
                       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full bg-[var(--color-accent)]" />
                       {item.subGroups ? (
-                        <div className="grid grid-cols-2 gap-3 px-4 py-2">
+                        <div
+                          className={`grid gap-3 px-4 py-2 ${
+                            item.subGroups.length >= 3 ? 'grid-cols-3' : 'grid-cols-2'
+                          }`}
+                        >
                           {item.subGroups.map((group) => (
                             <div key={group.label}>
                               <Link
@@ -322,19 +334,6 @@ export default function Navbar() {
               )}
             </Link>
 
-            {cartCount > 0 && (
-              <button
-                onClick={() => setIsCartOpen(true)}
-                className="relative transition-colors hover:text-[var(--color-accent)]"
-                aria-label="Carrello"
-              >
-                <ShoppingCart size={18} strokeWidth={1.5} />
-                <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[9px] font-bold text-white">
-                  {cartCount}
-                </span>
-              </button>
-            )}
-
             <div className="relative">
               {user ? (
                 <button
@@ -377,20 +376,6 @@ export default function Navbar() {
                       </p>
                       <p className="truncate text-[9px] text-zinc-500">{user.email}</p>
                     </div>
-                    <Link
-                      to="/club"
-                      onClick={() => setIsUserMenuOpen(false)}
-                      className="flex w-full items-center gap-2 px-4 py-2 text-left text-[10px] uppercase tracking-wider text-[var(--color-ink)] transition-colors hover:bg-zinc-50"
-                    >
-                      <UserIcon size={12} /> The Club
-                    </Link>
-                    <Link
-                      to="/account/acquisti"
-                      onClick={() => setIsUserMenuOpen(false)}
-                      className="flex w-full items-center gap-2 px-4 py-2 text-left text-[10px] uppercase tracking-wider text-[var(--color-ink)] transition-colors hover:bg-zinc-50"
-                    >
-                      <ShoppingCart size={12} /> I miei acquisti
-                    </Link>
                     {isAdmin && (
                       <Link
                         to="/admin"
@@ -626,21 +611,6 @@ export default function Navbar() {
                     >
                       <Mail size={24} />
                     </a>
-                    {cartCount > 0 && (
-                      <button
-                        onClick={() => {
-                          setIsCartOpen(true);
-                          setIsMobileMenuOpen(false);
-                        }}
-                        className="relative text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
-                        aria-label="Carrello"
-                      >
-                        <ShoppingCart size={24} />
-                        <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-accent)] text-[10px] font-bold text-white">
-                          {cartCount}
-                        </span>
-                      </button>
-                    )}
                   </div>
                   <div>
                     {user ? (

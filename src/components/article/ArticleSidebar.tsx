@@ -1,5 +1,6 @@
 import ShareButtons from './ShareButtons';
 import TableOfContents from './TableOfContents';
+import Newsletter from '../Newsletter';
 import type { TocItem } from './types';
 
 interface ArticleSidebarProps {
@@ -37,19 +38,12 @@ export default function ArticleSidebar({
         </div>
       </div>
 
-      {/* Newsletter Sidebar Widget */}
-      <div className="bg-ink p-10 rounded-4xl text-white overflow-hidden relative shadow-lg">
-        <div className="absolute top-0 right-0 w-48 h-48 bg-accent/20 rounded-full blur-3xl -mr-16 -mt-16" />
-        <h4 className="font-serif text-2xl mb-4 relative z-10 text-accent">Travel Insights</h4>
-        <p className="text-white/80 text-sm font-light mb-8 relative z-10 leading-relaxed">
-          Ricevi idee viaggio, guide e risorse premium per organizzare al meglio le tue prossime partenze.
+      <div className="overflow-hidden rounded-[2rem] bg-[var(--color-ink)] p-8 text-white shadow-lg">
+        <h4 className="mb-3 font-serif text-2xl text-[var(--color-accent)]">Travel insights</h4>
+        <p className="mb-6 text-sm font-light leading-relaxed text-white/70">
+          Ricevi guide pratiche e posti da salvare quando pubblichiamo contenuti davvero utili.
         </p>
-        <button
-          onClick={() => document.getElementById('newsletter')?.scrollIntoView({ behavior: 'smooth' })}
-          className="relative z-10 w-full py-4 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-white font-bold text-xs uppercase tracking-widest hover:bg-accent hover:border-accent transition-all"
-        >
-          Iscriviti Ora
-        </button>
+        <Newsletter variant="compact" source="article_sidebar" />
       </div>
     </div>
   );

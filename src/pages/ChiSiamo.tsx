@@ -1,49 +1,145 @@
 import { motion } from 'motion/react';
-import { Instagram, Mail, Camera, Compass, NotebookPen, MessageCircle } from 'lucide-react';
-import PageLayout from '../components/PageLayout';
-import OptimizedImage from '../components/OptimizedImage';
-import Newsletter from '../components/Newsletter';
+import {
+  Camera,
+  Compass,
+  Instagram,
+  Mail,
+  MessageCircle,
+  NotebookPen,
+  ShieldCheck,
+} from 'lucide-react';
 import Button from '../components/Button';
+import JsonLd from '../components/JsonLd';
+import Newsletter from '../components/Newsletter';
+import OptimizedImage from '../components/OptimizedImage';
+import PageLayout from '../components/PageLayout';
 import Section from '../components/Section';
 import SEO from '../components/SEO';
-import JsonLd from '../components/JsonLd';
-import { CONTACTS, BRAND_STATS, SITE_URL } from '../config/site';
+import { BRAND_STATS, CONTACTS, SITE_URL } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 
+const EDITORIAL_GUARDRAILS = [
+  'Se un posto funziona solo in foto e non nella vita reale, non ci interessa spingerlo.',
+  'Se una collaborazione ci chiede di sembrare entusiasti a prescindere, non e il progetto giusto per noi.',
+  'Se un consiglio non aiuta davvero chi legge a decidere meglio, preferiamo non pubblicarlo.',
+];
+
+const TIMELINE = [
+  {
+    year: '2016',
+    title: 'Il primo viaggio che cambia il ritmo',
+    text: 'Da li in poi i viaggi smettono di essere solo pause e diventano un modo stabile di guardare i luoghi.',
+  },
+  {
+    year: '2018',
+    title: 'Nasce Travelliniwithus',
+    text: 'Il progetto parte dai social e da un istinto semplice: consigliare solo quello che vale davvero.',
+  },
+  {
+    year: '2020',
+    title: 'Metodo prima del volume',
+    text: 'Il progetto prende una direzione piu precisa: meno lista, piu esperienza diretta, piu dettagli utili.',
+  },
+  {
+    year: '2023',
+    title: 'Arrivano le prime partnership serie',
+    text: 'Hotel, brand e territori iniziano a vedere valore in un racconto piu credibile e meno da brochure.',
+  },
+  {
+    year: '2026',
+    title: 'Nuova base editoriale',
+    text: 'Il sito diventa la casa del progetto: discovery, guide, strumenti e collaborazioni finalmente coerenti.',
+  },
+];
+
 export default function ChiSiamo() {
   const { data: content } = useSiteContent('about');
-  const pageContent = content ?? siteContentDefaults.about;
+  const pageContent = {
+    ...siteContentDefaults.about,
+    ...content,
+    eyebrow: 'Rodrigo, Betta e il metodo Travelliniwithus',
+    heroTitleMain: 'Come scegliamo',
+    heroTitleAccent: 'i posti che consigliamo',
+    introParagraphs: [
+      'Siamo Rodrigo e Betta. Travelliniwithus nasce dal desiderio di consigliare meno posti, ma consigliarli meglio.',
+      'Il progetto tiene insieme sguardo personale, immagini, ricerca e dettagli pratici: serve a chi vuole scoprire luoghi con piu criterio, non a chi cerca la lista piu lunga.',
+      'Ogni destinazione, soggiorno o esperienza passa da una domanda semplice: aiuterebbe davvero qualcuno a scegliere meglio? Se la risposta e no, non entra qui.',
+    ],
+    primaryCtaLabel: 'Scopri come collaborare',
+    primaryCtaLink: '/collaborazioni',
+    quoteText: 'Non ci interessa mostrare tutto. Ci interessa consigliare bene.',
+    quoteAuthor: 'Rodrigo & Betta',
+    focusTitle: 'Perche fidarsi',
+    focusSubtitle: 'Metodo editoriale',
+    focusAreas: [
+      {
+        title: 'Esperienza diretta',
+        text: 'Ogni luogo passa dalla prova reale: atmosfera, zona, logistica e dettagli vengono filtrati dal tempo sul posto, non da una lista trovata online.',
+      },
+      {
+        title: 'Liberta editoriale',
+        text: 'Quando collaboriamo, lo facciamo in modo dichiarato e senza rinunciare al nostro modo di raccontare. Altrimenti preferiamo non farlo.',
+      },
+      {
+        title: 'Immagini e dettagli credibili',
+        text: 'Le foto devono aiutare a capire il luogo, non solo a renderlo desiderabile. Per questo il racconto resta sempre legato alla realta del posto.',
+      },
+    ],
+    principlesTitle: 'Quello che difendiamo',
+    principlesSubtitle: 'Le nostre regole',
+    principles: [
+      {
+        title: 'Utilita prima del volume',
+        text: 'Ogni contenuto deve aiutare chi legge a decidere meglio, non solo a restare piu tempo sul sito.',
+      },
+      {
+        title: 'Selezione prima della lista',
+        text: 'Non cerchiamo di coprire tutto. Selezioniamo luoghi, esperienze e strumenti che hanno davvero qualcosa da lasciare.',
+      },
+      {
+        title: 'Credibilita prima della scena',
+        text: 'Preferiamo un racconto piu sobrio ma vero a una pagina bella che promette piu di quello che esiste.',
+      },
+    ],
+    audienceTitle: 'Per chi e costruito questo progetto',
+    audienceDescription:
+      'Il nostro contenuto non e per chi vuole tutto e subito. E per chi apprezza scelta, contesto e un punto di vista riconoscibile.',
+    audienceItems: [
+      'Viaggiatori che vogliono uscire dalle liste copia-incolla e capire se un luogo merita davvero.',
+      'Persone che cercano strumenti, guide e dettagli pratici che abbiano un uso concreto.',
+      'Partner che capiscono il valore di un racconto con criterio e non di una vetrina generica.',
+    ],
+  };
   const focusIcons = [Compass, NotebookPen, Camera];
 
   return (
     <PageLayout>
       <SEO
         title="Chi Siamo"
-        description="Scopri chi sono Rodrigo e Betta, il progetto Travelliniwithus e il nostro modo di raccontare posti particolari, esperienze memorabili e consigli utili."
+        description="Chi sono Rodrigo e Betta, come lavorano e perche Travelliniwithus consiglia solo posti particolari raccontati con criterio."
       />
-      <JsonLd data={{
-        '@context': 'https://schema.org',
-        '@type': 'Organization',
-        name: 'Travelliniwithus',
-        url: SITE_URL,
-        description: 'Posti particolari, esperienze memorabili e consigli utili per chi vuole scoprire, salvare e vivere meglio ogni viaggio.',
-        founders: [
-          { '@type': 'Person', name: 'Gaetano Rodrigo' },
-          { '@type': 'Person', name: 'Betta' },
-        ],
-        sameAs: [
-          CONTACTS.instagramUrl,
-          CONTACTS.tiktokUrl,
-          CONTACTS.facebookUrl,
-        ],
-      }} />
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'Organization',
+          name: 'Travelliniwithus',
+          url: SITE_URL,
+          description:
+            'Posti particolari, esperienze memorabili e consigli utili per chi vuole scoprire, salvare e vivere meglio ogni viaggio.',
+          founders: [
+            { '@type': 'Person', name: 'Gaetano Rodrigo' },
+            { '@type': 'Person', name: 'Betta' },
+          ],
+          sameAs: [CONTACTS.instagramUrl, CONTACTS.tiktokUrl, CONTACTS.facebookUrl],
+        }}
+      />
 
       <Section className="pt-8">
         <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
-          <div className="order-2 flex flex-col justify-center lg:order-1">
+          <div className="order-1 flex flex-col justify-center lg:order-1">
             <div className="mb-6 flex items-center gap-4">
-              <div className="h-[1px] w-12 bg-[var(--color-accent)]"></div>
+              <div className="h-px w-12 bg-[var(--color-accent)]" />
               <span className="text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)]">
                 {pageContent.eyebrow}
               </span>
@@ -51,23 +147,46 @@ export default function ChiSiamo() {
 
             <div className="relative mb-8 inline-block">
               <h1 className="text-display-1">
-                Posti particolari <br />
-                <span className="italic text-black/60">+ 10 anni di viaggi</span>
+                {pageContent.heroTitleMain}
+                <br />
+                <span className="italic text-black/60">{pageContent.heroTitleAccent}</span>
               </h1>
               <motion.span
                 initial={{ opacity: 0, rotate: -10, scale: 0.8 }}
-                animate={{ opacity: 1, rotate: -5, scale: 1 }}
-                transition={{ delay: 1.1, duration: 0.8 }}
+                animate={{ opacity: 1, rotate: -4, scale: 1 }}
+                transition={{ delay: 0.9, duration: 0.7 }}
                 aria-hidden="true"
-                className="absolute -bottom-4 right-8 hidden font-script text-2xl text-[var(--color-accent)] opacity-80 sm:block md:text-3xl"
+                className="absolute -bottom-4 right-6 hidden font-script text-2xl text-[var(--color-accent)] opacity-80 md:block"
               >
-                = questa guida
+                metodo prima del rumore
               </motion.span>
             </div>
 
-            <div className="mb-10 space-y-6 text-lg font-light leading-relaxed text-black/70">
-              <p>Siamo Gaetano Rodrigo e Betta. Dopo {BRAND_STATS.yearsOfTravel} anni di viaggi in coppia — weekend improvvisati, road trip on a budget, food experience cercate nei vicoli — abbiamo smesso di aspettare la guida perfetta e abbiamo iniziato a scriverla noi.</p>
-              <p>Il nostro niche è semplice: viaggiare bene spendendo meno, mangiare dove mangiano i locali, scoprire posti che non finiscono su tutti i feed uguale. Con {BRAND_STATS.instagramFollowers} follower su Instagram e {BRAND_STATS.tiktokFollowers} su TikTok, la Travellini Community è la nostra comunità vera.</p>
+            <div className="mb-10 space-y-5 text-lg leading-relaxed text-black/70">
+              {pageContent.introParagraphs.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </div>
+
+            <div className="mb-8 grid grid-cols-3 gap-4 sm:max-w-xl">
+              <div className="rounded-2xl border border-black/5 bg-white p-5 text-center shadow-sm">
+                <div className="text-3xl font-serif text-[var(--color-ink)]">{BRAND_STATS.yearsOfTravel}</div>
+                <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-black/42">
+                  anni di viaggi
+                </div>
+              </div>
+              <div className="rounded-2xl border border-black/5 bg-white p-5 text-center shadow-sm">
+                <div className="text-3xl font-serif text-[var(--color-ink)]">{BRAND_STATS.instagramFollowers}</div>
+                <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-black/42">
+                  community IG
+                </div>
+              </div>
+              <div className="rounded-2xl border border-black/5 bg-white p-5 text-center shadow-sm">
+                <div className="text-3xl font-serif text-[var(--color-ink)]">{BRAND_STATS.tiktokFollowers}</div>
+                <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-black/42">
+                  community TikTok
+                </div>
+              </div>
             </div>
 
             <div className="flex flex-wrap items-center gap-6">
@@ -97,17 +216,6 @@ export default function ChiSiamo() {
                 >
                   <MessageCircle size={20} />
                 </a>
-                <a
-                  href={CONTACTS.tiktokUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex h-12 w-12 items-center justify-center rounded-full border border-black/10 transition-all hover:border-[var(--color-gold)] hover:bg-[var(--color-gold)] hover:text-white"
-                  aria-label="TikTok Travelliniwithus"
-                >
-                  <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current" aria-hidden="true">
-                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.2 8.2 0 0 0 4.77 1.52V6.78a4.85 4.85 0 0 1-1-.09z" />
-                  </svg>
-                </a>
               </div>
               <Button to={pageContent.primaryCtaLink} variant="primary" size="lg">
                 {pageContent.primaryCtaLabel}
@@ -115,18 +223,21 @@ export default function ChiSiamo() {
             </div>
           </div>
 
-          <div className="relative order-1 lg:order-2">
-            <div className="aspect-[4/5] overflow-hidden rounded-[var(--radius-2xl)] shadow-[var(--shadow-premium)] transition-transform duration-700 hover:rotate-0 lg:rotate-2">
-              {/* TODO(@travelliniwithus): PLACEHOLDER — servono foto hero about — coppia in viaggio */}
+          <div className="relative order-2 lg:order-2">
+            <div className="aspect-[4/5] overflow-hidden rounded-[var(--radius-2xl)] shadow-[var(--shadow-premium)] transition-transform duration-700 lg:rotate-2 lg:hover:rotate-0">
               <OptimizedImage
-                src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1400&auto=format&fit=crop"
-                alt="Visuale editoriale del progetto Travelliniwithus"
+                src="https://images.unsplash.com/photo-1527631746610-bca00a040d60?q=80&w=1400&auto=format&fit=crop"
+                alt="Rodrigo e Betta in viaggio"
                 className="block h-full w-full object-cover"
               />
             </div>
             <div className="z-10 hidden max-w-xs rounded-[var(--radius-xl)] border border-[var(--color-ink)]/5 bg-[var(--color-surface)] p-8 shadow-[var(--shadow-premium)] md:absolute md:-bottom-8 md:-left-8 md:block">
-              <p className="mb-2 text-xl font-serif italic text-[var(--color-accent)]">"{pageContent.quoteText}"</p>
-              <p className="text-xs font-bold uppercase tracking-widest text-black/40">{pageContent.quoteAuthor}</p>
+              <p className="mb-2 text-xl font-serif italic text-[var(--color-accent)]">
+                "{pageContent.quoteText}"
+              </p>
+              <p className="text-xs font-bold uppercase tracking-widest text-black/40">
+                {pageContent.quoteAuthor}
+              </p>
             </div>
           </div>
         </div>
@@ -137,18 +248,15 @@ export default function ChiSiamo() {
           {pageContent.focusAreas.map((item, index) => {
             const Icon = focusIcons[index] ?? Compass;
             return (
-            <div
-              key={item.title}
-              className="card-info flex flex-col gap-6 md:flex-row md:items-start"
-            >
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[var(--radius-xl)] bg-white text-[var(--color-accent)] shadow-sm">
-                <Icon size={28} />
+              <div key={item.title} className="card-info flex flex-col gap-6 md:flex-row md:items-start">
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[var(--radius-xl)] bg-white text-[var(--color-accent)] shadow-sm">
+                  <Icon size={28} />
+                </div>
+                <div>
+                  <h3 className="mb-3 text-2xl font-serif">{item.title}</h3>
+                  <p className="leading-relaxed text-black/70">{item.text}</p>
+                </div>
               </div>
-              <div>
-                <h3 className="mb-3 text-2xl font-serif">{item.title}</h3>
-                <p className="font-normal leading-relaxed text-black/70">{item.text}</p>
-              </div>
-            </div>
             );
           })}
         </div>
@@ -165,55 +273,80 @@ export default function ChiSiamo() {
                 {String(index + 1).padStart(2, '0')}
               </span>
               <h3 className="relative z-10 mb-4 text-2xl font-serif">{item.title}</h3>
-              <p className="relative z-10 font-normal leading-relaxed text-black/70">{item.text}</p>
+              <p className="relative z-10 leading-relaxed text-black/70">{item.text}</p>
             </div>
           ))}
         </div>
       </Section>
 
-      <Section className="rounded-[3rem] bg-[var(--color-ink)] p-12 text-white md:p-20">
-        <div className="mx-auto max-w-4xl text-center">
-          <h2 className="mb-6 text-4xl font-serif md:text-5xl">{pageContent.audienceTitle}</h2>
-          <p className="mx-auto mb-12 max-w-2xl font-normal leading-relaxed text-white/85">
-            {pageContent.audienceDescription}
-          </p>
+      <Section className="rounded-[3rem] bg-[var(--color-sand)] p-12 md:p-20">
+        <div className="mx-auto max-w-4xl">
+          <div className="mb-10 text-center">
+            <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-[var(--color-accent)] shadow-sm">
+              <ShieldCheck size={24} />
+            </div>
+            <h2 className="mb-4 text-4xl font-serif">Quello che difendiamo ogni volta che pubblichiamo</h2>
+            <p className="mx-auto max-w-2xl text-lg leading-relaxed text-black/70">
+              Non ci interessa sembrare premium per lessico. Ci interessa essere utili, riconoscibili e credibili.
+            </p>
+          </div>
+
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {pageContent.audienceItems.map((item) => (
-              <div key={item} className="rounded-3xl border border-white/8 bg-[#1C1C1C] p-8 text-left">
-                <p className="font-light leading-relaxed text-white/80">{item}</p>
+            {EDITORIAL_GUARDRAILS.map((item) => (
+              <div key={item} className="rounded-3xl border border-black/5 bg-white p-8 shadow-sm">
+                <p className="leading-relaxed text-black/70">{item}</p>
               </div>
             ))}
           </div>
         </div>
       </Section>
 
-      {/* Timeline Milestones */}
+      <Section className="rounded-[3rem] bg-[var(--color-ink)] p-12 text-white md:p-20">
+        <div className="mx-auto max-w-4xl text-center">
+          <h2 className="mb-6 text-4xl font-serif md:text-5xl">{pageContent.audienceTitle}</h2>
+          <p className="mx-auto mb-12 max-w-2xl leading-relaxed text-white/85">
+            {pageContent.audienceDescription}
+          </p>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {pageContent.audienceItems.map((item) => (
+              <div key={item} className="rounded-3xl border border-white/8 bg-[#1C1C1C] p-8 text-left">
+                <p className="leading-relaxed text-white/80">{item}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Button to="/destinazioni" variant="cta" size="lg">
+              Esplora i posti
+            </Button>
+            <Button to="/collaborazioni" variant="outline-light" size="lg">
+              Scopri le collaborazioni
+            </Button>
+          </div>
+        </div>
+      </Section>
+
       <Section title="Il nostro percorso" subtitle="Milestones">
         <div className="mx-auto max-w-3xl">
-          {[
-            { year: '2016', title: 'Il primo viaggio insieme', text: 'Inizia tutto da un weekend improvvisato. Da lì non ci siamo più fermati.' },
-            { year: '2018', title: 'Nasce @travelliniwithus', text: 'Apriamo il profilo Instagram per condividere i nostri posti preferiti con amici e curiosi.' },
-            { year: '2020', title: 'La community cresce', text: 'I Travellini diventano una community vera: persone che condividono la nostra visione del viaggio.' },
-            { year: '2023', title: 'Prime collaborazioni', text: 'Brand e strutture iniziano a riconoscere il valore dei nostri contenuti autentici.' },
-            { year: '2025', title: `${BRAND_STATS.instagramFollowers} follower`, text: 'La community supera le aspettative. Lanciamo il sito web e lo shop digitale.' },
-          ].map((milestone, idx) => (
+          {TIMELINE.map((milestone, index) => (
             <motion.div
               key={milestone.year}
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
+              transition={{ delay: index * 0.08 }}
               className="flex gap-8 pb-12 last:pb-0"
             >
               <div className="flex flex-col items-center">
                 <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)] text-sm font-bold text-white">
                   {milestone.year}
                 </div>
-                {idx < 4 && <div className="mt-2 h-full w-px bg-gradient-to-b from-[var(--color-accent)] to-[var(--color-accent-warm)]" />}
+                {index < TIMELINE.length - 1 && (
+                  <div className="mt-2 h-full w-px bg-gradient-to-b from-[var(--color-accent)] to-[var(--color-accent-warm)]" />
+                )}
               </div>
               <div className="pt-3">
                 <h3 className="mb-2 text-2xl font-serif">{milestone.title}</h3>
-                <p className="font-normal leading-relaxed text-black/70">{milestone.text}</p>
+                <p className="leading-relaxed text-black/70">{milestone.text}</p>
               </div>
             </motion.div>
           ))}

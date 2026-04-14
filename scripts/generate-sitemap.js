@@ -13,7 +13,6 @@ const staticRoutes = [
   '/media-kit',
   '/contatti',
   '/risorse',
-  '/shop',
   '/privacy',
   '/cookie',
   '/termini',
@@ -49,6 +48,9 @@ console.log('Sitemap generated successfully.');
 
 const robotsTxt = `User-agent: *
 Allow: /
+Disallow: /shop
+Disallow: /club
+Disallow: /account/acquisti
 
 Sitemap: ${BASE_URL}/sitemap.xml
 `;

@@ -6,7 +6,7 @@ export const EXPERIENCE_TYPES = [
   'Locali insoliti',
   'Hotel con carattere',
   'Weekend romantici',
-  'Borghi e città d\'arte',
+  "Borghi e citta d'arte",
   'Passeggiate panoramiche',
   'Relax, terme e spa',
   'Esperienze insolite',
@@ -31,4 +31,3 @@ export function getExperienceTypeFromQuery(rawValue: string | null) {
 
   return EXPERIENCE_TYPES.find((item) => slugifyExperienceType(item) === rawValue) || null;
 }
-

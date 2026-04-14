@@ -29,7 +29,7 @@ export default function NotFound() {
             Pagina <span className="italic opacity-60">non trovata</span>
           </h1>
           <p className="max-w-2xl mx-auto mb-10 text-lg font-light leading-relaxed text-black/70">
-            Il contenuto che stai cercando non e disponibile a questo indirizzo. Puoi tornare alla home oppure ripartire da guide, destinazioni e shop.
+            Il contenuto che stai cercando non e disponibile a questo indirizzo. Puoi tornare alla home oppure ripartire da destinazioni, esperienze e guide.
           </p>
 
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -46,10 +46,10 @@ export default function NotFound() {
               Esplora i contenuti
             </Link>
             <Link
-              to="/shop"
+              to="/guide"
               className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-8 py-4 text-xs font-semibold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
             >
-              Vai allo shop
+              Leggi le guide
             </Link>
           </div>
         </div>

@@ -1,42 +1,207 @@
 import { useMemo, useState } from 'react';
-import { motion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { ArrowRight, Compass } from 'lucide-react';
+import { ArrowRight, Compass, Filter, MapPin, Search, ShieldCheck, X } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import ArticleSkeleton from '../components/ArticleSkeleton';
 import Breadcrumbs from '../components/Breadcrumbs';
+import CrossLinkWidget from '../components/CrossLinkWidget';
+import EmptyState from '../components/EmptyState';
+import JsonLd from '../components/JsonLd';
 import Newsletter from '../components/Newsletter';
+import OptimizedImage from '../components/OptimizedImage';
 import PageLayout from '../components/PageLayout';
 import Pagination from '../components/Pagination';
 import Section from '../components/Section';
 import SEO from '../components/SEO';
-import OptimizedImage from '../components/OptimizedImage';
-import EmptyState from '../components/EmptyState';
-import CrossLinkWidget from '../components/CrossLinkWidget';
-import { fetchArticles } from '../services/firebaseService';
-import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_DESTINATION_CARD } from '../config/demoContent';
+import {
+  DESTINATION_GROUPS,
+  EXPERIENCE_TYPES,
+  getExperienceTypeFromQuery,
+  slugifyExperienceType,
+} from '../config/contentTaxonomy';
+import { getExperienceVisual } from '../config/experienceVisuals';
+import { siteContentDefaults } from '../config/siteContent';
 import { SITE_URL } from '../config/site';
 import { useSiteContent } from '../hooks/useSiteContent';
-import { DESTINATION_GROUPS, EXPERIENCE_TYPES, getExperienceTypeFromQuery, slugifyExperienceType } from '../config/contentTaxonomy';
-import { getArchiveLocationLabel, mapArticleToArchiveItem, type ArchiveItem } from '../utils/contentArchive';
-import { getExperienceVisual, EXPERIENCE_VISUALS } from '../config/experienceVisuals';
+import { fetchArticles } from '../services/firebaseService';
+import {
+  getArchiveLocationLabel,
+  mapArticleToArchiveItem,
+  type ArchiveItem,
+} from '../utils/contentArchive';
 
-const experienceDescriptions: Record<string, string> = {
-  'Posti particolari': 'Luoghi fuori dall\'ordinario, indirizzi curiosi e scorci che danno personalità al viaggio.',
-  'Food & Ristoranti': 'Ristoranti, tavole e indirizzi che meritano davvero una deviazione o una serata dedicata.',
-  'Locali insoliti': 'Posti con atmosfera, concept o posizione che li rendono subito memorabili.',
-  'Hotel con carattere': 'Strutture in cui design, atmosfera e contesto fanno parte dell\'esperienza.',
-  'Weekend romantici': 'Idee e luoghi da vivere in coppia con un taglio più bello, utile e concreto.',
-  'Borghi e città d\'arte': 'Centri storici, borghi e città che hanno fascino, patrimonio e una visita ben costruita.',
-  'Passeggiate panoramiche': 'Percorsi, viste e camminate che valgono davvero il tempo del viaggio.',
-  'Relax, terme e spa': 'Pause lente, benessere e posti dove rallentare con più criterio.',
-  'Esperienze insolite': 'Musei strani, attività particolari e spunti da salvare proprio perché diversi.',
-  'Gite e day trip': 'Uscite facili da organizzare per una giornata o un weekend vicino.',
+const ITEMS_PER_PAGE = 6;
+
+const EXPERIENCE_DESCRIPTIONS: Record<string, string> = {
+  'Posti particolari':
+    'Luoghi insoliti, indirizzi salvabili e scoperte che danno personalita al viaggio.',
+  'Food & Ristoranti':
+    'Tavole, mercati e indirizzi scelti per atmosfera, sostanza e utilita reale.',
+  'Locali insoliti':
+    'Locali con concept, posizione o carattere capaci di rendere memorabile una tappa.',
+  'Hotel con carattere':
+    'Soggiorni dove design, atmosfera e contesto fanno parte del viaggio.',
+  'Weekend romantici':
+    'Idee brevi, curate e realistiche per partire in coppia senza costruire un sogno finto.',
+  "Borghi e citta d'arte":
+    'Centri storici, scorci e patrimonio da vivere con calma, non solo da fotografare.',
+  'Passeggiate panoramiche':
+    'Percorsi, viste e camminate che valgono davvero il tempo del viaggio.',
+  'Relax, terme e spa':
+    'Pause lente, terme e luoghi dove staccare con criterio.',
+  'Esperienze insolite':
+    'Musei strani, attivita particolari e spunti da salvare proprio perche diversi.',
+  'Gite e day trip':
+    'Uscite facili da organizzare per una giornata o un weekend vicino.',
 };
 
-/* Mood board span pattern for 10 types */
-const spanPattern = [2, 2, 1, 1, 1, 2, 1, 1, 1, 2];
+const HERO_VISUAL =
+  'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1800&auto=format&fit=crop';
+
+function uniqueValues(items: Array<string | undefined>) {
+  return Array.from(new Set(items.filter((item): item is string => Boolean(item && item !== 'Da definire'))));
+}
+
+function getDemoArchiveItem(): ArchiveItem {
+  return {
+    id: DEMO_DESTINATION_CARD.id,
+    title: DEMO_DESTINATION_CARD.title,
+    excerpt:
+      'Una preview editoriale temporanea per mostrare come appariranno le esperienze quando saranno pubblicati contenuti reali.',
+    image: DEMO_DESTINATION_CARD.image,
+    link: DEMO_DESTINATION_CARD.link,
+    category: DEMO_DESTINATION_CARD.category,
+    country: 'Italia',
+    region: 'Trentino-Alto Adige',
+    city: 'Dolomiti',
+    continent: 'Europa',
+    location: 'Italia, Trentino-Alto Adige, Dolomiti',
+    destinationGroup: 'Italia',
+    experienceTypes: ['Posti particolari', 'Passeggiate panoramiche'],
+    primaryExperience: 'Posti particolari',
+    period: 'Giugno - Settembre',
+    budget: 'Medio',
+    duration: 'Weekend lungo',
+  };
+}
+
+function FilterButton({
+  active,
+  children,
+  onClick,
+}: {
+  active: boolean;
+  children: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`whitespace-nowrap rounded-full px-4 py-2 text-xs font-bold uppercase tracking-widest transition-colors ${
+        active
+          ? 'bg-[var(--color-ink)] text-white'
+          : 'border border-black/5 bg-white text-black/55 hover:border-black/15 hover:text-black'
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function ExperienceCard({
+  experience,
+  count,
+  active,
+  onSelect,
+}: {
+  experience: string;
+  count: number;
+  active: boolean;
+  onSelect: () => void;
+}) {
+  const visual = getExperienceVisual(experience);
+  const Icon = visual.icon;
+
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      className={`group rounded-[1.75rem] border bg-white p-6 text-left shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-lg ${
+        active ? 'border-[var(--color-accent)] ring-2 ring-[var(--color-accent)]/10' : 'border-black/5'
+      }`}
+    >
+      <div className="mb-5 flex items-start justify-between gap-4">
+        <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
+          <Icon size={23} style={{ color: visual.color }} />
+        </span>
+        <span className="rounded-full bg-black/5 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-black/45">
+          {count} {count === 1 ? 'storia' : 'storie'}
+        </span>
+      </div>
+      <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.24em] text-black/35">
+        {visual.label}
+      </span>
+      <h2 className="text-2xl font-serif leading-tight text-[var(--color-ink)]">{experience}</h2>
+      <p className="mt-4 text-sm leading-relaxed text-black/65">{EXPERIENCE_DESCRIPTIONS[experience]}</p>
+      <div className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">
+        {active ? 'Filtro attivo' : 'Filtra'} <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+      </div>
+    </button>
+  );
+}
+
+function StoryCard({ item, isDemo }: { item: ArchiveItem; isDemo: boolean }) {
+  const visual = item.primaryExperience ? getExperienceVisual(item.primaryExperience) : getExperienceVisual('Posti particolari');
+  const Icon = visual.icon;
+
+  return (
+    <Link
+      to={item.link}
+      className="group block overflow-hidden rounded-[var(--radius-xl)] border border-black/5 bg-white shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--shadow-premium)]"
+    >
+      <div className="grid h-full md:grid-cols-[0.95fr_1.25fr]">
+        <div className="relative min-h-[240px] overflow-hidden">
+          <OptimizedImage
+            src={item.image}
+            alt={item.title}
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+          {isDemo && (
+            <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-black/60">
+              Preview
+            </span>
+          )}
+        </div>
+        <div className="flex flex-col justify-center p-7 md:p-8">
+          <div className="mb-4 flex flex-wrap gap-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-accent-soft)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)]">
+              <Icon size={12} style={{ color: visual.color }} />
+              {item.primaryExperience || 'Esperienza'}
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-black/5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-black/45">
+              <MapPin size={12} />
+              {getArchiveLocationLabel(item)}
+            </span>
+          </div>
+          <h3 className="text-3xl font-serif leading-tight text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]">
+            {item.title}
+          </h3>
+          <p className="mt-4 line-clamp-3 text-sm leading-relaxed text-black/65">
+            {item.excerpt ||
+              'Una storia da leggere per capire se questa esperienza merita davvero di entrare nel prossimo viaggio.'}
+          </p>
+          <div className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">
+            Leggi il contenuto <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+}
 
 export default function Esperienze() {
   const { data: demoContent } = useSiteContent('demo');
@@ -52,85 +217,78 @@ export default function Esperienze() {
   const selectedGroup = searchParams.get('group') || 'Tutti';
   const selectedRegion = searchParams.get('area') || 'Tutti';
   const selectedCity = searchParams.get('city') || 'Tutti';
-  const breadcrumbItems = [{ label: 'Esperienze' }];
-  const itemsPerPage = 6;
 
   const archiveItems = useMemo<ArchiveItem[]>(() => {
-    const mapped = articles.map((article) => mapArticleToArchiveItem(article)).filter((item) => item.experienceTypes.length > 0);
+    const mapped = articles
+      .map((article) => mapArticleToArchiveItem(article))
+      .filter((item) => item.experienceTypes.length > 0);
+
     if (mapped.length > 0) return mapped;
-    return demoSettings.showEditorialDemo
-      ? [{
-          id: DEMO_DESTINATION_CARD.id,
-          title: DEMO_DESTINATION_CARD.title,
-          image: DEMO_DESTINATION_CARD.image,
-          link: DEMO_DESTINATION_CARD.link,
-          category: DEMO_DESTINATION_CARD.category,
-          country: 'Italia',
-          region: 'Trentino-Alto Adige',
-          city: 'Dolomiti',
-          continent: 'Europa',
-          location: 'Italia, Trentino-Alto Adige, Dolomiti',
-          destinationGroup: 'Italia',
-          experienceTypes: ['Posti particolari', 'Passeggiate panoramiche'],
-          primaryExperience: 'Posti particolari',
-        }]
-      : [];
+    return demoSettings.showEditorialDemo ? [getDemoArchiveItem()] : [];
   }, [articles, demoSettings.showEditorialDemo]);
 
-  const availableExperiences = useMemo(() => {
-    const types = new Set<string>();
-    archiveItems.forEach((item) => item.experienceTypes.forEach((type) => types.add(type)));
-    return ['Tutti', ...EXPERIENCE_TYPES.filter((type) => types.has(type))];
-  }, [archiveItems]);
-
   const availableGroups = useMemo(() => {
-    const groups = new Set<string>();
-    archiveItems.forEach((item) => groups.add(item.destinationGroup));
+    const groups = new Set(archiveItems.map((item) => item.destinationGroup));
     return ['Tutti', ...DESTINATION_GROUPS.filter((group) => groups.has(group))];
   }, [archiveItems]);
 
   const availableRegions = useMemo(() => {
     if (selectedGroup !== 'Italia') return ['Tutti'];
-    const regions = new Set(
-      archiveItems.filter((item) => item.country === 'Italia' && item.region).map((item) => item.region as string)
-    );
-    return ['Tutti', ...Array.from(regions)];
+    return ['Tutti', ...uniqueValues(archiveItems.filter((item) => item.country === 'Italia').map((item) => item.region))];
   }, [archiveItems, selectedGroup]);
 
   const availableCities = useMemo(() => {
     if (selectedGroup !== 'Italia' || selectedRegion === 'Tutti') return ['Tutti'];
-    const cities = new Set(
-      archiveItems.filter((item) => item.country === 'Italia' && item.region === selectedRegion && item.city).map((item) => item.city as string)
-    );
-    return ['Tutti', ...Array.from(cities)];
+    return [
+      'Tutti',
+      ...uniqueValues(
+        archiveItems
+          .filter((item) => item.country === 'Italia' && item.region === selectedRegion)
+          .map((item) => item.city)
+      ),
+    ];
   }, [archiveItems, selectedGroup, selectedRegion]);
 
-  const filteredItems = useMemo(() => {
-    return archiveItems.filter((item) => {
-      const matchExperience = selectedExperience === 'Tutti' || item.experienceTypes.includes(selectedExperience);
-      const matchGroup = selectedGroup === 'Tutti' || item.destinationGroup === selectedGroup;
-      const matchRegion = selectedRegion === 'Tutti' || item.region === selectedRegion;
-      const matchCity = selectedCity === 'Tutti' || item.city === selectedCity;
-      return matchExperience && matchGroup && matchRegion && matchCity;
-    });
-  }, [archiveItems, selectedCity, selectedExperience, selectedGroup, selectedRegion]);
+  const filteredItems = useMemo(
+    () =>
+      archiveItems.filter((item) => {
+        const matchExperience =
+          selectedExperience === 'Tutti' || item.experienceTypes.includes(selectedExperience);
+        const matchGroup = selectedGroup === 'Tutti' || item.destinationGroup === selectedGroup;
+        const matchRegion = selectedRegion === 'Tutti' || item.region === selectedRegion;
+        const matchCity = selectedCity === 'Tutti' || item.city === selectedCity;
 
-  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+        return matchExperience && matchGroup && matchRegion && matchCity;
+      }),
+    [archiveItems, selectedCity, selectedExperience, selectedGroup, selectedRegion]
+  );
+
+  const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
   const paginatedItems = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    return filteredItems.slice(startIndex, startIndex + itemsPerPage);
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredItems.slice(startIndex, startIndex + ITEMS_PER_PAGE);
   }, [filteredItems, currentPage]);
+
+  const hasActiveFilters =
+    selectedExperience !== 'Tutti' ||
+    selectedGroup !== 'Tutti' ||
+    selectedRegion !== 'Tutti' ||
+    selectedCity !== 'Tutti';
+  const usingDemo = archiveItems.length === 1 && archiveItems[0]?.id === DEMO_DESTINATION_CARD.id;
 
   const updateSearch = (updates: Record<string, string | null>) => {
     setCurrentPage(1);
-    setSearchParams((prev) => {
-      const next = new URLSearchParams(prev);
-      Object.entries(updates).forEach(([key, value]) => {
-        if (!value || value === 'Tutti') next.delete(key);
-        else next.set(key, value);
-      });
-      return next;
-    }, { replace: true });
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        Object.entries(updates).forEach(([key, value]) => {
+          if (!value || value === 'Tutti') next.delete(key);
+          else next.set(key, value);
+        });
+        return next;
+      },
+      { replace: true }
+    );
   };
 
   const resetFilters = () => {
@@ -138,236 +296,195 @@ export default function Esperienze() {
     setSearchParams({}, { replace: true });
   };
 
-  const floatingExperiences = Object.entries(EXPERIENCE_VISUALS).slice(0, 4);
-
   return (
     <PageLayout>
       <SEO
         title="Esperienze"
-        description="Filtra lo stesso archivio Travelliniwithus per tipologia: posti particolari, food, hotel con carattere, weekend romantici e molto altro."
+        description="Esplora Travelliniwithus per intenzione di viaggio: posti particolari, food, hotel con carattere, borghi, relax, weekend e gite."
         canonical={`${SITE_URL}/esperienze`}
       />
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'CollectionPage',
+          name: 'Esperienze Travelliniwithus',
+          url: `${SITE_URL}/esperienze`,
+          description:
+            'Archivio tematico di esperienze travel selezionate da Travelliniwithus.',
+          breadcrumb: {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+              { '@type': 'ListItem', position: 2, name: 'Esperienze', item: `${SITE_URL}/esperienze` },
+            ],
+          },
+        }}
+      />
 
-      {/* --- VISUAL HERO --- */}
-      <section className="bg-gradient-to-b from-[var(--color-accent-soft)] to-[var(--color-sand)] pb-8 pt-32 md:pt-40">
-        <div className="mx-auto max-w-7xl px-6 md:px-12">
-          <Breadcrumbs items={breadcrumbItems} />
+      <section className="relative overflow-hidden bg-[var(--color-sand)] pb-20 pt-32 md:pt-40">
+        <div className="absolute inset-y-0 right-0 hidden w-1/2 lg:block">
+          <OptimizedImage
+            src={HERO_VISUAL}
+            alt=""
+            aria-hidden="true"
+            priority
+            className="h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-sand)] via-[var(--color-sand)]/70 to-transparent" />
+        </div>
 
-          <div className="mt-8 grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-              <span className="mb-4 block font-script text-xl text-[var(--color-accent)]">Filtro tematico</span>
-              <h1 className="mb-6 text-5xl font-serif font-medium leading-none text-[var(--color-ink)] md:text-7xl">
-                Parti dal tipo<br />
-                <span className="italic text-black/50">di esperienza</span>
-              </h1>
-              <p className="mb-8 max-w-lg text-lg font-normal leading-relaxed text-black/70">
-                Lo stesso archivio di Destinazioni, aperto dal lato delle esperienze: food, posti particolari, weekend romantici e molto altro.
-              </p>
+        <div className="relative z-10 mx-auto max-w-7xl px-6 md:px-12">
+          <Breadcrumbs items={[{ label: 'Esperienze' }]} />
+          <div className="mt-10 max-w-3xl">
+            <span className="mb-4 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)] shadow-sm">
+              <Search size={14} /> Tassonomia editoriale
+            </span>
+            <h1 className="text-5xl font-serif font-medium leading-[0.95] text-[var(--color-ink)] md:text-7xl lg:text-8xl">
+              Scegli il ritmo
+              <span className="block italic text-black/50">del viaggio</span>
+            </h1>
+            <p className="mt-7 max-w-2xl text-lg leading-relaxed text-black/70 md:text-xl">
+              Non sempre si parte da un Paese. A volte si parte da un tavolo, un hotel, un borgo,
+              una vista o una pausa lenta. Qui trovi lo stesso archivio organizzato per intenzione.
+            </p>
+          </div>
 
-              {/* Discovery counter */}
-              <motion.div
-                key={filteredItems.length}
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                className="mb-8 inline-flex items-center gap-3 rounded-full border border-[var(--color-accent)]/20 bg-white px-6 py-3 shadow-sm"
-              >
-                <Compass size={16} className="text-[var(--color-accent)]" />
-                <span className="text-2xl font-serif text-[var(--color-ink)]">{filteredItems.length}</span>
-                <span className="text-xs font-bold uppercase tracking-widest text-black/40">esperienze trovate</span>
-              </motion.div>
-
-              <div className="flex flex-col gap-4 sm:flex-row">
-                <Link
-                  to="/destinazioni"
-                  className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-sm font-semibold tracking-wide text-white transition-colors hover:bg-black"
-                >
-                  Vai a destinazioni <ArrowRight size={16} />
-                </Link>
-              </div>
-            </motion.div>
-
-            {/* Floating experience cards */}
-            <div className="relative hidden h-72 lg:block">
-              {floatingExperiences.map(([name, visual], idx) => {
-                const Icon = visual.icon;
-                const positions = [
-                  { top: '0', left: '10%', rotate: -6 },
-                  { top: '5%', right: '5%', rotate: 4 },
-                  { bottom: '5%', left: '20%', rotate: 3 },
-                  { bottom: '0', right: '15%', rotate: -4 },
-                ];
-                const pos = positions[idx];
-                return (
-                  <motion.div
-                    key={name}
-                    initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    transition={{ delay: 0.3 + idx * 0.12, duration: 0.6 }}
-                    className="absolute"
-                    style={{ ...pos, transform: `rotate(${pos.rotate}deg)` }}
-                  >
-                    <div
-                      className="rounded-2xl border border-black/5 bg-white p-5 shadow-lg transition-transform hover:scale-105"
-                      style={{ borderLeftColor: visual.color, borderLeftWidth: '4px' }}
-                    >
-                      <Icon size={24} style={{ color: visual.color }} className="mb-2" />
-                      <span className="block text-sm font-serif text-[var(--color-ink)]">{name}</span>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
+          <div className="mt-10 grid max-w-4xl gap-3 sm:grid-cols-3">
+            {['Intenzione prima della lista', 'Categorie sostenute dai contenuti', 'Ponte naturale verso guide e destinazioni'].map(
+              (item) => (
+                <div key={item} className="rounded-2xl border border-black/5 bg-white p-4 shadow-sm">
+                  <ShieldCheck size={16} className="mb-3 text-[var(--color-accent)]" />
+                  <p className="text-xs font-semibold leading-relaxed text-black/62">{item}</p>
+                </div>
+              )
+            )}
           </div>
         </div>
       </section>
 
       <Section>
-        {/* --- MOOD BOARD EXPERIENCE TYPES --- */}
-        <div className="mb-16 grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
-          {EXPERIENCE_TYPES.filter((item) => availableExperiences.includes(item)).map((experience, idx) => {
-            const visual = getExperienceVisual(experience);
-            const Icon = visual.icon;
-            const isActive = selectedExperience === experience;
-            const span = spanPattern[idx] ?? 1;
-            const count = archiveItems.filter((item) => item.experienceTypes.includes(experience)).length;
-
-            return (
-              <motion.button
-                key={experience}
-                type="button"
-                onClick={() => updateSearch({ type: slugifyExperienceType(experience) })}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.06, duration: 0.5 }}
-                className={`rounded-[1.8rem] border border-l-[3px] px-6 py-6 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
-                  span === 2 ? 'md:col-span-2' : ''
-                } ${
-                  isActive
-                    ? 'border-transparent shadow-lg'
-                    : 'border-black/5 bg-white hover:border-black/10'
-                }`}
-                style={isActive ? { backgroundColor: visual.colorLight, borderColor: visual.color, borderLeftColor: visual.color } : { borderLeftColor: visual.color }}
-              >
-                <div className="mb-3 flex items-center gap-3">
-                  <div
-                    className="flex h-10 w-10 items-center justify-center rounded-xl"
-                    style={{ backgroundColor: isActive ? `${visual.color}20` : visual.colorLight, color: visual.color }}
-                  >
-                    <Icon size={20} />
-                  </div>
-                  {isActive && (
-                    <span className="rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-widest text-white" style={{ backgroundColor: visual.color }}>
-                      Attivo
-                    </span>
-                  )}
-                </div>
-                <div className="mb-2 flex items-baseline gap-3">
-                  <h2 className="text-xl font-serif text-[var(--color-ink)] md:text-2xl">{experience}</h2>
-                  <span className="text-xs font-bold text-black/30">{count} {count === 1 ? 'articolo' : 'articoli'}</span>
-                </div>
-                <p className="text-sm font-normal leading-relaxed text-black/65">{experienceDescriptions[experience]}</p>
-              </motion.button>
-            );
-          })}
+        <div className="mb-12 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {EXPERIENCE_TYPES.map((experience) => (
+            <ExperienceCard
+              key={experience}
+              experience={experience}
+              count={archiveItems.filter((item) => item.experienceTypes.includes(experience)).length}
+              active={selectedExperience === experience}
+              onSelect={() =>
+                updateSearch({
+                  type: selectedExperience === experience ? null : slugifyExperienceType(experience),
+                })
+              }
+            />
+          ))}
         </div>
 
-        {/* --- GEOGRAPHIC FILTERS --- */}
-        <div className="mb-12 rounded-[var(--radius-xl)] border border-black/5 bg-[var(--color-sand)] p-6 shadow-sm">
-          {/* Active filters strip */}
-          {(selectedExperience !== 'Tutti' || selectedGroup !== 'Tutti' || selectedRegion !== 'Tutti' || selectedCity !== 'Tutti') && (
-            <div className="mb-6 flex flex-wrap items-center gap-2">
-              <span className="mr-2 text-[10px] font-bold uppercase tracking-widest text-black/40">Filtri attivi:</span>
-              {selectedExperience !== 'Tutti' && (
-                <button onClick={() => updateSearch({ type: null })} className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white" style={{ backgroundColor: getExperienceVisual(selectedExperience).color }}>
-                  {selectedExperience} <span className="ml-1 opacity-70">&times;</span>
-                </button>
-              )}
-              {selectedGroup !== 'Tutti' && (
-                <button onClick={() => updateSearch({ group: null, area: null, city: null })} className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-ink)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white">
-                  {selectedGroup} <span className="ml-1 opacity-70">&times;</span>
-                </button>
-              )}
-              {selectedRegion !== 'Tutti' && (
-                <button onClick={() => updateSearch({ area: null, city: null })} className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-ink)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white">
-                  {selectedRegion} <span className="ml-1 opacity-70">&times;</span>
-                </button>
-              )}
-              {selectedCity !== 'Tutti' && (
-                <button onClick={() => updateSearch({ city: null })} className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-ink)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white">
-                  {selectedCity} <span className="ml-1 opacity-70">&times;</span>
-                </button>
-              )}
-              <button onClick={resetFilters} className="ml-2 text-[10px] font-bold uppercase tracking-widest text-black/40 underline transition-colors hover:text-[var(--color-accent)]">
-                Resetta tutto
-              </button>
+        <div className="mb-12 rounded-[var(--radius-xl)] border border-black/5 bg-[var(--color-surface)] p-5 shadow-sm md:p-7">
+          <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div>
+              <span className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+                <Filter size={14} /> Raffina la scelta
+              </span>
+              <h2 className="mt-2 text-2xl font-serif text-[var(--color-ink)]">
+                Incrocia esperienza e luogo.
+              </h2>
             </div>
-          )}
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={resetFilters}
+                className="inline-flex items-center gap-2 rounded-full border border-black/10 px-4 py-2 text-xs font-bold uppercase tracking-widest text-black/55 transition-colors hover:border-black/25 hover:text-black"
+              >
+                <X size={14} /> Resetta
+              </button>
+            )}
+          </div>
 
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <div className="flex flex-col gap-3 xl:col-span-2">
-              <span className="text-xs font-bold uppercase tracking-widest text-black/50">Area geografica</span>
-              <div className="flex gap-2 overflow-x-auto pb-2 hide-scrollbar">
+          <div className="grid gap-5 lg:grid-cols-2">
+            <div>
+              <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/45">
+                Area geografica
+              </span>
+              <div className="flex gap-2 overflow-x-auto pb-1">
                 {availableGroups.map((group) => (
-                  <button
+                  <FilterButton
                     key={group}
+                    active={selectedGroup === group}
                     onClick={() => updateSearch({ group, area: null, city: null })}
-                    className={`whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-widest transition-colors ${
-                      selectedGroup === group ? 'bg-black text-white' : 'bg-white text-black/60 hover:bg-black/5'
-                    }`}
                   >
                     {group}
-                  </button>
+                  </FilterButton>
                 ))}
               </div>
             </div>
 
-            {selectedGroup === 'Italia' && (
-              <>
-                <div className="flex flex-col gap-3">
-                  <span className="text-xs font-bold uppercase tracking-widest text-black/50">Regione</span>
-                  <div className="flex gap-2 overflow-x-auto pb-2 hide-scrollbar">
-                    {availableRegions.map((region) => (
-                      <button
-                        key={region}
-                        onClick={() => updateSearch({ area: region, city: null })}
-                        className={`whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-widest transition-colors ${
-                          selectedRegion === region ? 'bg-[var(--color-accent)] text-white' : 'bg-white text-black/60 hover:bg-black/5'
-                        }`}
-                      >
-                        {region}
-                      </button>
-                    ))}
-                  </div>
+            {selectedGroup === 'Italia' && availableRegions.length > 1 && (
+              <div>
+                <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/45">
+                  Regione
+                </span>
+                <div className="flex gap-2 overflow-x-auto pb-1">
+                  {availableRegions.map((region) => (
+                    <FilterButton
+                      key={region}
+                      active={selectedRegion === region}
+                      onClick={() => updateSearch({ area: region, city: null })}
+                    >
+                      {region}
+                    </FilterButton>
+                  ))}
                 </div>
+              </div>
+            )}
 
-                {availableCities.length > 1 && (
-                  <div className="flex flex-col gap-3">
-                    <span className="text-xs font-bold uppercase tracking-widest text-black/50">Città / località</span>
-                    <div className="flex gap-2 overflow-x-auto pb-2 hide-scrollbar">
-                      {availableCities.map((city) => (
-                        <button
-                          key={city}
-                          onClick={() => updateSearch({ city })}
-                          className={`whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-widest transition-colors ${
-                            selectedCity === city ? 'bg-[var(--color-accent)] text-white' : 'bg-white text-black/60 hover:bg-black/5'
-                          }`}
-                        >
-                          {city}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </>
+            {selectedGroup === 'Italia' && availableCities.length > 1 && (
+              <div>
+                <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/45">
+                  Citta / localita
+                </span>
+                <div className="flex gap-2 overflow-x-auto pb-1">
+                  {availableCities.map((city) => (
+                    <FilterButton
+                      key={city}
+                      active={selectedCity === city}
+                      onClick={() => updateSearch({ city })}
+                    >
+                      {city}
+                    </FilterButton>
+                  ))}
+                </div>
+              </div>
             )}
           </div>
         </div>
 
-        {/* --- ARTICLE GRID (Editorial Style) --- */}
+        <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+          <div>
+            <span className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+              <Compass size={14} /> {filteredItems.length} contenuti trovati
+            </span>
+            <h2 className="mt-2 text-3xl font-serif text-[var(--color-ink)]">
+              {selectedExperience === 'Tutti' ? 'Esperienze da leggere e salvare' : selectedExperience}
+            </h2>
+          </div>
+          <Link
+            to="/destinazioni"
+            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]"
+          >
+            Cerca per destinazione <ArrowRight size={14} />
+          </Link>
+        </div>
+
+        {usingDemo && (
+          <div className="mb-8 rounded-2xl border border-[var(--color-accent)]/25 bg-[var(--color-accent-soft)] px-5 py-4 text-sm leading-relaxed text-[var(--color-accent-text)]">
+            Questa e una preview editoriale temporanea: serve a mostrare il layout finche non ci
+            sono contenuti reali pubblicati. Prima del deploy pubblico va sostituita o disattivata.
+          </div>
+        )}
+
         {isLoading ? (
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {[1, 2, 3, 4, 5, 6].map((item) => (
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+            {[1, 2, 3, 4].map((item) => (
               <ArticleSkeleton key={item} />
             ))}
           </div>
@@ -379,120 +496,21 @@ export default function Esperienze() {
         ) : (
           <>
             <div className="space-y-8">
-              {/* First 2 items: horizontal editorial cards */}
-              {paginatedItems.slice(0, 2).map((item, index) => {
-                const visual = item.primaryExperience ? getExperienceVisual(item.primaryExperience) : null;
-                const ExpIcon = visual?.icon;
-                return (
+              <AnimatePresence mode="popLayout">
+                {paginatedItems.map((item) => (
                   <motion.div
                     key={item.id}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    layout
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.96 }}
+                    transition={{ duration: 0.35 }}
                   >
-                    <Link
-                      to={item.link}
-                      className="group block overflow-hidden rounded-[var(--radius-xl)] border border-black/5 bg-white shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
-                    >
-                      {/* Accent top line */}
-                      {visual && <div className="h-1 w-full" style={{ backgroundColor: visual.color }} />}
-
-                      <div className="grid grid-cols-1 md:grid-cols-[2fr_3fr]">
-                        <div className="aspect-[4/3] overflow-hidden md:aspect-auto md:min-h-[280px]">
-                          <OptimizedImage
-                            src={item.image}
-                            alt={item.title}
-                            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                          />
-                        </div>
-                        <div className="flex flex-col justify-center p-8 md:p-10">
-                          <div className="mb-4 flex flex-wrap items-center gap-2">
-                            {item.primaryExperience && ExpIcon && (
-                              <span
-                                className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white"
-                                style={{ backgroundColor: visual.color }}
-                              >
-                                <ExpIcon size={12} />
-                                {item.primaryExperience}
-                              </span>
-                            )}
-                            <span className="rounded-full bg-black/5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-black/50">
-                              {getArchiveLocationLabel(item)}
-                            </span>
-                          </div>
-                          <h3 className="mb-3 text-3xl font-serif leading-tight text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)] md:text-4xl">
-                            {item.title}
-                          </h3>
-                          <p className="mb-6 font-normal leading-relaxed text-black/65">
-                            {getArchiveLocationLabel(item)}
-                          </p>
-                          <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
-                            Leggi il contenuto <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
+                    <StoryCard item={item} isDemo={usingDemo && item.id === DEMO_DESTINATION_CARD.id} />
                   </motion.div>
-                );
-              })}
-
-              {/* Remaining items: standard vertical cards */}
-              {paginatedItems.length > 2 && (
-                <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-                  {paginatedItems.slice(2).map((item, index) => {
-                    const visual = item.primaryExperience ? getExperienceVisual(item.primaryExperience) : null;
-                    const ExpIcon = visual?.icon;
-                    return (
-                      <motion.div
-                        key={item.id}
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: index * 0.08 }}
-                      >
-                        <Link
-                          to={item.link}
-                          className="group block overflow-hidden rounded-[var(--radius-xl)] border border-black/5 bg-white shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-[var(--shadow-premium)]"
-                        >
-                          {visual && <div className="h-1 w-full" style={{ backgroundColor: visual.color }} />}
-                          <div className="aspect-[4/3] overflow-hidden">
-                            <OptimizedImage
-                              src={item.image}
-                              alt={item.title}
-                              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                            />
-                          </div>
-                          <div className="p-6">
-                            <div className="mb-3 flex flex-wrap gap-2">
-                              {item.primaryExperience && ExpIcon && (
-                                <span
-                                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white"
-                                  style={{ backgroundColor: visual.color }}
-                                >
-                                  <ExpIcon size={11} />
-                                  {item.primaryExperience}
-                                </span>
-                              )}
-                              <span className="rounded-full bg-black/5 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-black/50">
-                                {getArchiveLocationLabel(item)}
-                              </span>
-                            </div>
-                            <h3 className="text-2xl font-serif leading-tight text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]">
-                              {item.title}
-                            </h3>
-                            <p className="mt-4 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
-                              Apri il contenuto
-                            </p>
-                          </div>
-                        </Link>
-                      </motion.div>
-                    );
-                  })}
-                </div>
-              )}
+                ))}
+              </AnimatePresence>
             </div>
-
             <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
           </>
         )}

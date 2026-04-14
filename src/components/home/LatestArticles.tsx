@@ -58,23 +58,25 @@ export default function LatestArticles() {
   const recentArticles = recentArticlesData?.articles ?? [];
 
   return (
-    <section className="bg-white py-20 md:py-24">
+    <section id="storie" className="bg-white py-20 md:py-24">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="mb-10 flex items-end justify-between gap-6">
           <div>
             <span className="text-[10px] uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
               Editoriale
             </span>
-            <h2 className="mt-1 text-3xl font-serif text-ink md:text-4xl">Da leggere ora.</h2>
+            <h2 className="mt-1 text-3xl font-serif text-ink md:text-4xl">
+              Storie da leggere prima di partire.
+            </h2>
             <p className="mt-3 max-w-xl text-base leading-relaxed text-black/60">
-              Storie e luoghi da salvare per il prossimo viaggio.
+              Luoghi, atmosfere e dettagli utili per capire cosa salvare per il prossimo viaggio.
             </p>
           </div>
           <Link
-            to="/destinazioni"
+            to="/guide"
             className="hidden items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-transform hover:translate-x-0.5 sm:inline-flex"
           >
-            Vedi tutto <ArrowRight size={12} />
+            Tutte le guide <ArrowRight size={12} />
           </Link>
         </div>
 

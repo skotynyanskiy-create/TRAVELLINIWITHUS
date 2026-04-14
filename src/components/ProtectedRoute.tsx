@@ -8,19 +8,23 @@ interface ProtectedRouteProps {
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const location = useLocation();
   const { user, loading, signIn, signOut, isAdmin, authError, clearAuthError } = useAuth();
+  const isDevBuild = import.meta.env.DEV;
   const isLocalHost =
     typeof window !== 'undefined' &&
     ['localhost', '127.0.0.1'].includes(window.location.hostname);
+  const canUsePreview = isDevBuild && isLocalHost;
   const hasPreviewParam = new URLSearchParams(location.search).get('previewAdmin') === '1';
 
-  if (typeof window !== 'undefined' && isLocalHost) {
+  if (typeof window !== 'undefined' && canUsePreview) {
     if (hasPreviewParam) {
       sessionStorage.setItem('admin-preview', '1');
     }
+  } else if (typeof window !== 'undefined') {
+    sessionStorage.removeItem('admin-preview');
   }
 
   const isPreviewAdmin =
-    isLocalHost &&
+    canUsePreview &&
     typeof window !== 'undefined' &&
     sessionStorage.getItem('admin-preview') === '1';
 
@@ -61,7 +65,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
         >
           Accedi con Google
         </button>
-        {isLocalHost && (
+        {canUsePreview && (
           <Link
             to={`${location.pathname}?previewAdmin=1`}
             className="mt-4 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] transition-colors hover:text-[var(--color-ink)]"

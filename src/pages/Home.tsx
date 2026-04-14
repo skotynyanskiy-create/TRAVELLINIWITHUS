@@ -2,15 +2,42 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ArrowUp } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import Newsletter from '../components/Newsletter';
 import { SITE_URL } from '../config/site';
 
 import HeroSection from '../components/home/HeroSection';
 import HomeDiscoveryCards from '../components/home/HomeDiscoveryCards';
+import HomeMapTeaser from '../components/home/HomeMapTeaser';
 import CoupleIntro from '../components/home/CoupleIntro';
 import LatestArticles from '../components/home/LatestArticles';
-import CommunitySection from '../components/home/CommunitySection';
+import HomeToolsTeaser from '../components/home/HomeToolsTeaser';
+import HomeCollaborationCta from '../components/home/HomeCollaborationCta';
+
+const HOME_PATHS = [
+  {
+    eyebrow: 'Scopri',
+    title: 'Posti particolari',
+    description: 'Destinazioni, luoghi e soggiorni che meritano davvero di entrare nei tuoi piani.',
+    to: '/destinazioni',
+    cta: 'Esplora i luoghi',
+  },
+  {
+    eyebrow: 'Preparati meglio',
+    title: 'Guide e strumenti',
+    description: 'Risorse, consigli pratici e strumenti che usiamo per viaggiare con meno rumore e piu criterio.',
+    to: '/risorse',
+    cta: 'Apri le risorse',
+  },
+  {
+    eyebrow: 'Lavora con noi',
+    title: 'Collaborazioni selettive',
+    description: 'Una porta chiara per hotel, destinazioni e brand che vogliono un racconto credibile.',
+    to: '/collaborazioni',
+    cta: 'Scopri il lato B2B',
+  },
+];
 
 export default function Home() {
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -52,7 +79,7 @@ export default function Home() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="fixed bottom-8 right-8 z-50 rounded-full bg-ink p-4 text-white shadow-[var(--shadow-premium)] transition-all hover:bg-[var(--color-accent-warm)] hover:-translate-y-1 ring-1 ring-[var(--color-gold)]/30"
+            className="fixed bottom-8 right-8 z-50 rounded-full bg-ink p-4 text-white shadow-[var(--shadow-premium)] ring-1 ring-[var(--color-gold)]/30 transition-all hover:-translate-y-1 hover:bg-[var(--color-accent-warm)]"
             aria-label="Torna all'inizio"
           >
             <ArrowUp size={20} />
@@ -60,25 +87,56 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* 1. Hero — impatto visivo + reel preview */}
       <HeroSection />
 
-      {/* 2. Esplora subito — card premium per luogo e per esperienza */}
+      <section className="bg-white py-10 md:py-14">
+        <div className="mx-auto grid max-w-7xl gap-4 px-6 md:px-12 lg:grid-cols-3">
+          {HOME_PATHS.map((item) => (
+            <Link
+              key={item.title}
+              to={item.to}
+              className="group rounded-3xl border border-black/5 bg-[var(--color-sand)] p-7 transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--color-gold)]"
+            >
+              <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
+                {item.eyebrow}
+              </p>
+              <h2 className="mt-3 text-2xl font-serif text-ink">{item.title}</h2>
+              <p className="mt-3 text-sm leading-relaxed text-black/62">{item.description}</p>
+              <span className="mt-5 inline-flex text-[10px] font-bold uppercase tracking-widest text-ink transition-colors group-hover:text-[var(--color-accent-warm)]">
+                {item.cta}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       <HomeDiscoveryCards />
-
-      {/* 3. Chi siamo — la coppia, umano e credibile */}
+      <HomeMapTeaser />
       <CoupleIntro />
-
-      {/* 4. Articoli — contenuto editoriale recente */}
       <LatestArticles />
+      <HomeToolsTeaser />
 
-      {/* 5. Newsletter — conversione principale, posizionata a metà pagina */}
-      <div className="bg-[var(--color-ink)] py-4">
-        <Newsletter variant="sand" source="homepage_mid" />
-      </div>
+      <section className="bg-white py-16 md:py-20">
+        <div className="mx-auto grid max-w-7xl gap-8 px-6 md:px-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+          <div>
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
+              Newsletter
+            </span>
+            <h2 className="mt-3 max-w-xl text-3xl font-serif leading-tight text-ink md:text-5xl">
+              Una email ogni tanto. Solo quando c'e davvero qualcosa da salvare.
+            </h2>
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-black/62">
+              Ricevi luoghi, idee weekend, guide e strumenti solo quando hanno senso. Niente
+              rumore, niente pressione, niente newsletter riempita per forza.
+            </p>
+          </div>
+          <div className="rounded-lg border border-black/8 bg-[var(--color-sand)] p-5 md:p-7">
+            <Newsletter compact variant="sand" source="homepage_compact" />
+          </div>
+        </div>
+      </section>
 
-      {/* 6. Social — strip compatta */}
-      <CommunitySection />
+      <HomeCollaborationCta />
     </div>
   );
 }

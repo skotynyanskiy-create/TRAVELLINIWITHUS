@@ -53,10 +53,10 @@ export default function CommunitySection() {
               TikTok
             </a>
             <Link
-              to="/club"
+              to="/guide"
               className="inline-flex items-center gap-2 rounded-full bg-[var(--color-gold)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white shadow-[0_0_20px_rgba(196,164,124,0.25)] transition-all hover:-translate-y-0.5 hover:brightness-110"
             >
-              Unisciti ai Travellini
+              Leggi le guide
               <ArrowRight size={14} />
             </Link>
           </div>

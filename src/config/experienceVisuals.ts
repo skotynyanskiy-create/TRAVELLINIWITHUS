@@ -1,14 +1,14 @@
 import {
-  Sparkles,
-  UtensilsCrossed,
-  Wine,
   BedDouble,
+  Droplets,
   Heart,
   Landmark,
   Mountain,
-  Droplets,
-  Zap,
   Route,
+  Sparkles,
+  UtensilsCrossed,
+  Wine,
+  Zap,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -16,7 +16,7 @@ export interface ExperienceVisual {
   icon: LucideIcon;
   color: string;
   colorLight: string;
-  emoji: string;
+  label: string;
 }
 
 export const EXPERIENCE_VISUALS: Record<string, ExperienceVisual> = {
@@ -24,61 +24,61 @@ export const EXPERIENCE_VISUALS: Record<string, ExperienceVisual> = {
     icon: Sparkles,
     color: '#C4A47C',
     colorLight: '#FDF0EA',
-    emoji: '✨',
+    label: 'scoperta',
   },
   'Food & Ristoranti': {
     icon: UtensilsCrossed,
     color: '#D97706',
     colorLight: '#FEF7ED',
-    emoji: '🍝',
+    label: 'food',
   },
   'Locali insoliti': {
     icon: Wine,
     color: '#9333EA',
     colorLight: '#F5F0FF',
-    emoji: '🍷',
+    label: 'atmosfera',
   },
   'Hotel con carattere': {
     icon: BedDouble,
     color: '#5B8A72',
     colorLight: '#F0F2F0',
-    emoji: '🏨',
+    label: 'soggiorno',
   },
   'Weekend romantici': {
     icon: Heart,
     color: '#E11D48',
     colorLight: '#FFF0F3',
-    emoji: '💑',
+    label: 'coppia',
   },
-  'Borghi e città d\'arte': {
+  "Borghi e citta d'arte": {
     icon: Landmark,
     color: '#6D5E3D',
     colorLight: '#F4F4F5',
-    emoji: '🏛️',
+    label: 'storia',
   },
   'Passeggiate panoramiche': {
     icon: Mountain,
     color: '#16A34A',
     colorLight: '#ECFDF5',
-    emoji: '🏔️',
+    label: 'natura',
   },
   'Relax, terme e spa': {
     icon: Droplets,
     color: '#0EA5E9',
     colorLight: '#EFF9FF',
-    emoji: '💧',
+    label: 'lentezza',
   },
   'Esperienze insolite': {
     icon: Zap,
     color: '#F97316',
     colorLight: '#FFF5ED',
-    emoji: '⚡',
+    label: 'insolito',
   },
   'Gite e day trip': {
     icon: Route,
     color: '#8B5CF6',
     colorLight: '#F3EEFF',
-    emoji: '🗺️',
+    label: 'itinerario',
   },
 };
 
