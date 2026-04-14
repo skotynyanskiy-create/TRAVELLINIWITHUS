@@ -5,9 +5,8 @@ import { Link } from 'react-router-dom';
 import Button from '../Button';
 import { CONTACTS, FEATURED_REEL } from '../../config/site';
 
-const HERO_IMAGE = '/hero-adventure.jpg';
-const REEL_FALLBACK_IMAGE =
-  'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=900&auto=format&fit=crop';
+const HERO_IMAGE = '/images/hero-amalfi.png';
+const REEL_FALLBACK_IMAGE = '/images/destinations/sardegna.png';
 
 const TRUST_PILLS = ['Posti particolari', 'Informazioni utili', 'Storytelling visivo', 'Prova reale'];
 

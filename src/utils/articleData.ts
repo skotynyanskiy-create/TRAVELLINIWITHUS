@@ -1,8 +1,6 @@
 import type { Timestamp } from 'firebase/firestore';
 
-// TODO(@travelliniwithus): PLACEHOLDER — servono foto default articolo
-const DEFAULT_ARTICLE_IMAGE =
-  'https://images.unsplash.com/photo-1488085061387-422e29b40080?q=80&w=1600&auto=format&fit=crop';
+const DEFAULT_ARTICLE_IMAGE = '/images/hero-amalfi.png';
 
 const asString = (value: unknown) => (typeof value === 'string' ? value.trim() : '');
 

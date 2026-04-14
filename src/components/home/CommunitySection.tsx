@@ -1,38 +1,119 @@
-import { ArrowRight, Instagram } from 'lucide-react';
+import { motion } from 'motion/react';
+import { ArrowRight, Instagram, Heart, MessageCircle, Send } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { CONTACTS, BRAND_STATS } from '../../config/site';
 
+const INSTAGRAM_GRID = [
+  { src: '/images/destinations/toscana.png', alt: 'Toscana — colline e borghi' },
+  { src: '/images/experiences/gastronomia.png', alt: 'Food — sapori autentici' },
+  { src: '/images/destinations/dolomiti.png', alt: 'Dolomiti — vette e natura' },
+  { src: '/images/experiences/insolito.png', alt: 'Luoghi insoliti — grotte e meraviglie' },
+  { src: '/images/destinations/sardegna.png', alt: 'Sardegna — mare cristallino' },
+  { src: '/images/experiences/romantico.png', alt: 'Weekend romantici — tramonti' },
+  { src: '/images/destinations/puglia.png', alt: 'Puglia — trulli e tradizione' },
+  { src: '/images/brand/couple-travel.png', alt: 'Rodrigo e Betta in viaggio' },
+];
+
+const SOCIAL_STATS = [
+  { value: BRAND_STATS.instagramFollowers, label: 'Instagram', platform: 'ig' },
+  { value: BRAND_STATS.tiktokFollowers, label: 'TikTok', platform: 'tt' },
+  { value: BRAND_STATS.destinationsExplored, label: 'Destinazioni', platform: 'dest' },
+  { value: BRAND_STATS.postsPublished, label: 'Contenuti', platform: 'posts' },
+];
+
 export default function CommunitySection() {
   return (
-    <section className="bg-[var(--color-ink)] py-12">
+    <section className="bg-[var(--color-ink)] py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
-        <div className="mb-10 flex flex-col gap-4 border-b border-white/10 pb-10 md:flex-row md:items-end md:justify-between">
-          <div>
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-gold)]">
-              Collaborazioni
-            </span>
-            <h2 className="mt-2 max-w-2xl text-3xl font-serif text-white md:text-4xl">
-              Hai un hotel, una destinazione o un'esperienza da raccontare bene?
-            </h2>
-          </div>
-          <Link
-            to="/collaborazioni"
-            className="inline-flex items-center justify-center gap-2 rounded-full border border-[var(--color-gold)]/40 px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-gold)] transition-colors hover:bg-[var(--color-gold)] hover:text-white"
-          >
-            Scopri le collaborazioni
-            <ArrowRight size={14} />
-          </Link>
-        </div>
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-12 text-center"
+        >
+          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-gold)]">
+            La community
+          </span>
+          <h2 className="mt-3 text-3xl font-serif text-white md:text-5xl">
+            Unisciti a chi viaggia{' '}
+            <span className="text-[var(--color-gold)]">con gusto.</span>
+          </h2>
+          <p className="mt-4 mx-auto max-w-2xl text-base text-white/60 md:text-lg">
+            Ogni giorno nuove scoperte, posti particolari e consigli pratici sui nostri canali.
+          </p>
+        </motion.div>
 
-        <div className="flex flex-col items-center gap-8 text-center md:flex-row md:justify-between md:text-left">
-          <div>
-            <span className="font-script text-xl text-[var(--color-gold)]">Seguici</span>
-            <p className="mt-1 max-w-sm text-base text-white/75">
-              {BRAND_STATS.instagramFollowers} su Instagram · {BRAND_STATS.tiktokFollowers} su
-              TikTok. Ogni giorno contenuti veri.
-            </p>
-          </div>
-          <div className="flex flex-wrap justify-center gap-3 md:justify-end">
+        {/* Stats Row */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="mb-12 grid grid-cols-2 gap-4 md:grid-cols-4"
+        >
+          {SOCIAL_STATS.map((stat) => (
+            <div
+              key={stat.platform}
+              className="rounded-xl border border-white/8 bg-white/5 px-5 py-5 text-center backdrop-blur-sm"
+            >
+              <div className="text-2xl font-serif font-bold text-white md:text-3xl">
+                {stat.value}
+              </div>
+              <div className="mt-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/50">
+                {stat.label}
+              </div>
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Instagram Grid */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="mb-12 grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-3"
+        >
+          {INSTAGRAM_GRID.map((item, index) => (
+            <motion.a
+              key={item.src}
+              href={CONTACTS.instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: index * 0.06 }}
+              className="group relative aspect-square overflow-hidden rounded-lg"
+            >
+              <img
+                src={item.src}
+                alt={item.alt}
+                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                loading="lazy"
+              />
+              {/* Hover overlay */}
+              <div className="absolute inset-0 flex items-center justify-center gap-4 bg-black/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <div className="flex items-center gap-1 text-white">
+                  <Heart size={16} fill="white" />
+                </div>
+                <div className="flex items-center gap-1 text-white">
+                  <MessageCircle size={16} />
+                </div>
+                <div className="flex items-center gap-1 text-white">
+                  <Send size={16} />
+                </div>
+              </div>
+            </motion.a>
+          ))}
+        </motion.div>
+
+        {/* Bottom — Social CTAs + B2B */}
+        <div className="flex flex-col gap-8 border-t border-white/10 pt-10 md:flex-row md:items-center md:justify-between">
+          {/* Social Buttons */}
+          <div className="flex flex-wrap justify-center gap-3 md:justify-start">
             <a
               href={CONTACTS.instagramUrl}
               target="_blank"
@@ -52,6 +133,13 @@ export default function CommunitySection() {
               </svg>
               TikTok
             </a>
+          </div>
+
+          {/* B2B CTA */}
+          <div className="text-center md:text-right">
+            <p className="mb-3 text-sm text-white/50">
+              Hai un hotel, una destinazione o un'esperienza da raccontare?
+            </p>
             <Link
               to="/guide"
               className="inline-flex items-center gap-2 rounded-full bg-[var(--color-gold)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white shadow-[0_0_20px_rgba(196,164,124,0.25)] transition-all hover:-translate-y-0.5 hover:brightness-110"

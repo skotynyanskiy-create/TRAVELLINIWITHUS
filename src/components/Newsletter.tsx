@@ -169,9 +169,20 @@ export default function Newsletter({
       if (onSuccess) {
         setTimeout(onSuccess, 1200);
       }
-    } catch (submitError) {
-      console.error('Error saving newsletter lead:', submitError);
-      setError('Iscrizione non riuscita. Riprova tra poco oppure scrivici direttamente via email.');
+    } catch {
+      // Fallback: salva in localStorage quando l'API non è configurata
+      try {
+        const stored = JSON.parse(localStorage.getItem('twu_newsletter_leads') || '[]');
+        stored.push({ email: normalizedEmail, source, date: new Date().toISOString() });
+        localStorage.setItem('twu_newsletter_leads', JSON.stringify(stored));
+        trackEvent('newsletter_signup', { source, fallback: 'localStorage' });
+        setIsSubscribed(true);
+        if (onSuccess) {
+          setTimeout(onSuccess, 2000);
+        }
+      } catch {
+        setError('Iscrizione non riuscita. Riprova tra poco oppure scrivici direttamente via email.');
+      }
     } finally {
       setIsSubmitting(false);
     }

@@ -26,7 +26,7 @@ import FinalCtaSection from '../components/FinalCtaSection';
 import { useCart } from '../context/CartContext';
 import { fetchProducts } from '../services/firebaseService';
 import { siteContentDefaults } from '../config/siteContent';
-import { DEMO_PRODUCT } from '../config/demoContent';
+import { DEMO_PRODUCT, DEMO_PRODUCTS } from '../config/demoContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { BRAND_STATS, SITE_URL } from '../config/site';
 

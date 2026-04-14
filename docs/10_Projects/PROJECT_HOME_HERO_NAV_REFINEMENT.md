@@ -146,9 +146,26 @@ Le voci `Guide`, `Esperienze` e `Shop` non compaiono piu nel menu principale. Le
 
 ## Asset e configurazione
 
-- `/public/rodrigo-betta.jpg`: mancante; `CoupleIntro` usa un placeholder temporaneo.
+- `/public/images/brand/couple-travel.png`: placeholder AI di coppia in viaggio. Sostituire con foto reale di Rodrigo & Betta.
+- `/public/images/hero-amalfi.png`: hero Costiera Amalfitana generata AI. Valutare se sostituire con foto reale.
+- `/public/images/destinations/`: 6 immagini destinazioni generate AI (Dolomiti, Puglia, Toscana, Sardegna, Islanda, Giappone).
+- `/public/images/experiences/`: 4 immagini esperienze generate AI (Gastronomia, Avventura, Romantico, Insolito).
 - `FEATURED_REEL.url`: intenzionalmente vuoto; quando sara presente uno shortcode reale Instagram, la hero renderizzera l'embed desktop.
 - `FEATURED_REEL.thumbnail`: campo previsto per aggiornamento manuale futuro.
+
+## Sessione Antigravity - Visual Identity (2026-04-14)
+
+Lavoro eseguito con Antigravity su Sprint Visual Identity:
+
+- generati 12 asset visivi AI premium e salvati in `public/images/`
+- aggiornati `destinationVisuals.ts`, `experienceContent.ts`, `demoContent.ts` per usare immagini locali
+- aggiornato `HeroSection.tsx`: hero Amalfi + reel fallback Sardegna
+- aggiornato `CoupleIntro.tsx`: foto coppia AI locale
+- aggiornato `LatestArticles.tsx`: 3 articoli demo (Dolomiti, Puglia, Toscana)
+- **redesign completo `CommunitySection.tsx`**: griglia Instagram 4x2, stats animati, social CTAs
+- verifiche: `typecheck` zero errori, `vite build` successo, visual check tutte le sezioni OK
+
+Prossimi step: pagine interne (ChiSiamo, Collaborazioni, MediaKit, Contatti), fix form, Shop, SEO.
 
 ## Link
 

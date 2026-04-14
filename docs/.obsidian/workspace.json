@@ -4,21 +4,24 @@
     "type": "split",
     "children": [
       {
-        "id": "fe8ecb858144a020",
+        "id": "34e7b5477585ff62",
         "type": "tabs",
         "children": [
           {
-            "id": "b7865f52ea78a74b",
+            "id": "98e266d66e6e54c7",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "canvas",
               "state": {
-                "file": "OBSIDIAN_HOME.md",
-                "mode": "preview",
-                "source": false
+                "file": "Senza nome 1.canvas",
+                "viewState": {
+                  "x": 0,
+                  "y": 0,
+                  "zoom": 0
+                }
               },
-              "icon": "lucide-file",
-              "title": "Obsidian Home"
+              "icon": "lucide-layout-dashboard",
+              "title": "Senza nome 1"
             }
           }
         ]
@@ -48,8 +51,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "1ccb3daf892e5f63",
@@ -83,11 +85,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "Senza nome 1.canvas",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Collegamenti in uscita"
+              "title": "Collegamenti in uscita da Senza nome 1"
             }
           },
           {
@@ -134,7 +137,7 @@
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -149,18 +152,22 @@
       "bases:Crea nuova Base": false
     }
   },
-  "active": "b7865f52ea78a74b",
+  "active": "98e266d66e6e54c7",
   "lastOpenFiles": [
+    "Senza nome 1.canvas",
+    "40_Daily/2026-04-12.md",
+    "40_Daily/Senza nome 2.base",
+    "40_Daily/Senza nome 1.base",
+    "40_Daily/Senza nome.base",
+    "40_Daily/2026-04-14.md",
+    "Senza nome.canvas",
     "OBSIDIAN_HOME.md",
     "Senza nome.md",
-    "40_Daily/Senza nome.base",
     "40_Daily/2026-04-13.md",
     "Senza nome 2.canvas",
     "20_Decisions/DECISION_0003_CLAUDE_CODE_SESSION_PROTOCOL.md",
     "TRAVELLINIWITHUS_BRAND_MEMORY.md",
-    "Senza nome 1.canvas",
     "Senza nome.base",
-    "Senza nome.canvas",
     "20_Decisions/DECISION_0002_AI_SYSTEM_OF_RECORD.md",
     "AI_COLLABORATION_PROTOCOL.md",
     "13_Content/CONTENT_PILLARS_TRAVELLINIWITHUS.md",
@@ -178,17 +185,12 @@
     "90_Templates/TPL_Content_Brief.md",
     "90_Templates/TPL_Partner.md",
     "90_Templates/TPL_Campaign.md",
-    "70_Assets",
     "OBSIDIAN_WORKFLOW.md",
     "OBSIDIAN_TAXONOMY.md",
     "OBSIDIAN_DASHBOARD.md",
-    "95_Bases/Task_Log.base",
     "90_Templates/TPL_Release_Note.md",
     "90_Templates/TPL_UI_Change.md",
     "90_Templates/TPL_Task.md",
-    "90_Templates/TPL_Project.md",
-    "90_Templates/TPL_Daily.md",
-    "90_Templates/TPL_Bug.md",
-    "90_Templates/TPL_Decision.md"
+    "90_Templates/TPL_Project.md"
   ]
 }
