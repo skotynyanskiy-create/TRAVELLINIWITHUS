@@ -38,8 +38,18 @@ import type { ArticleData, RelatedArticleSummary, TocItem } from '../components/
 const BRAND_AUTHOR = 'Travelliniwithus';
 
 const MONTHS_MAP: Record<string, number> = {
-  gennaio: 0, febbraio: 1, marzo: 2, aprile: 3, maggio: 4, giugno: 5,
-  luglio: 6, agosto: 7, settembre: 8, ottobre: 9, novembre: 10, dicembre: 11,
+  gennaio: 0,
+  febbraio: 1,
+  marzo: 2,
+  aprile: 3,
+  maggio: 4,
+  giugno: 5,
+  luglio: 6,
+  agosto: 7,
+  settembre: 8,
+  ottobre: 9,
+  novembre: 10,
+  dicembre: 11,
 };
 
 function toIsoDateString(value: unknown): string | null {
@@ -83,33 +93,41 @@ function getCategoryPath(category: string) {
 const articlesData: Record<string, ArticleData> = {
   'dolomiti-rifugi-design': {
     ...SAMPLE_ARTICLE,
-    date: "17 Marzo 2026",
+    date: '17 Marzo 2026',
     isMarkdown: false,
     content: (
       <>
         <div className="relative mb-16">
           <p className="text-2xl font-serif leading-relaxed text-black/80 italic border-l-4 border-[var(--color-accent)] pl-8 py-4">
-            "Le Dolomiti non sono solo montagne; sono un'opera d'arte geologica. In questo viaggio abbiamo voluto unire la fatica dei sentieri alla bellezza del design d'alta quota."
+            "Le Dolomiti non sono solo montagne; sono un'opera d'arte geologica. In questo viaggio
+            abbiamo voluto unire la fatica dei sentieri alla bellezza del design d'alta quota."
           </p>
         </div>
 
-        <h2 id="architettura" className="text-4xl font-serif mt-20 mb-10 text-black scroll-mt-32">L'Architettura che Rispetta la Roccia</h2>
+        <h2 id="architettura" className="text-4xl font-serif mt-20 mb-10 text-black scroll-mt-32">
+          L'Architettura che Rispetta la Roccia
+        </h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
           <div className="order-2 lg:order-1">
             <p className="text-lg leading-relaxed text-black/70 mb-6">
-              Uno dei punti forti di questo itinerario è il <strong className="text-black">Rifugio Oberholz</strong>. Situato a 2.096 metri, questa struttura è un esempio magistrale di come il legno e il vetro possano dialogare con le vette circostanti.
+              Uno dei punti forti di questo itinerario è il{' '}
+              <strong className="text-black">Rifugio Oberholz</strong>. Situato a 2.096 metri,
+              questa struttura è un esempio magistrale di come il legno e il vetro possano dialogare
+              con le vette circostanti.
             </p>
             <div className="bg-[var(--color-sand)] p-8 rounded-3xl border border-black/5">
               <p className="text-sm font-light m-0 leading-relaxed italic">
-                "Le sue tre grandi vetrate incorniciano i massicci del Latemar come se fossero quadri in una galleria, creando un'esperienza immersiva dove il confine tra interno ed esterno svanisce."
+                "Le sue tre grandi vetrate incorniciano i massicci del Latemar come se fossero
+                quadri in una galleria, creando un'esperienza immersiva dove il confine tra interno
+                ed esterno svanisce."
               </p>
             </div>
           </div>
           <div className="order-1 lg:order-2">
             <OptimizedImage
               // TODO(@travelliniwithus): PLACEHOLDER — servono foto fallback articolo
-              src="https://images.unsplash.com/photo-1544198365-f5d60b6d8190?q=80&w=1200&auto=format&fit=crop"
+              src="/images/destinations/dolomiti.png"
               alt="Rifugio Oberholz"
               className="w-full aspect-[4/5] object-cover rounded-[2.5rem] shadow-2xl shadow-black/10"
             />
@@ -119,9 +137,12 @@ const articlesData: Record<string, ArticleData> = {
         <div className="my-24 bg-ink text-white p-12 md:p-20 rounded-3xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-accent/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
           <div className="relative z-10">
-            <h2 id="percorso" className="text-4xl font-serif mb-8 text-white scroll-mt-32">Il Percorso: Oltre le Tre Cime</h2>
+            <h2 id="percorso" className="text-4xl font-serif mb-8 text-white scroll-mt-32">
+              Il Percorso: Oltre le Tre Cime
+            </h2>
             <p className="text-xl text-white/70 mb-12 max-w-2xl leading-relaxed">
-              Mentre tutti si affollano alle Tre Cime di Lavaredo, noi vi suggeriamo di esplorare il <span className="text-accent font-medium">Gruppo del Catinaccio</span>.
+              Mentre tutti si affollano alle Tre Cime di Lavaredo, noi vi suggeriamo di esplorare il{' '}
+              <span className="text-accent font-medium">Gruppo del Catinaccio</span>.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
@@ -132,25 +153,45 @@ const articlesData: Record<string, ArticleData> = {
               ].map((step) => (
                 <div key={step.num} className="p-6 bg-[#1C1C1C] rounded-2xl border border-white/8">
                   <div className="text-accent font-bold text-3xl mb-2">{step.num}</div>
-                  <div className="text-sm uppercase tracking-widest font-bold mb-2">{step.label}</div>
+                  <div className="text-sm uppercase tracking-widest font-bold mb-2">
+                    {step.label}
+                  </div>
                   <p className="text-xs text-white/50 m-0">{step.text}</p>
                 </div>
               ))}
             </div>
 
             <p className="text-lg italic text-white/60 border-l-2 border-white/20 pl-6">
-              "La vista sulle Torri del Vajolet è qualcosa che rimarrà impressa nella vostra memoria per sempre."
+              "La vista sulle Torri del Vajolet è qualcosa che rimarrà impressa nella vostra memoria
+              per sempre."
             </p>
           </div>
         </div>
 
-        <h2 id="perche-rifugi" className="text-4xl font-serif mt-20 mb-10 text-black scroll-mt-32 text-center">Perché scegliere i rifugi di design?</h2>
+        <h2
+          id="perche-rifugi"
+          className="text-4xl font-serif mt-20 mb-10 text-black scroll-mt-32 text-center"
+        >
+          Perché scegliere i rifugi di design?
+        </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
           {[
-            { icon: <Clock size={24} />, title: 'Esperienza Sensoriale', text: 'Il profumo del cirmolo e la luce naturale che inonda gli spazi.' },
-            { icon: <DollarSign size={24} />, title: 'Cucina Gourmet', text: 'Piatti raffinati d\'alta quota che elevano il concetto di rifugio.' },
-            { icon: <MapPin size={24} />, title: 'Design & Natura', text: 'Un\'estetica che non invade ma celebra il paesaggio circostante.' },
+            {
+              icon: <Clock size={24} />,
+              title: 'Esperienza Sensoriale',
+              text: 'Il profumo del cirmolo e la luce naturale che inonda gli spazi.',
+            },
+            {
+              icon: <DollarSign size={24} />,
+              title: 'Cucina Gourmet',
+              text: "Piatti raffinati d'alta quota che elevano il concetto di rifugio.",
+            },
+            {
+              icon: <MapPin size={24} />,
+              title: 'Design & Natura',
+              text: "Un'estetica che non invade ma celebra il paesaggio circostante.",
+            },
           ].map((item) => (
             <div key={item.title} className="text-center group">
               <div className="w-16 h-16 bg-[var(--color-sand)] rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-accent group-hover:text-white transition-all">
@@ -162,18 +203,41 @@ const articlesData: Record<string, ArticleData> = {
           ))}
         </div>
       </>
-    )
-  }
+    ),
+  },
 };
 
 function buildTocItems(article: ArticleData): TocItem[] {
   return [
-    { id: 'highlights', label: 'Highlights', show: !!(article.highlights && article.highlights.length > 0) },
-    { id: 'itinerario', label: 'Itinerario', show: !!(article.itinerary && article.itinerary.length > 0) },
-    { id: 'sapori-locali', label: 'Sapori Locali', show: !!(article.localFood && article.localFood.length > 0) },
-    { id: 'mappa', label: 'Mappa', show: !!(article.mapUrl || (article.mapMarkers && article.mapMarkers.length > 0)) },
+    {
+      id: 'highlights',
+      label: 'Highlights',
+      show: !!(article.highlights && article.highlights.length > 0),
+    },
+    {
+      id: 'itinerario',
+      label: 'Itinerario',
+      show: !!(article.itinerary && article.itinerary.length > 0),
+    },
+    {
+      id: 'sapori-locali',
+      label: 'Sapori Locali',
+      show: !!(article.localFood && article.localFood.length > 0),
+    },
+    {
+      id: 'mappa',
+      label: 'Mappa',
+      show: !!(article.mapUrl || (article.mapMarkers && article.mapMarkers.length > 0)),
+    },
     { id: 'budget', label: 'Budget Indicativo', show: !!article.costs },
-    { id: 'tips-packing', label: 'Tips & Packing', show: !!((article.tips && article.tips.length > 0) || (article.packingList && article.packingList.length > 0)) },
+    {
+      id: 'tips-packing',
+      label: 'Tips & Packing',
+      show: !!(
+        (article.tips && article.tips.length > 0) ||
+        (article.packingList && article.packingList.length > 0)
+      ),
+    },
     { id: 'gallery', label: 'Gallery', show: !!(article.gallery && article.gallery.length > 0) },
     { id: 'dove-dormire', label: 'Dove Dormire', show: true },
     { id: 'consigli', label: 'Consigli Reali', show: true },
@@ -206,7 +270,11 @@ export default function Articolo() {
           return;
         }
 
-        if (demoSettings.showEditorialDemo && currentSlug === DEMO_ARTICLE_SLUG && articlesData[currentSlug]) {
+        if (
+          demoSettings.showEditorialDemo &&
+          currentSlug === DEMO_ARTICLE_SLUG &&
+          articlesData[currentSlug]
+        ) {
           currentArticle = articlesData[currentSlug];
           setArticleSource('demo');
           setDynamicArticle(currentArticle);
@@ -228,25 +296,34 @@ export default function Articolo() {
         if (currentArticle) {
           try {
             const allArticles = await fetchArticles();
-            const currentContinent = typeof currentArticle.continent === 'string' ? currentArticle.continent : undefined;
+            const currentContinent =
+              typeof currentArticle.continent === 'string' ? currentArticle.continent : undefined;
             const related = allArticles
-              .map((article) => ({
-                id: article.slug || article.id,
-                title: article.title,
-                image: article.image,
-                category: article.category,
-                date: article.date,
-                continent: article.continent,
-              }) satisfies RelatedArticleSummary)
-              .filter((article) => article.id !== currentSlug && (article.category === currentArticle.category || article.continent === currentContinent))
+              .map(
+                (article) =>
+                  ({
+                    id: article.slug || article.id,
+                    title: article.title,
+                    image: article.image,
+                    category: article.category,
+                    date: article.date,
+                    continent: article.continent,
+                  }) satisfies RelatedArticleSummary
+              )
+              .filter(
+                (article) =>
+                  article.id !== currentSlug &&
+                  (article.category === currentArticle.category ||
+                    article.continent === currentContinent)
+              )
               .slice(0, 3);
             setRelatedArticles(related);
           } catch (e) {
-            console.error("Error fetching related articles", e);
+            console.error('Error fetching related articles', e);
           }
         }
       } catch (error) {
-        console.error("Error fetching article:", error);
+        console.error('Error fetching article:', error);
         setArticleSource('missing');
         setDynamicArticle(null);
         setRelatedArticles([]);
@@ -263,7 +340,9 @@ export default function Articolo() {
   const isSaved = isFavorite(currentSlug);
   const isDemoArticle = articleSource === 'demo';
   const demoRelatedArticles = isDemoArticle
-    ? Object.entries(articlesData).filter(([slugKey]) => slugKey === DEMO_ARTICLE_SLUG && slugKey !== currentSlug).slice(0, 2)
+    ? Object.entries(articlesData)
+        .filter(([slugKey]) => slugKey === DEMO_ARTICLE_SLUG && slugKey !== currentSlug)
+        .slice(0, 2)
     : [];
 
   const [copied, setCopied] = useState(false);
@@ -272,7 +351,7 @@ export default function Articolo() {
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
-    restDelta: 0.001
+    restDelta: 0.001,
   });
   const yHero = useTransform(scrollY, [0, 1000], prefersReducedMotion ? [0, 0] : [0, 350]);
 
@@ -288,13 +367,18 @@ export default function Articolo() {
     return <NotFound />;
   }
 
-  const readingTime = article.readTime || (() => {
-    if (typeof article.content !== 'string') return '5 min';
-    const plainText = article.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-    const wordCount = plainText ? plainText.split(' ').length : 0;
-    const minutes = Math.max(3, Math.ceil(wordCount / 200));
-    return `${minutes} min`;
-  })();
+  const readingTime =
+    article.readTime ||
+    (() => {
+      if (typeof article.content !== 'string') return '5 min';
+      const plainText = article.content
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+      const wordCount = plainText ? plainText.split(' ').length : 0;
+      const minutes = Math.max(3, Math.ceil(wordCount / 200));
+      return `${minutes} min`;
+    })();
 
   const authorName = isDemoArticle ? BRAND_AUTHOR : article.author || BRAND_AUTHOR;
   const categoryPath = getCategoryPath(article.category);
@@ -325,47 +409,57 @@ export default function Articolo() {
 
   if (!isDemoArticle) {
     structuredDataArray.push({
-      "@context": "https://schema.org",
-      "@type": "BlogPosting",
-      "headline": articleTitle,
-      "image": [articleImage],
-      "datePublished": datePublished,
-      "dateModified": dateModified,
-      "author": [{ "@type": "Person", "name": authorName, "url": `${SITE_URL}/chi-siamo` }],
-      "publisher": { "@type": "Organization", "name": "Travelliniwithus", "url": SITE_URL }
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: articleTitle,
+      image: [articleImage],
+      datePublished: datePublished,
+      dateModified: dateModified,
+      author: [{ '@type': 'Person', name: authorName, url: `${SITE_URL}/chi-siamo` }],
+      publisher: { '@type': 'Organization', name: 'Travelliniwithus', url: SITE_URL },
     });
   }
 
-  if (!isDemoArticle && article.category === 'Guide' && article.itinerary && article.itinerary.length > 0) {
+  if (
+    !isDemoArticle &&
+    article.category === 'Guide' &&
+    article.itinerary &&
+    article.itinerary.length > 0
+  ) {
     structuredDataArray.push({
-      "@context": "https://schema.org",
-      "@type": "HowTo",
-      "name": `Come visitare ${article.location}`,
-      "description": article.description,
-      "image": article.image,
-      "step": article.itinerary.map((step, index) => ({
-        "@type": "HowToStep",
-        "position": index + 1,
-        "name": step.title,
-        "text": step.description
-      }))
+      '@context': 'https://schema.org',
+      '@type': 'HowTo',
+      name: `Come visitare ${article.location}`,
+      description: article.description,
+      image: article.image,
+      step: article.itinerary.map((step, index) => ({
+        '@type': 'HowToStep',
+        position: index + 1,
+        name: step.title,
+        text: step.description,
+      })),
     });
-  } else if (!isDemoArticle && article.category === 'Guide' && article.tips && article.tips.length > 0) {
+  } else if (
+    !isDemoArticle &&
+    article.category === 'Guide' &&
+    article.tips &&
+    article.tips.length > 0
+  ) {
     structuredDataArray.push({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": article.tips.map((tip) => ({
-        "@type": "Question",
-        "name": `Consiglio utile per ${article.location}`,
-        "acceptedAnswer": { "@type": "Answer", "text": tip }
-      }))
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: article.tips.map((tip) => ({
+        '@type': 'Question',
+        name: `Consiglio utile per ${article.location}`,
+        acceptedAnswer: { '@type': 'Answer', text: tip },
+      })),
     });
   }
 
   const breadcrumbItems = [
     { label: article.category, href: categoryPath },
     { label: article.location.split(',')[0], href: '/destinazioni' },
-    { label: article.title.split(':')[0] }
+    { label: article.title.split(':')[0] },
   ];
 
   const tocItems = buildTocItems(article);
@@ -383,8 +477,12 @@ export default function Articolo() {
         />
         <Helmet>
           {!isDemoArticle && <meta property="article:published_time" content={datePublished} />}
-          {!isDemoArticle && article.updatedAt && <meta property="article:modified_time" content={dateModified} />}
-          {!isDemoArticle && <meta property="article:author" content={article.author || "Travelliniwithus"} />}
+          {!isDemoArticle && article.updatedAt && (
+            <meta property="article:modified_time" content={dateModified} />
+          )}
+          {!isDemoArticle && (
+            <meta property="article:author" content={article.author || 'Travelliniwithus'} />
+          )}
           <meta name="author" content={authorName} />
           {structuredDataArray.map((data, index) => (
             <script key={index} type="application/ld+json">
@@ -402,7 +500,10 @@ export default function Articolo() {
         <article className="relative bg-white rounded-[2.5rem] overflow-hidden shadow-xl shadow-black/5 border border-black/5 mx-4 md:mx-8 lg:mx-12 my-8 pb-24">
           {/* Navigation Header */}
           <div className="absolute top-8 left-8 z-50 hidden md:block">
-            <Link to={categoryPath} className="flex items-center gap-2 text-white/60 hover:text-white transition-colors text-xs uppercase tracking-widest font-bold">
+            <Link
+              to={categoryPath}
+              className="flex items-center gap-2 text-white/60 hover:text-white transition-colors text-xs uppercase tracking-widest font-bold"
+            >
               <ArrowRight size={16} className="rotate-180" />
               Torna ai Racconti
             </Link>
@@ -428,7 +529,9 @@ export default function Articolo() {
             {article.description && (
               <div className="mt-12 mb-16 p-8 md:p-12 bg-zinc-50/80 backdrop-blur-md rounded-[2.5rem] border border-[var(--color-accent)]/10 shadow-lg shadow-[var(--color-accent)]/5 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-48 h-48 bg-accent/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none" />
-                <h3 className="text-xl md:text-2xl font-serif mb-4 relative z-10 font-medium text-accent">In Breve</h3>
+                <h3 className="text-xl md:text-2xl font-serif mb-4 relative z-10 font-medium text-accent">
+                  In Breve
+                </h3>
                 <p className="text-lg md:text-xl font-light text-zinc-700 leading-relaxed relative z-10 italic">
                   "{article.description}"
                 </p>
@@ -437,28 +540,51 @@ export default function Articolo() {
 
             {/* Affiliate Disclaimer */}
             <div className="mt-4 mb-8 text-[10px] uppercase tracking-widest text-black/40 italic">
-              * Questo articolo contiene link di affiliazione. Se acquisti tramite questi link, potremmo ricevere una piccola commissione senza alcun costo aggiuntivo per te. Consigliamo solo cio che amiamo veramente.
+              * Questo articolo contiene link di affiliazione. Se acquisti tramite questi link,
+              potremmo ricevere una piccola commissione senza alcun costo aggiuntivo per te.
+              Consigliamo solo cio che amiamo veramente.
             </div>
 
             {/* Travel Essentials Card */}
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.8, ease: 'easeOut' }}
             >
               <div className="grid grid-cols-1 md:grid-cols-4 gap-px bg-black/5 rounded-[2.5rem] overflow-hidden border border-black/5 mb-20 shadow-sm">
                 {[
-                  { icon: <MapPin className="text-accent" size={20} />, label: 'Destinazione', value: article.location },
-                  { icon: <Calendar className="text-accent" size={20} />, label: 'Periodo Migliore', value: article.period },
-                  { icon: <DollarSign className="text-accent" size={20} />, label: 'Budget Stimato', value: article.budget },
-                  { icon: <Clock className="text-accent" size={20} />, label: 'Durata Consigliata', value: article.duration || readingTime + ' di lettura' },
+                  {
+                    icon: <MapPin className="text-accent" size={20} />,
+                    label: 'Destinazione',
+                    value: article.location,
+                  },
+                  {
+                    icon: <Calendar className="text-accent" size={20} />,
+                    label: 'Periodo Migliore',
+                    value: article.period,
+                  },
+                  {
+                    icon: <DollarSign className="text-accent" size={20} />,
+                    label: 'Budget Stimato',
+                    value: article.budget,
+                  },
+                  {
+                    icon: <Clock className="text-accent" size={20} />,
+                    label: 'Durata Consigliata',
+                    value: article.duration || readingTime + ' di lettura',
+                  },
                 ].map((item) => (
-                  <div key={item.label} className="bg-white p-8 flex flex-col items-center text-center">
+                  <div
+                    key={item.label}
+                    className="bg-white p-8 flex flex-col items-center text-center"
+                  >
                     <div className="w-12 h-12 rounded-full bg-[var(--color-sand)] flex items-center justify-center mb-4">
                       {item.icon}
                     </div>
-                    <span className="text-[10px] uppercase tracking-widest font-bold text-black/40 mb-1">{item.label}</span>
+                    <span className="text-[10px] uppercase tracking-widest font-bold text-black/40 mb-1">
+                      {item.label}
+                    </span>
                     <span className="text-sm font-medium">{item.value}</span>
                   </div>
                 ))}
@@ -467,16 +593,17 @@ export default function Articolo() {
 
             {/* Content Body with Sticky Sidebar */}
             <div className="flex flex-col lg:flex-row gap-16 relative">
-
               {/* Main Content */}
               <div className="lg:w-2/3 prose prose-lg prose-headings:font-serif prose-headings:font-normal prose-a:text-accent max-w-none text-black/80 font-light leading-relaxed markdown-body">
-
                 {/* Mobile Table of Contents */}
                 <TableOfContents items={tocItems} variant="mobile-inline" />
 
                 {/* Highlights Section */}
                 {article.highlights && article.highlights.length > 0 && (
-                  <div id="highlights" className="mb-16 p-10 bg-[var(--color-sand)] rounded-[2.5rem] border border-black/5 scroll-mt-32">
+                  <div
+                    id="highlights"
+                    className="mb-16 p-10 bg-[var(--color-sand)] rounded-[2.5rem] border border-black/5 scroll-mt-32"
+                  >
                     <h2 className="text-3xl font-serif mb-8 mt-0">Highlights del Viaggio</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                       {article.highlights.map((highlight, i) => (
@@ -507,11 +634,16 @@ export default function Articolo() {
                     <h2 className="text-3xl font-serif mb-10">L'Itinerario Giorno per Giorno</h2>
                     <div className="space-y-12">
                       {article.itinerary.map((step, i) => (
-                        <div key={i} className="relative pl-12 border-l border-black/10 pb-12 last:pb-0 last:border-0">
+                        <div
+                          key={i}
+                          className="relative pl-12 border-l border-black/10 pb-12 last:pb-0 last:border-0"
+                        >
                           <div className="absolute left-[-13px] top-0 w-6 h-6 rounded-full bg-white border-2 border-[var(--color-accent)] flex items-center justify-center z-10">
                             <div className="w-2 h-2 rounded-full bg-accent"></div>
                           </div>
-                          <div className="text-[10px] uppercase tracking-widest font-bold text-accent mb-2">Giorno {step.day}</div>
+                          <div className="text-[10px] uppercase tracking-widest font-bold text-accent mb-2">
+                            Giorno {step.day}
+                          </div>
                           <h3 className="text-2xl font-serif mb-4 mt-0">{step.title}</h3>
                           <p className="text-black/60 font-light m-0">{step.description}</p>
                         </div>
@@ -526,7 +658,15 @@ export default function Articolo() {
                     <div className="flex items-center gap-4 mb-6">
                       <div className="h-px flex-1 bg-black/10"></div>
                       <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-black/40 flex items-center gap-2">
-                        <svg width={14} height={14} viewBox="0 0 24 24" fill="currentColor" className="text-black/40"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.79 1.53V6.78a4.85 4.85 0 0 1-1.02-.09z"/></svg>
+                        <svg
+                          width={14}
+                          height={14}
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="text-black/40"
+                        >
+                          <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.79 1.53V6.78a4.85 4.85 0 0 1-1.02-.09z" />
+                        </svg>
                         Il nostro video su questo posto
                       </span>
                       <div className="h-px flex-1 bg-black/10"></div>
@@ -538,8 +678,15 @@ export default function Articolo() {
                           cite={article.videoUrl}
                           data-video-id={article.videoUrl.split('/video/')[1]?.split('?')[0]}
                         >
-                          <a href={article.videoUrl} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center justify-center h-48 bg-black/5 rounded-3xl text-sm text-black/40 gap-3 hover:bg-black/10 transition-colors">
-                            <svg width={32} height={32} viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.79 1.53V6.78a4.85 4.85 0 0 1-1.02-.09z"/></svg>
+                          <a
+                            href={article.videoUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex flex-col items-center justify-center h-48 bg-black/5 rounded-3xl text-sm text-black/40 gap-3 hover:bg-black/10 transition-colors"
+                          >
+                            <svg width={32} height={32} viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.79 1.53V6.78a4.85 4.85 0 0 1-1.02-.09z" />
+                            </svg>
                             Guarda il video su TikTok
                           </a>
                         </blockquote>
@@ -566,8 +713,15 @@ export default function Articolo() {
                     <h2 className="text-3xl font-serif mb-8">Momenti dal Viaggio</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {article.gallery.map((img, i) => (
-                        <div key={i} className={`overflow-hidden rounded-2xl ${i === 0 ? 'md:col-span-2 aspect-[16/9]' : 'aspect-square'}`}>
-                          <OptimizedImage src={img} alt={`Gallery image ${i + 1}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+                        <div
+                          key={i}
+                          className={`overflow-hidden rounded-2xl ${i === 0 ? 'md:col-span-2 aspect-[16/9]' : 'aspect-square'}`}
+                        >
+                          <OptimizedImage
+                            src={img}
+                            alt={`Gallery image ${i + 1}`}
+                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                          />
                         </div>
                       ))}
                     </div>
@@ -577,12 +731,22 @@ export default function Articolo() {
                 {/* Hidden Gems Section */}
                 {article.hiddenGems && article.hiddenGems.length > 0 && (
                   <div className="my-20">
-                    <h2 className="text-3xl font-serif mb-8">Hidden Gems <span className="text-sm font-sans font-normal text-black/40 ml-2 italic">Oltre i soliti percorsi</span></h2>
+                    <h2 className="text-3xl font-serif mb-8">
+                      Hidden Gems{' '}
+                      <span className="text-sm font-sans font-normal text-black/40 ml-2 italic">
+                        Oltre i soliti percorsi
+                      </span>
+                    </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                       {article.hiddenGems.map((gem, i) => (
-                        <div key={i} className="p-8 bg-[var(--color-sand)] rounded-[2.5rem] border border-black/5 hover:shadow-lg transition-all">
+                        <div
+                          key={i}
+                          className="p-8 bg-[var(--color-sand)] rounded-[2.5rem] border border-black/5 hover:shadow-lg transition-all"
+                        >
                           <h3 className="text-xl font-serif mb-4 mt-0">{gem.title}</h3>
-                          <p className="text-sm text-black/60 font-light m-0 leading-relaxed">{gem.description}</p>
+                          <p className="text-sm text-black/60 font-light m-0 leading-relaxed">
+                            {gem.description}
+                          </p>
                         </div>
                       ))}
                     </div>
@@ -592,18 +756,32 @@ export default function Articolo() {
                 {/* Local Food Section */}
                 {article.localFood && article.localFood.length > 0 && (
                   <div id="sapori-locali" className="my-20 scroll-mt-32">
-                    <h2 className="text-3xl font-serif mb-8">Sapori Locali <span className="text-sm font-sans font-normal text-black/40 ml-2 italic">Cosa assaggiare assolutamente</span></h2>
+                    <h2 className="text-3xl font-serif mb-8">
+                      Sapori Locali{' '}
+                      <span className="text-sm font-sans font-normal text-black/40 ml-2 italic">
+                        Cosa assaggiare assolutamente
+                      </span>
+                    </h2>
                     <div className="grid grid-cols-1 gap-6">
                       {article.localFood.map((food, i) => (
-                        <div key={i} className="flex flex-col sm:flex-row gap-6 p-6 bg-white border border-black/5 rounded-3xl hover:shadow-md transition-all">
+                        <div
+                          key={i}
+                          className="flex flex-col sm:flex-row gap-6 p-6 bg-white border border-black/5 rounded-3xl hover:shadow-md transition-all"
+                        >
                           {food.image && (
                             <div className="sm:w-32 sm:h-32 shrink-0 rounded-2xl overflow-hidden">
-                              <OptimizedImage src={food.image} alt={food.name} className="w-full h-full object-cover" />
+                              <OptimizedImage
+                                src={food.image}
+                                alt={food.name}
+                                className="w-full h-full object-cover"
+                              />
                             </div>
                           )}
                           <div>
                             <h3 className="text-lg font-serif mb-2 mt-0">{food.name}</h3>
-                            <p className="text-sm text-black/60 font-light m-0 leading-relaxed">{food.description}</p>
+                            <p className="text-sm text-black/60 font-light m-0 leading-relaxed">
+                              {food.description}
+                            </p>
                           </div>
                         </div>
                       ))}
@@ -643,31 +821,48 @@ export default function Articolo() {
 
                 {/* Budget Breakdown */}
                 {article.costs && (
-                  <div id="budget" className="my-20 p-10 bg-ink text-white rounded-[2.5rem] scroll-mt-32">
-                    <h2 className="text-3xl font-serif mb-2 mt-0 text-white">Quanto abbiamo speso</h2>
-                    <p className="text-white/50 text-sm font-light mb-8">Budget indicativo per 2 persone, basato sulla nostra esperienza reale.</p>
+                  <div
+                    id="budget"
+                    className="my-20 p-10 bg-ink text-white rounded-[2.5rem] scroll-mt-32"
+                  >
+                    <h2 className="text-3xl font-serif mb-2 mt-0 text-white">
+                      Quanto abbiamo speso
+                    </h2>
+                    <p className="text-white/50 text-sm font-light mb-8">
+                      Budget indicativo per 2 persone, basato sulla nostra esperienza reale.
+                    </p>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
                       {Object.entries(article.costs).map(([key, value]) => {
                         const labelMap: Record<string, string> = {
-                          alloggio: 'Alloggio', cibo: 'Cibo & Food', trasporti: 'Trasporti',
-                          attivita: 'Attività', voli: 'Voli', totale: 'Totale',
+                          alloggio: 'Alloggio',
+                          cibo: 'Cibo & Food',
+                          trasporti: 'Trasporti',
+                          attivita: 'Attività',
+                          voli: 'Voli',
+                          totale: 'Totale',
                         };
                         return (
                           <div key={key} className="text-center">
-                            <div className="text-[10px] uppercase tracking-widest font-bold text-white/40 mb-2">{labelMap[key] ?? key}</div>
+                            <div className="text-[10px] uppercase tracking-widest font-bold text-white/40 mb-2">
+                              {labelMap[key] ?? key}
+                            </div>
                             <div className="text-2xl font-serif text-accent">{value}</div>
                           </div>
                         );
                       })}
                     </div>
                     <p className="mt-8 text-xs text-white/40 font-light italic">
-                      * I costi sono indicativi. Prezzi e disponibilità possono variare in base alla stagione e a quanto prenotate in anticipo.
+                      * I costi sono indicativi. Prezzi e disponibilità possono variare in base alla
+                      stagione e a quanto prenotate in anticipo.
                     </p>
                   </div>
                 )}
 
                 {/* Tips & Packing List */}
-                <div id="tips-packing" className="grid grid-cols-1 md:grid-cols-2 gap-8 my-16 scroll-mt-32">
+                <div
+                  id="tips-packing"
+                  className="grid grid-cols-1 md:grid-cols-2 gap-8 my-16 scroll-mt-32"
+                >
                   {article.tips && article.tips.length > 0 && (
                     <div className="bg-[var(--color-sand)] p-8 rounded-3xl border border-black/5">
                       <h3 className="text-xl font-serif mb-6 flex items-center gap-2">
@@ -676,7 +871,10 @@ export default function Articolo() {
                       </h3>
                       <ul className="space-y-4 list-none pl-0 m-0">
                         {article.tips.map((tip, i) => (
-                          <li key={i} className="flex items-start gap-3 text-sm font-light leading-relaxed m-0">
+                          <li
+                            key={i}
+                            className="flex items-start gap-3 text-sm font-light leading-relaxed m-0"
+                          >
                             <CheckCircle size={16} className="text-accent mt-1 shrink-0" />
                             {tip}
                           </li>
@@ -695,10 +893,18 @@ export default function Articolo() {
                         {article.packingList.map((item, i) => (
                           <label key={i} className="flex items-center gap-3 cursor-pointer group">
                             <div className="relative flex items-center justify-center">
-                              <input type="checkbox" className="peer appearance-none w-5 h-5 border border-white/30 rounded-md checked:bg-accent checked:border-[var(--color-accent)] transition-all" />
-                              <CheckCircle size={12} className="absolute text-white opacity-0 peer-checked:opacity-100 transition-opacity" />
+                              <input
+                                type="checkbox"
+                                className="peer appearance-none w-5 h-5 border border-white/30 rounded-md checked:bg-accent checked:border-[var(--color-accent)] transition-all"
+                              />
+                              <CheckCircle
+                                size={12}
+                                className="absolute text-white opacity-0 peer-checked:opacity-100 transition-opacity"
+                              />
                             </div>
-                            <span className="text-sm font-light text-white/80 group-hover:text-white transition-colors peer-checked:line-through peer-checked:opacity-50">{item}</span>
+                            <span className="text-sm font-light text-white/80 group-hover:text-white transition-colors peer-checked:line-through peer-checked:opacity-50">
+                              {item}
+                            </span>
                           </label>
                         ))}
                       </div>
@@ -706,23 +912,43 @@ export default function Articolo() {
                   )}
                 </div>
 
-                <h2 id="dove-dormire" className="text-3xl mt-12 mb-6 text-black scroll-mt-32">Dove Dormire</h2>
+                <h2 id="dove-dormire" className="text-3xl mt-12 mb-6 text-black scroll-mt-32">
+                  Dove Dormire
+                </h2>
                 <p>
-                  Noi cerchiamo sempre il miglior rapporto qualità-prezzo — non il più economico in assoluto, ma quello che vale davvero ogni euro. Il trucco è prenotare in anticipo, soprattutto per i weekend e l'estate, e puntare sulla cancellazione gratuita così puoi cambiare idea senza stress.
+                  Noi cerchiamo sempre il miglior rapporto qualità-prezzo — non il più economico in
+                  assoluto, ma quello che vale davvero ogni euro. Il trucco è prenotare in anticipo,
+                  soprattutto per i weekend e l'estate, e puntare sulla cancellazione gratuita così
+                  puoi cambiare idea senza stress.
                 </p>
                 <AffiliateWidget type="booking" />
 
-                <h2 id="consigli" className="text-3xl mt-12 mb-6 text-black scroll-mt-32">I Nostri Consigli da Coppia in Viaggio</h2>
+                <h2 id="consigli" className="text-3xl mt-12 mb-6 text-black scroll-mt-32">
+                  I Nostri Consigli da Coppia in Viaggio
+                </h2>
                 <p>
-                  Dopo 10 anni di viaggi insieme, abbiamo imparato a distinguere ciò che è davvero utile da ciò che si porta per niente. Queste sono le cose che non mancano mai nelle nostre valigie — e che vi consigliamo sinceramente.
+                  Dopo 10 anni di viaggi insieme, abbiamo imparato a distinguere ciò che è davvero
+                  utile da ciò che si porta per niente. Queste sono le cose che non mancano mai
+                  nelle nostre valigie — e che vi consigliamo sinceramente.
                 </p>
                 <AffiliateWidget type="insurance" />
                 <AffiliateWidget type="esim" />
 
                 <ul>
-                  <li><strong>Assicurazione Viaggio:</strong> Non si parte senza, davvero. Heymondo è quella che usiamo noi — con il codice <strong>TRAVELLINIWITHUS</strong> hai il 10% di sconto.</li>
-                  <li><strong>eSIM per restare connessi:</strong> Fuori dall'UE la eSIM Airalo è una svolta. Con il codice <strong>TRAVELLINI3</strong> hai credito extra al primo acquisto.</li>
-                  <li><strong>Prenotare le attività:</strong> GetYourGuide è il nostro go-to per tour e ingressi — spesso hanno prezzi migliori e niente code.</li>
+                  <li>
+                    <strong>Assicurazione Viaggio:</strong> Non si parte senza, davvero. Heymondo è
+                    quella che usiamo noi — con il codice <strong>TRAVELLINIWITHUS</strong> hai il
+                    10% di sconto.
+                  </li>
+                  <li>
+                    <strong>eSIM per restare connessi:</strong> Fuori dall'UE la eSIM Airalo è una
+                    svolta. Con il codice <strong>TRAVELLINI3</strong> hai credito extra al primo
+                    acquisto.
+                  </li>
+                  <li>
+                    <strong>Prenotare le attività:</strong> GetYourGuide è il nostro go-to per tour
+                    e ingressi — spesso hanno prezzi migliori e niente code.
+                  </li>
                 </ul>
               </div>
 
@@ -750,28 +976,41 @@ export default function Articolo() {
                 <div className="flex items-center gap-3 mb-4 text-[10px] font-bold uppercase tracking-[0.24em] text-accent">
                   Guide Premium
                 </div>
-                <h3 className="text-3xl font-serif md:text-4xl mb-4 leading-tight">Parti preparato davvero.</h3>
-                <p className="text-white/70 font-light text-lg">Itinerari pratici, consigli budget e guide scritte dopo averle vissute. Niente teoria — solo quello che funziona.</p>
+                <h3 className="text-3xl font-serif md:text-4xl mb-4 leading-tight">
+                  Parti preparato davvero.
+                </h3>
+                <p className="text-white/70 font-light text-lg">
+                  Itinerari pratici, consigli budget e guide scritte dopo averle vissute. Niente
+                  teoria — solo quello che funziona.
+                </p>
               </div>
               <div className="relative z-10 shrink-0">
-                <Link to="/shop" className="inline-flex items-center justify-center bg-accent text-ink hover:bg-white px-8 py-4 rounded-full font-bold uppercase tracking-[0.2em] text-xs transition-colors shadow-lg">
+                <Link
+                  to="/shop"
+                  className="inline-flex items-center justify-center bg-accent text-ink hover:bg-white px-8 py-4 rounded-full font-bold uppercase tracking-[0.2em] text-xs transition-colors shadow-lg"
+                >
                   Esplora lo Shop <ArrowRight size={16} className="ml-2" />
                 </Link>
               </div>
             </div>
 
             {/* Recommended Gear */}
-            {(article.gear && article.gear.length > 0) ? (
+            {article.gear && article.gear.length > 0 ? (
               <div className="mt-24 bg-[var(--color-sand)] rounded-3xl p-10 md:p-16 border border-black/5">
                 <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
                   <div>
                     <div className="flex items-center gap-4 mb-4">
                       <div className="w-8 h-px bg-accent"></div>
-                      <span className="uppercase tracking-widest text-xs font-semibold text-accent">Travel Gear</span>
+                      <span className="uppercase tracking-widest text-xs font-semibold text-accent">
+                        Travel Gear
+                      </span>
                     </div>
                     <h3 className="text-3xl font-serif">Cosa portiamo con noi</h3>
                   </div>
-                  <Link to="/risorse" className="text-sm uppercase tracking-widest font-semibold text-black/60 hover:text-accent transition-colors flex items-center gap-2">
+                  <Link
+                    to="/risorse"
+                    className="text-sm uppercase tracking-widest font-semibold text-black/60 hover:text-accent transition-colors flex items-center gap-2"
+                  >
                     Vedi tutte le risorse <ArrowRight size={16} />
                   </Link>
                 </div>
@@ -784,7 +1023,7 @@ export default function Articolo() {
                       title={item.title}
                       description={item.description}
                       link={item.link}
-                      cta={item.cta || "Vedi Prodotto"}
+                      cta={item.cta || 'Vedi Prodotto'}
                       image={item.image}
                     />
                   ))}
@@ -796,11 +1035,16 @@ export default function Articolo() {
                   <div>
                     <div className="flex items-center gap-4 mb-4">
                       <div className="w-8 h-px bg-accent"></div>
-                      <span className="uppercase tracking-widest text-xs font-semibold text-accent">Travel Gear</span>
+                      <span className="uppercase tracking-widest text-xs font-semibold text-accent">
+                        Travel Gear
+                      </span>
                     </div>
                     <h3 className="text-3xl font-serif">Cosa portiamo con noi</h3>
                   </div>
-                  <Link to="/risorse" className="text-sm uppercase tracking-widest font-semibold text-black/60 hover:text-accent transition-colors flex items-center gap-2">
+                  <Link
+                    to="/risorse"
+                    className="text-sm uppercase tracking-widest font-semibold text-black/60 hover:text-accent transition-colors flex items-center gap-2"
+                  >
                     Vedi tutte le risorse <ArrowRight size={16} />
                   </Link>
                 </div>
@@ -813,7 +1057,7 @@ export default function Articolo() {
                     link="https://amazon.it"
                     cta="Vedi su Amazon"
                     // TODO(@travelliniwithus): PLACEHOLDER — servono foto fallback articolo
-                    image="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?q=80&w=400&auto=format&fit=crop"
+                    image="/images/experiences/avventura.png"
                   />
                   <AffiliateWidget
                     type="gear"
@@ -822,7 +1066,7 @@ export default function Articolo() {
                     link="https://amazon.it"
                     cta="Vedi su Amazon"
                     // TODO(@travelliniwithus): PLACEHOLDER — servono foto fallback articolo
-                    image="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=400&auto=format&fit=crop"
+                    image="/images/experiences/insolito.png"
                   />
                 </div>
               </div>

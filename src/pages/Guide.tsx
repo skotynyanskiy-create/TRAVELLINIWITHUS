@@ -112,6 +112,7 @@ function Guide() {
       <SEO
         title="Guide di Viaggio"
         description="Guide, idee e consigli pratici per organizzare meglio i viaggi, capire se un posto merita davvero e trovare spunti utili da salvare."
+        canonical={`${SITE_URL}/guide`}
       />
       <JsonLd
         data={{

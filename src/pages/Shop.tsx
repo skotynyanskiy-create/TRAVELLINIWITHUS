@@ -14,6 +14,7 @@ import Newsletter from '../components/Newsletter';
 import ProductCard from '../components/ProductCard';
 import { useCart } from '../context/CartContext';
 import { fetchProducts } from '../services/firebaseService';
+import { SITE_URL } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_PRODUCT, DEMO_PRODUCTS } from '../config/demoContent';
 import { useSiteContent } from '../hooks/useSiteContent';
@@ -107,9 +108,9 @@ function Shop() {
     const cats = new Set(products.map((p) => p.category));
     return ['Tutti', ...Array.from(cats)];
   }, [products]);
-  
-  const demoSlugs = DEMO_PRODUCTS.map(p => p.slug);
-  const usingShopDemo = products.length > 0 && products.some(p => demoSlugs.includes(p.slug));
+
+  const demoSlugs = DEMO_PRODUCTS.map((p) => p.slug);
+  const usingShopDemo = products.length > 0 && products.some((p) => demoSlugs.includes(p.slug));
 
   const filteredAndSortedProducts = useMemo(() => {
     let result = [...products];
@@ -144,6 +145,7 @@ function Shop() {
         <SEO
           title="Contenuti Premium"
           description="Guide premium, itinerari pronti, planner e contenuti pratici Travelliniwithus pensati per aiutarti a viaggiare meglio."
+          canonical={`${SITE_URL}/shop`}
         />
 
         <AnimatePresence>
