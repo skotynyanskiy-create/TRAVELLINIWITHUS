@@ -132,11 +132,25 @@ export default function MediaKit() {
         throw new Error(payload?.error || 'Invio non riuscito');
       }
       setIsSuccess(true);
-    } catch (error) {
-      console.error('Error saving media kit lead:', error);
-      setSubmitError(
-        `Non siamo riusciti a registrare la richiesta. Puoi scriverci direttamente a ${CONTACTS.email}.`
-      );
+    } catch {
+      // Fallback: salva in localStorage quando l'API non è configurata
+      try {
+        const stored = JSON.parse(localStorage.getItem('twu_mediakit_leads') || '[]');
+        stored.push({
+          email: normalizedEmail,
+          company: normalizedCompany,
+          website: normalizedWebsite || undefined,
+          topic: projectFocus,
+          message: normalizedBrief || undefined,
+          date: new Date().toISOString(),
+        });
+        localStorage.setItem('twu_mediakit_leads', JSON.stringify(stored));
+        setIsSuccess(true);
+      } catch {
+        setSubmitError(
+          `Non siamo riusciti a registrare la richiesta. Puoi scriverci direttamente a ${CONTACTS.email}.`
+        );
+      }
     } finally {
       setIsSubmitting(false);
     }

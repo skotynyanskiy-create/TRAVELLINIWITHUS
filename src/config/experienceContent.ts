@@ -1,7 +1,6 @@
 import type { ExperienceType } from './contentTaxonomy';
 
-export const EXPERIENCE_HERO_IMAGE =
-  'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop';
+export const EXPERIENCE_HERO_IMAGE = '/images/experiences/avventura.png';
 
 export const HOME_EXPERIENCE_TYPES: ExperienceType[] = [
   'Posti particolari',

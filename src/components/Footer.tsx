@@ -52,7 +52,6 @@ export default function Footer() {
               <div className="flex items-center gap-4">
                 {[
                   { icon: Instagram, href: CONTACTS.instagramUrl, label: 'Instagram' },
-                  { icon: MessageCircle, href: CONTACTS.whatsappUrl, label: 'WhatsApp' },
                   { icon: Mail, href: CONTACTS.mailto, label: 'Email' },
                 ].map((social) => (
                   <a

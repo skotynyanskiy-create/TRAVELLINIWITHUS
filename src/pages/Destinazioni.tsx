@@ -27,19 +27,13 @@ import {
 } from '../utils/contentArchive';
 import { getExperienceVisual } from '../config/experienceVisuals';
 
-// TODO(@travelliniwithus): PLACEHOLDER — servono foto rappresentative per ogni gruppo geografico (una per continente/area)
 const groupVisuals: Record<string, string> = {
-  Italia:
-    'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?q=80&w=1200&auto=format&fit=crop',
-  Europa:
-    'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?q=80&w=1200&auto=format&fit=crop',
-  Asia: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1200&auto=format&fit=crop',
-  Americhe:
-    'https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?q=80&w=1200&auto=format&fit=crop',
-  Africa:
-    'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?q=80&w=1200&auto=format&fit=crop',
-  Oceania:
-    'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?q=80&w=1200&auto=format&fit=crop',
+  Italia: '/images/destinations/toscana.png',
+  Europa: '/images/destinations/islanda.png',
+  Asia: '/images/destinations/giappone.png',
+  Americhe: '/images/destinations/americhe.png',
+  Africa: '/images/destinations/africa.png',
+  Oceania: '/images/destinations/oceania.png',
 };
 
 export default function Destinazioni() {

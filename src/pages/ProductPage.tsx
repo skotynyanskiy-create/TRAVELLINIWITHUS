@@ -12,7 +12,7 @@ import ProductPageSkeleton from '../components/ProductPageSkeleton';
 import { Product } from '../types';
 import { SITE_URL } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
-import { DEMO_PRODUCT } from '../config/demoContent';
+import { DEMO_PRODUCTS } from '../config/demoContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 
 const trustPoints = [
@@ -54,8 +54,9 @@ export default function ProductPage() {
 
   const product =
     fetchedProduct ||
-    (demoSettings.showShopDemo && slug === DEMO_PRODUCT.slug ? (DEMO_PRODUCT as Product) : null);
-  const isDemoProduct = !fetchedProduct && product?.slug === DEMO_PRODUCT.slug;
+    (demoSettings.showShopDemo ? (DEMO_PRODUCTS.find(p => p.slug === slug) as Product | undefined) : null) || null;
+    
+  const isDemoProduct = !fetchedProduct && !!DEMO_PRODUCTS.find(p => p.slug === product?.slug);
 
   const handleAddToCart = () => {
     if (!product || isDemoProduct) return;

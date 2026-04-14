@@ -15,7 +15,7 @@ import ProductCard from '../components/ProductCard';
 import { useCart } from '../context/CartContext';
 import { fetchProducts } from '../services/firebaseService';
 import { siteContentDefaults } from '../config/siteContent';
-import { DEMO_PRODUCT } from '../config/demoContent';
+import { DEMO_PRODUCT, DEMO_PRODUCTS } from '../config/demoContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { BRAND_STATS } from '../config/site';
 
@@ -93,7 +93,7 @@ function Shop() {
         return fetchedProducts as Product[];
       }
 
-      return demoSettings.showShopDemo ? [DEMO_PRODUCT as Product] : [];
+      return demoSettings.showShopDemo ? (DEMO_PRODUCTS as Product[]) : [];
     },
   });
 
@@ -107,7 +107,9 @@ function Shop() {
     const cats = new Set(products.map((p) => p.category));
     return ['Tutti', ...Array.from(cats)];
   }, [products]);
-  const usingShopDemo = products.length === 1 && products[0]?.slug === DEMO_PRODUCT.slug;
+  
+  const demoSlugs = DEMO_PRODUCTS.map(p => p.slug);
+  const usingShopDemo = products.length > 0 && products.some(p => demoSlugs.includes(p.slug));
 
   const filteredAndSortedProducts = useMemo(() => {
     let result = [...products];

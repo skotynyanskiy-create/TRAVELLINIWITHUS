@@ -88,15 +88,7 @@ export default function ChiSiamo() {
                 >
                   <Mail size={20} />
                 </a>
-                <a
-                  href={CONTACTS.whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex h-12 w-12 items-center justify-center rounded-full border border-black/10 transition-all hover:border-[var(--color-gold)] hover:bg-[var(--color-gold)] hover:text-white"
-                  aria-label="WhatsApp Travelliniwithus"
-                >
-                  <MessageCircle size={20} />
-                </a>
+
                 <a
                   href={CONTACTS.tiktokUrl}
                   target="_blank"
@@ -117,10 +109,9 @@ export default function ChiSiamo() {
 
           <div className="relative order-1 lg:order-2">
             <div className="aspect-[4/5] overflow-hidden rounded-[var(--radius-2xl)] shadow-[var(--shadow-premium)] transition-transform duration-700 hover:rotate-0 lg:rotate-2">
-              {/* TODO(@travelliniwithus): PLACEHOLDER — servono foto hero about — coppia in viaggio */}
               <OptimizedImage
-                src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1400&auto=format&fit=crop"
-                alt="Visuale editoriale del progetto Travelliniwithus"
+                src="/images/brand/about-editorial.png"
+                alt="Rodrigo e Betta al lavoro — Travelliniwithus"
                 className="block h-full w-full object-cover"
               />
             </div>

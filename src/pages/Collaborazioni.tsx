@@ -231,10 +231,9 @@ export default function Collaborazioni() {
             className="relative"
           >
             <div className="aspect-[4/5] overflow-hidden rounded-3xl shadow-2xl transition-transform duration-700 hover:rotate-0 lg:-rotate-2">
-              {/* TODO(@travelliniwithus): PLACEHOLDER — servono foto hero collaborazioni — coppia al lavoro con brand */}
               <OptimizedImage
-                src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1000&auto=format&fit=crop"
-                alt="Collaborazioni Travelliniwithus"
+                src="/images/brand/collab-work.png"
+                alt="Collaborazioni Travelliniwithus — creators al lavoro"
                 className="h-full w-full object-cover"
               />
             </div>

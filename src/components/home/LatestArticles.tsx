@@ -7,7 +7,7 @@ import OptimizedImage from '../OptimizedImage';
 import ArticleSkeleton from '../ArticleSkeleton';
 import { SITE_URL } from '../../config/site';
 import { siteContentDefaults } from '../../config/siteContent';
-import { DEMO_ARTICLE_PREVIEW } from '../../config/demoContent';
+import { DEMO_ARTICLE_PREVIEW, DEMO_ARTICLES_EXTRA } from '../../config/demoContent';
 import { useSiteContent } from '../../hooks/useSiteContent';
 import { formatDateValue, toMillis, type DateValue } from '../../utils/dateValue';
 
@@ -27,7 +27,7 @@ interface Article {
   experienceTypes?: string[];
 }
 
-const EDITORIAL_PREVIEWS: Article[] = [DEMO_ARTICLE_PREVIEW];
+const EDITORIAL_PREVIEWS: Article[] = [DEMO_ARTICLE_PREVIEW, ...DEMO_ARTICLES_EXTRA];
 
 function formatDate(dateInput: DateValue) {
   return formatDateValue(dateInput);

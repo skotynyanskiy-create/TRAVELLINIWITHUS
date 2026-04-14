@@ -375,9 +375,8 @@ export default function Risorse() {
               whileHover={{ y: -10 }}
               className="aspect-[3/4] rounded-[var(--radius-xl)] overflow-hidden shadow-2xl border-4 border-white"
             >
-              {/* TODO(@travelliniwithus): PLACEHOLDER — servono foto attrezzatura e strumenti di viaggio */}
               <img
-                src="https://images.unsplash.com/photo-1527631746610-bca00a040d60?q=80&w=600&auto=format&fit=crop"
+                src="/images/experiences/avventura.png"
                 alt="Strumenti utili per viaggiare meglio"
                 className="w-full h-full object-cover"
               />
@@ -386,9 +385,8 @@ export default function Risorse() {
               whileHover={{ y: -10 }}
               className="aspect-[3/4] rounded-[var(--radius-xl)] overflow-hidden shadow-2xl border-4 border-white mt-12"
             >
-              {/* TODO(@travelliniwithus): PLACEHOLDER — servono foto risorse e partner travel */}
               <img
-                src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=600&auto=format&fit=crop"
+                src="/images/experiences/romantico.png"
                 alt="Partner e risorse travel selezionate"
                 className="w-full h-full object-cover"
               />
@@ -403,8 +401,7 @@ export default function Risorse() {
           transition={{ duration: 0.7 }}
           className="mt-32 bg-[var(--color-ink)] text-white rounded-[2.5rem] p-10 md:p-20 relative overflow-hidden shadow-2xl"
         >
-          {/* TODO(@travelliniwithus): PLACEHOLDER — servono foto sfondo sezione vantaggi */}
-          <div className="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1500835556837-99ac94a94552?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center mix-blend-overlay"></div>
+          <div className="absolute inset-0 opacity-20 bg-[url('/images/destinations/dolomiti.png')] bg-cover bg-center mix-blend-overlay"></div>
           <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-ink)] via-[var(--color-ink)]/90 to-transparent"></div>
 
           <div className="relative z-10 max-w-2xl">

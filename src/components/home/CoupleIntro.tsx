@@ -5,8 +5,7 @@ import { BRAND_STATS } from '../../config/site';
 
 // TODO: sostituire con foto reale di Rodrigo & Betta
 // Aggiungere il file come public/rodrigo-betta.jpg e cambiare la costante sotto
-const COUPLE_IMG =
-  'https://images.unsplash.com/photo-1516589091380-5d8e87df6999?w=800&auto=format&fit=crop&q=80';
+const COUPLE_IMG = '/images/brand/couple-travel.png';
 
 const METHOD_STANDARDS = [
   {
