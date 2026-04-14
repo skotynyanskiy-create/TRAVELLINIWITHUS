@@ -6,11 +6,19 @@ import { CONTACTS } from '../../config/site';
 /* TODO: sostituire tutte le immagini con foto reali dal profilo Instagram */
 // TODO(@travelliniwithus): PLACEHOLDER — servono foto reali dal profilo Instagram @travelliniwithus
 const FEED_IMAGES = [
-  { src: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?q=80&w=600&auto=format&fit=crop', alt: 'Coffee and travel', offsetClass: '' },
-  { src: 'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=600&auto=format&fit=crop', alt: 'Paris', offsetClass: 'md:translate-y-8' },
-  { src: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=600&auto=format&fit=crop', alt: 'Mountain lake', offsetClass: 'hidden lg:block -translate-y-4' },
-  { src: 'https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?q=80&w=600&auto=format&fit=crop', alt: 'Rainy street', offsetClass: 'md:translate-y-12' },
-  { src: 'https://images.unsplash.com/photo-1463693396721-8ca0cfa2b3b5?q=80&w=600&auto=format&fit=crop', alt: 'Beach', offsetClass: '' },
+  { src: '/images/destinations/dolomiti.png', alt: 'Coffee and travel', offsetClass: '' },
+  { src: '/images/destinations/puglia.png', alt: 'Paris', offsetClass: 'md:translate-y-8' },
+  {
+    src: '/images/destinations/sardegna.png',
+    alt: 'Mountain lake',
+    offsetClass: 'hidden lg:block -translate-y-4',
+  },
+  {
+    src: '/images/destinations/toscana.png',
+    alt: 'Rainy street',
+    offsetClass: 'md:translate-y-12',
+  },
+  { src: '/images/destinations/islanda.png', alt: 'Beach', offsetClass: '' },
 ];
 
 export default function InstagramFeed() {
@@ -24,7 +32,9 @@ export default function InstagramFeed() {
           <Instagram size={14} />
           @travelliniwithus
         </div>
-        <h2 className="text-3xl font-serif leading-tight text-ink md:text-4xl">Il diario visivo del viaggio.</h2>
+        <h2 className="text-3xl font-serif leading-tight text-ink md:text-4xl">
+          Il diario visivo del viaggio.
+        </h2>
         <p className="mt-3 text-base font-normal text-black/70">
           Ogni giorno posti veri, momenti autentici e scorci da non dimenticare.
         </p>
@@ -44,7 +54,11 @@ export default function InstagramFeed() {
               viewport={{ once: true }}
               transition={{ delay: idx * 0.08, duration: 0.6 }}
             >
-              <OptimizedImage src={img.src} alt={img.alt} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+              <OptimizedImage
+                src={img.src}
+                alt={img.alt}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              />
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                 <Instagram className="text-white" size={28} />
               </div>

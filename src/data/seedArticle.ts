@@ -7,10 +7,9 @@ export const SAMPLE_ARTICLE = {
   category: 'Guide',
   slug: 'dolomiti-rifugi-design',
   // TODO(@travelliniwithus): PLACEHOLDER — servono foto seed article placeholder
-  image:
-    'https://images.unsplash.com/photo-1533130061792-64b345e4a833?q=80&w=2000&auto=format&fit=crop',
+  image: '/images/destinations/dolomiti.png',
   excerpt:
-    "Un unico contenuto dimostrativo per mostrare come potranno apparire guide, itinerari e racconti quando inserirai il materiale definitivo.",
+    'Un unico contenuto dimostrativo per mostrare come potranno apparire guide, itinerari e racconti quando inserirai il materiale definitivo.',
   description: 'Guida demo ai rifugi di design e ai percorsi panoramici delle Dolomiti.',
   location: 'Trentino-Alto Adige, Italia',
   period: 'Giugno - Ottobre',
@@ -25,21 +24,35 @@ export const SAMPLE_ARTICLE = {
     'Alba al Lago di Carezza',
   ],
   itinerary: [
-    { day: 1, title: 'Arrivo in Val di Fiemme', description: 'Check-in e prima esplorazione dei boschi circostanti.' },
-    { day: 2, title: 'Latemar e architettura', description: 'Salita al Rifugio Oberholz e pranzo panoramico.' },
-    { day: 3, title: 'Il Catinaccio', description: 'Trekking panoramico verso il Rifugio Re Alberto I.' },
+    {
+      day: 1,
+      title: 'Arrivo in Val di Fiemme',
+      description: 'Check-in e prima esplorazione dei boschi circostanti.',
+    },
+    {
+      day: 2,
+      title: 'Latemar e architettura',
+      description: 'Salita al Rifugio Oberholz e pranzo panoramico.',
+    },
+    {
+      day: 3,
+      title: 'Il Catinaccio',
+      description: 'Trekking panoramico verso il Rifugio Re Alberto I.',
+    },
   ],
   tips: [
     "Prenota i rifugi con qualche mese di anticipo per l'alta stagione.",
     'Porta sempre con te una giacca a vento, anche in estate.',
     'Scarica mappe offline prima di salire in quota.',
   ],
-  packingList: ['Scarponi da trekking', 'Zaino da 30L', 'Borraccia termica', 'Bastoncini telescopici'],
-  // TODO(@travelliniwithus): PLACEHOLDER — servono foto seed article placeholder
-  gallery: [
-    'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800&auto=format&fit=crop',
-    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=800&auto=format&fit=crop',
+  packingList: [
+    'Scarponi da trekking',
+    'Zaino da 30L',
+    'Borraccia termica',
+    'Bastoncini telescopici',
   ],
+  // TODO(@travelliniwithus): PLACEHOLDER — servono foto seed article placeholder
+  gallery: ['/images/experiences/avventura.png', '/images/experiences/romantico.png'],
   content: `
 # Dolomiti: L'Estetica della Montagna
 
