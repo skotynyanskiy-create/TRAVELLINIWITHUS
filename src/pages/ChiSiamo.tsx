@@ -21,7 +21,7 @@ import { useSiteContent } from '../hooks/useSiteContent';
 
 const EDITORIAL_GUARDRAILS = [
   'Se un posto funziona solo in foto e non nella vita reale, non ci interessa spingerlo.',
-  'Se una collaborazione ci chiede di sembrare entusiasti a prescindere, non e il progetto giusto per noi.',
+  'Se una collaborazione ci chiede di sembrare entusiasti a prescindere, non è il progetto giusto per noi.',
   'Se un consiglio non aiuta davvero chi legge a decidere meglio, preferiamo non pubblicarlo.',
 ];
 
@@ -29,7 +29,7 @@ const TIMELINE = [
   {
     year: '2016',
     title: 'Il primo viaggio che cambia il ritmo',
-    text: 'Da li in poi i viaggi smettono di essere solo pause e diventano un modo stabile di guardare i luoghi.',
+    text: 'Da lì in poi i viaggi smettono di essere solo pause e diventano un modo stabile di guardare i luoghi.',
   },
   {
     year: '2018',
@@ -39,12 +39,12 @@ const TIMELINE = [
   {
     year: '2020',
     title: 'Metodo prima del volume',
-    text: 'Il progetto prende una direzione piu precisa: meno lista, piu esperienza diretta, piu dettagli utili.',
+    text: 'Il progetto prende una direzione più precisa: meno lista, più esperienza diretta, più dettagli utili.',
   },
   {
     year: '2023',
     title: 'Arrivano le prime partnership serie',
-    text: 'Hotel, brand e territori iniziano a vedere valore in un racconto piu credibile e meno da brochure.',
+    text: 'Hotel, brand e territori iniziano a vedere valore in un racconto più credibile e meno da brochure.',
   },
   {
     year: '2026',
@@ -63,14 +63,14 @@ export default function ChiSiamo() {
     heroTitleAccent: 'i posti che consigliamo',
     introParagraphs: [
       'Siamo Rodrigo e Betta. Travelliniwithus nasce dal desiderio di consigliare meno posti, ma consigliarli meglio.',
-      'Il progetto tiene insieme sguardo personale, immagini, ricerca e dettagli pratici: serve a chi vuole scoprire luoghi con piu criterio, non a chi cerca la lista piu lunga.',
-      'Ogni destinazione, soggiorno o esperienza passa da una domanda semplice: aiuterebbe davvero qualcuno a scegliere meglio? Se la risposta e no, non entra qui.',
+      'Il progetto tiene insieme sguardo personale, immagini, ricerca e dettagli pratici: serve a chi vuole scoprire luoghi con più criterio, non a chi cerca la lista più lunga.',
+      'Ogni destinazione, soggiorno o esperienza passa da una domanda semplice: aiuterebbe davvero qualcuno a scegliere meglio? Se la risposta è no, non entra qui.',
     ],
     primaryCtaLabel: 'Scopri come collaborare',
     primaryCtaLink: '/collaborazioni',
     quoteText: 'Non ci interessa mostrare tutto. Ci interessa consigliare bene.',
     quoteAuthor: 'Rodrigo & Betta',
-    focusTitle: 'Perche fidarsi',
+    focusTitle: 'Perché fidarsi',
     focusSubtitle: 'Metodo editoriale',
     focusAreas: [
       {
@@ -78,33 +78,33 @@ export default function ChiSiamo() {
         text: 'Ogni luogo passa dalla prova reale: atmosfera, zona, logistica e dettagli vengono filtrati dal tempo sul posto, non da una lista trovata online.',
       },
       {
-        title: 'Liberta editoriale',
+        title: 'Libertà editoriale',
         text: 'Quando collaboriamo, lo facciamo in modo dichiarato e senza rinunciare al nostro modo di raccontare. Altrimenti preferiamo non farlo.',
       },
       {
         title: 'Immagini e dettagli credibili',
-        text: 'Le foto devono aiutare a capire il luogo, non solo a renderlo desiderabile. Per questo il racconto resta sempre legato alla realta del posto.',
+        text: 'Le foto devono aiutare a capire il luogo, non solo a renderlo desiderabile. Per questo il racconto resta sempre legato alla realtà del posto.',
       },
     ],
     principlesTitle: 'Quello che difendiamo',
     principlesSubtitle: 'Le nostre regole',
     principles: [
       {
-        title: 'Utilita prima del volume',
-        text: 'Ogni contenuto deve aiutare chi legge a decidere meglio, non solo a restare piu tempo sul sito.',
+        title: 'Utilità prima del volume',
+        text: 'Ogni contenuto deve aiutare chi legge a decidere meglio, non solo a restare più tempo sul sito.',
       },
       {
         title: 'Selezione prima della lista',
         text: 'Non cerchiamo di coprire tutto. Selezioniamo luoghi, esperienze e strumenti che hanno davvero qualcosa da lasciare.',
       },
       {
-        title: 'Credibilita prima della scena',
-        text: 'Preferiamo un racconto piu sobrio ma vero a una pagina bella che promette piu di quello che esiste.',
+        title: 'Credibilità prima della scena',
+        text: 'Preferiamo un racconto più sobrio ma vero a una pagina bella che promette più di quello che esiste.',
       },
     ],
-    audienceTitle: 'Per chi e costruito questo progetto',
+    audienceTitle: 'Per chi è costruito questo progetto',
     audienceDescription:
-      'Il nostro contenuto non e per chi vuole tutto e subito. E per chi apprezza scelta, contesto e un punto di vista riconoscibile.',
+      'Il nostro contenuto non è per chi vuole tutto e subito. È per chi apprezza scelta, contesto e un punto di vista riconoscibile.',
     audienceItems: [
       'Viaggiatori che vogliono uscire dalle liste copia-incolla e capire se un luogo merita davvero.',
       'Persone che cercano strumenti, guide e dettagli pratici che abbiano un uso concreto.',
@@ -117,7 +117,7 @@ export default function ChiSiamo() {
     <PageLayout>
       <SEO
         title="Chi Siamo"
-        description="Chi sono Rodrigo e Betta, come lavorano e perche Travelliniwithus consiglia solo posti particolari raccontati con criterio."
+        description="Chi sono Rodrigo e Betta, come lavorano e perché Travelliniwithus consiglia solo posti particolari raccontati con criterio."
       />
       <JsonLd
         data={{
@@ -195,14 +195,14 @@ export default function ChiSiamo() {
                   href={CONTACTS.instagramUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex h-12 w-12 items-center justify-center rounded-full border border-black/10 transition-all hover:border-[var(--color-gold)] hover:bg-[var(--color-gold)] hover:text-white"
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-black/10 transition-all hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white"
                   aria-label="Instagram Travelliniwithus"
                 >
                   <Instagram size={20} />
                 </a>
                 <a
                   href={CONTACTS.mailto}
-                  className="flex h-12 w-12 items-center justify-center rounded-full border border-black/10 transition-all hover:border-[var(--color-gold)] hover:bg-[var(--color-gold)] hover:text-white"
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-black/10 transition-all hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white"
                   aria-label="Email Travelliniwithus"
                 >
                   <Mail size={20} />
@@ -211,7 +211,7 @@ export default function ChiSiamo() {
                   href={CONTACTS.whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex h-12 w-12 items-center justify-center rounded-full border border-black/10 transition-all hover:border-[var(--color-gold)] hover:bg-[var(--color-gold)] hover:text-white"
+                  className="flex h-12 w-12 items-center justify-center rounded-full border border-black/10 transition-all hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white"
                   aria-label="WhatsApp Travelliniwithus"
                 >
                   <MessageCircle size={20} />
@@ -341,7 +341,7 @@ export default function ChiSiamo() {
                   {milestone.year}
                 </div>
                 {index < TIMELINE.length - 1 && (
-                  <div className="mt-2 h-full w-px bg-gradient-to-b from-[var(--color-accent)] to-[var(--color-accent-warm)]" />
+                  <div className="mt-2 h-full w-px bg-gradient-to-b from-[var(--color-accent)] to-[var(--color-accent)]" />
                 )}
               </div>
               <div className="pt-3">

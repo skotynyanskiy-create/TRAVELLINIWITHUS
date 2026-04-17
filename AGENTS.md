@@ -11,6 +11,8 @@ This repository is the website and marketing operating system for the travel cre
 - Agent stack truth: `docs/AI_AGENT_STACK.md`
 - Marketing operating hub: `docs/MARKETING_OPERATIONS_HUB.md`
 - Project hub: `docs/10_Projects/PROJECT_TRAVELLINIWITHUS_SITE.md`
+- Editorial rules: `docs/EDITORIAL_GUIDE.md`
+- Vault taxonomy and naming: `docs/OBSIDIAN_TAXONOMY.md`
 
 ## Read this order first
 
@@ -79,9 +81,14 @@ npm run predeploy
 
 - Use `MARKETING_OPERATIONS_HUB.md` as the top marketing dashboard
 - Track campaigns with `TPL_Campaign.md`
-- Track partnerships with `TPL_Partner.md`
+- Track partnerships with `TPL_Partner.md` or `TPL_Collaboration.md` (extended)
 - Track content planning with `TPL_Content_Brief.md`
+- Track articles and guides with `TPL_Article.md`, `TPL_Destination_Guide.md`, `TPL_Itinerary.md`
+- Track places/hotels with `TPL_Place.md`
+- Track SEO page audits with `TPL_SEO_Page.md`
+- Track products with `TPL_Product.md`
 - Track release checkpoints with `TPL_Release_Note.md`
+- Web clips and design references: `TPL_Web_Clip.md`, `TPL_Design_Reference.md`
 
 ## Public brand references
 

@@ -49,7 +49,7 @@ export default function CoupleIntro() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4, duration: 0.6 }}
-              className="absolute bottom-4 left-4 rounded-lg border border-[var(--color-gold)]/20 bg-white/90 px-4 py-3 backdrop-blur-sm"
+              className="absolute bottom-4 left-4 rounded-lg border border-[var(--color-accent)]/20 bg-white/90 px-4 py-3 backdrop-blur-sm"
             >
               <div className="font-script text-xl text-[var(--color-accent)]">Rodrigo & Betta</div>
               <div className="text-[10px] uppercase tracking-widest text-black/50">
@@ -70,10 +70,10 @@ export default function CoupleIntro() {
             </span>
             <h2 className="mt-3 max-w-2xl text-3xl font-serif leading-tight text-ink md:text-5xl">
               Andiamo, proviamo, raccontiamo.
-              <span className="text-[var(--color-accent-warm)]"> Solo dopo consigliamo.</span>
+              <span className="text-[var(--color-accent)]"> Solo dopo consigliamo.</span>
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-black/65 md:text-lg">
-              Travelliniwithus non nasce per mostrare piu posti possibile. Nasce per selezionare quelli
+              Travelliniwithus non nasce per mostrare più posti possibile. Nasce per selezionare quelli
               che meritano davvero, con un racconto abbastanza concreto da aiutarti a decidere.
             </p>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/65 md:text-lg">
@@ -87,7 +87,7 @@ export default function CoupleIntro() {
 
                 return (
                   <div key={standard.title} className="rounded-lg border border-black/8 bg-white/70 p-4">
-                    <Icon size={18} className="text-[var(--color-accent-warm)]" />
+                    <Icon size={18} className="text-[var(--color-accent)]" />
                     <h3 className="mt-3 text-sm font-bold text-ink">{standard.title}</h3>
                     <p className="mt-2 text-xs leading-relaxed text-black/55">{standard.text}</p>
                   </div>
@@ -97,13 +97,13 @@ export default function CoupleIntro() {
 
             <div className="mt-7 border-t border-black/8 pt-6">
               <p className="max-w-2xl text-xs font-bold uppercase tracking-[0.22em] text-black/45">
-                Meno rumore, piu criterio. Meno lista, piu esperienza vera.
+                Meno rumore, più criterio. Meno lista, più esperienza vera.
               </p>
             </div>
 
             <Link
               to="/chi-siamo"
-              className="mt-6 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-ink transition-colors hover:text-[var(--color-accent-warm)]"
+              className="mt-6 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-ink transition-colors hover:text-[var(--color-accent)]"
             >
               Come lavoriamo davvero <ArrowRight size={14} />
             </Link>

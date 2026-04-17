@@ -50,9 +50,9 @@ export default function Button({
     primary:
       'bg-[var(--color-ink)] text-white shadow-md hover:bg-[var(--color-ink)]/85 hover:shadow-premium hover:-translate-y-0.5',
     secondary:
-      'bg-[var(--color-surface)] text-[var(--color-ink)] shadow-sm hover:text-[var(--color-gold)] hover:shadow-premium border border-[var(--color-ink)]/10 hover:-translate-y-0.5',
+      'bg-[var(--color-surface)] text-[var(--color-ink)] shadow-sm hover:text-[var(--color-accent)] hover:shadow-premium border border-[var(--color-ink)]/10 hover:-translate-y-0.5',
     outline:
-      'bg-transparent border border-[var(--color-ink)]/20 text-[var(--color-ink)] hover:border-[var(--color-gold)] hover:text-[var(--color-gold)] hover:bg-[var(--color-gold-soft)]',
+      'bg-transparent border border-[var(--color-ink)]/20 text-[var(--color-ink)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] hover:bg-[var(--color-accent-soft)]',
     'outline-light':
       'bg-white/10 border border-white/40 text-white backdrop-blur-sm hover:bg-white hover:text-[var(--color-ink)] hover:border-white shadow-glass hover:-translate-y-0.5',
     cta: 'bg-[var(--color-accent)] text-white shadow-[0_0_20px_rgba(155,127,166,0.25)] hover:shadow-[0_0_30px_rgba(155,127,166,0.4)] hover:brightness-110 hover:-translate-y-0.5',

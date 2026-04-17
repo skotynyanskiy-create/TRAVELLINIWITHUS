@@ -50,7 +50,7 @@ export const EXPERIENCE_VISUALS: Record<string, ExperienceVisual> = {
     colorLight: '#FFF0F3',
     label: 'coppia',
   },
-  "Borghi e citta d'arte": {
+  "Borghi e città d'arte": {
     icon: Landmark,
     color: '#6D5E3D',
     colorLight: '#F4F4F5',

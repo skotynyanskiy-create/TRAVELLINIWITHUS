@@ -32,9 +32,9 @@ export default function CrossLinkWidget({ variant }: CrossLinkWidgetProps) {
         cta: 'Leggi le guide',
         wrapClass: 'bg-[var(--color-ink)]',
         titleClass: 'text-white',
-        scriptClass: 'text-[var(--color-gold)]',
+        scriptClass: 'text-[var(--color-accent)]',
         descClass: 'text-white/65',
-        btnClass: 'bg-white text-[var(--color-ink)] hover:bg-[var(--color-gold-soft)]',
+        btnClass: 'bg-white text-[var(--color-ink)] hover:bg-[var(--color-accent-soft)]',
       }
     : isToEsperienze
       ? {

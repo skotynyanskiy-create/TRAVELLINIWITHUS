@@ -97,7 +97,7 @@ export default function RelatedArticles({
             </p>
             <p className="mt-4 text-base font-normal leading-relaxed text-black/70">
               Quando inizierai a pubblicare i contenuti reali, qui potremo mostrare articoli
-              collegati in modo piu preciso per tema, luogo o intento di lettura.
+              collegati in modo più preciso per tema, luogo o intento di lettura.
             </p>
             <Link
               to="/guide"

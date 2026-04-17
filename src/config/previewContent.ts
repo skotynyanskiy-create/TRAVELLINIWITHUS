@@ -24,25 +24,25 @@ export const PREVIEW_ARTICLES: Record<string, ArticleData & { id: string; slug: 
     content: `
 Questa preview mostra la direzione editoriale del sito: non un diario generico, ma una guida costruita per capire se un posto merita davvero il viaggio.
 
-## Perche andarci
+## Perché andarci
 
 Le Dolomiti funzionano quando il viaggio non viene ridotto a una foto panoramica. Il valore sta nel ritmo: una salita fatta con calma, un rifugio scelto bene, un punto dove fermarsi prima che arrivi la folla.
 
 ## Cosa sapere prima
 
-La finestra migliore va da giugno a ottobre. Luglio e agosto sono piu pieni, quindi conviene prenotare rifugi e alloggi con anticipo. Settembre e spesso il mese piu equilibrato per luce, temperature e tranquillita.
+La finestra migliore va da giugno a ottobre. Luglio e agosto sono più pieni, quindi conviene prenotare rifugi e alloggi con anticipo. Settembre e spesso il mese più equilibrato per luce, temperature e tranquillita.
 
 ## Quando andare
 
-Se vuoi camminare senza stress, evita le ore centrali sui sentieri piu famosi. Alba e tardo pomeriggio restituiscono una montagna piu silenziosa e piu adatta anche ai contenuti visual.
+Se vuoi camminare senza stress, evita le ore centrali sui sentieri più famosi. Alba e tardo pomeriggio restituiscono una montagna più silenziosa e più adatta anche ai contenuti visual.
 
 ## Come arrivare
 
-Per un weekend breve ha senso muoversi in auto e costruire una base unica, invece di cambiare alloggio ogni notte. Questo riduce tempi morti e rende piu facile scegliere percorsi coerenti.
+Per un weekend breve ha senso muoversi in auto e costruire una base unica, invece di cambiare alloggio ogni notte. Questo riduce tempi morti e rende più facile scegliere percorsi coerenti.
 
 ## Consiglio Travellini
 
-Non cercare di vedere tutto. Scegli una valle, due punti forti e un margine per fermarti. Un viaggio piu corto ma leggibile resta molto piu memorabile.
+Non cercare di vedere tutto. Scegli una valle, due punti forti e un margine per fermarti. Un viaggio più corto ma leggibile resta molto più memorabile.
 `,
     highlights: [
       'Rifugi con architettura contemporanea e vista aperta',
@@ -60,7 +60,7 @@ Non cercare di vedere tutto. Scegli una valle, due punti forti e un margine per 
         day: 2,
         title: 'Rifugio e sentiero principale',
         description:
-          'Giornata piena dedicata al percorso piu scenografico, con pausa lunga in rifugio e rientro prima del buio.',
+          'Giornata piena dedicata al percorso più scenografico, con pausa lunga in rifugio e rientro prima del buio.',
       },
       {
         day: 3,
@@ -101,7 +101,7 @@ Non cercare di vedere tutto. Scegli una valle, due punti forti e un margine per 
     image:
       'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?q=80&w=2000&auto=format&fit=crop',
     excerpt:
-      'Una guida preview per trasformare il classico weekend in borgo in una scelta piu consapevole, utile e meno casuale.',
+      'Una guida preview per trasformare il classico weekend in borgo in una scelta più consapevole, utile e meno casuale.',
     description:
       'Criteri pratici per scegliere un borgo che abbia davvero senso: accessibilita, atmosfera, cibo, ritmo e cose da fare senza correre.',
     location: 'Italia',
@@ -115,7 +115,7 @@ Non cercare di vedere tutto. Scegli una valle, due punti forti e un margine per 
     content: `
 Un borgo non basta fotografarlo. Per diventare un buon weekend deve avere ritmo, accoglienza e almeno un motivo vero per restare oltre la passeggiata principale.
 
-## Perche andarci
+## Perché andarci
 
 Il weekend lento funziona quando riduce attriti: arrivo semplice, distanze brevi, una buona tavola e qualche deviazione interessante intorno.
 
@@ -125,7 +125,7 @@ Prima di scegliere guarda tre cose: parcheggio o stazione, orari reali di ristor
 
 ## Quando andare
 
-Primavera e autunno sono spesso migliori dell estate. Meno folla, luce piu morbida e prezzi piu sensati.
+Primavera e autunno sono spesso migliori dell estate. Meno folla, luce più morbida e prezzi più sensati.
 
 ## Consiglio Travellini
 
@@ -163,9 +163,9 @@ Scegli un posto dove puoi fare meno, ma farlo meglio: una trattoria, un belveder
     date: '2 aprile 2026',
     author: 'Rodrigo & Betta',
     content: `
-La scelta migliore non e sempre quella piu spettacolare. E quella che regge il tempo che hai, il budget reale e il tipo di energia che vuoi portare nel viaggio.
+La scelta migliore non e sempre quella più spettacolare. E quella che regge il tempo che hai, il budget reale e il tipo di energia che vuoi portare nel viaggio.
 
-## Perche usarla
+## Perché usarla
 
 Prima di prenotare conviene verificare se la destinazione e davvero compatibile con giorni, spostamenti, stagione e aspettative.
 

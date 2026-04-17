@@ -42,7 +42,7 @@ const MEDIA_KIT_PREVIEW = [
 ];
 
 const QUALIFYING_POINTS = [
-  'Hotel, hospitality e soggiorni con una forte identita.',
+  'Hotel, hospitality e soggiorni con una forte identità.',
   'Destinazioni, territori e progetti travel con una storia da raccontare bene.',
   'Brand lifestyle e utility coerenti con il nostro modo di viaggiare e consigliare.',
 ];
@@ -54,11 +54,11 @@ const NEXT_STEPS = [
   },
   {
     title: '2. Valutazione editoriale',
-    text: 'Capiamo se il progetto e coerente con il pubblico, con il tono del brand e con il tipo di contenuto che sappiamo fare bene.',
+    text: 'Capiamo se il progetto è coerente con il pubblico, con il tono del brand e con il tipo di contenuto che sappiamo fare bene.',
   },
   {
     title: '3. Invio materiali e dialogo',
-    text: 'Se c e allineamento, ricevi il media kit e apriamo il confronto operativo con basi piu serie e pulite.',
+    text: `Se c'è allineamento, ricevi il media kit e apriamo il confronto operativo con basi più serie e pulite.`,
   },
 ];
 
@@ -151,7 +151,7 @@ export default function MediaKit() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <div className="mb-6 flex items-center justify-center gap-4">
               <div className="h-px w-12 bg-[var(--color-accent)]" />
-              <span className="font-script text-xl text-[var(--color-accent-warm)]">Media kit</span>
+              <span className="font-script text-xl text-[var(--color-accent)]">Media kit</span>
               <div className="h-px w-12 bg-[var(--color-accent)]" />
             </div>
             <h1 className="mb-8 text-5xl font-serif md:text-7xl">
@@ -161,7 +161,7 @@ export default function MediaKit() {
             </h1>
             <p className="mx-auto max-w-3xl text-xl leading-relaxed text-black/70">
               Il media kit serve a capire se il progetto ha senso per entrambe le parti. Pubblico,
-              posizionamento, format e modo di lavorare: tutto il necessario per parlare con basi piu serie.
+              posizionamento, format e modo di lavorare: tutto il necessario per parlare con basi più serie.
             </p>
             <div className="mt-8 inline-flex flex-wrap items-center justify-center gap-4 rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent-soft)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] md:gap-6 md:px-8">
               <span>{BRAND_STATS.instagramFollowers} Instagram</span>
@@ -328,7 +328,7 @@ export default function MediaKit() {
                     value={brief}
                     onChange={(e) => setBrief(e.target.value)}
                     className="w-full rounded-xl border border-zinc-200 px-4 py-3 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-[var(--color-accent)]"
-                    placeholder="Obiettivo, periodo, tipo di attivazione o perche pensi che ci sia un fit reale."
+                    placeholder="Obiettivo, periodo, tipo di attivazione o perché pensi che ci sia un fit reale."
                   />
                 </div>
 
@@ -351,7 +351,7 @@ export default function MediaKit() {
                 {submitError && <p className="text-sm text-red-600">{submitError}</p>}
 
                 <p className="text-center text-xs font-medium text-[var(--color-accent)]">
-                  Se il contatto e coerente, ricevi il link al media kit e un riscontro entro 48 ore lavorative.
+                  Se il contatto è coerente, ricevi il link al media kit e un riscontro entro 48 ore lavorative.
                 </p>
 
                 <p className="text-center text-xs leading-relaxed text-zinc-400">
@@ -378,13 +378,13 @@ export default function MediaKit() {
               </h2>
               <p className="text-center leading-relaxed text-[var(--color-accent-text)]">
                 Grazie. Se vediamo un allineamento reale, ti inviamo il media kit e ti rispondiamo con i
-                prossimi passi piu utili.
+                prossimi passi più utili.
               </p>
               <div className="mt-8 space-y-4 rounded-[1.5rem] border border-[var(--color-accent)]/10 bg-white/70 p-6">
                 <div className="flex gap-3">
                   <CheckCircle size={18} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
                   <p className="text-sm leading-relaxed text-black/70">
-                    Ti scriviamo entro 48 ore lavorative se il progetto e in linea.
+                    Ti scriviamo entro 48 ore lavorative se il progetto è in linea.
                   </p>
                 </div>
                 <div className="flex gap-3">
@@ -396,7 +396,7 @@ export default function MediaKit() {
                 <div className="flex gap-3">
                   <CheckCircle size={18} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
                   <p className="text-sm leading-relaxed text-black/70">
-                    Se vuoi accelerare, puoi anche scriverci direttamente con un brief piu dettagliato.
+                    Se vuoi accelerare, puoi anche scriverci direttamente con un brief più dettagliato.
                   </p>
                 </div>
               </div>
@@ -423,8 +423,8 @@ export default function MediaKit() {
         <div className="mb-12 text-center">
           <h2 className="mb-4 text-4xl font-serif">Come funziona dopo il primo contatto</h2>
           <p className="mx-auto max-w-2xl leading-relaxed text-black/70">
-            Questo passaggio serve a filtrare meglio, non a complicare. Preferiamo meno richieste ma piu
-            coerenti, con una conversazione pulita fin dall inizio.
+            Questo passaggio serve a filtrare meglio, non a complicare. Preferiamo meno richieste ma più
+            coerenti, con una conversazione pulita fin dall'inizio.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
@@ -444,13 +444,13 @@ export default function MediaKit() {
           </div>
           <h2 className="mb-4 text-3xl font-serif md:text-4xl">Vuoi partire da un contatto diretto?</h2>
           <p className="mb-8 leading-relaxed text-white/80">
-            Se hai gia un brief chiaro o una proposta ben impostata, puoi scriverci direttamente. Il criterio
+            Se hai già un brief chiaro o una proposta ben impostata, puoi scriverci direttamente. Il criterio
             resta lo stesso: allineamento, chiarezza e poi approfondimento.
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a
               href={CONTACTS.mailto}
-              className="inline-flex h-12 items-center justify-center rounded-xl bg-[var(--color-gold)] px-8 text-xs font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
+              className="inline-flex h-12 items-center justify-center rounded-xl bg-[var(--color-accent)] px-8 text-xs font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
             >
               Scrivi a {CONTACTS.email}
             </a>

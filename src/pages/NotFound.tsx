@@ -24,7 +24,7 @@ export default function NotFound() {
             <Compass className="text-[var(--color-accent)]" size={32} />
           </div>
 
-          <span className="font-script text-3xl text-[var(--color-accent-warm)] mb-4 block">Ops, ci siamo persi!</span>
+          <span className="font-script text-3xl text-[var(--color-accent)] mb-4 block">Ops, ci siamo persi!</span>
           <h1 className="text-display-1 mb-6">
             Pagina <span className="italic opacity-60">non trovata</span>
           </h1>

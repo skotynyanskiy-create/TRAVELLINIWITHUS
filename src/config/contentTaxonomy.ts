@@ -13,7 +13,7 @@ export const EXPERIENCE_TYPES = [
   'Locali insoliti',
   'Hotel con carattere',
   'Weekend romantici',
-  "Borghi e citta d'arte",
+  "Borghi e città d'arte",
   'Passeggiate panoramiche',
   'Relax, terme e spa',
   'Esperienze insolite',

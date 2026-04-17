@@ -63,7 +63,7 @@ export default function Footer() {
                       target={social.href.startsWith('mailto:') ? undefined : '_blank'}
                       rel={social.href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
                       aria-label={social.label}
-                      className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 transition-all duration-300 hover:border-[var(--color-gold)] hover:bg-[var(--color-gold)] hover:text-white"
+                      className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 transition-all duration-300 hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white"
                     >
                       <social.icon size={20} />
                     </a>
@@ -73,7 +73,7 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="TikTok"
-                    className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 transition-all duration-300 hover:border-[var(--color-gold)] hover:bg-[var(--color-gold)] hover:text-white"
+                    className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 transition-all duration-300 hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white"
                   >
                     <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current" aria-hidden="true">
                       <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.2 8.2 0 0 0 4.77 1.52V6.78a4.85 4.85 0 0 1-1-.09z" />
@@ -84,7 +84,7 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Facebook"
-                    className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 transition-all duration-300 hover:border-[var(--color-gold)] hover:bg-[var(--color-gold)] hover:text-white"
+                    className="flex h-12 w-12 items-center justify-center rounded-full border border-white/10 transition-all duration-300 hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white"
                   >
                     <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current" aria-hidden="true">
                       <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
@@ -239,147 +239,11 @@ export default function Footer() {
                 </ul>
                 <button
                   onClick={handleNewsletterClick}
-                  className="w-full rounded-2xl border border-transparent bg-[var(--color-gold)] px-6 py-4 text-xs font-bold uppercase tracking-widest text-white shadow-sm transition-all hover:brightness-110"
+                  className="w-full rounded-2xl border border-transparent bg-[var(--color-accent)] px-6 py-4 text-xs font-bold uppercase tracking-widest text-white shadow-sm transition-all hover:brightness-110"
                 >
                   {footer.newsletterButtonLabel}
                 </button>
               </div>
-            </div>
-
-            <div>
-              <h4 className="mb-10 text-sm font-bold uppercase tracking-[0.3em] text-white">
-                {footer.discoverTitle}
-              </h4>
-              <ul className="space-y-5">
-                <li>
-                  <Link
-                    to="/destinazioni"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
-                    {navigation.destinationsLabel}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/esperienze"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
-                    {navigation.experiencesLabel}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/guide"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
-                    {navigation.guidesLabel}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/risorse"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
-                    {navigation.resourcesLabel}
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="mb-10 text-sm font-bold uppercase tracking-[0.3em] text-white">
-                {footer.resourcesTitle}
-              </h4>
-              <ul className="space-y-5">
-                <li>
-                  <button
-                    onClick={handleNewsletterClick}
-                    className="inline-block text-left text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
-                    {footer.newsletterButtonLabel}
-                  </button>
-                </li>
-                <li>
-                  <Link
-                    to="/preferiti"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
-                    {navigation.favoritesLabel}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/risorse"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
-                    Toolkit di viaggio
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/disclaimer"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
-                    Affiliazioni
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div className="md:col-span-4 lg:col-span-1">
-              <h4 className="mb-10 text-sm font-bold uppercase tracking-[0.3em] text-white">
-                {footer.projectTitle}
-              </h4>
-              <ul className="mb-10 space-y-5">
-                <li>
-                  <Link
-                    to="/chi-siamo"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
-                    {navigation.aboutLabel}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/collaborazioni"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
-                    {navigation.collaborationsLabel}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/media-kit"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
-                    {navigation.mediaKitLabel}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/contatti"
-                    className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                  >
-                    {navigation.contactsLabel}
-                  </Link>
-                </li>
-                {isAdmin && (
-                  <li>
-                    <Link
-                      to="/admin"
-                      className="flex items-center gap-2 text-base text-[var(--color-accent)] transition-colors hover:text-white"
-                    >
-                      <ShieldCheck size={16} /> Pannello admin
-                    </Link>
-                  </li>
-                )}
-              </ul>
-              <button
-                onClick={handleNewsletterClick}
-                className="w-full rounded-2xl border border-transparent bg-[var(--color-gold)] px-6 py-4 text-xs font-bold uppercase tracking-widest text-white shadow-sm transition-all hover:brightness-110"
-              >
-                Collabora con noi <ArrowRight size={14} />
-              </Link>
             </div>
 
             <div className="flex flex-col items-center justify-between gap-8 border-t border-white/10 pt-12 md:flex-row">

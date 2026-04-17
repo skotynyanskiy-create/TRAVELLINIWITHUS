@@ -1,20 +1,15 @@
 import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { AnimatePresence, motion, useScroll, useSpring } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import ConsentBanner from './ConsentBanner';
+import AnalyticsScripts from './AnalyticsScripts';
 import { initAnalytics, trackPageview } from '../services/analytics';
 import { initErrorTracking } from '../lib/errorTracking';
 
 export default function Layout() {
   const location = useLocation();
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
 
   useEffect(() => {
     initErrorTracking();
@@ -34,10 +29,6 @@ export default function Layout() {
         Vai al contenuto principale
       </a>
       <AnalyticsScripts />
-      <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-[var(--color-accent)] origin-left z-[60]"
-        style={{ scaleX }}
-      />
       <Navbar />
       <main id="main-content" className="flex-grow">
         <AnimatePresence mode="popLayout">

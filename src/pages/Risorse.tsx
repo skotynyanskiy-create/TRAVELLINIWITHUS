@@ -51,12 +51,12 @@ const resourceCategories: Array<{
       {
         name: 'GetYourGuide',
         description:
-          'Utile per ingressi, tour e attivita quando vuoi capire disponibilita e orari prima di partire.',
+          'Utile per ingressi, tour e attività quando vuoi capire disponibilita e orari prima di partire.',
         link: 'https://getyourguide.com/-cs552',
         tags: ['Esperienze', 'Prenotazioni'],
         badge: 'Affiliato',
-        fit: 'Per chi preferisce bloccare attivita chiave prima del viaggio.',
-        avoid: 'Da evitare se vuoi massima spontaneita o se il meteo e molto incerto.',
+        fit: 'Per chi preferisce bloccare attività chiave prima del viaggio.',
+        avoid: 'Da evitare se vuoi massima spontaneità o se il meteo e molto incerto.',
       },
       {
         name: 'Heymondo',
@@ -95,7 +95,7 @@ const resourceCategories: Array<{
       {
         name: 'Airalo',
         description:
-          'Una eSIM e utile quando vuoi arrivare con connessione gia pronta, soprattutto fuori dall Unione Europea.',
+          `Una eSIM è utile quando vuoi arrivare con connessione già pronta, soprattutto fuori dall'Unione Europea.`,
         link: 'https://airalo.com',
         tags: ['eSIM', 'Internet'],
         badge: 'Codice',
@@ -132,7 +132,7 @@ const resourceCategories: Array<{
           'Una soluzione pratica per tenere ordinati cavi, batterie e piccoli accessori senza perdere tempo nello zaino.',
         link: 'https://amazon.it',
         tags: ['Organizzazione', 'Gear'],
-        fit: 'Per chi porta camera, power bank, microfoni o piu caricatori.',
+        fit: 'Per chi porta camera, power bank, microfoni o più caricatori.',
       },
       {
         name: 'Sony A7IV',
@@ -229,7 +229,7 @@ export default function Risorse() {
           '@type': 'CollectionPage',
           name: 'Risorse di viaggio selezionate - Travelliniwithus',
           description:
-            'Una selezione editoriale di strumenti, servizi e attrezzatura per viaggiare con piu criterio.',
+            'Una selezione editoriale di strumenti, servizi e attrezzatura per viaggiare con più criterio.',
           url: `${SITE_URL}/risorse`,
         }}
       />
@@ -303,7 +303,7 @@ export default function Risorse() {
 
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
                 {category.items.map((item) => (
-                  <a
+                  <motion.a
                     key={item.name}
                     href={item.link}
                     target="_blank"

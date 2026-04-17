@@ -121,7 +121,7 @@ function ensureArticleData(article: Partial<ArticleData> & { title: string; imag
 
 function buildTocItems(article: ArticleData): TocItem[] {
   return [
-    { id: 'overview', label: 'Perche leggerla', show: true },
+    { id: 'overview', label: 'Perché leggerla', show: true },
     { id: 'pratico', label: 'Cose da sapere', show: true },
     { id: 'itinerario', label: 'Itinerario', show: !!article.itinerary?.length },
     { id: 'mappa', label: 'Mappa', show: !!(article.mapUrl || article.mapMarkers?.length) },
@@ -457,7 +457,7 @@ export default function Articolo() {
                 {article.highlights && article.highlights.length > 0 && (
                   <section className="mt-14 rounded-[2rem] border border-black/5 bg-white p-8 shadow-sm">
                     <p className="mb-6 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
-                      Perche salvarlo
+                      Perché salvarlo
                     </p>
                     <div className="grid gap-4 md:grid-cols-3">
                       {article.highlights.map((highlight) => (

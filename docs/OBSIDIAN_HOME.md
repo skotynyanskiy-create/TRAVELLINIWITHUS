@@ -10,91 +10,101 @@ tags:
   - workspace
 ---
 
-# Obsidian Home
+# Obsidian Home — Travellini
 
-Questa cartella `docs/` e il vault operativo del progetto.
+Questo vault è il sistema operativo editoriale e strategico di Travellini.
+Apri `docs/` con **Open folder as vault** e imposta questa nota come home.
 
-> [!tip]
-> Apri `docs/` con `Open folder as vault`, poi imposta questa nota come home del workspace.
+---
 
-## Start here
+## Cabina di regia
 
-- [[OBSIDIAN_DASHBOARD]]
-- [[MARKETING_OPERATIONS_HUB]]
-- [[OBSIDIAN_WORKFLOW]]
-- [[OBSIDIAN_TAXONOMY]]
-- [[10_Projects/PROJECT_TRAVELLINIWITHUS_SITE]]
-- [[AGENT_WORKFLOWS]]
+- [[OBSIDIAN_DASHBOARD]] — priorità, contenuti in corso, SEO, pipeline
+- [[MARKETING_OPERATIONS_HUB]] — campagne, partner, content
+
+---
 
 ## Fast paths
 
-- nuova feature: [[90_Templates/TPL_Project]]
-- nuovo task: [[90_Templates/TPL_Task]]
-- nuovo bug: [[90_Templates/TPL_Bug]]
-- tweak UI: [[90_Templates/TPL_UI_Change]]
+### Editoriale
+- nuovo articolo: [[90_Templates/TPL_Article]]
+- nuova guida destinazione: [[90_Templates/TPL_Destination_Guide]]
+- nuovo itinerario: [[90_Templates/TPL_Itinerary]]
+- nuovo luogo/hotel: [[90_Templates/TPL_Place]]
+
+### Commerciale
+- nuovo prodotto shop: [[90_Templates/TPL_Product]]
+- nuova collaborazione: [[90_Templates/TPL_Collaboration]]
 - nuova campagna: [[90_Templates/TPL_Campaign]]
-- nuovo partner: [[90_Templates/TPL_Partner]]
-- nuovo brief contenuto: [[90_Templates/TPL_Content_Brief]]
+
+### SEO e social
+- nuova SEO page: [[90_Templates/TPL_SEO_Page]]
+- web clip rapida: [[90_Templates/TPL_Web_Clip]]
+- design reference: [[90_Templates/TPL_Design_Reference]]
+
+### Sito e operazioni
+- nuova feature sito: [[90_Templates/TPL_Project]]
+- tweak UI: [[90_Templates/TPL_UI_Change]]
+- nuovo bug: [[90_Templates/TPL_Bug]]
 - nuova decisione: [[90_Templates/TPL_Decision]]
-- meeting o handoff: [[90_Templates/TPL_Meeting]]
-- release note: [[90_Templates/TPL_Release_Note]]
 - cattura rapida: [[50_Scratch/INBOX]]
 
-## Project sources
+---
 
-### Strategia e piano
+## Aree vault
 
-- [[TRAVELLINIWITHUS_MASTER_PLAN]]
-- [[TRAVELLINIWITHUS_EXECUTION_PLAN]]
-- [[TRAVELLINIWITHUS_BRAND_MEMORY]]
-- [[BRAND_MESSAGING_STRATEGY]]
+### Editoriale
+- [[60_Editorial/]] — articoli, guide, itinerari, destinazioni
+- [[80_SEO/]] — keyword e audit pagine sito
+- [[86_Social/]] — content calendar Instagram/TikTok
 
-### Engineering e handoff
+### Brand e visual
+- [[70_Brand/]] — voce, personas, visual reference
+- [[87_References/]] — competitor, design, luoghi, trend
 
-- [[QUICK_START]]
-- [[CODEX_CONTEXT_FROM_CLAUDE]]
-- [[AGENT_WORKFLOWS]]
+### Commerciale
+- [[85_Shop/]] — prodotti e affiliati
+- [[12_Partnerships/]] — collaborazioni brand
 
-### Delivery e operations
+### Sito e operazioni
+- [[10_Projects/PROJECT_TRAVELLINIWITHUS_SITE]] — stato sito
+- [[10_Projects/PROJECT_RELEASE_READINESS]] — release readiness
+- [[14_Bugs/]] — bug aperti
 
-- [[DEPLOYMENT_RUNBOOK]]
-- [[LAUNCH_CHECKLIST]]
-- [[OPERATIONAL_VERIFICATION_REPORT]]
+### Mappe visive
+- [[90_Canvas/]] — sitemap, content architecture, customer journey
 
-### Cataloghi e supporto
+---
 
-- [[DEMO_PRODUCTS]]
+## Basi principali
 
-## Working zones
+- [[95_Bases/Editorial_Archive.base|Archivio editoriale]]
+- [[95_Bases/SEO_Pages.base|SEO pagine]]
+- [[95_Bases/Content_Pipeline.base|Content pipeline]]
+- [[95_Bases/Campaign_Pipeline.base|Campagne]]
+- [[95_Bases/Partnership_Pipeline.base|Partnership]]
+- [[95_Bases/Place_Library.base|Library luoghi]]
+- [[95_Bases/Shop_Products.base|Prodotti shop]]
+- [[95_Bases/Project_Log.base|Progetti attivi]]
+- [[95_Bases/Bug_Log.base|Bug aperti]]
 
-- [[50_Scratch/INBOX]]
-- [[20_Decisions/DECISION_0001_OBSIDIAN_VAULT_STRATEGY]]
-- [[90_Templates/TPL_Project]]
-- [[90_Templates/TPL_Task]]
-- [[90_Templates/TPL_Bug]]
-- [[90_Templates/TPL_UI_Change]]
-- [[90_Templates/TPL_Campaign]]
-- [[90_Templates/TPL_Partner]]
-- [[90_Templates/TPL_Content_Brief]]
-- [[90_Templates/TPL_Decision]]
-- [[90_Templates/TPL_Meeting]]
-- [[90_Templates/TPL_Daily]]
-- [[90_Templates/TPL_Release_Note]]
+---
 
-## Live views
+## Riferimenti strategici
 
-- ![[95_Bases/Project_Log.base#Active Projects]]
-- ![[95_Bases/Task_Log.base#Open Tasks]]
-- ![[95_Bases/Bug_Log.base#Open Bugs]]
-- ![[95_Bases/Campaign_Pipeline.base#Active Campaigns]]
-- ![[95_Bases/Partnership_Pipeline.base#Partner Pipeline]]
-- ![[95_Bases/Content_Pipeline.base#Content Pipeline]]
+- [[BRAND_MESSAGING_STRATEGY]] — voice, messaging, tono
+- [[EDITORIAL_GUIDE]] — regole editoriali Travellini
+- [[OBSIDIAN_TAXONOMY]] — naming e properties standard
+- [[OBSIDIAN_WORKFLOW]] — tutti i flussi operativi
+- [[AGENT_WORKFLOWS]] — workflow con Claude/AI
+
+---
 
 ## Vault principles
 
-- le note condivise restano in Markdown semplice
-- le properties standardizzano ricerca, filtro e basi
-- le note operative nuove vivono in cartelle dedicate
-- la config condivisa di Obsidian e versionata solo dove serve
-- i wikilink sono la forma primaria di collegamento tra note
-- i riferimenti al repo vanno salvati come testo chiaro in `repo_path`, `route`, `branch`, `commit`
+- inbox first: tutto entra in `50_Scratch/INBOX`, poi si processa
+- ogni nota ha almeno un wikilink entrante
+- status obbligatorio: nessuna nota senza `status`
+- duplicati: cerca prima di creare
+- le properties non sono decorative, abilitano le Bases
+- Canvas si aggiorna dopo ogni sprint o release importante

@@ -76,7 +76,7 @@ const variantCopy: Record<
     eyebrow: 'Dopo questa lettura',
     title: 'Ricevi il prossimo posto da salvare.',
     description:
-      'Se questo contenuto ti e stato utile, la newsletter e il modo piu semplice per non perdere le prossime guide.',
+      'Se questo contenuto ti e stato utile, la newsletter e il modo più semplice per non perdere le prossime guide.',
     bullets: [
       'Guide pratiche, non solo ispirazione.',
       'Luoghi selezionati con criterio.',

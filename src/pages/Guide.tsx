@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen, CheckCircle2, Clock, Filter, Search } from 'lucide-react';
@@ -6,6 +6,11 @@ import { useQuery } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 import { cardContainer } from '../lib/animations';
 import ArticleSkeleton from '../components/ArticleSkeleton';
+import Breadcrumbs from '../components/Breadcrumbs';
+import JsonLd from '../components/JsonLd';
+import Newsletter from '../components/Newsletter';
+import PageLayout from '../components/PageLayout';
+import SEO from '../components/SEO';
 import Section from '../components/Section';
 import OptimizedImage from '../components/OptimizedImage';
 import DemoContentNotice from '../components/DemoContentNotice';
@@ -16,13 +21,13 @@ import { PREVIEW_GUIDES } from '../config/previewContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { SITE_URL } from '../config/site';
 import {
-  DESTINATION_GROUPS,
   GUIDE_CATEGORIES,
-  getGuideCategoryFromQuery,
   slugifyGuideCategory,
   type GuideCategory,
 } from '../config/contentTaxonomy';
+import GuideCategoryBrowser from '../components/discovery/GuideCategoryBrowser';
 import { mapArticleToArchiveItem } from '../utils/contentArchive';
+import { formatDateValue, toMillis, type DateValue } from '../utils/dateValue';
 import {
   countByScope,
   filterByScope,
@@ -31,7 +36,6 @@ import {
   parseDiscoveryFilters,
 } from '../utils/discoveryQuery';
 import { usePagination } from '../hooks/usePagination';
-import { toMillis } from '../utils/dateValue';
 import { normalizeFirestoreArticle } from '../utils/articleData';
 
 interface GuideArticle {
@@ -98,16 +102,16 @@ function Guide() {
     throw new Error('Impossibile caricare le guide');
   }
 
-  const usingPreview = guides.length > 0 && guides.every((guide) => PREVIEW_GUIDES.some((preview) => preview.slug === guide.slug));
+  const usingPreview = articles.length > 0 && articles.every((guide) => PREVIEW_GUIDES.some((preview) => preview.slug === guide.slug));
   const categories = useMemo(() => {
-    const cats = new Set(guides.map((guide) => guide.category).filter(Boolean));
+    const cats = new Set(articles.map((guide) => guide.category).filter(Boolean));
     return ['Tutte', ...Array.from(cats)];
-  }, [guides]);
+  }, [articles]);
 
   const filteredGuides = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
 
-    return guides
+    return articles
       .filter((guide) => selectedCategory === 'Tutte' || guide.category === selectedCategory)
       .filter((guide) => {
         if (!q) return true;
@@ -116,7 +120,22 @@ function Guide() {
           .some((value) => String(value).toLowerCase().includes(q));
       })
       .sort((a, b) => toMillis(b.createdAt) - toMillis(a.createdAt));
-  }, [guides, selectedCategory, searchQuery]);
+  }, [articles, selectedCategory, searchQuery]);
+
+  const handleCategorySelect = useCallback((cat: GuideCategory | null) => {
+    setSelectedCategory(cat ?? 'Tutte');
+  }, []);
+
+  const categoryCounts = useMemo(() => {
+    const counts: Partial<Record<GuideCategory, number>> = {};
+    for (const article of articles) {
+      if (article.category) {
+        const cat = article.category as GuideCategory;
+        counts[cat] = (counts[cat] ?? 0) + 1;
+      }
+    }
+    return counts;
+  }, [articles]);
 
   return (
     <PageLayout>
@@ -132,7 +151,7 @@ function Guide() {
           '@type': 'CollectionPage',
           name: 'Guide pratiche di viaggio - Travelliniwithus',
           description:
-            'Guide editoriali e checklist pratiche per organizzare viaggi, weekend e destinazioni con piu criterio.',
+            'Guide editoriali e checklist pratiche per organizzare viaggi, weekend e destinazioni con più criterio.',
           url: `${SITE_URL}/guide`,
           breadcrumb: {
             '@type': 'BreadcrumbList',
@@ -153,7 +172,7 @@ function Guide() {
               Biblioteca pratica
             </span>
             <h1 className="text-display-1">
-              Guide per partire <span className="italic text-black/55">con piu criterio</span>
+              Guide per partire <span className="italic text-black/55">con più criterio</span>
             </h1>
             <p className="mt-8 max-w-2xl text-lg leading-relaxed text-black/68">
               Non solo ispirazione: qui raccogliamo metodi, checklist e itinerari pensati per
@@ -181,15 +200,16 @@ function Guide() {
             </div>
           </div>
         </div>
-      }
-    >
+      </Section>
+
+      <Section spacing="tight">
       {/* ─── CATEGORY BROWSER ─── */}
       <div className="mb-2">
         <h2 className="mb-4 text-[10px] font-bold uppercase tracking-[0.28em] text-black/45">
           Scegli un argomento
         </h2>
         <GuideCategoryBrowser
-          selectedCategory={selectedCategory}
+          selectedCategory={selectedCategory === 'Tutte' ? null : selectedCategory as GuideCategory}
           onSelect={handleCategorySelect}
           counts={categoryCounts}
         />
@@ -198,7 +218,7 @@ function Guide() {
         {usingPreview && (
           <DemoContentNotice
             className="mt-12"
-            message="Le guide mostrate sono preview controllate: servono a vedere ritmo, formato e qualita finale. Prima del deploy pubblico vanno approvate, completate o sostituite con contenuti reali."
+            message="Le guide mostrate sono preview controllate: servono a vedere ritmo, formato e qualità finale. Prima del deploy pubblico vanno approvate, completate o sostituite con contenuti reali."
           />
         )}
 
@@ -240,7 +260,7 @@ function Guide() {
             {filteredGuides.length === 1 ? 'guida disponibile' : 'guide disponibili'}
             {selectedCategory !== 'Tutte' ? ` in ${selectedCategory}` : ''}.
           </p>
-          <p>Ordinate per contenuto piu recente o prioritario.</p>
+          <p>Ordinate per contenuto più recente o prioritario.</p>
         </div>
 
         {isLoading ? (
@@ -255,7 +275,7 @@ function Guide() {
               Nessuna guida trovata
             </p>
             <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-black/62">
-              Prova a cambiare filtro o ricerca. Se il catalogo reale e ancora vuoto, puoi attivare
+              Prova a cambiare filtro o ricerca. Se il catalogo reale è ancora vuoto, puoi attivare
               le preview editoriali dal pannello admin per vedere la struttura finale.
             </p>
           </div>
@@ -345,6 +365,6 @@ function Guide() {
       <Section className="!py-0 !pb-16">
         <Newsletter variant="sand" />
       </Section>
-    </DiscoveryPageLayout>
+    </PageLayout>
   );
 }

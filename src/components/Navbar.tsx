@@ -322,9 +322,9 @@ export default function Navbar() {
           <div className="hidden shrink-0 items-center space-x-4 text-zinc-600 lg:flex xl:space-x-6">
             <Link
               to="/collaborazioni"
-              className="hidden items-center gap-1 rounded-full border border-[var(--color-gold)]/30 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-colors hover:bg-[var(--color-gold-soft)] xl:inline-flex"
+              className="hidden items-center gap-1 rounded-full border border-[var(--color-accent)]/30 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-colors hover:bg-[var(--color-accent-soft)] xl:inline-flex"
             >
-              Lavora con noi
+              Collabora con noi
             </Link>
 
             <button
@@ -572,7 +572,7 @@ export default function Navbar() {
                   <Link
                     to="/collaborazioni"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-gold)] px-6 py-4 text-xs font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
+                    className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-6 py-4 text-xs font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
                   >
                     Collabora con noi
                     <ArrowRight size={14} />

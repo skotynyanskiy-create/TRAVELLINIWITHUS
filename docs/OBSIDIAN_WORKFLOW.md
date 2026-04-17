@@ -12,101 +12,174 @@ tags:
 
 ## Struttura del vault
 
-- `10_Projects/` note di lavoro e feature
-- `20_Decisions/` decision log architetturale e operativo
-- `30_Meetings/` meeting notes e handoff
-- `40_Daily/` daily notes
-- `50_Scratch/` cattura rapida e note transitorie
-- `90_Templates/` template condivisi
-- `95_Bases/` viste database per il vault
+```
+docs/
+├── 10_Projects/     note di lavoro, feature, sprint
+├── 11_Campaigns/    campagne marketing
+├── 12_Partnerships/ collaborazioni brand e lead commerciali
+├── 13_Content/      pillar strategici, content calendar
+├── 14_Bugs/         bug e issue tracking
+├── 20_Decisions/    decision log (ADR)
+├── 30_Meetings/     meeting notes e handoff
+├── 40_Daily/        daily notes
+├── 50_Scratch/      inbox e note transitorie
+├── 60_Editorial/    archivio contenuti pubblicati e in corso
+│   ├── Articoli/
+│   ├── Guide/
+│   ├── Itinerari/
+│   └── Destinazioni/
+├── 70_Brand/        knowledge base brand
+│   ├── Voce_e_Tono/
+│   ├── Personas/
+│   └── Visual/
+├── 80_SEO/          sistema SEO per pagine
+│   ├── Keywords/
+│   └── Pagine/
+├── 85_Shop/         prodotti e affiliati
+│   ├── Prodotti/
+│   └── Affiliati/
+├── 86_Social/       content planning social
+│   ├── Instagram/
+│   └── TikTok/
+├── 87_References/   web clips e reference visive
+│   ├── Competitor/
+│   ├── Design/
+│   ├── Luoghi/
+│   ├── Trend/
+│   ├── Articoli/
+│   └── Idee/
+├── 90_Canvas/       mappe visive
+├── 90_Templates/    tutti i template
+└── 95_Bases/        database Obsidian
+```
 
-## Flusso consigliato
+---
+
+## Workflow editoriale — Nuovo articolo
+
+1. **Idea** → cattura in [[50_Scratch/INBOX]]: titolo + angolo editoriale + keyword
+2. **Brief** → crea `60_Editorial/Articoli/ART_<slug>.md` da [[90_Templates/TPL_Article]]
+   - imposta `pillar`, `keyword_primaria`, `route`, `author`
+3. **Sviluppo** → scrivi draft nella nota
+   - collega `[[DEST_]]` se c'è destinazione
+   - collega `[[PLACE_]]` per luoghi specifici
+4. **SEO** → crea `80_SEO/Pagine/SEO_<slug>.md` da [[90_Templates/TPL_SEO_Page]]
+5. **Review** → `status: review`, aggiorna link interni e CTA
+6. **Pubblicazione** → imposta `status: published`, `published_at`, `route` finale
+7. **Post-publish** → aggiungi link dall'articolo in note destinazione/guide correlate
+
+---
+
+## Workflow editoriale — Nuova destinazione
+
+1. Crea `60_Editorial/Destinazioni/DEST_<nome>.md` da [[90_Templates/TPL_Destination_Guide]]
+2. Crea luoghi collegati in `87_References/Luoghi/` da [[90_Templates/TPL_Place]]
+3. Crea itinerario in `60_Editorial/Itinerari/ITIN_<dest>_<durata>.md` da [[90_Templates/TPL_Itinerary]]
+4. Crea SEO page in `80_SEO/Pagine/SEO_<slug>.md`
+5. Collega tutti gli articoli correlati con wikilink bidirezionali
+
+---
+
+## Workflow editoriale — Prodotto shop
+
+1. Crea `85_Shop/Prodotti/PROD_<nome>.md` da [[90_Templates/TPL_Product]]
+2. Collega contenuti correlati: guide, articoli, destinazioni
+3. Scrivi copy vendita nella nota
+4. Collega a campagna lancio se pianificata
+5. Checklist lancio nella nota: asset, Stripe, route live
+
+---
+
+## Workflow commerciale — Collaborazione brand
+
+1. Crea `12_Partnerships/COLLAB_<brand>.md` da [[90_Templates/TPL_Collaboration]]
+2. Collega a [[12_Partnerships/PARTNER_PIPELINE_TRAVELLINIWITHUS]]
+3. Valuta `fit_brand` prima di rispondere
+4. Se accordo → crea brief contenuto con [[90_Templates/TPL_Content_Brief]]
+5. Collega deliverable a campagna dedicata
+
+---
+
+## Workflow SEO — Audit pagina
+
+1. Crea `80_SEO/Pagine/SEO_<route>.md` da [[90_Templates/TPL_SEO_Page]]
+2. Compila analisi attuale (title, h1, meta, score)
+3. Identifica ottimizzazioni e link interni mancanti
+4. Imposta `priority` e `status: in-corso`
+5. Quando completato → `status: ottimizzato`, aggiorna `last_audit`
+
+---
+
+## Workflow web clipper
+
+1. Salva URL in Omnivore/Readwise con tag di categoria
+2. Sync in Obsidian → atterrano in `50_Scratch/INBOX` o direttamente in `87_References/`
+3. Una volta a settimana: processa inbox, sposta in sottocartella giusta
+4. Aggiungi `action` e collega a note rilevanti
+5. **Regola**: clip senza `action` entro 7 giorni → cancella o archivia
+
+---
+
+## Workflow operativo — Nuova feature / tweak sito
 
 1. Parti da [[OBSIDIAN_HOME]]
-2. Controlla [[OBSIDIAN_DASHBOARD]]
-3. Cattura velocemente in [[50_Scratch/INBOX]]
-4. Trasforma la cattura in nota strutturata con un template
-5. Collega la nota al progetto o alla decisione giusta
-6. Chiudi il loop aggiornando la documentazione stabile del repo
+2. Crea nota da [[90_Templates/TPL_Project]] o [[90_Templates/TPL_UI_Change]]
+3. Imposta `status`, `priority`, `route`, `repo_path`
+4. Collega piano, file chiave, decisioni
+5. Quando stabile → promuovi in docs stabili del repo
 
-## Routine pratica
+---
 
-### Nuova feature
+## Workflow operativo — Nuovo bug
 
-1. Crea una nota da [[90_Templates/TPL_Project]]
-2. imposta `status`, `priority`, `area`
-3. compila `route`, `repo_path`, `related`, `source` se servono
-4. collega piano, file chiave e decisioni
-5. quando la feature si stabilizza, promuovi il contenuto nei docs stabili
+1. Crea nota da [[90_Templates/TPL_Bug]]
+2. Cattura: sintomo, impatto, riproduzione, fix
+3. Compila `repo_path`, `blocked_by` se rilevanti
+4. Linka PR, commit, file e test
+5. Chiudi con `status: done` e aggiorna nota progetto padre
 
-### Tweak UI o copy
+---
 
-1. Usa [[90_Templates/TPL_UI_Change]]
-2. salva sempre `route` e `repo_path`
-3. allega note QA, screenshot e decisioni
-4. se il tweak diventa piu ampio, promuovilo a `project`
+## Routine giornaliera (5 min)
 
-### Nuova campagna
+1. Apri [[OBSIDIAN_DASHBOARD]] → controlla focus settimanale
+2. Processa `50_Scratch/INBOX` se ci sono nuove clip/idee
+3. Aggiorna `status` note in progress
+4. Fine lavoro: annota in `40_Daily/` cosa è cambiato
 
-1. Usa [[90_Templates/TPL_Campaign]]
-2. imposta `goal`, `channel`, `start`, `end`
-3. collega sito, asset e CTA
-4. collega la campagna al progetto principale o alla release
+---
 
-### Nuovo partner o lead commerciale
+## Routine settimanale (20 min)
 
-1. Usa [[90_Templates/TPL_Partner]]
-2. salva `company`, `stage`, `offer_type`
-3. annota fit brand, prossima azione e owner
+- Processa tutto l'inbox di `87_References/`
+- Aggiorna [[MARKETING_OPERATIONS_HUB]]: campagne, partner, contenuti
+- Pianifica i contenuti social della settimana successiva
+- Controlla se ci sono SEO page con `priority: p1` da ottimizzare
 
-### Nuovo contenuto o brief
+---
 
-1. Usa [[90_Templates/TPL_Content_Brief]]
-2. salva `pillar`, `channel`, `route`
-3. collega il brief al contenuto del sito o alla campagna
+## Routine mensile (45 min)
 
-### Nuovo bug
+- Archivia note `status: done/archived` vecchie di 3+ mesi
+- Aggiorna i Canvas rilevanti (`90_Canvas/`)
+- Review pipeline collaborazioni e follow-up
+- Verifica keyword in `80_SEO/Keywords/`
+- Monthly report da [[90_Templates/TPL_Monthly_Marketing_Report]]
 
-1. Crea una nota da [[90_Templates/TPL_Bug]]
-2. cattura sintomo, impatto, riproduzione e fix
-3. compila `repo_path`, `blocked_by`, `source` quando servono
-4. linka PR, commit, file e test
-
-### Nuova decisione
-
-1. Crea una nota da [[90_Templates/TPL_Decision]]
-2. descrivi contesto, opzioni e decisione presa
-3. linka le note impattate
-
-### Riunioni e handoff
-
-1. Usa [[90_Templates/TPL_Meeting]]
-2. assegna owner e follow-up
-3. collega sempre la nota al progetto attivo
-
-### Release o checkpoint
-
-1. Usa [[90_Templates/TPL_Release_Note]]
-2. collega decisioni, fix, bug chiusi e rischi residui
-3. promuovi la nota se serve in runbook o report
-
-## Config condivisa
-
-- la cartella `docs/.obsidian/` contiene solo la configurazione team-safe
-- `workspace*.json`, `hotkeys.json` e cache restano locali
-- i plugin usati nel setup sono core features, cosi il vault resta portabile
+---
 
 ## Agent handoff pattern
 
-- usa [[AGENT_WORKFLOWS]] come riferimento operativo
-- quando un agente o assistente modifica il repo, crea o aggiorna una nota progetto o bug
-- salva sempre i file chiave in `repo_path`
-- se la modifica nasce da chat o review, annota la sorgente in `source`
-- se cambia una decisione, apri o aggiorna una nota in `20_Decisions/`
+- Quando un agente modifica il repo → crea/aggiorna nota progetto o bug
+- Salva sempre `repo_path` nella nota
+- Se la modifica nasce da chat/review → compila `source`
+- Se cambia una decisione → apri/aggiorna nota in `20_Decisions/`
 
-## Marketing operating pattern
+---
 
-- usa [[MARKETING_OPERATIONS_HUB]] come dashboard giornaliera marketing
-- gestisci home, funnel e collaborazioni come progetti collegati
-- usa campagne e partner come pipeline, non come note sparse
-- trasforma i contenuti social importanti in brief collegati al sito
+## Config condivisa
+
+- `docs/.obsidian/` contiene solo config team-safe
+- `workspace*.json`, `hotkeys.json`, cache → restano locali (gitignore)
+- I plugin del setup sono core features: vault portabile senza plugin obbligatori
+- Plugin community consigliati: Templater, Omnivore/Readwise (opzionale: Dataview)

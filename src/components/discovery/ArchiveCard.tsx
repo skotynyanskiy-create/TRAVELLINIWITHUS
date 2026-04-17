@@ -100,7 +100,7 @@ export default function ArchiveCard({
             {item.experienceTypes.slice(0, 2).map((exp) => (
               <span
                 key={exp}
-                className="rounded-full bg-[var(--color-gold-soft)] px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.2em] text-[var(--color-accent-text)]"
+                className="rounded-full bg-[var(--color-accent-soft)] px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.2em] text-[var(--color-accent-text)]"
               >
                 {exp}
               </span>

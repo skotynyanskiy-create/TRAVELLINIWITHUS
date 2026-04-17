@@ -1,51 +1,28 @@
-# Claude Code Session Prompt
+# Claude Code Session Start
 
-Use this prompt at the start of a new Claude Code session for this repository.
+For a new session on TRAVELLINIWITHUS, Claude already auto-loads `CLAUDE.md`. That covers stack, model routing, code discipline, quality bar, commands, and skill/agent routing.
 
-```text
-You are working on the repository TRAVELLINIWITHUS.
+If the session needs deeper project memory, read on demand (not preemptively):
 
-Read first:
-1. AGENTS.md
-2. CLAUDE.md
-3. docs/AI_COLLABORATION_PROTOCOL.md
-4. DESIGN.md
-5. docs/AI_AGENT_STACK.md
-6. docs/OBSIDIAN_HOME.md
-7. docs/OBSIDIAN_DASHBOARD.md
-8. docs/MARKETING_OPERATIONS_HUB.md
+- `AGENTS.md` — expanded operating rules
+- `DESIGN.md` — design-system source (UI, Stitch/Figma prompts)
+- `docs/10_Projects/PROJECT_TRAVELLINIWITHUS_SITE.md` — current project hub
+- `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md` — brand snapshot
 
-Project context:
-- This is the website and marketing operating system for the influencer brand @travelliniwithus.
-- The repo owner is the marketing lead building the website, positioning, campaigns, collaborations and conversion flows.
-- Primary language for UI and content is Italian.
+Do not load the whole `docs/` tree. Open only what the task actually needs.
 
-Non-negotiable rules:
-- Treat docs/ as part of the working system, not optional documentation.
-- Use DESIGN.md as the design-system source for UI, Stitch/Figma prompts and visual reviews.
-- Use .agents/skills as the canonical local skill source and run npm run sync:agents after edits.
-- When changing important UI, brand positioning, campaigns, content architecture, collaborations or release readiness, update the relevant note in docs/.
-- If you change homepage, navbar, collaborations, content strategy or release state, update or create the corresponding project note.
-- If you find or fix a bug, update or create a bug note.
-- If the work is marketing-related, use the campaign / partner / content templates and notes.
+## Non-negotiable rules (quick reference)
 
-Default notes to use:
-- docs/10_Projects/PROJECT_TRAVELLINIWITHUS_SITE.md
-- docs/10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT.md
-- docs/10_Projects/PROJECT_DESTINATIONS_SECTION_REVIEW.md
-- docs/10_Projects/PROJECT_RELEASE_READINESS.md
-- docs/MARKETING_OPERATIONS_HUB.md
+- Italian for public UI and copy.
+- Preserve premium editorial language unless the user asks for a redesign.
+- Smallest change that solves the problem. No refactor during bugfix.
+- `server.ts`, `firestore.rules`, `src/config/admin.ts` are high-risk — confirm before editing.
+- Default model: **sonnet**. Escalate to opus only for multi-file architecture / hard debugging.
+- Use `code-explorer` (haiku) for any "where is X / what does Y do" research before touching code.
 
-Important technical rules:
-- Do not introduce new any unless unavoidable.
-- Preserve current visual language unless redesign is explicitly requested.
-- Treat server.ts, firestore.rules and src/config/admin.ts as high-risk.
-- Run relevant checks after changes.
-- For agent or skill changes, run npm run audit:agents.
-- For UI-heavy work, run npm run audit:visual when feasible.
+## First response pattern
 
-When you start, first summarize:
-1. what the current task is
-2. which files are likely involved
-3. which Obsidian notes must be updated
-```
+On a new task, say in 3 lines:
+1. what the task is
+2. which files / routes are likely touched
+3. which `docs/` note (if any) will be updated

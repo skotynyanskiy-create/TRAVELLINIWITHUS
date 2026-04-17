@@ -191,7 +191,7 @@ export const siteContentDefaults: SiteContentMap = {
         eyebrow: 'Preparati meglio',
         title: 'Guide e strumenti',
         description:
-          'Risorse, consigli pratici e strumenti che usiamo per viaggiare con meno rumore e piu criterio.',
+          'Risorse, consigli pratici e strumenti che usiamo per viaggiare con meno rumore e più criterio.',
         to: '/risorse',
         cta: 'Apri le risorse',
       },
@@ -208,7 +208,7 @@ export const siteContentDefaults: SiteContentMap = {
     aboutTitleMain: 'Andiamo, proviamo,',
     aboutTitleAccent: 'solo dopo consigliamo',
     aboutDescription:
-      'Travelliniwithus non nasce per mostrare piu posti possibile. Nasce per selezionare quelli che meritano davvero, con un racconto abbastanza concreto da aiutarti a decidere.',
+      'Travelliniwithus non nasce per mostrare più posti possibile. Nasce per selezionare quelli che meritano davvero, con un racconto abbastanza concreto da aiutarti a decidere.',
     aboutButtonLabel: 'Come lavoriamo davvero',
     aboutButtonLink: '/chi-siamo',
     boutiqueIntro:
@@ -220,7 +220,7 @@ export const siteContentDefaults: SiteContentMap = {
       'Il canale principale per reel, luoghi da salvare, stile del progetto e contatto diretto con la community.',
     instagramCta: 'Apri Instagram',
     tiktokDescription:
-      'Il lato piu rapido del progetto: scorci, idee e contenuti pensati per essere immediati e memorabili.',
+      'Il lato più rapido del progetto: scorci, idee e contenuti pensati per essere immediati e memorabili.',
     tiktokCta: 'Apri TikTok',
   },
   about: {
@@ -229,14 +229,14 @@ export const siteContentDefaults: SiteContentMap = {
     heroTitleAccent: 'i posti che consigliamo',
     introParagraphs: [
       'Siamo Rodrigo e Betta. Travelliniwithus nasce dal desiderio di consigliare meno posti, ma consigliarli meglio.',
-      'Il progetto tiene insieme sguardo personale, immagini, ricerca e dettagli pratici: serve a chi vuole scoprire luoghi con piu criterio, non a chi cerca la lista piu lunga.',
+      'Il progetto tiene insieme sguardo personale, immagini, ricerca e dettagli pratici: serve a chi vuole scoprire luoghi con più criterio, non a chi cerca la lista più lunga.',
       'Ogni destinazione, soggiorno o esperienza passa da una domanda semplice: aiuterebbe davvero qualcuno a scegliere meglio?',
     ],
     primaryCtaLabel: 'Scopri come collaborare',
     primaryCtaLink: '/collaborazioni',
     quoteText: 'Non ci interessa mostrare tutto. Ci interessa consigliare bene.',
     quoteAuthor: 'Rodrigo & Betta',
-    focusTitle: 'Perche fidarsi',
+    focusTitle: 'Perché fidarsi',
     focusSubtitle: 'Metodo editoriale',
     focusAreas: [
       {
@@ -244,33 +244,33 @@ export const siteContentDefaults: SiteContentMap = {
         text: 'Ogni luogo passa dalla prova reale: atmosfera, zona, logistica e dettagli vengono filtrati dal tempo sul posto, non da una lista trovata online.',
       },
       {
-        title: 'Liberta editoriale',
+        title: 'Libertà editoriale',
         text: 'Quando collaboriamo, lo facciamo in modo dichiarato e senza rinunciare al nostro modo di raccontare. Altrimenti preferiamo non farlo.',
       },
       {
         title: 'Immagini e dettagli credibili',
-        text: 'Le foto devono aiutare a capire il luogo, non solo a renderlo desiderabile. Il racconto resta legato alla realta del posto.',
+        text: 'Le foto devono aiutare a capire il luogo, non solo a renderlo desiderabile. Il racconto resta legato alla realtà del posto.',
       },
     ],
     principlesTitle: 'Quello che difendiamo',
     principlesSubtitle: 'Le nostre regole',
     principles: [
       {
-        title: 'Utilita prima del volume',
-        text: 'Ogni contenuto deve aiutare chi legge a decidere meglio, non solo a restare piu tempo sul sito.',
+        title: 'Utilità prima del volume',
+        text: 'Ogni contenuto deve aiutare chi legge a decidere meglio, non solo a restare più tempo sul sito.',
       },
       {
         title: 'Selezione prima della lista',
         text: 'Non cerchiamo di coprire tutto. Selezioniamo luoghi, esperienze e strumenti che hanno davvero qualcosa da lasciare.',
       },
       {
-        title: 'Credibilita prima della scena',
-        text: 'Preferiamo un racconto piu sobrio ma vero a una pagina bella che promette piu di quello che esiste.',
+        title: 'Credibilità prima della scena',
+        text: 'Preferiamo un racconto più sobrio ma vero a una pagina bella che promette più di quello che esiste.',
       },
     ],
-    audienceTitle: 'Per chi e costruito questo progetto',
+    audienceTitle: 'Per chi è costruito questo progetto',
     audienceDescription:
-      'Il nostro contenuto e per chi apprezza scelta, contesto e un punto di vista riconoscibile.',
+      'Il nostro contenuto è per chi apprezza scelta, contesto e un punto di vista riconoscibile.',
     audienceItems: [
       'Viaggiatori che vogliono uscire dalle liste copia-incolla e capire se un luogo merita davvero.',
       'Persone che cercano strumenti, guide e dettagli pratici con un uso concreto.',
@@ -280,12 +280,12 @@ export const siteContentDefaults: SiteContentMap = {
   collaborations: {
     heroEyebrow: 'Collaborazioni editoriali',
     heroTitleMain: 'Raccontiamo progetti travel',
-    heroTitleAccent: 'con credibilita editoriale',
+    heroTitleAccent: 'con credibilità editoriale',
     heroDescription:
-      'Lavoriamo con realta travel, hospitality e lifestyle quando esiste un allineamento reale tra progetto, pubblico e liberta editoriale. Non cerchiamo volume: cerchiamo fit.',
+      'Lavoriamo con realtà travel, hospitality e lifestyle quando esiste un allineamento reale tra progetto, pubblico e libertà editoriale. Non cerchiamo volume: cerchiamo fit.',
     heroChecklist: [
       'Hotel, destinazioni, brand travel e progetti con una storia vera da raccontare',
-      'Liberta editoriale chiara, senza copioni finti o promesse cosmetiche',
+      'Libertà editoriale chiara, senza copioni finti o promesse cosmetiche',
       'Contenuti visivi e testuali costruiti per reggere nel tempo',
       'Media kit, numeri e contatto business ordinati e trasparenti',
     ],
@@ -297,7 +297,7 @@ export const siteContentDefaults: SiteContentMap = {
     statsDescription:
       'Community reale, reach pubblica e presenza costruita in anni di contenuti salvabili. Usiamo solo segnali che possiamo sostenere, non metriche decorative.',
     servicesTitle: 'Format con un esito chiaro',
-    servicesSubtitle: 'Come puo prendere forma una collaborazione',
+    servicesSubtitle: 'Come può prendere forma una collaborazione',
     services: [
       {
         title: 'Presenza editoriale',
@@ -307,7 +307,7 @@ export const siteContentDefaults: SiteContentMap = {
       {
         title: 'Attivazione destinazione',
         description:
-          'Racconti piu ampi per territori, enti e destinazioni che hanno bisogno di un frame narrativo piu completo.',
+          'Racconti più ampi per territori, enti e destinazioni che hanno bisogno di un frame narrativo più completo.',
       },
       {
         title: 'Contenuti visuali e UGC',
@@ -331,13 +331,13 @@ export const siteContentDefaults: SiteContentMap = {
         step: '2',
         title: 'Valutazione',
         description:
-          'Capiamo se il progetto e coerente con il nostro pubblico, con il tono del brand e con il tipo di contenuto che sappiamo fare bene.',
+          'Capiamo se il progetto è coerente con il nostro pubblico, con il tono del brand e con il tipo di contenuto che sappiamo fare bene.',
       },
       {
         step: '3',
         title: 'Sviluppo',
         description:
-          'Definiamo il perimetro e costruiamo il racconto con liberta editoriale, immagini reali e tono coerente.',
+          'Definiamo il perimetro e costruiamo il racconto con libertà editoriale, immagini reali e tono coerente.',
       },
       {
         step: '4',
@@ -348,7 +348,7 @@ export const siteContentDefaults: SiteContentMap = {
     ],
     partnerTitle: 'Con chi lavoriamo meglio',
     partnerDescription:
-      'Restiamo aperti a progetti diversi, ma lavoriamo meglio quando ci sono identita, contesto e una storia che vale la pena raccontare.',
+      'Restiamo aperti a progetti diversi, ma lavoriamo meglio quando ci sono identità, contesto e una storia che vale la pena raccontare.',
     partnerTypes: [
       {
         title: 'Hotel e hospitality',
@@ -356,7 +356,7 @@ export const siteContentDefaults: SiteContentMap = {
       },
       {
         title: 'Destinazioni e territori',
-        text: 'DMO, enti turismo, territori e destinazioni che vogliono essere raccontati con profondita e meno brochure.',
+        text: 'DMO, enti turismo, territori e destinazioni che vogliono essere raccontati con profondità e meno brochure.',
       },
       {
         title: 'Brand travel e lifestyle',
@@ -374,14 +374,14 @@ export const siteContentDefaults: SiteContentMap = {
           'Articolo, guida o inserimento editoriale sul sito',
           'Menzione o supporto social coerente al formato',
           'Tono pulito e integrato nel progetto',
-          'Pensato per partner che vogliono chiarezza e credibilita',
+          'Pensato per partner che vogliono chiarezza e credibilità',
         ],
       },
       {
         title: 'Attivazione destinazione',
-        subtitle: 'Per territori, soggiorni o storytelling piu ampi',
+        subtitle: 'Per territori, soggiorni o storytelling più ampi',
         features: [
-          'Contenuto cross-canale con piu profondita',
+          'Contenuto cross-canale con più profondità',
           'Integrazione tra guida, visual e social',
           'Ideale per hospitality e destinazioni',
           'Pensato per valorizzare il contesto, non solo il lancio',
@@ -393,7 +393,7 @@ export const siteContentDefaults: SiteContentMap = {
         subtitle: 'Per format speciali o esigenze non standard',
         features: [
           'Formato costruito sul progetto',
-          'Flessibilita tra contenuto, visual e contesto',
+          'Flessibilità tra contenuto, visual e contesto',
           'Possibile uso UGC o contenuti dedicati',
           'Adatto quando il progetto merita una struttura propria',
         ],
@@ -414,8 +414,8 @@ export const siteContentDefaults: SiteContentMap = {
     helperTitle: 'Per aiutarci a risponderti meglio',
     helperItems: [
       'Se ci scrivi per una collaborazione, indica brand o struttura, obiettivo e periodo indicativo.',
-      'Se hai bisogno del media kit, usa la pagina dedicata: rende il contatto piu ordinato.',
-      'Se la richiesta e informale, Instagram e WhatsApp restano i canali piu immediati.',
+      'Se hai bisogno del media kit, usa la pagina dedicata: rende il contatto più ordinato.',
+      'Se la richiesta è informale, Instagram e WhatsApp restano i canali più immediati.',
     ],
     formTitle: 'Inviaci un messaggio',
   },

@@ -6,7 +6,7 @@ const TOOL_ITEMS = [
   {
     icon: Plane,
     title: 'Prenotare meglio',
-    text: 'Servizi e riferimenti che usiamo per voli, hotel, attivita e logistica.',
+    text: 'Servizi e riferimenti che usiamo per voli, hotel, attività e logistica.',
   },
   {
     icon: Smartphone,
@@ -43,7 +43,7 @@ export default function HomeToolsTeaser() {
           </p>
           <Link
             to="/risorse"
-            className="mt-7 inline-flex items-center gap-2 rounded-lg bg-ink px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-warm)]"
+            className="mt-7 inline-flex items-center gap-2 rounded-lg bg-ink px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
           >
             Apri gli strumenti <ArrowRight size={14} />
           </Link>
@@ -57,14 +57,14 @@ export default function HomeToolsTeaser() {
               <Link
                 key={item.title}
                 to="/risorse"
-                className="group rounded-lg border border-black/8 bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--color-gold)]"
+                className="group rounded-lg border border-black/8 bg-white p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--color-accent)]"
               >
-                <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--color-gold-soft)] text-[var(--color-accent-warm)]">
+                <div className="mb-6 flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
                   <Icon size={18} />
                 </div>
                 <h3 className="text-lg font-serif text-ink">{item.title}</h3>
                 <p className="mt-3 text-sm leading-relaxed text-black/56">{item.text}</p>
-                <span className="mt-5 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-black/42 transition-colors group-hover:text-[var(--color-accent-warm)]">
+                <span className="mt-5 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-black/42 transition-colors group-hover:text-[var(--color-accent)]">
                   Vai alle risorse <ArrowRight size={12} />
                 </span>
               </Link>

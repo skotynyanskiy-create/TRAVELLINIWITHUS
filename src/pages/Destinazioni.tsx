@@ -373,7 +373,7 @@ export default function Destinazioni() {
           <div className="mt-10 grid max-w-4xl gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {TRUST_STRIP.map((item) => (
               <div key={item} className="rounded-2xl border border-white/12 bg-white/10 p-4 backdrop-blur">
-                <ShieldCheck size={16} className="mb-3 text-[var(--color-gold)]" />
+                <ShieldCheck size={16} className="mb-3 text-[var(--color-accent)]" />
                 <p className="text-xs font-semibold leading-relaxed text-white/75">{item}</p>
               </div>
             ))}
@@ -621,66 +621,7 @@ export default function Destinazioni() {
           </>
         )}
 
-        <div className="mt-24">
-          <CrossLinkWidget variant="to-esperienze" />
-        </div>
-      }
-      filters={
-        <DiscoveryFilterBar
-          sections={sections}
-          onClearAll={hasAnyFilter(filters) ? clearAll : undefined}
-          resultsLabel={resultsLabel}
-        />
-      }
-    >
-      <AnimatePresence initial={false}>
-        {mapOpen && (
-          <motion.div
-            key="map"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-hidden"
-          >
-            <div className="mb-10 overflow-hidden rounded-[var(--radius-2xl)] border border-black/5 shadow-sm">
-              <InteractiveMap />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {isLoading ? (
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {Array.from({ length: 6 }).map((_, idx) => (
-            <ArticleSkeleton key={idx} />
-          ))}
-        </div>
-      ) : filteredItems.length === 0 ? (
-        <EmptyState
-          variant={archiveItems.length === 0 ? 'no-content' : 'no-results'}
-          onReset={archiveItems.length > 0 ? clearAll : undefined}
-        />
-      ) : (
-        <>
-          <motion.div
-            variants={cardContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-80px' }}
-            className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
-          >
-            {paginated.map((item) => (
-              <ArchiveCard key={item.id} item={item} />
-            ))}
-          </motion.div>
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        </>
-      )}
+      </Section>
 
       <Section className="!py-20">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -692,6 +633,6 @@ export default function Destinazioni() {
       <Section className="!py-0 !pb-16">
         <Newsletter variant="sand" />
       </Section>
-    </DiscoveryPageLayout>
+    </PageLayout>
   );
 }

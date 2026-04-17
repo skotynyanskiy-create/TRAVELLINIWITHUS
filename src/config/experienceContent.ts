@@ -7,14 +7,14 @@ export const HOME_EXPERIENCE_TYPES: ExperienceType[] = [
   'Food & Ristoranti',
   'Hotel con carattere',
   'Weekend romantici',
-  "Borghi e citta d'arte",
+  "Borghi e città d'arte",
   'Relax, terme e spa',
 ];
 
 export const EXPERIENCE_CARD_LABELS: Partial<Record<ExperienceType, string>> = {
   'Food & Ristoranti': 'Food',
   'Hotel con carattere': 'Hotel',
-  "Borghi e citta d'arte": 'Borghi',
+  "Borghi e città d'arte": 'Borghi',
   'Relax, terme e spa': 'Relax',
 };
 
@@ -24,7 +24,7 @@ export const EXPERIENCE_DESCRIPTIONS: Partial<Record<ExperienceType, string>> = 
   'Hotel con carattere':
     'Posti dove dormire che fanno parte del viaggio, non solo della logistica.',
   'Weekend romantici': 'Idee brevi, curate e realistiche per partire in coppia.',
-  "Borghi e citta d'arte": 'Centri storici, scorci e cultura da vivere senza correre.',
+  "Borghi e città d'arte": 'Centri storici, scorci e cultura da vivere senza correre.',
   'Relax, terme e spa': 'Pause lente, terme e soggiorni dove staccare davvero.',
 };
 

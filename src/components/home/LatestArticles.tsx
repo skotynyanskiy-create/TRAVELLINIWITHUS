@@ -98,7 +98,7 @@ export default function LatestArticles() {
             >
               <Link
                 to={`/articolo/${recentArticles[0].slug || recentArticles[0].id}`}
-                className="group relative flex h-full flex-col overflow-hidden rounded-lg border border-black/8 bg-white transition-all duration-500 hover:border-[var(--color-gold)]"
+                className="group relative flex h-full flex-col overflow-hidden rounded-lg border border-black/8 bg-white transition-all duration-500 hover:border-[var(--color-accent)]"
               >
                 <div className="relative aspect-[16/10] overflow-hidden">
                   <OptimizedImage
@@ -107,11 +107,11 @@ export default function LatestArticles() {
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
                   />
                   <div className="absolute top-6 left-6 flex items-center gap-2">
-                    <span className="rounded-lg border border-[var(--color-gold)]/20 bg-[var(--color-gold-soft)] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-ink backdrop-blur-md">
+                    <span className="rounded-lg border border-[var(--color-accent)]/20 bg-[var(--color-accent-soft)] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-ink backdrop-blur-md">
                       {recentArticles[0].category}
                     </span>
                     {recentArticles[0].readTime && (
-                      <span className="rounded-lg bg-[var(--color-accent-warm)]/90 px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
+                      <span className="rounded-lg bg-[var(--color-accent)]/90 px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
                         <Clock size={10} className="inline mr-1" />
                         {recentArticles[0].readTime}
                       </span>
@@ -127,7 +127,7 @@ export default function LatestArticles() {
                         {formatDate(recentArticles[0].createdAt)}
                       </div>
                     </div>
-                    <h3 className="mb-4 text-3xl font-serif leading-[1.12] text-ink transition-colors group-hover:text-[var(--color-accent-warm)] md:text-4xl lg:text-5xl">
+                    <h3 className="mb-4 text-3xl font-serif leading-[1.12] text-ink transition-colors group-hover:text-[var(--color-accent)] md:text-4xl lg:text-5xl">
                       {recentArticles[0].title}
                     </h3>
                     <p className="mb-4 text-base font-normal leading-relaxed text-black/64 line-clamp-2 md:text-lg">
@@ -135,7 +135,7 @@ export default function LatestArticles() {
                         'Un contenuto pensato per ispirarti davvero e aiutarti a capire se questo luogo merita di entrare nei tuoi prossimi piani.'}
                     </p>
                   </div>
-                  <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-ink mt-auto group-hover:text-[var(--color-accent-warm)] transition-colors">
+                  <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-ink mt-auto group-hover:text-[var(--color-accent)] transition-colors">
                     Leggi l'articolo
                     <ArrowRight
                       size={14}
@@ -159,7 +159,7 @@ export default function LatestArticles() {
                 >
                   <Link
                     to={`/articolo/${article.slug || article.id}`}
-                    className="group relative flex h-full flex-1 flex-col overflow-hidden rounded-lg border border-black/8 bg-white transition-all duration-500 hover:-translate-y-0.5 hover:border-[var(--color-gold)]"
+                    className="group relative flex h-full flex-1 flex-col overflow-hidden rounded-lg border border-black/8 bg-white transition-all duration-500 hover:-translate-y-0.5 hover:border-[var(--color-accent)]"
                   >
                     <div className="relative aspect-[16/10] overflow-hidden">
                       <OptimizedImage
@@ -180,10 +180,10 @@ export default function LatestArticles() {
                           {formatDate(article.createdAt)}
                         </div>
                       </div>
-                      <h3 className="mb-3 text-lg font-serif leading-[1.2] text-ink transition-colors group-hover:text-[var(--color-accent-warm)] lg:text-2xl">
+                      <h3 className="mb-3 text-lg font-serif leading-[1.2] text-ink transition-colors group-hover:text-[var(--color-accent)] lg:text-2xl">
                         {article.title}
                       </h3>
-                      <div className="mt-auto inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-ink group-hover:text-[var(--color-accent-warm)] transition-colors">
+                      <div className="mt-auto inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-ink group-hover:text-[var(--color-accent)] transition-colors">
                         Leggi <ArrowRight size={12} />
                       </div>
                     </div>
@@ -205,7 +205,7 @@ export default function LatestArticles() {
               </p>
               <Link
                 to="/destinazioni"
-                className="mt-6 inline-flex items-center gap-2 rounded-lg bg-ink px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-warm)]"
+                className="mt-6 inline-flex items-center gap-2 rounded-lg bg-ink px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
               >
                 Esplora l'archivio <ArrowRight size={14} />
               </Link>

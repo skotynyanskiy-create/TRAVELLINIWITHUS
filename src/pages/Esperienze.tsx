@@ -36,23 +36,23 @@ const ITEMS_PER_PAGE = 6;
 
 const EXPERIENCE_DESCRIPTIONS: Record<string, string> = {
   'Posti particolari':
-    'Luoghi insoliti, indirizzi salvabili e scoperte che danno personalita al viaggio.',
+    'Luoghi insoliti, indirizzi salvabili e scoperte che danno personalità al viaggio.',
   'Food & Ristoranti':
-    'Tavole, mercati e indirizzi scelti per atmosfera, sostanza e utilita reale.',
+    'Tavole, mercati e indirizzi scelti per atmosfera, sostanza e utilità reale.',
   'Locali insoliti':
     'Locali con concept, posizione o carattere capaci di rendere memorabile una tappa.',
   'Hotel con carattere':
     'Soggiorni dove design, atmosfera e contesto fanno parte del viaggio.',
   'Weekend romantici':
     'Idee brevi, curate e realistiche per partire in coppia senza costruire un sogno finto.',
-  "Borghi e citta d'arte":
+  "Borghi e città d'arte":
     'Centri storici, scorci e patrimonio da vivere con calma, non solo da fotografare.',
   'Passeggiate panoramiche':
     'Percorsi, viste e camminate che valgono davvero il tempo del viaggio.',
   'Relax, terme e spa':
     'Pause lente, terme e luoghi dove staccare con criterio.',
   'Esperienze insolite':
-    'Musei strani, attivita particolari e spunti da salvare proprio perche diversi.',
+    'Musei strani, attività particolari e spunti da salvare proprio perché diversi.',
   'Gite e day trip':
     'Uscite facili da organizzare per una giornata o un weekend vicino.',
 };

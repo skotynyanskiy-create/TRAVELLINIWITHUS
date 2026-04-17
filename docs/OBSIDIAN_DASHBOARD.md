@@ -7,50 +7,104 @@ cssclasses:
 tags:
   - obsidian
   - dashboard
+  - workspace
 ---
 
-# Obsidian Dashboard
+# Travellini — Dashboard
 
-## Projects
+## Focus settimanale
+
+> *Cosa pubblichiamo questa settimana? Qual è la priorità sito? Chi contattare?*
+
+**Settimana del**: 
+**Focus editoriale**: 
+**Focus sito**: 
+**Follow-up commerciale**: 
+
+---
+
+## Contenuti in corso
+
+![[95_Bases/Editorial_Archive.base#In Progress]]
+
+---
+
+## Priorità sito
 
 ![[95_Bases/Project_Log.base#Active Projects]]
 
-## Tasks
+---
+
+## Task aperti
 
 ![[95_Bases/Task_Log.base#Open Tasks]]
 
-## Bugs
+---
 
-![[95_Bases/Bug_Log.base#Open Bugs]]
+## SEO — Da ottimizzare
 
-## Campaigns
+![[95_Bases/SEO_Pages.base#Da ottimizzare]]
 
-![[95_Bases/Campaign_Pipeline.base#Active Campaigns]]
+---
 
-## Partnerships
+## Partner pipeline
 
 ![[95_Bases/Partnership_Pipeline.base#Partner Pipeline]]
 
-## Content pipeline
+---
 
-![[95_Bases/Content_Pipeline.base#Content Pipeline]]
+## Campagne attive
 
-## Decisions
+![[95_Bases/Campaign_Pipeline.base#Active Campaigns]]
+
+---
+
+## Social — Prossima settimana
+
+![[95_Bases/Social_Calendar.base#Prossima settimana]]
+
+---
+
+## Bug aperti
+
+![[95_Bases/Bug_Log.base#Open Bugs]]
+
+---
+
+## Decisioni recenti
 
 ![[95_Bases/Decision_Log.base#Recent Decisions]]
 
-## Meetings
+---
 
-![[95_Bases/Meeting_Log.base#Latest Meetings]]
+## Inbox da processare
 
-## Daily notes
+[[50_Scratch/INBOX]]
 
-![[95_Bases/Daily_Log.base#Recent Daily]]
+---
 
-## Documentation map
+## Link rapidi
 
-![[95_Bases/Documentation_Index.base#Core Docs]]
+### Crea nuovo
+- [[90_Templates/TPL_Article|+ Articolo]]
+- [[90_Templates/TPL_Destination_Guide|+ Guida destinazione]]
+- [[90_Templates/TPL_Place|+ Luogo/Hotel]]
+- [[90_Templates/TPL_Itinerary|+ Itinerario]]
+- [[90_Templates/TPL_SEO_Page|+ SEO page]]
+- [[90_Templates/TPL_Collaboration|+ Collaborazione]]
+- [[90_Templates/TPL_Product|+ Prodotto]]
+- [[90_Templates/TPL_Web_Clip|+ Web clip]]
+- [[90_Templates/TPL_Project|+ Progetto sito]]
+- [[90_Templates/TPL_Bug|+ Bug]]
 
-## Mixed active work
+### Hub principali
+- [[MARKETING_OPERATIONS_HUB]] — campagne, partner, contenuti
+- [[EDITORIAL_GUIDE]] — regole editoriali
+- [[OBSIDIAN_TAXONOMY]] — naming e properties
+- [[OBSIDIAN_WORKFLOW]] — tutti i flussi
 
-![[95_Bases/Active_Work.base#Open Work]]
+### Pipeline
+- [[95_Bases/Content_Pipeline.base|Content pipeline]]
+- [[95_Bases/Editorial_Archive.base|Archivio editoriale]]
+- [[95_Bases/Place_Library.base|Library luoghi]]
+- [[95_Bases/Shop_Products.base|Prodotti shop]]

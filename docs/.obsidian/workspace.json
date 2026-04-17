@@ -11,10 +11,17 @@
             "id": "e5f6ddea49458a62",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
-              "icon": "lucide-file",
-              "title": "Nuova scheda"
+              "type": "canvas",
+              "state": {
+                "file": "Senza nome 4.canvas",
+                "viewState": {
+                  "x": 0,
+                  "y": 0,
+                  "zoom": 0
+                }
+              },
+              "icon": "lucide-layout-dashboard",
+              "title": "Senza nome 4"
             }
           }
         ]
@@ -120,12 +127,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "Senza nome 4.canvas",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Struttura"
+              "title": "Struttura di Senza nome 4"
             }
           }
         ],
@@ -146,6 +154,9 @@
   },
   "active": "e5f6ddea49458a62",
   "lastOpenFiles": [
+    "40_Daily/2026-04-17.md",
+    "Senza nome 4.canvas",
+    "Senza nome 3.canvas",
     "Senza nome 1.md",
     "Senza nome.md",
     "Senza nome.base",
@@ -182,8 +193,6 @@
     "OBSIDIAN_TAXONOMY.md",
     "OBSIDIAN_DASHBOARD.md",
     "90_Templates/TPL_Release_Note.md",
-    "90_Templates/TPL_UI_Change.md",
-    "90_Templates/TPL_Task.md",
-    "90_Templates/TPL_Project.md"
+    "90_Templates/TPL_UI_Change.md"
   ]
 }

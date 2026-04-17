@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { ArrowRight, Search } from 'lucide-react';
+import { ArrowRight, BookOpen, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
   DESTINATION_GROUPS,
@@ -8,6 +8,7 @@ import {
   slugifyGuideCategory,
   type DestinationGroup,
   type ExperienceType,
+  type GuideCategory,
 } from '../../config/contentTaxonomy';
 import { getDestinationVisual } from '../../config/destinationVisuals';
 import {
@@ -18,6 +19,26 @@ import {
 import { getExperienceVisual } from '../../config/experienceVisuals';
 import { GUIDE_CATEGORY_VISUALS } from '../../config/guideContent';
 
+function GuideTile({ category, description }: { category: GuideCategory; description: string }) {
+  const visual = GUIDE_CATEGORY_VISUALS[category];
+  const Icon = visual?.icon;
+  return (
+    <Link
+      to={`/guide?cat=${slugifyGuideCategory(category)}`}
+      className="group flex flex-col gap-2 rounded-2xl border border-black/6 bg-white p-4 transition-all hover:-translate-y-0.5 hover:shadow-md"
+      style={{ borderLeftColor: visual?.color, borderLeftWidth: 3 }}
+    >
+      {Icon && (
+        <div className="flex h-8 w-8 items-center justify-center rounded-xl" style={{ backgroundColor: visual.colorLight, color: visual.color }}>
+          <Icon size={16} />
+        </div>
+      )}
+      <p className="text-sm font-serif leading-tight text-[var(--color-ink)]">{category}</p>
+      <p className="line-clamp-2 text-[11px] leading-relaxed text-black/55">{description}</p>
+    </Link>
+  );
+}
+
 const EXPERIENCE_IMAGES: Record<string, string> = {
   'Posti particolari':
     'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=900&auto=format&fit=crop',
@@ -27,30 +48,21 @@ const EXPERIENCE_IMAGES: Record<string, string> = {
     'https://images.unsplash.com/photo-1445019980597-93fa8acb246c?q=80&w=900&auto=format&fit=crop',
   'Weekend romantici':
     'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=900&auto=format&fit=crop',
-  "Borghi e cittÃ  d'arte":
+  "Borghi e città d'arte":
     'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?q=80&w=900&auto=format&fit=crop',
   'Relax, terme e spa':
     'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=900&auto=format&fit=crop',
 };
 
 function getCleanExperienceLabel(type: ExperienceType) {
-  if (String(type).includes('Borghi')) return 'Borghi';
   return getExperienceCardLabel(type);
 }
 
 function getCleanExperienceDescription(type: ExperienceType) {
-  if (String(type).includes('Borghi')) {
-    return 'Centri storici, scorci e cultura da vivere senza correre.';
-  }
-
   return getExperienceDescription(type);
 }
 
 function getExperienceImage(type: ExperienceType) {
-  if (String(type).includes('Borghi')) {
-    return 'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?q=80&w=900&auto=format&fit=crop';
-  }
-
   return EXPERIENCE_IMAGES[type] ?? EXPERIENCE_IMAGES['Posti particolari'];
 }
 
@@ -193,7 +205,7 @@ export default function HomeDiscoveryCards() {
 
           <Link
             to="/destinazioni?search="
-            className="inline-flex h-12 w-fit items-center justify-center gap-2 rounded-lg border border-black/10 px-5 text-xs font-bold uppercase tracking-widest text-ink transition-colors hover:border-[var(--color-gold)] hover:text-[var(--color-accent-warm)]"
+            className="inline-flex h-12 w-fit items-center justify-center gap-2 rounded-lg border border-black/10 px-5 text-xs font-bold uppercase tracking-widest text-ink transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
           >
             <Search size={14} />
             Cerca nell'archivio
@@ -226,7 +238,7 @@ export default function HomeDiscoveryCards() {
             </div>
             <Link
               to="/esperienze"
-              className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-ink transition-colors hover:text-[var(--color-accent-warm)]"
+              className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-ink transition-colors hover:text-[var(--color-accent)]"
             >
               Apri tutte le esperienze <ArrowRight size={13} />
             </Link>
@@ -240,7 +252,7 @@ export default function HomeDiscoveryCards() {
         </div>
 
         <div className="mt-8 grid gap-4 lg:grid-cols-[0.76fr_1.44fr]">
-          <div className="rounded-lg border border-[var(--color-gold)]/25 bg-[var(--color-gold-soft)] p-7 md:p-9">
+          <div className="rounded-lg border border-[var(--color-accent)]/25 bg-[var(--color-accent-soft)] p-7 md:p-9">
             <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
               <BookOpen size={13} />
               Guide di viaggio
@@ -253,7 +265,7 @@ export default function HomeDiscoveryCards() {
             </p>
             <Link
               to="/guide"
-              className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[var(--color-ink)] px-5 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-warm)]"
+              className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[var(--color-ink)] px-5 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
             >
               Apri guide <ArrowRight size={14} />
             </Link>

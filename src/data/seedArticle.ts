@@ -6,8 +6,7 @@ export const SAMPLE_ARTICLE = {
   title: 'Dolomiti: Tra Rifugi di Design e Vette Leggendarie',
   category: 'Guide',
   slug: 'dolomiti-rifugi-design',
-  // TODO(@travelliniwithus): PLACEHOLDER — servono foto seed article placeholder
-  image: '/images/destinations/dolomiti.png',
+  image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1400&auto=format&fit=crop',
   excerpt:
     'Un unico contenuto dimostrativo per mostrare come potranno apparire guide, itinerari e racconti quando inserirai il materiale definitivo.',
   description: 'Guida demo ai rifugi di design e ai percorsi panoramici delle Dolomiti.',
@@ -51,20 +50,22 @@ export const SAMPLE_ARTICLE = {
     'Borraccia termica',
     'Bastoncini telescopici',
   ],
-  // TODO(@travelliniwithus): PLACEHOLDER — servono foto seed article placeholder
-  gallery: ['/images/experiences/avventura.png', '/images/experiences/romantico.png'],
+  gallery: [
+    'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?q=80&w=1200&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1200&auto=format&fit=crop',
+  ],
   content: `
 # Dolomiti: L'Estetica della Montagna
 
-Questo contenuto demo serve a mostrare struttura, ritmo editoriale e profondita del layout articolo.
+Questo contenuto demo serve a mostrare struttura, ritmo editoriale e profondità del layout articolo.
 
 ## Rifugi di design e panorami forti
 
-Le Dolomiti sono perfette per raccontare come un contenuto Travelliniwithus puo unire atmosfera, indicazioni utili e identita visiva.
+Le Dolomiti sono perfette per raccontare come un contenuto Travelliniwithus può unire atmosfera, indicazioni utili e identita visiva.
 
 ## Come usare questo demo
 
-Quando il sito sara definitivo, questo articolo potra essere disattivato dal pannello admin e sostituito dai tuoi contenuti reali.
+Quando il sito sarà definitivo, questo articolo potra essere disattivato dal pannello admin e sostituito dai tuoi contenuti reali.
   `,
 };
 
