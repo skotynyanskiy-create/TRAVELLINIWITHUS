@@ -1,0 +1,45 @@
+{
+  "filters": {
+    "filterOperator": "and",
+    "conditions": [
+      {
+        "field": "type",
+        "operator": "is",
+        "value": ["social-post"]
+      }
+    ]
+  },
+  "order": [
+    {
+      "field": "publish_date",
+      "direction": "asc"
+    }
+  ],
+  "views": [
+    {
+      "id": "prossima-settimana",
+      "name": "Prossima settimana",
+      "type": "table",
+      "columns": ["file.name", "status", "channel", "format", "destination", "pillar", "publish_date", "caption_ready"]
+    },
+    {
+      "id": "in-produzione",
+      "name": "In produzione",
+      "type": "table",
+      "filters": {
+        "filterOperator": "and",
+        "conditions": [
+          {"field": "status", "operator": "is", "value": ["idea", "in-produzione", "review"]}
+        ]
+      },
+      "columns": ["file.name", "status", "channel", "format", "destination", "pillar", "publish_date"]
+    },
+    {
+      "id": "per-canale",
+      "name": "Per canale",
+      "type": "table",
+      "order": [{"field": "channel", "direction": "asc"}],
+      "columns": ["file.name", "channel", "format", "status", "publish_date", "destination"]
+    }
+  ]
+}

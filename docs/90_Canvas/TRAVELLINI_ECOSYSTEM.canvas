@@ -1,0 +1,26 @@
+{
+  "nodes": [
+    { "id": "brand", "type": "text", "text": "# Travellini\n@travelliniwithus\nRodrigo & Betta", "x": 0, "y": 0, "width": 200, "height": 90, "color": "1" },
+
+    { "id": "sito", "type": "text", "text": "**Sito**\ntravelliniwithus.it\nGuide · Blog · Shop · Mappa", "x": -500, "y": -200, "width": 220, "height": 80, "color": "2" },
+    { "id": "social", "type": "text", "text": "**Social**\nInstagram · TikTok\nContent editoriale", "x": 300, "y": -200, "width": 200, "height": 80, "color": "2" },
+    { "id": "newsletter", "type": "text", "text": "**Newsletter**\nLead capture\nContenuti esclusivi", "x": -500, "y": 100, "width": 200, "height": 80, "color": "3" },
+    { "id": "shop", "type": "text", "text": "**Shop**\nProdotti digitali\nAffiliate links", "x": -200, "y": 200, "width": 200, "height": 80, "color": "4" },
+    { "id": "collaborazioni", "type": "text", "text": "**Collaborazioni**\nBrand deals · Press trip\nMedia Kit", "x": 300, "y": 100, "width": 220, "height": 80, "color": "4" },
+    { "id": "seo", "type": "text", "text": "**SEO**\nKeyword organiche\nLong-tail guide", "x": -500, "y": -400, "width": 200, "height": 80, "color": "6" },
+    { "id": "community", "type": "text", "text": "**Club / Community**\nAccesso riservato\nFidelizzazione", "x": 200, "y": 200, "width": 200, "height": 80, "color": "5" },
+    { "id": "obsidian", "type": "text", "text": "**Vault Obsidian**\nKnowledge base\nOperazioni editoriali", "x": 600, "y": -100, "width": 200, "height": 80, "color": "6" }
+  ],
+  "edges": [
+    { "id": "e1", "fromNode": "brand", "toNode": "sito", "label": "contenuto" },
+    { "id": "e2", "fromNode": "brand", "toNode": "social", "label": "distribuzione" },
+    { "id": "e3", "fromNode": "sito", "toNode": "newsletter", "label": "lead capture" },
+    { "id": "e4", "fromNode": "sito", "toNode": "shop", "label": "monetizzazione" },
+    { "id": "e5", "fromNode": "social", "toNode": "collaborazioni", "label": "partnership" },
+    { "id": "e6", "fromNode": "sito", "toNode": "seo", "label": "traffico organico" },
+    { "id": "e7", "fromNode": "sito", "toNode": "community", "label": "fidelizzazione" },
+    { "id": "e8", "fromNode": "social", "toNode": "sito", "label": "traffico" },
+    { "id": "e9", "fromNode": "newsletter", "toNode": "sito", "label": "retention" },
+    { "id": "e10", "fromNode": "obsidian", "toNode": "brand", "label": "sistema operativo" }
+  ]
+}

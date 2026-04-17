@@ -1,0 +1,57 @@
+{
+  "filters": {
+    "filterOperator": "and",
+    "conditions": [
+      {
+        "field": "type",
+        "operator": "is",
+        "value": ["place"]
+      }
+    ]
+  },
+  "order": [
+    {
+      "field": "destination",
+      "direction": "asc"
+    }
+  ],
+  "views": [
+    {
+      "id": "all-places",
+      "name": "Tutti i luoghi",
+      "type": "table",
+      "columns": ["file.name", "category", "status", "destination", "country", "rating", "price_range", "affiliate_link"]
+    },
+    {
+      "id": "by-destination",
+      "name": "Per destinazione",
+      "type": "table",
+      "order": [{"field": "destination", "direction": "asc"}, {"field": "rating", "direction": "desc"}],
+      "columns": ["file.name", "category", "destination", "rating", "price_range", "status"]
+    },
+    {
+      "id": "hotel",
+      "name": "Hotel",
+      "type": "table",
+      "filters": {
+        "filterOperator": "and",
+        "conditions": [
+          {"field": "category", "operator": "is", "value": ["hotel"]}
+        ]
+      },
+      "columns": ["file.name", "destination", "country", "rating", "price_range", "affiliate_link", "status"]
+    },
+    {
+      "id": "da-visitare",
+      "name": "Da visitare",
+      "type": "table",
+      "filters": {
+        "filterOperator": "and",
+        "conditions": [
+          {"field": "status", "operator": "is", "value": ["da-visitare"]}
+        ]
+      },
+      "columns": ["file.name", "category", "destination", "country", "rating"]
+    }
+  ]
+}

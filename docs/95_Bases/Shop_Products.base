@@ -1,0 +1,50 @@
+{
+  "filters": {
+    "filterOperator": "and",
+    "conditions": [
+      {
+        "field": "type",
+        "operator": "is",
+        "value": ["product"]
+      }
+    ]
+  },
+  "order": [
+    {
+      "field": "status",
+      "direction": "asc"
+    }
+  ],
+  "views": [
+    {
+      "id": "all-products",
+      "name": "Tutti i prodotti",
+      "type": "table",
+      "columns": ["file.name", "status", "category", "price", "route", "affiliate"]
+    },
+    {
+      "id": "live",
+      "name": "Live",
+      "type": "table",
+      "filters": {
+        "filterOperator": "and",
+        "conditions": [
+          {"field": "status", "operator": "is", "value": ["live"]}
+        ]
+      },
+      "columns": ["file.name", "category", "price", "route", "affiliate"]
+    },
+    {
+      "id": "pipeline",
+      "name": "In sviluppo",
+      "type": "table",
+      "filters": {
+        "filterOperator": "and",
+        "conditions": [
+          {"field": "status", "operator": "is", "value": ["idea", "in-sviluppo"]}
+        ]
+      },
+      "columns": ["file.name", "status", "category", "price"]
+    }
+  ]
+}

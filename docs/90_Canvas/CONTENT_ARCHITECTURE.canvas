@@ -1,0 +1,48 @@
+{
+  "nodes": [
+    { "id": "brand", "type": "text", "text": "# Brand\ntravelliniwithus\nRodrigo & Betta", "x": 0, "y": 0, "width": 200, "height": 80, "color": "1" },
+
+    { "id": "p1", "type": "text", "text": "**Pillar 1**\nDestinazione", "x": -600, "y": 200, "width": 160, "height": 60, "color": "2" },
+    { "id": "p2", "type": "text", "text": "**Pillar 2**\nStile di viaggio", "x": -380, "y": 200, "width": 160, "height": 60, "color": "2" },
+    { "id": "p3", "type": "text", "text": "**Pillar 3**\nPratico", "x": -160, "y": 200, "width": 160, "height": 60, "color": "2" },
+    { "id": "p4", "type": "text", "text": "**Pillar 4**\nIspirazione", "x": 60, "y": 200, "width": 160, "height": 60, "color": "2" },
+    { "id": "p5", "type": "text", "text": "**Pillar 5**\nShop", "x": 280, "y": 200, "width": 160, "height": 60, "color": "4" },
+
+    { "id": "dest-hub", "type": "text", "text": "Guide destinazioni\nDEST_*", "x": -700, "y": 360, "width": 180, "height": 60, "color": "3" },
+    { "id": "itin-hub", "type": "text", "text": "Itinerari\nITIN_*", "x": -480, "y": 360, "width": 160, "height": 60, "color": "3" },
+    { "id": "art-dest", "type": "text", "text": "Articoli\ndestinazione\nART_*", "x": -600, "y": 480, "width": 160, "height": 70, "color": "3" },
+    { "id": "art-stile", "type": "text", "text": "Articoli\nstile viaggio\nART_*", "x": -380, "y": 480, "width": 160, "height": 70, "color": "3" },
+    { "id": "art-prat", "type": "text", "text": "Articoli\npratici\nART_*", "x": -160, "y": 480, "width": 160, "height": 70, "color": "3" },
+    { "id": "art-insp", "type": "text", "text": "Articoli\nispirazione\nART_*", "x": 60, "y": 480, "width": 160, "height": 70, "color": "3" },
+
+    { "id": "places", "type": "text", "text": "Luoghi\nHotel / Ristoranti\nPLACE_*", "x": -700, "y": 620, "width": 180, "height": 70, "color": "5" },
+    { "id": "seo", "type": "text", "text": "SEO Pages\nSEO_*\n80_SEO/Pagine/", "x": -400, "y": 620, "width": 180, "height": 70, "color": "6" },
+    { "id": "social", "type": "text", "text": "Social Posts\nInstagram / TikTok\nPOST_*", "x": -100, "y": 620, "width": 180, "height": 70, "color": "6" },
+
+    { "id": "prod", "type": "text", "text": "Prodotti shop\nPROD_*", "x": 260, "y": 360, "width": 160, "height": 60, "color": "4" },
+    { "id": "affiliati", "type": "text", "text": "Affiliati\n85_Shop/Affiliati/", "x": 260, "y": 480, "width": 160, "height": 60, "color": "4" },
+
+    { "id": "newsletter", "type": "text", "text": "Newsletter\nLead capture", "x": 500, "y": 360, "width": 160, "height": 60, "color": "4" },
+    { "id": "collab", "type": "text", "text": "Collaborazioni\nCOLLAB_*", "x": 500, "y": 480, "width": 160, "height": 60, "color": "4" }
+  ],
+  "edges": [
+    { "id": "e-b1", "fromNode": "brand", "toNode": "p1" },
+    { "id": "e-b2", "fromNode": "brand", "toNode": "p2" },
+    { "id": "e-b3", "fromNode": "brand", "toNode": "p3" },
+    { "id": "e-b4", "fromNode": "brand", "toNode": "p4" },
+    { "id": "e-b5", "fromNode": "brand", "toNode": "p5" },
+    { "id": "e-p1-dest", "fromNode": "p1", "toNode": "dest-hub" },
+    { "id": "e-p1-itin", "fromNode": "p1", "toNode": "itin-hub" },
+    { "id": "e-dest-art", "fromNode": "dest-hub", "toNode": "art-dest" },
+    { "id": "e-p2-art", "fromNode": "p2", "toNode": "art-stile" },
+    { "id": "e-p3-art", "fromNode": "p3", "toNode": "art-prat" },
+    { "id": "e-p4-art", "fromNode": "p4", "toNode": "art-insp" },
+    { "id": "e-dest-pl", "fromNode": "dest-hub", "toNode": "places" },
+    { "id": "e-art-seo", "fromNode": "art-dest", "toNode": "seo" },
+    { "id": "e-art-social", "fromNode": "art-dest", "toNode": "social" },
+    { "id": "e-p5-prod", "fromNode": "p5", "toNode": "prod" },
+    { "id": "e-prod-aff", "fromNode": "prod", "toNode": "affiliati" },
+    { "id": "e-brand-nl", "fromNode": "brand", "toNode": "newsletter" },
+    { "id": "e-brand-col", "fromNode": "brand", "toNode": "collab" }
+  ]
+}

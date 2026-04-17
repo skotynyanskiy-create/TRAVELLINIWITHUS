@@ -1,0 +1,34 @@
+{
+  "nodes": [
+    { "id": "home", "type": "text", "text": "# Home\n/\nHero + CoupleIntro + DiscoveryCards + MapTeaser + ToolsTeaser + LatestArticles + CollaborationCTA", "x": 0, "y": 0, "width": 280, "height": 140, "color": "1" },
+    { "id": "destinazioni", "type": "text", "text": "# Destinazioni\n/destinazioni\nBrowser per continente + filtri", "x": -400, "y": 220, "width": 220, "height": 100, "color": "2" },
+    { "id": "esperienze", "type": "text", "text": "# Esperienze\n/esperienze\nFilter per tipo (10 categorie)", "x": -140, "y": 220, "width": 220, "height": 100, "color": "2" },
+    { "id": "guide", "type": "text", "text": "# Guide\n/guide\nBrowser 8 categorie", "x": 120, "y": 220, "width": 200, "height": 100, "color": "2" },
+    { "id": "blog", "type": "text", "text": "# Blog / Articoli\n/blog\nArchivio + filtri + search", "x": 360, "y": 220, "width": 200, "height": 100, "color": "2" },
+    { "id": "mappa", "type": "text", "text": "# Mappa\n/mappa\nMapbox world map interattiva", "x": 600, "y": 220, "width": 200, "height": 100, "color": "2" },
+    { "id": "shop", "type": "text", "text": "# Shop\n/shop\nProdotti digitali + fisici", "x": -560, "y": 420, "width": 200, "height": 100, "color": "4" },
+    { "id": "club", "type": "text", "text": "# Club\n/club\nCommunity + accesso riservato", "x": -320, "y": 420, "width": 200, "height": 100, "color": "4" },
+    { "id": "collaborazioni", "type": "text", "text": "# Collaborazioni\n/collaborazioni\nFormati + media kit + form", "x": -80, "y": 420, "width": 220, "height": 100, "color": "6" },
+    { "id": "mediakit", "type": "text", "text": "# Media Kit\n/media-kit\nDownload PDF + stats", "x": 180, "y": 420, "width": 200, "height": 100, "color": "6" },
+    { "id": "chisiamo", "type": "text", "text": "# Chi Siamo\n/chi-siamo\nRodrigo & Betta + storia", "x": 420, "y": 420, "width": 200, "height": 100, "color": "3" },
+    { "id": "contatti", "type": "text", "text": "# Contatti\n/contatti\nForm contatto", "x": 640, "y": 420, "width": 180, "height": 100, "color": "3" },
+    { "id": "account", "type": "text", "text": "# Account\n/account\nProfilo + ordini", "x": 860, "y": 220, "width": 180, "height": 100, "color": "5" },
+    { "id": "navbar", "type": "text", "text": "**Navbar**\nDestinazioni | Esperienze | Guide | Blog | Shop | Collaborazioni", "x": 0, "y": -120, "width": 340, "height": 80, "color": "6" },
+    { "id": "legenda", "type": "text", "text": "**Legenda**\n🔴 Core nav\n🟢 Editorial\n🟡 Commercial\n🔵 Account\n🟣 Brand\n🟤 Community", "x": 1100, "y": 0, "width": 200, "height": 140 }
+  ],
+  "edges": [
+    { "id": "e1", "fromNode": "home", "toNode": "destinazioni" },
+    { "id": "e2", "fromNode": "home", "toNode": "esperienze" },
+    { "id": "e3", "fromNode": "home", "toNode": "guide" },
+    { "id": "e4", "fromNode": "home", "toNode": "blog" },
+    { "id": "e5", "fromNode": "home", "toNode": "mappa" },
+    { "id": "e6", "fromNode": "home", "toNode": "account" },
+    { "id": "e7", "fromNode": "navbar", "toNode": "home" },
+    { "id": "e8", "fromNode": "destinazioni", "toNode": "shop" },
+    { "id": "e9", "fromNode": "destinazioni", "toNode": "club" },
+    { "id": "e10", "fromNode": "blog", "toNode": "collaborazioni" },
+    { "id": "e11", "fromNode": "collaborazioni", "toNode": "mediakit" },
+    { "id": "e12", "fromNode": "home", "toNode": "chisiamo" },
+    { "id": "e13", "fromNode": "home", "toNode": "contatti" }
+  ]
+}

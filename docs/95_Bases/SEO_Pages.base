@@ -1,0 +1,54 @@
+{
+  "filters": {
+    "filterOperator": "and",
+    "conditions": [
+      {
+        "field": "type",
+        "operator": "is",
+        "value": ["seo-page"]
+      }
+    ]
+  },
+  "order": [
+    {
+      "field": "priority",
+      "direction": "asc"
+    }
+  ],
+  "views": [
+    {
+      "id": "da-ottimizzare",
+      "name": "Da ottimizzare",
+      "type": "table",
+      "filters": {
+        "filterOperator": "and",
+        "conditions": [
+          {
+            "field": "status",
+            "operator": "is",
+            "value": ["da-ottimizzare", "in-corso"]
+          }
+        ]
+      },
+      "columns": ["file.name", "status", "priority", "route", "keyword_primaria", "score", "last_audit"]
+    },
+    {
+      "id": "all-pages",
+      "name": "Tutte le pagine",
+      "type": "table",
+      "columns": ["file.name", "status", "priority", "route", "keyword_primaria", "score", "last_audit"]
+    },
+    {
+      "id": "ottimizzate",
+      "name": "Ottimizzate",
+      "type": "table",
+      "filters": {
+        "filterOperator": "and",
+        "conditions": [
+          {"field": "status", "operator": "is", "value": ["ottimizzato"]}
+        ]
+      },
+      "columns": ["file.name", "route", "keyword_primaria", "score", "last_audit"]
+    }
+  ]
+}
