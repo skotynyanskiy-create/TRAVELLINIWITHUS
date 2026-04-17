@@ -14,12 +14,8 @@
   --color-accent: #a8865a; /* Accento unico — sabbia profonda/cuoio */
   --color-accent-hover: #96734a; /* Accento hover — sabbia scura */
   --color-accent-text: #7a5c35; /* Accento testo — WCAG AA su bianco */
-  --color-accent-warm: #a8865a; /* Alias accento — unificato */
-  --color-accent-warm-hover: #96734a; /* Alias hover — unificato */
   --color-accent-soft: #f3efe9; /* Sezioni soft — sabbia calda */
   --color-footer: #141414; /* Footer — nero profondo */
-  --color-gold: #a8865a; /* Decorazioni — uguale accento */
-  --color-gold-soft: #f3efe9; /* Highlight boxes — uguale soft */
 
   /* Social Brand Colors */
   --color-social-instagram-start: #f09433;
@@ -110,7 +106,7 @@
     content: '';
     width: 3rem;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--color-gold), transparent);
+    background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
   }
 
   /* Subtle topographic contour pattern for dark sections */
@@ -177,6 +173,7 @@ h6,
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+  position: relative;
 }
 
 /* Custom scrollbar */

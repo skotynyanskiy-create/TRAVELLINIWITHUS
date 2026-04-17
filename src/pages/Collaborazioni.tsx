@@ -25,30 +25,10 @@ import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import Section from '../components/Section';
 import { BRAND_STATS } from '../config/site';
+import AnimatedCounter from '../components/AnimatedCounter';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { fetchStats, type SiteStats } from '../services/firebaseService';
-
-const TRIAD = [
-  {
-    eyebrow: 'Chi siamo',
-    title: 'Una coppia creator-led con taglio editoriale',
-    text: 'Rodrigo e Betta raccontano luoghi, soggiorni ed esperienze con il filtro piu utile: esserci stati davvero.',
-    icon: Users,
-  },
-  {
-    eyebrow: 'Con chi lavoriamo',
-    title: 'Partner travel, hospitality e lifestyle con identita',
-    text: 'Cerchiamo progetti che abbiano qualcosa da dire, non solo qualcosa da promuovere.',
-    icon: BriefcaseBusiness,
-  },
-  {
-    eyebrow: 'Perche fidarsi',
-    title: 'Liberta editoriale, contenuti reali, tono pulito',
-    text: 'Non facciamo sponsor mascherati, recensioni costruite o pagine che promettono piu di quello che esiste.',
-    icon: ShieldCheck,
-  },
-];
 
 const PARTNER_AREAS = [
   {
@@ -58,7 +38,7 @@ const PARTNER_AREAS = [
   },
   {
     title: 'Destinazioni e territori',
-    text: 'DMO, enti turismo, territori e destinazioni che vogliono essere raccontati con piu profondita e meno brochure.',
+    text: 'DMO, enti turismo, territori e destinazioni che vogliono essere raccontati con più profondità e meno brochure.',
     icon: Globe,
   },
   {
@@ -86,7 +66,7 @@ const PROOF_SIGNALS = [
   },
   {
     title: 'Partnership con criterio',
-    text: 'Se un progetto non e coerente con il pubblico o con il nostro metodo, preferiamo non aprirlo.',
+    text: 'Se un progetto non è coerente con il pubblico o con il nostro metodo, preferiamo non aprirlo.',
     icon: MessageSquareText,
   },
 ];
@@ -94,7 +74,7 @@ const PROOF_SIGNALS = [
 const ANTI_TARGETS = [
   'No sponsor mascherati da consiglio spontaneo.',
   'No recensioni finte o contenuti scritti da desk senza esperienza diretta.',
-  'No campagne solo sconto, coupon o volume senza qualita.',
+  'No campagne solo sconto, coupon o volume senza qualità.',
   'No collaborazioni incoerenti solo per "esserci".',
 ];
 
@@ -108,23 +88,23 @@ function parseStatString(stat: string | undefined): { value: number; suffix: str
 const FAQ_ITEMS = [
   {
     q: 'Come capiamo se una collaborazione ha senso?',
-    a: 'Guardiamo tre cose: allineamento con il brand, utilita per il pubblico e spazio reale per un racconto credibile. Se manca uno di questi elementi, preferiamo non forzare.',
+    a: 'Guardiamo tre cose: allineamento con il brand, utilità per il pubblico e spazio reale per un racconto credibile. Se manca uno di questi elementi, preferiamo non forzare.',
   },
   {
     q: 'Lavorate con format fissi o su misura?',
-    a: 'Partiamo da format chiari per rendere piu semplice la conversazione, ma i progetti migliori nascono quasi sempre da un adattamento su misura del racconto.',
+    a: 'Partiamo da format chiari per rendere più semplice la conversazione, ma i progetti migliori nascono quasi sempre da un adattamento su misura del racconto.',
   },
   {
     q: 'Garantite copertura positiva o approvazione finale?',
-    a: 'No. Garantiamo serieta, accuratezza e rispetto del brief fattuale, ma la linea editoriale resta nostra. E proprio questo che rende credibile il contenuto.',
+    a: 'No. Garantiamo serietà, accuratezza e rispetto del brief fattuale, ma la linea editoriale resta nostra. È proprio questo che rende credibile il contenuto.',
   },
   {
     q: 'Che cosa conviene mandarvi nel primo contatto?',
-    a: 'Brand o struttura, obiettivo del progetto, timing indicativo e due righe su quello che volete ottenere. Piu il contesto e chiaro, piu velocemente capiamo se c e match.',
+    a: `Brand o struttura, obiettivo del progetto, timing indicativo e due righe su quello che volete ottenere. Più il contesto è chiaro, più velocemente capiamo se c'è match.`,
   },
   {
     q: 'Possiamo partire dal media kit?',
-    a: 'Si. E il punto di ingresso migliore quando vuoi capire tono, pubblico, format e contesto prima di entrare nella proposta vera e propria.',
+    a: 'Sì. È il punto di ingresso migliore quando vuoi capire tono, pubblico, format e contesto prima di entrare nella proposta vera e propria.',
   },
 ];
 
@@ -145,7 +125,7 @@ function FaqSection() {
     <Section>
       <div className="mx-auto max-w-3xl">
         <div className="mb-12 text-center">
-          <span className="mb-2 block font-script text-xl text-[var(--color-accent-warm)]">
+          <span className="mb-2 block font-script text-xl text-[var(--color-accent)]">
             FAQ per partner
           </span>
           <h2 className="text-4xl font-serif">Le domande che aiutano davvero a capire il fit</h2>
@@ -202,12 +182,12 @@ export default function Collaborazioni() {
     ...content,
     heroEyebrow: 'Collaborazioni editoriali',
     heroTitleMain: 'Raccontiamo progetti travel',
-    heroTitleAccent: 'con credibilita editoriale',
+    heroTitleAccent: 'con credibilità editoriale',
     heroDescription:
-      'Lavoriamo con realta travel, hospitality e lifestyle quando esiste un allineamento reale tra progetto, pubblico e liberta editoriale. Non cerchiamo volume: cerchiamo fit.',
+      'Lavoriamo con realtà travel, hospitality e lifestyle quando esiste un allineamento reale tra progetto, pubblico e libertà editoriale. Non cerchiamo volume: cerchiamo fit.',
     heroChecklist: [
       'Hotel, destinazioni, brand travel e progetti con una storia vera da raccontare',
-      'Liberta editoriale chiara, senza copioni finti o promesse cosmetiche',
+      'Libertà editoriale chiara, senza copioni finti o promesse cosmetiche',
       'Contenuti visivi e testuali costruiti per reggere nel tempo, non solo per il lancio',
       'Media kit, numeri e contatto business ordinati e trasparenti',
     ],
@@ -219,7 +199,7 @@ export default function Collaborazioni() {
     statsDescription:
       'Community reale, reach pubblica e presenza costruita in anni di contenuti salvabili. Usiamo solo segnali che possiamo sostenere, non metriche decorative.',
     servicesTitle: 'Format con un esito chiaro',
-    servicesSubtitle: 'Come puo prendere forma una collaborazione',
+    servicesSubtitle: 'Come può prendere forma una collaborazione',
     services: [
       {
         title: 'Presenza editoriale',
@@ -229,12 +209,12 @@ export default function Collaborazioni() {
       {
         title: 'Attivazione destinazione',
         description:
-          'Racconti piu ampi per territori, enti e destinazioni che hanno bisogno di un frame narrativo piu completo.',
+          'Racconti più ampi per territori, enti e destinazioni che hanno bisogno di un frame narrativo più completo.',
       },
       {
         title: 'Contenuti visuali e UGC',
         description:
-          'Foto, video e materiali pensati per funzionare sui nostri canali o come contenuti utili al brand, senza perdere credibilita.',
+          'Foto, video e materiali pensati per funzionare sui nostri canali o come contenuti utili al brand, senza perdere credibilità.',
       },
       {
         title: 'Progetto su misura',
@@ -253,13 +233,13 @@ export default function Collaborazioni() {
         step: '2',
         title: 'Valutazione',
         description:
-          'Capiamo se il progetto e coerente con il nostro pubblico, con il tono del brand e con il tipo di contenuto che sappiamo fare bene.',
+          'Capiamo se il progetto è coerente con il nostro pubblico, con il tono del brand e con il tipo di contenuto che sappiamo fare bene.',
       },
       {
         step: '3',
         title: 'Sviluppo',
         description:
-          'Definiamo il perimetro e costruiamo il racconto con liberta editoriale, immagini reali e un tono coerente con il progetto.',
+          'Definiamo il perimetro e costruiamo il racconto con libertà editoriale, immagini reali e un tono coerente con il progetto.',
       },
       {
         step: '4',
@@ -279,14 +259,14 @@ export default function Collaborazioni() {
           'Articolo, guida o inserimento editoriale sul sito',
           'Menzione o supporto social coerente al formato',
           'Tono pulito e integrato nel progetto',
-          'Pensato per partner che vogliono chiarezza e credibilita',
+          'Pensato per partner che vogliono chiarezza e credibilità',
         ],
       },
       {
         title: 'Attivazione destinazione',
-        subtitle: 'Per territori, soggiorni o storytelling piu ampi',
+        subtitle: 'Per territori, soggiorni o storytelling più ampi',
         features: [
-          'Contenuto cross-canale con piu profondita',
+          'Contenuto cross-canale con più profondità',
           'Integrazione tra guida, visual e social',
           'Ideale per hospitality e destinazioni',
           'Pensato per valorizzare il contesto, non solo il lancio',
@@ -298,7 +278,7 @@ export default function Collaborazioni() {
         subtitle: 'Per format speciali o esigenze non standard',
         features: [
           'Formato costruito sul progetto',
-          'Maggiore flessibilita tra contenuto, visual e contesto',
+          'Maggiore flessibilità tra contenuto, visual e contesto',
           'Possibile uso UGC o contenuti dedicati',
           'Adatto quando il progetto merita una struttura propria',
         ],
@@ -336,7 +316,7 @@ export default function Collaborazioni() {
     <PageLayout>
       <SEO
         title="Collaborazioni"
-        description="Collaborazioni editoriali per hotel, destinazioni, brand travel e progetti lifestyle che hanno qualcosa da raccontare con credibilita."
+        description="Collaborazioni editoriali per hotel, destinazioni, brand travel e progetti lifestyle che hanno qualcosa da raccontare con credibilità."
       />
       <JsonLd data={faqStructuredData} />
 
@@ -359,7 +339,7 @@ export default function Collaborazioni() {
 
             <div className="relative mb-8 inline-block">
               <h1 className="text-5xl font-serif leading-tight md:text-7xl">
-                {pageContent.heroTitleMain}
+                {pageContent.heroTitleMain}{' '}
                 <br />
                 <span className="italic text-black/60">{pageContent.heroTitleAccent}</span>
               </h1>
@@ -422,34 +402,10 @@ export default function Collaborazioni() {
                 </span>
               </div>
               <p className="text-[10px] font-bold uppercase tracking-widest text-black/45">
-                Con priorita alla qualita del racconto
+                Con priorità alla qualità del racconto
               </p>
             </div>
           </motion.div>
-        </div>
-      </Section>
-
-      <Section>
-        <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-3">
-          {TRIAD.map((item, index) => (
-            <motion.div
-              key={item.title}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.08 }}
-              className="rounded-3xl border border-black/5 bg-white p-8 shadow-sm"
-            >
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
-                <item.icon size={22} />
-              </div>
-              <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.24em] text-black/40">
-                {item.eyebrow}
-              </p>
-              <h2 className="mb-4 text-2xl font-serif leading-tight">{item.title}</h2>
-              <p className="leading-relaxed text-black/68">{item.text}</p>
-            </motion.div>
-          ))}
         </div>
       </Section>
 
@@ -487,33 +443,37 @@ export default function Collaborazioni() {
       </Section>
 
       <Section>
-        <div className="mx-auto max-w-4xl text-center">
-          <span className="mb-2 block font-script text-xl text-[var(--color-accent-warm)]">
-            Partner ideali
-          </span>
-          <h2 className="mb-6 text-4xl font-serif">Con chi lavoriamo meglio</h2>
-          <p className="mb-12 text-lg text-black/70">
-            Restiamo aperti a progetti diversi, ma lavoriamo meglio quando c e identita, contesto e una
-            storia che vale la pena raccontare.
-          </p>
-        </div>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
-          {PARTNER_AREAS.map((item, idx) => (
-            <motion.div
-              key={item.title}
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.08 }}
-              className="rounded-3xl border border-black/5 bg-white p-8 shadow-sm"
-            >
-              <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
-                <item.icon size={24} />
-              </div>
-              <h3 className="mb-3 text-2xl font-serif">{item.title}</h3>
-              <p className="leading-relaxed text-black/68">{item.text}</p>
-            </motion.div>
-          ))}
+        <div className="mx-auto max-w-4xl">
+          <div className="mb-10 text-center">
+            <span className="mb-2 block font-script text-xl text-[var(--color-accent)]">
+              Partner ideali
+            </span>
+            <h2 className="mb-4 text-4xl font-serif">Con chi lavoriamo meglio</h2>
+            <p className="text-lg text-black/70">
+              Restiamo aperti a progetti diversi, ma lavoriamo meglio quando c'è identità, contesto e una
+              storia che vale la pena raccontare.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {PARTNER_AREAS.map((item, idx) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.06 }}
+                className="flex items-start gap-4 rounded-2xl border border-black/5 bg-white p-6 shadow-sm"
+              >
+                <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
+                  <item.icon size={20} />
+                </div>
+                <div>
+                  <h3 className="mb-1.5 text-lg font-serif leading-tight">{item.title}</h3>
+                  <p className="text-sm leading-relaxed text-black/62">{item.text}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </Section>
 
@@ -521,11 +481,11 @@ export default function Collaborazioni() {
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[0.9fr_1.1fr]">
           <div>
             <div className="mb-4 flex items-center gap-2">
-              <ShieldCheck size={14} className="text-[var(--color-accent-warm)]" />
-              <span className="font-script text-xl text-[var(--color-accent-warm)]">Proof sobria</span>
+              <ShieldCheck size={14} className="text-[var(--color-accent)]" />
+              <span className="font-script text-xl text-[var(--color-accent)]">Proof sobria</span>
             </div>
             <h2 className="mb-6 text-4xl font-serif leading-tight">
-              Segnali che contano piu di un case study inventato.
+              Segnali che contano più di un case study inventato.
             </h2>
             <p className="max-w-xl text-lg leading-relaxed text-white/82">
               Preferiamo mostrare numeri verificabili, metodo e criteri di lavoro chiari invece di
@@ -579,12 +539,12 @@ export default function Collaborazioni() {
       <Section className="rounded-[3rem] bg-[var(--color-sand)] p-12 md:p-20">
         <div className="mx-auto max-w-4xl">
           <div className="mb-10 text-center">
-            <span className="mb-2 block font-script text-xl text-[var(--color-accent-warm)]">
+            <span className="mb-2 block font-script text-xl text-[var(--color-accent)]">
               Limiti chiari
             </span>
             <h2 className="mb-4 text-4xl font-serif">Quello che non facciamo</h2>
             <p className="mx-auto max-w-2xl text-lg text-black/70">
-              Mettere dei confini non ci rende rigidi: rende piu pulita la collaborazione e piu forte il
+              Mettere dei confini non ci rende rigidi: rende più pulita la collaborazione e più forte il
               contenuto finale.
             </p>
           </div>
@@ -638,13 +598,13 @@ export default function Collaborazioni() {
                   key={format.title}
                   className={`flex flex-col rounded-3xl border p-10 transition-transform duration-500 hover:-translate-y-2 ${
                     isHighlighted
-                      ? 'border-[var(--color-accent-warm)]/50 bg-white/10 shadow-2xl shadow-[var(--color-accent-warm)]/10'
+                      ? 'border-[var(--color-accent)]/50 bg-white/10 shadow-2xl shadow-[var(--color-accent)]/10'
                       : 'border-white/10 bg-white/5'
                   }`}
                 >
                   {isHighlighted && (
-                    <div className="mb-4 font-script text-lg text-[var(--color-accent-warm)]">
-                      Il formato piu completo
+                    <div className="mb-4 font-script text-lg text-[var(--color-accent)]">
+                      Il formato più completo
                     </div>
                   )}
                   <h3 className="mb-2 text-2xl font-serif">{format.title}</h3>
@@ -662,7 +622,7 @@ export default function Collaborazioni() {
                   <Button
                     to={ctaTargets[index] ?? pageContent.secondaryCtaLink}
                     variant={isHighlighted ? 'primary' : 'outline-light'}
-                    className={`w-full ${isHighlighted ? 'bg-[var(--color-gold)] hover:brightness-110' : ''}`}
+                    className={`w-full ${isHighlighted ? 'bg-[var(--color-accent)] hover:brightness-110' : ''}`}
                   >
                     {ctaLabels[index] ?? 'Richiedi info'}
                   </Button>
@@ -680,7 +640,7 @@ export default function Collaborazioni() {
           <h2 className="mb-6 text-4xl font-serif">Se ha senso, costruiamolo bene.</h2>
           <p className="mb-10 text-lg text-black/70">
             Parti dal media kit se vuoi orientarti in modo ordinato, oppure scrivici direttamente se hai
-            gia una proposta chiara.
+            già una proposta chiara.
           </p>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Button to="/media-kit" variant="cta" size="lg" className="px-10 py-5">

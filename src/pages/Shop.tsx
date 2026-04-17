@@ -25,11 +25,10 @@ import DemoContentNotice from '../components/DemoContentNotice';
 import FinalCtaSection from '../components/FinalCtaSection';
 import { useCart } from '../context/CartContext';
 import { fetchProducts } from '../services/firebaseService';
-import { SITE_URL } from '../config/site';
-import { siteContentDefaults } from '../config/siteContent';
-import { DEMO_PRODUCT, DEMO_PRODUCTS } from '../config/demoContent';
-import { useSiteContent } from '../hooks/useSiteContent';
 import { BRAND_STATS, SITE_URL } from '../config/site';
+import { siteContentDefaults } from '../config/siteContent';
+import { DEMO_PRODUCTS } from '../config/demoContent';
+import { useSiteContent } from '../hooks/useSiteContent';
 
 interface Product {
   id: string;
@@ -58,7 +57,7 @@ const shopPrinciples = [
   {
     icon: <Shield className="text-[var(--color-accent)]" size={22} />,
     title: 'Pochi, non generici',
-    text: 'Meglio pochi prodotti chiari che uno shop pieno di file senza identita.',
+    text: 'Meglio pochi prodotti chiari che uno shop pieno di file senza identità.',
   },
 ];
 
@@ -104,7 +103,7 @@ function Shop() {
         return fetchedProducts as Product[];
       }
 
-      return [DEMO_PRODUCT as Product];
+      return DEMO_PRODUCTS as Product[];
     },
   });
 
@@ -112,7 +111,9 @@ function Shop() {
     throw new Error('Impossibile caricare i prodotti');
   }
 
-  const usingShopDemo = products.length === 1 && products[0]?.slug === DEMO_PRODUCT.slug;
+  const demoSlugs = new Set(DEMO_PRODUCTS.map((item) => item.slug));
+  const usingShopDemo =
+    products.length > 0 && products.every((product) => demoSlugs.has(product.slug));
   const categories = useMemo(() => {
     const cats = new Set(products.map((product) => product.category).filter(Boolean));
     return ['Tutti', ...Array.from(cats)];
@@ -153,7 +154,7 @@ function Shop() {
       <>
         <SEO
           title="Shop editoriale"
-          description="Guide premium, planner e toolkit Travelliniwithus pensati per organizzare viaggi con piu criterio. Catalogo reale in preparazione."
+          description="Guide premium, planner e toolkit Travelliniwithus pensati per organizzare viaggi con più criterio. Catalogo reale in preparazione."
           canonical={`${SITE_URL}/shop`}
           noindex={usingShopDemo || products.length === 0}
         />
@@ -256,8 +257,8 @@ function Shop() {
           {usingShopDemo && (
             <DemoContentNotice
               className="mt-12"
-              title="Shop in preview interna"
-              message="Il prodotto mostrato e una preview controllata per vedere formato e percezione finale. Il carrello resta disabilitato finche catalogo, file e flusso di vendita non sono reali."
+              title="Boutique in apertura"
+              message="Questi sono i prodotti in lavorazione: formato, copertine e sommari definiti, file e checkout in finalizzazione. Il carrello resta disabilitato finché ogni prodotto non è consegnabile."
             />
           )}
 

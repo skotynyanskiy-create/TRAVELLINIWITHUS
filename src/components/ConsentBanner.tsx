@@ -59,38 +59,48 @@ export default function ConsentBanner() {
       role="dialog"
       aria-live="polite"
       aria-label="Informativa cookie"
-      className="fixed inset-x-4 bottom-4 z-[1000] mx-auto max-w-3xl rounded-2xl border border-black/10 bg-white/95 p-5 shadow-premium backdrop-blur-md sm:p-6"
+      className="fixed inset-x-3 bottom-3 z-[1000] mx-auto max-w-3xl rounded-2xl border border-black/10 bg-white/95 p-4 shadow-premium backdrop-blur-md sm:inset-x-4 sm:bottom-4 sm:p-6"
     >
       {mode === 'banner' ? (
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-6">
           <div className="flex-1">
-            <h2 className="text-base font-serif font-semibold text-[var(--color-ink)]">
+            <h2 className="hidden text-base font-serif font-semibold text-[var(--color-ink)] sm:block">
               Cookie e privacy
             </h2>
-            <p className="mt-2 text-sm leading-relaxed text-zinc-600">
-              Usiamo cookie tecnici necessari al funzionamento del sito e, con il tuo consenso, cookie
-              analitici e di marketing per migliorare l&apos;esperienza. Leggi la{' '}
-              <Link to="/cookie" className="underline decoration-[var(--color-accent)] underline-offset-2">
+            <p className="text-sm leading-relaxed text-zinc-600 sm:mt-2">
+              <span className="sm:hidden">
+                Usiamo cookie per far funzionare il sito e, col tuo ok, per capire come viene usato.{' '}
+              </span>
+              <span className="hidden sm:inline">
+                Usiamo cookie tecnici necessari al funzionamento del sito e, con il tuo consenso, cookie
+                analitici e di marketing per migliorare l&apos;esperienza.{' '}
+              </span>
+              <Link
+                to="/cookie"
+                className="underline decoration-[var(--color-accent)] underline-offset-2"
+              >
                 Cookie Policy
               </Link>
               .
             </p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-shrink-0">
-            <button
-              type="button"
-              onClick={handleAcceptAll}
-              className="rounded-full bg-[var(--color-ink)] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[var(--color-accent)]"
-            >
-              Accetta tutti
-            </button>
-            <button
-              type="button"
-              onClick={handleRejectAll}
-              className="rounded-full border border-black/15 px-5 py-2.5 text-sm font-medium text-[var(--color-ink)] transition-colors hover:border-black/30"
-            >
-              Rifiuta
-            </button>
+            <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-col">
+              <button
+                type="button"
+                onClick={handleAcceptAll}
+                className="rounded-full bg-[var(--color-ink)] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[var(--color-accent)]"
+              >
+                Accetta
+              </button>
+              <button
+                type="button"
+                onClick={handleRejectAll}
+                className="rounded-full border border-black/15 px-4 py-2.5 text-sm font-medium text-[var(--color-ink)] transition-colors hover:border-black/30"
+              >
+                Rifiuta
+              </button>
+            </div>
             <button
               type="button"
               onClick={() => setMode('customize')}

@@ -8,9 +8,9 @@ import { CONTACTS, FEATURED_REEL } from '../../config/site';
 const HERO_IMAGE =
   'https://images.unsplash.com/photo-1549144511-f099e773c147?q=80&w=2000&auto=format&fit=crop';
 const REEL_FALLBACK_IMAGE =
-  'https://images.unsplash.com/photo-1518420627255-a040b171f114?q=80&w=800&auto=format&fit=crop';
+  'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800&auto=format&fit=crop';
 
-const TRUST_PILLS = ['Posti particolari', 'Informazioni utili', 'Storytelling visivo', 'Prova reale'];
+const TRUST_PILLS = ['Vissuto prima di scritto', 'Dettagli utili, zero marketing', 'Criterio, non hype'];
 
 function getInstagramEmbedUrl(url: string) {
   return url.includes('/reel/') ? `${url.replace(/\/?$/, '/')}embed/` : '';
@@ -27,7 +27,7 @@ function FeaturedReelPreview() {
 
   const reelMessage = hasConfiguredVisual
     ? FEATURED_REEL.caption
-    : "Guarda il lato piu immediato del progetto sul nostro profilo Instagram.";
+    : "Guarda il lato più immediato del progetto sul nostro profilo Instagram.";
 
   return (
     <motion.aside
@@ -42,7 +42,7 @@ function FeaturedReelPreview() {
           <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/72">
             Ultimo reel Instagram
           </span>
-          <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-gold)]" />
+          <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
         </div>
 
         <div className="relative aspect-[9/12] overflow-hidden rounded-lg bg-ink">
@@ -76,7 +76,7 @@ function FeaturedReelPreview() {
             href={instagramHref}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/68 transition-colors hover:text-[var(--color-gold)]"
+            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/68 transition-colors hover:text-[var(--color-accent)]"
           >
             Guarda su Instagram <ExternalLink size={12} />
           </a>
@@ -124,7 +124,7 @@ export default function HeroSection() {
           transition={{ duration: 0.95, ease: [0.16, 1, 0.3, 1] }}
           className="max-w-3xl"
         >
-          <span className="block text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-gold)] sm:text-xs">
+          <span className="block text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent)] sm:text-xs">
             Rodrigo & Betta / Travelliniwithus
           </span>
 
@@ -168,7 +168,7 @@ export default function HeroSection() {
           </div>
 
           <p className="mt-6 max-w-xl text-xs font-semibold uppercase tracking-[0.18em] text-white/68">
-            Scoperta, utilita e uno sguardo personale prima di prenotare o partire.
+            Scoperta, utilità e uno sguardo personale prima di prenotare o partire.
           </p>
         </motion.div>
 

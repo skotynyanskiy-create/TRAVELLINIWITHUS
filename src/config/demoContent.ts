@@ -6,7 +6,7 @@ export const DEMO_ARTICLE_PREVIEW = {
   title: 'Dolomiti: Tra Rifugi di Design e Vette Leggendarie',
   category: 'Guide',
   image:
-    'https://images.unsplash.com/photo-1518420627255-a040b171f114?q=80&w=1200&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop',
   excerpt:
     'Un itinerario tra rifugi di design, panorami iconici e spunti pratici per vivere le Dolomiti nel modo giusto.',
   readTime: '8 min',
@@ -71,7 +71,7 @@ export const DEMO_DESTINATION_CARD = {
   id: `destination-${DEMO_ARTICLE_SLUG}`,
   title: 'Dolomiti da esplorare',
   image:
-    'https://images.unsplash.com/photo-1518420627255-a040b171f114?q=80&w=1200&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop',
   link: DEMO_ARTICLE_PATH,
   region: 'Europa',
   category: 'Guide',
@@ -83,7 +83,7 @@ export const DEMO_ARTICLE_MARKER = {
   coordinates: [11.8598, 46.4102] as [number, number],
   link: DEMO_ARTICLE_PATH,
   image:
-    'https://images.unsplash.com/photo-1518420627255-a040b171f114?q=80&w=1200&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop',
   category: 'Guide',
   title: 'Dolomiti: Tra Rifugi di Design e Vette Leggendarie',
 };
@@ -96,7 +96,7 @@ export const DEMO_PRODUCTS = [
     price: 24.9,
     isDigital: true,
     imageUrl:
-      'https://images.unsplash.com/photo-1518420627255-a040b171f114?q=80&w=1200&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop',
     category: 'Itinerari completi',
     description:
       'Una guida premium pensata per raccogliere tappe, indirizzi, consigli pratici e idee già selezionate in un formato ordinato.',
@@ -141,8 +141,8 @@ export const DEMO_PRODUCTS = [
     ],
   },
   {
-    id: 'planner-viaggio-Islanda',
-    slug: 'planner-viaggio-Islanda',
+    id: 'planner-viaggio-islanda',
+    slug: 'planner-viaggio-islanda',
     name: 'Islanda Ring Road Planner',
     price: 29.0,
     isDigital: true,

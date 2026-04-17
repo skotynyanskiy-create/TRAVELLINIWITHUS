@@ -1,15 +1,13 @@
 import { useState, useEffect, useMemo } from 'react';
 import Map, { Marker, Popup, NavigationControl, FullscreenControl } from 'react-map-gl/mapbox';
 import { Link } from 'react-router-dom';
-import { MapPin, Navigation, X } from 'lucide-react';
+import { MapPin, Navigation, X, Compass } from 'lucide-react';
 import { fetchArticles } from '../../services/firebaseService';
 import type { NormalizedArticle } from '../../utils/articleData';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-const MAPBOX_TOKEN =
-  import.meta.env.VITE_MAPBOX_TOKEN ||
-  'pk.eyJ1IjoiZXhhbXBsZVB1YmxpYyIsImEiOiJjbG9jaHZ2bTEwMXY0MmxtYW02a3B5NWJjIn0.EXAMPLE';
+const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN as string | undefined;
 
 const COUNTRY_COORDS: Record<string, { lat: number; lng: number }> = {
   Italia: { lat: 41.8719, lng: 12.5674 },
@@ -133,6 +131,33 @@ export default function MapboxWorldMap() {
       )),
     [articles]
   );
+
+  if (!MAPBOX_TOKEN) {
+    return (
+      <div className="relative flex h-full w-full items-center justify-center bg-[var(--color-ink)] px-6 text-center text-white">
+        <div className="max-w-md">
+          <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[var(--color-accent)]">
+            <Compass size={24} />
+          </div>
+          <div className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">
+            Mappa in preparazione
+          </div>
+          <h1 className="mb-4 font-serif text-3xl leading-tight md:text-4xl">
+            Stiamo caricando le destinazioni sulla mappa.
+          </h1>
+          <p className="mb-8 text-sm font-light text-white/60">
+            Nel frattempo puoi già esplorare i luoghi uno a uno, divisi per continente e criterio di scelta.
+          </p>
+          <Link
+            to="/destinazioni"
+            className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:border-transparent hover:bg-white hover:text-[var(--color-ink)]"
+          >
+            <MapPin size={14} /> Vai alle destinazioni
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative h-full w-full bg-[var(--color-ink)]">

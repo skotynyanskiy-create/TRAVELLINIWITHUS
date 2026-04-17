@@ -123,7 +123,14 @@ interface DemoSettings {
 }
 
 const DEMO_ARTICLE_SLUG = 'dolomiti-rifugi-design';
-const DEMO_PRODUCT_SLUG = 'guida-premium-dolomiti';
+const DEMO_PRODUCT_SLUGS = new Set([
+  'guida-premium-dolomiti',
+  'guida-premium-giappone',
+  'itinerario-puglia',
+  'planner-viaggio-islanda',
+  'safari-template-sudafrica',
+  'weekend-trentino-spa',
+]);
 
 const STATIC_APP_ROUTES = new Set([
   '/',
@@ -369,6 +376,10 @@ async function resolveAppStatus(pathname: string) {
     return 200;
   }
 
+  const firestoreAvailable = Boolean(
+    firebaseConfig.projectId && firebaseConfig.firestoreDatabaseId
+  );
+
   if (pathname.startsWith('/articolo/')) {
     const slug = pathname.split('/').pop();
     if (!slug) {
@@ -376,10 +387,11 @@ async function resolveAppStatus(pathname: string) {
     }
 
     if (slug === DEMO_ARTICLE_SLUG) {
-      const demoSettings = await fetchDemoSettings();
-      if (demoSettings.showEditorialDemo) {
-        return 200;
-      }
+      return 200;
+    }
+
+    if (!firestoreAvailable) {
+      return 200;
     }
 
     const article = await fetchArticle(slug);
@@ -392,9 +404,12 @@ async function resolveAppStatus(pathname: string) {
       return 404;
     }
 
-    if (slug === DEMO_PRODUCT_SLUG) {
-      const demoSettings = await fetchDemoSettings();
-      return demoSettings.showShopDemo ? 200 : 404;
+    if (DEMO_PRODUCT_SLUGS.has(slug)) {
+      return 200;
+    }
+
+    if (!firestoreAvailable) {
+      return 200;
     }
 
     const product = await fetchProductBySlug(slug);

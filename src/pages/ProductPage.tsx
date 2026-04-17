@@ -12,7 +12,8 @@ import { useCart } from '../context/CartContext';
 import ProductPageSkeleton from '../components/ProductPageSkeleton';
 import { Product } from '../types';
 import { SITE_URL } from '../config/site';
-import { DEMO_PRODUCT } from '../config/demoContent';
+import { DEMO_PRODUCTS } from '../config/demoContent';
+import { formatPrice } from '../utils/format';
 
 const trustPoints = [
   {
@@ -28,13 +29,15 @@ const trustPoints = [
   {
     icon: <Shield className="text-[var(--color-accent)]" size={20} />,
     title: 'Curato dal progetto',
-    text: 'La struttura segue il metodo Travelliniwithus: meno rumore, piu decisioni utili.',
+    text: 'La struttura segue il metodo Travelliniwithus: meno rumore, più decisioni utili.',
   },
 ];
 
 export default function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
   const { addToCart, setIsCartOpen } = useCart();
+
+  const demoFallback = DEMO_PRODUCTS.find((item) => item.slug === slug) as Product | undefined;
 
   const {
     data: fetchedProduct,
@@ -46,12 +49,11 @@ export default function ProductPage() {
       const product = await fetchProductBySlug(slug!);
       return product || null;
     },
-    enabled: !!slug && slug !== DEMO_PRODUCT.slug,
+    enabled: !!slug && !demoFallback,
   });
 
-  const product =
-    fetchedProduct || (slug === DEMO_PRODUCT.slug ? (DEMO_PRODUCT as Product) : null);
-  const isDemoProduct = !fetchedProduct && product?.slug === DEMO_PRODUCT.slug;
+  const product = fetchedProduct || demoFallback || null;
+  const isDemoProduct = !fetchedProduct && Boolean(demoFallback);
 
   const handleAddToCart = () => {
     if (!product || isDemoProduct) return;
@@ -73,7 +75,7 @@ export default function ProductPage() {
       <div className="min-h-screen bg-[var(--color-sand)] pt-32">
         <SEO
           title="Prodotto non disponibile"
-          description="Questa scheda prodotto non e disponibile in questo momento."
+          description="Questa scheda prodotto non è disponibile in questo momento."
           canonical={`${SITE_URL}/shop/${slug || ''}`}
           noindex
         />
@@ -82,9 +84,9 @@ export default function ProductPage() {
             <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
               Prodotto non disponibile
             </p>
-            <h1 className="mt-4 text-4xl font-serif">Questa scheda non e disponibile</h1>
+            <h1 className="mt-4 text-4xl font-serif">Questa scheda non è disponibile</h1>
             <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-black/70">
-              Il prodotto che stai cercando non e pubblico oppure non e ancora stato pubblicato.
+              Il prodotto che stai cercando non è pubblico oppure non è ancora stato pubblicato.
               Puoi tornare allo shop e continuare a esplorare i contenuti disponibili.
             </p>
             <div className="mt-8">
@@ -172,7 +174,7 @@ export default function ProductPage() {
               <DemoContentNotice
                 className="mb-8"
                 title="Prodotto preview"
-                message="Questa scheda mostra la struttura futura dello shop. Il prodotto non e acquistabile finche file, prezzo, consegna e checkout non sono verificati."
+                message="Questa scheda mostra la struttura futura dello shop. Il prodotto non è acquistabile finché file, prezzo, consegna e checkout non sono verificati."
               />
             )}
 
@@ -185,7 +187,7 @@ export default function ProductPage() {
 
             <div className="mb-10 flex flex-wrap items-center gap-4">
               <div className="text-4xl font-serif text-[var(--color-accent-text)]">
-                EUR {product.price.toFixed(2)}
+                {formatPrice(product.price)}
               </div>
               <span className="rounded-full border border-black/10 bg-white px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/55">
                 Contenuto curato
@@ -194,7 +196,7 @@ export default function ProductPage() {
 
             <p className="mb-10 text-xl font-light leading-relaxed text-black/70">
               {product.description ||
-                'Il compagno digitale per organizzare, pianificare e rendere piu chiaro ogni viaggio.'}
+                'Il compagno digitale per organizzare, pianificare e rendere più chiaro ogni viaggio.'}
             </p>
 
             <div className="mb-12 space-y-4">
@@ -212,8 +214,21 @@ export default function ProductPage() {
             </div>
 
             {isDemoProduct ? (
-              <div className="rounded-2xl border border-[var(--color-accent)]/20 bg-white px-8 py-5 text-center text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)]">
-                In uscita prossimamente
+              <div className="rounded-2xl border border-[var(--color-accent)]/25 bg-white p-6">
+                <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
+                  In uscita prossimamente
+                </div>
+                <p className="mb-5 text-sm leading-relaxed text-black/65">
+                  Quando la guida sarà pronta avviseremo via email chi è già in lista. Nessuno spam,
+                  solo la notifica del lancio.
+                </p>
+                <Link
+                  to={`/contatti?prodotto=${product.slug}`}
+                  className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
+                >
+                  Iscrivimi alla lista
+                  <ArrowRight size={14} />
+                </Link>
               </div>
             ) : (
               <Button
@@ -264,7 +279,7 @@ export default function ProductPage() {
                 Lo shop deve restare editoriale.
               </h2>
               <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/65">
-                Ogni prodotto deve essere utile, verificato e consegnabile. Se non e pronto, resta
+                Ogni prodotto deve essere utile, verificato e consegnabile. Se non è pronto, resta
                 in preview.
               </p>
             </div>
