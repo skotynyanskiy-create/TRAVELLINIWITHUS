@@ -12,3 +12,14 @@ qa-final/
 qa-shots/
 output/
 .playwright-cli/
+
+# Playwright MCP session cache (auto-generated per session)
+.playwright-mcp/
+
+# Obsidian local user config + untitled canvas drafts
+.obsidian/
+docs/Senza nome*
+
+# Local audit screenshots (regenerated on demand)
+audit-*.jpeg
+audit-*.png
