@@ -98,6 +98,13 @@ const ANTI_TARGETS = [
   'No collaborazioni incoerenti solo per "esserci".',
 ];
 
+function parseStatString(stat: string | undefined): { value: number; suffix: string } {
+  if (!stat) return { value: 0, suffix: '' };
+  const value = parseFloat(stat.replace(/[^0-9.]/g, ''));
+  const suffix = stat.replace(/[0-9.]/g, '');
+  return { value: isNaN(value) ? 0 : value, suffix };
+}
+
 const FAQ_ITEMS = [
   {
     q: 'Come capiamo se una collaborazione ha senso?',
@@ -319,10 +326,10 @@ export default function Collaborazioni() {
   };
 
   const statsCards = [
-    { icon: Instagram, value: resolvedStats.igFollowers, label: 'Follower Instagram' },
-    { icon: TikTokIcon, value: BRAND_STATS.tiktokFollowers, label: 'Follower TikTok' },
-    { icon: Users, value: resolvedStats.monthlyReach, label: 'Reach mensile stimata' },
-    { icon: BarChart, value: resolvedStats.engagementRate, label: 'Engagement rate' },
+    { icon: Instagram, rawValue: resolvedStats.igFollowers, label: 'Follower Instagram' },
+    { icon: TikTokIcon, rawValue: BRAND_STATS.tiktokFollowers, label: 'Follower TikTok' },
+    { icon: Users, rawValue: resolvedStats.monthlyReach, label: 'Reach mensile stimata' },
+    { icon: BarChart, rawValue: resolvedStats.engagementRate, label: 'Engagement rate' },
   ];
 
   return (
@@ -453,24 +460,29 @@ export default function Collaborazioni() {
         </div>
 
         <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
-          {statsCards.map((item, index) => (
-            <motion.div
-              key={item.label}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="flex flex-col items-center rounded-3xl border border-black/5 bg-white p-8 text-center shadow-sm"
-            >
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)]">
-                <item.icon size={24} />
-              </div>
-              <div className="mb-2 text-4xl font-serif text-[var(--color-ink)]">{item.value}</div>
-              <div className="text-[10px] font-bold uppercase tracking-widest text-black/40">
-                {item.label}
-              </div>
-            </motion.div>
-          ))}
+          {statsCards.map((item, index) => {
+            const parsed = parseStatString(item.rawValue);
+            return (
+              <motion.div
+                key={item.label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="flex flex-col items-center rounded-3xl border border-[var(--color-accent)]/20 bg-white/80 backdrop-blur-lg p-8 text-center shadow-[var(--shadow-premium)]"
+              >
+                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)]">
+                  <item.icon size={26} />
+                </div>
+                <div className="mb-2 text-4xl font-serif text-[var(--color-ink)]">
+                  <AnimatedCounter value={parsed.value} suffix={parsed.suffix} duration={1800} />
+                </div>
+                <div className="text-[10px] font-bold uppercase tracking-widest text-black/50">
+                  {item.label}
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </Section>
 

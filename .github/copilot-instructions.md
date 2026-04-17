@@ -9,6 +9,8 @@ Use `AGENTS.md` as the main repository instruction file.
 - `docs/OBSIDIAN_HOME.md`
 - `docs/OBSIDIAN_DASHBOARD.md`
 - `docs/MARKETING_OPERATIONS_HUB.md`
+- `DESIGN.md`
+- `docs/AI_AGENT_STACK.md`
 
 ## Repository purpose
 
@@ -25,6 +27,8 @@ It combines:
 ## Non-negotiable rules
 
 - `docs/` is part of the operating system, not optional docs
+- `.agents/skills` is the canonical skill source; use `npm run sync:agents` after changing local skills
+- `DESIGN.md` governs design direction, Stitch/Figma prompts and visual reviews
 - important work should update the relevant note in `docs/`
 - prefer explicit types and avoid new `any`
 - preserve the existing visual language unless redesign is requested
@@ -48,6 +52,9 @@ npm run build
 npm run audit:ui
 npm run audit:firebase
 npm run audit:stripe
+npm run audit:agents
+npm run audit:visual
+npm run audit:quality
 npm run predeploy
 ```
 

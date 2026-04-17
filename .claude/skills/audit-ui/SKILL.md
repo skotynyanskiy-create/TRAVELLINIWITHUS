@@ -1,3 +1,8 @@
+---
+name: audit-ui
+description: Audit UI consistency in the TRAVELLINIWITHUS project across CSS variables, inline styles, Tailwind patterns, responsive behavior, accessibility, icons, and layout wrappers.
+---
+
 # /audit-ui
 
 Audit the UI consistency of the TRAVELLINIWITHUS project.

@@ -18,6 +18,9 @@ Make every AI tool work on the same project memory, same documentation system an
 
 - repo root = source of code truth
 - `docs/` = source of operational truth
+- `DESIGN.md` = source of design-system truth for agents and design tools
+- `.agents/skills` = canonical local skill source
+- `docs/AI_AGENT_STACK.md` = source of AI stack and external-reference policy
 - `docs/MARKETING_OPERATIONS_HUB.md` = source of marketing truth
 - `docs/10_Projects/PROJECT_TRAVELLINIWITHUS_SITE.md` = source of project truth
 
@@ -27,8 +30,18 @@ Any assistant used on this repo should:
 
 1. read `AGENTS.md`
 2. read `CLAUDE.md`
-3. use `docs/` as the working documentation vault
-4. update the relevant note when work changes scope, decisions or delivery state
+3. read `DESIGN.md` for UI and design-system work
+4. read `docs/AI_AGENT_STACK.md` for skill and agent workflow rules
+5. use `docs/` as the working documentation vault
+6. update the relevant note when work changes scope, decisions or delivery state
+
+## Multi-agent workflow
+
+- Edit canonical local skills in `.agents/skills`.
+- Run `npm run sync:agents` to sync skill copies to agent-specific directories.
+- Run `npm run audit:agents` after agent, skill, instruction or workflow changes.
+- Use Stitch/Figma as controlled design inputs only; implementation remains repo-native React/Tailwind.
+- Use `npm run audit:visual` for UI-heavy changes and `npm run audit:quality` for major release confidence.
 
 ## Minimum update policy
 

@@ -1,3 +1,8 @@
+---
+name: firebase-check
+description: Audit Firebase and Firestore usage in TRAVELLINIWITHUS for published filters, timestamps, limits, error handling, security rules, and client-side safety.
+---
+
 # /firebase-check
 
 Audit Firebase/Firestore usage in the TRAVELLINIWITHUS project.

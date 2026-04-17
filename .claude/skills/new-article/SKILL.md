@@ -1,3 +1,8 @@
+---
+name: new-article
+description: Scaffold a Travelliniwithus editorial article seed and matching Obsidian content note with Italian metadata, slug, category, and draft publication state.
+---
+
 # /new-article
 
 Scaffold a new article for the Travelliniwithus editorial archive.
@@ -5,6 +10,7 @@ Scaffold a new article for the Travelliniwithus editorial archive.
 ## Arguments
 
 The user must provide:
+
 - **title**: article title in Italian (e.g. "Le migliori spiagge della Sardegna")
 - **slug**: URL slug (e.g. `spiagge-sardegna`) — auto-generate from title if not provided
 - **category**: one of `destinazioni`, `esperienze`, `guide`, `risorse`
@@ -15,6 +21,7 @@ The user must provide:
 ### 1. Generate slug
 
 If not provided, generate from title:
+
 - lowercase
 - replace spaces with `-`
 - remove accents and special characters
@@ -69,16 +76,16 @@ tags:
 
 ## Brief
 
-- Angolo: 
+- Angolo:
 - Target reader: viaggiatori curiosi che cercano posti reali
 - Tone: autentico, diretto, niente fuffa
-- CTA primaria: 
+- CTA primaria:
 
 ## Outline
 
-1. 
-2. 
-3. 
+1.
+2.
+3.
 
 ## Note operative
 
@@ -91,6 +98,7 @@ tags:
 ### 4. Report
 
 Tell the user:
+
 - Seed file created at `src/data/articles/[slug].seed.ts`
 - Content note created at `docs/13_Content/ARTICLE_[slug].md`
 - Next steps: write the content, set `published: true` when ready, seed to Firestore via AdminDashboard

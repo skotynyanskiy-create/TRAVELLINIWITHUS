@@ -89,7 +89,13 @@ export default function LatestArticles() {
         ) : recentArticles.length > 0 ? (
           <div className="grid gap-6 lg:grid-cols-12">
             {/* Articolo Principale */}
-            <div className="lg:col-span-8">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-50px' }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:col-span-8"
+            >
               <Link
                 to={`/articolo/${recentArticles[0].slug || recentArticles[0].id}`}
                 className="group relative flex h-full flex-col overflow-hidden rounded-lg border border-black/8 bg-white transition-all duration-500 hover:border-[var(--color-gold)]"
@@ -138,7 +144,7 @@ export default function LatestArticles() {
                   </div>
                 </div>
               </Link>
-            </div>
+            </motion.div>
 
             {/* Articoli Secondari */}
             <div className="grid grid-cols-2 gap-4 lg:flex lg:flex-col lg:gap-6 lg:col-span-4">

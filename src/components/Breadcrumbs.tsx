@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { ChevronRight, Home } from 'lucide-react';
 import JsonLd from './JsonLd';
 
-interface BreadcrumbItem {
+export interface BreadcrumbItem {
   label: string;
   href?: string;
 }
@@ -14,7 +14,8 @@ interface BreadcrumbsProps {
 
 export default function Breadcrumbs({ items, className }: BreadcrumbsProps) {
   const location = useLocation();
-  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://travelliniwithus.it';
+  const origin =
+    typeof window !== 'undefined' ? window.location.origin : 'https://travelliniwithus.it';
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
@@ -38,10 +39,16 @@ export default function Breadcrumbs({ items, className }: BreadcrumbsProps) {
   return (
     <>
       <JsonLd data={breadcrumbSchema} />
-      <nav aria-label="Breadcrumb" className={`flex items-center text-xs uppercase tracking-widest font-semibold text-black/50 mb-8 overflow-x-auto whitespace-nowrap pb-2 ${className ?? ''}`}>
+      <nav
+        aria-label="Breadcrumb"
+        className={`flex items-center text-xs uppercase tracking-widest font-semibold text-black/50 mb-8 overflow-x-auto whitespace-nowrap pb-2 ${className ?? ''}`}
+      >
         <ol className="flex items-center space-x-2">
           <li>
-            <Link to="/" className="hover:text-[var(--color-accent)] transition-colors flex items-center gap-1">
+            <Link
+              to="/"
+              className="hover:text-[var(--color-accent)] transition-colors flex items-center gap-1"
+            >
               <Home size={14} />
               <span className="sr-only">Home</span>
             </Link>
@@ -56,7 +63,10 @@ export default function Breadcrumbs({ items, className }: BreadcrumbsProps) {
                     {item.label}
                   </span>
                 ) : (
-                  <Link to={item.href} className="hover:text-[var(--color-accent)] transition-colors">
+                  <Link
+                    to={item.href}
+                    className="hover:text-[var(--color-accent)] transition-colors"
+                  >
                     {item.label}
                   </Link>
                 )}

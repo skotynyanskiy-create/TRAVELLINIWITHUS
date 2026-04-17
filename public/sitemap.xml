@@ -92,4 +92,158 @@
       <priority>0.8</priority>
     </url>
       
+    <url>
+      <loc>https://travelliniwithus.it/destinazioni?group=Italia</loc>
+      <lastmod>2026-04-16T22:11:23.012Z</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.6</priority>
+    </url>
+      
+    <url>
+      <loc>https://travelliniwithus.it/destinazioni?group=Europa</loc>
+      <lastmod>2026-04-16T22:11:23.012Z</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.6</priority>
+    </url>
+      
+    <url>
+      <loc>https://travelliniwithus.it/destinazioni?group=Asia</loc>
+      <lastmod>2026-04-16T22:11:23.012Z</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.6</priority>
+    </url>
+      
+    <url>
+      <loc>https://travelliniwithus.it/destinazioni?group=Americhe</loc>
+      <lastmod>2026-04-16T22:11:23.012Z</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.6</priority>
+    </url>
+      
+    <url>
+      <loc>https://travelliniwithus.it/destinazioni?group=Africa</loc>
+      <lastmod>2026-04-16T22:11:23.012Z</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.6</priority>
+    </url>
+      
+    <url>
+      <loc>https://travelliniwithus.it/destinazioni?group=Oceania</loc>
+      <lastmod>2026-04-16T22:11:23.012Z</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.6</priority>
+    </url>
+      
+    <url>
+      <loc>https://travelliniwithus.it/guide?group=Italia</loc>
+      <lastmod>2026-04-16T22:11:23.012Z</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.6</priority>
+    </url>
+      
+    <url>
+      <loc>https://travelliniwithus.it/guide?group=Europa</loc>
+      <lastmod>2026-04-16T22:11:23.012Z</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.6</priority>
+    </url>
+      
+    <url>
+      <loc>https://travelliniwithus.it/guide?group=Asia</loc>
+      <lastmod>2026-04-16T22:11:23.012Z</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.6</priority>
+    </url>
+      
+    <url>
+      <loc>https://travelliniwithus.it/guide?group=Americhe</loc>
+      <lastmod>2026-04-16T22:11:23.012Z</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.6</priority>
+    </url>
+      
+    <url>
+      <loc>https://travelliniwithus.it/guide?group=Africa</loc>
+      <lastmod>2026-04-16T22:11:23.012Z</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.6</priority>
+    </url>
+      
+    <url>
+      <loc>https://travelliniwithus.it/guide?group=Oceania</loc>
+      <lastmod>2026-04-16T22:11:23.012Z</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.6</priority>
+    </url>
+      
+    <url>
+      <loc>https://travelliniwithus.it/esperienze?type=posti-particolari</loc>
+      <lastmod>2026-04-16T22:11:23.012Z</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.6</priority>
+    </url>
+      
+    <url>
+      <loc>https://travelliniwithus.it/esperienze?type=food-e-ristoranti</loc>
+      <lastmod>2026-04-16T22:11:23.012Z</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.6</priority>
+    </url>
+      
+    <url>
+      <loc>https://travelliniwithus.it/esperienze?type=locali-insoliti</loc>
+      <lastmod>2026-04-16T22:11:23.012Z</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.6</priority>
+    </url>
+      
+    <url>
+      <loc>https://travelliniwithus.it/esperienze?type=hotel-con-carattere</loc>
+      <lastmod>2026-04-16T22:11:23.012Z</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.6</priority>
+    </url>
+      
+    <url>
+      <loc>https://travelliniwithus.it/esperienze?type=weekend-romantici</loc>
+      <lastmod>2026-04-16T22:11:23.012Z</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.6</priority>
+    </url>
+      
+    <url>
+      <loc>https://travelliniwithus.it/esperienze?type=borghi-e-citt-d-arte</loc>
+      <lastmod>2026-04-16T22:11:23.012Z</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.6</priority>
+    </url>
+      
+    <url>
+      <loc>https://travelliniwithus.it/esperienze?type=passeggiate-panoramiche</loc>
+      <lastmod>2026-04-16T22:11:23.012Z</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.6</priority>
+    </url>
+      
+    <url>
+      <loc>https://travelliniwithus.it/esperienze?type=relax-terme-e-spa</loc>
+      <lastmod>2026-04-16T22:11:23.012Z</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.6</priority>
+    </url>
+      
+    <url>
+      <loc>https://travelliniwithus.it/esperienze?type=esperienze-insolite</loc>
+      <lastmod>2026-04-16T22:11:23.012Z</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.6</priority>
+    </url>
+      
+    <url>
+      <loc>https://travelliniwithus.it/esperienze?type=gite-e-day-trip</loc>
+      <lastmod>2026-04-16T22:11:23.012Z</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.6</priority>
+    </url>
+      
 </urlset>

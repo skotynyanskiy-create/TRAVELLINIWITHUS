@@ -1,3 +1,8 @@
+---
+name: commit
+description: Create a well-formed TRAVELLINIWITHUS git commit by reviewing diffs, staging safe files, writing a conventional commit, and checking docs impact.
+---
+
 # /commit
 
 Create a well-formed git commit for the TRAVELLINIWITHUS project.
@@ -11,6 +16,7 @@ Optional: commit message hint (e.g. `/commit fix hero LCP`)
 ### 1. Understand what changed
 
 Run:
+
 ```bash
 git status
 git diff --staged
@@ -18,6 +24,7 @@ git diff
 ```
 
 Read the diff carefully. Identify:
+
 - What files changed
 - What was the intent (fix, feature, refactor, content, style, docs)
 - Which part of the system is affected (ui, firebase, stripe, seo, admin, content, config)
@@ -25,6 +32,7 @@ Read the diff carefully. Identify:
 ### 2. Stage files
 
 Stage all relevant modified files. Do NOT stage:
+
 - `.env` or any file with secrets
 - `dist/` build output
 - `node_modules/`
@@ -41,6 +49,7 @@ Optional body: why this change was made, not what.
 ```
 
 **Types:**
+
 - `feat` — new feature or component
 - `fix` — bug fix
 - `style` — visual/UI-only change, no logic
@@ -55,6 +64,7 @@ Optional body: why this change was made, not what.
 `hero`, `navbar`, `home`, `destinations`, `shop`, `article`, `admin`, `firebase`, `stripe`, `seo`, `pwa`, `obsidian`, `deps`
 
 **Examples:**
+
 ```
 feat(home): add trust pills to hero section
 fix(navbar): close mobile menu on route change

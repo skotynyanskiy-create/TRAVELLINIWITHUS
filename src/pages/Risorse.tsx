@@ -207,7 +207,7 @@ export default function Risorse() {
             fit: 'Risorsa inserita dal CMS: verifica descrizione, natura del link e coerenza prima del deploy.',
           })) ?? category.items,
       })),
-    [firestoreByCategory],
+    [firestoreByCategory]
   );
 
   const handleCopy = () => {
@@ -359,7 +359,7 @@ export default function Risorse() {
                         </p>
                       )}
                     </div>
-                  </a>
+                  </motion.a>
                 ))}
               </div>
             </motion.section>

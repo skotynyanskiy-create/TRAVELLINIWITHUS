@@ -36,7 +36,8 @@ export default function InteractiveMap({
   const demoSettings = demoContent ?? siteContentDefaults.demo;
   const [activeMarker, setActiveMarker] = useState<MapMarker | null>(null);
   const [activeCountry, setActiveCountry] = useState<{ name: string; id: string } | null>(null);
-  const resolvedMarkers = markers ?? (demoSettings.showDestinationDemo ? [DEMO_ARTICLE_MARKER] : []);
+  const resolvedMarkers =
+    markers ?? (demoSettings.showDestinationDemo ? [DEMO_ARTICLE_MARKER] : []);
 
   const handleCountryClick = (geo: { properties: { name: string }; id?: string }) => {
     setActiveMarker(null);
@@ -55,7 +56,9 @@ export default function InteractiveMap({
     <div className="relative w-full overflow-hidden rounded-3xl border border-black/5 bg-[var(--color-sand)] shadow-inner">
       <div className="pointer-events-none absolute left-6 top-6 z-10">
         <h3 className="text-2xl font-serif text-black/80">Esplora la mappa</h3>
-        <p className="text-sm font-normal text-black/65">Clicca sui pin o sulle nazioni per orientarti tra i contenuti.</p>
+        <p className="text-sm font-normal text-black/65">
+          Clicca sui pin o sulle nazioni per orientarti tra i contenuti.
+        </p>
       </div>
 
       <ComposableMap
@@ -117,7 +120,7 @@ export default function InteractiveMap({
                       cy="24"
                       rx="10"
                       ry="5"
-                      fill="rgba(197, 160, 89, 0.4)"
+                      fill="rgba(155, 127, 166, 0.4)"
                       initial={{ scale: 0.5, opacity: 1 }}
                       animate={{ scale: 2.5, opacity: 0 }}
                       transition={{ duration: 1.5, repeat: Infinity, ease: 'easeOut' }}
@@ -138,10 +141,15 @@ export default function InteractiveMap({
                     whileHover={{ scale: 1.15, y: -3 }}
                     transition={{ type: 'spring', stiffness: 400, damping: 15 }}
                   >
-                    <circle cx="12" cy="10" r="3" fill={isActive ? '#fff' : 'var(--color-accent)'} />
+                    <circle
+                      cx="12"
+                      cy="10"
+                      r="3"
+                      fill={isActive ? '#fff' : 'var(--color-accent)'}
+                    />
                     <path
                       d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 6.9 8 11.7z"
-                      fill={isActive ? 'var(--color-accent)' : 'rgba(197, 160, 89, 0.2)'}
+                      fill={isActive ? 'var(--color-accent)' : 'rgba(155, 127, 166, 0.2)'}
                     />
                   </motion.g>
                 </g>
@@ -169,7 +177,11 @@ export default function InteractiveMap({
             </button>
             {activeMarker.image && (
               <div className="relative h-40 overflow-hidden">
-                <img src={activeMarker.image} alt={activeMarker.name} className="h-full w-full object-cover" />
+                <img
+                  src={activeMarker.image}
+                  alt={activeMarker.name}
+                  className="h-full w-full object-cover"
+                />
                 {activeMarker.category && (
                   <div className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)] backdrop-blur-sm">
                     {activeMarker.category}
@@ -182,7 +194,9 @@ export default function InteractiveMap({
                 <MapPin size={12} className="text-[var(--color-accent)]" />
                 {activeMarker.name}
               </div>
-              {activeMarker.title && <h4 className="mb-4 text-lg font-serif leading-tight">{activeMarker.title}</h4>}
+              {activeMarker.title && (
+                <h4 className="mb-4 text-lg font-serif leading-tight">{activeMarker.title}</h4>
+              )}
               {activeMarker.link && (
                 <Link
                   to={activeMarker.link}

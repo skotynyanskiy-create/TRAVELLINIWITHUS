@@ -12,6 +12,7 @@ const steps = [
   ['audit:ui', ['run', 'audit:ui']],
   ['audit:firebase', ['run', 'audit:firebase']],
   ['audit:stripe', ['run', 'audit:stripe']],
+  ['audit:agents', ['run', 'audit:agents']],
 ];
 
 let failed = false;

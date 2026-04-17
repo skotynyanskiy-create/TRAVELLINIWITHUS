@@ -1,14 +1,10 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen, CheckCircle2, Clock, Filter, Search } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
-import Breadcrumbs from '../components/Breadcrumbs';
-import PageLayout from '../components/PageLayout';
-import SEO from '../components/SEO';
-import JsonLd from '../components/JsonLd';
-import Newsletter from '../components/Newsletter';
+import { cardContainer } from '../lib/animations';
 import ArticleSkeleton from '../components/ArticleSkeleton';
 import Section from '../components/Section';
 import OptimizedImage from '../components/OptimizedImage';
@@ -19,7 +15,24 @@ import { siteContentDefaults } from '../config/siteContent';
 import { PREVIEW_GUIDES } from '../config/previewContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { SITE_URL } from '../config/site';
-import { formatDateValue, toMillis, type DateValue } from '../utils/dateValue';
+import {
+  DESTINATION_GROUPS,
+  GUIDE_CATEGORIES,
+  getGuideCategoryFromQuery,
+  slugifyGuideCategory,
+  type GuideCategory,
+} from '../config/contentTaxonomy';
+import { mapArticleToArchiveItem } from '../utils/contentArchive';
+import {
+  countByScope,
+  filterByScope,
+  hasAnyFilter,
+  isGuideItem,
+  parseDiscoveryFilters,
+} from '../utils/discoveryQuery';
+import { usePagination } from '../hooks/usePagination';
+import { toMillis } from '../utils/dateValue';
+import { normalizeFirestoreArticle } from '../utils/articleData';
 
 interface GuideArticle {
   id: string;
@@ -65,10 +78,10 @@ function Guide() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const {
-    data: guides = [],
+    data: articles = [],
     isLoading,
     error,
-  } = useQuery<GuideArticle[]>({
+  } = useQuery({
     queryKey: ['articles', 'guides-page', demoSettings.showEditorialDemo],
     queryFn: async () => {
       const fetchedGuides = await fetchArticles();
@@ -168,6 +181,19 @@ function Guide() {
             </div>
           </div>
         </div>
+      }
+    >
+      {/* ─── CATEGORY BROWSER ─── */}
+      <div className="mb-2">
+        <h2 className="mb-4 text-[10px] font-bold uppercase tracking-[0.28em] text-black/45">
+          Scegli un argomento
+        </h2>
+        <GuideCategoryBrowser
+          selectedCategory={selectedCategory}
+          onSelect={handleCategorySelect}
+          counts={categoryCounts}
+        />
+      </div>
 
         {usingPreview && (
           <DemoContentNotice
@@ -315,6 +341,10 @@ function Guide() {
           <FinalCtaSection intent="discovery" />
         </div>
       </Section>
-    </PageLayout>
+
+      <Section className="!py-0 !pb-16">
+        <Newsletter variant="sand" />
+      </Section>
+    </DiscoveryPageLayout>
   );
 }

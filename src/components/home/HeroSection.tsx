@@ -5,8 +5,10 @@ import { Link } from 'react-router-dom';
 import Button from '../Button';
 import { CONTACTS, FEATURED_REEL } from '../../config/site';
 
-const HERO_IMAGE = '/images/hero-amalfi.png';
-const REEL_FALLBACK_IMAGE = '/images/destinations/sardegna.png';
+const HERO_IMAGE =
+  'https://images.unsplash.com/photo-1549144511-f099e773c147?q=80&w=2000&auto=format&fit=crop';
+const REEL_FALLBACK_IMAGE =
+  'https://images.unsplash.com/photo-1518420627255-a040b171f114?q=80&w=800&auto=format&fit=crop';
 
 const TRUST_PILLS = ['Posti particolari', 'Informazioni utili', 'Storytelling visivo', 'Prova reale'];
 

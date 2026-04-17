@@ -1,3 +1,8 @@
+---
+name: predeploy
+description: Run TRAVELLINIWITHUS pre-deployment checks across TypeScript, lint, tests, build, sitemap, robots, environment, security, and release notes.
+---
+
 # /predeploy
 
 Run pre-deployment checks for the TRAVELLINIWITHUS project before shipping to production.
@@ -32,9 +37,14 @@ Run pre-deployment checks for the TRAVELLINIWITHUS project before shipping to pr
    - No hardcoded API keys or secrets in `src/`
    - `firestore.rules` has no `allow read, write: if true`
 
-9. **Obsidian Release Note** — Remind the user to update `docs/10_Projects/PROJECT_RELEASE_READINESS.md`:
-   - Mark completed checklist items
-   - If all checks pass, suggest creating a release note from `docs/90_Templates/TPL_Release_Note.md`
+9. **Agent Stack** — Run `npm run audit:agents`. Must pass when skills, agents, AI instructions or workflow docs changed.
+
+10. **Obsidian Release Note** — Remind the user to update `docs/10_Projects/PROJECT_RELEASE_READINESS.md`:
+
+- Mark completed checklist items
+- If all checks pass, suggest creating a release note from `docs/90_Templates/TPL_Release_Note.md`
+
+Visual QA is intentionally part of `npm run audit:quality`, not the default predeploy path.
 
 ## Output
 

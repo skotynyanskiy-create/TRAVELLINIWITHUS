@@ -516,7 +516,10 @@ export default function Esperienze() {
         )}
 
         <div className="mt-24">
-          <CrossLinkWidget variant="to-destinazioni" />
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <CrossLinkWidget variant="to-destinazioni" />
+            <CrossLinkWidget variant="to-guide" />
+          </div>
         </div>
 
         <div className="mt-16">

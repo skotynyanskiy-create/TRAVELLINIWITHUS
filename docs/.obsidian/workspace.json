@@ -4,24 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "34e7b5477585ff62",
+        "id": "278fbcf7f9311f4e",
         "type": "tabs",
         "children": [
           {
-            "id": "98e266d66e6e54c7",
+            "id": "e5f6ddea49458a62",
             "type": "leaf",
             "state": {
-              "type": "canvas",
-              "state": {
-                "file": "Senza nome 1.canvas",
-                "viewState": {
-                  "x": 0,
-                  "y": 0,
-                  "zoom": 0
-                }
-              },
-              "icon": "lucide-layout-dashboard",
-              "title": "Senza nome 1"
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "Nuova scheda"
             }
           }
         ]
@@ -85,12 +78,11 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Senza nome 1.canvas",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Collegamenti in uscita da Senza nome 1"
+              "title": "Collegamenti in uscita"
             }
           },
           {
@@ -128,7 +120,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "followCursor": false,
+                "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
@@ -137,7 +129,7 @@
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
@@ -152,8 +144,12 @@
       "bases:Crea nuova Base": false
     }
   },
-  "active": "98e266d66e6e54c7",
+  "active": "e5f6ddea49458a62",
   "lastOpenFiles": [
+    "Senza nome 1.md",
+    "Senza nome.md",
+    "Senza nome.base",
+    "Senza nome 2.canvas",
     "Senza nome 1.canvas",
     "40_Daily/2026-04-12.md",
     "40_Daily/Senza nome 2.base",
@@ -162,12 +158,9 @@
     "40_Daily/2026-04-14.md",
     "Senza nome.canvas",
     "OBSIDIAN_HOME.md",
-    "Senza nome.md",
     "40_Daily/2026-04-13.md",
-    "Senza nome 2.canvas",
     "20_Decisions/DECISION_0003_CLAUDE_CODE_SESSION_PROTOCOL.md",
     "TRAVELLINIWITHUS_BRAND_MEMORY.md",
-    "Senza nome.base",
     "20_Decisions/DECISION_0002_AI_SYSTEM_OF_RECORD.md",
     "AI_COLLABORATION_PROTOCOL.md",
     "13_Content/CONTENT_PILLARS_TRAVELLINIWITHUS.md",

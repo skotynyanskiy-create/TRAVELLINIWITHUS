@@ -10,25 +10,28 @@ export default function EmptyState({ variant, onReset }: EmptyStateProps) {
   if (variant === 'no-content') {
     return (
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ type: 'spring', damping: 20, stiffness: 100 }}
         className="mx-auto max-w-md py-24 text-center"
       >
         <div className="relative mx-auto mb-8 flex h-32 w-32 items-center justify-center">
-          <div className="absolute inset-0 rounded-full bg-[var(--color-accent-soft)]" />
-          <Compass size={56} className="relative text-[var(--color-accent)]" strokeWidth={1.2} />
+          <div className="absolute inset-0 rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent-soft)]/50" />
+          <Compass size={48} className="relative text-[var(--color-accent)]" strokeWidth={1.5} />
           <MapPin
             size={20}
-            className="absolute -right-1 top-4 text-[var(--color-accent-warm,#C4A47C)] rotate-12"
+            className="absolute -right-1 top-4 text-[var(--color-accent)] rotate-12"
           />
-          <MapPin
-            size={16}
-            className="absolute -left-2 bottom-6 text-[var(--color-accent)] -rotate-12 opacity-60"
-          />
+          <span className="absolute -bottom-4 rounded-full border border-[var(--color-accent)]/20 bg-white px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)] shadow-sm">
+            Presto online
+          </span>
         </div>
-        <h3 className="mb-3 text-2xl font-serif text-[var(--color-ink)]">La mappa è ancora vuota</h3>
+        <h3 className="mb-3 text-2xl font-serif text-[var(--color-ink)]">
+          Destinazione in esplorazione
+        </h3>
         <p className="font-normal leading-relaxed text-black/65">
-          I contenuti sono in arrivo. Iscriviti alla newsletter per essere tra i primi a scoprirli.
+          Stiamo curando i contenuti perfetti per questo luogo. Nel frattempo esplora altre aree o
+          iscriviti per sapere quando saranno disponibili.
         </p>
       </motion.div>
     );
@@ -42,9 +45,15 @@ export default function EmptyState({ variant, onReset }: EmptyStateProps) {
     >
       <div className="relative mx-auto mb-8 flex h-32 w-32 items-center justify-center">
         <div className="absolute inset-0 rounded-full bg-[var(--color-accent-soft)]" />
-        <Search size={48} className="relative text-[var(--color-accent)] opacity-60" strokeWidth={1.2} />
+        <Search
+          size={48}
+          className="relative text-[var(--color-accent)] opacity-60"
+          strokeWidth={1.2}
+        />
       </div>
-      <h3 className="mb-3 text-2xl font-serif text-[var(--color-ink)]">Nessun risultato per questi filtri</h3>
+      <h3 className="mb-3 text-2xl font-serif text-[var(--color-ink)]">
+        Nessun risultato per questi filtri
+      </h3>
       <p className="mb-8 font-normal leading-relaxed text-black/65">
         Prova a modificare i filtri o a resettarli per vedere tutti i contenuti disponibili.
       </p>

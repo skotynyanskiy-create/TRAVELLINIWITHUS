@@ -1,3 +1,8 @@
+---
+name: new-page
+description: Scaffold a new TRAVELLINIWITHUS page with SEO, PageLayout, Section, route wiring, optional navigation, sitemap considerations, and project conventions.
+---
+
 # /new-page
 
 Scaffold a new page for the TRAVELLINIWITHUS project.
@@ -9,12 +14,13 @@ The user should provide: page name (e.g., "Podcast", "Blog", "Partners")
 ## Steps
 
 1. **Create page file** at `src/pages/{PageName}.tsx` with this structure:
+
    ```tsx
    import { Helmet } from 'react-helmet-async';
    import SEO from '../components/SEO';
    import PageLayout from '../components/PageLayout';
    import Section from '../components/Section';
-   
+
    export default function PageName() {
      return (
        <>
@@ -27,9 +33,7 @@ The user should provide: page name (e.g., "Podcast", "Blog", "Partners")
            canonical={`${import.meta.env.VITE_APP_URL}/route-name`}
          />
          <PageLayout>
-           <Section>
-             {/* Content */}
-           </Section>
+           <Section>{/* Content */}</Section>
          </PageLayout>
        </>
      );

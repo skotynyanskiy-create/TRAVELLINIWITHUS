@@ -13,7 +13,7 @@ export default function Layout() {
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
-    restDelta: 0.001
+    restDelta: 0.001,
   });
 
   useEffect(() => {
@@ -33,6 +33,7 @@ export default function Layout() {
       >
         Vai al contenuto principale
       </a>
+      <AnalyticsScripts />
       <motion.div
         className="fixed top-0 left-0 right-0 h-1 bg-[var(--color-accent)] origin-left z-[60]"
         style={{ scaleX }}

@@ -19,7 +19,11 @@
     "audit:ui": "node scripts/check-ui.mjs",
     "audit:firebase": "node scripts/check-firebase.mjs",
     "audit:stripe": "node scripts/check-stripe.mjs",
+    "audit:agents": "node scripts/audit-agent-stack.mjs",
+    "audit:visual": "playwright test e2e/visual-quality.spec.ts",
+    "audit:quality": "npm run typecheck && npm run lint && npm run test && npm run build && npm run audit:ui && npm run audit:firebase && npm run audit:stripe && npm run audit:agents && npm run audit:visual",
     "audit:all": "npm run audit:ui && npm run audit:firebase && npm run audit:stripe",
+    "sync:agents": "node scripts/sync-agent-skills.mjs",
     "scaffold:page": "node scripts/scaffold-page.mjs",
     "predeploy": "node scripts/predeploy.mjs",
     "prepare": "husky"

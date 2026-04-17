@@ -3,7 +3,9 @@ import { ArrowRight, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
   DESTINATION_GROUPS,
+  GUIDE_CATEGORIES,
   slugifyExperienceType,
+  slugifyGuideCategory,
   type DestinationGroup,
   type ExperienceType,
 } from '../../config/contentTaxonomy';
@@ -14,6 +16,7 @@ import {
   getExperienceDescription,
 } from '../../config/experienceContent';
 import { getExperienceVisual } from '../../config/experienceVisuals';
+import { GUIDE_CATEGORY_VISUALS } from '../../config/guideContent';
 
 const EXPERIENCE_IMAGES: Record<string, string> = {
   'Posti particolari':
@@ -232,6 +235,37 @@ export default function HomeDiscoveryCards() {
           <div className="grid grid-cols-2 gap-4 xl:grid-cols-3">
             {HOME_EXPERIENCE_TYPES.map((type) => (
               <ExperienceCard key={type} type={type} />
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-8 grid gap-4 lg:grid-cols-[0.76fr_1.44fr]">
+          <div className="rounded-lg border border-[var(--color-gold)]/25 bg-[var(--color-gold-soft)] p-7 md:p-9">
+            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
+              <BookOpen size={13} />
+              Guide di viaggio
+            </div>
+            <h3 className="mt-7 text-3xl font-serif leading-tight text-ink md:text-5xl">
+              Pianifica con guide scritte a mano.
+            </h3>
+            <p className="mt-4 text-sm leading-relaxed text-black/62 md:text-base">
+              Itinerari, consigli e costi per prepararti al meglio prima di partire.
+            </p>
+            <Link
+              to="/guide"
+              className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[var(--color-ink)] px-5 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-warm)]"
+            >
+              Apri guide <ArrowRight size={14} />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+            {GUIDE_CATEGORIES.slice(0, 6).map((cat) => (
+              <GuideTile
+                key={cat}
+                category={cat}
+                description={GUIDE_CATEGORY_VISUALS[cat].description}
+              />
             ))}
           </div>
         </div>

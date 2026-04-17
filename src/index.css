@@ -1,44 +1,44 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Kalam:wght@300;400;700&display=swap');
-@import "tailwindcss";
-@import "react-quill-new/dist/quill.snow.css";
+@import 'tailwindcss';
+@import 'react-quill-new/dist/quill.snow.css';
 
 @theme {
-  --font-serif: "Cormorant Garamond", Georgia, serif;
-  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
-  --font-script: "Kalam", cursive;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-script: 'Kalam', cursive;
 
   /* Nero & Sabbia — Minimal Premium */
-  --color-sand: #F7F7F8;         /* Sfondo pagina — grigio neutro */
-  --color-surface: #FFFFFF;      /* Card, form — bianco puro */
-  --color-ink: #111111;          /* Testo, bottoni primary — nero */
-  --color-accent: #C4A47C;       /* Accento unico — sabbia/champagne */
-  --color-accent-hover: #B39369; /* Accento hover — sabbia scura */
-  --color-accent-text: #7D6A4B;  /* Accento testo — WCAG AA su bianco */
-  --color-accent-warm: #C4A47C;  /* Alias accento — unificato */
-  --color-accent-warm-hover: #B39369; /* Alias hover — unificato */
-  --color-accent-soft: #F4F2EF;  /* Sezioni soft — appena caldo */
-  --color-footer: #141414;       /* Footer — nero profondo */
-  --color-gold: #C4A47C;         /* Decorazioni — uguale accento */
-  --color-gold-soft: #F4F2EF;    /* Highlight boxes — uguale soft */
+  --color-sand: #f7f7f8; /* Sfondo pagina — grigio neutro */
+  --color-surface: #ffffff; /* Card, form — bianco puro */
+  --color-ink: #111111; /* Testo, bottoni primary — nero */
+  --color-accent: #a8865a; /* Accento unico — sabbia profonda/cuoio */
+  --color-accent-hover: #96734a; /* Accento hover — sabbia scura */
+  --color-accent-text: #7a5c35; /* Accento testo — WCAG AA su bianco */
+  --color-accent-warm: #a8865a; /* Alias accento — unificato */
+  --color-accent-warm-hover: #96734a; /* Alias hover — unificato */
+  --color-accent-soft: #f3efe9; /* Sezioni soft — sabbia calda */
+  --color-footer: #141414; /* Footer — nero profondo */
+  --color-gold: #a8865a; /* Decorazioni — uguale accento */
+  --color-gold-soft: #f3efe9; /* Highlight boxes — uguale soft */
 
   /* Social Brand Colors */
-  --color-social-instagram-start: #F09433;
-  --color-social-instagram-mid: #E6683C;
-  --color-social-instagram-end: #DC2743;
-  --color-social-facebook: #1877F2;
-  --color-social-twitter: #1DA1F2;
-  --color-social-pinterest: #E60023;
+  --color-social-instagram-start: #f09433;
+  --color-social-instagram-mid: #e6683c;
+  --color-social-instagram-end: #dc2743;
+  --color-social-facebook: #1877f2;
+  --color-social-twitter: #1da1f2;
+  --color-social-pinterest: #e60023;
 
   /* Affiliate / partner colors */
   --color-affiliate-booking: #003580;
-  --color-affiliate-booking-soft: #EFF6FF;
-  --color-affiliate-heymondo: #00D084;
-  --color-affiliate-skyscanner: #0770E3;
-  --color-affiliate-skyscanner-soft: #F0F9FF;
-  --color-affiliate-getyourguide: #FF523B;
-  --color-affiliate-getyourguide-soft: #FEF2F2;
-  --color-affiliate-amazon: #FF9900;
-  --color-affiliate-amazon-soft: #FFF7ED;
+  --color-affiliate-booking-soft: #eff6ff;
+  --color-affiliate-heymondo: #00d084;
+  --color-affiliate-skyscanner: #0770e3;
+  --color-affiliate-skyscanner-soft: #f0f9ff;
+  --color-affiliate-getyourguide: #ff523b;
+  --color-affiliate-getyourguide-soft: #fef2f2;
+  --color-affiliate-amazon: #ff9900;
+  --color-affiliate-amazon-soft: #fff7ed;
 
   --tracking-tight: -0.025em;
   --tracking-wide: 0.05em;
@@ -53,7 +53,8 @@
   --radius-xl: 1.5rem;
   --radius-2xl: 2.5rem;
   --radius-3xl: 3rem;
-  --shadow-premium: 0 20px 40px -10px rgba(17, 17, 17, 0.08), 0 10px 20px -5px rgba(17, 17, 17, 0.04);
+  --shadow-premium:
+    0 20px 40px -10px rgba(17, 17, 17, 0.08), 0 10px 20px -5px rgba(17, 17, 17, 0.04);
   --shadow-glass: 0 8px 32px 0 rgba(17, 17, 17, 0.06);
 }
 
@@ -114,7 +115,7 @@
 
   /* Subtle topographic contour pattern for dark sections */
   .bg-topo {
-    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 10c22 0 40 18 40 40s-18 40-40 40S10 72 10 50 28 10 50 10z' fill='none' stroke='%23B8945A' stroke-width='0.3' opacity='0.08'/%3E%3Cpath d='M50 25c14 0 25 11 25 25s-11 25-25 25-25-11-25-25 11-25 25-25z' fill='none' stroke='%23B8945A' stroke-width='0.3' opacity='0.06'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 10c22 0 40 18 40 40s-18 40-40 40S10 72 10 50 28 10 50 10z' fill='none' stroke='%23906842' stroke-width='0.3' opacity='0.08'/%3E%3Cpath d='M50 25c14 0 25 11 25 25s-11 25-25 25-25-11-25-25 11-25 25-25z' fill='none' stroke='%23906842' stroke-width='0.3' opacity='0.06'/%3E%3C/svg%3E");
   }
 }
 
@@ -122,7 +123,9 @@
 .img-blur-up {
   filter: blur(20px);
   transform: scale(1.1);
-  transition: filter 0.6s ease-out, transform 0.6s ease-out;
+  transition:
+    filter 0.6s ease-out,
+    transform 0.6s ease-out;
 }
 .img-blur-up.loaded {
   filter: blur(0);
@@ -140,6 +143,16 @@
     outline-offset: 2px;
     border-radius: 2px;
   }
+
+  /* Fix for Mobile Safari / Instagram WebView height */
+  .min-h-screen {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  .h-screen {
+    height: 100vh;
+    height: 100dvh;
+  }
 }
 
 body {
@@ -147,9 +160,17 @@ body {
   background-color: var(--color-sand);
   color: var(--color-ink);
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-h1, h2, h3, h4, h5, h6, .font-serif {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-serif {
   font-family: var(--font-serif);
 }
 
@@ -175,7 +196,9 @@ html {
 
 /* Accessibility: Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

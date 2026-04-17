@@ -31,44 +31,44 @@ interface ButtonProps {
 /**
  * A reusable button component that supports different variants, sizes, and navigation types.
  */
-export default function Button({ 
-  children, 
-  variant = 'primary', 
-  size = 'md', 
-  className = '', 
+export default function Button({
+  children,
+  variant = 'primary',
+  size = 'md',
+  className = '',
   onClick,
   to,
   href,
   rel,
   target,
-  type = 'button'
+  type = 'button',
 }: ButtonProps) {
-  
-  const baseStyles = "inline-flex items-center justify-center gap-3 rounded-[var(--radius-xl)] uppercase tracking-widest font-semibold transition-all duration-500 ease-out";
-  
+  const baseStyles =
+    'inline-flex items-center justify-center gap-3 rounded-[var(--radius-xl)] uppercase tracking-widest font-semibold transition-all duration-500 ease-out';
+
   const variants = {
-    primary: "bg-[var(--color-ink)] text-white shadow-md hover:bg-[var(--color-ink)]/85 hover:shadow-premium hover:-translate-y-0.5",
-    secondary: "bg-[var(--color-surface)] text-[var(--color-ink)] shadow-sm hover:text-[var(--color-gold)] hover:shadow-premium border border-[var(--color-ink)]/10 hover:-translate-y-0.5",
-    outline: "bg-transparent border border-[var(--color-ink)]/20 text-[var(--color-ink)] hover:border-[var(--color-gold)] hover:text-[var(--color-gold)] hover:bg-[var(--color-gold-soft)]",
-    "outline-light": "bg-white/10 border border-white/40 text-white backdrop-blur-sm hover:bg-white hover:text-[var(--color-ink)] hover:border-white shadow-glass hover:-translate-y-0.5",
-    cta: "bg-[var(--color-accent)] text-white shadow-[0_0_20px_rgba(196,164,124,0.25)] hover:shadow-[0_0_30px_rgba(196,164,124,0.4)] hover:brightness-110 hover:-translate-y-0.5"
+    primary:
+      'bg-[var(--color-ink)] text-white shadow-md hover:bg-[var(--color-ink)]/85 hover:shadow-premium hover:-translate-y-0.5',
+    secondary:
+      'bg-[var(--color-surface)] text-[var(--color-ink)] shadow-sm hover:text-[var(--color-gold)] hover:shadow-premium border border-[var(--color-ink)]/10 hover:-translate-y-0.5',
+    outline:
+      'bg-transparent border border-[var(--color-ink)]/20 text-[var(--color-ink)] hover:border-[var(--color-gold)] hover:text-[var(--color-gold)] hover:bg-[var(--color-gold-soft)]',
+    'outline-light':
+      'bg-white/10 border border-white/40 text-white backdrop-blur-sm hover:bg-white hover:text-[var(--color-ink)] hover:border-white shadow-glass hover:-translate-y-0.5',
+    cta: 'bg-[var(--color-accent)] text-white shadow-[0_0_20px_rgba(155,127,166,0.25)] hover:shadow-[0_0_30px_rgba(155,127,166,0.4)] hover:brightness-110 hover:-translate-y-0.5',
   };
 
   const sizes = {
-    sm: "px-5 py-2 text-xs",
-    md: "px-8 py-4 text-sm rounded-full",
-    lg: "px-10 py-4 text-sm md:text-base rounded-full"
+    sm: 'px-5 py-2 text-xs',
+    md: 'px-8 py-4 text-sm rounded-full',
+    lg: 'px-10 py-4 text-sm md:text-base rounded-full',
   };
 
   const combinedStyles = `${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`;
 
   if (to) {
     return (
-      <motion.div
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        className="inline-block"
-      >
+      <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="inline-block">
         <Link to={to} className={combinedStyles}>
           {children}
         </Link>
@@ -82,8 +82,8 @@ export default function Button({
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         href={href}
-        target={target || "_blank"}
-        rel={rel || "noopener noreferrer"}
+        target={target || '_blank'}
+        rel={rel || 'noopener noreferrer'}
         className={combinedStyles}
       >
         {children}

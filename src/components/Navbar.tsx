@@ -19,7 +19,9 @@ import { CONTACTS } from '../config/site';
 import {
   DESTINATION_GROUPS,
   EXPERIENCE_TYPES,
+  GUIDE_CATEGORIES,
   slugifyExperienceType,
+  slugifyGuideCategory,
 } from '../config/contentTaxonomy';
 import { siteContentDefaults } from '../config/siteContent';
 import { useAuth } from '../context/AuthContext';
@@ -112,6 +114,15 @@ export default function Navbar() {
     []
   );
 
+  const guideLinks = useMemo(
+    () =>
+      GUIDE_CATEGORIES.map((cat) => ({
+        name: cat,
+        href: `/guide?cat=${slugifyGuideCategory(cat)}`,
+      })),
+    []
+  );
+
   const exploreGroups = useMemo<NavSubGroup[]>(
     () => [
       {
@@ -130,7 +141,7 @@ export default function Navbar() {
         links: [{ name: 'Tutte le guide', href: '/guide' }],
       },
     ],
-    [destinationLinks, experienceLinks]
+    [destinationLinks, experienceLinks, guideLinks]
   );
 
   const navItems = useMemo<NavItem[]>(
@@ -188,7 +199,11 @@ export default function Navbar() {
   const isSubLinkActive = (item: NavItem, href: string) => {
     const [subLinkPath, subLinkSearch] = href.split('?');
 
-    if (href.startsWith('/destinazioni?') || href.startsWith('/esperienze?')) {
+    if (
+      href.startsWith('/destinazioni?') ||
+      href.startsWith('/esperienze?') ||
+      href.startsWith('/guide?')
+    ) {
       return location.pathname === subLinkPath && location.search === `?${subLinkSearch}`;
     }
 
@@ -205,10 +220,10 @@ export default function Navbar() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-4 left-4 right-4 z-50 w-[calc(100%-2rem)] rounded-full border px-6 py-3 text-[var(--color-ink)] transition-all duration-500 md:top-6 md:left-1/2 md:w-[96%] md:-translate-x-1/2 md:px-8 md:py-4 lg:w-[calc(100%-4rem)] max-w-[1400px] ${
+        className={`fixed top-4 left-4 right-4 z-50 w-[calc(100%-2rem)] rounded-full border px-6 py-3 text-[var(--color-ink)] transition-all duration-700 md:top-6 md:left-1/2 md:w-[96%] md:-translate-x-1/2 md:px-8 md:py-4 lg:w-[calc(100%-4rem)] max-w-[1400px] ${
           isScrolled
-            ? 'border-[var(--color-ink)]/5 bg-[var(--color-surface)]/90 shadow-glass backdrop-blur-2xl'
-            : 'border-white/20 bg-white/40 shadow-sm backdrop-blur-lg'
+            ? 'border-[var(--color-ink)]/5 bg-[var(--color-surface)]/80 saturate-[150%] shadow-[0_8px_32px_0_rgba(10,10,10,0.08)] backdrop-blur-[40px]'
+            : 'border-white/40 bg-white/50 shadow-sm backdrop-blur-xl'
         }`}
       >
         <div className="flex items-center justify-between gap-4">

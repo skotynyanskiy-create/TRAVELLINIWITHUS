@@ -1,251 +1,55 @@
-# TRAVELLINIWITHUS — Production Launch Checklist
+# TRAVELLINIWITHUS — Checklist Finale di Lancio 🚀
 
-**Status**: In Progress  
-**Target Date**: 2026-03-27 (1 week)  
-**Owner**: Rodrigo & Betta
+Questo documento riassume i passi necessari per portare il sito dallo stato attuale (sviluppo/predisposizione) al lancio ufficiale in produzione. La struttura tecnica, il design e la logica di navigazione sono completati e verificati.
 
----
+## 1. 📂 Contenuti e CMS (Azione richiesta: Rodrigo & Betta)
 
-## PRE-LAUNCH TASKS (Do First)
+Il sito è attualmente in "Demo Mode". Per renderlo reale:
 
-### Phase 1: Environment & Configuration (Day 1)
+- [ ] **Accesso Admin**: Accedi a `/admin` con un account Google autorizzato.
+- [ ] **Articoli Reali**: Carica almeno 3-5 articoli reali tra **Destinazioni** e **Guide**.
+  - _Nota_: Per le Guide, usa le nuove categorie blog (es: "Itinerari completi", "Cosa portare").
+- [ ] **Prodotti Shop**: Carica i prodotti digitali (o fisici) reali nella collezione `products`.
+- [ ] **Disattivazione Demo**: Una volta caricati i contenuti, vai nelle impostazioni del sito (sempre in Admin) e disattiva `showEditorialDemo` e `showShopDemo`.
 
-- [ ] **Firebase Setup**
-  - [ ] Create Firestore database (if not exists)
-  - [ ] Create collections: `users`, `articles`, `products`, `leads`, `orders`, `siteContent`
-  - [ ] Enable Authentication (Google Sign-In)
-  - [ ] Add authorized domains: `localhost`, `127.0.0.1`, `travelliniwithus.it`
+## 2. 📈 Analisi e Tracciamento (Predisposizione completata)
 
-- [ ] **Environment Variables**
-  - [ ] Copy `.env.local.template` → `.env.local`
-  - [ ] Fill Firebase config from Firebase Console
-  - [ ] Get Stripe keys: `STRIPE_SECRET_KEY` (sk_live_xxx), `STRIPE_PUBLISHABLE_KEY` (pk_live_xxx)
-  - [ ] Get Gemini API key from Google AI Studio
-  - [ ] Set `APP_URL=https://travelliniwithus.it` (or staging URL)
-  - [ ] Verify: `cat .env.local` shows all vars (never commit this)
+Il sistema è già pronto per tracciare le visite.
 
-- [ ] **Admin Setup**
-  - [ ] Update `src/config/admin.ts` with real admin emails (Rodrigo & Betta)
-  - [ ] Test admin login with Google account
-  - [ ] Verify admin dashboard loads
+- [ ] **ID Integrazioni**: Apri il file `src/config/integrations.ts`.
+- [ ] **Inserimento ID**: Incolla i tuoi ID reali per:
+  - Google Analytics 4 (`googleAnalyticsId`)
+  - Meta Pixel (`metaPixelId`)
+- [ ] **Newsletter**: Se usi un servizio esterno (Mailchimp/Flodesk), inserisci l'URL del form in `newsletterActionUrl`.
 
-### Phase 2: Content Creation (Days 2-3)
+## 3. 💳 Shop e Pagamenti (Solo predisposizione)
 
-- [ ] **Create Demo Products** (at least 5)
-  ```
-  Go to: Firebase Console → Firestore → products collection
-  Create documents with:
-  {
-    "name": "Dolomiti Travel Guide",
-    "slug": "dolomiti-guide",
-    "price": 29.99,
-    "category": "guide",
-    "description": "Complete guide to Dolomiti hiking...",
-    "imageUrl": "https://...",
-    "published": true,
-    "createdAt": NOW
-  }
-  ```
-  - [ ] Product 1: Dolomiti Guide (guide)
-  - [ ] Product 2: Iceland Planner (planner)
-  - [ ] Product 3: Travel Presets (preset)
-  - [ ] Product 4: Europe Road Trip (guide)
-  - [ ] Product 5: Asia Bundle (bundle)
+Al momento il carrello simula il successo del pagamento.
 
-- [ ] **Create Demo Articles** (at least 3)
-  ```
-  Go to: Firebase Console → Firestore → articles collection
-  Create documents with:
-  {
-    "title": "Hidden Gems of Dolomiti",
-    "slug": "dolomiti-hidden-gems",
-    "content": "# Dolomiti\n\n...",
-    "excerpt": "Discover lesser-known spots...",
-    "category": "Destination",
-    "country": "Italia",
-    "continent": "Europa",
-    "author": "Betta & Rodrigo",
-    "authorId": "uid-of-author",
-    "published": true,
-    "createdAt": NOW
-  }
-  ```
-  - [ ] Article 1: Dolomiti Hidden Gems
-  - [ ] Article 2: Iceland Winter Adventure
-  - [ ] Article 3: Southeast Asia Slow Travel
+- [ ] **Account Stripe**: Crea o configura il tuo account Stripe.
+- [ ] **Firebase Extension**: Configura l'estensione "Run Payments with Stripe" su Firebase.
+- [ ] **Webhook**: Assicurati che i webhook di Stripe puntino al tuo backend per sbloccare i contenuti digitali acquistati.
 
-- [ ] **Update Site Content**
-  - [ ] Go to `/admin` → Site Content Editor
-  - [ ] Update home page: hero title, hero text, featured destinations
-  - [ ] Update contact page: title, description
-  - [ ] Update about page: mission statement, team bio
+## 4. ⚖️ Aspetti Legali e GDPR
 
-### Phase 3: Quality Assurance (Days 4-5)
+- [ ] **Privacy & Cookie**: I testi in `src/pages/legal/` sono bozze strutturate. Verifica che i dati (email, riferimenti fiscali) siano corretti.
+- [ ] **Banner Cookie**: Se usi Iubenda, inserisci lo script fornito nel file `index.html`.
 
-- [ ] **Build & Deploy to Staging**
-  - [ ] Run: `npm run build`
-  - [ ] Verify: `dist/` contains assets
-  - [ ] Deploy to staging: `vercel` (or Firebase staging)
-  - [ ] Test staging URL works
+## 5. 🚀 Deployment Finale
 
-- [ ] **Smoke Testing**
-  - [ ] Homepage loads (< 3 seconds)
-  - [ ] Navigate to all main pages (no 404s)
-  - [ ] Click products → load `/shop/slug` correctly
-  - [ ] Newsletter form saves to Firestore
-  - [ ] Contact form saves to Firestore
-  - [ ] Admin login works
-  - [ ] Admin can edit content
-
-- [ ] **E2E Test Suite**
-  - [ ] Run: `npm run e2e`
-  - [ ] Fix any failing tests
-  - [ ] Document expected vs actual behavior
-
-- [ ] **Lighthouse Audit**
-  - [ ] Chrome DevTools → Lighthouse
-  - [ ] Mobile score > 80
-  - [ ] Desktop score > 90
-  - [ ] Fix any critical issues
-
-### Phase 4: Monitoring & Security (Day 6)
-
-- [ ] **Enable Error Tracking**
-  - [ ] Sign up for Sentry (free tier OK)
-  - [ ] Configure Sentry in React app
-  - [ ] Test error capture
-
-- [ ] **Analytics Setup**
-  - [ ] Create Google Analytics 4 property
-  - [ ] Add GA4 script to HTML
-  - [ ] Verify events are tracked
-
-- [ ] **Security Checklist**
-  - [ ] Firestore rules reviewed & deployed
-  - [ ] `.env.local` not committed to git
-  - [ ] No API keys in client-side code
-  - [ ] HTTPS enabled on domain
-  - [ ] CORS origins correct
-
-- [ ] **Backup Strategy**
-  - [ ] Enable Firestore automated backups (Firebase Console)
-  - [ ] Export Firestore manually before launch
-  - [ ] Save backup to secure location
-
-### Phase 5: Production Deployment (Day 7)
-
-- [ ] **Final Pre-Flight**
-  - [ ] All environment variables set correctly
-  - [ ] Admin emails updated
-  - [ ] Products & articles published
-  - [ ] Homepage copy finalized
-  - [ ] E2E tests passing
-
-- [ ] **Deploy to Production**
-  - [ ] Option A (Vercel): `vercel --prod`
-  - [ ] Option B (Firebase): `firebase deploy --only hosting`
-  - [ ] Option C (Self-hosted): Deploy to server + start with PM2
-
-- [ ] **Post-Launch**
-  - [ ] Monitor error logs for 24 hours
-  - [ ] Check Analytics dashboard
-  - [ ] Respond to test emails/contact submissions
-  - [ ] Have rollback plan ready
+- [ ] **Build Check**: Esegui `npm run build` localmente per assicurarti che non ci siano errori dell'ultimo minuto.
+- [ ] **Vercel/Hosting**: Carica l'ultima versione su Vercel (o il tuo provider) e configura il dominio `travelliniwithus.it`.
+- [ ] **HTTPS**: Verifica che il certificato SSL sia attivo.
 
 ---
 
-## CRITICAL PATHS TO TEST
+### Verifiche di Qualità (Audit)
 
-### Customer Journey
-```
-Home → Featured Product → /shop/slug → Add to Cart → Checkout → Success
-```
+- [x] **SEO**: Meta tag dinamici e OpenGraph configurati.
+- [x] **Performance**: Immagini ottimizzate e lazy loading attivo.
+- [x] **Navigazione**: Interconnessione tra Luoghi, Esperienze e Guide funzionante.
+- [x] **Mobile**: Layout responsive su tutti i breakpoint.
 
-### Newsletter Signup
-```
-Home Newsletter Form → Submit → Firestore leads (type: newsletter)
-```
-
-### Contact Form
-```
-/contatti → Fill form → Submit → Firestore leads (type: contact)
-```
-
-### Admin Content Management
-```
-/admin → Login → Dashboard → Create Article → Publish → Appears on Home
-```
-
----
-
-## ROLLBACK PLAN
-
-If something breaks after launch:
-
-1. **Immediate**: Check error logs (Sentry)
-2. **If critical**: Revert to previous commit: `git revert HEAD`
-3. **Rebuild**: `npm run build`
-4. **Redeploy**: Follow deployment steps above
-5. **Expected downtime**: < 5 minutes
-
----
-
-## LAUNCH DAY RUNBOOK
-
-**7:00 AM**: Final checks complete, team ready
-**7:15 AM**: Deploy to production
-**7:30 AM**: Smoke tests pass, announce launch
-**8:00 AM**: Monitor dashboard, respond to early users
-**Ongoing**: Log errors, track metrics
-
----
-
-## POST-LAUNCH ROADMAP
-
-### Week 1
-- Monitor for bugs
-- Respond to user feedback
-- Fix critical issues immediately
-- Track conversion funnel
-
-### Weeks 2-3
-- Phase 3: Brand refocus (rewrite copy)
-- Create 10+ more products
-- Write 5+ more articles
-- Set up affiliate partnerships
-
-### Weeks 4+
-- SEO optimization
-- Content strategy expansion
-- Analytics optimization
-- Community building
-
----
-
-## SUCCESS METRICS
-
-✅ **Launch Successful If:**
-- Homepage loads < 3 seconds
-- Newsletter form captures emails
-- Contact form works
-- Admin can manage content
-- No critical errors in logs
-- At least 1 conversion (newsletter) in first day
-
-🟡 **Monitor Closely:**
-- Core Web Vitals (LCP, FID, CLS)
-- Error rate < 1%
-- Conversion rate > 1%
-
-❌ **Rollback If:**
-- Stripe checkout broken
-- Database inaccessible
-- Admin auth non-functional
-- Homepage unreachable
-
----
-
-**Created**: 2026-03-20  
-**Ready to Execute**: YES  
-**Team Approval**: Pending  
-**Next Step**: Complete Phase 1 tasks above
+**Creato il**: 15 Aprile 2026  
+**Stato**: PRONTO PER IL CARICAMENTO CONTENUTI  
+**Prossimo Passo**: Caricare il primo articolo reale su `/admin`.
