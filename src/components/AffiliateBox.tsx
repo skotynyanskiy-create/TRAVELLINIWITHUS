@@ -1,9 +1,12 @@
 import React from 'react';
 import { ExternalLink, Shield, Plane, Hotel, MapPin, Tag } from 'lucide-react';
-import { trackEvent } from '../services/analytics';
+import { prepareAffiliateLink, type AffiliatePartner } from '../lib/affiliate';
 import OptimizedImage from './OptimizedImage';
 
-export type AffiliateProvider = 'booking' | 'heymondo' | 'skyscanner' | 'getyourguide' | 'amazon' | 'generic';
+export type AffiliateProvider = Extract<
+  AffiliatePartner,
+  'booking' | 'heymondo' | 'skyscanner' | 'getyourguide' | 'amazon' | 'generic'
+>;
 
 interface AffiliateBoxProps {
   provider: AffiliateProvider;
@@ -73,14 +76,11 @@ export default function AffiliateBox({
 }: AffiliateBoxProps) {
   const config = providerConfig[provider] || providerConfig.generic;
 
-  const handleClick = () => {
-    trackEvent('affiliate_click', {
-      provider,
-      campaign_id: campaignId,
-      link_url: link,
-      title: title
-    });
-  };
+  const { href, onClick: handleClick } = prepareAffiliateLink(provider, link, {
+    campaign: campaignId,
+    placement: 'affiliate_box',
+    label: title,
+  });
 
   return (
     <div className="my-10 bg-white rounded-3xl border border-black/5 shadow-sm overflow-hidden flex flex-col sm:flex-row group hover:shadow-md transition-all duration-300">
@@ -119,10 +119,10 @@ export default function AffiliateBox({
         </p>
         
         <div className="mt-auto">
-          <a 
-            href={link}
+          <a
+            href={href}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="nofollow sponsored noopener noreferrer"
             onClick={handleClick}
             className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 rounded-xl text-white font-semibold text-sm transition-all active:scale-[0.98]"
             style={{ backgroundColor: config.color }}

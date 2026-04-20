@@ -1,6 +1,6 @@
 import { ExternalLink, Shield, Plane, Hotel, Smartphone } from 'lucide-react';
 import Button from './Button';
-import { trackEvent } from '../services/analytics';
+import { prepareAffiliateLink, type AffiliatePartner } from '../lib/affiliate';
 
 interface AffiliateWidgetProps {
   type: 'insurance' | 'booking' | 'esim' | 'gear';
@@ -11,6 +11,13 @@ interface AffiliateWidgetProps {
   discount?: string;
   image?: string;
 }
+
+const TYPE_TO_PARTNER: Record<AffiliateWidgetProps['type'], AffiliatePartner> = {
+  insurance: 'heymondo',
+  booking: 'booking',
+  esim: 'airalo',
+  gear: 'generic',
+};
 
 export default function AffiliateWidget({ type, title, description, link, cta, discount, image }: AffiliateWidgetProps) {
   const configs = {
@@ -49,14 +56,13 @@ export default function AffiliateWidget({ type, title, description, link, cta, d
   };
 
   const config = configs[type];
-
-  const handleClick = () => {
-    trackEvent('affiliate_click', {
-      type,
-      title: title || config.defaultTitle,
-      link_url: link || config.defaultLink
-    });
-  };
+  const resolvedLabel = title || config.defaultTitle;
+  const resolvedLink = link || config.defaultLink;
+  const { href, onClick: handleClick } = prepareAffiliateLink(TYPE_TO_PARTNER[type], resolvedLink, {
+    campaign: `widget_${type}`,
+    placement: 'affiliate_widget',
+    label: resolvedLabel,
+  });
 
   return (
     <div className="my-12 bg-white rounded-2xl border border-black/5 shadow-sm overflow-hidden flex flex-col md:flex-row">
@@ -80,12 +86,13 @@ export default function AffiliateWidget({ type, title, description, link, cta, d
           {description || config.defaultDescription}
         </p>
         <div className="flex flex-wrap items-center gap-4 mt-auto">
-          <Button 
-            href={link || config.defaultLink} 
-            variant="primary" 
+          <Button
+            href={href}
+            variant="primary"
             size="sm"
             className="group"
             onClick={handleClick}
+            rel="nofollow sponsored noopener noreferrer"
           >
             <span className="flex items-center gap-2">
               {cta || config.defaultCta}

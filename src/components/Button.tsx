@@ -14,8 +14,8 @@ interface ButtonProps {
   size?: 'sm' | 'md' | 'lg';
   /** Additional CSS classes to apply to the button. */
   className?: string;
-  /** Callback function to be executed when the button is clicked. */
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  /** Callback eseguita al click. Supportata sia in modalita button che in modalita anchor (href). */
+  onClick?: React.MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>;
   /** The path to navigate to if the button is a link. */
   to?: string;
   /** The URL to open if the button is an external link. */
@@ -84,6 +84,7 @@ export default function Button({
         href={href}
         target={target || '_blank'}
         rel={rel || 'noopener noreferrer'}
+        onClick={onClick as React.MouseEventHandler<HTMLAnchorElement> | undefined}
         className={combinedStyles}
       >
         {children}
@@ -95,7 +96,7 @@ export default function Button({
     <motion.button
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      onClick={onClick}
+      onClick={onClick as React.MouseEventHandler<HTMLButtonElement> | undefined}
       type={type}
       className={combinedStyles}
     >
