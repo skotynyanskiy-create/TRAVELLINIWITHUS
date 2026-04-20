@@ -353,6 +353,7 @@ export default function Navbar() {
               {user ? (
                 <button
                   onClick={() => setIsUserMenuOpen((prev) => !prev)}
+                  aria-label="Account"
                   className="h-7 w-7 overflow-hidden rounded-full border border-zinc-200 transition-colors hover:border-[var(--color-accent)]"
                 >
                   {user.photoURL ? (
@@ -371,6 +372,7 @@ export default function Navbar() {
               ) : (
                 <button
                   onClick={signIn}
+                  aria-label="Accedi"
                   className="flex items-center gap-1 transition-colors hover:text-[var(--color-accent)]"
                 >
                   <UserIcon size={18} strokeWidth={1.5} />

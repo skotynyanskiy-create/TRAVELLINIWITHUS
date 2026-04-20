@@ -165,7 +165,7 @@ export default function DestinationFilters({
 
           {selectedGroup === 'Italia' && availableRegions.length > 1 && (
             <div className="grid gap-5 md:grid-cols-2">
-              <div>
+              <div className="min-w-0">
                 <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/45">
                   Regione
                 </span>
@@ -183,7 +183,7 @@ export default function DestinationFilters({
               </div>
 
               {availableCities.length > 1 && (
-                <div>
+                <div className="min-w-0">
                   <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/45">
                     Città / località
                   </span>
@@ -209,7 +209,7 @@ export default function DestinationFilters({
               { label: 'Budget', key: 'budget', value: selectedBudget, values: availableBudgets, icon: Wallet },
               { label: 'Durata', key: 'duration', value: selectedDuration, values: availableDurations, icon: Clock3 },
             ].map(({ label, key, value, values, icon: Icon }) => (
-              <div key={key}>
+              <div key={key} className="min-w-0">
                 <span className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-black/45">
                   <Icon size={14} /> {label}
                 </span>

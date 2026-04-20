@@ -401,7 +401,7 @@ export default function Esperienze() {
           </div>
 
           <div className="grid gap-5 lg:grid-cols-2">
-            <div>
+            <div className="min-w-0">
               <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/45">
                 Area geografica
               </span>
@@ -419,7 +419,7 @@ export default function Esperienze() {
             </div>
 
             {selectedGroup === 'Italia' && availableRegions.length > 1 && (
-              <div>
+              <div className="min-w-0">
                 <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/45">
                   Regione
                 </span>
@@ -438,7 +438,7 @@ export default function Esperienze() {
             )}
 
             {selectedGroup === 'Italia' && availableCities.length > 1 && (
-              <div>
+              <div className="min-w-0">
                 <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/45">
                   Citta / localita
                 </span>

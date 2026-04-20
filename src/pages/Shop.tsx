@@ -292,6 +292,7 @@ export default function Shop() {
             <select
               value={sortBy}
               onChange={(event) => setSortBy(event.target.value)}
+              aria-label="Ordina prodotti"
               className="rounded-full border border-black/5 bg-white px-5 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-black/55 focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
             >
               <option value="featured">In evidenza</option>

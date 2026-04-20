@@ -39,7 +39,7 @@ export default function Footer() {
                 >
                   Travellini<span className="font-bold text-[var(--color-accent)]">with</span>us
                 </Link>
-                <span className="mb-8 block font-script text-lg text-white/30">
+                <span className="mb-8 block font-script text-lg text-white/60">
                   Posti particolari, esperienze vere.
                 </span>
                 <p className="mb-6 max-w-sm text-base font-light leading-relaxed text-zinc-400">
@@ -234,7 +234,7 @@ export default function Footer() {
             </div>
 
             <div className="flex flex-col items-center justify-between gap-8 border-t border-white/10 pt-12 md:flex-row">
-              <div className="text-center text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 md:text-left">
+              <div className="text-center text-xs font-medium uppercase tracking-[0.2em] text-zinc-400 md:text-left">
                 &copy; {new Date().getFullYear()} Travelliniwithus.
               </div>
 
@@ -248,7 +248,7 @@ export default function Footer() {
                   <Link
                     key={link.label}
                     to={link.to}
-                    className="text-xs font-medium uppercase tracking-[0.2em] text-zinc-500 transition-colors hover:text-white"
+                    className="text-xs font-medium uppercase tracking-[0.2em] text-zinc-400 transition-colors hover:text-white"
                   >
                     {link.label}
                   </Link>
