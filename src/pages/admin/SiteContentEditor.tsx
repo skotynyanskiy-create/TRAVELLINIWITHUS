@@ -169,7 +169,7 @@ export default function SiteContentEditor() {
         <Section className="pt-32 pb-24">
           <div className="mx-auto max-w-3xl rounded-3xl border border-red-100 bg-white p-10 text-center shadow-sm">
             <h1 className="mb-4 text-3xl font-serif">Sezione non trovata</h1>
-            <p className="mb-8 text-black/60">L editor richiesto non esiste o non e ancora stato configurato.</p>
+            <p className="mb-8 text-black/60">L&apos;editor richiesto non esiste o non è ancora stato configurato.</p>
             <Link
               to="/admin"
               className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-accent)]"

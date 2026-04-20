@@ -26,12 +26,12 @@ export default function Disclaimer() {
             <h2 className="mt-10 mb-4 font-serif text-2xl text-black">1. Cosa significa</h2>
             <p>
               Se acquisti un prodotto o prenoti un servizio tramite alcuni link presenti sul sito, Travelliniwithus
-              puo&apos; ricevere una commissione senza costi aggiuntivi per te.
+              può ricevere una commissione senza costi aggiuntivi per te.
             </p>
 
             <h2 className="mt-10 mb-4 font-serif text-2xl text-black">2. Indipendenza editoriale</h2>
             <p>
-              Le eventuali commissioni non determinano automaticamente i contenuti pubblicati. L&apos;obiettivo e&apos;
+              Le eventuali commissioni non determinano automaticamente i contenuti pubblicati. L&apos;obiettivo è
               consigliare strumenti, servizi o esperienze coerenti con il progetto e ritenuti utili per il pubblico.
             </p>
 
@@ -44,7 +44,7 @@ export default function Disclaimer() {
 
             <h2 className="mt-10 mb-4 font-serif text-2xl text-black">4. Supporto al progetto</h2>
             <p>
-              L&apos;uso di link affiliati puo&apos; contribuire a sostenere il lavoro editoriale e la produzione di contenuti
+              L&apos;uso di link affiliati può contribuire a sostenere il lavoro editoriale e la produzione di contenuti
               gratuiti pubblicati su Travelliniwithus.
             </p>
           </div>

@@ -21,7 +21,7 @@ export default function HomeCollaborationCta() {
               Hai un luogo, un hotel o un progetto che merita un racconto fatto bene?
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/70 md:text-lg">
-              Lavoriamo con realtà travel, hospitality e lifestyle quando c e allineamento reale tra
+              Lavoriamo con realtà travel, hospitality e lifestyle quando c&rsquo;è allineamento reale tra
               progetto, pubblico e libertà editoriale.
             </p>
           </div>

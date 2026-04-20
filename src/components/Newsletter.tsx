@@ -43,7 +43,7 @@ const variantCopy: Record<
   },
   white: {
     eyebrow: 'Archivio utile',
-    title: 'Una mail quando c e qualcosa da salvare.',
+    title: 'Una mail quando c\u2019è qualcosa da salvare.',
     description:
       'Niente invii automatici senza valore: solo contenuti Travelliniwithus utili per scegliere, organizzare e partire meglio.',
     bullets: [
@@ -278,7 +278,7 @@ export default function Newsletter({
             <div>
               <p className="font-serif text-xl">Iscrizione confermata.</p>
               <p className={`mt-1 text-sm leading-relaxed ${isDark ? 'text-white/65' : 'text-black/60'}`}>
-                Richiesta ricevuta. Se la piattaforma email non e ancora attiva, il lead resta comunque salvato.
+                Richiesta ricevuta. Se la piattaforma email non è ancora attiva, il lead resta comunque salvato.
               </p>
             </div>
           </div>
@@ -340,7 +340,7 @@ export default function Newsletter({
             <div>
               <p className="font-serif text-xl">Invii curati, non automatici.</p>
               <p className={`mt-1 text-sm leading-relaxed ${isDark ? 'text-white/55' : 'text-black/50'}`}>
-                Il punto non e scrivere spesso: e mandare qualcosa che valga davvero un salvataggio.
+                Il punto non è scrivere spesso: è mandare qualcosa che valga davvero un salvataggio.
               </p>
             </div>
           </div>

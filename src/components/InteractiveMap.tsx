@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { MapPin, ArrowRight, X, Globe } from 'lucide-react';
 import { siteContentDefaults } from '../config/siteContent';
-import { DEMO_ARTICLE_MARKER } from '../config/demoContent';
+import { DEMO_ARTICLE_MARKERS } from '../config/demoContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 
 const geoUrl = 'https://unpkg.com/world-atlas@2.0.2/countries-110m.json';
@@ -37,7 +37,7 @@ export default function InteractiveMap({
   const [activeMarker, setActiveMarker] = useState<MapMarker | null>(null);
   const [activeCountry, setActiveCountry] = useState<{ name: string; id: string } | null>(null);
   const resolvedMarkers =
-    markers ?? (demoSettings.showDestinationDemo ? [DEMO_ARTICLE_MARKER] : []);
+    markers ?? (demoSettings.showDestinationDemo ? DEMO_ARTICLE_MARKERS : []);
 
   const handleCountryClick = (geo: { properties: { name: string }; id?: string }) => {
     setActiveMarker(null);

@@ -9,7 +9,7 @@ export default function NotFound() {
     <PageLayout>
       <SEO
         title="Pagina non trovata"
-        description="La pagina che stai cercando non esiste o e stata spostata. Torna alle sezioni principali di Travelliniwithus."
+        description="La pagina che stai cercando non esiste o è stata spostata. Torna alle sezioni principali di Travelliniwithus."
         noindex
       />
       <Section className="min-h-[70vh] flex items-center">
@@ -29,7 +29,7 @@ export default function NotFound() {
             Pagina <span className="italic opacity-60">non trovata</span>
           </h1>
           <p className="max-w-2xl mx-auto mb-10 text-lg font-light leading-relaxed text-black/70">
-            Il contenuto che stai cercando non e disponibile a questo indirizzo. Puoi tornare alla home oppure ripartire da destinazioni, esperienze e guide.
+            Il contenuto che stai cercando non è disponibile a questo indirizzo. Puoi tornare alla home oppure ripartire da destinazioni, esperienze e guide.
           </p>
 
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">

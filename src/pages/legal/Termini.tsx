@@ -45,14 +45,14 @@ export default function Termini() {
 
             <h2 className="mt-10 mb-4 font-serif text-2xl text-black">4. Link esterni e servizi di terzi</h2>
             <p>
-              Il sito puo&apos; includere collegamenti a servizi, piattaforme o siti esterni. Travelliniwithus non e&apos;
+              Il sito può includere collegamenti a servizi, piattaforme o siti esterni. Travelliniwithus non è
               responsabile dei contenuti, delle policy o delle condizioni applicate da tali soggetti terzi.
             </p>
 
             <h2 className="mt-10 mb-4 font-serif text-2xl text-black">5. Modifiche</h2>
             <p>
               Ci riserviamo il diritto di aggiornare in qualsiasi momento il sito, i contenuti e i presenti termini.
-              La versione pubblicata su questa pagina e&apos; quella da considerare valida.
+              La versione pubblicata su questa pagina è quella da considerare valida.
             </p>
           </div>
         </div>

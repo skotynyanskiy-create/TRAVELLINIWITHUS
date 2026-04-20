@@ -513,8 +513,8 @@ export default function AdminDashboard() {
             <div className="p-8">
               <div className="mb-8 max-w-3xl">
                 <p className="text-zinc-600">
-                  Qui trovi gli editor guidati per le pagine istituzionali del sito. L obiettivo e permetterti di aggiornare
-                  contenuti chiave senza toccare il codice, mantenendo pero struttura, stile e logica del progetto.
+                  Qui trovi gli editor guidati per le pagine istituzionali del sito. L&rsquo;obiettivo è permetterti di aggiornare
+                  contenuti chiave senza toccare il codice, mantenendo però struttura, stile e logica del progetto.
                 </p>
               </div>
 

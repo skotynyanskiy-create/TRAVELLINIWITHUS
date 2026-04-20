@@ -32,17 +32,17 @@ function getAuthErrorMessage(error: unknown) {
 
   switch (errorCode) {
     case 'auth/popup-closed-by-user':
-      return 'Il popup di accesso e stato chiuso prima del completamento.';
+      return 'Il popup di accesso è stato chiuso prima del completamento.';
     case 'auth/cancelled-popup-request':
-      return 'E gia presente una richiesta di accesso in corso. Attendi un attimo e riprova.';
+      return 'È già presente una richiesta di accesso in corso. Attendi un attimo e riprova.';
     case 'auth/popup-blocked':
       return 'Il browser ha bloccato il popup Google. Consenti i popup per localhost e riprova.';
     case 'auth/unauthorized-domain':
-      return 'Questo dominio non e autorizzato su Firebase Auth. Aggiungi localhost e 127.0.0.1 agli Authorized Domains.';
+      return 'Questo dominio non è autorizzato su Firebase Auth. Aggiungi localhost e 127.0.0.1 agli Authorized Domains.';
     case 'auth/operation-not-allowed':
-      return 'L accesso con Google non risulta abilitato in Firebase Authentication.';
+      return 'L\u2019accesso con Google non risulta abilitato in Firebase Authentication.';
     case 'auth/network-request-failed':
-      return 'La richiesta a Firebase non e andata a buon fine. Controlla connessione e configurazione del progetto.';
+      return 'La richiesta a Firebase non è andata a buon fine. Controlla connessione e configurazione del progetto.';
     default:
       return 'Accesso Google non riuscito. Controlla la configurazione Firebase Authentication e riprova.';
   }
