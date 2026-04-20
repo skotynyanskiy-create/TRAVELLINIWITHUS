@@ -38,7 +38,7 @@ This repository is the website and marketing operating system for the travel cre
 ## Working rules for any AI agent
 
 - Do not treat Obsidian notes as optional side material. `docs/` is part of the working system.
-- Use `.agents/skills` as the canonical local skill source. Run `npm run sync:agents` after editing skills.
+- Use `.agents/skills` as the **canonical** local skill source. `/.claude/skills/` is a generated mirror — never edit it directly. After editing `.agents/skills/**`, always run `npm run sync:agents` (and `npm run audit:agents` in CI validates the sync).
 - Use `DESIGN.md` for UI direction, Stitch/Figma prompts and design-system interpretation.
 - Do not import external skill behavior directly into the repo without adapting it locally and documenting the source in `docs/AI_AGENT_STACK.md`.
 - When changing important UI, flows, positioning or operations, update the relevant note in `docs/`.
