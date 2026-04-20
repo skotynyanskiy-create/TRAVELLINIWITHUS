@@ -1,330 +1,309 @@
 # TRAVELLINIWITHUS — Deployment & Operations Runbook
 
-**Status**: 🟡 PRE-PRODUCTION  
-**Last Updated**: 2026-03-20
+**Status**: 🟡 PRE-PRODUCTION — infrastruttura Sprint 1 completa, attivazione chiavi e contenuti reali pendenti
+**Last Updated**: 2026-04-20
+
+---
+
+## 0. Runbook correlati
+
+Questa guida è il punto d'ingresso. Dettaglio operativo nelle runbook dedicate:
+
+- [STRIPE_WEBHOOK_RUNBOOK.md](STRIPE_WEBHOOK_RUNBOOK.md) — configurazione endpoint Stripe live + smoke test A/B/C + incident response.
+- [DISASTER_RECOVERY_RUNBOOK.md](DISASTER_RECOVERY_RUNBOOK.md) — backup Firestore automatico (GitHub Actions + GCS + OIDC), scenari restore, RPO/RTO.
+- [20_Decisions/DECISION_ADMIN_CUSTOM_CLAIMS.md](20_Decisions/DECISION_ADMIN_CUSTOM_CLAIMS.md) — migrazione da email hardcoded a Firebase Custom Claims.
+- [20_Decisions/DECISION_ERROR_TRACKING_STRATEGY.md](20_Decisions/DECISION_ERROR_TRACKING_STRATEGY.md) — attivazione Sentry (client + server) in sessione finale.
+- [LAUNCH_CHECKLIST.md](LAUNCH_CHECKLIST.md) — checklist pre-lancio aggiornata post Sprint 1.
+- [10_Projects/PROJECT_RELEASE_READINESS.md](10_Projects/PROJECT_RELEASE_READINESS.md) — stato dettagliato release.
 
 ---
 
 ## 1. PRE-DEPLOYMENT CHECKLIST
 
-### Environment Variables Required
+### Environment variables richieste
 
 ```bash
-# Firebase
-VITE_FIREBASE_PROJECT_ID=your-project-id
-VITE_FIREBASE_API_KEY=your-api-key
-VITE_FIREBASE_AUTH_DOMAIN=your-auth-domain
-VITE_FIREBASE_DATABASE_URL=your-db-url
-VITE_FIREBASE_STORAGE_BUCKET=your-storage
-VITE_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
-VITE_FIREBASE_APP_ID=your-app-id
-VITE_FIRESTORE_DATABASE_ID=your-database-id
+# --- Firebase ---
+VITE_FIREBASE_PROJECT_ID=travelliniwithus
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=travelliniwithus.firebaseapp.com
+VITE_FIREBASE_DATABASE_URL=
+VITE_FIREBASE_STORAGE_BUCKET=travelliniwithus.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+VITE_FIREBASE_APP_ID=
+VITE_FIRESTORE_DATABASE_ID=(default)
 
-# Payments
-STRIPE_SECRET_KEY=sk_live_xxxxx
-STRIPE_PUBLISHABLE_KEY=pk_live_xxxxx
+# --- Payments (Stripe) — vedi STRIPE_WEBHOOK_RUNBOOK.md ---
+STRIPE_SECRET_KEY=sk_live_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+VITE_STRIPE_PUBLISHABLE_KEY=pk_live_...
 
-# API
-GEMINI_API_KEY=your-gemini-key
+# --- AI / content ---
+GEMINI_API_KEY=
 
-# Server
+# --- Mail ---
+RESEND_API_KEY=
+MAIL_FROM="Travelliniwithus <hello@travelliniwithus.it>"
+MAIL_TO_OWNER=hello@travelliniwithus.it
+
+# --- Newsletter ---
+BREVO_API_KEY=
+BREVO_LIST_ID=
+
+# --- Analytics / pixel (gated dal consenso) ---
+VITE_GA4_MEASUREMENT_ID=G-XXXXXXX
+VITE_META_PIXEL_ID=
+VITE_TIKTOK_PIXEL_ID=
+
+# --- Mappa ---
+VITE_MAPBOX_TOKEN=pk.
+
+# --- Error tracking (vedi DECISION_ERROR_TRACKING_STRATEGY) ---
+VITE_SENTRY_DSN=
+SENTRY_DSN=
+SENTRY_ENVIRONMENT=production
+SENTRY_RELEASE=
+
+# --- Server ---
 PORT=3000
 APP_URL=https://travelliniwithus.it
 NODE_ENV=production
-
-# Dev Only
-ALLOW_MOCK_CHECKOUT=false (production) | true (dev)
+ALLOW_MOCK_CHECKOUT=false
 ```
 
-### Security Checks
+### Security checks
 
-- [ ] Firebase security rules deployed and tested
-- [ ] Stripe webhook secrets configured
-- [ ] Admin emails whitelist updated
-- [ ] Environment variables not committed to git
-- [ ] CORS origins whitelist configured correctly
-- [ ] HTTPS enforced
-- [ ] Database backups enabled
+- [ ] `firestore.rules` deployati con `isAdmin()` basata su Custom Claims (no email hardcoded) — vedi [DECISION_ADMIN_CUSTOM_CLAIMS](20_Decisions/DECISION_ADMIN_CUSTOM_CLAIMS.md).
+- [ ] Stripe webhook secret verificato (runbook dedicato).
+- [ ] MFA attivo su tutti gli account admin.
+- [ ] `.env*` non committati; secrets in Vercel env (Production + Preview distinti).
+- [ ] CORS `app.use(cors())` ok per API pubbliche; se si introducono endpoint sensibili, restringere per origin.
+- [ ] HTTPS enforced (Vercel default).
+- [ ] Firestore export settimanale verde (`firestore-backup` GitHub Action).
 
-### Content Checks
+### Content checks
 
-- [ ] All articles marked `published: true`
-- [ ] All products marked `published: true`
-- [ ] Hero copy updated and reviewed
-- [ ] Images optimized and CDN ready
-- [ ] Links verified (no 404s)
-- [ ] Meta tags and SEO data complete
+- [ ] Almeno 5 articoli con `published: true`.
+- [ ] Almeno 3 prodotti con `published: true`, `price > 0`, `downloadUrl` se digitale.
+- [ ] Flag `showEditorialDemo` e `showShopDemo` disattivati nell'admin `/admin/site-content`.
+- [ ] OG image default aggiornata (1200×630) se brand asset rivisti.
+- [ ] Sitemap rigenerata (`npm run predeploy` esegue `generate-sitemap.js`).
 
-### Functional Tests
+### Functional tests
 
-- [ ] Homepage loads (Lighthouse > 80)
-- [ ] Article rendering works
-- [ ] Product page navigation works (FIX #1 applied)
-- [ ] Add to cart → checkout flow works
-- [ ] Newsletter signup works
-- [ ] Contact form submits successfully
-- [ ] Admin login works
-- [ ] Admin dashboard loads
+- [ ] Home → Lighthouse > 80 (LCP, CLS, INP nel verde).
+- [ ] Rendering articolo reale con JSON-LD Article + breadcrumb + eventuale FAQ.
+- [ ] Flow shop → add to cart → checkout Stripe live (smoke test B in runbook).
+- [ ] Newsletter signup → record in Firestore `leads` + sync Brevo se configurato.
+- [ ] Contact form `/contatti` → email `MAIL_TO_OWNER`.
+- [ ] Login admin con Custom Claims → dashboard accessibile.
+- [ ] Banner cookie: accetta, rifiuta, personalizza; riapertura da footer e `/cookie`.
+- [ ] Click affiliate in `/risorse` → evento `affiliate_click` in GA4 DebugView.
 
 ---
 
 ## 2. DEPLOYMENT STEPS
 
-### Option A: Vercel (Recommended)
+### Vercel (raccomandato)
 
 ```bash
-# 1. Connect GitHub repo
+# 1. Collega il repo GitHub al progetto Vercel (una tantum)
 vercel link
 
-# 2. Set environment variables in Vercel dashboard
-# (copy from .env.local)
+# 2. Popola le env vars tramite UI Vercel (Production + Preview)
+#    Usa la lista in sezione 1 come base.
 
-# 3. Deploy
+# 3. Trigger deploy
 vercel --prod
 
-# 4. Test production
+# 4. Smoke test
+curl -I https://travelliniwithus.it
 curl https://travelliniwithus.it/api/health
+curl https://travelliniwithus.it/sitemap.xml | head
 ```
 
-### Option B: Firebase Hosting
+### Firebase Hosting (alternativa)
 
 ```bash
-# 1. Install Firebase CLI
 npm install -g firebase-tools
-
-# 2. Login
 firebase login
-
-# 3. Initialize
 firebase init hosting
-
-# 4. Build
 npm run build
-
-# 5. Deploy
 firebase deploy --only hosting
 ```
 
-### Option C: Self-Hosted (Node.js)
+### Self-hosted Node (fallback)
 
 ```bash
-# 1. Build
 npm run build
-
-# 2. Transfer to server
 scp -r dist/* user@server:/app/public/
 scp server.ts user@server:/app/
-
-# 3. Install on server
-ssh user@server
-cd /app
-npm install --production
-
-# 4. Start with PM2
-pm2 start server.ts --name "travelliniwithus"
-pm2 save
-pm2 startup
-
-# 5. Setup reverse proxy (Nginx)
-# Configure /etc/nginx/sites-available/travelliniwithus
-# Point to localhost:3000
-# Enable HTTPS with certbot
+ssh user@server "cd /app && npm ci --production && pm2 start server.ts --name travelliniwithus"
 ```
 
 ---
 
 ## 3. POST-DEPLOYMENT MONITORING
 
-### Health Checks
+### Health checks
 
 ```bash
-# API endpoint
 curl https://travelliniwithus.it/api/health
-
-# Sitemap
 curl https://travelliniwithus.it/sitemap.xml
-
-# Home page
 curl -I https://travelliniwithus.it
 ```
 
-### Analytics Setup
+### Observability stack
 
-- [ ] Google Analytics 4 configured
-- [ ] Search Console verified
-- [ ] Bing Webmaster Tools configured
-- [ ] Sentry (or similar) error tracking enabled
-- [ ] Stripe Dashboard monitoring enabled
+- [ ] GA4: verifica eventi `page_view`, `affiliate_click`, `newsletter_subscribe`, `checkout_started` in DebugView (prime 24h).
+- [ ] Search Console: proprietà verificata + sitemap submitted.
+- [ ] Sentry: prima exception test ricevuta (attivazione per [DECISION_ERROR_TRACKING_STRATEGY](20_Decisions/DECISION_ERROR_TRACKING_STRATEGY.md)).
+- [ ] Stripe Dashboard: alert email se delivery webhook fallisce > 3 volte (runbook Stripe §Monitoraggio).
+- [ ] GitHub Actions: workflow `Firestore weekly backup` verde (check lunedì mattina).
 
-### Performance Monitoring
+### Performance
 
-- [ ] Core Web Vitals tracked
-- [ ] Page load time < 3s
-- [ ] Lighthouse score > 80
-- [ ] Database query performance monitored
-- [ ] Stripe API latency monitored
+- Lighthouse CI non ancora configurato — post Sprint 1.
+- Core Web Vitals monitorati via GA4 > Engagement > Events.
+- Stripe API latency: Dashboard > Developers > Events.
 
 ---
 
 ## 4. COMMON ISSUES & SOLUTIONS
 
-### Issue: Stripe checkout returns 503
+### Stripe checkout 503
 
-**Solution**: Check `STRIPE_SECRET_KEY` env var is set
-```bash
-# Verify
-echo $STRIPE_SECRET_KEY
+`STRIPE_SECRET_KEY` mancante → server.ts risponde 503 per design. Fix: popola env var e redeploy. Verifica: `curl -X POST /api/checkout` con body valido → non più 503.
 
-# If missing, set it
-export STRIPE_SECRET_KEY=sk_live_xxxxx
-```
+### Webhook signature verification failed
 
-### Issue: Admin login fails with "unauthorized-domain"
+Vedi [STRIPE_WEBHOOK_RUNBOOK.md §Procedura incidente](STRIPE_WEBHOOK_RUNBOOK.md).
 
-**Solution**: Add localhost and production domain to Firebase Auth
-```
-Firebase Console → Authentication → Settings
-→ Authorized domains
-→ Add: localhost, 127.0.0.1, yourdomain.it
-```
+### Admin login OK ma dashboard 403
 
-### Issue: Newsletter subscription not working
+Custom claim mancante. Esegui script `setAdminClaim` documentato in [DECISION_ADMIN_CUSTOM_CLAIMS.md](20_Decisions/DECISION_ADMIN_CUSTOM_CLAIMS.md), quindi l'utente deve fare logout/login per refresh token.
 
-**Solution**: Verify Firestore `leads` collection exists
-```
-Firestore → Create collection "leads"
-→ Security rules checked for PUBLIC create permission
-```
+### Newsletter signup silent fail
 
-### Issue: Products not showing in shop
+`BREVO_API_KEY` o `BREVO_LIST_ID` mancante → fallback save-lead-only. Verifica Firestore `leads/` per conferma, poi configura Brevo e redeploy.
 
-**Solution**: Verify products have `published: true`
-```
-Firestore Console → products collection
-→ Each product document must have: published = true
-```
+### Products non visibili
+
+- `published: false`?
+- Shop in demo mode? Disattiva flag `showShopDemo`.
+
+### Error tracking vuoto
+
+Sentry SDK non installato. Segui [DECISION_ERROR_TRACKING_STRATEGY.md](20_Decisions/DECISION_ERROR_TRACKING_STRATEGY.md) sezione "Attivazione pre-deploy".
+
+### Firestore backup non generato
+
+Controlla: vars repo `GCP_PROJECT_ID`, `GCP_WORKLOAD_IDENTITY_PROVIDER`, `GCP_BACKUP_SERVICE_ACCOUNT`, `FIRESTORE_BACKUP_BUCKET` popolate? OIDC provider configurato? Service account ha `roles/datastore.importExportAdmin`? Guida in [DISASTER_RECOVERY_RUNBOOK.md](DISASTER_RECOVERY_RUNBOOK.md).
 
 ---
 
 ## 5. ROLLBACK PROCEDURE
 
-If deployment fails:
-
 ```bash
-# Option 1: Revert to previous version
+# Vercel — via dashboard
+# Deployments → seleziona precedente → Promote to Production (1 click)
+
+# Git revert + redeploy
 git revert HEAD
-npm run build
-vercel --prod
+git push
+# Vercel redeploya automaticamente
 
-# Option 2: Rollback on Vercel dashboard
-Vercel Dashboard → Deployments → Select previous → Click "Promote to Production"
-
-# Option 3: Rollback on Firebase
-firebase deploy --only hosting --version <previous-hash>
+# Firebase Hosting
+firebase hosting:clone SOURCE:live TARGET:live --version <previous-hash>
 ```
 
----
-
-## 6. DATABASE BACKUP & RECOVERY
-
-### Firestore Backup
+Rollback regole Firestore:
 
 ```bash
-# Enable automatic backups in Firebase Console
-# Settings → Backup and Restore → Enable for all collections
-
-# Manual export (local)
-firebase firestore:export backup/$(date +%Y%m%d_%H%M%S)
-
-# Restore from backup
-firebase firestore:import backup/20260320_143000
+git checkout <commit-precedente> -- firestore.rules
+firebase deploy --only firestore:rules
 ```
+
+Rollback dati Firestore: vedi [DISASTER_RECOVERY_RUNBOOK.md §Scenario B](DISASTER_RECOVERY_RUNBOOK.md).
 
 ---
 
-## 7. SCALING CONSIDERATIONS
+## 6. BACKUP & RECOVERY
 
-### Current Limits
-- Firestore: Free tier = 1 write/sec per document
-- Storage: 5GB free
-- Functions: 2M invocations/month free
+Procedura completa in [DISASTER_RECOVERY_RUNBOOK.md](DISASTER_RECOVERY_RUNBOOK.md). In sintesi:
 
-### When to Scale
-- Newsletter subscribers > 1000 → upgrade Firestore
-- Product images > 5GB → upgrade Storage
-- Traffic > 1M/month → consider CDN upgrade
+- Workflow `.github/workflows/firestore-backup.yml` weekly (domenica 03:00 UTC) + manual dispatch.
+- Retention 30 giorni su bucket `gs://travelliniwithus-firestore-backups` (lifecycle policy).
+- Restore: `gcloud firestore import <path-backup> --project travelliniwithus` (staging per tentativi, prod in Scenario B).
+- Test restore trimestrale su progetto staging.
 
-### Scaling Steps
-1. Upgrade Firestore plan in Firebase Console
-2. Configure CDN (Cloudflare recommended)
-3. Add caching headers to static assets
-4. Consider separating API from static hosting
+---
+
+## 7. SCALING
+
+| Soglia | Azione |
+|--------|--------|
+| Newsletter > 1000 subscriber | Upgrade Brevo plan o valutare ESP alternativo |
+| Articoli > 250 | Implementare pagination + composite index su `articles` (published, createdAt desc) |
+| Storage Firebase > 5GB | Migrare asset media a Cloudinary/Bunny CDN |
+| Traffico > 1M pageview/mese | Valutare Cloudflare davanti a Vercel + runtime caching PWA |
+| Ordini > 100/mese | Scrivere upsert `orders/` su `stripeSessionId` per idempotenza (oggi non presente, vedi runbook Stripe §Duplicati) |
 
 ---
 
 ## 8. SECURITY MAINTENANCE
 
-### Monthly Tasks
-- [ ] Review Firebase security rules
-- [ ] Check admin access logs
-- [ ] Verify SSL certificate valid
-- [ ] Review active sessions
-- [ ] Backup Firestore
+### Monthly
 
-### Quarterly Tasks
-- [ ] Security audit of codebase
-- [ ] Update dependencies (npm audit)
-- [ ] Review error logs for suspicious activity
-- [ ] Test disaster recovery procedure
+- [ ] Review `firestore.rules` diff vs mese precedente.
+- [ ] Verifica log admin access (Firebase Auth → Users → last sign-in).
+- [ ] Controllo SSL certificate (Vercel automatico, ma verifica scadenza).
+- [ ] `npm audit --audit-level=high` → zero CVE bloccanti.
+- [ ] Firestore weekly backup presente (check lunedì).
+
+### Quarterly
+
+- [ ] Security audit codebase (manuale o `pr-review-toolkit:silent-failure-hunter` sul branch main).
+- [ ] `npm outdated` + upgrade sicuro dipendenze maggiori.
+- [ ] Test restore Firestore su staging (registrare in `docs/40_Daily/` con tag `[dr-test]`).
+- [ ] Review error log Sentry per top 10 exception → tickets di fix.
 
 ---
 
 ## 9. CONTACT & ESCALATION
 
-**On-Call**: skotynyanskiy@gmail.com  
-**Stripe Support**: Via Stripe Dashboard  
-**Firebase Support**: Firebase Console → Help  
-**Error Monitoring**: Check Sentry dashboard (when enabled)
+- **Owner / on-call**: skotynyanskiy@gmail.com (Rodrigo). Account `admin@travelliniwithus.it` pianificato come handover.
+- **Stripe support**: Stripe Dashboard → Help.
+- **Firebase support**: Firebase Console → Help.
+- **Error monitoring**: Sentry (dopo attivazione DSN).
+- **Backup bucket**: `gs://travelliniwithus-firestore-backups` (GCP console).
 
 ---
 
 ## Quick Start (Development)
 
 ```bash
-# Install
 npm install
-
-# Set env vars (copy from .env.local)
-export $(cat .env.local | xargs)
-
-# Run dev
-npm run dev
-
-# Run server only (for testing Node backend)
-npm run start
-
-# Test production build locally
-npm run build
-npm run preview
+cp .env.example .env.local  # popola con chiavi dev
+npm run dev                 # http://localhost:3000
+npm run typecheck
+npm run audit:quality
+npm run build && npm run preview
 ```
 
 ---
 
-## Next Steps
+## Next Steps (post Sprint 1, 2026-04-20)
 
-1. **FIX Critical Bugs** (DONE):
-   - [x] Routing `/shop/:slug` (FIX #1)
-   - [x] Verify Firestore rules (FIX #2)
-   - [x] Test Stripe config (FIX #3)
-
-2. **Add Monitoring** (FIX #4):
-   - [ ] Sentry integration
-   - [ ] Analytics tracking
-   - [ ] Error logging
-
-3. **Prepare for Launch**:
-   - [ ] Run E2E tests before deployment
-   - [ ] Load test under expected traffic
-   - [ ] Have rollback plan ready
-   - [ ] Schedule post-launch monitoring
-
+1. **Sessione finale pre-deploy** — attivazione chiavi reali:
+   - [ ] Install `@sentry/react` + `@sentry/node`, popolare DSN, sostituire body init (vedi decision doc).
+   - [ ] Stripe live endpoint + env + smoke test A/B/C.
+   - [ ] Setup WIF + bucket GCS + primo backup Firestore.
+   - [ ] Migrazione Custom Claims owner + redeploy rules.
+   - [ ] Popolare GA4/Meta/TikTok/Mapbox ID in `src/config/integrations.ts` + env vars.
+2. **Content work (owner)**: 5 articoli + 3 prodotti reali secondo [EDITORIAL_PUBLISH_CHECKLIST](13_Content/EDITORIAL_PUBLISH_CHECKLIST.md).
+3. **Post-launch**:
+   - [ ] Lighthouse CI + budget JSON.
+   - [ ] PWA runtime caching articoli (Workbox strategies).
+   - [ ] Image pipeline WebP/AVIF build-time.
+   - [ ] Refactor `server.ts` (1477 LOC → moduli `routes/`, `middleware/`, `services/`).
