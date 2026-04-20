@@ -555,6 +555,8 @@ export interface Resource {
   category: string; // 'booking' | 'digital' | 'gear'
   tags?: string[];
   badge?: string;
+  /** Nome del programma affiliate/partner per tracking UTM e analytics (default: 'generic'). */
+  partner?: string;
   isPartner?: boolean;
   order?: number;
   published?: boolean;

@@ -90,6 +90,14 @@ function Guide() {
     queryFn: async () => {
       const fetchedGuides = await fetchArticles();
 
+      if (demoSettings.showEditorialDemo) {
+        const existingSlugs = new Set(fetchedGuides.map((g) => g.slug));
+        const demoOnly = (PREVIEW_GUIDES as GuideArticle[]).filter(
+          (preview) => !existingSlugs.has(preview.slug),
+        );
+        return [...(fetchedGuides as GuideArticle[]), ...demoOnly];
+      }
+
       if (fetchedGuides.length > 0) {
         return fetchedGuides as GuideArticle[];
       }

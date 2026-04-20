@@ -11,6 +11,7 @@ import { Search, MapPin, Loader2 } from 'lucide-react';
 import PageLayout from '../../components/PageLayout';
 import Section from '../../components/Section';
 import SEOPreview from '../../components/SEOPreview';
+import { summarizeValidation, validateArticle } from '../../utils/articleValidator';
 
 const splitLines = (value: string) =>
   value
@@ -128,6 +129,41 @@ export default function ArticleEditor() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
+
+    if (published) {
+      const report = summarizeValidation(
+        validateArticle({
+          title,
+          slug,
+          excerpt,
+          description: excerpt,
+          content,
+          coverImage,
+          image: coverImage,
+          category,
+          author,
+        })
+      );
+      if (!report.canPublish) {
+        const lines = report.errors
+          .map((issue) => `• [${issue.field}] ${issue.message}${issue.hint ? ` — ${issue.hint}` : ''}`)
+          .join('\n');
+        alert(
+          `Non posso pubblicare: ${report.errorCount} errore/i da correggere.\n\n${lines}\n\nPuoi comunque salvare come bozza togliendo il flag "Pubblica immediatamente".`
+        );
+        return;
+      }
+      if (report.warningCount > 0) {
+        const warnLines = report.warnings
+          .map((issue) => `• [${issue.field}] ${issue.message}`)
+          .join('\n');
+        const ok = window.confirm(
+          `Check editoriale: ${report.warningCount} avviso/i.\n\n${warnLines}\n\nVuoi pubblicare comunque?`
+        );
+        if (!ok) return;
+      }
+    }
+
     setSaving(true);
 
     const articleId = id || slug || Date.now().toString();

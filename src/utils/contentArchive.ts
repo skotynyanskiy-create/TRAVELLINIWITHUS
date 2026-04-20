@@ -1,5 +1,8 @@
 import type { NormalizedArticle } from './articleData';
 import { DESTINATION_GROUPS } from '../config/contentTaxonomy';
+import type { ArticleData } from '../components/article';
+
+type PreviewLike = ArticleData & { id: string; slug: string; excerpt?: string };
 
 export interface ArchiveItem {
   id: string;
@@ -54,6 +57,39 @@ export function mapArticleToArchiveItem(article: NormalizedArticle): ArchiveItem
     period: article.period,
     budget: article.budget,
     duration: article.duration,
+  };
+}
+
+export function mapPreviewToArchiveItem(
+  preview: PreviewLike,
+  experienceTypes: string[] = [],
+): ArchiveItem {
+  const locationStr = preview.location || '';
+  const isItaly = /italia/i.test(locationStr);
+  const continent = preview.continent;
+  const destinationGroup = isItaly
+    ? 'Italia'
+    : continent && DESTINATION_GROUPS.includes(continent as (typeof DESTINATION_GROUPS)[number])
+      ? continent
+      : 'Altro';
+  const country = isItaly ? 'Italia' : undefined;
+
+  return {
+    id: preview.id,
+    title: preview.title,
+    excerpt: preview.excerpt || preview.description,
+    image: preview.image,
+    link: `/articolo/${preview.slug}`,
+    category: preview.category,
+    country,
+    continent,
+    location: locationStr,
+    destinationGroup,
+    experienceTypes,
+    primaryExperience: experienceTypes[0],
+    period: preview.period,
+    budget: preview.budget,
+    duration: preview.duration,
   };
 }
 
