@@ -21,7 +21,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout (solo per logging)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Auth to Google Cloud
         uses: google-github-actions/auth@v2
