@@ -23,10 +23,16 @@ import JsonLd from '../components/JsonLd';
 import FinalCtaSection from '../components/FinalCtaSection';
 import { SITE_URL } from '../config/site';
 import { fetchResources } from '../services/firebaseService';
-import { trackEvent } from '../services/analytics';
+import {
+  AFFILIATE_PARTNERS,
+  prepareAffiliateLink,
+  trackAffiliateClick,
+  type AffiliatePartner,
+} from '../lib/affiliate';
 
 interface ResourceItem {
   name: string;
+  partner: AffiliatePartner;
   description: string;
   link: string;
   tags: string[];
@@ -50,6 +56,7 @@ const resourceCategories: Array<{
     items: [
       {
         name: 'GetYourGuide',
+        partner: 'getyourguide',
         description:
           'Utile per ingressi, tour e attività quando vuoi capire disponibilita e orari prima di partire.',
         link: 'https://getyourguide.com/-cs552',
@@ -60,8 +67,9 @@ const resourceCategories: Array<{
       },
       {
         name: 'Heymondo',
+        partner: 'heymondo',
         description:
-          'Una soluzione assicurativa che valutiamo quando il viaggio ha costi, distanze o imprevisti potenziali piu alti.',
+          'Una soluzione assicurativa che valutiamo quando il viaggio ha costi, distanze o imprevisti potenziali più alti.',
         link: 'https://heymondo.it/?utm_medium=Afiliado&utm_source=TRAVELLINIWITHUS&utm_campaign=PRINCIPAL&cod_descuento=TRAVELLINIWITHUS&ag_campaign=TRAVELLINI&agencia=JG4Tepc5b47oLeK3xGDmbAX9I25ExoDeoc8cbPFt',
         tags: ['Assicurazione', 'Sconto'],
         badge: '-10%',
@@ -70,6 +78,7 @@ const resourceCategories: Array<{
       },
       {
         name: 'Skyscanner',
+        partner: 'skyscanner',
         description:
           'Buono per confrontare tratte e capire il range prezzo prima di scegliere davvero una destinazione.',
         link: 'https://skyscanner.it',
@@ -78,6 +87,7 @@ const resourceCategories: Array<{
       },
       {
         name: 'Booking.com',
+        partner: 'booking',
         description:
           'Comodo per confrontare posizione, recensioni e condizioni di cancellazione in modo rapido.',
         link: 'https://booking.com',
@@ -94,6 +104,7 @@ const resourceCategories: Array<{
     items: [
       {
         name: 'Airalo',
+        partner: 'airalo',
         description:
           `Una eSIM è utile quando vuoi arrivare con connessione già pronta, soprattutto fuori dall'Unione Europea.`,
         link: 'https://airalo.com',
@@ -104,6 +115,7 @@ const resourceCategories: Array<{
       },
       {
         name: 'Revolut',
+        partner: 'revolut',
         description:
           'Comoda per pagamenti, cambio valuta e controllo delle spese quando ti muovi tra paesi diversi.',
         link: 'https://revolut.com',
@@ -112,6 +124,7 @@ const resourceCategories: Array<{
       },
       {
         name: 'Splitwise',
+        partner: 'splitwise',
         description:
           'Semplice per dividere costi tra coppia, amici o gruppo senza ricostruire tutto a fine viaggio.',
         link: 'https://splitwise.com',
@@ -128,6 +141,7 @@ const resourceCategories: Array<{
     items: [
       {
         name: 'Peak Design Tech Pouch',
+        partner: 'amazon',
         description:
           'Una soluzione pratica per tenere ordinati cavi, batterie e piccoli accessori senza perdere tempo nello zaino.',
         link: 'https://amazon.it',
@@ -136,6 +150,7 @@ const resourceCategories: Array<{
       },
       {
         name: 'Sony A7IV',
+        partner: 'amazon',
         description:
           'Camera full-frame per contenuti foto/video di livello alto quando il viaggio ha anche un obiettivo creator.',
         link: 'https://amzn.to/49Q6d10',
@@ -144,6 +159,7 @@ const resourceCategories: Array<{
       },
       {
         name: 'DJI Mini 3 Pro',
+        partner: 'amazon',
         description:
           'Drone leggero per punti di vista ampi, da usare solo dove regole, condizioni e sicurezza lo permettono.',
         link: 'https://amzn.to/3P39XfN',
@@ -155,6 +171,11 @@ const resourceCategories: Array<{
   },
 ];
 
+const HEYMONDO_AFFILIATE_URL =
+  'https://heymondo.it/?utm_medium=Afiliado&utm_source=TRAVELLINIWITHUS&utm_campaign=PRINCIPAL&cod_descuento=TRAVELLINIWITHUS&ag_campaign=TRAVELLINI&agencia=JG4Tepc5b47oLeK3xGDmbAX9I25ExoDeoc8cbPFt';
+
+const AIRALO_PROMO_CODE = 'TRAVELLINI3';
+
 const resourcePrinciples = [
   {
     icon: <Shield className="text-[var(--color-accent)]" size={20} />,
@@ -164,7 +185,7 @@ const resourcePrinciples = [
   {
     icon: <Compass className="text-[var(--color-accent)]" size={20} />,
     title: 'Metodo prima del codice',
-    text: 'Il punto non e lo sconto: e capire quando uno strumento ha davvero senso.',
+    text: 'Il punto non è lo sconto: è capire quando uno strumento ha davvero senso.',
   },
   {
     icon: <BadgePercent className="text-[var(--color-accent)]" size={20} />,
@@ -198,8 +219,11 @@ export default function Risorse() {
       resourceCategories.map((category) => ({
         ...category,
         items:
-          firestoreByCategory?.[category.id]?.map((resource) => ({
+          firestoreByCategory?.[category.id]?.map<ResourceItem>((resource) => ({
             name: resource.name,
+            partner: (resource.partner && resource.partner in AFFILIATE_PARTNERS
+              ? (resource.partner as AffiliatePartner)
+              : 'generic'),
             description: resource.description,
             link: resource.link,
             tags: resource.tags ?? [],
@@ -210,10 +234,27 @@ export default function Risorse() {
     [firestoreByCategory]
   );
 
+  const heymondoCta = useMemo(
+    () =>
+      prepareAffiliateLink('heymondo', HEYMONDO_AFFILIATE_URL, {
+        campaign: 'risorse_benefit',
+        placement: 'risorse_benefit_banner',
+        label: 'Heymondo -10%',
+      }),
+    []
+  );
+
   const handleCopy = () => {
-    navigator.clipboard.writeText('TRAVELLINI3');
+    navigator.clipboard.writeText(AIRALO_PROMO_CODE);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+    trackAffiliateClick({
+      partner: 'airalo',
+      url: `promo_code:${AIRALO_PROMO_CODE}`,
+      campaign: 'risorse_benefit',
+      placement: 'risorse_benefit_banner_copy',
+      label: 'Copia Airalo',
+    });
   };
 
   return (
@@ -246,7 +287,7 @@ export default function Risorse() {
               Strumenti scelti <span className="italic text-black/55">con criterio</span>
             </h1>
             <p className="mt-8 max-w-2xl text-lg leading-relaxed text-black/68">
-              Questa non e una pagina di link a caso. E una selezione editoriale di strumenti che
+              Questa non è una pagina di link a caso. È una selezione editoriale di strumenti che
               usiamo, valutiamo o riteniamo coerenti con il nostro modo di viaggiare: utili,
               dichiarati e mai coupon-first.
             </p>
@@ -302,19 +343,23 @@ export default function Risorse() {
               </div>
 
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-                {category.items.map((item) => (
+                {category.items.map((item) => {
+                  const { href: affiliateHref, onClick: handleAffiliateClick } = prepareAffiliateLink(
+                    item.partner,
+                    item.link,
+                    {
+                      campaign: `risorse_${category.id}`,
+                      placement: 'risorse_grid',
+                      label: item.name,
+                    }
+                  );
+                  return (
                   <motion.a
                     key={item.name}
-                    href={item.link}
+                    href={affiliateHref}
                     target="_blank"
                     rel="nofollow sponsored noopener noreferrer"
-                    onClick={() =>
-                      trackEvent('affiliate_click', {
-                        name: item.name,
-                        category: category.id,
-                        url: item.link,
-                      })
-                    }
+                    onClick={handleAffiliateClick}
                     className="group flex min-h-[290px] flex-col rounded-[2rem] border border-black/5 bg-[var(--color-sand)] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-accent)]/35 hover:bg-white hover:shadow-xl"
                   >
                     <div className="mb-5 flex items-start justify-between gap-4">
@@ -360,7 +405,8 @@ export default function Risorse() {
                       )}
                     </div>
                   </motion.a>
-                ))}
+                  );
+                })}
               </div>
             </motion.section>
           ))}
@@ -380,7 +426,8 @@ export default function Risorse() {
             </div>
             <div className="grid gap-4 sm:grid-cols-2 lg:min-w-[420px]">
               <Button
-                href="https://heymondo.it/?utm_medium=Afiliado&utm_source=TRAVELLINIWITHUS&utm_campaign=PRINCIPAL&cod_descuento=TRAVELLINIWITHUS&ag_campaign=TRAVELLINI&agencia=JG4Tepc5b47oLeK3xGDmbAX9I25ExoDeoc8cbPFt"
+                href={heymondoCta.href}
+                onClick={heymondoCta.onClick}
                 variant="outline-light"
                 rel="nofollow sponsored noopener noreferrer"
                 className="w-full"
