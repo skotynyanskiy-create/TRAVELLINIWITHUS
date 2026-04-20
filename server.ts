@@ -126,14 +126,35 @@ interface DemoSettings {
   showShopDemo: boolean;
 }
 
-const DEMO_ARTICLE_SLUG = 'dolomiti-rifugi-design';
+const DEMO_ARTICLE_SLUGS = new Set([
+  'dolomiti-rifugi-design',
+  'puglia-roadtrip-borghi-bianchi',
+  'sicilia-orientale-5-giorni',
+  'islanda-ring-road-10-giorni',
+  'lisbona-weekend-lento',
+  'provenza-lavanda-luberon',
+  'giappone-kyoto-osaka-14-giorni',
+  'vietnam-hoi-an-8-giorni',
+  'peru-valle-sacra-machu-picchu',
+  'west-coast-usa-roadtrip-14-giorni',
+  'marocco-medina-deserto-7-giorni',
+  'nuova-zelanda-south-island-12-giorni',
+  'weekend-borgo-lento',
+  'guida-prima-di-prenotare',
+]);
 const DEMO_PRODUCT_SLUGS = new Set([
   'guida-premium-dolomiti',
   'guida-premium-giappone',
-  'itinerario-puglia',
-  'planner-viaggio-islanda',
-  'safari-template-sudafrica',
-  'weekend-trentino-spa',
+  'guida-premium-islanda',
+  'guida-premium-puglia',
+  'planner-viaggio',
+  'budget-tracker',
+  'packing-checklist',
+  'weekend-roma',
+  'weekend-firenze',
+  'weekend-lisbona',
+  'bundle-premium-itinerari',
+  'couple-starter-kit',
 ]);
 
 const STATIC_APP_ROUTES = new Set([
@@ -390,7 +411,7 @@ async function resolveAppStatus(pathname: string) {
       return 404;
     }
 
-    if (slug === DEMO_ARTICLE_SLUG) {
+    if (DEMO_ARTICLE_SLUGS.has(slug)) {
       return 200;
     }
 
