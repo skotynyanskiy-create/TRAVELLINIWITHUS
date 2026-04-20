@@ -76,10 +76,16 @@ service cloud.firestore {
     function isOwner(userId) {
        return isAuthenticated() && request.auth.uid == userId;
     }
+    // Admin authorization — in ordine di priorita:
+    //   1. Custom Claim `admin == true` sul token (fonte di verita in prod)
+    //   2. `users/{uid}.role == 'admin'` (legacy, mantenuto per compat)
+    //   3. Email bootstrap verificata (fallback minimo per primo accesso owner;
+    //      rimuovere dopo aver assegnato il claim via `scripts/set-admin-claim.mjs`)
     function isAdmin() {
       return isAuthenticated() &&
         (
-          (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+          request.auth.token.admin == true ||
+          (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
            get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin') ||
           (request.auth.token.email == "skotynyanskiy@gmail.com" && request.auth.token.email_verified == true)
         );
