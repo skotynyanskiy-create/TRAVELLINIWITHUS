@@ -1,0 +1,58 @@
+name: Firestore weekly backup
+
+on:
+  schedule:
+    # Ogni domenica 03:00 UTC (05:00 Europe/Rome in estate, 04:00 in inverno)
+    - cron: '0 3 * * 0'
+  workflow_dispatch:
+    inputs:
+      bucket:
+        description: 'GCS bucket di destinazione (senza gs://). Se vuoto usa vars.FIRESTORE_BACKUP_BUCKET'
+        required: false
+        type: string
+
+jobs:
+  export:
+    name: Export Firestore to GCS
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # abilita OIDC per autenticazione GCP senza service account JSON
+    timeout-minutes: 30
+    steps:
+      - name: Checkout (solo per logging)
+        uses: actions/checkout@v4
+
+      - name: Auth to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_BACKUP_SERVICE_ACCOUNT }}
+
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+
+      - name: Compute export prefix
+        id: prefix
+        run: |
+          echo "prefix=firestore-backups/$(date -u +%Y-%m-%d_%H%M)" >> "$GITHUB_OUTPUT"
+
+      - name: Export Firestore
+        run: |
+          BUCKET="${{ inputs.bucket || vars.FIRESTORE_BACKUP_BUCKET }}"
+          if [ -z "$BUCKET" ]; then
+            echo "::error::FIRESTORE_BACKUP_BUCKET non configurato (vars o input)"
+            exit 1
+          fi
+          gcloud firestore export "gs://${BUCKET}/${{ steps.prefix.outputs.prefix }}" \
+            --project "${{ vars.GCP_PROJECT_ID }}"
+
+      - name: Summary
+        run: |
+          echo "### Export completato" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Project: \`${{ vars.GCP_PROJECT_ID }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Destinazione: \`gs://${{ inputs.bucket || vars.FIRESTORE_BACKUP_BUCKET }}/${{ steps.prefix.outputs.prefix }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Retention: vedere lifecycle rule del bucket (default suggerito 30 giorni)" >> $GITHUB_STEP_SUMMARY

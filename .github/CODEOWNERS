@@ -1,0 +1,24 @@
+# CODEOWNERS — Travelliniwithus
+# Ogni PR richiede review dell'owner indicato per i path corrispondenti.
+# L'ultimo match vince. Vedi https://docs.github.com/en/repositories/managing-your-repositories-settings-and-customizations/customizing-your-repository/about-code-owners
+
+# Default: owner globale
+*                               @skotynyanskiy-create
+
+# File high-risk — richiedono attenzione esplicita
+/server.ts                      @skotynyanskiy-create
+/firestore.rules                @skotynyanskiy-create
+/firestore.indexes.json         @skotynyanskiy-create
+/src/config/admin.ts            @skotynyanskiy-create
+
+# Infrastruttura CI / deploy
+/.github/workflows/             @skotynyanskiy-create
+/firebase.json                  @skotynyanskiy-create
+/vercel.json                    @skotynyanskiy-create
+/.firebaserc                    @skotynyanskiy-create
+
+# Operating rules / doc canoniche
+/CLAUDE.md                      @skotynyanskiy-create
+/AGENTS.md                      @skotynyanskiy-create
+/DESIGN.md                      @skotynyanskiy-create
+/.claude/                       @skotynyanskiy-create

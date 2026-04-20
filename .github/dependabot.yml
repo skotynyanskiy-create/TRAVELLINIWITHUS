@@ -1,0 +1,62 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "07:00"
+      timezone: Europe/Rome
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: chore
+      include: scope
+    labels:
+      - dependencies
+      - npm
+    groups:
+      react:
+        patterns:
+          - react
+          - react-dom
+          - react-router-dom
+          - react-helmet-async
+          - react-error-boundary
+          - react-intersection-observer
+      firebase:
+        patterns:
+          - firebase
+          - firebase-admin
+      stripe:
+        patterns:
+          - stripe
+          - "@stripe/*"
+      tailwind:
+        patterns:
+          - tailwindcss
+          - "@tailwindcss/*"
+          - autoprefixer
+      tooling:
+        patterns:
+          - eslint
+          - "@typescript-eslint/*"
+          - prettier
+          - typescript
+          - vite
+          - vitest
+          - "@playwright/*"
+          - tsx
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "07:00"
+      timezone: Europe/Rome
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: chore(ci)
+    labels:
+      - dependencies
+      - github-actions
