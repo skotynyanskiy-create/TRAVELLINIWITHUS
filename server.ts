@@ -14,6 +14,10 @@ import {
   renderMediaKitNotification,
   renderMediaKitAutoReply,
 } from './src/lib/email';
+import {
+  initServerErrorTracking,
+  captureServerException,
+} from './src/lib/serverErrorTracking';
 
 dotenv.config();
 
@@ -742,6 +746,15 @@ function injectProductMetaTags(html: string, product: ProductRecord, url: string
 }
 
 async function startServer() {
+  initServerErrorTracking();
+
+  process.on('unhandledRejection', (reason) => {
+    captureServerException(reason, { source: 'unhandledRejection' });
+  });
+  process.on('uncaughtException', (error) => {
+    captureServerException(error, { source: 'uncaughtException' });
+  });
+
   const app = express();
   const PORT = Number(process.env.PORT) || 3000;
 
@@ -1468,6 +1481,16 @@ async function startServer() {
       }
     });
   }
+
+  app.use((err: unknown, req: express.Request, res: express.Response, _next: express.NextFunction) => {
+    captureServerException(err, {
+      source: 'express-error-middleware',
+      method: req.method,
+      path: req.originalUrl,
+    });
+    if (res.headersSent) return;
+    res.status(500).json({ error: 'Errore interno. Riprova piu tardi.' });
+  });
 
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on http://localhost:${PORT}`);
