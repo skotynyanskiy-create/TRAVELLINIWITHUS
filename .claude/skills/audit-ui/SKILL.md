@@ -1,6 +1,7 @@
 ---
 name: audit-ui
 description: Audit UI consistency in the TRAVELLINIWITHUS project across CSS variables, inline styles, Tailwind patterns, responsive behavior, accessibility, icons, and layout wrappers.
+agent: travellini-quality-auditor
 ---
 
 # /audit-ui

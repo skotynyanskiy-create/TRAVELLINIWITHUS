@@ -1,6 +1,7 @@
 ---
 name: stripe-flow
 description: Audit the TRAVELLINIWITHUS Stripe checkout flow, including cart, server security, price integrity, webhooks, environment variables, and payment errors.
+agent: travellini-quality-auditor
 ---
 
 # /stripe-flow

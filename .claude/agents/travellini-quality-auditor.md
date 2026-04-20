@@ -33,3 +33,11 @@ npm run predeploy
 ```
 
 Prioritize: bugs, accessibility blockers, broken routing, broken images, horizontal overflow, missing headings, release blockers, stale docs. Report findings first with file/route references and severity. Do not edit files.
+
+## Riferimenti di progetto
+
+- `AGENTS.md` — guida operativa radice
+- `CLAUDE.md` — operating rules TRAVELLINIWITHUS
+- `docs/` — vault operativo Obsidian
+- `docs/MARKETING_OPERATIONS_HUB.md` — hub campagne e operations
+- `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md` — brand voice e identity

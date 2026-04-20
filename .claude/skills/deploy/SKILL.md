@@ -1,6 +1,7 @@
 ---
 name: deploy
 description: Deploy the TRAVELLINIWITHUS site after mandatory preflight checks, build validation, Firebase Hosting checks, and release documentation updates.
+agent: travellini-release-quality
 ---
 
 # /deploy

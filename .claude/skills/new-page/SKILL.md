@@ -1,6 +1,7 @@
 ---
 name: new-page
 description: Scaffold a new TRAVELLINIWITHUS page with SEO, PageLayout, Section, route wiring, optional navigation, sitemap considerations, and project conventions.
+agent: travellini-frontend-builder
 ---
 
 # /new-page

@@ -1,6 +1,7 @@
 ---
 name: seo-check
 description: Audit TRAVELLINIWITHUS SEO quality across meta tags, Open Graph, structured data, image alt text, sitemap, robots, headings, and Core Web Vitals basics.
+agent: travellini-seo-conversion-strategist
 ---
 
 # /seo-check

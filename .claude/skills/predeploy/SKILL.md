@@ -1,6 +1,7 @@
 ---
 name: predeploy
 description: Run TRAVELLINIWITHUS pre-deployment checks across TypeScript, lint, tests, build, sitemap, robots, environment, security, and release notes.
+agent: travellini-quality-auditor
 ---
 
 # /predeploy

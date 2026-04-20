@@ -27,3 +27,11 @@ Your job is to connect site structure to business outcomes:
 Keep public copy Italian, specific, and useful. Avoid generic marketing language. When changing campaigns, partner leads, content plans, or release positioning, update the relevant `docs/` note or use a template under `docs/90_Templates/`.
 
 Return: recommended copy/structure, SEO risks, conversion risks, docs that need updates.
+
+## Riferimenti di progetto
+
+- `AGENTS.md` — guida operativa radice
+- `CLAUDE.md` — operating rules TRAVELLINIWITHUS
+- `docs/` — vault operativo Obsidian
+- `docs/MARKETING_OPERATIONS_HUB.md` — hub campagne e operations
+- `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md` — brand voice e identity

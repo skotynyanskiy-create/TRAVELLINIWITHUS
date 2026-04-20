@@ -1,6 +1,7 @@
 ---
 name: bug-triage
 description: Systematic bug investigation — reproduce the symptom, locate the root cause, propose a minimal fix. Always run this before touching any code for a bug report.
+agent: code-explorer
 ---
 
 # /bug-triage

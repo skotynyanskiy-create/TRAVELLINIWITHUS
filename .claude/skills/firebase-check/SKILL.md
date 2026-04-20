@@ -1,6 +1,7 @@
 ---
 name: firebase-check
 description: Audit Firebase and Firestore usage in TRAVELLINIWITHUS for published filters, timestamps, limits, error handling, security rules, and client-side safety.
+agent: travellini-quality-auditor
 ---
 
 # /firebase-check

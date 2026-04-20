@@ -29,3 +29,11 @@ Rules:
 - Run `npm run typecheck` after every TypeScript edit. Run `npm run audit:ui` for UI changes.
 
 Return changed files, checks run, and remaining risks.
+
+## Riferimenti di progetto
+
+- `AGENTS.md` — guida operativa radice
+- `CLAUDE.md` — operating rules TRAVELLINIWITHUS
+- `docs/` — vault operativo Obsidian
+- `docs/MARKETING_OPERATIONS_HUB.md` — hub campagne e operations
+- `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md` — brand voice e identity

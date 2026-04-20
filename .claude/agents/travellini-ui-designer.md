@@ -28,3 +28,11 @@ Focus on:
 - partnership/media kit conversion
 
 Return concise findings with route/component context, severity, and concrete design direction. Do not edit files.
+
+## Riferimenti di progetto
+
+- `AGENTS.md` — guida operativa radice
+- `CLAUDE.md` — operating rules TRAVELLINIWITHUS
+- `docs/` — vault operativo Obsidian
+- `docs/MARKETING_OPERATIONS_HUB.md` — hub campagne e operations
+- `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md` — brand voice e identity

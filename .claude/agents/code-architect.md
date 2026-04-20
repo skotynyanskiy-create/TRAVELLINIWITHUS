@@ -19,3 +19,11 @@ Rules:
 - Flag all touches to `server.ts`, `firestore.rules`, `src/config/admin.ts` as high-risk.
 - Do not implement changes yourself — return the plan for the implementer to execute.
 - If the problem is actually simple, say so and name which agent should handle it instead.
+
+## Riferimenti di progetto
+
+- `AGENTS.md` — guida operativa radice
+- `CLAUDE.md` — operating rules TRAVELLINIWITHUS
+- `docs/` — vault operativo Obsidian
+- `docs/MARKETING_OPERATIONS_HUB.md` — hub campagne e operations
+- `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md` — brand voice e identity

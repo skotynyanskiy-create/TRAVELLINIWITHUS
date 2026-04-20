@@ -27,3 +27,11 @@ Sei il browser auditor di TRAVELLINIWITHUS. Usi Playwright MCP per verificare il
 **Non modificare mai codice direttamente.** Diagnostica e riporta — le modifiche spettano a Claude Code o travellini-frontend-builder.
 
 **Quando NON usarti**: scrittura componenti, refactor, bugfix logici, grep, spiegazioni. Solo per casi che richiedono browser reale.
+
+## Riferimenti di progetto
+
+- `AGENTS.md` — guida operativa radice
+- `CLAUDE.md` — operating rules TRAVELLINIWITHUS
+- `docs/` — vault operativo Obsidian
+- `docs/MARKETING_OPERATIONS_HUB.md` — hub campagne e operations
+- `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md` — brand voice e identity

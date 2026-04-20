@@ -25,3 +25,11 @@ Rules:
 - No padding, no summaries of what you read, just findings.
 - If asked to find something and it is not there, say so clearly.
 - Grep before reading when looking for a symbol.
+
+## Riferimenti di progetto
+
+- `AGENTS.md` — guida operativa radice
+- `CLAUDE.md` — operating rules TRAVELLINIWITHUS
+- `docs/` — vault operativo Obsidian
+- `docs/MARKETING_OPERATIONS_HUB.md` — hub campagne e operations
+- `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md` — brand voice e identity

@@ -1,6 +1,7 @@
 ---
 name: new-article
 description: Scaffold a Travelliniwithus editorial article seed and matching Obsidian content note with Italian metadata, slug, category, and draft publication state.
+agent: travellini-seo-conversion-strategist
 ---
 
 # /new-article

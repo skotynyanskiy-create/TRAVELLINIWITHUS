@@ -1,6 +1,7 @@
 ---
 name: deep-refactor
 description: Controlled multi-file refactor with written plan and owner sign-off. Use only when small-fix is genuinely not enough. Expensive — use sparingly.
+agent: code-architect
 ---
 
 # /deep-refactor

@@ -1,6 +1,7 @@
 ---
 name: explain-module
 description: Quickly understand a file or module — what it does, what it exports, its dependencies, and where it is used. Read-only. Use code-explorer agent to keep cost low.
+agent: code-explorer
 ---
 
 # /explain-module
