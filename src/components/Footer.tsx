@@ -133,17 +133,12 @@ export default function Footer() {
                   <li>
                     <Link
                       to="/shop"
-                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                      className="inline-flex items-center gap-2 text-base transition-colors hover:text-[var(--color-accent)]"
                     >
                       Shop Premium
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/mappa"
-                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      Mappa Interattiva
+                      <span className="rounded-full bg-[var(--color-accent)] px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-widest text-white">
+                        Prossimamente
+                      </span>
                     </Link>
                   </li>
                 </ul>
@@ -176,14 +171,6 @@ export default function Footer() {
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
                       Toolkit di viaggio
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/disclaimer"
-                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      Affiliazioni
                     </Link>
                   </li>
                 </ul>

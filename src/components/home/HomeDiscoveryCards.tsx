@@ -18,6 +18,7 @@ import {
 } from '../../config/experienceContent';
 import { getExperienceVisual } from '../../config/experienceVisuals';
 import { GUIDE_CATEGORY_VISUALS } from '../../config/guideContent';
+import { MEDIA } from '../../config/mediaAssets';
 
 function GuideTile({ category, description }: { category: GuideCategory; description: string }) {
   const visual = GUIDE_CATEGORY_VISUALS[category];
@@ -39,20 +40,7 @@ function GuideTile({ category, description }: { category: GuideCategory; descrip
   );
 }
 
-const EXPERIENCE_IMAGES: Record<string, string> = {
-  'Posti particolari':
-    'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=900&auto=format&fit=crop',
-  'Food & Ristoranti':
-    'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=900&auto=format&fit=crop',
-  'Hotel con carattere':
-    'https://images.unsplash.com/photo-1445019980597-93fa8acb246c?q=80&w=900&auto=format&fit=crop',
-  'Weekend romantici':
-    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=900&auto=format&fit=crop',
-  "Borghi e città d'arte":
-    'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?q=80&w=900&auto=format&fit=crop',
-  'Relax, terme e spa':
-    'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=900&auto=format&fit=crop',
-};
+const EXPERIENCE_IMAGES: Record<string, string> = MEDIA.experienceCards;
 
 function getCleanExperienceLabel(type: ExperienceType) {
   return getExperienceCardLabel(type);

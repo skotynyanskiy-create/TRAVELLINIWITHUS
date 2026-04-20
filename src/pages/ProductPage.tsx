@@ -109,7 +109,23 @@ export default function ProductPage() {
           'Un contenuto premium Travelliniwithus pensato per aiutarti a organizzare meglio il viaggio.'
         }
         canonical={`${SITE_URL}/shop/${product.slug}`}
+        image={product.imageUrl}
         noindex={isDemoProduct}
+        product={{
+          name: product.name,
+          description: product.description,
+          image: product.imageUrl,
+          url: `${SITE_URL}/shop/${product.slug}`,
+          price: product.price,
+          availability: 'PreOrder',
+          category: product.category,
+          sku: product.id,
+        }}
+        breadcrumbs={[
+          { name: 'Home', url: SITE_URL },
+          { name: 'Shop', url: `${SITE_URL}/shop` },
+          { name: product.name, url: `${SITE_URL}/shop/${product.slug}` },
+        ]}
       />
 
       <Section className="pt-0 pb-0">

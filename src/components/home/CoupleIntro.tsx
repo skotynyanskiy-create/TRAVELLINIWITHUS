@@ -1,15 +1,15 @@
 import { motion } from 'motion/react';
 import { ArrowRight, BadgeCheck, Camera, MapPinned } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { MEDIA } from '../../config/mediaAssets';
 
-const COUPLE_IMG =
-  'https://images.unsplash.com/photo-1516589091380-5d8e87df6999?w=800&auto=format&fit=crop&q=80';
+const COUPLE_IMG = MEDIA.couple.intro;
 
 const METHOD_STANDARDS = [
   {
     icon: MapPinned,
     title: 'Provato sul posto',
-    text: 'Atmosfera, zona, logistica e tempi filtrati da chi c e stato davvero.',
+    text: 'Atmosfera, zona, logistica e tempi filtrati da chi c\u2019è stato davvero.',
   },
   {
     icon: Camera,
@@ -78,7 +78,7 @@ export default function CoupleIntro() {
             </p>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/65 md:text-lg">
               Rodrigo e Betta tengono insieme sguardo personale, immagini, ricerca e dettagli pratici:
-              e questo che rende il progetto utile sia per chi legge sia per i partner giusti.
+              è questo che rende il progetto utile sia per chi legge sia per i partner giusti.
             </p>
 
             <div className="mt-7 grid gap-3 md:grid-cols-3">

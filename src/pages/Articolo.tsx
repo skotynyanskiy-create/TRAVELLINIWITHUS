@@ -316,30 +316,25 @@ export default function Articolo() {
     }
   };
 
-  const structuredData = isPreviewArticle
-    ? []
+  const articleSchemaData = isPreviewArticle
+    ? undefined
+    : {
+        headline: articleTitle,
+        description: articleDescription,
+        image: articleImage,
+        datePublished,
+        dateModified,
+        authorName,
+        url: articleUrl,
+        articleSection: article.category,
+      };
+
+  const articleBreadcrumbs = isPreviewArticle
+    ? undefined
     : [
-        {
-          '@context': 'https://schema.org',
-          '@type': 'BlogPosting',
-          headline: articleTitle,
-          description: articleDescription,
-          image: [articleImage],
-          datePublished,
-          dateModified,
-          author: [{ '@type': 'Person', name: authorName, url: `${SITE_URL}/chi-siamo` }],
-          publisher: { '@type': 'Organization', name: 'Travelliniwithus', url: SITE_URL },
-          mainEntityOfPage: articleUrl,
-        },
-        {
-          '@context': 'https://schema.org',
-          '@type': 'BreadcrumbList',
-          itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
-            { '@type': 'ListItem', position: 2, name: article.category, item: `${SITE_URL}${categoryPath}` },
-            { '@type': 'ListItem', position: 3, name: article.title, item: articleUrl },
-          ],
-        },
+        { name: 'Home', url: SITE_URL },
+        { name: article.category, url: `${SITE_URL}${categoryPath}` },
+        { name: article.title, url: articleUrl },
       ];
 
   return (
@@ -352,16 +347,13 @@ export default function Articolo() {
           image={articleImage}
           type="article"
           noindex={isPreviewArticle}
+          article={articleSchemaData}
+          breadcrumbs={articleBreadcrumbs}
         />
         <Helmet>
           {!isPreviewArticle && <meta property="article:published_time" content={datePublished} />}
           {!isPreviewArticle && article.updatedAt && <meta property="article:modified_time" content={dateModified} />}
           <meta name="author" content={authorName} />
-          {structuredData.map((data, index) => (
-            <script key={index} type="application/ld+json">
-              {JSON.stringify(data)}
-            </script>
-          ))}
         </Helmet>
 
         <motion.div

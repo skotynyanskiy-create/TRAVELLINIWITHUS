@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ErrorBoundary } from 'react-error-boundary';
 import Breadcrumbs from '../components/Breadcrumbs';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
@@ -61,17 +60,7 @@ const shopPrinciples = [
   },
 ];
 
-export default function ShopWrapper() {
-  return (
-    <ErrorBoundary
-      fallback={<div className="py-20 text-center text-red-500">Impossibile caricare i prodotti</div>}
-    >
-      <Shop />
-    </ErrorBoundary>
-  );
-}
-
-function Shop() {
+export default function Shop() {
   const { addToCart, setIsCartOpen, clearCart } = useCart();
   const { data: demoContent } = useSiteContent('demo');
   const demoSettings = demoContent ?? siteContentDefaults.demo;
@@ -99,6 +88,15 @@ function Shop() {
     queryKey: ['products', demoSettings.showShopDemo],
     queryFn: async () => {
       const fetchedProducts = await fetchProducts();
+
+      if (demoSettings.showShopDemo) {
+        const existingSlugs = new Set(fetchedProducts.map((p) => p.slug));
+        const demoOnly = (DEMO_PRODUCTS as Product[]).filter(
+          (demo) => !existingSlugs.has(demo.slug),
+        );
+        return [...(fetchedProducts as Product[]), ...demoOnly];
+      }
+
       if (fetchedProducts.length > 0) {
         return fetchedProducts as Product[];
       }
@@ -196,7 +194,7 @@ function Shop() {
                     </div>
                     <h3 className="mb-2 text-2xl font-serif text-zinc-900">Pagamento annullato</h3>
                     <p className="mb-8 text-zinc-600">
-                      Il processo e stato interrotto. Nessun addebito e stato effettuato.
+                      Il processo è stato interrotto. Nessun addebito è stato effettuato.
                     </p>
                   </>
                 )}
@@ -216,15 +214,24 @@ function Shop() {
 
           <div className="mt-8 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
             <div>
-              <span className="mb-6 block text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
-                Boutique editoriale
-              </span>
+              <div className="mb-6 flex flex-wrap items-center gap-3">
+                <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
+                  Boutique editoriale
+                </span>
+                <span className="rounded-full bg-[var(--color-accent)] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-white">
+                  Prossimamente
+                </span>
+              </div>
               <h1 className="text-display-1">
                 Guide e toolkit <span className="italic text-black/55">per partire meglio</span>
               </h1>
               <p className="mt-8 max-w-2xl text-lg leading-relaxed text-black/68">
                 Lo shop deve essere una continuazione del progetto editoriale: pochi prodotti,
                 utili, leggibili da telefono e costruiti per ridurre incertezza prima del viaggio.
+              </p>
+              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-black/55">
+                Stiamo rifinendo i primi prodotti. Iscriviti alla newsletter qui sotto per essere
+                avvisato appena lo shop apre.
               </p>
             </div>
 
@@ -352,8 +359,8 @@ function Shop() {
                   Dal viaggio reale al formato utile.
                 </h2>
                 <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/68 md:text-lg">
-                  Dopo {BRAND_STATS.yearsOfTravel} anni di viaggi, il valore non e aggiungere file:
-                  e distillare decisioni, mappe, priorita e indirizzi in qualcosa che puoi usare in
+                  Dopo {BRAND_STATS.yearsOfTravel} anni di viaggi, il valore non è aggiungere file:
+                  è distillare decisioni, mappe, priorità e indirizzi in qualcosa che puoi usare in
                   fretta.
                 </p>
               </div>
@@ -365,7 +372,7 @@ function Shop() {
                   Regola prodotto
                 </p>
                 <p className="mt-4 text-2xl font-serif leading-relaxed">
-                  Se non e utile da consultare mentre stai decidendo o viaggiando, non entra nello
+                  Se non è utile da consultare mentre stai decidendo o viaggiando, non entra nello
                   shop.
                 </p>
               </div>

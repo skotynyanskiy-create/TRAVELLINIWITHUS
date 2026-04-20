@@ -10,6 +10,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Layout from './components/Layout';
 import ScrollToTop from './components/ScrollToTop';
 import ProtectedRoute from './components/ProtectedRoute';
+import ErrorBoundary from './components/ErrorBoundary';
 import { FavoritesProvider } from './context/FavoritesContext';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
@@ -38,9 +39,7 @@ const Preferiti = lazy(() => import('./pages/Preferiti'));
 const Risorse = lazy(() => import('./pages/Risorse'));
 const Shop = lazy(() => import('./pages/Shop'));
 const ProductPage = lazy(() => import('./pages/ProductPage'));
-const Club = lazy(() => import('./pages/Club'));
 const Guide = lazy(() => import('./pages/Guide'));
-const Mappa = lazy(() => import('./pages/Mappa'));
 const MieiAcquisti = lazy(() => import('./pages/MieiAcquisti'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
@@ -82,7 +81,8 @@ export default function App() {
               <BrowserRouter>
                 <ScrollToTop />
                 <Suspense fallback={<PageLoader />}>
-                  <Routes>
+                  <ErrorBoundary>
+                    <Routes>
                     <Route path="/" element={<Layout />}>
                       <Route index element={<Home />} />
                       <Route path="destinazioni" element={<Destinazioni />} />
@@ -97,8 +97,6 @@ export default function App() {
                       <Route path="risorse" element={<Risorse />} />
                       <Route path="shop" element={<Shop />} />
                       <Route path="shop/:slug" element={<ProductPage />} />
-                      <Route path="club" element={<Club />} />
-                      <Route path="mappa" element={<Mappa />} />
                       <Route path="account/acquisti" element={<MieiAcquisti />} />
                       
                       {/* Admin Routes */}
@@ -119,7 +117,8 @@ export default function App() {
 
                       <Route path="*" element={<NotFound />} />
                     </Route>
-                  </Routes>
+                    </Routes>
+                  </ErrorBoundary>
                 </Suspense>
               </BrowserRouter>
             </FavoritesProvider>

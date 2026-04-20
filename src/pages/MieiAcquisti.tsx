@@ -133,7 +133,7 @@ function OrderCard({ order }: { order: Order }) {
 }
 
 export default function MieiAcquisti() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, signIn } = useAuth();
 
   const { data: orders = [], isLoading } = useQuery<Order[]>({
     queryKey: ['userOrders', user?.uid, user?.email],
@@ -186,12 +186,13 @@ export default function MieiAcquisti() {
             <p className="text-black/60 font-light mb-8">
               Effettua l'accesso con lo stesso account usato al momento dell'acquisto.
             </p>
-            <Link
-              to="/club"
+            <button
+              type="button"
+              onClick={() => { void signIn(); }}
               className="inline-flex items-center gap-2 bg-[var(--color-ink)] text-white hover:bg-[var(--color-accent)] transition-colors px-8 py-3.5 rounded-full font-bold text-xs uppercase tracking-widest"
             >
-              Accedi
-            </Link>
+              Accedi con Google
+            </button>
           </div>
         ) : orders.length === 0 ? (
           <div className="bg-white rounded-[2rem] border border-black/5 p-12 text-center">

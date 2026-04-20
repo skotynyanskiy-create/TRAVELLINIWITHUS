@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ArrowUp } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
 import SEO from '../components/SEO';
 import Newsletter from '../components/Newsletter';
 import { SITE_URL } from '../config/site';
 
 import HeroSection from '../components/home/HeroSection';
 import HomeDiscoveryCards from '../components/home/HomeDiscoveryCards';
-import HomeMapTeaser from '../components/home/HomeMapTeaser';
 import CoupleIntro from '../components/home/CoupleIntro';
+import HomeMapTeaser from '../components/home/HomeMapTeaser';
 import LatestArticles from '../components/home/LatestArticles';
 import HomeToolsTeaser from '../components/home/HomeToolsTeaser';
 import HomeCollaborationCta from '../components/home/HomeCollaborationCta';
@@ -23,29 +22,15 @@ export default function Home() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'WebSite',
-        name: 'Travelliniwithus',
-        url: `${SITE_URL}/`,
-        description:
-          'Posti particolari, esperienze memorabili e consigli utili per chi vuole scoprire, salvare e vivere meglio ogni viaggio.',
-      },
-    ],
-  };
-
   return (
     <div className="min-h-screen overflow-x-clip bg-sand selection:bg-[var(--color-accent)] selection:text-white">
       <SEO
         title="Posti particolari, destinazioni ed esperienze da vivere"
         description="Scopri destinazioni, esperienze e consigli di viaggio con un archivio unico filtrabile per luoghi e tipologie. Travelliniwithus racconta idee da salvare e vivere davvero."
         canonical={`${SITE_URL}/`}
+        website
+        includeBrandSchema
       />
-      <Helmet>
-        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
-      </Helmet>
 
       <AnimatePresence>
         {showBackToTop && (
@@ -65,8 +50,8 @@ export default function Home() {
       <HeroSection />
 
       <HomeDiscoveryCards />
-      <HomeMapTeaser />
       <CoupleIntro />
+      <HomeMapTeaser />
       <div id="storie">
         <LatestArticles />
       </div>

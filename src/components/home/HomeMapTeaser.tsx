@@ -1,51 +1,89 @@
-import { motion } from 'motion/react';
-import { ArrowRight, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
+import { ArrowRight, MapPin } from 'lucide-react';
+
+const geoUrl = 'https://unpkg.com/world-atlas@2.0.2/countries-110m.json';
+
+type TeaserMarker = {
+  name: string;
+  coordinates: [number, number];
+};
+
+const HOME_TEASER_MARKERS: TeaserMarker[] = [
+  { name: 'Islanda', coordinates: [-19.0208, 64.9631] },
+  { name: 'Dolomiti', coordinates: [11.8476, 46.4102] },
+  { name: 'Puglia', coordinates: [17.3797, 40.8014] },
+  { name: 'Giappone', coordinates: [138.2529, 36.2048] },
+  { name: 'Marocco', coordinates: [-7.0926, 31.7917] },
+];
 
 export default function HomeMapTeaser() {
-
   return (
-    <section className="bg-white pb-16 md:pb-24">
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-120px' }}
-        transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
-        className="mx-auto max-w-[82rem] px-6 md:px-10 xl:px-12"
-      >
-        <Link
-          to="/mappa"
-          className="group grid overflow-hidden rounded-lg border border-black/8 bg-[var(--color-ink)] text-white md:grid-cols-[1.1fr_0.9fr]"
-        >
-          <div className="p-7 md:p-10 lg:p-12">
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent)]">
-              Mappa
-            </span>
-            <h2 className="mt-3 max-w-xl text-3xl font-serif leading-tight md:text-5xl">
-              Esplora i luoghi sulla mappa.
-            </h2>
-            <p className="mt-4 max-w-xl text-base leading-relaxed text-white/70 md:text-lg">
-              Scegli per zona quando vuoi capire dove si trovano davvero i luoghi salvati.
-            </p>
-            <span className="mt-8 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-white transition-colors group-hover:text-[var(--color-accent)]">
-              Apri la mappa <ArrowRight size={14} />
-            </span>
-          </div>
+    <section className="bg-[var(--color-sand)] py-20 md:py-28">
+      <div className="mx-auto grid max-w-6xl gap-12 px-6 md:px-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
+        <div>
+          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
+            Dove siamo stati
+          </span>
+          <h2 className="mt-4 max-w-xl font-serif text-4xl leading-[1.05] text-ink md:text-5xl">
+            Un mondo di posti <span className="italic text-black/55">vissuti davvero</span>
+          </h2>
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-black/62">
+            Ogni destinazione che raccontiamo è un viaggio che abbiamo fatto. Niente guide copiate:
+            solo luoghi esplorati, verificati e scelti uno a uno.
+          </p>
+          <Link
+            to="/destinazioni"
+            className="mt-8 inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-7 py-3.5 text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
+          >
+            Esplora le destinazioni <ArrowRight size={14} />
+          </Link>
+        </div>
 
-          <div className="relative min-h-[260px] overflow-hidden border-t border-white/10 md:border-l md:border-t-0">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_24%_30%,rgba(196,164,124,0.5)_0_2px,transparent_3px),radial-gradient(circle_at_62%_44%,rgba(255,255,255,0.46)_0_1.5px,transparent_3px),radial-gradient(circle_at_74%_70%,rgba(196,164,124,0.55)_0_2px,transparent_3px),linear-gradient(135deg,rgba(255,255,255,0.08),transparent_45%),repeating-linear-gradient(90deg,rgba(255,255,255,0.08)_0_1px,transparent_1px_42px),repeating-linear-gradient(0deg,rgba(255,255,255,0.06)_0_1px,transparent_1px_42px)]" />
-            <div className="absolute inset-x-8 top-1/2 h-px bg-[var(--color-accent)]/40" />
-            <div className="absolute left-[24%] top-[30%] flex items-center gap-2">
-              <MapPin size={18} className="text-[var(--color-accent)]" />
-              <span className="text-[10px] font-bold uppercase tracking-widest text-white/70">
-                Italia
-              </span>
-            </div>
-            <div className="absolute right-[18%] top-[44%] h-3 w-3 rounded-full border border-white/50 bg-white/20" />
-            <div className="absolute bottom-[25%] right-[24%] h-4 w-4 rounded-full border border-[var(--color-accent)] bg-[var(--color-accent)]/20" />
+        <div className="relative overflow-hidden rounded-[2rem] border border-black/5 bg-white shadow-sm">
+          <div className="pointer-events-none absolute left-6 top-6 z-10 flex items-center gap-2 rounded-full bg-[var(--color-sand)]/80 px-3 py-1.5 backdrop-blur-sm">
+            <MapPin size={12} className="text-[var(--color-accent)]" />
+            <span className="text-[10px] font-semibold uppercase tracking-widest text-black/70">
+              {HOME_TEASER_MARKERS.length} destinazioni raccontate
+            </span>
           </div>
-        </Link>
-      </motion.div>
+          <ComposableMap
+            projection="geoMercator"
+            projectionConfig={{ scale: 110, center: [10, 30] }}
+            className="h-[320px] w-full md:h-[420px]"
+            aria-label="Mappa delle destinazioni Travelliniwithus"
+          >
+            <Geographies geography={geoUrl}>
+              {({ geographies }) =>
+                geographies.map((geo) => (
+                  <Geography
+                    key={geo.rsmKey}
+                    geography={geo}
+                    fill="var(--color-sand)"
+                    stroke="var(--color-ink)"
+                    strokeWidth={0.35}
+                    style={{
+                      default: { outline: 'none' },
+                      hover: { outline: 'none', fill: 'var(--color-sand)' },
+                      pressed: { outline: 'none' },
+                    }}
+                  />
+                ))
+              }
+            </Geographies>
+            {HOME_TEASER_MARKERS.map((marker) => (
+              <Marker key={marker.name} coordinates={marker.coordinates}>
+                <circle r={6} fill="var(--color-accent)" stroke="#fff" strokeWidth={2} />
+                <circle
+                  r={12}
+                  fill="var(--color-accent)"
+                  fillOpacity={0.18}
+                />
+              </Marker>
+            ))}
+          </ComposableMap>
+        </div>
+      </div>
     </section>
   );
 }

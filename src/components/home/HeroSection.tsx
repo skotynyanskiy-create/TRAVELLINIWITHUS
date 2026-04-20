@@ -4,11 +4,10 @@ import { ArrowRight, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Button from '../Button';
 import { CONTACTS, FEATURED_REEL } from '../../config/site';
+import { MEDIA } from '../../config/mediaAssets';
 
-const HERO_IMAGE =
-  'https://images.unsplash.com/photo-1549144511-f099e773c147?q=80&w=2000&auto=format&fit=crop';
-const REEL_FALLBACK_IMAGE =
-  'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800&auto=format&fit=crop';
+const HERO_IMAGE = MEDIA.hero.primary;
+const REEL_FALLBACK_IMAGE = MEDIA.hero.reelFallback;
 
 const TRUST_PILLS = ['Vissuto prima di scritto', 'Dettagli utili, zero marketing', 'Criterio, non hype'];
 

@@ -442,10 +442,10 @@ export const siteContentDefaults: SiteContentMap = {
     searchLabel: 'Cerca',
   },
   demo: {
-    showEditorialDemo: false,
-    showDestinationDemo: false,
-    showShopDemo: false,
-    showDemoBadges: false,
+    showEditorialDemo: !(import.meta.env?.PROD ?? true),
+    showDestinationDemo: !(import.meta.env?.PROD ?? true),
+    showShopDemo: !(import.meta.env?.PROD ?? true),
+    showDemoBadges: !(import.meta.env?.PROD ?? true),
   },
 };
 
