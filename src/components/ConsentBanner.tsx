@@ -5,6 +5,7 @@ import {
   acceptAll,
   getConsent,
   hasRespondedToConsent,
+  onConsentReopenRequest,
   rejectAll,
   setConsent,
 } from '../lib/consent';
@@ -29,10 +30,20 @@ export default function ConsentBanner() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    let timer: number | undefined;
     if (!hasRespondedToConsent()) {
-      const timer = window.setTimeout(() => setVisible(true), 600);
-      return () => window.clearTimeout(timer);
+      timer = window.setTimeout(() => setVisible(true), 600);
     }
+    const unsubscribe = onConsentReopenRequest(() => {
+      const current = getConsent();
+      setPrefs({ analytics: current.analytics, marketing: current.marketing });
+      setMode('customize');
+      setVisible(true);
+    });
+    return () => {
+      if (timer) window.clearTimeout(timer);
+      unsubscribe();
+    };
   }, []);
 
   const close = () => setVisible(false);
