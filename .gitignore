@@ -16,6 +16,9 @@ output/
 # Playwright MCP session cache (auto-generated per session)
 .playwright-mcp/
 
+# Lighthouse CI reports (auto-generated)
+.lighthouseci/
+
 # Obsidian local user config + untitled canvas drafts
 .obsidian/
 docs/Senza nome*

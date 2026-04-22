@@ -29,6 +29,7 @@
     "audit:visual": "playwright test --project=chromium --workers=2 e2e/visual-quality.spec.ts",
     "audit:a11y": "playwright test --project=chromium --workers=2 e2e/a11y-smoke.spec.ts",
     "audit:forms": "playwright test --project=chromium --workers=2 e2e/forms.spec.ts",
+    "audit:lighthouse": "npx --yes @lhci/cli@0.14.x autorun",
     "audit:qa": "npm run audit:visual && npm run audit:a11y && npm run audit:forms",
     "audit:quality": "npm run typecheck && npm run lint && npm run test && npm run build && npm run audit:ui && npm run audit:firebase && npm run audit:stripe && npm run audit:agents && npm run audit:qa",
     "audit:all": "npm run audit:ui && npm run audit:firebase && npm run audit:stripe",
