@@ -38,7 +38,8 @@ This repository is the website and marketing operating system for the travel cre
 ## Working rules for any AI agent
 
 - Do not treat Obsidian notes as optional side material. `docs/` is part of the working system.
-- Use `.agents/skills` as the **canonical** local skill source. `/.claude/skills/` is a generated mirror — never edit it directly. After editing `.agents/skills/**`, always run `npm run sync:agents` (and `npm run audit:agents` in CI validates the sync).
+- Use `.agents/skills` as the **canonical** local skill source for cross-tool skills (currently: all five `travellini-*` skills). `.github/skills/`, `.cursor/skills/`, `.gemini/skills/`, and the `travellini-*` copies in `.claude/skills/` are generated mirrors — never edit them directly. After editing `.agents/skills/**`, always run `npm run sync:agents` (and `npm run audit:agents` in CI validates the sync).
+- `.claude/skills/` also hosts **Claude-only skills** that do not live in `.agents/skills/` by design (e.g. `bug-triage`, `small-fix`, `quick-review`, `deep-refactor`, `explain-module`, `audit-ui`, `audit-browser`, `smoke-test`, `commit`, `deploy`, `predeploy`, `firebase-check`, `stripe-flow`, `new-page`, `new-article`, `seo-check`, `route`). These are runtime workflow helpers specific to Claude Code; other AI tools (Cursor/Gemini/Copilot) do not consume them. They can be edited directly in `.claude/skills/`. `audit:agents` ignores them by design: it only validates the mirror of the canonical `travellini-*` skills.
 - Use `DESIGN.md` for UI direction, Stitch/Figma prompts and design-system interpretation.
 - Do not import external skill behavior directly into the repo without adapting it locally and documenting the source in `docs/AI_AGENT_STACK.md`.
 - When changing important UI, flows, positioning or operations, update the relevant note in `docs/`.
