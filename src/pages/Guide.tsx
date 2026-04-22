@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen, CheckCircle2, Clock, Filter, Search } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
-import { cardContainer } from '../lib/animations';
 import ArticleSkeleton from '../components/ArticleSkeleton';
 import Breadcrumbs from '../components/Breadcrumbs';
 import JsonLd from '../components/JsonLd';
@@ -20,23 +19,9 @@ import { siteContentDefaults } from '../config/siteContent';
 import { PREVIEW_GUIDES } from '../config/previewContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { SITE_URL } from '../config/site';
-import {
-  GUIDE_CATEGORIES,
-  slugifyGuideCategory,
-  type GuideCategory,
-} from '../config/contentTaxonomy';
+import { type GuideCategory } from '../config/contentTaxonomy';
 import GuideCategoryBrowser from '../components/discovery/GuideCategoryBrowser';
-import { mapArticleToArchiveItem } from '../utils/contentArchive';
 import { formatDateValue, toMillis, type DateValue } from '../utils/dateValue';
-import {
-  countByScope,
-  filterByScope,
-  hasAnyFilter,
-  isGuideItem,
-  parseDiscoveryFilters,
-} from '../utils/discoveryQuery';
-import { usePagination } from '../hooks/usePagination';
-import { normalizeFirestoreArticle } from '../utils/articleData';
 
 interface GuideArticle {
   id: string;

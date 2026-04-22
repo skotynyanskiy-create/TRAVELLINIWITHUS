@@ -141,7 +141,7 @@ export default function Navbar() {
         links: [{ name: 'Tutte le guide', href: '/guide' }],
       },
     ],
-    [destinationLinks, experienceLinks, guideLinks]
+    [destinationLinks, experienceLinks]
   );
 
   const navItems = useMemo<NavItem[]>(

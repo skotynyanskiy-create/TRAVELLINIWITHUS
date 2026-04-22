@@ -1,17 +1,21 @@
 import { describe, it, expect } from 'vitest';
-import { render } from '../test/test-utils';
+import { render, waitFor } from '../test/test-utils';
 import Navbar from './Navbar';
 
 describe('Navbar Component', () => {
-  it('renders the logo', () => {
+  it('renders the logo', async () => {
     const { getByText } = render(<Navbar />);
-    expect(getByText(/Travellini/i)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(getByText(/Travellini/i)).toBeInTheDocument();
+    });
   });
 
-  it('renders navigation links', () => {
+  it('renders navigation links', async () => {
     const { getAllByText } = render(<Navbar />);
-    expect(getAllByText(/Destinazioni/i).length).toBeGreaterThan(0);
-    expect(getAllByText(/Esperienze/i).length).toBeGreaterThan(0);
-    expect(getAllByText(/Guide/i).length).toBeGreaterThan(0);
+    await waitFor(() => {
+      expect(getAllByText(/Destinazioni/i).length).toBeGreaterThan(0);
+      expect(getAllByText(/Esperienze/i).length).toBeGreaterThan(0);
+      expect(getAllByText(/Guide/i).length).toBeGreaterThan(0);
+    });
   });
 });

@@ -8,7 +8,7 @@ Versioning: [SemVer](https://semver.org/spec/v2.0.0.html) — fino al primo tag 
 
 ### Sprint 1 — 2026-04-20 · Infrastruttura production-gate
 
-Obiettivo: chiudere tutti i gap non dipendenti da contenuto reale prima della sessione finale con chiavi API. Riferimento roadmap SWOT: `C:/Users/admin/.claude/plans/sei-un-principal-ai-dreamy-penguin.md`.
+Obiettivo: chiudere tutti i gap non dipendenti da contenuto reale prima della sessione finale con chiavi API.
 
 #### Aggiunto
 
