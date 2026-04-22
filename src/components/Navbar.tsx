@@ -19,9 +19,7 @@ import { CONTACTS } from '../config/site';
 import {
   DESTINATION_GROUPS,
   EXPERIENCE_TYPES,
-  GUIDE_CATEGORIES,
   slugifyExperienceType,
-  slugifyGuideCategory,
 } from '../config/contentTaxonomy';
 import { siteContentDefaults } from '../config/siteContent';
 import { useAuth } from '../context/AuthContext';
@@ -110,15 +108,6 @@ export default function Navbar() {
       EXPERIENCE_TYPES.map((type) => ({
         name: type,
         href: `/esperienze?type=${slugifyExperienceType(type)}`,
-      })),
-    []
-  );
-
-  const guideLinks = useMemo(
-    () =>
-      GUIDE_CATEGORIES.map((cat) => ({
-        name: cat,
-        href: `/guide?cat=${slugifyGuideCategory(cat)}`,
       })),
     []
   );
