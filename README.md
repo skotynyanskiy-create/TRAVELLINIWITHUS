@@ -106,6 +106,13 @@ For Claude Code session startup:
 
 - `.claude/CLAUDE_CODE_START_PROMPT.md`
 
+## Deploy
+
+- Frontend hosting: **Vercel** (raccomandato, linkato in `.vercel/`). Config in `vercel.json`.
+- Firestore rules / Auth / Storage / backup: **Firebase** (`firebase.json`, `firestore.rules`, `.firebaserc`). Firebase Hosting è alternativa per il frontend.
+- Runbook completo: [`docs/DEPLOYMENT_RUNBOOK.md`](docs/DEPLOYMENT_RUNBOOK.md).
+- Stripe webhook setup: [`docs/STRIPE_WEBHOOK_RUNBOOK.md`](docs/STRIPE_WEBHOOK_RUNBOOK.md).
+
 ## Obsidian
 
 Open this folder as vault:
