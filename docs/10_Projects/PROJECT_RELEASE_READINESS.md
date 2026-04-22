@@ -131,6 +131,37 @@ Roadmap di riferimento: `C:/Users/admin/.claude/plans/sei-un-principal-ai-dreamy
 - [ ] Setup WIF + bucket GCS + lancio primo backup Firestore reale.
 - [ ] Run smoke test Stripe A/B/C in produzione.
 
+## Audit 2026-04-22 — technical-operational pass
+
+Audit completo repo + workspace locale con focus su quality gates, automazioni e coerenza doc/config (multi-agent: Claude Opus 4.7 + Codex).
+
+### Verificato
+
+- [x] `npm run audit:quality` PASS.
+- [x] `npm run predeploy` PASS.
+- [x] `npm run e2e` PASS dopo riallineamento dei test Playwright alla UI e allo stato reale dello shop demo.
+- [x] `scripts/check-ui.mjs` ripulito da riferimenti stantii e da un falso positivo su `noscript`.
+- [x] `docs/DEPLOYMENT_RUNBOOK.md` riallineato al bootstrap Firebase reale via `firebase-applet-config.json` e ai nomi env analytics effettivamente usati dal codice (`VITE_GA_ID`, `VITE_META_PIXEL_ID`, `VITE_TIKTOK_PIXEL_ID`).
+- [x] Typecheck esteso a `server.ts` + `scripts/` via `tsconfig.node.json`; `typecheck:strict` portable via wrapper Node (`scripts/typecheck-strict.mjs`).
+- [x] Security hardening: chiavi Gemini dietro endpoint server `/api/ai/verify-*` con rate limiting (non più esposte al client).
+- [x] `npm audit fix` non-breaking: 30 → 19 vulnerabilità (CRITICAL protobufjs risolta).
+- [x] Smart routing AI: `CLAUDE.md` Smart Routing Protocol + hook BARC `.claude/settings.json`.
+
+### Follow-up aperti (priorità decrescente)
+
+- [ ] Chiudere migrazione admin a Firebase Custom Claims e rimuovere la allowlist client hardcoded in `src/config/admin.ts`.
+- [ ] Unificare bootstrap Firebase: scegliere una sola fonte di verità tra `firebase-applet-config.json` (oggi usato) e env vars `VITE_FIREBASE_*` (documentate in vari posti).
+- [ ] Convergere analytics su un solo loader consent-gated (`AnalyticsScripts` vs `initAnalytics()` convivono).
+- [ ] Auth check sugli endpoint `/api/ai/*` (oggi solo rate limit 5/min protegge la quota Gemini).
+- [ ] Piano "strict by slice" per TypeScript: lontano dall'adozione con >100 errori strict oggi.
+- [ ] Modularizzazione `server.ts` (1586 righe) quando si aprirà un task backend dedicato.
+
+### Note
+
+- `audit:ui` resta WARN-only e segnala ancora 34 warning non bloccanti: soprattutto raw color token locali e inline style usati per motion/illustrazioni.
+- Lo shop resta correttamente in modalità preview/demo: i test E2E ora verificano questo stato invece di assumere un checkout attivo su prodotti demo.
+- `public/media-kit.pdf` e `public/sitemap.xml` vengono rigenerati dai check di build/predeploy; mantenerli versionati resta una decisione operativa esplicita.
+
 ## Link
 
 - [[DEPLOYMENT_RUNBOOK]]

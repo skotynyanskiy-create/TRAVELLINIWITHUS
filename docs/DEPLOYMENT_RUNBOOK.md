@@ -1,7 +1,7 @@
 # TRAVELLINIWITHUS — Deployment & Operations Runbook
 
 **Status**: 🟡 PRE-PRODUCTION — infrastruttura Sprint 1 completa, attivazione chiavi e contenuti reali pendenti
-**Last Updated**: 2026-04-20
+**Last Updated**: 2026-04-22
 
 ---
 
@@ -23,20 +23,15 @@ Questa guida è il punto d'ingresso. Dettaglio operativo nelle runbook dedicate:
 ### Environment variables richieste
 
 ```bash
-# --- Firebase ---
-VITE_FIREBASE_PROJECT_ID=travelliniwithus
-VITE_FIREBASE_API_KEY=
-VITE_FIREBASE_AUTH_DOMAIN=travelliniwithus.firebaseapp.com
-VITE_FIREBASE_DATABASE_URL=
-VITE_FIREBASE_STORAGE_BUCKET=travelliniwithus.appspot.com
-VITE_FIREBASE_MESSAGING_SENDER_ID=
-VITE_FIREBASE_APP_ID=
-VITE_FIRESTORE_DATABASE_ID=(default)
+# --- Firebase client bootstrap ---
+# Il client e il server leggono il web config da `firebase-applet-config.json`.
+# Verifica che il file presente nel deploy punti al progetto Firebase corretto.
+# Variabile opzionale utile agli script admin/CI:
+FIREBASE_PROJECT_ID=travelliniwithus
 
 # --- Payments (Stripe) — vedi STRIPE_WEBHOOK_RUNBOOK.md ---
 STRIPE_SECRET_KEY=sk_live_...
 STRIPE_WEBHOOK_SECRET=whsec_...
-VITE_STRIPE_PUBLISHABLE_KEY=pk_live_...
 
 # --- AI / content ---
 GEMINI_API_KEY=
@@ -51,7 +46,7 @@ BREVO_API_KEY=
 BREVO_LIST_ID=
 
 # --- Analytics / pixel (gated dal consenso) ---
-VITE_GA4_MEASUREMENT_ID=G-XXXXXXX
+VITE_GA_ID=G-XXXXXXX
 VITE_META_PIXEL_ID=
 VITE_TIKTOK_PIXEL_ID=
 
@@ -77,6 +72,7 @@ ALLOW_MOCK_CHECKOUT=false
 - [ ] Stripe webhook secret verificato (runbook dedicato).
 - [ ] MFA attivo su tutti gli account admin.
 - [ ] `.env*` non committati; secrets in Vercel env (Production + Preview distinti).
+- [ ] `firebase-applet-config.json` nel deploy punta al progetto Firebase reale corretto.
 - [ ] CORS `app.use(cors())` ok per API pubbliche; se si introducono endpoint sensibili, restringere per origin.
 - [ ] HTTPS enforced (Vercel default).
 - [ ] Firestore export settimanale verde (`firestore-backup` GitHub Action).
@@ -300,7 +296,7 @@ npm run build && npm run preview
    - [ ] Stripe live endpoint + env + smoke test A/B/C.
    - [ ] Setup WIF + bucket GCS + primo backup Firestore.
    - [ ] Migrazione Custom Claims owner + redeploy rules.
-   - [ ] Popolare GA4/Meta/TikTok/Mapbox ID in `src/config/integrations.ts` + env vars.
+   - [ ] Popolare GA4/Meta/TikTok/Mapbox ID nelle env vars di produzione.
 2. **Content work (owner)**: 5 articoli + 3 prodotti reali secondo [EDITORIAL_PUBLISH_CHECKLIST](13_Content/EDITORIAL_PUBLISH_CHECKLIST.md).
 3. **Post-launch**:
    - [ ] Lighthouse CI + budget JSON.

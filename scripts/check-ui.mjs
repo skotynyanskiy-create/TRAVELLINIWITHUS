@@ -14,7 +14,6 @@ const inlineStyleAllowlist = [
   'src/components/InteractiveMap.tsx',
   'src/components/Layout.tsx',
   'src/components/article/ArticleHero.tsx',
-  'src/components/home/DestinationsGrid.tsx',
   'src/components/home/HeroSection.tsx',
   'src/pages/Articolo.tsx',
   'src/pages/Contatti.tsx',
@@ -33,15 +32,11 @@ const rawColorAllowlist = [
   'src/components/SEOPreview.tsx',
   'src/components/article/AuthorBio.tsx',
   'src/components/article/SocialFollowCTA.tsx',
-  'src/components/home/AboutPreview.tsx',
-  'src/components/home/CommunitySection.tsx',
-  'src/components/home/DestinationsGrid.tsx',
   'src/components/home/HeroSection.tsx',
   'src/pages/Articolo.tsx',
   'src/pages/ChiSiamo.tsx',
   'src/pages/Collaborazioni.tsx',
   'src/pages/Contatti.tsx',
-  'src/pages/Mappa.tsx',
   'src/pages/ProductPage.tsx',
   'src/pages/Risorse.tsx',
   'src/pages/Shop.tsx',
@@ -56,7 +51,6 @@ const semanticPaletteAllowlist = [
   'src/components/Navbar.tsx',
   'src/components/Newsletter.tsx',
   'src/components/ProtectedRoute.tsx',
-  'src/pages/Club.tsx',
   'src/pages/Contatti.tsx',
   'src/pages/Guide.tsx',
   'src/pages/MediaKit.tsx',
@@ -106,6 +100,10 @@ function getLineNumber(content, index) {
   return content.slice(0, index).split('\n').length;
 }
 
+function stripNoscriptBlocks(content) {
+  return content.replace(/<noscript[\s\S]*?<\/noscript>/gi, '');
+}
+
 function pushIssue(issues, level, filePath, line, message) {
   issues.push({
     level,
@@ -124,6 +122,7 @@ for (const filePath of files) {
   }
 
   const content = fs.readFileSync(filePath, 'utf8');
+  const contentForMarkupChecks = stripNoscriptBlocks(content);
 
   if (!isAllowlisted(filePath, inlineStyleAllowlist)) {
     const inlineStyleMatches = [...content.matchAll(/style=\{\{/g)];
@@ -152,9 +151,15 @@ for (const filePath of files) {
     }
   }
 
-  const imgMatches = [...content.matchAll(/<img\b(?![^>]*\balt=)[^>]*>/g)];
+  const imgMatches = [...contentForMarkupChecks.matchAll(/<img\b(?![^>]*\balt=)[^>]*>/g)];
   for (const match of imgMatches) {
-    pushIssue(issues, 'warn', filePath, getLineNumber(content, match.index), '<img> without alt attribute found.');
+    pushIssue(
+      issues,
+      'warn',
+      filePath,
+      getLineNumber(contentForMarkupChecks, match.index),
+      '<img> without alt attribute found.'
+    );
   }
 
   const iconLibraryMatches = [...content.matchAll(/from ['"]([^'"]+)['"]/g)];

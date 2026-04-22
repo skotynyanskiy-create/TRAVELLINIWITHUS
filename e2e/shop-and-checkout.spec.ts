@@ -2,117 +2,36 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Shop & Checkout Flow', () => {
   test('should navigate to shop and display products', async ({ page }) => {
-    await page.goto('/shop', { waitUntil: 'networkidle' });
+    await page.goto('/shop');
 
-    // Verify page loads
-    const title = await page.title();
-    expect(title).toBeTruthy();
-
-    // Verify shop content is visible
-    const heading = page.locator('h1, h2').first();
-    await expect(heading).toBeVisible({ timeout: 5000 });
+    await expect(page).toHaveTitle(/Travelliniwithus/i);
+    await expect(
+      page.getByRole('heading', { level: 1, name: /Guide e toolkit/i })
+    ).toBeVisible();
+    await expect(page.getByText(/Boutique in apertura/i)).toBeVisible();
   });
 
   test('should load product page from shop slug', async ({ page }) => {
-    // This tests FIX #1: routing to /shop/:slug
-
-    // Navigate directly to a product (assumes demo product exists)
     await page.goto('/shop/guida-premium-dolomiti');
 
-    // Product page should load
-    await expect(page.locator('h1')).toBeVisible();
-
-    // Should not redirect to /risorse
+    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     expect(page.url()).toContain('/shop/');
     expect(page.url()).not.toContain('/risorse');
   });
 
-  test('should add product to cart', async ({ page }) => {
-    await page.goto('/shop/guida-premium-dolomiti', { waitUntil: 'networkidle' });
-
-    // Find add to cart button
-    const addToCartBtn = page
-      .locator('button')
-      .filter({ hasText: /aggiungi|add to cart|compra/i })
-      .first();
-
-    // Wait for button to be ready
-    await addToCartBtn.waitFor({ state: 'visible', timeout: 5000 });
-
-    if (await addToCartBtn.isEnabled({ timeout: 2000 }).catch(() => false)) {
-      await addToCartBtn.click();
-
-      // Verify cart opens or page changes
-      await page.waitForLoadState('networkidle');
-      const url = page.url();
-      expect(url).toBeTruthy();
-    }
-  });
-
-  test('should navigate to checkout', async ({ page }) => {
-    // Add item to cart
+  test('should keep demo product in preview mode', async ({ page }) => {
     await page.goto('/shop/guida-premium-dolomiti');
 
-    const addBtn = page
-      .locator('button')
-      .filter({ hasText: /aggiungi|compra/i })
-      .first();
-    if (await addBtn.isEnabled()) {
-      await addBtn.click();
-
-      // Wait for cart to open
-      await page.waitForLoadState('networkidle');
-
-      // Click checkout button
-      const checkoutBtn = page
-        .locator('button')
-        .filter({ hasText: /checkout|procedi|ordina|paga/i });
-      if (await checkoutBtn.first().isVisible()) {
-        await checkoutBtn.first().click();
-
-        // If Stripe is configured, should redirect to Stripe
-        // If mock checkout, should show success page
-        await page.waitForLoadState('networkidle');
-
-        // Verify either:
-        // 1. Redirected to Stripe (stripe.com domain) OR
-        // 2. Mock success page (?success=true)
-        const url = page.url();
-        expect(
-          url.includes('stripe.com') || url.includes('success=true') || url.includes('payment')
-        ).toBeTruthy();
-      }
-    }
+    await expect(page.getByText(/Prodotto preview/i)).toBeVisible();
+    await expect(page.getByRole('link', { name: /Iscrivimi alla lista/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /Aggiungi al carrello/i })).toHaveCount(0);
   });
 
-  test('should handle mock checkout in development', async ({ page }) => {
-    // Test that ALLOW_MOCK_CHECKOUT works
-    // This simulates payment flow without Stripe
+  test('should render the success state when checkout returns to shop', async ({ page }) => {
+    await page.goto('/shop?success=true');
 
-    await page.goto('/shop');
-
-    // If mock checkout enabled, adding to cart should work
-    // and checkout should return /shop?success=true
-    const addBtn = page
-      .locator('button')
-      .filter({ hasText: /aggiungi|compra/i })
-      .first();
-
-    if (await addBtn.isEnabled()) {
-      await addBtn.click();
-      await page.waitForLoadState('networkidle');
-
-      const checkoutBtn = page.locator('button').filter({ hasText: /checkout|procedi/i });
-      if (await checkoutBtn.first().isVisible()) {
-        await checkoutBtn.first().click();
-        await page.waitForLoadState('networkidle');
-
-        // For mock checkout, should redirect to /shop?success=true
-        if (page.url().includes('success=true')) {
-          await expect(page.locator('text=/pagamento|grazie|ordine/i').first()).toBeVisible();
-        }
-      }
-    }
+    await expect(page.getByRole('heading', { name: /Pagamento completato/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /Chiudi/i })).toBeVisible();
   });
 });
 
