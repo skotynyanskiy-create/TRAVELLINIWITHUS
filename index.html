@@ -15,6 +15,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://images.unsplash.com" />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Kalam:wght@300;400;700&display=swap" rel="stylesheet" />
+    <!-- LCP hero preload — immagine above-the-fold della Home.
+         Se cambi MEDIA.hero.primary in src/config/mediaAssets.ts, aggiorna anche questo href. -->
+    <link
+      rel="preload"
+      as="image"
+      href="https://images.unsplash.com/photo-1549144511-f099e773c147?q=80&w=2000&auto=format&fit=crop"
+      fetchpriority="high"
+    />
   </head>
   <body>
     <div id="root"></div>
