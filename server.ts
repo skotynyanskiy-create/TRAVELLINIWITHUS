@@ -368,32 +368,8 @@ async function fetchArticle(slug: string): Promise<ArticleMeta | null> {
   }
 }
 
-async function fetchDemoSettings(): Promise<DemoSettings> {
-  if (!firebaseConfig.projectId || !firebaseConfig.firestoreDatabaseId) {
-    return {
-      showEditorialDemo: false,
-      showShopDemo: false,
-    };
-  }
 
-  try {
-    const data = await fetchJson<FirestoreDocument>(getSiteContentDocumentUrl('demo'));
-    const fields = data?.fields;
-    const showEditorialDemo = fields?.showEditorialDemo?.booleanValue;
-    const showShopDemo = fields?.showShopDemo?.booleanValue;
 
-    return {
-      showEditorialDemo: typeof showEditorialDemo === 'boolean' ? showEditorialDemo : false,
-      showShopDemo: typeof showShopDemo === 'boolean' ? showShopDemo : false,
-    };
-  } catch (error) {
-    console.error('Error fetching demo settings:', error);
-    return {
-      showEditorialDemo: false,
-      showShopDemo: false,
-    };
-  }
-}
 
 async function resolveAppStatus(pathname: string) {
   if (STATIC_APP_ROUTES.has(pathname)) {
@@ -965,6 +941,106 @@ async function startServer() {
   });
 
   app.use(express.json());
+
+  // AI verification endpoints — server-side proxy for Gemini API
+  const aiLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    max: 5,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { error: 'Troppi tentativi. Riprova tra un minuto.' },
+  });
+  app.use('/api/ai/', aiLimiter);
+
+  app.post('/api/ai/verify-search', async (req, res) => {
+    const geminiKey = process.env.GEMINI_API_KEY;
+    if (!geminiKey) {
+      res.status(503).json({ error: 'AI verification non configurato.' });
+      return;
+    }
+
+    const { content, title } = req.body as { content?: string; title?: string };
+    if (!content?.trim() || !title?.trim()) {
+      res.status(400).json({ error: 'Contenuto e titolo obbligatori.' });
+      return;
+    }
+
+    try {
+      const { GoogleGenAI } = await import('@google/genai');
+      const ai = new GoogleGenAI({ apiKey: geminiKey });
+
+      const prompt = `
+        Sei un editor esperto di viaggi. Il tuo compito è verificare e arricchire il seguente articolo di viaggio.
+        Usa la ricerca Google per assicurarti che tutte le informazioni storiche, culturali e generali siano precise, aggiornate e veritiere.
+        Correggi eventuali inesattezze e aggiungi dettagli interessanti se pertinenti.
+        Mantieni il tono di voce diretto, concreto e autentico — budget travel, food experience, posti reali. Niente retorica da luxury travel o da brochure turistica.
+        
+        Titolo: ${title}
+        Contenuto attuale:
+        ${content}
+        
+        Restituisci SOLO il contenuto dell'articolo revisionato in formato Markdown, senza introduzioni o conclusioni.
+      `;
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: prompt,
+        config: {
+          tools: [{ googleSearch: {} }],
+        },
+      });
+
+      res.json({ result: response.text || content });
+    } catch (error) {
+      console.error('AI verify-search error:', error);
+      res.status(500).json({ error: 'Errore durante la verifica AI.' });
+    }
+  });
+
+  app.post('/api/ai/verify-maps', async (req, res) => {
+    const geminiKey = process.env.GEMINI_API_KEY;
+    if (!geminiKey) {
+      res.status(503).json({ error: 'AI verification non configurato.' });
+      return;
+    }
+
+    const { content, title } = req.body as { content?: string; title?: string };
+    if (!content?.trim() || !title?.trim()) {
+      res.status(400).json({ error: 'Contenuto e titolo obbligatori.' });
+      return;
+    }
+
+    try {
+      const { GoogleGenAI } = await import('@google/genai');
+      const ai = new GoogleGenAI({ apiKey: geminiKey });
+
+      const prompt = `
+        Sei un editor esperto di viaggi. Il tuo compito è verificare le informazioni geografiche e logistiche del seguente articolo.
+        Usa Google Maps per verificare che i nomi dei luoghi, gli indirizzi, le distanze e le descrizioni geografiche siano precise e veritiere.
+        Correggi eventuali inesattezze sui luoghi e aggiungi dettagli utili (es. quartieri corretti, vicinanza ad altri punti di interesse).
+        Mantieni il tono di voce diretto, concreto e autentico — budget travel, food experience, posti reali. Niente retorica da luxury travel o da brochure turistica.
+        
+        Titolo: ${title}
+        Contenuto attuale:
+        ${content}
+        
+        Restituisci SOLO il contenuto dell'articolo revisionato in formato Markdown, senza introduzioni o conclusioni.
+      `;
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: prompt,
+        config: {
+          tools: [{ googleMaps: {} }],
+        },
+      });
+
+      res.json({ result: response.text || content });
+    } catch (error) {
+      console.error('AI verify-maps error:', error);
+      res.status(500).json({ error: 'Errore durante la verifica AI.' });
+    }
+  });
 
   const saveLeadBackup = async ({
     type,

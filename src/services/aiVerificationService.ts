@@ -1,59 +1,36 @@
-import { GoogleGenAI } from "@google/genai";
-
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+/**
+ * AI verification service — calls server-side endpoints to avoid leaking API keys.
+ * The actual Gemini interaction happens in server.ts behind /api/ai/* routes.
+ */
 
 export async function verifyWithSearch(content: string, title: string): Promise<string> {
-  if (!apiKey) throw new Error("API Key not found");
-  const ai = new GoogleGenAI({ apiKey });
-
-  const prompt = `
-    Sei un editor esperto di viaggi. Il tuo compito è verificare e arricchire il seguente articolo di viaggio.
-    Usa la ricerca Google per assicurarti che tutte le informazioni storiche, culturali e generali siano precise, aggiornate e veritiere.
-    Correggi eventuali inesattezze e aggiungi dettagli interessanti se pertinenti.
-    Mantieni il tono di voce diretto, concreto e autentico — budget travel, food experience, posti reali. Niente retorica da luxury travel o da brochure turistica.
-    
-    Titolo: ${title}
-    Contenuto attuale:
-    ${content}
-    
-    Restituisci SOLO il contenuto dell'articolo revisionato in formato Markdown, senza introduzioni o conclusioni.
-  `;
-
-  const response = await ai.models.generateContent({
-    model: "gemini-3-flash-preview",
-    contents: prompt,
-    config: {
-      tools: [{ googleSearch: {} }],
-    },
+  const response = await fetch('/api/ai/verify-search', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content, title }),
   });
 
-  return response.text || content;
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Errore durante la verifica.' }));
+    throw new Error(error.error || `Verifica fallita: ${response.status}`);
+  }
+
+  const data = await response.json() as { result: string };
+  return data.result;
 }
 
 export async function verifyWithMaps(content: string, title: string): Promise<string> {
-  if (!apiKey) throw new Error("API Key not found");
-  const ai = new GoogleGenAI({ apiKey });
-
-  const prompt = `
-    Sei un editor esperto di viaggi. Il tuo compito è verificare le informazioni geografiche e logistiche del seguente articolo.
-    Usa Google Maps per verificare che i nomi dei luoghi, gli indirizzi, le distanze e le descrizioni geografiche siano precise e veritiere.
-    Correggi eventuali inesattezze sui luoghi e aggiungi dettagli utili (es. quartieri corretti, vicinanza ad altri punti di interesse).
-    Mantieni il tono di voce diretto, concreto e autentico — budget travel, food experience, posti reali. Niente retorica da luxury travel o da brochure turistica.
-    
-    Titolo: ${title}
-    Contenuto attuale:
-    ${content}
-    
-    Restituisci SOLO il contenuto dell'articolo revisionato in formato Markdown, senza introduzioni o conclusioni.
-  `;
-
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
-    contents: prompt,
-    config: {
-      tools: [{ googleMaps: {} }],
-    },
+  const response = await fetch('/api/ai/verify-maps', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content, title }),
   });
 
-  return response.text || content;
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({ error: 'Errore durante la verifica.' }));
+    throw new Error(error.error || `Verifica fallita: ${response.status}`);
+  }
+
+  const data = await response.json() as { result: string };
+  return data.result;
 }
