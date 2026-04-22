@@ -933,7 +933,63 @@ async function startServer() {
 
   app.use(express.json());
 
-  // AI verification endpoints — server-side proxy for Gemini API
+  // Firebase Admin SDK lazy init — usato dal middleware requireAdmin per verifyIdToken.
+  // Nessun crash se credentials mancano: il middleware risponde 503 in quel caso.
+  let firebaseAdminReady = false;
+  async function ensureFirebaseAdmin() {
+    if (firebaseAdminReady) return true;
+    try {
+      const { initializeApp: initAdminApp, applicationDefault, cert, getApps } = await import('firebase-admin/app');
+      if (getApps().length > 0) {
+        firebaseAdminReady = true;
+        return true;
+      }
+      const inlineJson = process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
+      const credsPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+      const projectId = firebaseConfig.projectId;
+      if (inlineJson) {
+        initAdminApp({ credential: cert(JSON.parse(inlineJson)), projectId });
+      } else if (credsPath && fs.existsSync(credsPath)) {
+        initAdminApp({ credential: cert(JSON.parse(fs.readFileSync(credsPath, 'utf8'))), projectId });
+      } else {
+        initAdminApp({ credential: applicationDefault(), projectId });
+      }
+      firebaseAdminReady = true;
+      return true;
+    } catch (error) {
+      console.warn('[firebase-admin] init failed — auth guard endpoints returneranno 503:', error instanceof Error ? error.message : error);
+      return false;
+    }
+  }
+
+  async function requireAdmin(req: express.Request, res: express.Response, next: express.NextFunction) {
+    const ready = await ensureFirebaseAdmin();
+    if (!ready) {
+      res.status(503).json({ error: 'Auth admin non configurato (FIREBASE_SERVICE_ACCOUNT_JSON o GOOGLE_APPLICATION_CREDENTIALS mancanti).' });
+      return;
+    }
+    const authHeader = req.get('Authorization') || '';
+    const match = authHeader.match(/^Bearer (.+)$/);
+    if (!match) {
+      res.status(401).json({ error: 'Token mancante.' });
+      return;
+    }
+    try {
+      const { getAuth: getAdminAuth } = await import('firebase-admin/auth');
+      const decoded = await getAdminAuth().verifyIdToken(match[1]);
+      if (decoded.admin !== true) {
+        res.status(403).json({ error: 'Permesso admin richiesto.' });
+        return;
+      }
+      (req as express.Request & { user?: unknown }).user = decoded;
+      next();
+    } catch (error) {
+      console.error('[requireAdmin] verifyIdToken failed:', error instanceof Error ? error.message : error);
+      res.status(401).json({ error: 'Token non valido.' });
+    }
+  }
+
+  // AI verification endpoints — server-side proxy for Gemini API (admin-only)
   const aiLimiter = rateLimit({
     windowMs: 60 * 1000,
     max: 5,
@@ -941,7 +997,7 @@ async function startServer() {
     legacyHeaders: false,
     message: { error: 'Troppi tentativi. Riprova tra un minuto.' },
   });
-  app.use('/api/ai/', aiLimiter);
+  app.use('/api/ai/', aiLimiter, requireAdmin);
 
   app.post('/api/ai/verify-search', async (req, res) => {
     const geminiKey = process.env.GEMINI_API_KEY;
