@@ -17,8 +17,7 @@ export const MEDIA = {
       'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800&auto=format&fit=crop',
   },
   couple: {
-    intro:
-      'https://images.unsplash.com/photo-1516589091380-5d8e87df6999?w=800&auto=format&fit=crop&q=80',
+    intro: '/images/brand/couple-travel.png',
   },
   destinationGroups: {
     Italia:

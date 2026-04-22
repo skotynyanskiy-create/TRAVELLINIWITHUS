@@ -388,8 +388,8 @@ export default function Collaborazioni() {
           >
             <div className="aspect-[4/5] overflow-hidden rounded-3xl shadow-2xl transition-transform duration-700 lg:-rotate-2 lg:hover:rotate-0">
               <OptimizedImage
-                src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1200&auto=format&fit=crop"
-                alt="Rodrigo e Betta in un contesto travel editoriale"
+                src="/images/brand/collab-work.png"
+                alt="Rodrigo e Betta al lavoro su una collaborazione editoriale"
                 className="h-full w-full object-cover"
               />
             </div>

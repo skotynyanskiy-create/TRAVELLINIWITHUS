@@ -226,8 +226,8 @@ export default function ChiSiamo() {
           <div className="relative order-2 lg:order-2">
             <div className="aspect-[4/5] overflow-hidden rounded-[var(--radius-2xl)] shadow-[var(--shadow-premium)] transition-transform duration-700 lg:rotate-2 lg:hover:rotate-0">
               <OptimizedImage
-                src="https://images.unsplash.com/photo-1527631746610-bca00a040d60?q=80&w=1400&auto=format&fit=crop"
-                alt="Rodrigo e Betta in viaggio"
+                src="/images/brand/about-editorial.png"
+                alt="Rodrigo e Betta, ritratto editoriale del progetto Travelliniwithus"
                 className="block h-full w-full object-cover"
               />
             </div>
