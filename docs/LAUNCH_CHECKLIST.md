@@ -32,7 +32,7 @@ Il sito resta in Demo Mode finché il catalogo editoriale e shop non vengono pop
 
 Stack GA4 / Meta / TikTok già gated sul consenso. Da completare con ID reali.
 
-- [ ] In `src/config/integrations.ts` inserire `googleAnalyticsId`, `metaPixelId`, eventuale `tiktokPixelId`.
+- [ ] In `.env` inserire `VITE_GA_ID`, `VITE_META_PIXEL_ID`, `VITE_TIKTOK_PIXEL_ID`. Il loader `src/services/analytics.ts` li legge consent-gated (nessuna chiamata finché `ConsentBanner` accept).
 - [ ] Verifica che i pixel carichino solo dopo consenso (test: rifiuta nel banner → nessuna chiamata di rete a `googletagmanager.com`).
 - [ ] UTM affiliate: controllare dashboard GA4/Plausible → evento `affiliate_click` presente con `partner`, `campaign`, `placement`.
 - [ ] Newsletter: se Brevo attivo verificare `BREVO_API_KEY` + `BREVO_LIST_ID` in env, altrimenti fallback save-lead-only rimane attivo.
@@ -57,10 +57,27 @@ Runbook completo: [STRIPE_WEBHOOK_RUNBOOK.md](STRIPE_WEBHOOK_RUNBOOK.md).
 
 Decisione di riferimento: [20_Decisions/DECISION_ADMIN_CUSTOM_CLAIMS.md](20_Decisions/DECISION_ADMIN_CUSTOM_CLAIMS.md).
 
-- [ ] Migrazione admin a Custom Claims completata per gli account owner (Rodrigo + Betta + eventuale backup). Verifica: `firebase auth:export` → colonna `customClaims` con `{ "admin": true }`.
-- [ ] `firestore.rules` aggiornato per leggere `request.auth.token.admin == true` al posto dell'email hardcoded (vedi decision doc).
-- [ ] Redeploy rules + smoke test: login con claim → accesso admin; login senza claim → accesso negato.
+**Stato attuale (Fase A pre-go-live):**
+- Il codice supporta ENTRAMBI i meccanismi: claim custom `admin=true` (target) + email fallback transitorio (`skotynyanskiy@gmail.com`).
+- Applicato: `src/config/admin.ts` `isAdminUser()`, `src/context/AuthContext.tsx` `isAdmin` derivato, `firestore.rules` `isAdmin()` claim-first, `server.ts` middleware `requireAdmin` su `/api/ai/*`.
+- Auto-upgrade role → admin da email matcher **rimosso** (era bypass claims).
+- Nessun impatto oggi: il fallback email mantiene admin accessibile in dev.
+
+**Fase B (pre-go-live, esegui in quest'ordine):**
+
+- [ ] **Scegliere email admin ufficiale Travellini finale** (sostituire `skotynyanskiy@gmail.com` che è personale).
+- [ ] Configurare Firebase Admin credentials localmente: scaricare service account JSON dalla Console, set `GOOGLE_APPLICATION_CREDENTIALS` env.
+- [ ] Eseguire `node scripts/set-admin-claim.mjs grant <email-ufficiale>`.
+- [ ] L'admin fa logout + login (o `user.getIdToken(true)` force refresh) per ricevere il claim.
+- [ ] Verificare via Simple Browser: login con email con claim → dashboard accessibile; login con email NON in fallback e SENZA claim → accesso negato.
+- [ ] Rimuovere il fallback email:
+  - In `src/config/admin.ts`: `ADMIN_EMAILS_FALLBACK = []` (array vuoto) + deprecated notice aggiornata.
+  - In `firestore.rules` `isAdmin()`: rimuovere il branch `request.auth.token.email == "skotynyanskiy@gmail.com" ...`.
+- [ ] Redeploy rules: `firebase deploy --only firestore:rules`.
+- [ ] Redeploy frontend: `vercel --prod` (o Firebase Hosting).
+- [ ] Smoke test finale: login con email ufficiale claim → OK; login senza claim → denied.
 - [ ] Abilitare MFA su tutti gli account admin (Firebase Auth → Sign-in method → Multi-factor).
+- [ ] Verificare `firebase auth:export` colonna `customClaims` contiene `{ "admin": true }` per gli admin.
 
 ## 6. Error tracking e disaster recovery
 

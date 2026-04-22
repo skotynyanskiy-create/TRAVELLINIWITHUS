@@ -3,7 +3,7 @@ import { User, onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, signInWithGoogle, logOut } from '../lib/firebaseAuth';
 import { db } from '../lib/firebaseDb';
-import { isAdminEmail } from '../config/admin';
+import { isAdminUser } from '../config/admin';
 
 interface UserProfile {
   uid: string;
@@ -51,49 +51,46 @@ function getAuthErrorMessage(error: unknown) {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState<string | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
-      
+
       if (currentUser) {
         setAuthError(null);
-        // Sync user profile with Firestore
+
+        // Admin check via custom claim (+ email fallback transitorio, vedi src/config/admin.ts)
+        const adminCheck = await isAdminUser(currentUser);
+        setIsAdmin(adminCheck);
+
+        // Sync user profile su Firestore. Il `role` è indicativo:
+        // l'autorizzazione effettiva passa da `isAdmin` derivato dal claim,
+        // non da `profile.role`. Non facciamo più auto-upgrade del role.
         const userRef = doc(db, 'users', currentUser.uid);
         const userDoc = await getDoc(userRef);
-        
+
         if (!userDoc.exists()) {
           const newProfile: UserProfile = {
             uid: currentUser.uid,
             email: currentUser.email || '',
             displayName: currentUser.displayName || '',
             photoURL: currentUser.photoURL || '',
-            role: isAdminEmail(currentUser.email) ? 'admin' : 'user',
-            updatedAt: serverTimestamp()
+            role: adminCheck ? 'admin' : 'user',
+            updatedAt: serverTimestamp(),
           };
           await setDoc(userRef, newProfile);
           setProfile(newProfile);
         } else {
-          const existingProfile = userDoc.data() as UserProfile;
-
-          if (existingProfile.role !== 'admin' && isAdminEmail(currentUser.email)) {
-            const upgradedProfile: UserProfile = {
-              ...existingProfile,
-              role: 'admin',
-              updatedAt: serverTimestamp()
-            };
-            await setDoc(userRef, upgradedProfile, { merge: true });
-            setProfile(upgradedProfile);
-          } else {
-            setProfile(existingProfile);
-          }
+          setProfile(userDoc.data() as UserProfile);
         }
       } else {
         setProfile(null);
+        setIsAdmin(false);
       }
-      
+
       setLoading(false);
     });
 
@@ -121,7 +118,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       value={{
         user,
         profile,
-        isAdmin: profile?.role === 'admin',
+        isAdmin,
         loading,
         authError,
         signIn,
