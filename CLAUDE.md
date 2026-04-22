@@ -27,22 +27,38 @@ React 19 · TypeScript (non-strict) · Vite 6 · Tailwind 4 + CSS variables · E
 - Run `npm run typecheck` after TypeScript edits. Run `npm run audit:ui` / `audit:visual` for UI work.
 - High-risk files (require owner confirmation): `server.ts`, `firestore.rules`, `src/config/admin.ts`.
 
-## Model routing (cost discipline)
+## Smart Routing Protocol (cost discipline)
 
-Default model is **sonnet**. Never escalate without reason.
+**Ceiling**: opus 4.7 high è disponibile come massima potenza. Il main thread **non lo usa automaticamente**: esegue prima un check di classificazione e delega a subagent economici quando il task non richiede opus. Il costo deve emergere dalle chiamate reali, non dalla configurazione statica.
 
-| Task | Route to |
-|------|----------|
-| Search, grep, read logs, "where is X", summarize | `code-explorer` (haiku) |
-| Standard bugfix, component, feature, PR | default (sonnet) |
-| UI critique, visual direction | `travellini-ui-designer` (sonnet) |
-| Italian copy, SEO, conversion | `travellini-seo-conversion-strategist` (sonnet) |
-| Release QA, audits, regressions | `travellini-quality-auditor` (sonnet) |
-| Browser audit, UX reale, responsive, form, regressioni | `browser-auditor` (sonnet) via Playwright MCP |
-| Implementation of a clear plan | `travellini-frontend-builder` (sonnet) |
-| Multi-file refactor, architecture, hard debugging | `code-architect` (opus) — rare |
+### Before-Action Routing Check (BARC)
 
-**Never use opus for:** single-file edits, grep/search, explanations, routine bugfixes, typecheck runs, anything completable in one file. If a subagent is about to read more than 3 files to explore, delegate to `code-explorer` instead.
+Prima di ogni tool call non banale il main thread, in testa al turno:
+
+1. **Classifica** il task contro la tabella qui sotto.
+2. **Delega** via `Agent` al subagent indicato se il task rientra in una classe economica.
+3. **Giustifica opus** in una riga se il task resta sul main thread opus (es. "multi-file cross-layer debug: restano opus").
+4. **Si fida dell'override** se l'owner dice esplicitamente "usa opus" / "fai tu direttamente": salta la delega.
+
+### Tassonomia task → route
+
+| Classe task | Keywords / segnali | Route |
+|---|---|---|
+| Ricerca, grep, "dove è X", enumerazione, log read | find, grep, search, list, dove, quale, elenca, mostra | `code-explorer` (haiku 4.5) |
+| Spiegazione / orientamento in modulo sconosciuto | spiega, explain, cosa fa, come funziona | `code-explorer` (haiku 4.5) |
+| Bugfix routine single-file | fix, typo, piccolo errore, rename locale | `travellini-frontend-builder` (sonnet) o edit diretto se ovvio |
+| UI critique, direzione visuale | UI, visual, design, estetica, brand | `travellini-ui-designer` (sonnet) |
+| Copy italiano, SEO, conversione | SEO, copy, italiano, conversion, lead | `travellini-seo-conversion-strategist` (sonnet) |
+| Audit, QA, regressione | audit, QA, regression, release, predeploy | `travellini-quality-auditor` (sonnet) |
+| Browser test reale, responsive, form | browser, Playwright, UX, responsive | `browser-auditor` (sonnet) via Playwright MCP |
+| Implementazione feature da piano già definito | "implementa", "segui il piano" | `travellini-frontend-builder` (sonnet) |
+| Refactor multi-file / architettura / debugging cross-layer | refactor grosso, design arch, bug multi-sistema | main thread opus (giustificato) o `code-architect` |
+
+### Regole assolute
+
+- **Mai opus per**: single-file edit, grep/search, spiegazioni, bugfix routine, typecheck run, qualsiasi cosa completabile in un file.
+- **Sempre subagent read-only** quando l'esplorazione richiede >3 file letti.
+- **Override owner** batte sempre la tabella.
 
 ## Commands
 

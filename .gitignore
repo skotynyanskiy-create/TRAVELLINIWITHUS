@@ -24,3 +24,12 @@ docs/Senza nome*
 audit-*.jpeg
 audit-*.png
 .vercel
+
+# AI tool memory/session cache
+.remember/
+
+# Claude Code per-machine local overrides (never commit)
+.claude/settings.local.json
+
+# Build artifacts and temp
+metadata.json

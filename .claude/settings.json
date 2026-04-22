@@ -1,6 +1,16 @@
 {
   "enableAllProjectMcpServers": true,
   "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'echo \"[BARC] Prima di agire: ricerca/read-only -> code-explorer (haiku). Single-file edit -> subagent sonnet o edit diretto. Refactor multi-file / debug ostico -> opus con giustificazione. Regola in CLAUDE.md #Smart-Routing-Protocol.\"'"
+          }
+        ]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Bash",
