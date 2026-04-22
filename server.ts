@@ -121,11 +121,6 @@ interface CouponRecord {
   expiryDate: string | null;
 }
 
-interface DemoSettings {
-  showEditorialDemo: boolean;
-  showShopDemo: boolean;
-}
-
 const DEMO_ARTICLE_SLUGS = new Set([
   'dolomiti-rifugi-design',
   'puglia-roadtrip-borghi-bianchi',
@@ -243,10 +238,6 @@ function getArticlesCollectionUrl() {
 
 function getProductsCollectionUrl() {
   return `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/${firebaseConfig.firestoreDatabaseId}/documents/products`;
-}
-
-function getSiteContentDocumentUrl(documentId: string) {
-  return `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/${firebaseConfig.firestoreDatabaseId}/documents/siteContent/${documentId}`;
 }
 
 function getNumber(fields: Record<string, FirestoreValue> | undefined, key: string) {
