@@ -22,6 +22,7 @@
     "test": "vitest run",
     "e2e": "playwright test",
     "audit:ui": "node scripts/check-ui.mjs",
+    "audit:ui:update-baseline": "node scripts/check-ui.mjs --update-baseline",
     "audit:firebase": "node scripts/check-firebase.mjs",
     "audit:stripe": "node scripts/check-stripe.mjs",
     "audit:agents": "node scripts/audit-agent-stack.mjs",

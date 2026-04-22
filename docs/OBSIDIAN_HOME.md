@@ -97,6 +97,7 @@ Apri `docs/` con **Open folder as vault** e imposta questa nota come home.
 - [[OBSIDIAN_TAXONOMY]] — naming e properties standard
 - [[OBSIDIAN_WORKFLOW]] — tutti i flussi operativi
 - [[AGENT_WORKFLOWS]] — workflow con Claude/AI
+- [[DESIGN_SYSTEM_CHEATSHEET]] — token CSS, componenti, motion presets (ready reference UI)
 
 ---
 

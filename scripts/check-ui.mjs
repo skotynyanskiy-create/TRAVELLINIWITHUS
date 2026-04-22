@@ -1,8 +1,22 @@
+// audit:ui — static heuristic UI consistency check.
+//
+// Workflow baseline:
+// - Senza flag: confronta i warning correnti con `audit-ui-baseline.json` in root.
+//   I warning presenti nel baseline sono marcati come BASELINE (accettati/giustificati).
+//   I warning nuovi fuori dal baseline sono marcati NEW e spiccano nel summary.
+//   I warning nel baseline ma non più presenti nel codice sono marcati RESOLVED.
+// - Flag `--update-baseline`: rigenera il file baseline con il set corrente
+//   (usare quando hai intenzionalmente fixato warning vecchi o accettato nuovi).
+//
+// Non blocca mai la CI (exit code 0). Se in futuro si vuole rendere blocking,
+// basta cambiare process.exitCode in presenza di NEW warnings.
 import fs from 'node:fs';
 import path from 'node:path';
 
 const rootDir = process.cwd();
 const srcDir = path.join(rootDir, 'src');
+const baselinePath = path.join(rootDir, 'audit-ui-baseline.json');
+const updateBaseline = process.argv.includes('--update-baseline');
 const extensions = new Set(['.tsx']);
 const ignoredFiles = new Set([
   path.join(srcDir, 'config', 'site.ts'),
@@ -183,24 +197,99 @@ for (const filePath of files) {
 
 const errorCount = issues.filter((issue) => issue.level === 'error').length;
 const warnCount = issues.filter((issue) => issue.level === 'warn').length;
-const maxPrintedIssues = 80;
 
-console.log('UI audit');
-console.log(`Files scanned: ${files.length}`);
-console.log(`Errors: ${errorCount}`);
-console.log(`Warnings: ${warnCount}`);
-
-for (const issue of issues.slice(0, maxPrintedIssues)) {
-  const prefix = issue.level.toUpperCase().padEnd(5, ' ');
-  console.log(`${prefix} ${issue.filePath}:${issue.line} - ${issue.message}`);
+function issueKey(issue) {
+  const normalizedPath = issue.filePath.replaceAll('\\', '/');
+  return `${normalizedPath}|${issue.line}|${issue.message}`;
 }
 
-if (issues.length > maxPrintedIssues) {
-  console.log(`WARN  ${issues.length - maxPrintedIssues} additional findings omitted from console output.`);
+function serializeForBaseline(list) {
+  return list
+    .map((issue) => ({
+      file: issue.filePath.replaceAll('\\', '/'),
+      line: issue.line,
+      level: issue.level,
+      message: issue.message,
+    }))
+    .sort((a, b) => (a.file === b.file ? a.line - b.line : a.file.localeCompare(b.file)));
 }
 
-if (issues.length === 0) {
-  console.log('PASS  No UI consistency issues detected by static heuristics.');
-}
+if (updateBaseline) {
+  const baseline = {
+    generatedAt: new Date().toISOString().slice(0, 10),
+    description:
+      'Warning audit:ui accettati come giustificati (PDF react constraint, animazioni Framer, palette affiliate dinamiche, ecc.). Rigenerare con: npm run audit:ui:update-baseline',
+    warnings: serializeForBaseline(issues),
+  };
+  fs.writeFileSync(baselinePath, JSON.stringify(baseline, null, 2) + '\n', 'utf8');
+  console.log('UI audit — baseline update');
+  console.log(`Files scanned: ${files.length}`);
+  console.log(`Warnings snapshot: ${warnCount}`);
+  console.log(`Errors snapshot: ${errorCount}`);
+  console.log(`Baseline written: ${path.relative(rootDir, baselinePath)}`);
+  process.exitCode = 0;
+} else if (fs.existsSync(baselinePath)) {
+  const baseline = JSON.parse(fs.readFileSync(baselinePath, 'utf8'));
+  const baselineIssues = (baseline.warnings || []).map((w) => ({
+    filePath: w.file,
+    line: w.line,
+    level: w.level || 'warn',
+    message: w.message,
+  }));
+  const baselineKeys = new Set(baselineIssues.map(issueKey));
+  const currentKeys = new Set(issues.map(issueKey));
 
-process.exitCode = 0;
+  const matched = issues.filter((i) => baselineKeys.has(issueKey(i)));
+  const newIssues = issues.filter((i) => !baselineKeys.has(issueKey(i)));
+  const resolved = baselineIssues.filter((i) => !currentKeys.has(issueKey(i)));
+
+  console.log('UI audit');
+  console.log(`Files scanned: ${files.length}`);
+  console.log(`Baseline date: ${baseline.generatedAt || 'unknown'}`);
+  console.log(`Errors: ${errorCount}`);
+  console.log(`Warnings total: ${warnCount} (baseline: ${matched.length}, new: ${newIssues.length}, resolved: ${resolved.length})`);
+
+  if (newIssues.length > 0) {
+    console.log('');
+    console.log('NEW warnings (fuori dal baseline — verifica se sono voluti):');
+    for (const issue of newIssues) {
+      const prefix = `NEW-${issue.level.toUpperCase()}`.padEnd(9, ' ');
+      console.log(`${prefix} ${issue.filePath}:${issue.line} - ${issue.message}`);
+    }
+  }
+
+  if (resolved.length > 0) {
+    console.log('');
+    console.log('RESOLVED (nel baseline ma non più nel codice — rigenera baseline con --update-baseline):');
+    for (const issue of resolved) {
+      console.log(`RESOLVED ${issue.filePath}:${issue.line} - ${issue.message}`);
+    }
+  }
+
+  if (newIssues.length === 0 && resolved.length === 0) {
+    console.log('PASS  Solo baseline warnings, nessun nuovo. Coerente.');
+  }
+
+  process.exitCode = 0;
+} else {
+  const maxPrintedIssues = 80;
+  console.log('UI audit (nessun baseline trovato — genera con: npm run audit:ui:update-baseline)');
+  console.log(`Files scanned: ${files.length}`);
+  console.log(`Errors: ${errorCount}`);
+  console.log(`Warnings: ${warnCount}`);
+
+  for (const issue of issues.slice(0, maxPrintedIssues)) {
+    const prefix = issue.level.toUpperCase().padEnd(5, ' ');
+    console.log(`${prefix} ${issue.filePath}:${issue.line} - ${issue.message}`);
+  }
+
+  if (issues.length > maxPrintedIssues) {
+    console.log(`WARN  ${issues.length - maxPrintedIssues} additional findings omitted from console output.`);
+  }
+
+  if (issues.length === 0) {
+    console.log('PASS  No UI consistency issues detected by static heuristics.');
+  }
+
+  process.exitCode = 0;
+}

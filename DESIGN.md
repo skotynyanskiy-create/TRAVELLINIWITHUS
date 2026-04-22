@@ -13,6 +13,15 @@ Read these before changing important UI:
 5. `docs/10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT.md`
 6. relevant notes under `docs/`
 
+## Quick Reference
+
+- **Token tecnici** (CSS vars, componenti riusabili, motion presets, utility classes): vedi [`docs/DESIGN_SYSTEM_CHEATSHEET.md`](docs/DESIGN_SYSTEM_CHEATSHEET.md) — aggiornarlo dopo PR che modificano `@theme` o aggiungono atoms.
+- **Baseline UI consistency**: `npm run audit:ui` confronta col file `audit-ui-baseline.json` committato. Nuovi warning fuori dal baseline spiccano come `NEW`. Per accettare un nuovo set: `npm run audit:ui:update-baseline`.
+- **Pagine mature di riferimento** (composizione pulita da cui copiare pattern):
+  - Home → [`src/pages/Home.tsx`](src/pages/Home.tsx)
+  - Articolo → [`src/pages/Articolo.tsx`](src/pages/Articolo.tsx) (pagina editoriale complex)
+  - Destinazioni → [`src/pages/Destinazioni.tsx`](src/pages/Destinazioni.tsx) (filtri + grid + pagination)
+
 ## Brand
 
 Travelliniwithus is the travel creator brand of Rodrigo & Betta. The site must feel people-led, editorial, useful, and commercially credible.
