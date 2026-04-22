@@ -72,7 +72,7 @@ ALLOW_MOCK_CHECKOUT=false
 - [ ] Stripe webhook secret verificato (runbook dedicato).
 - [ ] MFA attivo su tutti gli account admin.
 - [ ] `.env*` non committati; secrets in Vercel env (Production + Preview distinti).
-- [ ] `firebase-applet-config.json` nel deploy punta al progetto Firebase reale corretto.
+- [ ] `firebase-applet-config.json` nel deploy punta al progetto Firebase reale corretto. **Verificato automaticamente** in `npm run predeploy`: confronta `projectId` tra `firebase-applet-config.json`, `.firebaserc` (`projects.default`) e `FIREBASE_PROJECT_ID` env var se presente. Deploy blocca su mismatch.
 - [ ] CORS `app.use(cors())` ok per API pubbliche; se si introducono endpoint sensibili, restringere per origin.
 - [ ] HTTPS enforced (Vercel default).
 - [ ] Firestore export settimanale verde (`firestore-backup` GitHub Action).
@@ -162,6 +162,21 @@ curl -I https://travelliniwithus.it
 - Lighthouse CI non ancora configurato — post Sprint 1.
 - Core Web Vitals monitorati via GA4 > Engagement > Events.
 - Stripe API latency: Dashboard > Developers > Events.
+
+### Ordine di attivazione chiavi API (pre-launch)
+
+Il codice è scritto con guard-clause: ogni integrazione si auto-disabilita se chiave manca. Ordine consigliato di attivazione quando il content è pronto:
+
+1. **Gemini** (`GEMINI_API_KEY`) — opzionale, solo admin editorial. Bassa priorità.
+2. **Stripe live** (`STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `VITE_STRIPE_PUBLISHABLE_KEY`) — essenziale per shop. Smoke test A/B/C in [STRIPE_WEBHOOK_RUNBOOK.md](STRIPE_WEBHOOK_RUNBOOK.md).
+3. **Sentry** (`VITE_SENTRY_DSN`, `SENTRY_DSN`) — essenziale pre-launch, error tracking client + server, 2 progetti separati consigliati.
+4. **Resend** (`RESEND_API_KEY`) — essenziale, lead notifications + order receipts; domain verification richiesta.
+5. **Brevo** (`BREVO_API_KEY`, `BREVO_LIST_ID`) — essenziale, newsletter double opt-in.
+6. **Mapbox** (`VITE_MAPBOX_TOKEN`) — se feature mappa rimarrà attiva (token pubblico con URL restriction).
+7. **GA4** (`VITE_GA_ID`) — essenziale per remarketing Meta/Google Ads.
+8. **Meta Pixel** (`VITE_META_PIXEL_ID`) — remarketing IG/FB.
+9. **TikTok Pixel** (`VITE_TIKTOK_PIXEL_ID`) — remarketing TikTok.
+10. **Plausible** (`VITE_PLAUSIBLE_DOMAIN`, opzionale) — dashboard privacy-first.
 
 ---
 

@@ -158,9 +158,45 @@ Audit completo repo + workspace locale con focus su quality gates, automazioni e
 
 ### Note
 
-- `audit:ui` resta WARN-only e segnala ancora 34 warning non bloccanti: soprattutto raw color token locali e inline style usati per motion/illustrazioni.
+- `audit:ui` resta WARN-only e segnala ancora 34 warning non bloccanti: soprattutto raw color token locali e inline style usati per motion/illustrazioni. Dal 2026-04-22 è presente un **baseline esplicito** (`audit-ui-baseline.json`): nuovi warning fuori dal baseline vengono marcati `NEW-WARN` e spiccano nel report.
 - Lo shop resta correttamente in modalità preview/demo: i test E2E ora verificano questo stato invece di assumere un checkout attivo su prodotti demo.
 - `public/media-kit.pdf` e `public/sitemap.xml` vengono rigenerati dai check di build/predeploy; mantenerli versionati resta una decisione operativa esplicita.
+- **Design system cheatsheet** consultabile: [[DESIGN_SYSTEM_CHEATSHEET]] — reference completa di CSS vars, layout primitives, atoms riusabili, motion presets.
+
+## Strict TypeScript — Piano "by slice" (2026-04-22)
+
+Adozione progressiva di strict TS come audit continuo, senza rendere `typecheck:strict` un gate bloccante. Comando: `npm run typecheck:strict` (wrapper Node portable, sempre exit 0).
+
+### Stato attuale
+
+- `tsconfig.strict.json` esiste con `strict: true`, `noUncheckedIndexedAccess: true`, `exactOptionalPropertyTypes: true`, `noImplicitReturns: true`, `noFallthroughCasesInSwitch: true`.
+- Errori rilevati oggi: >100 sparsi (principalmente `noUncheckedIndexedAccess` + `exactOptionalPropertyTypes` + qualche `implicit any` in moduli minori).
+
+### Slice roadmap (ordine di riduzione errori, facile → difficile)
+
+| Slice | Area | Rationale | Effort stimato |
+|---|---|---|---|
+| **S1** | `src/utils/` | Funzioni pure, basso blast-radius, isolate | 1 sessione |
+| **S2** | `src/hooks/` | Custom hooks: pattern prevedibili, fix mirati | 1 sessione |
+| **S3** | `src/lib/` | Helper condivisi (animations, consent, stripe, firestore error handler) | 1 sessione |
+| **S4** | `src/services/` | Service layer (analytics, aiVerificationService, ecc.) | 1-2 sessioni |
+| **S5** | `src/context/` | Context React (Auth, Cart, Favorites, Consent) | 1-2 sessioni |
+| **S6** | `src/components/` atoms | Componenti UI riusabili (Button, Card, Skeleton, ecc.) | 2 sessioni |
+| **S7** | `src/components/` sezioni | Feature folder (home, destinazioni, discovery, article, ecc.) | 3-4 sessioni |
+| **S8** | `src/pages/` | Top-level pages | 2-3 sessioni |
+| **S9** | `server.ts` | Dopo modularizzazione server.ts (non prima) | 2 sessioni |
+
+### Regole per ogni slice
+
+- Non forzare `!` non-null assertion in modo sistematico: preferire guard-clause + narrowing esplicito.
+- Non rendere opzionale un campo obbligatorio solo per spegnere errore `exactOptionalPropertyTypes`: preferire `| undefined` espliciti.
+- Dopo ogni slice: run `npm run typecheck:strict`, documentare errori rimasti.
+- Commit per slice: `refactor(ts-strict): S<N> <area> — N errors -> M`.
+- Non unire slice: un commit = un'area, per facilità review e rollback.
+
+### Gate finale
+
+Quando S1-S8 completati: valutare se portare `strict` dentro `tsconfig.json` base e rendere `typecheck` unificato. S9 (server.ts) dopo modularizzazione.
 
 ## Link
 
