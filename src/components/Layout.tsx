@@ -4,7 +4,6 @@ import { AnimatePresence, motion } from 'motion/react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import ConsentBanner from './ConsentBanner';
-import AnalyticsScripts from './AnalyticsScripts';
 import { initAnalytics, trackPageview } from '../services/analytics';
 import { initErrorTracking } from '../lib/errorTracking';
 
@@ -28,7 +27,6 @@ export default function Layout() {
       >
         Vai al contenuto principale
       </a>
-      <AnalyticsScripts />
       <Navbar />
       <main id="main-content" className="flex-grow">
         <AnimatePresence mode="popLayout">
