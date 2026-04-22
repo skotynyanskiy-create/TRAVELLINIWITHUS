@@ -13,6 +13,21 @@ export default function Layout() {
   useEffect(() => {
     initErrorTracking();
     initAnalytics();
+
+    // Idle prefetch delle rotte più probabili dopo la landing (Home).
+    // Parte dopo first paint; zero impatto su LCP; chunk pronti quando l'utente clicca.
+    const prefetchTopRoutes = () => {
+      void import('../pages/Destinazioni');
+      void import('../pages/Guide');
+      void import('../pages/Articolo');
+    };
+    type RIC = (cb: () => void, opts?: { timeout?: number }) => number;
+    const ric = (window as Window & { requestIdleCallback?: RIC }).requestIdleCallback;
+    if (typeof ric === 'function') {
+      ric(prefetchTopRoutes, { timeout: 3000 });
+    } else {
+      window.setTimeout(prefetchTopRoutes, 2500);
+    }
   }, []);
 
   useEffect(() => {
