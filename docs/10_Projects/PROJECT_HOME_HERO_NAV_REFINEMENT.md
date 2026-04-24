@@ -218,3 +218,62 @@ Decisione: la nav smette di comprimere tutto dentro `Esplora` + `Risorse`.
 - `Guide` ora dichiara il layer editoriale pratico: guide, itinerari, dove dormire, cosa mangiare
 - `Pianifica` diventa il funnel operativo: `Inizia da qui`, `Risorse`, `Dove dormire`
 - il cambio serve a rendere leggibile la differenza tra ispirazione, contenuto pratico e workflow di organizzazione
+
+## Build pass 2026-04-24 - senior UI polish (homepage + footer)
+
+Revisione editoriale premium (no redesign) focalizzata su contrast, gerarchia e dedupe navigazionale. Tutti i gate verdi (`typecheck`, `audit:ui` 11/0 new, `build` OK in 20s).
+
+Modifiche:
+
+- **Footer** (`src/components/Footer.tsx`) — dedupe dei link: ogni voce appare una sola volta. Rimossi `Dove dormire` duplicato in Scopri, `Risorse` duplicato in Scopri e Pianifica, `Preferiti` duplicato in Pianifica. Aggiunto `Cosa mangiare` in colonna Pianifica. Ridotta densità senza perdere funzionalità.
+- **HeroSection** (`src/components/home/HeroSection.tsx`) — rimosso paragrafo uppercase ridondante sotto i CTA (ripeteva il messaggio dei TRUST_PILLS). Bump opacity: description `text-white/86 → /90`, pill text `/78 → /85`, secondary CTA text `/82 → /88`.
+- **Home newsletter section** (`src/pages/Home.tsx`) — italic `text-black/55 → /70`, body `/62 → /72` per soddisfare WCAG AA con margine.
+- **HomeDiscoveryCards** (`src/components/home/HomeDiscoveryCards.tsx`) — description principali `text-black/62 → /72`, guide-tile desc `/55 → /65`. Typo `gia → già` corretto nel CTA Pianifica.
+- **CoupleIntro** (`src/components/home/CoupleIntro.tsx`) — quote manifesto `text-black/45 → text-accent-text` (dal bronzo WCAG AA compliant). Card standard desc `/55 → /68`. Badge meta `/50 → /62` con bold.
+- **LatestArticles** (`src/components/home/LatestArticles.tsx`) — heading ristretta da "Contenuti editoriali da leggere prima di partire" a "Guide e itinerari da leggere prima di partire" (più diretto), eyebrow `Editoriale → Dalla redazione`, body `/60 → /70`, link secondari `/50 → /62`.
+
+Proposte rimandate (medio rischio, richiedono approval):
+
+- **B1**. Home consolidation: valutare fusione `InstagramFeed + PartnerLogos` in strip social proof unica, e riordino `HomeMapTeaser` dopo `DestinationScroller`.
+- **B2**. Design token: introdurre `.text-muted` (/70) e `.text-meta` (/55) in `@theme` per eliminare i `/55 /62 /65 /68` dispersi nei componenti.
+
+Fuori scope (pre-esistente, non toccato):
+
+- Warning IDE `suggestCanonicalClasses` (`text-[var(--color-accent)] → text-accent`) — presenti in tutto il codebase, non introdotti dalle modifiche.
+- Navbar refactor (stabile, 713 righe).
+- Sostituzione immagini AI con foto reali Rodrigo & Betta (owner task).
+
+## Build pass 2026-04-24 - wave 2 + 3 (home residui + pagine conversione)
+
+Seconda e terza ondata della senior UI review, sullo stesso gate giornaliero. Tutti i gate verdi (`typecheck`, `audit:ui` 11/0 new, `build` OK in 25s).
+
+Wave 2 — home components residui:
+
+- **HomeToolsTeaser** (`src/components/home/HomeToolsTeaser.tsx`) — main description `text-black/62 → /72`, card descriptions `/56 → /68`, CTA meta `/42 → /60` per migliore affordance dei link "Vai alle risorse".
+- **HomeMapTeaser** (`src/components/home/HomeMapTeaser.tsx`) — italic `text-black/55 → /70`, description `/62 → /72`. SVG world shapes `strokeOpacity 0.18 → 0.22`, marker-pulse `fillOpacity 0.18 → 0.24` per migliore riconoscibilità geografica.
+- **HomeCollaborationCta** (`src/components/home/HomeCollaborationCta.tsx`) — secondary button "Richiedi il media kit" rinforzato: `border-white/18 → /24`, `text-white/76 → /92`. Parity visuale con il primary CTA senza perdere la gerarchia.
+
+Wave 3 — pagine di conversione:
+
+- **InstagramFeed** (`src/components/home/InstagramFeed.tsx`) — stesso pattern italic+body `/55 → /70`, `/62 → /72`.
+- **Collaborazioni** (`src/pages/Collaborazioni.tsx`) — badge "Con priorità alla qualità del racconto" `text-black/45 → /60` per leggibilità mobile sulla floating card B2B.
+
+Pagine auditate ma non modificate (copy e gerarchia già molto forti, nessun quick win giustificato):
+
+- `src/pages/ChiSiamo.tsx` — `/70` su cards principi è borderline ma accettabile. Rinvio a pass design token (B2).
+- `src/pages/MediaKit.tsx` — success message usa `text-accent-text` (bronzo WCAG AA), già al limite corretto.
+- `src/pages/IniziaDaQui.tsx` — card body `/65` adeguato, gerarchia forte, no interventi.
+
+Totale ondate 1+2+3: **11 file src toccati** (Footer, HeroSection, Home, HomeDiscoveryCards, HomeToolsTeaser, HomeMapTeaser, HomeCollaborationCta, CoupleIntro, LatestArticles, InstagramFeed, Collaborazioni), 0 regression, 0 new audit warning, build stabile.
+
+### Wave 4 — smoke test reale (Playwright MCP) e fix follow-up
+
+Eseguito smoke test via `browser-auditor` su `http://localhost:3000` — homepage desktop 1280×800, homepage mobile 390×844, `/collaborazioni` desktop. Verdict: nessun blocker, nessun errore console, nessuna regressione strutturale. 5 screenshot salvati.
+
+Issue trovati dallo smoke test:
+
+1. **Footer grid desktop wrap** (pre-esistente, scoperto durante il test) — a 1280px la colonna `Progetto` andava a capo su una seconda riga. Calcolo grid: logo `lg:col-span-2` + 4 colonne link × 1 = 6 colonne necessarie, ma grid era `lg:grid-cols-5`. Fix: `lg:grid-cols-5 → lg:grid-cols-6` in `src/components/Footer.tsx`. Ora le 5 colonne desktop si distribuiscono pulite: Logo (2) + Scopri + Pianifica + Risorse + Progetto.
+
+2. **Navbar sticky copre prima voce footer su mobile** (pre-esistente, WARN minore) — il z-index della navbar sticky sovrappone visivamente la prima voce di `Scopri` (Destinazioni) quando lo scroll raggiunge il footer. Il link è presente e funzionale, solo oscurato visivamente. **Non fixato in questa pass**: richiede intervento sulla Navbar, fuori scope. Aggiunto qui come tech debt noto.
+
+Totale post wave 4: **11 file src** (ri-toccato Footer per il grid fix), 0 regression, 0 nuovi audit warning.

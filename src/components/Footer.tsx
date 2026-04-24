@@ -33,7 +33,7 @@ export default function Footer() {
       <footer className="border-t border-white/10 bg-[var(--color-footer)] text-zinc-400">
         <div className="pt-20 pb-16">
           <div className="mx-auto max-w-7xl px-6 md:px-12">
-            <div className="mb-16 grid grid-cols-1 gap-16 md:grid-cols-4 lg:grid-cols-5">
+            <div className="mb-16 grid grid-cols-1 gap-16 md:grid-cols-4 lg:grid-cols-6">
               <div className="md:col-span-2 lg:col-span-2">
                 <Link
                   to="/"
@@ -132,22 +132,6 @@ export default function Footer() {
                       {navigation.itinerariesLabel}
                     </Link>
                   </li>
-                  <li>
-                    <Link
-                      to="/dove-dormire"
-                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      Dove dormire
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/risorse"
-                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      {navigation.resourcesLabel}
-                    </Link>
-                  </li>
                   {isShopDiscoverable && (
                     <li>
                       <Link
@@ -183,28 +167,20 @@ export default function Footer() {
                     </Link>
                   </li>
                   <li>
+                    <Link
+                      to="/cosa-mangiare"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      Cosa mangiare
+                    </Link>
+                  </li>
+                  <li>
                     <button
                       onClick={handleNewsletterClick}
                       className="inline-block text-left text-base transition-colors hover:text-[var(--color-accent)]"
                     >
                       {footer.newsletterButtonLabel}
                     </button>
-                  </li>
-                  <li>
-                    <Link
-                      to="/preferiti"
-                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      {navigation.favoritesLabel}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/risorse"
-                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      Toolkit di viaggio
-                    </Link>
                   </li>
                 </ul>
               </div>

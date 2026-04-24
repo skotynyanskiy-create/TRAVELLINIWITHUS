@@ -45,9 +45,9 @@ export default function HomeMapTeaser() {
             Dove siamo stati
           </span>
           <h2 className="mt-4 max-w-xl font-serif text-4xl leading-[1.05] text-ink md:text-5xl">
-            Un mondo di posti <span className="italic text-black/55">vissuti davvero</span>
+            Un mondo di posti <span className="italic text-black/70">vissuti davvero</span>
           </h2>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-black/62">
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-black/72">
             Ogni destinazione che raccontiamo è un viaggio che abbiamo fatto. Niente guide copiate:
             solo luoghi esplorati, verificati e scelti uno a uno.
           </p>
@@ -79,7 +79,7 @@ export default function HomeMapTeaser() {
                 d={shape}
                 fill="var(--color-surface)"
                 stroke="var(--color-ink)"
-                strokeOpacity="0.18"
+                strokeOpacity="0.22"
                 strokeWidth="1"
               />
             ))}
@@ -88,7 +88,7 @@ export default function HomeMapTeaser() {
 
               return (
                 <g key={marker.name}>
-                  <circle cx={x} cy={y} r="12" fill="var(--color-accent)" fillOpacity="0.18" />
+                  <circle cx={x} cy={y} r="12" fill="var(--color-accent)" fillOpacity="0.24" />
                   <circle
                     cx={x}
                     cy={y}

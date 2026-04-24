@@ -37,7 +37,7 @@ export default function HomeToolsTeaser() {
           <h2 className="mt-3 max-w-xl text-3xl font-serif leading-tight text-ink md:text-5xl">
             Poche risorse, scelte per viaggiare meglio.
           </h2>
-          <p className="mt-4 max-w-xl text-base leading-relaxed text-black/62">
+          <p className="mt-4 max-w-xl text-base leading-relaxed text-black/72">
             Non una vetrina di link: solo strumenti, app e attrezzatura che hanno senso dentro il
             modo in cui viaggiamo e raccontiamo.
           </p>
@@ -63,8 +63,8 @@ export default function HomeToolsTeaser() {
                   <Icon size={18} />
                 </div>
                 <h3 className="text-lg font-serif text-ink">{item.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-black/56">{item.text}</p>
-                <span className="mt-5 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-black/42 transition-colors group-hover:text-[var(--color-accent)]">
+                <p className="mt-3 text-sm leading-relaxed text-black/68">{item.text}</p>
+                <span className="mt-5 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-black/60 transition-colors group-hover:text-[var(--color-accent)]">
                   Vai alle risorse <ArrowRight size={12} />
                 </span>
               </Link>

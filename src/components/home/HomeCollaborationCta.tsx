@@ -21,8 +21,8 @@ export default function HomeCollaborationCta() {
               Hai un luogo, un hotel o un progetto che merita un racconto fatto bene?
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/70 md:text-lg">
-              Lavoriamo con realtà travel, hospitality e lifestyle quando c&rsquo;è allineamento reale tra
-              progetto, pubblico e libertà editoriale.
+              Lavoriamo con realtà travel, hospitality e lifestyle quando c&rsquo;è allineamento
+              reale tra progetto, pubblico e libertà editoriale.
             </p>
           </div>
 
@@ -35,7 +35,7 @@ export default function HomeCollaborationCta() {
             </Link>
             <Link
               to="/media-kit"
-              className="inline-flex h-12 items-center justify-center rounded-lg border border-white/18 px-6 text-xs font-bold uppercase tracking-widest text-white/76 transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+              className="inline-flex h-12 items-center justify-center rounded-lg border border-white/24 px-6 text-xs font-bold uppercase tracking-widest text-white/92 transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
             >
               Richiedi il media kit
             </Link>

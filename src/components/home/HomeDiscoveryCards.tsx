@@ -36,7 +36,7 @@ function GuideTile({ category, description }: { category: GuideCategory; descrip
         </div>
       )}
       <p className="text-sm font-serif leading-tight text-[var(--color-ink)]">{category}</p>
-      <p className="line-clamp-2 text-[11px] leading-relaxed text-black/55">{description}</p>
+      <p className="line-clamp-2 text-[11px] leading-relaxed text-black/65">{description}</p>
     </Link>
   );
 }
@@ -192,7 +192,7 @@ export default function HomeDiscoveryCards() {
             <h2 className="mt-3 text-4xl font-serif leading-tight text-ink md:text-6xl">
               Trova il prossimo posto da salvare.
             </h2>
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/62 md:text-lg">
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/72 md:text-lg">
               Parti da una zona, da uno stile di viaggio o da un'idea precisa. Il resto lo trovi
               nell'archivio.
             </p>
@@ -255,9 +255,9 @@ export default function HomeDiscoveryCards() {
             <h3 className="mt-7 text-3xl font-serif leading-tight text-ink md:text-5xl">
               Guide pratiche e itinerari con un criterio unico.
             </h3>
-            <p className="mt-4 text-sm leading-relaxed text-black/62 md:text-base">
+            <p className="mt-4 text-sm leading-relaxed text-black/72 md:text-base">
               Parti dal funnel Pianifica: guide operative per decidere meglio, itinerari per partire
-              con un piano gia leggibile e hotel collegati quando servono davvero.
+              con un piano già leggibile e hotel collegati quando servono davvero.
             </p>
             <Link
               to="/inizia-da-qui"

@@ -86,21 +86,21 @@ export default function LatestArticles() {
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="mb-10 flex items-end justify-between gap-6">
           <div>
-            <span className="text-[10px] uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
-              Editoriale
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
+              Dalla redazione
             </span>
-            <h2 className="mt-1 text-3xl font-serif text-ink md:text-4xl">
-              Contenuti editoriali da leggere prima di partire.
+            <h2 className="mt-2 text-3xl font-serif leading-tight text-ink md:text-4xl">
+              Guide e itinerari da leggere prima di partire.
             </h2>
-            <p className="mt-3 max-w-xl text-base leading-relaxed text-black/60">
-              Una selezione mista di guide pratiche e itinerari per capire cosa salvare e come
-              organizzarlo meglio.
+            <p className="mt-3 max-w-xl text-base leading-relaxed text-black/70">
+              Una selezione mista di contenuti editoriali: cosa salvare, come organizzarlo e perché
+              un posto merita davvero.
             </p>
           </div>
           <div className="hidden items-center gap-4 sm:flex">
             <Link
               to="/guide"
-              className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-black/50 transition-transform hover:translate-x-0.5 hover:text-[var(--color-accent-text)]"
+              className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-black/62 transition-transform hover:translate-x-0.5 hover:text-[var(--color-accent-text)]"
             >
               Guide pratiche <ArrowRight size={12} />
             </Link>

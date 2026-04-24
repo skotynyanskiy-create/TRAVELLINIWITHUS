@@ -79,11 +79,11 @@ export default function InstagramFeed({ posts }: InstagramFeedProps) {
             </span>
             <h2 className="mt-4 text-4xl font-serif leading-[1.05] text-ink md:text-5xl">
               Segui i nostri viaggi
-              <span className="italic text-black/55"> giorno per giorno.</span>
+              <span className="italic text-black/70"> giorno per giorno.</span>
             </h2>
           </div>
           <div className="flex flex-col items-start gap-4 md:items-end">
-            <p className="max-w-md text-base leading-relaxed text-black/62 md:text-right">
+            <p className="max-w-md text-base leading-relaxed text-black/72 md:text-right">
               Foto, video e piccole scoperte che non finiscono nelle guide. Su Instagram siamo
               {` ${BRAND_STATS.instagramFollowers} `}
               persone a viaggiare insieme.

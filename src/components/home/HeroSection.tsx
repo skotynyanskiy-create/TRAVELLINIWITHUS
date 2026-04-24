@@ -135,7 +135,7 @@ export default function HeroSection() {
             Posti particolari che valgono davvero.
           </h1>
 
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/86 drop-shadow-[0_2px_12px_rgba(0,0,0,0.3)] md:text-xl">
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/90 drop-shadow-[0_2px_12px_rgba(0,0,0,0.3)] md:text-xl">
             Guide pratiche scritte da chi ha vissuto il viaggio. Atmosfera, dettagli utili e
             consigli che aiutano a capire se un posto merita davvero.
           </p>
@@ -144,7 +144,7 @@ export default function HeroSection() {
             {TRUST_PILLS.map((pill) => (
               <span
                 key={pill}
-                className="rounded-full border border-white/14 bg-white/8 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/78 backdrop-blur-sm"
+                className="rounded-full border border-white/18 bg-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/85 backdrop-blur-sm"
               >
                 {pill}
               </span>
@@ -169,15 +169,11 @@ export default function HeroSection() {
 
             <Link
               to="/#storie"
-              className="inline-flex h-14 min-w-[230px] items-center justify-center rounded-lg border border-white/24 bg-black/5 px-8 text-sm font-bold uppercase tracking-widest text-white/82 transition-all duration-300 hover:border-white/60 hover:bg-white/10 hover:text-white sm:h-16"
+              className="inline-flex h-14 min-w-[230px] items-center justify-center rounded-lg border border-white/24 bg-black/5 px-8 text-sm font-bold uppercase tracking-widest text-white/88 transition-all duration-300 hover:border-white/60 hover:bg-white/10 hover:text-white sm:h-16"
             >
               Ultime storie
             </Link>
           </div>
-
-          <p className="mt-6 max-w-xl text-xs font-semibold uppercase tracking-[0.18em] text-white/68">
-            Scoperta, utilità e uno sguardo personale prima di prenotare o partire.
-          </p>
         </motion.div>
 
         <FeaturedReelPreview />
