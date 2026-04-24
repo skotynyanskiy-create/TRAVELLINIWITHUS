@@ -18,25 +18,29 @@ import Breadcrumbs from '../components/Breadcrumbs';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import Section from '../components/Section';
-import { BRAND_STATS, CONTACTS } from '../config/site';
+import { BRAND_STATS, CONTACTS, SITE_URL } from '../config/site';
+import { useContactForm, isValidEmail } from '../hooks/useContactForm';
 
 const MEDIA_KIT_PREVIEW = [
   {
     step: '01',
     title: 'Profilo del progetto',
-    description: 'Chi sono Rodrigo e Betta, come nasce Travelliniwithus e quale tono rende il progetto riconoscibile.',
+    description:
+      'Chi sono Rodrigo e Betta, come nasce Travelliniwithus e quale tono rende il progetto riconoscibile.',
     icon: BriefcaseBusiness,
   },
   {
     step: '02',
     title: 'Audience e segnali utili',
-    description: 'Numeri, reach, contesto editoriale e lettura corretta del pubblico, senza cosmetica da brochure.',
+    description:
+      'Numeri, reach, contesto editoriale e lettura corretta del pubblico, senza cosmetica da brochure.',
     icon: BarChart3,
   },
   {
     step: '03',
     title: 'Format e contesto operativo',
-    description: 'Come lavoriamo, che tipo di attivazioni hanno senso e quali collaborazioni non prendiamo in considerazione.',
+    description:
+      'Come lavoriamo, che tipo di attivazioni hanno senso e quali collaborazioni non prendiamo in considerazione.',
     icon: Clapperboard,
   },
 ];
@@ -77,13 +81,15 @@ export default function MediaKit() {
   const [website, setWebsite] = useState('');
   const [projectFocus, setProjectFocus] = useState('');
   const [brief, setBrief] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [submitError, setSubmitError] = useState('');
+  const {
+    isSubmitting,
+    submitError,
+    isSubmitted: isSuccess,
+    submit,
+    setSubmitError,
+  } = useContactForm({ kind: 'media-kit' });
 
   const breadcrumbItems = [{ label: 'Media Kit' }];
-
-  const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -94,7 +100,9 @@ export default function MediaKit() {
     const normalizedBrief = brief.trim();
 
     if (!normalizedEmail || !normalizedCompany || !projectFocus || !normalizedBrief) {
-      setSubmitError('Inserisci azienda, email lavorativa, focus del progetto e un contesto breve ma utile.');
+      setSubmitError(
+        'Inserisci azienda, email lavorativa, focus del progetto e un contesto breve ma utile.'
+      );
       return;
     }
 
@@ -103,38 +111,13 @@ export default function MediaKit() {
       return;
     }
 
-    setSubmitError('');
-    setIsSubmitting(true);
-
-    try {
-      const response = await fetch('/api/media-kit-lead', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: normalizedEmail,
-          company: normalizedCompany,
-          website: normalizedWebsite || undefined,
-          topic: projectFocus,
-          message: normalizedBrief || undefined,
-        }),
-      });
-
-      if (!response.ok) {
-        const payload = (await response.json().catch(() => null)) as { error?: string } | null;
-        throw new Error(payload?.error || 'Invio non riuscito');
-      }
-
-      setIsSuccess(true);
-    } catch (error) {
-      console.error('Error saving media kit lead:', error);
-      setSubmitError(
-        `Non siamo riusciti a registrare la richiesta. Puoi scriverci direttamente a ${CONTACTS.email}.`,
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
+    await submit({
+      email: normalizedEmail,
+      company: normalizedCompany,
+      website: normalizedWebsite || undefined,
+      topic: projectFocus,
+      message: normalizedBrief || undefined,
+    });
   };
 
   return (
@@ -142,6 +125,7 @@ export default function MediaKit() {
       <SEO
         title="Media Kit"
         description="Richiedi il media kit Travelliniwithus per capire audience, format, tono editoriale e condizioni giuste per una collaborazione coerente."
+        canonical={`${SITE_URL}/media-kit`}
       />
 
       <Section className="pt-8">
@@ -161,7 +145,8 @@ export default function MediaKit() {
             </h1>
             <p className="mx-auto max-w-3xl text-xl leading-relaxed text-black/70">
               Il media kit serve a capire se il progetto ha senso per entrambe le parti. Pubblico,
-              posizionamento, format e modo di lavorare: tutto il necessario per parlare con basi più serie.
+              posizionamento, format e modo di lavorare: tutto il necessario per parlare con basi
+              più serie.
             </p>
             <div className="mt-8 inline-flex flex-wrap items-center justify-center gap-4 rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent-soft)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] md:gap-6 md:px-8">
               <span>{BRAND_STATS.instagramFollowers} Instagram</span>
@@ -180,8 +165,8 @@ export default function MediaKit() {
             <div className="mb-10 rounded-[2rem] border border-black/5 bg-[var(--color-sand)] p-8 md:p-10">
               <h2 className="mb-4 text-3xl font-serif">Cosa troverai nel media kit</h2>
               <p className="leading-relaxed text-black/70">
-                Non una presentazione gonfiata. Una sintesi ordinata di chi siamo, a chi parliamo, che cosa
-                sappiamo fare bene e quando una collaborazione conviene davvero.
+                Non una presentazione gonfiata. Una sintesi ordinata di chi siamo, a chi parliamo,
+                che cosa sappiamo fare bene e quando una collaborazione conviene davvero.
               </p>
             </div>
 
@@ -237,8 +222,8 @@ export default function MediaKit() {
               <div className="mb-8">
                 <h2 className="mb-2 text-2xl font-serif">Richiedi il media kit</h2>
                 <p className="text-sm leading-relaxed text-zinc-500">
-                  Ti chiediamo poche informazioni, ma utili. Servono a capire se il progetto e allineato e
-                  a risponderti con materiale davvero rilevante.
+                  Ti chiediamo poche informazioni, ma utili. Servono a capire se il progetto e
+                  allineato e a risponderti con materiale davvero rilevante.
                 </p>
               </div>
 
@@ -294,7 +279,10 @@ export default function MediaKit() {
                 </div>
 
                 <div>
-                  <label htmlFor="project-focus" className="mb-2 block text-sm font-medium text-zinc-700">
+                  <label
+                    htmlFor="project-focus"
+                    className="mb-2 block text-sm font-medium text-zinc-700"
+                  >
                     Focus della richiesta
                   </label>
                   <div className="relative">
@@ -351,12 +339,13 @@ export default function MediaKit() {
                 {submitError && <p className="text-sm text-red-600">{submitError}</p>}
 
                 <p className="text-center text-xs font-medium text-[var(--color-accent)]">
-                  Se il contatto è coerente, ricevi il link al media kit e un riscontro entro 48 ore lavorative.
+                  Se il contatto è coerente, ricevi il link al media kit e un riscontro entro 48 ore
+                  lavorative.
                 </p>
 
                 <p className="text-center text-xs leading-relaxed text-zinc-400">
-                  Inviando la richiesta accetti di essere ricontattato in merito a possibili collaborazioni e
-                  al trattamento dei dati secondo la nostra{' '}
+                  Inviando la richiesta accetti di essere ricontattato in merito a possibili
+                  collaborazioni e al trattamento dei dati secondo la nostra{' '}
                   <Link to="/privacy" className="underline underline-offset-2 hover:text-zinc-600">
                     privacy policy
                   </Link>
@@ -377,8 +366,8 @@ export default function MediaKit() {
                 Richiesta ricevuta
               </h2>
               <p className="text-center leading-relaxed text-[var(--color-accent-text)]">
-                Grazie. Se vediamo un allineamento reale, ti inviamo il media kit e ti rispondiamo con i
-                prossimi passi più utili.
+                Grazie. Se vediamo un allineamento reale, ti inviamo il media kit e ti rispondiamo
+                con i prossimi passi più utili.
               </p>
               <div className="mt-8 space-y-4 rounded-[1.5rem] border border-[var(--color-accent)]/10 bg-white/70 p-6">
                 <div className="flex gap-3">
@@ -390,13 +379,15 @@ export default function MediaKit() {
                 <div className="flex gap-3">
                   <CheckCircle size={18} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
                   <p className="text-sm leading-relaxed text-black/70">
-                    Il media kit arriva via email insieme al contesto giusto per continuare la conversazione.
+                    Il media kit arriva via email insieme al contesto giusto per continuare la
+                    conversazione.
                   </p>
                 </div>
                 <div className="flex gap-3">
                   <CheckCircle size={18} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
                   <p className="text-sm leading-relaxed text-black/70">
-                    Se vuoi accelerare, puoi anche scriverci direttamente con un brief più dettagliato.
+                    Se vuoi accelerare, puoi anche scriverci direttamente con un brief più
+                    dettagliato.
                   </p>
                 </div>
               </div>
@@ -423,13 +414,16 @@ export default function MediaKit() {
         <div className="mb-12 text-center">
           <h2 className="mb-4 text-4xl font-serif">Come funziona dopo il primo contatto</h2>
           <p className="mx-auto max-w-2xl leading-relaxed text-black/70">
-            Questo passaggio serve a filtrare meglio, non a complicare. Preferiamo meno richieste ma più
-            coerenti, con una conversazione pulita fin dall'inizio.
+            Questo passaggio serve a filtrare meglio, non a complicare. Preferiamo meno richieste ma
+            più coerenti, con una conversazione pulita fin dall'inizio.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {NEXT_STEPS.map((item) => (
-            <div key={item.title} className="rounded-[2rem] border border-black/5 bg-white p-8 shadow-sm">
+            <div
+              key={item.title}
+              className="rounded-[2rem] border border-black/5 bg-white p-8 shadow-sm"
+            >
               <h3 className="mb-3 text-2xl font-serif">{item.title}</h3>
               <p className="leading-relaxed text-black/70">{item.text}</p>
             </div>
@@ -442,10 +436,12 @@ export default function MediaKit() {
           <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-[var(--color-accent)]">
             <Mail size={24} />
           </div>
-          <h2 className="mb-4 text-3xl font-serif md:text-4xl">Vuoi partire da un contatto diretto?</h2>
+          <h2 className="mb-4 text-3xl font-serif md:text-4xl">
+            Vuoi partire da un contatto diretto?
+          </h2>
           <p className="mb-8 leading-relaxed text-white/80">
-            Se hai già un brief chiaro o una proposta ben impostata, puoi scriverci direttamente. Il criterio
-            resta lo stesso: allineamento, chiarezza e poi approfondimento.
+            Se hai già un brief chiaro o una proposta ben impostata, puoi scriverci direttamente. Il
+            criterio resta lo stesso: allineamento, chiarezza e poi approfondimento.
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a

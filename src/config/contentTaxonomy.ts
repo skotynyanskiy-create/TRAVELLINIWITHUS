@@ -55,6 +55,14 @@ export function slugifyGuideCategory(value: string) {
     .replace(/^-+|-+$/g, '');
 }
 
+export function getGuideCategoryFromQuery(rawValue: string | null) {
+  if (!rawValue) {
+    return null;
+  }
+
+  return GUIDE_CATEGORIES.find((item) => slugifyGuideCategory(item) === rawValue) || null;
+}
+
 export function getExperienceTypeFromQuery(rawValue: string | null) {
   if (!rawValue) {
     return null;

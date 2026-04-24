@@ -93,3 +93,18 @@ export const GUIDE_CATEGORY_VISUALS: Record<GuideCategory, GuideCategoryVisual> 
 export function getGuideCategoryVisual(category: GuideCategory): GuideCategoryVisual {
   return GUIDE_CATEGORY_VISUALS[category];
 }
+
+export const GUIDE_CATEGORY_VISUAL_CLASSES: Record<GuideCategory, string> = {
+  'Itinerari completi': 'guide-visual-itinerari-completi',
+  'Consigli pratici': 'guide-visual-consigli-pratici',
+  'Cosa portare': 'guide-visual-cosa-portare',
+  'Food guide': 'guide-visual-food-guide',
+  'Dove dormire': 'guide-visual-dove-dormire',
+  'Budget & Costi': 'guide-visual-budget-costi',
+  Pianificazione: 'guide-visual-pianificazione',
+  'Weekend & Day trip': 'guide-visual-weekend-day-trip',
+};
+
+export function getGuideCategoryVisualClass(category: GuideCategory): string {
+  return GUIDE_CATEGORY_VISUAL_CLASSES[category];
+}

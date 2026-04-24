@@ -7,9 +7,10 @@ import Button from '../components/Button';
 import PageLayout from '../components/PageLayout';
 import Section from '../components/Section';
 import SEO from '../components/SEO';
-import { CONTACTS, SOCIAL_COLORS } from '../config/site';
+import { CONTACTS, SITE_URL, SOCIAL_COLORS } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
+import { useContactForm, isValidEmail } from '../hooks/useContactForm';
 
 export default function Contatti() {
   const { data: content } = useSiteContent('contact');
@@ -21,9 +22,10 @@ export default function Contatti() {
     message: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState('');
+  const { isSubmitting, submitError, isSubmitted, submit, setSubmitError, reset } = useContactForm({
+    kind: 'generic',
+    fallbackToLocalStorage: true,
+  });
 
   const topicGuidance: Record<string, { hint: string; placeholder: string }> = {
     collab: {
@@ -52,8 +54,6 @@ export default function Contatti() {
     },
   };
 
-  const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -65,7 +65,7 @@ export default function Contatti() {
 
     if (!formData.email.trim()) {
       newErrors.email = "L'email è obbligatoria";
-    } else if (!validateEmail(formData.email)) {
+    } else if (!isValidEmail(formData.email)) {
       newErrors.email = 'Inserisci un indirizzo email valido';
     }
 
@@ -84,48 +84,13 @@ export default function Contatti() {
 
     setErrors({});
     setSubmitError('');
-    setIsSubmitting(true);
 
-    try {
-      const response = await fetch('/api/contact-lead', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name.trim(),
-          email: formData.email.trim(),
-          topic: formData.topic,
-          message: formData.message.trim(),
-        }),
-      });
-
-      if (!response.ok) {
-        const payload = (await response.json().catch(() => null)) as { error?: string } | null;
-        throw new Error(payload?.error || 'Invio non riuscito');
-      }
-      setIsSubmitted(true);
-    } catch {
-      // Fallback: salva in localStorage quando l'API non è configurata
-      try {
-        const stored = JSON.parse(localStorage.getItem('twu_contact_leads') || '[]');
-        stored.push({
-          name: formData.name.trim(),
-          email: formData.email.trim(),
-          topic: formData.topic,
-          message: formData.message.trim(),
-          date: new Date().toISOString(),
-        });
-        localStorage.setItem('twu_contact_leads', JSON.stringify(stored));
-        setIsSubmitted(true);
-      } catch {
-        setSubmitError(
-          `Non siamo riusciti a inviare il messaggio. Puoi scriverci direttamente a ${CONTACTS.email}.`
-        );
-      }
-    } finally {
-      setIsSubmitting(false);
-    }
+    await submit({
+      name: formData.name.trim(),
+      email: formData.email.trim(),
+      topic: formData.topic,
+      message: formData.message.trim(),
+    });
   };
 
   const handleChange = (
@@ -150,6 +115,7 @@ export default function Contatti() {
       <SEO
         title="Contatti"
         description="Scrivici per collaborazioni, proposte, media kit o richieste legate a Travelliniwithus. Qui trovi il canale giusto per contattarci."
+        canonical={`${SITE_URL}/contatti`}
       />
 
       <Section className="pt-8">
@@ -449,7 +415,7 @@ export default function Contatti() {
                   </p>
                   <button
                     onClick={() => {
-                      setIsSubmitted(false);
+                      reset();
                       setFormData({ name: '', email: '', topic: '', message: '' });
                     }}
                     className="border-b border-[var(--color-accent)] pb-1 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] transition-colors hover:border-black hover:text-black"

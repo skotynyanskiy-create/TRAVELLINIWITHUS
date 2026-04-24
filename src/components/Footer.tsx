@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { CONTACTS } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
+import { useShopGate } from '../hooks/useShopGate';
 import InstagramGrid from './InstagramGrid';
 
 export default function Footer() {
@@ -12,6 +13,7 @@ export default function Footer() {
   const navigate = useNavigate();
   const { data: footerContent } = useSiteContent('footer');
   const { data: navigationContent } = useSiteContent('navigation');
+  const { isShopDiscoverable } = useShopGate();
   const footer = footerContent ?? siteContentDefaults.footer;
   const navigation = navigationContent ?? siteContentDefaults.navigation;
 
@@ -124,31 +126,62 @@ export default function Footer() {
                   </li>
                   <li>
                     <Link
+                      to="/itinerari"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      {navigation.itinerariesLabel}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/dove-dormire"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      Dove dormire
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
                       to="/risorse"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
                       {navigation.resourcesLabel}
                     </Link>
                   </li>
-                  <li>
-                    <Link
-                      to="/shop"
-                      className="inline-flex items-center gap-2 text-base transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      Shop Premium
-                      <span className="rounded-full bg-[var(--color-accent)] px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-widest text-white">
-                        Prossimamente
-                      </span>
-                    </Link>
-                  </li>
+                  {isShopDiscoverable && (
+                    <li>
+                      <Link
+                        to="/shop"
+                        className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                      >
+                        {navigation.shopLabel}
+                      </Link>
+                    </li>
+                  )}
                 </ul>
               </div>
 
               <div>
                 <h4 className="mb-10 text-sm font-bold uppercase tracking-[0.3em] text-white">
-                  {footer.resourcesTitle}
+                  {footer.planningTitle}
                 </h4>
                 <ul className="space-y-5">
+                  <li>
+                    <Link
+                      to="/inizia-da-qui"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      {navigation.planningLabel}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/dove-dormire"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      Dove dormire
+                    </Link>
+                  </li>
                   <li>
                     <button
                       onClick={handleNewsletterClick}
@@ -171,6 +204,30 @@ export default function Footer() {
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
                       Toolkit di viaggio
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="mb-10 text-sm font-bold uppercase tracking-[0.3em] text-white">
+                  {footer.resourcesTitle}
+                </h4>
+                <ul className="space-y-5">
+                  <li>
+                    <Link
+                      to="/risorse"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      {navigation.resourcesLabel}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/preferiti"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      {navigation.favoritesLabel}
                     </Link>
                   </li>
                 </ul>

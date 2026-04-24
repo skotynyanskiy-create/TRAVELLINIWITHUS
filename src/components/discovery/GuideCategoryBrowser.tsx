@@ -6,9 +6,11 @@ import {
   slugifyGuideCategory,
   type GuideCategory,
 } from '../../config/contentTaxonomy';
-import { getGuideCategoryVisual } from '../../config/guideContent';
+import { getGuideCategoryVisual, getGuideCategoryVisualClass } from '../../config/guideContent';
 
 interface GuideCategoryBrowserProps {
+  categories?: readonly GuideCategory[];
+  basePath?: string;
   selectedCategory?: GuideCategory | null;
   onSelect?: (category: GuideCategory | null) => void;
   /** Se true, usa Link verso /guide?cat=... invece di onSelect */
@@ -21,6 +23,8 @@ interface GuideCategoryBrowserProps {
 const spanPattern = [2, 1, 1, 2, 1, 1, 1, 1];
 
 export default function GuideCategoryBrowser({
+  categories = GUIDE_CATEGORIES,
+  basePath = '/guide',
   selectedCategory,
   onSelect,
   useLinks = false,
@@ -28,9 +32,10 @@ export default function GuideCategoryBrowser({
 }: GuideCategoryBrowserProps) {
   return (
     <div className="mb-12 grid grid-cols-2 gap-3 md:grid-cols-4">
-      {GUIDE_CATEGORIES.map((category, idx) => {
+      {categories.map((category, idx) => {
         const visual = getGuideCategoryVisual(category);
         const Icon = visual.icon;
+        const visualClass = getGuideCategoryVisualClass(category);
         const isActive = selectedCategory === category;
         const span = spanPattern[idx] ?? 1;
         const count = counts?.[category];
@@ -41,38 +46,24 @@ export default function GuideCategoryBrowser({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: idx * 0.05, duration: 0.45 }}
-            className={`group flex h-full flex-col rounded-[1.5rem] border border-l-[3px] p-5 text-left transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg ${
+            className={`guide-card-dynamic ${visualClass} group flex h-full flex-col rounded-[1.5rem] border border-l-[3px] p-5 text-left transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg ${
               span === 2 ? 'md:col-span-2' : ''
             } ${
               isActive
-                ? 'border-transparent shadow-md'
+                ? 'is-active border-transparent shadow-md'
                 : 'border-black/6 bg-white hover:border-black/10'
             }`}
-            style={
-              isActive
-                ? {
-                    backgroundColor: visual.colorLight,
-                    borderColor: visual.color,
-                    borderLeftColor: visual.color,
-                  }
-                : { borderLeftColor: visual.color }
-            }
           >
             <div className="mb-3 flex items-center justify-between gap-3">
               <div
-                className="flex h-9 w-9 items-center justify-center rounded-xl transition-colors"
-                style={{
-                  backgroundColor: isActive ? `${visual.color}20` : visual.colorLight,
-                  color: visual.color,
-                }}
+                className={`guide-icon-dynamic flex h-9 w-9 items-center justify-center rounded-xl transition-colors ${
+                  isActive ? 'is-active' : ''
+                }`}
               >
                 <Icon size={18} />
               </div>
               {isActive && (
-                <span
-                  className="rounded-full px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-white"
-                  style={{ backgroundColor: visual.color }}
-                >
+                <span className="guide-badge-dynamic rounded-full px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-white">
                   Attivo
                 </span>
               )}
@@ -80,7 +71,6 @@ export default function GuideCategoryBrowser({
                 <ArrowRight
                   size={13}
                   className="text-black/20 transition-all group-hover:translate-x-0.5"
-                  style={{ color: isActive ? visual.color : undefined }}
                 />
               )}
             </div>
@@ -104,7 +94,7 @@ export default function GuideCategoryBrowser({
           return (
             <Link
               key={category}
-              to={`/guide?cat=${slugifyGuideCategory(category)}`}
+              to={`${basePath}?cat=${slugifyGuideCategory(category)}`}
               className={`block ${span === 2 ? 'md:col-span-2' : ''}`}
             >
               {content}

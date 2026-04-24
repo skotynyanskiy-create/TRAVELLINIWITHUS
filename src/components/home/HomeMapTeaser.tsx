@@ -1,8 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
 import { ArrowRight, MapPin } from 'lucide-react';
-
-const geoUrl = 'https://unpkg.com/world-atlas@2.0.2/countries-110m.json';
 
 type TeaserMarker = {
   name: string;
@@ -16,6 +13,28 @@ const HOME_TEASER_MARKERS: TeaserMarker[] = [
   { name: 'Giappone', coordinates: [138.2529, 36.2048] },
   { name: 'Marocco', coordinates: [-7.0926, 31.7917] },
 ];
+
+const TEASER_WORLD_SHAPES = [
+  'M64 126C54 108 68 86 99 78C129 69 160 74 182 91C200 105 194 125 171 139C143 155 84 153 64 126Z',
+  'M148 165C173 150 205 158 219 184C233 209 219 244 199 264C178 285 156 278 149 249C142 221 126 178 148 165Z',
+  'M246 112C280 91 333 88 371 105C404 120 402 143 372 159C340 177 282 174 249 158C220 144 219 129 246 112Z',
+  'M332 180C365 168 407 179 425 205C446 236 428 269 397 281C364 294 331 275 319 244C307 216 306 190 332 180Z',
+  'M445 165C476 141 534 143 570 168C608 195 599 228 561 247C522 267 473 260 444 236C416 212 416 186 445 165Z',
+  'M504 271C529 259 565 265 583 288C599 310 588 333 563 344C536 355 504 342 493 319C482 296 482 282 504 271Z',
+];
+
+function projectPoint([longitude, latitude]: [number, number]) {
+  const x = ((longitude + 180) / 360) * 640;
+  const clampedLat = Math.max(-85, Math.min(85, latitude));
+  const latRad = (clampedLat * Math.PI) / 180;
+  const mercator = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
+  const y = 320 / 2 - (640 * mercator) / (2 * Math.PI);
+
+  return {
+    x: Math.max(18, Math.min(622, x)),
+    y: Math.max(32, Math.min(288, y)),
+  };
+}
 
 export default function HomeMapTeaser() {
   return (
@@ -47,41 +66,41 @@ export default function HomeMapTeaser() {
               {HOME_TEASER_MARKERS.length} destinazioni raccontate
             </span>
           </div>
-          <ComposableMap
-            projection="geoMercator"
-            projectionConfig={{ scale: 110, center: [10, 30] }}
-            className="h-[320px] w-full md:h-[420px]"
+          <svg
+            viewBox="0 0 640 320"
+            role="img"
             aria-label="Mappa delle destinazioni Travelliniwithus"
+            className="h-[320px] w-full md:h-[420px]"
           >
-            <Geographies geography={geoUrl}>
-              {({ geographies }) =>
-                geographies.map((geo) => (
-                  <Geography
-                    key={geo.rsmKey}
-                    geography={geo}
-                    fill="var(--color-sand)"
-                    stroke="var(--color-ink)"
-                    strokeWidth={0.35}
-                    style={{
-                      default: { outline: 'none' },
-                      hover: { outline: 'none', fill: 'var(--color-sand)' },
-                      pressed: { outline: 'none' },
-                    }}
-                  />
-                ))
-              }
-            </Geographies>
-            {HOME_TEASER_MARKERS.map((marker) => (
-              <Marker key={marker.name} coordinates={marker.coordinates}>
-                <circle r={6} fill="var(--color-accent)" stroke="#fff" strokeWidth={2} />
-                <circle
-                  r={12}
-                  fill="var(--color-accent)"
-                  fillOpacity={0.18}
-                />
-              </Marker>
+            <rect width="640" height="320" fill="var(--color-sand)" />
+            {TEASER_WORLD_SHAPES.map((shape) => (
+              <path
+                key={shape}
+                d={shape}
+                fill="var(--color-surface)"
+                stroke="var(--color-ink)"
+                strokeOpacity="0.18"
+                strokeWidth="1"
+              />
             ))}
-          </ComposableMap>
+            {HOME_TEASER_MARKERS.map((marker) => {
+              const { x, y } = projectPoint(marker.coordinates);
+
+              return (
+                <g key={marker.name}>
+                  <circle cx={x} cy={y} r="12" fill="var(--color-accent)" fillOpacity="0.18" />
+                  <circle
+                    cx={x}
+                    cy={y}
+                    r="6"
+                    fill="var(--color-accent)"
+                    stroke="var(--color-surface)"
+                    strokeWidth="2"
+                  />
+                </g>
+              );
+            })}
+          </svg>
         </div>
       </div>
     </section>

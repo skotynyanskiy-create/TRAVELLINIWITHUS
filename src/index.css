@@ -113,6 +113,86 @@
   .bg-topo {
     background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 10c22 0 40 18 40 40s-18 40-40 40S10 72 10 50 28 10 50 10z' fill='none' stroke='%23906842' stroke-width='0.3' opacity='0.08'/%3E%3Cpath d='M50 25c14 0 25 11 25 25s-11 25-25 25-25-11-25-25 11-25 25-25z' fill='none' stroke='%23906842' stroke-width='0.3' opacity='0.06'/%3E%3C/svg%3E");
   }
+
+  .scrollbar-hidden {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+
+  .overlay-editorial-strong {
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.06) 0%,
+      rgba(0, 0, 0, 0.2) 40%,
+      rgba(0, 0, 0, 0.76) 100%
+    );
+  }
+
+  .guide-visual-itinerari-completi {
+    --guide-color: #6366f1;
+    --guide-soft: #eef2ff;
+  }
+
+  .guide-visual-consigli-pratici {
+    --guide-color: #a8865a;
+    --guide-soft: #f3efe9;
+  }
+
+  .guide-visual-cosa-portare {
+    --guide-color: #059669;
+    --guide-soft: #ecfdf5;
+  }
+
+  .guide-visual-food-guide {
+    --guide-color: #dc2626;
+    --guide-soft: #fef2f2;
+  }
+
+  .guide-visual-dove-dormire {
+    --guide-color: #7c3aed;
+    --guide-soft: #f5f3ff;
+  }
+
+  .guide-visual-budget-costi {
+    --guide-color: #b45309;
+    --guide-soft: #fffbeb;
+  }
+
+  .guide-visual-pianificazione {
+    --guide-color: #0891b2;
+    --guide-soft: #ecfeff;
+  }
+
+  .guide-visual-weekend-day-trip {
+    --guide-color: #be185d;
+    --guide-soft: #fdf2f8;
+  }
+
+  .guide-card-dynamic {
+    border-left-color: var(--guide-color);
+  }
+
+  .guide-card-dynamic.is-active {
+    background-color: var(--guide-soft);
+    border-color: var(--guide-color);
+  }
+
+  .guide-icon-dynamic {
+    background-color: var(--guide-soft);
+    color: var(--guide-color);
+  }
+
+  .guide-icon-dynamic.is-active {
+    background-color: color-mix(in srgb, var(--guide-color) 13%, transparent);
+  }
+
+  .guide-badge-dynamic {
+    background-color: var(--guide-color);
+  }
 }
 
 /* Image blur-up loading effect */

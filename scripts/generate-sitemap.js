@@ -8,6 +8,22 @@ const staticRoutes = [
   '/destinazioni',
   '/esperienze',
   '/guide',
+  '/itinerari',
+  '/dove-dormire',
+  '/dove-dormire/forestis-dolomites',
+  '/dove-dormire/adler-lodge-ritten',
+  '/dove-dormire/icaro-hotel',
+  '/dove-dormire/borgo-egnazia',
+  '/dove-dormire/masseria-trapana',
+  '/dove-dormire/don-ferrante',
+  '/dove-dormire/parilio',
+  '/dove-dormire/canaves-oia-suites',
+  '/dove-dormire/sao-lourenco-do-barrocal',
+  '/destinazioni/italia',
+  '/destinazioni/grecia',
+  '/destinazioni/portogallo',
+  '/inizia-da-qui',
+  '/cosa-mangiare',
   '/chi-siamo',
   '/collaborazioni',
   '/media-kit',
@@ -44,7 +60,6 @@ function slugifyExperienceType(value) {
 
 const filterRoutes = [
   ...DESTINATION_GROUPS.map((group) => `/destinazioni?group=${encodeURIComponent(group)}`),
-  ...DESTINATION_GROUPS.map((group) => `/guide?group=${encodeURIComponent(group)}`),
   ...EXPERIENCE_TYPES.map((type) => `/esperienze?type=${slugifyExperienceType(type)}`),
 ];
 
@@ -89,7 +104,6 @@ console.log('Sitemap generated successfully.');
 const robotsTxt = `User-agent: *
 Allow: /
 Disallow: /shop
-Disallow: /club
 Disallow: /account/acquisti
 
 Sitemap: ${BASE_URL}/sitemap.xml

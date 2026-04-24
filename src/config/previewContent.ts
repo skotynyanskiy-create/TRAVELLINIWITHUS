@@ -5,18 +5,59 @@ type PreviewArticle = ArticleData & { id: string; slug: string; excerpt: string 
 
 export const PREVIEW_EXPERIENCE_TYPES: Record<string, string[]> = {
   'dolomiti-rifugi-design': ['Hotel con carattere', 'Passeggiate panoramiche', 'Posti particolari'],
-  'puglia-roadtrip-borghi-bianchi': ["Borghi e città d'arte", 'Food & Ristoranti', 'Hotel con carattere'],
-  'sicilia-orientale-5-giorni': ["Borghi e città d'arte", 'Food & Ristoranti', 'Esperienze insolite'],
-  'islanda-ring-road-10-giorni': ['Posti particolari', 'Passeggiate panoramiche', 'Esperienze insolite'],
+  'puglia-roadtrip-borghi-bianchi': [
+    "Borghi e città d'arte",
+    'Food & Ristoranti',
+    'Hotel con carattere',
+  ],
+  'sicilia-orientale-5-giorni': [
+    "Borghi e città d'arte",
+    'Food & Ristoranti',
+    'Esperienze insolite',
+  ],
+  'islanda-ring-road-10-giorni': [
+    'Posti particolari',
+    'Passeggiate panoramiche',
+    'Esperienze insolite',
+  ],
   'lisbona-weekend-lento': ['Food & Ristoranti', 'Locali insoliti', "Borghi e città d'arte"],
-  'provenza-lavanda-luberon': ['Passeggiate panoramiche', "Borghi e città d'arte", 'Food & Ristoranti'],
-  'giappone-kyoto-osaka-14-giorni': ['Posti particolari', 'Food & Ristoranti', 'Hotel con carattere'],
+  'provenza-lavanda-luberon': [
+    'Passeggiate panoramiche',
+    "Borghi e città d'arte",
+    'Food & Ristoranti',
+  ],
+  'giappone-kyoto-osaka-14-giorni': [
+    'Posti particolari',
+    'Food & Ristoranti',
+    'Hotel con carattere',
+  ],
   'vietnam-hoi-an-8-giorni': ['Esperienze insolite', 'Food & Ristoranti', 'Posti particolari'],
-  'peru-valle-sacra-machu-picchu': ['Passeggiate panoramiche', 'Esperienze insolite', 'Posti particolari'],
-  'west-coast-usa-roadtrip-14-giorni': ['Passeggiate panoramiche', 'Hotel con carattere', 'Posti particolari'],
-  'marocco-medina-deserto-7-giorni': ['Esperienze insolite', 'Food & Ristoranti', 'Hotel con carattere'],
-  'nuova-zelanda-south-island-12-giorni': ['Passeggiate panoramiche', 'Posti particolari', 'Esperienze insolite'],
+  'peru-valle-sacra-machu-picchu': [
+    'Passeggiate panoramiche',
+    'Esperienze insolite',
+    'Posti particolari',
+  ],
+  'west-coast-usa-roadtrip-14-giorni': [
+    'Passeggiate panoramiche',
+    'Hotel con carattere',
+    'Posti particolari',
+  ],
+  'marocco-medina-deserto-7-giorni': [
+    'Esperienze insolite',
+    'Food & Ristoranti',
+    'Hotel con carattere',
+  ],
+  'nuova-zelanda-south-island-12-giorni': [
+    'Passeggiate panoramiche',
+    'Posti particolari',
+    'Esperienze insolite',
+  ],
   'weekend-borgo-lento': ["Borghi e città d'arte", 'Weekend romantici', 'Gite e day trip'],
+  'sardegna-nord-7-giorni-guida-completa': [
+    'Hotel con carattere',
+    'Passeggiate panoramiche',
+    'Posti particolari',
+  ],
 };
 
 export const PREVIEW_ARTICLES: Record<string, PreviewArticle> = {
@@ -109,12 +150,21 @@ Non cercare di vedere tutto. Scegli una valle, due punti forti e un margine per 
       'Occhiali da sole con lente scura',
     ],
     hiddenGems: [
-      { title: 'Malga Furcia dei Fers', description: 'rifugio piccolo con cucina casalinga e vista aperta' },
-      { title: 'Sentiero dell Adolf Munkel al mattino', description: 'prima che arrivino i gruppi' },
+      {
+        title: 'Malga Furcia dei Fers',
+        description: 'rifugio piccolo con cucina casalinga e vista aperta',
+      },
+      {
+        title: 'Sentiero dell Adolf Munkel al mattino',
+        description: 'prima che arrivino i gruppi',
+      },
     ],
     localFood: [
       { name: 'Canederli', description: 'In brodo in un rifugio di quota' },
-      { name: 'Speck e formaggio di malga con pane di segale', description: 'Speck e formaggio di malga con pane di segale' },
+      {
+        name: 'Speck e formaggio di malga con pane di segale',
+        description: 'Speck e formaggio di malga con pane di segale',
+      },
       { name: 'Strudel fatto', description: 'In casa con gelato alla vaniglia' },
     ],
     costs: {
@@ -163,6 +213,41 @@ Non cercare di vedere tutto. Scegli una valle, due punti forti e un margine per 
     mapCenter: [11.8598, 46.55],
     mapZoom: 9,
     isMarkdown: true,
+    shopCta: {
+      productType: 'maps',
+      productUrl: '/shop/mappa-dolomiti-rifugi',
+      count: 18,
+    },
+    hotels: [
+      {
+        name: 'Forestis Dolomites',
+        image:
+          'https://images.unsplash.com/photo-1578898886225-c7b38bfe1d45?q=80&w=1600&auto=format&fit=crop',
+        bookingUrl: 'https://www.booking.com/hotel/it/forestis-dolomites.it.html',
+        category: 'Wellness in quota',
+        rating: 9.4,
+        priceHint: '€420',
+        badge: 'Nostra scelta',
+      },
+      {
+        name: 'Adler Lodge Ritten',
+        image:
+          'https://images.unsplash.com/photo-1564501049412-61c2a3083791?q=80&w=1600&auto=format&fit=crop',
+        bookingUrl: 'https://www.booking.com/hotel/it/adler-lodge-ritten.it.html',
+        category: 'Lodge contemporaneo',
+        rating: 9.2,
+        priceHint: '€310',
+      },
+      {
+        name: 'Icaro Hotel',
+        image:
+          'https://images.unsplash.com/photo-1586375300773-8384e3e4916f?q=80&w=1600&auto=format&fit=crop',
+        bookingUrl: 'https://www.booking.com/hotel/it/icaro.it.html',
+        category: 'Design di montagna',
+        rating: 9.0,
+        priceHint: '€240',
+      },
+    ],
   },
 
   'puglia-roadtrip-borghi-bianchi': {
@@ -264,7 +349,10 @@ Alberobello al mattino presto, mai di pomeriggio. E soprattutto: non riempire og
       'Borraccia',
     ],
     hiddenGems: [
-      { title: 'Trattoria Terra Madre a Cisternino', description: 'cucina contadina senza turismo' },
+      {
+        title: 'Trattoria Terra Madre a Cisternino',
+        description: 'cucina contadina senza turismo',
+      },
       { title: 'Riserva di Torre Guaceto', description: 'mare trasparente a 30 min da Ostuni' },
     ],
     localFood: [
@@ -429,8 +517,14 @@ L Etna non e una gita di mezza giornata, dedicale tutto il tempo. E Ortigia al t
     ],
     localFood: [
       { name: 'Pasta alla norma', description: 'In trattoria catanese' },
-      { name: 'Arancino al ragu caldo al mattino', description: 'Arancino al ragu caldo al mattino' },
-      { name: 'Cannolo siciliano fresco con ricotta', description: 'Cannolo siciliano fresco con ricotta' },
+      {
+        name: 'Arancino al ragu caldo al mattino',
+        description: 'Arancino al ragu caldo al mattino',
+      },
+      {
+        name: 'Cannolo siciliano fresco con ricotta',
+        description: 'Cannolo siciliano fresco con ricotta',
+      },
     ],
     costs: {
       alloggio: '90-150 € a notte per coppia',
@@ -541,20 +635,17 @@ Non inseguire ogni cascata. Scegli le 5 migliori (Gullfoss, Seljalandsfoss, Skog
       {
         day: 2,
         title: 'Golden Circle',
-        description:
-          'Thingvellir, Geysir, Gullfoss in giornata, rientro a Reykjavik o base sud.',
+        description: 'Thingvellir, Geysir, Gullfoss in giornata, rientro a Reykjavik o base sud.',
       },
       {
         day: 3,
         title: 'Costa sud: cascate',
-        description:
-          'Seljalandsfoss, Skogafoss, notte a Vik.',
+        description: 'Seljalandsfoss, Skogafoss, notte a Vik.',
       },
       {
         day: 4,
         title: 'Spiagge nere e Vatnajokull',
-        description:
-          'Reynisfjara, attraversamento verso la laguna glaciale, notte a Hofn.',
+        description: 'Reynisfjara, attraversamento verso la laguna glaciale, notte a Hofn.',
       },
       {
         day: 5,
@@ -565,32 +656,27 @@ Non inseguire ogni cascata. Scegli le 5 migliori (Gullfoss, Seljalandsfoss, Skog
       {
         day: 6,
         title: 'Fiordi orientali',
-        description:
-          'Guida panoramica, Egilsstadir come base, sera in guesthouse.',
+        description: 'Guida panoramica, Egilsstadir come base, sera in guesthouse.',
       },
       {
         day: 7,
         title: 'Myvatn',
-        description:
-          'Bagni geotermali, Dettifoss, campi lavici, notte a Myvatn.',
+        description: 'Bagni geotermali, Dettifoss, campi lavici, notte a Myvatn.',
       },
       {
         day: 8,
         title: 'Akureyri e nord',
-        description:
-          'Akureyri capitale del nord, Godafoss, notte in penisola.',
+        description: 'Akureyri capitale del nord, Godafoss, notte in penisola.',
       },
       {
         day: 9,
         title: 'Snaefellsnes',
-        description:
-          'Kirkjufell, spiagge, notte ultima in guesthouse.',
+        description: 'Kirkjufell, spiagge, notte ultima in guesthouse.',
       },
       {
         day: 10,
         title: 'Rientro',
-        description:
-          'Trasferimento in aeroporto, volo rientro nel pomeriggio.',
+        description: 'Trasferimento in aeroporto, volo rientro nel pomeriggio.',
       },
     ],
     tips: [
@@ -615,9 +701,15 @@ Non inseguire ogni cascata. Scegli le 5 migliori (Gullfoss, Seljalandsfoss, Skog
       { title: 'Hverir', description: 'area geotermale fumante a Myvatn senza folla' },
     ],
     localFood: [
-      { name: 'Zuppa di agnello islandese (kjotsupa)', description: 'Zuppa di agnello islandese (kjotsupa)' },
+      {
+        name: 'Zuppa di agnello islandese (kjotsupa)',
+        description: 'Zuppa di agnello islandese (kjotsupa)',
+      },
       { name: 'Pesce bianco freschissimo a Vik', description: 'Pesce bianco freschissimo a Vik' },
-      { name: 'Skyr con frutti di bosco a colazione', description: 'Skyr con frutti di bosco a colazione' },
+      {
+        name: 'Skyr con frutti di bosco a colazione',
+        description: 'Skyr con frutti di bosco a colazione',
+      },
     ],
     costs: {
       alloggio: '180-250 € a notte per coppia',
@@ -760,7 +852,10 @@ Pastel de nata solo a Belem (Pasteis de Belem, fila di 15 minuti ma vale). Il fa
     ],
     hiddenGems: [
       { title: 'Miradouro da Graca al tramonto', description: 'meno folla del Santa Luzia' },
-      { title: 'Time Out Market ma solo per gli stand indipendenti', description: 'evita il mainstream' },
+      {
+        title: 'Time Out Market ma solo per gli stand indipendenti',
+        description: 'evita il mainstream',
+      },
     ],
     localFood: [
       { name: 'Pastel de nata originale a Belem', description: 'Pastel de nata originale a Belem' },
@@ -882,8 +977,7 @@ Valensole all alba, punto. Alle 7.30 la luce e perfetta e i campi sono vuoti. Al
       {
         day: 3,
         title: 'Roussillon e Bonnieux',
-        description:
-          'Roussillon per il colore ocra, pranzo a Bonnieux, cena nel villaggio base.',
+        description: 'Roussillon per il colore ocra, pranzo a Bonnieux, cena nel villaggio base.',
       },
       {
         day: 4,
@@ -914,7 +1008,10 @@ Valensole all alba, punto. Alle 7.30 la luce e perfetta e i campi sono vuoti. Al
       'Macchina fotografica (lavanda)',
     ],
     hiddenGems: [
-      { title: 'Campo di lavanda lungo la D8 prima di Valensole', description: 'quasi sempre vuoto' },
+      {
+        title: 'Campo di lavanda lungo la D8 prima di Valensole',
+        description: 'quasi sempre vuoto',
+      },
       { title: 'Oppedele-le-Vieux', description: 'villaggio abbandonato medievale' },
     ],
     localFood: [
@@ -1025,20 +1122,17 @@ Kyoto la mattina presto: Fushimi Inari alle 7 e deserto, alle 10 e una fila. Ara
       {
         day: 1,
         title: 'Arrivo Kansai',
-        description:
-          'Volo + treno HARUKA, check-in hotel Gion, cena leggera, riposo.',
+        description: 'Volo + treno HARUKA, check-in hotel Gion, cena leggera, riposo.',
       },
       {
         day: 2,
         title: 'Kyoto centro',
-        description:
-          'Higashiyama, Kiyomizu-dera, vicoli di Gion, cena in izakaya.',
+        description: 'Higashiyama, Kiyomizu-dera, vicoli di Gion, cena in izakaya.',
       },
       {
         day: 3,
         title: 'Arashiyama',
-        description:
-          'Bambu grove alle 8, Tenryu-ji, Sagano railway, pomeriggio a Kyoto.',
+        description: 'Bambu grove alle 8, Tenryu-ji, Sagano railway, pomeriggio a Kyoto.',
       },
       {
         day: 4,
@@ -1049,14 +1143,12 @@ Kyoto la mattina presto: Fushimi Inari alle 7 e deserto, alle 10 e una fila. Ara
       {
         day: 5,
         title: 'Nishiki e templi nord',
-        description:
-          'Nishiki Market al mattino, Kinkaku-ji, Ryoan-ji.',
+        description: 'Nishiki Market al mattino, Kinkaku-ji, Ryoan-ji.',
       },
       {
         day: 6,
         title: 'Ryokan',
-        description:
-          'Check-in ryokan in Higashiyama, cena kaiseki in stanza, onsen privato.',
+        description: 'Check-in ryokan in Higashiyama, cena kaiseki in stanza, onsen privato.',
       },
       {
         day: 7,
@@ -1067,44 +1159,37 @@ Kyoto la mattina presto: Fushimi Inari alle 7 e deserto, alle 10 e una fila. Ara
       {
         day: 8,
         title: 'Osaka',
-        description:
-          'Dotonbori al tramonto, street food (takoyaki, okonomiyaki), rientro a Kyoto.',
+        description: 'Dotonbori al tramonto, street food (takoyaki, okonomiyaki), rientro a Kyoto.',
       },
       {
         day: 9,
         title: 'Koyasan',
-        description:
-          'Treno per Koyasan (2h30), check-in tempio, cena vegetariana shojin ryori.',
+        description: 'Treno per Koyasan (2h30), check-in tempio, cena vegetariana shojin ryori.',
       },
       {
         day: 10,
         title: 'Koyasan cerimonia',
-        description:
-          'Cerimonia buddhista all alba, Okunoin cimitero, rientro Kyoto sera.',
+        description: 'Cerimonia buddhista all alba, Okunoin cimitero, rientro Kyoto sera.',
       },
       {
         day: 11,
         title: 'Himeji',
-        description:
-          'Treno per Himeji (50 min), castello (3h), rientro Kyoto nel pomeriggio.',
+        description: 'Treno per Himeji (50 min), castello (3h), rientro Kyoto nel pomeriggio.',
       },
       {
         day: 12,
         title: 'Cerimonia del te',
-        description:
-          'Cerimonia del te in casa di maestro, pomeriggio libero, cena leggera.',
+        description: 'Cerimonia del te in casa di maestro, pomeriggio libero, cena leggera.',
       },
       {
         day: 13,
         title: 'Kyoto libera',
-        description:
-          'Giardini minori, mercato Nishiki seconda visita, cena finale kaiseki.',
+        description: 'Giardini minori, mercato Nishiki seconda visita, cena finale kaiseki.',
       },
       {
         day: 14,
         title: 'Rientro',
-        description:
-          'Check-out, HARUKA per aeroporto Kansai, volo rientro.',
+        description: 'Check-out, HARUKA per aeroporto Kansai, volo rientro.',
       },
     ],
     tips: [
@@ -1242,8 +1327,7 @@ Hoi An di notte e il momento. Accendono le lanterne dalle 18, i ristoranti sul f
       {
         day: 1,
         title: 'Arrivo Hanoi',
-        description:
-          'Volo lungo con scalo, check-in Hanoi old quarter, cena pho, riposo.',
+        description: 'Volo lungo con scalo, check-in Hanoi old quarter, cena pho, riposo.',
       },
       {
         day: 2,
@@ -1254,14 +1338,12 @@ Hoi An di notte e il momento. Accendono le lanterne dalle 18, i ristoranti sul f
       {
         day: 3,
         title: 'Hoi An centro',
-        description:
-          'Centro storico al mattino, pranzo cao lau, corso di cucina nel pomeriggio.',
+        description: 'Centro storico al mattino, pranzo cao lau, corso di cucina nel pomeriggio.',
       },
       {
         day: 4,
         title: 'Hue',
-        description:
-          'Treno per Hue (3h), tombe imperiali e citta imperiale, rientro Hoi An sera.',
+        description: 'Treno per Hue (3h), tombe imperiali e citta imperiale, rientro Hoi An sera.',
       },
       {
         day: 5,
@@ -1272,8 +1354,7 @@ Hoi An di notte e il momento. Accendono le lanterne dalle 18, i ristoranti sul f
       {
         day: 6,
         title: 'Rientro Hanoi + treno notte',
-        description:
-          'Volo Da Nang-Hanoi, giornata in citta, treno notte per Sa Pa (8h).',
+        description: 'Volo Da Nang-Hanoi, giornata in citta, treno notte per Sa Pa (8h).',
       },
       {
         day: 7,
@@ -1284,8 +1365,7 @@ Hoi An di notte e il momento. Accendono le lanterne dalle 18, i ristoranti sul f
       {
         day: 8,
         title: 'Rientro Hanoi',
-        description:
-          'Volo Hanoi al mattino, giornata in citta, volo serale per Italia.',
+        description: 'Volo Hanoi al mattino, giornata in citta, volo serale per Italia.',
       },
     ],
     tips: [
@@ -1308,9 +1388,15 @@ Hoi An di notte e il momento. Accendono le lanterne dalle 18, i ristoranti sul f
       { title: 'Mercato notturno di Hue', description: 'cucina locale non turistica' },
     ],
     localFood: [
-      { name: 'Cao lau Hoi An (solo qui nel mondo)', description: 'Cao lau Hoi An (solo qui nel mondo)' },
+      {
+        name: 'Cao lau Hoi An (solo qui nel mondo)',
+        description: 'Cao lau Hoi An (solo qui nel mondo)',
+      },
       { name: 'Bun bo Hue piccante', description: 'Bun bo Hue piccante' },
-      { name: 'Pho alla stazione di Hanoi al mattino', description: 'Pho alla stazione di Hanoi al mattino' },
+      {
+        name: 'Pho alla stazione di Hanoi al mattino',
+        description: 'Pho alla stazione di Hanoi al mattino',
+      },
     ],
     costs: {
       alloggio: '40-90 € a notte per coppia',
@@ -1415,14 +1501,12 @@ Machu Picchu alle 6, mai dopo. Alle 9 iniziano i bus da Aguas Calientes e il sit
       {
         day: 1,
         title: 'Lima centro',
-        description:
-          'Arrivo, check-in Miraflores, cena cucina peruviana moderna (ceviche).',
+        description: 'Arrivo, check-in Miraflores, cena cucina peruviana moderna (ceviche).',
       },
       {
         day: 2,
         title: 'Lima storica',
-        description:
-          'Centro storico al mattino, pomeriggio Barranco, sera pisco sour.',
+        description: 'Centro storico al mattino, pomeriggio Barranco, sera pisco sour.',
       },
       {
         day: 3,
@@ -1433,14 +1517,12 @@ Machu Picchu alle 6, mai dopo. Alle 9 iniziano i bus da Aguas Calientes e il sit
       {
         day: 4,
         title: 'Pisac',
-        description:
-          'Mercato andino al mattino, rovine di Pisac pomeriggio, rientro in lodge.',
+        description: 'Mercato andino al mattino, rovine di Pisac pomeriggio, rientro in lodge.',
       },
       {
         day: 5,
         title: 'Ollantaytambo',
-        description:
-          'Fortezza inca al mattino, passeggiata nel villaggio, cena in lodge.',
+        description: 'Fortezza inca al mattino, passeggiata nel villaggio, cena in lodge.',
       },
       {
         day: 6,
@@ -1451,26 +1533,22 @@ Machu Picchu alle 6, mai dopo. Alle 9 iniziano i bus da Aguas Calientes e il sit
       {
         day: 7,
         title: 'Aguas Calientes',
-        description:
-          'Bagni termali, passeggiata fiume, treno pomeriggio per Cusco.',
+        description: 'Bagni termali, passeggiata fiume, treno pomeriggio per Cusco.',
       },
       {
         day: 8,
         title: 'Cusco centro',
-        description:
-          'Plaza de Armas, cattedrale, Qoricancha, pranzo in mercato San Pedro.',
+        description: 'Plaza de Armas, cattedrale, Qoricancha, pranzo in mercato San Pedro.',
       },
       {
         day: 9,
         title: 'San Blas',
-        description:
-          'Quartiere artistico a piedi, botteghe tessili, cena pisco sour.',
+        description: 'Quartiere artistico a piedi, botteghe tessili, cena pisco sour.',
       },
       {
         day: 10,
         title: 'Rientro',
-        description:
-          'Volo Cusco-Lima, connessione Italia, rientro notte.',
+        description: 'Volo Cusco-Lima, connessione Italia, rientro notte.',
       },
     ],
     tips: [
@@ -1608,56 +1686,47 @@ Highway 1 da LA a SF e l icona, ma la parte piu bella e da Big Sur a Monterey. F
       {
         day: 1,
         title: 'Arrivo LA',
-        description:
-          'Pick-up auto LAX, hotel Santa Monica, sera in spiaggia.',
+        description: 'Pick-up auto LAX, hotel Santa Monica, sera in spiaggia.',
       },
       {
         day: 2,
         title: 'LA',
-        description:
-          'Griffith Observatory, centro, cena a Venice.',
+        description: 'Griffith Observatory, centro, cena a Venice.',
       },
       {
         day: 3,
         title: 'Highway 1 a Big Sur',
-        description:
-          'LA-Big Sur 300 miglia con pause a Cambria, arrivo sera.',
+        description: 'LA-Big Sur 300 miglia con pause a Cambria, arrivo sera.',
       },
       {
         day: 4,
         title: 'Big Sur a SF',
-        description:
-          'Monterey al mattino, 17 Mile Drive, Santa Cruz, arrivo SF.',
+        description: 'Monterey al mattino, 17 Mile Drive, Santa Cruz, arrivo SF.',
       },
       {
         day: 5,
         title: 'San Francisco',
-        description:
-          'Golden Gate, Alcatraz, Fisherman Wharf, cena cinese in Chinatown.',
+        description: 'Golden Gate, Alcatraz, Fisherman Wharf, cena cinese in Chinatown.',
       },
       {
         day: 6,
         title: 'SF quartieri',
-        description:
-          'Mission, Castro, Haight-Ashbury, sera in Castro.',
+        description: 'Mission, Castro, Haight-Ashbury, sera in Castro.',
       },
       {
         day: 7,
         title: 'Napa Valley',
-        description:
-          'Giornata tra cantine, pranzo in winery, rientro SF sera.',
+        description: 'Giornata tra cantine, pranzo in winery, rientro SF sera.',
       },
       {
         day: 8,
         title: 'SF a Redwood',
-        description:
-          'Guida lunga 5h, arrivo in foresta di sequoie, passeggiata al tramonto.',
+        description: 'Guida lunga 5h, arrivo in foresta di sequoie, passeggiata al tramonto.',
       },
       {
         day: 9,
         title: 'Redwood',
-        description:
-          'Trek tra le sequoie, costa selvaggia, cena in lodge.',
+        description: 'Trek tra le sequoie, costa selvaggia, cena in lodge.',
       },
       {
         day: 10,
@@ -1668,26 +1737,22 @@ Highway 1 da LA a SF e l icona, ma la parte piu bella e da Big Sur a Monterey. F
       {
         day: 11,
         title: 'Portland',
-        description:
-          'Arrivo Portland, caffe tour, Powell s Books, cena food truck.',
+        description: 'Arrivo Portland, caffe tour, Powell s Books, cena food truck.',
       },
       {
         day: 12,
         title: 'Seattle',
-        description:
-          'Arrivo Seattle, Pike Place Market, Space Needle.',
+        description: 'Arrivo Seattle, Pike Place Market, Space Needle.',
       },
       {
         day: 13,
         title: 'Seattle lento',
-        description:
-          'Chihuly garden, Capitol Hill quartiere, cena ultima.',
+        description: 'Chihuly garden, Capitol Hill quartiere, cena ultima.',
       },
       {
         day: 14,
         title: 'Rientro',
-        description:
-          'Drop-off auto SEA, volo pomeridiano per Italia.',
+        description: 'Drop-off auto SEA, volo pomeridiano per Italia.',
       },
     ],
     tips: [
@@ -1711,8 +1776,14 @@ Highway 1 da LA a SF e l icona, ma la parte piu bella e da Big Sur a Monterey. F
       { title: 'Arcata sulla costa Redwood', description: 'piccola citta hippie bohemien' },
     ],
     localFood: [
-      { name: 'In-N-Out burger al primo pit stop california', description: 'In-N-Out burger al primo pit stop california' },
-      { name: 'Sourdough bread a SF Boudin bakery', description: 'Sourdough bread a SF Boudin bakery' },
+      {
+        name: 'In-N-Out burger al primo pit stop california',
+        description: 'In-N-Out burger al primo pit stop california',
+      },
+      {
+        name: 'Sourdough bread a SF Boudin bakery',
+        description: 'Sourdough bread a SF Boudin bakery',
+      },
       { name: 'Salmon cedar plank a Seattle', description: 'Salmon cedar plank a Seattle' },
     ],
     costs: {
@@ -1825,8 +1896,7 @@ Il souk di Marrakech solo con guida il primo giorno: ti fa risparmiare ore, ti s
       {
         day: 1,
         title: 'Arrivo Marrakech',
-        description:
-          'Volo Roma-Marrakech, check-in riad, cena sul tetto.',
+        description: 'Volo Roma-Marrakech, check-in riad, cena sul tetto.',
       },
       {
         day: 2,
@@ -1855,8 +1925,7 @@ Il souk di Marrakech solo con guida il primo giorno: ti fa risparmiare ore, ti s
       {
         day: 6,
         title: 'Rientro via Fes',
-        description:
-          'Guida lunga 8h, arrivo Fes sera, riad in medina.',
+        description: 'Guida lunga 8h, arrivo Fes sera, riad in medina.',
       },
       {
         day: 7,
@@ -1886,7 +1955,10 @@ Il souk di Marrakech solo con guida il primo giorno: ti fa risparmiare ore, ti s
     ],
     localFood: [
       { name: 'Tajine di pollo al limone', description: 'In riad' },
-      { name: 'Couscous del venerdi tradizionale', description: 'Couscous del venerdi tradizionale' },
+      {
+        name: 'Couscous del venerdi tradizionale',
+        description: 'Couscous del venerdi tradizionale',
+      },
       { name: 'The alla menta', description: 'rituale quotidiano' },
     ],
     costs: {
@@ -1999,74 +2071,62 @@ Milford Sound sempre al mattino (alle 9 tour in barca, alle 15 e gia folla). Se 
       {
         day: 1,
         title: 'Arrivo Christchurch',
-        description:
-          'Volo lunghissimo, acclimatamento jet lag, cena e notte.',
+        description: 'Volo lunghissimo, acclimatamento jet lag, cena e notte.',
       },
       {
         day: 2,
         title: 'Christchurch lento',
-        description:
-          'Botanic Gardens, passeggiata, pick-up auto, cena ultima prima del tour.',
+        description: 'Botanic Gardens, passeggiata, pick-up auto, cena ultima prima del tour.',
       },
       {
         day: 3,
         title: 'Mount Cook',
-        description:
-          'Guida a Lake Tekapo e Pukaki, arrivo Mount Cook pomeriggio.',
+        description: 'Guida a Lake Tekapo e Pukaki, arrivo Mount Cook pomeriggio.',
       },
       {
         day: 4,
         title: 'Tasman Glacier',
-        description:
-          'Trekking Hooker Valley, Tasman Glacier viewpoint, cena in lodge.',
+        description: 'Trekking Hooker Valley, Tasman Glacier viewpoint, cena in lodge.',
       },
       {
         day: 5,
         title: 'Wanaka',
-        description:
-          'Transfer via Lindis Pass, arrivo Wanaka pomeriggio, sera lake.',
+        description: 'Transfer via Lindis Pass, arrivo Wanaka pomeriggio, sera lake.',
       },
       {
         day: 6,
         title: 'Roy Peak',
-        description:
-          'Trek 6h andata-ritorno Roy Peak al mattino, riposo pomeriggio.',
+        description: 'Trek 6h andata-ritorno Roy Peak al mattino, riposo pomeriggio.',
       },
       {
         day: 7,
         title: 'Te Anau',
-        description:
-          'Transfer a Te Anau via fiordland, check-in, cena in pub.',
+        description: 'Transfer a Te Anau via fiordland, check-in, cena in pub.',
       },
       {
         day: 8,
         title: 'Milford Sound',
-        description:
-          'Partenza alle 7, tour in barca sul fiordo alle 10, rientro sera.',
+        description: 'Partenza alle 7, tour in barca sul fiordo alle 10, rientro sera.',
       },
       {
         day: 9,
         title: 'Doubtful Sound',
-        description:
-          'Day tour Doubtful (piu lungo, meno folla), cena a Te Anau.',
+        description: 'Day tour Doubtful (piu lungo, meno folla), cena a Te Anau.',
       },
       {
         day: 10,
         title: 'Franz Josef',
-        description:
-          'Guida lunga via Haast Pass, arrivo Franz Josef sera.',
+        description: 'Guida lunga via Haast Pass, arrivo Franz Josef sera.',
       },
       {
         day: 11,
         title: 'Ghiacciaio',
-        description:
-          'Elicottero + trekking ghiacciaio Franz Josef, cena lodge.',
+        description: 'Elicottero + trekking ghiacciaio Franz Josef, cena lodge.',
       },
       {
         day: 12,
         title: 'Rientro',
-        description:
-          'Guida Franz Josef a Christchurch (5h), drop-off auto, volo notte.',
+        description: 'Guida Franz Josef a Christchurch (5h), drop-off auto, volo notte.',
       },
     ],
     tips: [
@@ -2267,6 +2327,243 @@ Lascia sempre un margine di 1-2 giorni non programmati nel viaggio. Serviranno: 
       'Verifica orari stagionali reali di luoghi e trasporti.',
     ],
     packingList: ['Note salvate', 'Budget indicativo', 'Mappa offline'],
+    isMarkdown: true,
+  },
+
+  'sardegna-nord-7-giorni-guida-completa': {
+    id: 'sardegna-nord-7-giorni-guida-completa',
+    slug: 'sardegna-nord-7-giorni-guida-completa',
+    title: 'Sardegna del nord in 7 giorni: la nostra guida completa',
+    category: 'Itinerari completi',
+    type: 'pillar',
+    image:
+      'https://images.unsplash.com/photo-1530541930197-ff16ac917b0e?q=80&w=2000&auto=format&fit=crop',
+    excerpt:
+      'Sette giorni tra Gallura, Costa Smeralda e Asinara. Calette che vale la pena cercare, masserie contemporanee, cosa mangiare davvero e come muoversi senza trasformare la vacanza in un circuito turistico.',
+    description:
+      'Guida completa alla Sardegna del nord in 7 giorni. Itinerario giorno per giorno, hotel curati, food guide, budget reale, hidden gems. Tutto quello che serve per pianificare il viaggio senza altri tab aperti.',
+    location: 'Sardegna, Italia',
+    period: 'Maggio - giugno, settembre',
+    budget: '€€€',
+    duration: '7 giorni',
+    readTime: '14 min',
+    date: '20 aprile 2026',
+    author: 'Rodrigo & Betta',
+    continent: 'Europa',
+    budgetBand: 'Alto',
+    tripIntents: ['Posti particolari', 'Hotel con carattere', 'Passeggiate panoramiche'],
+    disclosureType: 'none',
+    verifiedAt: '2026-04-12',
+    featuredPlacement: 'hub-destination',
+    content: `
+La Sardegna del nord non e una destinazione da spuntare in tre giorni. E una costa piu lunga di quanto sembri, con tre anime distinte — Gallura, Costa Smeralda, Asinara — che chiedono tempo per essere lette senza banalizzarle a "mare cristallino e basta".
+
+Questo itinerario viene dai sette giorni che ci siamo costruiti noi a maggio. Non e una lista di "10 cose da vedere": e il ritmo che abbiamo verificato sul posto, con i tempi reali di spostamento, le calette che vale la pena cercare anche a piedi, e le scelte di alloggio che hanno fatto davvero la differenza.
+
+## Perche andarci (e perche non in agosto)
+
+La Sardegna funziona quando il mare e pulito, le strade non sono intasate e puoi trovare un tavolo a cena senza prenotare due settimane prima. Questo significa maggio, giugno prima del 20, o settembre dopo il 10. Fuori da questa finestra si entra in una logica completamente diversa: folla, prezzi premium su hotel medi, ristoranti che tirano via.
+
+La finestra che consigliamo e la meta di maggio. Acqua ancora fresca ma nuotabile, temperature diurne 22-26 gradi, luce lunga per camminare al tramonto, paesi che si svegliano lentamente per la stagione. Se il mare caldo e fondamentale, sposta tutto a settembre: il mare resta balneabile fino a meta ottobre in certe baie riparate.
+
+## Come arrivare e muoversi
+
+Tre aeroporti di riferimento, ognuno con una logica diversa. Olbia e il piu vicino a Costa Smeralda e Gallura, ed e anche quello con piu voli low-cost da Roma, Milano e molte citta europee. Cagliari serve chi vuole mischiare sud e nord in un road trip piu lungo. Alghero e la porta d'ingresso naturale se il focus e ovest: Asinara, Bosa, Stintino.
+
+Noleggia l'auto all'aeroporto e tienila tutta la settimana. I mezzi pubblici in Sardegna non coprono bene l'itinerario da viaggio: ci sono autobus estivi che collegano spiagge principali, ma perderai flessibilita e tempo. Con l'auto puoi decidere ogni mattina dove fermarti, cambiare destinazione per meteo, cercare calette che richiedono 200 metri di sterrato.
+
+Il costo medio di un noleggio compatto a maggio e 35-55 euro al giorno, piu carburante (conta 60-80 euro per tutta la settimana se non esageri con le deviazioni). Prenota con 4-6 settimane di anticipo: i prezzi salgono ripidamente quando gli slot piu economici si esauriscono.
+
+## Itinerario giorno per giorno
+
+Questo e il ritmo che ha funzionato per noi. Parti da Olbia o da Alghero, ma adatta in base al tuo aeroporto di arrivo. Le tappe sono ordinate per ridurre al minimo i backtrack.
+
+Giorno 1: atterraggio e Costa Smeralda leggera. Arrivi, ritiri l'auto, eviti la tentazione di fermarti subito in una caletta intasata. Sali verso Porto Cervo e poi ti sposti a Porto Rotondo per una prima serata calma. Cena leggera, pranzo del giorno dopo lo programmi sulla costa nord.
+
+Giorno 2: la Costa Smeralda vera. Cala di Volpe, spiaggia del Principe, Cala Granu. Vai presto (entro le 9 sei gia in acqua) per evitare la folla che inizia alle 11. Piccolo secondo bagno al pomeriggio in un punto meno famoso come Portisco o Piccolo Pevero. Tramonto da Romazzino con vista sulla baia.
+
+Giorno 3: arcipelago della Maddalena. Traghetto da Palau (15 minuti, ogni 20 minuti d'estate). Una giornata intera non basta per tutto, scegli: se hai tempo e meteo buono affitta una barca a vela con skipper (250-350 euro per un giorno, 4 persone) e vedi Budelli e Spargi. Alternativa low-budget: noleggio scooter sulla Maddalena e giro di Caprera + La Maddalena citta a piedi.
+
+Giorno 4: Gallura interna. Lascia la costa per un giorno. San Pantaleo per il mercato del giovedi, un pranzo da dentro (non turistico, ma di paese) e poi Tempio Pausania o Aggius per vedere la Sardegna che non sta su Instagram. Ti servira per capire la regione, non solo per fotografarla.
+
+Giorno 5: traversata verso ovest. Guida 2h30 da Olbia a Stintino passando per Castelsardo. Sosta pranzo a Castelsardo in uno dei ristoranti con vista sul golfo, poi scendi verso la Pelosa. La Pelosa e stupenda ma richiede prenotazione obbligatoria a pagamento (3.50 euro a persona, numeri chiusi giornalieri): fallo dal sito ufficiale due-tre settimane prima.
+
+Giorno 6: Asinara. Parti da Porto Torres con una escursione guidata (metti in conto tutta la giornata, 50-70 euro a persona con pranzo). Il parco non e accessibile in modo libero, quindi scegli tra un giro in jeep fuoristrada con guida o una barca che fa il giro perimetrale fermandosi in tre calette. Noi abbiamo scelto la jeep: porta in posti che dalla barca non vedi e ha un altro ritmo.
+
+Giorno 7: Bosa e rientro lento. Se il tuo volo parte di sera, fai Bosa al mattino con calma: una delle piu belle cittadine della Sardegna, colori pastello, una passeggiata lungo il Temo, un caffe nel centro storico. Poi rientro ad Alghero per l'aeroporto o ad Olbia (2h30 di strada panoramica) per i voli orientali.
+
+## Cosa mangiare davvero
+
+La cucina sarda non e "pasta allo scoglio e basta". Ci sono tre-quattro piatti firmati che valgono davvero il chilometro in piu, e altrettanti da riconoscere come trappole turistiche che aggirare.
+
+Mangia sicuramente: culurgiones di patate e menta (ravioli sardi), fregola con frutti di mare (granello di grano duro tostato, consistenza unica), porceddu se incontri un vero ristorante di campagna (mai quello dei buffet grand hotel), pane carasau con olio e pomodoro fresco, bottarga di tonno grattugiata su spaghetti semplici. Per dolce, seadas con miele di corbezzolo.
+
+Diffida di: menu turistici a 25 euro con "antipasto misto-primo-secondo-dolce" dove tutto sa di surgelato; pasta con "specialita locali" scritta in quattro lingue; cestini di pane industriale sul tavolo invece del carasau vero. Sono i tre segnali che il posto serve volume, non cucina.
+
+Tre ristoranti su cui non abbiamo dubbi a consigliare: Agriturismo Li Licci (Aggius, Gallura) per il pranzo della tradizione vera, Il Gallinaro (Castelsardo) per pesce giornaliero a prezzi onesti, Andreini (Bosa) per un'ultima cena di viaggio in centro storico.
+
+## Budget reale per 7 giorni in due
+
+Questi sono i numeri che abbiamo speso noi a maggio 2026, stando su hotel di fascia media-alta ma senza resort iconici. Utili come baseline, poi tu modulici in base alle scelte. Coppia, due persone.
+
+Voli andata-ritorno Milano-Olbia: 160-220 euro a persona se prenoti 6-8 settimane prima. Noleggio auto 7 giorni compatta: 320 euro totali. Carburante: 80 euro. Pedaggi e parcheggi: 30 euro. Hotel per 6 notti in strutture scelte come quelle che trovi sotto: 1400-1800 euro. Pranzi in spiaggia o trattoria semplice: 40-55 euro per due, cene in ristoranti decenti: 70-110 euro. Attivita singole (Asinara, La Maddalena): 180-280 euro. Spuntini, gelati, caffe: 120 euro.
+
+Totale realistico per due: 2700-3500 euro tutto compreso, se fai scelte intelligenti senza rinunciare a qualita sulle due-tre serate importanti.
+
+## Hidden gems che non leggi ovunque
+
+Ci sono posti che non finiscono nelle top list ma che spesso sono la parte che ti ricordi piu di tutto. Questi sono i nostri quattro.
+
+Cala Coticcio, Caprera. La chiamano Tahiti per l'acqua. Per raggiungerla servono 45 minuti a piedi con un po' di dislivello, e questo filtro naturale tiene lontana meta della folla. Porta acqua vera, non ombrellone: non c'e ombra naturale.
+
+Spiaggia delle Saline, Stintino. A cinque minuti dalla Pelosa ma con un decimo della gente. Non e fotogenica come la sorella famosa, ma per stare in acqua un intero pomeriggio in pace, nessuna competizione.
+
+Argentiera, Alghero. Miniera abbandonata sul mare, villaggio minerario in disuso, scogliere rosse. Non e balneabile, e una tappa estetica e storica. Ci vai al tramonto per la luce.
+
+Bar Chiosco del Borgo a San Pantaleo. Il giovedi mattina mentre gli altri sono al mercato, tu ti siedi qui per la colazione vera con pastorelle e anziani del paese. E il nord Sardegna che non compare sulle guide.
+
+## Link utili e risorse
+
+Per pianificare meglio: assicurazione Heymondo con il nostro 10% di sconto dedicato, eSIM Airalo se il tuo piano dati europeo non basta, escursioni verificate su GetYourGuide per Maddalena e Asinara. Tutti i link che trovi nella barra affiliate in fondo sono servizi che abbiamo usato davvero.
+
+Se vuoi espandere il viaggio: abbiamo una guida dedicata alla Sardegna del sud (Cagliari, Costa Rei, Villasimius) per chi vuole completare l'esperienza, e una sezione dedicata ai rifugi di design nelle Dolomiti se il tuo prossimo viaggio guarda verso la montagna invece del mare. Tutto linkato nella sezione articoli correlati.
+`,
+    highlights: [
+      'Itinerario giorno per giorno testato sul campo — tempi e costi reali di maggio 2026',
+      '3 hotel curati personalmente con budget, posizione e carattere molto diversi',
+      'Food guide con piatti sardi veri e come riconoscere le trappole turistiche',
+      '4 hidden gems che non trovi nelle top list generiche',
+      'Budget completo in due (2700-3500 euro), scomposto per categoria',
+    ],
+    tips: [
+      'Vai meta maggio, prima settimana di giugno o dopo il 10 settembre. Agosto solo se non hai alternativa.',
+      'Prenota Pelosa online con 2-3 settimane di anticipo, altrimenti non entri in spiaggia.',
+      'Noleggia lo scooter sulla Maddalena se vuoi esplorare Caprera senza barca.',
+      'Parti presto ogni mattina: alle 9 sei in spiaggia con luce migliore e poca gente.',
+    ],
+    packingList: [
+      'Scarpe da trekking leggere (per Cala Coticcio e sentieri costieri)',
+      'Costume asciugabile due pezzi',
+      'Borsa termica piccola per acqua e pranzo',
+      'Cappello e protezione 50+',
+      'Powerbank per giornate fuori dalla struttura',
+    ],
+    itinerary: [
+      {
+        day: 1,
+        title: 'Arrivo e Costa Smeralda leggera',
+        description:
+          'Ritiro auto, primo giro senza fretta tra Porto Cervo e Porto Rotondo. Cena calma.',
+      },
+      {
+        day: 2,
+        title: 'Costa Smeralda al massimo',
+        description:
+          'Cala di Volpe, Spiaggia del Principe, Cala Granu al mattino. Tramonto da Romazzino.',
+      },
+      {
+        day: 3,
+        title: 'Arcipelago della Maddalena',
+        description:
+          'Traghetto da Palau. Barca a vela con skipper verso Budelli e Spargi oppure scooter Caprera + Maddalena citta.',
+      },
+      {
+        day: 4,
+        title: 'Gallura interna',
+        description:
+          'San Pantaleo, Tempio Pausania o Aggius. La Sardegna che non sta su Instagram.',
+      },
+      {
+        day: 5,
+        title: 'Traversata verso ovest',
+        description: 'Castelsardo a pranzo, Pelosa nel pomeriggio con prenotazione.',
+      },
+      {
+        day: 6,
+        title: 'Asinara',
+        description: 'Giornata intera al parco con jeep fuoristrada guidata o barca perimetrale.',
+      },
+      {
+        day: 7,
+        title: 'Bosa e rientro',
+        description:
+          'Mattinata tra colori pastello e lungofiume Temo. Rientro lento verso aeroporto.',
+      },
+    ],
+    hotels: [
+      {
+        name: 'Su Gologone Experience Hotel',
+        image:
+          'https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=1600&auto=format&fit=crop',
+        bookingUrl: 'https://www.booking.com/hotel/it/su-gologone.it.html',
+        category: 'Interno Gallura — arte e memoria',
+        rating: 9.5,
+        priceHint: '€280',
+        badge: 'Nostra scelta',
+      },
+      {
+        name: 'Hotel Pelicano',
+        image:
+          'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?q=80&w=1600&auto=format&fit=crop',
+        bookingUrl: 'https://www.booking.com/hotel/it/pelicano-palau.it.html',
+        category: 'Palau — base Maddalena',
+        rating: 9.1,
+        priceHint: '€210',
+      },
+      {
+        name: 'Capo Falcone Charming Apartments',
+        image:
+          'https://images.unsplash.com/photo-1510312305653-8ed496efae75?q=80&w=1600&auto=format&fit=crop',
+        bookingUrl: 'https://www.booking.com/hotel/it/capo-falcone-stintino.it.html',
+        category: 'Stintino — vista Asinara',
+        rating: 9.3,
+        priceHint: '€240',
+      },
+    ],
+    shopCta: {
+      productType: 'maps',
+      productUrl: '/shop/mappa-sardegna-nord',
+      count: 24,
+    },
+    mapCenter: [9.3117, 40.9265],
+    mapZoom: 8,
+    mapMarkers: [
+      {
+        id: 'porto-cervo',
+        name: 'Porto Cervo',
+        title: 'Costa Smeralda',
+        coordinates: [9.5368, 41.1413],
+        category: 'Zona',
+      },
+      {
+        id: 'la-maddalena',
+        name: 'La Maddalena',
+        title: 'Arcipelago',
+        coordinates: [9.4069, 41.2142],
+        category: 'Escursione',
+      },
+      {
+        id: 'stintino-pelosa',
+        name: 'Stintino — Pelosa',
+        title: 'Spiaggia',
+        coordinates: [8.2239, 40.9597],
+        category: 'Spiaggia',
+      },
+      {
+        id: 'asinara',
+        name: 'Parco Asinara',
+        title: 'Parco nazionale',
+        coordinates: [8.2822, 41.0678],
+        category: 'Parco',
+      },
+      {
+        id: 'bosa',
+        name: 'Bosa',
+        title: 'Borgo',
+        coordinates: [8.4992, 40.2967],
+        category: 'Borgo',
+      },
+    ],
     isMarkdown: true,
   },
 };

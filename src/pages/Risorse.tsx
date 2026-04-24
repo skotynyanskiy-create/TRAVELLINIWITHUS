@@ -22,6 +22,7 @@ import SEO from '../components/SEO';
 import JsonLd from '../components/JsonLd';
 import FinalCtaSection from '../components/FinalCtaSection';
 import { SITE_URL } from '../config/site';
+import { slugifyExperienceType } from '../config/contentTaxonomy';
 import { fetchResources } from '../services/firebaseService';
 import {
   AFFILIATE_PARTNERS,
@@ -29,6 +30,7 @@ import {
   trackAffiliateClick,
   type AffiliatePartner,
 } from '../lib/affiliate';
+import { useShopGate } from '../hooks/useShopGate';
 
 interface ResourceItem {
   name: string;
@@ -74,7 +76,8 @@ const resourceCategories: Array<{
         tags: ['Assicurazione', 'Sconto'],
         badge: '-10%',
         fit: 'Per viaggi extra UE, itinerari lunghi o prenotazioni non banali.',
-        avoid: 'Non sostituisce la lettura delle condizioni: controlla sempre massimali e coperture.',
+        avoid:
+          'Non sostituisce la lettura delle condizioni: controlla sempre massimali e coperture.',
       },
       {
         name: 'Skyscanner',
@@ -105,8 +108,7 @@ const resourceCategories: Array<{
       {
         name: 'Airalo',
         partner: 'airalo',
-        description:
-          `Una eSIM è utile quando vuoi arrivare con connessione già pronta, soprattutto fuori dall'Unione Europea.`,
+        description: `Una eSIM è utile quando vuoi arrivare con connessione già pronta, soprattutto fuori dall'Unione Europea.`,
         link: 'https://airalo.com',
         tags: ['eSIM', 'Internet'],
         badge: 'Codice',
@@ -194,8 +196,31 @@ const resourcePrinciples = [
   },
 ];
 
+const EXPLORE_PATHS = [
+  {
+    title: 'Per luogo',
+    description: 'Vai prima nelle destinazioni se stai decidendo dove andare.',
+    to: '/destinazioni',
+    cta: 'Apri destinazioni',
+  },
+  {
+    title: 'Per esperienza',
+    description: 'Weekend romantici, posti particolari, hotel con carattere e idee piu mirate.',
+    to: `/esperienze?type=${slugifyExperienceType('Posti particolari')}`,
+    cta: 'Apri esperienze',
+  },
+  {
+    title: 'Guide pratiche',
+    description:
+      'Se ti servono contesto, budget, logistica o food guide, entra prima nel layer guide.',
+    to: '/guide',
+    cta: 'Apri guide pratiche',
+  },
+];
+
 export default function Risorse() {
   const [copied, setCopied] = useState(false);
+  const { isShopDiscoverable } = useShopGate();
 
   const { data: firestoreResources } = useQuery({
     queryKey: ['resources'],
@@ -221,9 +246,10 @@ export default function Risorse() {
         items:
           firestoreByCategory?.[category.id]?.map<ResourceItem>((resource) => ({
             name: resource.name,
-            partner: (resource.partner && resource.partner in AFFILIATE_PARTNERS
-              ? (resource.partner as AffiliatePartner)
-              : 'generic'),
+            partner:
+              resource.partner && resource.partner in AFFILIATE_PARTNERS
+                ? (resource.partner as AffiliatePartner)
+                : 'generic',
             description: resource.description,
             link: resource.link,
             tags: resource.tags ?? [],
@@ -281,10 +307,10 @@ export default function Risorse() {
         <div className="mt-8 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
           <div>
             <span className="mb-6 block text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
-              Travel toolkit
+              Pianifica meglio
             </span>
             <h1 className="text-display-1">
-              Strumenti scelti <span className="italic text-black/55">con criterio</span>
+              Strumenti e risorse <span className="italic text-black/55">per viaggiare bene</span>
             </h1>
             <p className="mt-8 max-w-2xl text-lg leading-relaxed text-black/68">
               Questa non è una pagina di link a caso. È una selezione editoriale di strumenti che
@@ -298,7 +324,8 @@ export default function Risorse() {
               Regola Travellini
             </p>
             <p className="mt-4 text-2xl font-serif leading-relaxed text-[var(--color-ink)]">
-              Se una risorsa non aiuta a decidere, organizzare o viaggiare meglio, non merita spazio.
+              Se una risorsa non aiuta a decidere, organizzare o viaggiare meglio, non merita
+              spazio.
             </p>
             <p className="mt-5 text-sm leading-relaxed text-black/55">
               Alcuni link possono essere affiliati: per te non cambia il costo, per noi possono
@@ -309,13 +336,35 @@ export default function Risorse() {
 
         <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-3">
           {resourcePrinciples.map((item) => (
-            <div key={item.title} className="rounded-[2rem] border border-black/5 bg-white p-7 shadow-sm">
+            <div
+              key={item.title}
+              className="rounded-[2rem] border border-black/5 bg-white p-7 shadow-sm"
+            >
               <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-sand)]">
                 {item.icon}
               </div>
               <h2 className="font-serif text-xl">{item.title}</h2>
               <p className="mt-3 text-sm leading-relaxed text-black/60">{item.text}</p>
             </div>
+          ))}
+        </div>
+
+        <div className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-3">
+          {EXPLORE_PATHS.map((item) => (
+            <Link
+              key={item.title}
+              to={item.to}
+              className="group rounded-[2rem] border border-black/5 bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-accent)]/25"
+            >
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
+                Parti da qui
+              </p>
+              <h2 className="mt-4 text-2xl font-serif">{item.title}</h2>
+              <p className="mt-3 text-sm leading-relaxed text-black/62">{item.description}</p>
+              <span className="mt-6 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent-text)]">
+                {item.cta} <ArrowRight size={12} />
+              </span>
+            </Link>
           ))}
         </div>
 
@@ -344,67 +393,64 @@ export default function Risorse() {
 
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
                 {category.items.map((item) => {
-                  const { href: affiliateHref, onClick: handleAffiliateClick } = prepareAffiliateLink(
-                    item.partner,
-                    item.link,
-                    {
+                  const { href: affiliateHref, onClick: handleAffiliateClick } =
+                    prepareAffiliateLink(item.partner, item.link, {
                       campaign: `risorse_${category.id}`,
                       placement: 'risorse_grid',
                       label: item.name,
-                    }
-                  );
+                    });
                   return (
-                  <motion.a
-                    key={item.name}
-                    href={affiliateHref}
-                    target="_blank"
-                    rel="nofollow sponsored noopener noreferrer"
-                    onClick={handleAffiliateClick}
-                    className="group flex min-h-[290px] flex-col rounded-[2rem] border border-black/5 bg-[var(--color-sand)] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-accent)]/35 hover:bg-white hover:shadow-xl"
-                  >
-                    <div className="mb-5 flex items-start justify-between gap-4">
-                      <div>
-                        <div className="mb-3 flex flex-wrap gap-2">
-                          {item.badge && (
-                            <span className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-white">
-                              {item.badge}
-                            </span>
-                          )}
-                          {item.tags.map((tag) => (
-                            <span
-                              key={tag}
-                              className="rounded-full bg-white px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-black/42"
-                            >
-                              {tag}
-                            </span>
-                          ))}
+                    <motion.a
+                      key={item.name}
+                      href={affiliateHref}
+                      target="_blank"
+                      rel="nofollow sponsored noopener noreferrer"
+                      onClick={handleAffiliateClick}
+                      className="group flex min-h-[290px] flex-col rounded-[2rem] border border-black/5 bg-[var(--color-sand)] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-accent)]/35 hover:bg-white hover:shadow-xl"
+                    >
+                      <div className="mb-5 flex items-start justify-between gap-4">
+                        <div>
+                          <div className="mb-3 flex flex-wrap gap-2">
+                            {item.badge && (
+                              <span className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-white">
+                                {item.badge}
+                              </span>
+                            )}
+                            {item.tags.map((tag) => (
+                              <span
+                                key={tag}
+                                className="rounded-full bg-white px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-black/42"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                          <h3 className="text-2xl font-serif leading-tight transition-colors group-hover:text-[var(--color-accent-text)]">
+                            {item.name}
+                          </h3>
                         </div>
-                        <h3 className="text-2xl font-serif leading-tight transition-colors group-hover:text-[var(--color-accent-text)]">
-                          {item.name}
-                        </h3>
+                        <ArrowRight
+                          size={18}
+                          className="mt-1 shrink-0 text-black/25 transition-all group-hover:translate-x-1 group-hover:text-[var(--color-accent)]"
+                        />
                       </div>
-                      <ArrowRight
-                        size={18}
-                        className="mt-1 shrink-0 text-black/25 transition-all group-hover:translate-x-1 group-hover:text-[var(--color-accent)]"
-                      />
-                    </div>
 
-                    <p className="text-sm leading-relaxed text-black/62">{item.description}</p>
+                      <p className="text-sm leading-relaxed text-black/62">{item.description}</p>
 
-                    <div className="mt-auto space-y-3 pt-7">
-                      <div className="rounded-2xl bg-white p-4">
-                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/35">
-                          Per chi ha senso
-                        </p>
-                        <p className="mt-2 text-sm leading-relaxed text-black/62">{item.fit}</p>
+                      <div className="mt-auto space-y-3 pt-7">
+                        <div className="rounded-2xl bg-white p-4">
+                          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/35">
+                            Per chi ha senso
+                          </p>
+                          <p className="mt-2 text-sm leading-relaxed text-black/62">{item.fit}</p>
+                        </div>
+                        {item.avoid && (
+                          <p className="text-xs leading-relaxed text-black/45">
+                            <strong className="text-black/62">Quando evitarlo:</strong> {item.avoid}
+                          </p>
+                        )}
                       </div>
-                      {item.avoid && (
-                        <p className="text-xs leading-relaxed text-black/45">
-                          <strong className="text-black/62">Quando evitarlo:</strong> {item.avoid}
-                        </p>
-                      )}
-                    </div>
-                  </motion.a>
+                    </motion.a>
                   );
                 })}
               </div>
@@ -418,7 +464,9 @@ export default function Risorse() {
               <span className="mb-4 block text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
                 Vantaggi dichiarati
               </span>
-              <h2 className="text-3xl font-serif md:text-5xl">Codici e benefit, senza spingere a comprare.</h2>
+              <h2 className="text-3xl font-serif md:text-5xl">
+                Codici e benefit, senza spingere a comprare.
+              </h2>
               <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/68">
                 Li teniamo qui per chi li cerca. Non sostituiscono una scelta consapevole: prima
                 valuta se lo strumento e davvero utile per il tuo viaggio.
@@ -451,6 +499,24 @@ export default function Risorse() {
           </div>
         </div>
 
+        {isShopDiscoverable && (
+          <div className="mt-10 rounded-[2rem] border border-black/5 bg-white p-7 shadow-sm">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
+                  Boutique editoriale
+                </p>
+                <h2 className="mt-3 text-2xl font-serif">
+                  Quando una risorsa diventa un prodotto, la trovi nello shop.
+                </h2>
+              </div>
+              <Button to="/shop" variant="outline">
+                Apri lo shop
+              </Button>
+            </div>
+          </div>
+        )}
+
         <div className="mt-20">
           <Newsletter variant="editorial" source="resources_newsletter" />
         </div>
@@ -461,7 +527,10 @@ export default function Risorse() {
 
         <div className="mt-12 rounded-[2rem] border border-black/5 bg-white p-7 text-sm leading-relaxed text-black/55">
           Per dettagli completi sulla natura dei link affiliati, consulta la{' '}
-          <Link to="/disclaimer" className="font-semibold text-[var(--color-accent-text)] underline underline-offset-2">
+          <Link
+            to="/disclaimer"
+            className="font-semibold text-[var(--color-accent-text)] underline underline-offset-2"
+          >
             pagina disclaimer
           </Link>
           .

@@ -4,30 +4,33 @@ import { Link } from 'react-router-dom';
 import { EXPERIENCE_VISUALS } from '../config/experienceVisuals';
 
 interface CrossLinkWidgetProps {
-  variant: 'to-esperienze' | 'to-destinazioni' | 'to-guide';
+  variant: 'to-esperienze' | 'to-destinazioni' | 'to-guide' | 'to-itinerari';
 }
 
 const experienceIcons = Object.values(EXPERIENCE_VISUALS).slice(0, 6);
 
 const guideCategories = [
-  { label: 'Itinerari', color: '#6366F1', bg: '#EEF2FF' },
-  { label: 'Cosa portare', color: '#059669', bg: '#ECFDF5' },
-  { label: 'Budget', color: '#B45309', bg: '#FFFBEB' },
-  { label: 'Food guide', color: '#DC2626', bg: '#FEF2F2' },
-  { label: 'Dove dormire', color: '#7C3AED', bg: '#F5F3FF' },
-  { label: 'Pianificazione', color: '#0891B2', bg: '#ECFEFF' },
+  'Consigli',
+  'Cosa portare',
+  'Budget',
+  'Food guide',
+  'Dove dormire',
+  'Pianificazione',
 ];
+
+const itineraryCategories = ['Weekend', '7 giorni', 'Roadtrip', '2 settimane', 'Citta', 'Isole'];
 
 export default function CrossLinkWidget({ variant }: CrossLinkWidgetProps) {
   const isToEsperienze = variant === 'to-esperienze';
   const isToGuide = variant === 'to-guide';
+  const isToItinerari = variant === 'to-itinerari';
 
   const config = isToGuide
     ? {
         scriptAccent: 'trovi tutto qui',
-        title: 'Leggi le guide di viaggio',
+        title: 'Apri le guide pratiche',
         description:
-          'Itinerari completi, consigli pratici, packing list e food guide – tutto quello che ti serve prima di partire.',
+          'Consigli pratici, packing list, budget, food guide e dove dormire: il layer operativo del sito prima di prenotare.',
         href: '/guide',
         cta: 'Leggi le guide',
         wrapClass: 'bg-[var(--color-ink)]',
@@ -36,33 +39,47 @@ export default function CrossLinkWidget({ variant }: CrossLinkWidgetProps) {
         descClass: 'text-white/65',
         btnClass: 'bg-white text-[var(--color-ink)] hover:bg-[var(--color-accent-soft)]',
       }
-    : isToEsperienze
+    : isToItinerari
       ? {
-          scriptAccent: 'stessa prospettiva, altra porta',
-          title: 'Cerca per tipo di esperienza',
+          scriptAccent: 'se vuoi un piano, entra qui',
+          title: 'Apri gli itinerari',
           description:
-            'Lo stesso archivio visto dal lato delle esperienze: food, posti particolari, weekend romantici e molto altro.',
-          href: '/esperienze',
-          cta: 'Esplora per esperienza',
-          wrapClass: 'bg-[var(--color-accent-soft)]',
-          titleClass: 'text-[var(--color-ink)]',
+            'Weekend, roadtrip e viaggi completi con tappe, tempi e ritmo gia ordinati per partire senza improvvisare tutto.',
+          href: '/itinerari',
+          cta: 'Apri itinerari',
+          wrapClass: 'bg-[var(--color-ink)]',
+          titleClass: 'text-white',
           scriptClass: 'text-[var(--color-accent)]',
-          descClass: 'text-black/70',
-          btnClass: 'bg-[var(--color-ink)] text-white hover:bg-[var(--color-ink)]/85',
+          descClass: 'text-white/65',
+          btnClass: 'bg-white text-[var(--color-ink)] hover:bg-[var(--color-accent-soft)]',
         }
-      : {
-          scriptAccent: 'stessa prospettiva, altra porta',
-          title: 'Cerca per destinazione',
-          description:
-            'Lo stesso archivio organizzato per luogo: Italia, Europa e oltre. Filtra per regione, città o continente.',
-          href: '/destinazioni',
-          cta: 'Esplora per destinazione',
-          wrapClass: 'bg-[var(--color-accent-soft)]',
-          titleClass: 'text-[var(--color-ink)]',
-          scriptClass: 'text-[var(--color-accent)]',
-          descClass: 'text-black/70',
-          btnClass: 'bg-[var(--color-ink)] text-white hover:bg-[var(--color-ink)]/85',
-        };
+      : isToEsperienze
+        ? {
+            scriptAccent: 'stessa prospettiva, altra porta',
+            title: 'Cerca per tipo di esperienza',
+            description:
+              'Lo stesso archivio visto dal lato delle esperienze: food, posti particolari, weekend romantici e molto altro.',
+            href: '/esperienze',
+            cta: 'Esplora per esperienza',
+            wrapClass: 'bg-[var(--color-accent-soft)]',
+            titleClass: 'text-[var(--color-ink)]',
+            scriptClass: 'text-[var(--color-accent)]',
+            descClass: 'text-black/70',
+            btnClass: 'bg-[var(--color-ink)] text-white hover:bg-[var(--color-ink)]/85',
+          }
+        : {
+            scriptAccent: 'stessa prospettiva, altra porta',
+            title: 'Cerca per destinazione',
+            description:
+              'Lo stesso archivio organizzato per luogo: Italia, Europa e oltre. Filtra per regione, città o continente.',
+            href: '/destinazioni',
+            cta: 'Esplora per destinazione',
+            wrapClass: 'bg-[var(--color-accent-soft)]',
+            titleClass: 'text-[var(--color-ink)]',
+            scriptClass: 'text-[var(--color-accent)]',
+            descClass: 'text-black/70',
+            btnClass: 'bg-[var(--color-ink)] text-white hover:bg-[var(--color-ink)]/85',
+          };
 
   return (
     <motion.div
@@ -125,8 +142,8 @@ export default function CrossLinkWidget({ variant }: CrossLinkWidgetProps) {
                 </motion.div>
               );
             })
-          ) : isToGuide ? (
-            /* Guide: book icon + scattered category pills */
+          ) : isToGuide || isToItinerari ? (
+            /* Archive editoriali: book icon + scattered category pills */
             <>
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -138,7 +155,7 @@ export default function CrossLinkWidget({ variant }: CrossLinkWidgetProps) {
                   <BookOpen size={40} strokeWidth={1.2} className="text-white/80" />
                 </div>
               </motion.div>
-              {guideCategories.map((cat, idx) => {
+              {(isToItinerari ? itineraryCategories : guideCategories).map((cat, idx) => {
                 const positions = [
                   { top: '2%', left: '5%' },
                   { top: '0%', right: '5%' },
@@ -150,7 +167,7 @@ export default function CrossLinkWidget({ variant }: CrossLinkWidgetProps) {
                 const pos = positions[idx];
                 return (
                   <motion.div
-                    key={cat.label}
+                    key={cat}
                     initial={{ opacity: 0, scale: 0.7 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
@@ -158,11 +175,8 @@ export default function CrossLinkWidget({ variant }: CrossLinkWidgetProps) {
                     className="absolute"
                     style={pos}
                   >
-                    <div
-                      className="rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider shadow-md"
-                      style={{ backgroundColor: cat.bg, color: cat.color }}
-                    >
-                      {cat.label}
+                    <div className="rounded-full border border-white/12 bg-white/90 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--color-ink)] shadow-md">
+                      {cat}
                     </div>
                   </motion.div>
                 );

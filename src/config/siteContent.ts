@@ -80,6 +80,29 @@ export interface CollaborationFormat {
   highlight?: string;
 }
 
+export interface CollaborationTestimonial {
+  quote: string;
+  name: string;
+  role: string;
+  brand: string;
+  photo?: string;
+}
+
+export interface CollaborationCaseStudyMetric {
+  value: string;
+  label: string;
+}
+
+export interface CollaborationCaseStudy {
+  brand: string;
+  project: string;
+  objective: string;
+  approach: string;
+  metrics: CollaborationCaseStudyMetric[];
+  image?: string;
+  href?: string;
+}
+
 export interface CollaborationsContent {
   heroEyebrow: string;
   heroTitleMain: string;
@@ -90,6 +113,8 @@ export interface CollaborationsContent {
   primaryCtaLink: string;
   secondaryCtaLabel: string;
   secondaryCtaLink: string;
+  positioningTitle: string;
+  positioningDescription: string;
   statsTitle: string;
   statsDescription: string;
   servicesTitle: string;
@@ -100,9 +125,15 @@ export interface CollaborationsContent {
   partnerTitle: string;
   partnerDescription: string;
   partnerTypes: CollaborationPartnerType[];
+  fitTitle: string;
+  fitList: string[];
+  noFitTitle: string;
+  noFitList: string[];
   formatsTitle: string;
   formatsDescription: string;
   collaborationFormats: CollaborationFormat[];
+  testimonials?: CollaborationTestimonial[];
+  caseStudies?: CollaborationCaseStudy[];
 }
 
 export interface ContactContent {
@@ -123,6 +154,7 @@ export interface ContactContent {
 export interface FooterContent {
   description: string;
   discoverTitle: string;
+  planningTitle: string;
   resourcesTitle: string;
   projectTitle: string;
   newsletterButtonLabel: string;
@@ -131,7 +163,9 @@ export interface FooterContent {
 export interface NavigationContent {
   destinationsLabel: string;
   destinationsAllLabel: string;
+  planningLabel: string;
   guidesLabel: string;
+  itinerariesLabel: string;
   experiencesLabel: string;
   resourcesLabel: string;
   shopLabel: string;
@@ -150,6 +184,17 @@ export interface DemoContent {
   showDemoBadges: boolean;
 }
 
+export interface PlanningContent {
+  heroEyebrow: string;
+  heroTitleMain: string;
+  heroTitleAccent: string;
+  heroDescription: string;
+  primaryCtaLabel: string;
+  primaryCtaLink: string;
+  secondaryCtaLabel: string;
+  secondaryCtaLink: string;
+}
+
 export interface SiteContentMap {
   home: HomeContent;
   about: AboutContent;
@@ -157,6 +202,7 @@ export interface SiteContentMap {
   contact: ContactContent;
   footer: FooterContent;
   navigation: NavigationContent;
+  planning: PlanningContent;
   demo: DemoContent;
 }
 
@@ -293,6 +339,9 @@ export const siteContentDefaults: SiteContentMap = {
     primaryCtaLink: '/media-kit',
     secondaryCtaLabel: 'Scrivici per una proposta',
     secondaryCtaLink: '/contatti',
+    positioningTitle: 'Chi siamo per un partner',
+    positioningDescription:
+      'Siamo un progetto creator-led che unisce immagini, sito, guide e racconto. Funzioniamo meglio quando un partner cerca un contenuto con gusto, criterio e utilita reale per chi legge.',
     statsTitle: 'Numeri utili, non rumore',
     statsDescription:
       'Community reale, reach pubblica e presenza costruita in anni di contenuti salvabili. Usiamo solo segnali che possiamo sostenere, non metriche decorative.',
@@ -363,6 +412,20 @@ export const siteContentDefaults: SiteContentMap = {
         text: 'Prodotti, servizi e strumenti coerenti con il modo in cui viaggiamo, raccontiamo e consigliamo.',
       },
     ],
+    fitTitle: 'Lavoriamo bene con',
+    fitList: [
+      'Partner che cercano un racconto credibile, non solo visibilita rapida.',
+      'Brief chiari su obiettivo, timing e perimetro del progetto.',
+      'Spazio reale per immagini vive, dettagli utili e liberta editoriale.',
+      'Progetti travel, hospitality e lifestyle coerenti con il nostro pubblico.',
+    ],
+    noFitTitle: 'Non siamo la scelta giusta per',
+    noFitList: [
+      'Richieste di recensioni preconfezionate o approvazione totale del tono.',
+      'Campagne solo sconto, coupon o puro volume senza qualita narrativa.',
+      'Progetti fuori fuoco rispetto a viaggio, ospitalita, scoperta e utilita.',
+      'Partnership senza contesto, senza timing o senza aspettative realistiche.',
+    ],
     formatsTitle: 'Tre modi per partire bene',
     formatsDescription:
       'Partiamo da format chiari per orientare la conversazione, ma i progetti migliori restano calibrati sul contesto reale.',
@@ -410,7 +473,8 @@ export const siteContentDefaults: SiteContentMap = {
     emailCardDescription: 'Per proposte commerciali, richieste strutturate e media kit.',
     emailCardLinkLabel: 'Apri il media kit',
     whatsappCardTitle: 'WhatsApp',
-    whatsappCardDescription: 'Ideale per richieste rapide o per capire se ha senso fissare una call.',
+    whatsappCardDescription:
+      'Ideale per richieste rapide o per capire se ha senso fissare una call.',
     helperTitle: 'Per aiutarci a risponderti meglio',
     helperItems: [
       'Se ci scrivi per una collaborazione, indica brand o struttura, obiettivo e periodo indicativo.',
@@ -423,6 +487,7 @@ export const siteContentDefaults: SiteContentMap = {
     description:
       'Posti particolari, esperienze vere e informazioni utili raccontate da Rodrigo e Betta con criterio, immagini e prova reale.',
     discoverTitle: 'Scopri',
+    planningTitle: 'Pianifica',
     resourcesTitle: 'Risorse',
     projectTitle: 'Progetto',
     newsletterButtonLabel: 'Iscriviti alla newsletter',
@@ -430,9 +495,11 @@ export const siteContentDefaults: SiteContentMap = {
   navigation: {
     destinationsLabel: 'Destinazioni',
     destinationsAllLabel: 'Tutte le destinazioni',
-    guidesLabel: 'Guide',
+    planningLabel: 'Pianifica',
+    guidesLabel: 'Guide pratiche',
+    itinerariesLabel: 'Itinerari',
     experiencesLabel: 'Esperienze',
-    resourcesLabel: 'Strumenti',
+    resourcesLabel: 'Risorse',
     shopLabel: 'Shop',
     collaborationsLabel: 'Collaborazioni',
     mediaKitLabel: 'Media kit',
@@ -440,6 +507,17 @@ export const siteContentDefaults: SiteContentMap = {
     contactsLabel: 'Contatti',
     favoritesLabel: 'Preferiti',
     searchLabel: 'Cerca',
+  },
+  planning: {
+    heroEyebrow: 'Pianifica meglio',
+    heroTitleMain: 'Usa il sito come',
+    heroTitleAccent: 'un sistema di viaggio',
+    heroDescription:
+      'Risorse, hotel, guide pratiche e punti di partenza ordinati per aiutarti a scegliere con piu criterio, non per farti aprire dieci tab inutili.',
+    primaryCtaLabel: 'Apri le risorse',
+    primaryCtaLink: '/risorse',
+    secondaryCtaLabel: 'Vedi dove dormire',
+    secondaryCtaLink: '/dove-dormire',
   },
   demo: {
     showEditorialDemo: !(import.meta.env?.PROD ?? true),
@@ -497,7 +575,11 @@ const textareaField = (key: string, label: string, rows = 4): SiteContentFieldDe
   rows,
 });
 
-const stringListField = (key: string, label: string, itemLabel: string): SiteContentFieldDefinition => ({
+const stringListField = (
+  key: string,
+  label: string,
+  itemLabel: string
+): SiteContentFieldDefinition => ({
   key,
   label,
   type: 'string-list',
@@ -570,10 +652,22 @@ export const siteContentDefinitions: SiteContentDefinition[] = [
       textField('quoteAuthor', 'Autore citazione'),
       textField('focusTitle', 'Titolo focus'),
       textField('focusSubtitle', 'Sottotitolo focus'),
-      { key: 'focusAreas', label: 'Aree focus', type: 'object-list', itemLabel: 'Area', fields: cardFields },
+      {
+        key: 'focusAreas',
+        label: 'Aree focus',
+        type: 'object-list',
+        itemLabel: 'Area',
+        fields: cardFields,
+      },
       textField('principlesTitle', 'Titolo valori'),
       textField('principlesSubtitle', 'Sottotitolo valori'),
-      { key: 'principles', label: 'Valori', type: 'object-list', itemLabel: 'Valore', fields: cardFields },
+      {
+        key: 'principles',
+        label: 'Valori',
+        type: 'object-list',
+        itemLabel: 'Valore',
+        fields: cardFields,
+      },
       textField('audienceTitle', 'Titolo pubblico'),
       textareaField('audienceDescription', 'Descrizione pubblico', 3),
       stringListField('audienceItems', 'Punti pubblico', 'Punto'),
@@ -595,6 +689,8 @@ export const siteContentDefinitions: SiteContentDefinition[] = [
       urlField('primaryCtaLink', 'CTA primaria link'),
       textField('secondaryCtaLabel', 'CTA secondaria label'),
       urlField('secondaryCtaLink', 'CTA secondaria link'),
+      textField('positioningTitle', 'Titolo posizionamento partner'),
+      textareaField('positioningDescription', 'Descrizione posizionamento partner'),
       textField('statsTitle', 'Titolo metriche'),
       textareaField('statsDescription', 'Descrizione metriche'),
       textField('servicesTitle', 'Titolo servizi'),
@@ -623,7 +719,17 @@ export const siteContentDefinitions: SiteContentDefinition[] = [
       },
       textField('partnerTitle', 'Titolo partner ideali'),
       textareaField('partnerDescription', 'Descrizione partner ideali'),
-      { key: 'partnerTypes', label: 'Tipi partner', type: 'object-list', itemLabel: 'Partner', fields: cardFields },
+      {
+        key: 'partnerTypes',
+        label: 'Tipi partner',
+        type: 'object-list',
+        itemLabel: 'Partner',
+        fields: cardFields,
+      },
+      textField('fitTitle', 'Titolo fit'),
+      stringListField('fitList', 'Lista fit', 'Punto fit'),
+      textField('noFitTitle', 'Titolo no-fit'),
+      stringListField('noFitList', 'Lista no-fit', 'Punto no-fit'),
       textField('formatsTitle', 'Titolo formati collaborazione'),
       textareaField('formatsDescription', 'Descrizione formati collaborazione'),
       {
@@ -668,6 +774,7 @@ export const siteContentDefinitions: SiteContentDefinition[] = [
     fields: [
       textareaField('description', 'Descrizione footer'),
       textField('discoverTitle', 'Titolo colonna scopri'),
+      textField('planningTitle', 'Titolo colonna pianifica'),
       textField('resourcesTitle', 'Titolo colonna risorse'),
       textField('projectTitle', 'Titolo colonna progetto'),
       textField('newsletterButtonLabel', 'Label bottone newsletter'),
@@ -681,7 +788,9 @@ export const siteContentDefinitions: SiteContentDefinition[] = [
     fields: [
       textField('destinationsLabel', 'Label destinazioni'),
       textField('destinationsAllLabel', 'Label tutte le destinazioni'),
+      textField('planningLabel', 'Label pianifica'),
       textField('guidesLabel', 'Label guide'),
+      textField('itinerariesLabel', 'Label itinerari'),
       textField('experiencesLabel', 'Label esperienze'),
       textField('resourcesLabel', 'Label risorse'),
       textField('shopLabel', 'Label shop'),
@@ -691,6 +800,23 @@ export const siteContentDefinitions: SiteContentDefinition[] = [
       textField('contactsLabel', 'Label contatti'),
       textField('favoritesLabel', 'Label preferiti'),
       textField('searchLabel', 'Label cerca'),
+    ],
+  },
+  {
+    id: 'planning',
+    title: 'Planning',
+    description:
+      'Hero e CTA del layer Pianifica usato da Inizia da qui e dalle superfici planning.',
+    previewPath: '/inizia-da-qui',
+    fields: [
+      textField('heroEyebrow', 'Eyebrow hero'),
+      textField('heroTitleMain', 'Titolo hero principale'),
+      textField('heroTitleAccent', 'Titolo hero accent'),
+      textareaField('heroDescription', 'Descrizione hero'),
+      textField('primaryCtaLabel', 'CTA primaria label'),
+      urlField('primaryCtaLink', 'CTA primaria link'),
+      textField('secondaryCtaLabel', 'CTA secondaria label'),
+      urlField('secondaryCtaLink', 'CTA secondaria link'),
     ],
   },
   {

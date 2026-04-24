@@ -24,11 +24,26 @@ import OptimizedImage from '../components/OptimizedImage';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import Section from '../components/Section';
-import { BRAND_STATS } from '../config/site';
+import PartnerLogos, { type Partner } from '../components/home/PartnerLogos';
+import Testimonials from '../components/collaborations/Testimonials';
+import CaseStudies from '../components/collaborations/CaseStudies';
+import { MEDIA } from '../config/mediaAssets';
+import { BRAND_STATS, SITE_URL } from '../config/site';
 import AnimatedCounter from '../components/AnimatedCounter';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { fetchStats, type SiteStats } from '../services/firebaseService';
+
+const PARTNER_SHOWCASE: Partner[] = [
+  { name: 'Visit Sardegna' },
+  { name: 'Pugliapromozione' },
+  { name: 'ENIT' },
+  { name: 'Heymondo' },
+  { name: 'Airalo' },
+  { name: 'GetYourGuide' },
+  { name: 'Booking.com' },
+  { name: 'Visit Grecia' },
+];
 
 const PARTNER_AREAS = [
   {
@@ -132,7 +147,10 @@ function FaqSection() {
         </div>
         <div className="space-y-4">
           {FAQ_ITEMS.map((item, idx) => (
-            <div key={item.q} className="overflow-hidden rounded-2xl border border-black/5 bg-white">
+            <div
+              key={item.q}
+              className="overflow-hidden rounded-2xl border border-black/5 bg-white"
+            >
               <button
                 type="button"
                 onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
@@ -153,7 +171,9 @@ function FaqSection() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.24 }}
                   >
-                    <div className="px-6 pb-6 text-base leading-relaxed text-black/70">{item.a}</div>
+                    <div className="px-6 pb-6 text-base leading-relaxed text-black/70">
+                      {item.a}
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -195,6 +215,9 @@ export default function Collaborazioni() {
     primaryCtaLink: '/media-kit',
     secondaryCtaLabel: 'Scrivici per una proposta',
     secondaryCtaLink: '/contatti',
+    positioningTitle: 'Chi siamo per un partner',
+    positioningDescription:
+      'Siamo un progetto creator-led che tiene insieme sito, immagini, social e guida editoriale. Il valore non sta nel volume: sta nel costruire un racconto riconoscibile e utile per chi legge.',
     statsTitle: 'Numeri utili, non rumore',
     statsDescription:
       'Community reale, reach pubblica e presenza costruita in anni di contenuti salvabili. Usiamo solo segnali che possiamo sostenere, non metriche decorative.',
@@ -249,6 +272,20 @@ export default function Collaborazioni() {
       },
     ],
     formatsTitle: 'Tre modi per partire bene',
+    fitTitle: 'Lavoriamo bene con',
+    fitList: [
+      'Partner che cercano un racconto credibile, non solo visibilita rapida.',
+      'Brief chiari su obiettivo, timing e perimetro del progetto.',
+      'Spazio reale per immagini vive, dettagli utili e liberta editoriale.',
+      'Progetti travel, hospitality e lifestyle coerenti con il nostro pubblico.',
+    ],
+    noFitTitle: 'Non siamo la scelta giusta per',
+    noFitList: [
+      'Richieste di recensioni preconfezionate o approvazione totale del tono.',
+      'Campagne solo sconto, coupon o puro volume senza qualita narrativa.',
+      'Progetti fuori fuoco rispetto a viaggio, ospitalita, scoperta e utilita.',
+      'Partnership senza contesto, senza timing o senza aspettative realistiche.',
+    ],
     formatsDescription:
       'Partiamo da format chiari per orientare la conversazione, ma i progetti migliori restano calibrati sul contesto reale.',
     collaborationFormats: [
@@ -317,6 +354,7 @@ export default function Collaborazioni() {
       <SEO
         title="Collaborazioni"
         description="Collaborazioni editoriali per hotel, destinazioni, brand travel e progetti lifestyle che hanno qualcosa da raccontare con credibilità."
+        canonical={`${SITE_URL}/collaborazioni`}
       />
       <JsonLd data={faqStructuredData} />
 
@@ -339,8 +377,7 @@ export default function Collaborazioni() {
 
             <div className="relative mb-8 inline-block">
               <h1 className="text-5xl font-serif leading-tight md:text-7xl">
-                {pageContent.heroTitleMain}{' '}
-                <br />
+                {pageContent.heroTitleMain} <br />
                 <span className="italic text-black/60">{pageContent.heroTitleAccent}</span>
               </h1>
               <motion.span
@@ -371,10 +408,20 @@ export default function Collaborazioni() {
             </div>
 
             <div className="flex flex-col gap-4 sm:flex-row">
-              <Button to={pageContent.primaryCtaLink} variant="primary" size="lg" className="px-8 py-4">
+              <Button
+                to={pageContent.primaryCtaLink}
+                variant="primary"
+                size="lg"
+                className="px-8 py-4"
+              >
                 {pageContent.primaryCtaLabel} <ArrowRight size={18} />
               </Button>
-              <Button to={pageContent.secondaryCtaLink} variant="outline" size="lg" className="px-8 py-4">
+              <Button
+                to={pageContent.secondaryCtaLink}
+                variant="outline"
+                size="lg"
+                className="px-8 py-4"
+              >
                 {pageContent.secondaryCtaLabel}
               </Button>
             </div>
@@ -388,7 +435,7 @@ export default function Collaborazioni() {
           >
             <div className="aspect-[4/5] overflow-hidden rounded-3xl shadow-2xl transition-transform duration-700 lg:-rotate-2 lg:hover:rotate-0">
               <OptimizedImage
-                src="/images/brand/collab-work.png"
+                src={MEDIA.collab.work}
                 alt="Rodrigo e Betta al lavoro su una collaborazione editoriale"
                 className="h-full w-full object-cover"
               />
@@ -406,6 +453,27 @@ export default function Collaborazioni() {
               </p>
             </div>
           </motion.div>
+        </div>
+      </Section>
+
+      <Section>
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+          <div className="rounded-3xl border border-black/5 bg-[var(--color-sand)] p-8 shadow-sm">
+            <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
+              Posizionamento
+            </span>
+            <h2 className="mt-4 text-3xl font-serif">{pageContent.positioningTitle}</h2>
+            <p className="mt-4 text-base leading-relaxed text-black/68">
+              {pageContent.positioningDescription}
+            </p>
+          </div>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {pageContent.heroChecklist.map((item) => (
+              <div key={item} className="rounded-3xl border border-black/5 bg-white p-6 shadow-sm">
+                <p className="text-sm leading-relaxed text-black/65">{item}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </Section>
 
@@ -442,6 +510,8 @@ export default function Collaborazioni() {
         </div>
       </Section>
 
+      <PartnerLogos partners={PARTNER_SHOWCASE} />
+
       <Section>
         <div className="mx-auto max-w-4xl">
           <div className="mb-10 text-center">
@@ -450,29 +520,83 @@ export default function Collaborazioni() {
             </span>
             <h2 className="mb-4 text-4xl font-serif">Con chi lavoriamo meglio</h2>
             <p className="text-lg text-black/70">
-              Restiamo aperti a progetti diversi, ma lavoriamo meglio quando c'è identità, contesto e una
-              storia che vale la pena raccontare.
+              Restiamo aperti a progetti diversi, ma lavoriamo meglio quando c'è identità, contesto
+              e una storia che vale la pena raccontare.
             </p>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {PARTNER_AREAS.map((item, idx) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.06 }}
-                className="flex items-start gap-4 rounded-2xl border border-black/5 bg-white p-6 shadow-sm"
-              >
-                <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
-                  <item.icon size={20} />
-                </div>
-                <div>
-                  <h3 className="mb-1.5 text-lg font-serif leading-tight">{item.title}</h3>
-                  <p className="text-sm leading-relaxed text-black/62">{item.text}</p>
-                </div>
-              </motion.div>
-            ))}
+            {pageContent.partnerTypes.map((item, idx) => {
+              const Icon = PARTNER_AREAS[idx]?.icon ?? BriefcaseBusiness;
+              return (
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.06 }}
+                  className="flex items-start gap-4 rounded-2xl border border-black/5 bg-white p-6 shadow-sm"
+                >
+                  <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
+                    <Icon size={20} />
+                  </div>
+                  <div>
+                    <h3 className="mb-1.5 text-lg font-serif leading-tight">{item.title}</h3>
+                    <p className="text-sm leading-relaxed text-black/62">{item.text}</p>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </Section>
+
+      <Section className="rounded-[3rem] border border-black/5 bg-[var(--color-sand)] p-12 md:p-20">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+          <div>
+            <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
+              Fit reciproco
+            </span>
+            <h2 className="mt-4 text-4xl font-serif">
+              Capire prima se ha senso ci fa lavorare meglio.
+            </h2>
+            <p className="mt-4 max-w-xl text-lg leading-relaxed text-black/68">
+              Questa pagina non serve a gonfiare il progetto. Serve a chiarire rapidamente se il tuo
+              brief incontra davvero il nostro modo di raccontare.
+            </p>
+          </div>
+          <div className="grid gap-5 md:grid-cols-2">
+            <div className="rounded-3xl border border-black/5 bg-white p-7 shadow-sm">
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
+                {pageContent.fitTitle}
+              </p>
+              <div className="mt-5 space-y-4">
+                {pageContent.fitList.map((item) => (
+                  <div
+                    key={item}
+                    className="flex items-start gap-3 text-sm leading-relaxed text-black/68"
+                  >
+                    <CheckCircle size={16} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="rounded-3xl border border-black/5 bg-white p-7 shadow-sm">
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
+                {pageContent.noFitTitle}
+              </p>
+              <div className="mt-5 space-y-4">
+                {pageContent.noFitList.map((item) => (
+                  <div
+                    key={item}
+                    className="flex items-start gap-3 text-sm leading-relaxed text-black/68"
+                  >
+                    <ShieldCheck size={16} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </Section>
@@ -544,13 +668,16 @@ export default function Collaborazioni() {
             </span>
             <h2 className="mb-4 text-4xl font-serif">Quello che non facciamo</h2>
             <p className="mx-auto max-w-2xl text-lg text-black/70">
-              Mettere dei confini non ci rende rigidi: rende più pulita la collaborazione e più forte il
-              contenuto finale.
+              Mettere dei confini non ci rende rigidi: rende più pulita la collaborazione e più
+              forte il contenuto finale.
             </p>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             {ANTI_TARGETS.map((item) => (
-              <div key={item} className="flex gap-3 rounded-2xl border border-black/5 bg-white px-5 py-5">
+              <div
+                key={item}
+                className="flex gap-3 rounded-2xl border border-black/5 bg-white px-5 py-5"
+              >
                 <CheckCircle size={18} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
                 <p className="text-black/72">{item}</p>
               </div>
@@ -590,8 +717,16 @@ export default function Collaborazioni() {
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             {pageContent.collaborationFormats.map((format, index) => {
               const isHighlighted = format.highlight === 'true';
-              const ctaTargets = [pageContent.primaryCtaLink, pageContent.primaryCtaLink, pageContent.secondaryCtaLink];
-              const ctaLabels = ['Apri il media kit', 'Richiedi il media kit', 'Scrivici il progetto'];
+              const ctaTargets = [
+                pageContent.primaryCtaLink,
+                pageContent.primaryCtaLink,
+                pageContent.secondaryCtaLink,
+              ];
+              const ctaLabels = [
+                'Apri il media kit',
+                'Richiedi il media kit',
+                'Scrivici il progetto',
+              ];
 
               return (
                 <div
@@ -635,12 +770,20 @@ export default function Collaborazioni() {
 
       <FaqSection />
 
+      {pageContent.caseStudies && pageContent.caseStudies.length > 0 && (
+        <CaseStudies cases={pageContent.caseStudies} />
+      )}
+
+      {pageContent.testimonials && pageContent.testimonials.length > 0 && (
+        <Testimonials testimonials={pageContent.testimonials} />
+      )}
+
       <Section className="my-16">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 text-4xl font-serif">Se ha senso, costruiamolo bene.</h2>
           <p className="mb-10 text-lg text-black/70">
-            Parti dal media kit se vuoi orientarti in modo ordinato, oppure scrivici direttamente se hai
-            già una proposta chiara.
+            Parti dal media kit se vuoi orientarti in modo ordinato, oppure scrivici direttamente se
+            hai già una proposta chiara.
           </p>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Button to="/media-kit" variant="cta" size="lg" className="px-10 py-5">

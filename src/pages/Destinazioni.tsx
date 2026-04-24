@@ -1,14 +1,13 @@
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import Breadcrumbs from '../components/Breadcrumbs';
 import JsonLd from '../components/JsonLd';
 import PageLayout from '../components/PageLayout';
 import Section from '../components/Section';
 import SEO from '../components/SEO';
 import DestinationHero from '../components/destinazioni/DestinationHero';
-import DestinationFilters, {
-  GROUP_VISUALS,
-} from '../components/destinazioni/DestinationFilters';
+import DestinationFilters, { GROUP_VISUALS } from '../components/destinazioni/DestinationFilters';
 import DestinationGrid from '../components/destinazioni/DestinationGrid';
 import DestinationFooter from '../components/destinazioni/DestinationFooter';
 import { DEMO_DESTINATION_CARD } from '../config/demoContent';
@@ -28,7 +27,7 @@ const ITEMS_PER_PAGE = 6;
 
 function uniqueValues(items: Array<string | undefined>) {
   return Array.from(
-    new Set(items.filter((item): item is string => Boolean(item && item !== 'Da definire'))),
+    new Set(items.filter((item): item is string => Boolean(item && item !== 'Da definire')))
   );
 }
 
@@ -57,13 +56,11 @@ export default function Destinazioni() {
       .filter((item) => item.destinationGroup !== 'Altro');
 
     if (demoSettings.showDestinationDemo) {
-      const existingSlugs = new Set(
-        mapped.map((item) => item.link.replace(/^\/articolo\//, '')),
-      );
+      const existingSlugs = new Set(mapped.map((item) => item.link.replace(/^\/articolo\//, '')));
       const demoItems = Object.values(PREVIEW_ARTICLES)
         .filter((preview) => !existingSlugs.has(preview.slug))
         .map((preview) =>
-          mapPreviewToArchiveItem(preview, PREVIEW_EXPERIENCE_TYPES[preview.slug] ?? []),
+          mapPreviewToArchiveItem(preview, PREVIEW_EXPERIENCE_TYPES[preview.slug] ?? [])
         )
         .filter((item) => item.destinationGroup !== 'Altro');
       return [...mapped, ...demoItems];
@@ -78,7 +75,7 @@ export default function Destinazioni() {
     return [
       'Tutti',
       ...uniqueValues(
-        archiveItems.filter((item) => item.country === 'Italia').map((item) => item.region),
+        archiveItems.filter((item) => item.country === 'Italia').map((item) => item.region)
       ),
     ];
   }, [archiveItems, selectedGroup]);
@@ -90,22 +87,22 @@ export default function Destinazioni() {
       ...uniqueValues(
         archiveItems
           .filter((item) => item.country === 'Italia' && item.region === selectedRegion)
-          .map((item) => item.city),
+          .map((item) => item.city)
       ),
     ];
   }, [archiveItems, selectedGroup, selectedRegion]);
 
   const availablePeriods = useMemo(
     () => ['Tutti', ...uniqueValues(archiveItems.map((item) => item.period))],
-    [archiveItems],
+    [archiveItems]
   );
   const availableBudgets = useMemo(
     () => ['Tutti', ...uniqueValues(archiveItems.map((item) => item.budget))],
-    [archiveItems],
+    [archiveItems]
   );
   const availableDurations = useMemo(
     () => ['Tutti', ...uniqueValues(archiveItems.map((item) => item.duration))],
-    [archiveItems],
+    [archiveItems]
   );
 
   const filteredItems = useMemo(
@@ -139,7 +136,7 @@ export default function Destinazioni() {
       selectedGroup,
       selectedPeriod,
       selectedRegion,
-    ],
+    ]
   );
 
   const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
@@ -158,8 +155,7 @@ export default function Destinazioni() {
     selectedPeriod !== 'Tutti' ||
     selectedBudget !== 'Tutti' ||
     selectedDuration !== 'Tutti';
-  const usingDemo =
-    archiveItems.length === 1 && archiveItems[0]?.id === DEMO_DESTINATION_CARD.id;
+  const usingDemo = archiveItems.length === 1 && archiveItems[0]?.id === DEMO_DESTINATION_CARD.id;
 
   const updateSearch = (updates: Record<string, string | null>) => {
     setCurrentPage(1);
@@ -172,7 +168,7 @@ export default function Destinazioni() {
         });
         return next;
       },
-      { replace: true },
+      { replace: true }
     );
   };
 
@@ -214,6 +210,7 @@ export default function Destinazioni() {
       <DestinationHero activeGroupImage={activeGroupImage} />
 
       <Section>
+        <Breadcrumbs items={[{ label: 'Destinazioni' }]} />
         <DestinationFilters
           archiveItems={archiveItems}
           selectedGroup={selectedGroup}

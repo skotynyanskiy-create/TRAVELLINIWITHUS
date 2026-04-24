@@ -8,6 +8,7 @@ import {
   NotebookPen,
   ShieldCheck,
 } from 'lucide-react';
+import Breadcrumbs from '../components/Breadcrumbs';
 import Button from '../components/Button';
 import JsonLd from '../components/JsonLd';
 import Newsletter from '../components/Newsletter';
@@ -15,6 +16,7 @@ import OptimizedImage from '../components/OptimizedImage';
 import PageLayout from '../components/PageLayout';
 import Section from '../components/Section';
 import SEO from '../components/SEO';
+import { MEDIA } from '../config/mediaAssets';
 import { BRAND_STATS, CONTACTS, SITE_URL } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
@@ -23,6 +25,27 @@ const EDITORIAL_GUARDRAILS = [
   'Se un posto funziona solo in foto e non nella vita reale, non ci interessa spingerlo.',
   'Se una collaborazione ci chiede di sembrare entusiasti a prescindere, non è il progetto giusto per noi.',
   'Se un consiglio non aiuta davvero chi legge a decidere meglio, preferiamo non pubblicarlo.',
+];
+
+const DECISION_CRITERIA = [
+  {
+    title: 'Prima il potenziale, poi l estetica',
+    text: 'Un luogo entra davvero nel progetto solo se promette atmosfera, logistica leggibile e un esperienza che resta anche fuori dalla foto.',
+  },
+  {
+    title: 'Preferiamo luoghi con un carattere chiaro',
+    text: 'Soggiorni con identita, territori con ritmo, esperienze locali riconoscibili: se sembra intercambiabile, di solito non entra.',
+  },
+  {
+    title: 'Valutiamo sempre il contesto reale',
+    text: 'Stagione, folla, zona, prezzo, accessibilita e coerenza con il viaggio contano quanto il colpo d occhio.',
+  },
+];
+
+const VERIFICATION_AREAS = [
+  'Negli hotel guardiamo atmosfera, posizione, qualita del sonno, luce, spazi comuni e quanto l esperienza corrisponde davvero alle immagini.',
+  'Nelle esperienze guardiamo ritmo, autenticita, livello di affollamento, chiarezza dell organizzazione e se il prezzo ha senso.',
+  'Nel food guardiamo gusto, contesto, servizio e se il posto funziona anche per chi ci arriva senza hype social.',
 ];
 
 const TIMELINE = [
@@ -117,7 +140,8 @@ export default function ChiSiamo() {
     <PageLayout>
       <SEO
         title="Chi Siamo"
-        description="Chi sono Rodrigo e Betta, come lavorano e perché Travelliniwithus consiglia solo posti particolari raccontati con criterio."
+        description="Chi sono Rodrigo e Betta, come decidono cosa raccontare e quale metodo usano per consigliare solo luoghi che meritano davvero."
+        canonical={`${SITE_URL}/chi-siamo`}
       />
       <JsonLd
         data={{
@@ -136,6 +160,7 @@ export default function ChiSiamo() {
       />
 
       <Section className="pt-8">
+        <Breadcrumbs items={[{ label: 'Chi siamo' }]} />
         <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <div className="order-1 flex flex-col justify-center lg:order-1">
             <div className="mb-6 flex items-center gap-4">
@@ -170,19 +195,25 @@ export default function ChiSiamo() {
 
             <div className="mb-8 grid grid-cols-3 gap-4 sm:max-w-xl">
               <div className="rounded-2xl border border-black/5 bg-white p-5 text-center shadow-sm">
-                <div className="text-3xl font-serif text-[var(--color-ink)]">{BRAND_STATS.yearsOfTravel}</div>
+                <div className="text-3xl font-serif text-[var(--color-ink)]">
+                  {BRAND_STATS.yearsOfTravel}
+                </div>
                 <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-black/42">
                   anni di viaggi
                 </div>
               </div>
               <div className="rounded-2xl border border-black/5 bg-white p-5 text-center shadow-sm">
-                <div className="text-3xl font-serif text-[var(--color-ink)]">{BRAND_STATS.instagramFollowers}</div>
+                <div className="text-3xl font-serif text-[var(--color-ink)]">
+                  {BRAND_STATS.instagramFollowers}
+                </div>
                 <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-black/42">
                   community IG
                 </div>
               </div>
               <div className="rounded-2xl border border-black/5 bg-white p-5 text-center shadow-sm">
-                <div className="text-3xl font-serif text-[var(--color-ink)]">{BRAND_STATS.tiktokFollowers}</div>
+                <div className="text-3xl font-serif text-[var(--color-ink)]">
+                  {BRAND_STATS.tiktokFollowers}
+                </div>
                 <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-black/42">
                   community TikTok
                 </div>
@@ -226,7 +257,7 @@ export default function ChiSiamo() {
           <div className="relative order-2 lg:order-2">
             <div className="aspect-[4/5] overflow-hidden rounded-[var(--radius-2xl)] shadow-[var(--shadow-premium)] transition-transform duration-700 lg:rotate-2 lg:hover:rotate-0">
               <OptimizedImage
-                src="/images/brand/about-editorial.png"
+                src={MEDIA.about.editorial}
                 alt="Rodrigo e Betta, ritratto editoriale del progetto Travelliniwithus"
                 className="block h-full w-full object-cover"
               />
@@ -248,7 +279,10 @@ export default function ChiSiamo() {
           {pageContent.focusAreas.map((item, index) => {
             const Icon = focusIcons[index] ?? Compass;
             return (
-              <div key={item.title} className="card-info flex flex-col gap-6 md:flex-row md:items-start">
+              <div
+                key={item.title}
+                className="card-info flex flex-col gap-6 md:flex-row md:items-start"
+              >
                 <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[var(--radius-xl)] bg-white text-[var(--color-accent)] shadow-sm">
                   <Icon size={28} />
                 </div>
@@ -259,6 +293,44 @@ export default function ChiSiamo() {
               </div>
             );
           })}
+        </div>
+      </Section>
+
+      <Section title="Come decidiamo dove andare" subtitle="Selezione prima della lista">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          {DECISION_CRITERIA.map((item) => (
+            <div
+              key={item.title}
+              className="rounded-[var(--radius-xl)] border border-black/5 bg-white p-8 shadow-sm"
+            >
+              <h3 className="text-2xl font-serif">{item.title}</h3>
+              <p className="mt-4 leading-relaxed text-black/68">{item.text}</p>
+            </div>
+          ))}
+        </div>
+      </Section>
+
+      <Section className="rounded-[3rem] bg-[var(--color-sand)] p-12 md:p-20">
+        <div className="mx-auto max-w-5xl">
+          <div className="mb-10 max-w-3xl">
+            <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
+              Cosa verifichiamo
+            </span>
+            <h2 className="mt-4 text-4xl font-serif">
+              La fiducia nasce dal controllo, non dal tono.
+            </h2>
+            <p className="mt-4 text-lg leading-relaxed text-black/68">
+              Quando consigliamo un luogo, proviamo a capire se regge davvero nel tempo, nel prezzo
+              e nell esperienza concreta di chi ci andra dopo di noi.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {VERIFICATION_AREAS.map((item) => (
+              <div key={item} className="rounded-3xl border border-black/5 bg-white p-8 shadow-sm">
+                <p className="leading-relaxed text-black/68">{item}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </Section>
 
@@ -285,9 +357,12 @@ export default function ChiSiamo() {
             <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-[var(--color-accent)] shadow-sm">
               <ShieldCheck size={24} />
             </div>
-            <h2 className="mb-4 text-4xl font-serif">Quello che difendiamo ogni volta che pubblichiamo</h2>
+            <h2 className="mb-4 text-4xl font-serif">
+              Quello che difendiamo ogni volta che pubblichiamo
+            </h2>
             <p className="mx-auto max-w-2xl text-lg leading-relaxed text-black/70">
-              Non ci interessa sembrare premium per lessico. Ci interessa essere utili, riconoscibili e credibili.
+              Non ci interessa sembrare premium per lessico. Ci interessa essere utili,
+              riconoscibili e credibili.
             </p>
           </div>
 
@@ -309,7 +384,10 @@ export default function ChiSiamo() {
           </p>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             {pageContent.audienceItems.map((item) => (
-              <div key={item} className="rounded-3xl border border-white/8 bg-[#1C1C1C] p-8 text-left">
+              <div
+                key={item}
+                className="rounded-3xl border border-white/8 bg-[#1C1C1C] p-8 text-left"
+              >
                 <p className="leading-relaxed text-white/80">{item}</p>
               </div>
             ))}

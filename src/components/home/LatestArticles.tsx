@@ -10,6 +10,8 @@ import { siteContentDefaults } from '../../config/siteContent';
 import { DEMO_ARTICLE_PREVIEW, DEMO_ARTICLES_EXTRA } from '../../config/demoContent';
 import { useSiteContent } from '../../hooks/useSiteContent';
 import { formatDateValue, toMillis, type DateValue } from '../../utils/dateValue';
+import { getPublicArticlePath } from '../../utils/articleRoutes';
+import type { ArticleType } from '../article';
 
 interface Article {
   id: string;
@@ -17,20 +19,41 @@ interface Article {
   category: string;
   image: string;
   slug: string;
+  type?: ArticleType;
   readTime?: string;
   createdAt?: DateValue;
+  updatedAt?: DateValue;
+  verifiedAt?: DateValue;
   excerpt?: string;
   country?: string;
   region?: string;
   city?: string;
   continent?: string;
   experienceTypes?: string[];
+  tripIntents?: string[];
+  budgetBand?: string;
+  disclosureType?: string;
+  featuredPlacement?: string | null;
+  duration?: string;
 }
 
 const EDITORIAL_PREVIEWS: Article[] = [DEMO_ARTICLE_PREVIEW, ...DEMO_ARTICLES_EXTRA];
 
 function formatDate(dateInput: DateValue) {
   return formatDateValue(dateInput);
+}
+
+function selectHomepageArticles(articles: Article[]) {
+  const sorted = [...articles].sort((a, b) => toMillis(b.createdAt) - toMillis(a.createdAt));
+  const flagships = sorted.filter((article) => article.featuredPlacement === 'home-flagship');
+
+  if (flagships.length >= 3) {
+    return flagships.slice(0, 3);
+  }
+
+  const usedIds = new Set(flagships.map((article) => article.id));
+  const fillers = sorted.filter((article) => !usedIds.has(article.id));
+  return [...flagships, ...fillers].slice(0, 3);
 }
 
 export default function LatestArticles() {
@@ -44,14 +67,15 @@ export default function LatestArticles() {
     queryKey: ['articles', 'recent', demoSettings.showEditorialDemo],
     queryFn: async () => {
       const fetched = await fetchArticles();
-      const sorted = [...fetched].sort((a, b) => toMillis(b.createdAt) - toMillis(a.createdAt));
-      if (sorted.length === 0) {
+      if (fetched.length === 0) {
         return {
-          articles: demoSettings.showEditorialDemo ? EDITORIAL_PREVIEWS : [],
+          articles: demoSettings.showEditorialDemo
+            ? selectHomepageArticles(EDITORIAL_PREVIEWS)
+            : [],
           usingExamples: demoSettings.showEditorialDemo,
         };
       }
-      return { articles: sorted.slice(0, 3) as Article[], usingExamples: false };
+      return { articles: selectHomepageArticles(fetched as Article[]), usingExamples: false };
     },
   });
 
@@ -66,18 +90,27 @@ export default function LatestArticles() {
               Editoriale
             </span>
             <h2 className="mt-1 text-3xl font-serif text-ink md:text-4xl">
-              Storie da leggere prima di partire.
+              Contenuti editoriali da leggere prima di partire.
             </h2>
             <p className="mt-3 max-w-xl text-base leading-relaxed text-black/60">
-              Luoghi, atmosfere e dettagli utili per capire cosa salvare per il prossimo viaggio.
+              Una selezione mista di guide pratiche e itinerari per capire cosa salvare e come
+              organizzarlo meglio.
             </p>
           </div>
-          <Link
-            to="/guide"
-            className="hidden items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-transform hover:translate-x-0.5 sm:inline-flex"
-          >
-            Tutte le guide <ArrowRight size={12} />
-          </Link>
+          <div className="hidden items-center gap-4 sm:flex">
+            <Link
+              to="/guide"
+              className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-black/50 transition-transform hover:translate-x-0.5 hover:text-[var(--color-accent-text)]"
+            >
+              Guide pratiche <ArrowRight size={12} />
+            </Link>
+            <Link
+              to="/itinerari"
+              className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-transform hover:translate-x-0.5"
+            >
+              Itinerari <ArrowRight size={12} />
+            </Link>
+          </div>
         </div>
 
         {loadingArticles ? (
@@ -97,7 +130,7 @@ export default function LatestArticles() {
               className="lg:col-span-8"
             >
               <Link
-                to={`/articolo/${recentArticles[0].slug || recentArticles[0].id}`}
+                to={getPublicArticlePath(recentArticles[0])}
                 className="group relative flex h-full flex-col overflow-hidden rounded-lg border border-black/8 bg-white transition-all duration-500 hover:border-[var(--color-accent)]"
               >
                 <div className="relative aspect-[16/10] overflow-hidden">
@@ -134,9 +167,30 @@ export default function LatestArticles() {
                       {recentArticles[0].excerpt ||
                         'Un contenuto pensato per ispirarti davvero e aiutarti a capire se questo luogo merita di entrare nei tuoi prossimi piani.'}
                     </p>
+                    <div className="flex flex-wrap gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-black/40">
+                      {recentArticles[0].tripIntents?.[0] && (
+                        <span className="rounded-full bg-[var(--color-sand)] px-3 py-1">
+                          {recentArticles[0].tripIntents[0]}
+                        </span>
+                      )}
+                      {recentArticles[0].budgetBand && (
+                        <span className="rounded-full bg-[var(--color-accent-soft)] px-3 py-1 text-[var(--color-accent-text)]">
+                          Budget {recentArticles[0].budgetBand}
+                        </span>
+                      )}
+                      {(recentArticles[0].verifiedAt || recentArticles[0].updatedAt) && (
+                        <span className="rounded-full bg-black/4 px-3 py-1">
+                          Verificato{' '}
+                          {formatDate(
+                            (recentArticles[0].verifiedAt ||
+                              recentArticles[0].updatedAt) as DateValue
+                          )}
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-ink mt-auto group-hover:text-[var(--color-accent)] transition-colors">
-                    Leggi l'articolo
+                    Apri il contenuto
                     <ArrowRight
                       size={14}
                       className="transition-transform group-hover:translate-x-1"
@@ -158,7 +212,7 @@ export default function LatestArticles() {
                   className="flex-1"
                 >
                   <Link
-                    to={`/articolo/${article.slug || article.id}`}
+                    to={getPublicArticlePath(article)}
                     className="group relative flex h-full flex-1 flex-col overflow-hidden rounded-lg border border-black/8 bg-white transition-all duration-500 hover:-translate-y-0.5 hover:border-[var(--color-accent)]"
                   >
                     <div className="relative aspect-[16/10] overflow-hidden">
@@ -183,6 +237,20 @@ export default function LatestArticles() {
                       <h3 className="mb-3 text-lg font-serif leading-[1.2] text-ink transition-colors group-hover:text-[var(--color-accent)] lg:text-2xl">
                         {article.title}
                       </h3>
+                      <div className="mt-auto space-y-3">
+                        <div className="flex flex-wrap gap-2 text-[9px] font-bold uppercase tracking-[0.18em] text-black/38">
+                          {article.tripIntents?.[0] && (
+                            <span className="rounded-full bg-[var(--color-sand)] px-3 py-1">
+                              {article.tripIntents[0]}
+                            </span>
+                          )}
+                          {article.budgetBand && (
+                            <span className="rounded-full bg-[var(--color-accent-soft)] px-3 py-1 text-[var(--color-accent-text)]">
+                              {article.budgetBand}
+                            </span>
+                          )}
+                        </div>
+                      </div>
                       <div className="mt-auto inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-ink group-hover:text-[var(--color-accent)] transition-colors">
                         Leggi <ArrowRight size={12} />
                       </div>
@@ -223,7 +291,7 @@ export function getArticleSchema(articles: Article[], usingPreviews: boolean) {
     '@type': 'BlogPosting',
     headline: article.title,
     image: article.image,
-    url: `${SITE_URL}/articolo/${article.slug || article.id}`,
+    url: `${SITE_URL}${getPublicArticlePath(article)}`,
     publisher: { '@type': 'Organization', name: 'Travelliniwithus' },
   }));
 }

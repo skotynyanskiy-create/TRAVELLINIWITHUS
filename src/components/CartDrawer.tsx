@@ -287,19 +287,17 @@ export default function CartDrawer() {
                     {couponError && <p className="text-xs text-red-500">{couponError}</p>}
                   </div>
                 ) : (
-                  <div className="flex items-center justify-between rounded-lg border border-[var(--color-accent)]/20 bg-[var(--color-accent-soft)] px-3 py-2">
+                  <div className="flex items-center justify-between rounded-lg border border-accent/20 bg-accent/10 px-3 py-2">
                     <div className="flex items-center gap-2">
-                      <CheckCircle size={14} className="text-[var(--color-accent)]" />
-                      <span className="text-sm font-semibold text-[var(--color-accent-text)]">
+                      <CheckCircle size={14} className="text-accent" />
+                      <span className="text-sm font-semibold text-accent">
                         {appliedCoupon.code}
                       </span>
-                      <span className="text-xs text-[var(--color-accent)]">
-                        {appliedCoupon.description}
-                      </span>
+                      <span className="text-xs text-accent">{appliedCoupon.description}</span>
                     </div>
                     <button
                       onClick={() => setAppliedCoupon(null)}
-                      className="text-[var(--color-accent)] hover:text-[var(--color-accent-hover)] transition-colors"
+                      className="text-accent hover:text-accent/80 transition-colors"
                       aria-label="Rimuovi coupon"
                     >
                       <X size={14} />
@@ -316,10 +314,8 @@ export default function CartDrawer() {
                         <span className="text-zinc-700">EUR {total.toFixed(2)}</span>
                       </div>
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-[var(--color-accent)]">
-                          Sconto ({appliedCoupon.code})
-                        </span>
-                        <span className="font-medium text-[var(--color-accent)]">
+                        <span className="text-accent">Sconto ({appliedCoupon.code})</span>
+                        <span className="font-medium text-accent">
                           - EUR {discountAmount.toFixed(2)}
                         </span>
                       </div>
@@ -375,8 +371,8 @@ export default function CartDrawer() {
                   aria-label="Conferma checkout"
                   className="relative z-140 w-full max-w-sm rounded-3xl bg-white p-8 text-center shadow-2xl"
                 >
-                  <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-accent)]/15">
-                    <CheckCircle className="text-[var(--color-accent)]" size={32} />
+                  <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-accent/15">
+                    <CheckCircle className="text-accent" size={32} />
                   </div>
                   <h3 className="mb-2 text-2xl font-serif text-zinc-900">Ordine completato</h3>
                   <p className="mb-8 text-zinc-600">

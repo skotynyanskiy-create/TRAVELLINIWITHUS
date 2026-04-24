@@ -115,6 +115,15 @@ export default function Navbar() {
   const exploreGroups = useMemo<NavSubGroup[]>(
     () => [
       {
+        label: 'Hub paesi',
+        href: '/destinazioni/italia',
+        links: [
+          { name: '🇮🇹 Italia', href: '/destinazioni/italia' },
+          { name: '🇬🇷 Grecia', href: '/destinazioni/grecia' },
+          { name: '🇵🇹 Portogallo', href: '/destinazioni/portogallo' },
+        ],
+      },
+      {
         label: 'Per luogo',
         href: '/destinazioni',
         links: [{ name: 'Tutte le destinazioni', href: '/destinazioni' }, ...destinationLinks],
@@ -125,12 +134,46 @@ export default function Navbar() {
         links: [{ name: 'Tutte le esperienze', href: '/esperienze' }, ...experienceLinks],
       },
       {
-        label: 'Guide',
+        label: 'Ispirazione pronta',
         href: '/guide',
-        links: [{ name: 'Tutte le guide', href: '/guide' }],
+        links: [
+          { name: navigation.guidesLabel, href: '/guide' },
+          { name: navigation.itinerariesLabel, href: '/itinerari' },
+        ],
       },
     ],
-    [destinationLinks, experienceLinks]
+    [destinationLinks, experienceLinks, navigation.guidesLabel, navigation.itinerariesLabel]
+  );
+
+  const guideGroups = useMemo<NavSubGroup[]>(
+    () => [
+      {
+        label: 'Guide pratiche',
+        href: '/guide',
+        links: [
+          { name: navigation.guidesLabel, href: '/guide' },
+          { name: navigation.itinerariesLabel, href: '/itinerari' },
+        ],
+      },
+      {
+        label: 'Planning editoriale',
+        href: '/dove-dormire',
+        links: [
+          { name: 'Dove dormire', href: '/dove-dormire' },
+          { name: 'Cosa mangiare', href: '/cosa-mangiare' },
+        ],
+      },
+    ],
+    [navigation.guidesLabel, navigation.itinerariesLabel]
+  );
+
+  const planningLinks = useMemo<NavSubLink[]>(
+    () => [
+      { name: navigation.resourcesLabel, href: '/risorse' },
+      { name: 'Inizia da qui', href: '/inizia-da-qui' },
+      { name: 'Dove dormire', href: '/dove-dormire' },
+    ],
+    [navigation.resourcesLabel]
   );
 
   const navItems = useMemo<NavItem[]>(
@@ -140,7 +183,16 @@ export default function Navbar() {
         href: '/destinazioni',
         subGroups: exploreGroups,
       },
-      { name: navigation.resourcesLabel, href: '/risorse' },
+      {
+        name: 'Guide',
+        href: '/guide',
+        subGroups: guideGroups,
+      },
+      {
+        name: navigation.planningLabel,
+        href: '/inizia-da-qui',
+        subLinks: planningLinks,
+      },
       {
         name: navigation.collaborationsLabel,
         href: '/collaborazioni',
@@ -149,18 +201,31 @@ export default function Navbar() {
       {
         name: navigation.aboutLabel,
         href: '/chi-siamo',
-        subLinks: [{ name: navigation.contactsLabel, href: '/contatti' }],
+        subLinks: [
+          { name: 'Inizia da qui', href: '/inizia-da-qui' },
+          { name: navigation.contactsLabel, href: '/contatti' },
+        ],
       },
     ],
-    [exploreGroups, navigation]
+    [exploreGroups, guideGroups, navigation, planningLinks]
   );
 
   const isItemActive = (item: NavItem) => {
     if (item.name === 'Esplora') {
       return (
         location.pathname === '/destinazioni' ||
-        location.pathname === '/esperienze' ||
-        location.pathname === '/guide'
+        location.pathname.startsWith('/destinazioni/') ||
+        location.pathname === '/esperienze'
+      );
+    }
+
+    if (item.name === 'Guide') {
+      return (
+        location.pathname.startsWith('/guide') ||
+        location.pathname.startsWith('/itinerari') ||
+        location.pathname === '/dove-dormire' ||
+        location.pathname.startsWith('/dove-dormire/') ||
+        location.pathname === '/cosa-mangiare'
       );
     }
 
@@ -191,7 +256,8 @@ export default function Navbar() {
     if (
       href.startsWith('/destinazioni?') ||
       href.startsWith('/esperienze?') ||
-      href.startsWith('/guide?')
+      href.startsWith('/guide?') ||
+      href.startsWith('/itinerari?')
     ) {
       return location.pathname === subLinkPath && location.search === `?${subLinkSearch}`;
     }
@@ -211,7 +277,7 @@ export default function Navbar() {
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className={`fixed top-4 left-4 right-4 z-50 w-[calc(100%-2rem)] rounded-full border px-6 py-3 text-[var(--color-ink)] transition-all duration-700 md:top-6 md:left-1/2 md:w-[96%] md:-translate-x-1/2 md:px-8 md:py-4 lg:w-[calc(100%-4rem)] max-w-[1400px] ${
           isScrolled
-            ? 'border-[var(--color-ink)]/5 bg-[var(--color-surface)]/80 saturate-[150%] shadow-[0_8px_32px_0_rgba(10,10,10,0.08)] backdrop-blur-[40px]'
+            ? 'border-[var(--color-ink)]/5 bg-[var(--color-surface)]/80 saturate-[150%] shadow-[var(--shadow-glass)] backdrop-blur-[40px]'
             : 'border-white/40 bg-white/50 shadow-sm backdrop-blur-xl'
         }`}
       >
@@ -225,7 +291,7 @@ export default function Navbar() {
             </Link>
           </div>
 
-          <div className="hidden flex-1 items-center justify-center space-x-4 px-4 lg:flex xl:space-x-6 2xl:space-x-8">
+          <div className="hidden flex-1 items-center justify-center space-x-4 px-4 md:flex lg:space-x-6 xl:space-x-8">
             {navItems.map((item) => (
               <div key={item.name} className="group relative">
                 <Link
@@ -308,7 +374,7 @@ export default function Navbar() {
             ))}
           </div>
 
-          <div className="hidden shrink-0 items-center space-x-4 text-zinc-600 lg:flex xl:space-x-6">
+          <div className="hidden shrink-0 items-center space-x-4 text-zinc-600 md:flex xl:space-x-6">
             <Link
               to="/collaborazioni"
               className="hidden items-center gap-1 rounded-full border border-[var(--color-accent)]/30 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-colors hover:bg-[var(--color-accent-soft)] xl:inline-flex"
@@ -405,7 +471,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          <div className="flex items-center gap-1 text-[var(--color-ink)] lg:hidden">
+          <div className="flex items-center gap-1 text-[var(--color-ink)] md:hidden">
             <button
               onClick={() => setIsSearchOpen(true)}
               className="p-2 transition-colors hover:text-[var(--color-accent)]"
@@ -432,7 +498,7 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="fixed inset-0 z-[110] bg-black/90 backdrop-blur-md lg:hidden"
+              className="fixed inset-0 z-[110] bg-black/90 backdrop-blur-md md:hidden"
             />
 
             <motion.div
@@ -440,7 +506,7 @@ export default function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="fixed inset-y-0 right-0 z-[120] flex w-full flex-col bg-white shadow-2xl md:w-96 lg:hidden"
+              className="fixed inset-y-0 right-0 z-[120] flex w-full flex-col bg-white shadow-2xl sm:w-96 md:hidden"
             >
               <div className="flex items-center justify-between border-b border-zinc-100 px-6 py-6">
                 <Link

@@ -17,20 +17,21 @@ import {
   getExperienceDescription,
 } from '../../config/experienceContent';
 import { getExperienceVisual } from '../../config/experienceVisuals';
-import { GUIDE_CATEGORY_VISUALS } from '../../config/guideContent';
+import { GUIDE_CATEGORY_VISUALS, getGuideCategoryVisualClass } from '../../config/guideContent';
 import { MEDIA } from '../../config/mediaAssets';
+import { getPublicArticleCollectionPath } from '../../utils/articleRoutes';
 
 function GuideTile({ category, description }: { category: GuideCategory; description: string }) {
   const visual = GUIDE_CATEGORY_VISUALS[category];
   const Icon = visual?.icon;
+  const visualClass = getGuideCategoryVisualClass(category);
   return (
     <Link
-      to={`/guide?cat=${slugifyGuideCategory(category)}`}
-      className="group flex flex-col gap-2 rounded-2xl border border-black/6 bg-white p-4 transition-all hover:-translate-y-0.5 hover:shadow-md"
-      style={{ borderLeftColor: visual?.color, borderLeftWidth: 3 }}
+      to={`${getPublicArticleCollectionPath({ category })}?cat=${slugifyGuideCategory(category)}`}
+      className={`guide-card-dynamic ${visualClass} group flex flex-col gap-2 rounded-2xl border border-l-[3px] border-black/6 bg-white p-4 transition-all hover:-translate-y-0.5 hover:shadow-md`}
     >
       {Icon && (
-        <div className="flex h-8 w-8 items-center justify-center rounded-xl" style={{ backgroundColor: visual.colorLight, color: visual.color }}>
+        <div className="guide-icon-dynamic flex h-8 w-8 items-center justify-center rounded-xl">
           <Icon size={16} />
         </div>
       )}
@@ -69,7 +70,7 @@ function DestinationFeature({ group }: { group: DestinationGroup }) {
         className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
         loading="lazy"
       />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.06)_0%,rgba(0,0,0,0.2)_40%,rgba(0,0,0,0.76)_100%)]" />
+      <div className="overlay-editorial-strong absolute inset-0" />
       <div className="relative flex h-full min-h-[360px] flex-col justify-between p-6 md:min-h-[500px] md:p-9">
         <div className="flex items-center justify-between">
           <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/78">
@@ -91,7 +92,13 @@ function DestinationFeature({ group }: { group: DestinationGroup }) {
   );
 }
 
-function DestinationTile({ group, className = '' }: { group: DestinationGroup; className?: string }) {
+function DestinationTile({
+  group,
+  className = '',
+}: {
+  group: DestinationGroup;
+  className?: string;
+}) {
   const visual = getDestinationVisual(group);
 
   return (
@@ -243,19 +250,20 @@ export default function HomeDiscoveryCards() {
           <div className="rounded-lg border border-[var(--color-accent)]/25 bg-[var(--color-accent-soft)] p-7 md:p-9">
             <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
               <BookOpen size={13} />
-              Guide di viaggio
+              Pianifica il viaggio
             </div>
             <h3 className="mt-7 text-3xl font-serif leading-tight text-ink md:text-5xl">
-              Pianifica con guide scritte a mano.
+              Guide pratiche e itinerari con un criterio unico.
             </h3>
             <p className="mt-4 text-sm leading-relaxed text-black/62 md:text-base">
-              Itinerari, consigli e costi per prepararti al meglio prima di partire.
+              Parti dal funnel Pianifica: guide operative per decidere meglio, itinerari per partire
+              con un piano gia leggibile e hotel collegati quando servono davvero.
             </p>
             <Link
-              to="/guide"
+              to="/inizia-da-qui"
               className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[var(--color-ink)] px-5 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
             >
-              Apri guide <ArrowRight size={14} />
+              Apri Pianifica <ArrowRight size={14} />
             </Link>
           </div>
 

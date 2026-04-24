@@ -9,7 +9,11 @@ import { MEDIA } from '../../config/mediaAssets';
 const HERO_IMAGE = MEDIA.hero.primary;
 const REEL_FALLBACK_IMAGE = MEDIA.hero.reelFallback;
 
-const TRUST_PILLS = ['Vissuto prima di scritto', 'Dettagli utili, zero marketing', 'Criterio, non hype'];
+const TRUST_PILLS = [
+  'Vissuto prima di scritto',
+  'Dettagli utili, zero marketing',
+  'Criterio, non hype',
+];
 
 function getInstagramEmbedUrl(url: string) {
   return url.includes('/reel/') ? `${url.replace(/\/?$/, '/')}embed/` : '';
@@ -26,14 +30,14 @@ function FeaturedReelPreview() {
 
   const reelMessage = hasConfiguredVisual
     ? FEATURED_REEL.caption
-    : "Guarda il lato più immediato del progetto sul nostro profilo Instagram.";
+    : 'Guarda il lato più immediato del progetto sul nostro profilo Instagram.';
 
   return (
     <motion.aside
       initial={{ opacity: 0, x: 28 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 0.35, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-      className="w-full max-w-[21rem] justify-self-start lg:justify-self-end"
+      className="w-full justify-self-start lg:justify-self-end"
       aria-label="Ultimo reel Instagram"
     >
       <div className="rounded-lg border border-white/14 bg-black/24 p-3 shadow-[0_24px_64px_rgba(0,0,0,0.3)] backdrop-blur-md">
@@ -114,7 +118,7 @@ export default function HeroSection() {
       <div className="absolute inset-0 z-[1] bg-[linear-gradient(90deg,rgba(17,17,17,0.78)_0%,rgba(17,17,17,0.46)_48%,rgba(17,17,17,0.2)_100%)]" />
 
       <motion.div
-        className="relative z-10 mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-center lg:gap-16 xl:grid-cols-[minmax(0,1fr)_24rem]"
+        className="relative z-10 mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[1fr_21rem] lg:items-center lg:gap-16"
         style={{ opacity: heroOpacity }}
       >
         <motion.div
@@ -132,8 +136,8 @@ export default function HeroSection() {
           </h1>
 
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/86 drop-shadow-[0_2px_12px_rgba(0,0,0,0.3)] md:text-xl">
-            Guide pratiche scritte da chi ha vissuto il viaggio. Atmosfera, dettagli utili e consigli
-            che aiutano a capire se un posto merita davvero.
+            Guide pratiche scritte da chi ha vissuto il viaggio. Atmosfera, dettagli utili e
+            consigli che aiutano a capire se un posto merita davvero.
           </p>
 
           <div className="mt-7 flex flex-wrap gap-2">
@@ -154,8 +158,13 @@ export default function HeroSection() {
               size="lg"
               className="group h-14 min-w-[230px] rounded-lg shadow-[0_18px_44px_rgba(0,0,0,0.18)] sm:h-16"
             >
-              <span className="text-sm font-bold uppercase tracking-widest">Scopri destinazioni</span>
-              <ArrowRight size={20} className="ml-2 transition-transform group-hover:translate-x-1" />
+              <span className="text-sm font-bold uppercase tracking-widest">
+                Scopri destinazioni
+              </span>
+              <ArrowRight
+                size={20}
+                className="ml-2 transition-transform group-hover:translate-x-1"
+              />
             </Button>
 
             <Link

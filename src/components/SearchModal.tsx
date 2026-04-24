@@ -8,6 +8,7 @@ import { fetchArticles } from '../services/firebaseService';
 import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_ARTICLE_PREVIEW, DEMO_ARTICLE_PATH } from '../config/demoContent';
 import { useSiteContent } from '../hooks/useSiteContent';
+import { getPublicArticlePath } from '../utils/articleRoutes';
 
 interface SearchResult {
   id: string;
@@ -39,9 +40,16 @@ const STATIC_PAGE_RESULTS: SearchResult[] = [
   },
   {
     id: 'page-guide',
-    title: 'Guide',
+    title: 'Guide pratiche',
     category: 'Pagina',
     link: '/guide',
+    icon: BookOpen,
+  },
+  {
+    id: 'page-itinerari',
+    title: 'Itinerari',
+    category: 'Pagina',
+    link: '/itinerari',
     icon: BookOpen,
   },
   {
@@ -50,6 +58,20 @@ const STATIC_PAGE_RESULTS: SearchResult[] = [
     category: 'Pagina',
     link: '/risorse',
     icon: BookOpen,
+  },
+  {
+    id: 'page-inizia-da-qui',
+    title: 'Inizia da qui',
+    category: 'Planning',
+    link: '/inizia-da-qui',
+    icon: BookOpen,
+  },
+  {
+    id: 'page-dove-dormire',
+    title: 'Dove dormire',
+    category: 'Planning',
+    link: '/dove-dormire',
+    icon: MapPin,
   },
   {
     id: 'page-collaborazioni',
@@ -99,16 +121,21 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
       setLoading(true);
       try {
         const articles = await fetchArticles();
-        
+
         const fetchedData: SearchResult[] = [...STATIC_PAGE_RESULTS];
-        
+
         articles.forEach((data) => {
           fetchedData.push({
             id: data.id,
             title: data.title,
             category: data.category || 'Articolo',
-            link: `/articolo/${data.slug || data.id}`,
-            icon: data.category === 'Destinazioni' ? MapPin : data.category === 'Esperienze' ? Compass : BookOpen
+            link: getPublicArticlePath(data),
+            icon:
+              data.category === 'Destinazioni'
+                ? MapPin
+                : data.category === 'Esperienze'
+                  ? Compass
+                  : BookOpen,
           });
         });
 
@@ -124,7 +151,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
         setAllData(fetchedData);
       } catch (error) {
-        console.error("Error fetching search data:", error);
+        console.error('Error fetching search data:', error);
       } finally {
         setLoading(false);
       }
@@ -154,7 +181,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         if (!isOpen) {
-          // We can't easily open it from here without lifting state up, 
+          // We can't easily open it from here without lifting state up,
           // but we assume the parent handles the shortcut too, or we just rely on the button.
         }
       }
@@ -166,12 +193,16 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  const filteredResults = query.trim() === '' 
-    ? [] 
-    : allData.filter(item => 
-        item.title.toLowerCase().includes(query.toLowerCase()) || 
-        item.category.toLowerCase().includes(query.toLowerCase())
-      ).slice(0, 8); // Limit to 8 results
+  const filteredResults =
+    query.trim() === ''
+      ? []
+      : allData
+          .filter(
+            (item) =>
+              item.title.toLowerCase().includes(query.toLowerCase()) ||
+              item.category.toLowerCase().includes(query.toLowerCase())
+          )
+          .slice(0, 8); // Limit to 8 results
 
   const handleSelect = (link: string) => {
     navigate(link);
@@ -206,10 +237,14 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Cerca pagine, destinazioni, esperienze e sezioni utili..."
+                placeholder="Cerca pagine, destinazioni, esperienze, guide e itinerari..."
                 className="flex-grow text-xl bg-transparent border-none focus:outline-none placeholder:text-black/30 text-black"
               />
-              <button onClick={onClose} aria-label="Chiudi ricerca" className="p-2 hover:bg-black/5 rounded-full transition-colors text-black/50 hover:text-black">
+              <button
+                onClick={onClose}
+                aria-label="Chiudi ricerca"
+                className="p-2 hover:bg-black/5 rounded-full transition-colors text-black/50 hover:text-black"
+              >
                 <X size={20} />
               </button>
             </div>
@@ -217,7 +252,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             <div className="overflow-y-auto p-4 flex-grow">
               {loading ? (
                 <div className="space-y-2">
-                  {[1, 2, 3, 4].map(i => (
+                  {[1, 2, 3, 4].map((i) => (
                     <div key={i} className="flex items-center px-4 py-3">
                       <Skeleton className="w-10 h-10 rounded-full mr-4 shrink-0" />
                       <div className="flex-1">
@@ -230,14 +265,57 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
               ) : query.trim() === '' ? (
                 <div className="text-center py-12 text-black/40">
                   <Search className="mx-auto mb-4 opacity-20" size={48} />
-                  <p>Inizia a digitare per cercare...</p>
+                  <p>Inizia a digitare per cercare nel sito...</p>
                   <div className="mt-6 flex flex-wrap justify-center gap-2">
-                    <button type="button" className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10" onClick={() => setQuery('Destinazioni')}>Destinazioni</button>
-                    <button type="button" className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10" onClick={() => setQuery('Esperienze')}>Esperienze</button>
-                    <button type="button" className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10" onClick={() => setQuery('Guide')}>Guide</button>
-                    <button type="button" className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10" onClick={() => setQuery('Risorse')}>Risorse</button>
-                    <button type="button" className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10" onClick={() => setQuery('Contatti')}>Contatti</button>
-                    <button type="button" className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10" onClick={() => setQuery('Collaborazioni')}>Collaborazioni</button>
+                    <button
+                      type="button"
+                      className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10"
+                      onClick={() => setQuery('Destinazioni')}
+                    >
+                      Destinazioni
+                    </button>
+                    <button
+                      type="button"
+                      className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10"
+                      onClick={() => setQuery('Esperienze')}
+                    >
+                      Esperienze
+                    </button>
+                    <button
+                      type="button"
+                      className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10"
+                      onClick={() => setQuery('Guide')}
+                    >
+                      Guide
+                    </button>
+                    <button
+                      type="button"
+                      className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10"
+                      onClick={() => setQuery('Itinerari')}
+                    >
+                      Itinerari
+                    </button>
+                    <button
+                      type="button"
+                      className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10"
+                      onClick={() => setQuery('Risorse')}
+                    >
+                      Risorse
+                    </button>
+                    <button
+                      type="button"
+                      className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10"
+                      onClick={() => setQuery('Contatti')}
+                    >
+                      Contatti
+                    </button>
+                    <button
+                      type="button"
+                      className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10"
+                      onClick={() => setQuery('Collaborazioni')}
+                    >
+                      Collaborazioni
+                    </button>
                   </div>
                 </div>
               ) : filteredResults.length > 0 ? (
@@ -254,8 +332,12 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                             <Icon size={18} />
                           </div>
                           <div>
-                            <h4 className="font-medium text-black group-hover:text-[var(--color-accent)] transition-colors">{item.title}</h4>
-                            <span className="text-xs uppercase tracking-widest text-black/50 font-semibold">{item.category}</span>
+                            <h4 className="font-medium text-black group-hover:text-[var(--color-accent)] transition-colors">
+                              {item.title}
+                            </h4>
+                            <span className="text-xs uppercase tracking-widest text-black/50 font-semibold">
+                              {item.category}
+                            </span>
                           </div>
                         </button>
                       </li>
@@ -268,10 +350,16 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 </div>
               )}
             </div>
-            
+
             <div className="bg-[var(--color-sand)] px-6 py-3 text-xs text-black/40 flex justify-between items-center border-t border-black/5">
               <span>Usa le frecce per navigare</span>
-              <span className="flex items-center gap-1">Premi <kbd className="bg-white px-2 py-1 rounded border border-black/10 shadow-sm font-sans">ESC</kbd> per chiudere</span>
+              <span className="flex items-center gap-1">
+                Premi{' '}
+                <kbd className="bg-white px-2 py-1 rounded border border-black/10 shadow-sm font-sans">
+                  ESC
+                </kbd>{' '}
+                per chiudere
+              </span>
             </div>
           </motion.div>
         </>

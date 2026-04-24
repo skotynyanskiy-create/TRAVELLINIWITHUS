@@ -1,13 +1,10 @@
 import { useState } from 'react';
-import { ComposableMap, Geographies, Geography, Marker, ZoomableGroup } from 'react-simple-maps';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { MapPin, ArrowRight, X, Globe } from 'lucide-react';
+import { MapPin, ArrowRight, X } from 'lucide-react';
 import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_ARTICLE_MARKERS } from '../config/demoContent';
 import { useSiteContent } from '../hooks/useSiteContent';
-
-const geoUrl = 'https://unpkg.com/world-atlas@2.0.2/countries-110m.json';
 
 export interface MapMarker {
   id: string | number;
@@ -26,30 +23,41 @@ interface InteractiveMapProps {
   className?: string;
 }
 
+const WORLD_SHAPES = [
+  'M105 145C92 123 105 95 137 82C171 68 205 72 232 91C254 106 252 128 232 143C203 165 133 175 105 145Z',
+  'M216 177C240 163 277 164 296 188C318 214 310 255 286 284C267 307 247 336 219 325C190 314 194 273 204 238C211 215 196 190 216 177Z',
+  'M316 118C351 96 402 87 444 101C485 115 490 147 459 169C425 193 353 195 317 174C291 158 291 134 316 118Z',
+  'M412 194C446 183 493 194 514 222C538 254 524 296 491 314C456 333 410 319 392 286C374 253 381 204 412 194Z',
+  'M542 178C578 151 640 151 686 178C731 204 727 248 684 273C643 297 584 287 548 258C514 231 510 202 542 178Z',
+  'M611 306C638 291 678 296 701 320C724 344 718 379 691 394C662 411 621 399 602 373C584 348 584 322 611 306Z',
+];
+
+function projectPoint([longitude, latitude]: [number, number]) {
+  const x = ((longitude + 180) / 360) * 760;
+  const clampedLat = Math.max(-85, Math.min(85, latitude));
+  const latRad = (clampedLat * Math.PI) / 180;
+  const mercator = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
+  const y = 360 / 2 - (760 * mercator) / (2 * Math.PI);
+
+  return {
+    x: Math.max(24, Math.min(736, x)),
+    y: Math.max(36, Math.min(324, y)),
+  };
+}
+
 export default function InteractiveMap({
   markers,
-  center = [0, 30],
-  zoom = 1,
+  center: _center = [0, 30],
+  zoom: _zoom = 1,
   className = 'w-full h-[500px] md:h-[600px]',
 }: InteractiveMapProps) {
   const { data: demoContent } = useSiteContent('demo');
   const demoSettings = demoContent ?? siteContentDefaults.demo;
   const [activeMarker, setActiveMarker] = useState<MapMarker | null>(null);
-  const [activeCountry, setActiveCountry] = useState<{ name: string; id: string } | null>(null);
-  const resolvedMarkers =
-    markers ?? (demoSettings.showDestinationDemo ? DEMO_ARTICLE_MARKERS : []);
-
-  const handleCountryClick = (geo: { properties: { name: string }; id?: string }) => {
-    setActiveMarker(null);
-    setActiveCountry({
-      name: geo.properties.name,
-      id: geo.id || geo.properties.name,
-    });
-  };
+  const resolvedMarkers = markers ?? (demoSettings.showDestinationDemo ? DEMO_ARTICLE_MARKERS : []);
 
   const closeCards = () => {
     setActiveMarker(null);
-    setActiveCountry(null);
   };
 
   return (
@@ -57,107 +65,80 @@ export default function InteractiveMap({
       <div className="pointer-events-none absolute left-6 top-6 z-10">
         <h3 className="text-2xl font-serif text-black/80">Esplora la mappa</h3>
         <p className="text-sm font-normal text-black/65">
-          Clicca sui pin o sulle nazioni per orientarti tra i contenuti.
+          Clicca sui pin per orientarti tra guide, itinerari e destinazioni.
         </p>
       </div>
 
-      <ComposableMap
-        projection="geoMercator"
-        projectionConfig={{
-          scale: 140,
-          center,
-        }}
+      <svg
+        viewBox="0 0 760 360"
+        role="img"
+        aria-label="Mappa editoriale delle destinazioni Travelliniwithus"
         className={`${className} outline-none`}
       >
-        <ZoomableGroup zoom={zoom} minZoom={1} maxZoom={8}>
-          <Geographies geography={geoUrl}>
-            {({ geographies }) =>
-              geographies.map((geo) => {
-                const isCountryActive = activeCountry?.name === geo.properties.name;
+        <defs>
+          <linearGradient id="map-water" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0%" stopColor="var(--color-sand)" />
+            <stop offset="100%" stopColor="var(--color-surface)" />
+          </linearGradient>
+        </defs>
+        <rect width="760" height="360" fill="url(#map-water)" />
+        {WORLD_SHAPES.map((shape) => (
+          <path
+            key={shape}
+            d={shape}
+            fill="var(--color-surface)"
+            stroke="var(--color-accent)"
+            strokeOpacity="0.25"
+            strokeWidth="1"
+          />
+        ))}
+        {resolvedMarkers.map((marker) => {
+          const isActive = activeMarker?.id === marker.id;
+          const { x, y } = projectPoint(marker.coordinates);
 
-                return (
-                  <Geography
-                    key={geo.rsmKey}
-                    geography={geo}
-                    onClick={() => handleCountryClick(geo)}
-                    fill={isCountryActive ? 'var(--color-accent)' : '#e5e0d8'}
-                    stroke={isCountryActive ? '#fff' : 'var(--color-accent)'}
-                    strokeWidth={isCountryActive ? 1 : 0.5}
-                    strokeOpacity={isCountryActive ? 1 : 0.3}
-                    style={{
-                      default: { outline: 'none', transition: 'all 250ms' },
-                      hover: {
-                        fill: isCountryActive ? 'var(--color-accent)' : '#dcd5cb',
-                        outline: 'none',
-                        transition: 'all 250ms',
-                        cursor: 'pointer',
-                      },
-                      pressed: { outline: 'none' },
-                    }}
-                  />
-                );
-              })
-            }
-          </Geographies>
-
-          {resolvedMarkers.map((marker) => {
-            const isActive = activeMarker?.id === marker.id;
-
-            return (
-              <Marker
-                key={marker.id}
-                coordinates={marker.coordinates}
-                onClick={() => {
-                  setActiveCountry(null);
+          return (
+            <motion.g
+              key={marker.id}
+              role="button"
+              tabIndex={0}
+              aria-label={`Apri ${marker.name}`}
+              className="cursor-pointer outline-none"
+              onClick={() => setActiveMarker(marker)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
                   setActiveMarker(marker);
-                }}
-                className="cursor-pointer outline-none"
-              >
-                <g transform="translate(-12, -24)">
-                  {isActive && (
-                    <motion.ellipse
-                      cx="12"
-                      cy="24"
-                      rx="10"
-                      ry="5"
-                      fill="rgba(155, 127, 166, 0.4)"
-                      initial={{ scale: 0.5, opacity: 1 }}
-                      animate={{ scale: 2.5, opacity: 0 }}
-                      transition={{ duration: 1.5, repeat: Infinity, ease: 'easeOut' }}
-                    />
-                  )}
-                  <motion.g
-                    fill="none"
-                    stroke="var(--color-accent)"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    style={{ originX: '12px', originY: '24px' }}
-                    initial={{ scale: 1, y: 0 }}
-                    animate={{
-                      scale: isActive ? 1.25 : 1,
-                      y: isActive ? -6 : 0,
-                    }}
-                    whileHover={{ scale: 1.15, y: -3 }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-                  >
-                    <circle
-                      cx="12"
-                      cy="10"
-                      r="3"
-                      fill={isActive ? '#fff' : 'var(--color-accent)'}
-                    />
-                    <path
-                      d="M12 21.7C17.3 17 20 13 20 10a8 8 0 1 0-16 0c0 3 2.7 6.9 8 11.7z"
-                      fill={isActive ? 'var(--color-accent)' : 'rgba(155, 127, 166, 0.2)'}
-                    />
-                  </motion.g>
-                </g>
-              </Marker>
-            );
-          })}
-        </ZoomableGroup>
-      </ComposableMap>
+                }
+              }}
+              initial={{ scale: 1 }}
+              animate={{ scale: isActive ? 1.18 : 1 }}
+              whileHover={{ scale: 1.12 }}
+              transition={{ type: 'spring', stiffness: 420, damping: 18 }}
+            >
+              {isActive && (
+                <motion.circle
+                  cx={x}
+                  cy={y}
+                  r="10"
+                  fill="var(--color-accent)"
+                  initial={{ scale: 0.8, opacity: 0.32 }}
+                  animate={{ scale: 2.4, opacity: 0 }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: 'easeOut' }}
+                />
+              )}
+              <circle
+                cx={x}
+                cy={y}
+                r="13"
+                fill="var(--color-surface)"
+                stroke="var(--color-accent)"
+                strokeWidth="2"
+              />
+              <circle cx={x} cy={y} r="6" fill="var(--color-accent)" />
+            </motion.g>
+          );
+        })}
+      </svg>
 
       <AnimatePresence mode="wait">
         {activeMarker && (
@@ -205,42 +186,6 @@ export default function InteractiveMap({
                   Leggi articolo <ArrowRight size={14} />
                 </Link>
               )}
-            </div>
-          </motion.div>
-        )}
-
-        {activeCountry && !activeMarker && (
-          <motion.div
-            key={`country-${activeCountry.id}`}
-            initial={{ opacity: 0, y: 30, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-            className="absolute bottom-6 left-6 right-6 z-20 overflow-hidden rounded-2xl border border-black/5 bg-white shadow-2xl md:left-auto md:right-6 md:w-80"
-          >
-            <button
-              onClick={closeCards}
-              className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/5 text-black/50 transition-colors hover:bg-black/10"
-            >
-              <X size={16} />
-            </button>
-            <div className="p-6">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-sand)] text-[var(--color-accent)]">
-                <Globe size={24} />
-              </div>
-              <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-black/50">
-                Destinazione
-              </div>
-              <h4 className="mb-2 text-2xl font-serif leading-tight">{activeCountry.name}</h4>
-              <p className="mb-6 text-sm font-normal leading-relaxed text-black/70">
-                Scopri tutte le nostre guide, consigli e itinerari dedicati a questa destinazione.
-              </p>
-              <Link
-                to="/destinazioni"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-black py-3 text-sm font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
-              >
-                Esplora <ArrowRight size={16} />
-              </Link>
             </div>
           </motion.div>
         )}

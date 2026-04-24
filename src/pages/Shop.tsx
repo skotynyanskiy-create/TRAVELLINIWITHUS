@@ -27,6 +27,7 @@ import { fetchProducts } from '../services/firebaseService';
 import { BRAND_STATS, SITE_URL } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_PRODUCTS } from '../config/demoContent';
+import { SHOP_NAV_THRESHOLD, useShopGate } from '../hooks/useShopGate';
 import { useSiteContent } from '../hooks/useSiteContent';
 
 interface Product {
@@ -63,6 +64,7 @@ const shopPrinciples = [
 export default function Shop() {
   const { addToCart, setIsCartOpen, clearCart } = useCart();
   const { data: demoContent } = useSiteContent('demo');
+  const { isShopDiscoverable, realPublishedCount } = useShopGate();
   const demoSettings = demoContent ?? siteContentDefaults.demo;
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState('Tutti');
@@ -92,7 +94,7 @@ export default function Shop() {
       if (demoSettings.showShopDemo) {
         const existingSlugs = new Set(fetchedProducts.map((p) => p.slug));
         const demoOnly = (DEMO_PRODUCTS as Product[]).filter(
-          (demo) => !existingSlugs.has(demo.slug),
+          (demo) => !existingSlugs.has(demo.slug)
         );
         return [...(fetchedProducts as Product[]), ...demoOnly];
       }
@@ -154,7 +156,7 @@ export default function Shop() {
           title="Shop editoriale"
           description="Guide premium, planner e toolkit Travelliniwithus pensati per organizzare viaggi con più criterio. Catalogo reale in preparazione."
           canonical={`${SITE_URL}/shop`}
-          noindex={usingShopDemo || products.length === 0}
+          noindex={!isShopDiscoverable || usingShopDemo || products.length === 0}
         />
 
         <AnimatePresence>
@@ -219,7 +221,7 @@ export default function Shop() {
                   Boutique editoriale
                 </span>
                 <span className="rounded-full bg-[var(--color-accent)] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-white">
-                  Prossimamente
+                  {isShopDiscoverable ? 'Aperto' : 'In apertura'}
                 </span>
               </div>
               <h1 className="text-display-1">
@@ -230,8 +232,9 @@ export default function Shop() {
                 utili, leggibili da telefono e costruiti per ridurre incertezza prima del viaggio.
               </p>
               <p className="mt-4 max-w-2xl text-sm leading-relaxed text-black/55">
-                Stiamo rifinendo i primi prodotti. Iscriviti alla newsletter qui sotto per essere
-                avvisato appena lo shop apre.
+                {isShopDiscoverable
+                  ? 'Catalogo piccolo, selezionato e coerente con il progetto editoriale.'
+                  : `Lo renderemo visibile nella navigazione quando ci saranno almeno ${SHOP_NAV_THRESHOLD} prodotti reali pronti. Intanto questa pagina mostra tono, struttura e primi formati in costruzione.`}
               </p>
             </div>
 
@@ -251,7 +254,10 @@ export default function Shop() {
 
           <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-3">
             {shopPrinciples.map((item) => (
-              <div key={item.title} className="rounded-[2rem] border border-black/5 bg-white p-7 shadow-sm">
+              <div
+                key={item.title}
+                className="rounded-[2rem] border border-black/5 bg-white p-7 shadow-sm"
+              >
                 <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-sand)]">
                   {item.icon}
                 </div>
@@ -267,6 +273,15 @@ export default function Shop() {
               title="Boutique in apertura"
               message="Questi sono i prodotti in lavorazione: formato, copertine e sommari definiti, file e checkout in finalizzazione. Il carrello resta disabilitato finché ogni prodotto non è consegnabile."
             />
+          )}
+
+          {!isShopDiscoverable && (
+            <div className="mt-8 rounded-[2rem] border border-black/5 bg-[var(--color-sand)] p-6 text-sm leading-relaxed text-black/62 shadow-sm">
+              Oggi il catalogo reale conta{' '}
+              <strong className="text-[var(--color-ink)]">{realPublishedCount}</strong> prodotti
+              pubblicati. `Shop` resta fuori da navbar e footer finché la boutique non è abbastanza
+              solida da non sembrare una promessa vuota.
+            </div>
           )}
 
           <div className="mt-12 flex flex-col gap-4 rounded-[2rem] border border-black/5 bg-white/75 p-4 shadow-sm backdrop-blur-md md:flex-row md:items-center md:justify-between md:p-6">

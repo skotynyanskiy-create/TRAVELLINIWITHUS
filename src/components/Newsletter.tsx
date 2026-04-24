@@ -33,7 +33,7 @@ const variantCopy: Record<
     eyebrow: 'Newsletter Travellini',
     title: 'Posti particolari, senza rumore.',
     description:
-      'Una selezione lenta e utile: idee viaggio, guide pratiche e risorse quando hanno davvero senso.',
+      'Una selezione lenta e utile: idee viaggio, guide pratiche, itinerari e risorse quando hanno davvero senso.',
     bullets: [
       'Luoghi e itinerari da salvare prima che diventino ovvi.',
       'Consigli pratici scritti per decidere meglio, non per riempire la inbox.',
@@ -57,11 +57,11 @@ const variantCopy: Record<
     eyebrow: 'Continua la scoperta',
     title: 'Tieni da parte i prossimi posti giusti.',
     description:
-      'La newsletter e il filo tra articoli, guide e risorse: pochi contenuti, scelti con lo stesso metodo editoriale del sito.',
+      'La newsletter e il filo tra articoli, guide pratiche, itinerari e risorse: pochi contenuti, scelti con lo stesso metodo editoriale del sito.',
     bullets: [
       'Posti particolari e informazioni concrete.',
       'Percorsi utili per coppie, weekend e viaggi lenti.',
-      'Anteprime delle guide quando sono davvero pronte.',
+      'Anteprime di guide e itinerari quando sono davvero pronti.',
     ],
     ctaLabel: 'Entra nella lista',
   },
@@ -76,13 +76,13 @@ const variantCopy: Record<
     eyebrow: 'Dopo questa lettura',
     title: 'Ricevi il prossimo posto da salvare.',
     description:
-      'Se questo contenuto ti e stato utile, la newsletter e il modo più semplice per non perdere le prossime guide.',
+      'Se questo contenuto ti e stato utile, la newsletter e il modo più semplice per non perdere i prossimi contenuti utili.',
     bullets: [
-      'Guide pratiche, non solo ispirazione.',
+      'Guide pratiche e itinerari, non solo ispirazione.',
       'Luoghi selezionati con criterio.',
       'Nessuna sequenza aggressiva di vendita.',
     ],
-    ctaLabel: 'Ricevi le prossime guide',
+    ctaLabel: 'Ricevi i prossimi contenuti',
   },
   business: {
     eyebrow: 'Per partner e lettori',
@@ -90,7 +90,7 @@ const variantCopy: Record<
     description:
       'Aggiornamenti essenziali su nuovi contenuti, risorse e sviluppi editoriali Travelliniwithus.',
     bullets: [
-      'Nuovi racconti e guide dal sito.',
+      'Nuovi racconti, guide e itinerari dal sito.',
       'Risorse utili e progetti in lavorazione.',
       'Una comunicazione curata, mai invasiva.',
     ],
@@ -105,7 +105,10 @@ function resolveCopy({
   description,
   bullets,
   ctaLabel,
-}: Pick<NewsletterProps, 'variant' | 'title' | 'eyebrow' | 'description' | 'bullets' | 'ctaLabel'>) {
+}: Pick<
+  NewsletterProps,
+  'variant' | 'title' | 'eyebrow' | 'description' | 'bullets' | 'ctaLabel'
+>) {
   const base = variantCopy[variant ?? 'sand'];
 
   return {
@@ -181,7 +184,9 @@ export default function Newsletter({
           setTimeout(onSuccess, 2000);
         }
       } catch {
-        setError('Iscrizione non riuscita. Riprova tra poco oppure scrivici direttamente via email.');
+        setError(
+          'Iscrizione non riuscita. Riprova tra poco oppure scrivici direttamente via email.'
+        );
       }
     } finally {
       setIsSubmitting(false);
@@ -251,10 +256,14 @@ export default function Newsletter({
             )}
           </div>
 
-          {error && <p className={`text-sm ${isDark ? 'text-red-200' : 'text-red-600'}`}>{error}</p>}
+          {error && (
+            <p className={`text-sm ${isDark ? 'text-red-200' : 'text-red-600'}`}>{error}</p>
+          )}
 
           {!isCompact && (
-            <p className={`text-center text-xs leading-relaxed ${isDark ? 'text-white/45' : 'text-black/40'}`}>
+            <p
+              className={`text-center text-xs leading-relaxed ${isDark ? 'text-white/45' : 'text-black/40'}`}
+            >
               Iscrivendoti accetti il trattamento dei dati secondo la nostra{' '}
               <Link
                 to="/privacy"
@@ -277,8 +286,11 @@ export default function Newsletter({
             <CheckCircle className="mt-0.5 shrink-0 text-[var(--color-accent)]" size={24} />
             <div>
               <p className="font-serif text-xl">Iscrizione confermata.</p>
-              <p className={`mt-1 text-sm leading-relaxed ${isDark ? 'text-white/65' : 'text-black/60'}`}>
-                Richiesta ricevuta. Se la piattaforma email non è ancora attiva, il lead resta comunque salvato.
+              <p
+                className={`mt-1 text-sm leading-relaxed ${isDark ? 'text-white/65' : 'text-black/60'}`}
+              >
+                Richiesta ricevuta. Se la piattaforma email non è ancora attiva, il lead resta
+                comunque salvato.
               </p>
             </div>
           </div>
@@ -314,7 +326,9 @@ export default function Newsletter({
           <h2 className="max-w-2xl text-4xl font-serif leading-tight tracking-tight md:text-6xl">
             {copy.title}
           </h2>
-          <p className={`mt-6 max-w-2xl text-base leading-relaxed md:text-lg ${isDark ? 'text-white/70' : 'text-black/65'}`}>
+          <p
+            className={`mt-6 max-w-2xl text-base leading-relaxed md:text-lg ${isDark ? 'text-white/70' : 'text-black/65'}`}
+          >
             {copy.description}
           </p>
 
@@ -323,7 +337,9 @@ export default function Newsletter({
               {copy.bullets.map((item) => (
                 <div key={item} className="flex items-start gap-3">
                   <ShieldCheck className="mt-0.5 shrink-0 text-[var(--color-accent)]" size={18} />
-                  <span className={`text-sm leading-relaxed ${isDark ? 'text-white/68' : 'text-black/62'}`}>
+                  <span
+                    className={`text-sm leading-relaxed ${isDark ? 'text-white/68' : 'text-black/62'}`}
+                  >
                     {item}
                   </span>
                 </div>
@@ -332,14 +348,20 @@ export default function Newsletter({
           )}
         </div>
 
-        <div className={`rounded-[2rem] border p-6 md:p-8 ${isDark ? 'border-white/10 bg-white/5' : 'border-black/5 bg-white/80'}`}>
+        <div
+          className={`rounded-[2rem] border p-6 md:p-8 ${isDark ? 'border-white/10 bg-white/5' : 'border-black/5 bg-white/80'}`}
+        >
           <div className="mb-6 flex items-start gap-4">
-            <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${isDark ? 'bg-white/10' : 'bg-[var(--color-accent-soft)]'}`}>
+            <div
+              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${isDark ? 'bg-white/10' : 'bg-[var(--color-accent-soft)]'}`}
+            >
               <Gift className="text-[var(--color-accent)]" size={22} />
             </div>
             <div>
               <p className="font-serif text-xl">Invii curati, non automatici.</p>
-              <p className={`mt-1 text-sm leading-relaxed ${isDark ? 'text-white/55' : 'text-black/50'}`}>
+              <p
+                className={`mt-1 text-sm leading-relaxed ${isDark ? 'text-white/55' : 'text-black/50'}`}
+              >
                 Il punto non è scrivere spesso: è mandare qualcosa che valga davvero un salvataggio.
               </p>
             </div>

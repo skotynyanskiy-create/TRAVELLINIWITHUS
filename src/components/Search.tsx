@@ -3,6 +3,8 @@ import Fuse from 'fuse.js';
 import { Search as SearchIcon } from 'lucide-react';
 import { fetchArticles } from '../services/firebaseService';
 import { Link } from 'react-router-dom';
+import { getPublicArticlePath } from '../utils/articleRoutes';
+import type { ArticleType } from './article';
 
 interface Article {
   id: string;
@@ -10,6 +12,7 @@ interface Article {
   description: string;
   category: string;
   slug: string;
+  type?: ArticleType;
 }
 
 export default function Search() {
@@ -26,14 +29,18 @@ export default function Search() {
     loadArticles();
   }, []);
 
-  const fuse = useMemo(() => new Fuse(articles, {
-    keys: ['title', 'description', 'category'],
-    threshold: 0.3,
-  }), [articles]);
+  const fuse = useMemo(
+    () =>
+      new Fuse(articles, {
+        keys: ['title', 'description', 'category'],
+        threshold: 0.3,
+      }),
+    [articles]
+  );
 
   const results = useMemo(() => {
     if (query.length > 2) {
-      return fuse.search(query).map(result => result.item);
+      return fuse.search(query).map((result) => result.item);
     }
     return [];
   }, [query, fuse]);
@@ -50,7 +57,11 @@ export default function Search() {
 
   return (
     <div className="relative" ref={searchRef}>
-      <button onClick={() => setIsOpen(!isOpen)} aria-label="Cerca nel sito" className="p-2 hover:bg-black/5 rounded-full transition-colors">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label="Cerca nel sito"
+        className="p-2 hover:bg-black/5 rounded-full transition-colors"
+      >
         <SearchIcon size={20} />
       </button>
 
@@ -59,7 +70,7 @@ export default function Search() {
           <div className="relative mb-4">
             <input
               type="text"
-              placeholder="Cerca un articolo..."
+              placeholder="Cerca un contenuto..."
               className="w-full pl-10 pr-4 py-2 rounded-xl border border-black/10 focus:outline-none focus:border-[var(--color-accent)]"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -68,21 +79,21 @@ export default function Search() {
           </div>
 
           <div className="max-h-60 overflow-y-auto">
-            {results.length > 0 ? (
-              results.map((article) => (
-                <Link
-                  key={article.id}
-                  to={`/articolo/${article.slug}`}
-                  className="block p-3 hover:bg-black/5 rounded-xl transition-colors"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <h5 className="font-bold text-sm">{article.title}</h5>
-                  <p className="text-xs text-black/50">{article.category}</p>
-                </Link>
-              ))
-            ) : (
-              query.length > 2 && <p className="text-center text-sm text-black/50">Nessun risultato trovato.</p>
-            )}
+            {results.length > 0
+              ? results.map((article) => (
+                  <Link
+                    key={article.id}
+                    to={getPublicArticlePath(article)}
+                    className="block p-3 hover:bg-black/5 rounded-xl transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <h5 className="font-bold text-sm">{article.title}</h5>
+                    <p className="text-xs text-black/50">{article.category}</p>
+                  </Link>
+                ))
+              : query.length > 2 && (
+                  <p className="text-center text-sm text-black/50">Nessun risultato trovato.</p>
+                )}
           </div>
         </div>
       )}

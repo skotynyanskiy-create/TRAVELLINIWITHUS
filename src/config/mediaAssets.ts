@@ -19,13 +19,18 @@ export const MEDIA = {
   couple: {
     intro: '/images/brand/couple-travel.png',
   },
+  about: {
+    editorial: '/images/brand/about-editorial.png',
+  },
+  collab: {
+    work: '/images/brand/collab-work.png',
+  },
   destinationGroups: {
     Italia:
       'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?q=80&w=1600&auto=format&fit=crop',
     Europa:
       'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?q=80&w=1600&auto=format&fit=crop',
-    Asia:
-      'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1600&auto=format&fit=crop',
+    Asia: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1600&auto=format&fit=crop',
     Americhe:
       'https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?q=80&w=1600&auto=format&fit=crop',
     Africa:

@@ -18,13 +18,24 @@ interface FinalCtaSectionProps {
 
 const defaults: Record<
   FinalCtaIntent,
-  Required<Pick<FinalCtaSectionProps, 'eyebrow' | 'title' | 'description' | 'primaryLabel' | 'primaryTo' | 'secondaryLabel' | 'secondaryTo'>>
+  Required<
+    Pick<
+      FinalCtaSectionProps,
+      | 'eyebrow'
+      | 'title'
+      | 'description'
+      | 'primaryLabel'
+      | 'primaryTo'
+      | 'secondaryLabel'
+      | 'secondaryTo'
+    >
+  >
 > = {
   discovery: {
     eyebrow: 'Continua a esplorare',
     title: 'Trova il prossimo posto da salvare.',
     description:
-      'Destinazioni, esperienze e guide sono collegate tra loro per aiutarti a scegliere meglio dove andare dopo.',
+      'Destinazioni, esperienze, guide pratiche e itinerari sono collegati tra loro per aiutarti a scegliere meglio dove andare dopo.',
     primaryLabel: 'Esplora destinazioni',
     primaryTo: '/destinazioni',
     secondaryLabel: 'Sfoglia esperienze',
@@ -34,11 +45,11 @@ const defaults: Record<
     eyebrow: 'Resta nel filo giusto',
     title: 'Ricevi contenuti utili quando sono pronti.',
     description:
-      'La newsletter raccoglie solo aggiornamenti selezionati: nuovi posti, guide pratiche e risorse davvero utili.',
+      'La newsletter raccoglie solo aggiornamenti selezionati: nuovi posti, guide pratiche, itinerari e risorse davvero utili.',
     primaryLabel: 'Vai alla newsletter',
     primaryTo: '#newsletter',
-    secondaryLabel: 'Leggi le guide',
-    secondaryTo: '/guide',
+    secondaryLabel: 'Apri itinerari',
+    secondaryTo: '/itinerari',
   },
   business: {
     eyebrow: 'Per brand e territori',
@@ -91,7 +102,9 @@ export default function FinalCtaSection({
           <span className="mb-5 block text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">
             {copy.eyebrow}
           </span>
-          <h2 className="text-4xl font-serif leading-tight tracking-tight md:text-6xl">{copy.title}</h2>
+          <h2 className="text-4xl font-serif leading-tight tracking-tight md:text-6xl">
+            {copy.title}
+          </h2>
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/68 md:text-lg">
             {copy.description}
           </p>

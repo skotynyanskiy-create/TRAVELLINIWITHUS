@@ -1,3 +1,5 @@
+import { getPublicArticlePath } from '../utils/articleRoutes';
+
 export const DEMO_ARTICLE_SLUG = 'dolomiti-rifugi-design';
 
 export const DEMO_ARTICLE_PREVIEW = {
@@ -11,14 +13,26 @@ export const DEMO_ARTICLE_PREVIEW = {
     'Un itinerario di tre giorni tra rifugi di design, valli meno battute e spunti pratici per vivere le Dolomiti con ritmo.',
   readTime: '8 min',
   createdAt: '2026-03-17T08:00:00.000Z',
+  verifiedAt: '2026-03-19T08:00:00.000Z',
+  budgetBand: 'Alto',
+  disclosureType: 'none',
+  featuredPlacement: 'home-flagship',
+  tripIntents: ['Hotel con carattere', 'Posti particolari'],
 };
 
-export const DEMO_ARTICLE_PATH = `/articolo/${DEMO_ARTICLE_SLUG}`;
+export const DEMO_ARTICLE_PATH = getPublicArticlePath({
+  slug: DEMO_ARTICLE_SLUG,
+  category: 'Itinerari completi',
+});
+
+function getDemoArticlePath(slug: string, category: string) {
+  return getPublicArticlePath({ slug, category });
+}
 
 /**
  * Articoli demo leggeri per homepage, liste destinazioni/esperienze/guide.
  * Ogni entry ha una controparte full-shape in `previewContent.ts::PREVIEW_ARTICLES`
- * che alimenta la pagina `/articolo/:slug` quando Firestore è vuoto.
+ * che alimenta le route editoriali typed (`/guide/:slug` e `/itinerari/:slug`) quando Firestore è vuoto.
  */
 export const DEMO_ARTICLES_EXTRA = [
   {
@@ -32,6 +46,11 @@ export const DEMO_ARTICLES_EXTRA = [
       'Cinque giorni on the road tra Valle d’Itria, Salento e costa adriatica: masserie vere, borghi bianchi e tavole che restano.',
     readTime: '9 min',
     createdAt: '2026-04-02T09:00:00.000Z',
+    verifiedAt: '2026-04-05T09:00:00.000Z',
+    budgetBand: 'Medio',
+    disclosureType: 'none',
+    featuredPlacement: 'home-flagship',
+    tripIntents: ["Borghi e cittÃ  d'arte", 'Food & Ristoranti'],
   },
   {
     id: 'sicilia-orientale-5-giorni',
@@ -44,6 +63,11 @@ export const DEMO_ARTICLES_EXTRA = [
       'Un itinerario stretto ma denso: luce barocca di Ortigia, pendii lavici dell’Etna e pietra dorata di Noto.',
     readTime: '7 min',
     createdAt: '2026-03-29T09:00:00.000Z',
+    verifiedAt: '2026-03-31T09:00:00.000Z',
+    budgetBand: 'Medio',
+    disclosureType: 'none',
+    featuredPlacement: 'home-flagship',
+    tripIntents: ['Food & Ristoranti', 'Esperienze insolite'],
   },
   {
     id: 'islanda-ring-road-10-giorni',
@@ -176,7 +200,7 @@ export const DEMO_DESTINATION_CARDS = [
     title: 'Puglia slow da esplorare',
     image:
       'https://images.unsplash.com/photo-1499695867787-12ace027e651?q=80&w=1600&auto=format&fit=crop',
-    link: '/articolo/puglia-roadtrip-borghi-bianchi',
+    link: getDemoArticlePath('puglia-roadtrip-borghi-bianchi', 'Itinerari completi'),
     region: 'Italia',
     category: 'Itinerari completi',
   },
@@ -185,7 +209,7 @@ export const DEMO_DESTINATION_CARDS = [
     title: 'Islanda: il giro dell’isola',
     image:
       'https://images.unsplash.com/photo-1476610182048-b716b8518aae?q=80&w=1600&auto=format&fit=crop',
-    link: '/articolo/islanda-ring-road-10-giorni',
+    link: getDemoArticlePath('islanda-ring-road-10-giorni', 'Itinerari completi'),
     region: 'Europa',
     category: 'Itinerari completi',
   },
@@ -194,7 +218,7 @@ export const DEMO_DESTINATION_CARDS = [
     title: 'Giappone: Kyoto, Osaka, Nara',
     image:
       'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1600&auto=format&fit=crop',
-    link: '/articolo/giappone-kyoto-osaka-14-giorni',
+    link: getDemoArticlePath('giappone-kyoto-osaka-14-giorni', 'Itinerari completi'),
     region: 'Asia',
     category: 'Itinerari completi',
   },
@@ -203,7 +227,7 @@ export const DEMO_DESTINATION_CARDS = [
     title: 'Perù: la valle sacra degli Inca',
     image:
       'https://images.unsplash.com/photo-1526392060635-9d6019884377?q=80&w=1600&auto=format&fit=crop',
-    link: '/articolo/peru-valle-sacra-machu-picchu',
+    link: getDemoArticlePath('peru-valle-sacra-machu-picchu', 'Itinerari completi'),
     region: 'Americhe',
     category: 'Itinerari completi',
   },
@@ -212,7 +236,7 @@ export const DEMO_DESTINATION_CARDS = [
     title: 'Marocco: medine e deserto',
     image:
       'https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?q=80&w=1600&auto=format&fit=crop',
-    link: '/articolo/marocco-medina-deserto-7-giorni',
+    link: getDemoArticlePath('marocco-medina-deserto-7-giorni', 'Itinerari completi'),
     region: 'Africa',
     category: 'Itinerari completi',
   },
@@ -221,7 +245,7 @@ export const DEMO_DESTINATION_CARDS = [
     title: 'Nuova Zelanda: South Island',
     image:
       'https://images.unsplash.com/photo-1469521669194-babb45599def?q=80&w=1600&auto=format&fit=crop',
-    link: '/articolo/nuova-zelanda-south-island-12-giorni',
+    link: getDemoArticlePath('nuova-zelanda-south-island-12-giorni', 'Itinerari completi'),
     region: 'Oceania',
     category: 'Itinerari completi',
   },
@@ -256,7 +280,7 @@ export const DEMO_ARTICLE_MARKERS: Array<{
     id: 'puglia-roadtrip-borghi-bianchi',
     name: 'Valle d’Itria',
     coordinates: [17.3797, 40.8014],
-    link: '/articolo/puglia-roadtrip-borghi-bianchi',
+    link: getDemoArticlePath('puglia-roadtrip-borghi-bianchi', 'Itinerari completi'),
     image:
       'https://images.unsplash.com/photo-1499695867787-12ace027e651?q=80&w=1600&auto=format&fit=crop',
     category: 'Itinerari completi',
@@ -266,7 +290,7 @@ export const DEMO_ARTICLE_MARKERS: Array<{
     id: 'sicilia-orientale-5-giorni',
     name: 'Ortigia, Siracusa',
     coordinates: [15.2931, 37.0623],
-    link: '/articolo/sicilia-orientale-5-giorni',
+    link: getDemoArticlePath('sicilia-orientale-5-giorni', 'Weekend & Day trip'),
     image:
       'https://images.unsplash.com/photo-1523365154888-8a758819b722?q=80&w=1600&auto=format&fit=crop',
     category: 'Weekend & Day trip',
@@ -276,7 +300,7 @@ export const DEMO_ARTICLE_MARKERS: Array<{
     id: 'islanda-ring-road-10-giorni',
     name: 'Islanda Ring Road',
     coordinates: [-19.0208, 64.9631],
-    link: '/articolo/islanda-ring-road-10-giorni',
+    link: getDemoArticlePath('islanda-ring-road-10-giorni', 'Itinerari completi'),
     image:
       'https://images.unsplash.com/photo-1476610182048-b716b8518aae?q=80&w=1600&auto=format&fit=crop',
     category: 'Itinerari completi',
@@ -286,7 +310,7 @@ export const DEMO_ARTICLE_MARKERS: Array<{
     id: 'lisbona-weekend-lento',
     name: 'Lisbona',
     coordinates: [-9.1393, 38.7223],
-    link: '/articolo/lisbona-weekend-lento',
+    link: getDemoArticlePath('lisbona-weekend-lento', 'Weekend & Day trip'),
     image:
       'https://images.unsplash.com/photo-1580060839134-75a5edca2e99?q=80&w=1600&auto=format&fit=crop',
     category: 'Weekend & Day trip',
@@ -296,7 +320,7 @@ export const DEMO_ARTICLE_MARKERS: Array<{
     id: 'provenza-lavanda-luberon',
     name: 'Luberon, Provenza',
     coordinates: [5.3033, 43.8867],
-    link: '/articolo/provenza-lavanda-luberon',
+    link: getDemoArticlePath('provenza-lavanda-luberon', 'Itinerari completi'),
     image:
       'https://images.unsplash.com/photo-1499678329028-101435549a4e?q=80&w=1600&auto=format&fit=crop',
     category: 'Itinerari completi',
@@ -306,7 +330,7 @@ export const DEMO_ARTICLE_MARKERS: Array<{
     id: 'giappone-kyoto-osaka-14-giorni',
     name: 'Kyoto',
     coordinates: [135.7681, 35.0116],
-    link: '/articolo/giappone-kyoto-osaka-14-giorni',
+    link: getDemoArticlePath('giappone-kyoto-osaka-14-giorni', 'Itinerari completi'),
     image:
       'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1600&auto=format&fit=crop',
     category: 'Itinerari completi',
@@ -315,8 +339,8 @@ export const DEMO_ARTICLE_MARKERS: Array<{
   {
     id: 'vietnam-hoi-an-8-giorni',
     name: 'Hoi An',
-    coordinates: [108.3380, 15.8801],
-    link: '/articolo/vietnam-hoi-an-8-giorni',
+    coordinates: [108.338, 15.8801],
+    link: getDemoArticlePath('vietnam-hoi-an-8-giorni', 'Itinerari completi'),
     image:
       'https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=1600&auto=format&fit=crop',
     category: 'Itinerari completi',
@@ -325,8 +349,8 @@ export const DEMO_ARTICLE_MARKERS: Array<{
   {
     id: 'peru-valle-sacra-machu-picchu',
     name: 'Machu Picchu',
-    coordinates: [-72.5450, -13.1631],
-    link: '/articolo/peru-valle-sacra-machu-picchu',
+    coordinates: [-72.545, -13.1631],
+    link: getDemoArticlePath('peru-valle-sacra-machu-picchu', 'Itinerari completi'),
     image:
       'https://images.unsplash.com/photo-1526392060635-9d6019884377?q=80&w=1600&auto=format&fit=crop',
     category: 'Itinerari completi',
@@ -336,7 +360,7 @@ export const DEMO_ARTICLE_MARKERS: Array<{
     id: 'west-coast-usa-roadtrip-14-giorni',
     name: 'Pacific Coast Highway',
     coordinates: [-121.8813, 36.2704],
-    link: '/articolo/west-coast-usa-roadtrip-14-giorni',
+    link: getDemoArticlePath('west-coast-usa-roadtrip-14-giorni', 'Itinerari completi'),
     image:
       'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=1600&auto=format&fit=crop',
     category: 'Itinerari completi',
@@ -345,8 +369,8 @@ export const DEMO_ARTICLE_MARKERS: Array<{
   {
     id: 'marocco-medina-deserto-7-giorni',
     name: 'Merzouga, Sahara',
-    coordinates: [-4.0130, 31.0997],
-    link: '/articolo/marocco-medina-deserto-7-giorni',
+    coordinates: [-4.013, 31.0997],
+    link: getDemoArticlePath('marocco-medina-deserto-7-giorni', 'Itinerari completi'),
     image:
       'https://images.unsplash.com/photo-1489749798305-4fea3ae63d43?q=80&w=1600&auto=format&fit=crop',
     category: 'Itinerari completi',
@@ -356,7 +380,7 @@ export const DEMO_ARTICLE_MARKERS: Array<{
     id: 'nuova-zelanda-south-island-12-giorni',
     name: 'Milford Sound',
     coordinates: [167.9225, -44.6414],
-    link: '/articolo/nuova-zelanda-south-island-12-giorni',
+    link: getDemoArticlePath('nuova-zelanda-south-island-12-giorni', 'Itinerari completi'),
     image:
       'https://images.unsplash.com/photo-1469521669194-babb45599def?q=80&w=1600&auto=format&fit=crop',
     category: 'Itinerari completi',
@@ -396,11 +420,28 @@ export const DEMO_PRODUCTS = [
       'https://images.unsplash.com/photo-1533130061792-64b345e4a833?q=80&w=1600&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1551524559-8af4e6624178?q=80&w=1600&auto=format&fit=crop',
     ],
-    relatedProductIds: ['guida-premium-giappone', 'guida-premium-puglia', 'bundle-premium-itinerari'],
+    relatedProductIds: [
+      'guida-premium-giappone',
+      'guida-premium-puglia',
+      'bundle-premium-itinerari',
+    ],
     reviews: [
-      { rating: 5, author: 'Giulia M.', comment: 'Usata per un weekend in Val di Funes. Finalmente una guida che seleziona davvero.' },
-      { rating: 5, author: 'Luca R.', comment: 'Gli indirizzi food in valle sono oro. Zero tempo perso a cercare.' },
-      { rating: 4, author: 'Chiara B.', comment: 'Chiara e ben scritta. Aggiungerei qualche alternativa pioggia.' },
+      {
+        rating: 5,
+        author: 'Giulia M.',
+        comment:
+          'Usata per un weekend in Val di Funes. Finalmente una guida che seleziona davvero.',
+      },
+      {
+        rating: 5,
+        author: 'Luca R.',
+        comment: 'Gli indirizzi food in valle sono oro. Zero tempo perso a cercare.',
+      },
+      {
+        rating: 4,
+        author: 'Chiara B.',
+        comment: 'Chiara e ben scritta. Aggiungerei qualche alternativa pioggia.',
+      },
     ],
   },
   {
@@ -435,11 +476,28 @@ export const DEMO_PRODUCTS = [
       'https://images.unsplash.com/photo-1528164344705-47542687000d?q=80&w=1600&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1545569341-9eb8b30979d9?q=80&w=1600&auto=format&fit=crop',
     ],
-    relatedProductIds: ['guida-premium-dolomiti', 'guida-premium-islanda', 'bundle-premium-itinerari'],
+    relatedProductIds: [
+      'guida-premium-dolomiti',
+      'guida-premium-islanda',
+      'bundle-premium-itinerari',
+    ],
     reviews: [
-      { rating: 5, author: 'Marco T.', comment: 'Il JR Pass spiegato finalmente in modo umano. Mi ha fatto risparmiare giorni di ricerche.' },
-      { rating: 5, author: 'Elena S.', comment: 'Gli indirizzi food sono perfetti: niente trappole per turisti.' },
-      { rating: 5, author: 'Andrea P.', comment: 'Usato per novembre: koyo incredibile, crowds gestibili. Consigliato.' },
+      {
+        rating: 5,
+        author: 'Marco T.',
+        comment:
+          'Il JR Pass spiegato finalmente in modo umano. Mi ha fatto risparmiare giorni di ricerche.',
+      },
+      {
+        rating: 5,
+        author: 'Elena S.',
+        comment: 'Gli indirizzi food sono perfetti: niente trappole per turisti.',
+      },
+      {
+        rating: 5,
+        author: 'Andrea P.',
+        comment: 'Usato per novembre: koyo incredibile, crowds gestibili. Consigliato.',
+      },
     ],
   },
   {
@@ -467,10 +525,22 @@ export const DEMO_PRODUCTS = [
       Lingua: 'Italiano',
       Aggiornamenti: 'Inclusi per 12 mesi',
     },
-    relatedProductIds: ['guida-premium-dolomiti', 'guida-premium-giappone', 'bundle-premium-itinerari'],
+    relatedProductIds: [
+      'guida-premium-dolomiti',
+      'guida-premium-giappone',
+      'bundle-premium-itinerari',
+    ],
     reviews: [
-      { rating: 5, author: 'Sara V.', comment: 'La parte "piano B meteo" mi ha salvato tre giorni di viaggio.' },
-      { rating: 4, author: 'Davide L.', comment: 'Ottima. I costi carburante erano aggiornati al mese giusto.' },
+      {
+        rating: 5,
+        author: 'Sara V.',
+        comment: 'La parte "piano B meteo" mi ha salvato tre giorni di viaggio.',
+      },
+      {
+        rating: 4,
+        author: 'Davide L.',
+        comment: 'Ottima. I costi carburante erano aggiornati al mese giusto.',
+      },
     ],
   },
   {
@@ -674,10 +744,23 @@ export const DEMO_PRODUCTS = [
       Lingua: 'Italiano',
       Aggiornamenti: 'Inclusi per 12 mesi',
     },
-    relatedProductIds: ['guida-premium-dolomiti', 'guida-premium-giappone', 'guida-premium-islanda', 'guida-premium-puglia'],
+    relatedProductIds: [
+      'guida-premium-dolomiti',
+      'guida-premium-giappone',
+      'guida-premium-islanda',
+      'guida-premium-puglia',
+    ],
     reviews: [
-      { rating: 5, author: 'Francesca D.', comment: 'Il bundle ha senso: li ho usati tutti e quattro nell’arco di un anno.' },
-      { rating: 5, author: 'Roberto C.', comment: 'Prezzo onesto, zero filler. Si vede che sono stati scritti viaggiando.' },
+      {
+        rating: 5,
+        author: 'Francesca D.',
+        comment: 'Il bundle ha senso: li ho usati tutti e quattro nell’arco di un anno.',
+      },
+      {
+        rating: 5,
+        author: 'Roberto C.',
+        comment: 'Prezzo onesto, zero filler. Si vede che sono stati scritti viaggiando.',
+      },
     ],
   },
   {
