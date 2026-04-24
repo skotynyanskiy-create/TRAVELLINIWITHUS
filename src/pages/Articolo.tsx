@@ -18,6 +18,8 @@ import FinalCtaSection from '../components/FinalCtaSection';
 import NotFound from './NotFound';
 import { SITE_URL } from '../config/site';
 import { PREVIEW_ARTICLES } from '../config/previewContent';
+import { siteContentDefaults } from '../config/siteContent';
+import { useSiteContent } from '../hooks/useSiteContent';
 import {
   AffiliateBar,
   ARTICLE_DISCLOSURE_LABELS,
@@ -229,6 +231,9 @@ export default function Articolo() {
   const [copied, setCopied] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const { data: demoContent } = useSiteContent('demo');
+  const demoSettings = demoContent ?? siteContentDefaults.demo;
+
   const prefersReducedMotion = useReducedMotion();
   const { scrollYProgress, scrollY } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -250,14 +255,6 @@ export default function Articolo() {
           return;
         }
 
-        const previewArticle = PREVIEW_ARTICLES[currentSlug];
-        if (previewArticle) {
-          setArticle(ensureArticleData(previewArticle));
-          setArticleSource('preview');
-          setRelatedArticles([]);
-          return;
-        }
-
         const publicArticle = await fetchArticleBySlug(currentSlug);
 
         if (publicArticle) {
@@ -272,6 +269,11 @@ export default function Articolo() {
             )
           );
           setArticleSource('published');
+        } else if (demoSettings.showEditorialDemo && PREVIEW_ARTICLES[currentSlug]) {
+          setArticle(ensureArticleData(PREVIEW_ARTICLES[currentSlug]));
+          setArticleSource('preview');
+          setRelatedArticles([]);
+          return;
         } else {
           setArticleSource('missing');
           setArticle(null);
@@ -304,7 +306,7 @@ export default function Articolo() {
     };
 
     fetchArticle();
-  }, [currentSlug]);
+  }, [currentSlug, demoSettings.showEditorialDemo]);
 
   const previewRelatedArticles = useMemo(
     () =>

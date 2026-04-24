@@ -13,6 +13,8 @@ import ProductPageSkeleton from '../components/ProductPageSkeleton';
 import { Product } from '../types';
 import { SITE_URL } from '../config/site';
 import { DEMO_PRODUCTS } from '../config/demoContent';
+import { siteContentDefaults } from '../config/siteContent';
+import { useSiteContent } from '../hooks/useSiteContent';
 import { formatPrice } from '../utils/format';
 
 const trustPoints = [
@@ -37,7 +39,12 @@ export default function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
   const { addToCart, setIsCartOpen } = useCart();
 
-  const demoFallback = DEMO_PRODUCTS.find((item) => item.slug === slug) as Product | undefined;
+  const { data: demoContent } = useSiteContent('demo');
+  const demoSettings = demoContent ?? siteContentDefaults.demo;
+
+  const demoFallback = demoSettings.showShopDemo
+    ? (DEMO_PRODUCTS.find((item) => item.slug === slug) as Product | undefined)
+    : undefined;
 
   const {
     data: fetchedProduct,
@@ -49,7 +56,7 @@ export default function ProductPage() {
       const product = await fetchProductBySlug(slug!);
       return product || null;
     },
-    enabled: !!slug && !demoFallback,
+    enabled: !!slug,
   });
 
   const product = fetchedProduct || demoFallback || null;
@@ -291,9 +298,7 @@ export default function ProductPage() {
               <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-accent)]/15">
                 <FileText className="text-[var(--color-accent)]" size={24} />
               </div>
-              <h2 className="text-3xl font-serif md:text-5xl">
-                Lo shop deve restare editoriale.
-              </h2>
+              <h2 className="text-3xl font-serif md:text-5xl">Lo shop deve restare editoriale.</h2>
               <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/65">
                 Ogni prodotto deve essere utile, verificato e consegnabile. Se non è pronto, resta
                 in preview.
