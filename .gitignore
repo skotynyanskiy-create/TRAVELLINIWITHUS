@@ -6,6 +6,15 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Secret credentials — defense in depth alongside .claude/settings.json secret-block hook
+service-account*.json
+serviceAccount*.json
+firebase-adminsdk*.json
+*.pem
+*.p12
+*.pfx
+*.key
 playwright-report/
 test-results/
 qa-final/
