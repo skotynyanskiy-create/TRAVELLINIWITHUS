@@ -47,6 +47,19 @@ This repository is the website and marketing operating system for the travel cre
 - If a change introduces or resolves a bug, create or update a bug note.
 - If a new campaign, partner lead or content plan appears, use the marketing templates in `docs/90_Templates/`.
 
+## Cross-tool runtime alignment
+
+These rules are the portable equivalent of the Claude Code runtime hooks. Every AI assistant should follow them even if the local tool does not enforce them automatically.
+
+- Before any non-trivial tool call, do a lightweight routing check: search/orientation first, minimal edit path second, heavy multi-file work only when the task truly requires it.
+- Prefer read-only exploration for "where is X", "how does Y work", grep, inventory, and unknown-module orientation.
+- Prefer the smallest direct implementation path for routine single-file fixes and contained UI/content edits.
+- Treat multi-file refactors, cross-layer debugging, and architecture work as heavier operations that require explicit justification.
+- Explicit owner override beats the routing heuristic. If the owner says "do it directly", proceed directly.
+- Do not run destructive commands, production deploy commands, or irreversible clean/reset flows without explicit owner confirmation.
+- Treat `server.ts`, `firestore.rules`, and `src/config/admin.ts` as high-risk in every tool, not only in Claude Code.
+- Local runtime config files such as `.claude/settings.local.json` are not shared policy. Shared policy must live in `AGENTS.md`, `CLAUDE.md`, `.agents/skills/`, or `docs/AI_AGENT_STACK.md`.
+
 ## Default operational notes
 
 - Homepage/UI work: `docs/10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT.md`

@@ -1,530 +1,427 @@
-# Travelliniwithus Master Plan
+---
+type: reference
+area: product
+status: active
+priority: p0
+owner: team
+repo: TRAVELLINIWITHUS
+related: '[[10_Projects/PROJECT_SITE_REBUILD_AUTHORITY_PREMIUM]]'
+source: competitive analysis + rebuild mandate
+tags:
+  - product
+  - strategy
+  - rebuild
+  - premium
+---
 
-Last updated: 2026-03-18
-Scope: strategic and operational direction for the replacement version contained in this repository.
+# TRAVELLINIWITHUS MASTER PLAN
 
-## Premessa
+## Executive verdict
 
-Questo documento non valuta `travelliniwithus.it` come prodotto finale.
+Travelliniwithus non ha bisogno di "piu pagine". Ha bisogno di diventare un **travel media brand editoriale premium** con una struttura piu netta, una gerarchia piu severa e un modello contenutistico piu rigoroso.
 
-Base corretta di lavoro:
+Il repo attuale non e da buttare. Ha gia tre basi preziose:
 
-- il sito live attuale e` una versione temporanea/in costruzione
-- questa codebase locale e` la vera base della prossima versione da pubblicare
+1. un impianto tecnico pubblicabile
+2. un funnel B2B gia piu maturo della media creator
+3. un embrione credibile di sistema editoriale
 
-Quindi:
+Non e ancora best-in-class per quattro motivi:
 
-- il live serve solo a capire la percezione pubblica attuale
-- questo repository serve a costruire la versione definitiva
+1. troppe superfici discovery con responsabilita parzialmente sovrapposte
+2. tassonomie ancora miste tra luogo, intento, formato e utility
+3. contenuti e asset in parte ancora percepibili come preview o transitori
+4. mancanza di una gerarchia definitiva tra authority editoriale, planning e monetizzazione
 
-## Decisione Centrale
+Verdetto netto:
 
-La direzione migliore non e`:
+- **non serve una migrazione di stack come prima mossa**
+- **serve una rifondazione guidata di information architecture, page system, content model e design discipline**
+- **l'obiettivo corretto e diventare il riferimento italiano nel modello Salt in Our Hair + Along Dusty Roads, non imitare un travel blog creator classico**
 
-- travel blog generalista
-- luxury travel puro
-- hub sconti/affiliate puro
-- travel agency
-- brand che parla di tutto
+## Top competitor benchmark
 
-La direzione migliore e`:
+### Primary model: Salt in Our Hair
 
-- media brand creator-led di scoperta viaggi
-- centrato su posti particolari, esperienze memorabili e consigli davvero utili
-- con forte storytelling visivo
-- con una prospettiva chiara di coppia
+Da prendere:
 
-Formula sintetica:
+- homepage come portale di esplorazione
+- guide strutturate per il viaggio reale
+- separazione chiara tra contenuto, planning e monetizzazione
+- pagina collaborazioni autorevole
 
-- `posti particolari + informazioni utili + storytelling visivo + fiducia`
+Da adattare:
 
-## Posizionamento Consigliato
+- tono meno "travel business" e piu mediterraneo
+- meno packaging da creator-product machine, piu selezione editoriale
 
-### Cosa deve diventare Travelliniwithus
+Da evitare:
 
-Travelliniwithus deve diventare uno dei riferimenti italiani per:
+- espansione prematura di shop e asset se il catalogo reale non e ancora all'altezza
 
-- luoghi curiosi
-- locali insoliti
-- soggiorni belli ma credibili
-- esperienze da salvare
-- mini fughe, weekend e itinerari memorabili
-- dritte pratiche che fanno agire davvero le persone
+### Editorial tone model: Along Dusty Roads
 
-### Promessa corretta
+Da prendere:
 
-Promessa di brand consigliata:
+- tono adulto, indipendente, non rumoroso
+- posizionamento basato su fiducia e criterio
+- sensazione da publication, non da feed riciclato
 
-- ti facciamo scoprire posti particolari e ti diamo le informazioni giuste per viverli davvero
+Da adattare:
 
-Oppure, in forma piu` editoriale:
+- piu calore people-led e piu presenza della coppia
 
-- scopriamo, selezioniamo e rendiamo semplici da vivere luoghi ed esperienze che meritano davvero
+Da evitare:
 
-### Cosa non deve sembrare
+- eccesso di understatement se penalizza la conversione commerciale
 
-Non deve sembrare:
+### Guide template model: Anywhere We Roam
 
-- un sito coupon
-- un progetto premium costruito solo su estetica
-- un magazine generalista senza angolo distintivo
-- un portfolio B2B travestito da brand consumer
-- una raccolta di pagine belle ma non operative
+Da prendere:
 
-## Perche' questa e` la direzione giusta
+- guide leggibili e molto ben segmentate
+- Table of Contents utile
+- promessa iniziale chiara
+- struttura pensata per decidere, non solo per ispirare
 
-I segnali piu` forti raccolti dal progetto e dalla presenza pubblica puntano tutti nella stessa direzione:
+### Commercial model: The Blonde Abroad
 
-- Instagram e Linktree suggeriscono contenuti social ad alta salvabilita`
-- il tono migliore del progetto emerge quando parli di scoperte, luoghi curiosi e esperienze
-- la monetizzazione piu` naturale nasce da fiducia, utilita` e selezione
-- il lato B2B funziona meglio se poggia su una identita` editoriale riconoscibile, non su servizi generici
+Da prendere:
 
-In pratica:
+- productization disciplinata
+- funnel newsletter forte
+- capacita di trasformare il brand in motore commerciale
 
-- l'attenzione arriva dal contenuto discovery
-- la fiducia arriva dall'utilita`
-- la monetizzazione arriva dalla selezione
-- il premium arriva dalla cura, non dal lessico
+Da evitare:
 
-## Architettura Del Brand
+- tono troppo americano
+- espansione lifestyle non coerente con il cuore travel editoriale
 
-Il brand deve avere due livelli chiari.
+### Supplementary model: Bruised Passports
 
-### Livello B2C
+Da prendere:
 
-Serve per:
+- forza della coppia come asset narrativo e commerciale
+- uso esplicito del social proof
 
-- ispirare
-- aiutare
-- convertire utenti in community, click qualificati, prodotti digitali e richieste
+## Current-state audit
 
-Pilastri consigliati:
+### Scorecard sintetica
 
-- posti particolari
-- esperienze e locali memorabili
-- guide pratiche
-- risorse utili
-- prodotti digitali selettivi
+| Area                      | Score | Verdetto                                                          |
+| ------------------------- | ----: | ----------------------------------------------------------------- |
+| Posizionamento brand      |   7.5 | buono, ma ancora non definitivo                                   |
+| Information architecture  |   6.0 | troppo larga, con cluster da semplificare                         |
+| Homepage                  |   7.0 | ricca di segnali giusti, ma ancora non gerarchicamente definitiva |
+| Template articolo         |   8.0 | base solida, uno dei punti migliori del repo                      |
+| Hubs destinazione         |   6.5 | buona direzione, ancora eterogenea                                |
+| Funnel B2B                |   8.0 | sopra la media del progetto                                       |
+| Monetizzazione editoriale |   6.5 | sensata, ma non ancora perfettamente calibrata                    |
+| CMS/admin                 |   7.5 | promettente, ma da governare piu duramente                        |
+| Design system             |   6.5 | identita in crescita, ancora non completamente blindata           |
+| SEO structure             |   6.5 | potenziale alto, struttura URL e tipi contenuto da razionalizzare |
 
-### Livello B2B
+### Cosa tenere
 
-Serve per:
+- `Articolo` come base del template editoriale premium
+- `Collaborazioni` e `Media Kit` come ossatura del funnel B2B
+- il principio di contenuti flagship, preview controllate e publish validation
+- i componenti di trust editoriale e monetizzazione contestuale
+- l'impianto admin/Firestore come base operativa
 
-- attrarre brand, hotel, destinazioni e partner
-- mostrare prova
-- generare richieste qualificate
+### Cosa rifare
 
-Pilastri consigliati:
+- la gerarchia complessiva delle route pubbliche
+- il ruolo reciproco di `Destinazioni`, `Guide`, `Esperienze`, `Risorse`, `Inizia da qui`, `Dove dormire`, `Cosa mangiare`
+- la homepage come mappa coerente dell'intero sistema
+- il design language di card, hub, menu e CTA
+- la distinzione tra contenuto ispirazionale, contenuto decisionale e contenuto commerciale
 
-- collaborazioni
-- media kit reale
-- case study
-- metriche vere
-- contatto business semplice e credibile
+### Cosa unire
 
-## Cosa Tenere Della Codebase Attuale
+- discovery per luogo e discovery per formato in un sistema piu chiaro
+- guide pratiche e itinerary logic sotto un modello editoriale unico
+- `Risorse` e `Inizia da qui` dentro un funnel planning non ridondante
 
-### Da tenere quasi sicuramente
+### Cosa eliminare o declassare
 
-- direzione visiva premium-editoriale della home
-- tono raffinato ma umano delle sezioni piu` riuscite
-- separazione gia` abbozzata tra contenuto, brand e shop
-- page design di Collaborazioni, Shop, Risorse e Contatti come base estetica
-- brand feeling caldo, cinematografico e curato
+- qualsiasi superficie che esiste ma non ha densita editoriale sufficiente
+- feature account/social che non aiutano scoperta, pianificazione o collaborazione
+- sezioni home che sembrano "riempitive"
+- asset AI o demo presentati con intensita uguale a contenuti reali
 
-### Da tenere ma rifocalizzare
+## End-state vision
 
-- shop: non come catalogo generico, ma come libreria selettiva di strumenti e prodotti travel
-- risorse: da lista lunga affiliata a pagina utilissima e curata
-- collaborazioni: da pagina aspirazionale a pagina con prova, numeri e casi reali
-- chi siamo: da manifesto astratto a pagina che spiega perche' fidarsi di voi
+Travelliniwithus deve apparire come:
 
-### Da tagliare o ridurre
+**il travel media brand editoriale premium italiano per chi vuole scegliere bene dove andare, come viverlo e cosa vale davvero**
 
-- promesse troppo ampie
-- elementi placeholder
-- offerte troppo numerose insieme
-- sezioni che sembrano complete ma non lo sono ancora
-- funnel finti
+Tre promesse:
 
-## Cosa Oggi Blocca Il Lancio
+1. **selezione**: non tutto merita di essere consigliato
+2. **utilita**: ogni pagina aiuta a decidere qualcosa
+3. **credibilita**: prima si prova, poi si pubblica
 
-Questi punti non sono dettagli. Sono blocchi reali per la nuova pubblicazione.
+Tre pubblici:
 
-### Blocchi di affidabilita`
+1. viaggiatore che cerca ispirazione filtrata
+2. viaggiatore che sta pianificando in modo concreto
+3. brand o struttura che cerca una collaborazione credibile
 
-- la rotta prodotto non e` coerente: il sito linka `/shop/{slug}` ma il router espone solo `/shop` e `/shop/senza-confini-planner`
-- la pagina prodotto dipende dal database e oggi non gestisce bene il prodotto hero statico
-- la pagina articolo ha gia` mostrato rotture in runtime
-- la route admin accetta qualunque utente loggato
+## New information architecture
 
-### Blocchi di fiducia
+### Principio guida
 
-- form contatti oggi non invia nulla, mostra solo successo locale
-- newsletter oggi non iscrive davvero nessuno e invia solo un evento analytics
-- media kit salva il lead ma scarica un PDF che non esiste
-- alcuni testi hanno encoding rotto
-- varie metriche e testimonial sono placeholder o troppo generici
+La nuova IA deve rispondere a tre soli job-to-be-done:
 
-### Blocchi di coerenza
+1. **Esplora**: dove andare e cosa vale davvero
+2. **Pianifica**: come organizzare il viaggio
+3. **Collabora**: come lavorare con Travelliniwithus
 
-- navbar, ricerca, pagine articolo, shop e regole Firestore non parlano lo stesso modello dati
-- il modello articolo e` frammentato tra editor admin, frontend e seed locali
-- alcuni percorsi di navigazione portano a pagine vuote o non ancora chiuse
+### Top navigation raccomandata
 
-## Priorita` Prima Del Lancio
+- `Esplora`
+- `Guide`
+- `Pianifica`
+- `Collaborazioni`
+- `Chi siamo`
 
-### Fase 1: Stabilita` e verita`
+`Shop` non entra come voce primaria finche non ha almeno 3 prodotti reali forti.
 
-Obiettivo:
+### Route map target
 
-- eliminare tutte le false promesse e tutte le rotture
+- `/`
+- `/destinazioni`
+- `/destinazioni/[paese]`
+- `/destinazioni/[paese]/[area-o-luogo]`
+- `/guide`
+- `/guide/[slug]`
+- `/itinerari`
+- `/itinerari/[slug]`
+- `/dove-dormire`
+- `/dove-dormire/[slug]`
+- `/risorse`
+- `/inizia-da-qui`
+- `/collaborazioni`
+- `/media-kit`
+- `/chi-siamo`
+- `/shop`
+- `/shop/[slug]`
 
-Da fare:
+### Regole IA
 
-- correggere routing shop e product detail
-- correggere articolo runtime
-- attivare davvero contatti o sostituirli con flusso reale semplice
-- attivare davvero newsletter oppure rimuovere la promessa download
-- caricare media kit reale o togliere la pagina fino a disponibilita`
-- sistemare testi con encoding rotto
-- chiudere accesso admin
-- rimuovere numeri, recensioni o offerte non verificabili
+- una route, un lavoro chiaro
+- niente route "contenitore" senza densita
+- niente tassonomia che mescola geografia, formato e intento nello stesso livello
+- i country hubs devono vivere sotto `destinazioni`, non come mini-sito parallelo
 
-### Fase 2: Focus e struttura
+## New content model
 
-Obiettivo:
+### Tipi contenuto core
 
-- far capire in 10 secondi chi siete, a chi servite e cosa offrirete
+- `pillar`
+- `guide`
+- `itinerary`
+- `hotel`
+- `resource`
+- `product`
+- `case-study`
+- `testimonial`
+- `page`
 
-Da fare:
+### Campi obbligatori per contenuti editoriali pubblicabili
 
-- riscrivere home con una sola promessa forte
-- dare a ogni pagina una CTA primaria
-- chiarire la gerarchia tra magazine, risorse, shop e collaborazioni
-- ridurre la dispersione nel menu
-- legare ogni sezione a un funnel reale
+- titolo
+- slug
+- tipo contenuto
+- promessa/meta description
+- hero image reale o approvata
+- `verifiedAt`
+- disclosure
+- destination/country/region coerenti
+- struttura minima del template
+- CTA primaria unica
+- related content coerente
 
-### Fase 3: Monetizzazione e autorevolezza
+### Governance
 
-Obiettivo:
+- nessun publish senza superare quality gate
+- i contenuti preview devono restare chiaramente distinti
+- i pillar devono essere pochi e migliori del resto
+- i contenuti commerciali non possono avere una qualita inferiore ai contenuti editoriali
 
-- trasformare attenzione e fiducia in asset di business ripetibili
+## New page system and templates
 
-Da fare:
+### 1. Homepage
 
-- prodotti digitali veri
-- risorse affiliate curate e contestualizzate
-- media kit professionale
-- case study collaborazioni
-- lead magnet reale
-- newsletter con sequenza minima
+Funzione: portale editoriale.
 
-## Struttura Sito Consigliata
+Deve fare solo questo:
 
-### Home
+- chiarire il posizionamento
+- far partire esplorazione e planning
+- mostrare il metodo
+- aprire il funnel B2B senza rubare la scena
 
-Ruolo:
+### 2. Destination hub
 
-- definire chi siete
-- mostrare cosa rende unico il brand
-- indirizzare il traffico verso i tre assi principali
+Funzione: pagina madre per un paese o macro-area.
 
-Tre assi consigliati:
+Blocchi minimi:
 
-- scopri posti particolari
-- organizza meglio il tuo viaggio
-- lavora con noi
+- hero con promessa del territorio
+- sub-destinations curate
+- best guides
+- planning essentials
+- dove dormire
+- related food/experience
 
-CTA primarie:
+### 3. Pillar guide
 
-- esplora i posti
-- scopri le guide
-- collabora con noi
+Funzione: pagina definitiva su un tema forte.
 
-### Destinazioni
+Blocchi minimi:
 
-Ruolo:
+- intro decisionale
+- TOC
+- highlights
+- logistica
+- dormire
+- budget
+- periodo migliore
+- related map / risorse / prodotti
 
-- archivio discovery per area geografica
+### 4. Standard guide / itinerary
 
-Deve contenere:
+Funzione: articolo pratico a profondita media.
 
-- localita`
-- mappe
-- filtri veri
-- hook utili
-- collegamenti a guide, hotel, esperienze e articoli
+Principio: meno "blog post", piu "pagina utile".
 
-### Esperienze
+### 5. Planning pages
 
-Ruolo:
+`Dove dormire`, `Risorse`, `Inizia da qui` devono essere pagine di sistema, non riempitivi.
 
-- pagina ad alto potenziale shareable
+### 6. B2B pages
 
-Tema:
+`Collaborazioni` e `Media Kit` devono mantenere un tono piu sobrio e piu premium del resto del mercato creator.
 
-- posti insoliti
-- locali curiosi
-- esperienze romantiche
-- uscite brevi ma forti
+## New feature system
 
-### Guide
+### Core
 
-Ruolo:
+- ricerca e filtri editoriali
+- related content forte
+- trust/disclosure layer
+- newsletter contestuale
+- affiliate modules contestuali
+- products integrati solo quando coerenti
 
-- contenuto evergreen ad alto trust
+### Secondary
 
-Deve essere:
+- preferiti
+- community/social widgets
+- mappe avanzate
 
-- piu` pratico di Destinazioni
-- meno frammentato
-- pensato per traffico organico e salvataggi
+Regola: se una feature non aumenta decisione, fiducia o conversione, non e core.
 
-### Risorse
+## Design and UX direction
 
-Ruolo:
+### Direzione
 
-- pagina utility/affiliate
+Premium editoriale mediterraneo. Non lusso finto, non creator-template, non SaaS travestito.
 
-Non deve sembrare:
+### Regole visive
 
-- un muro di link
+- hero sobrie ma forti
+- typography con contrasto chiaro tra titoli e corpo
+- spacing generoso, non molle
+- cards disciplinate
+- immagini reali e con peso gerarchico
+- CTA poche, chiare, distribuite per ruolo
 
-Deve sembrare:
+### Da evitare
 
-- una cassetta degli attrezzi approvata da voi
+- blocchi ripetuti
+- numeri decorativi
+- badge superflui
+- widget social invadenti
+- layout che sembrano demo
 
-Struttura consigliata:
+## Technology recommendation
 
-- pianificazione
-- assicurazione
-- prenotazioni
-- tech e creator gear
-- travel essentials
+### Raccomandazione
 
-### Shop
+**Restare su React + TypeScript + Vite + Firebase/Firestore + Stripe** per il rebuild.
 
-Ruolo:
+### Motivo
 
-- piccola boutique digitale
+Il limite oggi non e lo stack. Il limite e la disciplina di prodotto.
 
-Non deve diventare:
+Cambiare stack ora produrrebbe:
 
-- e-commerce dispersivo
+- costo alto
+- rischio alto
+- ritardo sul lavoro davvero importante
 
-Deve contenere solo prodotti coerenti con il brand:
+### Cambi richiesti senza replatform
 
-- planner
-- guide geografiche
-- mappe curate
-- mini itinerari
-- bundle tematici
+- consolidare content layer e route schema
+- ridurre complessita dei template
+- separare meglio public model e admin model
+- modularizzare progressivamente il server
+- valutare SSR o pre-render solo se l'audit SEO successivo lo rende necessario
 
-### Collaborazioni
+## Non-negotiables
 
-Ruolo:
+1. Ogni route deve avere un ruolo unico.
+2. Nessun contenuto debole deve andare live solo per riempire il sito.
+3. Nessuna monetizzazione deve rompere la lettura.
+4. Il brand deve sembrare una publication premium, non un blog con plugin.
+5. Le immagini reali restano il target; gli asset temporanei sono debito, non verita finale.
+6. `Collaborazioni` e `Media Kit` devono parlare con lo stesso livello di qualita del lato editoriale.
 
-- pagina commerciale principale B2B
+## Kill list
 
-Deve rispondere subito a:
+- route e cluster semanticamente sovrapposti
+- pagine con tassonomia poco difendibile
+- CTA concorrenti nella stessa sezione
+- blocchi "social proof" senza prova forte
+- sezioni shop troppo visibili prima che il catalogo sia maturo
+- food o experience hubs standalone se non raggiungono massa critica
 
-- chi siete
-- che audience avete
-- che contenuti fate
-- per chi siete giusti
-- che risultati potete generare
-- come si avvia una collaborazione
+## Quick wins
 
-Da aggiungere in futuro:
+1. Bloccare la nuova IA e la mappa route definitiva.
+2. Portare i country hubs dentro la gerarchia `destinazioni`.
+3. Unificare il page system in 4 template forti.
+4. Demotare o nascondere tutte le superfici non ancora mature.
+5. Rendere `Inizia da qui` il vero ingresso planning.
+6. Alzare il publish gate per articoli, hotel e risorse.
 
-- casi studio
-- risultati misurabili
-- form business breve
-- FAQ per brand e hospitality
+## Launch model
 
-### Media Kit
+### Modello raccomandato
 
-Ruolo:
+Lancio **ampio ma curato**, non totale indiscriminato.
 
-- asset reale, non promessa
+### Struttura lancio
 
-Contenuto minimo:
+- homepage definitiva
+- destinazioni e 3 country hubs forti
+- guide archive con pillar + standard guides
+- `Inizia da qui`
+- `Dove dormire`
+- `Risorse`
+- `Collaborazioni` + `Media Kit`
+- shop aperto solo se il catalogo reale regge il livello
 
-- bio breve
-- dati audience
-- canali
-- servizi
-- esempi contenuti
-- brand gia` coinvolti
-- contatti business
+### Regola finale
 
-### Contatti
+Meglio un sito che sembra gia il migliore nel 70% delle superfici, che un sito pieno ma disomogeneo nel 100%.
 
-Ruolo:
+## Link operativi
 
-- conversione semplice
-
-Regola:
-
-- meno forma, piu` sostanza
-
-Se il form non e` operativo:
-
-- meglio email/WhatsApp veri e chiari
-
-### Chi Siamo
-
-Ruolo:
-
-- costruire fiducia
-
-Deve spiegare:
-
-- chi siete
-- cosa vi muove
-- che tipo di viaggi raccontate
-- cosa rende affidabili i vostri consigli
-
-## Funnel Consigliato
-
-### Funnel B2C
-
-1. contenuto social o ricerca
-2. pagina sito utile
-3. salvataggio o iscrizione
-4. click affiliate o acquisto prodotto
-5. ritorno tramite newsletter o social
-
-### Funnel B2B
-
-1. scoperta tramite contenuti o passaparola
-2. pagina Collaborazioni
-3. prova e metriche
-4. media kit o contatto diretto
-5. call
-
-## Offerta Consigliata
-
-### Oggi
-
-Concentrati su:
-
-- collaborazioni brand e hospitality
-- affiliate travel coerenti
-- uno o pochi prodotti digitali davvero pronti
-
-### Domani
-
-Poi espandi verso:
-
-- guide premium regionali
-- mappe curate
-- newsletter premium o club
-- itinerari personalizzati solo se processabili bene
-- viaggi di gruppo solo se diventa un ramo operativo vero
-
-## Strategia Contenuti
-
-La regola editoriale piu` importante deve essere questa:
-
-- ogni contenuto deve avere una componente `wow` e una componente `utile`
-
-Formato ideale:
-
-- hook forte
-- prova visiva
-- consiglio pratico
-- selezione personale
-- call to action naturale
-
-Contenuti da privilegiare:
-
-- posti che non ci si aspetta
-- luoghi belli ma vivibili
-- locali insoliti
-- mini guide da salvare
-- weekend e gite
-- raccolte curate per zona o tema
-
-Contenuti da evitare:
-
-- guide generiche gia` viste
-- articoli troppo ampi
-- liste senza angolo
-- pagine solo decorative
-
-## Modello Dati Da Unificare
-
-Il progetto deve arrivare a un solo modello coerente per:
-
-- articoli
-- destinazioni
-- prodotti
-- risorse
-- statistiche brand
-
-Oggi il sistema e` frammentato.
-
-Il traguardo corretto e`:
-
-- stesso schema tra admin, frontend, ricerca, SEO e regole Firestore
-
-## KPI Da Misurare
-
-### KPI consumer
-
-- click outbound affiliati
-- iscrizioni newsletter reali
-- salvataggi e traffico verso guide e shop
-- conversione prodotto digitale
-
-### KPI B2B
-
-- richieste commerciali qualificate
-- download media kit reali
-- call prenotate
-- chiusure collaborazione
-
-### KPI brand
-
-- pagine piu` utili
-- temi piu` salvati
-- territori o format che generano piu` interesse
-
-## Principi Non Negoziabili
-
-- meglio meno, ma vero
-- meglio un funnel semplice che cinque funnel finti
-- meglio una categoria chiara che completezza apparente
-- meglio prova reale che linguaggio premium
-- meglio utilita` alta che estetica vuota
-
-## Ordine Di Esecuzione Consigliato
-
-1. correggere i blocchi tecnici reali
-2. semplificare il messaggio di home e nav
-3. rendere veri i funnel di contatto, newsletter e media kit
-4. chiudere il sistema prodotto e contenuti
-5. aggiungere proof e credibilita` B2B
-6. solo dopo spingere crescita, SEO e performance avanzata
-
-## Decisione Finale
-
-Se l'obiettivo e` diventare il migliore in modo utile alle persone, la risposta non e` fare tutto.
-
-La risposta e`:
-
-- diventare il piu` riconoscibile e affidabile nel far scoprire luoghi ed esperienze memorabili
-- e poi costruire sopra questa reputazione prodotti, risorse e collaborazioni coerenti
-
-Travelliniwithus vince se riesce a sembrare allo stesso tempo:
-
-- bello
-- vero
-- utile
-- scelto con gusto
-
-Non deve essere il sito di viaggio piu` grande.
-Deve essere uno di quelli di cui ci si fida di piu`.
+- [[TRAVELLINIWITHUS_EXECUTION_PLAN]]
+- [[10_Projects/PROJECT_SITE_REBUILD_AUTHORITY_PREMIUM]]
+- [[87_References/COMPETITIVE_ANALYSIS_TRAVEL_INFLUENCER_SITES]]
+- [[10_Projects/PROJECT_TRAVELLINIWITHUS_SITE]]

@@ -23,6 +23,34 @@ Keep every AI assistant aligned on the same local operating system for TRAVELLIN
 - External skills are reference material only until reviewed and adapted locally.
 - `DESIGN.md` is the design-system prompt source for Stitch, Figma, agents, and code reviews.
 
+## Alignment model
+
+The stack has two layers and they are not equivalent:
+
+- Shared layer: `AGENTS.md`, `CLAUDE.md`, `DESIGN.md`, `docs/`, canonical `travellini-*` skills in `.agents/skills`, repo commands, and project notes.
+- Claude-only runtime layer: `.claude/settings.json`, `.claude/settings.local.json`, `.claude/skills/` helper workflows, and `.claude/agents`.
+
+Rule: if a behavior must apply across Codex, Claude Code, Cursor, Gemini, GitHub, or future assistants, it must be expressed in the shared layer. If it exists only in `.claude/settings*.json`, it is a Claude convenience, not shared truth.
+
+## Shared vs Claude-only
+
+Shared across tools:
+
+- `travellini-*` skills in `.agents/skills`
+- brand, docs, design system, release and marketing notes
+- quality gates and repo commands
+- high-risk file list
+- update-the-docs discipline for homepage, nav, collaborations, release, campaigns, and bugs
+
+Claude-only by design:
+
+- slash-style workflow helpers in `.claude/skills/` such as `small-fix`, `audit-browser`, `predeploy`, `seo-check`, `commit`, `deploy`
+- Claude project agents under `.claude/agents`
+- hook-based runtime warnings and command blocks in `.claude/settings.json`
+- local permission allowances in `.claude/settings.local.json`
+
+Do not try to mirror `.claude/settings.local.json` into shared repo policy. It is workstation-specific and may contain personal or temporary allowances.
+
 ## Commands
 
 ```bash
@@ -61,6 +89,16 @@ Do not install a whole upstream catalog into this repo. Copy, reduce, attribute,
 - `travellini-frontend-builder`: implementation agent for React/Tailwind work.
 - `travellini-quality-auditor`: read-only quality and release review.
 - `travellini-seo-conversion-strategist`: SEO, content architecture, conversion and marketing alignment.
+
+## Portable runtime rules
+
+The following Claude runtime behaviors are important enough that they should be treated as shared policy:
+
+- Before-action routing check: search/orientation first, smallest edit path second, heavier multi-file work only when justified.
+- Dangerous command guardrails: no destructive cleanup, force-push, hard reset, or production deploy behavior without explicit owner confirmation.
+- High-risk file warnings: `server.ts`, `firestore.rules`, and `src/config/admin.ts`.
+
+These are mirrored into `AGENTS.md` so non-Claude assistants can follow the same intent even without Claude hook support.
 
 ## Operating Rules
 

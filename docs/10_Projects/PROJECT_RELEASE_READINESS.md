@@ -21,10 +21,10 @@ Tenere sotto controllo cio che manca per una release pulita e verificabile della
 
 ## Checklist
 
-- [ ] verificare home e hero
-- [ ] verificare destinazioni
-- [ ] verificare navbar e navigazione
-- [ ] verificare contenuti, funnel e shop
+- [x] verificare home e hero
+- [x] verificare destinazioni
+- [x] verificare navbar e navigazione
+- [x] verificare contenuti, funnel e shop
 - [ ] verificare build e smoke test
 
 ## Snapshot fase A
@@ -149,10 +149,10 @@ Audit completo repo + workspace locale con focus su quality gates, automazioni e
 
 ### Follow-up aperti (priorità decrescente)
 
-- [ ] Chiudere migrazione admin a Firebase Custom Claims e rimuovere la allowlist client hardcoded in `src/config/admin.ts`.
-- [ ] Unificare bootstrap Firebase: scegliere una sola fonte di verità tra `firebase-applet-config.json` (oggi usato) e env vars `VITE_FIREBASE_*` (documentate in vari posti).
-- [ ] Convergere analytics su un solo loader consent-gated (`AnalyticsScripts` vs `initAnalytics()` convivono).
-- [ ] Auth check sugli endpoint `/api/ai/*` (oggi solo rate limit 5/min protegge la quota Gemini).
+- [x] Chiudere migrazione admin a Firebase Custom Claims e rimuovere la allowlist client hardcoded in `src/config/admin.ts`.
+- [x] Unificare bootstrap Firebase: scelto `firebase-applet-config.json` come unica fonte di verità per client e server.
+- [x] Convergere analytics su un solo loader consent-gated: rimosso l'init legacy da `firebase.ts`, tutto centralizzato su `services/analytics.ts`.
+- [x] Auth check sugli endpoint `/api/ai/*` (risolto tramite middleware `requireAdmin` con Custom Claims in server.ts).
 - [ ] Piano "strict by slice" per TypeScript: lontano dall'adozione con >100 errori strict oggi.
 - [ ] Modularizzazione `server.ts` (1586 righe) quando si aprirà un task backend dedicato.
 
@@ -174,17 +174,17 @@ Adozione progressiva di strict TS come audit continuo, senza rendere `typecheck:
 
 ### Slice roadmap (ordine di riduzione errori, facile → difficile)
 
-| Slice | Area | Rationale | Effort stimato |
-|---|---|---|---|
-| **S1** | `src/utils/` | Funzioni pure, basso blast-radius, isolate | 1 sessione |
-| **S2** | `src/hooks/` | Custom hooks: pattern prevedibili, fix mirati | 1 sessione |
-| **S3** | `src/lib/` | Helper condivisi (animations, consent, stripe, firestore error handler) | 1 sessione |
-| **S4** | `src/services/` | Service layer (analytics, aiVerificationService, ecc.) | 1-2 sessioni |
-| **S5** | `src/context/` | Context React (Auth, Cart, Favorites, Consent) | 1-2 sessioni |
-| **S6** | `src/components/` atoms | Componenti UI riusabili (Button, Card, Skeleton, ecc.) | 2 sessioni |
-| **S7** | `src/components/` sezioni | Feature folder (home, destinazioni, discovery, article, ecc.) | 3-4 sessioni |
-| **S8** | `src/pages/` | Top-level pages | 2-3 sessioni |
-| **S9** | `server.ts` | Dopo modularizzazione server.ts (non prima) | 2 sessioni |
+| Slice  | Area                      | Rationale                                                               | Effort stimato |
+| ------ | ------------------------- | ----------------------------------------------------------------------- | -------------- |
+| **S1** | `src/utils/`              | Funzioni pure, basso blast-radius, isolate                              | 1 sessione     |
+| **S2** | `src/hooks/`              | Custom hooks: pattern prevedibili, fix mirati                           | 1 sessione     |
+| **S3** | `src/lib/`                | Helper condivisi (animations, consent, stripe, firestore error handler) | 1 sessione     |
+| **S4** | `src/services/`           | Service layer (analytics, aiVerificationService, ecc.)                  | 1-2 sessioni   |
+| **S5** | `src/context/`            | Context React (Auth, Cart, Favorites, Consent)                          | 1-2 sessioni   |
+| **S6** | `src/components/` atoms   | Componenti UI riusabili (Button, Card, Skeleton, ecc.)                  | 2 sessioni     |
+| **S7** | `src/components/` sezioni | Feature folder (home, destinazioni, discovery, article, ecc.)           | 3-4 sessioni   |
+| **S8** | `src/pages/`              | Top-level pages                                                         | 2-3 sessioni   |
+| **S9** | `server.ts`               | Dopo modularizzazione server.ts (non prima)                             | 2 sessioni     |
 
 ### Regole per ogni slice
 
@@ -209,3 +209,75 @@ Quando S1-S8 completati: valutare se portare `strict` dentro `tsconfig.json` bas
 - [[20_Decisions/DECISION_ADMIN_CUSTOM_CLAIMS]]
 - [[20_Decisions/DECISION_ERROR_TRACKING_STRATEGY]]
 - [[13_Content/EDITORIAL_PUBLISH_CHECKLIST]]
+
+## Build pass 2026-04-24 - planning IA + hotel detail layer
+
+### Completato
+
+- [x] `npm run typecheck` pulito dopo fix `ArticleEditor` su `shopCta.productUrl`.
+- [x] `npm run lint` pulito.
+- [x] `npm run build` pulito.
+- [x] Navbar e footer riallineati al modello `Esplora / Guide / Pianifica / Collaborazioni / Chi siamo`.
+- [x] `siteContent` esteso con il nuovo layer `planning` e label dedicate per nav/footer.
+- [x] `Inizia da qui` aggiornata come ingresso del funnel `Pianifica`.
+- [x] Introdotta la route pubblica `/dove-dormire/:slug` con scheda hotel dedicata.
+- [x] Introdotto il content model hotel (`HotelEntry`) con fallback locale e service Firestore `hotels`.
+- [x] Sitemap estesa al nuovo layer hotel detail.
+- [x] `audit:ui` migliorato: i `NEW-WARN` scendono a 5 e restano solo inline style residui su discovery/home.
+
+### Ancora aperto
+
+- [ ] Verifica roundtrip reale Firestore per `leads`, `newsletter` e `media-kit`.
+- [ ] Popolare la collection Firestore `hotels` con asset e copy reali.
+- [ ] Chiudere o approvare i 5 `NEW-WARN` residui di `audit:ui`.
+- [ ] Risolvere il warning CSS storico in build legato a una utility CSS var placeholder malformata.
+
+## Build pass 2026-04-22 - content model and public funnel
+
+### Completato
+
+- [x] Estensione non-breaking del content model articoli: `tripIntents`, `budgetBand`, `verifiedAt`, `disclosureType`, `featuredPlacement`.
+- [x] `ArticleEditor` aggiornato per leggere/salvare i nuovi campi.
+- [x] Validazione publish aggiornata: `disclosureType` e `verifiedAt` ora sono richiesti in fase di pubblicazione; `budgetBand` e `tripIntents` restano warning.
+- [x] `siteContent.collaborations` esteso con copy admin-driven per `positioning`, `fit` e `no-fit`.
+- [x] Footer allineato allo `Shop gate`: niente promo shop in navigazione finche non ci sono almeno 3 prodotti reali pubblicati.
+- [x] `/shop` resta accessibile ma va in stato editoriale "in apertura" quando il gate e chiuso.
+- [x] `typecheck`, `build`, `audit:ui` eseguiti con esito positivo.
+
+### Ancora aperto
+
+- [x] Verificare in browser il nuovo pass su `Home`, `ChiSiamo`, `Collaborazioni`, `Risorse` e `Shop`.
+- [ ] Aggiornare i contenuti demo/editoriali in Firestore usando i nuovi campi, cosi il layer `featuredPlacement` e i badge trust si vedono anche fuori dai fallback locali.
+- [x] Confermare il warning CSS Tailwind storico relativo a una utility CSS var placeholder malformata (risolto con refactoring utility standard in CartDrawer.tsx).
+
+## Build pass 2026-04-23 — Salt-style premium layer + pillar infrastructure
+
+### Completato
+
+- [x] Articolo premium Salt-style: integrati in `src/pages/Articolo.tsx` i 4 componenti `AffiliateBar`, `HotelRecommendations`, `PinterestSaveBanner`, `ShopContextualCta` con rendering condizionale sui campi `hotels` / `shopCta`.
+- [x] Fix encoding `Shop.tsx:278` ("finchÃ©" → "finché").
+- [x] Sample preview Dolomiti in `src/config/previewContent.ts` con `hotels[]` + `shopCta`: testabile in dev su `/articolo/dolomiti-rifugi-design`.
+- [x] Homepage ri-orchestrata a portale: `DestinationScroller` montato, nuovi `InstagramFeed` (fixture in dev) e `PartnerLogos` (prop-driven) inseriti prima della newsletter.
+- [x] Nuova route `/dove-dormire`: hub affiliate curato con 12 hotel su 4 destinazioni, schema `CollectionPage` + `ItemList` + `LodgingBusiness`, breadcrumb JSON-LD, tracking Booking via `prepareAffiliateLink`.
+- [x] Link `/dove-dormire` in Navbar (gruppo Guide) e Footer (blocco Scopri). Generator sitemap aggiornato.
+- [x] Collaborazioni B2B: `PartnerLogos` montato con lista dedicata (`PARTNER_SHOWCASE`). Componenti `Testimonials` e `CaseStudies` creati come riusabili, auto-render condizionale su `siteContent.collaborations.testimonials/caseStudies` quando popolati.
+- [x] Pillar infrastructure (M5): nuovi `ArticleType = 'article' | 'pillar'`, `NormalizedArticle.type` con default `'article'`, validator pillar-aware (min 1500 parole, 5 heading, hotels e shopCta consigliati), badge visuale "Guida completa" in `ArticleHero`, pill "Pillar" in `AdminDashboard` articles list.
+- [x] Admin editor (`src/pages/admin/ArticleEditor.tsx`): UI completa per `type` (select), `hotels[]` (array editor add/remove con 7 campi per hotel), `shopCta` (sotto-form 3 colonne). Load/save Firestore + validator pass con `type`.
+- [x] Breadcrumbs UI+JSON-LD su `ChiSiamo` e `Destinazioni` (prima erano solo testuali nel schema).
+- [x] A11y pass su `InstagramFeed` + `PartnerLogos`: `role="list"/"listitem"`, `aria-label` su grid partner.
+- [x] Documentazione: nuovo `TPL_Pillar_Guide.md` in templates, nuovo `PROJECT_DOVE_DORMIRE.md`, pass aggiornamento `PROJECT_HOME_HERO_NAV_REFINEMENT.md`.
+- [x] Gates passati: `typecheck`, `audit:ui` (0 errori, 4 warning advisory inline-style giustificati), `build` (70 precache entries).
+
+### Ancora aperto pre-deploy
+
+- [ ] Popolare almeno 1 articolo Firestore con `type='pillar'`, `hotels[]` reali, `shopCta` reale — per validare end-to-end in prod.
+- [ ] Popolare `siteContent.collaborations.testimonials[]` e `caseStudies[]` quando quote/progetti reali sono pronti (le sezioni appariranno automatiche).
+- [ ] Design review dedicato (M2 del piano `facciamo-un-piano-prendendo-groovy-harp.md`): decisione owner su palette / tipografia / token.
+- [ ] Contenuti pillar italiani (Sardegna, Puglia, Grecia delle isole) — work di content strategist.
+- [ ] Primi 3 prodotti shop reali: Google Maps locations + 1 ebook + 1 preset Lightroom (richiede Stripe live keys).
+- [ ] Instagram Graph API live + Stripe live keys + release hardening finale (M8).
+
+### Note
+
+- Tutti i componenti nuovi sono **non-breaking**: articoli e pagine esistenti che non espongono i nuovi campi continuano a funzionare esattamente come prima.
+- Restyle visivo (M2) **non eseguito** in questa build pass — il design system (palette, tipografia, spacing) resta invariato per preservare coerenza con foto brand già in hero.

@@ -1,273 +1,269 @@
-# Travelliniwithus Execution Plan
+---
+type: project
+area: product
+status: open
+priority: p0
+owner: team
+repo: TRAVELLINIWITHUS
+route: site-wide
+related: '[[TRAVELLINIWITHUS_MASTER_PLAN]]'
+source: master rebuild mandate
+tags:
+  - project
+  - execution
+  - rebuild
+  - premium
+---
 
-Last updated: 2026-03-18
-Goal: turn the current local codebase into a publishable, credible, focused, high-conversion version of Travelliniwithus.
+# TRAVELLINIWITHUS EXECUTION PLAN
 
-## Obiettivo
+## Objective
 
-Migliorare il progetto in questo ordine:
+Tradurre il `MASTER_PLAN` in una sequenza di implementazione concreta, con dipendenze chiare, criteri di accettazione e una matrice severa di keep / merge / replace / delete.
 
-1. renderlo vero e affidabile
-2. renderlo chiaro e focalizzato
-3. renderlo utile e convertente
-4. renderlo scalabile
+## Phase 0 — Freeze e audit operativo
 
-## Priorita' Assolute
+### Obiettivo
 
-Prima di qualsiasi rifinitura estetica o SEO avanzata, il sito deve:
+Congelare la logica del rebuild prima di introdurre altre superfici non governate.
 
-- non rompersi
-- non promettere cose finte
-- non avere link incoerenti
-- non mostrare placeholder evidenti
-- far capire subito chi siete e cosa offrite
+### Deliverable
 
-## Fase 1: Bloccanti Tecnici
+- inventory definitiva delle route pubbliche
+- inventory dei template reali e dei pseudo-template
+- scoring delle pagine principali
+- lista debito asset e lista contenuti demo
+- mappa tassonomie attuali contro tassonomie target
 
-Obiettivo:
+### Exit criteria
 
-- eliminare i problemi che oggi impediscono un lancio serio
+- nessuna ambiguita su quali superfici sopravvivono
+- keep / merge / replace / delete approvata
 
-Da fare:
+## Phase 1 — Information architecture e route system
 
-- correggere il routing prodotti
-- trasformare `shop/senza-confini-planner` in un sistema coerente con `shop/:slug`
-- sistemare `ProductPage` per il prodotto hero e per i prodotti Firestore
-- correggere la ricerca, che oggi manda gli articoli a `/articolo/{doc.id}` e i prodotti a `/shop`
-- chiudere l'accesso admin solo agli utenti autorizzati
-- sistemare la pagina articolo e gli errori runtime
-- correggere i testi con encoding rotto
+### Obiettivo
 
-Esito atteso:
+Bloccare la struttura informativa prima di rifinire il design.
 
-- tutte le pagine principali apribili
-- nessun CTA importante che porta a errore
-- area admin non esposta in modo improprio
+### Lavoro
 
-## Fase 2: Verita' Dei Funnel
+- definire la route map finale
+- spostare i country hub sotto `destinazioni`
+- decidere le canonical route per guide, itinerari, hotel e risorse
+- declassare o accorpare le superfici ridondanti
 
-Obiettivo:
+### Decisioni operative
 
-- sostituire i funnel simulati con funnel reali
+- `articolo/:slug` non e l'end-state ideale
+- `destinazioni`, `guide`, `itinerari`, `dove-dormire`, `inizia-da-qui`, `risorse` devono avere confini espliciti
+- niente nuove route finche non esiste il template target
 
-Da fare:
+### Exit criteria
 
-- rendere operativo il form contatti
-- collegare la newsletter a un sistema reale oppure rimuovere la promessa di iscrizione
-- sostituire il lead magnet con un file reale oppure togliere la CTA
-- caricare un media kit vero oppure disattivare temporaneamente la pagina
-- rivedere tutti i pulsanti che oggi sembrano “funzionanti” ma non producono niente
+- sitemap target definita
+- redirect map bozza pronta
+- nav finale approvata
 
-Esito atteso:
+## Phase 2 — Content model e governance editoriale
 
-- ogni conversione principale produce un risultato reale
-- il sito non finge processi non ancora pronti
+### Obiettivo
 
-## Fase 3: Messa A Fuoco Del Brand
+Trasformare il CMS da archivio flessibile a sistema editoriale governato.
 
-Obiettivo:
+### Lavoro
 
-- far capire in pochi secondi cosa rende unico Travelliniwithus
+- introdurre i tipi contenuto target
+- allineare i campi admin ai template pubblici
+- rafforzare le validazioni publish
+- definire i requisiti minimi per `pillar`, `guide`, `hotel`, `resource`
+- introdurre criteri di readiness per asset, trust e disclosure
 
-Da fare:
+### Exit criteria
 
-- riscrivere hero e messaggio chiave della home
-- allineare `Home`, `Chi Siamo`, `Collaborazioni`, `Risorse` e `Shop` allo stesso posizionamento
-- togliere linguaggio troppo ampio, astratto o “premium vuoto”
-- far emergere meglio:
-  - posti particolari
-  - esperienze memorabili
-  - informazioni utili
-  - prospettiva autentica di coppia
+- ogni tipo contenuto ha schema, scopo e template associato
+- nessun contenuto pubblicabile senza campi critici
 
-Esito atteso:
+## Phase 3 — Design system hardening
 
-- brand piu' riconoscibile
-- meno dispersione tra lato editoriale, affiliate e B2B
+### Obiettivo
 
-## Fase 4: Struttura E Navigazione
+Passare da una direzione premium "promettente" a un sistema coerente e riusabile.
 
-Obiettivo:
+### Lavoro
 
-- semplificare il sistema e farlo lavorare come ecosistema
+- congelare palette, tipografia, card system, CTA system, spacing rhythm
+- definire 4-6 blocchi editoriali core
+- definire 3-4 blocchi planning core
+- definire 2-3 blocchi B2B core
+- ridurre varianti inutili
 
-Da fare:
+### Exit criteria
 
-- ridurre il menu alle aree davvero utili
-- far combaciare navbar, pagine, filtri e query params
-- dare a ogni pagina una CTA primaria
-- collegare meglio:
-  - contenuti
-  - risorse
-  - shop
-  - collaborazioni
-- trasformare la ricerca in uno strumento davvero utile
+- homepage, hub, guide e B2B usano lo stesso linguaggio
+- niente componenti premium solo in una pagina isolata
 
-Esito atteso:
+## Phase 4 — Page system rebuild
 
-- navigazione piu' comprensibile
-- meno rimbalzi
-- piu' passaggi naturali tra contenuti e conversione
+### Priorita
 
-## Fase 5: Contenuti E Dati
+1. Homepage
+2. Destination hub
+3. Pillar guide
+4. Standard guide / itinerary
+5. Planning pages
+6. Collaborazioni / Media Kit
 
-Obiettivo:
+### Regole
 
-- rendere il sito mantenibile e coerente
+- si ricostruisce per template, non per pagina casuale
+- ogni template va chiuso prima di passare al successivo
+- niente pagine "speciali" che bypassano il sistema
 
-Da fare:
+## Phase 5 — Funnel, monetizzazione e commercial clarity
 
-- unificare il modello dati di articoli, prodotti e tassonomie
-- allineare admin, frontend, ricerca e Firestore rules
-- decidere campi standard per:
-  - articoli
-  - guide
-  - prodotti
-  - destinazioni
-- eliminare doppioni tra contenuti hardcoded e contenuti da database
+### Obiettivo
 
-Esito atteso:
+Lineare il percorso discovery → planning → trust → monetizzazione / lead.
 
-- CMS piu' stabile
-- meno bug derivati da campi incoerenti
-- base pronta per crescita editoriale
+### Lavoro
 
-## Fase 6: Monetizzazione Intelligente
+- ridurre CTA concorrenti
+- chiarire il ruolo di newsletter
+- integrare meglio affiliate bar, hotel modules e shop CTA
+- mantenere `Collaborazioni` come funnel separato e premium
+- mostrare shop solo quando il catalogo lo merita
 
-Obiettivo:
+### Exit criteria
 
-- far guadagnare il brand senza farlo sembrare commerciale in modo cheap
+- ogni pagina ha una CTA primaria unica
+- il sito non sembra spingere troppe cose insieme
 
-Da fare:
+## Phase 6 — SEO migration e redirect strategy
 
-- ripulire la pagina `Risorse`
-- tenere solo affiliate coerenti e utili
-- trasformare lo shop in boutique digitale selettiva
-- definire 1-3 prodotti digitali veri
-- progettare funnel chiari per:
-  - affiliate
-  - prodotti digitali
-  - richieste B2B
+### Obiettivo
 
-Esito atteso:
+Cambiare architettura senza perdere controllo.
 
-- monetizzazione piu' coerente col brand
-- piu' trust
-- piu' conversione su cio' che conta davvero
+### Lavoro
 
-## Fase 7: Credibilita' B2B
+- definire canonical policy
+- riscrivere sitemap strategy
+- creare mapping old → new route
+- separare pagine pillar, hub e archive
+- verificare title/meta/schema per tipo contenuto
 
-Obiettivo:
+### Exit criteria
 
-- trasformare la pagina collaborazioni in una vera pagina commerciale
+- redirect map pronta
+- nessuna nuova route senza policy SEO
 
-Da fare:
+## Phase 7 — Asset, contenuto reale e launch hardening
 
-- sostituire metriche placeholder con dati reali
-- aggiungere case study o almeno esempi verificabili
-- chiarire i servizi davvero offerti
-- semplificare pacchetti e CTA
-- rendere il media kit uno strumento serio
+### Obiettivo
 
-Esito atteso:
+Chiudere il gap tra struttura premium e percezione reale.
 
-- richieste business piu' qualificate
-- percezione piu' professionale
+### Lavoro
 
-## Fase 8: SEO, Performance E Qualita'
+- sostituzione prioritaria asset deboli
+- selezione contenuti flagship
+- QA visuale umana
+- QA editoriale
+- QA mobile e commercial
 
-Obiettivo:
+### Exit criteria
 
-- consolidare il progetto dopo la pulizia strategica
+- il sito puo essere mostrato senza disclaimer impliciti
+- le superfici chiave non sembrano in preview
 
-Da fare:
+## Keep / Merge / Replace / Delete
 
-- sistemare head management e meta
-- risolvere gli errori TypeScript
-- rimettere in ordine i test
-- alleggerire i bundle piu' grandi
-- controllare sitemap, link interni e contenuti indicizzabili
+| Stato           | Oggetto                                                                  | Azione                                  |
+| --------------- | ------------------------------------------------------------------------ | --------------------------------------- |
+| Keep            | `Collaborazioni`, `Media Kit`, base admin/CMS, template articolo premium | tenere e rafforzare                     |
+| Keep            | newsletter condivisa, final CTA condivise, trust/disclosure layer        | tenere come pattern di sistema          |
+| Merge           | `Risorse` + `Inizia da qui`                                              | trasformare in funnel planning coerente |
+| Merge           | country hubs sparsi                                                      | portarli sotto `destinazioni`           |
+| Replace         | homepage attuale                                                         | rifare attorno a IA definitiva          |
+| Replace         | nav attuale                                                              | rifare dopo blocco route map            |
+| Replace         | logica `articolo/:slug` come contenitore universale                      | migrare verso URL e template per tipo   |
+| Delete / demote | superfici con massa critica insufficiente                                | togliere dal percorso principale        |
+| Delete / demote | shop prominence senza catalogo forte                                     | nascondere o declassare                 |
+| Delete / demote | blocchi percepiti come demo, social fillers, CTA duplicate               | rimuovere                               |
 
-Esito atteso:
+## Rischi principali
 
-- base tecnica solida
-- miglior mantenibilita'
-- miglior rendimento organico nel tempo
+### 1. Rebuild senza gerarchia
 
-## Ordine Pratico Di Lavoro
+Rischio: migliorare singole pagine ma mantenere il caos del sistema.
 
-Ordine consigliato reale:
+Contromisura: bloccare IA e page system prima del restyle diffuso.
 
-1. fix tecnici bloccanti
-2. funnel reali
-3. copy e posizionamento
-4. navigazione e struttura
-5. modello dati e CMS
-6. monetizzazione
-7. credibilita' B2B
-8. SEO e performance
+### 2. Eccesso di ambizione sul perimetro
 
-## Quick Wins
+Rischio: provare a tenere tutte le superfici e abbassare la qualita media.
 
-Cose da fare subito per migliorare molto senza aspettare tutto:
+Contromisura: kill list obbligatoria e demotion delle aree immature.
 
-- sistemare route shop
-- togliere WhatsApp placeholder
-- togliere media kit fake se non esiste ancora
-- togliere download guide se il file non esiste
-- sistemare i titoli piu' importanti della home
-- correggere i testi con encoding rotto
-- chiudere admin
+### 3. Stack distraction
 
-## Piano Consigliato Di Esecuzione
+Rischio: spendere energia in migrazioni tecnologiche non necessarie.
 
-### Sprint 1
+Contromisura: replatform solo se emerge un limite concreto non risolvibile.
 
-Focus:
+## Acceptance criteria
 
-- Fase 1 + quick wins
+### IA
 
-Risultato:
+- ogni route ha uno scopo unico
+- nessuna duplicazione semantica tra archive, hub e planning pages
 
-- sito non rotto e piu' credibile
+### Contenuto
 
-### Sprint 2
+- ogni template ha campi minimi obbligatori
+- nessun publish debole
 
-Focus:
+### UX
 
-- Fase 2 + Fase 3
+- mobile-first
+- zero overflow
+- gerarchia leggibile
+- massimo controllo su CTA, card e sezioni ripetute
 
-Risultato:
+### Commercial
 
-- sito vero e con identita' piu' chiara
+- B2C, B2B, affiliate e shop non si disturbano
+- `Collaborazioni` e `Media Kit` restano premium
 
-### Sprint 3
+### SEO
 
-Focus:
+- sitemap chiara
+- canonical coerenti
+- redirect definiti
 
-- Fase 4 + Fase 5
+### Tech
 
-Risultato:
+- build e typecheck puliti
+- complessita ridotta, non aumentata
+- admin coerente col public model
 
-- struttura pulita e base dati piu' robusta
+## Recommended sequence for implementation
 
-### Sprint 4
+1. inventory + audit matrix
+2. route map finale
+3. content types + publish rules
+4. design system freeze
+5. homepage + nav
+6. destination hubs
+7. guide templates
+8. planning system
+9. B2B refinement
+10. SEO migration + redirects
+11. content fill + QA
 
-Focus:
+## Links
 
-- Fase 6 + Fase 7 + Fase 8
-
-Risultato:
-
-- progetto pronto per crescere, monetizzare e posizionarsi bene
-
-## Criterio Di Decisione
-
-Per ogni scelta futura, applicare questa domanda:
-
-- aumenta fiducia?
-- chiarisce il brand?
-- aiuta davvero l'utente?
-- sostiene un funnel reale?
-
-Se la risposta e` no, non e` prioritaria.
+- [[TRAVELLINIWITHUS_MASTER_PLAN]]
+- [[10_Projects/PROJECT_SITE_REBUILD_AUTHORITY_PREMIUM]]
+- [[10_Projects/PROJECT_RELEASE_READINESS]]

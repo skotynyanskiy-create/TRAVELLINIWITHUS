@@ -52,9 +52,9 @@ La homepage precedente aveva troppe sezioni, statistiche duplicate e tre voci di
 - [x] nascondere il carrello quando non ci sono item
 - [x] pass grafico senior: radius piu controllati, meno ombre, gerarchia editoriale piu netta
 - [x] pass clean/modern: rimossi controlli finti, CTA duplicate e testo non necessario
-- [ ] verificare composizione finale hero su desktop
-- [ ] verificare navbar desktop su viewport laptop e wide
-- [ ] verificare scroll orizzontale chip su mobile
+- [x] verificare composizione finale hero su desktop
+- [x] verificare navbar desktop su viewport laptop e wide
+- [x] verificare scroll orizzontale chip su mobile
 
 ## QA
 
@@ -172,3 +172,49 @@ Prossimi step: pagine interne (ChiSiamo, Collaborazioni, MediaKit, Contatti), fi
 - [[OBSIDIAN_DASHBOARD]]
 - [[TRAVELLINIWITHUS_EXECUTION_PLAN]]
 - [[AGENT_WORKFLOWS]]
+
+## Build pass 2026-04-22 - discovery + trust layer
+
+Implementazione riallineata al repo senza cambiare la nav V3:
+
+- `LatestArticles` ora privilegia `featuredPlacement = home-flagship` e mostra anche metadata decisionali (`tripIntents`, `budgetBand`, `verifiedAt`) quando disponibili.
+- Le foto brand reali di `ChiSiamo` e `Collaborazioni` passano dal registry `MEDIA`, cosi gli asset editoriali restano centralizzati.
+- `ChiSiamo` aggiunge due blocchi espliciti: `Come decidiamo dove andare` e `Cosa verifichiamo`, per spostare la fiducia dal tono al metodo.
+- `Risorse` rafforza la semantica "plan a trip" con card `Parti da qui` che collegano il toolkit a `Destinazioni`, `Esperienze` e `Guide`.
+- Home e discovery restano dentro la struttura V3 gia approvata; il nuovo layer premium arriva da metadati, selezione flagship e copy piu decisionale, non da nuove route.
+
+## Build pass 2026-04-23 - Salt-style premium layer
+
+Home ri-orchestrata da flusso lineare a portale di esplorazione, seguendo il reference saltinourhair.com adattato al tono italiano del brand.
+
+Ordine sezioni attuale:
+
+1. `HeroSection`
+2. `DestinationScroller` (montato — era untracked)
+3. `HomeDiscoveryCards`
+4. `CoupleIntro`
+5. `HomeMapTeaser`
+6. `LatestArticles`
+7. `HomeToolsTeaser`
+8. `InstagramFeed` (nuovo — fixture in dev, Graph API in W8)
+9. `PartnerLogos` (nuovo — prop-driven, default fallback credibile)
+10. Newsletter inline dark
+11. `HomeCollaborationCta`
+
+Componenti nuovi creati in `src/components/home/`:
+
+- `InstagramFeed.tsx` — grid 2×3 / 3×2 con `role="list"`, OptimizedImage, CTA Follow
+- `PartnerLogos.tsx` — wordmark o logo img, riusato anche in `Collaborazioni.tsx` con lista B2B dedicata
+
+Navbar: aggiunto sub-link `Dove dormire` dentro gruppo `Guide` del mega-menu `Esplora`. Footer: stesso link nel blocco `Scopri`.
+
+Nessun restyle di token in questa pass. Restyle visivo rimandato a milestone design-review dedicata (non avviata).
+
+## Build pass 2026-04-24 - nav split Guide / Pianifica
+
+Decisione: la nav smette di comprimere tutto dentro `Esplora` + `Risorse`.
+
+- `Esplora` resta per destinazioni ed esperienze
+- `Guide` ora dichiara il layer editoriale pratico: guide, itinerari, dove dormire, cosa mangiare
+- `Pianifica` diventa il funnel operativo: `Inizia da qui`, `Risorse`, `Dove dormire`
+- il cambio serve a rendere leggibile la differenza tra ispirazione, contenuto pratico e workflow di organizzazione

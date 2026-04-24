@@ -58,6 +58,7 @@ docs/
 - stabilita tecnica
 - funnel e monetizzazione
 - QA e rilascio
+- rebuild authority-premium
 
 ## Snapshot 2026-04-14
 
@@ -74,11 +75,19 @@ docs/
 - `Risorse` e `Shop` sono stati riposizionati verso monetizzazione sobria: toolkit editoriale e boutique di prodotti digitali, non pagina coupon/catalogo demo
 - priorita successiva: QA visiva umana, roundtrip lead Firestore, sostituzione/approvazione contenuti preview e contenuti reali minimi prima del deploy pubblico
 
+## Snapshot 2026-04-23 - master rebuild formalizzato
+
+- creati i documenti madre [[TRAVELLINIWITHUS_MASTER_PLAN]] e [[TRAVELLINIWITHUS_EXECUTION_PLAN]]
+- aperto il progetto dedicato [[10_Projects/PROJECT_SITE_REBUILD_AUTHORITY_PREMIUM]]
+- direzione ufficiale: Salt in Our Hair + Along Dusty Roads, authority editoriale prima di tutto
+- decisione tecnica provvisoria: nessun replatform come prima mossa; prima si correggono IA, page system, content model e design discipline
+
 ## Registro collegato
 
 - [[20_Decisions/DECISION_0001_OBSIDIAN_VAULT_STRATEGY]]
 - [[30_Meetings/MEETING_2026-04-12_obsidian_vault_upgrade]]
 - [[10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT]]
+- [[10_Projects/PROJECT_SITE_REBUILD_AUTHORITY_PREMIUM]]
 - [[10_Projects/PROJECT_DESTINATIONS_SECTION_REVIEW]]
 - [[10_Projects/PROJECT_EDITORIAL_SYSTEM_V1_1]]
 - [[10_Projects/PROJECT_RELEASE_READINESS]]
@@ -86,3 +95,14 @@ docs/
 - [[12_Partnerships/PARTNER_PIPELINE_TRAVELLINIWITHUS]]
 - [[13_Content/CONTENT_PILLARS_TRAVELLINIWITHUS]]
 - [[50_Scratch/INBOX]]
+
+## Snapshot 2026-04-24 - first implementation pass del piano completo
+
+- chiuso il bug tecnico che bloccava `typecheck` nell'admin editoriale
+- nav pubblica riallineata al modello target: `Esplora`, `Guide`, `Pianifica`, `Collaborazioni`, `Chi siamo`
+- introdotto il layer `planning` in `siteContent` per governare copy e CTA del funnel pratico
+- `Inizia da qui` diventa il punto di ingresso esplicito del funnel `Pianifica`
+- `Dove dormire` evolve da archivio statico a sistema con dettaglio dedicato via `/dove-dormire/:slug`
+- introdotto il modello dati hotel (`HotelEntry`) con fallback locale e supporto Firestore `hotels`
+- gates verificati in questo pass: `typecheck`, `lint`, `build`
+- stato qualitativo: `audit:ui` migliorato ma non ancora chiuso del tutto; restano 5 warning inline-style da decidere nel prossimo pass
