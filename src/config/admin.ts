@@ -1,45 +1,28 @@
 /**
- * Admin policy — claim-first con email fallback TRANSITORIO.
+ * Admin policy: custom-claim only.
  *
- * Architettura target (post Fase B pre-go-live):
- *   Il permesso admin deriva ESCLUSIVAMENTE da Firebase custom claim `admin=true`
- *   assegnato via `scripts/set-admin-claim.mjs`. Zero email hardcoded.
- *
- * Stato attuale (Fase A):
- *   Il claim NON è ancora assegnato perché Firebase Admin SDK non è configurato
- *   in dev. Per non bloccare lo sviluppo editoriale, manteniamo una fallback list
- *   di email come "admin emeriti".
- *
- * ⚠️ DA RIMUOVERE PRE-GO-LIVE:
- *   1. Eseguire `node scripts/set-admin-claim.mjs grant <email-ufficiale-travellini>`
- *   2. Verificare login + accesso dashboard via claim
- *   3. Svuotare `ADMIN_EMAILS_FALLBACK` a `[]`
- *   4. Rimuovere branch fallback da firestore.rules `isAdmin()`
- *   5. Redeploy rules + frontend
- *   Vedi `docs/LAUNCH_CHECKLIST.md` sezione "Custom Claims migration".
+ * Il permesso admin deriva esclusivamente da Firebase custom claim `admin=true`
+ * assegnato via `scripts/set-admin-claim.mjs`. Nessuna email hardcoded concede
+ * accesso admin: se il claim manca, l'utente puo autenticarsi ma non accede al CMS.
  */
 import type { User } from 'firebase/auth';
 
 /**
- * @deprecated TRANSITORIO — sostituire con custom claim prima del go-live.
- * Email autorizzate come admin finché il claim non è assegnato.
+ * Mantenuto per compatibilita di firma, ma svuotato per il go-live.
+ * L'accesso admin ora e governato esclusivamente dai Custom Claims.
  */
-export const ADMIN_EMAILS_FALLBACK: string[] = ['skotynyanskiy@gmail.com'];
+export const ADMIN_EMAILS_FALLBACK: string[] = [];
 
 /**
- * @deprecated Usare `isAdminUser(user)` che supporta anche custom claim.
- * Mantenuto per compat con codice esistente.
+ * @deprecated Usare `isAdminUser(user)` che supporta custom claim.
  */
-export function isAdminEmail(email?: string | null): boolean {
-  if (!email) return false;
-  return ADMIN_EMAILS_FALLBACK.includes(email.toLowerCase());
+export function isAdminEmail(_email?: string | null): boolean {
+  return false;
 }
 
 /**
  * Controlla se l'utente corrente ha permessi admin.
- * Preferenza: custom claim `admin=true`. Fallback: email nella lista (Fase A).
- *
- * Async perché `getIdTokenResult()` fa fetch/decode del token.
+ * Autorizzazione: custom claim `admin=true`.
  */
 export async function isAdminUser(user: User | null): Promise<boolean> {
   if (!user) return false;
@@ -49,8 +32,7 @@ export async function isAdminUser(user: User | null): Promise<boolean> {
       return true;
     }
   } catch {
-    // Token check fallito — procedi con fallback
+    console.error('Failed to verify admin custom claims');
   }
-  // Fallback transitorio via email
-  return isAdminEmail(user.email);
+  return false;
 }

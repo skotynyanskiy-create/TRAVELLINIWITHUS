@@ -15,13 +15,19 @@ import { db } from '../lib/firebaseDb';
 import { normalizeFirestoreArticle, type NormalizedArticle } from '../utils/articleData';
 import type { SiteContentKey, SiteContentMap } from '../config/siteContent';
 import { DEMO_PRODUCT, DEMO_ARTICLE_PREVIEW } from '../config/demoContent';
+import {
+  getHotelBySlug as getFallbackHotelBySlug,
+  getPublishedHotels,
+} from '../config/hotelDirectory';
 import type { Product } from '../types';
+import type { HotelEntry } from '../types';
 import { isTimestamp } from '../utils/dateValue';
 
 type FirestoreProductData = Partial<Omit<Product, 'id'>> & Record<string, unknown>;
 
 const PRODUCT_COLLECTION_READ_LIMIT = 100;
 const ARTICLE_COLLECTION_READ_LIMIT = 250;
+const HOTEL_COLLECTION_READ_LIMIT = 100;
 
 const asString = (value: unknown) =>
   typeof value === 'string' && value.trim() ? value.trim() : undefined;
@@ -101,6 +107,90 @@ function normalizeFirestoreProduct(id: string, data: FirestoreProductData): Prod
   };
 }
 
+function normalizeFirestoreHotel(id: string, data: Record<string, unknown>): HotelEntry | null {
+  const name = asString(data.name) || asString(data.title);
+  const slug = asString(data.slug);
+  const destination = asString(data.destination);
+  const destinationSlug = asString(data.destinationSlug);
+  const destinationHref = asString(data.destinationHref);
+  const country = asString(data.country);
+  const category = asString(data.category);
+  const image = asString(data.image) || asString(data.heroImage);
+  const bookingUrl = asString(data.bookingUrl);
+  const summary = asString(data.summary) || asString(data.description);
+  const fit = asString(data.fit);
+  const editorialNote = asString(data.editorialNote);
+  const pros = asStringArray(data.pros);
+  const cons = asStringArray(data.cons);
+  const idealFor = asStringArray(data.idealFor);
+
+  if (
+    !name ||
+    !slug ||
+    !destination ||
+    !destinationSlug ||
+    !destinationHref ||
+    !country ||
+    !category ||
+    !image ||
+    !bookingUrl ||
+    !summary ||
+    !fit ||
+    !editorialNote ||
+    !pros?.length ||
+    !cons?.length ||
+    !idealFor?.length
+  ) {
+    return null;
+  }
+
+  return {
+    id,
+    slug,
+    title: name,
+    name,
+    description: summary,
+    destination,
+    destinationSlug,
+    destinationHref,
+    country,
+    region: asString(data.region),
+    area: asString(data.area),
+    category,
+    heroImage: image,
+    image,
+    gallery: asStringArray(data.gallery),
+    bookingUrl,
+    priceHint: asString(data.priceHint),
+    budgetBand: asString(data.budgetBand) as HotelEntry['budgetBand'],
+    rating: asNumber(data.rating) ?? undefined,
+    badge: asString(data.badge),
+    summary,
+    fit,
+    idealFor,
+    pros,
+    cons,
+    affiliateDisclosure: asString(data.affiliateDisclosure) as HotelEntry['affiliateDisclosure'],
+    verifiedAt: data.verifiedAt,
+    editorialNote,
+    relatedGuideHref: asString(data.relatedGuideHref),
+    relatedArticles: asStringArray(data.relatedArticles),
+    mapLabel: asString(data.mapLabel),
+    published: data.published === true,
+  };
+}
+
+function markFallbackHotel(hotel: HotelEntry): HotelEntry {
+  return {
+    ...hotel,
+    title: hotel.title ?? hotel.name,
+    description: hotel.description ?? hotel.summary,
+    heroImage: hotel.heroImage ?? hotel.image,
+    affiliateDisclosure: hotel.affiliateDisclosure ?? 'affiliate',
+    isFallback: true,
+  };
+}
+
 export async function fetchProducts(): Promise<Product[]> {
   const productsQuery = query(
     collection(db, 'products'),
@@ -111,6 +201,48 @@ export async function fetchProducts(): Promise<Product[]> {
   return querySnapshot.docs
     .map((docSnap) => normalizeFirestoreProduct(docSnap.id, docSnap.data() as FirestoreProductData))
     .filter((product): product is Product => product !== null);
+}
+
+export async function fetchHotels(): Promise<HotelEntry[]> {
+  try {
+    const hotelsQuery = query(
+      collection(db, 'hotels'),
+      where('published', '==', true),
+      limit(HOTEL_COLLECTION_READ_LIMIT)
+    );
+    const querySnapshot = await getDocs(hotelsQuery);
+    const hotels = querySnapshot.docs
+      .map((docSnap) =>
+        normalizeFirestoreHotel(docSnap.id, docSnap.data() as Record<string, unknown>)
+      )
+      .filter((hotel): hotel is HotelEntry => hotel !== null);
+
+    return hotels.length > 0 ? hotels : getPublishedHotels().map(markFallbackHotel);
+  } catch (error) {
+    console.error('Error fetching hotels, using local fallback:', error);
+    return getPublishedHotels().map(markFallbackHotel);
+  }
+}
+
+export async function fetchHotelBySlug(slug: string): Promise<HotelEntry | null> {
+  try {
+    const slugQuery = query(
+      collection(db, 'hotels'),
+      where('slug', '==', slug),
+      where('published', '==', true),
+      limit(1)
+    );
+    const querySnapshot = await getDocs(slugQuery);
+    if (!querySnapshot.empty) {
+      const hotelDoc = querySnapshot.docs[0];
+      return normalizeFirestoreHotel(hotelDoc.id, hotelDoc.data() as Record<string, unknown>);
+    }
+  } catch (error) {
+    console.error(`Error fetching hotel by slug "${slug}", using fallback:`, error);
+  }
+
+  const fallbackHotel = getFallbackHotelBySlug(slug);
+  return fallbackHotel ? markFallbackHotel(fallbackHotel) : null;
 }
 
 export async function fetchProductBySlug(slug: string): Promise<Product | null> {

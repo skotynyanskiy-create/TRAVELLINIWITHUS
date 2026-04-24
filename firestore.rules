@@ -1,225 +1,259 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    // ===============================================================
-    // Assumed Data Model
-    // ===============================================================
-    //
-    // Collection: users
-    // Document ID: {userId}
-    // Fields:
-    //   - uid: string (required)
-    //   - email: string (optional)
-    //   - displayName: string (optional)
-    //   - photoURL: string (optional)
-    //   - role: string (optional) - 'admin' or 'user'
-    //   - favoriteSlugs: list of strings (optional)
-    //   - updatedAt: timestamp (optional)
-    //
-    // Collection: articles
-    // Document ID: {articleId}
-    // Fields:
-    //   - title: string (required)
-    //   - slug: string (required)
-    //   - excerpt: string (optional)
-    //   - content: string (required)
-    //   - coverImage: string (optional)
-    //   - category: string (optional)
-    //   - author: string (optional)
-    //   - location: string (optional)
-    //   - region: string (optional)
-    //   - continent: string (optional)
-    //   - period: string (optional)
-    //   - budget: string (optional)
-    //   - readTime: string (optional)
-    //   - tips: list of strings (optional)
-    //   - packingList: list of strings (optional)
-    //   - highlights: list of strings (optional)
-    //   - mapUrl: string (optional)
-    //   - published: boolean (optional)
-    //   - authorId: string (required)
-    //   - createdAt: timestamp (optional)
-    //   - updatedAt: timestamp (optional)
-    //
-    // Collection: products
-    // Document ID: {productId}
-    // Fields:
-    //   - name: string (required)
-    //   - slug: string (required)
-    //   - description: string (optional)
-    //   - price: number (required)
-    //   - imageUrl: string (optional)
-    //   - category: string (required)
-    //   - published: boolean (optional)
-    //   - createdAt: timestamp (optional)
-    //
-    // ===============================================================
 
-    // Collection: orders
-    // Document ID: {orderId}
-    // Fields:
-    //   - customerName: string (required)
-    //   - email: string (required)
-    //   - total: number (required)
-    //   - status: string (required) - 'pending', 'completed', etc.
-    //   - createdAt: timestamp (optional)
-    //
-    // ===============================================================
-
-    // ===============================================================
-    // Helper Functions
-    // ===============================================================
     function isAuthenticated() {
-       return request.auth != null;
+      return request.auth != null;
     }
+
     function isOwner(userId) {
-       return isAuthenticated() && request.auth.uid == userId;
+      return isAuthenticated() && request.auth.uid == userId;
     }
-    // Admin authorization — Fase A (pre-go-live):
-    //   1. Custom Claim `admin == true` sul token (target architecture)
-    //   2. Email bootstrap verificata (FALLBACK TRANSITORIO, da rimuovere pre-go-live
-    //      dopo aver assegnato il claim via `scripts/set-admin-claim.mjs` all'email
-    //      ufficiale Travellini. Vedi `docs/LAUNCH_CHECKLIST.md` sezione Custom Claims.)
-    //
-    // Legacy `users/{uid}.role == 'admin'` RIMOSSO: il role su Firestore è ora
-    // indicativo, l'autorizzazione effettiva passa solo da claim/email fallback.
+
+    // Production admin authorization relies only on Firebase Auth custom claims.
     function isAdmin() {
-      return isAuthenticated() &&
-        (
-          request.auth.token.admin == true ||
-          // FALLBACK TRANSITORIO — rimuovere pre-go-live
-          (request.auth.token.email == "skotynyanskiy@gmail.com" && request.auth.token.email_verified == true)
-        );
+      return isAuthenticated() && request.auth.token.admin == true;
     }
+
     function uidUnchanged() {
-       return !('uid' in request.resource.data) || request.resource.data.uid == request.auth.uid;
+      return !('uid' in request.resource.data) || request.resource.data.uid == request.auth.uid;
     }
+
     function uidNotModified() {
-       return !('uid' in request.resource.data) || request.resource.data.uid == resource.data.uid;
+      return !('uid' in request.resource.data) || request.resource.data.uid == resource.data.uid;
     }
+
     function hasOnlyAllowedFields(fields) {
       return request.resource.data.keys().hasOnly(fields);
     }
+
     function isValidList(listVar, maxSize) {
       return listVar is list && listVar.size() <= maxSize;
     }
+
     function isValidStringList(listVar, maxSize, maxItemLength) {
       return isValidList(listVar, maxSize) &&
-             listVar.size() == listVar.where(item, item is string && item.size() > 0 && item.size() <= maxItemLength).size();
+        listVar.size() == listVar.where(item, item is string && item.size() > 0 && item.size() <= maxItemLength).size();
     }
 
-    // Domain Validators
+    function optionalString(field, maxLength) {
+      return !(field in request.resource.data) ||
+        request.resource.data[field] == null ||
+        (request.resource.data[field] is string && request.resource.data[field].size() < maxLength);
+    }
+
+    function optionalTimestamp(field) {
+      return !(field in request.resource.data) ||
+        request.resource.data[field] == null ||
+        request.resource.data[field] is timestamp;
+    }
+
+    function optionalBool(field) {
+      return !(field in request.resource.data) ||
+        request.resource.data[field] == null ||
+        request.resource.data[field] is bool;
+    }
+
+    function optionalNumber(field) {
+      return !(field in request.resource.data) ||
+        request.resource.data[field] == null ||
+        request.resource.data[field] is number;
+    }
+
+    function optionalStringList(field, maxSize, maxItemLength) {
+      return !(field in request.resource.data) ||
+        request.resource.data[field] == null ||
+        isValidStringList(request.resource.data[field], maxSize, maxItemLength);
+    }
+
     function isValidUser() {
       return hasOnlyAllowedFields(['uid', 'role', 'favoriteSlugs', 'updatedAt', 'displayName', 'photoURL', 'email']) &&
-             request.resource.data.uid is string &&
-             request.resource.data.uid.size() > 0 &&
-             request.resource.data.uid.size() < 128 &&
-             (!('role' in request.resource.data) || request.resource.data.role in ['admin', 'user']) &&
-             (!('favoriteSlugs' in request.resource.data) || isValidList(request.resource.data.favoriteSlugs, 500)) &&
-             (!('displayName' in request.resource.data) || (request.resource.data.displayName is string && request.resource.data.displayName.size() < 200)) &&
-             (!('photoURL' in request.resource.data) || (request.resource.data.photoURL is string && request.resource.data.photoURL.size() < 1000)) &&
-             (!('email' in request.resource.data) || (request.resource.data.email is string && request.resource.data.email.size() < 200)) &&
-             (!('updatedAt' in request.resource.data) || request.resource.data.updatedAt is timestamp);
+        request.resource.data.uid is string &&
+        request.resource.data.uid.size() > 0 &&
+        request.resource.data.uid.size() < 128 &&
+        (!('role' in request.resource.data) || request.resource.data.role in ['admin', 'user']) &&
+        (!('favoriteSlugs' in request.resource.data) || isValidList(request.resource.data.favoriteSlugs, 500)) &&
+        optionalString('displayName', 200) &&
+        optionalString('photoURL', 1000) &&
+        optionalString('email', 200) &&
+        optionalTimestamp('updatedAt');
     }
 
     function isValidArticle() {
-      return hasOnlyAllowedFields(['title', 'slug', 'excerpt', 'content', 'coverImage', 'category', 'author', 'location', 'country', 'region', 'city', 'continent', 'experienceTypes', 'period', 'budget', 'readTime', 'tips', 'packingList', 'highlights', 'mapUrl', 'duration', 'videoUrl', 'published', 'authorId', 'createdAt', 'updatedAt']) &&
-             request.resource.data.title is string && request.resource.data.title.size() > 0 && request.resource.data.title.size() < 200 &&
-             request.resource.data.slug is string && request.resource.data.slug.size() > 0 && request.resource.data.slug.size() < 200 &&
-             request.resource.data.content is string && request.resource.data.content.size() > 0 && request.resource.data.content.size() < 100000 &&
-             request.resource.data.authorId is string && request.resource.data.authorId == request.auth.uid &&
-             (!('excerpt' in request.resource.data) || (request.resource.data.excerpt is string && request.resource.data.excerpt.size() < 1000)) &&
-             (!('coverImage' in request.resource.data) || (request.resource.data.coverImage is string && request.resource.data.coverImage.size() < 1000)) &&
-             (!('category' in request.resource.data) || (request.resource.data.category is string && request.resource.data.category.size() < 100)) &&
-             (!('author' in request.resource.data) || (request.resource.data.author is string && request.resource.data.author.size() < 150)) &&
-             (!('location' in request.resource.data) || (request.resource.data.location is string && request.resource.data.location.size() < 200)) &&
-             (!('country' in request.resource.data) || (request.resource.data.country is string && request.resource.data.country.size() < 120)) &&
-             (!('region' in request.resource.data) || (request.resource.data.region is string && request.resource.data.region.size() < 150)) &&
-             (!('city' in request.resource.data) || (request.resource.data.city is string && request.resource.data.city.size() < 150)) &&
-             (!('continent' in request.resource.data) || (request.resource.data.continent is string && request.resource.data.continent.size() < 100)) &&
-             (!('experienceTypes' in request.resource.data) || isValidStringList(request.resource.data.experienceTypes, 20, 80)) &&
-             (!('period' in request.resource.data) || (request.resource.data.period is string && request.resource.data.period.size() < 150)) &&
-             (!('budget' in request.resource.data) || (request.resource.data.budget is string && request.resource.data.budget.size() < 100)) &&
-             (!('readTime' in request.resource.data) || (request.resource.data.readTime is string && request.resource.data.readTime.size() < 50)) &&
-             (!('tips' in request.resource.data) || isValidStringList(request.resource.data.tips, 50, 300)) &&
-             (!('packingList' in request.resource.data) || isValidStringList(request.resource.data.packingList, 50, 200)) &&
-             (!('highlights' in request.resource.data) || isValidStringList(request.resource.data.highlights, 20, 200)) &&
-             (!('mapUrl' in request.resource.data) || (request.resource.data.mapUrl is string && request.resource.data.mapUrl.size() < 2000)) &&
-             (!('duration' in request.resource.data) || request.resource.data.duration == null || (request.resource.data.duration is string && request.resource.data.duration.size() < 100)) &&
-             (!('videoUrl' in request.resource.data) || request.resource.data.videoUrl == null || (request.resource.data.videoUrl is string && request.resource.data.videoUrl.size() < 2000)) &&
-             (!('published' in request.resource.data) || request.resource.data.published is bool) &&
-             (!('createdAt' in request.resource.data) || request.resource.data.createdAt is timestamp) &&
-             (!('updatedAt' in request.resource.data) || request.resource.data.updatedAt is timestamp);
+      return hasOnlyAllowedFields(['title', 'slug', 'type', 'excerpt', 'description', 'content', 'image', 'coverImage', 'category', 'author', 'location', 'country', 'region', 'city', 'continent', 'experienceTypes', 'tripIntents', 'period', 'budget', 'budgetBand', 'readTime', 'verifiedAt', 'disclosureType', 'featuredPlacement', 'tips', 'packingList', 'gallery', 'highlights', 'itinerary', 'costs', 'seasonality', 'hiddenGems', 'localFood', 'mapUrl', 'mapMarkers', 'mapCenter', 'mapZoom', 'duration', 'videoUrl', 'hotels', 'shopCta', 'published', 'authorId', 'createdAt', 'updatedAt']) &&
+        request.resource.data.title is string && request.resource.data.title.size() > 0 && request.resource.data.title.size() < 200 &&
+        request.resource.data.slug is string && request.resource.data.slug.size() > 0 && request.resource.data.slug.size() < 200 &&
+        request.resource.data.type in ['pillar', 'guide', 'itinerary'] &&
+        request.resource.data.content is string && request.resource.data.content.size() > 0 && request.resource.data.content.size() < 100000 &&
+        request.resource.data.authorId is string && request.resource.data.authorId == request.auth.uid &&
+        optionalString('excerpt', 1000) &&
+        optionalString('description', 1000) &&
+        optionalString('image', 1000) &&
+        optionalString('coverImage', 1000) &&
+        optionalString('category', 100) &&
+        optionalString('author', 150) &&
+        optionalString('location', 200) &&
+        optionalString('country', 120) &&
+        optionalString('region', 150) &&
+        optionalString('city', 150) &&
+        optionalString('continent', 100) &&
+        optionalStringList('experienceTypes', 20, 80) &&
+        optionalStringList('tripIntents', 20, 80) &&
+        optionalString('period', 150) &&
+        optionalString('budget', 100) &&
+        (!('budgetBand' in request.resource.data) || request.resource.data.budgetBand == null || request.resource.data.budgetBand in ['Economico', 'Medio', 'Alto']) &&
+        optionalString('readTime', 50) &&
+        optionalTimestamp('verifiedAt') &&
+        (!('disclosureType' in request.resource.data) || request.resource.data.disclosureType == null || request.resource.data.disclosureType in ['none', 'affiliate', 'sponsored', 'gifted', 'partner']) &&
+        (!('featuredPlacement' in request.resource.data) || request.resource.data.featuredPlacement == null || request.resource.data.featuredPlacement in ['home-flagship', 'hub-destination', 'hub-experience']) &&
+        optionalStringList('tips', 50, 300) &&
+        optionalStringList('packingList', 50, 200) &&
+        optionalStringList('gallery', 20, 1000) &&
+        optionalStringList('highlights', 20, 200) &&
+        (!('itinerary' in request.resource.data) || request.resource.data.itinerary == null || isValidList(request.resource.data.itinerary, 30)) &&
+        (!('costs' in request.resource.data) || request.resource.data.costs == null || request.resource.data.costs is map) &&
+        (!('seasonality' in request.resource.data) || request.resource.data.seasonality == null || isValidList(request.resource.data.seasonality, 12)) &&
+        (!('hiddenGems' in request.resource.data) || request.resource.data.hiddenGems == null || isValidList(request.resource.data.hiddenGems, 30)) &&
+        (!('localFood' in request.resource.data) || request.resource.data.localFood == null || isValidList(request.resource.data.localFood, 30)) &&
+        optionalString('mapUrl', 2000) &&
+        (!('mapMarkers' in request.resource.data) || request.resource.data.mapMarkers == null || isValidList(request.resource.data.mapMarkers, 100)) &&
+        (!('mapCenter' in request.resource.data) || request.resource.data.mapCenter == null || isValidList(request.resource.data.mapCenter, 2)) &&
+        optionalNumber('mapZoom') &&
+        optionalString('duration', 100) &&
+        optionalString('videoUrl', 2000) &&
+        (!('hotels' in request.resource.data) || request.resource.data.hotels == null || isValidList(request.resource.data.hotels, 20)) &&
+        (!('shopCta' in request.resource.data) || request.resource.data.shopCta == null || request.resource.data.shopCta is map) &&
+        optionalBool('published') &&
+        optionalTimestamp('createdAt') &&
+        optionalTimestamp('updatedAt');
+    }
+
+    function isValidHotel() {
+      return hasOnlyAllowedFields(['title', 'name', 'slug', 'description', 'summary', 'country', 'region', 'area', 'destination', 'destinationSlug', 'destinationHref', 'category', 'heroImage', 'image', 'gallery', 'bookingUrl', 'priceHint', 'budgetBand', 'rating', 'badge', 'fit', 'idealFor', 'pros', 'cons', 'affiliateDisclosure', 'verifiedAt', 'editorialNote', 'relatedGuideHref', 'relatedArticles', 'mapLabel', 'published', 'createdAt', 'updatedAt']) &&
+        (('title' in request.resource.data && request.resource.data.title is string && request.resource.data.title.size() > 0 && request.resource.data.title.size() < 200) ||
+         ('name' in request.resource.data && request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() < 200)) &&
+        request.resource.data.slug is string && request.resource.data.slug.size() > 0 && request.resource.data.slug.size() < 200 &&
+        request.resource.data.country is string && request.resource.data.country.size() > 0 && request.resource.data.country.size() < 120 &&
+        request.resource.data.fit is string && request.resource.data.fit.size() > 0 && request.resource.data.fit.size() < 1000 &&
+        request.resource.data.editorialNote is string && request.resource.data.editorialNote.size() > 0 && request.resource.data.editorialNote.size() < 2000 &&
+        optionalString('description', 1500) &&
+        optionalString('summary', 1500) &&
+        optionalString('region', 150) &&
+        optionalString('area', 150) &&
+        optionalString('destination', 150) &&
+        optionalString('destinationSlug', 150) &&
+        optionalString('destinationHref', 300) &&
+        optionalString('category', 100) &&
+        optionalString('heroImage', 1000) &&
+        optionalString('image', 1000) &&
+        optionalStringList('gallery', 20, 1000) &&
+        optionalString('bookingUrl', 2000) &&
+        optionalString('priceHint', 100) &&
+        (!('budgetBand' in request.resource.data) || request.resource.data.budgetBand == null || request.resource.data.budgetBand in ['Economico', 'Medio', 'Alto']) &&
+        optionalNumber('rating') &&
+        optionalString('badge', 80) &&
+        optionalStringList('idealFor', 20, 80) &&
+        optionalStringList('pros', 20, 250) &&
+        optionalStringList('cons', 20, 250) &&
+        (!('affiliateDisclosure' in request.resource.data) || request.resource.data.affiliateDisclosure == null || request.resource.data.affiliateDisclosure in ['none', 'affiliate', 'sponsored', 'gifted', 'partner']) &&
+        optionalTimestamp('verifiedAt') &&
+        optionalString('relatedGuideHref', 300) &&
+        optionalStringList('relatedArticles', 20, 200) &&
+        optionalString('mapLabel', 150) &&
+        optionalBool('published') &&
+        optionalTimestamp('createdAt') &&
+        optionalTimestamp('updatedAt');
     }
 
     function isValidProduct() {
-      return hasOnlyAllowedFields(['name', 'slug', 'description', 'price', 'imageUrl', 'category', 'isDigital', 'downloadUrl', 'published', 'createdAt', 'updatedAt']) &&
-             request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() < 200 &&
-             request.resource.data.slug is string && request.resource.data.slug.size() > 0 && request.resource.data.slug.size() < 200 &&
-             request.resource.data.price is number && request.resource.data.price >= 0 &&
-             request.resource.data.category is string && request.resource.data.category.size() > 0 && request.resource.data.category.size() < 100 &&
-             (!('description' in request.resource.data) || (request.resource.data.description is string && request.resource.data.description.size() < 2000)) &&
-             (!('imageUrl' in request.resource.data) || (request.resource.data.imageUrl is string && request.resource.data.imageUrl.size() < 1000)) &&
-             (!('isDigital' in request.resource.data) || request.resource.data.isDigital is bool) &&
-             (!('downloadUrl' in request.resource.data) || request.resource.data.downloadUrl == null || (request.resource.data.downloadUrl is string && request.resource.data.downloadUrl.size() < 2000)) &&
-             (!('published' in request.resource.data) || request.resource.data.published is bool) &&
-             (!('createdAt' in request.resource.data) || request.resource.data.createdAt is timestamp) &&
-             (!('updatedAt' in request.resource.data) || request.resource.data.updatedAt is timestamp);
+      return hasOnlyAllowedFields(['name', 'slug', 'description', 'price', 'imageUrl', 'category', 'isDigital', 'downloadUrl', 'isBestseller', 'features', 'gallery', 'specifications', 'relatedProductIds', 'reviews', 'published', 'createdAt', 'updatedAt']) &&
+        request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() < 200 &&
+        request.resource.data.slug is string && request.resource.data.slug.size() > 0 && request.resource.data.slug.size() < 200 &&
+        request.resource.data.price is number && request.resource.data.price >= 0 &&
+        request.resource.data.category is string && request.resource.data.category.size() > 0 && request.resource.data.category.size() < 100 &&
+        optionalString('description', 2000) &&
+        optionalString('imageUrl', 1000) &&
+        optionalBool('isDigital') &&
+        optionalString('downloadUrl', 2000) &&
+        optionalBool('isBestseller') &&
+        optionalStringList('features', 50, 300) &&
+        optionalStringList('gallery', 20, 1000) &&
+        (!('specifications' in request.resource.data) || request.resource.data.specifications == null || request.resource.data.specifications is map) &&
+        optionalStringList('relatedProductIds', 30, 200) &&
+        (!('reviews' in request.resource.data) || request.resource.data.reviews == null || isValidList(request.resource.data.reviews, 100)) &&
+        optionalBool('published') &&
+        optionalTimestamp('createdAt') &&
+        optionalTimestamp('updatedAt');
     }
 
     function isValidSettings() {
       return hasOnlyAllowedFields(['igFollowers', 'monthlyReach', 'uniqueUsers', 'engagementRate', 'updatedAt']) &&
-             request.resource.data.igFollowers is string && request.resource.data.igFollowers.size() > 0 && request.resource.data.igFollowers.size() < 50 &&
-             request.resource.data.monthlyReach is string && request.resource.data.monthlyReach.size() > 0 && request.resource.data.monthlyReach.size() < 50 &&
-             request.resource.data.uniqueUsers is string && request.resource.data.uniqueUsers.size() > 0 && request.resource.data.uniqueUsers.size() < 50 &&
-             request.resource.data.engagementRate is string && request.resource.data.engagementRate.size() > 0 && request.resource.data.engagementRate.size() < 50 &&
-             (!('updatedAt' in request.resource.data) || request.resource.data.updatedAt is timestamp);
+        request.resource.data.igFollowers is string && request.resource.data.igFollowers.size() > 0 && request.resource.data.igFollowers.size() < 50 &&
+        request.resource.data.monthlyReach is string && request.resource.data.monthlyReach.size() > 0 && request.resource.data.monthlyReach.size() < 50 &&
+        request.resource.data.uniqueUsers is string && request.resource.data.uniqueUsers.size() > 0 && request.resource.data.uniqueUsers.size() < 50 &&
+        request.resource.data.engagementRate is string && request.resource.data.engagementRate.size() > 0 && request.resource.data.engagementRate.size() < 50 &&
+        optionalTimestamp('updatedAt');
     }
 
     function isValidLead() {
       return hasOnlyAllowedFields(['type', 'source', 'name', 'email', 'company', 'website', 'topic', 'message', 'createdAt']) &&
-             request.resource.data.email is string && request.resource.data.email.size() > 0 && request.resource.data.email.size() < 150 &&
-             request.resource.data.email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$") &&
-             (!('type' in request.resource.data) || request.resource.data.type in ['contact', 'newsletter', 'media-kit']) &&
-             (!('source' in request.resource.data) || (request.resource.data.source is string && request.resource.data.source.size() > 0 && request.resource.data.source.size() < 100)) &&
-             (!('name' in request.resource.data) || (request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() < 150)) &&
-             (!('company' in request.resource.data) || (request.resource.data.company is string && request.resource.data.company.size() > 0 && request.resource.data.company.size() < 150)) &&
-             (!('website' in request.resource.data) || (request.resource.data.website is string && request.resource.data.website.size() > 0 && request.resource.data.website.size() < 300)) &&
-             (!('topic' in request.resource.data) || (request.resource.data.topic is string && request.resource.data.topic.size() > 0 && request.resource.data.topic.size() < 150)) &&
-             (!('message' in request.resource.data) || (request.resource.data.message is string && request.resource.data.message.size() > 0 && request.resource.data.message.size() < 5000)) &&
-             (!('createdAt' in request.resource.data) || request.resource.data.createdAt is timestamp);
+        request.resource.data.email is string && request.resource.data.email.size() > 0 && request.resource.data.email.size() < 150 &&
+        request.resource.data.email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$") &&
+        (!('type' in request.resource.data) || request.resource.data.type in ['contact', 'newsletter', 'media-kit']) &&
+        optionalString('source', 100) &&
+        optionalString('name', 150) &&
+        optionalString('company', 150) &&
+        optionalString('website', 300) &&
+        optionalString('topic', 150) &&
+        optionalString('message', 5000) &&
+        optionalTimestamp('createdAt');
     }
 
     function isValidOrder() {
       return hasOnlyAllowedFields(['customerName', 'email', 'total', 'status', 'createdAt', 'items', 'userId', 'stripeSessionId']) &&
-             request.resource.data.customerName is string && request.resource.data.customerName.size() > 0 && request.resource.data.customerName.size() < 200 &&
-             request.resource.data.email is string && request.resource.data.email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$") &&
-             request.resource.data.total is number && request.resource.data.total >= 0 &&
-             request.resource.data.status is string && request.resource.data.status in ['pending', 'completed', 'cancelled'] &&
-             (!('items' in request.resource.data) || isValidList(request.resource.data.items, 50)) &&
-             (!('userId' in request.resource.data) || request.resource.data.userId == null || (request.resource.data.userId is string && request.resource.data.userId.size() < 128)) &&
-             (!('stripeSessionId' in request.resource.data) || (request.resource.data.stripeSessionId is string && request.resource.data.stripeSessionId.size() < 255)) &&
-             (!('createdAt' in request.resource.data) || request.resource.data.createdAt is timestamp);
+        request.resource.data.customerName is string && request.resource.data.customerName.size() > 0 && request.resource.data.customerName.size() < 200 &&
+        request.resource.data.email is string && request.resource.data.email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$") &&
+        request.resource.data.total is number && request.resource.data.total >= 0 &&
+        request.resource.data.status in ['pending', 'completed', 'cancelled'] &&
+        (!('items' in request.resource.data) || request.resource.data.items == null || isValidList(request.resource.data.items, 50)) &&
+        optionalString('userId', 128) &&
+        optionalString('stripeSessionId', 255) &&
+        optionalTimestamp('createdAt');
     }
 
     function isValidCoupon() {
       return hasOnlyAllowedFields(['code', 'type', 'value', 'description', 'active', 'expiryDate', 'createdAt']) &&
-             request.resource.data.code is string && request.resource.data.code.size() > 0 && request.resource.data.code.size() < 50 &&
-             request.resource.data.type is string && request.resource.data.type in ['percent', 'fixed'] &&
-             request.resource.data.value is number && request.resource.data.value >= 0 &&
-             (!('description' in request.resource.data) || (request.resource.data.description is string && request.resource.data.description.size() < 200)) &&
-             request.resource.data.active is bool &&
-             (!('expiryDate' in request.resource.data) || request.resource.data.expiryDate is timestamp) &&
-             (!('createdAt' in request.resource.data) || request.resource.data.createdAt is timestamp);
+        request.resource.data.code is string && request.resource.data.code.size() > 0 && request.resource.data.code.size() < 50 &&
+        request.resource.data.type in ['percent', 'fixed'] &&
+        request.resource.data.value is number && request.resource.data.value >= 0 &&
+        optionalString('description', 200) &&
+        request.resource.data.active is bool &&
+        optionalTimestamp('expiryDate') &&
+        optionalTimestamp('createdAt');
     }
 
     function isValidLog() {
       return hasOnlyAllowedFields(['action', 'userEmail', 'timestamp', 'details']) &&
-             request.resource.data.action is string &&
-             request.resource.data.userEmail is string &&
-             request.resource.data.timestamp is timestamp &&
-             (!('details' in request.resource.data) || request.resource.data.details is string);
+        request.resource.data.action is string &&
+        request.resource.data.userEmail is string &&
+        request.resource.data.timestamp is timestamp &&
+        optionalString('details', 2000);
+    }
+
+    function isValidResource() {
+      return hasOnlyAllowedFields(['name', 'description', 'link', 'category', 'tags', 'badge', 'partner', 'isPartner', 'order', 'published', 'createdAt', 'updatedAt']) &&
+        request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() < 200 &&
+        request.resource.data.description is string && request.resource.data.description.size() > 0 && request.resource.data.description.size() < 1000 &&
+        request.resource.data.link is string && request.resource.data.link.size() > 0 && request.resource.data.link.size() < 2000 &&
+        request.resource.data.category is string && request.resource.data.category.size() > 0 && request.resource.data.category.size() < 100 &&
+        optionalStringList('tags', 30, 80) &&
+        optionalString('badge', 80) &&
+        optionalString('partner', 120) &&
+        optionalBool('isPartner') &&
+        optionalNumber('order') &&
+        optionalBool('published') &&
+        optionalTimestamp('createdAt') &&
+        optionalTimestamp('updatedAt');
     }
 
     match /users/{userId} {
@@ -230,9 +264,16 @@ service cloud.firestore {
     }
 
     match /articles/{articleId} {
-      allow read: if (resource.data.published == true) || isAdmin();
+      allow read: if resource.data.published == true || isAdmin();
       allow create: if isAdmin() && isValidArticle();
       allow update: if isAdmin() && isValidArticle() && request.resource.data.authorId == resource.data.authorId && request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if isAdmin();
+    }
+
+    match /hotels/{hotelId} {
+      allow read: if resource.data.published == true || isAdmin();
+      allow create: if isAdmin() && isValidHotel();
+      allow update: if isAdmin() && isValidHotel() && request.resource.data.createdAt == resource.data.createdAt;
       allow delete: if isAdmin();
     }
 
@@ -240,6 +281,13 @@ service cloud.firestore {
       allow read: if resource.data.published == true || isAdmin();
       allow create: if isAdmin() && isValidProduct();
       allow update: if isAdmin() && isValidProduct() && request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if isAdmin();
+    }
+
+    match /resources/{resourceId} {
+      allow read: if resource.data.published == true || isAdmin();
+      allow create: if isAdmin() && isValidResource();
+      allow update: if isAdmin() && isValidResource() && request.resource.data.createdAt == resource.data.createdAt;
       allow delete: if isAdmin();
     }
 
@@ -267,7 +315,7 @@ service cloud.firestore {
         (resource.data.userId is string && resource.data.userId == request.auth.uid) ||
         (resource.data.email is string && request.auth.token.email == resource.data.email)
       ));
-      allow create: if isValidOrder();
+      allow create: if isAdmin() && isValidOrder();
       allow update: if isAdmin() && isValidOrder();
       allow delete: if isAdmin();
     }

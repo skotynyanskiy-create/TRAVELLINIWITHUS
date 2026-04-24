@@ -28,7 +28,8 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 function getAuthErrorMessage(error: unknown) {
-  const errorCode = typeof error === 'object' && error !== null && 'code' in error ? String(error.code) : '';
+  const errorCode =
+    typeof error === 'object' && error !== null && 'code' in error ? String(error.code) : '';
 
   switch (errorCode) {
     case 'auth/popup-closed-by-user':
@@ -62,7 +63,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (currentUser) {
         setAuthError(null);
 
-        // Admin check via custom claim (+ email fallback transitorio, vedi src/config/admin.ts)
+        // Admin check via custom claim. Firestore role is informational only.
         const adminCheck = await isAdminUser(currentUser);
         setIsAdmin(adminCheck);
 

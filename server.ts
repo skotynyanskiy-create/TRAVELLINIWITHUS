@@ -14,15 +14,14 @@ import {
   renderMediaKitNotification,
   renderMediaKitAutoReply,
 } from './src/lib/email';
-import {
-  initServerErrorTracking,
-  captureServerException,
-} from './src/lib/serverErrorTracking';
+import { initServerErrorTracking, captureServerException } from './src/lib/serverErrorTracking';
 
 dotenv.config();
 
 const OWNER_EMAIL = process.env.MAIL_TO_OWNER || 'hello@travelliniwithus.it';
-const MEDIA_KIT_URL = process.env.MEDIA_KIT_URL || `${process.env.APP_URL || 'https://travelliniwithus.it'}/media-kit.pdf`;
+const MEDIA_KIT_URL =
+  process.env.MEDIA_KIT_URL ||
+  `${process.env.APP_URL || 'https://travelliniwithus.it'}/media-kit.pdf`;
 
 const ssrCache = new NodeCache({ stdTTL: 300, checkperiod: 600 });
 
@@ -75,6 +74,7 @@ interface ArticleMeta {
   date: string;
   updatedAt: string | null;
   category: string;
+  type: string;
   location: string;
   itinerary: { title: string; description: string }[] | null;
   tips: string[] | null;
@@ -85,6 +85,8 @@ interface SitemapArticle {
   title: string;
   description: string;
   date: string;
+  category: string;
+  type: string;
 }
 
 interface CheckoutItem {
@@ -136,6 +138,7 @@ const DEMO_ARTICLE_SLUGS = new Set([
   'nuova-zelanda-south-island-12-giorni',
   'weekend-borgo-lento',
   'guida-prima-di-prenotare',
+  'sardegna-nord-7-giorni-guida-completa',
 ]);
 const DEMO_PRODUCT_SLUGS = new Set([
   'guida-premium-dolomiti',
@@ -157,6 +160,13 @@ const STATIC_APP_ROUTES = new Set([
   '/destinazioni',
   '/esperienze',
   '/guide',
+  '/itinerari',
+  '/dove-dormire',
+  '/italia',
+  '/grecia',
+  '/portogallo',
+  '/inizia-da-qui',
+  '/cosa-mangiare',
   '/chi-siamo',
   '/collaborazioni',
   '/media-kit',
@@ -174,6 +184,32 @@ const STATIC_APP_ROUTES = new Set([
   '/admin/editor',
   '/admin/product-editor',
 ]);
+
+const ITINERARY_SERVER_CATEGORIES = new Set(['Itinerari completi', 'Weekend & Day trip']);
+
+function getPublicArticlePathForServer(article: {
+  slug: string;
+  category?: string;
+  type?: string;
+}) {
+  const section =
+    article.type === 'itinerary' || ITINERARY_SERVER_CATEGORIES.has(article.category || '')
+      ? 'itinerari'
+      : 'guide';
+  return `/${section}/${article.slug}`;
+}
+
+function buildAllowedOrigins() {
+  const configured = [
+    process.env.APP_URL,
+    process.env.FRONTEND_URL,
+    process.env.STAGING_URL,
+    'https://travelliniwithus.it',
+    'https://www.travelliniwithus.it',
+  ].filter((origin): origin is string => Boolean(origin));
+
+  return new Set(configured.map((origin) => origin.replace(/\/$/, '')));
+}
 
 function getString(fields: Record<string, FirestoreValue> | undefined, key: string) {
   return fields?.[key]?.stringValue || '';
@@ -287,6 +323,7 @@ function mapArticleMeta(fields: Record<string, FirestoreValue>): ArticleMeta {
     date: getTimestamp(fields, 'createdAt'),
     updatedAt: fields.updatedAt?.timestampValue || null,
     category: getString(fields, 'category'),
+    type: getString(fields, 'type') || 'guide',
     location: getString(fields, 'location'),
     itinerary: itinerary.length > 0 ? itinerary : null,
     tips: tips.length > 0 ? tips : null,
@@ -359,9 +396,6 @@ async function fetchArticle(slug: string): Promise<ArticleMeta | null> {
   }
 }
 
-
-
-
 async function resolveAppStatus(pathname: string) {
   if (STATIC_APP_ROUTES.has(pathname)) {
     return 200;
@@ -387,6 +421,32 @@ async function resolveAppStatus(pathname: string) {
 
     const article = await fetchArticle(slug);
     return article ? 200 : 404;
+  }
+
+  if (pathname.startsWith('/guide/') || pathname.startsWith('/itinerari/')) {
+    const slug = pathname.split('/').pop();
+    if (!slug) {
+      return 404;
+    }
+
+    if (DEMO_ARTICLE_SLUGS.has(slug)) {
+      return 200;
+    }
+
+    if (!firestoreAvailable) {
+      return 200;
+    }
+
+    const article = await fetchArticle(slug);
+    return article ? 200 : 404;
+  }
+
+  if (pathname.startsWith('/dove-dormire/')) {
+    return 200;
+  }
+
+  if (pathname.startsWith('/destinazioni/')) {
+    return 200;
   }
 
   if (pathname.startsWith('/shop/')) {
@@ -430,6 +490,8 @@ async function fetchAllArticles(): Promise<SitemapArticle[]> {
           title: getString(fields, 'title'),
           description: getString(fields, 'description') || getString(fields, 'excerpt'),
           date: getTimestamp(fields, 'createdAt'),
+          category: getString(fields, 'category'),
+          type: getString(fields, 'type') || 'guide',
         };
       })
       .filter((article) => article.slug && article.title);
@@ -745,7 +807,23 @@ async function startServer() {
   const app = express();
   const PORT = Number(process.env.PORT) || 3000;
 
-  app.use(cors());
+  const allowedOrigins = buildAllowedOrigins();
+  app.use(
+    cors({
+      origin(origin, callback) {
+        if (
+          !origin ||
+          process.env.NODE_ENV !== 'production' ||
+          allowedOrigins.has(origin.replace(/\/$/, ''))
+        ) {
+          callback(null, true);
+          return;
+        }
+
+        callback(new Error('Origin not allowed by CORS'));
+      },
+    })
+  );
 
   // Rate limiting — protegge da abuse e spam
   const newsletterLimiter = rateLimit({
@@ -939,7 +1017,12 @@ async function startServer() {
   async function ensureFirebaseAdmin() {
     if (firebaseAdminReady) return true;
     try {
-      const { initializeApp: initAdminApp, applicationDefault, cert, getApps } = await import('firebase-admin/app');
+      const {
+        initializeApp: initAdminApp,
+        applicationDefault,
+        cert,
+        getApps,
+      } = await import('firebase-admin/app');
       if (getApps().length > 0) {
         firebaseAdminReady = true;
         return true;
@@ -950,22 +1033,37 @@ async function startServer() {
       if (inlineJson) {
         initAdminApp({ credential: cert(JSON.parse(inlineJson)), projectId });
       } else if (credsPath && fs.existsSync(credsPath)) {
-        initAdminApp({ credential: cert(JSON.parse(fs.readFileSync(credsPath, 'utf8'))), projectId });
+        initAdminApp({
+          credential: cert(JSON.parse(fs.readFileSync(credsPath, 'utf8'))),
+          projectId,
+        });
       } else {
         initAdminApp({ credential: applicationDefault(), projectId });
       }
       firebaseAdminReady = true;
       return true;
     } catch (error) {
-      console.warn('[firebase-admin] init failed — auth guard endpoints returneranno 503:', error instanceof Error ? error.message : error);
+      console.warn(
+        '[firebase-admin] init failed — auth guard endpoints returneranno 503:',
+        error instanceof Error ? error.message : error
+      );
       return false;
     }
   }
 
-  async function requireAdmin(req: express.Request, res: express.Response, next: express.NextFunction) {
+  async function requireAdmin(
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) {
     const ready = await ensureFirebaseAdmin();
     if (!ready) {
-      res.status(503).json({ error: 'Auth admin non configurato (FIREBASE_SERVICE_ACCOUNT_JSON o GOOGLE_APPLICATION_CREDENTIALS mancanti).' });
+      res
+        .status(503)
+        .json({
+          error:
+            'Auth admin non configurato (FIREBASE_SERVICE_ACCOUNT_JSON o GOOGLE_APPLICATION_CREDENTIALS mancanti).',
+        });
       return;
     }
     const authHeader = req.get('Authorization') || '';
@@ -984,7 +1082,10 @@ async function startServer() {
       (req as express.Request & { user?: unknown }).user = decoded;
       next();
     } catch (error) {
-      console.error('[requireAdmin] verifyIdToken failed:', error instanceof Error ? error.message : error);
+      console.error(
+        '[requireAdmin] verifyIdToken failed:',
+        error instanceof Error ? error.message : error
+      );
       res.status(401).json({ error: 'Token non valido.' });
     }
   }
@@ -1180,7 +1281,7 @@ async function startServer() {
     } else if (brevoApiKey && process.env.NODE_ENV !== 'production') {
       console.warn(
         '[newsletter] BREVO_API_KEY presente ma BREVO_LIST_ID mancante o non valido. ' +
-          'Newsletter in save-lead-only mode.',
+          'Newsletter in save-lead-only mode.'
       );
     }
 
@@ -1486,9 +1587,10 @@ async function startServer() {
       '/destinazioni',
       '/esperienze',
       '/guide',
+      '/itinerari',
+      '/dove-dormire',
+      '/inizia-da-qui',
       '/risorse',
-      '/shop',
-      '/club',
       '/collaborazioni',
       '/media-kit',
       '/contatti',
@@ -1508,7 +1610,7 @@ async function startServer() {
       const ageMs = now - new Date(article.date).getTime();
       const ageDays = ageMs / (1000 * 60 * 60 * 24);
       const priority = ageDays < 30 ? '0.9' : ageDays < 90 ? '0.7' : '0.5';
-      xml += `  <url>\n    <loc>${origin}/articolo/${article.slug}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>${priority}</priority>\n  </url>\n`;
+      xml += `  <url>\n    <loc>${origin}${getPublicArticlePathForServer(article)}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>${priority}</priority>\n  </url>\n`;
     }
 
     xml += '</urlset>';
@@ -1529,7 +1631,7 @@ async function startServer() {
     for (const article of articles) {
       xml += '  <item>\n';
       xml += `    <title>${escapeHtml(article.title)}</title>\n`;
-      xml += `    <link>${origin}/articolo/${article.slug}</link>\n`;
+      xml += `    <link>${origin}${getPublicArticlePathForServer(article)}</link>\n`;
       xml += `    <description>${escapeHtml(article.description)}</description>\n`;
       xml += `    <pubDate>${new Date(article.date).toUTCString()}</pubDate>\n`;
       xml += '  </item>\n';
@@ -1624,15 +1726,17 @@ async function startServer() {
     });
   }
 
-  app.use((err: unknown, req: express.Request, res: express.Response, _next: express.NextFunction) => {
-    captureServerException(err, {
-      source: 'express-error-middleware',
-      method: req.method,
-      path: req.originalUrl,
-    });
-    if (res.headersSent) return;
-    res.status(500).json({ error: 'Errore interno. Riprova piu tardi.' });
-  });
+  app.use(
+    (err: unknown, req: express.Request, res: express.Response, _next: express.NextFunction) => {
+      captureServerException(err, {
+        source: 'express-error-middleware',
+        method: req.method,
+        path: req.originalUrl,
+      });
+      if (res.headersSent) return;
+      res.status(500).json({ error: 'Errore interno. Riprova piu tardi.' });
+    }
+  );
 
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on http://localhost:${PORT}`);
