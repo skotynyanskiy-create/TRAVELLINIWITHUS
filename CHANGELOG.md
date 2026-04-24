@@ -49,6 +49,19 @@ Obiettivo: portare la configurazione Claude Code / Obsidian / VS Code a livello 
 - `npm run typecheck` → PASS
 - `npm audit` → 10 open (2 low, 8 moderate), tutte `uuid <14` transitive, decision note creata
 
+#### Aggiunto (FASE 2 content — 3 pillar drafts + 13 hotels)
+
+- **3 pillar guide drafts** in `docs/60_Editorial/Articoli/`: Dolomiti rifugi di design (~1850 parole, completo), Puglia roadtrip borghi bianchi (~1200 parole, scaffold), Islanda Ring Road inverno (~1400 parole, scaffold). Ogni pillar con frontmatter Obsidian, 5 strutture reali, itinerario giornaliero, stagionalità, FAQ, SEO target block, note editoriali `[REQUIRED before publish]` per owner (foto reali, aneddoti, quote, verifica prezzi).
+- **13 nuovi `HotelEntry`** aggiunti a `src/config/hotelDirectory.ts` (totale 22): Rosa Alpina, Lerchner's, Utia de Borz, Rifugio Lagazuoi (Dolomiti, 4); Masseria Cervarolo, Palazzo Bozzi Corso, Masseria Le Stanzie, Trulli Soave (Puglia, 4); Hotel Budir, Fosshotel Glacier Lagoon, Vogafjos, Hotel Kria, Konsulat (Islanda, 5). Ogni entry con tutti i campi richiesti (summary, fit, idealFor, pros/cons, editorialNote, relatedGuideHref al pillar, budgetBand, priceHint, rating, mapLabel). `bookingUrl` come Booking.com search placeholder — owner sostituirà con link affiliate reale. Foto heroImage da Unsplash come placeholder — owner sostituirà con foto brand autentiche. `published: true` per essere visibili sulla route `/dove-dormire` in assenza di Firestore popolato.
+- **`firebase.json`**: aggiunto `database: ai-studio-541b3c8a-...` per allineare deploy rules al database non-default del progetto (era causa di errori deploy). Allineato con `firestoreDatabaseId` in `firebase-applet-config.json` e `src/firebase.ts`.
+
+#### Infrastruttura runtime sbloccata
+
+- `firebase login` eseguito dall'owner.
+- Admin claim `{ admin: true }` assegnato a `skotynyanskiy@gmail.com` (uid=4U9BMZlkDnXz4EELPEaEyf5Q7zc2).
+- `firestore.rules` deployate in production sul database `ai-studio-541b3c8a-...`.
+- Service-account JSON compromesso (key id `5a3ee02c94...`) revocato post-operazione.
+
 #### Aggiunto (Codex MCP integration)
 
 - **`.mcp.json`** esteso con entry `codex` (comando `codex mcp-server`, stdio) accanto all'esistente `playwright`. Al prossimo restart Claude Code i tool esposti da Codex diventano invocabili in-session.
