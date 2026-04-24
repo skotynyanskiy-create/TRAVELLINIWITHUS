@@ -58,6 +58,11 @@ Obiettivo: portare la configurazione Claude Code / Obsidian / VS Code a livello 
 
 **Stato**: **pronto e attivo al prossimo restart Claude Code.** Smoke-test OK (`codex mcp-server` si avvia senza errori). Nessun rischio residuo lato install.
 
+#### Corretto (Vitest 4.1.0 parallelism bug + firebaseService console noise)
+
+- `vitest.config.ts`: aggiunta `fileParallelism: false` per aggirare race condition Vitest 4.1.0 su Windows (tutti gli 8 test file fallivano con `TypeError: Cannot read properties of undefined (reading 'config')` quando eseguiti in parallelo). Run sequenziale: 35s, 86/86 test PASS. Scoperta durante `npm run audit:quality` della sessione. TROUBLESHOOTING aggiornato con diagnosi.
+- `src/services/firebaseService.ts` (`fetchArticleBySlug` fallback): convertito `console.error` in early-return silenzioso per `FirebaseError` con `code === 'permission-denied'` o `not-found` (flusso atteso: articolo non pubblicato o non esistente). Altri errori loggano `console.warn` invece di `error`. Risolveva il 3/33 fail di `audit:visual` sulle preview `/articolo/*` che producevano 6× `console.error` per pagina × 3 viewport, causando fail del `expect(consoleErrors).toEqual([])`.
+
 #### Aggiunto (tooling catalog + install CLI + MCP extension)
 
 Dopo analisi approfondita (via `claude-code-guide`) di MCP server, CLI e plugin disponibili nel 2026, applicato il principio skill-diet del progetto (vedi `project_skills_diet_decision_2026_04_20`): install solo di ciò che ha 4+ use case ricorrenti nello stack reale.

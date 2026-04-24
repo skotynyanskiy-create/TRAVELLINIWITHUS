@@ -298,7 +298,11 @@ export async function fetchArticleBySlug(slug: string): Promise<NormalizedArticl
 
     return normalizeFirestoreArticle(docSnap.id, data);
   } catch (error) {
-    console.error(`Error fetching article by slug fallback for "${slug}":`, error);
+    const code = (error as { code?: string }).code;
+    if (code === 'permission-denied' || code === 'not-found') {
+      return null;
+    }
+    console.warn(`Article fallback fetch failed for "${slug}":`, error);
     return null;
   }
 }

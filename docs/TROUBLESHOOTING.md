@@ -101,6 +101,23 @@ Vedi [`STRIPE_WEBHOOK_RUNBOOK.md`](./STRIPE_WEBHOOK_RUNBOOK.md). Cause frequenti
 
 Vitest 4 richiede Node 22+. Verifica `node -v`.
 
+### `npm run test` fallisce con "Cannot read properties of undefined (reading 'config')" su TUTTI i file
+
+Bug confermato in **Vitest 4.1.0 su Windows**: race condition tra worker thread che eseguono file in parallelo → `describe()` vede i global Vitest undefined. Sintomo: tutti gli 8 file test falliscono all'inizio con identico stack trace su `describe` alla riga 1 del `describe` stesso.
+
+**Fix già applicato** in `vitest.config.ts`:
+
+```ts
+fileParallelism: false,
+```
+
+Test diventano sequenziali (~35s invece di ~20s parallelo), ma stabili al 100%. Quando Vitest rilascerà una 4.1.x con fix upstream, questo flag si può rimuovere.
+
+**Diagnosi se torna il problema**:
+
+- `npx vitest run --no-file-parallelism` → se passa, il fix config non è stato caricato o è stato rimosso.
+- `npx vitest run <singolo.test.tsx>` → se un singolo file passa e il set completo no, è il bug di parallelismo.
+
 ### `npm run e2e` fallisce con "browser not found"
 
 Prima run dopo clone: `npx playwright install --with-deps chromium`. La config usa chromium + Mobile Chrome.
