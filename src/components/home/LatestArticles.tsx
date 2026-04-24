@@ -67,15 +67,31 @@ export default function LatestArticles() {
     queryKey: ['articles', 'recent', demoSettings.showEditorialDemo],
     queryFn: async () => {
       const fetched = await fetchArticles();
-      if (fetched.length === 0) {
+      const fetchedArticles = fetched as Article[];
+      const flagshipCount = fetchedArticles.filter(
+        (article) => article.featuredPlacement === 'home-flagship'
+      ).length;
+
+      // Firestore articles get priority. When demo mode is on AND Firestore
+      // has fewer than 3 flagships, merge demo previews to fill the editorial
+      // flagship slot instead of falling back to random filler.
+      if (demoSettings.showEditorialDemo && flagshipCount < 3) {
+        const seen = new Set(fetchedArticles.map((article) => article.id));
+        const combined = [
+          ...fetchedArticles,
+          ...EDITORIAL_PREVIEWS.filter((preview) => !seen.has(preview.id)),
+        ];
         return {
-          articles: demoSettings.showEditorialDemo
-            ? selectHomepageArticles(EDITORIAL_PREVIEWS)
-            : [],
-          usingExamples: demoSettings.showEditorialDemo,
+          articles: selectHomepageArticles(combined),
+          usingExamples: fetchedArticles.length === 0,
         };
       }
-      return { articles: selectHomepageArticles(fetched as Article[]), usingExamples: false };
+
+      if (fetchedArticles.length === 0) {
+        return { articles: [], usingExamples: false };
+      }
+
+      return { articles: selectHomepageArticles(fetchedArticles), usingExamples: false };
     },
   });
 

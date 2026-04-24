@@ -16,6 +16,9 @@ export default function Footer() {
   const { isShopDiscoverable } = useShopGate();
   const footer = footerContent ?? siteContentDefaults.footer;
   const navigation = navigationContent ?? siteContentDefaults.navigation;
+  // Home has its own editorial InstagramFeed; hide the global grid there to
+  // avoid back-to-back Instagram sections before the footer.
+  const showInstagramGrid = location.pathname !== '/';
 
   const handleNewsletterClick = () => {
     if (location.pathname === '/') {
@@ -29,7 +32,7 @@ export default function Footer() {
 
   return (
     <>
-      <InstagramGrid />
+      {showInstagramGrid && <InstagramGrid />}
       <footer className="border-t border-white/10 bg-[var(--color-footer)] text-zinc-400">
         <div className="pt-20 pb-16">
           <div className="mx-auto max-w-7xl px-6 md:px-12">

@@ -335,3 +335,39 @@ Tutti i campi usano **solo dati già presenti nel body** (duration, period, cost
 - Valutare aggiunta `updatedAt` timestamp ad ogni revisione per trigger di "maintenance" in bullet footer articolo.
 
 Totale wave 5: **9 file modificati** (types, index, ArticleHero, Articolo, HeroSection, LatestArticles, HomeMapTeaser, siteContent, previewContent) + **2 file creati** (PullQuote, FactBox). 0 regression, 0 nuovi audit warning.
+
+## Build pass 2026-04-24 - wave 6 (allineamento copy↔contenuto + Instagram dedup)
+
+Re-check browser post wave 5 ha trovato 3 problemi concreti da sistemare — tutti chiusi in questa wave.
+
+Fix eseguiti:
+
+1. **LatestArticles mostrava solo "Guida a Bali" invece dei 3 pillar promessi dalla copy.** Root cause: quando Firestore restituiva anche 1 articolo, il fallback logic di `LatestArticles.tsx` soppiantava completamente i demo previews, senza merge. Fix: in modalità demo (`showEditorialDemo=true`), se Firestore ha < 3 flagship, si fa merge di Firestore + `EDITORIAL_PREVIEWS` (dedup per id) per garantire i flagship editoriali. Firestore mantiene priorità sui dati reali.
+
+2. **Mismatch copy↔contenuto demo flagship.** La nuova copy della wave 5 nominava "Puglia slow, Islanda Ring Road d'estate e d'inverno", ma i demo `featuredPlacement: 'home-flagship'` erano su Dolomiti + Puglia + Sicilia, e Islanda inverno non era neanche in `demoContent.ts`. Fix in `src/config/demoContent.ts`:
+   - Rimosso `featuredPlacement` da Dolomiti (DEMO_ARTICLE_PREVIEW) e da Sicilia.
+   - Aggiunto `featuredPlacement: 'home-flagship'` a Islanda estate.
+   - Aggiunta nuova entry Islanda inverno con `featuredPlacement: 'home-flagship'`, createdAt `2026-04-24` (il più recente → diventa flagship visuale).
+     Top 3 flagship ora per createdAt desc: Islanda inverno, Puglia, Islanda estate. Coincide con la copy.
+
+3. **Instagram duplicato pre-footer.** La home mostrava `InstagramFeed` (sezione editoriale dedicata) + subito sotto `InstagramGrid` renderizzato dal `Footer.tsx` (band generica pre-footer presente su ogni pagina). Fix: in `Footer.tsx` aggiunto guard `showInstagramGrid = location.pathname !== '/'`. Le altre pagine mantengono il grid generico; la home ha solo la sua versione editoriale.
+
+Bug minore fix:
+
+- **Encoding UTF-8 "cittÃ d'arte"** in `demoContent.ts` L52 — double-encoded mojibake (bytes `0xC3 0x83 0xC2 0xA0` invece di `0xC3 0xA0` per `à`). Corretto a byte-level a `città d'arte`. Impatto: accessibility tree, tag card, rich snippet Google.
+
+### Verdict browser post-wave 6
+
+Home auditor confermato:
+
+- LatestArticles mostra ora i 3 pillar corretti (Islanda inverno flagship + Puglia + Islanda estate). Copy=contenuto.
+- Instagram appare esattamente 1 volta sulla home; resta visibile su `/collaborazioni` come prima.
+- 0 console errors.
+- Encoding pulito.
+
+### Tech debt residuo (fuori scope wave 6)
+
+- `/collaborazioni` ha alcune "sezioni con molto spazio vuoto" rilevate nel browser audit — probabilmente immagini Firestore non disponibili in locale. Da investigare in una pass dedicata alla pagina Collaborazioni.
+- HomeDiscoveryCards mantiene la densità di 3 blocchi di navigazione consecutivi — pattern editoriale da rivedere (B1 rimandata).
+
+Totale wave 6: **3 file src toccati** (`demoContent.ts`, `LatestArticles.tsx`, `Footer.tsx`). 0 regression, 0 nuovi audit warning, build OK.

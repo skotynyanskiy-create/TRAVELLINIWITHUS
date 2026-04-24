@@ -16,7 +16,6 @@ export const DEMO_ARTICLE_PREVIEW = {
   verifiedAt: '2026-03-19T08:00:00.000Z',
   budgetBand: 'Alto',
   disclosureType: 'none',
-  featuredPlacement: 'home-flagship',
   tripIntents: ['Hotel con carattere', 'Posti particolari'],
 };
 
@@ -50,7 +49,7 @@ export const DEMO_ARTICLES_EXTRA = [
     budgetBand: 'Medio',
     disclosureType: 'none',
     featuredPlacement: 'home-flagship',
-    tripIntents: ["Borghi e cittÃ  d'arte", 'Food & Ristoranti'],
+    tripIntents: ["Borghi e città d'arte", 'Food & Ristoranti'],
   },
   {
     id: 'sicilia-orientale-5-giorni',
@@ -66,8 +65,24 @@ export const DEMO_ARTICLES_EXTRA = [
     verifiedAt: '2026-03-31T09:00:00.000Z',
     budgetBand: 'Medio',
     disclosureType: 'none',
-    featuredPlacement: 'home-flagship',
     tripIntents: ['Food & Ristoranti', 'Esperienze insolite'],
+  },
+  {
+    id: 'islanda-ring-road-inverno',
+    slug: 'islanda-ring-road-inverno',
+    title: 'Islanda in inverno: Ring Road in 10 giorni, tra aurora e ghiaccio',
+    category: 'Itinerari completi',
+    image:
+      'https://images.unsplash.com/photo-1504829857797-ddff29c27927?q=80&w=2000&auto=format&fit=crop',
+    excerpt:
+      'Ring Road completa da novembre a febbraio. Quattro ore di luce, hot springs a meno 15, aurora hunting onesto. Non per tutti — ma unica.',
+    readTime: '12 min',
+    createdAt: '2026-04-24T09:00:00.000Z',
+    verifiedAt: '2026-04-24T09:00:00.000Z',
+    budgetBand: 'Alto',
+    disclosureType: 'none',
+    featuredPlacement: 'home-flagship',
+    tripIntents: ['Aurora boreale', 'Paesaggi invernali'],
   },
   {
     id: 'islanda-ring-road-10-giorni',
@@ -80,6 +95,11 @@ export const DEMO_ARTICLES_EXTRA = [
       'Ring Road con calma: cascate, fiordi dell’Est, grotte di ghiaccio e un ritmo che lascia spazio anche al meteo.',
     readTime: '12 min',
     createdAt: '2026-03-24T09:00:00.000Z',
+    verifiedAt: '2026-03-25T09:00:00.000Z',
+    budgetBand: 'Alto',
+    disclosureType: 'none',
+    featuredPlacement: 'home-flagship',
+    tripIntents: ['Paesaggi unici', 'Roadtrip'],
   },
   {
     id: 'lisbona-weekend-lento',
