@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import OptimizedImage from '../OptimizedImage';
 import { heartPulse } from '../../lib/animations';
 import type { ArticleData } from './types';
+import { ARTICLE_DISCLOSURE_LABELS } from './types';
 
 interface ArticleHeroProps {
   article: ArticleData;
@@ -65,6 +66,11 @@ export default function ArticleHero({
             >
               {article.category}
             </Link>
+            {article.type === 'pillar' && (
+              <span className="rounded-full border border-white/40 bg-white/10 px-4 py-1.5 text-white backdrop-blur-sm">
+                Guida completa
+              </span>
+            )}
             <span className="w-8 h-px bg-white/30"></span>
             <span className="flex items-center gap-2 text-white/80">
               <Clock size={14} /> {readingTime} di lettura
@@ -87,6 +93,21 @@ export default function ArticleHero({
             <div className="w-[1px] h-4 bg-white/20 hidden sm:block"></div>
             <span>{article.date}</span>
           </div>
+
+          {(article.disclosureType || article.verifiedAt) && (
+            <div className="mt-5 flex flex-wrap items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/78">
+              {article.disclosureType && (
+                <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5">
+                  {ARTICLE_DISCLOSURE_LABELS[article.disclosureType] ?? article.disclosureType}
+                </span>
+              )}
+              {article.verifiedAt && (
+                <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5">
+                  Verificato
+                </span>
+              )}
+            </div>
+          )}
         </motion.div>
       </div>
 

@@ -1,6 +1,7 @@
 import type { NormalizedArticle } from './articleData';
 import { DESTINATION_GROUPS } from '../config/contentTaxonomy';
 import type { ArticleData } from '../components/article';
+import { getPublicArticlePath } from './articleRoutes';
 
 type PreviewLike = ArticleData & { id: string; slug: string; excerpt?: string };
 
@@ -29,7 +30,10 @@ export function getDestinationGroup(article: Pick<NormalizedArticle, 'country' |
     return 'Italia';
   }
 
-  if (article.continent && DESTINATION_GROUPS.includes(article.continent as (typeof DESTINATION_GROUPS)[number])) {
+  if (
+    article.continent &&
+    DESTINATION_GROUPS.includes(article.continent as (typeof DESTINATION_GROUPS)[number])
+  ) {
     return article.continent;
   }
 
@@ -44,7 +48,7 @@ export function mapArticleToArchiveItem(article: NormalizedArticle): ArchiveItem
     title: article.title,
     excerpt: article.excerpt || article.description,
     image: article.image,
-    link: `/articolo/${article.slug || article.id}`,
+    link: getPublicArticlePath(article),
     category: article.category,
     country: article.country,
     region: article.region,
@@ -62,7 +66,7 @@ export function mapArticleToArchiveItem(article: NormalizedArticle): ArchiveItem
 
 export function mapPreviewToArchiveItem(
   preview: PreviewLike,
-  experienceTypes: string[] = [],
+  experienceTypes: string[] = []
 ): ArchiveItem {
   const locationStr = preview.location || '';
   const isItaly = /italia/i.test(locationStr);
@@ -79,7 +83,7 @@ export function mapPreviewToArchiveItem(
     title: preview.title,
     excerpt: preview.excerpt || preview.description,
     image: preview.image,
-    link: `/articolo/${preview.slug}`,
+    link: getPublicArticlePath(preview),
     category: preview.category,
     country,
     continent,

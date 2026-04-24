@@ -30,7 +30,9 @@ const MAX_TITLE_LEN = 75;
 const MIN_DESCRIPTION_LEN = 80;
 const MAX_DESCRIPTION_LEN = 170;
 const MIN_CONTENT_WORDS = 600;
+const MIN_CONTENT_WORDS_PILLAR = 1500;
 const MIN_HEADINGS = 3;
+const MIN_HEADINGS_PILLAR = 5;
 
 function countWords(text: string): number {
   return text
@@ -120,25 +122,50 @@ export function validateArticle(article: Partial<NormalizedArticle>): ArticleVal
   const wordCount = countWords(content);
   const headingCount = countMarkdownHeadings(content);
   const imageCount = countImages(content);
+  const isPillar = article.type === 'pillar';
+  const minWords = isPillar ? MIN_CONTENT_WORDS_PILLAR : MIN_CONTENT_WORDS;
+  const minHeadings = isPillar ? MIN_HEADINGS_PILLAR : MIN_HEADINGS;
 
   if (!content) {
     issues.push({ severity: 'error', field: 'content', message: 'Corpo articolo vuoto' });
-  } else if (wordCount < MIN_CONTENT_WORDS) {
+  } else if (wordCount < minWords) {
     issues.push({
       severity: 'warning',
       field: 'content',
-      message: `Contenuto breve (${wordCount} parole, target min ${MIN_CONTENT_WORDS})`,
-      hint: 'Gli articoli Travellini puntano a valore esperienziale, non al minimo SEO.',
+      message: `Contenuto breve (${wordCount} parole, target min ${minWords}${isPillar ? ' per una pillar guide' : ''})`,
+      hint: isPillar
+        ? 'Le pillar guide sono risorse lunghe e complete: servono sezioni When, Where to stay, What to eat, Budget, Itinerary.'
+        : 'Gli articoli Travellini puntano a valore esperienziale, non al minimo SEO.',
     });
   }
 
-  if (content && headingCount < MIN_HEADINGS) {
+  if (content && headingCount < minHeadings) {
     issues.push({
       severity: 'warning',
       field: 'content',
-      message: `Solo ${headingCount} heading (target min ${MIN_HEADINGS})`,
+      message: `Solo ${headingCount} heading (target min ${minHeadings}${isPillar ? ' per pillar' : ''})`,
       hint: 'Struttura con H2/H3: lettura scannabile e opportunità per featured snippet.',
     });
+  }
+
+  if (isPillar) {
+    if (!article.hotels || article.hotels.length === 0) {
+      issues.push({
+        severity: 'error',
+        field: 'content',
+        message: 'Pillar senza hotel consigliati',
+        hint: 'Una guida completa deve includere almeno 2-3 hotel curati con priceHint e rating.',
+      });
+    }
+
+    if (!article.shopCta) {
+      issues.push({
+        severity: 'warning',
+        field: 'content',
+        message: 'Pillar senza Shop CTA',
+        hint: 'Collega un prodotto shop (Google Maps, preset o ebook) per monetizzare il traffico pillar.',
+      });
+    }
   }
 
   const cover = article.coverImage?.trim() || article.image?.trim() || '';
@@ -163,6 +190,42 @@ export function validateArticle(article: Partial<NormalizedArticle>): ArticleVal
       field: 'author',
       message: 'Autore non indicato',
       hint: 'E-E-A-T: senza author byline Google fatica a stabilire expertise.',
+    });
+  }
+
+  if (!article.disclosureType) {
+    issues.push({
+      severity: 'error',
+      field: 'disclosureType',
+      message: 'Disclosure editoriale non impostata',
+      hint: 'Indica se il viaggio e personale, ospitato, pagato o con affiliazioni.',
+    });
+  }
+
+  if (!article.verifiedAt) {
+    issues.push({
+      severity: 'error',
+      field: 'verifiedAt',
+      message: 'Data verifica mancante',
+      hint: 'Compila l ultima data in cui il contenuto e stato verificato sul campo o aggiornato.',
+    });
+  }
+
+  if (!article.budgetBand) {
+    issues.push({
+      severity: 'warning',
+      field: 'budgetBand',
+      message: 'Fascia budget non impostata',
+      hint: 'Serve per rendere piu leggibile l archivio e i box decisionali.',
+    });
+  }
+
+  if (!article.tripIntents?.length) {
+    issues.push({
+      severity: 'warning',
+      field: 'tripIntents',
+      message: 'Intenti di viaggio non compilati',
+      hint: 'Seleziona 1-3 intenti per collegare meglio articolo, home e hub discovery.',
     });
   }
 

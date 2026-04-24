@@ -19,15 +19,27 @@ import NotFound from './NotFound';
 import { SITE_URL } from '../config/site';
 import { PREVIEW_ARTICLES } from '../config/previewContent';
 import {
+  AffiliateBar,
+  ARTICLE_DISCLOSURE_LABELS,
   ArticleHero,
   ArticleSidebar,
   AuthorBio,
+  HotelRecommendations,
   MobileBottomBar,
   MobileTocOverlay,
+  PinterestSaveBanner,
   RelatedArticles,
+  ShopContextualCta,
   TableOfContents,
 } from '../components/article';
 import type { ArticleData, RelatedArticleSummary, TocItem } from '../components/article';
+import { formatDateValue } from '../utils/dateValue';
+import {
+  getPublicArticleCollectionPath,
+  getPublicArticlePath,
+  getPublicSectionLabel,
+  getPublicArticleSection,
+} from '../utils/articleRoutes';
 
 const BRAND_AUTHOR = 'Rodrigo & Betta';
 
@@ -81,23 +93,35 @@ function toIsoDateString(value: unknown): string | null {
 function getCategoryPath(category: string) {
   if (category === 'Esperienze') return '/esperienze';
   if (category === 'Destinazioni') return '/destinazioni';
-  return '/guide';
+  return getPublicArticleCollectionPath({ category });
 }
 
-function ensureArticleData(article: Partial<ArticleData> & { title: string; image: string; category: string; content: ArticleData['content'] }): ArticleData {
+function ensureArticleData(
+  article: Partial<ArticleData> & {
+    title: string;
+    image: string;
+    category: string;
+    content: ArticleData['content'];
+  }
+): ArticleData {
   return {
     title: article.title,
     description: article.description || 'Guida e racconto di viaggio firmato Travelliniwithus.',
     image: article.image,
     category: article.category || 'Guide',
+    type: article.type || 'guide',
     date: article.date || 'In aggiornamento',
     author: article.author || BRAND_AUTHOR,
     readTime: article.readTime || '6 min',
     location: article.location || 'Destinazione',
     period: article.period || 'Da valutare',
     budget: article.budget || 'Da definire',
+    budgetBand: article.budgetBand,
     duration: article.duration,
     continent: article.continent,
+    tripIntents: article.tripIntents,
+    disclosureType: article.disclosureType,
+    featuredPlacement: article.featuredPlacement,
     content: article.content,
     isMarkdown: article.isMarkdown ?? typeof article.content === 'string',
     tips: article.tips,
@@ -116,6 +140,9 @@ function ensureArticleData(article: Partial<ArticleData> & { title: string; imag
     mapZoom: article.mapZoom,
     videoUrl: article.videoUrl,
     updatedAt: article.updatedAt,
+    verifiedAt: article.verifiedAt,
+    hotels: article.hotels,
+    shopCta: article.shopCta,
   };
 }
 
@@ -125,7 +152,11 @@ function buildTocItems(article: ArticleData): TocItem[] {
     { id: 'pratico', label: 'Cose da sapere', show: true },
     { id: 'itinerario', label: 'Itinerario', show: !!article.itinerary?.length },
     { id: 'mappa', label: 'Mappa', show: !!(article.mapUrl || article.mapMarkers?.length) },
-    { id: 'consigli', label: 'Consigli pratici', show: !!(article.tips?.length || article.packingList?.length) },
+    {
+      id: 'consigli',
+      label: 'Consigli pratici',
+      show: !!(article.tips?.length || article.packingList?.length),
+    },
     { id: 'risorse', label: 'Risorse utili', show: true },
   ];
 }
@@ -134,7 +165,10 @@ function getReadingTime(article: ArticleData) {
   if (article.readTime) return article.readTime;
   if (typeof article.content !== 'string') return '6 min';
 
-  const plainText = article.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  const plainText = article.content
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
   const wordCount = plainText ? plainText.split(' ').length : 0;
   return `${Math.max(3, Math.ceil(wordCount / 200))} min`;
 }
@@ -162,7 +196,9 @@ function ArticleBody({ article }: { article: ArticleData }) {
           <p className="mt-5 text-lg leading-relaxed text-black/70">{children}</p>
         ),
         ul: ({ children }) => (
-          <ul className="mt-6 space-y-3 pl-0 text-base leading-relaxed text-black/70">{children}</ul>
+          <ul className="mt-6 space-y-3 pl-0 text-base leading-relaxed text-black/70">
+            {children}
+          </ul>
         ),
         li: ({ children }) => (
           <li className="flex gap-3">
@@ -170,7 +206,9 @@ function ArticleBody({ article }: { article: ArticleData }) {
             <span>{children}</span>
           </li>
         ),
-        strong: ({ children }) => <strong className="font-semibold text-[var(--color-ink)]">{children}</strong>,
+        strong: ({ children }) => (
+          <strong className="font-semibold text-[var(--color-ink)]">{children}</strong>
+        ),
       }}
     >
       {article.content}
@@ -183,7 +221,9 @@ export default function Articolo() {
   const currentSlug = slug || '';
   const { isFavorite, toggleFavorite } = useFavorites();
   const [article, setArticle] = useState<ArticleData | null>(null);
-  const [articleSource, setArticleSource] = useState<'preview' | 'published' | 'missing'>('missing');
+  const [articleSource, setArticleSource] = useState<'preview' | 'published' | 'missing'>(
+    'missing'
+  );
   const [relatedArticles, setRelatedArticles] = useState<RelatedArticleSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
@@ -228,8 +268,8 @@ export default function Articolo() {
                 image: string;
                 category: string;
                 content: ArticleData['content'];
-              },
-            ),
+              }
+            )
           );
           setArticleSource('published');
         } else {
@@ -270,9 +310,12 @@ export default function Articolo() {
     () =>
       Object.entries(PREVIEW_ARTICLES)
         .filter(([previewSlug]) => previewSlug !== currentSlug)
-        .map(([previewSlug, previewArticle]) => [previewSlug, ensureArticleData(previewArticle)] as [string, ArticleData])
+        .map(
+          ([previewSlug, previewArticle]) =>
+            [previewSlug, ensureArticleData(previewArticle)] as [string, ArticleData]
+        )
         .slice(0, 2),
-    [currentSlug],
+    [currentSlug]
   );
 
   if (loading) {
@@ -292,10 +335,26 @@ export default function Articolo() {
   const readingTime = getReadingTime(article);
   const authorName = article.author || BRAND_AUTHOR;
   const categoryPath = getCategoryPath(article.category);
+  const editorialSection = getPublicArticleSection({
+    category: article.category,
+    type: article.type,
+  });
+  const collectionLabel = getPublicSectionLabel(editorialSection);
+  const returnToArchiveLabel =
+    categoryPath === '/itinerari'
+      ? 'Torna agli itinerari'
+      : categoryPath === '/guide'
+        ? 'Torna alle guide'
+        : 'Torna alla sezione';
   const articleTitle = article.title;
   const articleDescription = article.description;
   const articleImage = article.image;
-  const articleUrl = `${SITE_URL}/articolo/${currentSlug}`;
+  const articlePath = getPublicArticlePath({
+    slug: currentSlug,
+    category: article.category,
+    type: article.type,
+  });
+  const articleUrl = `${SITE_URL}${articlePath}`;
   const datePublished = toIsoDateString(article.date) || new Date().toISOString();
   const dateModified = toIsoDateString(article.updatedAt) || datePublished;
   const tocItems = buildTocItems(article);
@@ -316,6 +375,7 @@ export default function Articolo() {
     }
   };
 
+  const isPillar = article.type === 'pillar';
   const articleSchemaData = isPreviewArticle
     ? undefined
     : {
@@ -326,7 +386,7 @@ export default function Articolo() {
         dateModified,
         authorName,
         url: articleUrl,
-        articleSection: article.category,
+        articleSection: isPillar ? `Guida completa — ${article.category}` : article.category,
       };
 
   const articleBreadcrumbs = isPreviewArticle
@@ -352,7 +412,9 @@ export default function Articolo() {
         />
         <Helmet>
           {!isPreviewArticle && <meta property="article:published_time" content={datePublished} />}
-          {!isPreviewArticle && article.updatedAt && <meta property="article:modified_time" content={dateModified} />}
+          {!isPreviewArticle && article.updatedAt && (
+            <meta property="article:modified_time" content={dateModified} />
+          )}
           <meta name="author" content={authorName} />
         </Helmet>
 
@@ -400,7 +462,10 @@ export default function Articolo() {
               />
             )}
 
-            <div id="overview" className="mt-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start">
+            <div
+              id="overview"
+              className="mt-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start"
+            >
               <div>
                 <div className="rounded-[2rem] border border-[var(--color-accent)]/15 bg-[var(--color-accent-soft)] p-8 md:p-10">
                   <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
@@ -431,7 +496,11 @@ export default function Articolo() {
                       { icon: <MapPin size={18} />, label: 'Dove', value: article.location },
                       { icon: <Clock size={18} />, label: 'Quando', value: article.period },
                       { icon: <WalletCards size={18} />, label: 'Budget', value: article.budget },
-                      { icon: <Route size={18} />, label: 'Durata', value: article.duration || readingTime },
+                      {
+                        icon: <Route size={18} />,
+                        label: 'Durata',
+                        value: article.duration || readingTime,
+                      },
                     ].map((item) => (
                       <div key={item.label} className="bg-white p-6">
                         <div className="mb-4 flex items-center gap-2 text-[var(--color-accent-text)]">
@@ -440,9 +509,37 @@ export default function Articolo() {
                             {item.label}
                           </span>
                         </div>
-                        <p className="font-serif text-xl leading-tight text-[var(--color-ink)]">{item.value}</p>
+                        <p className="font-serif text-xl leading-tight text-[var(--color-ink)]">
+                          {item.value}
+                        </p>
                       </div>
                     ))}
+                  </div>
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    {article.tripIntents?.map((item) => (
+                      <span
+                        key={item}
+                        className="rounded-full bg-[var(--color-sand)] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-black/55"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                    {article.budgetBand && (
+                      <span className="rounded-full bg-[var(--color-accent-soft)] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)]">
+                        Budget {article.budgetBand}
+                      </span>
+                    )}
+                    {article.verifiedAt && (
+                      <span className="rounded-full bg-white px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-black/45 ring-1 ring-black/5">
+                        Verificato {formatDateValue(article.verifiedAt)}
+                      </span>
+                    )}
+                    {article.disclosureType && (
+                      <span className="rounded-full bg-white px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-black/45 ring-1 ring-black/5">
+                        {ARTICLE_DISCLOSURE_LABELS[article.disclosureType] ??
+                          article.disclosureType}
+                      </span>
+                    )}
                   </div>
                 </section>
 
@@ -478,13 +575,18 @@ export default function Articolo() {
                     </div>
                     <div className="space-y-5">
                       {article.itinerary.map((step) => (
-                        <div key={`${step.day}-${step.title}`} className="grid gap-5 rounded-[2rem] border border-black/5 bg-[var(--color-sand)] p-6 md:grid-cols-[80px_1fr]">
+                        <div
+                          key={`${step.day}-${step.title}`}
+                          className="grid gap-5 rounded-[2rem] border border-black/5 bg-[var(--color-sand)] p-6 md:grid-cols-[80px_1fr]"
+                        >
                           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-ink)] font-serif text-2xl text-white">
                             {step.day}
                           </div>
                           <div>
                             <h3 className="font-serif text-2xl">{step.title}</h3>
-                            <p className="mt-2 text-base leading-relaxed text-black/62">{step.description}</p>
+                            <p className="mt-2 text-base leading-relaxed text-black/62">
+                              {step.description}
+                            </p>
                           </div>
                         </div>
                       ))}
@@ -519,6 +621,22 @@ export default function Articolo() {
                   </section>
                 )}
 
+                {article.shopCta && (
+                  <ShopContextualCta
+                    destinationName={article.location.split(',')[0]}
+                    productType={article.shopCta.productType}
+                    productUrl={article.shopCta.productUrl}
+                    count={article.shopCta.count}
+                  />
+                )}
+
+                {article.hotels && article.hotels.length > 0 && (
+                  <HotelRecommendations
+                    hotels={article.hotels}
+                    destination={article.location.split(',')[0]}
+                  />
+                )}
+
                 <section id="consigli" className="mt-20 grid scroll-mt-32 gap-8 md:grid-cols-2">
                   {article.tips && article.tips.length > 0 && (
                     <div className="rounded-[2rem] bg-[var(--color-sand)] p-8">
@@ -528,8 +646,14 @@ export default function Articolo() {
                       </h2>
                       <ul className="space-y-4">
                         {article.tips.map((tip) => (
-                          <li key={tip} className="flex gap-3 text-sm leading-relaxed text-black/65">
-                            <CheckCircle2 className="mt-1 shrink-0 text-[var(--color-accent)]" size={16} />
+                          <li
+                            key={tip}
+                            className="flex gap-3 text-sm leading-relaxed text-black/65"
+                          >
+                            <CheckCircle2
+                              className="mt-1 shrink-0 text-[var(--color-accent)]"
+                              size={16}
+                            />
                             {tip}
                           </li>
                         ))}
@@ -542,8 +666,14 @@ export default function Articolo() {
                       <h2 className="mb-6 font-serif text-2xl">Cosa tenere pronto</h2>
                       <ul className="space-y-4">
                         {article.packingList.map((item) => (
-                          <li key={item} className="flex gap-3 text-sm leading-relaxed text-white/70">
-                            <CheckCircle2 className="mt-1 shrink-0 text-[var(--color-accent)]" size={16} />
+                          <li
+                            key={item}
+                            className="flex gap-3 text-sm leading-relaxed text-white/70"
+                          >
+                            <CheckCircle2
+                              className="mt-1 shrink-0 text-[var(--color-accent)]"
+                              size={16}
+                            />
                             {item}
                           </li>
                         ))}
@@ -557,7 +687,9 @@ export default function Articolo() {
                     <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
                       Risorse utili
                     </p>
-                    <h2 className="text-3xl font-serif md:text-4xl">Strumenti, non coupon a caso.</h2>
+                    <h2 className="text-3xl font-serif md:text-4xl">
+                      Strumenti, non coupon a caso.
+                    </h2>
                     <p className="mt-5 max-w-2xl text-base leading-relaxed text-black/64">
                       Quando un articolo ha risorse affiliate, devono aiutare davvero la decisione:
                       assicurazione, eSIM, prenotazioni o gear entrano solo se sono coerenti con il
@@ -572,10 +704,10 @@ export default function Articolo() {
                         <ArrowRight size={15} />
                       </Link>
                       <Link
-                        to="/guide"
+                        to={categoryPath}
                         className="inline-flex items-center gap-2 rounded-full border border-black/10 px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)]"
                       >
-                        Torna alle guide
+                        {returnToArchiveLabel}
                       </Link>
                     </div>
                   </div>
@@ -585,15 +717,28 @@ export default function Articolo() {
                   <Newsletter variant="article" source="article_bottom" />
                 </div>
 
+                <PinterestSaveBanner
+                  articleUrl={articleUrl}
+                  articleTitle={articleTitle}
+                  articleDescription={articleDescription}
+                  articleImage={articleImage}
+                />
+
                 <AuthorBio />
 
                 <div className="mt-20">
                   <FinalCtaSection intent="discovery" />
                 </div>
 
+                <div className="mt-20">
+                  <AffiliateBar destination={article.location.split(',')[0]} />
+                </div>
+
                 <RelatedArticles
                   relatedArticles={relatedArticles}
                   demoRelatedArticles={isPreviewArticle ? previewRelatedArticles : []}
+                  fallbackHref={categoryPath}
+                  fallbackLabel={`Vai a ${collectionLabel.toLowerCase()}`}
                 />
               </div>
 

@@ -3,10 +3,13 @@ import { ArrowRight, Calendar, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import OptimizedImage from '../OptimizedImage';
 import type { ArticleData, RelatedArticleSummary } from './types';
+import { getPublicArticlePath } from '../../utils/articleRoutes';
 
 interface RelatedArticlesProps {
   relatedArticles: RelatedArticleSummary[];
   demoRelatedArticles: [string, ArticleData][];
+  fallbackHref?: string;
+  fallbackLabel?: string;
 }
 
 function RelatedCard({
@@ -57,6 +60,8 @@ function RelatedCard({
 export default function RelatedArticles({
   relatedArticles,
   demoRelatedArticles,
+  fallbackHref = '/guide',
+  fallbackLabel = 'Vai alle guide',
 }: RelatedArticlesProps) {
   return (
     <motion.div
@@ -72,7 +77,7 @@ export default function RelatedArticles({
           relatedArticles.map((data) => (
             <RelatedCard
               key={data.id}
-              to={`/articolo/${data.id}`}
+              to={getPublicArticlePath({ slug: data.id, category: data.category })}
               title={data.title}
               image={data.image}
               category={data.category}
@@ -83,7 +88,7 @@ export default function RelatedArticles({
           demoRelatedArticles.map(([slug, data]) => (
             <RelatedCard
               key={slug}
-              to={`/articolo/${slug}`}
+              to={getPublicArticlePath({ slug, category: data.category, type: data.type })}
               title={data.title}
               image={data.image}
               category={data.category}
@@ -100,10 +105,10 @@ export default function RelatedArticles({
               collegati in modo più preciso per tema, luogo o intento di lettura.
             </p>
             <Link
-              to="/guide"
+              to={fallbackHref}
               className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent-text)]"
             >
-              Vai alle guide
+              {fallbackLabel}
               <ArrowRight size={14} />
             </Link>
           </div>
