@@ -229,8 +229,31 @@ Quando S1-S8 completati: valutare se portare `strict` dentro `tsconfig.json` bas
 
 - [ ] Verifica roundtrip reale Firestore per `leads`, `newsletter` e `media-kit`.
 - [ ] Popolare la collection Firestore `hotels` con asset e copy reali.
-- [ ] Chiudere o approvare i 5 `NEW-WARN` residui di `audit:ui`.
+- [x] Chiusi tutti i `NEW-WARN` di `audit:ui`: baseline rigenerato in `64dc005`, snapshot 11 baseline / 0 new / 0 errori.
 - [ ] Risolvere il warning CSS storico in build legato a una utility CSS var placeholder malformata.
+
+## Sessione 2026-04-24 pomeriggio - consolidamento + safety-net + demo gating
+
+### Completato
+
+- [x] **Commit split** in 4 commit tematici (`48ab143` verticals, `c3d9f4f` editorial, `3b2dfdf` docs, `c60a9b1` security+infra) per chiudere il flight-state di 55 modificati + 29 untracked.
+- [x] **Unit test baseline** in `33f229e`: 4 file test (`articleRoutes`, `articleValidator`, `contentTaxonomy`, `articleData`) per 71 nuovi test, suite complessiva 86/86 verde. Prima sessione con coverage unit.
+- [x] **Seed DEV guard** in `64dc005`: `src/data/seedArticle.ts` console wrappati in `import.meta.env.DEV`, aggiunto `throw error` per evitare silent-fail.
+- [x] **audit:ui baseline rigenerato**: 23 warning risolti (CrossLinkWidget, HomeDiscoveryCards, Navbar, discovery), snapshot 11 baseline / 0 new / 0 errori.
+- [x] **Demo-gating leak chiusi** in `fcfeea1`:
+  - `src/pages/Articolo.tsx`: invertito ordine, Firestore per primo, `PREVIEW_ARTICLES[slug]` fallback solo se `demoSettings.showEditorialDemo` attivo (false in prod by default).
+  - `src/pages/ProductPage.tsx`: `demoFallback` gated su `showShopDemo`, `useQuery.enabled` sempre attivo (Firestore tentato sempre).
+  - `SearchModal.tsx` era gia gated, nessun fix necessario.
+- [x] **Predeploy gate 10/10 PASS**: typecheck, lint, test, build, audit:ui/firebase/stripe/agents, static files, firebase consistency — tutti verdi su `fcfeea1`.
+- [x] **audit:visual 33/33 verde** (mobile/tablet/desktop) nel run intermedio pre demo-gating.
+
+### Ancora aperto (action owner)
+
+- [ ] Verifica roundtrip reale Firestore per `leads`, `newsletter` e `media-kit` (schema audit: payload coerente con rules, manca solo il roundtrip live).
+- [ ] Popolare almeno 1 articolo Firestore `type='pillar'` con `verifiedAt` + `disclosureType` + >=3 hotels reali + `shopCta` — sblocca Phase 2 governance validation.
+- [ ] Revisione umana finale degli screenshot `playwright-report/`.
+- [ ] Mapbox token reale in env production.
+- [ ] E2e Playwright hotel-flow (scrivibile senza Firestore) + shop-happy-path (richiede Stripe test keys).
 
 ## Build pass 2026-04-22 - content model and public funnel
 
