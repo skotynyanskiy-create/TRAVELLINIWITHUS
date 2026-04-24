@@ -45,12 +45,17 @@ npm run dev
 
 ## Setup on a second PC
 
-Clone only the canonical repository:
+Guida operativa completa (Claude Code plugin, MCP auth, `.env`, Obsidian, Codex CLI):
+
+→ [`docs/SECOND_PC_SETUP.md`](docs/SECOND_PC_SETUP.md)
+
+Quick start:
 
 ```bash
 git clone https://github.com/skotynyanskiy-create/TRAVELLINIWITHUS.git
 cd TRAVELLINIWITHUS
 npm install
+cp .env.example .env   # compila con le chiavi reali
 npm run dev
 ```
 
@@ -61,6 +66,8 @@ docs/
 ```
 
 The `docs/` folder is part of the repository on purpose. It contains the operational vault, project notes, marketing hub and release tracking. Obsidian settings that are useful for keeping the working environment consistent across computers are also versioned.
+
+Per replicare completamente l'ambiente Claude Code (plugin user-level, MCP auth, memoria di sessione), segui [`docs/SECOND_PC_SETUP.md`](docs/SECOND_PC_SETUP.md) e [`docs/CLAUDE_CODE_PLUGINS_MANIFEST.md`](docs/CLAUDE_CODE_PLUGINS_MANIFEST.md).
 
 ## Git workflow
 
