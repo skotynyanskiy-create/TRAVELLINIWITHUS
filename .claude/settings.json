@@ -43,6 +43,17 @@
           }
         ]
       }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'FILE=\"$CLAUDE_FILE_PATH\"; if echo \"$FILE\" | grep -qE \"\\.(ts|tsx)$\" && ! echo \"$FILE\" | grep -qE \"\\.test\\.|\\.spec\\.|^e2e/|/e2e/\"; then echo \"💡 TS edited: $FILE — ricordati npm run typecheck prima del commit.\" >&2; fi'"
+          }
+        ]
+      }
     ]
   }
 }

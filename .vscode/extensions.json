@@ -1,0 +1,13 @@
+{
+  "// recommendations": "Estensioni raccomandate per chi clona il repo. Non obbligatorie — VS Code le propone solo come suggerimento.",
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "bradlc.vscode-tailwindcss",
+    "ms-playwright.playwright",
+    "vitest.explorer",
+    "toba.vsfire",
+    "github.vscode-github-actions",
+    "eamodio.gitlens"
+  ]
+}
