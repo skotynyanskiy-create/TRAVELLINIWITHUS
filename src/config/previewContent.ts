@@ -20,6 +20,11 @@ export const PREVIEW_EXPERIENCE_TYPES: Record<string, string[]> = {
     'Passeggiate panoramiche',
     'Esperienze insolite',
   ],
+  'islanda-ring-road-inverno': [
+    'Posti particolari',
+    'Passeggiate panoramiche',
+    'Esperienze insolite',
+  ],
   'lisbona-weekend-lento': ['Food & Ristoranti', 'Locali insoliti', "Borghi e città d'arte"],
   'provenza-lavanda-luberon': [
     'Passeggiate panoramiche',
@@ -759,6 +764,166 @@ Non inseguire ogni cascata. Scegli le 5 migliori (Gullfoss, Seljalandsfoss, Skog
         title: 'Myvatn',
         category: 'Area geotermale',
         coordinates: [-16.9333, 65.6],
+      },
+    ],
+    mapCenter: [-18.5, 64.9],
+    mapZoom: 5,
+    isMarkdown: true,
+  },
+
+  'islanda-ring-road-inverno': {
+    id: 'islanda-ring-road-inverno',
+    slug: 'islanda-ring-road-inverno',
+    title: 'Islanda in inverno: Ring Road in 10 giorni, tra aurora e ghiaccio',
+    category: 'Itinerari completi',
+    image:
+      'https://images.unsplash.com/photo-1504829857797-ddff29c27927?q=80&w=2000&auto=format&fit=crop',
+    excerpt:
+      'Ring Road completa da novembre a febbraio. Quattro ore di luce, hot springs a meno 15, aurora hunting onesto. Non per tutti — ma unica.',
+    description:
+      'Itinerario circolare completo dell Islanda da novembre a febbraio, con 5 strutture testate, regole di guida invernale, e aurora hunting raccontato senza false promesse.',
+    location: 'Islanda',
+    period: 'Novembre - febbraio',
+    budget: '€€€',
+    duration: '10 giorni',
+    readTime: '12 min',
+    date: '24 aprile 2026',
+    author: 'Rodrigo & Betta',
+    continent: 'Europa',
+    content: `
+L Islanda d estate e bella ma e un parco a tema per bus turistici. L Islanda da novembre a febbraio e un altro paese: meno del 30% dei visitatori, aurora boreale regolare, prezzi hotel ragionevoli, paesaggi davvero solitari.
+
+## Perche l inverno
+
+Non e la vacanza facile. Dovrai guidare su ghiaccio 8 ore al giorno, gestire vento a 100 km/h, cambiare piani per meteo due volte al giorno. In cambio ottieni il cielo piu scuro del pianeta, hot springs private, 12 ore di notte utili per aurora hunting.
+
+## Itinerario 10 giorni — Ring Road da Reykjavik
+
+Giorno 1: Keflavik arrivo, Reykjavik. Giorno 2: Golden Circle (Thingvellir, Geysir, Gullfoss) + sud, notte Vik. Giorno 3: Skaftafell, Diamond Beach, notte Hof. Giorno 4: fiordi orientali. Giorno 5: Dettifoss, Myvatn. Giorno 6: Myvatn Nature Baths, Godafoss. Giorno 7: Akureyri. Giorno 8-9: Snaefellsnes peninsula, Hotel Budir. Giorno 10: rientro Keflavik.
+
+## Dove dormire
+
+Cinque strutture testate: Konsulat (Reykjavik), Hotel Kria (Vik), Fosshotel Glacier Lagoon (Hof), Vogafjos Farm Resort (Myvatn), Hotel Budir (Snaefellsnes). Prezzi inverno €200-380/notte — sensibilmente piu accessibili dell estate.
+
+## Aurora boreale: verita
+
+L indice Kp non basta. Cielo coperto = niente aurora anche con Kp 6. Controlla vedur.is (meteo islandese) insieme al Kp. Fascia tipica: mezzanotte-2am, ma puo apparire alle 22 o alle 4. Chi promette "aurora guaranteed" sta mentendo — su 10 notti abbiamo visto aurora 4 volte.
+
+## Guida invernale
+
+Auto 4x4 obbligatoria (Duster o sopra), gomme chiodate, controlla SafeTravel.is ogni mattina. F-roads (altopiano) chiuse ottobre-maggio. Mai uscire di strada per una foto: multa €300 + danno irreversibile.
+
+## Consiglio Travellini
+
+Meta febbraio e la nostra sweet spot: neve piena per le foto, giornate leggermente piu lunghe di gennaio, aurora ancora forte. Budget realistico 10 giorni in 2: €3.500-5.000 esclusi voli. Prenota tutto 4-5 mesi prima.
+`,
+    highlights: [
+      'Ring Road completa con 5 basi notturne, rispettando ritmo invernale',
+      'Aurora hunting onesto: come combinare Kp, meteo e luoghi bui',
+      'Cinque strutture di design scelte per posizione e atmosfera invernale',
+    ],
+    itinerary: [
+      {
+        day: 1,
+        title: 'Arrivo Keflavik e prima notte Reykjavik',
+        description:
+          'Pickup auto 4x4, check-in Konsulat. Cena lenta in centro, jet lag soft. Prima uscita aurora se il cielo e libero.',
+      },
+      {
+        day: 2,
+        title: 'Golden Circle + costa sud',
+        description:
+          'Thingvellir, Geysir, Gullfoss al mattino. Seljalandsfoss e Skogafoss nel pomeriggio. Notte a Vik, Hotel Kria.',
+      },
+      {
+        day: 3,
+        title: 'Costa sud-est e laguna glaciale',
+        description:
+          'Parco Skaftafell, Diamond Beach, laguna Jokulsarlon al tramonto. Aurora da Fosshotel Glacier Lagoon.',
+      },
+      {
+        day: 4,
+        title: 'Fiordi orientali',
+        description:
+          'Trasferimento lento verso Egilsstadir. Pause a Djupivogur, tunnel Lagarfljot. Giornata di guida ma panorami solitari.',
+      },
+      {
+        day: 5,
+        title: 'Mývatn da est',
+        description:
+          'Dettifoss lato est (accessibile in inverno), area geotermica Namafjall. Check-in Vogafjos.',
+      },
+    ],
+    tips: [
+      'Auto 4x4 obbligatoria, gomme chiodate comprese nel noleggio.',
+      'SafeTravel.is ogni mattina per chiusure strade e allerte vento.',
+      'Power bank caldo addosso: l iPhone a -10°C muore in 20 minuti.',
+      'Mezza giornata in piu per meteo imprevisto: non programmare ogni ora.',
+      'Maschera da sci per vento laterale — serve davvero.',
+    ],
+    packingList: [
+      'Merino 200g + pile tecnico + piumino + guscio Goretex',
+      'Pantaloni tecnici + sotto-pantaloni merino',
+      'Scarponi waterproof con ramponcini',
+      'Cappello copri-orecchie + muffole',
+      'Maschera da sci per vento',
+      'Power bank 20.000 mAh',
+      'Costume da bagno per hot springs',
+    ],
+    hiddenGems: [
+      {
+        title: 'Seljavallalaug pool',
+        description: 'piscina termale abbandonata nella valle, accesso gratuito',
+      },
+      {
+        title: 'Studlagil canyon',
+        description: 'colonne basaltiche nell est, fuori dai tour classici',
+      },
+    ],
+    localFood: [
+      { name: 'Plokkfiskur', description: 'stufato di pesce e patate da Messinn, Reykjavik' },
+      { name: 'Zuppa di agnello', description: 'calda e lenta da Svarta Kaffid, Reykjavik' },
+      { name: 'Trota affumicata Laxa', description: 'servita al ristorante Vogafjos, Myvatn' },
+      {
+        name: 'Pane di segale cotto a vapore geotermico',
+        description: 'Fontana Bakery, Laugarvatn',
+      },
+    ],
+    mapMarkers: [
+      {
+        id: 'reykjavik',
+        name: 'Reykjavik',
+        title: 'Capitale',
+        category: 'Capitale',
+        coordinates: [-21.9, 64.1],
+      },
+      {
+        id: 'vik',
+        name: 'Vik',
+        title: 'Costa sud, spiaggia nera Reynisfjara',
+        category: 'Costa sud',
+        coordinates: [-19.0, 63.42],
+      },
+      {
+        id: 'jokulsarlon',
+        name: 'Jokulsarlon',
+        title: 'Laguna glaciale e Diamond Beach',
+        category: 'Ghiacciai',
+        coordinates: [-16.18, 64.05],
+      },
+      {
+        id: 'myvatn',
+        name: 'Myvatn',
+        title: 'Area geotermica nord, Nature Baths',
+        category: 'Area geotermale',
+        coordinates: [-16.9333, 65.6],
+      },
+      {
+        id: 'snaefellsnes',
+        name: 'Snaefellsnes',
+        title: 'Penisola vulcanica, Hotel Budir',
+        category: 'Peninsula',
+        coordinates: [-23.7, 64.84],
       },
     ],
     mapCenter: [-18.5, 64.9],
