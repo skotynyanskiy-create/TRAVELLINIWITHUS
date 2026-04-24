@@ -1,8 +1,12 @@
 # TRAVELLINIWITHUS — Demo Products for Firestore
 
+> [!warning] Stale — ultimo aggiornamento 2026-03-20 (35 giorni fa)
+> Dati demo per popolamento shop. Gli schemi prodotto sono cambiati dal pass 2026-04-24: verifica rispetto a [[FIRESTORE_SCHEMA]] e [[API_CONTRACT]] prima di copiare in Firestore. Non usare in produzione senza riallineare i campi.
+
 Copy-paste these products into Firestore Console to populate the shop.
 
 **How to use**:
+
 1. Go to: Firebase Console → Firestore → products collection
 2. Click "+ Add document"
 3. Copy each document below and paste into Firebase

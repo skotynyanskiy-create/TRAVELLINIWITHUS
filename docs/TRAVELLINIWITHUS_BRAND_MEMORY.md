@@ -1,5 +1,8 @@
 # Travelliniwithus Brand Memory
 
+> [!warning] Stale — ultimo aggiornamento 2026-03-18 (37 giorni fa)
+> Rivista non più da 37 giorni. Prima di usarla come fonte, confronta con le note brand fresche: [[BRAND_MESSAGING_STRATEGY]], [[BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS]], [[TRAVELLINIWITHUS_MASTER_PLAN]] (aggiornato 2026-04-24). In caso di conflitto, le note recenti vincono.
+
 Last updated: 2026-03-18
 Purpose: persistent operating profile for future design, copy, SEO, product, and technical decisions.
 
@@ -223,7 +226,7 @@ Observed from the public site:
   - destinations
   - experiences
   - guides
-  currently appear empty or not meaningfully populated
+    currently appear empty or not meaningfully populated
 - the shop page publicly says it is still under construction
 - the site is stronger as a positioning shell than as a content or conversion engine
 
@@ -237,7 +240,7 @@ Important inconsistencies currently visible online:
   - `travelliniagency@gmail.com`
 - Privacy policy references:
   - `https://travelliniwithus.com`
-  while the live site is on:
+    while the live site is on:
   - `https://www.travelliniwithus.it/`
 
 This creates avoidable trust friction.
@@ -262,7 +265,7 @@ Notable external signals:
   - group trips
   - activities
   - discounts
-  and said the brand engages millions on TikTok and Instagram
+    and said the brand engages millions on TikTok and Instagram
 
 These are useful authority signals even if not all of them are independently verified from first-party dashboards.
 

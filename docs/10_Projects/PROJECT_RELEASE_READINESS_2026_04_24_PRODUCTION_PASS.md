@@ -15,6 +15,9 @@ tags:
 
 # Release Readiness - Production Implementation Pass - 2026-04-24
 
+> [!info] Snapshot atomica
+> Questa è la snapshot della sessione 2026-04-24. La master checklist multi-fase è [[PROJECT_RELEASE_READINESS]]; aggiornare lì le chiusure permanenti, usare questa nota come evidence-log del pass.
+
 ## Completato
 
 - [x] `npm run typecheck` pulito dopo riallineamento `ArticleType = pillar | guide | itinerary`.

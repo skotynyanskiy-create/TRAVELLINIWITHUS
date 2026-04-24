@@ -27,6 +27,19 @@
           {
             "type": "command",
             "command": "bash -c 'FILE=\"$CLAUDE_FILE_PATH\"; if echo \"$FILE\" | grep -qE \"server\\.ts$|firestore\\.rules$|src/config/admin\\.ts$\"; then echo \"⚠ HIGH-RISK FILE / FILE AD ALTO RISCHIO: $FILE. Double-check the change before continuing. — Verifica attentamente le modifiche prima di procedere.\" >&2; fi'"
+          },
+          {
+            "type": "command",
+            "command": "bash -c 'FILE=\"$CLAUDE_FILE_PATH\"; if echo \"$FILE\" | grep -qE \"package-lock\\.json$|firebase-applet-config\\.json$|\\.firebaserc$|vercel\\.json$|firebase\\.json$\"; then echo \"⚠ DEPLOY / LOCKFILE: $FILE. Modifica intenzionale? Se no, rigenera invece di editare a mano.\" >&2; fi'"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'FILE=\"$CLAUDE_FILE_PATH\"; if echo \"$FILE\" | grep -qE \"\\.env\\.local$|\\.env\\.production$|\\.env\\.development\\.local$|service-account.*\\.json$|serviceAccount.*\\.json$|.*\\.pem$|.*private.*key.*\"; then echo \"BLOCKED / BLOCCATO: secret file $FILE. Non leggere/scrivere direttamente. Usa .env.example come riferimento o chiedi al proprietario.\" >&2; exit 2; fi'"
           }
         ]
       }

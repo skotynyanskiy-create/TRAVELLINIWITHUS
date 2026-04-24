@@ -1,5 +1,8 @@
 # TRAVELLINIWITHUS — Quick Start Guide for Developers
 
+> [!warning] Stale — ultimo aggiornamento 2026-03-20 (35 giorni fa)
+> Prerequisiti obsoleti: il repo richiede **Node ≥22** (non 18) e npm 10.9+. Per onboarding aggiornato usa `README.md`, `CONTRIBUTING.md` (entrambi root) e `CLAUDE.md`. Questa guida resta valida solo per sezioni non-ambientali (convenzioni codice, struttura cartelle).
+
 **Last Updated**: 2026-03-20  
 **Status**: 🟢 Ready to Develop
 
@@ -295,6 +298,7 @@ Firebase Console → Your Project
 ### 5.4 Common Errors & Fixes
 
 **Error: "Firebase config not found"**
+
 ```bash
 # Solution: Make sure .env.local has Firebase keys
 cp .env.local.template .env.local
@@ -302,6 +306,7 @@ cp .env.local.template .env.local
 ```
 
 **Error: "Admin access denied"**
+
 ```bash
 # Solution: Add your email to ADMIN_EMAILS
 # Edit: src/config/admin.ts
@@ -309,6 +314,7 @@ const ADMIN_EMAILS = ['your-email@example.com', 'other@example.com'];
 ```
 
 **Error: "Products not showing"**
+
 ```bash
 # Solution: Verify products are published
 # Go to: Firebase Console → Firestore → products
@@ -316,6 +322,7 @@ const ADMIN_EMAILS = ['your-email@example.com', 'other@example.com'];
 ```
 
 **Error: "Newsletter form not submitting"**
+
 ```bash
 # Solution: Check Firestore leads collection
 # Firebase Console → Firestore → leads
@@ -421,12 +428,14 @@ git pull origin main
 ## 8. Performance Tips
 
 ✅ **Do:**
+
 - Lazy load routes (already done in App.tsx)
 - Use React Query for API data
 - Optimize images (use OptimizedImage component)
 - Keep component props minimal
 
 ❌ **Don't:**
+
 - Call `useEffect` without dependencies
 - Create new objects/functions in render
 - Forget to cleanup subscriptions

@@ -27,22 +27,26 @@ Apri `docs/` con **Open folder as vault** e imposta questa nota come home.
 ## Fast paths
 
 ### Editoriale
+
 - nuovo articolo: [[90_Templates/TPL_Article]]
 - nuova guida destinazione: [[90_Templates/TPL_Destination_Guide]]
 - nuovo itinerario: [[90_Templates/TPL_Itinerary]]
 - nuovo luogo/hotel: [[90_Templates/TPL_Place]]
 
 ### Commerciale
+
 - nuovo prodotto shop: [[90_Templates/TPL_Product]]
 - nuova collaborazione: [[90_Templates/TPL_Collaboration]]
 - nuova campagna: [[90_Templates/TPL_Campaign]]
 
 ### SEO e social
+
 - nuova SEO page: [[90_Templates/TPL_SEO_Page]]
 - web clip rapida: [[90_Templates/TPL_Web_Clip]]
 - design reference: [[90_Templates/TPL_Design_Reference]]
 
 ### Sito e operazioni
+
 - nuova feature sito: [[90_Templates/TPL_Project]]
 - tweak UI: [[90_Templates/TPL_UI_Change]]
 - nuovo bug: [[90_Templates/TPL_Bug]]
@@ -54,24 +58,29 @@ Apri `docs/` con **Open folder as vault** e imposta questa nota come home.
 ## Aree vault
 
 ### Editoriale
+
 - [[60_Editorial/]] — articoli, guide, itinerari, destinazioni
 - [[80_SEO/]] — keyword e audit pagine sito
 - [[86_Social/]] — content calendar Instagram/TikTok
 
 ### Brand e visual
+
 - [[70_Brand/]] — voce, personas, visual reference
 - [[87_References/]] — competitor, design, luoghi, trend
 
 ### Commerciale
+
 - [[85_Shop/]] — prodotti e affiliati
 - [[12_Partnerships/]] — collaborazioni brand
 
 ### Sito e operazioni
+
 - [[10_Projects/PROJECT_TRAVELLINIWITHUS_SITE]] — stato sito
 - [[10_Projects/PROJECT_RELEASE_READINESS]] — release readiness
 - [[14_Bugs/]] — bug aperti
 
 ### Mappe visive
+
 - [[90_Canvas/]] — sitemap, content architecture, customer journey
 
 ---
@@ -97,7 +106,18 @@ Apri `docs/` con **Open folder as vault** e imposta questa nota come home.
 - [[OBSIDIAN_TAXONOMY]] — naming e properties standard
 - [[OBSIDIAN_WORKFLOW]] — tutti i flussi operativi
 - [[AGENT_WORKFLOWS]] — workflow con Claude/AI
+- [[AI_AGENT_STACK]] — stack AI: shared skills, Claude-only, routing rules
 - [[DESIGN_SYSTEM_CHEATSHEET]] — token CSS, componenti, motion presets (ready reference UI)
+
+## Repo governance (fuori vault)
+
+- [../README.md](../README.md) — overview repo
+- [../CLAUDE.md](../CLAUDE.md) — Claude Code operating rules + BARC routing
+- [../AGENTS.md](../AGENTS.md) — shared rules cross-tool
+- [../DESIGN.md](../DESIGN.md) — design-system source
+- [../CONTRIBUTING.md](../CONTRIBUTING.md) — setup, branching, Definition of Done
+- [../SECURITY.md](../SECURITY.md) — secret policy + responsible disclosure
+- [../CHANGELOG.md](../CHANGELOG.md) — release log
 
 ---
 

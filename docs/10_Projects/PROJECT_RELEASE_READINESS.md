@@ -15,6 +15,9 @@ tags:
 
 # PROJECT_RELEASE_READINESS
 
+> [!info] Latest pass — 2026-04-24
+> La snapshot operativa più recente è [[PROJECT_RELEASE_READINESS_2026_04_24_PRODUCTION_PASS]]. Questa nota rimane la master checklist (fase A, B, Sprint 1); per lo stato concreto dell'ultimo production pass consultare la snapshot.
+
 ## Obiettivo
 
 Tenere sotto controllo cio che manca per una release pulita e verificabile della V1.

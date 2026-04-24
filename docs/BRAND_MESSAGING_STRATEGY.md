@@ -1,5 +1,8 @@
 # TRAVELLINIWITHUS — Brand & Messaging Strategy (Phase 3)
 
+> [!warning] Stale — ultimo aggiornamento 2026-03-20 (35 giorni fa)
+> Phase 3 è stata prodotta a marzo. Prima di eseguire va verificata rispetto a [[TRAVELLINIWITHUS_MASTER_PLAN]] e [[TRAVELLINIWITHUS_EXECUTION_PLAN]] (entrambi 2026-04-24) per evitare messaggi superati. In caso di conflitto, Master + Execution vincono.
+
 **Status**: Implementation in progress  
 **Owner**: Rodrigo & Betta  
 **Deadline**: 2 weeks
@@ -25,6 +28,7 @@
 **Key Message**: "Posti Particolari + Informazioni Utili + Storytelling Visivo"
 
 **Value Props**:
+
 1. **Curation**: Not everything, just the best
 2. **Authenticity**: Real experiences, not sponsored posts
 3. **Actionability**: Guides you can actually use
@@ -32,6 +36,7 @@
 5. **Tools**: Products that solve real problems
 
 **Content Mix**:
+
 - 50% Editorial (destinations, experiences, tips)
 - 30% Learning (guides, resources, tools)
 - 20% Products (guides, planners, presets)
@@ -43,6 +48,7 @@
 **Key Message**: "Partner with creators who have real influence among quality travelers"
 
 **Value Props**:
+
 1. **Audience**: Affluent, curious, decision-makers
 2. **Engagement**: High engagement rates (proof needed)
 3. **Credibility**: Editorial-first, trust-based
@@ -50,6 +56,7 @@
 5. **Flexibility**: Collaboration formats (articles, trips, content)
 
 **Content Mix**:
+
 - Case studies of past collaborations
 - Metrics & audience insights
 - Media kit with real numbers
@@ -62,12 +69,14 @@
 ### 1. HOME (Hero Rewrite)
 
 **Current Hero** (too abstract):
+
 ```
 "Scopri il Mondo con Consapevolezza"
 Subtitle: "Travel guides, experiences e risorse per chi ama i posti particolari"
 ```
 
 **NEW HERO** (specific + emotional):
+
 ```
 Hero Section:
 HEADLINE: "Posti particolari che valgono davvero"
@@ -90,18 +99,21 @@ Visual: Cinematic travel photo (Dolomiti, Iceland, or street scene)
 ```
 
 **Current Content** (editorial preview):
+
 - Show 3 recent articles with high-quality images
 - Add "Leggi ora" CTA for each
 
 **Newsletter Section**:
+
 ```
 HEADLINE: "I posti più belli direttamente nella tua inbox"
-Copy: "Una volta a settimana. Niente marketing, niente rumore. 
+Copy: "Una volta a settimana. Niente marketing, niente rumore.
 Solo posti che meritano, risorse che usiamo, idee vere."
 CTA: "Iscriviti gratis"
 ```
 
 **Bottom CTA**:
+
 ```
 HEADLINE: "Vuoi scoprire come fare il viaggio che immagini?"
 Copy: "Abbiamo guide, pianificatori e strumenti pratici."
@@ -274,6 +286,7 @@ Subject line: "Collaborazione: [Brand Name]"
 **NEW STRATEGY**:
 
 **RISORSE PAGE** (Free + Affiliate):
+
 - Curated list of tools we actually use
 - Booking.com, GetYourGuide, Heymondo, etc.
 - No hard sell, just "here's what we use"
@@ -281,6 +294,7 @@ Subject line: "Collaborazione: [Brand Name]"
 - Blog-style articles on how to use each tool
 
 **SHOP PAGE** (Premium Products):
+
 ```
 HEADLINE: "Strumenti per il viaggio che immagini"
 
@@ -334,20 +348,21 @@ Newsletter: [subscribe CTA]
 
 ## Messaging Alignment Chart
 
-| Element | B2C (Travelers) | B2B (Brands) |
-|---------|-----------------|-------------|
-| **Promise** | Discover authentic places | Reach quality travelers |
-| **Tone** | Warm, honest, adventurous | Professional, trustworthy, selective |
-| **Key Message** | "Posti particolari + info utili" | "Partnership with editorial credibility" |
-| **Primary CTA** | Newsletter signup / Shop | Contact for collaboration |
-| **Page Entry** | Home → Destinazioni | Home → Collaborazioni |
-| **Success Metric** | Newsletter subscribers / sales | Partnership requests / agreements |
+| Element            | B2C (Travelers)                  | B2B (Brands)                             |
+| ------------------ | -------------------------------- | ---------------------------------------- |
+| **Promise**        | Discover authentic places        | Reach quality travelers                  |
+| **Tone**           | Warm, honest, adventurous        | Professional, trustworthy, selective     |
+| **Key Message**    | "Posti particolari + info utili" | "Partnership with editorial credibility" |
+| **Primary CTA**    | Newsletter signup / Shop         | Contact for collaboration                |
+| **Page Entry**     | Home → Destinazioni              | Home → Collaborazioni                    |
+| **Success Metric** | Newsletter subscribers / sales   | Partnership requests / agreements        |
 
 ---
 
 ## Copy Tone Guidelines
 
 ### DO:
+
 - ✅ Use first-person singular ("we discovered", "I tested")
 - ✅ Specific details ("3-week trip in Dolomiti")
 - ✅ Honest criticism ("the hike is tough", "overpriced")
@@ -356,6 +371,7 @@ Newsletter: [subscribe CTA]
 - ✅ Numbers when true ("50+ destinations", "5 years")
 
 ### DON'T:
+
 - ❌ Buzzwords ("magical", "authentic", "unique" - vague)
 - ❌ Superlatives without evidence ("best hotel ever")
 - ❌ Marketing fluff ("your journey starts here")
@@ -368,6 +384,7 @@ Newsletter: [subscribe CTA]
 ## Implementation Checklist
 
 ### Content Updates
+
 - [ ] Rewrite Home hero + copy
 - [ ] Update Chi Siamo page (full personal story)
 - [ ] Rewrite Collaborazioni (case studies + B2B focus)
@@ -375,17 +392,20 @@ Newsletter: [subscribe CTA]
 - [ ] Update Contatti (dual CTA for B2C + B2B)
 
 ### Social Proof
+
 - [ ] Collect testimonials from readers (email campaign)
 - [ ] Add testimonials to product pages
 - [ ] Create case study graphics (Figma)
 - [ ] Add partner logos to Collaborazioni
 
 ### Metadata
+
 - [ ] Update meta descriptions (all pages)
 - [ ] Update OG images (Home, Shop, Collaborazioni)
 - [ ] Update schema markup (Article, Product, Organization)
 
 ### Design Elements
+
 - [ ] Update hero image (cinematic, authentic)
 - [ ] Create value prop graphics (3-column layout)
 - [ ] Design testimonial cards
