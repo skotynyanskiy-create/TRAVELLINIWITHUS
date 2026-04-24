@@ -6,7 +6,8 @@ export const SAMPLE_ARTICLE = {
   title: 'Dolomiti: Tra Rifugi di Design e Vette Leggendarie',
   category: 'Guide',
   slug: 'dolomiti-rifugi-design',
-  image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1400&auto=format&fit=crop',
+  image:
+    'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1400&auto=format&fit=crop',
   excerpt:
     'Un unico contenuto dimostrativo per mostrare come potranno apparire guide, itinerari e racconti quando inserirai il materiale definitivo.',
   description: 'Guida demo ai rifugi di design e ai percorsi panoramici delle Dolomiti.',
@@ -77,8 +78,13 @@ export async function seedSampleArticle() {
       ...SAMPLE_ARTICLE,
       createdAt: serverTimestamp(),
     });
-    console.log('Articolo demo creato con successo.');
+    if (import.meta.env.DEV) {
+      console.log('Articolo demo creato con successo.');
+    }
   } catch (error) {
-    console.error('Errore durante il seeding:', error);
+    if (import.meta.env.DEV) {
+      console.error('Errore durante il seeding:', error);
+    }
+    throw error;
   }
 }
