@@ -2,11 +2,13 @@ export { default as AffiliateBar } from './AffiliateBar';
 export { default as ArticleHero } from './ArticleHero';
 export { default as ArticleSidebar } from './ArticleSidebar';
 export { default as AuthorBio } from './AuthorBio';
+export { default as FactBox } from './FactBox';
 export { default as HotelRecommendations } from './HotelRecommendations';
 export { default as MobileBottomBar } from './MobileBottomBar';
 export { default as MobileTocOverlay } from './MobileTocOverlay';
 export { default as PinterestIcon } from './PinterestIcon';
 export { default as PinterestSaveBanner } from './PinterestSaveBanner';
+export { default as PullQuote } from './PullQuote';
 export { default as RelatedArticles } from './RelatedArticles';
 export { default as ShareButtons } from './ShareButtons';
 export { default as ShopContextualCta } from './ShopContextualCta';
@@ -25,7 +27,10 @@ export type {
   ArticleBudgetBand,
   ArticleData,
   ArticleDisclosureType,
+  ArticleFactBox,
+  ArticleFactBoxItem,
   ArticleFeaturedPlacement,
+  ArticlePullQuote,
   ArticleType,
   HotelRecommendation,
   RelatedArticleSummary,

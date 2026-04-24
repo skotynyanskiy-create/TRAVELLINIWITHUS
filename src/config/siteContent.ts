@@ -214,7 +214,7 @@ export const siteContentDefaults: SiteContentMap = {
     heroTitleMain: 'Posti particolari',
     heroTitleAccent: 'che valgono davvero',
     heroDescription:
-      'Guide pratiche scritte da chi ha vissuto il viaggio. Atmosfera, dettagli utili e consigli che aiutano a capire se un posto merita davvero.',
+      'Itinerari scritti dopo il viaggio, hotel testati sul posto, costi e stagioni reali. Non la lista più lunga: quella che ti fa decidere meglio.',
     primaryCtaLabel: 'Scopri destinazioni',
     primaryCtaLink: '/destinazioni',
     secondaryCtaLabel: 'Ultime storie',

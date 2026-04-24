@@ -90,11 +90,11 @@ export default function LatestArticles() {
               Dalla redazione
             </span>
             <h2 className="mt-2 text-3xl font-serif leading-tight text-ink md:text-4xl">
-              Guide e itinerari da leggere prima di partire.
+              Le guide che stiamo finendo di scrivere.
             </h2>
             <p className="mt-3 max-w-xl text-base leading-relaxed text-black/70">
-              Una selezione mista di contenuti editoriali: cosa salvare, come organizzarlo e perché
-              un posto merita davvero.
+              Puglia slow in cinque giorni, Islanda Ring Road d'estate e d'inverno: itinerari
+              vissuti sul posto con hotel testati, numeri reali e stagioni giuste.
             </p>
           </div>
           <div className="hidden items-center gap-4 sm:flex">

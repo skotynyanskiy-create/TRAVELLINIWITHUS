@@ -94,16 +94,18 @@ export default function ArticleHero({
             <span>{article.date}</span>
           </div>
 
-          {(article.disclosureType || article.verifiedAt) && (
-            <div className="mt-5 flex flex-wrap items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/78">
+          {(article.disclosureType || article.verifiedAt || article.verifiedContext) && (
+            <div className="mt-5 flex flex-wrap items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/85">
               {article.disclosureType && (
-                <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5">
+                <span className="rounded-full border border-white/18 bg-white/10 px-3 py-1.5">
                   {ARTICLE_DISCLOSURE_LABELS[article.disclosureType] ?? article.disclosureType}
                 </span>
               )}
-              {article.verifiedAt && (
-                <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1.5">
-                  Verificato
+              {(article.verifiedContext || article.verifiedAt) && (
+                <span className="rounded-full border border-[var(--color-accent)]/50 bg-[var(--color-accent)]/14 px-3 py-1.5">
+                  {article.verifiedContext
+                    ? `Verificato · ${article.verifiedContext}`
+                    : 'Verificato sul posto'}
                 </span>
               )}
             </div>

@@ -274,6 +274,20 @@ Non cercare di vedere tutto. Scegli una valle, due punti forti e un margine per 
     date: '2 aprile 2026',
     author: 'Rodrigo & Betta',
     continent: 'Europa',
+    verifiedContext: '5 giorni in Valle d’Itria',
+    factBox: {
+      title: 'Valle d’Itria in breve',
+      items: [
+        { label: 'Durata', value: '5 giorni' },
+        { label: 'Periodo ideale', value: 'Maggio–giugno, settembre' },
+        { label: 'Budget 2 pax', value: '€€' },
+        { label: 'Distanze massime', value: '≈40 km' },
+      ],
+    },
+    pullQuote: {
+      text: 'Alberobello al mattino presto, mai di pomeriggio. E soprattutto: non riempire ogni giorno. La Puglia funziona se lasci spazio alle cene lunghe, non se corri tra trulli e selfie.',
+      attribution: 'Consiglio Travellini',
+    },
     content: `
 La Puglia vissuta nei weekend di agosto e un altra cosa rispetto a quella di fine maggio. Quando la luce e piu pulita e i borghi si svuotano, i muri bianchi e le masserie di pietra recuperano la loro gerarchia. Questo itinerario e il nostro piano per chi ha cinque giorni reali e vuole evitare il circuito sovraffollato.
 
@@ -598,6 +612,20 @@ L Etna non e una gita di mezza giornata, dedicale tutto il tempo. E Ortigia al t
     date: '8 marzo 2026',
     author: 'Rodrigo & Betta',
     continent: 'Europa',
+    verifiedContext: '10 giorni lungo la Ring Road',
+    factBox: {
+      title: 'Ring Road d’estate in breve',
+      items: [
+        { label: 'Durata', value: '10 giorni' },
+        { label: 'Ring Road', value: '1.332 km' },
+        { label: 'Periodo', value: 'Giugno–agosto' },
+        { label: 'Budget 2 pax', value: '€4.500–5.800' },
+      ],
+    },
+    pullQuote: {
+      text: 'Non inseguire ogni cascata. Scegli le 5 migliori e dedica tempo a ognuna: le altre sono ripetizioni.',
+      attribution: 'Consiglio Travellini',
+    },
     content: `
 L Islanda in dieci giorni sulla Ring Road e il classico viaggio dove ogni curva sembra uno sfondo impossibile. Il rischio e volerlo fotografare tutto e perderci il ritmo. Il nostro piano riduce le tappe a 5 basi notturne, non 10, e concentra la guida sulla mattina.
 
@@ -790,6 +818,20 @@ Non inseguire ogni cascata. Scegli le 5 migliori (Gullfoss, Seljalandsfoss, Skog
     date: '24 aprile 2026',
     author: 'Rodrigo & Betta',
     continent: 'Europa',
+    verifiedContext: 'Ring Road in pieno inverno, 10 giorni',
+    factBox: {
+      title: 'Ring Road d’inverno in breve',
+      items: [
+        { label: 'Durata', value: '10 giorni' },
+        { label: 'Ring Road', value: '1.332 km' },
+        { label: 'Periodo', value: 'Novembre–febbraio' },
+        { label: 'Budget 2 pax', value: '€3.500–5.000' },
+      ],
+    },
+    pullQuote: {
+      text: 'Metà febbraio è la nostra sweet spot: neve piena per le foto, giornate leggermente più lunghe di gennaio, aurora ancora forte.',
+      attribution: 'Consiglio Travellini',
+    },
     content: `
 L Islanda d estate e bella ma e un parco a tema per bus turistici. L Islanda da novembre a febbraio e un altro paese: meno del 30% dei visitatori, aurora boreale regolare, prezzi hotel ragionevoli, paesaggi davvero solitari.
 

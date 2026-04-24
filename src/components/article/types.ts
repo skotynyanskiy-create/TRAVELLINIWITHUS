@@ -30,6 +30,21 @@ export const ARTICLE_DISCLOSURE_LABELS: Record<ArticleDisclosureType, string> = 
   partner: 'Partner editoriale',
 };
 
+export interface ArticlePullQuote {
+  text: string;
+  attribution?: string;
+}
+
+export interface ArticleFactBoxItem {
+  label: string;
+  value: string;
+}
+
+export interface ArticleFactBox {
+  title?: string;
+  items: ArticleFactBoxItem[];
+}
+
 export interface ArticleData {
   title: string;
   description: string;
@@ -40,6 +55,12 @@ export interface ArticleData {
   date: string;
   updatedAt?: unknown;
   verifiedAt?: unknown;
+  /** Optional richer label for verified badge, e.g. "Febbraio 2026, dopo 10 giorni sul posto". */
+  verifiedContext?: string;
+  /** Editorial pullquote rendered after the body, before practical sections. */
+  pullQuote?: ArticlePullQuote;
+  /** Fast-facts card rendered at the top of the article, after the meta row. */
+  factBox?: ArticleFactBox;
   author?: string;
   readTime?: string;
   location: string;

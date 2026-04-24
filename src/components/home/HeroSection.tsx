@@ -136,8 +136,8 @@ export default function HeroSection() {
           </h1>
 
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/90 drop-shadow-[0_2px_12px_rgba(0,0,0,0.3)] md:text-xl">
-            Guide pratiche scritte da chi ha vissuto il viaggio. Atmosfera, dettagli utili e
-            consigli che aiutano a capire se un posto merita davvero.
+            Itinerari scritti dopo il viaggio, hotel testati sul posto, costi e stagioni reali. Non
+            la lista più lunga: quella che ti fa decidere meglio.
           </p>
 
           <div className="mt-7 flex flex-wrap gap-2">

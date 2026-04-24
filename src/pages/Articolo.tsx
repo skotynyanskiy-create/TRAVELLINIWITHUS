@@ -26,10 +26,12 @@ import {
   ArticleHero,
   ArticleSidebar,
   AuthorBio,
+  FactBox,
   HotelRecommendations,
   MobileBottomBar,
   MobileTocOverlay,
   PinterestSaveBanner,
+  PullQuote,
   RelatedArticles,
   ShopContextualCta,
   TableOfContents,
@@ -561,9 +563,15 @@ export default function Articolo() {
                   </section>
                 )}
 
+                {article.factBox && article.factBox.items.length > 0 && (
+                  <FactBox factBox={article.factBox} className="mt-10" />
+                )}
+
                 <section className="prose-reset mt-14">
                   <ArticleBody article={article} />
                 </section>
+
+                {article.pullQuote && <PullQuote quote={article.pullQuote} className="mt-14" />}
 
                 {article.itinerary && article.itinerary.length > 0 && (
                   <section id="itinerario" className="mt-20 scroll-mt-32">

@@ -277,3 +277,61 @@ Issue trovati dallo smoke test:
 2. **Navbar sticky copre prima voce footer su mobile** (pre-esistente, WARN minore) — il z-index della navbar sticky sovrappone visivamente la prima voce di `Scopri` (Destinazioni) quando lo scroll raggiunge il footer. Il link è presente e funzionale, solo oscurato visivamente. **Non fixato in questa pass**: richiede intervento sulla Navbar, fuori scope. Aggiunto qui come tech debt noto.
 
 Totale post wave 4: **11 file src** (ri-toccato Footer per il grid fix), 0 regression, 0 nuovi audit warning.
+
+## Build pass 2026-04-24 - wave 5 (editorial polish: magazine feel)
+
+Passaggio da "buon sito creator" a "rivista travel digitale": infrastruttura editoriale + copy più specifica. Tutti i gate verdi (`typecheck` clean, `audit:ui` 119 file / 11-0 new, `build` 22.26s).
+
+### Nuovi componenti editoriali riusabili
+
+- **`src/components/article/PullQuote.tsx`** — blockquote visivo con accent-line a sinistra, icona Quote floating, font serif italic 2xl/3xl, attribuzione opzionale in accent-text small-caps. Sostituisce la trasformazione inline "Consiglio Travellini" in markdown con un blocco visivo che spezza il ritmo del corpo articolo.
+- **`src/components/article/FactBox.tsx`** — fast-facts card con `<dl>` semantica, grid 1/2/4 colonne responsive (sm/lg), label uppercase sottile e valore in serif prominente. Progettato per "destinazione in breve" (es. "Ring Road: 1.332 km · 10 giorni · €3.500–5.000").
+
+Entrambi esportati da `src/components/article/index.ts` e accessibili da qualunque pagina articolo.
+
+### Estensione tipo `ArticleData` (`src/components/article/types.ts`)
+
+Aggiunti 3 campi opzionali:
+
+- `verifiedContext?: string` — etichetta rich del badge "Verificato" (es. `"10 giorni lungo la Ring Road"`), rimpiazza il generico "Verificato" quando popolato.
+- `pullQuote?: { text: string; attribution?: string }` — contenuto PullQuote strutturato.
+- `factBox?: { title?: string; items: { label: string; value: string }[] }` — fast-facts strutturati.
+
+Nessuno è required: articoli esistenti continuano a renderizzare senza variazioni.
+
+### Wiring render (`src/pages/Articolo.tsx`)
+
+- FactBox renderizzato subito dopo la sezione "Perché salvarlo" (highlights), prima del body. Target: lettori scanner che vogliono i numeri prima della prosa.
+- PullQuote renderizzato dopo `ArticleBody`, prima dell'itinerario. Target: punto di respiro visivo tra il racconto discorsivo e le sezioni pratiche.
+- `ArticleHero` ora mostra `verifiedContext` con bordo/bg accent anziché bianco neutro, quando presente. Badge cresce da puro statement a micro-credibility statement.
+
+### 3 pillar popolati (`src/config/previewContent.ts`)
+
+Tutti i campi usano **solo dati già presenti nel body** (duration, period, costs, content) — zero numeri inventati, zero claim verificabili non supportati.
+
+- **Puglia roadtrip**: verifiedContext `"5 giorni in Valle d'Itria"`, factBox (durata/periodo/budget/distanze), pullQuote estratto da "Consiglio Travellini" del body.
+- **Islanda Ring Road estate**: verifiedContext `"10 giorni lungo la Ring Road"`, factBox con km reali (1.332), pullQuote "Non inseguire ogni cascata...".
+- **Islanda Ring Road inverno**: verifiedContext `"Ring Road in pieno inverno, 10 giorni"`, factBox con budget esplicito (€3.500–5.000 esclusi voli, come dichiarato nel body), pullQuote "Metà febbraio è la nostra sweet spot...".
+
+### Home copy: da astratta a specifica (con pillar names reali)
+
+- **`HeroSection.tsx`**: description da `"Guide pratiche scritte da chi ha vissuto..."` a `"Itinerari scritti dopo il viaggio, hotel testati sul posto, costi e stagioni reali. Non la lista più lunga: quella che ti fa decidere meglio."`.
+- **`siteContent.ts`** → `home.heroDescription` default CMS allineato alla nuova copy (admin editor mostra la stessa voce).
+- **`LatestArticles.tsx`**: heading da `"Guide e itinerari da leggere prima di partire."` a `"Le guide che stiamo finendo di scrivere."` + body che nomina i 3 pillar reali (Puglia slow, Islanda estate, Islanda inverno).
+- **`HomeMapTeaser.tsx`**: heading da `"Un mondo di posti vissuti davvero"` a `"I posti che stiamo raccontando"` (onesto sullo stato draft) + body che cita Valle d'Itria e Ring Road.
+
+### Vincoli rispettati
+
+- Zero numeri inventati (seguita la regola CLAUDE.md "non inventare promesse commerciali non supportate").
+- Zero claim su follower/metriche social.
+- `const` field `verifiedContext` è opzionale: articoli senza il campo mantengono il badge "Verificato sul posto" di default.
+- Pull-quote estratti dal body esistente — non scritti ex novo.
+
+### Follow-up editoriale consigliati (owner action)
+
+- Espandere i 3 pillar: ogni body è ~300-400 parole. Per "feature magazine" servono 1.500-2.500 (già indicato in EDITORIAL_GUIDE: pillar 1800-3000 parole).
+- Sostituire immagini pillar Unsplash con foto reali Rodrigo & Betta sul posto.
+- Aggiungere gallery reale e hotel testati nei 3 pillar.
+- Valutare aggiunta `updatedAt` timestamp ad ogni revisione per trigger di "maintenance" in bullet footer articolo.
+
+Totale wave 5: **9 file modificati** (types, index, ArticleHero, Articolo, HeroSection, LatestArticles, HomeMapTeaser, siteContent, previewContent) + **2 file creati** (PullQuote, FactBox). 0 regression, 0 nuovi audit warning.

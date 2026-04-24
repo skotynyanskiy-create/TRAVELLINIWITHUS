@@ -45,11 +45,11 @@ export default function HomeMapTeaser() {
             Dove siamo stati
           </span>
           <h2 className="mt-4 max-w-xl font-serif text-4xl leading-[1.05] text-ink md:text-5xl">
-            Un mondo di posti <span className="italic text-black/70">vissuti davvero</span>
+            I posti che <span className="italic text-black/70">stiamo raccontando</span>.
           </h2>
           <p className="mt-6 max-w-xl text-base leading-relaxed text-black/72">
-            Ogni destinazione che raccontiamo è un viaggio che abbiamo fatto. Niente guide copiate:
-            solo luoghi esplorati, verificati e scelti uno a uno.
+            Dalla Valle d'Itria alla Ring Road islandese: la mappa si allarga solo quando un posto
+            ha abbastanza da dire per meritare un racconto completo, non una scheda copiata.
           </p>
           <Link
             to="/destinazioni"
