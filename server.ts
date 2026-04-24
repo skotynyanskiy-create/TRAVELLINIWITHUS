@@ -128,6 +128,7 @@ const DEMO_ARTICLE_SLUGS = new Set([
   'puglia-roadtrip-borghi-bianchi',
   'sicilia-orientale-5-giorni',
   'islanda-ring-road-10-giorni',
+  'islanda-ring-road-inverno',
   'lisbona-weekend-lento',
   'provenza-lavanda-luberon',
   'giappone-kyoto-osaka-14-giorni',
@@ -1058,12 +1059,10 @@ async function startServer() {
   ) {
     const ready = await ensureFirebaseAdmin();
     if (!ready) {
-      res
-        .status(503)
-        .json({
-          error:
-            'Auth admin non configurato (FIREBASE_SERVICE_ACCOUNT_JSON o GOOGLE_APPLICATION_CREDENTIALS mancanti).',
-        });
+      res.status(503).json({
+        error:
+          'Auth admin non configurato (FIREBASE_SERVICE_ACCOUNT_JSON o GOOGLE_APPLICATION_CREDENTIALS mancanti).',
+      });
       return;
     }
     const authHeader = req.get('Authorization') || '';
