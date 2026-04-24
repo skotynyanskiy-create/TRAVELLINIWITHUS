@@ -6,6 +6,80 @@ Versioning: [SemVer](https://semver.org/spec/v2.0.0.html) — fino al primo tag 
 
 ## [Unreleased]
 
+### Sessione 2026-04-24 · AI-assisted environment hardening + DX
+
+Obiettivo: portare la configurazione Claude Code / Obsidian / VS Code a livello production-professional senza riscrivere niente di già solido.
+
+#### Aggiunto
+
+- **Repo governance**:
+  - `SECURITY.md` — responsible disclosure, inventario segreti, high-risk files, pointer a `docs/DISASTER_RECOVERY_RUNBOOK.md`.
+  - `CONTRIBUTING.md` — setup, branching, Definition of Done, routing BARC, ancoraggio al sistema skill/agent esistente.
+- **Claude Code hooks** (`.claude/settings.json`):
+  - `PreToolUse` block su `Edit|Write|Read` dei file secret (`.env.local`, `.env.production`, `service-account*.json`, `serviceAccount*.json`, `*.pem`, pattern `private...key`) → exit 2.
+  - `PreToolUse` warn su `Edit|Write` dei file deploy/lockfile (`package-lock.json`, `firebase-applet-config.json`, `.firebaserc`, `vercel.json`, `firebase.json`).
+  - `PostToolUse` reminder `npm run typecheck` dopo Edit/Write su `.ts/.tsx` non-test / non-e2e.
+- **Gitignore hardening**: pattern espliciti per `service-account*.json`, `serviceAccount*.json`, `firebase-adminsdk*.json`, `*.pem`, `*.p12`, `*.pfx`, `*.key` — defense-in-depth oltre l'hook AI.
+- **VS Code DX** (onboarding 2° PC):
+  - `.vscode/extensions.json` — 8 recommendations (ESLint, Prettier, Tailwind CSS, Playwright, Vitest Explorer, Firestore, GitHub Actions, GitLens).
+  - `.vscode/settings.json` — format-on-save, Prettier come default formatter per linguaggio, ESLint flat config + fixAll on save, TypeScript workspace `tsdk`, Tailwind `classRegex` per `cn()`/`clsx()`, LF EOL, `search.exclude`/`files.exclude` coerenti con `.gitignore`.
+- **Test documentation**: `e2e/README.md` — guida ai 6 spec Playwright (cosa testano, come eseguire/debuggare, policy snapshot, quando aggiungere spec), cross-link a `LAUNCH_CHECKLIST` / `DEPLOYMENT_RUNBOOK` / `CONTRIBUTING`.
+- **Obsidian vault housekeeping**:
+  - Cross-link `PROJECT_RELEASE_READINESS` ↔ `PROJECT_RELEASE_READINESS_2026_04_24_PRODUCTION_PASS` (master ↔ snapshot).
+  - `OBSIDIAN_HOME` esteso con sezione "Repo governance (fuori vault)" → link relativi a README/CLAUDE/AGENTS/DESIGN/CONTRIBUTING/SECURITY/CHANGELOG + `AI_AGENT_STACK` nei riferimenti strategici.
+  - Daily `docs/40_Daily/2026-04-24.md` con log sessione, decisioni, tomorrow.
+- **Routine remota schedulata**: one-time agent per review banner stale il 2026-05-11 07:00 UTC (`trig_01MzJkVuJepwcr83g5jj57eA`).
+
+#### Modificato
+
+- 5 note stale di marzo ricevono callout `> [!warning] Stale` con rimandi a fonti fresche: `TRAVELLINIWITHUS_BRAND_MEMORY.md`, `BRAND_MESSAGING_STRATEGY.md`, `DEMO_PRODUCTS.md`, `QUICK_START.md`, `OPERATIONAL_VERIFICATION_REPORT.md`.
+- `docs/QUICK_START.md` refresh completo post-banner: Node ≥22 / npm ≥10.9, `.env.example` al posto di `.env.local.template` ormai non esistente, port 3000 (con nota VS Code tasks override 3001), sezione Testing punta a `e2e/README.md`, Git Workflow allineato a `CONTRIBUTING.md`, Recent Fixes sostituite con pointer a `CHANGELOG.md`.
+
+#### Aggiunto (audit runtime + docs consolidamento)
+
+- **`docs/TROUBLESHOOTING.md`**: diagnosi rapida per 10 aree (dev server, Firebase, Stripe, build, test, lint/commit, Claude Code hooks, npm audit, git, Obsidian). Cross-linkato da `OBSIDIAN_HOME`, `README.md`, `CONTRIBUTING.md`.
+- **`docs/ARCHITECTURE.md`**: mappa sintetica dello stack — entry points, struttura `src/`, data flow (React Query → firebaseService → Firestore), tabella 11 endpoint API in `server.ts` con auth/rate-limit, state management, build pipeline, security boundaries, CI/CD, high-risk files, AI-assisted workflow. Cross-linkato da `README.md` e `OBSIDIAN_HOME`.
+- **`docs/20_Decisions/DECISION_UUID_FIREBASE_ADMIN_VULNERABILITY.md`**: decision trail sulle 10 moderate vulns `uuid <14` transitive via `firebase-admin@13.8.0` → `@google-cloud/storage`. Decisione: **non** applicare `npm audit fix --force` (richiederebbe downgrade breaking a `firebase-admin@10.1.0`). Monitoraggio via Dependabot fino a bump upstream di `@google-cloud/storage`.
+
+#### Audit runtime (baseline verde)
+
+- `npm run lint` → 0 errors / 0 warnings
+- `npm run audit:agents` → 5 canonical skills sync, PASS
+- `npm run audit:ui` → 117 files scanned, 11 warnings baseline, 0 new, PASS
+- `npm run typecheck` → PASS
+- `npm audit` → 10 open (2 low, 8 moderate), tutte `uuid <14` transitive, decision note creata
+
+#### Aggiunto (Codex MCP integration)
+
+- **`.mcp.json`** esteso con entry `codex` (comando `codex mcp-server`, stdio) accanto all'esistente `playwright`. Al prossimo restart Claude Code i tool esposti da Codex diventano invocabili in-session.
+- **Codex CLI installato** sul profilo `admin`: `codex-cli 0.124.0` in `C:\Users\admin\AppData\Roaming\npm\codex`. Auth già attivo (`Logged in using ChatGPT`).
+- `docs/TROUBLESHOOTING.md` → nuova sezione "MCP server Codex non parte" con prerequisiti, diagnosi, note sul sottocomando corretto `mcp-server` (non `mcp`), Windows multi-profilo, disattivazione temporanea.
+- `docs/ARCHITECTURE.md` → sezione "AI-assisted workflow" espansa: coesistenza Claude Code ↔ Codex CLI via AGENTS.md (shared system prompt) + MCP server (delegabile in-session) + branch prefix `codex/**` (CI-level).
+
+**Stato**: **pronto e attivo al prossimo restart Claude Code.** Smoke-test OK (`codex mcp-server` si avvia senza errori). Nessun rischio residuo lato install.
+
+#### Aggiunto (tooling catalog + install CLI + MCP extension)
+
+Dopo analisi approfondita (via `claude-code-guide`) di MCP server, CLI e plugin disponibili nel 2026, applicato il principio skill-diet del progetto (vedi `project_skills_diet_decision_2026_04_20`): install solo di ciò che ha 4+ use case ricorrenti nello stack reale.
+
+**CLI installati**:
+
+- `firebase-tools 15.15.0` via `npm i -g firebase-tools` — deploy/emulate/rules, predeploy verification, admin claim management.
+- `gh 2.91.0` via `winget install GitHub.cli` — `gh pr create`, review, release, già referenziato da `CONTRIBUTING.md` e dal pattern di commit + PR. Binary in `C:\Program Files\GitHub CLI\gh.exe`. Richiede **restart della shell Bash** per vederlo nel PATH.
+
+**MCP server estesi** in `.mcp.json`:
+
+- `sequential-thinking` (`@modelcontextprotocol/server-sequential-thinking`, Anthropic ufficiale, no-auth) — reasoning multi-step opt-in per problemi ostico. Si attiva al prossimo restart Claude Code.
+
+**Nuovo documento**: `docs/DEV_TOOLING.md` — catalogo completo CLI/MCP/plugin installati nel progetto, versioni, criteri di scelta, MCP server proposti ma non attivi (Sentry, Obsidian), plugin community policy. Cross-linkato da `ARCHITECTURE.md`, `OBSIDIAN_HOME.md`.
+
+**Non installato** (documentato come "da attivare al bisogno"):
+
+- **Stripe CLI**: `winget install Stripe.StripeCLI` quando si aprirà QA checkout.
+- **Sentry MCP**: attivazione contestuale al setup `VITE_SENTRY_DSN` nella sessione finale pre-deploy.
+- **Obsidian MCP**: rivalutare se la vault cresce oltre 50 note operative.
+- `jq`, `rg`, `fd`, `bat`, `bun`, `ollama`, `supabase`, `gemini-cli`: duplicano tool nativi Claude Code o non pertinenti allo stack.
+
 ### Sprint 1 — 2026-04-20 · Infrastruttura production-gate
 
 Obiettivo: chiudere tutti i gap non dipendenti da contenuto reale prima della sessione finale con chiavi API.

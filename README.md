@@ -90,6 +90,14 @@ npm run audit:all
 npm run predeploy
 ```
 
+## Architecture
+
+Mappa dello stack, data flow, API endpoints, CI/CD e security boundaries: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+
+## Troubleshooting
+
+Problemi comuni (dev server, Firebase, Stripe, build, test, lint, Claude Code hook, `npm audit`): [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md).
+
 ## AI collaboration
 
 This repo is configured to work cleanly across multiple AI tools.

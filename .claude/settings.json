@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'echo \"[BARC] Prima di agire: ricerca/read-only -> code-explorer (haiku). Single-file edit -> subagent sonnet o edit diretto. Refactor multi-file / debug ostico -> opus con giustificazione. Regola in CLAUDE.md #Smart-Routing-Protocol.\"'"
+            "command": "bash -c 'echo \"[BARC] Prima di agire: ricerca/read-only -> code-explorer (haiku). Single-file edit -> subagent sonnet o edit diretto. Refactor multi-file / debug ostico -> opus con giustificazione. Second-opinion indipendente o fresh-eyes review -> codex() via MCP. Regole in CLAUDE.md #Smart-Routing-Protocol e #Claude-Codex-delegation.\"'"
           }
         ]
       }

@@ -59,6 +59,7 @@ These rules are the portable equivalent of the Claude Code runtime hooks. Every 
 - Do not run destructive commands, production deploy commands, or irreversible clean/reset flows without explicit owner confirmation.
 - Treat `server.ts`, `firestore.rules`, and `src/config/admin.ts` as high-risk in every tool, not only in Claude Code.
 - Local runtime config files such as `.claude/settings.local.json` are not shared policy. Shared policy must live in `AGENTS.md`, `CLAUDE.md`, `.agents/skills/`, or `docs/AI_AGENT_STACK.md`.
+- `AGENTS.md` is the shared system prompt read natively by OpenAI Codex CLI. When Claude Code runs, the Codex MCP server declared in `.mcp.json` is also available: Claude can delegate isolated second-opinion tasks to Codex in-session via the `codex()` tool (see `CLAUDE.md` → "Claude ↔ Codex delegation"). Default remains Claude; Codex is the independent reviewer.
 
 ## Default operational notes
 

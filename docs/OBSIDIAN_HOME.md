@@ -108,6 +108,9 @@ Apri `docs/` con **Open folder as vault** e imposta questa nota come home.
 - [[AGENT_WORKFLOWS]] — workflow con Claude/AI
 - [[AI_AGENT_STACK]] — stack AI: shared skills, Claude-only, routing rules
 - [[DESIGN_SYSTEM_CHEATSHEET]] — token CSS, componenti, motion presets (ready reference UI)
+- [[ARCHITECTURE]] — mappa stack, struttura src/, data flow, API, CI/CD, security boundaries
+- [[DEV_TOOLING]] — CLI + MCP server + plugin: cosa è installato, cosa no, perché
+- [[TROUBLESHOOTING]] — diagnosi rapida problemi comuni (dev server, Firebase, Stripe, build, test, Claude Code hooks)
 
 ## Repo governance (fuori vault)
 

@@ -42,23 +42,45 @@ Prima di ogni tool call non banale il main thread, in testa al turno:
 
 ### Tassonomia task → route
 
-| Classe task | Keywords / segnali | Route |
-|---|---|---|
-| Ricerca, grep, "dove è X", enumerazione, log read | find, grep, search, list, dove, quale, elenca, mostra | `code-explorer` (haiku 4.5) |
-| Spiegazione / orientamento in modulo sconosciuto | spiega, explain, cosa fa, come funziona | `code-explorer` (haiku 4.5) |
-| Bugfix routine single-file | fix, typo, piccolo errore, rename locale | `travellini-frontend-builder` (sonnet) o edit diretto se ovvio |
-| UI critique, direzione visuale | UI, visual, design, estetica, brand | `travellini-ui-designer` (sonnet) |
-| Copy italiano, SEO, conversione | SEO, copy, italiano, conversion, lead | `travellini-seo-conversion-strategist` (sonnet) |
-| Audit, QA, regressione | audit, QA, regression, release, predeploy | `travellini-quality-auditor` (sonnet) |
-| Browser test reale, responsive, form | browser, Playwright, UX, responsive | `browser-auditor` (sonnet) via Playwright MCP |
-| Implementazione feature da piano già definito | "implementa", "segui il piano" | `travellini-frontend-builder` (sonnet) |
-| Refactor multi-file / architettura / debugging cross-layer | refactor grosso, design arch, bug multi-sistema | main thread opus (giustificato) o `code-architect` |
+| Classe task                                                | Keywords / segnali                                    | Route                                                          |
+| ---------------------------------------------------------- | ----------------------------------------------------- | -------------------------------------------------------------- |
+| Ricerca, grep, "dove è X", enumerazione, log read          | find, grep, search, list, dove, quale, elenca, mostra | `code-explorer` (haiku 4.5)                                    |
+| Spiegazione / orientamento in modulo sconosciuto           | spiega, explain, cosa fa, come funziona               | `code-explorer` (haiku 4.5)                                    |
+| Bugfix routine single-file                                 | fix, typo, piccolo errore, rename locale              | `travellini-frontend-builder` (sonnet) o edit diretto se ovvio |
+| UI critique, direzione visuale                             | UI, visual, design, estetica, brand                   | `travellini-ui-designer` (sonnet)                              |
+| Copy italiano, SEO, conversione                            | SEO, copy, italiano, conversion, lead                 | `travellini-seo-conversion-strategist` (sonnet)                |
+| Audit, QA, regressione                                     | audit, QA, regression, release, predeploy             | `travellini-quality-auditor` (sonnet)                          |
+| Browser test reale, responsive, form                       | browser, Playwright, UX, responsive                   | `browser-auditor` (sonnet) via Playwright MCP                  |
+| Implementazione feature da piano già definito              | "implementa", "segui il piano"                        | `travellini-frontend-builder` (sonnet)                         |
+| Refactor multi-file / architettura / debugging cross-layer | refactor grosso, design arch, bug multi-sistema       | main thread opus (giustificato) o `code-architect`             |
 
 ### Regole assolute
 
 - **Mai opus per**: single-file edit, grep/search, spiegazioni, bugfix routine, typecheck run, qualsiasi cosa completabile in un file.
 - **Sempre subagent read-only** quando l'esplorazione richiede >3 file letti.
 - **Override owner** batte sempre la tabella.
+
+### Claude ↔ Codex delegation (via MCP)
+
+Claude Code ha accesso a Codex CLI tramite il server MCP `codex` dichiarato in `.mcp.json`. I tool esposti (`codex(...)`, `codex-reply(...)`) permettono di delegare un task a Codex **all'interno della sessione Claude**. Regola di routing:
+
+| Situazione                                                                            | Canale                                                      |
+| ------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| **Default** (95% dei task)                                                            | Claude — main thread o subagent via BARC                    |
+| Second-opinion indipendente su PR / decisione architetturale / scelta di approccio    | **Codex** (`codex()` con prompt focalizzato)                |
+| Code review "fresh eyes" dopo un refactor Claude                                      | Codex                                                       |
+| Task iniziato in un branch `codex/*` già aperto da Codex CLI esternamente             | Codex (continuità)                                          |
+| Fallimento Claude in loop (debugger fallisce 2 volte di seguito con stesso approccio) | Codex come fallback diverso-modello                         |
+| Single-file edit, grep, spiegazione, audit, UI critique                               | Claude — **non** Codex (doppio costo, zero valore aggiunto) |
+
+### Regole assolute Codex
+
+- **Default = Claude**. Codex è lo strumento del "serve una vista indipendente".
+- **Mai** Codex → Claude → Codex in loop nello stesso turno. Se Claude e Codex disagree, torna all'owner con entrambe le posizioni.
+- **Mai** Codex per task a costo Claude già basso (haiku/sonnet cover): sarebbe solo spreco di quota OpenAI.
+- **Sempre Codex** quando l'owner lo chiede esplicitamente ("chiedi a Codex", "second opinion", "verifica con l'altro modello").
+- **Fallback sicuro**: se il server MCP `codex` non è disponibile (binary assente, auth scaduta, quota esaurita), continua con Claude normale. Non bloccare il turno.
+- **Evidenza del routing**: quando deleghi a Codex, dichiara in una riga il perché prima del tool call ("Delego a Codex: second opinion sulla firestore.rules rewrite").
 
 ## Commands
 

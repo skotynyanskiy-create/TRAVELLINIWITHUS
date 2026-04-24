@@ -86,9 +86,13 @@ Claude Code surfaces a warning hook on Edit/Write to those paths. Do not suppres
 - CI must be green (`quality`, `audit-agents`, `audit-visual` jobs in `.github/workflows/ci.yml`).
 - CODEOWNERS will auto-request review.
 
+## Troubleshooting
+
+Common dev-server, Firebase, Stripe, test, lint, and Claude Code hook problems are diagnosed in [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md). Check there before opening a bug note.
+
 ## Security
 
-Vulnerabilities are reported privately — see `SECURITY.md`.
+Vulnerabilities are reported privately — see `SECURITY.md`. Open `npm audit` findings that are deferred (e.g. the transitive `uuid <14` chain via `firebase-admin`) are documented as decision notes in `docs/20_Decisions/` so nobody applies `npm audit fix --force` blindly.
 
 ## Docs operating model
 
