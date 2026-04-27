@@ -69,7 +69,19 @@ export default function HotelDetail() {
         title={`${hotel.name} - Dove dormire a ${hotel.destination}`}
         description={hotel.summary}
         canonical={canonical}
+        image={hotel.image}
         noindex={hotel.isFallback}
+        breadcrumbs={[
+          { name: 'Home', url: SITE_URL },
+          { name: 'Dove dormire', url: `${SITE_URL}/dove-dormire` },
+          { name: hotel.name, url: canonical },
+        ]}
+        review={{
+          itemReviewed: { name: hotel.name, type: 'LodgingBusiness' },
+          reviewBody: hotel.editorialNote || hotel.summary,
+          authorName: 'Travelliniwithus',
+          rating: hotel.rating ? { value: hotel.rating, best: 10, worst: 1 } : undefined,
+        }}
       />
 
       <section className="bg-sand pb-16 pt-28 md:pb-24 md:pt-32">

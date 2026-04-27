@@ -1,7 +1,7 @@
 import type { ArticleType } from '../components/article';
 import type { GuideCategory } from '../config/contentTaxonomy';
 
-export type PublicArticleSection = 'guide' | 'itinerari';
+export type PublicArticleSection = 'guide' | 'itinerari' | 'reportage';
 
 export const ITINERARY_GUIDE_CATEGORIES: readonly GuideCategory[] = [
   'Itinerari completi',
@@ -19,6 +19,17 @@ export const GUIDE_LIBRARY_CATEGORIES: readonly GuideCategory[] = [
   'Pianificazione',
 ];
 
+// Reportage: racconti editoriali, non guide pratiche. Usati nel hub /diario per
+// distinguere dal contenuto utility. La category in Firestore deve matchare
+// uno di questi valori esatti perche un articolo finisca in /reportage.
+export const REPORTAGE_CATEGORIES: readonly string[] = [
+  'Diario di viaggio',
+  'Reportage',
+  'Storia personale',
+];
+
+const REPORTAGE_SET = new Set<string>(REPORTAGE_CATEGORIES);
+
 interface PublicArticleLike {
   id?: string;
   slug?: string;
@@ -34,6 +45,10 @@ export function getPublicArticleSection(
   }
 
   const category = article.category?.trim() || '';
+
+  if (REPORTAGE_SET.has(category)) {
+    return 'reportage';
+  }
 
   if (ITINERARY_CATEGORIES.has(category)) {
     return 'itinerari';
@@ -70,7 +85,9 @@ export function matchesPublicArticleSection(
 }
 
 export function getPublicSectionLabel(section: PublicArticleSection) {
-  return section === 'itinerari' ? 'Itinerari' : 'Guide';
+  if (section === 'itinerari') return 'Itinerari';
+  if (section === 'reportage') return 'Reportage';
+  return 'Guide';
 }
 
 export function getLegacyArticlePath(slug: string) {

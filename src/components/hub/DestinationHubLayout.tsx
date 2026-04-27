@@ -17,7 +17,7 @@ interface DestinationHubLayoutProps {
 }
 
 export default function DestinationHubLayout({ hub }: DestinationHubLayoutProps) {
-  const pageUrl = `${SITE_URL}/${hub.slug}`;
+  const pageUrl = `${SITE_URL}/destinazioni/${hub.slug}`;
 
   const collectionSchema = {
     '@context': 'https://schema.org',
@@ -43,6 +43,11 @@ export default function DestinationHubLayout({ hub }: DestinationHubLayoutProps)
         description={hub.seo.description}
         canonical={pageUrl}
         image={hub.heroImage}
+        breadcrumbs={[
+          { name: 'Home', url: SITE_URL },
+          { name: 'Destinazioni', url: `${SITE_URL}/destinazioni` },
+          { name: hub.country, url: pageUrl },
+        ]}
       />
       <JsonLd data={collectionSchema} />
 

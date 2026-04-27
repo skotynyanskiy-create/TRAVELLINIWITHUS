@@ -16,11 +16,7 @@ import {
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { CONTACTS } from '../config/site';
-import {
-  DESTINATION_GROUPS,
-  EXPERIENCE_TYPES,
-  slugifyExperienceType,
-} from '../config/contentTaxonomy';
+import { DESTINATION_GROUPS } from '../config/contentTaxonomy';
 import { siteContentDefaults } from '../config/siteContent';
 import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
@@ -103,15 +99,6 @@ export default function Navbar() {
     []
   );
 
-  const experienceLinks = useMemo(
-    () =>
-      EXPERIENCE_TYPES.map((type) => ({
-        name: type,
-        href: `/esperienze?type=${slugifyExperienceType(type)}`,
-      })),
-    []
-  );
-
   const exploreGroups = useMemo<NavSubGroup[]>(
     () => [
       {
@@ -129,37 +116,33 @@ export default function Navbar() {
         links: [{ name: 'Tutte le destinazioni', href: '/destinazioni' }, ...destinationLinks],
       },
       {
-        label: 'Per esperienza',
-        href: '/esperienze',
-        links: [{ name: 'Tutte le esperienze', href: '/esperienze' }, ...experienceLinks],
-      },
-      {
-        label: 'Ispirazione pronta',
-        href: '/guide',
+        label: 'Mappa & visivo',
+        href: '/mappa',
         links: [
-          { name: navigation.guidesLabel, href: '/guide' },
-          { name: navigation.itinerariesLabel, href: '/itinerari' },
+          { name: 'Mappa interattiva', href: '/mappa' },
+          { name: 'Tutte le esperienze', href: '/esperienze' },
         ],
       },
     ],
-    [destinationLinks, experienceLinks, navigation.guidesLabel, navigation.itinerariesLabel]
+    [destinationLinks]
   );
 
-  const guideGroups = useMemo<NavSubGroup[]>(
+  const diarioGroups = useMemo<NavSubGroup[]>(
     () => [
       {
-        label: 'Guide pratiche',
+        label: 'Tutto il diario',
+        href: '/diario',
+        links: [
+          { name: 'Tutti gli articoli', href: '/diario' },
+          { name: 'Reportage', href: '/diario?tab=reportage' },
+        ],
+      },
+      {
+        label: 'Per intenzione',
         href: '/guide',
         links: [
           { name: navigation.guidesLabel, href: '/guide' },
           { name: navigation.itinerariesLabel, href: '/itinerari' },
-        ],
-      },
-      {
-        label: 'Planning editoriale',
-        href: '/dove-dormire',
-        links: [
-          { name: 'Dove dormire', href: '/dove-dormire' },
           { name: 'Cosa mangiare', href: '/cosa-mangiare' },
         ],
       },
@@ -167,13 +150,27 @@ export default function Navbar() {
     [navigation.guidesLabel, navigation.itinerariesLabel]
   );
 
-  const planningLinks = useMemo<NavSubLink[]>(
+  const toolsLinks = useMemo<NavSubLink[]>(
     () => [
+      { name: 'Trova viaggio', href: '/trova-viaggio' },
       { name: navigation.resourcesLabel, href: '/risorse' },
       { name: 'Inizia da qui', href: '/inizia-da-qui' },
-      { name: 'Dove dormire', href: '/dove-dormire' },
+      { name: 'Mappa', href: '/mappa' },
+      { name: 'Newsletter', href: '/newsletter' },
     ],
     [navigation.resourcesLabel]
+  );
+
+  const collaboraLinks = useMemo<NavSubLink[]>(
+    () => [
+      { name: 'Per brand', href: '/collaborazioni?audience=brand' },
+      { name: 'Per hotel', href: '/collaborazioni?audience=hotel' },
+      { name: 'Per destinazioni', href: '/collaborazioni?audience=destinazioni' },
+      { name: navigation.mediaKitLabel, href: '/media-kit' },
+      { name: 'Press & Reach', href: '/press-reach' },
+      { name: navigation.contactsLabel, href: '/contatti' },
+    ],
+    [navigation.contactsLabel, navigation.mediaKitLabel]
   );
 
   const navItems = useMemo<NavItem[]>(
@@ -184,30 +181,26 @@ export default function Navbar() {
         subGroups: exploreGroups,
       },
       {
-        name: 'Guide',
-        href: '/guide',
-        subGroups: guideGroups,
+        name: 'Diario',
+        href: '/diario',
+        subGroups: diarioGroups,
       },
       {
-        name: navigation.planningLabel,
-        href: '/inizia-da-qui',
-        subLinks: planningLinks,
+        name: 'Dove dormire',
+        href: '/dove-dormire',
       },
       {
-        name: navigation.collaborationsLabel,
+        name: 'Strumenti',
+        href: '/risorse',
+        subLinks: toolsLinks,
+      },
+      {
+        name: 'Collabora',
         href: '/collaborazioni',
-        subLinks: [{ name: navigation.mediaKitLabel, href: '/media-kit' }],
-      },
-      {
-        name: navigation.aboutLabel,
-        href: '/chi-siamo',
-        subLinks: [
-          { name: 'Inizia da qui', href: '/inizia-da-qui' },
-          { name: navigation.contactsLabel, href: '/contatti' },
-        ],
+        subLinks: collaboraLinks,
       },
     ],
-    [exploreGroups, guideGroups, navigation, planningLinks]
+    [collaboraLinks, diarioGroups, exploreGroups, toolsLinks]
   );
 
   const isItemActive = (item: NavItem) => {
@@ -215,17 +208,39 @@ export default function Navbar() {
       return (
         location.pathname === '/destinazioni' ||
         location.pathname.startsWith('/destinazioni/') ||
-        location.pathname === '/esperienze'
+        location.pathname === '/esperienze' ||
+        location.pathname === '/mappa'
       );
     }
 
-    if (item.name === 'Guide') {
+    if (item.name === 'Diario') {
       return (
+        location.pathname === '/diario' ||
         location.pathname.startsWith('/guide') ||
         location.pathname.startsWith('/itinerari') ||
-        location.pathname === '/dove-dormire' ||
-        location.pathname.startsWith('/dove-dormire/') ||
         location.pathname === '/cosa-mangiare'
+      );
+    }
+
+    if (item.name === 'Dove dormire') {
+      return (
+        location.pathname === '/dove-dormire' || location.pathname.startsWith('/dove-dormire/')
+      );
+    }
+
+    if (item.name === 'Strumenti') {
+      return (
+        location.pathname === '/risorse' ||
+        location.pathname === '/inizia-da-qui' ||
+        location.pathname === '/mappa'
+      );
+    }
+
+    if (item.name === 'Collabora') {
+      return (
+        location.pathname === '/collaborazioni' ||
+        location.pathname === '/media-kit' ||
+        location.pathname === '/contatti'
       );
     }
 

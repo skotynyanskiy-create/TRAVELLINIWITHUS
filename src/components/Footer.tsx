@@ -36,7 +36,7 @@ export default function Footer() {
       <footer className="border-t border-white/10 bg-[var(--color-footer)] text-zinc-400">
         <div className="pt-20 pb-16">
           <div className="mx-auto max-w-7xl px-6 md:px-12">
-            <div className="mb-16 grid grid-cols-1 gap-16 md:grid-cols-4 lg:grid-cols-6">
+            <div className="mb-16 grid grid-cols-1 gap-16 md:grid-cols-3 lg:grid-cols-7">
               <div className="md:col-span-2 lg:col-span-2">
                 <Link
                   to="/"
@@ -100,7 +100,7 @@ export default function Footer() {
 
               <div>
                 <h4 className="mb-10 text-sm font-bold uppercase tracking-[0.3em] text-white">
-                  {footer.discoverTitle}
+                  Scopri
                 </h4>
                 <ul className="space-y-5">
                   <li>
@@ -113,10 +113,60 @@ export default function Footer() {
                   </li>
                   <li>
                     <Link
-                      to="/esperienze"
+                      to="/destinazioni/italia"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
-                      {navigation.experiencesLabel}
+                      Italia
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/destinazioni/grecia"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      Grecia
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/destinazioni/portogallo"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      Portogallo
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/mappa"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      Mappa
+                    </Link>
+                  </li>
+                  {isShopDiscoverable && (
+                    <li>
+                      <Link
+                        to="/shop"
+                        className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                      >
+                        {navigation.shopLabel}
+                      </Link>
+                    </li>
+                  )}
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="mb-10 text-sm font-bold uppercase tracking-[0.3em] text-white">
+                  Diario
+                </h4>
+                <ul className="space-y-5">
+                  <li>
+                    <Link
+                      to="/diario"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      Tutto il diario
                     </Link>
                   </li>
                   <li>
@@ -135,32 +185,30 @@ export default function Footer() {
                       {navigation.itinerariesLabel}
                     </Link>
                   </li>
-                  {isShopDiscoverable && (
-                    <li>
-                      <Link
-                        to="/shop"
-                        className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                      >
-                        {navigation.shopLabel}
-                      </Link>
-                    </li>
-                  )}
+                  <li>
+                    <Link
+                      to="/cosa-mangiare"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      Cosa mangiare
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/esperienze"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      {navigation.experiencesLabel}
+                    </Link>
+                  </li>
                 </ul>
               </div>
 
               <div>
                 <h4 className="mb-10 text-sm font-bold uppercase tracking-[0.3em] text-white">
-                  {footer.planningTitle}
+                  Pratico
                 </h4>
                 <ul className="space-y-5">
-                  <li>
-                    <Link
-                      to="/inizia-da-qui"
-                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      {navigation.planningLabel}
-                    </Link>
-                  </li>
                   <li>
                     <Link
                       to="/dove-dormire"
@@ -171,10 +219,18 @@ export default function Footer() {
                   </li>
                   <li>
                     <Link
-                      to="/cosa-mangiare"
+                      to="/risorse"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
-                      Cosa mangiare
+                      {navigation.resourcesLabel}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/inizia-da-qui"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      Inizia da qui
                     </Link>
                   </li>
                   <li>
@@ -190,15 +246,39 @@ export default function Footer() {
 
               <div>
                 <h4 className="mb-10 text-sm font-bold uppercase tracking-[0.3em] text-white">
-                  {footer.resourcesTitle}
+                  Brand
                 </h4>
                 <ul className="space-y-5">
                   <li>
                     <Link
-                      to="/risorse"
+                      to="/chi-siamo"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
-                      {navigation.resourcesLabel}
+                      {navigation.aboutLabel}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/metodo"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      Metodo
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/trasparenza"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      Trasparenza
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/press-reach"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      Press &amp; Reach
                     </Link>
                   </li>
                   <li>
@@ -209,22 +289,24 @@ export default function Footer() {
                       {navigation.favoritesLabel}
                     </Link>
                   </li>
+                  {isAdmin && (
+                    <li>
+                      <Link
+                        to="/admin"
+                        className="flex items-center gap-2 text-base text-[var(--color-accent)] transition-colors hover:text-white"
+                      >
+                        <ShieldCheck size={16} /> Pannello admin
+                      </Link>
+                    </li>
+                  )}
                 </ul>
               </div>
 
-              <div className="md:col-span-4 lg:col-span-1">
+              <div className="md:col-span-3 lg:col-span-1">
                 <h4 className="mb-10 text-sm font-bold uppercase tracking-[0.3em] text-white">
-                  {footer.projectTitle}
+                  Lavora con noi
                 </h4>
                 <ul className="mb-10 space-y-5">
-                  <li>
-                    <Link
-                      to="/chi-siamo"
-                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      {navigation.aboutLabel}
-                    </Link>
-                  </li>
                   <li>
                     <Link
                       to="/collaborazioni"
@@ -249,16 +331,6 @@ export default function Footer() {
                       {navigation.contactsLabel}
                     </Link>
                   </li>
-                  {isAdmin && (
-                    <li>
-                      <Link
-                        to="/admin"
-                        className="flex items-center gap-2 text-base text-[var(--color-accent)] transition-colors hover:text-white"
-                      >
-                        <ShieldCheck size={16} /> Pannello admin
-                      </Link>
-                    </li>
-                  )}
                 </ul>
                 <button
                   onClick={handleNewsletterClick}
