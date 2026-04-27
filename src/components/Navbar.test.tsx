@@ -22,11 +22,11 @@ describe('Navbar Component', () => {
   it('exposes the five primary nav voices', async () => {
     const { getAllByText } = render(<Navbar />);
     await waitFor(() => {
-      expect(getAllByText(/^Esplora$/i).length).toBeGreaterThan(0);
-      expect(getAllByText(/^Diario$/i).length).toBeGreaterThan(0);
+      expect(getAllByText(/^Destinazioni$/i).length).toBeGreaterThan(0);
+      expect(getAllByText(/^Travel tips$/i).length).toBeGreaterThan(0);
       expect(getAllByText(/^Dove dormire$/i).length).toBeGreaterThan(0);
-      expect(getAllByText(/^Strumenti$/i).length).toBeGreaterThan(0);
-      expect(getAllByText(/^Collabora$/i).length).toBeGreaterThan(0);
+      expect(getAllByText(/^Shop$/i).length).toBeGreaterThan(0);
+      expect(getAllByText(/^Chi siamo$/i).length).toBeGreaterThan(0);
     });
   });
 });

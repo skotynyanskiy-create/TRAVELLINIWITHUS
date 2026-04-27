@@ -453,6 +453,20 @@ Alberobello al mattino presto, mai di pomeriggio. E soprattutto: non riempire og
     date: '15 marzo 2026',
     author: 'Rodrigo & Betta',
     continent: 'Europa',
+    verifiedContext: '5 giorni a marzo, base unica a Ortigia',
+    factBox: {
+      title: 'Sicilia orientale in breve',
+      items: [
+        { label: 'Durata', value: '5 giorni' },
+        { label: 'Base', value: 'Ortigia (Siracusa)' },
+        { label: 'Periodo', value: 'Aprile–giugno · settembre–ottobre' },
+        { label: 'Budget 2 pax', value: '€1.800–2.500' },
+      ],
+    },
+    pullQuote: {
+      text: 'Cinque giorni in Sicilia orientale: meno tappe, più tempo. È così che la luce diventa parte del viaggio.',
+      attribution: 'Consiglio Travellini',
+    },
     content: `
 La Sicilia orientale in cinque giorni si puo fare, ma solo se rinunci all idea di vedere tutto. Questo e il nostro piano: base unica a Siracusa, quattro escursioni precise e una giornata sull Etna. Luce forte, cibo onesto, ritmo che non si spezza.
 
@@ -829,7 +843,7 @@ Non inseguire ogni cascata. Scegli le 5 migliori (Gullfoss, Seljalandsfoss, Skog
       ],
     },
     pullQuote: {
-      text: 'Metà febbraio è la nostra sweet spot: neve piena per le foto, giornate leggermente più lunghe di gennaio, aurora ancora forte.',
+      text: 'L’inverno islandese costa fatica. Ti restituisce un cielo che d’estate non vedrai mai.',
       attribution: 'Consiglio Travellini',
     },
     content: `

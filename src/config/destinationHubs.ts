@@ -87,43 +87,43 @@ export const DESTINATION_HUBS: Record<string, DestinationHub> = {
     subDestinations: [
       {
         name: 'Sardegna',
-        tagline: 'Gallura, Costa Smeralda, Ogliastra, Barbagia. Hub regione completo.',
-        href: '/destinazioni/italia/sardegna',
+        tagline: 'Gallura, Costa Smeralda, Asinara. Il nord in 7 giorni.',
+        href: '/itinerari/sardegna-nord-7-giorni-guida-completa',
         image:
           'https://images.unsplash.com/photo-1530541930197-ff16ac917b0e?q=80&w=1600&auto=format&fit=crop',
         featured: true,
       },
       {
         name: 'Puglia',
-        tagline: 'Masserie, borghi bianchi, Salento e Valle d Itria.',
-        href: '/destinazioni/italia/puglia',
+        tagline: 'Masserie, borghi bianchi, olio buono e tempo dilatato.',
+        href: '/itinerari/puglia-roadtrip-borghi-bianchi',
         image:
           'https://images.unsplash.com/photo-1583407723467-9b2d22504831?q=80&w=1600&auto=format&fit=crop',
       },
       {
-        name: 'Dolomiti / Trentino-Alto Adige',
-        tagline: 'Rifugi contemporanei e sentieri in quota.',
-        href: '/destinazioni/italia/trentino-alto-adige',
+        name: 'Dolomiti',
+        tagline: 'Rifugi contemporanei e sentieri da scegliere in quota.',
+        href: '/itinerari/dolomiti-rifugi-design',
         image:
           'https://images.unsplash.com/photo-1533130061792-64b345e4a833?q=80&w=1600&auto=format&fit=crop',
       },
       {
-        name: 'Sicilia',
-        tagline: 'Est barocco, ovest arabeggiante, Etna, isole minori.',
-        href: '/destinazioni/italia/sicilia',
+        name: 'Sicilia orientale',
+        tagline: 'Taormina, Siracusa, Noto. Cinque giorni pieni.',
+        href: '/itinerari/sicilia-orientale-5-giorni',
         image:
           'https://images.unsplash.com/photo-1498307833015-e7b400441eb8?q=80&w=1600&auto=format&fit=crop',
       },
       {
-        name: 'Toscana',
-        tagline: 'Chianti, Val d Orcia, Maremma. Senza cartoline.',
-        href: '/destinazioni/italia/toscana',
+        name: 'Borghi lenti',
+        tagline: 'Weekend tra pietra, vino e cene lunghe.',
+        href: '/itinerari/weekend-borgo-lento',
         image:
-          'https://images.unsplash.com/photo-1543429776-2782fc8e1acd?q=80&w=1600&auto=format&fit=crop',
+          'https://images.unsplash.com/photo-1533662654863-10b9d6ed02a3?q=80&w=1600&auto=format&fit=crop',
       },
       {
         name: 'Tutte le destinazioni italiane',
-        tagline: "L'archivio completo con filtri per regione, periodo, budget.",
+        tagline: "L'archivio completo con tutti i filtri per regione, periodo, budget.",
         href: '/destinazioni?group=Italia',
         image:
           'https://images.unsplash.com/photo-1512757776214-26d36777b513?q=80&w=1600&auto=format&fit=crop',
@@ -552,6 +552,7 @@ export const ITALIAN_REGION_HUBS: Record<string, DestinationHub> = {
       "Taormina, Siracusa, Noto, Palermo, l'entroterra. La Sicilia non e una destinazione: e cinque viaggi diversi nello stesso mese. Ti diciamo come scegliere fra est barocco, ovest arabeggiante, isole minori e Etna.",
     heroImage:
       'https://images.unsplash.com/photo-1498307833015-e7b400441eb8?q=80&w=2000&auto=format&fit=crop',
+    minArticlesToPublish: 1,
     regionMatcher: ['Sicilia', 'Sicilia orientale', 'Sicilia occidentale'],
     foodPreview: [
       {
@@ -583,6 +584,7 @@ export const ITALIAN_REGION_HUBS: Record<string, DestinationHub> = {
       'Valle d Itria, Salento, Gargano, Murgia. La Puglia e la regione del ritmo lento ben fatto: masserie, borghi bianchi, cene lunghe, mare onesto. Ti diciamo dove andare in alta stagione senza farti rovinare l esperienza.',
     heroImage:
       'https://images.unsplash.com/photo-1583407723467-9b2d22504831?q=80&w=2000&auto=format&fit=crop',
+    minArticlesToPublish: 1,
     regionMatcher: ['Puglia', 'Salento', 'Valle d Itria', 'Valle d’Itria'],
     foodPreview: [
       {
@@ -613,6 +615,7 @@ export const ITALIAN_REGION_HUBS: Record<string, DestinationHub> = {
       'Dolomiti, Val Gardena, Val Pusteria, Val di Fassa. La regione che ha reinventato il rifugio di montagna: design contemporaneo, cucina alpina seria, sentieri da scegliere in quota. Stagione, prenotazione, scelta del lodge: ogni dettaglio conta.',
     heroImage:
       'https://images.unsplash.com/photo-1533130061792-64b345e4a833?q=80&w=2000&auto=format&fit=crop',
+    minArticlesToPublish: 1,
     regionMatcher: ['Trentino-Alto Adige', 'Trentino', 'Alto Adige', 'Dolomiti', 'Sudtirol'],
     foodPreview: [
       {
@@ -642,6 +645,7 @@ export const ITALIAN_REGION_HUBS: Record<string, DestinationHub> = {
       'Chianti, Val d Orcia, Maremma, Firenze, Lucca. La Toscana che funziona davvero non e quella delle cartoline. Ti diciamo dove dormire senza turistificazione, dove mangiare lontano dai tour bus, e quando andare per evitare il caos di luglio.',
     heroImage:
       'https://images.unsplash.com/photo-1543429776-2782fc8e1acd?q=80&w=2000&auto=format&fit=crop',
+    minArticlesToPublish: 1,
     regionMatcher: ['Toscana', 'Chianti', 'Val d Orcia', 'Maremma'],
     foodPreview: [
       {
@@ -672,6 +676,7 @@ export const ITALIAN_REGION_HUBS: Record<string, DestinationHub> = {
       'Gallura, Asinara, Ogliastra, Sulcis, interno barbaricino. La Sardegna premia chi va oltre la costa nord patinata. Calette deserte, agriturismi seri, montagna che pochi raccontano. Ti diciamo come muoverti, dove dormire e cosa salvare per stagione.',
     heroImage:
       'https://images.unsplash.com/photo-1530541930197-ff16ac917b0e?q=80&w=2000&auto=format&fit=crop',
+    minArticlesToPublish: 1,
     regionMatcher: ['Sardegna', 'Gallura', 'Ogliastra', 'Sulcis', 'Barbagia'],
     foodPreview: [
       {
@@ -692,171 +697,6 @@ export const ITALIAN_REGION_HUBS: Record<string, DestinationHub> = {
         description: 'Grattugiata su spaghetti aglio e olio. Il caviale del Mediterraneo.',
       },
     ],
-  }),
-  'italia/abruzzo': createItalianRegionHub({
-    slug: 'abruzzo',
-    name: 'Abruzzo',
-    heroEyebrow: 'Abruzzo',
-    heroTitleAccent: 'montagna seria e mare onesto',
-    heroDescription:
-      'Gran Sasso, Maiella, Costa dei Trabocchi, borghi medievali. L Abruzzo e la regione piu sottovalutata del centro Italia: parchi nazionali enormi, pastoralismo vivo, cibo schietto. Per chi vuole montagna senza la calca alpina.',
-    heroImage:
-      'https://images.unsplash.com/photo-1565006447755-fe6dad88a18e?q=80&w=2000&auto=format&fit=crop',
-    regionMatcher: ['Abruzzo'],
-  }),
-  'italia/basilicata': createItalianRegionHub({
-    slug: 'basilicata',
-    name: 'Basilicata',
-    heroEyebrow: 'Basilicata',
-    heroTitleAccent: 'Matera e tutto il resto',
-    heroDescription:
-      'Matera, Maratea, Pollino, calanchi e bradano. La Basilicata e una sorpresa anche per chi pensa di averla vista. Sassi di Matera, costa tirrenica selvaggia, parchi naturali. Ti diciamo cosa scegliere a seconda di tempi e ritmi.',
-    heroImage:
-      'https://images.unsplash.com/photo-1591030456543-b7b1cf3d12bf?q=80&w=2000&auto=format&fit=crop',
-    regionMatcher: ['Basilicata'],
-  }),
-  'italia/calabria': createItalianRegionHub({
-    slug: 'calabria',
-    name: 'Calabria',
-    heroEyebrow: 'Calabria',
-    heroTitleAccent: 'mare doppio e Aspromonte',
-    heroDescription:
-      'Tropea, Capo Vaticano, Aspromonte, Sila, Reggio. Due coste molto diverse e un entroterra montano forte. La Calabria che vale e quella che premia chi sceglie i borghi giusti e mangia dove mangiano i pastori.',
-    heroImage:
-      'https://images.unsplash.com/photo-1597201278257-3687be27d954?q=80&w=2000&auto=format&fit=crop',
-    regionMatcher: ['Calabria'],
-  }),
-  'italia/campania': createItalianRegionHub({
-    slug: 'campania',
-    name: 'Campania',
-    heroEyebrow: 'Campania',
-    heroTitleAccent: 'Costiera, Cilento, Napoli',
-    heroDescription:
-      'Costiera Amalfitana, Capri, Ischia, Cilento, Napoli. La Campania concentra in una regione i posti piu fotografati e quelli piu sottovalutati. Ti diciamo dove andare quando l Amalfi e troppa e cosa scegliere fuori stagione.',
-    heroImage:
-      'https://images.unsplash.com/photo-1481931715705-36f5f6ee6b5c?q=80&w=2000&auto=format&fit=crop',
-    regionMatcher: ['Campania', 'Costiera Amalfitana', 'Cilento'],
-  }),
-  'italia/emilia-romagna': createItalianRegionHub({
-    slug: 'emilia-romagna',
-    name: 'Emilia-Romagna',
-    heroEyebrow: 'Emilia-Romagna',
-    heroTitleAccent: 'la cucina italiana al suo apice',
-    heroDescription:
-      'Bologna, Modena, Parma, Romagna. La regione dove il cibo non e una scelta: e una geografia. Pasta ripiena, salumi DOP, aceti balsamici tradizionali. Ti diciamo dove fermarsi e cosa ordinare nelle trattorie storiche.',
-    heroImage:
-      'https://images.unsplash.com/photo-1570452770879-eb2a30bf4ed4?q=80&w=2000&auto=format&fit=crop',
-    regionMatcher: ['Emilia-Romagna', 'Emilia', 'Romagna'],
-  }),
-  'italia/friuli-venezia-giulia': createItalianRegionHub({
-    slug: 'friuli-venezia-giulia',
-    name: 'Friuli-Venezia Giulia',
-    heroEyebrow: 'Friuli-Venezia Giulia',
-    heroTitleAccent: 'il nord est che mescola tre culture',
-    heroDescription:
-      'Trieste, Carso, Collio, Aquileia, Dolomiti friulane. Slovenia accanto, Austria sopra, mare a sud. La regione piu cosmopolita del nordest. Caffe asburgici, vini bianchi forti, cucina di confine.',
-    heroImage:
-      'https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?q=80&w=2000&auto=format&fit=crop',
-    regionMatcher: ['Friuli-Venezia Giulia', 'Friuli', 'Carso', 'Trieste'],
-  }),
-  'italia/lazio': createItalianRegionHub({
-    slug: 'lazio',
-    name: 'Lazio',
-    heroEyebrow: 'Lazio',
-    heroTitleAccent: 'oltre Roma, davvero',
-    heroDescription:
-      'Roma e ovviamente la regina, ma il Lazio fuori GRA e Tuscia, Castelli, Ciociaria, costa. Ti diciamo dove uscire da Roma per un weekend vero, e quali borghi laziali meritano davvero di essere percorsi.',
-    heroImage:
-      'https://images.unsplash.com/photo-1531572753322-ad063cecc140?q=80&w=2000&auto=format&fit=crop',
-    regionMatcher: ['Lazio', 'Roma', 'Tuscia', 'Ciociaria'],
-  }),
-  'italia/liguria': createItalianRegionHub({
-    slug: 'liguria',
-    name: 'Liguria',
-    heroEyebrow: 'Liguria',
-    heroTitleAccent: 'Cinque Terre e tutto il resto',
-    heroDescription:
-      'Cinque Terre, Portofino, Riviera di Levante, Riviera di Ponente. La regione costiera piu fotografata d Italia ha problemi di overtourism reali. Ti diciamo dove andare e quando, e quali borghi liguri restano ancora da scoprire.',
-    heroImage:
-      'https://images.unsplash.com/photo-1499678329028-101435549a4e?q=80&w=2000&auto=format&fit=crop',
-    regionMatcher: ['Liguria', 'Cinque Terre', 'Riviera Ligure'],
-  }),
-  'italia/lombardia': createItalianRegionHub({
-    slug: 'lombardia',
-    name: 'Lombardia',
-    heroEyebrow: 'Lombardia',
-    heroTitleAccent: 'tre laghi, una pianura, una capitale',
-    heroDescription:
-      'Milano, Como, Garda, Iseo, Valtellina, Bergamo, Mantova. La regione piu varia per offerta turistica del nord Italia: dai laghi piu cinematografici agli alpeggi della Valtellina alle capitali d arte come Bergamo e Mantova.',
-    heroImage:
-      'https://images.unsplash.com/photo-1596813362035-3edcff0c2487?q=80&w=2000&auto=format&fit=crop',
-    regionMatcher: ['Lombardia', 'Milano', 'Como', 'Garda', 'Valtellina'],
-  }),
-  'italia/marche': createItalianRegionHub({
-    slug: 'marche',
-    name: 'Marche',
-    heroEyebrow: 'Marche',
-    heroTitleAccent: 'il cuore segreto del centro Italia',
-    heroDescription:
-      'Urbino, Ancona, Conero, Sibillini, Frasassi. Le Marche sono la regione che chi ha viaggiato in Italia consiglia per ultimo perche se la tiene stretta. Borghi, mare onesto, cibo serio, prezzi ancora umani.',
-    heroImage:
-      'https://images.unsplash.com/photo-1605107796893-2497ab1a83a8?q=80&w=2000&auto=format&fit=crop',
-    regionMatcher: ['Marche', 'Conero', 'Sibillini'],
-  }),
-  'italia/molise': createItalianRegionHub({
-    slug: 'molise',
-    name: 'Molise',
-    heroEyebrow: 'Molise',
-    heroTitleAccent: 'la regione che dicono non esista',
-    heroDescription:
-      'Termoli, Campobasso, Pietrabbondante, Matese. La regione meno turistica d Italia e anche quella con la qualita-prezzo piu netta. Borghi medievali, parchi naturali, cucina pastorale che resiste.',
-    heroImage:
-      'https://images.unsplash.com/photo-1565006447755-fe6dad88a18e?q=80&w=2000&auto=format&fit=crop',
-    regionMatcher: ['Molise'],
-  }),
-  'italia/piemonte': createItalianRegionHub({
-    slug: 'piemonte',
-    name: 'Piemonte',
-    heroEyebrow: 'Piemonte',
-    heroTitleAccent: 'Langhe, Monferrato, Valli alpine',
-    heroDescription:
-      'Langhe, Monferrato, Roero, Torino, Valli olimpiche. La regione che ha trasformato il vino in un movimento culturale. Barolo e Barbaresco, ma anche tartufo bianco d Alba, agnolotti del plin, alpinismo serio.',
-    heroImage:
-      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2000&auto=format&fit=crop',
-    regionMatcher: ['Piemonte', 'Langhe', 'Monferrato', 'Torino', 'Roero'],
-  }),
-  'italia/umbria': createItalianRegionHub({
-    slug: 'umbria',
-    name: 'Umbria',
-    heroEyebrow: 'Umbria',
-    heroTitleAccent: 'cuore verde, ritmo lento',
-    heroDescription:
-      'Perugia, Assisi, Spoleto, Orvieto, Trasimeno, Valnerina. L Umbria fuori dai tour religiosi: borghi quieti, tartufi, lenticchie di Castelluccio, parchi nazionali. La regione perfetta per il weekend lento di tre giorni.',
-    heroImage:
-      'https://images.unsplash.com/photo-1537274942065-eda9d00a6293?q=80&w=2000&auto=format&fit=crop',
-    regionMatcher: ['Umbria', 'Trasimeno', 'Valnerina'],
-  }),
-  'italia/valle-d-aosta': createItalianRegionHub({
-    slug: 'valle-d-aosta',
-    name: "Valle d'Aosta",
-    heroEyebrow: "Valle d'Aosta",
-    heroTitleAccent: 'la piu piccola, la piu verticale',
-    heroDescription:
-      'Cervinia, Courmayeur, Cogne, Aosta, Gran Paradiso. La regione piu piccola d Italia e anche la piu verticale: alta montagna seria, sci storico, fonduta, fontina DOP. Per chi cerca l alpe vera senza compromessi.',
-    heroImage:
-      'https://images.unsplash.com/photo-1565551050026-4fc7616be820?q=80&w=2000&auto=format&fit=crop',
-    regionMatcher: ['Valle d Aosta', "Valle d'Aosta", 'Aosta'],
-  }),
-  'italia/veneto': createItalianRegionHub({
-    slug: 'veneto',
-    name: 'Veneto',
-    heroEyebrow: 'Veneto',
-    heroTitleAccent: 'Venezia, Dolomiti, Garda, Prosecco',
-    heroDescription:
-      'Venezia, Verona, Padova, Cortina, Garda, Colli Euganei. La regione piu turistica d Italia per volume, ma con angoli ancora autentici se sai dove cercare. Cortina d Ampezzo, Asolo, le valli del Prosecco DOCG.',
-    heroImage:
-      'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?q=80&w=2000&auto=format&fit=crop',
-    regionMatcher: ['Veneto', 'Venezia', 'Verona', 'Cortina', 'Prosecco'],
   }),
 };
 

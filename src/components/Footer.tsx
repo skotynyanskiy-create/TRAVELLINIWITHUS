@@ -158,17 +158,9 @@ export default function Footer() {
 
               <div>
                 <h4 className="mb-10 text-sm font-bold uppercase tracking-[0.3em] text-white">
-                  Diario
+                  Travel tips
                 </h4>
                 <ul className="space-y-5">
-                  <li>
-                    <Link
-                      to="/diario"
-                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      Tutto il diario
-                    </Link>
-                  </li>
                   <li>
                     <Link
                       to="/guide"
@@ -206,32 +198,56 @@ export default function Footer() {
 
               <div>
                 <h4 className="mb-10 text-sm font-bold uppercase tracking-[0.3em] text-white">
-                  Pratico
+                  Risorse di viaggio
                 </h4>
                 <ul className="space-y-5">
-                  <li>
-                    <Link
-                      to="/dove-dormire"
-                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      Dove dormire
-                    </Link>
-                  </li>
                   <li>
                     <Link
                       to="/risorse"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
-                      {navigation.resourcesLabel}
+                      Tutte le risorse
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      to="/inizia-da-qui"
+                    <a
+                      href="https://heymondo.it/?utm_medium=Afiliado&utm_source=TRAVELLINIWITHUS&utm_campaign=PRINCIPAL&cod_descuento=TRAVELLINIWITHUS&ag_campaign=TRAVELLINI&agencia=JG4Tepc5b47oLeK3xGDmbAX9I25ExoDeoc8cbPFt"
+                      target="_blank"
+                      rel="nofollow sponsored noopener noreferrer"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
-                      Inizia da qui
-                    </Link>
+                      Heymondo (assicurazione)
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="https://booking.com"
+                      target="_blank"
+                      rel="nofollow sponsored noopener noreferrer"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      Booking.com
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="https://skyscanner.it"
+                      target="_blank"
+                      rel="nofollow sponsored noopener noreferrer"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      Skyscanner
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="https://getyourguide.com/-cs552"
+                      target="_blank"
+                      rel="nofollow sponsored noopener noreferrer"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      GetYourGuide (esperienze)
+                    </a>
                   </li>
                   <li>
                     <button
@@ -262,7 +278,7 @@ export default function Footer() {
                       to="/metodo"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
-                      Metodo
+                      Il nostro metodo
                     </Link>
                   </li>
                   <li>
@@ -275,10 +291,10 @@ export default function Footer() {
                   </li>
                   <li>
                     <Link
-                      to="/press-reach"
+                      to="/inizia-da-qui"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
-                      Press &amp; Reach
+                      Inizia da qui
                     </Link>
                   </li>
                   <li>

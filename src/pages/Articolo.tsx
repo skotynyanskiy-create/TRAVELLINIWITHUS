@@ -145,6 +145,9 @@ function ensureArticleData(
     videoUrl: article.videoUrl,
     updatedAt: article.updatedAt,
     verifiedAt: article.verifiedAt,
+    verifiedContext: article.verifiedContext,
+    factBox: article.factBox,
+    pullQuote: article.pullQuote,
     hotels: article.hotels,
     shopCta: article.shopCta,
   };

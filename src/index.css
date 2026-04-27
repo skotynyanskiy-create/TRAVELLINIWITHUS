@@ -282,3 +282,20 @@ html {
     scroll-behavior: auto !important;
   }
 }
+
+/* Editorial drop-cap — first paragraph of an article body. */
+.prose-reset > p:first-of-type::first-letter {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 3.4em;
+  line-height: 0.86;
+  float: left;
+  margin: 0.14em 0.1em 0 0;
+  color: var(--color-ink);
+}
+@media (min-width: 768px) {
+  .prose-reset > p:first-of-type::first-letter {
+    font-size: 4.2em;
+    margin: 0.12em 0.12em 0 0;
+  }
+}

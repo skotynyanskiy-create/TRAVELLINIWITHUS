@@ -99,10 +99,10 @@ export default function Navbar() {
     []
   );
 
-  const exploreGroups = useMemo<NavSubGroup[]>(
+  const destinationsGroups = useMemo<NavSubGroup[]>(
     () => [
       {
-        label: 'Hub paesi',
+        label: 'Paesi',
         href: '/destinazioni/italia',
         links: [
           { name: '🇮🇹 Italia', href: '/destinazioni/italia' },
@@ -111,100 +111,78 @@ export default function Navbar() {
         ],
       },
       {
-        label: 'Per luogo',
+        label: 'Esplora',
         href: '/destinazioni',
-        links: [{ name: 'Tutte le destinazioni', href: '/destinazioni' }, ...destinationLinks],
-      },
-      {
-        label: 'Mappa & visivo',
-        href: '/mappa',
         links: [
+          { name: 'Tutte le destinazioni', href: '/destinazioni' },
           { name: 'Mappa interattiva', href: '/mappa' },
           { name: 'Tutte le esperienze', href: '/esperienze' },
+          ...destinationLinks,
         ],
       },
     ],
     [destinationLinks]
   );
 
-  const diarioGroups = useMemo<NavSubGroup[]>(
+  const tipsLinks = useMemo<NavSubLink[]>(
     () => [
-      {
-        label: 'Tutto il diario',
-        href: '/diario',
-        links: [
-          { name: 'Tutti gli articoli', href: '/diario' },
-          { name: 'Reportage', href: '/diario?tab=reportage' },
-        ],
-      },
-      {
-        label: 'Per intenzione',
-        href: '/guide',
-        links: [
-          { name: navigation.guidesLabel, href: '/guide' },
-          { name: navigation.itinerariesLabel, href: '/itinerari' },
-          { name: 'Cosa mangiare', href: '/cosa-mangiare' },
-        ],
-      },
-    ],
-    [navigation.guidesLabel, navigation.itinerariesLabel]
-  );
-
-  const toolsLinks = useMemo<NavSubLink[]>(
-    () => [
-      { name: 'Trova viaggio', href: '/trova-viaggio' },
+      { name: navigation.guidesLabel, href: '/guide' },
+      { name: navigation.itinerariesLabel, href: '/itinerari' },
+      { name: 'Cosa mangiare', href: '/cosa-mangiare' },
       { name: navigation.resourcesLabel, href: '/risorse' },
       { name: 'Inizia da qui', href: '/inizia-da-qui' },
-      { name: 'Mappa', href: '/mappa' },
-      { name: 'Newsletter', href: '/newsletter' },
     ],
-    [navigation.resourcesLabel]
+    [navigation.guidesLabel, navigation.itinerariesLabel, navigation.resourcesLabel]
   );
 
-  const collaboraLinks = useMemo<NavSubLink[]>(
+  const aboutLinks = useMemo<NavSubLink[]>(
     () => [
-      { name: 'Per brand', href: '/collaborazioni?audience=brand' },
-      { name: 'Per hotel', href: '/collaborazioni?audience=hotel' },
-      { name: 'Per destinazioni', href: '/collaborazioni?audience=destinazioni' },
+      { name: navigation.aboutLabel, href: '/chi-siamo' },
+      { name: 'Il nostro metodo', href: '/metodo' },
+      { name: 'Trasparenza', href: '/trasparenza' },
+      { name: navigation.collaborationsLabel, href: '/collaborazioni' },
       { name: navigation.mediaKitLabel, href: '/media-kit' },
-      { name: 'Press & Reach', href: '/press-reach' },
       { name: navigation.contactsLabel, href: '/contatti' },
     ],
-    [navigation.contactsLabel, navigation.mediaKitLabel]
+    [
+      navigation.aboutLabel,
+      navigation.collaborationsLabel,
+      navigation.contactsLabel,
+      navigation.mediaKitLabel,
+    ]
   );
 
   const navItems = useMemo<NavItem[]>(
     () => [
       {
-        name: 'Esplora',
+        name: navigation.destinationsLabel,
         href: '/destinazioni',
-        subGroups: exploreGroups,
+        subGroups: destinationsGroups,
       },
       {
-        name: 'Diario',
-        href: '/diario',
-        subGroups: diarioGroups,
+        name: 'Travel tips',
+        href: '/guide',
+        subLinks: tipsLinks,
       },
       {
         name: 'Dove dormire',
         href: '/dove-dormire',
       },
       {
-        name: 'Strumenti',
-        href: '/risorse',
-        subLinks: toolsLinks,
+        name: 'Shop',
+        href: '/shop',
       },
       {
-        name: 'Collabora',
-        href: '/collaborazioni',
-        subLinks: collaboraLinks,
+        name: navigation.aboutLabel,
+        href: '/chi-siamo',
+        subLinks: aboutLinks,
       },
     ],
-    [collaboraLinks, diarioGroups, exploreGroups, toolsLinks]
+    [aboutLinks, destinationsGroups, navigation.aboutLabel, navigation.destinationsLabel, tipsLinks]
   );
 
   const isItemActive = (item: NavItem) => {
-    if (item.name === 'Esplora') {
+    if (item.name === navigation.destinationsLabel) {
       return (
         location.pathname === '/destinazioni' ||
         location.pathname.startsWith('/destinazioni/') ||
@@ -213,12 +191,13 @@ export default function Navbar() {
       );
     }
 
-    if (item.name === 'Diario') {
+    if (item.name === 'Travel tips') {
       return (
-        location.pathname === '/diario' ||
         location.pathname.startsWith('/guide') ||
         location.pathname.startsWith('/itinerari') ||
-        location.pathname === '/cosa-mangiare'
+        location.pathname === '/cosa-mangiare' ||
+        location.pathname === '/risorse' ||
+        location.pathname === '/inizia-da-qui'
       );
     }
 
@@ -228,16 +207,15 @@ export default function Navbar() {
       );
     }
 
-    if (item.name === 'Strumenti') {
-      return (
-        location.pathname === '/risorse' ||
-        location.pathname === '/inizia-da-qui' ||
-        location.pathname === '/mappa'
-      );
+    if (item.name === 'Shop') {
+      return location.pathname === '/shop' || location.pathname.startsWith('/shop/');
     }
 
-    if (item.name === 'Collabora') {
+    if (item.name === navigation.aboutLabel) {
       return (
+        location.pathname === '/chi-siamo' ||
+        location.pathname === '/metodo' ||
+        location.pathname === '/trasparenza' ||
         location.pathname === '/collaborazioni' ||
         location.pathname === '/media-kit' ||
         location.pathname === '/contatti'

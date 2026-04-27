@@ -48,10 +48,6 @@ const IniziaDaQui = lazy(() => import('./pages/IniziaDaQui'));
 const CosaMangiare = lazy(() => import('./pages/CosaMangiare'));
 const MieiAcquisti = lazy(() => import('./pages/MieiAcquisti'));
 const Mappa = lazy(() => import('./pages/Mappa'));
-const Diario = lazy(() => import('./pages/Diario'));
-const PressReach = lazy(() => import('./pages/PressReach'));
-const NewsletterPage = lazy(() => import('./pages/NewsletterPage'));
-const Wizard = lazy(() => import('./pages/Wizard'));
 const Metodo = lazy(() => import('./pages/Metodo'));
 const Trasparenza = lazy(() => import('./pages/Trasparenza'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -121,10 +117,6 @@ export default function App() {
                         <Route path="inizia-da-qui" element={<IniziaDaQui />} />
                         <Route path="cosa-mangiare" element={<CosaMangiare />} />
                         <Route path="mappa" element={<Mappa />} />
-                        <Route path="diario" element={<Diario />} />
-                        <Route path="press-reach" element={<PressReach />} />
-                        <Route path="newsletter" element={<NewsletterPage />} />
-                        <Route path="trova-viaggio" element={<Wizard />} />
                         <Route path="metodo" element={<Metodo />} />
                         <Route path="trasparenza" element={<Trasparenza />} />
                         <Route path="chi-siamo" element={<ChiSiamo />} />
