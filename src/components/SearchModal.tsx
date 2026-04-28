@@ -249,23 +249,9 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                     <button
                       type="button"
                       className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10"
-                      onClick={() => setQuery('Esperienze')}
-                    >
-                      Esperienze
-                    </button>
-                    <button
-                      type="button"
-                      className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10"
                       onClick={() => setQuery('Guide')}
                     >
                       Guide
-                    </button>
-                    <button
-                      type="button"
-                      className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10"
-                      onClick={() => setQuery('Itinerari')}
-                    >
-                      Itinerari
                     </button>
                     <button
                       type="button"

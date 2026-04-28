@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-04-24",
+  "generatedAt": "2026-04-28",
   "description": "Warning audit:ui accettati come giustificati (PDF react constraint, animazioni Framer, palette affiliate dinamiche, ecc.). Rigenerare con: npm run audit:ui:update-baseline",
   "warnings": [
     {
       "file": "src/components/destinazioni/DestinationGrid.tsx",
-      "line": 38,
+      "line": 36,
       "level": "warn",
       "message": "Inline style found in JSX. Confirm it is required for animation, transforms or third-party APIs."
     },

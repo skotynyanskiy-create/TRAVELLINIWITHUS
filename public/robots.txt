@@ -2,7 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /admin/*
-Disallow: /preferiti
 Disallow: /account
 Disallow: /account/*
 Disallow: /articolo

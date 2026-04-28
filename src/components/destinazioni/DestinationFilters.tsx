@@ -111,7 +111,7 @@ export default function DestinationFilters({
   const showCityDetail = showItalyDetail && availableCities.length > 1;
 
   return (
-    <div className="mb-12 overflow-hidden rounded-[1.6rem] border border-black/6 bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_-12px_rgba(0,0,0,0.08)]">
+    <div className="mb-12 overflow-hidden rounded-[1.6rem] border border-black/6 bg-white shadow-[var(--shadow-card-soft)]">
       <div className="grid grid-cols-2 border-b border-black/6 bg-[var(--color-sand)]/40">
         <TabButton
           active={isLuogo}

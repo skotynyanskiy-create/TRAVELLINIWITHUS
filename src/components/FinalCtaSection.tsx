@@ -35,11 +35,11 @@ const defaults: Record<
     eyebrow: 'Continua a esplorare',
     title: 'Trova il prossimo posto da salvare.',
     description:
-      'Destinazioni, esperienze, guide pratiche e itinerari sono collegati tra loro per aiutarti a scegliere meglio dove andare dopo.',
+      'Destinazioni e guide pratiche collegate tra loro per aiutarti a scegliere meglio dove andare dopo.',
     primaryLabel: 'Esplora destinazioni',
     primaryTo: '/destinazioni',
-    secondaryLabel: 'Sfoglia esperienze',
-    secondaryTo: '/destinazioni',
+    secondaryLabel: 'Sfoglia le guide',
+    secondaryTo: '/guide',
   },
   newsletter: {
     eyebrow: 'Resta nel filo giusto',
