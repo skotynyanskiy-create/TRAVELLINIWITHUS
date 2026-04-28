@@ -25,7 +25,7 @@ React 19 · TypeScript (non-strict) · Vite 6 · Tailwind 4 + CSS variables · E
 - No new `any`. No error handling for impossible cases. No comments unless WHY is non-obvious.
 - Three similar lines is fine; abstract only at 4+ occurrences with a clear name.
 - Run `npm run typecheck` after TypeScript edits. Run `npm run audit:ui` / `audit:visual` for UI work.
-- High-risk files (require owner confirmation): `server.ts`, `firestore.rules`, `src/config/admin.ts`.
+- High-risk files (require owner confirmation): `server.ts`, `firestore.rules`, `src/config/admin.ts`, `.mcp.json`, `firebase.json`, `vite.config.ts`, `CLAUDE.md`, `AGENTS.md`.
 
 ## Smart Routing Protocol (cost discipline)
 
@@ -42,17 +42,19 @@ Prima di ogni tool call non banale il main thread, in testa al turno:
 
 ### Tassonomia task → route
 
-| Classe task                                                | Keywords / segnali                                    | Route                                                          |
-| ---------------------------------------------------------- | ----------------------------------------------------- | -------------------------------------------------------------- |
-| Ricerca, grep, "dove è X", enumerazione, log read          | find, grep, search, list, dove, quale, elenca, mostra | `code-explorer` (haiku 4.5)                                    |
-| Spiegazione / orientamento in modulo sconosciuto           | spiega, explain, cosa fa, come funziona               | `code-explorer` (haiku 4.5)                                    |
-| Bugfix routine single-file                                 | fix, typo, piccolo errore, rename locale              | `travellini-frontend-builder` (sonnet) o edit diretto se ovvio |
-| UI critique, direzione visuale                             | UI, visual, design, estetica, brand                   | `travellini-ui-designer` (sonnet)                              |
-| Copy italiano, SEO, conversione                            | SEO, copy, italiano, conversion, lead                 | `travellini-seo-conversion-strategist` (sonnet)                |
-| Audit, QA, regressione                                     | audit, QA, regression, release, predeploy             | `travellini-quality-auditor` (sonnet)                          |
-| Browser test reale, responsive, form                       | browser, Playwright, UX, responsive                   | `browser-auditor` (sonnet) via Playwright MCP                  |
-| Implementazione feature da piano già definito              | "implementa", "segui il piano"                        | `travellini-frontend-builder` (sonnet)                         |
-| Refactor multi-file / architettura / debugging cross-layer | refactor grosso, design arch, bug multi-sistema       | main thread opus (giustificato) o `code-architect`             |
+| Classe task                                               | Keywords / segnali                                      | Route                                                                       |
+| --------------------------------------------------------- | ------------------------------------------------------- | --------------------------------------------------------------------------- |
+| Ricerca, grep, "dove è X", enumerazione, log read         | find, grep, search, list, dove, quale, elenca, mostra   | `code-explorer` (haiku 4.5)                                                 |
+| Spiegazione / orientamento in modulo sconosciuto          | spiega, explain, cosa fa, come funziona                 | `code-explorer` (haiku 4.5)                                                 |
+| Bugfix routine single-file                                | fix, typo, piccolo errore, rename locale                | `travellini-frontend-builder` (sonnet) o edit diretto se ovvio              |
+| UI critique, direzione visuale                            | UI, visual, design, estetica, brand                     | `travellini-ui-designer` (sonnet)                                           |
+| Copy italiano, SEO, conversione                           | SEO, copy, italiano, conversion, lead                   | `travellini-seo-conversion-strategist` (sonnet)                             |
+| Audit, QA, regressione                                    | audit, QA, regression, release, predeploy               | `travellini-quality-auditor` (sonnet)                                       |
+| Browser test reale, responsive, form                      | browser, Playwright, UX, responsive                     | `browser-auditor` (sonnet) via Playwright MCP                               |
+| Implementazione feature da piano già definito             | "implementa", "segui il piano"                          | `travellini-frontend-builder` (sonnet)                                      |
+| Nuova pagina / nuovo articolo da scaffolding              | "nuova pagina", "nuovo articolo", new-page, new-article | skill `/new-page` o `/new-article` → `travellini-frontend-builder` (sonnet) |
+| Pianificazione architetturale (solo blueprint, no codice) | "fai un piano", "design", "blueprint", "come imposto"   | `code-architect` (opus, read-only)                                          |
+| Refactor multi-file / debugging cross-layer (esecuzione)  | refactor grosso, bug multi-sistema, fix cross-layer     | main thread opus (giustificato)                                             |
 
 ### Regole assolute
 
@@ -79,7 +81,7 @@ Claude Code ha accesso a Codex CLI tramite il server MCP `codex` dichiarato in `
 - **Mai** Codex → Claude → Codex in loop nello stesso turno. Se Claude e Codex disagree, torna all'owner con entrambe le posizioni.
 - **Mai** Codex per task a costo Claude già basso (haiku/sonnet cover): sarebbe solo spreco di quota OpenAI.
 - **Sempre Codex** quando l'owner lo chiede esplicitamente ("chiedi a Codex", "second opinion", "verifica con l'altro modello").
-- **Fallback sicuro**: se il server MCP `codex` non è disponibile (binary assente, auth scaduta, quota esaurita), continua con Claude normale. Non bloccare il turno.
+- **Fallback sicuro**: se il server MCP `codex` non è disponibile, continua con Claude normale. Non bloccare il turno. Segnali runtime di indisponibilità: tool `mcp__codex__codex` non listato fra i tool disponibili, `InputValidationError` persistente sullo schema, errore di auth/quota dal binary, timeout senza risposta. Al primo errore segnala in una riga al main thread ("Codex MCP non risponde, fallback Claude") e prosegui.
 - **Evidenza del routing**: quando deleghi a Codex, dichiara in una riga il perché prima del tool call ("Delego a Codex: second opinion sulla firestore.rules rewrite").
 
 ## Commands
