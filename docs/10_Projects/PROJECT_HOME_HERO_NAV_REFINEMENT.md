@@ -223,7 +223,7 @@ Decisione: la nav smette di comprimere tutto dentro `Esplora` + `Risorse`.
 
 Decisione: per il lancio V1 la navigazione diventa piu diretta e meno astratta.
 
-- nav primaria: `Destinazioni`, `Guide`, `Itinerari`, `Dove dormire`, `Risorse`, `Collaborazioni`
+- nav primaria a 4 voci: `Destinazioni`, `Guide`, `Risorse`, `Collaborazioni`. `Itinerari` e `Dove dormire` sono stati rimossi dalla nav perché non più pagine standalone — il contenuto rilevante vive dentro `Destinazioni` (hub regionali) e `Guide` (sezione editoriale).
 - rimossa la voce `Travel tips`
 - `Shop` resta fuori dalla nav finche non esistono prodotti reali acquistabili e consegnabili
 - home orientata al cluster Puglia/Italia con CTA `Inizia dalla Puglia`

@@ -34,7 +34,7 @@ Tenere sotto controllo cio che manca per una release pulita e verificabile della
 
 Obiettivo: portare il sito a una V1 pubblicabile e credibile, con esperienza pubblica piu chiara e senza promesse non verificate.
 
-- [x] Nav primaria riallineata a `Destinazioni / Guide / Itinerari / Dove dormire / Risorse / Collaborazioni`.
+- [x] Nav primaria riallineata a 4 voci: `Destinazioni / Guide / Risorse / Collaborazioni`. `Itinerari` e `Dove dormire` non sono più voci di nav (contenuto assorbito da hub regionali e sezione Guide).
 - [x] `Shop` resta fuori dalla nav principale finche il catalogo non e realmente acquistabile.
 - [x] `Travel tips` rimosso dalle superfici di navigazione pubblica.
 - [x] Home spostata su portale editoriale con Puglia come primo cluster V1 e B2B in fascia separata.
