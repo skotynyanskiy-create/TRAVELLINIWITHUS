@@ -37,6 +37,19 @@ audit-*.jpeg
 audit-*.png
 .vercel
 
+# Browser-auditor leftover screenshots and snapshots in repo root
+/iceland-*.png
+/sicily-*.png
+/sicilia-*.png
+/sicilia-*.md
+/islanda-*.png
+/islanda-*.md
+/mobile-*.png
+/mobile-*.md
+/search-modal.png
+/trova-*.png
+/guide-page-snapshot.md
+
 # AI tool memory/session cache
 .remember/
 

@@ -90,12 +90,6 @@ export default function DestinationHubLayout({ hub }: DestinationHubLayoutProps)
                 Apri l'archivio {hub.country}
                 <ArrowRight size={14} />
               </Link>
-              <Link
-                to="/inizia-da-qui"
-                className="inline-flex items-center gap-2 rounded-full border border-white/30 px-6 py-3 text-xs font-bold uppercase tracking-widest text-white/90 transition-colors hover:border-white hover:text-white"
-              >
-                Nuovo qui? Inizia da qui
-              </Link>
             </div>
           </motion.div>
         </div>
@@ -160,7 +154,7 @@ export default function DestinationHubLayout({ hub }: DestinationHubLayoutProps)
         <div className="mx-auto max-w-272 px-6 md:px-10">
           <div className="mb-10">
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-accent-text">
-              Travel tips
+              Consigli pratici
             </span>
             <h2 className="mt-4 text-3xl font-serif leading-tight text-ink md:text-4xl">
               Cosa sapere prima di partire per {hub.country}
@@ -199,15 +193,6 @@ export default function DestinationHubLayout({ hub }: DestinationHubLayoutProps)
                   <p className="mt-3 text-sm leading-relaxed text-white/70">{dish.description}</p>
                 </div>
               ))}
-            </div>
-            <div className="mt-12">
-              <Link
-                to="/cosa-mangiare"
-                className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-accent transition-colors hover:text-white"
-              >
-                Guida gastronomica completa
-                <ArrowRight size={14} />
-              </Link>
             </div>
           </div>
         </section>

@@ -32,7 +32,6 @@ const inlineStyleAllowlist = [
   'src/pages/Articolo.tsx',
   'src/pages/Contatti.tsx',
   'src/pages/Destinazioni.tsx',
-  'src/pages/Esperienze.tsx',
   'src/pages/Guide.tsx',
   'src/pages/Shop.tsx',
 ];

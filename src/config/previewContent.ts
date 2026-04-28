@@ -258,8 +258,9 @@ Non cercare di vedere tutto. Scegli una valle, due punti forti e un margine per 
   'puglia-roadtrip-borghi-bianchi': {
     id: 'puglia-roadtrip-borghi-bianchi',
     slug: 'puglia-roadtrip-borghi-bianchi',
-    title: 'Puglia slow: roadtrip tra borghi bianchi e masserie',
+    title: 'Puglia slow: roadtrip tra borghi bianchi, masserie e tavole vere',
     category: 'Itinerari completi',
+    type: 'pillar',
     image:
       'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=2000&auto=format&fit=crop',
     excerpt:
@@ -270,10 +271,14 @@ Non cercare di vedere tutto. Scegli una valle, due punti forti e un margine per 
     period: 'Maggio - giugno, settembre',
     budget: '€€',
     duration: '5 giorni',
-    readTime: '10 min',
+    readTime: '12 min',
     date: '2 aprile 2026',
     author: 'Rodrigo & Betta',
     continent: 'Europa',
+    disclosureType: 'none',
+    budgetBand: 'Medio',
+    tripIntents: ["Borghi e città d'arte", 'Food & Ristoranti', 'Hotel con carattere'],
+    verifiedAt: '2026-04-05T09:00:00.000Z',
     verifiedContext: '5 giorni in Valle d’Itria',
     factBox: {
       title: 'Valle d’Itria in breve',
@@ -432,6 +437,41 @@ Alberobello al mattino presto, mai di pomeriggio. E soprattutto: non riempire og
     mapCenter: [17.35, 40.82],
     mapZoom: 9,
     isMarkdown: true,
+    shopCta: {
+      productType: 'ebook',
+      productUrl: '/shop/guida-premium-puglia-slow',
+      count: 1,
+    },
+    hotels: [
+      {
+        name: 'Borgo Egnazia',
+        image:
+          'https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1600&auto=format&fit=crop',
+        bookingUrl: 'https://www.booking.com/',
+        category: 'Masseria resort',
+        rating: 9.2,
+        priceHint: '€€€',
+        badge: 'Da verificare',
+      },
+      {
+        name: 'Masseria Trapana',
+        image:
+          'https://images.unsplash.com/photo-1540541338287-41700207dee6?q=80&w=1600&auto=format&fit=crop',
+        bookingUrl: 'https://www.booking.com/',
+        category: 'Masseria boutique',
+        rating: 9.1,
+        priceHint: '€€€',
+      },
+      {
+        name: 'Don Ferrante',
+        image:
+          'https://images.unsplash.com/photo-1571896349842-33c89424de2d?q=80&w=1600&auto=format&fit=crop',
+        bookingUrl: 'https://www.booking.com/',
+        category: 'Dimora sul mare',
+        rating: 8.9,
+        priceHint: '€€',
+      },
+    ],
   },
 
   'sicilia-orientale-5-giorni': {

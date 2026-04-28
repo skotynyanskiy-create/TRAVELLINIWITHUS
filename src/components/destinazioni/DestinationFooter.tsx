@@ -6,10 +6,7 @@ export default function DestinationFooter() {
   return (
     <>
       <Section className="!py-20">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <CrossLinkWidget variant="to-esperienze" />
-          <CrossLinkWidget variant="to-itinerari" />
-        </div>
+        <CrossLinkWidget variant="to-guide" />
       </Section>
 
       <Section className="!py-0 !pb-16">

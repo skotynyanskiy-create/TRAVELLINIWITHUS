@@ -145,7 +145,7 @@ const DEMO_PRODUCT_SLUGS = new Set([
   'guida-premium-dolomiti',
   'guida-premium-giappone',
   'guida-premium-islanda',
-  'guida-premium-puglia',
+  'guida-premium-puglia-slow',
   'planner-viaggio',
   'budget-tracker',
   'packing-checklist',
@@ -159,20 +159,14 @@ const DEMO_PRODUCT_SLUGS = new Set([
 const STATIC_APP_ROUTES = new Set([
   '/',
   '/destinazioni',
-  '/esperienze',
   '/guide',
-  '/itinerari',
-  '/dove-dormire',
   '/italia',
   '/grecia',
   '/portogallo',
-  '/inizia-da-qui',
-  '/cosa-mangiare',
   '/chi-siamo',
   '/collaborazioni',
   '/media-kit',
   '/contatti',
-  '/preferiti',
   '/risorse',
   '/shop',
   '/club',
@@ -186,18 +180,8 @@ const STATIC_APP_ROUTES = new Set([
   '/admin/product-editor',
 ]);
 
-const ITINERARY_SERVER_CATEGORIES = new Set(['Itinerari completi', 'Weekend & Day trip']);
-
-function getPublicArticlePathForServer(article: {
-  slug: string;
-  category?: string;
-  type?: string;
-}) {
-  const section =
-    article.type === 'itinerary' || ITINERARY_SERVER_CATEGORIES.has(article.category || '')
-      ? 'itinerari'
-      : 'guide';
-  return `/${section}/${article.slug}`;
+function getPublicArticlePathForServer(article: { slug: string }) {
+  return `/guide/${article.slug}`;
 }
 
 function buildAllowedOrigins() {
@@ -440,10 +424,6 @@ async function resolveAppStatus(pathname: string) {
 
     const article = await fetchArticle(slug);
     return article ? 200 : 404;
-  }
-
-  if (pathname.startsWith('/dove-dormire/')) {
-    return 200;
   }
 
   if (pathname.startsWith('/destinazioni/')) {
@@ -1455,6 +1435,10 @@ async function startServer() {
               return null;
             }
 
+            if (product.isDigital && !product.downloadUrl) {
+              return null;
+            }
+
             return {
               id: product.id,
               name: product.name,
@@ -1587,17 +1571,11 @@ async function startServer() {
       '/destinazioni/italia',
       '/destinazioni/grecia',
       '/destinazioni/portogallo',
-      '/esperienze',
       '/guide',
-      '/itinerari',
-      '/dove-dormire',
       '/mappa',
-      '/inizia-da-qui',
-      '/cosa-mangiare',
       '/risorse',
       '/collaborazioni',
       '/media-kit',
-      '/metodo',
       '/trasparenza',
       '/contatti',
       '/chi-siamo',

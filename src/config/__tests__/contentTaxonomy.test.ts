@@ -17,6 +17,10 @@ describe('slugifyGuideCategory', () => {
     expect(slugifyGuideCategory('Budget & Costi')).toBe('budget-e-costi');
   });
 
+  it('normalizza gli accenti', () => {
+    expect(slugifyGuideCategory('Dove dormire')).toBe('dove-dormire');
+  });
+
   it('rimuove trattini iniziali e finali', () => {
     expect(slugifyGuideCategory('Dove dormire')).toBe('dove-dormire');
   });
@@ -29,6 +33,10 @@ describe('slugifyExperienceType', () => {
 
   it('trasforma & in e', () => {
     expect(slugifyExperienceType('Food & Ristoranti')).toBe('food-e-ristoranti');
+  });
+
+  it('normalizza città e apostrofi nello slug', () => {
+    expect(slugifyExperienceType("Borghi e città d'arte")).toBe('borghi-e-citta-d-arte');
   });
 });
 

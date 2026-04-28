@@ -1,15 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
-const ROUTES = [
-  '/',
-  '/destinazioni',
-  '/esperienze',
-  '/guide',
-  '/shop',
-  '/chi-siamo',
-  '/contatti',
-];
+const ROUTES = ['/', '/destinazioni', '/guide', '/shop', '/chi-siamo', '/contatti'];
 
 test.describe('A11y smoke (critical + serious)', () => {
   for (const path of ROUTES) {
@@ -29,7 +21,7 @@ test.describe('A11y smoke (critical + serious)', () => {
         .analyze();
 
       const blocking = results.violations.filter(
-        (v) => v.impact === 'critical' || v.impact === 'serious',
+        (v) => v.impact === 'critical' || v.impact === 'serious'
       );
 
       const report = blocking.map((v) => ({

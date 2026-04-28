@@ -11,7 +11,6 @@ import Layout from './components/Layout';
 import ScrollToTop from './components/ScrollToTop';
 import ProtectedRoute from './components/ProtectedRoute';
 import ErrorBoundary from './components/ErrorBoundary';
-import { FavoritesProvider } from './context/FavoritesContext';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 
@@ -28,27 +27,19 @@ const queryClient = new QueryClient({
 
 const Home = lazy(() => import('./pages/Home'));
 const Destinazioni = lazy(() => import('./pages/Destinazioni'));
-const Esperienze = lazy(() => import('./pages/Esperienze'));
 const ChiSiamo = lazy(() => import('./pages/ChiSiamo'));
 const Collaborazioni = lazy(() => import('./pages/Collaborazioni'));
 const Contatti = lazy(() => import('./pages/Contatti'));
 const MediaKit = lazy(() => import('./pages/MediaKit'));
 const Articolo = lazy(() => import('./pages/Articolo'));
 const ArticleLegacyRedirect = lazy(() => import('./pages/ArticleLegacyRedirect'));
-const Preferiti = lazy(() => import('./pages/Preferiti'));
 const Risorse = lazy(() => import('./pages/Risorse'));
 const Shop = lazy(() => import('./pages/Shop'));
 const ProductPage = lazy(() => import('./pages/ProductPage'));
 const Guide = lazy(() => import('./pages/Guide'));
-const Itinerari = lazy(() => import('./pages/Itinerari'));
-const DoveDormire = lazy(() => import('./pages/DoveDormire'));
-const HotelDetail = lazy(() => import('./pages/HotelDetail'));
 const DestinationHub = lazy(() => import('./pages/DestinationHub'));
-const IniziaDaQui = lazy(() => import('./pages/IniziaDaQui'));
-const CosaMangiare = lazy(() => import('./pages/CosaMangiare'));
 const MieiAcquisti = lazy(() => import('./pages/MieiAcquisti'));
 const Mappa = lazy(() => import('./pages/Mappa'));
-const Metodo = lazy(() => import('./pages/Metodo'));
 const Trasparenza = lazy(() => import('./pages/Trasparenza'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
@@ -83,130 +74,120 @@ export default function App() {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <CartProvider>
-            <FavoritesProvider>
-              <BrowserRouter>
-                <ScrollToTop />
-                <Suspense fallback={<PageLoader />}>
-                  <ErrorBoundary>
-                    <Routes>
-                      <Route path="/" element={<Layout />}>
-                        <Route index element={<Home />} />
-                        <Route path="destinazioni" element={<Destinazioni />} />
-                        <Route path="destinazioni/:country" element={<DestinationHub />} />
-                        <Route path="destinazioni/:country/:region" element={<DestinationHub />} />
-                        <Route path="destinazioni/:country/:region/:slug" element={<Articolo />} />
-                        <Route path="esperienze" element={<Esperienze />} />
-                        <Route path="guide" element={<Guide />} />
-                        <Route path="guide/:slug" element={<Articolo />} />
-                        <Route path="itinerari" element={<Itinerari />} />
-                        <Route path="itinerari/:slug" element={<Articolo />} />
-                        <Route path="dove-dormire" element={<DoveDormire />} />
-                        <Route path="dove-dormire/:slug" element={<HotelDetail />} />
-                        <Route
-                          path="italia"
-                          element={<Navigate to="/destinazioni/italia" replace />}
-                        />
-                        <Route
-                          path="grecia"
-                          element={<Navigate to="/destinazioni/grecia" replace />}
-                        />
-                        <Route
-                          path="portogallo"
-                          element={<Navigate to="/destinazioni/portogallo" replace />}
-                        />
-                        <Route path="inizia-da-qui" element={<IniziaDaQui />} />
-                        <Route path="cosa-mangiare" element={<CosaMangiare />} />
-                        <Route path="mappa" element={<Mappa />} />
-                        <Route path="metodo" element={<Metodo />} />
-                        <Route path="trasparenza" element={<Trasparenza />} />
-                        <Route path="chi-siamo" element={<ChiSiamo />} />
-                        <Route path="collaborazioni" element={<Collaborazioni />} />
-                        <Route path="media-kit" element={<MediaKit />} />
-                        <Route path="contatti" element={<Contatti />} />
-                        <Route path="articolo/:slug" element={<ArticleLegacyRedirect />} />
-                        <Route path="preferiti" element={<Preferiti />} />
-                        <Route path="risorse" element={<Risorse />} />
-                        <Route path="shop" element={<Shop />} />
-                        <Route path="shop/:slug" element={<ProductPage />} />
-                        <Route path="account/acquisti" element={<MieiAcquisti />} />
+            <BrowserRouter>
+              <ScrollToTop />
+              <Suspense fallback={<PageLoader />}>
+                <ErrorBoundary>
+                  <Routes>
+                    <Route path="/" element={<Layout />}>
+                      <Route index element={<Home />} />
+                      <Route path="destinazioni" element={<Destinazioni />} />
+                      <Route path="destinazioni/:country" element={<DestinationHub />} />
+                      <Route path="destinazioni/:country/:region" element={<DestinationHub />} />
+                      <Route path="destinazioni/:country/:region/:slug" element={<Articolo />} />
+                      <Route path="guide" element={<Guide />} />
+                      <Route path="guide/:slug" element={<Articolo />} />
+                      <Route path="itinerari/:slug" element={<Navigate to="/guide" replace />} />
+                      <Route
+                        path="italia"
+                        element={<Navigate to="/destinazioni/italia" replace />}
+                      />
+                      <Route
+                        path="grecia"
+                        element={<Navigate to="/destinazioni/grecia" replace />}
+                      />
+                      <Route
+                        path="portogallo"
+                        element={<Navigate to="/destinazioni/portogallo" replace />}
+                      />
+                      <Route path="mappa" element={<Mappa />} />
+                      <Route path="trasparenza" element={<Trasparenza />} />
+                      <Route path="chi-siamo" element={<ChiSiamo />} />
+                      <Route path="collaborazioni" element={<Collaborazioni />} />
+                      <Route path="media-kit" element={<MediaKit />} />
+                      <Route path="contatti" element={<Contatti />} />
+                      <Route path="articolo/:slug" element={<ArticleLegacyRedirect />} />
+                      <Route path="risorse" element={<Risorse />} />
+                      <Route path="shop" element={<Shop />} />
+                      <Route path="shop/:slug" element={<ProductPage />} />
+                      <Route path="account/acquisti" element={<MieiAcquisti />} />
 
-                        <Route
-                          path="admin"
-                          element={
-                            <ProtectedRoute>
-                              <AdminDashboard />
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route
-                          path="admin/site-content/:pageId"
-                          element={
-                            <ProtectedRoute>
-                              <SiteContentEditor />
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route
-                          path="admin/editor"
-                          element={
-                            <ProtectedRoute>
-                              <ArticleEditor />
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route
-                          path="admin/editor/:id"
-                          element={
-                            <ProtectedRoute>
-                              <ArticleEditor />
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route
-                          path="admin/product-editor"
-                          element={
-                            <ProtectedRoute>
-                              <ProductEditor />
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route
-                          path="admin/product-editor/:id"
-                          element={
-                            <ProtectedRoute>
-                              <ProductEditor />
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route
-                          path="admin/users"
-                          element={
-                            <ProtectedRoute>
-                              <AdminUsers />
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route
-                          path="admin/orders"
-                          element={
-                            <ProtectedRoute>
-                              <AdminOrders />
-                            </ProtectedRoute>
-                          }
-                        />
+                      <Route
+                        path="admin"
+                        element={
+                          <ProtectedRoute>
+                            <AdminDashboard />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="admin/site-content/:pageId"
+                        element={
+                          <ProtectedRoute>
+                            <SiteContentEditor />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="admin/editor"
+                        element={
+                          <ProtectedRoute>
+                            <ArticleEditor />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="admin/editor/:id"
+                        element={
+                          <ProtectedRoute>
+                            <ArticleEditor />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="admin/product-editor"
+                        element={
+                          <ProtectedRoute>
+                            <ProductEditor />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="admin/product-editor/:id"
+                        element={
+                          <ProtectedRoute>
+                            <ProductEditor />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="admin/users"
+                        element={
+                          <ProtectedRoute>
+                            <AdminUsers />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="admin/orders"
+                        element={
+                          <ProtectedRoute>
+                            <AdminOrders />
+                          </ProtectedRoute>
+                        }
+                      />
 
-                        <Route path="privacy" element={<Privacy />} />
-                        <Route path="cookie" element={<Cookie />} />
-                        <Route path="termini" element={<Termini />} />
-                        <Route path="disclaimer" element={<Disclaimer />} />
+                      <Route path="privacy" element={<Privacy />} />
+                      <Route path="cookie" element={<Cookie />} />
+                      <Route path="termini" element={<Termini />} />
+                      <Route path="disclaimer" element={<Disclaimer />} />
 
-                        <Route path="*" element={<NotFound />} />
-                      </Route>
-                    </Routes>
-                  </ErrorBoundary>
-                </Suspense>
-              </BrowserRouter>
-            </FavoritesProvider>
+                      <Route path="*" element={<NotFound />} />
+                    </Route>
+                  </Routes>
+                </ErrorBoundary>
+              </Suspense>
+            </BrowserRouter>
           </CartProvider>
         </AuthProvider>
       </QueryClientProvider>

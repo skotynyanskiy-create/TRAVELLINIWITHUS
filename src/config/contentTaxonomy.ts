@@ -1,23 +1,11 @@
-export const DESTINATION_GROUPS = [
-  'Italia',
-  'Europa',
-  'Asia',
-  'Americhe',
-  'Africa',
-  'Oceania',
-] as const;
+export const DESTINATION_GROUPS = ['Italia', 'Grecia', 'Portogallo'] as const;
 
 export const EXPERIENCE_TYPES = [
-  'Posti particolari',
   'Food & Ristoranti',
-  'Locali insoliti',
+  "Borghi e città d'arte",
   'Hotel con carattere',
   'Weekend romantici',
-  "Borghi e città d'arte",
-  'Passeggiate panoramiche',
-  'Relax, terme e spa',
   'Esperienze insolite',
-  'Gite e day trip',
 ] as const;
 
 /**
@@ -39,8 +27,12 @@ export type DestinationGroup = (typeof DESTINATION_GROUPS)[number];
 export type ExperienceType = (typeof EXPERIENCE_TYPES)[number];
 export type GuideCategory = (typeof GUIDE_CATEGORIES)[number];
 
+function normalizeSlugSource(value: string) {
+  return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
 export function slugifyExperienceType(value: string) {
-  return value
+  return normalizeSlugSource(value)
     .toLowerCase()
     .replace(/&/g, 'e')
     .replace(/[^a-z0-9]+/g, '-')
@@ -48,7 +40,7 @@ export function slugifyExperienceType(value: string) {
 }
 
 export function slugifyGuideCategory(value: string) {
-  return value
+  return normalizeSlugSource(value)
     .toLowerCase()
     .replace(/&/g, 'e')
     .replace(/[^a-z0-9]+/g, '-')

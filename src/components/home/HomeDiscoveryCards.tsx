@@ -19,7 +19,6 @@ import {
 import { getExperienceVisual } from '../../config/experienceVisuals';
 import { GUIDE_CATEGORY_VISUALS, getGuideCategoryVisualClass } from '../../config/guideContent';
 import { MEDIA } from '../../config/mediaAssets';
-import { getPublicArticleCollectionPath } from '../../utils/articleRoutes';
 
 function GuideTile({ category, description }: { category: GuideCategory; description: string }) {
   const visual = GUIDE_CATEGORY_VISUALS[category];
@@ -27,7 +26,7 @@ function GuideTile({ category, description }: { category: GuideCategory; descrip
   const visualClass = getGuideCategoryVisualClass(category);
   return (
     <Link
-      to={`${getPublicArticleCollectionPath({ category })}?cat=${slugifyGuideCategory(category)}`}
+      to={`/guide?cat=${slugifyGuideCategory(category)}`}
       className={`guide-card-dynamic ${visualClass} group flex flex-col gap-2 rounded-2xl border border-l-[3px] border-black/6 bg-white p-4 transition-all hover:-translate-y-0.5 hover:shadow-md`}
     >
       {Icon && (
@@ -57,10 +56,14 @@ function getExperienceImage(type: ExperienceType) {
 
 function DestinationFeature({ group }: { group: DestinationGroup }) {
   const visual = getDestinationVisual(group);
+  const href =
+    group === 'Italia'
+      ? '/destinazioni/italia/puglia'
+      : `/destinazioni?group=${encodeURIComponent(group)}`;
 
   return (
     <Link
-      to={`/destinazioni?group=${encodeURIComponent(group)}`}
+      to={href}
       className="group relative min-h-[360px] overflow-hidden rounded-lg bg-ink text-white md:min-h-[500px] lg:col-span-7"
     >
       <img
@@ -137,7 +140,7 @@ function ExperienceCard({ type }: { type: ExperienceType }) {
 
   return (
     <Link
-      to={`/esperienze?type=${slugifyExperienceType(type)}`}
+      to={`/destinazioni?view=esperienza&type=${slugifyExperienceType(type)}`}
       className="group relative min-h-[146px] overflow-hidden rounded-lg bg-ink text-left text-white transition-all duration-300 hover:-translate-y-0.5 md:min-h-[190px]"
     >
       <img
@@ -187,23 +190,23 @@ export default function HomeDiscoveryCards() {
         <div className="mb-7 grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div className="max-w-3xl">
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
-              Archivio guidato
+              Primo cluster V1
             </span>
             <h2 className="mt-3 text-4xl font-serif leading-tight text-ink md:text-6xl">
-              Trova il prossimo posto da salvare.
+              Parti dalla Puglia, poi esplora il resto.
             </h2>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/72 md:text-lg">
-              Parti da una zona, da uno stile di viaggio o da un'idea precisa. Il resto lo trovi
-              nell'archivio.
+              Borghi bianchi, masserie, tavole vere e hotel con carattere sono il primo asse
+              editoriale della V1. L'archivio resta il modo piu rapido per allargare la ricerca.
             </p>
           </div>
 
           <Link
-            to="/destinazioni?search="
+            to="/destinazioni/italia/puglia"
             className="inline-flex h-12 w-fit items-center justify-center gap-2 rounded-lg border border-black/10 px-5 text-xs font-bold uppercase tracking-widest text-ink transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
           >
             <Search size={14} />
-            Cerca nell'archivio
+            Apri la Puglia
           </Link>
         </div>
 
@@ -232,10 +235,10 @@ export default function HomeDiscoveryCards() {
               </h3>
             </div>
             <Link
-              to="/esperienze"
+              to="/destinazioni"
               className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-ink transition-colors hover:text-[var(--color-accent)]"
             >
-              Apri tutte le esperienze <ArrowRight size={13} />
+              Apri tutte le destinazioni <ArrowRight size={13} />
             </Link>
           </div>
 
@@ -260,10 +263,10 @@ export default function HomeDiscoveryCards() {
               con un piano già leggibile e hotel collegati quando servono davvero.
             </p>
             <Link
-              to="/inizia-da-qui"
+              to="/guide"
               className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[var(--color-ink)] px-5 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
             >
-              Apri Pianifica <ArrowRight size={14} />
+              Apri le guide <ArrowRight size={14} />
             </Link>
           </div>
 

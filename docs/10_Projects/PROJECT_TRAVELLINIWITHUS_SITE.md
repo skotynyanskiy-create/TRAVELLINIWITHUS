@@ -60,6 +60,32 @@ docs/
 - QA e rilascio
 - rebuild authority-premium
 
+## Checklist V1 rebuild forte
+
+- [ ] Contenuti reali minimi: almeno 1 pillar Puglia pubblicabile, 2 supporting article validati, 1 hotel reale con asset e disclosure.
+- [ ] Asset reali minimi: hero home approvata, foto coppia approvata, cover Puglia e cover prodotto non stock o dichiarate come provvisorie.
+- [ ] Shop state: `Guida Premium Puglia Slow` resta bozza finche non esistono prezzo finale, PDF, downloadUrl, termini vendita e checkout testato.
+- [ ] B2B proof verificata: loghi, metriche, testimonianze e case study restano nascosti finche non hanno fonte e data.
+- [ ] SEO/indexability: sitemap senza filtri query; solo contenuti pubblicati e acquistabili entrano in sitemap/schema.
+- [ ] Lead form testati: newsletter, contatti e media kit con salvataggio Firestore verificato.
+- [ ] Demo guardrail: demo attivi solo in dev/admin preview o noindex dichiarato, mai come proof reale.
+
+## Snapshot 2026-04-27 - V1 rebuild forte
+
+- Cluster di lancio scelto: Puglia / Italia.
+- Primo prodotto pianificato: `Guida Premium Puglia Slow`, PDF digitale, bozza non acquistabile.
+- Navigazione pubblica semplificata in italiano e senza `Shop` prematuro.
+- Home orientata a scoperta B2C, metodo Travellini e conversione B2B separata.
+- Collaborazioni e media kit declassano i dati non verificati: meglio meno proof, ma credibile.
+
+## Snapshot 2026-04-27 - predisposizioni senza contenuti reali
+
+- Nessun nuovo contenuto reale viene pubblicato in questa fase.
+- I draft Puglia/prodotto restano infrastruttura e traccia interna finche owner non valida dati, foto, prezzo, PDF e claim.
+- Admin prodotti ora impedisce il publish se mancano slug valido, prezzo maggiore di zero o download digitale per prodotti digitali.
+- `npm run check:v1` controlla regressioni su sitemap con query param, shop indicizzabile, loghi partner fallback, recensioni demo e media kit con numeri non verificati.
+- `npm run predeploy` include `check:v1`, quindi il gate V1 diventa parte della procedura standard prima del deploy.
+
 ## Snapshot 2026-04-14
 
 - rifinite le superfici chiave di brand e conversione: `Home`, `Collaborazioni`, `Media Kit`, `Chi Siamo`

@@ -24,7 +24,7 @@ import DemoContentNotice from '../components/DemoContentNotice';
 import FinalCtaSection from '../components/FinalCtaSection';
 import { useCart } from '../context/CartContext';
 import { fetchProducts } from '../services/firebaseService';
-import { BRAND_STATS, SITE_URL } from '../config/site';
+import { SITE_URL } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_PRODUCTS } from '../config/demoContent';
 import { SHOP_NAV_THRESHOLD, useShopGate } from '../hooks/useShopGate';
@@ -36,9 +36,11 @@ interface Product {
   slug: string;
   description?: string;
   price: number;
+  published?: boolean;
   imageUrl?: string;
   category: string;
   isDigital?: boolean;
+  downloadUrl?: string;
   features?: string[];
   isBestseller?: boolean;
 }
@@ -103,7 +105,7 @@ export default function Shop() {
         return fetchedProducts as Product[];
       }
 
-      return DEMO_PRODUCTS as Product[];
+      return [];
     },
   });
 
@@ -137,7 +139,7 @@ export default function Shop() {
   }, [products, selectedCategory, sortBy]);
 
   const handleAddToCart = (product: Product) => {
-    if (usingShopDemo) return;
+    if (!isProductPurchasable(product)) return;
 
     addToCart({
       id: product.id,
@@ -148,6 +150,12 @@ export default function Shop() {
     });
     setIsCartOpen(true);
   };
+
+  const isProductPurchasable = (product: Product) =>
+    !demoSlugs.has(product.slug) &&
+    product.published === true &&
+    product.price > 0 &&
+    Boolean(product.downloadUrl);
 
   return (
     <PageLayout>
@@ -341,9 +349,11 @@ export default function Shop() {
                       imageUrl={product.imageUrl}
                       category={product.category}
                       onAddToCart={() => handleAddToCart(product)}
-                      disableCart={usingShopDemo}
-                      isBestseller={product.isBestseller || (!usingShopDemo && isLarge)}
-                      badgeLabel={usingShopDemo ? 'In arrivo' : undefined}
+                      disableCart={!isProductPurchasable(product)}
+                      isBestseller={
+                        product.isBestseller || (isProductPurchasable(product) && isLarge)
+                      }
+                      badgeLabel={!isProductPurchasable(product) ? 'In arrivo' : undefined}
                     />
                   </div>
                 );
@@ -375,9 +385,8 @@ export default function Shop() {
                   Dal viaggio reale al formato utile.
                 </h2>
                 <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/68 md:text-lg">
-                  Dopo {BRAND_STATS.yearsOfTravel} anni di viaggi, il valore non è aggiungere file:
-                  è distillare decisioni, mappe, priorità e indirizzi in qualcosa che puoi usare in
-                  fretta.
+                  Il valore non è aggiungere file: è distillare decisioni, mappe, priorità e
+                  indirizzi in qualcosa che puoi usare in fretta.
                 </p>
               </div>
               <div className="rounded-[2rem] border border-white/10 bg-white/5 p-7">

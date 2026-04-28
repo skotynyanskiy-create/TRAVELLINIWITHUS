@@ -6,7 +6,6 @@ import { Helmet } from 'react-helmet-async';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { fetchArticleBySlug, fetchArticles } from '../services/firebaseService';
-import { useFavorites } from '../context/FavoritesContext';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Newsletter from '../components/Newsletter';
 import PageLayout from '../components/PageLayout';
@@ -39,7 +38,7 @@ import {
 import type { ArticleData, RelatedArticleSummary, TocItem } from '../components/article';
 import { formatDateValue } from '../utils/dateValue';
 import {
-  getPublicArticleCollectionPath,
+  getPublicArchivePath,
   getPublicArticlePath,
   getPublicSectionLabel,
   getPublicArticleSection,
@@ -95,9 +94,9 @@ function toIsoDateString(value: unknown): string | null {
 }
 
 function getCategoryPath(category: string) {
-  if (category === 'Esperienze') return '/esperienze';
+  if (category === 'Esperienze') return '/destinazioni';
   if (category === 'Destinazioni') return '/destinazioni';
-  return getPublicArticleCollectionPath({ category });
+  return getPublicArchivePath();
 }
 
 function ensureArticleData(
@@ -226,7 +225,6 @@ function ArticleBody({ article }: { article: ArticleData }) {
 export default function Articolo() {
   const { slug } = useParams();
   const currentSlug = slug || '';
-  const { isFavorite, toggleFavorite } = useFavorites();
   const [article, setArticle] = useState<ArticleData | null>(null);
   const [articleSource, setArticleSource] = useState<'preview' | 'published' | 'missing'>(
     'missing'
@@ -338,7 +336,6 @@ export default function Articolo() {
   }
 
   const isPreviewArticle = articleSource === 'preview';
-  const isSaved = isFavorite(currentSlug);
   const readingTime = getReadingTime(article);
   const authorName = article.author || BRAND_AUTHOR;
   const categoryPath = getCategoryPath(article.category);
@@ -348,8 +345,8 @@ export default function Articolo() {
   });
   const collectionLabel = getPublicSectionLabel(editorialSection);
   const returnToArchiveLabel =
-    categoryPath === '/itinerari'
-      ? 'Torna agli itinerari'
+    editorialSection === 'reportage'
+      ? 'Torna ai reportage'
       : categoryPath === '/guide'
         ? 'Torna alle guide'
         : 'Torna alla sezione';
@@ -446,9 +443,7 @@ export default function Articolo() {
             authorName={authorName}
             readingTime={readingTime}
             categoryPath={categoryPath}
-            isSaved={isSaved}
             copied={copied}
-            onToggleFavorite={() => toggleFavorite(currentSlug)}
             onShare={handleShare}
             yHero={yHero}
           />
@@ -768,9 +763,7 @@ export default function Articolo() {
 
         <MobileBottomBar
           article={article}
-          isSaved={isSaved}
           copied={copied}
-          onToggleFavorite={() => toggleFavorite(currentSlug)}
           onOpenToc={() => setIsMobileMenuOpen(true)}
           onShare={handleShare}
         />

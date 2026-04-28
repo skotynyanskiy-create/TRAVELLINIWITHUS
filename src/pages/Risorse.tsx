@@ -206,7 +206,7 @@ const EXPLORE_PATHS = [
   {
     title: 'Per esperienza',
     description: 'Weekend romantici, posti particolari, hotel con carattere e idee piu mirate.',
-    to: `/esperienze?type=${slugifyExperienceType('Posti particolari')}`,
+    to: `/destinazioni?view=esperienza&type=${slugifyExperienceType('Esperienze insolite')}`,
     cta: 'Apri esperienze',
   },
   {

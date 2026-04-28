@@ -10,7 +10,9 @@ export function useShopGate() {
     staleTime: 5 * 60 * 1000,
   });
 
-  const realPublishedCount = products.length;
+  const realPublishedCount = products.filter(
+    (product) => product.published === true && product.price > 0 && Boolean(product.downloadUrl)
+  ).length;
 
   return {
     isLoading,

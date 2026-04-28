@@ -8,27 +8,18 @@ export interface DestinationVisual {
 export const DESTINATION_GROUP_VISUALS: Record<DestinationGroup, DestinationVisual> = {
   Italia: {
     image: '/images/destinations/toscana.png',
-    description: "Borghi nascosti, panorami mozzafiato e tavole autentiche. L'Italia che non ti aspetti.",
+    description:
+      "Borghi nascosti, panorami mozzafiato e tavole autentiche. L'Italia che non ti aspetti.",
   },
-  Europa: {
-    image: '/images/destinations/islanda.png',
-    description: 'Capitali vibranti, natura selvaggia e itinerari europei dal taglio pratico.',
+  Grecia: {
+    image:
+      'https://images.unsplash.com/photo-1533105079780-92b9be482077?q=80&w=1600&auto=format&fit=crop',
+    description: 'Cicladi e Dodecaneso, calette nascoste e taverne fuori dai radar.',
   },
-  Asia: {
-    image: '/images/destinations/giappone.png',
-    description: 'Tradizioni millenarie, templi nascosti e viaggi da preparare con cura.',
-  },
-  Americhe: {
-    image: '/images/destinations/americhe.png',
-    description: 'Strade panoramiche, metropoli e mete fuori rotta da scoprire.',
-  },
-  Africa: {
-    image: '/images/destinations/africa.png',
-    description: 'Paesaggi potenti, culture profonde e viaggi da vivere senza superficialità.',
-  },
-  Oceania: {
-    image: '/images/destinations/oceania.png',
-    description: 'Natura incontaminata, costa infinita e avventure da progettare con calma.',
+  Portogallo: {
+    image:
+      'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?q=80&w=1600&auto=format&fit=crop',
+    description: 'Lisbona lenta, Alentejo profondo, scogliere atlantiche e ritmo umano.',
   },
 };
 

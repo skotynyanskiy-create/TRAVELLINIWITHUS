@@ -7,7 +7,10 @@ import PageLayout from '../components/PageLayout';
 import Section from '../components/Section';
 import SEO from '../components/SEO';
 import DestinationHero from '../components/destinazioni/DestinationHero';
-import DestinationFilters, { GROUP_VISUALS } from '../components/destinazioni/DestinationFilters';
+import DestinationFilters, {
+  GROUP_VISUALS,
+  type DestinationView,
+} from '../components/destinazioni/DestinationFilters';
 import DestinationGrid from '../components/destinazioni/DestinationGrid';
 import DestinationFooter from '../components/destinazioni/DestinationFooter';
 import { DEMO_DESTINATION_CARD } from '../config/demoContent';
@@ -42,13 +45,12 @@ export default function Destinazioni() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(1);
 
+  const viewParam = searchParams.get('view');
+  const view: DestinationView = viewParam === 'esperienza' ? 'esperienza' : 'luogo';
   const selectedGroup = searchParams.get('group') || searchParams.get('region') || 'Tutti';
   const selectedExperience = getExperienceTypeFromQuery(searchParams.get('type')) || 'Tutti';
   const selectedRegion = searchParams.get('area') || 'Tutti';
   const selectedCity = searchParams.get('city') || 'Tutti';
-  const selectedPeriod = searchParams.get('period') || 'Tutti';
-  const selectedBudget = searchParams.get('budget') || 'Tutti';
-  const selectedDuration = searchParams.get('duration') || 'Tutti';
 
   const archiveItems = useMemo<ArchiveItem[]>(() => {
     const mapped = articles
@@ -92,19 +94,6 @@ export default function Destinazioni() {
     ];
   }, [archiveItems, selectedGroup, selectedRegion]);
 
-  const availablePeriods = useMemo(
-    () => ['Tutti', ...uniqueValues(archiveItems.map((item) => item.period))],
-    [archiveItems]
-  );
-  const availableBudgets = useMemo(
-    () => ['Tutti', ...uniqueValues(archiveItems.map((item) => item.budget))],
-    [archiveItems]
-  );
-  const availableDurations = useMemo(
-    () => ['Tutti', ...uniqueValues(archiveItems.map((item) => item.duration))],
-    [archiveItems]
-  );
-
   const filteredItems = useMemo(
     () =>
       archiveItems.filter((item) => {
@@ -113,30 +102,10 @@ export default function Destinazioni() {
           selectedExperience === 'Tutti' || item.experienceTypes.includes(selectedExperience);
         const matchRegion = selectedRegion === 'Tutti' || item.region === selectedRegion;
         const matchCity = selectedCity === 'Tutti' || item.city === selectedCity;
-        const matchPeriod = selectedPeriod === 'Tutti' || item.period === selectedPeriod;
-        const matchBudget = selectedBudget === 'Tutti' || item.budget === selectedBudget;
-        const matchDuration = selectedDuration === 'Tutti' || item.duration === selectedDuration;
 
-        return (
-          matchGroup &&
-          matchExperience &&
-          matchRegion &&
-          matchCity &&
-          matchPeriod &&
-          matchBudget &&
-          matchDuration
-        );
+        return matchGroup && matchExperience && matchRegion && matchCity;
       }),
-    [
-      archiveItems,
-      selectedBudget,
-      selectedCity,
-      selectedDuration,
-      selectedExperience,
-      selectedGroup,
-      selectedPeriod,
-      selectedRegion,
-    ]
+    [archiveItems, selectedCity, selectedExperience, selectedGroup, selectedRegion]
   );
 
   const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
@@ -151,10 +120,7 @@ export default function Destinazioni() {
     selectedGroup !== 'Tutti' ||
     selectedExperience !== 'Tutti' ||
     selectedRegion !== 'Tutti' ||
-    selectedCity !== 'Tutti' ||
-    selectedPeriod !== 'Tutti' ||
-    selectedBudget !== 'Tutti' ||
-    selectedDuration !== 'Tutti';
+    selectedCity !== 'Tutti';
   const usingDemo = archiveItems.length === 1 && archiveItems[0]?.id === DEMO_DESTINATION_CARD.id;
 
   const updateSearch = (updates: Record<string, string | null>) => {
@@ -172,9 +138,30 @@ export default function Destinazioni() {
     );
   };
 
+  const changeView = (nextView: DestinationView) => {
+    setCurrentPage(1);
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        if (nextView === 'esperienza') {
+          next.delete('group');
+          next.delete('region');
+          next.delete('area');
+          next.delete('city');
+          next.set('view', 'esperienza');
+        } else {
+          next.delete('type');
+          next.delete('view');
+        }
+        return next;
+      },
+      { replace: true }
+    );
+  };
+
   const resetFilters = () => {
     setCurrentPage(1);
-    setSearchParams({}, { replace: true });
+    setSearchParams(view === 'esperienza' ? { view: 'esperienza' } : {}, { replace: true });
   };
 
   return (
@@ -212,20 +199,15 @@ export default function Destinazioni() {
       <Section>
         <Breadcrumbs items={[{ label: 'Destinazioni' }]} />
         <DestinationFilters
-          archiveItems={archiveItems}
+          view={view}
           selectedGroup={selectedGroup}
           selectedExperience={selectedExperience}
           selectedRegion={selectedRegion}
           selectedCity={selectedCity}
-          selectedPeriod={selectedPeriod}
-          selectedBudget={selectedBudget}
-          selectedDuration={selectedDuration}
           availableRegions={availableRegions}
           availableCities={availableCities}
-          availablePeriods={availablePeriods}
-          availableBudgets={availableBudgets}
-          availableDurations={availableDurations}
           hasActiveFilters={hasActiveFilters}
+          onChangeView={changeView}
           onUpdate={updateSearch}
           onReset={resetFilters}
         />

@@ -19,7 +19,6 @@ export default function Layout() {
     const prefetchTopRoutes = () => {
       void import('../pages/Destinazioni');
       void import('../pages/Guide');
-      void import('../pages/Itinerari');
       void import('../pages/Articolo');
     };
     type RIC = (cb: () => void, opts?: { timeout?: number }) => number;

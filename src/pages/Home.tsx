@@ -13,7 +13,6 @@ import HomeMapTeaser from '../components/home/HomeMapTeaser';
 import LatestArticles from '../components/home/LatestArticles';
 import HomeToolsTeaser from '../components/home/HomeToolsTeaser';
 import InstagramFeed from '../components/home/InstagramFeed';
-import PartnerLogos from '../components/home/PartnerLogos';
 import HomeCollaborationCta from '../components/home/HomeCollaborationCta';
 
 export default function Home() {
@@ -28,8 +27,8 @@ export default function Home() {
   return (
     <div className="min-h-screen overflow-x-clip bg-sand selection:bg-[var(--color-accent)] selection:text-white">
       <SEO
-        title="Posti particolari, destinazioni ed esperienze da vivere"
-        description="Scopri destinazioni, esperienze e consigli di viaggio con un archivio unico filtrabile per luoghi e tipologie. Travelliniwithus racconta idee da salvare e vivere davvero."
+        title="Rodrigo & Betta, guide di viaggio e posti particolari"
+        description="Travelliniwithus di Rodrigo e Betta raccoglie itinerari, hotel provati, guide utili e luoghi da salvare. Parti dalla Puglia o scopri come collaborare."
         canonical={`${SITE_URL}/`}
         website
         includeBrandSchema
@@ -61,7 +60,6 @@ export default function Home() {
       </div>
       <HomeToolsTeaser />
       <InstagramFeed />
-      <PartnerLogos />
 
       <section id="newsletter" className="bg-white py-20 md:py-28">
         <div className="mx-auto grid max-w-6xl gap-10 px-6 md:px-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">

@@ -35,6 +35,41 @@ const trustPoints = [
   },
 ];
 
+const productDetailSections = [
+  {
+    title: 'Per chi è',
+    items: [
+      'Viaggiatori che vogliono un itinerario già ragionato, ma adattabile.',
+      'Chi cerca hotel, tappe e indirizzi selezionati invece di liste infinite.',
+      'Chi preferisce un PDF consultabile prima di partire e durante il viaggio.',
+    ],
+  },
+  {
+    title: 'Per chi non è',
+    items: [
+      'Chi vuole una raccolta completa di ogni cosa da vedere.',
+      'Chi cerca offerte last minute, coupon o promesse di risparmio garantito.',
+      'Chi preferisce improvvisare tutto senza una traccia editoriale.',
+    ],
+  },
+  {
+    title: 'Indice previsto',
+    items: [
+      'Itinerario giorno per giorno, con tempi e priorità.',
+      'Dove dormire, cosa mangiare, budget, periodo migliore e alternative.',
+      'Checklist finale, link utili e aggiornamenti dichiarati.',
+    ],
+  },
+  {
+    title: 'Consegna e aggiornamenti',
+    items: [
+      'Download digitale dopo checkout solo quando il file è validato.',
+      'Eventuali aggiornamenti vengono indicati nella scheda prodotto.',
+      'Termini, privacy e condizioni di rimborso restano sempre linkati prima dell acquisto.',
+    ],
+  },
+];
+
 export default function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
   const { addToCart, setIsCartOpen } = useCart();
@@ -61,9 +96,15 @@ export default function ProductPage() {
 
   const product = fetchedProduct || demoFallback || null;
   const isDemoProduct = !fetchedProduct && Boolean(demoFallback);
+  const isPurchasableProduct =
+    Boolean(product?.published) &&
+    !isDemoProduct &&
+    Number.isFinite(product?.price) &&
+    (product?.price ?? 0) > 0 &&
+    Boolean(product?.downloadUrl);
 
   const handleAddToCart = () => {
-    if (!product || isDemoProduct) return;
+    if (!product || !isPurchasableProduct) return;
 
     addToCart({
       id: product.id,
@@ -117,17 +158,21 @@ export default function ProductPage() {
         }
         canonical={`${SITE_URL}/shop/${product.slug}`}
         image={product.imageUrl}
-        noindex={isDemoProduct}
-        product={{
-          name: product.name,
-          description: product.description,
-          image: product.imageUrl,
-          url: `${SITE_URL}/shop/${product.slug}`,
-          price: product.price,
-          availability: 'PreOrder',
-          category: product.category,
-          sku: product.id,
-        }}
+        noindex={!isPurchasableProduct}
+        product={
+          isPurchasableProduct
+            ? {
+                name: product.name,
+                description: product.description,
+                image: product.imageUrl,
+                url: `${SITE_URL}/shop/${product.slug}`,
+                price: product.price,
+                availability: 'InStock',
+                category: product.category,
+                sku: product.id,
+              }
+            : undefined
+        }
         breadcrumbs={[
           { name: 'Home', url: SITE_URL },
           { name: 'Shop', url: `${SITE_URL}/shop` },
@@ -178,7 +223,7 @@ export default function ProductPage() {
                     Digitale
                   </span>
                 )}
-                {isDemoProduct && (
+                {!isPurchasableProduct && (
                   <span className="rounded-full bg-[var(--color-accent)] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white shadow-lg">
                     In arrivo
                   </span>
@@ -193,10 +238,10 @@ export default function ProductPage() {
             transition={{ duration: 0.8, delay: 0.15 }}
             className="flex flex-col justify-center lg:col-span-5"
           >
-            {isDemoProduct && (
+            {!isPurchasableProduct && (
               <DemoContentNotice
                 className="mb-8"
-                title="Prodotto preview"
+                title={isDemoProduct ? 'Prodotto preview' : 'Prodotto non acquistabile'}
                 message="Questa scheda mostra la struttura futura dello shop. Il prodotto non è acquistabile finché file, prezzo, consegna e checkout non sono verificati."
               />
             )}
@@ -236,7 +281,7 @@ export default function ProductPage() {
               ))}
             </div>
 
-            {isDemoProduct ? (
+            {!isPurchasableProduct ? (
               <div className="rounded-2xl border border-[var(--color-accent)]/25 bg-white p-6">
                 <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
                   In uscita prossimamente
@@ -290,6 +335,49 @@ export default function ProductPage() {
           </div>
         </Section>
       )}
+
+      <Section className="pt-12">
+        <div className="mx-auto max-w-6xl">
+          <div className="mb-10 max-w-3xl">
+            <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
+              Prima dell'acquisto
+            </span>
+            <h2 className="mt-4 text-4xl font-serif">Cosa devi sapere sulla guida</h2>
+            <p className="mt-4 text-base leading-relaxed text-black/65">
+              La scheda prodotto deve chiarire contenuto, limiti, consegna e condizioni prima del
+              checkout. Se questi elementi non sono verificati, il prodotto resta in preview.
+            </p>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-2">
+            {productDetailSections.map((section) => (
+              <div key={section.title} className="rounded-2xl border border-black/5 bg-white p-7">
+                <h3 className="text-2xl font-serif">{section.title}</h3>
+                <ul className="mt-5 space-y-3">
+                  {section.items.map((item) => (
+                    <li key={item} className="flex gap-3 text-sm leading-relaxed text-black/65">
+                      <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-accent)]" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-4 text-xs font-bold uppercase tracking-[0.2em] text-black/50">
+            <Link to="/termini" className="transition-colors hover:text-[var(--color-accent)]">
+              Termini vendita
+            </Link>
+            <Link to="/privacy" className="transition-colors hover:text-[var(--color-accent)]">
+              Privacy
+            </Link>
+            <Link to="/contatti" className="transition-colors hover:text-[var(--color-accent)]">
+              Domande sul prodotto
+            </Link>
+          </div>
+        </div>
+      </Section>
 
       <Section className="pt-12">
         <div className="mx-auto max-w-5xl rounded-[2.5rem] bg-[var(--color-ink)] p-8 text-white md:p-12">

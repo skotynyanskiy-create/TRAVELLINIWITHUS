@@ -18,7 +18,7 @@ import Breadcrumbs from '../components/Breadcrumbs';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import Section from '../components/Section';
-import { BRAND_STATS, CONTACTS, SITE_URL } from '../config/site';
+import { CONTACTS, SITE_URL } from '../config/site';
 import { useContactForm, isValidEmail } from '../hooks/useContactForm';
 
 const MEDIA_KIT_PREVIEW = [
@@ -149,11 +149,9 @@ export default function MediaKit() {
               più serie.
             </p>
             <div className="mt-8 inline-flex flex-wrap items-center justify-center gap-4 rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent-soft)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] md:gap-6 md:px-8">
-              <span>{BRAND_STATS.instagramFollowers} Instagram</span>
-              <span className="h-4 w-px bg-[var(--color-accent)]/20" />
-              <span>{BRAND_STATS.tiktokFollowers} TikTok</span>
-              <span className="h-4 w-px bg-[var(--color-accent)]/20" />
-              <span>{BRAND_STATS.monthlyReach} reach</span>
+              <span>Audience e dati aggiornati condivisi su richiesta</span>
+              <span className="hidden h-4 w-px bg-[var(--color-accent)]/20 sm:block" />
+              <span>Format, criteri e fit editoriale nel PDF</span>
             </div>
           </motion.div>
         </div>

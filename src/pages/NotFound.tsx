@@ -56,12 +56,6 @@ export default function NotFound() {
             >
               Guide pratiche
             </Link>
-            <Link
-              to="/itinerari"
-              className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-8 py-4 text-xs font-semibold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-            >
-              Itinerari
-            </Link>
           </div>
         </div>
       </Section>

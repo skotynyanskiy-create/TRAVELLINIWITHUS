@@ -3,9 +3,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 import dotenv from 'dotenv';
 import { renderToFile } from '@react-pdf/renderer';
-import { CONTACTS, BRAND_STATS, SITE_URL } from '../src/config/site';
+import { CONTACTS, SITE_URL } from '../src/config/site';
 import { siteContentDefaults } from '../src/config/siteContent';
-import { MediaKitDocument, type MediaKitFormat, type MediaKitStat } from '../src/pdf/MediaKitDocument';
+import {
+  MediaKitDocument,
+  type MediaKitFormat,
+  type MediaKitStat,
+} from '../src/pdf/MediaKitDocument';
 
 dotenv.config();
 
@@ -40,7 +44,7 @@ async function fetchLiveAudienceStats(): Promise<MediaKitStat[] | null> {
     }
 
     const response = await fetch(
-      `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/${firebaseConfig.firestoreDatabaseId}/documents/settings/stats`,
+      `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/${firebaseConfig.firestoreDatabaseId}/documents/settings/stats`
     );
 
     if (!response.ok) {
@@ -58,18 +62,12 @@ async function fetchLiveAudienceStats(): Promise<MediaKitStat[] | null> {
 
     return stats.length > 0 ? stats : null;
   } catch (error) {
-    console.warn('[generate-media-kit] Impossibile leggere stats live, uso fallback locale.', error);
+    console.warn(
+      '[generate-media-kit] Impossibile leggere stats live, uso fallback locale.',
+      error
+    );
     return null;
   }
-}
-
-function getFallbackAudienceStats(): MediaKitStat[] {
-  return [
-    { label: 'Follower Instagram', value: BRAND_STATS.instagramFollowers },
-    { label: 'Follower TikTok', value: BRAND_STATS.tiktokFollowers },
-    { label: 'Reach mensile', value: BRAND_STATS.monthlyReach },
-    { label: 'Engagement rate', value: BRAND_STATS.engagementRate },
-  ];
 }
 
 function getFormats(): MediaKitFormat[] {
@@ -84,7 +82,7 @@ function getFormats(): MediaKitFormat[] {
 async function main() {
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 
-  const audienceStats = (await fetchLiveAudienceStats()) ?? getFallbackAudienceStats();
+  const audienceStats = (await fetchLiveAudienceStats()) ?? [];
   const formats = getFormats();
   const services = siteContentDefaults.collaborations.services.map((service) => service.title);
   const downloadUrl =
@@ -97,7 +95,7 @@ async function main() {
       audienceStats={audienceStats}
       brandHighlights={[
         'Posti particolari raccontati con taglio editoriale e consigli pratici.',
-        'Community reale costruita tra Instagram, TikTok e sito proprietario.',
+        'Community e dati audience condivisi con aggiornamento puntuale quando disponibili.',
         'Collaborazioni selezionate con piena libertà editoriale e disclosure chiara.',
       ]}
       services={services}
@@ -110,11 +108,13 @@ async function main() {
         whatsapp: CONTACTS.whatsappDisplay,
       }}
     />,
-    outputPath,
+    outputPath
   );
 
   const stat = fs.statSync(outputPath);
-  console.log(`[generate-media-kit] PDF generated: ${outputPath} (${Math.round(stat.size / 1024)} KB)`);
+  console.log(
+    `[generate-media-kit] PDF generated: ${outputPath} (${Math.round(stat.size / 1024)} KB)`
+  );
 }
 
 void main().catch((error) => {

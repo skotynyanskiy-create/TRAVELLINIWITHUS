@@ -32,9 +32,7 @@ function ArchiveCard({ item, isDemo }: { item: ArchiveItem; isDemo: boolean }) {
             </span>
           )}
           {item.primaryExperience && ExpIcon && (
-            <span
-              className="inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-black/70 backdrop-blur"
-            >
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-black/70 backdrop-blur">
               <ExpIcon size={12} style={{ color: visual.color }} />
               {item.primaryExperience}
             </span>
@@ -62,7 +60,8 @@ function ArchiveCard({ item, isDemo }: { item: ArchiveItem; isDemo: boolean }) {
             'Un contenuto da salvare per capire atmosfera, logistica e dettagli utili prima di partire.'}
         </p>
         <div className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">
-          Leggi e salva <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+          Leggi e salva{' '}
+          <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
         </div>
       </div>
     </Link>
@@ -105,18 +104,12 @@ export default function DestinationGrid({
             {hasActiveFilters ? 'Risultati filtrati con criterio' : 'Ultimi luoghi da esplorare'}
           </h2>
         </div>
-        <Link
-          to="/esperienze"
-          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]"
-        >
-          Cerca per esperienza <ArrowRight size={14} />
-        </Link>
       </div>
 
       {usingDemo && (
         <div className="mb-8 rounded-2xl border border-[var(--color-accent)]/25 bg-[var(--color-accent-soft)] px-5 py-4 text-sm leading-relaxed text-[var(--color-accent-text)]">
-          Questa è una preview editoriale temporanea: serve a mostrare il layout finché non ci
-          sono contenuti reali pubblicati. Prima del deploy pubblico va sostituita o disattivata.
+          Questa è una preview editoriale temporanea: serve a mostrare il layout finché non ci sono
+          contenuti reali pubblicati. Prima del deploy pubblico va sostituita o disattivata.
         </div>
       )}
 
@@ -144,12 +137,19 @@ export default function DestinationGrid({
                   exit={{ opacity: 0, scale: 0.96 }}
                   transition={{ duration: 0.35 }}
                 >
-                  <ArchiveCard item={item} isDemo={usingDemo && item.id === DEMO_DESTINATION_CARD.id} />
+                  <ArchiveCard
+                    item={item}
+                    isDemo={usingDemo && item.id === DEMO_DESTINATION_CARD.id}
+                  />
                 </motion.div>
               ))}
             </AnimatePresence>
           </motion.div>
-          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={onPageChange}
+          />
         </>
       )}
     </>

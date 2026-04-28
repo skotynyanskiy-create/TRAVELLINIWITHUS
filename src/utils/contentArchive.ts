@@ -70,13 +70,14 @@ export function mapPreviewToArchiveItem(
 ): ArchiveItem {
   const locationStr = preview.location || '';
   const isItaly = /italia/i.test(locationStr);
+  const isGreece = /grecia/i.test(locationStr);
+  const isPortugal = /portogallo/i.test(locationStr);
   const continent = preview.continent;
-  const destinationGroup = isItaly
-    ? 'Italia'
-    : continent && DESTINATION_GROUPS.includes(continent as (typeof DESTINATION_GROUPS)[number])
-      ? continent
+  const country = isItaly ? 'Italia' : isGreece ? 'Grecia' : isPortugal ? 'Portogallo' : undefined;
+  const destinationGroup =
+    country && DESTINATION_GROUPS.includes(country as (typeof DESTINATION_GROUPS)[number])
+      ? country
       : 'Altro';
-  const country = isItaly ? 'Italia' : undefined;
 
   return {
     id: preview.id,

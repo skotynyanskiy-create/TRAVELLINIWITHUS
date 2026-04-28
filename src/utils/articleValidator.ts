@@ -160,10 +160,28 @@ export function validateArticle(article: Partial<NormalizedArticle>): ArticleVal
 
     if (!article.shopCta) {
       issues.push({
-        severity: 'warning',
+        severity: 'error',
         field: 'content',
         message: 'Pillar senza Shop CTA',
-        hint: 'Collega un prodotto shop (Google Maps, preset o ebook) per monetizzare il traffico pillar.',
+        hint: 'Collega almeno una CTA interna: prodotto, guida premium o risorsa coerente.',
+      });
+    }
+
+    if (!article.budgetBand) {
+      issues.push({
+        severity: 'error',
+        field: 'budgetBand',
+        message: 'Pillar senza fascia budget',
+        hint: 'Ogni pillar V1 deve dichiarare la fascia budget per aiutare la decisione.',
+      });
+    }
+
+    if (!article.tripIntents?.length) {
+      issues.push({
+        severity: 'error',
+        field: 'tripIntents',
+        message: 'Pillar senza intenti di viaggio',
+        hint: 'Seleziona almeno un intento di viaggio per collegare articolo, hub e discovery.',
       });
     }
   }
@@ -211,7 +229,7 @@ export function validateArticle(article: Partial<NormalizedArticle>): ArticleVal
     });
   }
 
-  if (!article.budgetBand) {
+  if (!article.budgetBand && !isPillar) {
     issues.push({
       severity: 'warning',
       field: 'budgetBand',
@@ -220,7 +238,7 @@ export function validateArticle(article: Partial<NormalizedArticle>): ArticleVal
     });
   }
 
-  if (!article.tripIntents?.length) {
+  if (!article.tripIntents?.length && !isPillar) {
     issues.push({
       severity: 'warning',
       field: 'tripIntents',

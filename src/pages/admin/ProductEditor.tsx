@@ -25,6 +25,31 @@ export default function ProductEditor() {
   const [published, setPublished] = useState(false);
   const [loading, setLoading] = useState(id ? true : false);
   const [saving, setSaving] = useState(false);
+  const [publishError, setPublishError] = useState('');
+
+  const getPublishReadiness = () => {
+    const normalizedSlug = slug.trim();
+    const normalizedDownloadUrl = downloadUrl.trim();
+    const numericPrice = Number(price);
+
+    return [
+      {
+        label: 'Slug pulito in formato kebab-case',
+        ok: /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(normalizedSlug),
+        message: 'Usa uno slug minuscolo senza spazi, accenti o caratteri speciali.',
+      },
+      {
+        label: 'Prezzo maggiore di zero',
+        ok: Number.isFinite(numericPrice) && numericPrice > 0,
+        message: 'Inserisci un prezzo reale prima di pubblicare.',
+      },
+      {
+        label: 'Consegna digitale configurata',
+        ok: !isDigital || /^https?:\/\/.+/i.test(normalizedDownloadUrl),
+        message: 'Aggiungi un URL di download valido per i prodotti digitali.',
+      },
+    ];
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -58,20 +83,34 @@ export default function ProductEditor() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
+    setPublishError('');
+
+    const publishErrors = published
+      ? getPublishReadiness()
+          .filter((item) => !item.ok)
+          .map((item) => item.message)
+      : [];
+
+    if (publishErrors.length > 0) {
+      setPublishError(publishErrors.join(' '));
+      return;
+    }
+
     setSaving(true);
 
-    const productId = id || slug || Date.now().toString();
+    const productId = id || slug.trim() || Date.now().toString();
     const docRef = doc(db, 'products', productId);
+    const normalizedDownloadUrl = downloadUrl.trim();
 
     const productData = {
-      name,
-      slug,
-      description,
+      name: name.trim(),
+      slug: slug.trim(),
+      description: description.trim(),
       price: Number(price),
-      imageUrl,
+      imageUrl: imageUrl.trim(),
       category,
       isDigital,
-      downloadUrl: downloadUrl || null,
+      downloadUrl: normalizedDownloadUrl || null,
       published,
       updatedAt: serverTimestamp(),
       ...(id ? {} : { createdAt: serverTimestamp() }),
@@ -88,6 +127,8 @@ export default function ProductEditor() {
   };
 
   if (loading) return <FormSkeleton />;
+
+  const publishReadiness = getPublishReadiness();
 
   return (
     <PageLayout>
@@ -136,7 +177,7 @@ export default function ProductEditor() {
                 min="0"
                 required
                 value={price}
-                onChange={(e) => setPrice(parseFloat(e.target.value))}
+                onChange={(e) => setPrice(e.target.value === '' ? '' : Number(e.target.value))}
                 className="w-full p-3 border border-zinc-200 rounded-lg focus:outline-none focus:border-[var(--color-accent)]"
               />
             </div>
@@ -220,7 +261,7 @@ export default function ProductEditor() {
               <div>
                 <span className="block text-sm font-medium text-zinc-900">Prodotto pubblicato</span>
                 <span className="block text-xs text-zinc-500 mt-1">
-                  Attivalo solo quando vuoi mostrare davvero questo prodotto nello shop pubblico.
+                  Attivalo solo quando prezzo, consegna e checkout sono pronti per il pubblico.
                 </span>
               </div>
               <input
@@ -232,6 +273,25 @@ export default function ProductEditor() {
                 className="h-5 w-5 rounded border-zinc-300 text-[var(--color-accent)] focus:ring-[var(--color-accent)]"
               />
             </label>
+            <div className="mt-4 grid gap-2 text-xs text-zinc-600 sm:grid-cols-3">
+              {publishReadiness.map((item) => (
+                <span
+                  key={item.label}
+                  className={`rounded-full border px-3 py-2 ${
+                    item.ok
+                      ? 'border-[var(--color-accent)] bg-white text-[var(--color-ink)]'
+                      : 'border-zinc-200 bg-white text-zinc-500'
+                  }`}
+                >
+                  {item.ok ? 'Pronto' : 'Da completare'}: {item.label}
+                </span>
+              ))}
+            </div>
+            {publishError && (
+              <p className="mt-4 rounded-xl border border-[var(--color-accent)] bg-white p-4 text-sm text-[var(--color-ink)]">
+                {publishError}
+              </p>
+            )}
           </div>
 
           <div>

@@ -16,17 +16,11 @@ const staticRoutes = [
   '/destinazioni/italia',
   '/destinazioni/grecia',
   '/destinazioni/portogallo',
-  '/esperienze',
   '/guide',
-  '/itinerari',
   '/mappa',
-  '/dove-dormire',
-  '/inizia-da-qui',
-  '/cosa-mangiare',
   '/chi-siamo',
   '/collaborazioni',
   '/media-kit',
-  '/metodo',
   '/trasparenza',
   '/contatti',
   '/risorse',
@@ -36,57 +30,10 @@ const staticRoutes = [
   '/disclaimer',
 ];
 
-// Fallback hotel slugs used when Firestore is unreachable. Keep synced with
-// `src/config/hotelDirectory.ts` for build-time SEO continuity.
-const FALLBACK_HOTEL_SLUGS = [
-  'forestis-dolomites',
-  'adler-lodge-ritten',
-  'icaro-hotel',
-  'borgo-egnazia',
-  'masseria-trapana',
-  'don-ferrante',
-  'parilio',
-  'canaves-oia-suites',
-  'sao-lourenco-do-barrocal',
-];
-
-const DESTINATION_GROUPS = ['Italia', 'Europa', 'Asia', 'Americhe', 'Africa', 'Oceania'];
-
-const EXPERIENCE_TYPES = [
-  'Posti particolari',
-  'Food & Ristoranti',
-  'Locali insoliti',
-  'Hotel con carattere',
-  'Weekend romantici',
-  "Borghi e città d'arte",
-  'Passeggiate panoramiche',
-  'Relax, terme e spa',
-  'Esperienze insolite',
-  'Gite e day trip',
-];
-
-const ITINERARY_CATEGORIES = new Set(['Itinerari completi', 'Weekend & Day trip']);
-
-function slugifyExperienceType(value) {
-  return value
-    .toLowerCase()
-    .replace(/&/g, 'e')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
-
-const filterRoutes = [
-  ...DESTINATION_GROUPS.map((group) => `/destinazioni?group=${encodeURIComponent(group)}`),
-  ...EXPERIENCE_TYPES.map((type) => `/esperienze?type=${slugifyExperienceType(type)}`),
-];
-
-// Decide whether an article belongs to /guide or /itinerari. Mirrors
-// `src/utils/articleRoutes.ts` (getPublicArticleSection) so canonical URLs
-// produced here match the runtime canonical exactly.
-function getPublicArticleSection(article) {
-  if (article?.type === 'itinerary') return 'itinerari';
-  const category = typeof article?.category === 'string' ? article.category.trim() : '';
-  if (ITINERARY_CATEGORIES.has(category)) return 'itinerari';
+// Archive editoriale unificato: tutti gli articoli vivono sotto /guide/:slug.
+// Mirrors `src/utils/articleRoutes.ts` (getPublicArticleSection) so canonical
+// URLs produced here match the runtime canonical exactly.
+function getPublicArticleSection() {
   return 'guide';
 }
 
@@ -165,30 +112,6 @@ async function fetchPublishedArticles(firestore) {
   }
 }
 
-async function fetchPublishedHotels(firestore) {
-  if (!firestore) return [];
-  try {
-    const snapshot = await firestore
-      .collection('hotels')
-      .where('published', '==', true)
-      .limit(200)
-      .get();
-    return snapshot.docs
-      .map((doc) => {
-        const data = doc.data() ?? {};
-        const slug = typeof data.slug === 'string' && data.slug.trim() ? data.slug.trim() : doc.id;
-        return {
-          slug,
-          updatedAt: timestampToIso(data.updatedAt) || timestampToIso(data.createdAt),
-        };
-      })
-      .filter((hotel) => Boolean(hotel.slug));
-  } catch (error) {
-    console.warn('[sitemap] hotels fetch failed:', error?.message ?? error);
-    return [];
-  }
-}
-
 interface UrlEntryOptions {
   changefreq?: string;
   priority?: string;
@@ -214,31 +137,16 @@ async function main() {
   const buildIso = new Date().toISOString();
   const firestore = await tryInitFirebaseAdmin();
 
-  const [articles, hotels] = await Promise.all([
-    fetchPublishedArticles(firestore),
-    fetchPublishedHotels(firestore),
-  ]);
+  const articles = await fetchPublishedArticles(firestore);
 
   if (firestore) {
-    console.log(
-      `[sitemap] Firestore reachable: ${articles.length} articles, ${hotels.length} hotels.`
-    );
+    console.log(`[sitemap] Firestore reachable: ${articles.length} articles.`);
   } else {
     console.log('[sitemap] Firestore unreachable, using static fallback only.');
   }
 
-  // Hotel routes: prefer Firestore, fall back to static slug list to keep SEO
-  // continuity in unauthenticated builds (CI without secrets).
-  const hotelRoutes =
-    hotels.length > 0
-      ? hotels.map((hotel) => ({
-          route: `/dove-dormire/${hotel.slug}`,
-          lastmod: hotel.updatedAt ?? buildIso,
-        }))
-      : FALLBACK_HOTEL_SLUGS.map((slug) => ({ route: `/dove-dormire/${slug}`, lastmod: buildIso }));
-
   const articleRoutes = articles.map((article) => {
-    const section = getPublicArticleSection(article);
+    const section = getPublicArticleSection();
     return { route: `/${section}/${article.slug}`, lastmod: article.updatedAt ?? buildIso };
   });
 
@@ -263,12 +171,6 @@ async function main() {
     )
     .join('');
 
-  const hotelEntries = hotelRoutes
-    .map(({ route, lastmod }) =>
-      urlEntry(route, { changefreq: 'weekly', priority: '0.8', lastmod })
-    )
-    .join('');
-
   const articleEntries = articleRoutes
     .map(({ route, lastmod }) =>
       urlEntry(route, { changefreq: 'weekly', priority: '0.7', lastmod })
@@ -281,13 +183,9 @@ async function main() {
     )
     .join('');
 
-  const filterEntries = filterRoutes
-    .map((route) => urlEntry(route, { changefreq: 'weekly', priority: '0.6', lastmod: buildIso }))
-    .join('');
-
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  ${staticEntries}${hotelEntries}${regionalHubEntries}${articleEntries}${filterEntries}
+  ${staticEntries}${regionalHubEntries}${articleEntries}
 </urlset>
 `;
 
@@ -298,14 +196,13 @@ async function main() {
 
   fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), sitemap);
   console.log(
-    `[sitemap] generated: ${staticRoutes.length} static + ${hotelRoutes.length} hotel + ${regionalHubRoutes.length} regional hub + ${articleRoutes.length} article + ${filterRoutes.length} filter URLs.`
+    `[sitemap] generated: ${staticRoutes.length} static + ${regionalHubRoutes.length} regional hub + ${articleRoutes.length} article URLs.`
   );
 
   const robotsTxt = `User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /admin/*
-Disallow: /preferiti
 Disallow: /account
 Disallow: /account/*
 Disallow: /articolo

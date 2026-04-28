@@ -39,7 +39,7 @@ const defaults: Record<
     primaryLabel: 'Esplora destinazioni',
     primaryTo: '/destinazioni',
     secondaryLabel: 'Sfoglia esperienze',
-    secondaryTo: '/esperienze',
+    secondaryTo: '/destinazioni',
   },
   newsletter: {
     eyebrow: 'Resta nel filo giusto',
@@ -48,8 +48,8 @@ const defaults: Record<
       'La newsletter raccoglie solo aggiornamenti selezionati: nuovi posti, guide pratiche, itinerari e risorse davvero utili.',
     primaryLabel: 'Vai alla newsletter',
     primaryTo: '#newsletter',
-    secondaryLabel: 'Apri itinerari',
-    secondaryTo: '/itinerari',
+    secondaryLabel: 'Apri le guide',
+    secondaryTo: '/guide',
   },
   business: {
     eyebrow: 'Per brand e territori',

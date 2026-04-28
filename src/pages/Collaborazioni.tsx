@@ -24,26 +24,13 @@ import OptimizedImage from '../components/OptimizedImage';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import Section from '../components/Section';
-import PartnerLogos, { type Partner } from '../components/home/PartnerLogos';
 import Testimonials from '../components/collaborations/Testimonials';
 import CaseStudies from '../components/collaborations/CaseStudies';
 import { MEDIA } from '../config/mediaAssets';
-import { BRAND_STATS, SITE_URL } from '../config/site';
-import AnimatedCounter from '../components/AnimatedCounter';
+import { SITE_URL } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { fetchStats, type SiteStats } from '../services/firebaseService';
-
-const PARTNER_SHOWCASE: Partner[] = [
-  { name: 'Visit Sardegna' },
-  { name: 'Pugliapromozione' },
-  { name: 'ENIT' },
-  { name: 'Heymondo' },
-  { name: 'Airalo' },
-  { name: 'GetYourGuide' },
-  { name: 'Booking.com' },
-  { name: 'Visit Grecia' },
-];
 
 const PARTNER_AREAS = [
   {
@@ -92,13 +79,6 @@ const ANTI_TARGETS = [
   'No campagne solo sconto, coupon o volume senza qualità.',
   'No collaborazioni incoerenti solo per "esserci".',
 ];
-
-function parseStatString(stat: string | undefined): { value: number; suffix: string } {
-  if (!stat) return { value: 0, suffix: '' };
-  const value = parseFloat(stat.replace(/[^0-9.]/g, ''));
-  const suffix = stat.replace(/[0-9.]/g, '');
-  return { value: isNaN(value) ? 0 : value, suffix };
-}
 
 const FAQ_ITEMS = [
   {
@@ -185,12 +165,19 @@ function FaqSection() {
   );
 }
 
-function TikTokIcon({ size = 20 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.79 1.53V6.78a4.85 4.85 0 0 1-1.02-.09z" />
-    </svg>
-  );
+function formatStatsUpdatedAt(value: unknown) {
+  if (!value) return null;
+  const date =
+    value instanceof Date
+      ? value
+      : typeof value === 'string'
+        ? new Date(value)
+        : typeof value === 'object' && value !== null && 'toDate' in value
+          ? (value as { toDate: () => Date }).toDate()
+          : null;
+
+  if (!date || Number.isNaN(date.getTime())) return null;
+  return new Intl.DateTimeFormat('it-IT', { month: 'long', year: 'numeric' }).format(date);
 }
 
 export default function Collaborazioni() {
@@ -335,19 +322,15 @@ export default function Collaborazioni() {
     void loadStats();
   }, []);
 
-  const resolvedStats = stats ?? {
-    igFollowers: BRAND_STATS.instagramFollowers,
-    monthlyReach: BRAND_STATS.monthlyReach,
-    uniqueUsers: BRAND_STATS.totalFollowers,
-    engagementRate: BRAND_STATS.engagementRate,
-  };
-
-  const statsCards = [
-    { icon: Instagram, rawValue: resolvedStats.igFollowers, label: 'Follower Instagram' },
-    { icon: TikTokIcon, rawValue: BRAND_STATS.tiktokFollowers, label: 'Follower TikTok' },
-    { icon: Users, rawValue: resolvedStats.monthlyReach, label: 'Reach mensile stimata' },
-    { icon: BarChart, rawValue: resolvedStats.engagementRate, label: 'Engagement rate' },
-  ];
+  const statsUpdatedAt = formatStatsUpdatedAt(stats?.updatedAt);
+  const statsCards = stats
+    ? [
+        { icon: Instagram, value: stats.igFollowers, label: 'Follower Instagram' },
+        { icon: Users, value: stats.monthlyReach, label: 'Reach mensile' },
+        { icon: Users, value: stats.uniqueUsers, label: 'Audience totale' },
+        { icon: BarChart, value: stats.engagementRate, label: 'Engagement rate' },
+      ].filter((item) => item.value)
+    : [];
 
   return (
     <PageLayout>
@@ -480,13 +463,22 @@ export default function Collaborazioni() {
       <Section className="my-20 rounded-[3rem] bg-[var(--color-accent-soft)] p-12 md:p-20">
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <h2 className="mb-6 text-4xl font-serif">{pageContent.statsTitle}</h2>
-          <p className="text-lg text-black/70">{pageContent.statsDescription}</p>
+          <p className="text-lg text-black/70">
+            {statsCards.length > 0
+              ? pageContent.statsDescription
+              : 'I dati audience aggiornati vengono condivisi su richiesta nel media kit. In pubblico preferiamo mostrare metodo, format e criteri invece di numeri non verificati.'}
+          </p>
+          {statsUpdatedAt && (
+            <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
+              Dati aggiornati a {statsUpdatedAt}
+              {stats?.sourceLabel ? ` · fonte: ${stats.sourceLabel}` : ''}
+            </p>
+          )}
         </div>
 
-        <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
-          {statsCards.map((item, index) => {
-            const parsed = parseStatString(item.rawValue);
-            return (
+        {statsCards.length > 0 ? (
+          <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
+            {statsCards.map((item, index) => (
               <motion.div
                 key={item.label}
                 initial={{ opacity: 0, y: 20 }}
@@ -498,19 +490,32 @@ export default function Collaborazioni() {
                 <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)]">
                   <item.icon size={26} />
                 </div>
-                <div className="mb-2 text-4xl font-serif text-[var(--color-ink)]">
-                  <AnimatedCounter value={parsed.value} suffix={parsed.suffix} duration={1800} />
-                </div>
+                <div className="mb-2 text-4xl font-serif text-[var(--color-ink)]">{item.value}</div>
                 <div className="text-[10px] font-bold uppercase tracking-widest text-black/50">
                   {item.label}
                 </div>
               </motion.div>
-            );
-          })}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid gap-5 md:grid-cols-3">
+            {PROOF_SIGNALS.map((item, index) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.08 }}
+                className="rounded-3xl border border-[var(--color-accent)]/15 bg-white/75 p-7"
+              >
+                <item.icon size={22} className="text-[var(--color-accent)]" />
+                <h3 className="mt-5 mb-3 text-2xl font-serif">{item.title}</h3>
+                <p className="text-sm leading-relaxed text-black/65">{item.text}</p>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </Section>
-
-      <PartnerLogos partners={PARTNER_SHOWCASE} />
 
       <Section>
         <div className="mx-auto max-w-4xl">

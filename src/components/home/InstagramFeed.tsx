@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { ArrowUpRight, Instagram } from 'lucide-react';
 import OptimizedImage from '../OptimizedImage';
-import { BRAND_STATS, CONTACTS } from '../../config/site';
+import { CONTACTS } from '../../config/site';
 import { trackEvent } from '../../services/analytics';
 
 export interface InstagramPost {
@@ -84,9 +84,8 @@ export default function InstagramFeed({ posts }: InstagramFeedProps) {
           </div>
           <div className="flex flex-col items-start gap-4 md:items-end">
             <p className="max-w-md text-base leading-relaxed text-black/72 md:text-right">
-              Foto, video e piccole scoperte che non finiscono nelle guide. Su Instagram siamo
-              {` ${BRAND_STATS.instagramFollowers} `}
-              persone a viaggiare insieme.
+              Foto, video e piccole scoperte che non finiscono nelle guide. Instagram resta il posto
+              dove segui il viaggio mentre succede.
             </p>
             <a
               href={CONTACTS.instagramUrl}

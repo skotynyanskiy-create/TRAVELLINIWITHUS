@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from 'motion/react';
 import {
   ArrowRight,
   ChevronDown,
-  Heart,
   Instagram,
   LogOut,
   Mail,
@@ -16,10 +15,9 @@ import {
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { CONTACTS } from '../config/site';
-import { DESTINATION_GROUPS } from '../config/contentTaxonomy';
+import { GUIDE_CATEGORIES, slugifyGuideCategory } from '../config/contentTaxonomy';
 import { siteContentDefaults } from '../config/siteContent';
 import { useAuth } from '../context/AuthContext';
-import { useFavorites } from '../context/FavoritesContext';
 import { useSiteContent } from '../hooks/useSiteContent';
 
 const SearchModal = lazy(() => import('./SearchModal'));
@@ -50,7 +48,6 @@ export default function Navbar() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   const location = useLocation();
-  const { favorites } = useFavorites();
   const { user, isAdmin, signIn, signOut } = useAuth();
   const { data: navigationContent } = useSiteContent('navigation');
   const navigation = navigationContent ?? siteContentDefaults.navigation;
@@ -90,15 +87,6 @@ export default function Navbar() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const destinationLinks = useMemo(
-    () =>
-      DESTINATION_GROUPS.map((group) => ({
-        name: group,
-        href: `/destinazioni?group=${encodeURIComponent(group)}`,
-      })),
-    []
-  );
-
   const destinationsGroups = useMemo<NavSubGroup[]>(
     () => [
       {
@@ -116,40 +104,29 @@ export default function Navbar() {
         links: [
           { name: 'Tutte le destinazioni', href: '/destinazioni' },
           { name: 'Mappa interattiva', href: '/mappa' },
-          { name: 'Tutte le esperienze', href: '/esperienze' },
-          ...destinationLinks,
         ],
       },
     ],
-    [destinationLinks]
+    []
   );
 
-  const tipsLinks = useMemo<NavSubLink[]>(
+  const guideLinks = useMemo<NavSubLink[]>(
     () => [
-      { name: navigation.guidesLabel, href: '/guide' },
-      { name: navigation.itinerariesLabel, href: '/itinerari' },
-      { name: 'Cosa mangiare', href: '/cosa-mangiare' },
-      { name: navigation.resourcesLabel, href: '/risorse' },
-      { name: 'Inizia da qui', href: '/inizia-da-qui' },
+      { name: 'Tutte le guide', href: '/guide' },
+      ...GUIDE_CATEGORIES.map((category) => ({
+        name: category,
+        href: `/guide?cat=${slugifyGuideCategory(category)}`,
+      })),
     ],
-    [navigation.guidesLabel, navigation.itinerariesLabel, navigation.resourcesLabel]
+    []
   );
 
-  const aboutLinks = useMemo<NavSubLink[]>(
+  const collaborationLinks = useMemo<NavSubLink[]>(
     () => [
-      { name: navigation.aboutLabel, href: '/chi-siamo' },
-      { name: 'Il nostro metodo', href: '/metodo' },
-      { name: 'Trasparenza', href: '/trasparenza' },
       { name: navigation.collaborationsLabel, href: '/collaborazioni' },
       { name: navigation.mediaKitLabel, href: '/media-kit' },
-      { name: navigation.contactsLabel, href: '/contatti' },
     ],
-    [
-      navigation.aboutLabel,
-      navigation.collaborationsLabel,
-      navigation.contactsLabel,
-      navigation.mediaKitLabel,
-    ]
+    [navigation.collaborationsLabel, navigation.mediaKitLabel]
   );
 
   const navItems = useMemo<NavItem[]>(
@@ -160,25 +137,29 @@ export default function Navbar() {
         subGroups: destinationsGroups,
       },
       {
-        name: 'Travel tips',
+        name: navigation.guidesLabel,
         href: '/guide',
-        subLinks: tipsLinks,
+        subLinks: guideLinks,
       },
       {
-        name: 'Dove dormire',
-        href: '/dove-dormire',
+        name: navigation.resourcesLabel,
+        href: '/risorse',
       },
       {
-        name: 'Shop',
-        href: '/shop',
-      },
-      {
-        name: navigation.aboutLabel,
-        href: '/chi-siamo',
-        subLinks: aboutLinks,
+        name: navigation.collaborationsLabel,
+        href: '/collaborazioni',
+        subLinks: collaborationLinks,
       },
     ],
-    [aboutLinks, destinationsGroups, navigation.aboutLabel, navigation.destinationsLabel, tipsLinks]
+    [
+      collaborationLinks,
+      destinationsGroups,
+      guideLinks,
+      navigation.collaborationsLabel,
+      navigation.destinationsLabel,
+      navigation.guidesLabel,
+      navigation.resourcesLabel,
+    ]
   );
 
   const isItemActive = (item: NavItem) => {
@@ -186,40 +167,20 @@ export default function Navbar() {
       return (
         location.pathname === '/destinazioni' ||
         location.pathname.startsWith('/destinazioni/') ||
-        location.pathname === '/esperienze' ||
         location.pathname === '/mappa'
       );
     }
 
-    if (item.name === 'Travel tips') {
-      return (
-        location.pathname.startsWith('/guide') ||
-        location.pathname.startsWith('/itinerari') ||
-        location.pathname === '/cosa-mangiare' ||
-        location.pathname === '/risorse' ||
-        location.pathname === '/inizia-da-qui'
-      );
+    if (item.name === navigation.guidesLabel) {
+      return location.pathname.startsWith('/guide') || location.pathname.startsWith('/itinerari');
     }
 
-    if (item.name === 'Dove dormire') {
-      return (
-        location.pathname === '/dove-dormire' || location.pathname.startsWith('/dove-dormire/')
-      );
+    if (item.name === navigation.resourcesLabel) {
+      return location.pathname === '/risorse';
     }
 
-    if (item.name === 'Shop') {
-      return location.pathname === '/shop' || location.pathname.startsWith('/shop/');
-    }
-
-    if (item.name === navigation.aboutLabel) {
-      return (
-        location.pathname === '/chi-siamo' ||
-        location.pathname === '/metodo' ||
-        location.pathname === '/trasparenza' ||
-        location.pathname === '/collaborazioni' ||
-        location.pathname === '/media-kit' ||
-        location.pathname === '/contatti'
-      );
+    if (item.name === navigation.collaborationsLabel) {
+      return location.pathname === '/collaborazioni' || location.pathname === '/media-kit';
     }
 
     if (item.href && item.href !== '#' && location.pathname === item.href) {
@@ -236,7 +197,7 @@ export default function Navbar() {
     if (!item.subLinks) return false;
 
     return item.subLinks.some((subLink) => {
-      if (subLink.href.startsWith('/destinazioni?') || subLink.href.startsWith('/esperienze?')) {
+      if (subLink.href.startsWith('/destinazioni?')) {
         return location.pathname === item.href;
       }
       return location.pathname === subLink.href;
@@ -246,12 +207,7 @@ export default function Navbar() {
   const isSubLinkActive = (item: NavItem, href: string) => {
     const [subLinkPath, subLinkSearch] = href.split('?');
 
-    if (
-      href.startsWith('/destinazioni?') ||
-      href.startsWith('/esperienze?') ||
-      href.startsWith('/guide?') ||
-      href.startsWith('/itinerari?')
-    ) {
+    if (href.startsWith('/destinazioni?') || href.startsWith('/guide?')) {
       return location.pathname === subLinkPath && location.search === `?${subLinkSearch}`;
     }
 
@@ -369,10 +325,10 @@ export default function Navbar() {
 
           <div className="hidden shrink-0 items-center space-x-4 text-zinc-600 md:flex xl:space-x-6">
             <Link
-              to="/collaborazioni"
+              to="/media-kit"
               className="hidden items-center gap-1 rounded-full border border-[var(--color-accent)]/30 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-colors hover:bg-[var(--color-accent-soft)] xl:inline-flex"
             >
-              Collabora con noi
+              Media kit
             </Link>
 
             <button
@@ -383,19 +339,6 @@ export default function Navbar() {
               <Search size={12} />
               <span className="hidden xl:inline">{navigation.searchLabel}</span>
             </button>
-
-            <Link
-              to="/preferiti"
-              className="relative transition-colors hover:text-[var(--color-accent)]"
-              aria-label={navigation.favoritesLabel}
-            >
-              <Heart size={18} strokeWidth={1.5} />
-              {favorites.length > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[9px] font-bold text-white">
-                  {favorites.length}
-                </span>
-              )}
-            </Link>
 
             <div className="relative">
               {user ? (
@@ -628,18 +571,6 @@ export default function Navbar() {
                     <ArrowRight size={14} />
                   </Link>
                   <div className="flex flex-wrap items-center gap-5">
-                    <Link
-                      to="/preferiti"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="relative text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      <Heart size={24} />
-                      {favorites.length > 0 && (
-                        <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-accent)] text-[10px] font-bold text-white">
-                          {favorites.length}
-                        </span>
-                      )}
-                    </Link>
                     <a
                       href={CONTACTS.instagramUrl}
                       target="_blank"

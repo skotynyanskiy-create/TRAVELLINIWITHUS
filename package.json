@@ -33,6 +33,7 @@
     "audit:qa": "npm run audit:visual && npm run audit:a11y && npm run audit:forms",
     "audit:quality": "npm run typecheck && npm run lint && npm run test && npm run build && npm run audit:ui && npm run audit:firebase && npm run audit:stripe && npm run audit:agents && npm run audit:qa",
     "audit:all": "npm run audit:ui && npm run audit:firebase && npm run audit:stripe",
+    "check:v1": "node scripts/check-v1-readiness.mjs",
     "sync:agents": "node scripts/sync-agent-skills.mjs",
     "scaffold:page": "node scripts/scaffold-page.mjs",
     "admin:grant": "node scripts/set-admin-claim.mjs grant",

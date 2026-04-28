@@ -3,29 +3,28 @@ import type { ExperienceType } from './contentTaxonomy';
 export const EXPERIENCE_HERO_IMAGE = '/images/experiences/avventura.png';
 
 export const HOME_EXPERIENCE_TYPES: ExperienceType[] = [
-  'Posti particolari',
   'Food & Ristoranti',
+  "Borghi e città d'arte",
   'Hotel con carattere',
   'Weekend romantici',
-  "Borghi e città d'arte",
-  'Relax, terme e spa',
+  'Esperienze insolite',
 ];
 
 export const EXPERIENCE_CARD_LABELS: Partial<Record<ExperienceType, string>> = {
   'Food & Ristoranti': 'Food',
   'Hotel con carattere': 'Hotel',
   "Borghi e città d'arte": 'Borghi',
-  'Relax, terme e spa': 'Relax',
+  'Weekend romantici': 'Weekend',
+  'Esperienze insolite': 'Insolito',
 };
 
 export const EXPERIENCE_DESCRIPTIONS: Partial<Record<ExperienceType, string>> = {
-  'Posti particolari': 'Luoghi insoliti, salvabili e facili da immaginare nel prossimo viaggio.',
   'Food & Ristoranti': 'Tavole, mercati e indirizzi scelti per atmosfera e sostanza.',
   'Hotel con carattere':
     'Posti dove dormire che fanno parte del viaggio, non solo della logistica.',
   'Weekend romantici': 'Idee brevi, curate e realistiche per partire in coppia.',
   "Borghi e città d'arte": 'Centri storici, scorci e cultura da vivere senza correre.',
-  'Relax, terme e spa': 'Pause lente, terme e soggiorni dove staccare davvero.',
+  'Esperienze insolite': 'Musei strani, attività particolari e spunti diversi da salvare.',
 };
 
 export function getExperienceCardLabel(type: ExperienceType) {

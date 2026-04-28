@@ -11,23 +11,15 @@ export interface Partner {
   logo?: string;
 }
 
-const DEMO_PARTNERS: Partner[] = [
-  { name: 'Visit Sardegna' },
-  { name: 'Pugliapromozione' },
-  { name: 'ENIT — Agenzia Nazionale Turismo' },
-  { name: 'Visit Grecia' },
-  { name: 'Hotel Villa Dei Sogni' },
-  { name: 'Heymondo' },
-  { name: 'Airalo' },
-  { name: 'GetYourGuide' },
-];
-
 interface PartnerLogosProps {
   partners?: Partner[];
 }
 
 export default function PartnerLogos({ partners }: PartnerLogosProps) {
-  const items = partners && partners.length > 0 ? partners : DEMO_PARTNERS;
+  const items = partners ?? [];
+  if (items.length === 0) {
+    return null;
+  }
 
   return (
     <section className="bg-white py-20 md:py-24">

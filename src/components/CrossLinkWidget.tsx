@@ -1,13 +1,10 @@
 import { motion } from 'motion/react';
 import { ArrowRight, BookOpen, Compass, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { EXPERIENCE_VISUALS } from '../config/experienceVisuals';
 
 interface CrossLinkWidgetProps {
-  variant: 'to-esperienze' | 'to-destinazioni' | 'to-guide' | 'to-itinerari';
+  variant: 'to-destinazioni' | 'to-guide';
 }
-
-const experienceIcons = Object.values(EXPERIENCE_VISUALS).slice(0, 6);
 
 const guideCategories = [
   'Consigli',
@@ -18,12 +15,8 @@ const guideCategories = [
   'Pianificazione',
 ];
 
-const itineraryCategories = ['Weekend', '7 giorni', 'Roadtrip', '2 settimane', 'Citta', 'Isole'];
-
 export default function CrossLinkWidget({ variant }: CrossLinkWidgetProps) {
-  const isToEsperienze = variant === 'to-esperienze';
   const isToGuide = variant === 'to-guide';
-  const isToItinerari = variant === 'to-itinerari';
 
   const config = isToGuide
     ? {
@@ -39,47 +32,19 @@ export default function CrossLinkWidget({ variant }: CrossLinkWidgetProps) {
         descClass: 'text-white/65',
         btnClass: 'bg-white text-[var(--color-ink)] hover:bg-[var(--color-accent-soft)]',
       }
-    : isToItinerari
-      ? {
-          scriptAccent: 'se vuoi un piano, entra qui',
-          title: 'Apri gli itinerari',
-          description:
-            'Weekend, roadtrip e viaggi completi con tappe, tempi e ritmo gia ordinati per partire senza improvvisare tutto.',
-          href: '/itinerari',
-          cta: 'Apri itinerari',
-          wrapClass: 'bg-[var(--color-ink)]',
-          titleClass: 'text-white',
-          scriptClass: 'text-[var(--color-accent)]',
-          descClass: 'text-white/65',
-          btnClass: 'bg-white text-[var(--color-ink)] hover:bg-[var(--color-accent-soft)]',
-        }
-      : isToEsperienze
-        ? {
-            scriptAccent: 'stessa prospettiva, altra porta',
-            title: 'Cerca per tipo di esperienza',
-            description:
-              'Lo stesso archivio visto dal lato delle esperienze: food, posti particolari, weekend romantici e molto altro.',
-            href: '/esperienze',
-            cta: 'Esplora per esperienza',
-            wrapClass: 'bg-[var(--color-accent-soft)]',
-            titleClass: 'text-[var(--color-ink)]',
-            scriptClass: 'text-[var(--color-accent)]',
-            descClass: 'text-black/70',
-            btnClass: 'bg-[var(--color-ink)] text-white hover:bg-[var(--color-ink)]/85',
-          }
-        : {
-            scriptAccent: 'stessa prospettiva, altra porta',
-            title: 'Cerca per destinazione',
-            description:
-              'Lo stesso archivio organizzato per luogo: Italia, Europa e oltre. Filtra per regione, città o continente.',
-            href: '/destinazioni',
-            cta: 'Esplora per destinazione',
-            wrapClass: 'bg-[var(--color-accent-soft)]',
-            titleClass: 'text-[var(--color-ink)]',
-            scriptClass: 'text-[var(--color-accent)]',
-            descClass: 'text-black/70',
-            btnClass: 'bg-[var(--color-ink)] text-white hover:bg-[var(--color-ink)]/85',
-          };
+    : {
+        scriptAccent: 'stessa prospettiva, altra porta',
+        title: 'Cerca per destinazione',
+        description:
+          'Lo stesso archivio organizzato per luogo: Italia, Grecia, Portogallo. Filtra per regione, città o esperienza.',
+        href: '/destinazioni',
+        cta: 'Esplora per destinazione',
+        wrapClass: 'bg-[var(--color-accent-soft)]',
+        titleClass: 'text-[var(--color-ink)]',
+        scriptClass: 'text-[var(--color-accent)]',
+        descClass: 'text-black/70',
+        btnClass: 'bg-[var(--color-ink)] text-white hover:bg-[var(--color-ink)]/85',
+      };
 
   return (
     <motion.div
@@ -111,38 +76,7 @@ export default function CrossLinkWidget({ variant }: CrossLinkWidgetProps) {
 
         {/* Illustrazione decorativa */}
         <div className="relative hidden h-48 lg:block">
-          {isToEsperienze ? (
-            experienceIcons.map((visual, idx) => {
-              const Icon = visual.icon;
-              const positions = [
-                'top-0 left-8',
-                'top-4 left-40',
-                'top-2 right-12',
-                'bottom-4 left-16',
-                'bottom-0 left-52',
-                'bottom-6 right-8',
-              ];
-              const rotations = [-8, 5, -3, 6, -5, 4];
-              return (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.08 }}
-                  className={`absolute ${positions[idx]}`}
-                  style={{ transform: `rotate(${rotations[idx]}deg)` }}
-                >
-                  <div
-                    className="flex h-16 w-16 items-center justify-center rounded-2xl shadow-lg"
-                    style={{ backgroundColor: visual.colorLight, color: visual.color }}
-                  >
-                    <Icon size={28} />
-                  </div>
-                </motion.div>
-              );
-            })
-          ) : isToGuide || isToItinerari ? (
+          {isToGuide ? (
             /* Archive editoriali: book icon + scattered category pills */
             <>
               <motion.div
@@ -155,7 +89,7 @@ export default function CrossLinkWidget({ variant }: CrossLinkWidgetProps) {
                   <BookOpen size={40} strokeWidth={1.2} className="text-white/80" />
                 </div>
               </motion.div>
-              {(isToItinerari ? itineraryCategories : guideCategories).map((cat, idx) => {
+              {guideCategories.map((cat, idx) => {
                 const positions = [
                   { top: '2%', left: '5%' },
                   { top: '0%', right: '5%' },

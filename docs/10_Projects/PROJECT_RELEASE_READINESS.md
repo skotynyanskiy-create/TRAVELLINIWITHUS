@@ -30,6 +30,37 @@ Tenere sotto controllo cio che manca per una release pulita e verificabile della
 - [x] verificare contenuti, funnel e shop
 - [ ] verificare build e smoke test
 
+## Milestone V1 rebuild forte - 2026-04-27
+
+Obiettivo: portare il sito a una V1 pubblicabile e credibile, con esperienza pubblica piu chiara e senza promesse non verificate.
+
+- [x] Nav primaria riallineata a `Destinazioni / Guide / Itinerari / Dove dormire / Risorse / Collaborazioni`.
+- [x] `Shop` resta fuori dalla nav principale finche il catalogo non e realmente acquistabile.
+- [x] `Travel tips` rimosso dalle superfici di navigazione pubblica.
+- [x] Home spostata su portale editoriale con Puglia come primo cluster V1 e B2B in fascia separata.
+- [x] Sitemap statica senza URL con query param: i filtri restano UX, non landing SEO.
+- [x] B2B proof declassata: niente loghi partner pubblici o metriche fallback non aggiornate.
+- [x] Media kit generato senza numeri fallback quando Firestore non espone metriche.
+- [ ] Owner valida foto reali, dati audience aggiornati, prezzo, PDF e condizioni vendita prima del go-live.
+- [ ] Roundtrip reale lead Firestore per newsletter, contatti e media kit.
+- [ ] Smoke test browser V1 su home desktop/mobile, Collaborazioni, Media Kit, Shop e articolo Puglia.
+
+Regola di release: preview e fallback possono esistere in dev o come stato dichiarato, ma in produzione non devono diventare proof, prodotto acquistabile o contenuto indicizzabile senza validazione.
+
+## Predisposizioni senza contenuti reali - 2026-04-27
+
+Obiettivo: preparare il sito al go-live V1 senza pubblicare contenuti, prezzi, loghi, metriche o prodotti non ancora validati dall'owner.
+
+- [x] Admin prodotti: blocco publish se slug, prezzo o consegna digitale non sono pronti.
+- [x] Admin prodotti: checklist visiva di readiness prima della pubblicazione.
+- [x] Nuovo gate `npm run check:v1` per intercettare regressioni su sitemap, shop, demo proof e media kit.
+- [x] `predeploy` esegue `check:v1` subito dopo la build, quando `public/sitemap.xml` e `public/media-kit.pdf` sono aggiornati.
+- [x] Gate shop: `/shop` resta non indicizzabile finche non esiste un prodotto realmente vendibile o override esplicito `V1_SHOP_PUBLIC=true`.
+- [x] Gate proof B2B: il controllo V1 blocca il ritorno di loghi partner fallback hardcoded.
+- [x] Gate social proof: il controllo V1 blocca recensioni demo e fallback numerici nel media kit generator.
+
+Regola operativa: fino alla validazione contenuti, il lavoro deve concentrarsi su struttura, guardrail, template, admin flow, SEO tecnico e QA. I draft possono esistere solo come bozza o documentazione interna, mai come contenuto reale pubblico.
+
 ## Snapshot fase A
 
 - [x] consent banner predisposto con categorie necessarie, analytics e marketing

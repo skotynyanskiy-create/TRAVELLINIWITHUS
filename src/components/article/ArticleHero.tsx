@@ -1,9 +1,7 @@
-import { useState } from 'react';
 import { motion, MotionValue } from 'motion/react';
-import { Clock, Heart, Share2, CheckCircle } from 'lucide-react';
+import { Clock, Share2, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import OptimizedImage from '../OptimizedImage';
-import { heartPulse } from '../../lib/animations';
 import type { ArticleData } from './types';
 import { ARTICLE_DISCLOSURE_LABELS } from './types';
 
@@ -12,9 +10,7 @@ interface ArticleHeroProps {
   authorName: string;
   readingTime: string;
   categoryPath: string;
-  isSaved: boolean;
   copied: boolean;
-  onToggleFavorite: () => void;
   onShare: () => void;
   yHero: MotionValue<number>;
 }
@@ -24,19 +20,10 @@ export default function ArticleHero({
   authorName,
   readingTime,
   categoryPath,
-  isSaved,
   copied,
-  onToggleFavorite,
   onShare,
   yHero,
 }: ArticleHeroProps) {
-  const [pulseKey, setPulseKey] = useState(0);
-
-  const handleFavorite = () => {
-    setPulseKey((k) => k + 1);
-    onToggleFavorite();
-  };
-
   return (
     <header className="relative h-[70vh] md:h-[85vh] w-full flex items-end pb-20 overflow-hidden">
       <div className="absolute inset-0 z-0 bg-black">
@@ -115,20 +102,6 @@ export default function ArticleHero({
 
       {/* Floating Action Buttons */}
       <div className="absolute bottom-10 right-10 z-20 flex gap-3">
-        <button
-          onClick={handleFavorite}
-          aria-label={isSaved ? 'Rimuovi dai preferiti' : 'Salva nei preferiti'}
-          className={`w-14 h-14 rounded-full backdrop-blur-xl border flex items-center justify-center transition-all duration-500 ${isSaved ? 'bg-accent text-white border-[var(--color-accent)]' : 'bg-white/10 text-white border-white/20 hover:bg-white/20'}`}
-        >
-          <motion.span
-            key={pulseKey}
-            variants={heartPulse}
-            animate="beat"
-            className="flex items-center justify-center"
-          >
-            <Heart size={24} className={isSaved ? 'fill-current' : ''} />
-          </motion.span>
-        </button>
         <button
           onClick={onShare}
           aria-label="Condividi articolo"

@@ -10,9 +10,9 @@ const HERO_IMAGE = MEDIA.hero.primary;
 const REEL_FALLBACK_IMAGE = MEDIA.hero.reelFallback;
 
 const TRUST_PILLS = [
-  'Vissuto prima di scritto',
-  'Dettagli utili, zero marketing',
-  'Criterio, non hype',
+  'Posti provati sul posto',
+  'Hotel scelti con criterio',
+  'Affiliate dichiarate',
 ];
 
 function getInstagramEmbedUrl(url: string) {
@@ -128,16 +128,16 @@ export default function HeroSection() {
           className="max-w-3xl"
         >
           <span className="block text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent)] sm:text-xs">
-            Rodrigo & Betta / Travelliniwithus
+            Travel creator editoriali
           </span>
 
           <h1 className="mt-5 max-w-4xl text-5xl font-serif font-medium leading-[0.92] tracking-tight text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.45)] sm:text-6xl md:text-7xl xl:text-[6.15rem]">
-            Posti particolari che valgono davvero.
+            Rodrigo & Betta, Travelliniwithus.
           </h1>
 
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/90 drop-shadow-[0_2px_12px_rgba(0,0,0,0.3)] md:text-xl">
-            Itinerari scritti dopo il viaggio, hotel testati sul posto, costi e stagioni reali. Non
-            la lista più lunga: quella che ti fa decidere meglio.
+            Posti particolari, guide utili, hotel provati e itinerari da salvare. Partiamo dalla
+            Puglia slow, con borghi bianchi, masserie e tavole vere.
           </p>
 
           <div className="mt-7 flex flex-wrap gap-2">
@@ -153,13 +153,13 @@ export default function HeroSection() {
 
           <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
             <Button
-              to="/destinazioni"
+              to="/destinazioni/italia/puglia"
               variant="cta"
               size="lg"
               className="group h-14 min-w-[230px] rounded-lg shadow-[0_18px_44px_rgba(0,0,0,0.18)] sm:h-16"
             >
               <span className="text-sm font-bold uppercase tracking-widest">
-                Scopri destinazioni
+                Inizia dalla Puglia
               </span>
               <ArrowRight
                 size={20}
@@ -168,10 +168,10 @@ export default function HeroSection() {
             </Button>
 
             <Link
-              to="/#storie"
+              to="/collaborazioni"
               className="inline-flex h-14 min-w-[230px] items-center justify-center rounded-lg border border-white/24 bg-black/5 px-8 text-sm font-bold uppercase tracking-widest text-white/88 transition-all duration-300 hover:border-white/60 hover:bg-white/10 hover:text-white sm:h-16"
             >
-              Ultime storie
+              Collabora con noi
             </Link>
           </div>
         </motion.div>

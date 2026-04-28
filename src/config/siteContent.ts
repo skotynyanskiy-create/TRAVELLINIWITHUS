@@ -165,15 +165,12 @@ export interface NavigationContent {
   destinationsAllLabel: string;
   planningLabel: string;
   guidesLabel: string;
-  itinerariesLabel: string;
-  experiencesLabel: string;
   resourcesLabel: string;
   shopLabel: string;
   collaborationsLabel: string;
   mediaKitLabel: string;
   aboutLabel: string;
   contactsLabel: string;
-  favoritesLabel: string;
   searchLabel: string;
 }
 
@@ -184,17 +181,6 @@ export interface DemoContent {
   showDemoBadges: boolean;
 }
 
-export interface PlanningContent {
-  heroEyebrow: string;
-  heroTitleMain: string;
-  heroTitleAccent: string;
-  heroDescription: string;
-  primaryCtaLabel: string;
-  primaryCtaLink: string;
-  secondaryCtaLabel: string;
-  secondaryCtaLink: string;
-}
-
 export interface SiteContentMap {
   home: HomeContent;
   about: AboutContent;
@@ -202,7 +188,6 @@ export interface SiteContentMap {
   contact: ContactContent;
   footer: FooterContent;
   navigation: NavigationContent;
-  planning: PlanningContent;
   demo: DemoContent;
 }
 
@@ -496,28 +481,14 @@ export const siteContentDefaults: SiteContentMap = {
     destinationsLabel: 'Destinazioni',
     destinationsAllLabel: 'Tutte le destinazioni',
     planningLabel: 'Pianifica',
-    guidesLabel: 'Guide pratiche',
-    itinerariesLabel: 'Itinerari',
-    experiencesLabel: 'Esperienze',
+    guidesLabel: 'Guide',
     resourcesLabel: 'Risorse',
     shopLabel: 'Shop',
     collaborationsLabel: 'Collaborazioni',
     mediaKitLabel: 'Media kit',
     aboutLabel: 'Chi siamo',
     contactsLabel: 'Contatti',
-    favoritesLabel: 'Preferiti',
     searchLabel: 'Cerca',
-  },
-  planning: {
-    heroEyebrow: 'Pianifica meglio',
-    heroTitleMain: 'Usa il sito come',
-    heroTitleAccent: 'un sistema di viaggio',
-    heroDescription:
-      'Risorse, hotel, guide pratiche e punti di partenza ordinati per aiutarti a scegliere con piu criterio, non per farti aprire dieci tab inutili.',
-    primaryCtaLabel: 'Apri le risorse',
-    primaryCtaLink: '/risorse',
-    secondaryCtaLabel: 'Vedi dove dormire',
-    secondaryCtaLink: '/dove-dormire',
   },
   demo: {
     showEditorialDemo: !(import.meta.env?.PROD ?? true),
@@ -790,33 +761,13 @@ export const siteContentDefinitions: SiteContentDefinition[] = [
       textField('destinationsAllLabel', 'Label tutte le destinazioni'),
       textField('planningLabel', 'Label pianifica'),
       textField('guidesLabel', 'Label guide'),
-      textField('itinerariesLabel', 'Label itinerari'),
-      textField('experiencesLabel', 'Label esperienze'),
       textField('resourcesLabel', 'Label risorse'),
       textField('shopLabel', 'Label shop'),
       textField('collaborationsLabel', 'Label collaborazioni'),
       textField('mediaKitLabel', 'Label media kit'),
       textField('aboutLabel', 'Label chi siamo'),
       textField('contactsLabel', 'Label contatti'),
-      textField('favoritesLabel', 'Label preferiti'),
       textField('searchLabel', 'Label cerca'),
-    ],
-  },
-  {
-    id: 'planning',
-    title: 'Planning',
-    description:
-      'Hero e CTA del layer Pianifica usato da Inizia da qui e dalle superfici planning.',
-    previewPath: '/inizia-da-qui',
-    fields: [
-      textField('heroEyebrow', 'Eyebrow hero'),
-      textField('heroTitleMain', 'Titolo hero principale'),
-      textField('heroTitleAccent', 'Titolo hero accent'),
-      textareaField('heroDescription', 'Descrizione hero'),
-      textField('primaryCtaLabel', 'CTA primaria label'),
-      urlField('primaryCtaLink', 'CTA primaria link'),
-      textField('secondaryCtaLabel', 'CTA secondaria label'),
-      urlField('secondaryCtaLink', 'CTA secondaria link'),
     ],
   },
   {

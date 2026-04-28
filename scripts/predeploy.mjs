@@ -9,6 +9,7 @@ const steps = [
   ['lint', ['run', 'lint']],
   ['test', ['run', 'test']],
   ['build', ['run', 'build']],
+  ['check:v1', ['run', 'check:v1']],
   ['audit:ui', ['run', 'audit:ui']],
   ['audit:firebase', ['run', 'audit:firebase']],
   ['audit:stripe', ['run', 'audit:stripe']],

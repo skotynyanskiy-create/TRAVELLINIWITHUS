@@ -3,17 +3,18 @@ import {
   getPublicArticlePath,
   getPublicArticleSection,
   getPublicArticleCollectionPath,
+  getPublicArchivePath,
   getLegacyArticlePath,
   isItineraryCategory,
   matchesPublicArticleSection,
 } from '../articleRoutes';
 
 describe('getPublicArticleSection', () => {
-  it('type itinerary → sezione itinerari', () => {
-    expect(getPublicArticleSection({ type: 'itinerary' })).toBe('itinerari');
+  it('type itinerary → sezione guide (archive unificato)', () => {
+    expect(getPublicArticleSection({ type: 'itinerary' })).toBe('guide');
   });
 
-  it('type pillar → sezione guide (nessuna categoria speciale)', () => {
+  it('type pillar → sezione guide', () => {
     expect(getPublicArticleSection({ type: 'pillar', category: 'Consigli pratici' })).toBe('guide');
   });
 
@@ -21,22 +22,20 @@ describe('getPublicArticleSection', () => {
     expect(getPublicArticleSection({ type: 'guide', category: 'Food guide' })).toBe('guide');
   });
 
-  it('categoria "Itinerari completi" → sezione itinerari (anche senza type)', () => {
-    expect(getPublicArticleSection({ category: 'Itinerari completi' })).toBe('itinerari');
+  it('categoria "Itinerari completi" → sezione guide', () => {
+    expect(getPublicArticleSection({ category: 'Itinerari completi' })).toBe('guide');
   });
 
-  it('categoria "Weekend & Day trip" → sezione itinerari', () => {
-    expect(getPublicArticleSection({ category: 'Weekend & Day trip' })).toBe('itinerari');
+  it('categoria "Weekend & Day trip" → sezione guide', () => {
+    expect(getPublicArticleSection({ category: 'Weekend & Day trip' })).toBe('guide');
   });
 
-  it('categoria sconosciuta senza type → fallback guide', () => {
+  it('categoria reportage → sezione reportage', () => {
+    expect(getPublicArticleSection({ category: 'Reportage' })).toBe('reportage');
+  });
+
+  it('categoria sconosciuta → fallback guide', () => {
     expect(getPublicArticleSection({ category: 'Categoria inesistente' })).toBe('guide');
-  });
-
-  it('type itinerary ha priorità sulla categoria non-itinerary', () => {
-    expect(getPublicArticleSection({ type: 'itinerary', category: 'Food guide' })).toBe(
-      'itinerari'
-    );
   });
 });
 
@@ -45,8 +44,14 @@ describe('getPublicArticleCollectionPath', () => {
     expect(getPublicArticleCollectionPath({ type: 'pillar' })).toBe('/guide');
   });
 
-  it('itinerary → /itinerari', () => {
-    expect(getPublicArticleCollectionPath({ type: 'itinerary' })).toBe('/itinerari');
+  it('itinerary → /guide (archive unificato)', () => {
+    expect(getPublicArticleCollectionPath({ type: 'itinerary' })).toBe('/guide');
+  });
+});
+
+describe('getPublicArchivePath', () => {
+  it('ritorna sempre /guide come archivio editoriale pubblico', () => {
+    expect(getPublicArchivePath()).toBe('/guide');
   });
 });
 
@@ -57,9 +62,9 @@ describe('getPublicArticlePath', () => {
     );
   });
 
-  it('itinerary con slug → /itinerari/:slug', () => {
+  it('itinerary con slug → /guide/:slug (archive unificato)', () => {
     expect(getPublicArticlePath({ type: 'itinerary', slug: 'tre-giorni-sicilia' })).toBe(
-      '/itinerari/tre-giorni-sicilia'
+      '/guide/tre-giorni-sicilia'
     );
   });
 
@@ -113,7 +118,7 @@ describe('matchesPublicArticleSection', () => {
     expect(matchesPublicArticleSection('guide', { type: 'guide' })).toBe(true);
   });
 
-  it('articolo itinerary non corrisponde alla sezione guide', () => {
-    expect(matchesPublicArticleSection('guide', { type: 'itinerary' })).toBe(false);
+  it('articolo itinerary corrisponde alla sezione guide (archive unificato)', () => {
+    expect(matchesPublicArticleSection('guide', { type: 'itinerary' })).toBe(true);
   });
 });

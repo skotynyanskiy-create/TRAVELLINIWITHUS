@@ -325,6 +325,8 @@ export interface SiteStats {
   monthlyReach: string;
   uniqueUsers: string;
   engagementRate: string;
+  updatedAt?: unknown;
+  sourceLabel?: string;
 }
 
 export async function fetchStats(): Promise<SiteStats | null> {

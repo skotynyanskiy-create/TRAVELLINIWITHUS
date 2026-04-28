@@ -3,7 +3,6 @@ import { expect, test } from '@playwright/test';
 const ROUTES = [
   { path: '/', label: 'home' },
   { path: '/destinazioni', label: 'destinazioni' },
-  { path: '/esperienze', label: 'esperienze' },
   { path: '/guide', label: 'guide' },
   { path: '/risorse', label: 'risorse' },
   { path: '/collaborazioni', label: 'collaborazioni' },
@@ -37,10 +36,7 @@ test.describe('Visual quality smoke', () => {
           const consoleErrors: string[] = [];
 
           page.on('response', (response) => {
-            if (
-              response.request().resourceType() === 'image' &&
-              response.status() >= 400
-            ) {
+            if (response.request().resourceType() === 'image' && response.status() >= 400) {
               failedImages.push(`${response.status()} ${response.url()}`);
             }
           });
@@ -79,12 +75,10 @@ test.describe('Visual quality smoke', () => {
               scrollWidth: docEl.scrollWidth,
               clientWidth: viewportWidth,
               bodyTextLength: document.body.innerText.trim().length,
-              visibleLinks: [...document.querySelectorAll('a, button')].filter(
-                (element) => {
-                  const rect = element.getBoundingClientRect();
-                  return rect.width > 0 && rect.height > 0;
-                },
-              ).length,
+              visibleLinks: [...document.querySelectorAll('a, button')].filter((element) => {
+                const rect = element.getBoundingClientRect();
+                return rect.width > 0 && rect.height > 0;
+              }).length,
               overflowers,
             };
           });
@@ -93,16 +87,10 @@ test.describe('Visual quality smoke', () => {
           expect(layoutMetrics.visibleLinks).toBeGreaterThan(0);
           expect(
             layoutMetrics.scrollWidth,
-            `Horizontal overflow on ${route.path} (${viewport.label}). Top overflowers: ${JSON.stringify(layoutMetrics.overflowers, null, 2)}`,
+            `Horizontal overflow on ${route.path} (${viewport.label}). Top overflowers: ${JSON.stringify(layoutMetrics.overflowers, null, 2)}`
           ).toBeLessThanOrEqual(layoutMetrics.clientWidth + 1);
-          expect(
-            failedImages,
-            `Broken images on ${route.path} (${viewport.label})`,
-          ).toEqual([]);
-          expect(
-            consoleErrors,
-            `Console errors on ${route.path} (${viewport.label})`,
-          ).toEqual([]);
+          expect(failedImages, `Broken images on ${route.path} (${viewport.label})`).toEqual([]);
+          expect(consoleErrors, `Console errors on ${route.path} (${viewport.label})`).toEqual([]);
 
           const screenshot = await page.screenshot({ fullPage: true });
           await testInfo.attach(`${route.label}-${viewport.label}`, {

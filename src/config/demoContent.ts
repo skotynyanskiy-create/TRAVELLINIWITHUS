@@ -442,26 +442,8 @@ export const DEMO_PRODUCTS = [
     ],
     relatedProductIds: [
       'guida-premium-giappone',
-      'guida-premium-puglia',
+      'guida-premium-puglia-slow',
       'bundle-premium-itinerari',
-    ],
-    reviews: [
-      {
-        rating: 5,
-        author: 'Giulia M.',
-        comment:
-          'Usata per un weekend in Val di Funes. Finalmente una guida che seleziona davvero.',
-      },
-      {
-        rating: 5,
-        author: 'Luca R.',
-        comment: 'Gli indirizzi food in valle sono oro. Zero tempo perso a cercare.',
-      },
-      {
-        rating: 4,
-        author: 'Chiara B.',
-        comment: 'Chiara e ben scritta. Aggiungerei qualche alternativa pioggia.',
-      },
     ],
   },
   {
@@ -501,24 +483,6 @@ export const DEMO_PRODUCTS = [
       'guida-premium-islanda',
       'bundle-premium-itinerari',
     ],
-    reviews: [
-      {
-        rating: 5,
-        author: 'Marco T.',
-        comment:
-          'Il JR Pass spiegato finalmente in modo umano. Mi ha fatto risparmiare giorni di ricerche.',
-      },
-      {
-        rating: 5,
-        author: 'Elena S.',
-        comment: 'Gli indirizzi food sono perfetti: niente trappole per turisti.',
-      },
-      {
-        rating: 5,
-        author: 'Andrea P.',
-        comment: 'Usato per novembre: koyo incredibile, crowds gestibili. Consigliato.',
-      },
-    ],
   },
   {
     id: 'guida-premium-islanda',
@@ -550,23 +514,11 @@ export const DEMO_PRODUCTS = [
       'guida-premium-giappone',
       'bundle-premium-itinerari',
     ],
-    reviews: [
-      {
-        rating: 5,
-        author: 'Sara V.',
-        comment: 'La parte "piano B meteo" mi ha salvato tre giorni di viaggio.',
-      },
-      {
-        rating: 4,
-        author: 'Davide L.',
-        comment: 'Ottima. I costi carburante erano aggiornati al mese giusto.',
-      },
-    ],
   },
   {
-    id: 'guida-premium-puglia',
-    slug: 'guida-premium-puglia',
-    name: 'Puglia slow: masserie, borghi e tavole',
+    id: 'guida-premium-puglia-slow',
+    slug: 'guida-premium-puglia-slow',
+    name: 'Guida Premium Puglia Slow',
     price: 24.9,
     isDigital: true,
     imageUrl:
@@ -686,7 +638,7 @@ export const DEMO_PRODUCTS = [
       Pagine: '24',
       Lingua: 'Italiano',
     },
-    relatedProductIds: ['weekend-firenze', 'weekend-lisbona', 'guida-premium-puglia'],
+    relatedProductIds: ['weekend-firenze', 'weekend-lisbona', 'guida-premium-puglia-slow'],
   },
   {
     id: 'weekend-firenze',
@@ -711,7 +663,7 @@ export const DEMO_PRODUCTS = [
       Pagine: '22',
       Lingua: 'Italiano',
     },
-    relatedProductIds: ['weekend-roma', 'weekend-lisbona', 'guida-premium-puglia'],
+    relatedProductIds: ['weekend-roma', 'weekend-lisbona', 'guida-premium-puglia-slow'],
   },
   {
     id: 'weekend-lisbona',
@@ -768,19 +720,7 @@ export const DEMO_PRODUCTS = [
       'guida-premium-dolomiti',
       'guida-premium-giappone',
       'guida-premium-islanda',
-      'guida-premium-puglia',
-    ],
-    reviews: [
-      {
-        rating: 5,
-        author: 'Francesca D.',
-        comment: 'Il bundle ha senso: li ho usati tutti e quattro nell’arco di un anno.',
-      },
-      {
-        rating: 5,
-        author: 'Roberto C.',
-        comment: 'Prezzo onesto, zero filler. Si vede che sono stati scritti viaggiando.',
-      },
+      'guida-premium-puglia-slow',
     ],
   },
   {
@@ -809,6 +749,7 @@ export const DEMO_PRODUCTS = [
 ];
 
 // Manteniamo questi export per compatibilità con altre parti del sito
-export const DEMO_PRODUCT_SLUG = DEMO_PRODUCTS[0].slug;
-export const DEMO_PRODUCT = DEMO_PRODUCTS[0];
+export const DEMO_PRODUCT_SLUG = 'guida-premium-puglia-slow';
+export const DEMO_PRODUCT =
+  DEMO_PRODUCTS.find((product) => product.slug === DEMO_PRODUCT_SLUG) ?? DEMO_PRODUCTS[0];
 export const DEMO_PRODUCT_PATH = `/shop/${DEMO_PRODUCT_SLUG}`;

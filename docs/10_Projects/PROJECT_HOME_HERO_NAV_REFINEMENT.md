@@ -219,6 +219,17 @@ Decisione: la nav smette di comprimere tutto dentro `Esplora` + `Risorse`.
 - `Pianifica` diventa il funnel operativo: `Inizia da qui`, `Risorse`, `Dove dormire`
 - il cambio serve a rendere leggibile la differenza tra ispirazione, contenuto pratico e workflow di organizzazione
 
+## Build pass 2026-04-27 - V1 rebuild forte
+
+Decisione: per il lancio V1 la navigazione diventa piu diretta e meno astratta.
+
+- nav primaria: `Destinazioni`, `Guide`, `Itinerari`, `Dove dormire`, `Risorse`, `Collaborazioni`
+- rimossa la voce `Travel tips`
+- `Shop` resta fuori dalla nav finche non esistono prodotti reali acquistabili e consegnabili
+- home orientata al cluster Puglia/Italia con CTA `Inizia dalla Puglia`
+- B2B separato in CTA dedicata e fascia finale, senza loghi partner non verificati
+- `PartnerLogos` non mostra piu fallback demo: renderizza solo liste partner reali passate come prop
+
 ## Build pass 2026-04-24 - senior UI polish (homepage + footer)
 
 Revisione editoriale premium (no redesign) focalizzata su contrast, gerarchia e dedupe navigazionale. Tutti i gate verdi (`typecheck`, `audit:ui` 11/0 new, `build` OK in 20s).

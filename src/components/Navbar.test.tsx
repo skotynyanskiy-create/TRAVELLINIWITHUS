@@ -19,14 +19,17 @@ describe('Navbar Component', () => {
     });
   });
 
-  it('exposes the five primary nav voices', async () => {
-    const { getAllByText } = render(<Navbar />);
+  it('exposes the V1 primary nav voices', async () => {
+    const { getAllByText, queryByText } = render(<Navbar />);
     await waitFor(() => {
       expect(getAllByText(/^Destinazioni$/i).length).toBeGreaterThan(0);
-      expect(getAllByText(/^Travel tips$/i).length).toBeGreaterThan(0);
+      expect(getAllByText(/^Guide$/i).length).toBeGreaterThan(0);
+      expect(getAllByText(/^Itinerari$/i).length).toBeGreaterThan(0);
       expect(getAllByText(/^Dove dormire$/i).length).toBeGreaterThan(0);
-      expect(getAllByText(/^Shop$/i).length).toBeGreaterThan(0);
-      expect(getAllByText(/^Chi siamo$/i).length).toBeGreaterThan(0);
+      expect(getAllByText(/^Risorse$/i).length).toBeGreaterThan(0);
+      expect(getAllByText(/^Collaborazioni$/i).length).toBeGreaterThan(0);
+      expect(queryByText(/^Travel tips$/i)).not.toBeInTheDocument();
+      expect(queryByText(/^Shop$/i)).not.toBeInTheDocument();
     });
   });
 });

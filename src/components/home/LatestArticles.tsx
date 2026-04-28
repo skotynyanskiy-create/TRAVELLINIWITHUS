@@ -116,15 +116,9 @@ export default function LatestArticles() {
           <div className="hidden items-center gap-4 sm:flex">
             <Link
               to="/guide"
-              className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-black/62 transition-transform hover:translate-x-0.5 hover:text-[var(--color-accent-text)]"
-            >
-              Guide pratiche <ArrowRight size={12} />
-            </Link>
-            <Link
-              to="/itinerari"
               className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-transform hover:translate-x-0.5"
             >
-              Itinerari <ArrowRight size={12} />
+              Guide pratiche <ArrowRight size={12} />
             </Link>
           </div>
         </div>

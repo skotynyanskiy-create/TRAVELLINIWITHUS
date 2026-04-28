@@ -36,6 +36,11 @@ const PILLAR_VALIDO: Partial<NormalizedArticle> = {
   ],
   budgetBand: 'Medio',
   tripIntents: ['Cultura', 'Avventura'],
+  shopCta: {
+    productType: 'ebook',
+    productUrl: '/shop/guida-premium-puglia-slow',
+    count: 1,
+  },
 };
 
 // Articolo guide (non-pillar) minimale valido
@@ -121,6 +126,31 @@ describe('validateArticle — guide senza hotel', () => {
       (i) => i.severity === 'error' && i.message.toLowerCase().includes('hotel')
     );
     expect(hotelErrors).toHaveLength(0);
+  });
+});
+
+describe('validateArticle - pillar V1 governance', () => {
+  it('blocca una pillar senza CTA interna', () => {
+    const article: Partial<NormalizedArticle> = { ...PILLAR_VALIDO, shopCta: undefined };
+    const report = validateArticle(article);
+    const err = report.issues.find(
+      (i) => i.field === 'content' && i.severity === 'error' && i.message.includes('Shop CTA')
+    );
+    expect(err).toBeDefined();
+  });
+
+  it('blocca una pillar senza budgetBand', () => {
+    const article: Partial<NormalizedArticle> = { ...PILLAR_VALIDO, budgetBand: undefined };
+    const report = validateArticle(article);
+    const err = report.issues.find((i) => i.field === 'budgetBand' && i.severity === 'error');
+    expect(err).toBeDefined();
+  });
+
+  it('blocca una pillar senza tripIntents', () => {
+    const article: Partial<NormalizedArticle> = { ...PILLAR_VALIDO, tripIntents: [] };
+    const report = validateArticle(article);
+    const err = report.issues.find((i) => i.field === 'tripIntents' && i.severity === 'error');
+    expect(err).toBeDefined();
   });
 });
 

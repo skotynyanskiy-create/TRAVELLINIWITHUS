@@ -32,24 +32,10 @@ const STATIC_PAGE_RESULTS: SearchResult[] = [
     icon: MapPin,
   },
   {
-    id: 'page-esperienze',
-    title: 'Esperienze',
-    category: 'Pagina',
-    link: '/esperienze',
-    icon: Compass,
-  },
-  {
     id: 'page-guide',
     title: 'Guide pratiche',
     category: 'Pagina',
     link: '/guide',
-    icon: BookOpen,
-  },
-  {
-    id: 'page-itinerari',
-    title: 'Itinerari',
-    category: 'Pagina',
-    link: '/itinerari',
     icon: BookOpen,
   },
   {
@@ -58,20 +44,6 @@ const STATIC_PAGE_RESULTS: SearchResult[] = [
     category: 'Pagina',
     link: '/risorse',
     icon: BookOpen,
-  },
-  {
-    id: 'page-inizia-da-qui',
-    title: 'Inizia da qui',
-    category: 'Planning',
-    link: '/inizia-da-qui',
-    icon: BookOpen,
-  },
-  {
-    id: 'page-dove-dormire',
-    title: 'Dove dormire',
-    category: 'Planning',
-    link: '/dove-dormire',
-    icon: MapPin,
   },
   {
     id: 'page-collaborazioni',
