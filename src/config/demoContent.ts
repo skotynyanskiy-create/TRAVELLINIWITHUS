@@ -77,6 +77,55 @@ export const DEMO_DESTINATION_CARD = {
   category: 'Guide',
 };
 
+export const DEMO_DESTINATION_CARDS = [
+  DEMO_DESTINATION_CARD,
+  {
+    id: 'destination-puglia-trulli-masserie',
+    title: 'Puglia: trulli, masserie, mare',
+    image:
+      'https://images.unsplash.com/photo-1499695867787-12ace027e651?q=80&w=1200&auto=format&fit=crop',
+    link: '/guide',
+    region: 'Italia',
+    category: 'Destinazioni',
+  },
+  {
+    id: 'destination-toscana-borghi-nascosti',
+    title: 'Toscana: borghi sospesi nel tempo',
+    image:
+      'https://images.unsplash.com/photo-1516483638261-f40af5aa3463?q=80&w=1200&auto=format&fit=crop',
+    link: '/guide',
+    region: 'Italia',
+    category: 'Posti particolari',
+  },
+  {
+    id: 'destination-costiera-amalfitana',
+    title: 'Costiera Amalfitana fuori stagione',
+    image:
+      'https://images.unsplash.com/photo-1533418264835-9871c7c2dbf0?q=80&w=1200&auto=format&fit=crop',
+    link: '/guide',
+    region: 'Italia',
+    category: 'Weekend & Day trips',
+  },
+  {
+    id: 'destination-nord-delle-filippine',
+    title: 'Nord delle Filippine, lontano dai circuiti',
+    image:
+      'https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?q=80&w=1200&auto=format&fit=crop',
+    link: '/guide',
+    region: 'Asia',
+    category: 'Itinerari completi',
+  },
+  {
+    id: 'destination-islanda-ring-road',
+    title: 'Islanda: Ring Road in autonomia',
+    image:
+      'https://images.unsplash.com/photo-1476610182048-b716b8518aae?q=80&w=1200&auto=format&fit=crop',
+    link: '/guide',
+    region: 'Europa',
+    category: 'Itinerari completi',
+  },
+] as const;
+
 export const DEMO_ARTICLE_MARKER = {
   id: DEMO_ARTICLE_SLUG,
   name: 'Dolomiti',

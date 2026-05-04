@@ -24,6 +24,7 @@ import OptimizedImage from '../components/OptimizedImage';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import Section from '../components/Section';
+import StickyMobileCTA from '../components/StickyMobileCTA';
 import { BRAND_STATS } from '../config/site';
 import AnimatedCounter from '../components/AnimatedCounter';
 import { siteContentDefaults } from '../config/siteContent';
@@ -132,7 +133,10 @@ function FaqSection() {
         </div>
         <div className="space-y-4">
           {FAQ_ITEMS.map((item, idx) => (
-            <div key={item.q} className="overflow-hidden rounded-2xl border border-black/5 bg-white">
+            <div
+              key={item.q}
+              className="overflow-hidden rounded-2xl border border-black/5 bg-white"
+            >
               <button
                 type="button"
                 onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
@@ -153,7 +157,9 @@ function FaqSection() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.24 }}
                   >
-                    <div className="px-6 pb-6 text-base leading-relaxed text-black/70">{item.a}</div>
+                    <div className="px-6 pb-6 text-base leading-relaxed text-black/70">
+                      {item.a}
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -339,8 +345,7 @@ export default function Collaborazioni() {
 
             <div className="relative mb-8 inline-block">
               <h1 className="text-5xl font-serif leading-tight md:text-7xl">
-                {pageContent.heroTitleMain}{' '}
-                <br />
+                {pageContent.heroTitleMain} <br />
                 <span className="italic text-black/60">{pageContent.heroTitleAccent}</span>
               </h1>
               <motion.span
@@ -371,10 +376,20 @@ export default function Collaborazioni() {
             </div>
 
             <div className="flex flex-col gap-4 sm:flex-row">
-              <Button to={pageContent.primaryCtaLink} variant="primary" size="lg" className="px-8 py-4">
+              <Button
+                to={pageContent.primaryCtaLink}
+                variant="primary"
+                size="lg"
+                className="px-8 py-4"
+              >
                 {pageContent.primaryCtaLabel} <ArrowRight size={18} />
               </Button>
-              <Button to={pageContent.secondaryCtaLink} variant="outline" size="lg" className="px-8 py-4">
+              <Button
+                to={pageContent.secondaryCtaLink}
+                variant="outline"
+                size="lg"
+                className="px-8 py-4"
+              >
                 {pageContent.secondaryCtaLabel}
               </Button>
             </div>
@@ -450,8 +465,8 @@ export default function Collaborazioni() {
             </span>
             <h2 className="mb-4 text-4xl font-serif">Con chi lavoriamo meglio</h2>
             <p className="text-lg text-black/70">
-              Restiamo aperti a progetti diversi, ma lavoriamo meglio quando c'è identità, contesto e una
-              storia che vale la pena raccontare.
+              Restiamo aperti a progetti diversi, ma lavoriamo meglio quando c'è identità, contesto
+              e una storia che vale la pena raccontare.
             </p>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -544,13 +559,16 @@ export default function Collaborazioni() {
             </span>
             <h2 className="mb-4 text-4xl font-serif">Quello che non facciamo</h2>
             <p className="mx-auto max-w-2xl text-lg text-black/70">
-              Mettere dei confini non ci rende rigidi: rende più pulita la collaborazione e più forte il
-              contenuto finale.
+              Mettere dei confini non ci rende rigidi: rende più pulita la collaborazione e più
+              forte il contenuto finale.
             </p>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             {ANTI_TARGETS.map((item) => (
-              <div key={item} className="flex gap-3 rounded-2xl border border-black/5 bg-white px-5 py-5">
+              <div
+                key={item}
+                className="flex gap-3 rounded-2xl border border-black/5 bg-white px-5 py-5"
+              >
                 <CheckCircle size={18} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
                 <p className="text-black/72">{item}</p>
               </div>
@@ -590,8 +608,16 @@ export default function Collaborazioni() {
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             {pageContent.collaborationFormats.map((format, index) => {
               const isHighlighted = format.highlight === 'true';
-              const ctaTargets = [pageContent.primaryCtaLink, pageContent.primaryCtaLink, pageContent.secondaryCtaLink];
-              const ctaLabels = ['Apri il media kit', 'Richiedi il media kit', 'Scrivici il progetto'];
+              const ctaTargets = [
+                pageContent.primaryCtaLink,
+                pageContent.primaryCtaLink,
+                pageContent.secondaryCtaLink,
+              ];
+              const ctaLabels = [
+                'Apri il media kit',
+                'Richiedi il media kit',
+                'Scrivici il progetto',
+              ];
 
               return (
                 <div
@@ -639,8 +665,8 @@ export default function Collaborazioni() {
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 text-4xl font-serif">Se ha senso, costruiamolo bene.</h2>
           <p className="mb-10 text-lg text-black/70">
-            Parti dal media kit se vuoi orientarti in modo ordinato, oppure scrivici direttamente se hai
-            già una proposta chiara.
+            Parti dal media kit se vuoi orientarti in modo ordinato, oppure scrivici direttamente se
+            hai già una proposta chiara.
           </p>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Button to="/media-kit" variant="cta" size="lg" className="px-10 py-5">
@@ -652,6 +678,12 @@ export default function Collaborazioni() {
           </div>
         </div>
       </Section>
+
+      <StickyMobileCTA
+        label="Richiedi una proposta"
+        to="/contatti?topic=collab"
+        trackingId="collaborazioni_sticky_mobile"
+      />
     </PageLayout>
   );
 }

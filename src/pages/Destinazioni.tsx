@@ -25,7 +25,7 @@ import PageLayout from '../components/PageLayout';
 import Pagination from '../components/Pagination';
 import Section from '../components/Section';
 import SEO from '../components/SEO';
-import { DEMO_DESTINATION_CARD } from '../config/demoContent';
+import { DEMO_DESTINATION_CARD, DEMO_DESTINATION_CARDS } from '../config/demoContent';
 import {
   DESTINATION_GROUPS,
   EXPERIENCE_TYPES,
@@ -67,7 +67,9 @@ const TRUST_STRIP = [
 ];
 
 function uniqueValues(items: Array<string | undefined>) {
-  return Array.from(new Set(items.filter((item): item is string => Boolean(item && item !== 'Da definire'))));
+  return Array.from(
+    new Set(items.filter((item): item is string => Boolean(item && item !== 'Da definire')))
+  );
 }
 
 function getDemoArchiveItem(): ArchiveItem {
@@ -91,6 +93,105 @@ function getDemoArchiveItem(): ArchiveItem {
     budget: 'Medio',
     duration: 'Weekend lungo',
   };
+}
+
+const EDITORIAL_SEED_OVERRIDES: Record<string, Partial<ArchiveItem>> = {
+  'destination-puglia-trulli-masserie': {
+    excerpt: 'Trulli, masserie e calette nascoste oltre i circuiti turistici classici.',
+    country: 'Italia',
+    region: 'Puglia',
+    city: 'Alberobello, Polignano',
+    continent: 'Europa',
+    destinationGroup: 'Italia',
+    experienceTypes: ["Borghi e città d'arte", 'Food & Ristoranti'],
+    primaryExperience: "Borghi e città d'arte",
+    period: 'Maggio - Settembre',
+    budget: 'Medio',
+    duration: 'Settimana',
+  },
+  'destination-toscana-borghi-nascosti': {
+    excerpt:
+      'Borghi sospesi nel tempo lontano dalle rotte di massa: Lucignano, Pitigliano, Casentino.',
+    country: 'Italia',
+    region: 'Toscana',
+    city: 'Pitigliano, Lucignano',
+    continent: 'Europa',
+    destinationGroup: 'Italia',
+    experienceTypes: ['Posti particolari', "Borghi e città d'arte"],
+    primaryExperience: 'Posti particolari',
+    period: "Tutto l'anno",
+    budget: 'Medio',
+    duration: 'Weekend lungo',
+  },
+  'destination-costiera-amalfitana': {
+    excerpt:
+      'Costiera vissuta fuori stagione: calette intime, ristoranti fidati e sentieri panoramici.',
+    country: 'Italia',
+    region: 'Campania',
+    city: 'Positano, Amalfi, Ravello',
+    continent: 'Europa',
+    destinationGroup: 'Italia',
+    experienceTypes: ['Weekend romantici', 'Passeggiate panoramiche'],
+    primaryExperience: 'Weekend romantici',
+    period: 'Aprile - Giugno, Settembre',
+    budget: 'Alto',
+    duration: 'Weekend lungo',
+  },
+  'destination-nord-delle-filippine': {
+    excerpt:
+      'Itinerario reale dal caos di Manila ai terrazzamenti di Banaue, fuori dai circuiti turistici.',
+    country: 'Filippine',
+    region: 'Luzon',
+    city: 'Banaue, Sagada',
+    continent: 'Asia',
+    destinationGroup: 'Asia',
+    experienceTypes: ['Esperienze insolite', 'Passeggiate panoramiche'],
+    primaryExperience: 'Esperienze insolite',
+    period: 'Novembre - Aprile',
+    budget: 'Medio',
+    duration: 'Due settimane',
+  },
+  'destination-islanda-ring-road': {
+    excerpt: 'Ring Road in autonomia: come pianificare tappe, alloggi e meteo senza tour guidati.',
+    country: 'Islanda',
+    region: "Tutta l'isola",
+    city: 'Reykjavik, Vik, Hofn',
+    continent: 'Europa',
+    destinationGroup: 'Europa',
+    experienceTypes: ['Itinerari completi', 'Passeggiate panoramiche'],
+    primaryExperience: 'Passeggiate panoramiche',
+    period: 'Giugno - Agosto',
+    budget: 'Alto',
+    duration: 'Due settimane',
+  },
+};
+
+function getEditorialSeedItems(): ArchiveItem[] {
+  return DEMO_DESTINATION_CARDS.map((card) => {
+    if (card.id === DEMO_DESTINATION_CARD.id) return getDemoArchiveItem();
+    const override = EDITORIAL_SEED_OVERRIDES[card.id] || {};
+    return {
+      id: card.id,
+      title: card.title,
+      excerpt:
+        override.excerpt ||
+        "Destinazione editoriale curata mentre l'archivio si popola di contenuti reali.",
+      image: card.image,
+      link: card.link,
+      category: card.category,
+      country: override.country || 'Italia',
+      region: override.region || '—',
+      city: override.city || '',
+      continent: override.continent || 'Europa',
+      location: [override.country, override.region, override.city].filter(Boolean).join(', '),
+      destinationGroup: override.destinationGroup || 'Italia',
+      experienceTypes: override.experienceTypes || ['Posti particolari'],
+      primaryExperience: override.primaryExperience || 'Posti particolari',
+      period: override.period || "Tutto l'anno",
+      budget: override.budget || 'Medio',
+      duration: override.duration || 'Weekend lungo',
+    };
+  });
 }
 
 function FilterButton({
@@ -140,9 +241,7 @@ function ArchiveCard({ item, isDemo }: { item: ArchiveItem; isDemo: boolean }) {
             </span>
           )}
           {item.primaryExperience && ExpIcon && (
-            <span
-              className="inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-black/70 backdrop-blur"
-            >
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-black/70 backdrop-blur">
               <ExpIcon size={12} style={{ color: visual.color }} />
               {item.primaryExperience}
             </span>
@@ -170,7 +269,8 @@ function ArchiveCard({ item, isDemo }: { item: ArchiveItem; isDemo: boolean }) {
             'Un contenuto da salvare per capire atmosfera, logistica e dettagli utili prima di partire.'}
         </p>
         <div className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">
-          Leggi e salva <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+          Leggi e salva{' '}
+          <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
         </div>
       </div>
     </Link>
@@ -202,7 +302,7 @@ export default function Destinazioni() {
       .filter((item) => item.destinationGroup !== 'Altro');
 
     if (mapped.length > 0) return mapped;
-    return demoSettings.showDestinationDemo ? [getDemoArchiveItem()] : [];
+    return demoSettings.showDestinationDemo ? getEditorialSeedItems() : [];
   }, [articles, demoSettings.showDestinationDemo]);
 
   const mapMarkers = useMemo(
@@ -223,7 +323,12 @@ export default function Destinazioni() {
 
   const availableRegions = useMemo(() => {
     if (selectedGroup !== 'Italia') return ['Tutti'];
-    return ['Tutti', ...uniqueValues(archiveItems.filter((item) => item.country === 'Italia').map((item) => item.region))];
+    return [
+      'Tutti',
+      ...uniqueValues(
+        archiveItems.filter((item) => item.country === 'Italia').map((item) => item.region)
+      ),
+    ];
   }, [archiveItems, selectedGroup]);
 
   const availableCities = useMemo(() => {
@@ -238,9 +343,18 @@ export default function Destinazioni() {
     ];
   }, [archiveItems, selectedGroup, selectedRegion]);
 
-  const availablePeriods = useMemo(() => ['Tutti', ...uniqueValues(archiveItems.map((item) => item.period))], [archiveItems]);
-  const availableBudgets = useMemo(() => ['Tutti', ...uniqueValues(archiveItems.map((item) => item.budget))], [archiveItems]);
-  const availableDurations = useMemo(() => ['Tutti', ...uniqueValues(archiveItems.map((item) => item.duration))], [archiveItems]);
+  const availablePeriods = useMemo(
+    () => ['Tutti', ...uniqueValues(archiveItems.map((item) => item.period))],
+    [archiveItems]
+  );
+  const availableBudgets = useMemo(
+    () => ['Tutti', ...uniqueValues(archiveItems.map((item) => item.budget))],
+    [archiveItems]
+  );
+  const availableDurations = useMemo(
+    () => ['Tutti', ...uniqueValues(archiveItems.map((item) => item.duration))],
+    [archiveItems]
+  );
 
   const filteredItems = useMemo(
     () =>
@@ -282,7 +396,8 @@ export default function Destinazioni() {
     return filteredItems.slice(startIndex, startIndex + ITEMS_PER_PAGE);
   }, [filteredItems, currentPage]);
 
-  const activeGroupImage = GROUP_VISUALS[selectedGroup === 'Tutti' ? 'Italia' : selectedGroup] || GROUP_VISUALS.Italia;
+  const activeGroupImage =
+    GROUP_VISUALS[selectedGroup === 'Tutti' ? 'Italia' : selectedGroup] || GROUP_VISUALS.Italia;
   const hasActiveFilters =
     selectedGroup !== 'Tutti' ||
     selectedExperience !== 'Tutti' ||
@@ -291,7 +406,12 @@ export default function Destinazioni() {
     selectedPeriod !== 'Tutti' ||
     selectedBudget !== 'Tutti' ||
     selectedDuration !== 'Tutti';
-  const usingDemo = archiveItems.length === 1 && archiveItems[0]?.id === DEMO_DESTINATION_CARD.id;
+  const editorialSeedIds = useMemo(
+    () => new Set(DEMO_DESTINATION_CARDS.map((card) => card.id)),
+    []
+  );
+  const usingDemo =
+    archiveItems.length > 0 && archiveItems.every((item) => editorialSeedIds.has(item.id));
 
   const updateSearch = (updates: Record<string, string | null>) => {
     setCurrentPage(1);
@@ -332,7 +452,12 @@ export default function Destinazioni() {
             '@type': 'BreadcrumbList',
             itemListElement: [
               { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
-              { '@type': 'ListItem', position: 2, name: 'Destinazioni', item: `${SITE_URL}/destinazioni` },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Destinazioni',
+                item: `${SITE_URL}/destinazioni`,
+              },
             ],
           },
         }}
@@ -372,7 +497,10 @@ export default function Destinazioni() {
 
           <div className="mt-10 grid max-w-4xl gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {TRUST_STRIP.map((item) => (
-              <div key={item} className="rounded-2xl border border-white/12 bg-white/10 p-4 backdrop-blur">
+              <div
+                key={item}
+                className="rounded-2xl border border-white/12 bg-white/10 p-4 backdrop-blur"
+              >
                 <ShieldCheck size={16} className="mb-3 text-[var(--color-accent)]" />
                 <p className="text-xs font-semibold leading-relaxed text-white/75">{item}</p>
               </div>
@@ -462,7 +590,9 @@ export default function Destinazioni() {
 
           <div className="space-y-5">
             <div>
-              <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/45">Area</span>
+              <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/45">
+                Area
+              </span>
               <div className="flex gap-2 overflow-x-auto pb-1">
                 {['Tutti', ...DESTINATION_GROUPS].map((group) => (
                   <FilterButton
@@ -539,9 +669,27 @@ export default function Destinazioni() {
 
             <div className="grid gap-5 lg:grid-cols-3">
               {[
-                { label: 'Periodo', key: 'period', value: selectedPeriod, values: availablePeriods, icon: CalendarDays },
-                { label: 'Budget', key: 'budget', value: selectedBudget, values: availableBudgets, icon: Wallet },
-                { label: 'Durata', key: 'duration', value: selectedDuration, values: availableDurations, icon: Clock3 },
+                {
+                  label: 'Periodo',
+                  key: 'period',
+                  value: selectedPeriod,
+                  values: availablePeriods,
+                  icon: CalendarDays,
+                },
+                {
+                  label: 'Budget',
+                  key: 'budget',
+                  value: selectedBudget,
+                  values: availableBudgets,
+                  icon: Wallet,
+                },
+                {
+                  label: 'Durata',
+                  key: 'duration',
+                  value: selectedDuration,
+                  values: availableDurations,
+                  icon: Clock3,
+                },
               ].map(({ label, key, value, values, icon: Icon }) => (
                 <div key={key}>
                   <span className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-black/45">
@@ -612,15 +760,18 @@ export default function Destinazioni() {
                     exit={{ opacity: 0, scale: 0.96 }}
                     transition={{ duration: 0.35 }}
                   >
-                    <ArchiveCard item={item} isDemo={usingDemo && item.id === DEMO_DESTINATION_CARD.id} />
+                    <ArchiveCard item={item} isDemo={usingDemo && editorialSeedIds.has(item.id)} />
                   </motion.div>
                 ))}
               </AnimatePresence>
             </motion.div>
-            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
           </>
         )}
-
       </Section>
 
       <Section className="!py-20">

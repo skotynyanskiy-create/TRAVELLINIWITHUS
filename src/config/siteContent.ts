@@ -410,7 +410,8 @@ export const siteContentDefaults: SiteContentMap = {
     emailCardDescription: 'Per proposte commerciali, richieste strutturate e media kit.',
     emailCardLinkLabel: 'Apri il media kit',
     whatsappCardTitle: 'WhatsApp',
-    whatsappCardDescription: 'Ideale per richieste rapide o per capire se ha senso fissare una call.',
+    whatsappCardDescription:
+      'Ideale per richieste rapide o per capire se ha senso fissare una call.',
     helperTitle: 'Per aiutarci a risponderti meglio',
     helperItems: [
       'Se ci scrivi per una collaborazione, indica brand o struttura, obiettivo e periodo indicativo.',
@@ -443,7 +444,7 @@ export const siteContentDefaults: SiteContentMap = {
   },
   demo: {
     showEditorialDemo: false,
-    showDestinationDemo: false,
+    showDestinationDemo: true,
     showShopDemo: false,
     showDemoBadges: false,
   },
@@ -497,7 +498,11 @@ const textareaField = (key: string, label: string, rows = 4): SiteContentFieldDe
   rows,
 });
 
-const stringListField = (key: string, label: string, itemLabel: string): SiteContentFieldDefinition => ({
+const stringListField = (
+  key: string,
+  label: string,
+  itemLabel: string
+): SiteContentFieldDefinition => ({
   key,
   label,
   type: 'string-list',
@@ -570,10 +575,22 @@ export const siteContentDefinitions: SiteContentDefinition[] = [
       textField('quoteAuthor', 'Autore citazione'),
       textField('focusTitle', 'Titolo focus'),
       textField('focusSubtitle', 'Sottotitolo focus'),
-      { key: 'focusAreas', label: 'Aree focus', type: 'object-list', itemLabel: 'Area', fields: cardFields },
+      {
+        key: 'focusAreas',
+        label: 'Aree focus',
+        type: 'object-list',
+        itemLabel: 'Area',
+        fields: cardFields,
+      },
       textField('principlesTitle', 'Titolo valori'),
       textField('principlesSubtitle', 'Sottotitolo valori'),
-      { key: 'principles', label: 'Valori', type: 'object-list', itemLabel: 'Valore', fields: cardFields },
+      {
+        key: 'principles',
+        label: 'Valori',
+        type: 'object-list',
+        itemLabel: 'Valore',
+        fields: cardFields,
+      },
       textField('audienceTitle', 'Titolo pubblico'),
       textareaField('audienceDescription', 'Descrizione pubblico', 3),
       stringListField('audienceItems', 'Punti pubblico', 'Punto'),
@@ -623,7 +640,13 @@ export const siteContentDefinitions: SiteContentDefinition[] = [
       },
       textField('partnerTitle', 'Titolo partner ideali'),
       textareaField('partnerDescription', 'Descrizione partner ideali'),
-      { key: 'partnerTypes', label: 'Tipi partner', type: 'object-list', itemLabel: 'Partner', fields: cardFields },
+      {
+        key: 'partnerTypes',
+        label: 'Tipi partner',
+        type: 'object-list',
+        itemLabel: 'Partner',
+        fields: cardFields,
+      },
       textField('formatsTitle', 'Titolo formati collaborazione'),
       textareaField('formatsDescription', 'Descrizione formati collaborazione'),
       {
