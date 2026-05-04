@@ -14,6 +14,9 @@ export default defineConfig(({ mode }) => {
       VitePWA({
         registerType: 'autoUpdate',
         includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
+        // Disable PWA service worker in dev so HMR-updated bundles never get
+        // shadowed by a stale precache. Re-enabled automatically in build.
+        disable: mode !== 'production',
         manifest: {
           name: 'Travelliniwithus',
           short_name: 'Travellini',
@@ -37,6 +40,8 @@ export default defineConfig(({ mode }) => {
         },
         workbox: {
           maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
+          clientsClaim: true,
+          skipWaiting: true,
         },
       }),
     ],
