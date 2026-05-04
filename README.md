@@ -43,6 +43,20 @@ npm install
 npm run dev
 ```
 
+## Local environment setup
+
+Copy `.env.example` to `.env`. The site runs with zero keys configured (every integration self-disables silently), but the following keys unlock real behavior in dev:
+
+| Key                                                        | Purpose                                           | Without it                                                                                                              |
+| ---------------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `VITE_MAPBOX_TOKEN`                                        | Renders `/mappa` tiles                            | Map appears black, console errors. Get one at https://account.mapbox.com/access-tokens                                  |
+| `BREVO_API_KEY` + `BREVO_LIST_ID`                          | Forwards newsletter signups to Brevo              | Form still collects, falls back to localStorage `twu_newsletter_leads`. Keys at https://app.brevo.com/settings/keys/api |
+| `RESEND_API_KEY`                                           | Sends transactional email for `/api/contact-lead` | Lead saved server-side and to localStorage `twu_contact_leads`, no email sent. Keys at https://resend.com/api-keys      |
+| `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET`              | Real Stripe checkout & webhooks                   | Set `ALLOW_MOCK_CHECKOUT=true` to bypass with mock checkout in dev                                                      |
+| `VITE_GA_ID`, `VITE_META_PIXEL_ID`, `VITE_TIKTOK_PIXEL_ID` | Analytics & ad pixels (consent-gated)             | No tracking, banner still appears                                                                                       |
+
+Never commit `.env`. `.env.example` is the only env file checked in.
+
 ## Setup on a second PC
 
 Clone only the canonical repository:

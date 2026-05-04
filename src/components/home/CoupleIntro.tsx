@@ -9,7 +9,7 @@ const METHOD_STANDARDS = [
   {
     icon: MapPinned,
     title: 'Provato sul posto',
-    text: 'Atmosfera, zona, logistica e tempi filtrati da chi c e stato davvero.',
+    text: 'Atmosfera, zona, logistica e tempi filtrati da chi c’è stato davvero.',
   },
   {
     icon: Camera,
@@ -73,12 +73,14 @@ export default function CoupleIntro() {
               <span className="text-[var(--color-accent)]"> Solo dopo consigliamo.</span>
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-black/65 md:text-lg">
-              Travelliniwithus non nasce per mostrare più posti possibile. Nasce per selezionare quelli
-              che meritano davvero, con un racconto abbastanza concreto da aiutarti a decidere.
+              Travelliniwithus non nasce per mostrare più posti possibile. Nasce per selezionare
+              quelli che meritano davvero, con un racconto abbastanza concreto da aiutarti a
+              decidere.
             </p>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/65 md:text-lg">
-              Rodrigo e Betta tengono insieme sguardo personale, immagini, ricerca e dettagli pratici:
-              e questo che rende il progetto utile sia per chi legge sia per i partner giusti.
+              Rodrigo e Betta tengono insieme sguardo personale, immagini, ricerca e dettagli
+              pratici: e questo che rende il progetto utile sia per chi legge sia per i partner
+              giusti.
             </p>
 
             <div className="mt-7 grid gap-3 md:grid-cols-3">
@@ -86,7 +88,10 @@ export default function CoupleIntro() {
                 const Icon = standard.icon;
 
                 return (
-                  <div key={standard.title} className="rounded-lg border border-black/8 bg-white/70 p-4">
+                  <div
+                    key={standard.title}
+                    className="rounded-lg border border-black/8 bg-white/70 p-4"
+                  >
                     <Icon size={18} className="text-[var(--color-accent)]" />
                     <h3 className="mt-3 text-sm font-bold text-ink">{standard.title}</h3>
                     <p className="mt-2 text-xs leading-relaxed text-black/55">{standard.text}</p>
