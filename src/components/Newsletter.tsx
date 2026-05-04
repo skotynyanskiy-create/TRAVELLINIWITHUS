@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { CheckCircle, Gift, Loader2, Mail, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { trackEvent } from '../services/analytics';
+import { appendLeadFallback } from '../lib/leadFallback';
 import Button from './Button';
 
 type NewsletterVariant = 'sand' | 'white' | 'editorial' | 'compact' | 'article' | 'business';
@@ -183,17 +184,18 @@ export default function Newsletter({
         setTimeout(onSuccess, 1200);
       }
     } catch {
-      // Fallback: salva in localStorage quando l'API non è configurata
-      try {
-        const stored = JSON.parse(localStorage.getItem('twu_newsletter_leads') || '[]');
-        stored.push({ email: normalizedEmail, source, date: new Date().toISOString() });
-        localStorage.setItem('twu_newsletter_leads', JSON.stringify(stored));
+      const saved = appendLeadFallback('twu_newsletter_leads', {
+        email: normalizedEmail,
+        source,
+        date: new Date().toISOString(),
+      });
+      if (saved) {
         trackEvent('newsletter_signup', { source, fallback: 'localStorage' });
         setIsSubscribed(true);
         if (onSuccess) {
           setTimeout(onSuccess, 2000);
         }
-      } catch {
+      } else {
         setError(
           'Iscrizione non riuscita. Riprova tra poco oppure scrivici direttamente via email.'
         );

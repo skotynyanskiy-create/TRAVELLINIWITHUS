@@ -11,6 +11,7 @@ import { CONTACTS, SOCIAL_COLORS } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { trackEvent } from '../services/analytics';
+import { appendLeadFallback } from '../lib/leadFallback';
 
 export default function Contatti() {
   const { data: content } = useSiteContent('contact');
@@ -118,20 +119,18 @@ export default function Contatti() {
       trackEvent('contact_submit_success', { topic: formData.topic });
       setIsSubmitted(true);
     } catch {
-      // Fallback: salva in localStorage quando l'API non è configurata
-      try {
-        const stored = JSON.parse(localStorage.getItem('twu_contact_leads') || '[]');
-        stored.push({
-          name: formData.name.trim(),
-          email: formData.email.trim(),
-          topic: formData.topic,
-          message: formData.message.trim(),
-          date: new Date().toISOString(),
-        });
-        localStorage.setItem('twu_contact_leads', JSON.stringify(stored));
+      // Bounded fallback: append to localStorage capped at 50 entries / 14 days
+      const saved = appendLeadFallback('twu_contact_leads', {
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        topic: formData.topic,
+        message: formData.message.trim(),
+        date: new Date().toISOString(),
+      });
+      if (saved) {
         trackEvent('contact_submit_success', { topic: formData.topic, fallback: 'localStorage' });
         setIsSubmitted(true);
-      } catch {
+      } else {
         setSubmitError(
           `Non siamo riusciti a inviare il messaggio. Puoi scriverci direttamente a ${CONTACTS.email}.`
         );

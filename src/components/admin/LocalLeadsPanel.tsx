@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Download, HardDriveDownload, Trash2 } from 'lucide-react';
+import { clearLeadFallback, readLeadFallback } from '../../lib/leadFallback';
 
-interface ContactLead {
+interface ContactLead extends Record<string, unknown> {
   name: string;
   email: string;
   topic: string;
@@ -9,7 +10,7 @@ interface ContactLead {
   date: string;
 }
 
-interface NewsletterLead {
+interface NewsletterLead extends Record<string, unknown> {
   email: string;
   source: string;
   date: string;
@@ -24,16 +25,10 @@ const CONTACT_KEY = 'twu_contact_leads';
 const NEWSLETTER_KEY = 'twu_newsletter_leads';
 
 function readLeads(): LeadsBundle {
-  if (typeof window === 'undefined') {
-    return { contact: [], newsletter: [] };
-  }
-  try {
-    const contact = JSON.parse(localStorage.getItem(CONTACT_KEY) || '[]') as ContactLead[];
-    const newsletter = JSON.parse(localStorage.getItem(NEWSLETTER_KEY) || '[]') as NewsletterLead[];
-    return { contact, newsletter };
-  } catch {
-    return { contact: [], newsletter: [] };
-  }
+  return {
+    contact: readLeadFallback<ContactLead>(CONTACT_KEY),
+    newsletter: readLeadFallback<NewsletterLead>(NEWSLETTER_KEY),
+  };
 }
 
 function toCsv(rows: Record<string, unknown>[]): string {
@@ -75,21 +70,21 @@ export default function LocalLeadsPanel() {
   const exportContact = () => {
     downloadCsv(
       `twu-contact-leads-${new Date().toISOString().slice(0, 10)}.csv`,
-      toCsv(leads.contact as unknown as Record<string, unknown>[])
+      toCsv(leads.contact)
     );
   };
 
   const exportNewsletter = () => {
     downloadCsv(
       `twu-newsletter-leads-${new Date().toISOString().slice(0, 10)}.csv`,
-      toCsv(leads.newsletter as unknown as Record<string, unknown>[])
+      toCsv(leads.newsletter)
     );
   };
 
   const clearContact = () => {
     if (!window.confirm('Confermi di voler cancellare i lead contatti salvati su questo browser?'))
       return;
-    localStorage.removeItem(CONTACT_KEY);
+    clearLeadFallback(CONTACT_KEY);
     refresh();
   };
 
@@ -98,7 +93,7 @@ export default function LocalLeadsPanel() {
       !window.confirm('Confermi di voler cancellare i lead newsletter salvati su questo browser?')
     )
       return;
-    localStorage.removeItem(NEWSLETTER_KEY);
+    clearLeadFallback(NEWSLETTER_KEY);
     refresh();
   };
 
