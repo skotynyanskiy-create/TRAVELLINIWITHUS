@@ -8,9 +8,11 @@ import { Link } from 'react-router-dom';
 import Button from '../Button';
 import { CONTACTS, FEATURED_REEL } from '../../config/site';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
+import HeroBackdrop from './HeroBackdrop';
 
 const HERO_IMAGE_DESKTOP = '/images/brand/couple-travel.png';
 const HERO_IMAGE_MOBILE = '/images/hero-amalfi.png';
+const HERO_VIDEO = '/videos/hero.webm';
 const REEL_FALLBACK_IMAGE =
   'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800&auto=format&fit=crop';
 
@@ -203,19 +205,11 @@ export default function HeroSection() {
       ref={heroRef}
       className="relative flex min-h-[92svh] w-full items-center overflow-hidden bg-ink px-6 pb-12 pt-32 text-white md:px-12 md:pb-16 md:pt-28 xl:min-h-[94svh]"
     >
-      <div data-hero-image className="absolute inset-0 z-0">
-        <picture>
-          <source media="(max-width: 768px)" srcSet={HERO_IMAGE_MOBILE} />
-          <img
-            src={HERO_IMAGE_DESKTOP}
-            alt=""
-            aria-hidden="true"
-            fetchPriority="high"
-            className="h-full w-full object-cover object-center brightness-[0.96] saturate-[1.04]"
-            referrerPolicy="no-referrer"
-          />
-        </picture>
-      </div>
+      <HeroBackdrop
+        imageDesktop={HERO_IMAGE_DESKTOP}
+        imageMobile={HERO_IMAGE_MOBILE}
+        videoSrc={HERO_VIDEO}
+      />
 
       <div
         data-hero-overlay
