@@ -4,6 +4,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, BookOpen, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import TiltCard from '../TiltCard';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import {
   DESTINATION_GROUPS,
@@ -80,37 +81,39 @@ function DestinationFeature({ group }: { group: DestinationGroup }) {
   const visual = getDestinationVisual(group);
 
   return (
-    <Link
-      data-discovery-reveal
-      to={`/destinazioni?group=${encodeURIComponent(group)}`}
-      className="group relative min-h-[360px] overflow-hidden rounded-lg bg-ink text-white md:min-h-[500px] lg:col-span-7"
-    >
-      <img
-        src={visual.image}
-        alt=""
-        aria-hidden="true"
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
-        loading="lazy"
-      />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.06)_0%,rgba(0,0,0,0.2)_40%,rgba(0,0,0,0.76)_100%)]" />
-      <div className="relative flex h-full min-h-[360px] flex-col justify-between p-6 md:min-h-[500px] md:p-9">
-        <div className="flex items-center justify-between">
-          <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/78">
-            In evidenza
-          </span>
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/22 bg-white/12 backdrop-blur-md transition-transform duration-300 group-hover:translate-x-0.5">
-            <ArrowRight size={15} />
-          </span>
-        </div>
+    <TiltCard className="lg:col-span-7" maxTilt={5}>
+      <Link
+        data-discovery-reveal
+        to={`/destinazioni?group=${encodeURIComponent(group)}`}
+        className="group relative block min-h-[360px] overflow-hidden rounded-lg bg-ink text-white md:min-h-[500px]"
+      >
+        <img
+          src={visual.image}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
+          loading="lazy"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.06)_0%,rgba(0,0,0,0.2)_40%,rgba(0,0,0,0.76)_100%)]" />
+        <div className="relative flex h-full min-h-[360px] flex-col justify-between p-6 md:min-h-[500px] md:p-9">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/78">
+              In evidenza
+            </span>
+            <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/22 bg-white/12 backdrop-blur-md transition-transform duration-300 group-hover:translate-x-0.5">
+              <ArrowRight size={15} />
+            </span>
+          </div>
 
-        <div className="max-w-lg">
-          <h3 className="text-6xl font-serif leading-none md:text-8xl">{group}</h3>
-          <p className="mt-4 max-w-md text-sm leading-relaxed text-white/78 md:text-base">
-            {visual.description}
-          </p>
+          <div className="max-w-lg">
+            <h3 className="text-6xl font-serif leading-none md:text-8xl">{group}</h3>
+            <p className="mt-4 max-w-md text-sm leading-relaxed text-white/78 md:text-base">
+              {visual.description}
+            </p>
+          </div>
         </div>
-      </div>
-    </Link>
+      </Link>
+    </TiltCard>
   );
 }
 

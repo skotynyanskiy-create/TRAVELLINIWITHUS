@@ -5,6 +5,7 @@ import Footer from './Footer';
 import ConsentBanner from './ConsentBanner';
 import AnalyticsScripts from './AnalyticsScripts';
 import JsonLd from './JsonLd';
+import ScrollProgressBar from './ScrollProgressBar';
 import SmoothScrollProvider from './SmoothScrollProvider';
 import { initAnalytics, trackPageview } from '../services/analytics';
 import { initErrorTracking } from '../lib/errorTracking';
@@ -67,6 +68,7 @@ export default function Layout() {
         <JsonLd data={ORGANIZATION_JSONLD} />
         <JsonLd data={WEBSITE_JSONLD} />
         <AnalyticsScripts />
+        <ScrollProgressBar />
         <Navbar />
         <main id="main-content" className="flex-grow">
           <Outlet />

@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Link, useLocation } from 'react-router-dom';
 import { trackEvent } from '../services/analytics';
+import MagneticWrapper from './MagneticWrapper';
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -16,6 +17,8 @@ interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
   /** Granular CTA tracking id. When set, fires `cta_click` event with id + location. */
   trackingId?: string;
+  /** Apply subtle magnetic pointer attraction (premium CTAs only). */
+  magnetic?: boolean;
 }
 
 /**
@@ -33,6 +36,7 @@ export default function Button({
   target,
   type = 'button',
   trackingId,
+  magnetic = false,
 }: ButtonProps) {
   const location = useLocation();
   const fireTracking = () => {
@@ -72,8 +76,11 @@ export default function Button({
 
   const combinedStyles = `${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`;
 
+  const wrap = (node: React.ReactNode) =>
+    magnetic ? <MagneticWrapper>{node}</MagneticWrapper> : node;
+
   if (to) {
-    return (
+    return wrap(
       <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="inline-block">
         <Link to={to} onClick={handleAnchorClick} className={combinedStyles}>
           {children}
@@ -83,7 +90,7 @@ export default function Button({
   }
 
   if (href) {
-    return (
+    return wrap(
       <motion.a
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
@@ -98,7 +105,7 @@ export default function Button({
     );
   }
 
-  return (
+  return wrap(
     <motion.button
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}

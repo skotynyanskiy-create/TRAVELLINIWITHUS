@@ -277,6 +277,7 @@ export default function HeroSection() {
               variant="cta"
               size="lg"
               trackingId="home_hero_destinazioni"
+              magnetic
               className="group h-14 min-w-[230px] rounded-lg shadow-[0_18px_44px_rgba(0,0,0,0.18)] sm:h-16"
             >
               <span className="text-sm font-bold uppercase tracking-widest">
