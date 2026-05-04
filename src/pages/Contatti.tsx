@@ -10,6 +10,7 @@ import SEO from '../components/SEO';
 import { CONTACTS, SOCIAL_COLORS } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
+import { trackEvent } from '../services/analytics';
 
 export default function Contatti() {
   const { data: content } = useSiteContent('contact');
@@ -19,6 +20,7 @@ export default function Contatti() {
     email: '',
     topic: '',
     message: '',
+    website: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -56,6 +58,14 @@ export default function Contatti() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    trackEvent('contact_submit_attempt', { topic: formData.topic || 'unset' });
+
+    if (formData.website.trim()) {
+      trackEvent('contact_submit_blocked', { reason: 'honeypot' });
+      setIsSubmitted(true);
+      return;
+    }
 
     const newErrors: Record<string, string> = {};
 
@@ -97,6 +107,7 @@ export default function Contatti() {
           email: formData.email.trim(),
           topic: formData.topic,
           message: formData.message.trim(),
+          website: formData.website,
         }),
       });
 
@@ -104,6 +115,7 @@ export default function Contatti() {
         const payload = (await response.json().catch(() => null)) as { error?: string } | null;
         throw new Error(payload?.error || 'Invio non riuscito');
       }
+      trackEvent('contact_submit_success', { topic: formData.topic });
       setIsSubmitted(true);
     } catch {
       // Fallback: salva in localStorage quando l'API non è configurata
@@ -117,6 +129,7 @@ export default function Contatti() {
           date: new Date().toISOString(),
         });
         localStorage.setItem('twu_contact_leads', JSON.stringify(stored));
+        trackEvent('contact_submit_success', { topic: formData.topic, fallback: 'localStorage' });
         setIsSubmitted(true);
       } catch {
         setSubmitError(
@@ -305,6 +318,9 @@ export default function Contatti() {
                           id="name"
                           value={formData.name}
                           onChange={handleChange}
+                          autoComplete="name"
+                          aria-invalid={Boolean(errors.name)}
+                          aria-describedby={errors.name ? 'contact-name-error' : undefined}
                           className={`w-full border-b bg-transparent py-3 transition-colors focus:outline-none ${
                             errors.name
                               ? 'border-red-500 focus:border-red-500'
@@ -312,7 +328,15 @@ export default function Contatti() {
                           }`}
                           placeholder="Il tuo nome"
                         />
-                        {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
+                        {errors.name && (
+                          <p
+                            id="contact-name-error"
+                            role="alert"
+                            className="mt-1 text-xs text-red-500"
+                          >
+                            {errors.name}
+                          </p>
+                        )}
                       </div>
                       <div className="space-y-2">
                         <label
@@ -326,6 +350,9 @@ export default function Contatti() {
                           id="email"
                           value={formData.email}
                           onChange={handleChange}
+                          autoComplete="email"
+                          aria-invalid={Boolean(errors.email)}
+                          aria-describedby={errors.email ? 'contact-email-error' : undefined}
                           className={`w-full border-b bg-transparent py-3 transition-colors focus:outline-none ${
                             errors.email
                               ? 'border-red-500 focus:border-red-500'
@@ -334,7 +361,13 @@ export default function Contatti() {
                           placeholder="tua@email.com"
                         />
                         {errors.email && (
-                          <p className="mt-1 text-xs text-red-500">{errors.email}</p>
+                          <p
+                            id="contact-email-error"
+                            role="alert"
+                            className="mt-1 text-xs text-red-500"
+                          >
+                            {errors.email}
+                          </p>
                         )}
                       </div>
                     </div>
@@ -350,6 +383,8 @@ export default function Contatti() {
                         id="topic"
                         value={formData.topic}
                         onChange={handleChange}
+                        aria-invalid={Boolean(errors.topic)}
+                        aria-describedby={errors.topic ? 'contact-topic-error' : undefined}
                         className={`w-full appearance-none rounded-none border-b bg-transparent py-3 text-black transition-colors focus:outline-none ${
                           errors.topic
                             ? 'border-red-500 focus:border-red-500'
@@ -367,7 +402,15 @@ export default function Contatti() {
                         <option value="article">Domanda su guide, articoli o risorse</option>
                         <option value="other">Altro / informazioni generali</option>
                       </select>
-                      {errors.topic && <p className="mt-1 text-xs text-red-500">{errors.topic}</p>}
+                      {errors.topic && (
+                        <p
+                          id="contact-topic-error"
+                          role="alert"
+                          className="mt-1 text-xs text-red-500"
+                        >
+                          {errors.topic}
+                        </p>
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -385,6 +428,8 @@ export default function Contatti() {
                         rows={5}
                         value={formData.message}
                         onChange={handleChange}
+                        aria-invalid={Boolean(errors.message)}
+                        aria-describedby={errors.message ? 'contact-message-error' : undefined}
                         className={`w-full resize-none border-b bg-transparent py-3 transition-colors focus:outline-none ${
                           errors.message
                             ? 'border-red-500 focus:border-red-500'
@@ -393,8 +438,29 @@ export default function Contatti() {
                         placeholder={activeGuidance.placeholder}
                       ></textarea>
                       {errors.message && (
-                        <p className="mt-1 text-xs text-red-500">{errors.message}</p>
+                        <p
+                          id="contact-message-error"
+                          role="alert"
+                          className="mt-1 text-xs text-red-500"
+                        >
+                          {errors.message}
+                        </p>
                       )}
+
+                      <label className="sr-only" htmlFor="website">
+                        Lascia vuoto questo campo
+                      </label>
+                      <input
+                        id="website"
+                        type="text"
+                        value={formData.website}
+                        onChange={handleChange}
+                        tabIndex={-1}
+                        autoComplete="off"
+                        aria-hidden="true"
+                        className="absolute h-0 w-0 overflow-hidden border-0 p-0 opacity-0"
+                        style={{ left: '-10000px' }}
+                      />
                     </div>
 
                     <div className="pt-6">
@@ -450,7 +516,7 @@ export default function Contatti() {
                   <button
                     onClick={() => {
                       setIsSubmitted(false);
-                      setFormData({ name: '', email: '', topic: '', message: '' });
+                      setFormData({ name: '', email: '', topic: '', message: '', website: '' });
                     }}
                     className="border-b border-[var(--color-accent)] pb-1 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] transition-colors hover:border-black hover:text-black"
                   >

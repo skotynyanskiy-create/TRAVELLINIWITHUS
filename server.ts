@@ -18,7 +18,9 @@ import {
 dotenv.config();
 
 const OWNER_EMAIL = process.env.MAIL_TO_OWNER || 'hello@travelliniwithus.it';
-const MEDIA_KIT_URL = process.env.MEDIA_KIT_URL || `${process.env.APP_URL || 'https://travelliniwithus.it'}/media-kit.pdf`;
+const MEDIA_KIT_URL =
+  process.env.MEDIA_KIT_URL ||
+  `${process.env.APP_URL || 'https://travelliniwithus.it'}/media-kit.pdf`;
 
 const ssrCache = new NodeCache({ stdTTL: 300, checkperiod: 600 });
 
@@ -344,6 +346,7 @@ async function fetchArticle(slug: string): Promise<ArticleMeta | null> {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- kept for future SSR demo gating; unused at runtime today
 async function fetchDemoSettings(): Promise<DemoSettings> {
   if (!firebaseConfig.projectId || !firebaseConfig.firestoreDatabaseId) {
     return {
@@ -984,7 +987,20 @@ async function startServer() {
   };
 
   app.post('/api/newsletter-subscribe', async (req, res) => {
-    const { email, source = 'website' } = req.body as { email?: string; source?: string };
+    const {
+      email,
+      source = 'website',
+      website,
+    } = req.body as {
+      email?: string;
+      source?: string;
+      website?: string;
+    };
+
+    if (typeof website === 'string' && website.trim().length > 0) {
+      res.json({ success: true });
+      return;
+    }
 
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       res.status(400).json({ error: 'Email non valida.' });
@@ -1024,7 +1040,7 @@ async function startServer() {
     } else if (brevoApiKey && process.env.NODE_ENV !== 'production') {
       console.warn(
         '[newsletter] BREVO_API_KEY presente ma BREVO_LIST_ID mancante o non valido. ' +
-          'Newsletter in save-lead-only mode.',
+          'Newsletter in save-lead-only mode.'
       );
     }
 
@@ -1050,12 +1066,18 @@ async function startServer() {
   });
 
   app.post('/api/contact-lead', async (req, res) => {
-    const { name, email, topic, message } = req.body as {
+    const { name, email, topic, message, website } = req.body as {
       name?: string;
       email?: string;
       topic?: string;
       message?: string;
+      website?: string;
     };
+
+    if (typeof website === 'string' && website.trim().length > 0) {
+      res.json({ success: true });
+      return;
+    }
 
     if (!name?.trim() || !email?.trim() || !topic?.trim() || !message?.trim()) {
       res.status(400).json({ error: 'Tutti i campi obbligatori devono essere compilati.' });

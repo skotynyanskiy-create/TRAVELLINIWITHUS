@@ -43,7 +43,7 @@ const variantCopy: Record<
   },
   white: {
     eyebrow: 'Archivio utile',
-    title: 'Una mail quando c e qualcosa da salvare.',
+    title: 'Una mail quando c’è qualcosa da salvare.',
     description:
       'Niente invii automatici senza valore: solo contenuti Travelliniwithus utili per scegliere, organizzare e partire meglio.',
     bullets: [
@@ -105,7 +105,10 @@ function resolveCopy({
   description,
   bullets,
   ctaLabel,
-}: Pick<NewsletterProps, 'variant' | 'title' | 'eyebrow' | 'description' | 'bullets' | 'ctaLabel'>) {
+}: Pick<
+  NewsletterProps,
+  'variant' | 'title' | 'eyebrow' | 'description' | 'bullets' | 'ctaLabel'
+>) {
   const base = variantCopy[variant ?? 'sand'];
 
   return {
@@ -130,15 +133,25 @@ export default function Newsletter({
 }: NewsletterProps) {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [email, setEmail] = useState('');
+  const [website, setWebsite] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const copy = resolveCopy({ variant, title, eyebrow, description, bullets, ctaLabel });
   const isCompact = compact || variant === 'compact';
   const isDark = variant === 'article' || variant === 'business';
+  const errorId = `newsletter-error-${source}`;
 
   const handleSubscribe = async (e: FormEvent) => {
     e.preventDefault();
     const normalizedEmail = email.trim();
+
+    trackEvent('newsletter_submit_attempt', { source });
+
+    if (website.trim()) {
+      trackEvent('newsletter_submit_blocked', { source, reason: 'honeypot' });
+      setIsSubscribed(true);
+      return;
+    }
 
     if (!normalizedEmail) {
       setError('Inserisci un indirizzo email.');
@@ -157,7 +170,7 @@ export default function Newsletter({
       const response = await fetch('/api/newsletter-subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: normalizedEmail, source }),
+        body: JSON.stringify({ email: normalizedEmail, source, website }),
       });
 
       if (!response.ok) {
@@ -181,7 +194,9 @@ export default function Newsletter({
           setTimeout(onSuccess, 2000);
         }
       } catch {
-        setError('Iscrizione non riuscita. Riprova tra poco oppure scrivici direttamente via email.');
+        setError(
+          'Iscrizione non riuscita. Riprova tra poco oppure scrivici direttamente via email.'
+        );
       }
     } finally {
       setIsSubmitting(false);
@@ -217,11 +232,28 @@ export default function Newsletter({
               onChange={(e) => setEmail(e.target.value)}
               placeholder="nome@esempio.com"
               required
+              autoComplete="email"
+              aria-invalid={Boolean(error)}
+              aria-describedby={error ? errorId : undefined}
               className={`w-full rounded-full border px-5 py-3 text-sm transition-all focus:border-[var(--color-accent)] focus:outline-none ${
                 isDark
                   ? 'border-white/15 bg-white/10 text-white placeholder:text-white/35'
                   : 'border-black/10 bg-white text-[var(--color-ink)] placeholder:text-black/30'
               } ${isCompact ? 'sm:flex-1' : 'md:px-6 md:py-4'}`}
+            />
+            <label className="sr-only" htmlFor={`newsletter-website-${source}`}>
+              Lascia vuoto questo campo
+            </label>
+            <input
+              id={`newsletter-website-${source}`}
+              type="text"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              className="absolute h-0 w-0 overflow-hidden border-0 p-0 opacity-0"
+              style={{ left: '-10000px' }}
             />
             {isCompact ? (
               <button
@@ -251,10 +283,20 @@ export default function Newsletter({
             )}
           </div>
 
-          {error && <p className={`text-sm ${isDark ? 'text-red-200' : 'text-red-600'}`}>{error}</p>}
+          {error && (
+            <p
+              id={errorId}
+              role="alert"
+              className={`text-sm ${isDark ? 'text-red-200' : 'text-red-600'}`}
+            >
+              {error}
+            </p>
+          )}
 
           {!isCompact && (
-            <p className={`text-center text-xs leading-relaxed ${isDark ? 'text-white/45' : 'text-black/40'}`}>
+            <p
+              className={`text-center text-xs leading-relaxed ${isDark ? 'text-white/45' : 'text-black/40'}`}
+            >
               Iscrivendoti accetti il trattamento dei dati secondo la nostra{' '}
               <Link
                 to="/privacy"
@@ -277,8 +319,11 @@ export default function Newsletter({
             <CheckCircle className="mt-0.5 shrink-0 text-[var(--color-accent)]" size={24} />
             <div>
               <p className="font-serif text-xl">Iscrizione confermata.</p>
-              <p className={`mt-1 text-sm leading-relaxed ${isDark ? 'text-white/65' : 'text-black/60'}`}>
-                Richiesta ricevuta. Se la piattaforma email non e ancora attiva, il lead resta comunque salvato.
+              <p
+                className={`mt-1 text-sm leading-relaxed ${isDark ? 'text-white/65' : 'text-black/60'}`}
+              >
+                Richiesta ricevuta. Se la piattaforma email non e ancora attiva, il lead resta
+                comunque salvato.
               </p>
             </div>
           </div>
@@ -314,7 +359,9 @@ export default function Newsletter({
           <h2 className="max-w-2xl text-4xl font-serif leading-tight tracking-tight md:text-6xl">
             {copy.title}
           </h2>
-          <p className={`mt-6 max-w-2xl text-base leading-relaxed md:text-lg ${isDark ? 'text-white/70' : 'text-black/65'}`}>
+          <p
+            className={`mt-6 max-w-2xl text-base leading-relaxed md:text-lg ${isDark ? 'text-white/70' : 'text-black/65'}`}
+          >
             {copy.description}
           </p>
 
@@ -323,7 +370,9 @@ export default function Newsletter({
               {copy.bullets.map((item) => (
                 <div key={item} className="flex items-start gap-3">
                   <ShieldCheck className="mt-0.5 shrink-0 text-[var(--color-accent)]" size={18} />
-                  <span className={`text-sm leading-relaxed ${isDark ? 'text-white/68' : 'text-black/62'}`}>
+                  <span
+                    className={`text-sm leading-relaxed ${isDark ? 'text-white/68' : 'text-black/62'}`}
+                  >
                     {item}
                   </span>
                 </div>
@@ -332,14 +381,20 @@ export default function Newsletter({
           )}
         </div>
 
-        <div className={`rounded-[2rem] border p-6 md:p-8 ${isDark ? 'border-white/10 bg-white/5' : 'border-black/5 bg-white/80'}`}>
+        <div
+          className={`rounded-[2rem] border p-6 md:p-8 ${isDark ? 'border-white/10 bg-white/5' : 'border-black/5 bg-white/80'}`}
+        >
           <div className="mb-6 flex items-start gap-4">
-            <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${isDark ? 'bg-white/10' : 'bg-[var(--color-accent-soft)]'}`}>
+            <div
+              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${isDark ? 'bg-white/10' : 'bg-[var(--color-accent-soft)]'}`}
+            >
               <Gift className="text-[var(--color-accent)]" size={22} />
             </div>
             <div>
               <p className="font-serif text-xl">Invii curati, non automatici.</p>
-              <p className={`mt-1 text-sm leading-relaxed ${isDark ? 'text-white/55' : 'text-black/50'}`}>
+              <p
+                className={`mt-1 text-sm leading-relaxed ${isDark ? 'text-white/55' : 'text-black/50'}`}
+              >
                 Il punto non e scrivere spesso: e mandare qualcosa che valga davvero un salvataggio.
               </p>
             </div>
