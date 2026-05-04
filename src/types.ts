@@ -58,3 +58,75 @@ export interface HotelEntry {
   published?: boolean;
   isFallback?: boolean;
 }
+
+// --- Magazine content model ---
+
+import type {
+  ContentType,
+  TravelStyle,
+  DurationRange,
+  Season,
+  BudgetBand,
+} from './config/travelFilters';
+
+/** Extended article metadata for the magazine platform */
+export interface ArticleMeta {
+  id: string;
+  slug: string;
+  title: string;
+  subtitle?: string;
+  contentType: ContentType;
+  country?: string;
+  region?: string;
+  city?: string;
+  heroImage?: string;
+  excerpt?: string;
+  travelStyles?: TravelStyle[];
+  duration?: DurationRange;
+  season?: Season[];
+  budget?: BudgetBand;
+  verifiedAt?: string;
+  disclosureType?: DisclosureType;
+  publishedAt?: string;
+  updatedAt?: string;
+  readingTime?: number;
+  featured?: boolean;
+  published?: boolean;
+}
+
+/** Single day in an itinerary */
+export interface ItineraryDay {
+  day: number;
+  title: string;
+  description: string;
+  activities: string[];
+  transport?: string;
+  accommodation?: string;
+  meals?: string[];
+  tips?: string[];
+  estimatedCost?: string;
+  mapCoordinates?: { lat: number; lng: number };
+}
+
+/** Full itinerary content */
+export interface Itinerary extends ArticleMeta {
+  contentType: 'itinerary';
+  days: ItineraryDay[];
+  totalBudget?: string;
+  bestPeriod?: string;
+  packingEssentials?: string[];
+  googleMapsUrl?: string;
+  pdfUrl?: string;
+  relatedItineraries?: string[];
+}
+
+/** Travel planner consultation package */
+export interface TravelPlannerPackage {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  features: string[];
+  popular?: boolean;
+  ctaLabel: string;
+}

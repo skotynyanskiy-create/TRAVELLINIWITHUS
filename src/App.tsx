@@ -41,6 +41,7 @@ const DestinationHub = lazy(() => import('./pages/DestinationHub'));
 const MieiAcquisti = lazy(() => import('./pages/MieiAcquisti'));
 const Mappa = lazy(() => import('./pages/Mappa'));
 const Trasparenza = lazy(() => import('./pages/Trasparenza'));
+const ConsigliDiViaggio = lazy(() => import('./pages/TravelTips'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
@@ -85,9 +86,19 @@ export default function App() {
                       <Route path="destinazioni/:country" element={<DestinationHub />} />
                       <Route path="destinazioni/:country/:region" element={<DestinationHub />} />
                       <Route path="destinazioni/:country/:region/:slug" element={<Articolo />} />
-                      <Route path="guide" element={<Guide />} />
+                      <Route path="consigli-di-viaggio" element={<ConsigliDiViaggio />} />
+                      <Route path="consigli-di-viaggio/:slug" element={<Articolo />} />
+                      <Route
+                        path="guide"
+                        element={<Navigate to="/consigli-di-viaggio" replace />}
+                      />
                       <Route path="guide/:slug" element={<Articolo />} />
-                      <Route path="itinerari/:slug" element={<Navigate to="/guide" replace />} />
+                      <Route
+                        path="travel-tips"
+                        element={<Navigate to="/consigli-di-viaggio" replace />}
+                      />
+                      <Route path="itinerari" element={<Guide />} />
+                      <Route path="itinerari/:slug" element={<Articolo />} />
                       <Route
                         path="italia"
                         element={<Navigate to="/destinazioni/italia" replace />}

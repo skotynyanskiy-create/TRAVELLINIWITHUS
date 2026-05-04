@@ -81,7 +81,7 @@ function RegionalHubComingSoon({ hubName, parentSlug }: ComingSoonProps) {
 
           <div className="mt-12 mx-auto max-w-md">
             <Newsletter
-              variant="sand"
+              variant="compact"
               source={`region_coming_soon_${hubName.toLowerCase().replace(/\s+/g, '_')}`}
             />
           </div>

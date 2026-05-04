@@ -15,7 +15,6 @@ import {
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { CONTACTS } from '../config/site';
-import { GUIDE_CATEGORIES, slugifyGuideCategory } from '../config/contentTaxonomy';
 import { siteContentDefaults } from '../config/siteContent';
 import { useAuth } from '../context/AuthContext';
 import { useSiteContent } from '../hooks/useSiteContent';
@@ -101,22 +100,20 @@ export default function Navbar() {
       {
         label: 'Esplora',
         href: '/destinazioni',
-        links: [
-          { name: 'Tutte le destinazioni', href: '/destinazioni' },
-          { name: 'Mappa interattiva', href: '/mappa' },
-        ],
+        links: [{ name: 'Tutte le destinazioni', href: '/destinazioni' }],
       },
     ],
     []
   );
 
-  const guideLinks = useMemo<NavSubLink[]>(
+  const consigliLinks = useMemo<NavSubLink[]>(
     () => [
-      { name: 'Tutte le guide', href: '/guide' },
-      ...GUIDE_CATEGORIES.map((category) => ({
-        name: category,
-        href: `/guide?cat=${slugifyGuideCategory(category)}`,
-      })),
+      { name: 'Tutti i consigli', href: '/consigli-di-viaggio' },
+      { name: 'Consigli pratici', href: '/consigli-di-viaggio?cat=consigli-pratici' },
+      { name: 'Budget & Costi', href: '/consigli-di-viaggio?cat=budget-e-costi' },
+      { name: 'Food guide', href: '/consigli-di-viaggio?cat=food-guide' },
+      { name: 'Cosa portare', href: '/consigli-di-viaggio?cat=cosa-portare' },
+      { name: 'Pianificazione', href: '/consigli-di-viaggio?cat=pianificazione' },
     ],
     []
   );
@@ -137,13 +134,13 @@ export default function Navbar() {
         subGroups: destinationsGroups,
       },
       {
-        name: navigation.guidesLabel,
-        href: '/guide',
-        subLinks: guideLinks,
+        name: 'Itinerari',
+        href: '/itinerari',
       },
       {
-        name: navigation.resourcesLabel,
-        href: '/risorse',
+        name: 'Consigli di Viaggio',
+        href: '/consigli-di-viaggio',
+        subLinks: consigliLinks,
       },
       {
         name: navigation.collaborationsLabel,
@@ -153,30 +150,30 @@ export default function Navbar() {
     ],
     [
       collaborationLinks,
+      consigliLinks,
       destinationsGroups,
-      guideLinks,
       navigation.collaborationsLabel,
       navigation.destinationsLabel,
-      navigation.guidesLabel,
-      navigation.resourcesLabel,
     ]
   );
 
   const isItemActive = (item: NavItem) => {
     if (item.name === navigation.destinationsLabel) {
       return (
-        location.pathname === '/destinazioni' ||
-        location.pathname.startsWith('/destinazioni/') ||
-        location.pathname === '/mappa'
+        location.pathname === '/destinazioni' || location.pathname.startsWith('/destinazioni/')
       );
     }
 
-    if (item.name === navigation.guidesLabel) {
-      return location.pathname.startsWith('/guide') || location.pathname.startsWith('/itinerari');
+    if (item.name === 'Itinerari') {
+      return location.pathname.startsWith('/itinerari');
     }
 
-    if (item.name === navigation.resourcesLabel) {
-      return location.pathname === '/risorse';
+    if (item.name === 'Consigli di Viaggio') {
+      return (
+        location.pathname.startsWith('/consigli-di-viaggio') ||
+        location.pathname.startsWith('/guide') ||
+        location.pathname.startsWith('/travel-tips')
+      );
     }
 
     if (item.name === navigation.collaborationsLabel) {
@@ -207,7 +204,11 @@ export default function Navbar() {
   const isSubLinkActive = (item: NavItem, href: string) => {
     const [subLinkPath, subLinkSearch] = href.split('?');
 
-    if (href.startsWith('/destinazioni?') || href.startsWith('/guide?')) {
+    if (
+      href.startsWith('/destinazioni?') ||
+      href.startsWith('/guide?') ||
+      href.startsWith('/consigli-di-viaggio?')
+    ) {
       return location.pathname === subLinkPath && location.search === `?${subLinkSearch}`;
     }
 

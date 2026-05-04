@@ -11,14 +11,15 @@ const footerColumns = [
     title: 'Esplora',
     links: [
       { to: '/destinazioni', label: 'Destinazioni' },
-      { to: '/mappa', label: 'Mappa' },
+      { to: '/itinerari', label: 'Itinerari' },
+      { to: '/consigli-di-viaggio', label: 'Consigli di Viaggio' },
     ],
   },
   {
-    title: 'Pianifica',
+    title: 'Risorse',
     links: [
-      { to: '/guide', label: 'Guide' },
-      { to: '/risorse', label: 'Risorse' },
+      { to: '/risorse', label: 'Risorse e codici sconto' },
+      { to: '/shop', label: 'Shop' },
     ],
   },
   {

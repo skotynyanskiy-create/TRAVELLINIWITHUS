@@ -1,6 +1,5 @@
-import { useRef } from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, MapPin } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { DESTINATION_GROUPS, type DestinationGroup } from '../../config/contentTaxonomy';
 import { getDestinationVisual } from '../../config/destinationVisuals';
@@ -32,63 +31,26 @@ function DestinationChip({ group }: { group: DestinationGroup }) {
 }
 
 export default function DestinationScroller() {
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const scroll = (direction: 'left' | 'right') => {
-    if (!scrollRef.current) return;
-    const amount = scrollRef.current.clientWidth * 0.6;
-    scrollRef.current.scrollBy({
-      left: direction === 'left' ? -amount : amount,
-      behavior: 'smooth',
-    });
-  };
-
   return (
     <section className="bg-white py-10 md:py-14">
       <motion.div
         className="mx-auto max-w-[82rem] px-6 md:px-10 xl:px-12"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ y: 8 }}
+        whileInView={{ y: 0 }}
         viewport={{ once: true, margin: '-80px' }}
-        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.45, ease: [0.21, 0.47, 0.32, 0.98] }}
       >
-        <div className="mb-6 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
-              <MapPin size={16} />
-            </div>
-            <div>
-              <h2 className="text-xl font-serif leading-tight text-[var(--color-ink)] md:text-2xl">
-                Dove vuoi andare?
-              </h2>
-            </div>
+        <div className="mb-6 flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent-soft text-accent">
+            <MapPin size={16} />
           </div>
-
-          <div className="hidden items-center gap-2 md:flex">
-            <button
-              type="button"
-              onClick={() => scroll('left')}
-              aria-label="Scorri a sinistra"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-black/8 bg-white text-black/40 transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-            >
-              <ArrowRight size={14} className="rotate-180" />
-            </button>
-            <button
-              type="button"
-              onClick={() => scroll('right')}
-              aria-label="Scorri a destra"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-black/8 bg-white text-black/40 transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-            >
-              <ArrowRight size={14} />
-            </button>
-          </div>
+          <h2 className="text-xl font-serif leading-tight text-ink md:text-2xl">
+            Dove vuoi andare?
+          </h2>
         </div>
 
         <div className="relative">
-          <div
-            ref={scrollRef}
-            className="scrollbar-hidden flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4 md:gap-8 lg:justify-center lg:gap-10"
-          >
+          <div className="scrollbar-hidden flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4 md:flex-wrap md:justify-center md:gap-10 md:overflow-visible md:pb-0">
             {DESTINATION_GROUPS.map((group) => (
               <DestinationChip key={group} group={group} />
             ))}

@@ -6,7 +6,7 @@ import {
   slugifyGuideCategory,
   type GuideCategory,
 } from '../../config/contentTaxonomy';
-import { getGuideCategoryVisual, getGuideCategoryVisualClass } from '../../config/guideContent';
+import { getGuideCategoryVisual } from '../../config/guideContent';
 
 interface GuideCategoryBrowserProps {
   categories?: readonly GuideCategory[];
@@ -35,35 +35,36 @@ export default function GuideCategoryBrowser({
       {categories.map((category, idx) => {
         const visual = getGuideCategoryVisual(category);
         const Icon = visual.icon;
-        const visualClass = getGuideCategoryVisualClass(category);
         const isActive = selectedCategory === category;
         const span = spanPattern[idx] ?? 1;
         const count = counts?.[category];
 
         const content = (
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ y: 8 }}
+            whileInView={{ y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: idx * 0.05, duration: 0.45 }}
-            className={`guide-card-dynamic ${visualClass} group flex h-full flex-col rounded-[1.5rem] border border-l-[3px] p-5 text-left transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg ${
+            transition={{ delay: idx * 0.04, duration: 0.45 }}
+            className={`group flex h-full flex-col rounded-xl border p-5 text-left transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg ${
               span === 2 ? 'md:col-span-2' : ''
             } ${
               isActive
-                ? 'is-active border-transparent shadow-md'
-                : 'border-black/6 bg-white hover:border-black/10'
+                ? 'border-accent bg-accent-soft shadow-md'
+                : 'border-black/6 bg-white hover:border-accent/40'
             }`}
           >
             <div className="mb-3 flex items-center justify-between gap-3">
               <div
-                className={`guide-icon-dynamic flex h-9 w-9 items-center justify-center rounded-xl transition-colors ${
-                  isActive ? 'is-active' : ''
+                className={`flex h-9 w-9 items-center justify-center rounded-xl transition-colors ${
+                  isActive
+                    ? 'bg-accent text-white'
+                    : 'bg-accent-soft text-accent group-hover:bg-accent group-hover:text-white'
                 }`}
               >
                 <Icon size={18} />
               </div>
               {isActive && (
-                <span className="guide-badge-dynamic rounded-full px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-white">
+                <span className="rounded-full bg-accent px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-white">
                   Attivo
                 </span>
               )}

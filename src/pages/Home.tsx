@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ArrowUp } from 'lucide-react';
 import SEO from '../components/SEO';
-import Newsletter from '../components/Newsletter';
 import { SITE_URL } from '../config/site';
 
 import HeroSection from '../components/home/HeroSection';
 import DestinationScroller from '../components/home/DestinationScroller';
 import HomeDiscoveryCards from '../components/home/HomeDiscoveryCards';
 import CoupleIntro from '../components/home/CoupleIntro';
-import HomeMapTeaser from '../components/home/HomeMapTeaser';
 import LatestArticles from '../components/home/LatestArticles';
+import HomePromoCodesBanner from '../components/home/HomePromoCodesBanner';
+import NewsletterEnvelope from '../components/home/NewsletterEnvelope';
 import HomeToolsTeaser from '../components/home/HomeToolsTeaser';
 import InstagramFeed from '../components/home/InstagramFeed';
 import HomeCollaborationCta from '../components/home/HomeCollaborationCta';
@@ -27,8 +27,8 @@ export default function Home() {
   return (
     <div className="min-h-screen overflow-x-clip bg-sand selection:bg-[var(--color-accent)] selection:text-white">
       <SEO
-        title="Rodrigo & Betta, guide di viaggio e posti particolari"
-        description="Travelliniwithus di Rodrigo e Betta raccoglie itinerari, hotel provati, guide utili e luoghi da salvare. Parti dalla Puglia o scopri come collaborare."
+        title="Rodrigo & Betta — Consigli di viaggio, itinerari e posti particolari"
+        description="Travelliniwithus di Rodrigo e Betta: itinerari in Italia, consigli pratici, codici sconto e guide di viaggio per coppie e famiglie. Parti con noi."
         canonical={`${SITE_URL}/`}
         website
         includeBrandSchema
@@ -49,41 +49,36 @@ export default function Home() {
         )}
       </AnimatePresence>
 
+      {/* 1. Hero immersivo */}
       <HeroSection />
 
+      {/* 2. Destination picker — scroller per paese */}
       <DestinationScroller />
+
+      {/* 3. Discovery cards — esperienze */}
       <HomeDiscoveryCards />
+
+      {/* 4. Chi siamo / Il nostro metodo */}
       <CoupleIntro />
-      <HomeMapTeaser />
+
+      {/* 5. Articoli in evidenza (placeholder) */}
       <div id="storie">
         <LatestArticles />
       </div>
+
+      {/* 6. Codici sconto partner (dal Linktree reale) */}
+      <HomePromoCodesBanner />
+
+      {/* 7. Shop teaser (condizionale) */}
       <HomeToolsTeaser />
+
+      {/* 8. Newsletter "busta da viaggio" */}
+      <NewsletterEnvelope />
+
+      {/* 9. Instagram feed */}
       <InstagramFeed />
 
-      <section id="newsletter" className="bg-white py-20 md:py-28">
-        <div className="mx-auto grid max-w-6xl gap-10 px-6 md:px-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
-          <div>
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
-              Newsletter
-            </span>
-            <h2 className="mt-4 max-w-xl text-4xl font-serif leading-[1.05] text-ink md:text-5xl">
-              Una email ogni tanto.{' '}
-              <span className="italic text-black/70">
-                Solo quando c'è davvero qualcosa da salvare.
-              </span>
-            </h2>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-black/72">
-              Luoghi, idee weekend, guide pratiche, itinerari e strumenti. Niente rumore, niente
-              pressione, niente newsletter riempita per forza.
-            </p>
-          </div>
-          <div className="rounded-2xl border border-black/6 bg-[var(--color-sand)] p-8 md:p-10">
-            <Newsletter compact variant="sand" source="homepage_compact" />
-          </div>
-        </div>
-      </section>
-
+      {/* 10. CTA Collaborazioni */}
       <HomeCollaborationCta />
     </div>
   );

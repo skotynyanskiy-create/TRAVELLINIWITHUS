@@ -49,6 +49,12 @@ audit-*.png
 /search-modal.png
 /trova-*.png
 /guide-page-snapshot.md
+/home-*.png
+/collaborazioni-*.png
+/destinazioni-*.png
+/guide-*.png
+/article-*.png
+/puglia-*.png
 
 # AI tool memory/session cache
 .remember/

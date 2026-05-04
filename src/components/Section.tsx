@@ -25,15 +25,25 @@ const maxWidthMap = {
   wide: 'max-w-[1440px]',
 };
 
-export default function Section({ children, className = '', title, subtitle, id, spacing = 'default', divider, maxWidth = 'default', ornament }: SectionProps) {
+export default function Section({
+  children,
+  className = '',
+  title,
+  subtitle,
+  id,
+  spacing = 'default',
+  divider,
+  maxWidth = 'default',
+  ornament,
+}: SectionProps) {
   return (
     <section id={id} className={`${spacingMap[spacing]} ${className}`}>
       <motion.div
         className={`${maxWidthMap[maxWidth]} mx-auto px-6 md:px-12 ${divider ? 'editorial-divider' : ''}`}
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
+        initial={{ y: 8 }}
+        whileInView={{ y: 0 }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.45, ease: [0.21, 0.47, 0.32, 0.98] }}
       >
         {(title || subtitle) && (
           <div className="text-center mb-12 md:mb-16">
@@ -48,15 +58,13 @@ export default function Section({ children, className = '', title, subtitle, id,
               </span>
             )}
             {title && (
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-medium tracking-tight leading-tight text-[var(--color-ink)]">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-medium tracking-tight leading-[1.08] text-[var(--color-ink)]">
                 {title}
               </h2>
             )}
           </div>
         )}
-        <div>
-          {children}
-        </div>
+        <div>{children}</div>
       </motion.div>
     </section>
   );

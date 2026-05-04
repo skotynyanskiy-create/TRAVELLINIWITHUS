@@ -1,93 +1,11 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
-import { ArrowRight, ExternalLink } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Button from '../Button';
-import { CONTACTS, FEATURED_REEL } from '../../config/site';
 import { MEDIA } from '../../config/mediaAssets';
 
 const HERO_IMAGE = MEDIA.hero.primary;
-const REEL_FALLBACK_IMAGE = MEDIA.hero.reelFallback;
-
-const TRUST_PILLS = [
-  'Posti provati sul posto',
-  'Hotel scelti con criterio',
-  'Affiliate dichiarate',
-];
-
-function getInstagramEmbedUrl(url: string) {
-  return url.includes('/reel/') ? `${url.replace(/\/?$/, '/')}embed/` : '';
-}
-
-function FeaturedReelPreview() {
-  const reelUrl = FEATURED_REEL.url.trim();
-  const reelEmbedUrl = getInstagramEmbedUrl(reelUrl);
-  const reelThumbnail = FEATURED_REEL.thumbnail.trim();
-  const hasConfiguredReel = Boolean(reelEmbedUrl);
-  const hasConfiguredVisual = hasConfiguredReel || Boolean(reelThumbnail);
-  const previewImage = reelThumbnail || REEL_FALLBACK_IMAGE;
-  const instagramHref = reelUrl || CONTACTS.instagramUrl;
-
-  const reelMessage = hasConfiguredVisual
-    ? FEATURED_REEL.caption
-    : 'Guarda il lato più immediato del progetto sul nostro profilo Instagram.';
-
-  return (
-    <motion.aside
-      initial={{ opacity: 0, x: 28 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: 0.35, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-      className="w-full justify-self-start lg:justify-self-end"
-      aria-label="Ultimo reel Instagram"
-    >
-      <div className="rounded-lg border border-white/14 bg-black/24 p-3 shadow-[0_24px_64px_rgba(0,0,0,0.3)] backdrop-blur-md">
-        <div className="mb-3 flex items-center justify-between gap-4 px-1">
-          <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/72">
-            Ultimo reel Instagram
-          </span>
-          <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
-        </div>
-
-        <div className="relative aspect-[9/12] overflow-hidden rounded-lg bg-ink">
-          {hasConfiguredReel ? (
-            <iframe
-              src={reelEmbedUrl}
-              className="absolute inset-0 h-full w-full"
-              frameBorder="0"
-              scrolling="no"
-              allowFullScreen
-              title="Ultimo reel Instagram"
-            />
-          ) : (
-            <img
-              src={previewImage}
-              alt={FEATURED_REEL.caption || 'Preview Instagram Travelliniwithus'}
-              className="h-full w-full object-cover object-center"
-              loading="eager"
-            />
-          )}
-
-          <div className="pointer-events-none absolute inset-0 flex items-end bg-gradient-to-b from-black/8 via-black/4 to-black/72 p-5">
-            <p className="max-w-[14rem] text-sm font-semibold leading-snug text-white">
-              {reelMessage}
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-4 border-t border-white/10 px-1 pt-3">
-          <a
-            href={instagramHref}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/68 transition-colors hover:text-[var(--color-accent)]"
-          >
-            Guarda su Instagram <ExternalLink size={12} />
-          </a>
-        </div>
-      </div>
-    </motion.aside>
-  );
-}
 
 export default function HeroSection() {
   const heroRef = useRef<HTMLElement>(null);
@@ -118,7 +36,7 @@ export default function HeroSection() {
       <div className="absolute inset-0 z-[1] bg-[linear-gradient(90deg,rgba(17,17,17,0.78)_0%,rgba(17,17,17,0.46)_48%,rgba(17,17,17,0.2)_100%)]" />
 
       <motion.div
-        className="relative z-10 mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[1fr_21rem] lg:items-center lg:gap-16"
+        className="relative z-10 mx-auto w-full max-w-7xl"
         style={{ opacity: heroOpacity }}
       >
         <motion.div
@@ -140,18 +58,7 @@ export default function HeroSection() {
             Puglia slow, con borghi bianchi, masserie e tavole vere.
           </p>
 
-          <div className="mt-7 flex flex-wrap gap-2">
-            {TRUST_PILLS.map((pill) => (
-              <span
-                key={pill}
-                className="rounded-full border border-white/18 bg-white/10 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/85 backdrop-blur-sm"
-              >
-                {pill}
-              </span>
-            ))}
-          </div>
-
-          <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
+          <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center">
             <Button
               to="/destinazioni/italia/puglia"
               variant="cta"
@@ -175,8 +82,6 @@ export default function HeroSection() {
             </Link>
           </div>
         </motion.div>
-
-        <FeaturedReelPreview />
       </motion.div>
     </section>
   );

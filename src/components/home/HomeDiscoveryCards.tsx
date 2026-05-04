@@ -17,20 +17,19 @@ import {
   getExperienceDescription,
 } from '../../config/experienceContent';
 import { getExperienceVisual } from '../../config/experienceVisuals';
-import { GUIDE_CATEGORY_VISUALS, getGuideCategoryVisualClass } from '../../config/guideContent';
+import { GUIDE_CATEGORY_VISUALS } from '../../config/guideContent';
 import { MEDIA } from '../../config/mediaAssets';
 
 function GuideTile({ category, description }: { category: GuideCategory; description: string }) {
   const visual = GUIDE_CATEGORY_VISUALS[category];
   const Icon = visual?.icon;
-  const visualClass = getGuideCategoryVisualClass(category);
   return (
     <Link
       to={`/guide?cat=${slugifyGuideCategory(category)}`}
-      className={`guide-card-dynamic ${visualClass} group flex flex-col gap-2 rounded-2xl border border-l-[3px] border-black/6 bg-white p-4 transition-all hover:-translate-y-0.5 hover:shadow-md`}
+      className="group flex flex-col gap-2 rounded-2xl border border-black/8 bg-white p-4 transition-all hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-md"
     >
       {Icon && (
-        <div className="guide-icon-dynamic flex h-8 w-8 items-center justify-center rounded-xl">
+        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-accent-soft text-accent transition-colors group-hover:bg-accent group-hover:text-white">
           <Icon size={16} />
         </div>
       )}
@@ -182,10 +181,10 @@ export default function HomeDiscoveryCards() {
     <section className="bg-white py-16 md:py-24">
       <motion.div
         className="mx-auto max-w-[82rem] px-6 md:px-10 xl:px-12"
-        initial={{ opacity: 0, y: 28 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ y: 8 }}
+        whileInView={{ y: 0 }}
         viewport={{ once: true, margin: '-100px' }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 0.45, ease: [0.21, 0.47, 0.32, 0.98] }}
       >
         <div className="mb-7 grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div className="max-w-3xl">
