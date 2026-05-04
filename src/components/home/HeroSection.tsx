@@ -146,6 +146,7 @@ export default function HeroSection() {
                 end: '+=120%',
                 pin: true,
                 pinSpacing: true,
+                pinType: 'transform',
                 scrub: 0.6,
               },
             });
