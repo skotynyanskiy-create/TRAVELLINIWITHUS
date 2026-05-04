@@ -1,31 +1,21 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { trackEvent } from '../services/analytics';
 
-/**
- * Props for the Button component.
- */
 interface ButtonProps {
-  /** The content to be displayed inside the button. */
   children: React.ReactNode;
-  /** The visual style variant of the button. Defaults to 'primary'. */
   variant?: 'primary' | 'secondary' | 'outline' | 'outline-light' | 'cta';
-  /** The size of the button. Defaults to 'md'. */
   size?: 'sm' | 'md' | 'lg';
-  /** Additional CSS classes to apply to the button. */
   className?: string;
-  /** Callback function to be executed when the button is clicked. */
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  /** The path to navigate to if the button is a link. */
   to?: string;
-  /** The URL to open if the button is an external link. */
   href?: string;
-  /** Rel attribute for external links. */
   rel?: string;
-  /** Target attribute for external links. */
   target?: React.HTMLAttributeAnchorTarget;
-  /** The HTML type attribute of the button. Defaults to 'button'. */
   type?: 'button' | 'submit' | 'reset';
+  /** Granular CTA tracking id. When set, fires `cta_click` event with id + location. */
+  trackingId?: string;
 }
 
 /**
@@ -42,7 +32,23 @@ export default function Button({
   rel,
   target,
   type = 'button',
+  trackingId,
 }: ButtonProps) {
+  const location = useLocation();
+  const fireTracking = () => {
+    if (trackingId) {
+      trackEvent('cta_click', { id: trackingId, location: location.pathname });
+    }
+  };
+
+  const handleAnchorClick = () => {
+    fireTracking();
+  };
+
+  const handleButtonClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    fireTracking();
+    onClick?.(event);
+  };
   const baseStyles =
     'inline-flex items-center justify-center gap-3 rounded-[var(--radius-xl)] uppercase tracking-widest font-semibold transition-all duration-500 ease-out';
 
@@ -69,7 +75,7 @@ export default function Button({
   if (to) {
     return (
       <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="inline-block">
-        <Link to={to} className={combinedStyles}>
+        <Link to={to} onClick={handleAnchorClick} className={combinedStyles}>
           {children}
         </Link>
       </motion.div>
@@ -82,6 +88,7 @@ export default function Button({
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         href={href}
+        onClick={handleAnchorClick}
         target={target || '_blank'}
         rel={rel || 'noopener noreferrer'}
         className={combinedStyles}
@@ -95,7 +102,7 @@ export default function Button({
     <motion.button
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      onClick={onClick}
+      onClick={handleButtonClick}
       type={type}
       className={combinedStyles}
     >
