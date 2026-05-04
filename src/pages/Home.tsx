@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { ArrowUp } from 'lucide-react';
 import SEO from '../components/SEO';
 import Newsletter from '../components/Newsletter';
+import { useSmoothScroll } from '../components/SmoothScrollProvider';
 import { SITE_URL } from '../config/site';
 
 import HeroSection from '../components/home/HeroSection';
@@ -15,10 +16,11 @@ import HomeCollaborationCta from '../components/home/HomeCollaborationCta';
 
 export default function Home() {
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const { scrollTo } = useSmoothScroll();
 
   useEffect(() => {
     const handleScroll = () => setShowBackToTop(window.scrollY > 500);
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -36,7 +38,7 @@ export default function Home() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            onClick={() => scrollTo(0)}
             className="fixed bottom-8 right-8 z-50 rounded-full bg-ink p-4 text-white shadow-[var(--shadow-premium)] ring-1 ring-[var(--color-accent)]/30 transition-all hover:-translate-y-1 hover:bg-[var(--color-accent)]"
             aria-label="Torna all'inizio"
           >
