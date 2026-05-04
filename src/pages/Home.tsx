@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { AnimatePresence, motion } from 'motion/react';
 import { ArrowUp } from 'lucide-react';
 import SEO from '../components/SEO';
 import Newsletter from '../components/Newsletter';
@@ -32,20 +31,20 @@ export default function Home() {
         canonical={`${SITE_URL}/`}
       />
 
-      <AnimatePresence>
-        {showBackToTop && (
-          <motion.button
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            onClick={() => scrollTo(0)}
-            className="fixed bottom-8 right-8 z-50 rounded-full bg-ink p-4 text-white shadow-[var(--shadow-premium)] ring-1 ring-[var(--color-accent)]/30 transition-all hover:-translate-y-1 hover:bg-[var(--color-accent)]"
-            aria-label="Torna all'inizio"
-          >
-            <ArrowUp size={20} />
-          </motion.button>
-        )}
-      </AnimatePresence>
+      <button
+        type="button"
+        onClick={() => scrollTo(0)}
+        aria-label="Torna all'inizio"
+        aria-hidden={!showBackToTop}
+        tabIndex={showBackToTop ? 0 : -1}
+        className={`fixed bottom-8 right-8 z-50 rounded-full bg-ink p-4 text-white shadow-[var(--shadow-premium)] ring-1 ring-[var(--color-accent)]/30 transition-all duration-300 ease-out hover:-translate-y-1 hover:bg-[var(--color-accent)] ${
+          showBackToTop
+            ? 'opacity-100 scale-100 pointer-events-auto'
+            : 'opacity-0 scale-90 pointer-events-none'
+        }`}
+      >
+        <ArrowUp size={20} />
+      </button>
 
       <HeroSection />
 
