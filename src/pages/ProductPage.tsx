@@ -6,6 +6,8 @@ import Button from '../components/Button';
 import Section from '../components/Section';
 import Breadcrumbs from '../components/Breadcrumbs';
 import SEO from '../components/SEO';
+import JsonLd from '../components/JsonLd';
+import StickyMobileCTA from '../components/StickyMobileCTA';
 import DemoContentNotice from '../components/DemoContentNotice';
 import { fetchProductBySlug } from '../services/firebaseService';
 import { useCart } from '../context/CartContext';
@@ -100,6 +102,29 @@ export default function ProductPage() {
     );
   }
 
+  const productUrl = `${SITE_URL}/shop/${product.slug}`;
+  const productJsonLd = isDemoProduct
+    ? null
+    : {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: product.name,
+        description:
+          product.description ||
+          'Un contenuto premium Travelliniwithus pensato per aiutarti a organizzare meglio il viaggio.',
+        image: product.imageUrl ? [product.imageUrl] : undefined,
+        category: product.category,
+        sku: product.id,
+        brand: { '@type': 'Brand', name: 'Travelliniwithus' },
+        offers: {
+          '@type': 'Offer',
+          url: productUrl,
+          priceCurrency: 'EUR',
+          price: product.price,
+          availability: 'https://schema.org/InStock',
+        },
+      };
+
   return (
     <div className="min-h-screen bg-[var(--color-sand)] pt-32">
       <SEO
@@ -108,9 +133,11 @@ export default function ProductPage() {
           product.description ||
           'Un contenuto premium Travelliniwithus pensato per aiutarti a organizzare meglio il viaggio.'
         }
-        canonical={`${SITE_URL}/shop/${product.slug}`}
+        canonical={productUrl}
+        image={product.imageUrl}
         noindex={isDemoProduct}
       />
+      {productJsonLd && <JsonLd data={productJsonLd} />}
 
       <Section className="pt-0 pb-0">
         <Breadcrumbs items={[{ label: 'Shop', href: '/shop' }, { label: product.name }]} />
@@ -268,6 +295,20 @@ export default function ProductPage() {
         </Section>
       )}
 
+      {isDemoProduct ? (
+        <StickyMobileCTA
+          label="Iscrivimi alla lista"
+          to={`/contatti?prodotto=${product.slug}`}
+          trackingId={`shop_${product.slug}_sticky_waitlist`}
+        />
+      ) : (
+        <StickyMobileCTA
+          label="Aggiungi al carrello"
+          onClick={handleAddToCart}
+          trackingId={`shop_${product.slug}_sticky_cart`}
+        />
+      )}
+
       <Section className="pt-12">
         <div className="mx-auto max-w-5xl rounded-[2.5rem] bg-[var(--color-ink)] p-8 text-white md:p-12">
           <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
@@ -275,9 +316,7 @@ export default function ProductPage() {
               <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-accent)]/15">
                 <FileText className="text-[var(--color-accent)]" size={24} />
               </div>
-              <h2 className="text-3xl font-serif md:text-5xl">
-                Lo shop deve restare editoriale.
-              </h2>
+              <h2 className="text-3xl font-serif md:text-5xl">Lo shop deve restare editoriale.</h2>
               <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/65">
                 Ogni prodotto deve essere utile, verificato e consegnabile. Se non è pronto, resta
                 in preview.

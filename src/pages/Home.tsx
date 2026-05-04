@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { ArrowUp } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
 import SEO from '../components/SEO';
 import Newsletter from '../components/Newsletter';
 import { SITE_URL } from '../config/site';
@@ -23,19 +22,6 @@ export default function Home() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'WebSite',
-        name: 'Travelliniwithus',
-        url: `${SITE_URL}/`,
-        description:
-          'Posti particolari, esperienze memorabili e consigli utili per chi vuole scoprire, salvare e vivere meglio ogni viaggio.',
-      },
-    ],
-  };
-
   return (
     <div className="min-h-screen overflow-x-clip bg-sand selection:bg-[var(--color-accent)] selection:text-white">
       <SEO
@@ -43,9 +29,6 @@ export default function Home() {
         description="Scopri destinazioni, esperienze e consigli di viaggio con un archivio unico filtrabile per luoghi e tipologie. Travelliniwithus racconta idee da salvare e vivere davvero."
         canonical={`${SITE_URL}/`}
       />
-      <Helmet>
-        <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
-      </Helmet>
 
       <AnimatePresence>
         {showBackToTop && (
@@ -79,7 +62,10 @@ export default function Home() {
               Newsletter
             </span>
             <h2 className="mt-4 max-w-xl text-4xl font-serif leading-[1.05] text-ink md:text-5xl">
-              Una email ogni tanto. <span className="italic text-black/55">Solo quando c'è davvero qualcosa da salvare.</span>
+              Una email ogni tanto.{' '}
+              <span className="italic text-black/55">
+                Solo quando c'è davvero qualcosa da salvare.
+              </span>
             </h2>
             <p className="mt-6 max-w-xl text-base leading-relaxed text-black/62">
               Luoghi, idee weekend, guide e strumenti. Niente rumore, niente pressione, niente
