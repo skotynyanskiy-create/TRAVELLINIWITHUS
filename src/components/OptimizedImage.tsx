@@ -12,12 +12,18 @@ interface OptimizedImageProps extends React.ImgHTMLAttributes<HTMLImageElement> 
   priority?: boolean;
 }
 
+interface ResponsiveSources {
+  srcSet: string;
+  defaultSrc: string;
+  avifSrcSet?: string;
+}
+
 /**
  * Generates responsive srcSet for supported CDN image sources.
  * Supports: Unsplash, Firebase Storage (via image resize extension).
  * Falls through for other sources.
  */
-function getResponsiveSrcSet(src: string): { srcSet: string; defaultSrc: string } | null {
+function getResponsiveSrcSet(src: string): ResponsiveSources | null {
   const widths = [400, 800, 1200, 1920, 2560];
 
   if (src.includes('unsplash.com')) {
@@ -28,8 +34,12 @@ function getResponsiveSrcSet(src: string): { srcSet: string; defaultSrc: string 
       .map((w) => `${baseUrl}${separator}w=${w}&auto=format&fit=crop&q=80 ${w}w`)
       .join(', ');
 
+    const avifSrcSet = widths
+      .map((w) => `${baseUrl}${separator}w=${w}&fm=avif&fit=crop&q=70 ${w}w`)
+      .join(', ');
+
     const defaultSrc = `${baseUrl}${separator}w=1200&auto=format&fit=crop&q=80`;
-    return { srcSet, defaultSrc };
+    return { srcSet, defaultSrc, avifSrcSet };
   }
 
   if (src.includes('firebasestorage.googleapis.com')) {
@@ -80,22 +90,33 @@ export default function OptimizedImage({
   };
 
   if (responsive) {
+    const resolvedSizes = sizes || '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw';
+
+    if (responsive.avifSrcSet) {
+      return (
+        <picture>
+          <source type="image/avif" srcSet={responsive.avifSrcSet} sizes={resolvedSizes} />
+          <img
+            alt={alt}
+            src={responsive.defaultSrc}
+            srcSet={responsive.srcSet}
+            sizes={resolvedSizes}
+            {...sharedProps}
+          />
+        </picture>
+      );
+    }
+
     return (
       <img
         alt={alt}
         src={responsive.defaultSrc}
         srcSet={responsive.srcSet}
-        sizes={sizes || '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'}
+        sizes={resolvedSizes}
         {...sharedProps}
       />
     );
   }
 
-  return (
-    <img
-      alt={alt}
-      src={src}
-      {...sharedProps}
-    />
-  );
+  return <img alt={alt} src={src} {...sharedProps} />;
 }
