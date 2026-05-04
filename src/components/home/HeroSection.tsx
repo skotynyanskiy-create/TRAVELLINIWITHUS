@@ -1,16 +1,27 @@
 import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'motion/react';
+import { motion } from 'motion/react';
+import { useGSAP } from '@gsap/react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Button from '../Button';
 import { CONTACTS, FEATURED_REEL } from '../../config/site';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 
-const HERO_IMAGE =
-  'https://images.unsplash.com/photo-1549144511-f099e773c147?q=80&w=2000&auto=format&fit=crop';
+const HERO_IMAGE_DESKTOP = '/images/brand/couple-travel.png';
+const HERO_IMAGE_MOBILE = '/images/hero-amalfi.png';
 const REEL_FALLBACK_IMAGE =
   'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800&auto=format&fit=crop';
 
-const TRUST_PILLS = ['Vissuto prima di scritto', 'Dettagli utili, zero marketing', 'Criterio, non hype'];
+const HERO_TITLE = 'Posti particolari che valgono davvero.';
+const TRUST_PILLS = [
+  'Vissuto prima di scritto',
+  'Dettagli utili, zero marketing',
+  'Criterio, non hype',
+];
+
+gsap.registerPlugin(ScrollTrigger);
 
 function getInstagramEmbedUrl(url: string) {
   return url.includes('/reel/') ? `${url.replace(/\/?$/, '/')}embed/` : '';
@@ -27,13 +38,11 @@ function FeaturedReelPreview() {
 
   const reelMessage = hasConfiguredVisual
     ? FEATURED_REEL.caption
-    : "Guarda il lato più immediato del progetto sul nostro profilo Instagram.";
+    : 'Guarda il lato più immediato del progetto sul nostro profilo Instagram.';
 
   return (
     <motion.aside
-      initial={{ opacity: 0, x: 28 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: 0.35, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+      data-hero-reel
       className="w-full max-w-[21rem] justify-self-start lg:justify-self-end"
       aria-label="Ultimo reel Instagram"
     >
@@ -88,56 +97,169 @@ function FeaturedReelPreview() {
 
 export default function HeroSection() {
   const heroRef = useRef<HTMLElement>(null);
-  const { scrollYProgress: heroScroll } = useScroll({
-    target: heroRef,
-    offset: ['start start', 'end start'],
-  });
-  const heroScale = useTransform(heroScroll, [0, 1], [1, 1.045]);
-  const heroOpacity = useTransform(heroScroll, [0, 0.82], [1, 0]);
+  const reducedMotion = useReducedMotion();
+
+  useGSAP(
+    () => {
+      if (reducedMotion) return;
+      const root = heroRef.current;
+      if (!root) return;
+
+      const mm = gsap.matchMedia();
+
+      mm.add(
+        {
+          isDesktop: '(min-width: 769px)',
+          isMobile: '(max-width: 768px)',
+        },
+        (ctx) => {
+          const conditions = ctx.conditions ?? { isDesktop: false, isMobile: true };
+          const { isDesktop } = conditions;
+
+          gsap.set('[data-hero-word]', { yPercent: 100, opacity: 0 });
+          gsap.set('[data-hero-eyebrow]', { clipPath: 'inset(0 100% 0 0)' });
+          gsap.set('[data-hero-paragraph]', { opacity: 0, y: 24 });
+          gsap.set('[data-hero-cta]', { opacity: 0, y: 24 });
+          gsap.set('[data-hero-pills]', { opacity: 0, y: 16 });
+          gsap.set('[data-hero-reel]', { opacity: 0, x: 60 });
+
+          const intro = gsap.timeline({
+            defaults: { ease: 'power3.out' },
+          });
+          intro
+            .to('[data-hero-eyebrow]', { clipPath: 'inset(0 0 0 0)', duration: 0.85 })
+            .to(
+              '[data-hero-word]',
+              { yPercent: 0, opacity: 1, duration: 0.7, stagger: 0.05 },
+              '-=0.5'
+            )
+            .to('[data-hero-paragraph]', { opacity: 1, y: 0, duration: 0.7 }, '-=0.4')
+            .to('[data-hero-pills]', { opacity: 1, y: 0, duration: 0.6 }, '-=0.5')
+            .to('[data-hero-cta]', { opacity: 1, y: 0, duration: 0.7 }, '-=0.4')
+            .to('[data-hero-reel]', { opacity: 1, x: 0, duration: 0.9 }, '-=0.6');
+
+          if (isDesktop) {
+            const scrub = gsap.timeline({
+              scrollTrigger: {
+                trigger: root,
+                start: 'top top',
+                end: '+=120%',
+                pin: true,
+                pinSpacing: true,
+                scrub: 0.6,
+              },
+            });
+
+            scrub
+              .to(
+                '[data-hero-image]',
+                {
+                  scale: 1.08,
+                  yPercent: -6,
+                  ease: 'none',
+                },
+                0
+              )
+              .to(
+                '[data-hero-overlay]',
+                {
+                  opacity: 0.55,
+                  ease: 'none',
+                },
+                0
+              )
+              .to(
+                '[data-hero-content]',
+                {
+                  opacity: 0,
+                  y: -40,
+                  ease: 'power1.in',
+                },
+                0.4
+              );
+          } else {
+            gsap.to('[data-hero-image]', {
+              scale: 1.04,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: root,
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 0.4,
+              },
+            });
+          }
+        }
+      );
+    },
+    { scope: heroRef, dependencies: [reducedMotion] }
+  );
+
+  const titleWords = HERO_TITLE.split(/\s+/);
 
   return (
     <section
       ref={heroRef}
       className="relative flex min-h-[92svh] w-full items-center overflow-hidden bg-ink px-6 pb-12 pt-32 text-white md:px-12 md:pb-16 md:pt-28 xl:min-h-[94svh]"
     >
-      <motion.div className="absolute inset-0 z-0" style={{ scale: heroScale }}>
-        <img
-          src={HERO_IMAGE}
-          alt=""
-          aria-hidden="true"
-          fetchPriority="high"
-          className="h-full w-full object-cover object-center brightness-[0.96] saturate-[1.04]"
-          referrerPolicy="no-referrer"
-        />
-      </motion.div>
+      <div data-hero-image className="absolute inset-0 z-0">
+        <picture>
+          <source media="(max-width: 768px)" srcSet={HERO_IMAGE_MOBILE} />
+          <img
+            src={HERO_IMAGE_DESKTOP}
+            alt=""
+            aria-hidden="true"
+            fetchPriority="high"
+            className="h-full w-full object-cover object-center brightness-[0.96] saturate-[1.04]"
+            referrerPolicy="no-referrer"
+          />
+        </picture>
+      </div>
 
-      <div className="absolute inset-0 z-[1] bg-[linear-gradient(180deg,rgba(17,17,17,0.08)_0%,rgba(17,17,17,0.24)_34%,rgba(17,17,17,0.64)_100%)]" />
+      <div
+        data-hero-overlay
+        className="absolute inset-0 z-[1] bg-[linear-gradient(180deg,rgba(17,17,17,0.08)_0%,rgba(17,17,17,0.24)_34%,rgba(17,17,17,0.64)_100%)]"
+        style={{ opacity: 0.18 }}
+      />
       <div className="absolute inset-0 z-[1] bg-[linear-gradient(90deg,rgba(17,17,17,0.78)_0%,rgba(17,17,17,0.46)_48%,rgba(17,17,17,0.2)_100%)]" />
 
-      <motion.div
+      <div
+        data-hero-content
         className="relative z-10 mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-center lg:gap-16 xl:grid-cols-[minmax(0,1fr)_24rem]"
-        style={{ opacity: heroOpacity }}
       >
-        <motion.div
-          initial={{ opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.95, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-3xl"
-        >
-          <span className="block text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent)] sm:text-xs">
-            Rodrigo & Betta / Travelliniwithus
+        <div className="max-w-3xl">
+          <span
+            data-hero-eyebrow
+            className="block text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent)] sm:text-xs"
+          >
+            Rodrigo &amp; Betta / Travelliniwithus
           </span>
 
-          <h1 className="mt-5 max-w-4xl text-5xl font-serif font-medium leading-[0.92] tracking-tight text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.45)] sm:text-6xl md:text-7xl xl:text-[6.15rem]">
-            Posti particolari che valgono davvero.
+          <h1
+            className="mt-5 max-w-4xl font-serif font-medium leading-[0.92] tracking-tight text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.45)]"
+            style={{ fontSize: 'var(--text-display-1, clamp(3rem, 6vw + 1rem, 6.5rem))' }}
+          >
+            <span className="sr-only">{HERO_TITLE}</span>
+            <span aria-hidden="true" className="flex flex-wrap gap-x-[0.28em] overflow-hidden">
+              {titleWords.map((word, i) => (
+                <span key={`${word}-${i}`} className="inline-block overflow-hidden">
+                  <span data-hero-word className="inline-block">
+                    {word}
+                  </span>
+                </span>
+              ))}
+            </span>
           </h1>
 
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/86 drop-shadow-[0_2px_12px_rgba(0,0,0,0.3)] md:text-xl">
-            Guide pratiche scritte da chi ha vissuto il viaggio. Atmosfera, dettagli utili e consigli
-            che aiutano a capire se un posto merita davvero.
+          <p
+            data-hero-paragraph
+            className="mt-6 max-w-2xl text-base leading-relaxed text-white/86 drop-shadow-[0_2px_12px_rgba(0,0,0,0.3)] md:text-xl"
+          >
+            Guide pratiche scritte da chi ha vissuto il viaggio. Atmosfera, dettagli utili e
+            consigli che aiutano a capire se un posto merita davvero.
           </p>
 
-          <div className="mt-7 flex flex-wrap gap-2">
+          <div data-hero-pills className="mt-7 flex flex-wrap gap-2">
             {TRUST_PILLS.map((pill) => (
               <span
                 key={pill}
@@ -148,15 +270,21 @@ export default function HeroSection() {
             ))}
           </div>
 
-          <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
+          <div data-hero-cta className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
             <Button
               to="/destinazioni"
               variant="cta"
               size="lg"
+              trackingId="home_hero_destinazioni"
               className="group h-14 min-w-[230px] rounded-lg shadow-[0_18px_44px_rgba(0,0,0,0.18)] sm:h-16"
             >
-              <span className="text-sm font-bold uppercase tracking-widest">Scopri destinazioni</span>
-              <ArrowRight size={20} className="ml-2 transition-transform group-hover:translate-x-1" />
+              <span className="text-sm font-bold uppercase tracking-widest">
+                Scopri destinazioni
+              </span>
+              <ArrowRight
+                size={20}
+                className="ml-2 transition-transform group-hover:translate-x-1"
+              />
             </Button>
 
             <Link
@@ -170,10 +298,10 @@ export default function HeroSection() {
           <p className="mt-6 max-w-xl text-xs font-semibold uppercase tracking-[0.18em] text-white/68">
             Scoperta, utilità e uno sguardo personale prima di prenotare o partire.
           </p>
-        </motion.div>
+        </div>
 
         <FeaturedReelPreview />
-      </motion.div>
+      </div>
     </section>
   );
 }
