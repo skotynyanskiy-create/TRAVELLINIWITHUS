@@ -1,9 +1,12 @@
-import { motion } from 'motion/react';
+import { useRef } from 'react';
+import { useGSAP } from '@gsap/react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, BadgeCheck, Camera, MapPinned } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 
-const COUPLE_IMG =
-  'https://images.unsplash.com/photo-1516589091380-5d8e87df6999?w=800&auto=format&fit=crop&q=80';
+const COUPLE_IMG = '/images/brand/about-editorial.png';
 
 const METHOD_STANDARDS = [
   {
@@ -23,74 +26,129 @@ const METHOD_STANDARDS = [
   },
 ];
 
+gsap.registerPlugin(ScrollTrigger);
+
 export default function CoupleIntro() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const reducedMotion = useReducedMotion();
+
+  useGSAP(
+    () => {
+      if (reducedMotion) return;
+      const root = sectionRef.current;
+      if (!root) return;
+
+      gsap.from('[data-couple-image]', {
+        yPercent: 8,
+        scale: 1.04,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: root,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 0.7,
+        },
+      });
+
+      gsap.set('[data-couple-line]', { yPercent: 110, opacity: 0 });
+      gsap.to('[data-couple-line]', {
+        yPercent: 0,
+        opacity: 1,
+        duration: 0.85,
+        ease: 'power3.out',
+        stagger: 0.1,
+        scrollTrigger: {
+          trigger: '[data-couple-heading]',
+          start: 'top 78%',
+          once: true,
+        },
+      });
+
+      gsap.from('[data-couple-card]', {
+        y: 28,
+        opacity: 0,
+        duration: 0.6,
+        ease: 'power3.out',
+        stagger: 0.08,
+        scrollTrigger: {
+          trigger: '[data-couple-cards]',
+          start: 'top 80%',
+          once: true,
+        },
+      });
+    },
+    { scope: sectionRef, dependencies: [reducedMotion] }
+  );
+
   return (
-    <section className="bg-[var(--color-sand)] py-20 md:py-24">
+    <section ref={sectionRef} className="bg-[var(--color-sand)] py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-center lg:gap-14">
-          <motion.div
-            initial={{ opacity: 0, x: -24 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-            className="relative lg:col-span-5"
-          >
-            <div className="aspect-[3/2] overflow-hidden rounded-lg lg:aspect-[4/5]">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-start lg:gap-14">
+          <div className="relative lg:col-span-7">
+            <div
+              data-couple-image
+              className="aspect-[3/2] overflow-hidden rounded-2xl shadow-[0_30px_70px_-20px_rgba(17,17,17,0.25)] lg:aspect-[5/6]"
+            >
               <img
                 src={COUPLE_IMG}
-                alt="Rodrigo e Betta - Travelliniwithus"
+                alt="Rodrigo e Betta — Travelliniwithus"
                 className="h-full w-full object-cover"
                 loading="lazy"
               />
             </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4, duration: 0.6 }}
-              className="absolute bottom-4 left-4 rounded-lg border border-[var(--color-accent)]/20 bg-white/90 px-4 py-3 backdrop-blur-sm"
-            >
-              <div className="font-script text-xl text-[var(--color-accent)]">Rodrigo & Betta</div>
+            <div className="absolute bottom-4 left-4 rounded-lg border border-[var(--color-accent)]/20 bg-white/90 px-4 py-3 backdrop-blur-sm">
+              <div className="font-script text-xl text-[var(--color-accent)]">
+                Rodrigo &amp; Betta
+              </div>
               <div className="text-[10px] uppercase tracking-widest text-black/50">
                 Il metodo Travelliniwithus
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 24 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-7"
-          >
+          <div className="lg:col-span-5 lg:sticky lg:top-32">
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
               Il metodo
             </span>
-            <h2 className="mt-3 max-w-2xl text-3xl font-serif leading-tight text-ink md:text-5xl">
-              Andiamo, proviamo, raccontiamo.
-              <span className="text-[var(--color-accent)]"> Solo dopo consigliamo.</span>
+            <h2
+              data-couple-heading
+              className="mt-3 max-w-2xl font-serif leading-[1.02] tracking-tight text-ink"
+              style={{ fontSize: 'var(--text-display-2, clamp(2.25rem, 4vw + 1rem, 4rem))' }}
+            >
+              <span className="sr-only">
+                Andiamo, proviamo, raccontiamo. Solo dopo consigliamo.
+              </span>
+              <span aria-hidden="true" className="block overflow-hidden">
+                <span data-couple-line className="block">
+                  Andiamo, proviamo, raccontiamo.
+                </span>
+              </span>
+              <span aria-hidden="true" className="block overflow-hidden">
+                <span data-couple-line className="block text-[var(--color-accent)]">
+                  Solo dopo consigliamo.
+                </span>
+              </span>
             </h2>
-            <p className="mt-5 max-w-2xl text-base leading-relaxed text-black/65 md:text-lg">
+            <p className="drop-cap mt-6 max-w-2xl text-base leading-relaxed text-black/70 md:text-lg">
               Travelliniwithus non nasce per mostrare più posti possibile. Nasce per selezionare
               quelli che meritano davvero, con un racconto abbastanza concreto da aiutarti a
               decidere.
             </p>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/65 md:text-lg">
               Rodrigo e Betta tengono insieme sguardo personale, immagini, ricerca e dettagli
-              pratici: e questo che rende il progetto utile sia per chi legge sia per i partner
+              pratici: è questo che rende il progetto utile sia per chi legge sia per i partner
               giusti.
             </p>
 
-            <div className="mt-7 grid gap-3 md:grid-cols-3">
+            <div data-couple-cards className="mt-8 grid gap-3 md:grid-cols-3">
               {METHOD_STANDARDS.map((standard) => {
                 const Icon = standard.icon;
-
                 return (
                   <div
                     key={standard.title}
-                    className="rounded-lg border border-black/8 bg-white/70 p-4"
+                    data-couple-card
+                    className="rounded-xl border border-black/8 bg-white/70 p-4 backdrop-blur-sm"
                   >
                     <Icon size={18} className="text-[var(--color-accent)]" />
                     <h3 className="mt-3 text-sm font-bold text-ink">{standard.title}</h3>
@@ -112,7 +170,7 @@ export default function CoupleIntro() {
             >
               Come lavoriamo davvero <ArrowRight size={14} />
             </Link>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

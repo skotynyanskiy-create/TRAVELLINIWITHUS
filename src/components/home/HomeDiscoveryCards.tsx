@@ -1,6 +1,10 @@
-import { motion } from 'motion/react';
+import { useRef } from 'react';
+import { useGSAP } from '@gsap/react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, BookOpen, Search } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 import {
   DESTINATION_GROUPS,
   GUIDE_CATEGORIES,
@@ -24,12 +28,16 @@ function GuideTile({ category, description }: { category: GuideCategory; descrip
   const Icon = visual?.icon;
   return (
     <Link
+      data-discovery-reveal
       to={`/guide?cat=${slugifyGuideCategory(category)}`}
       className="group flex flex-col gap-2 rounded-2xl border border-black/6 bg-white p-4 transition-all hover:-translate-y-0.5 hover:shadow-md"
       style={{ borderLeftColor: visual?.color, borderLeftWidth: 3 }}
     >
       {Icon && (
-        <div className="flex h-8 w-8 items-center justify-center rounded-xl" style={{ backgroundColor: visual.colorLight, color: visual.color }}>
+        <div
+          className="flex h-8 w-8 items-center justify-center rounded-xl"
+          style={{ backgroundColor: visual.colorLight, color: visual.color }}
+        >
           <Icon size={16} />
         </div>
       )}
@@ -66,11 +74,14 @@ function getExperienceImage(type: ExperienceType) {
   return EXPERIENCE_IMAGES[type] ?? EXPERIENCE_IMAGES['Posti particolari'];
 }
 
+gsap.registerPlugin(ScrollTrigger);
+
 function DestinationFeature({ group }: { group: DestinationGroup }) {
   const visual = getDestinationVisual(group);
 
   return (
     <Link
+      data-discovery-reveal
       to={`/destinazioni?group=${encodeURIComponent(group)}`}
       className="group relative min-h-[360px] overflow-hidden rounded-lg bg-ink text-white md:min-h-[500px] lg:col-span-7"
     >
@@ -103,11 +114,18 @@ function DestinationFeature({ group }: { group: DestinationGroup }) {
   );
 }
 
-function DestinationTile({ group, className = '' }: { group: DestinationGroup; className?: string }) {
+function DestinationTile({
+  group,
+  className = '',
+}: {
+  group: DestinationGroup;
+  className?: string;
+}) {
   const visual = getDestinationVisual(group);
 
   return (
     <Link
+      data-discovery-reveal
       to={`/destinazioni?group=${encodeURIComponent(group)}`}
       className={`group relative min-h-[154px] overflow-hidden rounded-lg bg-ink text-white md:min-h-[242px] ${className}`}
     >
@@ -142,6 +160,7 @@ function ExperienceCard({ type }: { type: ExperienceType }) {
 
   return (
     <Link
+      data-discovery-reveal
       to={`/esperienze?type=${slugifyExperienceType(type)}`}
       className="group relative min-h-[146px] overflow-hidden rounded-lg bg-ink text-left text-white transition-all duration-300 hover:-translate-y-0.5 md:min-h-[190px]"
     >
@@ -179,16 +198,34 @@ function ExperienceCard({ type }: { type: ExperienceType }) {
 
 export default function HomeDiscoveryCards() {
   const [featuredDestination, ...secondaryDestinations] = DESTINATION_GROUPS;
+  const sectionRef = useRef<HTMLElement>(null);
+  const reducedMotion = useReducedMotion();
+
+  useGSAP(
+    () => {
+      if (reducedMotion) return;
+      const root = sectionRef.current;
+      if (!root) return;
+
+      ScrollTrigger.batch('[data-discovery-reveal]', {
+        start: 'top 88%',
+        once: true,
+        onEnter: (batch) =>
+          gsap.from(batch, {
+            opacity: 0,
+            y: 32,
+            duration: 0.65,
+            ease: 'power3.out',
+            stagger: 0.08,
+          }),
+      });
+    },
+    { scope: sectionRef, dependencies: [reducedMotion] }
+  );
 
   return (
-    <section className="bg-white py-16 md:py-24">
-      <motion.div
-        className="mx-auto max-w-[82rem] px-6 md:px-10 xl:px-12"
-        initial={{ opacity: 0, y: 28 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-100px' }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      >
+    <section ref={sectionRef} className="bg-white py-16 md:py-24">
+      <div className="mx-auto max-w-[82rem] px-6 md:px-10 xl:px-12">
         <div className="mb-7 grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div className="max-w-3xl">
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
@@ -281,7 +318,7 @@ export default function HomeDiscoveryCards() {
             ))}
           </div>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }
