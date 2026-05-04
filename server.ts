@@ -748,7 +748,29 @@ async function startServer() {
   const app = express();
   const PORT = Number(process.env.PORT) || 3000;
 
-  app.use(cors());
+  // Trust the first proxy hop so express-rate-limit keys on the real client IP
+  // when running behind Render/Vercel/Cloudflare. Harmless in local dev.
+  app.set('trust proxy', 1);
+
+  const allowedOrigins = [
+    process.env.APP_URL,
+    'https://travelliniwithus.it',
+    'https://www.travelliniwithus.it',
+    'http://localhost:3000',
+    'http://localhost:5173',
+  ].filter((origin): origin is string => Boolean(origin));
+
+  app.use(
+    cors({
+      origin(origin, callback) {
+        // No origin = same-origin or non-browser client; let it through.
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) return callback(null, true);
+        return callback(new Error(`CORS: origin ${origin} not allowed`));
+      },
+      credentials: false,
+    })
+  );
 
   // Rate limiting — protegge da abuse e spam
   const newsletterLimiter = rateLimit({
@@ -934,7 +956,9 @@ async function startServer() {
     res.json({ received: true });
   });
 
-  app.use(express.json());
+  // 32kb is enough for any contact-lead message; bigger payloads are dropped
+  // before they reach our handlers, capping JSON-parse CPU under abuse.
+  app.use(express.json({ limit: '32kb' }));
 
   const saveLeadBackup = async ({
     type,
