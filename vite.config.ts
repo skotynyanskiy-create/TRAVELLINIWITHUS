@@ -25,20 +25,20 @@ export default defineConfig(({ mode }) => {
             {
               src: 'pwa-192x192.png',
               sizes: '192x192',
-              type: 'image/png'
+              type: 'image/png',
             },
             {
               src: 'pwa-512x512.png',
               sizes: '512x512',
               type: 'image/png',
-              purpose: 'any maskable'
-            }
-          ]
+              purpose: 'any maskable',
+            },
+          ],
         },
         workbox: {
           maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
-        }
-      })
+        },
+      }),
     ],
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
@@ -94,6 +94,18 @@ export default defineConfig(({ mode }) => {
               return 'motion';
             }
 
+            if (id.includes('node_modules/gsap') || id.includes('@gsap/react')) {
+              return 'gsap';
+            }
+
+            if (id.includes('node_modules/lenis')) {
+              return 'lenis';
+            }
+
+            if (id.includes('embla-carousel')) {
+              return 'embla';
+            }
+
             if (id.includes('lucide-react')) {
               return 'icons';
             }
@@ -118,7 +130,11 @@ export default defineConfig(({ mode }) => {
               return 'editor';
             }
 
-            if (id.includes('fuse.js') || id.includes('react-intersection-observer') || id.includes('react-error-boundary')) {
+            if (
+              id.includes('fuse.js') ||
+              id.includes('react-intersection-observer') ||
+              id.includes('react-error-boundary')
+            ) {
               return 'search-utils';
             }
 
