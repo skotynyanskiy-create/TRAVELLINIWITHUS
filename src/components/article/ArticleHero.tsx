@@ -16,6 +16,7 @@ interface ArticleHeroProps {
   onToggleFavorite: () => void;
   onShare: () => void;
   yHero: MotionValue<number>;
+  slug?: string;
 }
 
 export default function ArticleHero({
@@ -28,6 +29,7 @@ export default function ArticleHero({
   onToggleFavorite,
   onShare,
   yHero,
+  slug,
 }: ArticleHeroProps) {
   const [pulseKey, setPulseKey] = useState(0);
 
@@ -39,7 +41,14 @@ export default function ArticleHero({
   return (
     <header className="relative h-[70vh] md:h-[85vh] w-full flex items-end pb-20 overflow-hidden">
       <div className="absolute inset-0 z-0 bg-black">
-        <motion.div style={{ y: yHero, scale: 1.1 }} className="w-full h-full origin-top">
+        <motion.div
+          style={{
+            y: yHero,
+            scale: 1.1,
+            ...(slug ? { viewTransitionName: `article-${slug}` } : {}),
+          }}
+          className="w-full h-full origin-top"
+        >
           <OptimizedImage
             src={article.image}
             alt={article.title}
