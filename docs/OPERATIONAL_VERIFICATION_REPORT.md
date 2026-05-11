@@ -1,7 +1,7 @@
 # TRAVELLINIWITHUS — Operational Verification Report
 
-> [!warning] Stale — ultimo aggiornamento 2026-03-20 (35 giorni fa)
-> Report storico. Lo stato operativo corrente è in [[10_Projects/PROJECT_RELEASE_READINESS_2026_04_24_PRODUCTION_PASS]] e [[10_Projects/PROJECT_RELEASE_READINESS]]. I bug e caveats citati qui potrebbero essere già chiusi: verifica prima di agire.
+> [!danger] Superseded by [[10_Projects/PROJECT_RELEASE_READINESS_2026_04_24_PRODUCTION_PASS]]
+> Le firestore.rules marchiate ✅ VERIFIED in questo report sono state completamente riscritte nel pass 2026-04-24; la verifica di sicurezza qui documentata non è più valida.
 
 **Date**: 2026-03-20  
 **Reviewed By**: Senior AI Expert  

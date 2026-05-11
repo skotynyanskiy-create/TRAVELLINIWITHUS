@@ -1,7 +1,7 @@
 # TRAVELLINIWITHUS — Demo Products for Firestore
 
-> [!warning] Stale — ultimo aggiornamento 2026-03-20 (35 giorni fa)
-> Dati demo per popolamento shop. Gli schemi prodotto sono cambiati dal pass 2026-04-24: verifica rispetto a [[FIRESTORE_SCHEMA]] e [[API_CONTRACT]] prima di copiare in Firestore. Non usare in produzione senza riallineare i campi.
+> [!danger] Superseded by [[FIRESTORE_SCHEMA]]
+> Tutti i prodotti hanno `published: true` ma FIRESTORE_SCHEMA vieta contenuti demo pubblicati senza `noindex` o marker visivo; il campo `createdAt` non è più nello schema prodotti.
 
 Copy-paste these products into Firestore Console to populate the shop.
 
