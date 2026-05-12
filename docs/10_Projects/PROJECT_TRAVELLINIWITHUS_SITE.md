@@ -18,6 +18,13 @@ tags:
 
 Portare il sito Travelliniwithus verso una V1 pubblicabile con funnel reali, brand coerente e operativita stabile.
 
+## Direzione V2
+
+La roadmap avanzata V2 vive in [[10_Projects/PROJECT_SITE_V2_ADVANCED_IMPROVEMENT_PLAN]].
+
+Obiettivo V2: trasformare il sito da V1 editoriale/commerciale a piattaforma travel piu utile,
+interattiva, misurabile e monetizzabile, senza perdere il carattere people-led di Rodrigo e Betta.
+
 ## Repository canonico
 
 Decisione operativa: `skotynyanskiy-create/TRAVELLINIWITHUS` e il repository ufficiale e unico da usare per Travelliniwithus.
@@ -79,6 +86,8 @@ docs/
 - [[20_Decisions/DECISION_0001_OBSIDIAN_VAULT_STRATEGY]]
 - [[30_Meetings/MEETING_2026-04-12_obsidian_vault_upgrade]]
 - [[10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT]]
+- [[10_Projects/PROJECT_SITE_V2_ADVANCED_IMPROVEMENT_PLAN]]
+- [[10_Projects/PROJECT_SITE_V2_SPRINT_0_BASELINE]]
 - [[10_Projects/PROJECT_DESTINATIONS_SECTION_REVIEW]]
 - [[10_Projects/PROJECT_EDITORIAL_SYSTEM_V1_1]]
 - [[10_Projects/PROJECT_RELEASE_READINESS]]

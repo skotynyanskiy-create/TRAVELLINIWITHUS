@@ -19,6 +19,28 @@ tags:
 
 Tenere sotto controllo cio che manca per una release pulita e verificabile della V1.
 
+## Piano V2 collegato
+
+La pianificazione V2 avanzata e tracciata in [[10_Projects/PROJECT_SITE_V2_ADVANCED_IMPROVEMENT_PLAN]].
+
+Prima di raccomandare un deploy V2, chiudere almeno:
+
+- [x] baseline QA V2 su route pubbliche principali
+- [ ] sostituzione asset demo/AI critici con asset reali approvati
+- [ ] contenuti preview non indicizzabili o sostituiti da contenuti reali
+- [ ] roundtrip lead Firestore/fallback verificato
+- [ ] shop reale solo se checkout e delivery sono pronti
+- [ ] `npm run audit:quality`
+
+## Snapshot V2 Sprint 0 - 2026-05-05
+
+- completata baseline Sprint 0 in [[10_Projects/PROJECT_SITE_V2_SPRINT_0_BASELINE]]
+- `npm run predeploy`: PASS
+- `npm run audit:visual`: PASS, 12/12 dopo fix overflow mobile
+- `npm run audit:agents`: PASS dopo compatibilita CRLF e riferimenti agenti
+- bug overflow mobile tracciato e risolto in [[14_Bugs/BUG_SITE_V2_MOBILE_OVERFLOW_BASELINE]]
+- restano aperti per V2: asset reali, contenuti reali, sitemap dinamica, roundtrip lead, shop reale
+
 ## Checklist
 
 - [ ] verificare home e hero

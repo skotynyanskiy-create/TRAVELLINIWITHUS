@@ -51,7 +51,7 @@ export default function AnalyticsScripts() {
       )}
       {metaPixelId && (
         <noscript id="meta-pixel-noscript">
-          {`<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=${metaPixelId}&ev=PageView&noscript=1" />`}
+          {`<img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=${metaPixelId}&ev=PageView&noscript=1" />`}
         </noscript>
       )}
     </Helmet>

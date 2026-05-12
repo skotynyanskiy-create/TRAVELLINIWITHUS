@@ -11,17 +11,10 @@
             "id": "e5f6ddea49458a62",
             "type": "leaf",
             "state": {
-              "type": "canvas",
-              "state": {
-                "file": "Senza nome 4.canvas",
-                "viewState": {
-                  "x": 0,
-                  "y": 0,
-                  "zoom": 0
-                }
-              },
-              "icon": "lucide-layout-dashboard",
-              "title": "Senza nome 4"
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "Nuova scheda"
             }
           }
         ]
@@ -127,13 +120,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Senza nome 4.canvas",
                 "followCursor": true,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Struttura di Senza nome 4"
+              "title": "Struttura"
             }
           }
         ],

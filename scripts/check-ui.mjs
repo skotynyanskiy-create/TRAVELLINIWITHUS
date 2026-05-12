@@ -27,6 +27,7 @@ const rawColorAllowlist = [
   'src/components/AffiliateBox.tsx',
   'src/components/Button.tsx',
   'src/components/CartDrawer.tsx',
+  'src/components/CrossLinkWidget.tsx',
   'src/components/EmptyState.tsx',
   'src/components/Footer.tsx',
   'src/components/InteractiveMap.tsx',

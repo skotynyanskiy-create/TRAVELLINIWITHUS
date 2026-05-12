@@ -667,7 +667,7 @@ export default function Destinazioni() {
               </div>
             )}
 
-            <div className="grid gap-5 lg:grid-cols-3">
+            <div className="grid min-w-0 gap-5 lg:grid-cols-3">
               {[
                 {
                   label: 'Periodo',
@@ -691,7 +691,7 @@ export default function Destinazioni() {
                   icon: Clock3,
                 },
               ].map(({ label, key, value, values, icon: Icon }) => (
-                <div key={key}>
+                <div key={key} className="min-w-0">
                   <span className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-black/45">
                     <Icon size={14} /> {label}
                   </span>

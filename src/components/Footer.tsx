@@ -1,4 +1,4 @@
-import { ArrowRight, Instagram, Mail, ShieldCheck } from 'lucide-react';
+import { Instagram, Mail, ShieldCheck } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { CONTACTS } from '../config/site';

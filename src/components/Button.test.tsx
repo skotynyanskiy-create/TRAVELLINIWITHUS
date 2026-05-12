@@ -1,7 +1,6 @@
-import { render } from '@testing-library/react';
+import { render } from '../test/test-utils';
 import { describe, it, expect, vi } from 'vitest';
 import Button from './Button';
-import { BrowserRouter } from 'react-router-dom';
 
 describe('Button Component', () => {
   it('renders children correctly', () => {
@@ -17,11 +16,7 @@ describe('Button Component', () => {
   });
 
   it('renders as a Link when "to" prop is provided', () => {
-    const { getByRole } = render(
-      <BrowserRouter>
-        <Button to="/test">Link</Button>
-      </BrowserRouter>
-    );
+    const { getByRole } = render(<Button to="/test">Link</Button>);
 
     const linkElement = getByRole('link', { name: /link/i });
     expect(linkElement).toBeInTheDocument();

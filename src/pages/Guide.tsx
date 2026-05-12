@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, BookOpen, CheckCircle2, Clock, Filter, Search } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
-import { cardContainer } from '../lib/animations';
 import ArticleSkeleton from '../components/ArticleSkeleton';
 import Breadcrumbs from '../components/Breadcrumbs';
 import JsonLd from '../components/JsonLd';
@@ -20,23 +19,9 @@ import { siteContentDefaults } from '../config/siteContent';
 import { PREVIEW_GUIDES } from '../config/previewContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { SITE_URL } from '../config/site';
-import {
-  GUIDE_CATEGORIES,
-  slugifyGuideCategory,
-  type GuideCategory,
-} from '../config/contentTaxonomy';
+import type { GuideCategory } from '../config/contentTaxonomy';
 import GuideCategoryBrowser from '../components/discovery/GuideCategoryBrowser';
-import { mapArticleToArchiveItem } from '../utils/contentArchive';
 import { formatDateValue, toMillis, type DateValue } from '../utils/dateValue';
-import {
-  countByScope,
-  filterByScope,
-  hasAnyFilter,
-  isGuideItem,
-  parseDiscoveryFilters,
-} from '../utils/discoveryQuery';
-import { usePagination } from '../hooks/usePagination';
-import { normalizeFirestoreArticle } from '../utils/articleData';
 
 interface GuideArticle {
   id: string;
@@ -102,7 +87,9 @@ function Guide() {
     throw new Error('Impossibile caricare le guide');
   }
 
-  const usingPreview = articles.length > 0 && articles.every((guide) => PREVIEW_GUIDES.some((preview) => preview.slug === guide.slug));
+  const usingPreview =
+    articles.length > 0 &&
+    articles.every((guide) => PREVIEW_GUIDES.some((preview) => preview.slug === guide.slug));
   const categories = useMemo(() => {
     const cats = new Set(articles.map((guide) => guide.category).filter(Boolean));
     return ['Tutte', ...Array.from(cats)];
@@ -175,8 +162,8 @@ function Guide() {
               Guide per partire <span className="italic text-black/55">con più criterio</span>
             </h1>
             <p className="mt-8 max-w-2xl text-lg leading-relaxed text-black/68">
-              Non solo ispirazione: qui raccogliamo metodi, checklist e itinerari pensati per
-              capire se un posto fa per te, quando andarci e come organizzarlo senza rumore.
+              Non solo ispirazione: qui raccogliamo metodi, checklist e itinerari pensati per capire
+              se un posto fa per te, quando andarci e come organizzarlo senza rumore.
             </p>
           </div>
 
@@ -203,17 +190,19 @@ function Guide() {
       </Section>
 
       <Section spacing="tight">
-      {/* ─── CATEGORY BROWSER ─── */}
-      <div className="mb-2">
-        <h2 className="mb-4 text-[10px] font-bold uppercase tracking-[0.28em] text-black/45">
-          Scegli un argomento
-        </h2>
-        <GuideCategoryBrowser
-          selectedCategory={selectedCategory === 'Tutte' ? null : selectedCategory as GuideCategory}
-          onSelect={handleCategorySelect}
-          counts={categoryCounts}
-        />
-      </div>
+        {/* ─── CATEGORY BROWSER ─── */}
+        <div className="mb-2">
+          <h2 className="mb-4 text-[10px] font-bold uppercase tracking-[0.28em] text-black/45">
+            Scegli un argomento
+          </h2>
+          <GuideCategoryBrowser
+            selectedCategory={
+              selectedCategory === 'Tutte' ? null : (selectedCategory as GuideCategory)
+            }
+            onSelect={handleCategorySelect}
+            counts={categoryCounts}
+          />
+        </div>
 
         {usingPreview && (
           <DemoContentNotice
@@ -242,7 +231,10 @@ function Guide() {
             </div>
 
             <div className="relative w-full lg:max-w-xs">
-              <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-black/30" />
+              <Search
+                size={15}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-black/30"
+              />
               <input
                 type="text"
                 value={searchQuery}
@@ -301,8 +293,15 @@ function Guide() {
                     isFeatured ? 'lg:col-span-8' : 'lg:col-span-4'
                   }`}
                 >
-                  <Link to={path} className={isFeatured ? 'grid h-full md:grid-cols-[1.1fr_0.9fr]' : 'block h-full'}>
-                    <div className={`relative overflow-hidden ${isFeatured ? 'min-h-[360px]' : 'aspect-[16/11]'}`}>
+                  <Link
+                    to={path}
+                    className={
+                      isFeatured ? 'grid h-full md:grid-cols-[1.1fr_0.9fr]' : 'block h-full'
+                    }
+                  >
+                    <div
+                      className={`relative overflow-hidden ${isFeatured ? 'min-h-[360px]' : 'aspect-[16/11]'}`}
+                    >
                       <OptimizedImage
                         src={guide.image}
                         alt={guide.title}
@@ -331,7 +330,9 @@ function Guide() {
                         </span>
                       </div>
 
-                      <h2 className={`${isFeatured ? 'text-3xl md:text-4xl' : 'text-2xl'} font-serif leading-tight transition-colors group-hover:text-[var(--color-accent-text)]`}>
+                      <h2
+                        className={`${isFeatured ? 'text-3xl md:text-4xl' : 'text-2xl'} font-serif leading-tight transition-colors group-hover:text-[var(--color-accent-text)]`}
+                      >
                         {guide.title}
                       </h2>
 
@@ -343,7 +344,10 @@ function Guide() {
 
                       <span className="mt-auto inline-flex items-center gap-2 pt-8 text-[10px] font-bold uppercase tracking-[0.22em] text-black/42 transition-colors group-hover:text-[var(--color-accent-text)]">
                         Leggi la guida
-                        <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
+                        <ArrowRight
+                          size={15}
+                          className="transition-transform group-hover:translate-x-1"
+                        />
                       </span>
                     </div>
                   </Link>
