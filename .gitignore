@@ -16,6 +16,10 @@ output/
 # Playwright MCP session cache (auto-generated per session)
 .playwright-mcp/
 
+# Claude Code local per-device settings (personal whitelist, not shared)
+.claude/settings.local.json
+.claude/worktrees/
+
 # Obsidian local user config + untitled canvas drafts
 .obsidian/
 docs/Senza nome*
