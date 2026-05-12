@@ -35,10 +35,21 @@ export default function HeroBackdrop({ imageDesktop, imageMobile, videoSrc }: He
     };
   }, [videoSrc, reducedMotion]);
 
+  const toFmt = (src: string, ext: 'avif' | 'webp') =>
+    src.replace(/\.(png|jpe?g)(?=$|[?#])/i, `.${ext}`);
+  const mobAvif = toFmt(imageMobile, 'avif');
+  const mobWebp = toFmt(imageMobile, 'webp');
+  const deskAvif = toFmt(imageDesktop, 'avif');
+  const deskWebp = toFmt(imageDesktop, 'webp');
+
   return (
     <div data-hero-image className="absolute inset-0 z-0">
       <picture>
+        <source media="(max-width: 768px)" type="image/avif" srcSet={mobAvif} />
+        <source media="(max-width: 768px)" type="image/webp" srcSet={mobWebp} />
         <source media="(max-width: 768px)" srcSet={imageMobile} />
+        <source type="image/avif" srcSet={deskAvif} />
+        <source type="image/webp" srcSet={deskWebp} />
         <img
           src={imageDesktop}
           alt=""

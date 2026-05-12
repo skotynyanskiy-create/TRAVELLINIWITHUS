@@ -118,5 +118,18 @@ export default function OptimizedImage({
     );
   }
 
+  const localMatch = /^\/(?:images\/[^?#]+)\.(png|jpe?g)(\?[^#]*)?(#.*)?$/i.exec(src);
+  if (localMatch) {
+    const avifSrc = src.replace(/\.(png|jpe?g)(?=$|[?#])/i, '.avif');
+    const webpSrc = src.replace(/\.(png|jpe?g)(?=$|[?#])/i, '.webp');
+    return (
+      <picture>
+        <source type="image/avif" srcSet={avifSrc} />
+        <source type="image/webp" srcSet={webpSrc} />
+        <img alt={alt} src={src} {...sharedProps} />
+      </picture>
+    );
+  }
+
   return <img alt={alt} src={src} {...sharedProps} />;
 }
