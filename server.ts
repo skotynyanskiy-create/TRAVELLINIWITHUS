@@ -752,6 +752,34 @@ async function startServer() {
   // when running behind Render/Vercel/Cloudflare. Harmless in local dev.
   app.set('trust proxy', 1);
 
+  const isProd = process.env.NODE_ENV === 'production';
+  const cspProd =
+    "default-src 'self'; " +
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://m.stripe.network https://connect.facebook.net https://www.facebook.com https://apis.google.com https://www.googletagmanager.com https://www.google-analytics.com; " +
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://api.mapbox.com; " +
+    "font-src 'self' data: https://fonts.gstatic.com; " +
+    "img-src 'self' data: blob: https:; " +
+    "media-src 'self' https: blob:; " +
+    "connect-src 'self' https://*.googleapis.com wss://*.firebaseio.com https://*.firebaseio.com https://*.firebasestorage.app https://identitytoolkit.googleapis.com https://api.stripe.com https://m.stripe.network https://api.mapbox.com https://events.mapbox.com https://www.facebook.com https://www.google-analytics.com; " +
+    "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.facebook.com; " +
+    "worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests";
+
+  app.use((_req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader(
+      'Permissions-Policy',
+      'camera=(), microphone=(), geolocation=(self), payment=(self "https://js.stripe.com"), interest-cohort=()'
+    );
+    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+    if (isProd) {
+      res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+      res.setHeader('Content-Security-Policy', cspProd);
+    }
+    next();
+  });
+
   const allowedOrigins = [
     process.env.APP_URL,
     'https://travelliniwithus.it',
