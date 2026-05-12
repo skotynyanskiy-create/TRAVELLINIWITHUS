@@ -31,16 +31,18 @@ React 19 · TypeScript (non-strict) · Vite 6 · Tailwind 4 + CSS variables · E
 
 Default model is **sonnet**. Never escalate without reason.
 
-| Task | Route to |
-|------|----------|
-| Search, grep, read logs, "where is X", summarize | `code-explorer` (haiku) |
-| Standard bugfix, component, feature, PR | default (sonnet) |
-| UI critique, visual direction | `travellini-ui-designer` (sonnet) |
-| Italian copy, SEO, conversion | `travellini-seo-conversion-strategist` (sonnet) |
-| Release QA, audits, regressions | `travellini-quality-auditor` (sonnet) |
-| Browser audit, UX reale, responsive, form, regressioni | `browser-auditor` (sonnet) via Playwright MCP |
-| Implementation of a clear plan | `travellini-frontend-builder` (sonnet) |
-| Multi-file refactor, architecture, hard debugging | `code-architect` (opus) — rare |
+| Task                                                                    | Route to                                        |
+| ----------------------------------------------------------------------- | ----------------------------------------------- |
+| Search, grep, read logs, "where is X", summarize                        | `code-explorer` (haiku)                         |
+| Standard bugfix, component, feature, PR                                 | default (sonnet)                                |
+| UI critique, visual direction                                           | `travellini-ui-designer` (sonnet)               |
+| Italian copy, SEO, conversion                                           | `travellini-seo-conversion-strategist` (sonnet) |
+| Social calendars, Reels/TikTok, campaign/content briefs                 | `travellini-social-content-operator` (sonnet)   |
+| Growth strategy, partner pipeline, media kit, affiliate/shop, analytics | `travellini-growth-revenue-operator` (sonnet)   |
+| Release QA, audits, regressions                                         | `travellini-quality-auditor` (sonnet)           |
+| Browser audit, UX reale, responsive, form, regressioni                  | `browser-auditor` (sonnet) via Playwright MCP   |
+| Implementation of a clear plan                                          | `travellini-frontend-builder` (sonnet)          |
+| Multi-file refactor, architecture, hard debugging                       | `code-architect` (opus) — rare                  |
 
 **Never use opus for:** single-file edits, grep/search, explanations, routine bugfixes, typecheck runs, anything completable in one file. If a subagent is about to read more than 3 files to explore, delegate to `code-explorer` instead.
 
@@ -72,7 +74,7 @@ Prefer these when they match the request:
 - `/smoke-test` dopo modifiche visive importanti
 - `/audit-ui`, `/seo-check`, `/firebase-check`, `/stripe-flow`, `/predeploy`, `/deploy`, `/commit`
 - `/new-page`, `/new-article`
-- `travellini-design-director`, `travellini-page-builder`, `travellini-web-quality-auditor`, `travellini-release-quality`, `travellini-stitch-figma-bridge`
+- `travellini-design-director`, `travellini-page-builder`, `travellini-web-quality-auditor`, `travellini-release-quality`, `travellini-stitch-figma-bridge`, `travellini-social-content-operator`, `travellini-growth-revenue-operator`
 
 ## When to update `docs/`
 

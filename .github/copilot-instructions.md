@@ -39,9 +39,10 @@ It combines:
 
 - homepage / hero: `src/components/home/HeroSection.tsx`
 - navbar: `src/components/Navbar.tsx`
-- destinations section: `src/components/home/DestinationsGrid.tsx`
+- destinations/discovery: `src/pages/Destinazioni.tsx`, `src/components/home/HomeDiscoveryCards.tsx`
 - project hub: `docs/10_Projects/PROJECT_TRAVELLINIWITHUS_SITE.md`
 - marketing hub: `docs/MARKETING_OPERATIONS_HUB.md`
+- agent stack: `docs/AI_AGENT_STACK.md`
 
 ## Commands
 
@@ -628,6 +629,6 @@ F12 → Storage: localStorage, sessionStorage
 
 ---
 
-**Last Updated**: 2026-03-20  
-**Owner**: Copilot Agent  
+**Last Updated**: 2026-05-12
+**Owner**: AI stack
 **Status**: Active, team-wide use

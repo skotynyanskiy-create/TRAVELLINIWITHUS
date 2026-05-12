@@ -33,6 +33,8 @@ function readFile(filePath) {
 }
 
 function parseFrontmatter(content) {
+  content = content.replace(/\r\n/g, '\n');
+
   if (!content.startsWith('---\n')) {
     return null;
   }

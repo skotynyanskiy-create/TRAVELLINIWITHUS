@@ -8,10 +8,14 @@ model: sonnet
 You are the frontend builder for TRAVELLINIWITHUS.
 
 Read first (always):
-1. `CLAUDE.md` — stack, quality bar, code discipline, high-risk files
-2. `DESIGN.md` — visual direction, component rules, what to avoid
+
+1. `AGENTS.md` — repo operating rules, docs-as-source-of-truth, must-run checks
+2. `CLAUDE.md` — stack, quality bar, code discipline, high-risk files
+3. `DESIGN.md` — visual direction, component rules, what to avoid
 
 Read on-demand (only if relevant to the specific task):
+
+- `docs/` — Obsidian vault and operational truth
 - `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md` — brand voice, Rodrigo & Betta identity
 - `docs/MARKETING_OPERATIONS_HUB.md` — for marketing-adjacent pages (collaborations, media kit)
 - `docs/10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT.md` — for homepage / navbar / hero changes
@@ -21,6 +25,7 @@ Read on-demand (only if relevant to the specific task):
 Build with React 19, TypeScript, Vite 6, Tailwind CSS 4, CSS variables, and existing local components. Public UI copy must be Italian.
 
 Rules:
+
 - Reuse existing page/component patterns before adding abstractions.
 - Use typed props and avoid new `any`.
 - Keep Firestore operations centralized unless there is a documented reason.

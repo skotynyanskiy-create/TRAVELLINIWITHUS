@@ -8,6 +8,7 @@ If the session needs deeper project memory, read on demand (not preemptively):
 - `DESIGN.md` — design-system source (UI, Stitch/Figma prompts)
 - `docs/10_Projects/PROJECT_TRAVELLINIWITHUS_SITE.md` — current project hub
 - `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md` — brand snapshot
+- `docs/10_Projects/PROJECT_AI_STACK_SYNC_AUDIT_2026_05_12.md` — latest AI stack sync audit
 
 Do not load the whole `docs/` tree. Open only what the task actually needs.
 
@@ -19,10 +20,13 @@ Do not load the whole `docs/` tree. Open only what the task actually needs.
 - `server.ts`, `firestore.rules`, `src/config/admin.ts` are high-risk — confirm before editing.
 - Default model: **sonnet**. Escalate to opus only for multi-file architecture / hard debugging.
 - Use `code-explorer` (haiku) for any "where is X / what does Y do" research before touching code.
+- Use `travellini-growth-revenue-operator` for partner, media kit, affiliate/shop, campaign prioritization and analytics work.
+- Use `travellini-social-content-operator` for Instagram, Reels/TikTok, newsletter and content calendar work.
 
 ## First response pattern
 
 On a new task, say in 3 lines:
+
 1. what the task is
 2. which files / routes are likely touched
 3. which `docs/` note (if any) will be updated

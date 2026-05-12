@@ -34,6 +34,14 @@ npm run audit:quality
 
 Use `npm run sync:agents` after editing `.agents/skills`. Use `npm run audit:agents` before committing agent, skill, or workflow changes.
 
+## Current Integrations
+
+- Codex plugin: GitHub is enabled in the local Codex config for repository, issue, pull request and CI workflows.
+- Codex MCP: Playwright is enabled in the local Codex config for browser QA parity with Claude Code.
+- Claude Code project MCP: `.mcp.json` currently enables only Playwright.
+- Claude Code project hooks: `.claude/settings.json` uses PowerShell-based safety hooks for this Windows workspace.
+- Obsidian memory: `docs/` is the project vault and operational memory. Do not duplicate stable project facts into a separate AI memory unless they are cross-project user preferences.
+
 ## Curated External References
 
 These sources informed the local stack and should be reviewed before importing future material:
@@ -44,8 +52,27 @@ These sources informed the local stack and should be reviewed before importing f
 - Google Labs Stitch Loop: `https://github.com/google-labs-code/stitch-loop`
 - Figma Skills directory: `https://officialskills.sh/figma/skills`
 - VoltAgent Claude Subagents: `https://github.com/VoltAgent/awesome-claude-code-subagents`
+- Agency Agents: `https://github.com/msitarzewski/agency-agents` reviewed at `783f6a72bfd7f3135700ac273c619d92821b419a`; only locally adapted slices should be imported.
 
 Do not install a whole upstream catalog into this repo. Copy, reduce, attribute, and adapt only the pieces that match the brand and workflow.
+
+## MCP Policy
+
+Keep MCP servers minimal. Every added server must have a concrete use case, a trusted source, auth handled through environment variables, and documentation in this file or a linked project note.
+
+Current default:
+
+- `playwright`: browser QA, visual review, responsive checks and smoke tests.
+
+Approved candidates when the task requires them:
+
+- GitHub MCP or GitHub plugin: pull requests, issues, review comments, CI and repository operations. Prefer the existing Codex GitHub plugin where available.
+- Stripe MCP: Stripe docs, checkout, webhook and sandbox work. Enable only for Stripe tasks.
+- Firebase MCP: Firebase/Firestore inspection and debugging. Enable only with explicit auth and task scope.
+- Figma MCP: design-to-code context from real Figma files. Enable only when there is a concrete Figma file or Dev Mode workflow.
+- Obsidian MCP: optional for external vault automation. Not needed for normal Travellini work because `docs/` is already repo-local.
+
+Do not add broad MCP registries, random community servers or full external agent catalogs as default project tools.
 
 ## Local Skills
 
@@ -54,6 +81,8 @@ Do not install a whole upstream catalog into this repo. Copy, reduce, attribute,
 - `travellini-stitch-figma-bridge`: controlled Stitch/Figma usage and design-to-code handoff.
 - `travellini-page-builder`: route-aware React page creation with SEO and docs.
 - `travellini-release-quality`: release gates, visual QA, docs, and deployment readiness.
+- `travellini-social-content-operator`: social, editorial, campaign, creator, and partnership content planning adapted from the Agency Agents marketing patterns.
+- `travellini-growth-revenue-operator`: growth, partnerships, media kit conversion, affiliate/shop, campaign prioritization, and analytics planning adapted from agency-style commercial patterns.
 
 ## Claude Project Agents
 
@@ -61,6 +90,8 @@ Do not install a whole upstream catalog into this repo. Copy, reduce, attribute,
 - `travellini-frontend-builder`: implementation agent for React/Tailwind work.
 - `travellini-quality-auditor`: read-only quality and release review.
 - `travellini-seo-conversion-strategist`: SEO, content architecture, conversion and marketing alignment.
+- `travellini-social-content-operator`: social calendars, Reels/TikTok concepts, campaign briefs, creator partnerships, newsletters, and content-to-conversion planning.
+- `travellini-growth-revenue-operator`: growth strategy, partner pipeline, media kit conversion, affiliate/shop planning, campaign prioritization, offer design, and analytics events.
 
 ## Operating Rules
 
