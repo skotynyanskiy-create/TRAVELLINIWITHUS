@@ -341,7 +341,10 @@ export default function Navbar() {
             <div className="relative">
               {user ? (
                 <button
+                  type="button"
                   onClick={() => setIsUserMenuOpen((prev) => !prev)}
+                  aria-label="Menu utente"
+                  aria-expanded={isUserMenuOpen}
                   className="h-7 w-7 overflow-hidden rounded-full border border-zinc-200 transition-colors hover:border-[var(--color-accent)]"
                 >
                   {user.photoURL ? (
@@ -359,7 +362,9 @@ export default function Navbar() {
                 </button>
               ) : (
                 <button
+                  type="button"
                   onClick={signIn}
+                  aria-label="Accedi all'area personale"
                   className="flex items-center gap-1 transition-colors hover:text-[var(--color-accent)]"
                 >
                   <UserIcon size={18} strokeWidth={1.5} />

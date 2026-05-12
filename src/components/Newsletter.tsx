@@ -221,7 +221,7 @@ export default function Newsletter({
               <label
                 htmlFor={`newsletter-email-${source}`}
                 className={`block text-xs font-bold uppercase tracking-[0.22em] ${
-                  isDark ? 'text-white/50' : 'text-black/45'
+                  isDark ? 'text-white/50' : 'text-black/65'
                 }`}
               >
                 La tua email

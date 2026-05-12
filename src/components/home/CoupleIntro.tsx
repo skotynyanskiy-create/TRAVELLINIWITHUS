@@ -159,7 +159,7 @@ export default function CoupleIntro() {
             </div>
 
             <div className="mt-7 border-t border-black/8 pt-6">
-              <p className="max-w-2xl text-xs font-bold uppercase tracking-[0.22em] text-black/45">
+              <p className="max-w-2xl text-xs font-bold uppercase tracking-[0.22em] text-black/65">
                 Meno rumore, più criterio. Meno lista, più esperienza vera.
               </p>
             </div>

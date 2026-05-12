@@ -590,7 +590,7 @@ export default function Destinazioni() {
 
           <div className="space-y-5">
             <div>
-              <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/45">
+              <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/65">
                 Area
               </span>
               <div className="flex gap-2 overflow-x-auto pb-1">
@@ -607,7 +607,7 @@ export default function Destinazioni() {
             </div>
 
             <div>
-              <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/45">
+              <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/65">
                 Esperienza
               </span>
               <div className="flex gap-2 overflow-x-auto pb-1">
@@ -630,7 +630,7 @@ export default function Destinazioni() {
             {selectedGroup === 'Italia' && availableRegions.length > 1 && (
               <div className="grid gap-5 md:grid-cols-2">
                 <div>
-                  <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/45">
+                  <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/65">
                     Regione
                   </span>
                   <div className="flex gap-2 overflow-x-auto pb-1">
@@ -648,7 +648,7 @@ export default function Destinazioni() {
 
                 {availableCities.length > 1 && (
                   <div>
-                    <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/45">
+                    <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/65">
                       Citta / localita
                     </span>
                     <div className="flex gap-2 overflow-x-auto pb-1">
@@ -692,7 +692,7 @@ export default function Destinazioni() {
                 },
               ].map(({ label, key, value, values, icon: Icon }) => (
                 <div key={key} className="min-w-0">
-                  <span className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-black/45">
+                  <span className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-black/65">
                     <Icon size={14} /> {label}
                   </span>
                   <div className="flex gap-2 overflow-x-auto pb-1">

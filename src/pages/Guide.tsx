@@ -170,7 +170,7 @@ function Guide() {
           <div className="rounded-[2rem] border border-black/5 bg-white p-6 shadow-sm md:p-8">
             <div className="mb-6 flex items-center gap-3">
               <BookOpen className="text-[var(--color-accent)]" size={22} />
-              <p className="text-sm font-bold uppercase tracking-[0.22em] text-black/45">
+              <p className="text-sm font-bold uppercase tracking-[0.22em] text-black/65">
                 Come leggerle
               </p>
             </div>
@@ -192,7 +192,7 @@ function Guide() {
       <Section spacing="tight">
         {/* ─── CATEGORY BROWSER ─── */}
         <div className="mb-2">
-          <h2 className="mb-4 text-[10px] font-bold uppercase tracking-[0.28em] text-black/45">
+          <h2 className="mb-4 text-[10px] font-bold uppercase tracking-[0.28em] text-black/65">
             Scegli un argomento
           </h2>
           <GuideCategoryBrowser

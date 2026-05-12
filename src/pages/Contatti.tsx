@@ -419,7 +419,7 @@ export default function Contatti() {
                       >
                         Messaggio *
                       </label>
-                      <p className="text-xs font-light leading-relaxed text-black/45">
+                      <p className="text-xs font-light leading-relaxed text-black/65">
                         {activeGuidance.hint}
                       </p>
                       <textarea

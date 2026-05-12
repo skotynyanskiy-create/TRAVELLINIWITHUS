@@ -66,7 +66,8 @@ const resourceCategories: Array<{
         tags: ['Assicurazione', 'Sconto'],
         badge: '-10%',
         fit: 'Per viaggi extra UE, itinerari lunghi o prenotazioni non banali.',
-        avoid: 'Non sostituisce la lettura delle condizioni: controlla sempre massimali e coperture.',
+        avoid:
+          'Non sostituisce la lettura delle condizioni: controlla sempre massimali e coperture.',
       },
       {
         name: 'Skyscanner',
@@ -94,8 +95,7 @@ const resourceCategories: Array<{
     items: [
       {
         name: 'Airalo',
-        description:
-          `Una eSIM è utile quando vuoi arrivare con connessione già pronta, soprattutto fuori dall'Unione Europea.`,
+        description: `Una eSIM è utile quando vuoi arrivare con connessione già pronta, soprattutto fuori dall'Unione Europea.`,
         link: 'https://airalo.com',
         tags: ['eSIM', 'Internet'],
         badge: 'Codice',
@@ -257,7 +257,8 @@ export default function Risorse() {
               Regola Travellini
             </p>
             <p className="mt-4 text-2xl font-serif leading-relaxed text-[var(--color-ink)]">
-              Se una risorsa non aiuta a decidere, organizzare o viaggiare meglio, non merita spazio.
+              Se una risorsa non aiuta a decidere, organizzare o viaggiare meglio, non merita
+              spazio.
             </p>
             <p className="mt-5 text-sm leading-relaxed text-black/55">
               Alcuni link possono essere affiliati: per te non cambia il costo, per noi possono
@@ -268,7 +269,10 @@ export default function Risorse() {
 
         <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-3">
           {resourcePrinciples.map((item) => (
-            <div key={item.title} className="rounded-[2rem] border border-black/5 bg-white p-7 shadow-sm">
+            <div
+              key={item.title}
+              className="rounded-[2rem] border border-black/5 bg-white p-7 shadow-sm"
+            >
               <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-sand)]">
                 {item.icon}
               </div>
@@ -354,7 +358,7 @@ export default function Risorse() {
                         <p className="mt-2 text-sm leading-relaxed text-black/62">{item.fit}</p>
                       </div>
                       {item.avoid && (
-                        <p className="text-xs leading-relaxed text-black/45">
+                        <p className="text-xs leading-relaxed text-black/65">
                           <strong className="text-black/62">Quando evitarlo:</strong> {item.avoid}
                         </p>
                       )}
@@ -372,7 +376,9 @@ export default function Risorse() {
               <span className="mb-4 block text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
                 Vantaggi dichiarati
               </span>
-              <h2 className="text-3xl font-serif md:text-5xl">Codici e benefit, senza spingere a comprare.</h2>
+              <h2 className="text-3xl font-serif md:text-5xl">
+                Codici e benefit, senza spingere a comprare.
+              </h2>
               <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/68">
                 Li teniamo qui per chi li cerca. Non sostituiscono una scelta consapevole: prima
                 valuta se lo strumento e davvero utile per il tuo viaggio.
@@ -414,7 +420,10 @@ export default function Risorse() {
 
         <div className="mt-12 rounded-[2rem] border border-black/5 bg-white p-7 text-sm leading-relaxed text-black/55">
           Per dettagli completi sulla natura dei link affiliati, consulta la{' '}
-          <Link to="/disclaimer" className="font-semibold text-[var(--color-accent-text)] underline underline-offset-2">
+          <Link
+            to="/disclaimer"
+            className="font-semibold text-[var(--color-accent-text)] underline underline-offset-2"
+          >
             pagina disclaimer
           </Link>
           .

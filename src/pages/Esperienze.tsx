@@ -41,27 +41,26 @@ const EXPERIENCE_DESCRIPTIONS: Record<string, string> = {
     'Tavole, mercati e indirizzi scelti per atmosfera, sostanza e utilità reale.',
   'Locali insoliti':
     'Locali con concept, posizione o carattere capaci di rendere memorabile una tappa.',
-  'Hotel con carattere':
-    'Soggiorni dove design, atmosfera e contesto fanno parte del viaggio.',
+  'Hotel con carattere': 'Soggiorni dove design, atmosfera e contesto fanno parte del viaggio.',
   'Weekend romantici':
     'Idee brevi, curate e realistiche per partire in coppia senza costruire un sogno finto.',
   "Borghi e città d'arte":
     'Centri storici, scorci e patrimonio da vivere con calma, non solo da fotografare.',
   'Passeggiate panoramiche':
     'Percorsi, viste e camminate che valgono davvero il tempo del viaggio.',
-  'Relax, terme e spa':
-    'Pause lente, terme e luoghi dove staccare con criterio.',
+  'Relax, terme e spa': 'Pause lente, terme e luoghi dove staccare con criterio.',
   'Esperienze insolite':
     'Musei strani, attività particolari e spunti da salvare proprio perché diversi.',
-  'Gite e day trip':
-    'Uscite facili da organizzare per una giornata o un weekend vicino.',
+  'Gite e day trip': 'Uscite facili da organizzare per una giornata o un weekend vicino.',
 };
 
 const HERO_VISUAL =
   'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1800&auto=format&fit=crop';
 
 function uniqueValues(items: Array<string | undefined>) {
-  return Array.from(new Set(items.filter((item): item is string => Boolean(item && item !== 'Da definire'))));
+  return Array.from(
+    new Set(items.filter((item): item is string => Boolean(item && item !== 'Da definire')))
+  );
 }
 
 function getDemoArchiveItem(): ArchiveItem {
@@ -130,14 +129,16 @@ function ExperienceCard({
       type="button"
       onClick={onSelect}
       className={`group rounded-[1.75rem] border bg-white p-6 text-left shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-lg ${
-        active ? 'border-[var(--color-accent)] ring-2 ring-[var(--color-accent)]/10' : 'border-black/5'
+        active
+          ? 'border-[var(--color-accent)] ring-2 ring-[var(--color-accent)]/10'
+          : 'border-black/5'
       }`}
     >
       <div className="mb-5 flex items-start justify-between gap-4">
         <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
           <Icon size={23} style={{ color: visual.color }} />
         </span>
-        <span className="rounded-full bg-black/5 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-black/45">
+        <span className="rounded-full bg-black/5 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-black/65">
           {count} {count === 1 ? 'storia' : 'storie'}
         </span>
       </div>
@@ -145,16 +146,21 @@ function ExperienceCard({
         {visual.label}
       </span>
       <h2 className="text-2xl font-serif leading-tight text-[var(--color-ink)]">{experience}</h2>
-      <p className="mt-4 text-sm leading-relaxed text-black/65">{EXPERIENCE_DESCRIPTIONS[experience]}</p>
+      <p className="mt-4 text-sm leading-relaxed text-black/65">
+        {EXPERIENCE_DESCRIPTIONS[experience]}
+      </p>
       <div className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">
-        {active ? 'Filtro attivo' : 'Filtra'} <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+        {active ? 'Filtro attivo' : 'Filtra'}{' '}
+        <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
       </div>
     </button>
   );
 }
 
 function StoryCard({ item, isDemo }: { item: ArchiveItem; isDemo: boolean }) {
-  const visual = item.primaryExperience ? getExperienceVisual(item.primaryExperience) : getExperienceVisual('Posti particolari');
+  const visual = item.primaryExperience
+    ? getExperienceVisual(item.primaryExperience)
+    : getExperienceVisual('Posti particolari');
   const Icon = visual.icon;
 
   return (
@@ -182,7 +188,7 @@ function StoryCard({ item, isDemo }: { item: ArchiveItem; isDemo: boolean }) {
               <Icon size={12} style={{ color: visual.color }} />
               {item.primaryExperience || 'Esperienza'}
             </span>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-black/5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-black/45">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-black/5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-black/65">
               <MapPin size={12} />
               {getArchiveLocationLabel(item)}
             </span>
@@ -195,7 +201,8 @@ function StoryCard({ item, isDemo }: { item: ArchiveItem; isDemo: boolean }) {
               'Una storia da leggere per capire se questa esperienza merita davvero di entrare nel prossimo viaggio.'}
           </p>
           <div className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">
-            Leggi il contenuto <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
+            Leggi il contenuto{' '}
+            <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
           </div>
         </div>
       </div>
@@ -234,7 +241,12 @@ export default function Esperienze() {
 
   const availableRegions = useMemo(() => {
     if (selectedGroup !== 'Italia') return ['Tutti'];
-    return ['Tutti', ...uniqueValues(archiveItems.filter((item) => item.country === 'Italia').map((item) => item.region))];
+    return [
+      'Tutti',
+      ...uniqueValues(
+        archiveItems.filter((item) => item.country === 'Italia').map((item) => item.region)
+      ),
+    ];
   }, [archiveItems, selectedGroup]);
 
   const availableCities = useMemo(() => {
@@ -309,13 +321,17 @@ export default function Esperienze() {
           '@type': 'CollectionPage',
           name: 'Esperienze Travelliniwithus',
           url: `${SITE_URL}/esperienze`,
-          description:
-            'Archivio tematico di esperienze travel selezionate da Travelliniwithus.',
+          description: 'Archivio tematico di esperienze travel selezionate da Travelliniwithus.',
           breadcrumb: {
             '@type': 'BreadcrumbList',
             itemListElement: [
               { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
-              { '@type': 'ListItem', position: 2, name: 'Esperienze', item: `${SITE_URL}/esperienze` },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Esperienze',
+                item: `${SITE_URL}/esperienze`,
+              },
             ],
           },
         }}
@@ -350,14 +366,16 @@ export default function Esperienze() {
           </div>
 
           <div className="mt-10 grid max-w-4xl gap-3 sm:grid-cols-3">
-            {['Intenzione prima della lista', 'Categorie sostenute dai contenuti', 'Ponte naturale verso guide e destinazioni'].map(
-              (item) => (
-                <div key={item} className="rounded-2xl border border-black/5 bg-white p-4 shadow-sm">
-                  <ShieldCheck size={16} className="mb-3 text-[var(--color-accent)]" />
-                  <p className="text-xs font-semibold leading-relaxed text-black/62">{item}</p>
-                </div>
-              )
-            )}
+            {[
+              'Intenzione prima della lista',
+              'Categorie sostenute dai contenuti',
+              'Ponte naturale verso guide e destinazioni',
+            ].map((item) => (
+              <div key={item} className="rounded-2xl border border-black/5 bg-white p-4 shadow-sm">
+                <ShieldCheck size={16} className="mb-3 text-[var(--color-accent)]" />
+                <p className="text-xs font-semibold leading-relaxed text-black/62">{item}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -368,11 +386,14 @@ export default function Esperienze() {
             <ExperienceCard
               key={experience}
               experience={experience}
-              count={archiveItems.filter((item) => item.experienceTypes.includes(experience)).length}
+              count={
+                archiveItems.filter((item) => item.experienceTypes.includes(experience)).length
+              }
               active={selectedExperience === experience}
               onSelect={() =>
                 updateSearch({
-                  type: selectedExperience === experience ? null : slugifyExperienceType(experience),
+                  type:
+                    selectedExperience === experience ? null : slugifyExperienceType(experience),
                 })
               }
             />
@@ -402,7 +423,7 @@ export default function Esperienze() {
 
           <div className="grid gap-5 lg:grid-cols-2">
             <div>
-              <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/45">
+              <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/65">
                 Area geografica
               </span>
               <div className="flex gap-2 overflow-x-auto pb-1">
@@ -420,7 +441,7 @@ export default function Esperienze() {
 
             {selectedGroup === 'Italia' && availableRegions.length > 1 && (
               <div>
-                <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/45">
+                <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/65">
                   Regione
                 </span>
                 <div className="flex gap-2 overflow-x-auto pb-1">
@@ -439,7 +460,7 @@ export default function Esperienze() {
 
             {selectedGroup === 'Italia' && availableCities.length > 1 && (
               <div>
-                <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/45">
+                <span className="mb-3 block text-xs font-bold uppercase tracking-widest text-black/65">
                   Citta / localita
                 </span>
                 <div className="flex gap-2 overflow-x-auto pb-1">
@@ -464,7 +485,9 @@ export default function Esperienze() {
               <Compass size={14} /> {filteredItems.length} contenuti trovati
             </span>
             <h2 className="mt-2 text-3xl font-serif text-[var(--color-ink)]">
-              {selectedExperience === 'Tutti' ? 'Esperienze da leggere e salvare' : selectedExperience}
+              {selectedExperience === 'Tutti'
+                ? 'Esperienze da leggere e salvare'
+                : selectedExperience}
             </h2>
           </div>
           <Link
@@ -506,12 +529,19 @@ export default function Esperienze() {
                     exit={{ opacity: 0, scale: 0.96 }}
                     transition={{ duration: 0.35 }}
                   >
-                    <StoryCard item={item} isDemo={usingDemo && item.id === DEMO_DESTINATION_CARD.id} />
+                    <StoryCard
+                      item={item}
+                      isDemo={usingDemo && item.id === DEMO_DESTINATION_CARD.id}
+                    />
                   </motion.div>
                 ))}
               </AnimatePresence>
             </div>
-            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
           </>
         )}
 

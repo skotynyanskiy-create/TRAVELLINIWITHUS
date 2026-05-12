@@ -416,7 +416,7 @@ export default function Collaborazioni() {
                   Hospitality, destinazioni, lifestyle
                 </span>
               </div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-black/45">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-black/65">
                 Con priorità alla qualità del racconto
               </p>
             </div>
