@@ -57,6 +57,23 @@ export default defineConfig(({ mode }) => {
       // The Mapbox route is already lazy-loaded and split into its own vendor chunk.
       // Raise the heuristic threshold so production builds don't warn on that intentional isolation.
       chunkSizeWarningLimit: 1800,
+      // Strip heavy route-specific chunks (mapbox, charts, editor) from the initial
+      // modulepreload list so the home does not pull 1.7 MB of mapbox eagerly.
+      // Lazy imports still fetch them on demand when the route mounts.
+      modulePreload: {
+        polyfill: true,
+        resolveDependencies: (_filename, deps, { hostType }) => {
+          if (hostType !== 'html') return deps;
+          return deps.filter(
+            (d) =>
+              !d.includes('/mapbox-') &&
+              !d.includes('/charts-') &&
+              !d.includes('/editor-') &&
+              !d.includes('/maps-') &&
+              !d.includes('/markdown-')
+          );
+        },
+      },
       rollupOptions: {
         output: {
           manualChunks(id) {
