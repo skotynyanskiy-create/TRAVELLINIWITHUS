@@ -78,6 +78,13 @@ export default function Navbar() {
     };
   }, [isMobileMenuOpen]);
 
+  const handleMobileMenuToggle = () => {
+    setIsMobileMenuOpen((prev) => {
+      if (!prev) setOpenMobileSection('Esplora');
+      return !prev;
+    });
+  };
+
   useEffect(() => {
     resetNavigationUi();
   }, [location.pathname, location.search]);
@@ -418,7 +425,7 @@ export default function Navbar() {
             </button>
             <button
               className="p-2 transition-colors hover:text-[var(--color-accent)]"
-              onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+              onClick={handleMobileMenuToggle}
               aria-label="Menu"
             >
               {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}

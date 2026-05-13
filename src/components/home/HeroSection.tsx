@@ -12,7 +12,8 @@ import HeroBackdrop from './HeroBackdrop';
 
 const HERO_IMAGE_DESKTOP = '/images/brand/couple-travel.png';
 const HERO_IMAGE_MOBILE = '/images/hero-amalfi.png';
-const HERO_VIDEO = '/videos/hero.webm';
+// videoSrc omitted finche public/videos/hero.webm non e disponibile (evita HEAD 404 in console)
+const HERO_VIDEO: string | undefined = undefined;
 const REEL_FALLBACK_IMAGE =
   'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800&auto=format&fit=crop';
 
