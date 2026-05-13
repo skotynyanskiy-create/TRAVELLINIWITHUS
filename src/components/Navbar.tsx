@@ -49,7 +49,7 @@ interface NavItem {
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [openMobileSection, setOpenMobileSection] = useState<string | null>(null);
+  const [openMobileSection, setOpenMobileSection] = useState<string | null>('Esplora');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
@@ -311,7 +311,7 @@ export default function Navbar() {
           <div className="hidden shrink-0 items-center space-x-4 text-zinc-600 lg:flex xl:space-x-6">
             <Link
               to="/collaborazioni"
-              className="hidden items-center gap-1 rounded-full border border-[var(--color-accent)]/30 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-colors hover:bg-[var(--color-accent-soft)] xl:inline-flex"
+              className="inline-flex items-center gap-1 rounded-full border border-[var(--color-accent)]/30 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-colors hover:bg-[var(--color-accent-soft)]"
             >
               Collabora con noi
             </Link>

@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowRight, ExternalLink } from 'lucide-react';
+import { ArrowDown, ArrowRight, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Button from '../Button';
 import { CONTACTS, FEATURED_REEL } from '../../config/site';
@@ -285,9 +285,14 @@ export default function HeroSection() {
 
             <Link
               to="/#storie"
-              className="inline-flex h-14 min-w-[230px] items-center justify-center rounded-lg border border-white/24 bg-black/5 px-8 text-sm font-bold uppercase tracking-widest text-white/82 transition-all duration-300 hover:border-white/60 hover:bg-white/10 hover:text-white sm:h-16"
+              data-tracking-id="home_hero_storie"
+              className="group inline-flex h-14 min-w-[230px] items-center justify-center gap-2 rounded-lg border border-white/40 bg-black/10 px-8 text-sm font-bold uppercase tracking-widest text-white/90 transition-all duration-300 hover:border-white/70 hover:bg-white/15 hover:text-white sm:h-16"
             >
-              Ultime storie
+              Leggi le storie
+              <ArrowDown
+                size={18}
+                className="transition-transform duration-300 group-hover:translate-y-0.5"
+              />
             </Link>
           </div>
 

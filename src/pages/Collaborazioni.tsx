@@ -7,6 +7,7 @@ import {
   CheckCircle,
   ChevronDown,
   Clapperboard,
+  Download,
   Globe,
   Instagram,
   MessageSquareText,
@@ -16,6 +17,7 @@ import {
   Sparkles,
   Users,
 } from 'lucide-react';
+import { trackEvent } from '../services/analytics';
 import { AnimatePresence, motion } from 'motion/react';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Button from '../components/Button';
@@ -393,6 +395,17 @@ export default function Collaborazioni() {
                 {pageContent.secondaryCtaLabel}
               </Button>
             </div>
+            <a
+              href="/media-kit.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() =>
+                trackEvent('media_kit_preview_download', { source: 'collaborazioni_hero' })
+              }
+              className="mt-5 inline-flex w-fit items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)] underline-offset-4 transition-colors hover:text-[var(--color-accent)] hover:underline"
+            >
+              <Download size={14} /> Sfoglia l&apos;anteprima del media kit (PDF)
+            </a>
           </motion.div>
 
           <motion.div

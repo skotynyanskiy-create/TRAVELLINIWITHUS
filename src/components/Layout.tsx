@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import ConsentBanner from './ConsentBanner';
+import ExitIntentPopup from './ExitIntentPopup';
 import AnalyticsScripts from './AnalyticsScripts';
 import JsonLd from './JsonLd';
 import ScrollProgressBar from './ScrollProgressBar';
@@ -75,6 +76,7 @@ export default function Layout() {
         </main>
         <Footer />
         <ConsentBanner />
+        <ExitIntentPopup />
       </div>
     </SmoothScrollProvider>
   );

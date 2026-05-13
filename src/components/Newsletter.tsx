@@ -71,7 +71,7 @@ const variantCopy: Record<
     title: 'Ricevi i prossimi contenuti utili.',
     description: 'Un aggiornamento sobrio quando pubblichiamo qualcosa che vale la pena salvare.',
     bullets: [],
-    ctaLabel: 'Iscriviti',
+    ctaLabel: 'Iscrivimi alla newsletter',
   },
   article: {
     eyebrow: 'Dopo questa lettura',
@@ -292,6 +292,22 @@ export default function Newsletter({
               className={`text-sm ${isDark ? 'text-red-200' : 'text-red-600'}`}
             >
               {error}
+            </p>
+          )}
+
+          {isCompact && (
+            <p
+              className={`flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-medium leading-relaxed ${
+                isDark ? 'text-white/55' : 'text-black/50'
+              }`}
+            >
+              <span className="inline-flex items-center gap-1.5">
+                <ShieldCheck size={12} className="text-[var(--color-accent)]" /> Una email al mese
+              </span>
+              <span aria-hidden="true">·</span>
+              <span>Zero spam</span>
+              <span aria-hidden="true">·</span>
+              <span>Disiscrizione con un click</span>
             </p>
           )}
 
