@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => {
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
+        includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'offline.html'],
         // Disable PWA service worker in dev so HMR-updated bundles never get
         // shadowed by a stale precache. Re-enabled automatically in build.
         disable: mode !== 'production',
@@ -42,6 +42,10 @@ export default defineConfig(({ mode }) => {
           maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
           clientsClaim: true,
           skipWaiting: true,
+          navigateFallback: '/offline.html',
+          // Don't redirect missing assets (with extension) to offline.html;
+          // only redirect SPA navigations.
+          navigateFallbackDenylist: [/^\/_/, /\/[^/?]+\.[^/]+$/],
         },
       }),
     ],

@@ -1,10 +1,16 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { ArrowRight, MapPin } from 'lucide-react';
+import { ArrowRight, Heart, MapPin } from 'lucide-react';
 import OptimizedImage from '../OptimizedImage';
 import { cardItem } from '../../lib/animations';
 import type { ArchiveItem } from '../../utils/contentArchive';
 import { getArchiveLocationLabel } from '../../utils/contentArchive';
+import { useFavorites } from '../../context/FavoritesContext';
+import { trackEvent } from '../../services/analytics';
+
+function extractSlug(link: string): string {
+  return link.split('/').filter(Boolean).pop() || link;
+}
 
 type Variant = 'editorial' | 'mood';
 
@@ -27,6 +33,36 @@ export default function ArchiveCard({
 }: ArchiveCardProps) {
   const location = getArchiveLocationLabel(item);
   const label = badge || item.primaryExperience || item.category;
+  const slug = extractSlug(item.link);
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const saved = isFavorite(slug);
+
+  const handleFavoriteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    toggleFavorite(slug);
+    trackEvent('archive_card_favorite_toggle', {
+      slug,
+      category: item.category,
+      now_saved: !saved,
+    });
+  };
+
+  const favoriteButton = (
+    <button
+      type="button"
+      onClick={handleFavoriteClick}
+      aria-label={saved ? 'Rimuovi dai preferiti' : 'Salva nei preferiti'}
+      aria-pressed={saved}
+      className={`absolute top-4 right-4 z-10 flex h-9 w-9 items-center justify-center rounded-full backdrop-blur-md transition-all duration-300 ${
+        saved
+          ? 'bg-[var(--color-accent)] text-white shadow-md'
+          : 'bg-white/85 text-[var(--color-ink)] hover:bg-white hover:text-[var(--color-accent)]'
+      }`}
+    >
+      <Heart size={15} className={saved ? 'fill-current' : ''} strokeWidth={1.8} />
+    </button>
+  );
 
   if (variant === 'mood') {
     return (
@@ -34,6 +70,7 @@ export default function ArchiveCard({
         variants={cardItem}
         className={`group relative overflow-hidden rounded-[var(--radius-xl)] ${className}`}
       >
+        {favoriteButton}
         <Link to={item.link} className="block h-full w-full">
           <div className="relative h-full w-full overflow-hidden">
             <OptimizedImage
@@ -67,8 +104,9 @@ export default function ArchiveCard({
   return (
     <motion.article
       variants={cardItem}
-      className={`group flex h-full flex-col overflow-hidden rounded-[var(--radius-xl)] border border-black/5 bg-white transition-all duration-500 hover:-translate-y-1 hover:border-black/10 hover:shadow-[0_20px_48px_-18px_rgba(17,17,17,0.22)] ${className}`}
+      className={`group relative flex h-full flex-col overflow-hidden rounded-[var(--radius-xl)] border border-black/5 bg-white transition-all duration-500 hover:-translate-y-1 hover:border-black/10 hover:shadow-[0_20px_48px_-18px_rgba(17,17,17,0.22)] ${className}`}
     >
+      {favoriteButton}
       <Link to={item.link} className="relative block aspect-[16/10] overflow-hidden">
         <OptimizedImage
           src={item.image}

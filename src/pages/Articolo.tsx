@@ -7,6 +7,8 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { fetchArticleBySlug, fetchArticles } from '../services/firebaseService';
 import { useFavorites } from '../context/FavoritesContext';
+import { useArticleAnalytics } from '../hooks/useArticleAnalytics';
+import { trackEvent } from '../services/analytics';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Newsletter from '../components/Newsletter';
 import PageLayout from '../components/PageLayout';
@@ -270,7 +272,7 @@ export default function Articolo() {
             continent: item.continent,
           }))
           .filter((item) => item.id !== currentSlug)
-          .slice(0, 3);
+          .slice(0, 18);
 
         setRelatedArticles(related);
       } catch (error) {
@@ -285,6 +287,13 @@ export default function Articolo() {
 
     fetchArticle();
   }, [currentSlug]);
+
+  useArticleAnalytics({
+    slug: currentSlug,
+    category: article?.category,
+    title: article?.title,
+    enabled: articleSource === 'published' && !loading,
+  });
 
   const previewRelatedArticles = useMemo(
     () =>
@@ -325,6 +334,8 @@ export default function Articolo() {
 
   const handleShare = async () => {
     const url = window.location.href;
+    const channel = navigator.share ? 'native' : 'clipboard';
+    trackEvent('article_share_click', { slug: currentSlug, channel });
 
     if (navigator.share) {
       try {

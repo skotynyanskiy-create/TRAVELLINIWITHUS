@@ -1,8 +1,13 @@
+import { useState } from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, Calendar, Clock } from 'lucide-react';
+import { ArrowRight, Calendar, Clock, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import OptimizedImage from '../OptimizedImage';
+import { trackEvent } from '../../services/analytics';
 import type { ArticleData, RelatedArticleSummary } from './types';
+
+const INITIAL_VISIBLE = 6;
+const LOAD_MORE_STEP = 6;
 
 interface RelatedArticlesProps {
   relatedArticles: RelatedArticleSummary[];
@@ -58,6 +63,24 @@ export default function RelatedArticles({
   relatedArticles,
   demoRelatedArticles,
 }: RelatedArticlesProps) {
+  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
+
+  const hasRelated = relatedArticles.length > 0;
+  const totalCount = hasRelated ? relatedArticles.length : demoRelatedArticles.length;
+  const hasMore = visibleCount < totalCount;
+  const remaining = totalCount - visibleCount;
+  const nextStep = Math.min(LOAD_MORE_STEP, remaining);
+
+  const handleLoadMore = () => {
+    const next = Math.min(visibleCount + LOAD_MORE_STEP, totalCount);
+    trackEvent('related_articles_load_more', {
+      from: visibleCount,
+      to: next,
+      total: totalCount,
+    });
+    setVisibleCount(next);
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
@@ -68,28 +91,32 @@ export default function RelatedArticles({
     >
       <h3 className="mb-12 text-3xl font-serif">Potrebbe interessarti anche</h3>
       <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
-        {relatedArticles.length > 0 ? (
-          relatedArticles.map((data) => (
-            <RelatedCard
-              key={data.id}
-              to={`/articolo/${data.id}`}
-              title={data.title}
-              image={data.image}
-              category={data.category}
-              date={data.date}
-            />
-          ))
+        {hasRelated ? (
+          relatedArticles
+            .slice(0, visibleCount)
+            .map((data) => (
+              <RelatedCard
+                key={data.id}
+                to={`/articolo/${data.id}`}
+                title={data.title}
+                image={data.image}
+                category={data.category}
+                date={data.date}
+              />
+            ))
         ) : demoRelatedArticles.length > 0 ? (
-          demoRelatedArticles.map(([slug, data]) => (
-            <RelatedCard
-              key={slug}
-              to={`/articolo/${slug}`}
-              title={data.title}
-              image={data.image}
-              category={data.category}
-              date={data.date}
-            />
-          ))
+          demoRelatedArticles
+            .slice(0, visibleCount)
+            .map(([slug, data]) => (
+              <RelatedCard
+                key={slug}
+                to={`/articolo/${slug}`}
+                title={data.title}
+                image={data.image}
+                category={data.category}
+                date={data.date}
+              />
+            ))
         ) : (
           <div className="rounded-[2rem] border border-black/5 bg-[var(--color-sand)] p-10 md:col-span-2">
             <p className="text-sm font-bold uppercase tracking-[0.2em] text-[var(--color-accent-text)]">
@@ -109,6 +136,19 @@ export default function RelatedArticles({
           </div>
         )}
       </div>
+
+      {hasMore && (
+        <div className="mt-12 flex justify-center">
+          <button
+            type="button"
+            onClick={handleLoadMore}
+            className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] transition-all hover:border-[var(--color-accent)] hover:bg-[var(--color-accent-soft)] hover:text-[var(--color-accent-text)]"
+          >
+            <Plus size={14} />
+            Mostra altri {nextStep} articoli
+          </button>
+        </div>
+      )}
     </motion.div>
   );
 }

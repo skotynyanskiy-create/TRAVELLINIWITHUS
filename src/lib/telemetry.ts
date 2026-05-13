@@ -19,7 +19,7 @@ export function initTelemetry(): void {
       environment: APP_ENV,
       release: import.meta.env.VITE_APP_VERSION as string | undefined,
       tracesSampleRate: 0.1,
-      replaysSessionSampleRate: 0,
+      replaysSessionSampleRate: 0.05,
       replaysOnErrorSampleRate: 0.5,
       integrations: [Sentry.browserTracingIntegration(), Sentry.replayIntegration()],
       sendDefaultPii: false,
