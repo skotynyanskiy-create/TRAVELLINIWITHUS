@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle, FileText, Map, Shield, Smartphone } from 'luci
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import Button from '../components/Button';
+import PageLayout from '../components/PageLayout';
 import Section from '../components/Section';
 import Breadcrumbs from '../components/Breadcrumbs';
 import SEO from '../components/SEO';
@@ -74,7 +75,7 @@ export default function ProductPage() {
 
   if (error || !product) {
     return (
-      <div className="min-h-screen bg-[var(--color-sand)] pt-32">
+      <PageLayout>
         <SEO
           title="Prodotto non disponibile"
           description="Questa scheda prodotto non è disponibile in questo momento."
@@ -98,7 +99,7 @@ export default function ProductPage() {
             </div>
           </div>
         </Section>
-      </div>
+      </PageLayout>
     );
   }
 
@@ -126,7 +127,7 @@ export default function ProductPage() {
       };
 
   return (
-    <div className="min-h-screen bg-[var(--color-sand)] pt-32">
+    <PageLayout>
       <SEO
         title={product.name}
         description={
@@ -332,6 +333,6 @@ export default function ProductPage() {
           </div>
         </div>
       </Section>
-    </div>
+    </PageLayout>
   );
 }
