@@ -13,6 +13,8 @@ import {
   renderContactAutoReply,
   renderMediaKitNotification,
   renderMediaKitAutoReply,
+  renderWelcomeEmail,
+  renderOrderConfirmation,
 } from './src/lib/email';
 
 dotenv.config();
@@ -21,6 +23,9 @@ const OWNER_EMAIL = process.env.MAIL_TO_OWNER || 'hello@travelliniwithus.it';
 const MEDIA_KIT_URL =
   process.env.MEDIA_KIT_URL ||
   `${process.env.APP_URL || 'https://travelliniwithus.it'}/media-kit.pdf`;
+const LEAD_MAGNET_URL =
+  process.env.LEAD_MAGNET_URL ||
+  `${process.env.APP_URL || 'https://travelliniwithus.it'}/lead-magnet-posti-italiani.pdf`;
 
 const ssrCache = new NodeCache({ stdTTL: 300, checkperiod: 600 });
 
@@ -988,6 +993,30 @@ async function startServer() {
           console.error('Failed to save order to Firestore:', e);
         }
       }
+
+      // Order confirmation email: invia al customer se ho email + items.
+      // Fire-and-forget, sendEmail e no-op se RESEND_API_KEY manca.
+      if (order.email && order.items.length > 0) {
+        const hasDigital = order.items.some((item) => item.isDigital);
+        const confirmation = renderOrderConfirmation({
+          customerName: order.customerName !== 'Unknown' ? order.customerName : undefined,
+          orderId: order.stripeSessionId,
+          total: order.total,
+          items: order.items.map((item) => ({
+            name: item.name ?? 'Prodotto',
+            quantity: item.quantity,
+            price: item.price,
+          })),
+          isDigital: hasDigital,
+        });
+        void sendEmail({
+          to: order.email,
+          ...confirmation,
+          tags: [{ name: 'type', value: 'order_confirmation' }],
+        }).catch((err) => {
+          console.error('[stripe-webhook] order confirmation email failed:', err);
+        });
+      }
     }
 
     res.json({ received: true });
@@ -1122,6 +1151,13 @@ async function startServer() {
       });
       return;
     }
+
+    // Welcome email: fire-and-forget, non bloccare la response.
+    // sendEmail e gia no-op se RESEND_API_KEY manca (predisposizione mode).
+    const welcome = renderWelcomeEmail({ source, leadMagnetUrl: LEAD_MAGNET_URL });
+    void sendEmail({ to: email, ...welcome }).catch((err) => {
+      console.error('[newsletter] welcome email failed:', err);
+    });
 
     res.json({ success: true });
   });
