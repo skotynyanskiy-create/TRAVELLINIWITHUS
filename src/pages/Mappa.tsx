@@ -28,7 +28,13 @@ export default function Mappa() {
   }, []);
 
   return (
-    <div className="relative h-screen bg-[var(--color-ink-deep)] pt-20">
+    // isolation: isolate crea uno stacking context locale che impedisce
+    // al <main> di Layout (con flex-grow) di sovrapporsi al popup Mapbox.
+    // mt-20 sposta il container sotto la Navbar fissa (top-4 + h~60px).
+    <div
+      className="relative mt-20 h-[calc(100dvh-5rem)] bg-[var(--color-ink-deep)]"
+      style={{ isolation: 'isolate' }}
+    >
       <SEO
         title="Esplora la Mappa Globale"
         description="Scopri gli itinerari e le destinazioni di Travelliniwithus attraverso la nostra mappa interattiva 3D."

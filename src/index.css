@@ -180,6 +180,53 @@
   }
 }
 
+/* Mapbox popup overrides: il Popup di react-map-gl crea uno stacking
+   context isolato via `transform: translate(...)`, quindi className z-[100]
+   non basta a superare la Navbar fissa (z-50) del sito. Forziamo con
+   selettore globale: il popup va SOPRA navbar, sticky CTA, cart drawer. */
+.mapboxgl-popup {
+  z-index: 110;
+}
+/* Rimuove padding/background di default del content perche la nostra
+   card Link interna ha gia il suo styling (rounded, shadow, bg-white). */
+.mapboxgl-popup-content {
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+/* Tip (arrow) coerente col bg-white della card popup. */
+.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
+  border-top-color: #ffffff;
+}
+.mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
+  border-bottom-color: #ffffff;
+}
+/* Close button di default: alto-destra del popup, ben sopra la nav,
+   styled con palette brand (sand + ink). */
+.mapboxgl-popup-close-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 9999px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 1;
+  z-index: 5;
+  backdrop-filter: blur(8px);
+  transition: background-color 0.2s;
+  /* Forza pointer-events sopra ogni wrapper di layout che potrebbe
+     intercettare il click in modo errato (es. <main> di Layout). */
+  pointer-events: auto !important;
+}
+.mapboxgl-popup-close-button:hover {
+  background-color: var(--color-ink);
+  color: #ffffff;
+}
+
 /* Map marker pulse — anello che cresce e dissolve, pattern Mapbox luxury */
 .twu-pulse-ring {
   width: 14px;

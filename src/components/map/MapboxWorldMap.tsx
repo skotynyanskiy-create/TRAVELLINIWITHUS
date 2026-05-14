@@ -10,7 +10,6 @@ import { Link } from 'react-router-dom';
 import {
   MapPin,
   Navigation,
-  X,
   Compass,
   BookOpen,
   Map as MapIcon,
@@ -336,15 +335,25 @@ export default function MapboxWorldMap() {
         </div>
       </div>
 
-      {/* Filter chips per continente — top center desktop, top scrollable mobile */}
-      <div className="pointer-events-none absolute inset-x-0 top-8 z-10 flex justify-center px-4 md:top-8">
-        <div className="pointer-events-auto flex max-w-full gap-1.5 overflow-x-auto rounded-full border border-white/12 bg-[var(--color-ink)]/70 p-1.5 backdrop-blur-xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      {/* Filter chips — wrapper outer è pointer-events-none (lascia passare
+          eventi alla mappa fuori dai chips). Il container interno e' invece
+          pointer-events-auto E ha overflow-x-auto in modo che su mobile
+          l'utente possa scrollare orizzontalmente i chip senza che il
+          canvas Mapbox intercetti il touch. */}
+      <div className="pointer-events-none absolute inset-x-0 top-8 z-10 flex justify-start px-4 md:justify-center">
+        <div
+          role="tablist"
+          aria-label="Filtra destinazioni per continente"
+          className="pointer-events-auto flex max-w-full gap-1.5 overflow-x-auto rounded-full border border-white/12 bg-[var(--color-ink)]/70 p-1.5 backdrop-blur-xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
           {CONTINENT_FILTERS.map((f) => {
             const isActive = activeContinent === f.id;
             return (
               <button
                 key={f.id}
                 type="button"
+                role="tab"
+                aria-selected={isActive}
                 onClick={() => setActiveContinent(f.id)}
                 className={`shrink-0 rounded-full px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] transition-colors ${
                   isActive
@@ -366,8 +375,27 @@ export default function MapboxWorldMap() {
         <MapPin size={14} /> Destinazioni
       </Link>
 
-      {/* Mini-lista articoli orizzontale (scroll-snap) — sincronizzata con i marker */}
-      {filteredArticles.length > 0 && (
+      {/* Mini-lista articoli orizzontale (scroll-snap) — sincronizzata con i marker.
+          Quando il filtro produce 0 risultati mostriamo un empty-state esplicito
+          invece di nascondere il pannello (l'utente capisce perche' la mappa e' vuota). */}
+      {filteredArticles.length === 0 && !isLoading ? (
+        <div className="pointer-events-none absolute inset-x-0 bottom-4 z-10 flex justify-center px-4 md:bottom-6">
+          <div
+            role="status"
+            className="pointer-events-auto inline-flex items-center gap-3 rounded-full border border-white/12 bg-[var(--color-ink)]/85 px-5 py-3 text-xs font-medium text-white/80 backdrop-blur-xl"
+          >
+            <Compass size={14} className="text-[var(--color-accent)]" />
+            Nessuna destinazione in {activeContinent === 'all' ? 'archivio' : activeContinent}.{' '}
+            <button
+              type="button"
+              onClick={() => setActiveContinent('all')}
+              className="font-bold uppercase tracking-[0.18em] text-[var(--color-accent)] hover:text-white"
+            >
+              Mostra tutte
+            </button>
+          </div>
+        </div>
+      ) : filteredArticles.length > 0 ? (
         <div className="pointer-events-none absolute inset-x-0 bottom-4 z-10 px-4 md:bottom-6">
           <div
             className="pointer-events-auto -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-auto md:max-w-5xl md:gap-4"
@@ -427,7 +455,7 @@ export default function MapboxWorldMap() {
             })}
           </div>
         </div>
-      )}
+      ) : null}
 
       <Map
         ref={mapRef}
@@ -452,53 +480,48 @@ export default function MapboxWorldMap() {
             longitude={selectedArticle.lng}
             latitude={selectedArticle.lat}
             onClose={() => setSelectedArticle(null)}
+            // Solo closeOnClick=true: il close button visibile non e'
+            // praticamente cliccabile perche' il <Link> wrapper della card
+            // popup occupa tutta l'area in stacking sopra di esso (DOM
+            // order: close-button prima, Link dopo). UX pattern Google
+            // Maps: click ovunque sulla mappa chiude il popup, ESC chiude
+            // da tastiera (gestito da Mapbox di default).
             closeButton={false}
-            closeOnClick={false}
-            className="z-50"
+            closeOnClick={true}
+            className="twu-map-popup"
             offset={[0, -40]}
+            maxWidth="320px"
           >
-            <div className="relative w-[300px] overflow-hidden rounded-[var(--radius-md)] bg-white p-0 shadow-2xl">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSelectedArticle(null);
-                }}
-                className="absolute right-3 top-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-md transition-colors hover:bg-[var(--color-ink)]"
-              >
-                <X size={14} />
-              </button>
-
-              <Link
-                to={`/articolo/${selectedArticle.slug || selectedArticle.id}`}
-                className="group relative block"
-              >
-                <div className="relative aspect-video w-full overflow-hidden bg-[var(--color-muted-bg)]">
-                  {selectedArticle.image && (
-                    <img
-                      src={selectedArticle.image}
-                      alt={selectedArticle.title}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  )}
-                  <div className="absolute bottom-3 left-3 flex gap-2">
-                    <span className="rounded-full bg-white/95 px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-[var(--color-ink)] shadow-md">
-                      {selectedArticle.category}
-                    </span>
-                  </div>
+            <Link
+              to={`/articolo/${selectedArticle.slug || selectedArticle.id}`}
+              className="group relative block w-[300px] overflow-hidden rounded-[var(--radius-md)] bg-white shadow-2xl"
+            >
+              <div className="relative aspect-video w-full overflow-hidden bg-[var(--color-muted-bg)]">
+                {selectedArticle.image && (
+                  <img
+                    src={selectedArticle.image}
+                    alt={selectedArticle.title}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                )}
+                <div className="absolute bottom-3 left-3 flex gap-2">
+                  <span className="rounded-full bg-white/95 px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-[var(--color-ink)] shadow-md">
+                    {selectedArticle.category}
+                  </span>
                 </div>
-                <div className="p-5">
-                  <h3 className="mb-2 line-clamp-2 font-serif text-xl leading-tight text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]">
-                    {selectedArticle.title}
-                  </h3>
-                  <p className="mb-4 line-clamp-2 text-xs font-light text-black/50">
-                    {selectedArticle.excerpt}
-                  </p>
-                  <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
-                    Leggi la guida →
-                  </div>
+              </div>
+              <div className="p-5">
+                <h3 className="mb-2 line-clamp-2 font-serif text-xl leading-tight text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]">
+                  {selectedArticle.title}
+                </h3>
+                <p className="mb-4 line-clamp-2 text-xs font-light text-black/50">
+                  {selectedArticle.excerpt}
+                </p>
+                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
+                  Leggi la guida →
                 </div>
-              </Link>
-            </div>
+              </div>
+            </Link>
           </Popup>
         )}
       </Map>
