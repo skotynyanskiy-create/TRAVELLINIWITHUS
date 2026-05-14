@@ -20,7 +20,7 @@ export const DEMO_ARTICLES_EXTRA = [
   {
     id: 'puglia-trulli-masserie',
     slug: 'puglia-trulli-masserie',
-    title: 'Puglia Segreta: Trulli, Masserie e Spiagge Nascoste',
+    title: 'Puglia: Trulli, Masserie e Costa Adriatica',
     category: 'Destinazioni',
     image:
       'https://images.unsplash.com/photo-1499695867787-12ace027e651?q=80&w=1200&auto=format&fit=crop',

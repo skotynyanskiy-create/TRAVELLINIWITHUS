@@ -1,4 +1,5 @@
 import { Eye, Instagram, MapPin, Users } from 'lucide-react';
+import { BRAND_STATS } from '../../config/site';
 
 /**
  * Strip social proof post-hero. Valori statici allineati a BRAND_STATS
@@ -12,10 +13,10 @@ interface TrustItem {
 }
 
 const TRUST_ITEMS: TrustItem[] = [
-  { icon: Instagram, value: '167K+', label: 'Follower Instagram' },
-  { icon: Eye, value: '500K+', label: 'Pubblico mensile' },
-  { icon: Users, value: '90K+', label: 'Follower TikTok' },
-  { icon: MapPin, value: '150+', label: 'Destinazioni esplorate' },
+  { icon: Instagram, value: BRAND_STATS.instagramFollowers, label: 'Follower Instagram' },
+  { icon: Eye, value: BRAND_STATS.monthlyReach, label: 'Pubblico mensile' },
+  { icon: Users, value: BRAND_STATS.tiktokFollowers, label: 'Follower TikTok' },
+  { icon: MapPin, value: BRAND_STATS.destinationsExplored, label: 'Destinazioni esplorate' },
 ];
 
 export default function HomeTrustStrip() {

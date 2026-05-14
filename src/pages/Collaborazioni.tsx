@@ -627,7 +627,7 @@ export default function Collaborazioni() {
                 pageContent.secondaryCtaLink,
               ];
               const ctaLabels = [
-                'Apri il media kit',
+                'Richiedi il media kit',
                 'Richiedi il media kit',
                 'Scrivici il progetto',
               ];

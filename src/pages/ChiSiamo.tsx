@@ -126,7 +126,7 @@ export default function ChiSiamo() {
           name: 'Travelliniwithus',
           url: SITE_URL,
           description:
-            'Posti particolari, esperienze memorabili e consigli utili per chi vuole scoprire, salvare e vivere meglio ogni viaggio.',
+            'Posti particolari, esperienze vere e consigli pratici da chi li ha vissuti. Travelliniwithus.',
           founders: [
             { '@type': 'Person', name: 'Gaetano Rodrigo' },
             { '@type': 'Person', name: 'Betta' },
@@ -337,7 +337,7 @@ export default function ChiSiamo() {
               Esplora i posti
             </Button>
             <Button to="/collaborazioni" variant="outline-light" size="lg">
-              Scopri le collaborazioni
+              Lavora con noi
             </Button>
           </div>
         </div>

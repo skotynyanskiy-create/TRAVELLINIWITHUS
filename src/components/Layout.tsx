@@ -35,7 +35,7 @@ const WEBSITE_JSONLD = {
   url: `${SITE_URL}/`,
   inLanguage: 'it-IT',
   description:
-    'Posti particolari, esperienze memorabili e consigli utili per chi vuole scoprire, salvare e vivere meglio ogni viaggio.',
+    'Posti particolari, esperienze vere e consigli pratici da chi li ha vissuti. Travelliniwithus.',
   potentialAction: {
     '@type': 'SearchAction',
     target: {

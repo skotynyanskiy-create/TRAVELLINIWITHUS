@@ -45,8 +45,8 @@ export default function Strumenti() {
             <span className="italic text-black/55">Stressati di meno.</span>
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-black/70">
-            Tre strumenti pratici per arrivare a un viaggio piu chiaro: capire quanto puo costare,
-            scegliere la direzione giusta, vedere dove siamo gia stati.
+            Tre strumenti pratici per arrivare a un viaggio più chiaro: capire quanto può costare,
+            scegliere la direzione giusta, vedere dove siamo già stati.
           </p>
         </div>
       </Section>
