@@ -8,6 +8,11 @@ const staticRoutes = [
   '/destinazioni',
   '/esperienze',
   '/guide',
+  '/itinerari',
+  '/quiz',
+  '/strumenti',
+  '/press',
+  '/mappa',
   '/chi-siamo',
   '/collaborazioni',
   '/media-kit',
@@ -172,6 +177,10 @@ Allow: /
 Disallow: /shop
 Disallow: /club
 Disallow: /account/acquisti
+Disallow: /vieni-con-noi
+Disallow: /lead-magnet
+Disallow: /iscrivi
+Disallow: /admin
 
 Sitemap: ${BASE_URL}/sitemap.xml
 `;
