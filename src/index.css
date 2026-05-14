@@ -1,21 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Kalam:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600;700&family=Kalam:wght@300;400;700&display=swap');
 @import 'tailwindcss';
 @import 'react-quill-new/dist/quill.snow.css';
 
 @theme {
-  --font-serif: 'Cormorant Garamond', Georgia, serif;
-  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-serif: 'Fraunces', 'Times New Roman', serif;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-script: 'Kalam', cursive;
 
-  /* Nero & Sabbia — Minimal Premium */
-  --color-sand: #f7f7f8; /* Sfondo pagina — grigio neutro */
+  /* Product Premium 2026 — neutrali sistematici + accent terracotta */
+  --color-sand: #fafafa; /* Sfondo pagina — neutro chiaro */
   --color-surface: #ffffff; /* Card, form — bianco puro */
-  --color-ink: #111111; /* Testo, bottoni primary — nero */
-  --color-accent: #a8865a; /* Accento unico — sabbia profonda/cuoio */
-  --color-accent-hover: #96734a; /* Accento hover — sabbia scura */
-  --color-accent-text: #7a5c35; /* Accento testo — WCAG AA su bianco */
-  --color-accent-soft: #f3efe9; /* Sezioni soft — sabbia calda */
-  --color-footer: #141414; /* Footer — nero profondo */
+  --color-surface-2: #f5f5f4; /* Tier 2 surface (alternate cards) */
+  --color-border: #e7e5e4; /* Divider sistematico */
+  --color-ink: #0a0a0a; /* Testo, bottoni primary — nero puro */
+  --color-ink-2: #44403c; /* Testo secondario */
+  --color-muted: #78716c; /* Testo terziario / placeholder */
+  --color-accent: #ea580c; /* Accento — terracotta moderna */
+  --color-accent-hover: #c2410c; /* Accento hover — terracotta scura */
+  --color-accent-text: #9a3412; /* Accento testo readable (WCAG AA su bianco) */
+  --color-accent-soft: #fff7ed; /* Sezioni soft — orange-50 */
+  --color-footer: #0a0a0a; /* Footer — allineato a ink */
 
   /* Social Brand Colors */
   --color-social-instagram-start: #f09433;
@@ -39,51 +43,81 @@
   --tracking-tight: -0.025em;
   --tracking-wide: 0.05em;
 
-  /* Fluid Typography Scale */
-  --text-h1: clamp(2.75rem, 6vw + 1rem, 5.5rem);
-  --text-h2: clamp(2.25rem, 4vw + 1rem, 4rem);
-  --text-h3: clamp(1.5rem, 2vw + 1rem, 2.5rem);
-  --text-body: clamp(1rem, 0.5vw + 0.875rem, 1.125rem);
+  /* Fluid Typography Scale (tighter, product premium) */
+  --text-h1: clamp(2.5rem, 5vw + 0.5rem, 4.5rem);
+  --text-h2: clamp(2rem, 3.5vw + 0.5rem, 3.25rem);
+  --text-h3: clamp(1.5rem, 2vw + 0.5rem, 2.25rem);
+  --text-body: clamp(1rem, 0.25vw + 0.95rem, 1.0625rem);
 
-  /* Editorial display scale (cinematic upgrade) */
-  --text-display-1: clamp(3.5rem, 8vw + 1rem, 8rem);
-  --text-display-2: clamp(2.5rem, 5vw + 0.5rem, 5rem);
+  /* Editorial display scale (Fraunces variable) */
+  --text-display-1: clamp(3rem, 6vw + 0.5rem, 6rem);
+  --text-display-2: clamp(2.25rem, 4vw + 0.5rem, 4rem);
 
-  /* Premium Design System */
-  --radius-xl: 1.5rem;
-  --radius-2xl: 2.5rem;
-  --radius-3xl: 3rem;
-  --shadow-premium:
-    0 20px 40px -10px rgba(17, 17, 17, 0.08), 0 10px 20px -5px rgba(17, 17, 17, 0.04);
-  --shadow-glass: 0 8px 32px 0 rgba(17, 17, 17, 0.06);
+  /* Radius — product premium contenuto (10-20px) */
+  --radius-sm: 0.375rem; /* 6 */
+  --radius-md: 0.625rem; /* 10 */
+  --radius-lg: 0.875rem; /* 14 */
+  --radius-xl: 1.25rem; /* 20 */
+  --radius-2xl: 1.5rem; /* 24 — solo hero card */
+  --radius-3xl: 1.75rem; /* 28 — only feature hero */
+
+  /* Shadow — sistematici, definiti (no soft warm) */
+  --shadow-xs: 0 1px 2px rgba(10, 10, 10, 0.04);
+  --shadow-sm: 0 1px 3px rgba(10, 10, 10, 0.06), 0 1px 2px rgba(10, 10, 10, 0.04);
+  --shadow-md: 0 4px 12px rgba(10, 10, 10, 0.06), 0 2px 4px rgba(10, 10, 10, 0.04);
+  --shadow-lg: 0 12px 24px rgba(10, 10, 10, 0.08), 0 4px 8px rgba(10, 10, 10, 0.04);
+  --shadow-xl: 0 24px 48px rgba(10, 10, 10, 0.1), 0 8px 16px rgba(10, 10, 10, 0.06);
+  --shadow-premium: var(--shadow-lg); /* alias retrocompat */
+  --shadow-glass: var(--shadow-md); /* alias retrocompat */
+
+  /* Motion — snappy product premium */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration: 220ms;
+  --duration-slow: 320ms;
 }
 
 @layer utilities {
   .text-display-1 {
-    @apply text-5xl md:text-7xl font-serif font-medium leading-tight;
+    @apply font-serif font-medium leading-[1.05] tracking-tight;
+    font-size: var(--text-display-1);
+    font-optical-sizing: auto;
   }
   .text-display-2 {
-    @apply text-4xl md:text-5xl font-serif leading-tight;
+    @apply font-serif leading-[1.08] tracking-tight;
+    font-size: var(--text-display-2);
+    font-optical-sizing: auto;
   }
   .text-eyebrow {
-    @apply text-[10px] font-bold uppercase tracking-[0.25em];
+    @apply text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-muted)];
   }
   .text-body-lg {
-    @apply text-lg font-light leading-relaxed;
-    color: color-mix(in srgb, var(--color-ink) 60%, transparent);
+    @apply text-lg leading-relaxed text-[var(--color-ink-2)];
   }
 
-  /* Card tiers */
+  /* Card tiers — product premium */
   .card-editorial {
-    @apply rounded-2xl bg-[var(--color-surface)] shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-1;
-    border: 1px solid color-mix(in srgb, var(--color-ink) 5%, transparent);
+    @apply rounded-[var(--radius-lg)] bg-[var(--color-surface)] transition-all;
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-xs);
+    transition-duration: var(--duration);
+  }
+  .card-editorial:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
   }
   .card-info {
-    @apply rounded-[var(--radius-xl)] bg-[var(--color-sand)] p-8 md:p-10;
-    border: 1px solid color-mix(in srgb, var(--color-ink) 5%, transparent);
+    @apply rounded-[var(--radius-lg)] bg-[var(--color-surface-2)] p-6 md:p-8;
+    border: 1px solid var(--color-border);
   }
   .card-dark {
-    @apply rounded-xl border border-white/8 bg-[#1C1C1C] p-5 transition-colors hover:bg-[#242424];
+    @apply rounded-[var(--radius-md)] bg-[#171717] p-5 transition-colors;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition-duration: var(--duration);
+  }
+  .card-dark:hover {
+    background-color: #1f1f1f;
   }
 
   /* Editorial divider */

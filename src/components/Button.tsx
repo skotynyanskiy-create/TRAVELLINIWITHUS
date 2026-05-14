@@ -54,24 +54,24 @@ export default function Button({
     onClick?.(event);
   };
   const baseStyles =
-    'inline-flex items-center justify-center gap-3 rounded-[var(--radius-xl)] uppercase tracking-widest font-semibold transition-all duration-500 ease-out';
+    'inline-flex items-center justify-center gap-2 rounded-[var(--radius-md)] font-semibold tracking-tight transition-all ease-out duration-200 whitespace-nowrap';
 
   const variants = {
     primary:
-      'bg-[var(--color-ink)] text-white shadow-md hover:bg-[var(--color-ink)]/85 hover:shadow-premium hover:-translate-y-0.5',
+      'bg-[var(--color-ink)] text-white shadow-[var(--shadow-sm)] hover:bg-[var(--color-ink-2)] hover:shadow-[var(--shadow-md)]',
     secondary:
-      'bg-[var(--color-surface)] text-[var(--color-ink)] shadow-sm hover:text-[var(--color-accent)] hover:shadow-premium border border-[var(--color-ink)]/10 hover:-translate-y-0.5',
+      'bg-[var(--color-surface)] text-[var(--color-ink)] border border-[var(--color-border)] hover:bg-[var(--color-surface-2)] hover:border-[var(--color-ink-2)]',
     outline:
-      'bg-transparent border border-[var(--color-ink)]/20 text-[var(--color-ink)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] hover:bg-[var(--color-accent-soft)]',
+      'bg-transparent border border-[var(--color-border)] text-[var(--color-ink)] hover:border-[var(--color-ink)] hover:bg-[var(--color-surface-2)]',
     'outline-light':
-      'bg-white/10 border border-white/40 text-white backdrop-blur-sm hover:bg-white hover:text-[var(--color-ink)] hover:border-white shadow-glass hover:-translate-y-0.5',
-    cta: 'bg-[var(--color-accent)] text-white shadow-[0_0_20px_rgba(155,127,166,0.25)] hover:shadow-[0_0_30px_rgba(155,127,166,0.4)] hover:brightness-110 hover:-translate-y-0.5',
+      'bg-white/5 border border-white/30 text-white backdrop-blur-sm hover:bg-white hover:text-[var(--color-ink)] hover:border-white',
+    cta: 'bg-[var(--color-accent)] text-white shadow-[var(--shadow-sm)] hover:bg-[var(--color-accent-hover)] hover:shadow-[var(--shadow-md)]',
   };
 
   const sizes = {
-    sm: 'px-5 py-2 text-xs',
-    md: 'px-8 py-4 text-sm rounded-full',
-    lg: 'px-10 py-4 text-sm md:text-base rounded-full',
+    sm: 'px-4 py-2 text-xs',
+    md: 'px-5 py-2.5 text-sm',
+    lg: 'px-7 py-3.5 text-sm md:text-base',
   };
 
   const combinedStyles = `${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`;
@@ -81,7 +81,7 @@ export default function Button({
 
   if (to) {
     return wrap(
-      <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="inline-block">
+      <motion.div whileTap={{ scale: 0.98 }} className="inline-block">
         <Link to={to} onClick={handleAnchorClick} className={combinedStyles}>
           {children}
         </Link>
@@ -92,7 +92,6 @@ export default function Button({
   if (href) {
     return wrap(
       <motion.a
-        whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         href={href}
         onClick={handleAnchorClick}
@@ -107,7 +106,6 @@ export default function Button({
 
   return wrap(
     <motion.button
-      whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       onClick={handleButtonClick}
       type={type}
