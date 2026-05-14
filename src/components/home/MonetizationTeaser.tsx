@@ -59,7 +59,7 @@ const CARDS: TeaserCard[] = [
 
 export default function MonetizationTeaser() {
   return (
-    <section className="bg-white py-20 md:py-24">
+    <section className="bg-[var(--color-surface-2)] py-20 md:py-24">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="mb-10 max-w-2xl">
           <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">

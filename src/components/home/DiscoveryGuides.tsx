@@ -37,7 +37,7 @@ export default function DiscoveryGuides() {
   );
 
   return (
-    <section ref={sectionRef} className="bg-white py-16 md:py-20">
+    <section ref={sectionRef} className="bg-[var(--color-surface-2)] py-16 md:py-20">
       <div className="mx-auto max-w-[82rem] px-6 md:px-10 xl:px-12">
         <div className="grid gap-6 lg:grid-cols-[0.76fr_1.44fr]">
           <div className="rounded-lg border border-[var(--color-accent)]/25 bg-[var(--color-accent-soft)] p-7 md:p-9">
