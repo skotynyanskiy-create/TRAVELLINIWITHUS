@@ -8,6 +8,51 @@ import { useReducedMotion } from '../../hooks/useReducedMotion';
 
 const COUPLE_IMG = '/images/brand/about-editorial.png';
 
+/**
+ * Polaroid scatter: 3 momenti R+B in giro per il mondo. Demo placeholder
+ * Unsplash people-led/travel-couple in attesa che R+B fornisca scatti
+ * polaroid reali (4:5 portrait, lume naturale, scene di coppia).
+ *
+ * TODO R+B: sostituire image+caption con 3 foto reali (cartella
+ * /images/brand/polaroid-{1,2,3}.jpg consigliata, 800x1000 webp).
+ */
+interface CouplePolaroid {
+  image: string;
+  alt: string;
+  caption: string;
+  /** Rotazione iniziale (deg) - stagger per effetto scatter. */
+  rotate: number;
+  /** Posizione absolute classi Tailwind. */
+  position: string;
+}
+
+const POLAROIDS: CouplePolaroid[] = [
+  {
+    image:
+      'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?q=80&w=600&auto=format&fit=crop',
+    alt: 'Coppia in viaggio — alba in montagna',
+    caption: 'Dolomiti, 2024',
+    rotate: -8,
+    position: '-top-6 -left-10 z-10',
+  },
+  {
+    image:
+      'https://images.unsplash.com/photo-1530789253388-582c481c54b0?q=80&w=600&auto=format&fit=crop',
+    alt: 'Coppia in viaggio — borgo italiano',
+    caption: 'Cilento, 2025',
+    rotate: 5,
+    position: 'top-1/3 -right-8 z-10',
+  },
+  {
+    image:
+      'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=600&auto=format&fit=crop',
+    alt: 'Coppia in viaggio — al tramonto',
+    caption: 'Andalusia, 2023',
+    rotate: -4,
+    position: '-bottom-10 left-1/3 z-10',
+  },
+];
+
 const METHOD_STANDARDS = [
   {
     icon: MapPinned,
@@ -64,6 +109,25 @@ export default function CoupleIntro() {
         },
       });
 
+      // Polaroid scatter: entry fan-out con stagger e rotazione finale.
+      // Inizialmente "tutte vicine al centro" (translate 0, rotate 0),
+      // animate alle posizioni absolute finali via rotation finale.
+      gsap.from('[data-couple-polaroid]', {
+        opacity: 0,
+        scale: 0.6,
+        rotate: 0,
+        y: 60,
+        x: (idx) => (idx === 1 ? -40 : 40),
+        duration: 0.9,
+        ease: 'back.out(1.3)',
+        stagger: 0.15,
+        scrollTrigger: {
+          trigger: '[data-couple-image]',
+          start: 'top 70%',
+          once: true,
+        },
+      });
+
       gsap.from('[data-couple-card]', {
         y: 28,
         opacity: 0,
@@ -105,6 +169,37 @@ export default function CoupleIntro() {
               <div className="text-[10px] uppercase tracking-widest text-black/50">
                 8 anni, 150 destinazioni, niente scrivania
               </div>
+            </div>
+
+            {/*
+              Polaroid scatter: 3 momenti scattered intorno alla foto
+              principale. Solo lg+ per non clutter su mobile.
+              Effetto entry: fan-out con rotation + scale via GSAP.
+            */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 hidden lg:block"
+            >
+              {POLAROIDS.map((p, idx) => (
+                <div
+                  key={idx}
+                  data-couple-polaroid
+                  className={`absolute ${p.position} w-40 rounded-[2px] bg-white p-2 pb-4 shadow-[0_18px_36px_-12px_rgba(17,17,17,0.35)]`}
+                  style={{ transform: `rotate(${p.rotate}deg)` }}
+                >
+                  <div className="aspect-[4/5] overflow-hidden bg-[var(--color-muted-bg)]">
+                    <img
+                      src={p.image}
+                      alt={p.alt}
+                      loading="lazy"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <div className="mt-2 px-1 text-center font-script text-[13px] leading-none text-[var(--color-ink-2)]">
+                    {p.caption}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
