@@ -112,7 +112,15 @@ export function DestinationTile({
   );
 }
 
-export function ExperienceCard({ type }: { type: ExperienceType }) {
+export function ExperienceCard({
+  type,
+  className = '',
+  featured = false,
+}: {
+  type: ExperienceType;
+  className?: string;
+  featured?: boolean;
+}) {
   const visual = getExperienceVisual(type);
   const Icon = visual.icon;
   const image = getExperienceImage(type);
@@ -121,7 +129,7 @@ export function ExperienceCard({ type }: { type: ExperienceType }) {
     <Link
       data-discovery-reveal
       to={`/esperienze?type=${slugifyExperienceType(type)}`}
-      className="group relative min-h-[146px] overflow-hidden rounded-lg bg-ink text-left text-white transition-all duration-300 hover:-translate-y-0.5 md:min-h-[190px]"
+      className={`group relative h-full min-h-[146px] overflow-hidden rounded-lg bg-ink text-left text-white transition-all duration-300 hover:-translate-y-0.5 md:min-h-[190px] ${className}`}
     >
       <img
         src={image}
@@ -134,17 +142,25 @@ export function ExperienceCard({ type }: { type: ExperienceType }) {
       <span className="relative flex h-full min-h-[146px] flex-col justify-between p-4 md:min-h-[190px] md:p-5">
         <span className="flex items-start justify-between gap-4">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/16 bg-white/14 text-white backdrop-blur-md">
-            <Icon size={15} />
+            <Icon size={featured ? 18 : 15} />
           </span>
           <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/16 bg-white/12 backdrop-blur-md transition-transform group-hover:translate-x-0.5">
             <ArrowRight size={13} />
           </span>
         </span>
         <span>
-          <span className="block text-xl font-serif leading-none text-white md:text-3xl">
+          <span
+            className={`block font-serif leading-none text-white ${
+              featured ? 'text-3xl md:text-5xl' : 'text-xl md:text-3xl'
+            }`}
+          >
             {getExperienceCardLabel(type)}
           </span>
-          <span className="mt-2 line-clamp-2 block max-w-[17rem] text-[10px] leading-relaxed text-white/68 md:text-xs">
+          <span
+            className={`mt-2 block text-[10px] leading-relaxed text-white/68 md:text-xs ${
+              featured ? 'line-clamp-3 max-w-[26rem]' : 'line-clamp-2 max-w-[17rem]'
+            }`}
+          >
             {getExperienceDescription(type)}
           </span>
         </span>

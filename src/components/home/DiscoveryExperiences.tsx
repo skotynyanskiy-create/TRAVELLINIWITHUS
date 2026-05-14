@@ -59,10 +59,25 @@ export default function DiscoveryExperiences() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 xl:grid-cols-3">
-          {HOME_EXPERIENCE_TYPES.map((type) => (
-            <ExperienceCard key={type} type={type} />
-          ))}
+        {/*
+          Bento grid asimmetrico (ref: Cereal, Apple feature pages):
+          - Feature card (Posti particolari) span 2x2 in alto-sinistra
+          - 4 card compatte 1x1 a destra
+          - 1 card wide 4x1 in basso
+          Stop al pattern uniform grid: l'asimmetria segnala "non e' un catalogo,
+          e' una selezione editoriale". Su mobile resta 2-col semplice.
+        */}
+        <div className="grid grid-cols-2 gap-4 lg:auto-rows-[200px] lg:grid-cols-4">
+          {HOME_EXPERIENCE_TYPES.map((type, idx) => {
+            const isFeature = idx === 0;
+            const isWide = idx === 5;
+            const cls = isFeature
+              ? 'lg:col-span-2 lg:row-span-2'
+              : isWide
+                ? 'lg:col-span-4'
+                : 'lg:col-span-1';
+            return <ExperienceCard key={type} type={type} className={cls} featured={isFeature} />;
+          })}
         </div>
       </div>
     </section>
