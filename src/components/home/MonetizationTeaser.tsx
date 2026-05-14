@@ -4,6 +4,8 @@ import { ArrowRight, BookMarked, Map, Sparkles } from 'lucide-react';
 import OptimizedImage from '../OptimizedImage';
 import { DEMO_GUIDES } from '../../config/demoGuides';
 
+type Status = 'live' | 'beta' | 'coming-soon';
+
 interface TeaserCard {
   eyebrow: string;
   title: string;
@@ -12,8 +14,24 @@ interface TeaserCard {
   to: string;
   image: string;
   icon: React.ComponentType<{ size?: number; className?: string }>;
+  status: Status;
   badge?: string;
 }
+
+const STATUS_STYLES: Record<Status, { label: string; className: string }> = {
+  live: {
+    label: 'Disponibile',
+    className: 'bg-[var(--color-success-soft)] text-[var(--color-success-text)]',
+  },
+  beta: {
+    label: 'Beta',
+    className: 'bg-[var(--color-warning-soft)] text-[var(--color-warning-text)]',
+  },
+  'coming-soon': {
+    label: 'In arrivo',
+    className: 'bg-[var(--color-muted-bg-2)] text-[var(--color-ink-2)]',
+  },
+};
 
 const featuredGuide = DEMO_GUIDES[0];
 
@@ -30,6 +48,7 @@ const CARDS: TeaserCard[] = [
       featuredGuide?.coverImage ||
       'https://images.unsplash.com/photo-1556471013-0001958d2f12?q=80&w=1200&auto=format&fit=crop',
     icon: BookMarked,
+    status: 'coming-soon',
     badge: 'Bestseller demo',
   },
   {
@@ -42,6 +61,7 @@ const CARDS: TeaserCard[] = [
     image:
       'https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1200&auto=format&fit=crop',
     icon: Map,
+    status: 'live',
   },
   {
     eyebrow: 'Travellini Club',
@@ -53,7 +73,8 @@ const CARDS: TeaserCard[] = [
     image:
       'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop',
     icon: Sparkles,
-    badge: 'In arrivo',
+    status: 'coming-soon',
+    badge: 'Lancio Q4 2026',
   },
 ];
 
@@ -94,11 +115,18 @@ export default function MonetizationTeaser() {
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
-                  {card.badge && (
-                    <span className="absolute right-4 top-4 rounded-full bg-white/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-ink)] backdrop-blur-md">
-                      {card.badge}
+                  <div className="absolute right-4 top-4 flex flex-col items-end gap-2">
+                    <span
+                      className={`rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] shadow-sm backdrop-blur-md ${STATUS_STYLES[card.status].className}`}
+                    >
+                      {STATUS_STYLES[card.status].label}
                     </span>
-                  )}
+                    {card.badge && (
+                      <span className="rounded-full bg-white/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-ink)] backdrop-blur-md">
+                        {card.badge}
+                      </span>
+                    )}
+                  </div>
                   <div className="absolute left-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-accent)] text-white">
                     <Icon size={16} />
                   </div>
