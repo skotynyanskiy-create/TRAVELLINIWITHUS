@@ -108,98 +108,39 @@ export default function HeroSection() {
       const root = heroRef.current;
       if (!root) return;
 
-      const mm = gsap.matchMedia();
+      // Subtle entry: fade + small Y, no word stagger or clipPath
+      gsap.set('[data-hero-eyebrow]', { opacity: 0, y: 12 });
+      gsap.set('[data-hero-title]', { opacity: 0, y: 16 });
+      gsap.set('[data-hero-paragraph]', { opacity: 0, y: 12 });
+      gsap.set('[data-hero-pills]', { opacity: 0, y: 8 });
+      gsap.set('[data-hero-cta]', { opacity: 0, y: 12 });
+      gsap.set('[data-hero-reel]', { opacity: 0, y: 16 });
 
-      mm.add(
-        {
-          isDesktop: '(min-width: 769px)',
-          isMobile: '(max-width: 768px)',
+      const intro = gsap.timeline({
+        defaults: { ease: 'power2.out', duration: 0.5 },
+      });
+      intro
+        .to('[data-hero-eyebrow]', { opacity: 1, y: 0 })
+        .to('[data-hero-title]', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+        .to('[data-hero-paragraph]', { opacity: 1, y: 0 }, '-=0.35')
+        .to('[data-hero-pills]', { opacity: 1, y: 0 }, '-=0.35')
+        .to('[data-hero-cta]', { opacity: 1, y: 0 }, '-=0.35')
+        .to('[data-hero-reel]', { opacity: 1, y: 0 }, '-=0.4');
+
+      // Light background scale on scroll (no pin, no overlay opacity drama)
+      gsap.to('[data-hero-image]', {
+        scale: 1.03,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: root,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.4,
         },
-        (ctx) => {
-          const conditions = ctx.conditions ?? { isDesktop: false, isMobile: true };
-          const { isDesktop } = conditions;
-
-          gsap.set('[data-hero-word]', { yPercent: 100, opacity: 0 });
-          gsap.set('[data-hero-eyebrow]', { clipPath: 'inset(0 100% 0 0)' });
-          gsap.set('[data-hero-paragraph]', { opacity: 0, y: 24 });
-          gsap.set('[data-hero-cta]', { opacity: 0, y: 24 });
-          gsap.set('[data-hero-pills]', { opacity: 0, y: 16 });
-          gsap.set('[data-hero-reel]', { opacity: 0, x: 60 });
-
-          const intro = gsap.timeline({
-            defaults: { ease: 'power3.out' },
-          });
-          intro
-            .to('[data-hero-eyebrow]', { clipPath: 'inset(0 0 0 0)', duration: 0.85 })
-            .to(
-              '[data-hero-word]',
-              { yPercent: 0, opacity: 1, duration: 0.7, stagger: 0.05 },
-              '-=0.5'
-            )
-            .to('[data-hero-paragraph]', { opacity: 1, y: 0, duration: 0.7 }, '-=0.4')
-            .to('[data-hero-pills]', { opacity: 1, y: 0, duration: 0.6 }, '-=0.5')
-            .to('[data-hero-cta]', { opacity: 1, y: 0, duration: 0.7 }, '-=0.4')
-            .to('[data-hero-reel]', { opacity: 1, x: 0, duration: 0.9 }, '-=0.6');
-
-          if (isDesktop) {
-            const scrub = gsap.timeline({
-              scrollTrigger: {
-                trigger: root,
-                start: 'top top',
-                end: '+=120%',
-                pin: true,
-                pinSpacing: true,
-                pinType: 'transform',
-                scrub: 0.6,
-              },
-            });
-
-            scrub
-              .to(
-                '[data-hero-image]',
-                {
-                  scale: 1.08,
-                  yPercent: -6,
-                  ease: 'none',
-                },
-                0
-              )
-              .to(
-                '[data-hero-overlay]',
-                {
-                  opacity: 0.55,
-                  ease: 'none',
-                },
-                0
-              )
-              .to(
-                '[data-hero-content]',
-                {
-                  opacity: 0,
-                  y: -40,
-                  ease: 'power1.in',
-                },
-                0.4
-              );
-          } else {
-            gsap.to('[data-hero-image]', {
-              scale: 1.04,
-              ease: 'none',
-              scrollTrigger: {
-                trigger: root,
-                start: 'top top',
-                end: 'bottom top',
-                scrub: 0.4,
-              },
-            });
-          }
-        }
-      );
+      });
     },
     { scope: heroRef, dependencies: [reducedMotion] }
   );
-
-  const titleWords = HERO_TITLE.split(/\s+/);
 
   return (
     <section
@@ -232,19 +173,11 @@ export default function HeroSection() {
           </span>
 
           <h1
-            className="mt-5 max-w-4xl font-serif font-medium leading-[0.92] tracking-tight text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.45)]"
+            data-hero-title
+            className="mt-5 max-w-4xl font-serif font-medium leading-[0.95] tracking-tight text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.45)]"
             style={{ fontSize: 'var(--text-display-1, clamp(3rem, 6vw + 1rem, 6.5rem))' }}
           >
-            <span className="sr-only">{HERO_TITLE}</span>
-            <span aria-hidden="true" className="flex flex-wrap gap-x-[0.28em] overflow-hidden">
-              {titleWords.map((word, i) => (
-                <span key={`${word}-${i}`} className="inline-block overflow-hidden">
-                  <span data-hero-word className="inline-block">
-                    {word}
-                  </span>
-                </span>
-              ))}
-            </span>
+            {HERO_TITLE}
           </h1>
 
           <p

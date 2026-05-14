@@ -139,6 +139,10 @@ const STATIC_APP_ROUTES = new Set([
   '/destinazioni',
   '/esperienze',
   '/guide',
+  '/itinerari',
+  '/quiz',
+  '/strumenti',
+  '/press',
   '/chi-siamo',
   '/collaborazioni',
   '/media-kit',
@@ -420,6 +424,11 @@ async function resolveAppStatus(pathname: string) {
   }
 
   if (pathname.startsWith('/admin/editor/') || pathname.startsWith('/admin/product-editor/')) {
+    return 200;
+  }
+
+  // Demo content types (Sprint 4): client renders NotFound if slug missing.
+  if (pathname.startsWith('/itinerari/') || pathname.startsWith('/guide/')) {
     return 200;
   }
 

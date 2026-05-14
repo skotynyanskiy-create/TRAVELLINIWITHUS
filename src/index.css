@@ -120,47 +120,14 @@
     background-color: #1f1f1f;
   }
 
-  /* Editorial divider */
-  .editorial-divider::before {
+  /* Subtle divider (sostituisce editorial-divider drammatico) */
+  .subtle-divider::before {
     content: '';
     display: block;
-    width: 3rem;
+    width: 2rem;
     height: 1px;
-    background: var(--color-accent);
-    margin: 0 auto 2rem;
-  }
-
-  /* Gold editorial ornament — thin lines with diamond center */
-  .ornament-gold {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    margin: 0 auto;
-    width: fit-content;
-  }
-  .ornament-gold::before,
-  .ornament-gold::after {
-    content: '';
-    width: 3rem;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
-  }
-
-  /* Subtle topographic contour pattern for dark sections */
-  .bg-topo {
-    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 10c22 0 40 18 40 40s-18 40-40 40S10 72 10 50 28 10 50 10z' fill='none' stroke='%23906842' stroke-width='0.3' opacity='0.08'/%3E%3Cpath d='M50 25c14 0 25 11 25 25s-11 25-25 25-25-11-25-25 11-25 25-25z' fill='none' stroke='%23906842' stroke-width='0.3' opacity='0.06'/%3E%3C/svg%3E");
-  }
-
-  /* Editorial drop cap on the first letter of the first paragraph */
-  .drop-cap::first-letter {
-    float: left;
-    font-family: var(--font-serif);
-    font-size: 4.6em;
-    line-height: 0.85;
-    padding: 0.05em 0.12em 0 0;
-    color: var(--color-accent);
-    font-weight: 500;
+    background: var(--color-border);
+    margin: 0 auto 1.5rem;
   }
 }
 

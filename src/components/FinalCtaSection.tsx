@@ -96,7 +96,7 @@ export default function FinalCtaSection({
     <section
       className={`relative overflow-hidden rounded-[var(--radius-xl)] bg-[var(--color-ink)] px-8 py-12 text-white shadow-2xl md:px-14 md:py-16 ${className}`}
     >
-      <div className="absolute inset-0 bg-topo opacity-20" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[var(--color-accent)]/8 via-transparent to-transparent" />
       <div className="relative z-10 grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
         <div className="max-w-3xl">
           <span className="mb-5 block text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">

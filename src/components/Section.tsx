@@ -25,38 +25,48 @@ const maxWidthMap = {
   wide: 'max-w-[1440px]',
 };
 
-export default function Section({ children, className = '', title, subtitle, id, spacing = 'default', divider, maxWidth = 'default', ornament }: SectionProps) {
+export default function Section({
+  children,
+  className = '',
+  title,
+  subtitle,
+  id,
+  spacing = 'default',
+  divider,
+  maxWidth = 'default',
+  ornament,
+}: SectionProps) {
   return (
     <section id={id} className={`${spacingMap[spacing]} ${className}`}>
       <motion.div
-        className={`${maxWidthMap[maxWidth]} mx-auto px-6 md:px-12 ${divider ? 'editorial-divider' : ''}`}
-        initial={{ opacity: 0, y: 20 }}
+        className={`${maxWidthMap[maxWidth]} mx-auto px-6 md:px-12 ${divider ? 'subtle-divider' : ''}`}
+        initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       >
         {(title || subtitle) && (
-          <div className="text-center mb-12 md:mb-16">
+          <div className="mb-10 text-center md:mb-14">
             {ornament && (
-              <div className="ornament-gold mb-6">
-                <div className="h-1.5 w-1.5 rotate-45 bg-[var(--color-accent)]" />
+              <div className="mb-5 flex items-center justify-center gap-2">
+                <span className="h-px w-8 bg-[var(--color-border)]" />
+                <span className="h-1 w-1 rotate-45 bg-[var(--color-accent)]" />
+                <span className="h-px w-8 bg-[var(--color-border)]" />
               </div>
             )}
             {subtitle && (
-              <span className="uppercase tracking-[0.25em] text-[10px] md:text-xs font-bold text-[var(--color-accent-text)] mb-4 block">
+              <span className="mb-3 block text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-accent-text)]">
                 {subtitle}
               </span>
             )}
             {title && (
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-medium tracking-tight leading-tight text-[var(--color-ink)]">
+              <h2 className="font-serif font-medium leading-tight tracking-tight text-[var(--color-ink)] text-3xl md:text-4xl lg:text-5xl">
                 {title}
               </h2>
             )}
           </div>
         )}
-        <div>
-          {children}
-        </div>
+        <div>{children}</div>
       </motion.div>
     </section>
   );

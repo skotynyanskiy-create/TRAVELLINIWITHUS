@@ -130,7 +130,7 @@ export default function CoupleIntro() {
                 </span>
               </span>
             </h2>
-            <p className="drop-cap mt-6 max-w-2xl text-base leading-relaxed text-black/70 md:text-lg">
+            <p className="mt-6 max-w-2xl text-base leading-relaxed text-black/70 md:text-lg">
               Travelliniwithus non nasce per mostrare più posti possibile. Nasce per selezionare
               quelli che meritano davvero, con un racconto abbastanza concreto da aiutarti a
               decidere.
