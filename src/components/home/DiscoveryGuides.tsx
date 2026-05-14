@@ -47,7 +47,7 @@ export default function DiscoveryGuides() {
               Guide di viaggio
             </div>
             <h2 className="mt-7 text-3xl font-serif leading-tight text-ink md:text-5xl">
-              Pianifica con guide scritte a mano.
+              Guide di viaggio scritte da chi c&apos;era.
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-black/62 md:text-base">
               Itinerari, consigli pratici, costi indicativi. Per prepararti prima di partire e

@@ -26,13 +26,6 @@ const METHOD_STANDARDS = [
   },
 ];
 
-const COUNTER_STATS = [
-  { value: '167K+', label: 'Instagram' },
-  { value: '90K+', label: 'TikTok' },
-  { value: '8', label: 'Anni di viaggi' },
-  { value: '150+', label: 'Destinazioni' },
-];
-
 gsap.registerPlugin(ScrollTrigger);
 
 export default function CoupleIntro() {
@@ -148,19 +141,6 @@ export default function CoupleIntro() {
               pratici: è questo che rende il progetto utile sia per chi legge sia per i partner
               giusti.
             </p>
-
-            <dl className="mt-6 grid grid-cols-4 gap-x-4 gap-y-2 border-y border-black/8 py-5">
-              {COUNTER_STATS.map((stat) => (
-                <div key={stat.label}>
-                  <dt className="text-[9px] font-semibold uppercase tracking-[0.18em] text-black/45">
-                    {stat.label}
-                  </dt>
-                  <dd className="mt-1 font-serif text-2xl text-[var(--color-ink)] md:text-3xl">
-                    {stat.value}
-                  </dd>
-                </div>
-              ))}
-            </dl>
 
             <div data-couple-cards className="mt-7 grid gap-3 md:grid-cols-3">
               {METHOD_STANDARDS.map((standard) => {

@@ -32,7 +32,7 @@ export default function Home() {
     <div className="min-h-screen overflow-x-clip bg-sand selection:bg-[var(--color-accent)] selection:text-white">
       <SEO
         title="Posti particolari, destinazioni ed esperienze da vivere"
-        description="Scopri destinazioni, esperienze e consigli di viaggio con un archivio unico filtrabile per luoghi e tipologie. Travelliniwithus racconta idee da salvare e vivere davvero."
+        description="Guide a posti particolari, hotel con carattere, borghi e weekend romantici — scritte da chi li ha vissuti. Archivio filtrabile per luogo e stile. Travelliniwithus."
         canonical={`${SITE_URL}/`}
       />
       <Helmet>

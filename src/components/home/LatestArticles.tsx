@@ -55,7 +55,7 @@ export default function LatestArticles() {
   const articlesGrid = recentArticles.slice(0, 6);
 
   return (
-    <section id="storie" className="bg-[var(--color-surface-2)] py-20 md:py-24">
+    <section id="storie" className="bg-white py-20 md:py-24">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="mb-10 flex items-end justify-between gap-6">
           <div>

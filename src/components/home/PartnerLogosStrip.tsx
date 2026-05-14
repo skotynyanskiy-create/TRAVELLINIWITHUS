@@ -24,7 +24,7 @@ export default function PartnerLogosStrip() {
     <div className="border-y border-white/10 bg-black/30 backdrop-blur-sm">
       <div className="mx-auto max-w-6xl px-6 py-6 md:px-12 md:py-8">
         <p className="mb-4 text-center text-[10px] font-semibold uppercase tracking-[0.28em] text-white/55">
-          Hanno collaborato con noi (demo placeholder)
+          Tra i progetti che raccontiamo
         </p>
         <ul className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3 md:grid-cols-6">
           {PARTNERS.map((partner) => (

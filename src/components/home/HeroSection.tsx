@@ -3,10 +3,10 @@ import { motion } from 'motion/react';
 import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowDown, ArrowRight, ExternalLink } from 'lucide-react';
+import { ArrowDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Button from '../Button';
-import { CONTACTS, FEATURED_REEL } from '../../config/site';
+import { FEATURED_REEL } from '../../config/site';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import HeroBackdrop from './HeroBackdrop';
 
@@ -37,7 +37,6 @@ function FeaturedReelPreview() {
   const hasConfiguredReel = Boolean(reelEmbedUrl);
   const hasConfiguredVisual = hasConfiguredReel || Boolean(reelThumbnail);
   const previewImage = reelThumbnail || REEL_FALLBACK_IMAGE;
-  const instagramHref = reelUrl || CONTACTS.instagramUrl;
 
   const reelMessage = hasConfiguredVisual
     ? FEATURED_REEL.caption
@@ -84,14 +83,12 @@ function FeaturedReelPreview() {
         </div>
 
         <div className="mt-4 border-t border-white/10 px-1 pt-3">
-          <a
-            href={instagramHref}
-            target="_blank"
-            rel="noreferrer"
+          <Link
+            to="/#storie"
             className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/68 transition-colors hover:text-[var(--color-accent)]"
           >
-            Guarda su Instagram <ExternalLink size={12} />
-          </a>
+            Tutte le storie <ArrowRight size={12} />
+          </Link>
         </div>
       </div>
     </motion.aside>

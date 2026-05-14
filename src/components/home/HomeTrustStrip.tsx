@@ -1,4 +1,4 @@
-import { Instagram, MapPin, TrendingUp, Users } from 'lucide-react';
+import { Eye, Instagram, MapPin, Users } from 'lucide-react';
 
 /**
  * Strip social proof post-hero. Valori statici allineati a BRAND_STATS
@@ -13,7 +13,7 @@ interface TrustItem {
 
 const TRUST_ITEMS: TrustItem[] = [
   { icon: Instagram, value: '167K+', label: 'Follower Instagram' },
-  { icon: TrendingUp, value: '500K+', label: 'Reach mensile' },
+  { icon: Eye, value: '500K+', label: 'Pubblico mensile' },
   { icon: Users, value: '90K+', label: 'Follower TikTok' },
   { icon: MapPin, value: '150+', label: 'Destinazioni esplorate' },
 ];

@@ -38,7 +38,7 @@ export default function DiscoveryDestinations() {
   );
 
   return (
-    <section ref={sectionRef} className="bg-white py-16 md:py-20">
+    <section ref={sectionRef} className="bg-[var(--color-surface-2)] py-16 md:py-20">
       <div className="mx-auto max-w-[82rem] px-6 md:px-10 xl:px-12">
         <div className="mb-7 grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div className="max-w-3xl">

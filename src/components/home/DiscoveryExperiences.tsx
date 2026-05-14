@@ -45,11 +45,10 @@ export default function DiscoveryExperiences() {
               Esplora per esperienza
             </span>
             <h2 className="mt-1 text-3xl font-serif leading-tight text-ink md:text-5xl">
-              Scegli il ritmo del viaggio.
+              Posti particolari, food, borghi e hotel con carattere.
             </h2>
             <p className="mt-4 max-w-xl text-sm leading-relaxed text-black/62 md:text-base">
-              Filtri per stile, non per categoria: posti particolari, food, hotel con carattere,
-              weekend romantici, borghi.
+              Filtra per stile: scegli cosa cerchi e l&apos;archivio si apre da lì.
             </p>
           </div>
           <Link

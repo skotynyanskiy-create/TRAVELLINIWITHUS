@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, BookMarked, Compass, Sparkles } from 'lucide-react';
+import { ArrowRight, BookMarked, Map, Sparkles } from 'lucide-react';
 import OptimizedImage from '../OptimizedImage';
 import { DEMO_GUIDES } from '../../config/demoGuides';
 
@@ -33,15 +33,15 @@ const CARDS: TeaserCard[] = [
     badge: 'Bestseller demo',
   },
   {
-    eyebrow: 'Strumenti pratici',
-    title: 'Calcolatore budget',
+    eyebrow: 'Esplora dal vivo',
+    title: 'Mappa interattiva',
     description:
-      'Quanto costa il prossimo viaggio? Durata, area, stile e una stima realistica voli + alloggi + cibo.',
-    cta: 'Apri gli strumenti',
-    to: '/strumenti',
+      'Tutti i posti raccontati su una mappa. Filtra per zona, esperienza, stagione: l’archivio diventa visivo.',
+    cta: 'Apri la mappa',
+    to: '/mappa',
     image:
-      'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1200&auto=format&fit=crop',
-    icon: Compass,
+      'https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1200&auto=format&fit=crop',
+    icon: Map,
   },
   {
     eyebrow: 'Travellini Club',
@@ -59,7 +59,7 @@ const CARDS: TeaserCard[] = [
 
 export default function MonetizationTeaser() {
   return (
-    <section className="bg-[var(--color-surface-2)] py-20 md:py-24">
+    <section className="bg-[var(--color-sand)] py-20 md:py-24">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="mb-10 max-w-2xl">
           <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">

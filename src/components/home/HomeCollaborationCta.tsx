@@ -91,7 +91,7 @@ export default function HomeCollaborationCta() {
                 to="/collaborazioni"
                 className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-[var(--color-accent)] px-6 text-xs font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
               >
-                Scopri le collaborazioni <ArrowRight size={14} />
+                Lavora con noi <ArrowRight size={14} />
               </Link>
               <Link
                 to="/media-kit"
