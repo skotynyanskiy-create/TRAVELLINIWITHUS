@@ -2,17 +2,20 @@ import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { ArrowUp } from 'lucide-react';
 import SEO from '../components/SEO';
-import Newsletter from '../components/Newsletter';
 import { useSmoothScroll } from '../components/SmoothScrollProvider';
 import { SITE_URL } from '../config/site';
 
 import HeroSection from '../components/home/HeroSection';
-import HomeDiscoveryCards from '../components/home/HomeDiscoveryCards';
-import HomeMapTeaser from '../components/home/HomeMapTeaser';
+import HomeTrustStrip from '../components/home/HomeTrustStrip';
+import DiscoveryDestinations from '../components/home/DiscoveryDestinations';
 import CoupleIntro from '../components/home/CoupleIntro';
+import DiscoveryExperiences from '../components/home/DiscoveryExperiences';
 import LatestArticles from '../components/home/LatestArticles';
-import HomeToolsTeaser from '../components/home/HomeToolsTeaser';
 import HomeQuizBudgetTeaser from '../components/home/HomeQuizBudgetTeaser';
+import DiscoveryGuides from '../components/home/DiscoveryGuides';
+import InstagramGrid from '../components/InstagramGrid';
+import NewsletterFeature from '../components/home/NewsletterFeature';
+import MonetizationTeaser from '../components/home/MonetizationTeaser';
 import HomeCollaborationCta from '../components/home/HomeCollaborationCta';
 
 export default function Home() {
@@ -64,40 +67,42 @@ export default function Home() {
         <ArrowUp size={20} />
       </button>
 
+      {/* 1. Hero */}
       <HeroSection />
 
-      <HomeDiscoveryCards />
-      <HomeQuizBudgetTeaser />
-      <HomeMapTeaser />
+      {/* 2. Trust strip — social proof immediato */}
+      <HomeTrustStrip />
+
+      {/* 3. Discovery destinations */}
+      <DiscoveryDestinations />
+
+      {/* 4. Creator showcase (Couple intro) — umanizza brand + metodo */}
       <CoupleIntro />
+
+      {/* 5. Discovery experiences */}
+      <DiscoveryExperiences />
+
+      {/* 6. Latest articles (grid, no carousel) */}
       <div id="storie">
         <LatestArticles />
       </div>
-      <HomeToolsTeaser />
 
-      <section id="newsletter" className="bg-white py-20 md:py-28">
-        <div className="mx-auto grid max-w-6xl gap-10 px-6 md:px-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
-          <div>
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
-              Newsletter
-            </span>
-            <h2 className="mt-4 max-w-xl text-4xl font-serif leading-[1.05] text-ink md:text-5xl">
-              Una email ogni tanto.{' '}
-              <span className="italic text-black/55">
-                Solo quando c'è davvero qualcosa da salvare.
-              </span>
-            </h2>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-black/62">
-              Luoghi, idee weekend, guide e strumenti. Niente rumore, niente pressione, niente
-              newsletter riempita per forza.
-            </p>
-          </div>
-          <div className="rounded-[var(--radius-md)] border border-black/6 bg-[var(--color-sand)] p-8 md:p-10">
-            <Newsletter compact variant="sand" source="homepage_compact" />
-          </div>
-        </div>
-      </section>
+      {/* 7. Quiz + Budget interactive (mid-page, post-content) */}
+      <HomeQuizBudgetTeaser />
 
+      {/* 8. Discovery guides */}
+      <DiscoveryGuides />
+
+      {/* 9. Instagram feed */}
+      <InstagramGrid />
+
+      {/* 10. Newsletter feature (mid-page con social proof counter) */}
+      <NewsletterFeature />
+
+      {/* 11. Monetization teaser (Shop + Strumenti + Club) */}
+      <MonetizationTeaser />
+
+      {/* 12. Collaboration B2B (partner logos + dark CTA) */}
       <HomeCollaborationCta />
     </div>
   );

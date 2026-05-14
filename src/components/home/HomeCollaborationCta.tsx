@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
+import PartnerLogosStrip from './PartnerLogosStrip';
 
 const COLLAB_IMG = '/images/brand/collab-work.png';
 
@@ -48,8 +49,9 @@ export default function HomeCollaborationCta() {
   );
 
   return (
-    <section ref={sectionRef} className="bg-[var(--color-ink)] py-16 text-white md:py-24">
-      <div className="mx-auto max-w-7xl px-6 md:px-12">
+    <section ref={sectionRef} className="bg-[var(--color-ink)] py-16 text-white md:py-20">
+      <PartnerLogosStrip />
+      <div className="mx-auto mt-12 max-w-7xl px-6 md:mt-16 md:px-12">
         <div className="grid gap-10 overflow-hidden rounded-[var(--radius-md)] border border-white/10 lg:grid-cols-[0.9fr_1.1fr]">
           <div
             data-collab-image
@@ -70,7 +72,7 @@ export default function HomeCollaborationCta() {
             className="flex flex-col justify-center gap-5 p-8 md:p-12 lg:p-14"
           >
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent)]">
-              Collaborazioni
+              Per hotel, destinazioni, brand travel & lifestyle
             </span>
             <h2
               className="max-w-3xl font-serif leading-[1.05] tracking-tight"
@@ -79,8 +81,8 @@ export default function HomeCollaborationCta() {
               Hai un luogo, un hotel o un progetto che merita un racconto fatto bene?
             </h2>
             <p className="max-w-2xl text-base leading-relaxed text-white/70 md:text-lg">
-              Lavoriamo con realtà travel, hospitality e lifestyle quando c’è allineamento reale tra
-              progetto, pubblico e libertà editoriale.
+              Lavoriamo con realta travel, hospitality e lifestyle quando c&apos;e allineamento
+              reale tra progetto, pubblico e liberta editoriale.
             </p>
 
             <div className="mt-2 flex flex-col gap-3 sm:flex-row">
