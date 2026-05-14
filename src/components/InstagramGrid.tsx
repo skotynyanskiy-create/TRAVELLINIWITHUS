@@ -9,6 +9,8 @@ interface InstaItem {
   caption: string;
   url: string;
   views?: string;
+  /** Span on lg+ grid (col-span × row-span). 'feature' = 2×2, 'tall' = 1×2, 'wide' = 2×1, 'square' = 1×1 */
+  span: 'feature' | 'tall' | 'wide' | 'square';
 }
 
 const INSTA_ITEMS: InstaItem[] = [
@@ -19,6 +21,7 @@ const INSTA_ITEMS: InstaItem[] = [
     caption: 'Catania prima dell alba — i posti che nessuno ti racconta',
     url: 'https://www.instagram.com/travelliniwithus/',
     views: '180K',
+    span: 'feature',
   },
   {
     image:
@@ -27,6 +30,7 @@ const INSTA_ITEMS: InstaItem[] = [
     caption: 'Tre rifugi delle Dolomiti che ti fanno cambiare idea',
     url: 'https://www.instagram.com/travelliniwithus/',
     views: '92K',
+    span: 'tall',
   },
   {
     image:
@@ -35,6 +39,7 @@ const INSTA_ITEMS: InstaItem[] = [
     caption: 'Andalusia in 4 giorni: dove ci siamo persi davvero',
     url: 'https://www.instagram.com/travelliniwithus/',
     views: '64K',
+    span: 'square',
   },
   {
     image:
@@ -42,6 +47,7 @@ const INSTA_ITEMS: InstaItem[] = [
     type: 'post',
     caption: 'Mercato del pesce a Brucoli',
     url: 'https://www.instagram.com/travelliniwithus/',
+    span: 'square',
   },
   {
     image:
@@ -49,6 +55,7 @@ const INSTA_ITEMS: InstaItem[] = [
     type: 'post',
     caption: 'Tramonto in Triana, Siviglia',
     url: 'https://www.instagram.com/travelliniwithus/',
+    span: 'wide',
   },
   {
     image:
@@ -57,8 +64,16 @@ const INSTA_ITEMS: InstaItem[] = [
     caption: 'Tre cose che NESSUNO ti dice prima di andare in Sicilia',
     url: 'https://www.instagram.com/travelliniwithus/',
     views: '210K',
+    span: 'tall',
   },
 ];
+
+const SPAN_CLASS: Record<InstaItem['span'], string> = {
+  feature: 'lg:col-span-2 lg:row-span-2',
+  tall: 'lg:row-span-2',
+  wide: 'lg:col-span-2',
+  square: '',
+};
 
 function handleClick(item: InstaItem, position: number) {
   trackEvent('instagram_grid_click', {
@@ -96,7 +111,14 @@ export default function InstagramGrid() {
           </a>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6 lg:gap-4">
+        {/*
+          Masonry asimmetrica (ref: Pinterest restrained, Cereal):
+          - lg+: grid 4-col, auto-rows-[220px], auto-flow dense
+          - span per item determinato dal type (feature/tall/wide/square)
+          - mobile: grid 2-col uniform (aspect-driven), tablet 3-col
+          Su mobile NON applichiamo gli span lg per evitare cells vuote.
+        */}
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:auto-rows-[220px] lg:grid-cols-4 lg:gap-4 [grid-auto-flow:dense]">
           {INSTA_ITEMS.map((item, idx) => (
             <motion.a
               key={idx}
@@ -110,7 +132,7 @@ export default function InstagramGrid() {
               transition={{ delay: idx * 0.06, duration: 0.5 }}
               className={`group relative overflow-hidden rounded-[var(--radius-md)] bg-[var(--color-ink)] ${
                 item.type === 'reel' ? 'aspect-[9/14]' : 'aspect-[3/4]'
-              } ${idx === 0 ? 'lg:col-span-2 lg:row-span-2 lg:aspect-[9/12]' : ''}`}
+              } lg:aspect-auto lg:h-full ${SPAN_CLASS[item.span]}`}
             >
               <img
                 src={item.image}
