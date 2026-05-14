@@ -15,6 +15,7 @@ import Breadcrumbs from '../components/Breadcrumbs';
 import Button from '../components/Button';
 import DemoContentNotice from '../components/DemoContentNotice';
 import OptimizedImage from '../components/OptimizedImage';
+import JsonLd from '../components/JsonLd';
 import PageLayout from '../components/PageLayout';
 import Section from '../components/Section';
 import SEO from '../components/SEO';
@@ -44,6 +45,35 @@ export default function Guida() {
         image={guide.coverImage}
         noindex={guide.isDemo}
       />
+
+      {!guide.isDemo && (
+        <JsonLd
+          data={{
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Home',
+                item: SITE_URL,
+              },
+              {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Guide',
+                item: `${SITE_URL}/guide`,
+              },
+              {
+                '@type': 'ListItem',
+                position: 3,
+                name: guide.title,
+                item: `${SITE_URL}/guide/${guide.slug}`,
+              },
+            ],
+          }}
+        />
+      )}
 
       <Section className="pt-8">
         <Breadcrumbs items={[{ label: 'Guide', href: '/guide' }, { label: guide.title }]} />

@@ -134,6 +134,29 @@ export default function ChiSiamo() {
           sameAs: [CONTACTS.instagramUrl, CONTACTS.tiktokUrl, CONTACTS.facebookUrl],
         }}
       />
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'Person',
+          name: 'Gaetano Rodrigo',
+          givenName: 'Gaetano',
+          jobTitle: 'Travel creator',
+          url: `${SITE_URL}/chi-siamo`,
+          worksFor: { '@type': 'Organization', name: 'Travelliniwithus', url: SITE_URL },
+          sameAs: [CONTACTS.instagramUrl, CONTACTS.tiktokUrl, CONTACTS.facebookUrl],
+        }}
+      />
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'Person',
+          name: 'Betta',
+          jobTitle: 'Travel creator',
+          url: `${SITE_URL}/chi-siamo`,
+          worksFor: { '@type': 'Organization', name: 'Travelliniwithus', url: SITE_URL },
+          sameAs: [CONTACTS.instagramUrl, CONTACTS.tiktokUrl, CONTACTS.facebookUrl],
+        }}
+      />
 
       <Section className="pt-8">
         <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">

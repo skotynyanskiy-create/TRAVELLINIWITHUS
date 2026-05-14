@@ -37,10 +37,9 @@ export default function Itinerari() {
   return (
     <PageLayout>
       <SEO
-        title="Itinerari di viaggio curati"
-        description="Itinerari pratici giorno per giorno, filtrabili per durata, stile e budget. Pensati per decidere meglio, non per riempire la lista."
+        title="Itinerari di viaggio in Italia e nel mondo"
+        description="Itinerari pratici giorno per giorno, filtrabili per durata, stile e budget. Italia, Europa, oltre. Per coppie che vogliono decidere meglio."
         canonical={`${SITE_URL}/itinerari`}
-        noindex
       />
 
       <Section className="pt-8">

@@ -264,7 +264,13 @@ export default function Articolo() {
         }
 
         const allArticles = await fetchArticles();
-        const related = allArticles
+        const currentCategory = publicArticle.category;
+        const currentContinent = (publicArticle as { continent?: string }).continent;
+        const currentCountry = (publicArticle as { country?: string }).country;
+
+        // Silos topical: priorita same-country > same-continent > same-category > resto.
+        // Senza filtro i correlati sono random e zero compound SEO interno.
+        const scored = allArticles
           .map((item) => ({
             id: item.slug || item.id,
             title: item.title,
@@ -272,11 +278,18 @@ export default function Articolo() {
             category: item.category,
             date: item.date,
             continent: item.continent,
+            country: item.country,
+            _score:
+              (item.country && item.country === currentCountry ? 100 : 0) +
+              (item.continent === currentContinent ? 30 : 0) +
+              (item.category === currentCategory ? 10 : 0),
           }))
           .filter((item) => item.id !== currentSlug)
-          .slice(0, 18);
+          .sort((a, b) => b._score - a._score)
+          .slice(0, 18)
+          .map(({ _score, ...rest }) => rest);
 
-        setRelatedArticles(related);
+        setRelatedArticles(scored);
       } catch (error) {
         console.error('Error fetching article:', error);
         setArticleSource('missing');
