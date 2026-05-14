@@ -127,9 +127,97 @@ Audit end-to-end su tutte le pagine pubbliche + product detail + mobile 375px. E
 - Trim `ChiSiamo` (6601px) e `Articolo` (6423px) — opzionale, non urgente.
 - Revisione umana finale degli screenshot prima del deploy pubblico (rimane [ ]).
 
+## Snapshot H2 2026 — Ultra-piano marketing/growth (2026-05-14)
+
+Piano completo H2 2026 implementato in 9 commit. Strategia: chiudere
+il funnel BOFU (oggi cieco), affermare posizionamento couple-led
+(oggi sfocato), attivare ops (oggi predisposti ma inerti). Plan file
+sorgente: `C:\Users\ccocu\.claude\plans\fai-un-piano-avanzato-temporal-panda.md`.
+
+### Fase 0 — Bug critici (ICE >60) ✅
+
+- [x] MediaKit lead funnel tracciato: `media_kit_request_attempt`/`_success`
+- [x] MediaKit fallback localStorage (key `twu_media_kit_leads`)
+- [x] StickyMobileCTA su `/media-kit` con scroll-to-form
+- [x] Copy success Newsletter: rimosso linguaggio interno + CTA IG/TikTok
+- [x] 5 trackingId specifici sui CTA Collaborazioni (hero/package/footer)
+
+### Fase 1 — Analytics infrastructure + posizionamento ✅
+
+- [x] `add_to_cart` in CartContext (enhanced ecommerce schema)
+- [x] `begin_checkout` in CartDrawer (prima del redirect Stripe)
+- [x] `purchase_complete` in Shop su `?success=true` (transaction_id da Stripe session_id)
+- [x] Meta Pixel mapping standard events (Purchase/Lead/AddToCart/InitiateCheckout)
+- [x] TikTok Pixel mapping standard events
+- [x] Hero eyebrow "Coppia italiana — 8 anni di viaggio vero"
+- [x] Hero paragraph con frase posizionamento target couple
+- [x] Overlay hero cleanup (responsive verticale mobile / orizzontale desktop)
+- [x] TrustStrip riordino mobile-first (monthlyReach primo)
+- [x] CoupleIntro caption rewrite
+
+### Fase 2 — Lead infrastructure ✅
+
+- [x] `renderWelcomeEmail()` template Resend (CTA lead magnet + IG/TikTok)
+- [x] `renderOrderConfirmation()` template Resend (items + total branded)
+- [x] Trigger welcome post `/api/newsletter-subscribe` (fire-and-forget)
+- [x] Trigger order confirmation post webhook Stripe `checkout.session.completed`
+- [x] Lead magnet PDF `src/pdf/LeadMagnetDocument.tsx` (12 pagine A4)
+- [x] Script `scripts/generate-lead-magnet.tsx` integrato in `npm run build`
+- [x] Page `/lead-magnet` (noindex) con download + tracking
+- [x] Landing `/vieni-con-noi` standalone (no navbar/footer, UTM capture)
+- [x] Redirect `/iscrivi` → `/vieni-con-noi`
+- [x] Quiz → newsletter coupling già presente (`source: quiz_result`)
+
+### Fase 3 — SEO + content compounding ✅
+
+- [x] Rimosso `noindex` da `/itinerari` + title rewrite con keyword geo
+- [x] `<link rel="preload" as="style">` Fraunces per LCP mobile
+- [x] `relatedArticles` filtro silos topical (country>continent>category)
+- [x] BreadcrumbList JSON-LD su `/guide/:slug`
+- [x] Schema Person dedicato per Rodrigo + Betta su `/chi-siamo`
+- [x] `docs/13_Content/CONTENT_CALENDAR_H2_2026.md` (8 slot mensili luglio→febbraio)
+- [x] `docs/13_Content/LEAD_MAGNET_POSTI_ITALIANI.md` (outline + tone + workflow)
+- [x] `docs/13_Content/PILLAR_ARTICLE_SALENTO_AGOSTO.md` (1500 parole outline + schema)
+- [x] `docs/12_Partnerships/PARTNER_PIPELINE_TRAVELLINIWITHUS.md` aggiornato (5 categorie + outreach template)
+
+### Fase 4 — Infra cleanup ✅
+
+- [x] Rimosso doppio init Sentry (`initErrorTracking` da `Layout.tsx`)
+- [x] Verificato `public/offline.html` esistente per PWA navigateFallback
+
+### TODO R+B per attivazione (~10-12h editorial + setup)
+
+- [ ] **Setup env production**: `RESEND_API_KEY`, `BREVO_API_KEY`,
+      `BREVO_LIST_ID`, `MAIL_FROM`, `MAIL_TO_OWNER` in `.env.production`
+- [ ] **FEATURED_REEL**: URL ultimo reel ≥50K in `src/config/site.ts`
+- [ ] **InstagramGrid**: 6 thumbnail + caption reali (no Unsplash)
+- [ ] **Lead magnet PDF**: 10 luoghi reali in `scripts/generate-lead-magnet.tsx`
+      (guidelines in `docs/13_Content/LEAD_MAGNET_POSTI_ITALIANI.md`)
+- [ ] **Pillar article**: compilare outline Salento con luoghi reali + foto
+      originali + publish 2026-07-15
+- [ ] **Partner shortlist**: nomi reali per le 5 categorie + outreach 5 email
+      entro 2026-09-30
+- [ ] **Bio IG/TikTok**: aggiornare con `https://travelliniwithus.it/vieni-con-noi?utm_source=instagram&utm_medium=bio&utm_campaign=lead_magnet`
+- [ ] **Affiliate signup**: Skyscanner BFCA, Booking BFCA, Airalo, Revolut
+- [ ] **Foto people-led R+B** in `/images/brand/` per hero fallback
+
+### Gate finale ultra-piano (verificato 2026-05-14)
+
+- `npm run typecheck` ✓ PASS
+- `npm run build` ✓ PASS (87 precache entries, lead magnet PDF 23 KB generato)
+- `npm run audit:visual` ✓ PASS 12/12 (chromium + Pixel 5)
+- `npm run generate:lead-magnet` ✓ PASS (PDF placeholder funzionale)
+- 9 commit logici sopra design tokens precedente:
+  `ed0149a → ce0068b` (MediaKit → Newsletter → analytics → hero → email →
+  lead magnet/landing → SEO/content → docs → infra)
+
 ## Link
 
 - [[DEPLOYMENT_RUNBOOK]]
 - [[LAUNCH_CHECKLIST]]
 - [[OPERATIONAL_VERIFICATION_REPORT]]
 - [[90_Templates/TPL_Release_Note]]
+- [[../13_Content/CONTENT_CALENDAR_H2_2026]]
+- [[../13_Content/PILLAR_ARTICLE_SALENTO_AGOSTO]]
+- [[../13_Content/LEAD_MAGNET_POSTI_ITALIANI]]
+- [[../12_Partnerships/PARTNER_PIPELINE_TRAVELLINIWITHUS]]

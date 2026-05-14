@@ -93,6 +93,18 @@ const ARTICLES = [
     category: 'Guide',
     location: 'Trentino-Alto Adige',
   },
+  {
+    slug: 'vieni-con-noi',
+    title: 'Pochi posti, raccontati bene. Solo se viaggi in coppia.',
+    category: 'Newsletter',
+    location: '10 posti italiani non ovvi',
+  },
+  {
+    slug: 'lead-magnet',
+    title: '10 posti italiani non ovvi — la mini-guida',
+    category: 'Guida pratica',
+    location: 'Travelliniwithus',
+  },
 ];
 
 async function generateOne(article) {

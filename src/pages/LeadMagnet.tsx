@@ -21,6 +21,7 @@ export default function LeadMagnet() {
         title="La tua mini-guida"
         description="Scarica '10 posti italiani non ovvi', mini guida Travelliniwithus per chi viaggia in coppia. Pratica, scelta dopo 8 anni di viaggi reali."
         canonical={`${SITE_URL}/lead-magnet`}
+        image={`${SITE_URL}/og/lead-magnet.webp`}
         noindex
       />
 

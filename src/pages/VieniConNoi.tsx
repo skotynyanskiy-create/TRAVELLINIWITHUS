@@ -92,6 +92,7 @@ export default function VieniConNoi() {
         title="Vieni con noi"
         description="Mini-guida 10 posti italiani non ovvi per chi viaggia in coppia. Pratica, scelta dopo 8 anni di viaggi reali. Solo via newsletter."
         canonical={`${SITE_URL}/vieni-con-noi`}
+        image={`${SITE_URL}/og/vieni-con-noi.webp`}
         noindex
       />
 
