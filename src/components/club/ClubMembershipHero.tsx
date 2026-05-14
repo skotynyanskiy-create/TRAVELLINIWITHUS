@@ -1,6 +1,8 @@
+import { useState, type FormEvent } from 'react';
 import { motion } from 'motion/react';
-import { CheckCircle2, Lock, Mail, Sparkles, Star } from 'lucide-react';
+import { CheckCircle2, Loader2, Lock, Mail, Sparkles, Star } from 'lucide-react';
 import { trackEvent } from '../../services/analytics';
+import { appendLeadFallback } from '../../lib/leadFallback';
 
 const FREE_BENEFITS = [
   'Articoli editoriali pubblici',
@@ -10,11 +12,8 @@ const FREE_BENEFITS = [
 ];
 
 const CLUB_BENEFITS = [
-  'Accesso a TUTTE le guide digitali, sempre aggiornate',
+  'Accesso a tutte le guide digitali, sempre aggiornate',
   'Anteprima nuovi itinerari prima della pubblicazione',
-  'Newsletter privata con consigli non pubblici',
-  'Sconti riservati su prodotti partner selezionati',
-  'Inviti a eventi e q&a riservati',
   'Cancellazione in un click, nessun vincolo',
 ];
 
@@ -37,8 +36,53 @@ const PRICING_TIERS = [
 ];
 
 export default function ClubMembershipHero() {
-  const handleInterest = (planId: string) => {
+  const [email, setEmail] = useState('');
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
+
+  const handlePlanSelect = (planId: string) => {
     trackEvent('club_interest', { plan: planId, demo: true });
+  };
+
+  const handleWaitlist = async (e: FormEvent) => {
+    e.preventDefault();
+    const normalized = email.trim();
+    if (!normalized) {
+      setError('Inserisci un indirizzo email.');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized)) {
+      setError('Inserisci un indirizzo email valido.');
+      return;
+    }
+    setError('');
+    setIsSubmitting(true);
+    trackEvent('club_waitlist_attempt');
+    try {
+      const response = await fetch('/api/newsletter-subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: normalized, source: 'club_waitlist', website: '' }),
+      });
+      if (!response.ok) throw new Error('save failed');
+      trackEvent('club_waitlist_success', { fallback: false });
+      setIsSubscribed(true);
+    } catch {
+      const saved = appendLeadFallback('twu_club_waitlist', {
+        email: normalized,
+        source: 'club_waitlist',
+        date: new Date().toISOString(),
+      });
+      if (saved) {
+        trackEvent('club_waitlist_success', { fallback: true });
+        setIsSubscribed(true);
+      } else {
+        setError('Iscrizione non riuscita. Riprova tra poco oppure scrivici via email.');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -114,7 +158,7 @@ export default function ClubMembershipHero() {
                 <button
                   key={tier.id}
                   type="button"
-                  onClick={() => handleInterest(tier.id)}
+                  onClick={() => handlePlanSelect(tier.id)}
                   className="group relative flex flex-col items-start gap-2 rounded-[var(--radius-md)] border border-white/12 bg-white/5 p-5 text-left transition-all hover:border-[var(--color-accent)]/60 hover:bg-white/10"
                 >
                   {tier.badge && (
@@ -140,26 +184,47 @@ export default function ClubMembershipHero() {
               iscrizioni.
             </p>
 
-            <form
-              onSubmit={(event) => {
-                event.preventDefault();
-                handleInterest('waitlist');
-              }}
-              className="mt-4 flex flex-col gap-2 sm:flex-row"
-            >
-              <input
-                type="email"
-                placeholder="la-tua@email.com"
-                required
-                className="w-full rounded-full border border-white/12 bg-white/5 px-5 py-3 text-sm text-white placeholder:text-white/35 focus:border-[var(--color-accent)] focus:outline-none sm:flex-1"
-              />
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:bg-white"
-              >
-                <Mail size={14} /> Avvisami al lancio
-              </button>
-            </form>
+            {isSubscribed ? (
+              <div className="mt-4 flex items-center gap-3 rounded-[var(--radius-md)] border border-[var(--color-accent)]/40 bg-[var(--color-accent)]/12 p-4 text-sm text-white">
+                <CheckCircle2 size={18} className="shrink-0 text-[var(--color-accent)]" />
+                <span>
+                  Sei in waitlist. Ti scriviamo appena il Club apre alle prime iscrizioni.
+                </span>
+              </div>
+            ) : (
+              <form onSubmit={handleWaitlist} className="mt-4 flex flex-col gap-2 sm:flex-row">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="la-tua@email.com"
+                  required
+                  disabled={isSubmitting}
+                  aria-invalid={error ? 'true' : undefined}
+                  className="w-full rounded-full border border-white/12 bg-white/5 px-5 py-3 text-sm text-white placeholder:text-white/35 focus:border-[var(--color-accent)] focus:outline-none disabled:opacity-50 sm:flex-1"
+                />
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:bg-white disabled:opacity-60"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 size={14} className="animate-spin" /> Invio
+                    </>
+                  ) : (
+                    <>
+                      <Mail size={14} /> Avvisami al lancio
+                    </>
+                  )}
+                </button>
+              </form>
+            )}
+            {error && !isSubscribed && (
+              <p className="mt-2 text-xs text-[var(--color-accent)]" role="alert">
+                {error}
+              </p>
+            )}
           </motion.div>
         </div>
       </div>

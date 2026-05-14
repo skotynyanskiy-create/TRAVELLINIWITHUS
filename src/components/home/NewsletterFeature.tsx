@@ -45,7 +45,7 @@ export default function NewsletterFeature() {
               duration={1500}
               className="font-serif text-base"
             />
-            <span className="text-black/55">lettori iscritti negli ultimi 30 giorni</span>
+            <span className="text-black/55">lettori già nella lista</span>
           </p>
         </div>
 
