@@ -7,7 +7,17 @@ import type { NormalizedArticle } from '../../utils/articleData';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN as string | undefined;
+const RAW_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN as string | undefined;
+/**
+ * Valida il token Mapbox prima di passarlo a react-map-gl.
+ * Mapbox pubblici sono nel formato `pk.eyJ...` (JWT base64). Qualunque
+ * altra stringa (incluso il placeholder `INSERISCI_QUI` di .env.example)
+ * causa un 401 silenzioso che renderizza la mappa tutta nera. Il
+ * fallback editoriale di sotto subentra solo quando questa funzione
+ * ritorna false.
+ */
+const MAPBOX_TOKEN =
+  RAW_MAPBOX_TOKEN && RAW_MAPBOX_TOKEN.startsWith('pk.') ? RAW_MAPBOX_TOKEN : undefined;
 
 const COUNTRY_COORDS: Record<string, { lat: number; lng: number }> = {
   Italia: { lat: 41.8719, lng: 12.5674 },
