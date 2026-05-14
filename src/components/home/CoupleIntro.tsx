@@ -11,19 +11,26 @@ const COUPLE_IMG = '/images/brand/about-editorial.png';
 const METHOD_STANDARDS = [
   {
     icon: MapPinned,
-    title: 'Provato sul posto',
-    text: 'Atmosfera, zona, logistica e tempi filtrati da chi c’è stato davvero.',
+    title: 'Provati sul posto',
+    text: '150+ destinazioni esplorate in 8 anni — niente recensione scritta da scrivania.',
   },
   {
     icon: Camera,
-    title: 'Immagini e dettagli reali',
-    text: 'Foto e note utili per capire cosa aspettarti, non per venderti un sogno generico.',
+    title: 'Foto reali, non stock',
+    text: 'Ogni articolo usa scatti nostri: luce, prospettiva, dettagli che riconosci sul posto.',
   },
   {
     icon: BadgeCheck,
-    title: 'Consigli che aiutano a decidere',
-    text: 'Non liste infinite, ma informazioni abbastanza chiare da farti scegliere meglio.',
+    title: 'Zero marketing forzato',
+    text: 'Quando un partner non e coerente, non lo accettiamo. La linea editoriale resta nostra.',
   },
+];
+
+const COUNTER_STATS = [
+  { value: '167K+', label: 'Instagram' },
+  { value: '90K+', label: 'TikTok' },
+  { value: '8', label: 'Anni di viaggi' },
+  { value: '150+', label: 'Destinazioni' },
 ];
 
 gsap.registerPlugin(ScrollTrigger);
@@ -141,7 +148,20 @@ export default function CoupleIntro() {
               giusti.
             </p>
 
-            <div data-couple-cards className="mt-8 grid gap-3 md:grid-cols-3">
+            <dl className="mt-6 grid grid-cols-4 gap-x-4 gap-y-2 border-y border-black/8 py-5">
+              {COUNTER_STATS.map((stat) => (
+                <div key={stat.label}>
+                  <dt className="text-[9px] font-semibold uppercase tracking-[0.18em] text-black/45">
+                    {stat.label}
+                  </dt>
+                  <dd className="mt-1 font-serif text-2xl text-[var(--color-ink)] md:text-3xl">
+                    {stat.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+
+            <div data-couple-cards className="mt-7 grid gap-3 md:grid-cols-3">
               {METHOD_STANDARDS.map((standard) => {
                 const Icon = standard.icon;
                 return (
@@ -156,12 +176,6 @@ export default function CoupleIntro() {
                   </div>
                 );
               })}
-            </div>
-
-            <div className="mt-7 border-t border-black/8 pt-6">
-              <p className="max-w-2xl text-xs font-bold uppercase tracking-[0.22em] text-black/65">
-                Meno rumore, più criterio. Meno lista, più esperienza vera.
-              </p>
             </div>
 
             <Link
