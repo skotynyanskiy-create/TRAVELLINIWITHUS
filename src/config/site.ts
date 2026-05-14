@@ -24,6 +24,9 @@ export const BRAND_STATS = {
   totalFollowers: '250K+',
 } as const;
 
+/** Live counter newsletter (demo: aggiornare manualmente o connettere a Brevo API). */
+export const NEWSLETTER_RECENT_SIGNUPS = 184;
+
 /** Aggiornare url con lo shortcode del reel più recente pubblicato su Instagram.
  *  Nessuna API key necessaria — aggiornamento manuale dopo ogni nuovo reel.
  *  Esempio: url: 'https://www.instagram.com/reel/ABC123XYZ/'

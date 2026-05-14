@@ -180,6 +180,28 @@ export default function Itinerari() {
         )}
       </Section>
 
+      <Section className="my-12">
+        <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-6 md:flex md:items-center md:justify-between md:p-8">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
+              Hai gia 2-3 candidati?
+            </p>
+            <p className="mt-2 font-serif text-2xl text-[var(--color-ink)]">
+              Confronta itinerari side-by-side.
+            </p>
+            <p className="mt-2 text-sm text-black/55">
+              Durata, stile, budget e cosa li rende diversi in una tabella.
+            </p>
+          </div>
+          <Link
+            to="/itinerari/compare"
+            className="mt-5 inline-flex items-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-ink)] px-5 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)] md:mt-0"
+          >
+            Apri il confronto <ArrowRight size={14} />
+          </Link>
+        </div>
+      </Section>
+
       <Section className="my-16 rounded-[var(--radius-xl)] bg-[var(--color-accent-soft)] p-12 text-center md:p-16">
         <Sparkles className="mx-auto text-[var(--color-accent)]" size={28} />
         <h2 className="mt-5 text-3xl font-serif md:text-4xl">Non sei sicuro da dove partire?</h2>

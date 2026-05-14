@@ -1,14 +1,19 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, X, MapPin, BookOpen, Compass, Mail } from 'lucide-react';
+import { Search, X, MapPin, BookOpen, Compass, Mail, Clock, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { LucideIcon } from 'lucide-react';
+import Fuse from 'fuse.js';
 import Skeleton from './Skeleton';
 import { fetchArticles } from '../services/firebaseService';
 import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_ARTICLE_PREVIEW, DEMO_ARTICLE_PATH } from '../config/demoContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { trackEvent } from '../services/analytics';
+
+const RECENT_SEARCHES_KEY = 'twu_recent_searches';
+const POPULAR_TAGS = ['Sicilia', 'Andalusia', 'Dolomiti', 'Weekend', 'Boutique hotel', 'Food'];
+const MAX_RECENT = 5;
 
 interface SearchResult {
   id: string;
@@ -86,10 +91,32 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [query, setQuery] = useState('');
   const [allData, setAllData] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
+  const [recentSearches, setRecentSearches] = useState<string[]>(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      return JSON.parse(localStorage.getItem(RECENT_SEARCHES_KEY) || '[]');
+    } catch {
+      return [];
+    }
+  });
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { data: demoContent } = useSiteContent('demo');
   const demoSettings = demoContent ?? siteContentDefaults.demo;
+
+  const fuse = useMemo(
+    () =>
+      new Fuse(allData, {
+        keys: [
+          { name: 'title', weight: 0.7 },
+          { name: 'category', weight: 0.3 },
+        ],
+        threshold: 0.4,
+        ignoreLocation: true,
+        minMatchCharLength: 2,
+      }),
+    [allData]
+  );
 
   useEffect(() => {
     setAllData([]);
@@ -172,16 +199,14 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  const filteredResults =
-    query.trim() === ''
-      ? []
-      : allData
-          .filter(
-            (item) =>
-              item.title.toLowerCase().includes(query.toLowerCase()) ||
-              item.category.toLowerCase().includes(query.toLowerCase())
-          )
-          .slice(0, 8); // Limit to 8 results
+  const filteredResults = useMemo(() => {
+    const trimmed = query.trim();
+    if (trimmed === '') return [];
+    return fuse
+      .search(trimmed)
+      .slice(0, 8)
+      .map((result) => result.item);
+  }, [fuse, query]);
 
   useEffect(() => {
     const trimmed = query.trim();
@@ -195,7 +220,22 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     return () => clearTimeout(timer);
   }, [query, filteredResults.length]);
 
+  const persistRecent = (term: string) => {
+    if (!term.trim() || typeof window === 'undefined') return;
+    const next = [term.trim(), ...recentSearches.filter((r) => r !== term.trim())].slice(
+      0,
+      MAX_RECENT
+    );
+    setRecentSearches(next);
+    try {
+      localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(next));
+    } catch {
+      // localStorage full o blocked
+    }
+  };
+
   const handleSelect = (link: string, item: SearchResult, position: number) => {
+    persistRecent(query);
     trackEvent('search_result_click', {
       query: query.trim().toLowerCase(),
       result_id: item.id,
@@ -260,52 +300,63 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   ))}
                 </div>
               ) : query.trim() === '' ? (
-                <div className="text-center py-12 text-black/40">
-                  <Search className="mx-auto mb-4 opacity-20" size={48} />
-                  <p>Inizia a digitare per cercare...</p>
-                  <div className="mt-6 flex flex-wrap justify-center gap-2">
-                    <button
-                      type="button"
-                      className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10"
-                      onClick={() => setQuery('Destinazioni')}
-                    >
-                      Destinazioni
-                    </button>
-                    <button
-                      type="button"
-                      className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10"
-                      onClick={() => setQuery('Esperienze')}
-                    >
-                      Esperienze
-                    </button>
-                    <button
-                      type="button"
-                      className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10"
-                      onClick={() => setQuery('Guide')}
-                    >
-                      Guide
-                    </button>
-                    <button
-                      type="button"
-                      className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10"
-                      onClick={() => setQuery('Risorse')}
-                    >
-                      Risorse
-                    </button>
-                    <button
-                      type="button"
-                      className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10"
-                      onClick={() => setQuery('Contatti')}
-                    >
-                      Contatti
-                    </button>
-                    <button
-                      type="button"
-                      className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10"
-                      onClick={() => setQuery('Collaborazioni')}
-                    >
-                      Collaborazioni
-                    </button>
+                <div className="space-y-6 px-2 py-4">
+                  {recentSearches.length > 0 && (
+                    <div>
+                      <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/45">
+                        <Clock size={11} /> Ricerche recenti
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {recentSearches.map((term) => (
+                          <button
+                            key={term}
+                            type="button"
+                            onClick={() => setQuery(term)}
+                            className="rounded-full border border-black/10 bg-white px-3 py-1.5 text-xs font-medium text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:bg-[var(--color-accent-soft)]"
+                          >
+                            {term}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div>
+                    <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/45">
+                      <TrendingUp size={11} /> Ricerche popolari
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {POPULAR_TAGS.map((tag) => (
+                        <button
+                          key={tag}
+                          type="button"
+                          onClick={() => setQuery(tag)}
+                          className="rounded-full border border-black/10 bg-[var(--color-sand)] px-3 py-1.5 text-xs font-medium text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:bg-[var(--color-accent-soft)] hover:text-[var(--color-accent-text)]"
+                        >
+                          {tag}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="border-t border-black/5 pt-5">
+                    <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/45">
+                      <Compass size={11} /> Sezioni
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {['Destinazioni', 'Esperienze', 'Guide', 'Itinerari', 'Risorse'].map(
+                        (label) => (
+                          <button
+                            key={label}
+                            type="button"
+                            onClick={() => setQuery(label)}
+                            className="rounded-full bg-black/5 px-3 py-1.5 text-xs font-medium text-black/70 transition-colors hover:bg-black/10"
+                          >
+                            {label}
+                          </button>
+                        )
+                      )}
+                    </div>
                   </div>
                 </div>
               ) : filteredResults.length > 0 ? (

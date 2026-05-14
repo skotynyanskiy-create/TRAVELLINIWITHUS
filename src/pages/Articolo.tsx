@@ -26,6 +26,7 @@ import {
   AuthorBio,
   MobileBottomBar,
   MobileTocOverlay,
+  ReadingMode,
   RelatedArticles,
   TableOfContents,
 } from '../components/article';
@@ -210,6 +211,7 @@ export default function Articolo() {
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isReadingMode, setIsReadingMode] = useState(false);
 
   const prefersReducedMotion = useReducedMotion();
   const { scrollYProgress, scrollY } = useScroll();
@@ -476,6 +478,7 @@ export default function Articolo() {
                 articleDescription={articleDescription}
                 articleImage={articleImage}
                 onCopyLink={handleShare}
+                onOpenReadingMode={() => setIsReadingMode(true)}
               />
             </div>
 
@@ -699,6 +702,14 @@ export default function Articolo() {
           onToggleFavorite={() => toggleFavorite(currentSlug)}
           onOpenToc={() => setIsMobileMenuOpen(true)}
           onShare={handleShare}
+        />
+
+        <ReadingMode
+          article={article}
+          authorName={authorName}
+          readingTime={readingTime}
+          open={isReadingMode}
+          onClose={() => setIsReadingMode(false)}
         />
       </>
     </PageLayout>

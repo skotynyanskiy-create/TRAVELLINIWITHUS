@@ -1,3 +1,4 @@
+import { BookOpen } from 'lucide-react';
 import ShareButtons from './ShareButtons';
 import TableOfContents from './TableOfContents';
 import Newsletter from '../Newsletter';
@@ -10,6 +11,7 @@ interface ArticleSidebarProps {
   articleDescription: string;
   articleImage: string;
   onCopyLink: () => void;
+  onOpenReadingMode?: () => void;
 }
 
 export default function ArticleSidebar({
@@ -19,6 +21,7 @@ export default function ArticleSidebar({
   articleDescription,
   articleImage,
   onCopyLink,
+  onOpenReadingMode,
 }: ArticleSidebarProps) {
   return (
     <div className="lg:w-1/3 hidden lg:block">
@@ -28,7 +31,17 @@ export default function ArticleSidebar({
         </h4>
         <TableOfContents items={tocItems} variant="desktop" />
 
-        <div className="mt-12 pt-10 border-t border-black/10">
+        {onOpenReadingMode && (
+          <button
+            type="button"
+            onClick={onOpenReadingMode}
+            className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-white px-4 py-3 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-ink)] transition-all hover:border-[var(--color-ink)] hover:bg-[var(--color-surface-2)]"
+          >
+            <BookOpen size={14} /> Modalita lettura
+          </button>
+        )}
+
+        <div className="mt-10 pt-10 border-t border-black/10">
           <h4 className="text-[10px] uppercase tracking-[0.2em] font-bold mb-6 text-black/40">
             Condividi l&apos;ispirazione
           </h4>

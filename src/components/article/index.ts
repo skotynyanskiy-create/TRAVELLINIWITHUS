@@ -4,6 +4,7 @@ export { default as AuthorBio } from './AuthorBio';
 export { default as MobileBottomBar } from './MobileBottomBar';
 export { default as MobileTocOverlay } from './MobileTocOverlay';
 export { default as PinterestIcon } from './PinterestIcon';
+export { default as ReadingMode } from './ReadingMode';
 export { default as RelatedArticles } from './RelatedArticles';
 export { default as ShareButtons } from './ShareButtons';
 export { default as SocialFollowCTA } from './SocialFollowCTA';

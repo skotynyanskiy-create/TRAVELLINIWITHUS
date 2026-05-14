@@ -1,9 +1,11 @@
 import { useState, type FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { CheckCircle, Gift, Loader2, Mail, ShieldCheck } from 'lucide-react';
+import { CheckCircle, Gift, Loader2, Mail, ShieldCheck, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { trackEvent } from '../services/analytics';
 import { appendLeadFallback } from '../lib/leadFallback';
+import { NEWSLETTER_RECENT_SIGNUPS } from '../config/site';
+import AnimatedCounter from './AnimatedCounter';
 import Button from './Button';
 
 type NewsletterVariant = 'sand' | 'white' | 'editorial' | 'compact' | 'article' | 'business';
@@ -296,19 +298,32 @@ export default function Newsletter({
           )}
 
           {isCompact && (
-            <p
-              className={`flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-medium leading-relaxed ${
-                isDark ? 'text-white/55' : 'text-black/50'
-              }`}
-            >
-              <span className="inline-flex items-center gap-1.5">
-                <ShieldCheck size={12} className="text-[var(--color-accent)]" /> Una email al mese
-              </span>
-              <span aria-hidden="true">·</span>
-              <span>Zero spam</span>
-              <span aria-hidden="true">·</span>
-              <span>Disiscrizione con un click</span>
-            </p>
+            <>
+              <p
+                className={`flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-medium leading-relaxed ${
+                  isDark ? 'text-white/55' : 'text-black/50'
+                }`}
+              >
+                <span className="inline-flex items-center gap-1.5">
+                  <ShieldCheck size={12} className="text-[var(--color-accent)]" /> Una email al mese
+                </span>
+                <span aria-hidden="true">·</span>
+                <span>Zero spam</span>
+                <span aria-hidden="true">·</span>
+                <span>Disiscrizione con un click</span>
+              </p>
+              <p
+                className={`inline-flex items-center gap-2 text-[11px] font-semibold ${
+                  isDark ? 'text-[var(--color-accent)]' : 'text-[var(--color-accent-text)]'
+                }`}
+              >
+                <TrendingUp size={12} />
+                <AnimatedCounter value={NEWSLETTER_RECENT_SIGNUPS} duration={1500} />
+                <span className={isDark ? 'text-white/65' : 'text-black/60'}>
+                  lettori iscritti negli ultimi 30 giorni
+                </span>
+              </p>
+            </>
           )}
 
           {!isCompact && (
