@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { ArrowUp } from 'lucide-react';
 import SEO from '../components/SEO';
 import Newsletter from '../components/Newsletter';
@@ -31,6 +32,22 @@ export default function Home() {
         description="Scopri destinazioni, esperienze e consigli di viaggio con un archivio unico filtrabile per luoghi e tipologie. Travelliniwithus racconta idee da salvare e vivere davvero."
         canonical={`${SITE_URL}/`}
       />
+      <Helmet>
+        <link
+          rel="preload"
+          as="image"
+          href="/images/brand/couple-travel.avif"
+          type="image/avif"
+          media="(min-width: 769px)"
+        />
+        <link
+          rel="preload"
+          as="image"
+          href="/images/hero-amalfi.avif"
+          type="image/avif"
+          media="(max-width: 768px)"
+        />
+      </Helmet>
 
       <button
         type="button"

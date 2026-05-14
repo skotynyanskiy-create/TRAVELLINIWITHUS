@@ -60,6 +60,12 @@ const STEPS = [
   },
 ] as const;
 
+function durationMatchesAnswer(itineraryDays: number, answer: DurationAnswer): boolean {
+  if (answer === 'weekend') return itineraryDays <= 4;
+  if (answer === 'week') return itineraryDays >= 4 && itineraryDays <= 7;
+  return itineraryDays >= 8;
+}
+
 function scoreItinerary(itinerary: (typeof DEMO_ITINERARIES)[number], answers: Required<Answers>) {
   let score = 0;
   const styleMap: Record<StyleAnswer, string> = {
@@ -70,9 +76,17 @@ function scoreItinerary(itinerary: (typeof DEMO_ITINERARIES)[number], answers: R
   };
   const durationMap: Record<DurationAnswer, number> = { weekend: 3, week: 6, long: 10 };
 
+  // Hard filter: duration band is decisive — gli itinerari fuori range
+  // ricevono un grosso malus (non possono superare quelli in range).
+  if (durationMatchesAnswer(itinerary.durationDays, answers.duration)) {
+    score += 6;
+  }
+
+  // Soft signals
   if (itinerary.style === styleMap[answers.style]) score += 4;
   if (itinerary.budgetTier === answers.budget) score += 3;
 
+  // Continuita: fit fine sulla durata
   const targetDays = durationMap[answers.duration];
   const diff = Math.abs(itinerary.durationDays - targetDays);
   score += Math.max(0, 3 - diff);

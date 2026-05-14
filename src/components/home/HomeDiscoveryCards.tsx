@@ -272,9 +272,9 @@ export default function HomeDiscoveryCards() {
               <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
                 Esplora per esperienza
               </span>
-              <h3 className="mt-1 text-2xl font-serif leading-tight text-ink md:text-3xl">
+              <h2 className="mt-1 text-2xl font-serif leading-tight text-ink md:text-3xl">
                 Scegli il ritmo del viaggio.
-              </h3>
+              </h2>
             </div>
             <Link
               to="/esperienze"
@@ -297,9 +297,9 @@ export default function HomeDiscoveryCards() {
               <BookOpen size={13} />
               Guide di viaggio
             </div>
-            <h3 className="mt-7 text-3xl font-serif leading-tight text-ink md:text-5xl">
+            <h2 className="mt-7 text-3xl font-serif leading-tight text-ink md:text-5xl">
               Pianifica con guide scritte a mano.
-            </h3>
+            </h2>
             <p className="mt-4 text-sm leading-relaxed text-black/62 md:text-base">
               Itinerari, consigli e costi per prepararti al meglio prima di partire.
             </p>

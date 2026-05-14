@@ -100,8 +100,11 @@ export default function Itinerari() {
             />
           </div>
           <p className="mt-5 text-xs text-black/45">
-            {filteredItineraries.length} itinerario{filteredItineraries.length !== 1 ? 'i' : ''}{' '}
-            corrispondente{filteredItineraries.length !== 1 ? 'i' : ''} ai filtri.
+            {filteredItineraries.length}{' '}
+            {filteredItineraries.length === 1
+              ? 'itinerario corrispondente'
+              : 'itinerari corrispondenti'}{' '}
+            ai filtri.
           </p>
         </div>
       </Section>

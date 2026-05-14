@@ -24,19 +24,19 @@ const QUICK_PROMPTS = [
 
 const KEYWORD_RESPONSES: { match: string[]; reply: string }[] = [
   {
-    match: ['weekend', 'breve', 'corto'],
+    match: ['weekend italia', 'italia weekend', 'weekend in italia', 'short italia'],
     reply:
-      'Per un weekend lungo ti suggerirei l itinerario "Andalusia weekend" — 4 giorni tra Siviglia e Cordoba. Ti porto alla scheda?',
+      'Per un weekend in Italia: "Dolomiti slow in 3 giorni" (boutique + sentiero panoramico) o "Sicilia orientale in 5 giorni" da Catania a Taormina. Quale tono cerchi?',
   },
   {
-    match: ['italia', 'sicilia', 'catania'],
+    match: ['italia', 'sicilia', 'catania', 'dolomiti', 'taormina'],
     reply:
-      'Per Italia, la nostra base e l itinerario "Sicilia orientale in 5 giorni" da Catania a Taormina. C e anche la guida PDF "Weekend a Catania" che approfondisce il food.',
+      'In Italia abbiamo due itinerari pronti: "Sicilia orientale 5 giorni" e "Dolomiti slow 3 giorni". C e anche la guida PDF "Weekend a Catania" che approfondisce il food.',
   },
   {
-    match: ['budget', 'costo', 'prezzo', 'quanto', 'spesa'],
+    match: ['andalusia', 'spagna', 'siviglia', 'cordoba'],
     reply:
-      'Apri il calcolatore budget in /strumenti: ti chiede durata, area e stile e ti da una stima realistica con voli, alloggi, cibo e spostamenti.',
+      'Per l Andalusia abbiamo un itinerario weekend (4 giorni Siviglia + Cordoba) e una guida estesa di 7 giorni. Ti porto a quello che ti serve?',
   },
   {
     match: ['dolomiti', 'montagna', 'rifugio'],
@@ -44,9 +44,14 @@ const KEYWORD_RESPONSES: { match: string[]; reply: string }[] = [
       'Sulle Dolomiti abbiamo l itinerario "Dolomiti slow in 3 giorni" — boutique, sentiero panoramico e una malga. E poi un articolo collegato con rifugi di design.',
   },
   {
-    match: ['andalusia', 'spagna', 'siviglia', 'cordoba'],
+    match: ['weekend', 'breve', 'corto'],
     reply:
-      'Per l Andalusia abbiamo un itinerario weekend (4 giorni Siviglia + Cordoba) e una guida estesa di 7 giorni. Ti porto a quello che ti serve?',
+      'Per un weekend lungo: "Andalusia weekend" (4 giorni Siviglia + Cordoba) o "Dolomiti slow" (3 giorni boutique). Vuoi qualcosa in Italia o all estero?',
+  },
+  {
+    match: ['budget', 'costo', 'prezzo', 'quanto', 'spesa'],
+    reply:
+      'Apri il calcolatore budget in /strumenti: ti chiede durata, area e stile e ti da una stima realistica con voli, alloggi, cibo e spostamenti.',
   },
   {
     match: ['insoliti', 'particolari', 'segreti', 'nascosti'],
@@ -65,10 +70,17 @@ const FALLBACK_REPLY =
 
 function matchReply(message: string): string {
   const text = message.toLowerCase();
-  const match = KEYWORD_RESPONSES.find((entry) =>
-    entry.match.some((keyword) => text.includes(keyword))
-  );
-  return match ? match.reply : FALLBACK_REPLY;
+  // Score by number of keyword matches: piu keyword match = entry piu specifica = vince.
+  let bestEntry: (typeof KEYWORD_RESPONSES)[number] | null = null;
+  let bestScore = 0;
+  for (const entry of KEYWORD_RESPONSES) {
+    const score = entry.match.reduce((sum, keyword) => sum + (text.includes(keyword) ? 1 : 0), 0);
+    if (score > bestScore) {
+      bestScore = score;
+      bestEntry = entry;
+    }
+  }
+  return bestEntry ? bestEntry.reply : FALLBACK_REPLY;
 }
 
 export default function AiAssistant() {
