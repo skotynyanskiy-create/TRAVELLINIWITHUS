@@ -383,6 +383,7 @@ export default function Collaborazioni() {
                 variant="primary"
                 size="lg"
                 className="px-8 py-4"
+                trackingId="collaborazioni_hero_primary"
               >
                 {pageContent.primaryCtaLabel} <ArrowRight size={18} />
               </Button>
@@ -391,6 +392,7 @@ export default function Collaborazioni() {
                 variant="outline"
                 size="lg"
                 className="px-8 py-4"
+                trackingId="collaborazioni_hero_secondary"
               >
                 {pageContent.secondaryCtaLabel}
               </Button>
@@ -662,6 +664,7 @@ export default function Collaborazioni() {
                     to={ctaTargets[index] ?? pageContent.secondaryCtaLink}
                     variant={isHighlighted ? 'primary' : 'outline-light'}
                     className={`w-full ${isHighlighted ? 'bg-[var(--color-accent)] hover:brightness-110' : ''}`}
+                    trackingId={`collaborazioni_package_${index}`}
                   >
                     {ctaLabels[index] ?? 'Richiedi info'}
                   </Button>
@@ -682,10 +685,22 @@ export default function Collaborazioni() {
             hai già una proposta chiara.
           </p>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            <Button to="/media-kit" variant="cta" size="lg" className="px-10 py-5">
+            <Button
+              to="/media-kit"
+              variant="cta"
+              size="lg"
+              className="px-10 py-5"
+              trackingId="collaborazioni_footer_mediakit"
+            >
               Richiedi il media kit <ArrowRight size={18} />
             </Button>
-            <Button to="/contatti" variant="outline" size="lg" className="px-10 py-5">
+            <Button
+              to="/contatti"
+              variant="outline"
+              size="lg"
+              className="px-10 py-5"
+              trackingId="collaborazioni_footer_contact"
+            >
               Scrivici per una proposta
             </Button>
           </div>

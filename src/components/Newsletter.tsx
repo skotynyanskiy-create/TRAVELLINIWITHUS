@@ -4,7 +4,7 @@ import { CheckCircle, Gift, Loader2, Mail, ShieldCheck, TrendingUp } from 'lucid
 import { Link } from 'react-router-dom';
 import { trackEvent } from '../services/analytics';
 import { appendLeadFallback } from '../lib/leadFallback';
-import { NEWSLETTER_RECENT_SIGNUPS } from '../config/site';
+import { CONTACTS, NEWSLETTER_RECENT_SIGNUPS } from '../config/site';
 import AnimatedCounter from './AnimatedCounter';
 import Button from './Button';
 
@@ -355,8 +355,26 @@ export default function Newsletter({
               <p
                 className={`mt-1 text-sm leading-relaxed ${isDark ? 'text-white/65' : 'text-black/60'}`}
               >
-                Richiesta ricevuta. Se la piattaforma email non e ancora attiva, il lead resta
-                comunque salvato.
+                Ti scriviamo solo quando c'e qualcosa di davvero utile da salvare. Intanto, se ti
+                va, ci trovi su{' '}
+                <a
+                  href={CONTACTS.instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-2 hover:text-[var(--color-accent)]"
+                >
+                  Instagram
+                </a>{' '}
+                e{' '}
+                <a
+                  href={CONTACTS.tiktokUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-2 hover:text-[var(--color-accent)]"
+                >
+                  TikTok
+                </a>
+                .
               </p>
             </div>
           </div>
