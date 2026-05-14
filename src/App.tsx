@@ -4,7 +4,7 @@
  */
 
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Layout from './components/Layout';
@@ -49,6 +49,8 @@ const Club = lazy(() => import('./pages/Club'));
 const Guide = lazy(() => import('./pages/Guide'));
 const Mappa = lazy(() => import('./pages/Mappa'));
 const MieiAcquisti = lazy(() => import('./pages/MieiAcquisti'));
+const LeadMagnet = lazy(() => import('./pages/LeadMagnet'));
+const VieniConNoi = lazy(() => import('./pages/VieniConNoi'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 // Admin pages
@@ -90,6 +92,10 @@ export default function App() {
                 <ScrollToTop />
                 <Suspense fallback={<PageLoader />}>
                   <Routes>
+                    {/* Standalone landings (no navbar/footer) — bio link IG/TikTok */}
+                    <Route path="/vieni-con-noi" element={<VieniConNoi />} />
+                    <Route path="/iscrivi" element={<Navigate to="/vieni-con-noi" replace />} />
+
                     <Route path="/" element={<Layout />}>
                       <Route index element={<Home />} />
                       <Route path="destinazioni" element={<Destinazioni />} />
@@ -114,6 +120,7 @@ export default function App() {
                       <Route path="club" element={<Club />} />
                       <Route path="mappa" element={<Mappa />} />
                       <Route path="account/acquisti" element={<MieiAcquisti />} />
+                      <Route path="lead-magnet" element={<LeadMagnet />} />
 
                       {/* Admin Routes */}
                       <Route
