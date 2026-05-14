@@ -34,11 +34,17 @@ export const NEWSLETTER_RECENT_SIGNUPS = 184;
 /** Aggiornare url con lo shortcode del reel più recente pubblicato su Instagram.
  *  Nessuna API key necessaria — aggiornamento manuale dopo ogni nuovo reel.
  *  Esempio: url: 'https://www.instagram.com/reel/ABC123XYZ/'
+ *
+ *  Demo placeholder: thumbnail editoriale Unsplash + caption demo che
+ *  comunica natura placeholder. R+B sostituisce con URL reel reale
+ *  appena disponibile (l'iframe embed Instagram subentra automaticamente
+ *  quando `url` punta a /reel/...).
  */
 export const FEATURED_REEL = {
-  url: '', // lasciare vuoto → mostra hero-adventure.jpg come fallback
-  thumbnail: '',
-  caption: 'Ultimo reel',
+  url: '', // vuoto = fallback su thumbnail + caption sotto
+  thumbnail:
+    'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=900&auto=format&fit=crop',
+  caption: 'Demo · ultimo reel R+B in arrivo',
 } as const;
 
 export const SOCIAL_COLORS = {
