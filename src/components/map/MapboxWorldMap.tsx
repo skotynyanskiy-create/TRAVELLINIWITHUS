@@ -1,10 +1,62 @@
-import { useState, useEffect, useMemo } from 'react';
-import Map, { Marker, Popup, NavigationControl, FullscreenControl } from 'react-map-gl/mapbox';
+import { useState, useEffect, useMemo, useRef } from 'react';
+import Map, {
+  Marker,
+  Popup,
+  NavigationControl,
+  FullscreenControl,
+  type MapRef,
+} from 'react-map-gl/mapbox';
 import { Link } from 'react-router-dom';
-import { MapPin, Navigation, X, Compass } from 'lucide-react';
+import {
+  MapPin,
+  Navigation,
+  X,
+  Compass,
+  BookOpen,
+  Map as MapIcon,
+  UtensilsCrossed,
+  Hotel,
+  Sparkles,
+  Star,
+} from 'lucide-react';
 import { fetchArticles } from '../../services/firebaseService';
 import type { NormalizedArticle } from '../../utils/articleData';
 import { DEMO_ARTICLE_PREVIEW, DEMO_ARTICLES_EXTRA } from '../../config/demoContent';
+
+/**
+ * Categoria -> icona + colore badge nel marker.
+ * Permette di leggere a colpo d'occhio "qui c'e' una guida vs un hotel
+ * vs un posto particolare" senza dover cliccare per scoprirlo.
+ */
+const CATEGORY_VISUAL: Record<
+  string,
+  { Icon: React.ComponentType<{ size?: number; className?: string }>; label: string }
+> = {
+  Guide: { Icon: BookOpen, label: 'Guida' },
+  'Itinerari completi': { Icon: MapIcon, label: 'Itinerario' },
+  'Posti particolari': { Icon: Sparkles, label: 'Posto particolare' },
+  'Weekend & Day trips': { Icon: MapPin, label: 'Weekend' },
+  Destinazioni: { Icon: Compass, label: 'Destinazione' },
+  'Food & Ristoranti': { Icon: UtensilsCrossed, label: 'Food' },
+  'Hotel con carattere': { Icon: Hotel, label: 'Hotel' },
+};
+
+const CONTINENT_FILTERS = [
+  { id: 'all', label: 'Tutti' },
+  { id: 'Europa', label: 'Europa' },
+  { id: 'Asia', label: 'Asia' },
+  { id: 'Americhe', label: 'Americhe' },
+  { id: 'Africa', label: 'Africa' },
+  { id: 'Oceania', label: 'Oceania' },
+] as const;
+
+type ContinentFilter = (typeof CONTINENT_FILTERS)[number]['id'];
+
+type ArticleWithCoords = NormalizedArticle & {
+  lat: number;
+  lng: number;
+  isPartner: boolean;
+};
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -91,15 +143,32 @@ const COUNTRY_COORDS: Record<string, { lat: number; lng: number }> = {
 };
 
 export default function MapboxWorldMap() {
-  const [articles, setArticles] = useState<Array<NormalizedArticle & { lat: number; lng: number }>>(
-    []
-  );
-  const [selectedArticle, setSelectedArticle] = useState<
-    (NormalizedArticle & { lat: number; lng: number }) | null
-  >(null);
+  const mapRef = useRef<MapRef | null>(null);
+  const [articles, setArticles] = useState<ArticleWithCoords[]>([]);
+  const [selectedArticle, setSelectedArticle] = useState<ArticleWithCoords | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-
   const [usingDemo, setUsingDemo] = useState(false);
+  const [activeContinent, setActiveContinent] = useState<ContinentFilter>('all');
+
+  const filteredArticles = useMemo(
+    () =>
+      activeContinent === 'all'
+        ? articles
+        : articles.filter((a) => (a as { continent?: string }).continent === activeContinent),
+    [articles, activeContinent]
+  );
+
+  /** Centra la mappa sull'articolo + apre popup. Usato sia dal click marker
+   *  che dal click sulla card della mini-lista sottostante. */
+  const focusArticle = (article: ArticleWithCoords) => {
+    setSelectedArticle(article);
+    mapRef.current?.flyTo({
+      center: [article.lng, article.lat],
+      zoom: 5.2,
+      duration: 1200,
+      essential: true,
+    });
+  };
 
   useEffect(() => {
     // Permissive input type — accettiamo sia NormalizedArticle (Firebase, con
@@ -122,11 +191,10 @@ export default function MapboxWorldMap() {
             ...(article as unknown as NormalizedArticle),
             lat: coords.lat + offset * 0.6,
             lng: coords.lng + offset,
+            isPartner: Boolean(article.isPartner),
           };
         })
-        .filter(
-          (article): article is NormalizedArticle & { lat: number; lng: number } => article !== null
-        );
+        .filter((article): article is ArticleWithCoords => article !== null);
 
     const loadData = async () => {
       setIsLoading(true);
@@ -158,32 +226,58 @@ export default function MapboxWorldMap() {
 
   const pins = useMemo(
     () =>
-      articles.map((article, index) => (
-        <Marker
-          key={`marker-${article.id || index}`}
-          longitude={article.lng}
-          latitude={article.lat}
-          anchor="bottom"
-          onClick={(e) => {
-            e.originalEvent.stopPropagation();
-            setSelectedArticle(article);
-          }}
-        >
-          <div className="relative cursor-pointer transition-transform hover:scale-110">
-            <span
-              aria-hidden="true"
-              className="twu-pulse-ring absolute -translate-x-1/2 -translate-y-1/2 rounded-full bg-[var(--color-accent)]/35"
-              style={{ left: '50%', top: '50%' }}
-            />
-            <span className="relative block h-8 w-8 text-[var(--color-accent)] drop-shadow-xl md:h-10 md:w-10">
-              <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" />
-              </svg>
-            </span>
-          </div>
-        </Marker>
-      )),
-    [articles]
+      filteredArticles.map((article, index) => {
+        const isActive = selectedArticle?.id === article.id;
+        const cat = article.category;
+        const visual = (cat && CATEGORY_VISUAL[cat]) || { Icon: MapPin, label: 'Posto' };
+        const CatIcon = visual.Icon;
+
+        return (
+          <Marker
+            key={`marker-${article.id || index}`}
+            longitude={article.lng}
+            latitude={article.lat}
+            anchor="bottom"
+            onClick={(e) => {
+              e.originalEvent.stopPropagation();
+              focusArticle(article);
+            }}
+          >
+            <div
+              className={`relative cursor-pointer transition-transform ${
+                isActive ? 'scale-125' : 'hover:scale-110'
+              }`}
+              aria-label={`${visual.label}: ${article.title}`}
+            >
+              <span
+                aria-hidden="true"
+                className={`twu-pulse-ring absolute -translate-x-1/2 -translate-y-1/2 rounded-full ${
+                  article.isPartner ? 'bg-[var(--color-success)]/40' : 'bg-[var(--color-accent)]/35'
+                }`}
+                style={{ left: '50%', top: '50%' }}
+              />
+              <span
+                className={`relative flex h-9 w-9 items-center justify-center rounded-full border-2 shadow-xl md:h-11 md:w-11 ${
+                  article.isPartner
+                    ? 'border-white bg-[var(--color-success)] text-white'
+                    : 'border-white bg-[var(--color-accent)] text-white'
+                }`}
+              >
+                <CatIcon size={16} />
+              </span>
+              {article.isPartner && (
+                <span
+                  aria-label="Partner"
+                  className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-white text-[var(--color-success)] shadow-md"
+                >
+                  <Star size={9} fill="currentColor" />
+                </span>
+              )}
+            </div>
+          </Marker>
+        );
+      }),
+    [filteredArticles, selectedArticle]
   );
 
   if (!MAPBOX_TOKEN) {
@@ -234,19 +328,109 @@ export default function MapboxWorldMap() {
           </div>
           <h1 className="mb-1 text-2xl font-serif text-[var(--color-ink)]">Il nostro mondo.</h1>
           <p className="text-xs font-light text-[var(--color-ink)]/50">
-            {articles.length} destinazioni{usingDemo ? ' (anteprime editoriali)' : ' esplorate'}
+            {filteredArticles.length}{' '}
+            {filteredArticles.length === 1 ? 'destinazione' : 'destinazioni'}
+            {usingDemo ? ' (anteprime editoriali)' : ' esplorate'}
+            {activeContinent !== 'all' && ` · ${activeContinent}`}
           </p>
+        </div>
+      </div>
+
+      {/* Filter chips per continente — top center desktop, top scrollable mobile */}
+      <div className="pointer-events-none absolute inset-x-0 top-8 z-10 flex justify-center px-4 md:top-8">
+        <div className="pointer-events-auto flex max-w-full gap-1.5 overflow-x-auto rounded-full border border-white/12 bg-[var(--color-ink)]/70 p-1.5 backdrop-blur-xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {CONTINENT_FILTERS.map((f) => {
+            const isActive = activeContinent === f.id;
+            return (
+              <button
+                key={f.id}
+                type="button"
+                onClick={() => setActiveContinent(f.id)}
+                className={`shrink-0 rounded-full px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] transition-colors ${
+                  isActive
+                    ? 'bg-[var(--color-accent)] text-white shadow-sm'
+                    : 'text-white/70 hover:bg-white/8 hover:text-white'
+                }`}
+              >
+                {f.label}
+              </button>
+            );
+          })}
         </div>
       </div>
 
       <Link
         to="/destinazioni"
-        className="absolute bottom-8 right-8 z-10 inline-flex items-center gap-2 rounded-full border border-[var(--color-ink)]/5 bg-[var(--color-surface)]/95 px-5 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] shadow-xl backdrop-blur-xl transition-all hover:border-transparent hover:bg-[var(--color-ink)] hover:text-white"
+        className="absolute bottom-44 right-8 z-10 inline-flex items-center gap-2 rounded-full border border-[var(--color-ink)]/5 bg-[var(--color-surface)]/95 px-5 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] shadow-xl backdrop-blur-xl transition-all hover:border-transparent hover:bg-[var(--color-ink)] hover:text-white md:bottom-36"
       >
         <MapPin size={14} /> Destinazioni
       </Link>
 
+      {/* Mini-lista articoli orizzontale (scroll-snap) — sincronizzata con i marker */}
+      {filteredArticles.length > 0 && (
+        <div className="pointer-events-none absolute inset-x-0 bottom-4 z-10 px-4 md:bottom-6">
+          <div
+            className="pointer-events-auto -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-auto md:max-w-5xl md:gap-4"
+            aria-label={`${filteredArticles.length} destinazioni filtrate`}
+          >
+            {filteredArticles.map((article) => {
+              const isActive = selectedArticle?.id === article.id;
+              const cat = article.category;
+              const visual = (cat && CATEGORY_VISUAL[cat]) || { Icon: MapPin, label: 'Posto' };
+              const CatIcon = visual.Icon;
+
+              return (
+                <button
+                  key={`card-${article.id}`}
+                  type="button"
+                  onClick={() => focusArticle(article)}
+                  aria-pressed={isActive}
+                  aria-label={`Mostra ${article.title} sulla mappa`}
+                  className={`group flex shrink-0 basis-[78%] snap-start items-center gap-3 rounded-[var(--radius-md)] border bg-[var(--color-surface)]/95 px-3 py-2.5 text-left shadow-xl backdrop-blur-xl transition-all sm:basis-[44%] md:basis-[260px] ${
+                    isActive
+                      ? 'border-[var(--color-accent)] ring-2 ring-[var(--color-accent)]/30'
+                      : 'border-[var(--color-ink)]/5 hover:border-[var(--color-accent)]/40'
+                  }`}
+                >
+                  <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-md bg-[var(--color-muted-bg)]">
+                    {article.image && (
+                      <img
+                        src={article.image}
+                        alt=""
+                        loading="lazy"
+                        className="h-full w-full object-cover"
+                      />
+                    )}
+                    <span
+                      className={`absolute -bottom-0 -right-0 flex h-5 w-5 items-center justify-center rounded-tl-md ${
+                        article.isPartner
+                          ? 'bg-[var(--color-success)] text-white'
+                          : 'bg-[var(--color-accent)] text-white'
+                      }`}
+                    >
+                      <CatIcon size={11} />
+                    </span>
+                  </div>
+                  <div className="flex min-w-0 flex-1 flex-col justify-center">
+                    <p className="truncate text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)]">
+                      {(article as { country?: string }).country ||
+                        (article as { continent?: string }).continent ||
+                        'In viaggio'}
+                      {article.isPartner && ' · Partner'}
+                    </p>
+                    <p className="line-clamp-2 text-xs font-serif leading-tight text-[var(--color-ink)] md:text-sm">
+                      {article.title}
+                    </p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       <Map
+        ref={mapRef}
         initialViewState={{
           longitude: 12.5,
           latitude: 42.0,

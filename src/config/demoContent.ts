@@ -30,6 +30,11 @@ export const DEMO_ARTICLES_EXTRA = [
     category: 'Destinazioni',
     country: 'Puglia',
     continent: 'Europa',
+    // Demo partner flag: simula un articolo prodotto in collaborazione
+    // con un partner editoriale (es. Masseria Brugia). Marker apparira'
+    // con badge verde Star + label "Partner" nella mini-card.
+    // R+B sostituisce con dati reali quando shortlist Q3 chiude un partner.
+    isPartner: true,
     image:
       'https://images.unsplash.com/photo-1499695867787-12ace027e651?q=80&w=1200&auto=format&fit=crop',
     excerpt:
