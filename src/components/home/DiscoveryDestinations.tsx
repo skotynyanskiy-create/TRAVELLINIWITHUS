@@ -30,6 +30,7 @@ export default function DiscoveryDestinations() {
             duration: 0.65,
             ease: 'power3.out',
             stagger: 0.08,
+            clearProps: 'all',
           }),
       });
     },

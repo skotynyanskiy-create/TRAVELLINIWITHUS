@@ -164,7 +164,6 @@ export function GuideTile({
   const Icon = visual?.icon;
   return (
     <Link
-      data-discovery-reveal
       to={`/guide?cat=${slugifyGuideCategory(category)}`}
       className="group flex flex-col gap-2 rounded-[var(--radius-md)] border border-black/6 bg-white p-4 transition-all hover:-translate-y-0.5 hover:shadow-md"
       style={{ borderLeftColor: visual?.color, borderLeftWidth: 3 }}
