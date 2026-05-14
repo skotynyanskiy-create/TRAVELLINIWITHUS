@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, Calendar, Clock, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import OptimizedImage from '../OptimizedImage';
 import { trackEvent } from '../../services/analytics';
+import { scoreArticles } from '../../utils/recommendations';
 import type { ArticleData, RelatedArticleSummary } from './types';
 
 const INITIAL_VISIBLE = 6;
@@ -65,8 +66,10 @@ export default function RelatedArticles({
 }: RelatedArticlesProps) {
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
 
-  const hasRelated = relatedArticles.length > 0;
-  const totalCount = hasRelated ? relatedArticles.length : demoRelatedArticles.length;
+  const personalizedArticles = useMemo(() => scoreArticles(relatedArticles), [relatedArticles]);
+
+  const hasRelated = personalizedArticles.length > 0;
+  const totalCount = hasRelated ? personalizedArticles.length : demoRelatedArticles.length;
   const hasMore = visibleCount < totalCount;
   const remaining = totalCount - visibleCount;
   const nextStep = Math.min(LOAD_MORE_STEP, remaining);
@@ -92,7 +95,7 @@ export default function RelatedArticles({
       <h3 className="mb-12 text-3xl font-serif">Potrebbe interessarti anche</h3>
       <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
         {hasRelated ? (
-          relatedArticles
+          personalizedArticles
             .slice(0, visibleCount)
             .map((data) => (
               <RelatedCard

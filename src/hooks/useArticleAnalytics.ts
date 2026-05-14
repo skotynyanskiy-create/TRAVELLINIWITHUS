@@ -1,9 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { trackEvent } from '../services/analytics';
+import { recordArticleRead } from '../utils/recommendations';
 
 interface UseArticleAnalyticsParams {
   slug: string;
   category?: string;
+  continent?: string;
   title?: string;
   enabled: boolean;
 }
@@ -12,7 +14,13 @@ const MILESTONES = [25, 50, 75, 100] as const;
 const READ_COMPLETE_SCROLL_PCT = 80;
 const READ_COMPLETE_TIME_MS = 60_000;
 
-export function useArticleAnalytics({ slug, category, title, enabled }: UseArticleAnalyticsParams) {
+export function useArticleAnalytics({
+  slug,
+  category,
+  continent,
+  title,
+  enabled,
+}: UseArticleAnalyticsParams) {
   const startedRef = useRef(false);
   const milestonesFiredRef = useRef<Set<number>>(new Set());
   const readCompleteFiredRef = useRef(false);
@@ -30,7 +38,8 @@ export function useArticleAnalytics({ slug, category, title, enabled }: UseArtic
     startedRef.current = true;
     startTimeRef.current = Date.now();
     trackEvent('article_read_start', { slug, category, title });
-  }, [enabled, slug, category, title]);
+    recordArticleRead({ slug, category, continent });
+  }, [enabled, slug, category, continent, title]);
 
   useEffect(() => {
     if (!enabled || !slug) return;

@@ -33,6 +33,7 @@ const ChiSiamo = lazy(() => import('./pages/ChiSiamo'));
 const Collaborazioni = lazy(() => import('./pages/Collaborazioni'));
 const Contatti = lazy(() => import('./pages/Contatti'));
 const MediaKit = lazy(() => import('./pages/MediaKit'));
+const Press = lazy(() => import('./pages/Press'));
 const Articolo = lazy(() => import('./pages/Articolo'));
 const Preferiti = lazy(() => import('./pages/Preferiti'));
 const Risorse = lazy(() => import('./pages/Risorse'));
@@ -91,6 +92,7 @@ export default function App() {
                       <Route path="chi-siamo" element={<ChiSiamo />} />
                       <Route path="collaborazioni" element={<Collaborazioni />} />
                       <Route path="media-kit" element={<MediaKit />} />
+                      <Route path="press" element={<Press />} />
                       <Route path="contatti" element={<Contatti />} />
                       <Route path="articolo/:slug" element={<Articolo />} />
                       <Route path="preferiti" element={<Preferiti />} />
@@ -100,17 +102,73 @@ export default function App() {
                       <Route path="club" element={<Club />} />
                       <Route path="mappa" element={<Mappa />} />
                       <Route path="account/acquisti" element={<MieiAcquisti />} />
-                      
+
                       {/* Admin Routes */}
-                      <Route path="admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-                      <Route path="admin/site-content/:pageId" element={<ProtectedRoute><SiteContentEditor /></ProtectedRoute>} />
-                      <Route path="admin/editor" element={<ProtectedRoute><ArticleEditor /></ProtectedRoute>} />
-                      <Route path="admin/editor/:id" element={<ProtectedRoute><ArticleEditor /></ProtectedRoute>} />
-                      <Route path="admin/product-editor" element={<ProtectedRoute><ProductEditor /></ProtectedRoute>} />
-                      <Route path="admin/product-editor/:id" element={<ProtectedRoute><ProductEditor /></ProtectedRoute>} />
-                      <Route path="admin/users" element={<ProtectedRoute><AdminUsers /></ProtectedRoute>} />
-                      <Route path="admin/orders" element={<ProtectedRoute><AdminOrders /></ProtectedRoute>} />
-                      
+                      <Route
+                        path="admin"
+                        element={
+                          <ProtectedRoute>
+                            <AdminDashboard />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="admin/site-content/:pageId"
+                        element={
+                          <ProtectedRoute>
+                            <SiteContentEditor />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="admin/editor"
+                        element={
+                          <ProtectedRoute>
+                            <ArticleEditor />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="admin/editor/:id"
+                        element={
+                          <ProtectedRoute>
+                            <ArticleEditor />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="admin/product-editor"
+                        element={
+                          <ProtectedRoute>
+                            <ProductEditor />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="admin/product-editor/:id"
+                        element={
+                          <ProtectedRoute>
+                            <ProductEditor />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="admin/users"
+                        element={
+                          <ProtectedRoute>
+                            <AdminUsers />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="admin/orders"
+                        element={
+                          <ProtectedRoute>
+                            <AdminOrders />
+                          </ProtectedRoute>
+                        }
+                      />
+
                       {/* Legal Routes */}
                       <Route path="privacy" element={<Privacy />} />
                       <Route path="cookie" element={<Cookie />} />

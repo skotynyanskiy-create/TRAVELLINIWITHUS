@@ -291,6 +291,7 @@ export default function Articolo() {
   useArticleAnalytics({
     slug: currentSlug,
     category: article?.category,
+    continent: article?.continent,
     title: article?.title,
     enabled: articleSource === 'published' && !loading,
   });
@@ -328,6 +329,8 @@ export default function Articolo() {
   const articleDescription = article.description;
   const articleImage = article.image;
   const articleUrl = `${SITE_URL}/articolo/${currentSlug}`;
+  // Branded OG image generated at build time for preview slugs; falls back to hero image otherwise.
+  const ogImage = isPreviewArticle ? `${SITE_URL}/og/${currentSlug}.webp` : articleImage;
   const datePublished = toIsoDateString(article.date) || new Date().toISOString();
   const dateModified = toIsoDateString(article.updatedAt) || datePublished;
   const tocItems = buildTocItems(article);
@@ -388,7 +391,7 @@ export default function Articolo() {
           title={articleTitle}
           description={articleDescription}
           canonical={articleUrl}
-          image={articleImage}
+          image={ogImage}
           type="article"
           noindex={isPreviewArticle}
         />
