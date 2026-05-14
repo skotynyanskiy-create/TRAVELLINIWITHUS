@@ -1,10 +1,16 @@
 export const DEMO_ARTICLE_SLUG = 'dolomiti-rifugi-design';
 
+// Country/continent valorizzati per essere indicizzabili dalla mappa
+// interattiva (MapboxWorldMap.tsx fa lookup su COUNTRY_COORDS).
+// Per gli articoli italiani usiamo la regione come "country" per
+// distribuirli geograficamente invece di accatastarli tutti su Roma.
 export const DEMO_ARTICLE_PREVIEW = {
   id: DEMO_ARTICLE_SLUG,
   slug: DEMO_ARTICLE_SLUG,
   title: 'Dolomiti: Tra Rifugi di Design e Vette Leggendarie',
   category: 'Guide',
+  country: 'Dolomiti',
+  continent: 'Europa',
   image:
     'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop',
   excerpt:
@@ -22,6 +28,8 @@ export const DEMO_ARTICLES_EXTRA = [
     slug: 'puglia-trulli-masserie',
     title: 'Puglia: Trulli, Masserie e Costa Adriatica',
     category: 'Destinazioni',
+    country: 'Puglia',
+    continent: 'Europa',
     image:
       'https://images.unsplash.com/photo-1499695867787-12ace027e651?q=80&w=1200&auto=format&fit=crop',
     excerpt:
@@ -34,6 +42,8 @@ export const DEMO_ARTICLES_EXTRA = [
     slug: 'toscana-borghi-nascosti',
     title: 'Toscana: I Borghi che Nessuno Conosce',
     category: 'Posti particolari',
+    country: 'Toscana',
+    continent: 'Europa',
     image:
       'https://images.unsplash.com/photo-1516483638261-f40af5aa3463?q=80&w=1200&auto=format&fit=crop',
     excerpt:
@@ -46,6 +56,8 @@ export const DEMO_ARTICLES_EXTRA = [
     slug: 'costiera-amalfitana',
     title: 'Costiera Amalfitana: Sfuggire alla Folla e Trovare la Magia',
     category: 'Weekend & Day trips',
+    country: 'Costiera Amalfitana',
+    continent: 'Europa',
     image:
       'https://images.unsplash.com/photo-1533418264835-9871c7c2dbf0?q=80&w=1200&auto=format&fit=crop',
     excerpt:
@@ -58,6 +70,8 @@ export const DEMO_ARTICLES_EXTRA = [
     slug: 'nord-delle-filippine',
     title: "Nord delle Filippine: L'Itinerario Non Turistico",
     category: 'Itinerari completi',
+    country: 'Filippine',
+    continent: 'Asia',
     image:
       'https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?q=80&w=1200&auto=format&fit=crop',
     excerpt:

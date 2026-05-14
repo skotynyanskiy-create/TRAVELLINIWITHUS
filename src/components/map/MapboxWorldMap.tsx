@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { MapPin, Navigation, X, Compass } from 'lucide-react';
 import { fetchArticles } from '../../services/firebaseService';
 import type { NormalizedArticle } from '../../utils/articleData';
+import { DEMO_ARTICLE_PREVIEW, DEMO_ARTICLES_EXTRA } from '../../config/demoContent';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -21,6 +22,19 @@ const MAPBOX_TOKEN =
 
 const COUNTRY_COORDS: Record<string, { lat: number; lng: number }> = {
   Italia: { lat: 41.8719, lng: 12.5674 },
+  // Italian regions: coords piu specifiche per articoli che parlano
+  // di un'area particolare, evitano l'accatastamento su Roma quando
+  // ci sono piu articoli italiani.
+  Dolomiti: { lat: 46.41, lng: 11.86 },
+  Puglia: { lat: 40.79, lng: 17.1 },
+  Toscana: { lat: 43.32, lng: 11.0 },
+  'Costiera Amalfitana': { lat: 40.63, lng: 14.6 },
+  Sicilia: { lat: 37.6, lng: 14.0 },
+  Sardegna: { lat: 40.12, lng: 9.01 },
+  Cilento: { lat: 40.32, lng: 15.3 },
+  Veneto: { lat: 45.43, lng: 12.33 },
+  // Asia: aggiungere paesi che ricorrono negli articoli demo.
+  Filippine: { lat: 12.8797, lng: 121.774 },
   Francia: { lat: 46.2276, lng: 2.2137 },
   Spagna: { lat: 40.4637, lng: -3.7492 },
   Portogallo: { lat: 39.3999, lng: -8.2245 },
@@ -85,32 +99,55 @@ export default function MapboxWorldMap() {
   >(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [usingDemo, setUsingDemo] = useState(false);
+
   useEffect(() => {
+    // Permissive input type — accettiamo sia NormalizedArticle (Firebase, con
+    // Timestamp) sia gli oggetti demo (createdAt come string). I campi
+    // davvero usati sono solo id/slug/title/category/image/excerpt + country.
+    const placeOnMap = (list: ReadonlyArray<Record<string, unknown>>) =>
+      list
+        .map((article, index) => {
+          const countryKey =
+            (article.country as string | undefined) ||
+            (article.continent as string | undefined) ||
+            '';
+          const coords = COUNTRY_COORDS[countryKey];
+          if (!coords) return null;
+
+          const variance = 0.3;
+          const offset = (index % 5) * variance - variance;
+
+          return {
+            ...(article as unknown as NormalizedArticle),
+            lat: coords.lat + offset * 0.6,
+            lng: coords.lng + offset,
+          };
+        })
+        .filter(
+          (article): article is NormalizedArticle & { lat: number; lng: number } => article !== null
+        );
+
     const loadData = async () => {
       setIsLoading(true);
       try {
         const data = await fetchArticles();
-        const mappedData = data
-          .map((article, index) => {
-            const countryKey = article.country || article.continent || '';
-            const coords = COUNTRY_COORDS[countryKey];
-            if (!coords) return null;
+        const mappedData = placeOnMap(data as unknown as ReadonlyArray<Record<string, unknown>>);
 
-            const variance = 0.3;
-            const offset = (index % 5) * variance - variance;
-
-            return {
-              ...article,
-              lat: coords.lat + offset * 0.6,
-              lng: coords.lng + offset,
-            };
-          })
-          .filter(
-            (article): article is NormalizedArticle & { lat: number; lng: number } =>
-              article !== null
-          );
-
-        setArticles(mappedData);
+        if (mappedData.length > 0) {
+          setArticles(mappedData);
+          setUsingDemo(false);
+        } else {
+          // Firestore vuoto: fallback su anteprime editoriali per non
+          // mostrare la mappa nuda. Quando R+B pubblica articoli reali
+          // con campo `country`, il fallback viene saltato automaticamente.
+          const demo = placeOnMap([
+            DEMO_ARTICLE_PREVIEW,
+            ...DEMO_ARTICLES_EXTRA,
+          ] as unknown as ReadonlyArray<Record<string, unknown>>);
+          setArticles(demo);
+          setUsingDemo(true);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -197,7 +234,7 @@ export default function MapboxWorldMap() {
           </div>
           <h1 className="mb-1 text-2xl font-serif text-[var(--color-ink)]">Il nostro mondo.</h1>
           <p className="text-xs font-light text-[var(--color-ink)]/50">
-            {articles.length} destinazioni esplorate
+            {articles.length} destinazioni{usingDemo ? ' (anteprime editoriali)' : ' esplorate'}
           </p>
         </div>
       </div>
