@@ -68,7 +68,7 @@ function getDemoArchiveItem(): ArchiveItem {
     id: DEMO_DESTINATION_CARD.id,
     title: DEMO_DESTINATION_CARD.title,
     excerpt:
-      'Una preview editoriale temporanea per mostrare come appariranno le esperienze quando saranno pubblicati contenuti reali.',
+      'Un weekend di trekking lenti, rifugi con cucina di valle e punti panoramici scelti per evitare le ore di folla.',
     image: DEMO_DESTINATION_CARD.image,
     link: DEMO_DESTINATION_CARD.link,
     category: DEMO_DESTINATION_CARD.category,
@@ -501,7 +501,7 @@ export default function Esperienze() {
           </Link>
         </div>
 
-        {usingDemo && (
+        {usingDemo && import.meta.env.DEV && (
           <div className="mb-8 rounded-[var(--radius-md)] border border-[var(--color-accent)]/25 bg-[var(--color-accent-soft)] px-5 py-4 text-sm leading-relaxed text-[var(--color-accent-text)]">
             Questa e una preview editoriale temporanea: serve a mostrare il layout finche non ci
             sono contenuti reali pubblicati. Prima del deploy pubblico va sostituita o disattivata.

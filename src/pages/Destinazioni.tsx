@@ -77,7 +77,7 @@ function getDemoArchiveItem(): ArchiveItem {
     id: DEMO_DESTINATION_CARD.id,
     title: DEMO_DESTINATION_CARD.title,
     excerpt:
-      'Una preview editoriale temporanea per mostrare come appariranno le destinazioni quando saranno pubblicati contenuti reali.',
+      'Rifugi contemporanei, sentieri scelti con criterio e ritmo lento: come vivere le Dolomiti senza trasformarle in una checklist.',
     image: DEMO_DESTINATION_CARD.image,
     link: DEMO_DESTINATION_CARD.link,
     category: DEMO_DESTINATION_CARD.category,
@@ -729,7 +729,7 @@ export default function Destinazioni() {
           </Link>
         </div>
 
-        {usingDemo && (
+        {usingDemo && import.meta.env.DEV && (
           <div className="mb-8 rounded-[var(--radius-md)] border border-[var(--color-accent)]/25 bg-[var(--color-accent-soft)] px-5 py-4 text-sm leading-relaxed text-[var(--color-accent-text)]">
             Questa e una preview editoriale temporanea: serve a mostrare il layout finche non ci
             sono contenuti reali pubblicati. Prima del deploy pubblico va sostituita o disattivata.

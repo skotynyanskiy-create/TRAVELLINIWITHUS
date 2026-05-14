@@ -20,8 +20,8 @@
   --color-muted-bg-2: #e7e5e4; /* Background neutro tier 2 (rimpiazza bg-zinc-200) */
   --color-muted-fg: #78716c; /* Foreground muted (rimpiazza text-zinc-500) */
   --color-muted-fg-2: #57534e; /* Foreground muted forte (rimpiazza text-zinc-600/700) */
-  --color-accent: #ea580c; /* Accento — terracotta moderna */
-  --color-accent-hover: #c2410c; /* Accento hover — terracotta scura */
+  --color-accent: #c2410c; /* Accento — terracotta (WCAG AA su bianco) */
+  --color-accent-hover: #9a3412; /* Accento hover — terracotta scura */
   --color-accent-text: #9a3412; /* Accento testo readable (WCAG AA su bianco) */
   --color-accent-soft: #fff7ed; /* Sezioni soft — orange-50 */
   --color-footer: #0a0a0a; /* Footer — allineato a ink */

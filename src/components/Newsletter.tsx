@@ -301,7 +301,7 @@ export default function Newsletter({
             <>
               <p
                 className={`flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-medium leading-relaxed ${
-                  isDark ? 'text-white/55' : 'text-black/50'
+                  isDark ? 'text-white/75' : 'text-black/70'
                 }`}
               >
                 <span className="inline-flex items-center gap-1.5">

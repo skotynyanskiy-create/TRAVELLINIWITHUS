@@ -119,7 +119,7 @@ function NewsletterArchivePreview({ items }: { items: NewsletterArchiveItem[] })
             key={item.subject}
             className="border-b border-[var(--color-border)] pb-3 last:border-b-0 last:pb-0"
           >
-            <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-black/40">
+            <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-black/70">
               {item.date}
             </p>
             <p className="mt-1 text-sm font-serif font-medium leading-snug text-[var(--color-ink)]">
