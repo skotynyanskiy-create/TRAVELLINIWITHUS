@@ -65,12 +65,19 @@ export default function DiscoveryDestinations() {
 
         <div className="grid gap-4 lg:grid-cols-12">
           <DestinationFeature group={featured} />
-          <div className="grid grid-cols-2 gap-4 lg:col-span-5 lg:grid-cols-6">
+          {/*
+            Mobile: horizontal scroll-snap (ergonomia pollice destro,
+            ref: Airbnb/Booking mobile categories). Su lg torna a grid.
+            scroll-snap-mandatory garantisce stop pulito su ogni tile.
+          */}
+          <div className="-mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:col-span-5 lg:mx-0 lg:grid lg:grid-cols-6 lg:overflow-visible lg:px-0 lg:pb-0">
             {secondary.map((group, index) => (
               <DestinationTile
                 key={group}
                 group={group}
-                className={index < 2 ? 'lg:col-span-3' : 'lg:col-span-2 lg:min-h-[238px]'}
+                className={`shrink-0 basis-[68%] snap-start sm:basis-[42%] lg:basis-auto lg:shrink ${
+                  index < 2 ? 'lg:col-span-3' : 'lg:col-span-2 lg:min-h-[238px]'
+                }`}
               />
             ))}
           </div>
