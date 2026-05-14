@@ -102,11 +102,10 @@ export default function AiAssistant() {
   }, [messages, isOpen]);
 
   const handleToggle = () => {
-    setIsOpen((prev) => {
-      const next = !prev;
-      trackEvent(next ? 'ai_assistant_open' : 'ai_assistant_close');
-      return next;
-    });
+    // Fire side-effect (analytics) outside the updater so React 19 StrictMode
+    // double-invocation of the updater doesn't emit duplicate events.
+    setIsOpen((prev) => !prev);
+    trackEvent(isOpen ? 'ai_assistant_close' : 'ai_assistant_open');
   };
 
   const sendMessage = (text: string) => {

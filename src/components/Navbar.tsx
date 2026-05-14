@@ -49,7 +49,7 @@ interface NavItem {
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [openMobileSection, setOpenMobileSection] = useState<string | null>('Esplora');
+  const [openMobileSection, setOpenMobileSection] = useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
@@ -79,8 +79,10 @@ export default function Navbar() {
   }, [isMobileMenuOpen]);
 
   const handleMobileMenuToggle = () => {
+    // Collassa tutti i sottomenu al primo open per evitare 14+ link visibili
+    // su mobile 375px (era 'Esplora' default-open).
     setIsMobileMenuOpen((prev) => {
-      if (!prev) setOpenMobileSection('Esplora');
+      if (!prev) setOpenMobileSection(null);
       return !prev;
     });
   };

@@ -77,9 +77,9 @@ export default function InstagramGrid() {
             <span className="mb-3 block text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
               Visto su Instagram
             </span>
-            <h3 className="text-3xl font-serif text-[var(--color-ink)] md:text-4xl">
+            <h2 className="text-3xl font-serif text-[var(--color-ink)] md:text-4xl">
               Reel e foto di Rodrigo & Betta
-            </h3>
+            </h2>
             <p className="mt-3 text-sm text-black/55 md:text-base">
               <span className="font-semibold text-black/70">{CONTACTS.instagramHandle}</span> ·
               Posti particolari, dietro le quinte e short-form video.
