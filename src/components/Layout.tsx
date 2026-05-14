@@ -10,7 +10,6 @@ import JsonLd from './JsonLd';
 import ScrollProgressBar from './ScrollProgressBar';
 import SmoothScrollProvider from './SmoothScrollProvider';
 import { initAnalytics, trackPageview } from '../services/analytics';
-import { initErrorTracking } from '../lib/errorTracking';
 import { CONTACTS, SITE_URL } from '../config/site';
 
 const ORGANIZATION_JSONLD = {
@@ -50,7 +49,9 @@ export default function Layout() {
   const location = useLocation();
 
   useEffect(() => {
-    initErrorTracking();
+    // Sentry e' inizializzato in main.tsx via initTelemetry() — qui solo analytics.
+    // L'ex initErrorTracking() di lib/errorTracking.ts era un no-op che generava
+    // confusione: rimosso per evitare doppio path in caso di Sentry DSN configurato.
     initAnalytics();
   }, []);
 
