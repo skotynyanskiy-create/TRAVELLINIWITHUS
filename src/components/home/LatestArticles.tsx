@@ -78,67 +78,13 @@ export default function LatestArticles() {
         </div>
 
         {loadingArticles ? (
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3].map((item) => (
               <ArticleSkeleton key={item} />
             ))}
           </div>
         ) : articlesGrid.length > 0 ? (
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {articlesGrid.map((article, index) => (
-              <motion.article
-                key={article.id || article.slug}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-60px' }}
-                transition={{ duration: 0.5, delay: index * 0.06 }}
-                className="group flex h-full min-h-[420px] flex-col overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white transition-all hover:-translate-y-1 hover:shadow-md"
-              >
-                <Link
-                  to={`/articolo/${article.slug || article.id}`}
-                  className="relative block aspect-[16/10] overflow-hidden"
-                >
-                  <OptimizedImage
-                    src={article.image}
-                    alt={article.title}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] backdrop-blur-md">
-                    {article.category}
-                  </span>
-                </Link>
-                <div className="flex flex-1 flex-col gap-3 p-6">
-                  <div className="flex items-center gap-3 text-[10px] font-medium uppercase tracking-[0.18em] text-black/40">
-                    <span className="inline-flex items-center gap-1">
-                      <Calendar size={11} className="text-[var(--color-accent)]" />
-                      {article.country || article.continent || 'In evidenza'}
-                    </span>
-                    <span aria-hidden="true">·</span>
-                    <span className="inline-flex items-center gap-1">
-                      <Clock size={11} className="text-[var(--color-accent)]" />
-                      {article.readTime || '5 min'}
-                    </span>
-                  </div>
-                  <Link to={`/articolo/${article.slug || article.id}`} className="block">
-                    <h3 className="line-clamp-2 text-xl font-serif leading-tight text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent-text)] md:text-2xl">
-                      {article.title}
-                    </h3>
-                  </Link>
-                  {article.excerpt && (
-                    <p className="line-clamp-3 text-sm leading-relaxed text-black/60">
-                      {article.excerpt}
-                    </p>
-                  )}
-                  <Link
-                    to={`/articolo/${article.slug || article.id}`}
-                    className="mt-auto inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
-                  >
-                    Leggi <ArrowRight size={12} />
-                  </Link>
-                </div>
-              </motion.article>
-            ))}
-          </div>
+          <MagazineGrid articles={articlesGrid} />
         ) : (
           <div className="border-y border-black/8 py-16">
             <div className="max-w-2xl">
@@ -169,6 +115,142 @@ export default function LatestArticles() {
         </div>
       </div>
     </section>
+  );
+}
+
+type CardVariant = 'cover' | 'sub' | 'secondary';
+
+/**
+ * Magazine grid asimmetrico stile editorial (ref: Cereal, Kinfolk):
+ * 1 cover story dominante + 2 sub-feature + 3 secondary su lg.
+ * Riusa la stessa ArticleCard con tre varianti di proporzioni.
+ *
+ * Layout 12-col lg:
+ *  ┌────────────────────┬──────────┐
+ *  │   COVER (col-7)    │ SUB (5)  │
+ *  │                    ├──────────┤
+ *  │                    │ SUB (5)  │
+ *  ├──────┬──────┬──────┴──────────┘
+ *  │ SEC  │ SEC  │ SEC              (col-4 ognuna)
+ *  └──────┴──────┴──────┘
+ */
+function MagazineGrid({ articles }: { articles: Article[] }) {
+  if (articles.length === 0) return null;
+
+  const [cover, ...rest] = articles;
+  const subFeatures = rest.slice(0, 2);
+  const secondary = rest.slice(2, 5);
+
+  return (
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-12">
+      <ArticleCard
+        article={cover}
+        variant="cover"
+        index={0}
+        className="lg:col-span-7 lg:row-span-2"
+      />
+      {subFeatures.map((article, idx) => (
+        <ArticleCard
+          key={article.id || article.slug}
+          article={article}
+          variant="sub"
+          index={idx + 1}
+          className="lg:col-span-5"
+        />
+      ))}
+      {secondary.map((article, idx) => (
+        <ArticleCard
+          key={article.id || article.slug}
+          article={article}
+          variant="secondary"
+          index={idx + 3}
+          className="lg:col-span-4"
+        />
+      ))}
+    </div>
+  );
+}
+
+interface ArticleCardProps {
+  article: Article;
+  variant: CardVariant;
+  index: number;
+  className?: string;
+}
+
+function ArticleCard({ article, variant, index, className = '' }: ArticleCardProps) {
+  const href = `/articolo/${article.slug || article.id}`;
+
+  const aspect = {
+    cover: 'aspect-[16/11] lg:aspect-[16/12]',
+    sub: 'aspect-[16/10]',
+    secondary: 'aspect-[16/10]',
+  }[variant];
+
+  const titleSize = {
+    cover: 'text-2xl leading-[1.15] md:text-4xl lg:text-5xl',
+    sub: 'text-xl leading-tight md:text-2xl',
+    secondary: 'text-lg leading-snug md:text-xl',
+  }[variant];
+
+  const showExcerpt = variant !== 'secondary';
+  const showMeta = variant !== 'secondary';
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.5, delay: index * 0.06 }}
+      className={`group flex h-full flex-col overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white transition-all hover:-translate-y-1 hover:shadow-md ${className}`}
+    >
+      <Link to={href} className={`relative block overflow-hidden ${aspect}`}>
+        <OptimizedImage
+          src={article.image}
+          alt={article.title}
+          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+        />
+        <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] backdrop-blur-md">
+          {article.category}
+        </span>
+        {variant === 'cover' && (
+          <span className="absolute right-4 top-4 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white shadow-sm">
+            Storia in evidenza
+          </span>
+        )}
+      </Link>
+      <div className="flex flex-1 flex-col gap-3 p-6">
+        {showMeta && (
+          <div className="flex items-center gap-3 text-[10px] font-medium uppercase tracking-[0.18em] text-black/40">
+            <span className="inline-flex items-center gap-1">
+              <Calendar size={11} className="text-[var(--color-accent)]" />
+              {article.country || article.continent || 'In evidenza'}
+            </span>
+            <span aria-hidden="true">·</span>
+            <span className="inline-flex items-center gap-1">
+              <Clock size={11} className="text-[var(--color-accent)]" />
+              {article.readTime || '5 min'}
+            </span>
+          </div>
+        )}
+        <Link to={href} className="block">
+          <h3
+            className={`line-clamp-3 font-serif text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent-text)] ${titleSize}`}
+          >
+            {article.title}
+          </h3>
+        </Link>
+        {showExcerpt && article.excerpt && (
+          <p className="line-clamp-3 text-sm leading-relaxed text-black/60">{article.excerpt}</p>
+        )}
+        <Link
+          to={href}
+          className="mt-auto inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+        >
+          Leggi <ArrowRight size={12} />
+        </Link>
+      </div>
+    </motion.article>
   );
 }
 
