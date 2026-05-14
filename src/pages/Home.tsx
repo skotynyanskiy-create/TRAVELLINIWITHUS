@@ -11,6 +11,7 @@ import HomeMapTeaser from '../components/home/HomeMapTeaser';
 import CoupleIntro from '../components/home/CoupleIntro';
 import LatestArticles from '../components/home/LatestArticles';
 import HomeToolsTeaser from '../components/home/HomeToolsTeaser';
+import HomeQuizBudgetTeaser from '../components/home/HomeQuizBudgetTeaser';
 import HomeCollaborationCta from '../components/home/HomeCollaborationCta';
 
 export default function Home() {
@@ -49,6 +50,7 @@ export default function Home() {
       <HeroSection />
 
       <HomeDiscoveryCards />
+      <HomeQuizBudgetTeaser />
       <HomeMapTeaser />
       <CoupleIntro />
       <div id="storie">

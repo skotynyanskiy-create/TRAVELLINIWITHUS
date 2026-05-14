@@ -38,6 +38,8 @@ const Articolo = lazy(() => import('./pages/Articolo'));
 const Itinerari = lazy(() => import('./pages/Itinerari'));
 const Itinerario = lazy(() => import('./pages/Itinerario'));
 const Guida = lazy(() => import('./pages/Guida'));
+const Quiz = lazy(() => import('./pages/Quiz'));
+const Strumenti = lazy(() => import('./pages/Strumenti'));
 const Preferiti = lazy(() => import('./pages/Preferiti'));
 const Risorse = lazy(() => import('./pages/Risorse'));
 const Shop = lazy(() => import('./pages/Shop'));
@@ -101,6 +103,8 @@ export default function App() {
                       <Route path="itinerari" element={<Itinerari />} />
                       <Route path="itinerari/:slug" element={<Itinerario />} />
                       <Route path="guide/:slug" element={<Guida />} />
+                      <Route path="quiz" element={<Quiz />} />
+                      <Route path="strumenti" element={<Strumenti />} />
                       <Route path="preferiti" element={<Preferiti />} />
                       <Route path="risorse" element={<Risorse />} />
                       <Route path="shop" element={<Shop />} />
