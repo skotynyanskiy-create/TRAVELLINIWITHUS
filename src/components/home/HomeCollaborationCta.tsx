@@ -38,6 +38,7 @@ export default function HomeCollaborationCta() {
         duration: 0.7,
         ease: 'power3.out',
         stagger: 0.1,
+        clearProps: 'all',
         scrollTrigger: {
           trigger: root,
           start: 'top 75%',

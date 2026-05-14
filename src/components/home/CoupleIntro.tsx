@@ -77,6 +77,7 @@ export default function CoupleIntro() {
         duration: 0.6,
         ease: 'power3.out',
         stagger: 0.08,
+        clearProps: 'all',
         scrollTrigger: {
           trigger: '[data-couple-cards]',
           start: 'top 80%',
