@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { X, Trash2, ShoppingBag, CheckCircle, Tag, Loader2 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import { trackEvent } from '../services/analytics';
 
 interface AppliedCoupon {
   code: string;
@@ -77,6 +78,17 @@ export default function CartDrawer() {
   const handleCheckout = async () => {
     try {
       setIsLoading(true);
+      trackEvent('begin_checkout', {
+        currency: 'EUR',
+        value: finalTotal,
+        coupon: appliedCoupon?.code,
+        items: items.map((item) => ({
+          item_id: item.id,
+          item_name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+        })),
+      });
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: {

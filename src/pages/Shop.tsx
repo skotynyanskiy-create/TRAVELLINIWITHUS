@@ -25,6 +25,7 @@ import DemoContentNotice from '../components/DemoContentNotice';
 import FinalCtaSection from '../components/FinalCtaSection';
 import { useCart } from '../context/CartContext';
 import { fetchProducts } from '../services/firebaseService';
+import { trackEvent } from '../services/analytics';
 import { BRAND_STATS, SITE_URL } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_PRODUCTS } from '../config/demoContent';
@@ -76,7 +77,7 @@ export default function ShopWrapper() {
 }
 
 function Shop() {
-  const { addToCart, setIsCartOpen, clearCart } = useCart();
+  const { addToCart, setIsCartOpen, clearCart, items, total } = useCart();
   const { data: demoContent } = useSiteContent('demo');
   const demoSettings = demoContent ?? siteContentDefaults.demo;
   const [searchParams, setSearchParams] = useSearchParams();
@@ -91,9 +92,27 @@ function Shop() {
 
   useEffect(() => {
     if (paymentStatus === 'success') {
+      // Emit purchase_complete PRIMA del clearCart per catturare value/items.
+      // transaction_id da session_id Stripe se Stripe lo passa nel success_url,
+      // altrimenti timestamp-based fallback (deduplica lato Meta via event_id).
+      const sessionId = searchParams.get('session_id') ?? `local_${Date.now()}`;
+      trackEvent('purchase_complete', {
+        transaction_id: sessionId,
+        currency: 'EUR',
+        value: total,
+        items: items.map((item) => ({
+          item_id: item.id,
+          item_name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+        })),
+      });
       clearCart();
+    } else if (paymentStatus === 'canceled') {
+      trackEvent('checkout_canceled', { value: total });
     }
-  }, [paymentStatus, clearCart]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paymentStatus]);
 
   const {
     data: products = [],

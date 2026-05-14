@@ -51,9 +51,23 @@ function loadGA4() {
 
 function loadMetaPixel() {
   if (loaded.meta || !META_PIXEL_ID || typeof window === 'undefined') return;
-  const w = window as Window & { fbq?: FbqFn & { callMethod?: GtagFn; queue?: unknown[]; loaded?: boolean; version?: string; push?: FbqFn } };
+  const w = window as Window & {
+    fbq?: FbqFn & {
+      callMethod?: GtagFn;
+      queue?: unknown[];
+      loaded?: boolean;
+      version?: string;
+      push?: FbqFn;
+    };
+  };
   if (w.fbq) return;
-  const fbq: FbqFn & { callMethod?: GtagFn; queue?: unknown[]; loaded?: boolean; version?: string; push?: FbqFn } = function (...args: unknown[]) {
+  const fbq: FbqFn & {
+    callMethod?: GtagFn;
+    queue?: unknown[];
+    loaded?: boolean;
+    version?: string;
+    push?: FbqFn;
+  } = function (...args: unknown[]) {
     if (fbq.callMethod) fbq.callMethod(...args);
     else (fbq.queue = fbq.queue || []).push(args);
   };
@@ -70,7 +84,9 @@ function loadMetaPixel() {
 
 function loadTikTokPixel() {
   if (loaded.tiktok || !TIKTOK_PIXEL_ID || typeof window === 'undefined') return;
-  void injectScript(`https://analytics.tiktok.com/i18n/pixel/events.js?sdkid=${TIKTOK_PIXEL_ID}&lib=ttq`);
+  void injectScript(
+    `https://analytics.tiktok.com/i18n/pixel/events.js?sdkid=${TIKTOK_PIXEL_ID}&lib=ttq`
+  );
   loaded.tiktok = true;
 }
 
@@ -89,14 +105,56 @@ function applyConsent() {
   }
 }
 
+/**
+ * Mapping events GA4 -> Meta/TikTok pixel standard events.
+ * Senza questo, Meta Ads Manager non puo ottimizzare campagne su
+ * Purchase/InitiateCheckout/Lead/AddToCart standard (`trackCustom`
+ * funziona solo per audience custom, non per optimization).
+ */
+const META_STANDARD_EVENT_MAP: Record<string, string> = {
+  add_to_cart: 'AddToCart',
+  begin_checkout: 'InitiateCheckout',
+  purchase_complete: 'Purchase',
+  newsletter_signup: 'Lead',
+  media_kit_request_success: 'Lead',
+  contact_submit_success: 'Lead',
+  club_waitlist_success: 'Lead',
+  lead_magnet_download: 'Lead',
+};
+
+const TIKTOK_STANDARD_EVENT_MAP: Record<string, string> = {
+  add_to_cart: 'AddToCart',
+  begin_checkout: 'InitiateCheckout',
+  purchase_complete: 'CompletePayment',
+  newsletter_signup: 'SubmitForm',
+  media_kit_request_success: 'SubmitForm',
+  contact_submit_success: 'SubmitForm',
+  club_waitlist_success: 'SubmitForm',
+  lead_magnet_download: 'Download',
+};
+
 export const trackEvent = (eventName: string, eventParams?: Record<string, unknown>) => {
   if (typeof window === 'undefined') return;
   if (canLoad('analytics') && window.gtag) {
     window.gtag('event', eventName, eventParams);
   }
   if (canLoad('marketing')) {
-    if (window.fbq) window.fbq('trackCustom', eventName, eventParams);
-    if (window.ttq) window.ttq.track(eventName, eventParams);
+    if (window.fbq) {
+      const metaStandard = META_STANDARD_EVENT_MAP[eventName];
+      if (metaStandard) {
+        window.fbq('track', metaStandard, eventParams);
+      } else {
+        window.fbq('trackCustom', eventName, eventParams);
+      }
+    }
+    if (window.ttq) {
+      const tiktokStandard = TIKTOK_STANDARD_EVENT_MAP[eventName];
+      if (tiktokStandard) {
+        window.ttq.track(tiktokStandard, eventParams);
+      } else {
+        window.ttq.track(eventName, eventParams);
+      }
+    }
   }
   if (import.meta.env.DEV) {
     console.log(`[analytics] event "${eventName}"`, eventParams);

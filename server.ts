@@ -1352,7 +1352,7 @@ async function startServer() {
         payment_method_types: ['card'],
         line_items: lineItems,
         mode: 'payment',
-        success_url: `${origin}/shop?success=true`,
+        success_url: `${origin}/shop?success=true&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${origin}/shop?canceled=true`,
         customer_email: body.userEmail || undefined,
         discounts: stripeDiscount ? [{ coupon: stripeDiscount.id }] : undefined,
