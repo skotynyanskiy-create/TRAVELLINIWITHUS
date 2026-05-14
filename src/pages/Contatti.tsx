@@ -4,9 +4,13 @@ import { Mail, Instagram, MessageCircle, ArrowRight, CheckCircle, Loader2 } from
 import { Link } from 'react-router-dom';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Button from '../components/Button';
+import FormField from '../components/FormField';
+import Input from '../components/Input';
 import PageLayout from '../components/PageLayout';
 import Section from '../components/Section';
+import Select from '../components/Select';
 import SEO from '../components/SEO';
+import Textarea from '../components/Textarea';
 import { CONTACTS, SOCIAL_COLORS } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
@@ -305,90 +309,47 @@ export default function Contatti() {
                   <h3 className="mb-8 text-3xl font-serif">{pageContent.formTitle}</h3>
                   <form className="space-y-8" onSubmit={handleSubmit} noValidate>
                     <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-                      <div className="space-y-2">
-                        <label
-                          htmlFor="name"
-                          className="text-[10px] font-bold uppercase tracking-widest text-black/50"
-                        >
-                          Nome / Azienda *
-                        </label>
-                        <input
+                      <FormField label="Nome / Azienda" htmlFor="name" required error={errors.name}>
+                        <Input
                           type="text"
                           id="name"
+                          variant="underline"
                           value={formData.name}
                           onChange={handleChange}
                           autoComplete="name"
-                          aria-invalid={Boolean(errors.name)}
-                          aria-describedby={errors.name ? 'contact-name-error' : undefined}
-                          className={`w-full border-b bg-transparent py-3 transition-colors focus:outline-none ${
-                            errors.name
-                              ? 'border-red-500 focus:border-red-500'
-                              : 'border-black/10 focus:border-[var(--color-accent)]'
-                          }`}
+                          error={Boolean(errors.name)}
+                          aria-describedby={errors.name ? 'name-error' : undefined}
                           placeholder="Il tuo nome"
                         />
-                        {errors.name && (
-                          <p
-                            id="contact-name-error"
-                            role="alert"
-                            className="mt-1 text-xs text-red-500"
-                          >
-                            {errors.name}
-                          </p>
-                        )}
-                      </div>
-                      <div className="space-y-2">
-                        <label
-                          htmlFor="email"
-                          className="text-[10px] font-bold uppercase tracking-widest text-black/50"
-                        >
-                          Email *
-                        </label>
-                        <input
+                      </FormField>
+                      <FormField label="Email" htmlFor="email" required error={errors.email}>
+                        <Input
                           type="email"
                           id="email"
+                          variant="underline"
                           value={formData.email}
                           onChange={handleChange}
                           autoComplete="email"
-                          aria-invalid={Boolean(errors.email)}
-                          aria-describedby={errors.email ? 'contact-email-error' : undefined}
-                          className={`w-full border-b bg-transparent py-3 transition-colors focus:outline-none ${
-                            errors.email
-                              ? 'border-red-500 focus:border-red-500'
-                              : 'border-black/10 focus:border-[var(--color-accent)]'
-                          }`}
+                          error={Boolean(errors.email)}
+                          aria-describedby={errors.email ? 'email-error' : undefined}
                           placeholder="tua@email.com"
                         />
-                        {errors.email && (
-                          <p
-                            id="contact-email-error"
-                            role="alert"
-                            className="mt-1 text-xs text-red-500"
-                          >
-                            {errors.email}
-                          </p>
-                        )}
-                      </div>
+                      </FormField>
                     </div>
 
-                    <div className="space-y-2">
-                      <label
-                        htmlFor="topic"
-                        className="text-[10px] font-bold uppercase tracking-widest text-black/50"
-                      >
-                        Motivo del contatto *
-                      </label>
-                      <select
+                    <FormField
+                      label="Motivo del contatto"
+                      htmlFor="topic"
+                      required
+                      error={errors.topic}
+                    >
+                      <Select
                         id="topic"
+                        variant="underline"
                         value={formData.topic}
                         onChange={handleChange}
-                        aria-invalid={Boolean(errors.topic)}
-                        aria-describedby={errors.topic ? 'contact-topic-error' : undefined}
-                        className={`w-full appearance-none rounded-none border-b bg-transparent py-3 text-black transition-colors focus:outline-none ${
-                          errors.topic
-                            ? 'border-red-500 focus:border-red-500'
-                            : 'border-black/10 focus:border-[var(--color-accent)]'
-                        }`}
+                        error={Boolean(errors.topic)}
+                        aria-describedby={errors.topic ? 'topic-error' : undefined}
                       >
                         <option value="" disabled>
                           Seleziona un&apos;opzione
@@ -400,51 +361,26 @@ export default function Contatti() {
                         <option value="content">Richiesta creazione contenuti</option>
                         <option value="article">Domanda su guide, articoli o risorse</option>
                         <option value="other">Altro / informazioni generali</option>
-                      </select>
-                      {errors.topic && (
-                        <p
-                          id="contact-topic-error"
-                          role="alert"
-                          className="mt-1 text-xs text-red-500"
-                        >
-                          {errors.topic}
-                        </p>
-                      )}
-                    </div>
+                      </Select>
+                    </FormField>
 
-                    <div className="space-y-2">
-                      <label
-                        htmlFor="message"
-                        className="text-[10px] font-bold uppercase tracking-widest text-black/50"
-                      >
-                        Messaggio *
-                      </label>
-                      <p className="text-xs font-light leading-relaxed text-black/65">
-                        {activeGuidance.hint}
-                      </p>
-                      <textarea
+                    <FormField
+                      label="Messaggio"
+                      htmlFor="message"
+                      required
+                      hint={activeGuidance.hint}
+                      error={errors.message}
+                    >
+                      <Textarea
                         id="message"
                         rows={5}
+                        variant="underline"
                         value={formData.message}
                         onChange={handleChange}
-                        aria-invalid={Boolean(errors.message)}
-                        aria-describedby={errors.message ? 'contact-message-error' : undefined}
-                        className={`w-full resize-none border-b bg-transparent py-3 transition-colors focus:outline-none ${
-                          errors.message
-                            ? 'border-red-500 focus:border-red-500'
-                            : 'border-black/10 focus:border-[var(--color-accent)]'
-                        }`}
+                        error={Boolean(errors.message)}
+                        aria-describedby={errors.message ? 'message-error' : undefined}
                         placeholder={activeGuidance.placeholder}
-                      ></textarea>
-                      {errors.message && (
-                        <p
-                          id="contact-message-error"
-                          role="alert"
-                          className="mt-1 text-xs text-red-500"
-                        >
-                          {errors.message}
-                        </p>
-                      )}
+                      />
 
                       <label className="sr-only" htmlFor="website">
                         Lascia vuoto questo campo
@@ -460,7 +396,7 @@ export default function Contatti() {
                         className="absolute h-0 w-0 overflow-hidden border-0 p-0 opacity-0"
                         style={{ left: '-10000px' }}
                       />
-                    </div>
+                    </FormField>
 
                     <div className="pt-6">
                       <p className="mb-8 text-xs font-light leading-relaxed text-black/40">
@@ -474,7 +410,11 @@ export default function Contatti() {
                         per il trattamento dei dati personali. Rispondiamo di solito entro 24-48 ore
                         lavorative, quando il contatto è chiaro e completo.
                       </p>
-                      {submitError && <p className="mb-6 text-sm text-red-600">{submitError}</p>}
+                      {submitError && (
+                        <p role="alert" className="mb-6 text-sm text-[var(--color-error)]">
+                          {submitError}
+                        </p>
+                      )}
                       <Button
                         type="submit"
                         variant="primary"
