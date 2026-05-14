@@ -11,6 +11,7 @@ import PageLayout from '../components/PageLayout';
 import OptimizedImage from '../components/OptimizedImage';
 import Button from '../components/Button';
 import ClubSkeleton from '../components/ClubSkeleton';
+import ClubMembershipHero from '../components/club/ClubMembershipHero';
 import type { NormalizedArticle } from '../utils/articleData';
 
 export default function Club() {
@@ -46,63 +47,69 @@ export default function Club() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-[var(--color-sand)] pt-32 pb-24 px-4 flex flex-col justify-center items-center">
-        <SEO title="The Travel Club" description="Accedi al club esclusivo Travelliniwithus" noindex />
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="max-w-lg w-full bg-white rounded-[3rem] p-10 md:p-16 text-center shadow-xl border border-[var(--color-accent)]/10"
-        >
-          <div className="mx-auto w-16 h-16 rounded-full bg-[var(--color-sand)] flex items-center justify-center mb-8 shadow-sm">
-            <MapPin size={24} className="text-[var(--color-accent)]" />
-          </div>
-          <h1 className="text-4xl font-serif text-[var(--color-ink)] mb-3">The Travel Club</h1>
-          <p className="text-base font-normal text-black/70 mb-8 leading-relaxed">
-            Il tuo spazio personale su Travelliniwithus.
-          </p>
-
-          <div className="space-y-3 mb-10 text-left">
-            {[
-              {
-                label: 'Salva gli articoli',
-                text: 'Cuori roaming — tieni da parte gli itinerari che vuoi vivere.',
-              },
-              {
-                label: 'I tuoi acquisti',
-                text: 'Accedi e scarica subito le guide premium che hai comprato.',
-              },
-              {
-                label: 'Sincronizzato ovunque',
-                text: 'Tutto disponibile su ogni dispositivo, sempre.',
-              },
-            ].map((b) => (
-              <div
-                key={b.label}
-                className="flex items-start gap-4 rounded-2xl bg-[var(--color-sand)] px-5 py-4"
-              >
-                <CheckCircle size={18} className="text-[var(--color-accent)] shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-sm font-bold text-[var(--color-ink)]">{b.label}</p>
-                  <p className="text-xs font-light text-[var(--color-ink)]/50 mt-0.5">{b.text}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <Button
-            onClick={signIn}
-            className="w-full bg-[var(--color-ink)] text-white hover:bg-[var(--color-ink)]/85 py-4 rounded-full shadow-lg transition-all hover:-translate-y-1"
+      <PageLayout>
+        <SEO
+          title="Travellini Club"
+          description="Tutte le guide digitali, itinerari aggiornati, newsletter privata. Una piccola quota per accedere al meglio del progetto."
+          noindex
+        />
+        <ClubMembershipHero />
+        <div className="bg-[var(--color-sand)] py-20 px-4 flex flex-col justify-center items-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="max-w-lg w-full bg-white rounded-[3rem] p-10 md:p-16 text-center shadow-xl border border-[var(--color-accent)]/10"
           >
-            <LogIn size={20} className="mr-3" />
-            Accedi con Google
-          </Button>
-          <p className="mt-6 text-xs text-black/40 font-light">
-            Accesso rapido, nessun form noioso da compilare.
-          </p>
-        </motion.div>
-      </div>
+            <div className="mx-auto w-16 h-16 rounded-full bg-[var(--color-sand)] flex items-center justify-center mb-8 shadow-sm">
+              <MapPin size={24} className="text-[var(--color-accent)]" />
+            </div>
+            <h1 className="text-4xl font-serif text-[var(--color-ink)] mb-3">The Travel Club</h1>
+            <p className="text-base font-normal text-black/70 mb-8 leading-relaxed">
+              Il tuo spazio personale su Travelliniwithus.
+            </p>
+
+            <div className="space-y-3 mb-10 text-left">
+              {[
+                {
+                  label: 'Salva gli articoli',
+                  text: 'Cuori roaming — tieni da parte gli itinerari che vuoi vivere.',
+                },
+                {
+                  label: 'I tuoi acquisti',
+                  text: 'Accedi e scarica subito le guide premium che hai comprato.',
+                },
+                {
+                  label: 'Sincronizzato ovunque',
+                  text: 'Tutto disponibile su ogni dispositivo, sempre.',
+                },
+              ].map((b) => (
+                <div
+                  key={b.label}
+                  className="flex items-start gap-4 rounded-2xl bg-[var(--color-sand)] px-5 py-4"
+                >
+                  <CheckCircle size={18} className="text-[var(--color-accent)] shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm font-bold text-[var(--color-ink)]">{b.label}</p>
+                    <p className="text-xs font-light text-[var(--color-ink)]/50 mt-0.5">{b.text}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <Button
+              onClick={signIn}
+              className="w-full bg-[var(--color-ink)] text-white hover:bg-[var(--color-ink)]/85 py-4 rounded-full shadow-lg transition-all hover:-translate-y-1"
+            >
+              <LogIn size={20} className="mr-3" />
+              Accedi con Google
+            </Button>
+            <p className="mt-6 text-xs text-black/40 font-light">
+              Accesso rapido, nessun form noioso da compilare.
+            </p>
+          </motion.div>
+        </div>
+      </PageLayout>
     );
   }
 

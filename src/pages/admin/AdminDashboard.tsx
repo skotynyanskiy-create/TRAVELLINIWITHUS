@@ -54,6 +54,7 @@ import Users from './Users';
 import CouponManager from '../../components/CouponManager';
 import AuditLog from '../../components/AuditLog';
 import LocalLeadsPanel from '../../components/admin/LocalLeadsPanel';
+import AdminMetricsOverview from '../../components/admin/AdminMetricsOverview';
 import { siteContentDefinitions } from '../../config/siteContent';
 
 // Mock data for analytics
@@ -426,6 +427,8 @@ export default function AdminDashboard() {
             <BarChart3 size={18} /> Statistiche B2B
           </button>
         </div>
+
+        {activeTab === 'overview' && !loading && <AdminMetricsOverview />}
 
         {activeTab === 'overview' && !loading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">

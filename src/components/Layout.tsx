@@ -4,6 +4,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import ConsentBanner from './ConsentBanner';
 import ExitIntentPopup from './ExitIntentPopup';
+import AiAssistant from './AiAssistant';
 import AnalyticsScripts from './AnalyticsScripts';
 import JsonLd from './JsonLd';
 import ScrollProgressBar from './ScrollProgressBar';
@@ -77,6 +78,7 @@ export default function Layout() {
         <Footer />
         <ConsentBanner />
         <ExitIntentPopup />
+        <AiAssistant />
       </div>
     </SmoothScrollProvider>
   );
