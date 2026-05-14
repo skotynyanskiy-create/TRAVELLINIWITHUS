@@ -28,7 +28,7 @@ export default function Footer() {
 
   return (
     <>
-      <footer className="border-t border-white/10 bg-[var(--color-footer)] text-zinc-400">
+      <footer className="border-t border-white/10 bg-[var(--color-footer)] text-white/55">
         <div className="pt-20 pb-16">
           <div className="mx-auto max-w-7xl px-6 md:px-12">
             <div className="mb-16 grid grid-cols-1 gap-16 md:grid-cols-4 lg:grid-cols-5">
@@ -42,12 +42,12 @@ export default function Footer() {
                 <span className="mb-8 block font-script text-lg text-white/55">
                   Posti particolari, esperienze vere.
                 </span>
-                <p className="mb-6 max-w-sm text-base font-light leading-relaxed text-zinc-400">
+                <p className="mb-6 max-w-sm text-base font-light leading-relaxed text-white/55">
                   {footer.description}
                 </p>
                 <a
                   href={CONTACTS.mailto}
-                  className="mb-8 block text-sm font-light text-zinc-400 transition-colors hover:text-white"
+                  className="mb-8 block text-sm font-light text-white/55 transition-colors hover:text-white"
                 >
                   {CONTACTS.email}
                 </a>
@@ -247,7 +247,7 @@ export default function Footer() {
             </div>
 
             <div className="flex flex-col items-center justify-between gap-8 border-t border-white/10 pt-12 md:flex-row">
-              <div className="text-center text-xs font-medium uppercase tracking-[0.2em] text-zinc-400 md:text-left">
+              <div className="text-center text-xs font-medium uppercase tracking-[0.2em] text-white/55 md:text-left">
                 &copy; {new Date().getFullYear()} Travelliniwithus.
               </div>
 
@@ -261,7 +261,7 @@ export default function Footer() {
                   <Link
                     key={link.label}
                     to={link.to}
-                    className="text-xs font-medium uppercase tracking-[0.2em] text-zinc-400 transition-colors hover:text-white"
+                    className="text-xs font-medium uppercase tracking-[0.2em] text-white/55 transition-colors hover:text-white"
                   >
                     {link.label}
                   </Link>

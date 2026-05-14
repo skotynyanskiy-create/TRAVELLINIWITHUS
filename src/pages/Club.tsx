@@ -257,7 +257,7 @@ export default function Club() {
                       {orders.map((order) => (
                         <div
                           key={order.id}
-                          className="flex flex-col md:flex-row md:items-center gap-6 p-6 rounded-[var(--radius-lg)] border border-black/5 bg-zinc-50/50 hover:bg-zinc-50 transition-colors"
+                          className="flex flex-col md:flex-row md:items-center gap-6 p-6 rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-muted-bg)]/50 hover:bg-[var(--color-muted-bg)] transition-colors"
                         >
                           <div className="w-16 h-16 rounded-[1rem] bg-[var(--color-accent)]/10 text-[var(--color-accent)] flex items-center justify-center shrink-0">
                             <ShoppingBag size={24} />
@@ -268,7 +268,7 @@ export default function Club() {
                                 Ordine #{order.id.slice(-6).toUpperCase()}
                               </span>
                               <span
-                                className={`px-2 py-0.5 rounded-full text-[9px] uppercase tracking-widest font-bold ${order.status === 'completed' ? 'bg-[var(--color-accent-soft)] text-[var(--color-accent-text)]' : 'bg-yellow-100 text-yellow-700'}`}
+                                className={`px-2 py-0.5 rounded-full text-[9px] uppercase tracking-widest font-bold ${order.status === 'completed' ? 'bg-[var(--color-accent-soft)] text-[var(--color-accent-text)]' : 'bg-[var(--color-warning-soft)] text-[var(--color-warning-text)]'}`}
                               >
                                 {order.status}
                               </span>

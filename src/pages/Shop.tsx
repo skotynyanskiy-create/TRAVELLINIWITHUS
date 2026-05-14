@@ -65,7 +65,9 @@ export default function ShopWrapper() {
   return (
     <ErrorBoundary
       fallback={
-        <div className="py-20 text-center text-red-500">Impossibile caricare i prodotti</div>
+        <div className="py-20 text-center text-[var(--color-error)]">
+          Impossibile caricare i prodotti
+        </div>
       }
     >
       <Shop />
@@ -185,19 +187,23 @@ function Shop() {
                     <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-accent)]/15">
                       <CheckCircle className="text-[var(--color-accent)]" size={32} />
                     </div>
-                    <h3 className="mb-2 text-2xl font-serif text-zinc-900">Pagamento completato</h3>
-                    <p className="mb-8 text-zinc-600">
+                    <h3 className="mb-2 text-2xl font-serif text-[var(--color-ink)]">
+                      Pagamento completato
+                    </h3>
+                    <p className="mb-8 text-[var(--color-ink-2)]">
                       Ordine ricevuto. Riceverai i dettagli e le istruzioni di accesso secondo il
                       flusso configurato.
                     </p>
                   </>
                 ) : (
                   <>
-                    <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
-                      <XCircle className="text-red-600" size={32} />
+                    <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-error-soft)]">
+                      <XCircle className="text-[var(--color-error)]" size={32} />
                     </div>
-                    <h3 className="mb-2 text-2xl font-serif text-zinc-900">Pagamento annullato</h3>
-                    <p className="mb-8 text-zinc-600">
+                    <h3 className="mb-2 text-2xl font-serif text-[var(--color-ink)]">
+                      Pagamento annullato
+                    </h3>
+                    <p className="mb-8 text-[var(--color-ink-2)]">
                       Il processo e stato interrotto. Nessun addebito e stato effettuato.
                     </p>
                   </>

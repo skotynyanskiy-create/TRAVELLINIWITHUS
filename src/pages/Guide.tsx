@@ -53,7 +53,11 @@ const guidePillars = [
 export default function GuideWrapper() {
   return (
     <ErrorBoundary
-      fallback={<div className="py-20 text-center text-red-500">Impossibile caricare le guide</div>}
+      fallback={
+        <div className="py-20 text-center text-[var(--color-error)]">
+          Impossibile caricare le guide
+        </div>
+      }
     >
       <Guide />
     </ErrorBoundary>

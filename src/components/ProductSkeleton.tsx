@@ -3,7 +3,7 @@ import Skeleton from './Skeleton';
 export default function ProductSkeleton() {
   return (
     <div className="bg-white rounded-[var(--radius-lg)] overflow-hidden shadow-sm flex flex-col h-full border border-black/5">
-      <div className="relative aspect-[4/5] overflow-hidden bg-zinc-100">
+      <div className="relative aspect-[4/5] overflow-hidden bg-[var(--color-muted-bg)]">
         <Skeleton className="w-full h-full rounded-none" />
         <div className="absolute top-6 left-6">
           <Skeleton className="w-24 h-6 rounded-full" />

@@ -291,7 +291,7 @@ export default function Newsletter({
             <p
               id={errorId}
               role="alert"
-              className={`text-sm ${isDark ? 'text-red-200' : 'text-red-600'}`}
+              className={`text-sm ${isDark ? 'text-[var(--color-error-soft)]' : 'text-[var(--color-error)]'}`}
             >
               {error}
             </p>

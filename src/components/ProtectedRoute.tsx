@@ -43,17 +43,17 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-[var(--color-sand)] p-8 text-center">
         <h1 className="mb-6 text-3xl font-serif">Accesso Riservato</h1>
-        <p className="mb-8 max-w-md text-zinc-600">
+        <p className="mb-8 max-w-md text-[var(--color-ink-2)]">
           Questa sezione e accessibile solo agli amministratori autorizzati. Effettua l accesso per
           continuare.
         </p>
         {authError && (
-          <div className="mb-6 max-w-md rounded-[var(--radius-md)] border border-red-100 bg-red-50 px-5 py-4 text-sm text-red-700">
+          <div className="mb-6 max-w-md rounded-[var(--radius-md)] border border-[var(--color-error)]/30 bg-[var(--color-error-soft)] px-5 py-4 text-sm text-[var(--color-error-text)]">
             <p>{authError}</p>
             <button
               type="button"
               onClick={clearAuthError}
-              className="mt-3 text-xs font-bold uppercase tracking-widest text-red-700 transition-colors hover:text-red-900"
+              className="mt-3 text-xs font-bold uppercase tracking-widest text-[var(--color-error-text)] transition-colors hover:text-[var(--color-error)]"
             >
               Chiudi
             </button>
@@ -81,7 +81,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-[var(--color-sand)] p-8 text-center">
         <h1 className="mb-6 text-3xl font-serif">Accesso Negato</h1>
-        <p className="mb-8 max-w-md text-zinc-600">
+        <p className="mb-8 max-w-md text-[var(--color-ink-2)]">
           Questo account non risulta autorizzato per l area amministrativa. Se deve avere accesso,
           assegna il ruolo <strong>admin</strong> al relativo profilo utente in Firestore.
         </p>

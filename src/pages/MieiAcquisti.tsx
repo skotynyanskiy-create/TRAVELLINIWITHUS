@@ -27,16 +27,16 @@ const statusConfig = {
   pending: {
     label: 'In attesa',
     icon: Clock,
-    color: 'text-amber-600',
-    bg: 'bg-amber-50',
-    border: 'border-amber-200',
+    color: 'text-[var(--color-warning-text)]',
+    bg: 'bg-[var(--color-warning-soft)]',
+    border: 'border-[var(--color-warning)]/30',
   },
   cancelled: {
     label: 'Annullato',
     icon: AlertCircle,
-    color: 'text-red-500',
-    bg: 'bg-red-50',
-    border: 'border-red-200',
+    color: 'text-[var(--color-error)]',
+    bg: 'bg-[var(--color-error-soft)]',
+    border: 'border-[var(--color-error)]/30',
   },
 };
 

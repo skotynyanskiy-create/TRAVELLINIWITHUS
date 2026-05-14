@@ -242,7 +242,7 @@ export default function Navbar() {
                   className={`relative flex items-center gap-1 whitespace-nowrap text-[11px] font-bold uppercase tracking-[0.15em] transition-all duration-300 xl:text-[12px] xl:tracking-[0.2em] hover:text-[var(--color-accent)] after:absolute after:-bottom-1 after:left-0 after:h-[1.5px] after:w-full after:bg-[var(--color-accent)] after:origin-left after:transition-transform after:duration-300 ${
                     isItemActive(item)
                       ? 'text-[var(--color-accent)] after:scale-x-100'
-                      : 'text-zinc-600 after:scale-x-0 hover:after:scale-x-100'
+                      : 'text-[var(--color-ink-2)] after:scale-x-0 hover:after:scale-x-100'
                   }`}
                 >
                   {item.name}
@@ -317,7 +317,7 @@ export default function Navbar() {
             ))}
           </div>
 
-          <div className="hidden shrink-0 items-center space-x-4 text-zinc-600 lg:flex xl:space-x-6">
+          <div className="hidden shrink-0 items-center space-x-4 text-[var(--color-ink-2)] lg:flex xl:space-x-6">
             <Link
               to="/collaborazioni"
               className="inline-flex items-center gap-1 rounded-full border border-[var(--color-accent)]/30 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-colors hover:bg-[var(--color-accent-soft)]"
@@ -327,7 +327,7 @@ export default function Navbar() {
 
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="flex items-center gap-2 rounded-full border border-zinc-200 bg-zinc-50 px-3 py-2 text-[9px] font-bold uppercase tracking-[0.2em] transition-all hover:border-zinc-300 xl:px-4 whitespace-nowrap"
+              className="flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-muted-bg)] px-3 py-2 text-[9px] font-bold uppercase tracking-[0.2em] transition-all hover:border-[var(--color-muted-bg-2)] xl:px-4 whitespace-nowrap"
               aria-label={navigation.searchLabel}
             >
               <Search size={12} />
@@ -354,7 +354,7 @@ export default function Navbar() {
                   onClick={() => setIsUserMenuOpen((prev) => !prev)}
                   aria-label="Menu utente"
                   aria-expanded={isUserMenuOpen}
-                  className="h-7 w-7 overflow-hidden rounded-full border border-zinc-200 transition-colors hover:border-[var(--color-accent)]"
+                  className="h-7 w-7 overflow-hidden rounded-full border border-[var(--color-border)] transition-colors hover:border-[var(--color-accent)]"
                 >
                   {user.photoURL ? (
                     <img
@@ -364,7 +364,7 @@ export default function Navbar() {
                       referrerPolicy="no-referrer"
                     />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-zinc-100 text-[10px] font-bold">
+                    <div className="flex h-full w-full items-center justify-center bg-[var(--color-muted-bg)] text-[10px] font-bold">
                       {user.email?.charAt(0).toUpperCase() || 'U'}
                     </div>
                   )}
@@ -386,18 +386,20 @@ export default function Navbar() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 10 }}
-                    className="absolute right-0 z-50 mt-3 w-52 overflow-hidden rounded-xl border border-zinc-100 bg-white py-2 text-[var(--color-ink)] shadow-xl"
+                    className="absolute right-0 z-50 mt-3 w-52 overflow-hidden rounded-xl border border-[var(--color-border)] bg-white py-2 text-[var(--color-ink)] shadow-xl"
                   >
-                    <div className="mb-2 border-b border-zinc-100 px-4 py-2">
-                      <p className="truncate text-[10px] font-semibold text-zinc-900">
+                    <div className="mb-2 border-b border-[var(--color-border)] px-4 py-2">
+                      <p className="truncate text-[10px] font-semibold text-[var(--color-ink)]">
                         {user.displayName}
                       </p>
-                      <p className="truncate text-[9px] text-zinc-500">{user.email}</p>
+                      <p className="truncate text-[9px] text-[var(--color-muted-fg)]">
+                        {user.email}
+                      </p>
                     </div>
                     {isAdmin && (
                       <Link
                         to="/admin"
-                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-[10px] uppercase tracking-wider text-[var(--color-accent)] transition-colors hover:bg-zinc-50"
+                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-[10px] uppercase tracking-wider text-[var(--color-accent)] transition-colors hover:bg-[var(--color-muted-bg)]"
                       >
                         <ShieldCheck size={12} /> Admin
                       </Link>
@@ -407,7 +409,7 @@ export default function Navbar() {
                         signOut();
                         setIsUserMenuOpen(false);
                       }}
-                      className="flex w-full items-center gap-2 px-4 py-2 text-left text-[10px] uppercase tracking-wider text-red-600 transition-colors hover:bg-red-50"
+                      className="flex w-full items-center gap-2 px-4 py-2 text-left text-[10px] uppercase tracking-wider text-[var(--color-error)] transition-colors hover:bg-[var(--color-error-soft)]"
                     >
                       <LogOut size={12} /> Esci
                     </button>
@@ -454,7 +456,7 @@ export default function Navbar() {
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
               className="fixed inset-y-0 right-0 z-[120] flex w-full flex-col bg-white shadow-2xl md:w-96 lg:hidden"
             >
-              <div className="flex items-center justify-between border-b border-zinc-100 px-6 py-6">
+              <div className="flex items-center justify-between border-b border-[var(--color-border)] px-6 py-6">
                 <Link
                   to="/"
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -463,7 +465,7 @@ export default function Navbar() {
                   Travellini<span className="font-bold text-[var(--color-accent)]">with</span>us
                 </Link>
                 <button
-                  className="rounded-full p-3 text-[var(--color-ink)] transition-colors hover:bg-zinc-100 hover:text-[var(--color-accent)]"
+                  className="rounded-full p-3 text-[var(--color-ink)] transition-colors hover:bg-[var(--color-muted-bg)] hover:text-[var(--color-accent)]"
                   onClick={() => setIsMobileMenuOpen(false)}
                   aria-label="Chiudi Menu"
                 >
@@ -634,7 +636,7 @@ export default function Navbar() {
                     {user ? (
                       <button
                         onClick={signOut}
-                        className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-red-600"
+                        className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[var(--color-error)]"
                       >
                         <LogOut size={20} /> Esci
                       </button>

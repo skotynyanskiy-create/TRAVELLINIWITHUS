@@ -37,7 +37,7 @@ export default function ProductCard({
       viewport={{ once: true }}
       className="group flex flex-col h-full bg-white rounded-4xl p-4 border border-black/5 hover:border-accent/20 hover:shadow-2xl transition-all duration-700"
     >
-      <div className="relative mb-6 aspect-4/5 overflow-hidden rounded-4xl bg-zinc-100">
+      <div className="relative mb-6 aspect-4/5 overflow-hidden rounded-4xl bg-[var(--color-muted-bg)]">
         <Link
           to={productPath}
           aria-label={`Apri la scheda di ${name}`}
@@ -51,7 +51,7 @@ export default function ProductCard({
             referrerPolicy="no-referrer"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-zinc-400">
+          <div className="w-full h-full flex items-center justify-center text-[var(--color-muted-fg)]">
             <ShoppingCart size={48} className="opacity-20" />
           </div>
         )}
@@ -110,14 +110,17 @@ export default function ProductCard({
               {name}
             </h3>
           </Link>
-          <span className="text-sm font-bold text-accent whitespace-nowrap bg-sand px-3 py-1 rounded-lg">EUR {price.toFixed(2)}</span>
+          <span className="text-sm font-bold text-accent whitespace-nowrap bg-sand px-3 py-1 rounded-lg">
+            EUR {price.toFixed(2)}
+          </span>
         </div>
 
         <Link
           to={productPath}
-          className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] font-bold text-zinc-400 group-hover:text-ink transition-colors mt-auto"
+          className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] font-bold text-[var(--color-muted-fg)] group-hover:text-ink transition-colors mt-auto"
         >
-          Dettagli <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+          Dettagli{' '}
+          <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
         </Link>
       </div>
     </motion.div>

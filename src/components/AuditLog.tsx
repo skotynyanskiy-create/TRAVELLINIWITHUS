@@ -43,7 +43,7 @@ export default function AuditLog() {
         </h3>
         <button
           onClick={fetchLogs}
-          className="text-sm text-zinc-500 hover:text-[var(--color-accent)] transition-colors"
+          className="text-sm text-[var(--color-muted-fg)] hover:text-[var(--color-accent)] transition-colors"
         >
           Aggiorna
         </button>
@@ -52,32 +52,34 @@ export default function AuditLog() {
       <div className="space-y-4">
         {loading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="animate-spin text-zinc-300" size={32} />
+            <Loader2 className="animate-spin text-[var(--color-muted-fg)]" size={32} />
           </div>
         ) : logs.length === 0 ? (
-          <p className="text-zinc-500 text-center py-12">Nessuna attività registrata.</p>
+          <p className="text-[var(--color-muted-fg)] text-center py-12">
+            Nessuna attività registrata.
+          </p>
         ) : (
           logs.map((log) => (
             <div
               key={log.id}
-              className="bg-zinc-50 p-5 rounded-[var(--radius-md)] border border-zinc-100 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm hover:bg-white transition-all"
+              className="bg-[var(--color-muted-bg)] p-5 rounded-[var(--radius-md)] border border-[var(--color-border)] flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm hover:bg-white transition-all"
             >
               <div className="flex items-start gap-4">
-                <div className="p-3 bg-white text-zinc-400 rounded-xl border border-zinc-100">
+                <div className="p-3 bg-white text-[var(--color-muted-fg)] rounded-xl border border-[var(--color-border)]">
                   <Info size={20} />
                 </div>
                 <div>
                   <p className="font-bold text-lg">{log.action}</p>
-                  <p className="text-sm text-zinc-600">
+                  <p className="text-sm text-[var(--color-ink-2)]">
                     {log.details || 'Nessun dettaglio aggiuntivo'}
                   </p>
                 </div>
               </div>
               <div className="flex flex-col md:items-end gap-1">
-                <div className="flex items-center gap-2 text-sm text-zinc-500">
+                <div className="flex items-center gap-2 text-sm text-[var(--color-muted-fg)]">
                   <User size={14} /> {log.userEmail}
                 </div>
-                <div className="flex items-center gap-2 text-xs text-zinc-400">
+                <div className="flex items-center gap-2 text-xs text-[var(--color-muted-fg)]">
                   <Clock size={14} />{' '}
                   {log.timestamp?.toDate ? log.timestamp.toDate().toLocaleString() : 'Recent'}
                 </div>

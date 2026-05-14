@@ -241,7 +241,7 @@ export default function MapboxWorldMap() {
                 to={`/articolo/${selectedArticle.slug || selectedArticle.id}`}
                 className="group relative block"
               >
-                <div className="relative aspect-video w-full overflow-hidden bg-zinc-100">
+                <div className="relative aspect-video w-full overflow-hidden bg-[var(--color-muted-bg)]">
                   {selectedArticle.image && (
                     <img
                       src={selectedArticle.image}

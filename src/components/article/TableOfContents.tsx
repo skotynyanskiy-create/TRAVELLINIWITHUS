@@ -72,14 +72,14 @@ export default function TableOfContents({
 
   // Desktop sidebar variant
   return (
-    <ul className="space-y-5 text-sm font-medium text-zinc-500 list-none pl-0 m-0">
+    <ul className="space-y-5 text-sm font-medium text-[var(--color-muted-fg)] list-none pl-0 m-0">
       {visibleItems.map((item) => (
         <li key={item.id} className="m-0">
           <a
             href={`#${item.id}`}
             className="flex items-center gap-4 hover:text-accent transition-all group"
           >
-            <span className="w-5 h-px bg-zinc-300 group-hover:bg-accent transition-all group-hover:w-8"></span>
+            <span className="w-5 h-px bg-[var(--color-muted-bg-2)] group-hover:bg-accent transition-all group-hover:w-8"></span>
             <span>{item.label}</span>
           </a>
         </li>

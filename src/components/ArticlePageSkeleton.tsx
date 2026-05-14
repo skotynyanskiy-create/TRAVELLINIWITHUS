@@ -4,7 +4,7 @@ export default function ArticlePageSkeleton() {
   return (
     <div aria-busy="true">
       {/* Hero skeleton */}
-      <div className="relative h-[70vh] md:h-[85vh] w-full bg-zinc-200 overflow-hidden">
+      <div className="relative h-[70vh] md:h-[85vh] w-full bg-[var(--color-muted-bg-2)] overflow-hidden">
         <Skeleton className="w-full h-full rounded-none" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
         <div className="absolute bottom-20 left-0 right-0 px-6 max-w-5xl mx-auto">

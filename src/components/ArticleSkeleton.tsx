@@ -2,7 +2,7 @@ import Skeleton from './Skeleton';
 
 export default function ArticleSkeleton() {
   return (
-    <div className="bg-white rounded-[var(--radius-md)] overflow-hidden border border-zinc-100 shadow-sm flex flex-col h-full">
+    <div className="bg-white rounded-[var(--radius-md)] overflow-hidden border border-[var(--color-border)] shadow-sm flex flex-col h-full">
       <div className="aspect-[16/10] w-full">
         <Skeleton className="w-full h-full rounded-none" />
       </div>

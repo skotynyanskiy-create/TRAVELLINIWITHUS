@@ -237,12 +237,12 @@ export default function MediaKit() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="relative h-fit overflow-hidden rounded-[var(--radius-lg)] border border-zinc-100 bg-white p-8 shadow-xl md:p-10"
+              className="relative h-fit overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-8 shadow-xl md:p-10"
             >
               <div className="absolute left-0 top-0 h-2 w-full bg-[var(--color-accent)]" />
               <div className="mb-8">
                 <h2 className="mb-2 text-2xl font-serif">Richiedi il media kit</h2>
-                <p className="text-sm leading-relaxed text-zinc-500">
+                <p className="text-sm leading-relaxed text-[var(--color-muted-fg)]">
                   Ti chiediamo poche informazioni, ma utili. Servono a capire se il progetto e
                   allineato e a risponderti con materiale davvero rilevante.
                 </p>
@@ -250,7 +250,10 @@ export default function MediaKit() {
 
               <form onSubmit={handleSubmit} className="space-y-6" noValidate>
                 <div>
-                  <label htmlFor="company" className="mb-2 block text-sm font-medium text-zinc-700">
+                  <label
+                    htmlFor="company"
+                    className="mb-2 block text-sm font-medium text-[var(--color-ink-2)]"
+                  >
                     Nome azienda / agenzia
                   </label>
                   <input
@@ -259,18 +262,21 @@ export default function MediaKit() {
                     required
                     value={company}
                     onChange={(e) => setCompany(e.target.value)}
-                    className="w-full rounded-xl border border-zinc-200 px-4 py-3 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-[var(--color-accent)]"
+                    className="w-full rounded-xl border border-[var(--color-border)] px-4 py-3 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-[var(--color-accent)]"
                     placeholder="Es. boutique hotel, agenzia travel, destination office"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="website" className="mb-2 block text-sm font-medium text-zinc-700">
+                  <label
+                    htmlFor="website"
+                    className="mb-2 block text-sm font-medium text-[var(--color-ink-2)]"
+                  >
                     Sito o profilo brand
                   </label>
                   <div className="relative">
                     <Globe
-                      className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"
+                      className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-muted-fg)]"
                       size={18}
                     />
                     <input
@@ -278,14 +284,17 @@ export default function MediaKit() {
                       id="website"
                       value={website}
                       onChange={(e) => setWebsite(e.target.value)}
-                      className="w-full rounded-xl border border-zinc-200 py-3 pl-11 pr-4 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-[var(--color-accent)]"
+                      className="w-full rounded-xl border border-[var(--color-border)] py-3 pl-11 pr-4 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-[var(--color-accent)]"
                       placeholder="https://..."
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="mb-2 block text-sm font-medium text-zinc-700">
+                  <label
+                    htmlFor="email"
+                    className="mb-2 block text-sm font-medium text-[var(--color-ink-2)]"
+                  >
                     Email lavorativa
                   </label>
                   <input
@@ -294,7 +303,7 @@ export default function MediaKit() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full rounded-xl border border-zinc-200 px-4 py-3 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-[var(--color-accent)]"
+                    className="w-full rounded-xl border border-[var(--color-border)] px-4 py-3 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-[var(--color-accent)]"
                     placeholder="nome@azienda.com"
                   />
                 </div>
@@ -302,20 +311,20 @@ export default function MediaKit() {
                 <div>
                   <label
                     htmlFor="project-focus"
-                    className="mb-2 block text-sm font-medium text-zinc-700"
+                    className="mb-2 block text-sm font-medium text-[var(--color-ink-2)]"
                   >
                     Focus della richiesta
                   </label>
                   <div className="relative">
                     <Target
-                      className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"
+                      className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-muted-fg)]"
                       size={18}
                     />
                     <select
                       id="project-focus"
                       value={projectFocus}
                       onChange={(e) => setProjectFocus(e.target.value)}
-                      className="w-full appearance-none rounded-xl border border-zinc-200 bg-white py-3 pl-11 pr-4 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-[var(--color-accent)]"
+                      className="w-full appearance-none rounded-xl border border-[var(--color-border)] bg-white py-3 pl-11 pr-4 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-[var(--color-accent)]"
                     >
                       <option value="">Seleziona il tipo di progetto</option>
                       {projectFocusOptions.map((option) => (
@@ -328,7 +337,10 @@ export default function MediaKit() {
                 </div>
 
                 <div>
-                  <label htmlFor="brief" className="mb-2 block text-sm font-medium text-zinc-700">
+                  <label
+                    htmlFor="brief"
+                    className="mb-2 block text-sm font-medium text-[var(--color-ink-2)]"
+                  >
                     Contesto breve ma utile
                   </label>
                   <textarea
@@ -336,7 +348,7 @@ export default function MediaKit() {
                     rows={5}
                     value={brief}
                     onChange={(e) => setBrief(e.target.value)}
-                    className="w-full rounded-xl border border-zinc-200 px-4 py-3 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-[var(--color-accent)]"
+                    className="w-full rounded-xl border border-[var(--color-border)] px-4 py-3 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-[var(--color-accent)]"
                     placeholder="Obiettivo, periodo, tipo di attivazione o perché pensi che ci sia un fit reale."
                   />
                 </div>
@@ -357,17 +369,20 @@ export default function MediaKit() {
                   )}
                 </button>
 
-                {submitError && <p className="text-sm text-red-600">{submitError}</p>}
+                {submitError && <p className="text-sm text-[var(--color-error)]">{submitError}</p>}
 
                 <p className="text-center text-xs font-medium text-[var(--color-accent)]">
                   Se il contatto è coerente, ricevi il link al media kit e un riscontro entro 48 ore
                   lavorative.
                 </p>
 
-                <p className="text-center text-xs leading-relaxed text-zinc-400">
+                <p className="text-center text-xs leading-relaxed text-[var(--color-muted-fg)]">
                   Inviando la richiesta accetti di essere ricontattato in merito a possibili
                   collaborazioni e al trattamento dei dati secondo la nostra{' '}
-                  <Link to="/privacy" className="underline underline-offset-2 hover:text-zinc-600">
+                  <Link
+                    to="/privacy"
+                    className="underline underline-offset-2 hover:text-[var(--color-ink-2)]"
+                  >
                     privacy policy
                   </Link>
                   .

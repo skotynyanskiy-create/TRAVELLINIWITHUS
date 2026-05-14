@@ -5,12 +5,15 @@ function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
   const message = error instanceof Error ? error.message : 'Errore imprevisto';
 
   return (
-    <div role="alert" className="p-6 bg-red-50 border border-red-200 rounded-xl text-red-800">
+    <div
+      role="alert"
+      className="p-6 bg-[var(--color-error-soft)] border border-[var(--color-error)]/30 rounded-xl text-[var(--color-error-text)]"
+    >
       <h2 className="text-lg font-semibold mb-2">Qualcosa e andato storto</h2>
       <p className="text-sm mb-4">{message}</p>
       <button
         onClick={resetErrorBoundary}
-        className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700 transition-colors"
+        className="px-4 py-2 bg-[var(--color-error)] text-white rounded-lg text-sm hover:bg-[var(--color-error-text)] transition-colors"
       >
         Riprova
       </button>

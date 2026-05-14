@@ -40,7 +40,7 @@ export default function AuthorBio() {
               href="https://www.tiktok.com/@travelliniwithus"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-black text-white text-xs font-bold uppercase tracking-widest rounded-full hover:bg-zinc-800 transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-black text-white text-xs font-bold uppercase tracking-widest rounded-full hover:bg-[var(--color-ink-2)] transition-colors"
             >
               <svg
                 width={14}

@@ -25,8 +25,11 @@ export default function ArticleSidebar({
 }: ArticleSidebarProps) {
   return (
     <div className="lg:w-1/3 hidden lg:block">
-      <div className="sticky top-32 p-8 border border-zinc-200 bg-zinc-50/50 backdrop-blur-sm rounded-[var(--radius-lg)] shadow-sm mb-8">
-        <h4 id="indice" className="font-serif text-2xl mb-8 border-b border-zinc-200 pb-4">
+      <div className="sticky top-32 p-8 border border-[var(--color-border)] bg-[var(--color-muted-bg)]/50 backdrop-blur-sm rounded-[var(--radius-lg)] shadow-sm mb-8">
+        <h4
+          id="indice"
+          className="font-serif text-2xl mb-8 border-b border-[var(--color-border)] pb-4"
+        >
           Indice
         </h4>
         <TableOfContents items={tocItems} variant="desktop" />

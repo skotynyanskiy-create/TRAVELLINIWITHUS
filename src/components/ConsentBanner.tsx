@@ -67,7 +67,7 @@ export default function ConsentBanner() {
             <h2 className="hidden text-base font-serif font-semibold text-[var(--color-ink)] sm:block">
               Cookie e privacy
             </h2>
-            <p className="text-sm leading-relaxed text-zinc-600 sm:mt-2">
+            <p className="text-sm leading-relaxed text-[var(--color-ink-2)] sm:mt-2">
               <span className="sm:hidden">
                 Usiamo cookie per far funzionare il sito e, col tuo ok, per capire come viene
                 usato.{' '}
@@ -105,7 +105,7 @@ export default function ConsentBanner() {
             <button
               type="button"
               onClick={() => setMode('customize')}
-              className="text-xs font-semibold uppercase tracking-widest text-zinc-500 transition-colors hover:text-[var(--color-ink)]"
+              className="text-xs font-semibold uppercase tracking-widest text-[var(--color-muted-fg)] transition-colors hover:text-[var(--color-ink)]"
             >
               Personalizza
             </button>
@@ -185,7 +185,7 @@ function ConsentRow({
       />
       <label htmlFor={inputId} className="cursor-pointer">
         <span className="block text-sm font-semibold text-[var(--color-ink)]">{title}</span>
-        <span className="block text-xs text-zinc-600">{description}</span>
+        <span className="block text-xs text-[var(--color-ink-2)]">{description}</span>
       </label>
     </div>
   );
