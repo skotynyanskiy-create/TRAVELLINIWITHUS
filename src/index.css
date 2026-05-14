@@ -14,12 +14,31 @@
   --color-border: #e7e5e4; /* Divider sistematico */
   --color-ink: #0a0a0a; /* Testo, bottoni primary — nero puro */
   --color-ink-2: #44403c; /* Testo secondario */
+  --color-ink-deep: #111111; /* Dark surfaces (Mappa, hero scuri, social CTA) */
   --color-muted: #78716c; /* Testo terziario / placeholder */
+  --color-muted-bg: #f5f5f4; /* Background neutro (rimpiazza bg-zinc-50/100) */
+  --color-muted-bg-2: #e7e5e4; /* Background neutro tier 2 (rimpiazza bg-zinc-200) */
+  --color-muted-fg: #78716c; /* Foreground muted (rimpiazza text-zinc-500) */
+  --color-muted-fg-2: #57534e; /* Foreground muted forte (rimpiazza text-zinc-600/700) */
   --color-accent: #ea580c; /* Accento — terracotta moderna */
   --color-accent-hover: #c2410c; /* Accento hover — terracotta scura */
   --color-accent-text: #9a3412; /* Accento testo readable (WCAG AA su bianco) */
   --color-accent-soft: #fff7ed; /* Sezioni soft — orange-50 */
   --color-footer: #0a0a0a; /* Footer — allineato a ink */
+
+  /* Semantic state tokens (error/success/warning/info) */
+  --color-error: #dc2626; /* Errori form, alerts critici */
+  --color-error-soft: #fee2e2; /* Background errore tenue */
+  --color-error-text: #991b1b; /* Errore testo readable (WCAG AA su bianco) */
+  --color-success: #16a34a; /* Successi, conferme */
+  --color-success-soft: #dcfce7; /* Background successo tenue */
+  --color-success-text: #15803d; /* Successo testo readable */
+  --color-warning: #ca8a04; /* Warning, alerts non critici */
+  --color-warning-soft: #fef9c3; /* Background warning tenue */
+  --color-warning-text: #854d0e; /* Warning testo readable */
+  --color-info: #0284c7; /* Info, suggerimenti */
+  --color-info-soft: #e0f2fe; /* Background info tenue */
+  --color-info-text: #075985; /* Info testo readable */
 
   /* Social Brand Colors */
   --color-social-instagram-start: #f09433;
