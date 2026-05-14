@@ -1,23 +1,21 @@
 import { Instagram, MapPin, TrendingUp, Users } from 'lucide-react';
-import AnimatedCounter from '../AnimatedCounter';
 
 /**
- * Strip social proof post-hero. Si attiva on intersection (AnimatedCounter
- * usa IntersectionObserver), niente immagini -> non compete con LCP del hero.
+ * Strip social proof post-hero. Valori statici allineati a BRAND_STATS
+ * (CoupleIntro counters). Niente immagini -> nessuna competizione LCP.
  */
 
 interface TrustItem {
   icon: React.ComponentType<{ size?: number; className?: string }>;
-  value: number;
-  suffix: string;
+  value: string;
   label: string;
 }
 
 const TRUST_ITEMS: TrustItem[] = [
-  { icon: Instagram, value: 167, suffix: 'K+', label: 'Follower Instagram' },
-  { icon: TrendingUp, value: 500, suffix: 'K+', label: 'Reach mensile' },
-  { icon: Users, value: 90, suffix: 'K+', label: 'Follower TikTok' },
-  { icon: MapPin, value: 150, suffix: '+', label: 'Destinazioni esplorate' },
+  { icon: Instagram, value: '167K+', label: 'Follower Instagram' },
+  { icon: TrendingUp, value: '500K+', label: 'Reach mensile' },
+  { icon: Users, value: '90K+', label: 'Follower TikTok' },
+  { icon: MapPin, value: '150+', label: 'Destinazioni esplorate' },
 ];
 
 export default function HomeTrustStrip() {
@@ -40,7 +38,7 @@ export default function HomeTrustStrip() {
               <Icon size={18} className="shrink-0 text-[var(--color-accent)]" />
               <div className="flex flex-col leading-tight">
                 <span className="font-serif text-2xl text-[var(--color-ink)] md:text-3xl">
-                  <AnimatedCounter value={item.value} suffix={item.suffix} duration={1400} />
+                  {item.value}
                 </span>
                 <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-muted)]">
                   {item.label}

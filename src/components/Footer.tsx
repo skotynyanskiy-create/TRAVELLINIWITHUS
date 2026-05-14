@@ -4,7 +4,8 @@ import { useAuth } from '../context/AuthContext';
 import { CONTACTS } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
-import InstagramGrid from './InstagramGrid';
+// InstagramGrid e ora renderizzata da Home (sezione #9). Rimossa qui per evitare
+// duplicato DOM. Per altre pagine puo essere reinserita on-demand.
 
 export default function Footer() {
   const { isAdmin } = useAuth();
@@ -27,7 +28,6 @@ export default function Footer() {
 
   return (
     <>
-      <InstagramGrid />
       <footer className="border-t border-white/10 bg-[var(--color-footer)] text-zinc-400">
         <div className="pt-20 pb-16">
           <div className="mx-auto max-w-7xl px-6 md:px-12">
