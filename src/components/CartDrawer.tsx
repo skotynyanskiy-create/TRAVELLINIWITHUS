@@ -137,16 +137,16 @@ export default function CartDrawer() {
             role="dialog"
             aria-modal="true"
             aria-label="Carrello"
-            className="fixed top-0 right-0 bottom-0 z-120 flex w-full max-w-md flex-col border-l border-zinc-200 bg-white shadow-2xl"
+            className="fixed top-0 right-0 bottom-0 z-120 flex w-full max-w-md flex-col border-l border-[var(--color-border)] bg-white shadow-2xl"
           >
-            <div className="flex items-center justify-between border-b border-zinc-100 p-6">
+            <div className="flex items-center justify-between border-b border-[var(--color-border)] p-6">
               <h2 className="flex items-center gap-2 text-xl font-serif">
                 <ShoppingBag size={20} className="text-accent" />
                 Il tuo carrello
               </h2>
               <button
                 onClick={() => setIsCartOpen(false)}
-                className="rounded-full p-2 transition-colors hover:bg-zinc-100"
+                className="rounded-full p-2 transition-colors hover:bg-[var(--color-muted-bg)]"
                 aria-label="Chiudi carrello"
               >
                 <X size={20} />
@@ -158,7 +158,7 @@ export default function CartDrawer() {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="flex h-full flex-col items-center justify-center space-y-4 text-zinc-500"
+                  className="flex h-full flex-col items-center justify-center space-y-4 text-[var(--color-muted-fg)]"
                 >
                   <ShoppingBag size={48} className="opacity-20" />
                   <p>Il tuo carrello e vuoto</p>
@@ -182,7 +182,7 @@ export default function CartDrawer() {
                         transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                         className="flex gap-4"
                       >
-                        <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-zinc-100">
+                        <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-[var(--color-muted-bg)]">
                           {item.imageUrl ? (
                             <img
                               src={item.imageUrl}
@@ -190,24 +190,24 @@ export default function CartDrawer() {
                               className="h-full w-full object-cover"
                             />
                           ) : (
-                            <div className="flex h-full w-full items-center justify-center text-zinc-400">
+                            <div className="flex h-full w-full items-center justify-center text-[var(--color-muted-fg)]">
                               <ShoppingBag size={24} />
                             </div>
                           )}
                         </div>
                         <div className="flex flex-1 flex-col justify-between">
                           <div>
-                            <h3 className="line-clamp-1 font-semibold text-zinc-900">
+                            <h3 className="line-clamp-1 font-semibold text-[var(--color-ink)]">
                               {item.name}
                             </h3>
                             <p className="font-medium text-accent">EUR {item.price.toFixed(2)}</p>
                           </div>
                           <div className="mt-2 flex items-center justify-between">
                             {!item.isDigital ? (
-                              <div className="flex items-center overflow-hidden rounded-md border border-zinc-200">
+                              <div className="flex items-center overflow-hidden rounded-md border border-[var(--color-border)]">
                                 <button
                                   onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                  className="px-2 py-1 transition-colors hover:bg-zinc-100 active:bg-zinc-200"
+                                  className="px-2 py-1 transition-colors hover:bg-[var(--color-muted-bg)] active:bg-[var(--color-muted-bg-2)]"
                                   aria-label={`Riduci quantita di ${item.name}`}
                                 >
                                   -
@@ -222,7 +222,7 @@ export default function CartDrawer() {
                                 </motion.span>
                                 <button
                                   onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                  className="px-2 py-1 transition-colors hover:bg-zinc-100 active:bg-zinc-200"
+                                  className="px-2 py-1 transition-colors hover:bg-[var(--color-muted-bg)] active:bg-[var(--color-muted-bg-2)]"
                                   aria-label={`Aumenta quantita di ${item.name}`}
                                 >
                                   +
@@ -235,7 +235,7 @@ export default function CartDrawer() {
                             )}
                             <button
                               onClick={() => removeFromCart(item.id)}
-                              className="p-1 text-zinc-400 transition-colors hover:text-red-500"
+                              className="p-1 text-[var(--color-muted-fg)] transition-colors hover:text-[var(--color-error)]"
                               aria-label={`Rimuovi ${item.name} dal carrello`}
                             >
                               <Trash2 size={16} />
@@ -253,7 +253,7 @@ export default function CartDrawer() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="border-t border-zinc-100 bg-zinc-50 p-6 space-y-4"
+                className="border-t border-[var(--color-border)] bg-[var(--color-muted-bg)] p-6 space-y-4"
               >
                 {/* Coupon input */}
                 {!appliedCoupon ? (
@@ -262,7 +262,7 @@ export default function CartDrawer() {
                       <div className="relative flex-1">
                         <Tag
                           size={14}
-                          className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400"
+                          className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-muted-fg)]"
                         />
                         <input
                           type="text"
@@ -273,18 +273,22 @@ export default function CartDrawer() {
                           }}
                           onKeyDown={(e) => e.key === 'Enter' && handleApplyCoupon()}
                           placeholder="Codice sconto"
-                          className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-8 pr-3 text-sm outline-none focus:border-accent focus:ring-1 focus:ring-accent"
+                          className="w-full rounded-lg border border-[var(--color-border)] bg-white py-2 pl-8 pr-3 text-sm outline-none focus:border-accent focus:ring-1 focus:ring-accent"
                         />
                       </div>
                       <button
                         onClick={handleApplyCoupon}
                         disabled={couponLoading || !couponInput.trim()}
-                        className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm font-semibold text-zinc-700 transition-colors hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-50"
+                        className="rounded-lg border border-[var(--color-border)] bg-white px-3 py-2 text-sm font-semibold text-[var(--color-ink-2)] transition-colors hover:border-accent hover:text-accent disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         {couponLoading ? <Loader2 size={14} className="animate-spin" /> : 'Applica'}
                       </button>
                     </div>
-                    {couponError && <p className="text-xs text-red-500">{couponError}</p>}
+                    {couponError && (
+                      <p role="alert" className="text-xs text-[var(--color-error)]">
+                        {couponError}
+                      </p>
+                    )}
                   </div>
                 ) : (
                   <div className="flex items-center justify-between rounded-lg border border-[var(--color-accent)]/20 bg-[var(--color-accent-soft)] px-3 py-2">
@@ -312,8 +316,8 @@ export default function CartDrawer() {
                   {appliedCoupon && (
                     <>
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-zinc-500">Subtotale</span>
-                        <span className="text-zinc-700">EUR {total.toFixed(2)}</span>
+                        <span className="text-[var(--color-muted-fg)]">Subtotale</span>
+                        <span className="text-[var(--color-ink-2)]">EUR {total.toFixed(2)}</span>
                       </div>
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-[var(--color-accent)]">
@@ -326,10 +330,11 @@ export default function CartDrawer() {
                     </>
                   )}
                   <div className="flex items-center justify-between">
-                    <span className="text-zinc-600">Totale</span>
+                    <span className="text-[var(--color-ink-2)]">Totale</span>
                     <motion.span
                       key={finalTotal}
-                      initial={{ scale: 1.1, color: '#f59e0b' }}
+                      // Hex literal: motion.color animations cannot read CSS vars; tracks --color-warning
+                      initial={{ scale: 1.1, color: '#ca8a04' }}
                       animate={{ scale: 1, color: 'inherit' }}
                       className="text-2xl font-serif font-semibold"
                     >
@@ -378,8 +383,10 @@ export default function CartDrawer() {
                   <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-accent)]/15">
                     <CheckCircle className="text-[var(--color-accent)]" size={32} />
                   </div>
-                  <h3 className="mb-2 text-2xl font-serif text-zinc-900">Ordine completato</h3>
-                  <p className="mb-8 text-zinc-600">
+                  <h3 className="mb-2 text-2xl font-serif text-[var(--color-ink)]">
+                    Ordine completato
+                  </h3>
+                  <p className="mb-8 text-[var(--color-ink-2)]">
                     Questa e una simulazione di acquisto. Grazie per aver provato lo shop di
                     Travelliniwithus.
                   </p>
