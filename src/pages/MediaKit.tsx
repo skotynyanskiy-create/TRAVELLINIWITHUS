@@ -18,7 +18,10 @@ import Breadcrumbs from '../components/Breadcrumbs';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import Section from '../components/Section';
+import StickyMobileCTA from '../components/StickyMobileCTA';
 import { BRAND_STATS, CONTACTS } from '../config/site';
+import { appendLeadFallback } from '../lib/leadFallback';
+import { trackEvent } from '../services/analytics';
 
 const MEDIA_KIT_PREVIEW = [
   {
@@ -96,6 +99,8 @@ export default function MediaKit() {
     const normalizedWebsite = website.trim();
     const normalizedBrief = brief.trim();
 
+    trackEvent('media_kit_request_attempt', { topic: projectFocus || 'unset' });
+
     if (!normalizedEmail || !normalizedCompany || !projectFocus || !normalizedBrief) {
       setSubmitError(
         'Inserisci azienda, email lavorativa, focus del progetto e un contesto breve ma utile.'
@@ -131,12 +136,29 @@ export default function MediaKit() {
         throw new Error(payload?.error || 'Invio non riuscito');
       }
 
+      trackEvent('media_kit_request_success', { topic: projectFocus });
       setIsSuccess(true);
     } catch (error) {
       console.error('Error saving media kit lead:', error);
-      setSubmitError(
-        `Non siamo riusciti a registrare la richiesta. Puoi scriverci direttamente a ${CONTACTS.email}.`
-      );
+      const saved = appendLeadFallback('twu_media_kit_leads', {
+        email: normalizedEmail,
+        company: normalizedCompany,
+        website: normalizedWebsite,
+        topic: projectFocus,
+        message: normalizedBrief,
+        date: new Date().toISOString(),
+      });
+      if (saved) {
+        trackEvent('media_kit_request_success', {
+          topic: projectFocus,
+          fallback: 'localStorage',
+        });
+        setIsSuccess(true);
+      } else {
+        setSubmitError(
+          `Non siamo riusciti a registrare la richiesta. Puoi scriverci direttamente a ${CONTACTS.email}.`
+        );
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -248,7 +270,7 @@ export default function MediaKit() {
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+              <form id="media-kit-form" onSubmit={handleSubmit} className="space-y-6" noValidate>
                 <div>
                   <label
                     htmlFor="company"
@@ -497,6 +519,21 @@ export default function MediaKit() {
           </div>
         </div>
       </Section>
+
+      {!isSuccess && (
+        <StickyMobileCTA
+          label="Richiedi il media kit"
+          onClick={() => {
+            const form = document.getElementById('media-kit-form');
+            if (form) {
+              form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              const firstInput = form.querySelector<HTMLInputElement>('input, select, textarea');
+              firstInput?.focus({ preventScroll: true });
+            }
+          }}
+          trackingId="media_kit_form"
+        />
+      )}
     </PageLayout>
   );
 }
