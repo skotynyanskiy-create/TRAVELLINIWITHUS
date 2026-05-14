@@ -152,10 +152,11 @@ export default function HeroSection() {
 
       <div
         data-hero-overlay
-        className="absolute inset-0 z-[1] bg-[linear-gradient(180deg,rgba(17,17,17,0.08)_0%,rgba(17,17,17,0.24)_34%,rgba(17,17,17,0.64)_100%)]"
-        style={{ opacity: 0.18 }}
+        // Single responsive scrim: verticale su mobile (no second column da
+        // oscurare), orizzontale su md+ per proteggere la leggibilita
+        // del copy nella colonna sinistra senza scurire il reel a destra.
+        className="absolute inset-0 z-[1] bg-[linear-gradient(180deg,rgba(17,17,17,0.2)_0%,rgba(17,17,17,0.5)_40%,rgba(17,17,17,0.78)_100%)] md:bg-[linear-gradient(90deg,rgba(17,17,17,0.78)_0%,rgba(17,17,17,0.46)_48%,rgba(17,17,17,0.2)_100%)]"
       />
-      <div className="absolute inset-0 z-[1] bg-[linear-gradient(90deg,rgba(17,17,17,0.78)_0%,rgba(17,17,17,0.46)_48%,rgba(17,17,17,0.2)_100%)]" />
 
       <div
         data-hero-content
@@ -166,7 +167,7 @@ export default function HeroSection() {
             data-hero-eyebrow
             className="block text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent)] sm:text-xs"
           >
-            Rodrigo &amp; Betta / Travelliniwithus
+            Coppia italiana &mdash; 8 anni di viaggio vero
           </span>
 
           <h1
@@ -182,7 +183,10 @@ export default function HeroSection() {
             className="mt-6 max-w-2xl text-base leading-relaxed text-white/86 drop-shadow-[0_2px_12px_rgba(0,0,0,0.3)] md:text-xl"
           >
             Guide pratiche scritte da chi ha vissuto il viaggio. Atmosfera, dettagli utili e
-            consigli che aiutano a capire se un posto merita davvero.
+            consigli che aiutano a capire se un posto merita davvero.{' '}
+            <strong className="font-semibold text-white">
+              Scriviamo per chi viaggia in coppia e vuole posti veri, non liste.
+            </strong>
           </p>
 
           <div data-hero-pills className="mt-7 flex flex-wrap gap-2">

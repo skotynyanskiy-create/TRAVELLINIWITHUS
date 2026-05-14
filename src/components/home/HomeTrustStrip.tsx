@@ -12,9 +12,11 @@ interface TrustItem {
   label: string;
 }
 
+// Gerarchia mobile-first: il dato di pubblico mensile (reach) e il segnale
+// piu persuasivo per partner B2B; va nella prima colonna 375px.
 const TRUST_ITEMS: TrustItem[] = [
-  { icon: Instagram, value: BRAND_STATS.instagramFollowers, label: 'Follower Instagram' },
   { icon: Eye, value: BRAND_STATS.monthlyReach, label: 'Pubblico mensile' },
+  { icon: Instagram, value: BRAND_STATS.instagramFollowers, label: 'Follower Instagram' },
   { icon: Users, value: BRAND_STATS.tiktokFollowers, label: 'Follower TikTok' },
   { icon: MapPin, value: BRAND_STATS.destinationsExplored, label: 'Destinazioni esplorate' },
 ];

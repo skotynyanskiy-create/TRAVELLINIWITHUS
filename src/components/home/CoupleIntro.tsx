@@ -103,7 +103,7 @@ export default function CoupleIntro() {
                 Rodrigo &amp; Betta
               </div>
               <div className="text-[10px] uppercase tracking-widest text-black/50">
-                Il metodo Travelliniwithus
+                8 anni, 150 destinazioni, niente scrivania
               </div>
             </div>
           </div>
