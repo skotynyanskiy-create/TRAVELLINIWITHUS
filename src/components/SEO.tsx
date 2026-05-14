@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
-import { CONTACTS, SITE_URL } from '../config/site';
+import { CONTACTS, SITE_URL, THEME_COLOR } from '../config/site';
 
 interface SEOProps {
   title: string;
@@ -38,7 +38,7 @@ export default function SEO({
         name="robots"
         content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'}
       />
-      <meta name="theme-color" content="#f7f0e5" />
+      <meta name="theme-color" content={THEME_COLOR} />
       <meta name="author" content={DEFAULT_SITE_NAME} />
       <meta property="og:site_name" content={DEFAULT_SITE_NAME} />
       <meta property="og:type" content={type} />

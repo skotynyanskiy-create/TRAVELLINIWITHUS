@@ -31,7 +31,7 @@ export default function SocialFollowCTA() {
         rel="noopener noreferrer"
         className="group relative overflow-hidden rounded-[var(--radius-lg)] p-8 bg-black text-white flex items-center gap-6 hover:scale-[1.02] transition-transform duration-300"
       >
-        <div className="w-14 h-14 rounded-[var(--radius-md)] bg-[#1C1C1C] flex items-center justify-center shrink-0">
+        <div className="w-14 h-14 rounded-[var(--radius-md)] bg-[var(--color-ink-deep)] flex items-center justify-center shrink-0">
           <svg width={28} height={28} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.79 1.53V6.78a4.85 4.85 0 0 1-1.02-.09z" />
           </svg>

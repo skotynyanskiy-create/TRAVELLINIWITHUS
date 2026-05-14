@@ -326,7 +326,7 @@ export default function ChiSiamo() {
             {pageContent.audienceItems.map((item) => (
               <div
                 key={item}
-                className="rounded-[var(--radius-lg)] border border-white/8 bg-[#1C1C1C] p-8 text-left"
+                className="rounded-[var(--radius-lg)] border border-white/8 bg-[var(--color-ink-deep)] p-8 text-left"
               >
                 <p className="leading-relaxed text-white/80">{item}</p>
               </div>

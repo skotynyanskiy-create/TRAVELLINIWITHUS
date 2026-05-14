@@ -1,5 +1,9 @@
 export const SITE_URL = 'https://travelliniwithus.it';
 
+/** Browser theme-color (<meta name="theme-color">). Hex literal required by spec;
+ *  mantiene il sand caldo legacy per coerenza brand nella chrome del browser. */
+export const THEME_COLOR = '#f7f0e5';
+
 export const CONTACTS = {
   email: 'info@travelliniwithus.it',
   mailto: 'mailto:info@travelliniwithus.it',
