@@ -64,7 +64,9 @@ const shopPrinciples = [
 export default function ShopWrapper() {
   return (
     <ErrorBoundary
-      fallback={<div className="py-20 text-center text-red-500">Impossibile caricare i prodotti</div>}
+      fallback={
+        <div className="py-20 text-center text-red-500">Impossibile caricare i prodotti</div>
+      }
     >
       <Shop />
     </ErrorBoundary>
@@ -176,7 +178,7 @@ function Shop() {
                 role="dialog"
                 aria-modal="true"
                 aria-label="Stato del pagamento"
-                className="relative z-[160] w-full max-w-sm rounded-3xl bg-white p-8 text-center shadow-2xl"
+                className="relative z-[160] w-full max-w-sm rounded-[var(--radius-lg)] bg-white p-8 text-center shadow-2xl"
               >
                 {paymentStatus === 'success' ? (
                   <>
@@ -228,7 +230,7 @@ function Shop() {
               </p>
             </div>
 
-            <div className="rounded-[2rem] border border-black/5 bg-white p-7 shadow-sm">
+            <div className="rounded-[var(--radius-lg)] border border-black/5 bg-white p-7 shadow-sm">
               <div className="mb-5 flex items-center gap-3">
                 <Sparkles className="text-[var(--color-accent)]" size={22} />
                 <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-black/42">
@@ -244,7 +246,10 @@ function Shop() {
 
           <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-3">
             {shopPrinciples.map((item) => (
-              <div key={item.title} className="rounded-[2rem] border border-black/5 bg-white p-7 shadow-sm">
+              <div
+                key={item.title}
+                className="rounded-[var(--radius-lg)] border border-black/5 bg-white p-7 shadow-sm"
+              >
                 <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-sand)]">
                   {item.icon}
                 </div>
@@ -262,7 +267,7 @@ function Shop() {
             />
           )}
 
-          <div className="mt-12 flex flex-col gap-4 rounded-[2rem] border border-black/5 bg-white/75 p-4 shadow-sm backdrop-blur-md md:flex-row md:items-center md:justify-between md:p-6">
+          <div className="mt-12 flex flex-col gap-4 rounded-[var(--radius-lg)] border border-black/5 bg-white/75 p-4 shadow-sm backdrop-blur-md md:flex-row md:items-center md:justify-between md:p-6">
             <div className="flex min-w-0 items-center gap-3 overflow-x-auto pb-1 hide-scrollbar">
               <span className="shrink-0 text-[10px] font-bold uppercase tracking-[0.22em] text-black/35">
                 Filtra
@@ -327,7 +332,7 @@ function Shop() {
               })}
             </div>
           ) : (
-            <div className="mt-12 rounded-[2rem] border border-black/5 bg-white p-10 text-center shadow-sm">
+            <div className="mt-12 rounded-[var(--radius-lg)] border border-black/5 bg-white p-10 text-center shadow-sm">
               <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
                 Catalogo reale da inserire
               </p>
@@ -342,7 +347,7 @@ function Shop() {
             </div>
           )}
 
-          <div className="mt-20 overflow-hidden rounded-[3rem] bg-[var(--color-ink)] p-8 text-white md:p-14">
+          <div className="mt-20 overflow-hidden rounded-[var(--radius-xl)] bg-[var(--color-ink)] p-8 text-white md:p-14">
             <div className="grid gap-10 lg:grid-cols-[1fr_0.8fr] lg:items-center">
               <div>
                 <span className="mb-5 block text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">
@@ -357,8 +362,8 @@ function Shop() {
                   fretta.
                 </p>
               </div>
-              <div className="rounded-[2rem] border border-white/10 bg-white/5 p-7">
-                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-accent)]/15">
+              <div className="rounded-[var(--radius-lg)] border border-white/10 bg-white/5 p-7">
+                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-accent)]/15">
                   <Smartphone className="text-[var(--color-accent)]" size={24} />
                 </div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-white/45">

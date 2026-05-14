@@ -108,7 +108,7 @@ export default function InstagramGrid() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.06, duration: 0.5 }}
-              className={`group relative overflow-hidden rounded-2xl bg-[var(--color-ink)] ${
+              className={`group relative overflow-hidden rounded-[var(--radius-md)] bg-[var(--color-ink)] ${
                 item.type === 'reel' ? 'aspect-[9/14]' : 'aspect-[3/4]'
               } ${idx === 0 ? 'lg:col-span-2 lg:row-span-2 lg:aspect-[9/12]' : ''}`}
             >

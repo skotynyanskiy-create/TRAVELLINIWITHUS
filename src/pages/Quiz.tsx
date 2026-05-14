@@ -188,7 +188,7 @@ export default function Quiz() {
                     key={option.id}
                     type="button"
                     onClick={() => handleSelect(currentStep.key, option.id)}
-                    className="group flex flex-col items-start gap-2 rounded-3xl border border-black/8 bg-white p-7 text-left transition-all hover:-translate-y-1 hover:border-[var(--color-accent)] hover:shadow-md"
+                    className="group flex flex-col items-start gap-2 rounded-[var(--radius-lg)] border border-black/8 bg-white p-7 text-left transition-all hover:-translate-y-1 hover:border-[var(--color-accent)] hover:shadow-md"
                   >
                     <span className="text-2xl font-serif text-[var(--color-ink)] group-hover:text-[var(--color-accent-text)]">
                       {option.label}
@@ -219,7 +219,7 @@ export default function Quiz() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6 }}
             >
-              <div className="grid gap-10 overflow-hidden rounded-[2.5rem] border border-black/5 bg-white shadow-xl md:grid-cols-[1.05fr_0.95fr]">
+              <div className="grid gap-10 overflow-hidden rounded-[var(--radius-lg)] border border-black/5 bg-white shadow-xl md:grid-cols-[1.05fr_0.95fr]">
                 <div className="relative min-h-[260px] md:min-h-full">
                   <OptimizedImage
                     src={result.itinerary.image}
@@ -295,7 +295,7 @@ export default function Quiz() {
       </Section>
 
       <Section className="my-12">
-        <div className="flex flex-wrap items-center justify-between gap-4 rounded-3xl border border-black/5 bg-[var(--color-sand)] p-7">
+        <div className="flex flex-wrap items-center justify-between gap-4 rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-sand)] p-7">
           <div className="flex items-center gap-3">
             <Compass className="text-[var(--color-accent)]" size={22} />
             <p className="text-sm leading-snug text-black/65">Vuoi vedere tutti gli itinerari?</p>

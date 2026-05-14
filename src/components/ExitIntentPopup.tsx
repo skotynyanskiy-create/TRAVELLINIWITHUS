@@ -82,7 +82,7 @@ export default function ExitIntentPopup() {
             role="dialog"
             aria-modal="true"
             aria-label="Iscriviti alla newsletter Travelliniwithus"
-            className="fixed inset-x-4 top-1/2 z-[201] mx-auto max-w-lg -translate-y-1/2 overflow-hidden rounded-[2.5rem] bg-white shadow-2xl sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2"
+            className="fixed inset-x-4 top-1/2 z-[201] mx-auto max-w-lg -translate-y-1/2 overflow-hidden rounded-[var(--radius-lg)] bg-white shadow-2xl sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2"
           >
             {/* Close button */}
             <button
@@ -108,18 +108,14 @@ export default function ExitIntentPopup() {
                 <span className="italic text-[var(--color-accent)]">prossimi contenuti utili</span>?
               </h2>
               <p className="mt-3 text-sm font-normal leading-relaxed text-white/85">
-                Posti veri, budget travel, food experience e aggiornamenti sul progetto direttamente in inbox.
+                Posti veri, budget travel, food experience e aggiornamenti sul progetto direttamente
+                in inbox.
               </p>
             </div>
 
             {/* Form area */}
             <div className="px-8 pb-8 pt-6">
-              <Newsletter
-                variant="white"
-                source="exit_intent_popup"
-                compact
-                onSuccess={close}
-              />
+              <Newsletter variant="white" source="exit_intent_popup" compact onSuccess={close} />
               <button
                 onClick={close}
                 className="mt-4 w-full text-center text-xs text-black/30 transition-colors hover:text-black/60"

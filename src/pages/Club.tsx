@@ -59,7 +59,7 @@ export default function Club() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="max-w-lg w-full bg-white rounded-[3rem] p-10 md:p-16 text-center shadow-xl border border-[var(--color-accent)]/10"
+            className="max-w-lg w-full bg-white rounded-[var(--radius-xl)] p-10 md:p-16 text-center shadow-xl border border-[var(--color-accent)]/10"
           >
             <div className="mx-auto w-16 h-16 rounded-full bg-[var(--color-sand)] flex items-center justify-center mb-8 shadow-sm">
               <MapPin size={24} className="text-[var(--color-accent)]" />
@@ -86,7 +86,7 @@ export default function Club() {
               ].map((b) => (
                 <div
                   key={b.label}
-                  className="flex items-start gap-4 rounded-2xl bg-[var(--color-sand)] px-5 py-4"
+                  className="flex items-start gap-4 rounded-[var(--radius-md)] bg-[var(--color-sand)] px-5 py-4"
                 >
                   <CheckCircle size={18} className="text-[var(--color-accent)] shrink-0 mt-0.5" />
                   <div>
@@ -123,7 +123,7 @@ export default function Club() {
 
       <div className="max-w-[1200px] mx-auto px-4 md:px-8 pt-8">
         {/* HEADER DASHBOARD */}
-        <div className="bg-[var(--color-ink)] rounded-[3rem] p-10 md:p-16 text-white mb-12 shadow-xl relative overflow-hidden group">
+        <div className="bg-[var(--color-ink)] rounded-[var(--radius-xl)] p-10 md:p-16 text-white mb-12 shadow-xl relative overflow-hidden group">
           <div className="absolute inset-0 bg-gradient-to-tr from-transparent to-[var(--color-accent)]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
           <div className="relative z-10 flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
             <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-[var(--color-accent)]/30 p-1">
@@ -155,7 +155,7 @@ export default function Club() {
         </div>
 
         {/* CONTENUTO DASHBOARD */}
-        <div className="bg-[var(--color-surface)] rounded-[3rem] shadow-sm border border-[var(--color-ink)]/5 overflow-hidden min-h-[500px]">
+        <div className="bg-[var(--color-surface)] rounded-[var(--radius-xl)] shadow-sm border border-[var(--color-ink)]/5 overflow-hidden min-h-[500px]">
           <div className="flex items-center justify-center gap-3 py-6 border-b border-[var(--color-ink)]/5">
             <button
               onClick={() => setActiveTab('favorites')}
@@ -207,7 +207,7 @@ export default function Club() {
                           to={`/articolo/${article.slug || article.id}`}
                           className="group block"
                         >
-                          <div className="relative aspect-[4/3] rounded-[2rem] overflow-hidden shadow-sm transition-all duration-500 group-hover:shadow-lg mb-4">
+                          <div className="relative aspect-[4/3] rounded-[var(--radius-lg)] overflow-hidden shadow-sm transition-all duration-500 group-hover:shadow-lg mb-4">
                             <OptimizedImage
                               src={article.image}
                               alt={article.title}
@@ -257,7 +257,7 @@ export default function Club() {
                       {orders.map((order) => (
                         <div
                           key={order.id}
-                          className="flex flex-col md:flex-row md:items-center gap-6 p-6 rounded-[2rem] border border-black/5 bg-zinc-50/50 hover:bg-zinc-50 transition-colors"
+                          className="flex flex-col md:flex-row md:items-center gap-6 p-6 rounded-[var(--radius-lg)] border border-black/5 bg-zinc-50/50 hover:bg-zinc-50 transition-colors"
                         >
                           <div className="w-16 h-16 rounded-[1rem] bg-[var(--color-accent)]/10 text-[var(--color-accent)] flex items-center justify-center shrink-0">
                             <ShoppingBag size={24} />

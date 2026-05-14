@@ -69,7 +69,7 @@ export default function Itinerari() {
       </Section>
 
       <Section className="pt-4">
-        <div className="rounded-3xl border border-black/5 bg-white p-6 shadow-sm md:p-8">
+        <div className="rounded-[var(--radius-lg)] border border-black/5 bg-white p-6 shadow-sm md:p-8">
           <div className="grid gap-5 md:grid-cols-3">
             <FilterSelect
               label="Durata"
@@ -108,7 +108,7 @@ export default function Itinerari() {
 
       <Section>
         {filteredItineraries.length === 0 ? (
-          <div className="rounded-[2rem] border border-black/5 bg-[var(--color-sand)] p-10 text-center">
+          <div className="rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-sand)] p-10 text-center">
             <p className="text-sm font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
               Nessun risultato
             </p>
@@ -125,7 +125,7 @@ export default function Itinerari() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.05 }}
-                className="group flex h-full flex-col overflow-hidden rounded-[2rem] border border-black/5 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
+                className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-lg)] border border-black/5 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
               >
                 <Link
                   to={`/itinerari/${item.slug}`}
@@ -177,7 +177,7 @@ export default function Itinerari() {
         )}
       </Section>
 
-      <Section className="my-16 rounded-[3rem] bg-[var(--color-accent-soft)] p-12 text-center md:p-16">
+      <Section className="my-16 rounded-[var(--radius-xl)] bg-[var(--color-accent-soft)] p-12 text-center md:p-16">
         <Sparkles className="mx-auto text-[var(--color-accent)]" size={28} />
         <h2 className="mt-5 text-3xl font-serif md:text-4xl">Non sei sicuro da dove partire?</h2>
         <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-black/65">

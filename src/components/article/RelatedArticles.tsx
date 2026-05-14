@@ -30,7 +30,7 @@ function RelatedCard({
 }) {
   return (
     <Link to={to} className="group block">
-      <div className="relative mb-6 aspect-[16/10] overflow-hidden rounded-[2rem]">
+      <div className="relative mb-6 aspect-[16/10] overflow-hidden rounded-[var(--radius-lg)]">
         <OptimizedImage
           src={image}
           alt={title}
@@ -121,7 +121,7 @@ export default function RelatedArticles({
               />
             ))
         ) : (
-          <div className="rounded-[2rem] border border-black/5 bg-[var(--color-sand)] p-10 md:col-span-2">
+          <div className="rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-sand)] p-10 md:col-span-2">
             <p className="text-sm font-bold uppercase tracking-[0.2em] text-[var(--color-accent-text)]">
               Nessun correlato disponibile
             </p>

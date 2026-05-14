@@ -281,7 +281,7 @@ export default function AdminDashboard() {
     <PageLayout>
       <Section className="pt-32 pb-24 min-h-screen">
         {isPreviewMode && (
-          <div className="mb-8 rounded-2xl border border-amber-200 bg-amber-50 px-6 py-4 text-sm text-amber-800">
+          <div className="mb-8 rounded-[var(--radius-md)] border border-amber-200 bg-amber-50 px-6 py-4 text-sm text-amber-800">
             Modalita anteprima admin locale attiva. Puoi esplorare struttura e editor, ma le azioni
             che scrivono dati reali restano disattivate finche non completi il login Firebase.
           </div>
@@ -432,7 +432,7 @@ export default function AdminDashboard() {
 
         {activeTab === 'overview' && !loading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            <div className="bg-white p-6 rounded-2xl border border-zinc-100 shadow-sm">
+            <div className="bg-white p-6 rounded-[var(--radius-md)] border border-zinc-100 shadow-sm">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 bg-[var(--color-accent-soft)] text-[var(--color-accent)] rounded-xl">
                   <ShoppingBag size={24} />
@@ -446,7 +446,7 @@ export default function AdminDashboard() {
               <h3 className="text-zinc-500 text-sm font-medium">Fatturato Totale</h3>
               <p className="text-3xl font-bold mt-1">€{totalRevenue.toFixed(2)}</p>
             </div>
-            <div className="bg-white p-6 rounded-2xl border border-zinc-100 shadow-sm">
+            <div className="bg-white p-6 rounded-[var(--radius-md)] border border-zinc-100 shadow-sm">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 bg-blue-50 text-blue-600 rounded-xl">
                   <FileText size={24} />
@@ -455,7 +455,7 @@ export default function AdminDashboard() {
               <h3 className="text-zinc-500 text-sm font-medium">Articoli Pubblicati</h3>
               <p className="text-3xl font-bold mt-1">{articles.length}</p>
             </div>
-            <div className="bg-white p-6 rounded-2xl border border-zinc-100 shadow-sm">
+            <div className="bg-white p-6 rounded-[var(--radius-md)] border border-zinc-100 shadow-sm">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 bg-purple-50 text-purple-600 rounded-xl">
                   <UsersIcon size={24} />
@@ -464,7 +464,7 @@ export default function AdminDashboard() {
               <h3 className="text-zinc-500 text-sm font-medium">Utenti Registrati</h3>
               <p className="text-3xl font-bold mt-1">{users.length}</p>
             </div>
-            <div className="bg-white p-6 rounded-2xl border border-zinc-100 shadow-sm">
+            <div className="bg-white p-6 rounded-[var(--radius-md)] border border-zinc-100 shadow-sm">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 bg-orange-50 text-orange-600 rounded-xl">
                   <Mail size={24} />
@@ -476,7 +476,7 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        <div className="bg-white rounded-2xl shadow-sm border border-zinc-100 overflow-hidden">
+        <div className="bg-white rounded-[var(--radius-md)] shadow-sm border border-zinc-100 overflow-hidden">
           <div className="p-6 border-b border-zinc-100 bg-zinc-50 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <h2 className="text-lg font-semibold">
               {activeTab === 'overview'
@@ -635,7 +635,7 @@ export default function AdminDashboard() {
                 {siteContentDefinitions.map((page) => (
                   <div
                     key={page.id}
-                    className="rounded-2xl border border-zinc-100 bg-zinc-50 p-6 shadow-sm"
+                    className="rounded-[var(--radius-md)] border border-zinc-100 bg-zinc-50 p-6 shadow-sm"
                   >
                     <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-white text-[var(--color-accent)] shadow-sm">
                       <Edit size={20} />

@@ -18,7 +18,18 @@ interface FinalCtaSectionProps {
 
 const defaults: Record<
   FinalCtaIntent,
-  Required<Pick<FinalCtaSectionProps, 'eyebrow' | 'title' | 'description' | 'primaryLabel' | 'primaryTo' | 'secondaryLabel' | 'secondaryTo'>>
+  Required<
+    Pick<
+      FinalCtaSectionProps,
+      | 'eyebrow'
+      | 'title'
+      | 'description'
+      | 'primaryLabel'
+      | 'primaryTo'
+      | 'secondaryLabel'
+      | 'secondaryTo'
+    >
+  >
 > = {
   discovery: {
     eyebrow: 'Continua a esplorare',
@@ -83,7 +94,7 @@ export default function FinalCtaSection({
 
   return (
     <section
-      className={`relative overflow-hidden rounded-[3rem] bg-[var(--color-ink)] px-8 py-12 text-white shadow-2xl md:px-14 md:py-16 ${className}`}
+      className={`relative overflow-hidden rounded-[var(--radius-xl)] bg-[var(--color-ink)] px-8 py-12 text-white shadow-2xl md:px-14 md:py-16 ${className}`}
     >
       <div className="absolute inset-0 bg-topo opacity-20" />
       <div className="relative z-10 grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
@@ -91,7 +102,9 @@ export default function FinalCtaSection({
           <span className="mb-5 block text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">
             {copy.eyebrow}
           </span>
-          <h2 className="text-4xl font-serif leading-tight tracking-tight md:text-6xl">{copy.title}</h2>
+          <h2 className="text-4xl font-serif leading-tight tracking-tight md:text-6xl">
+            {copy.title}
+          </h2>
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/68 md:text-lg">
             {copy.description}
           </p>

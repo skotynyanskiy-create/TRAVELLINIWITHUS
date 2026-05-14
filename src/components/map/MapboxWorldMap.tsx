@@ -181,7 +181,7 @@ export default function MapboxWorldMap() {
       )}
 
       <div className="pointer-events-none absolute left-4 top-8 z-10 md:left-8">
-        <div className="pointer-events-auto max-w-xs rounded-2xl border border-[var(--color-ink)]/5 bg-[var(--color-surface)]/95 p-6 shadow-xl backdrop-blur-xl">
+        <div className="pointer-events-auto max-w-xs rounded-[var(--radius-md)] border border-[var(--color-ink)]/5 bg-[var(--color-surface)]/95 p-6 shadow-xl backdrop-blur-xl">
           <div className="mb-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
             <Navigation size={14} /> Mappa Interattiva
           </div>
@@ -226,7 +226,7 @@ export default function MapboxWorldMap() {
             className="z-50"
             offset={[0, -40]}
           >
-            <div className="relative w-[300px] overflow-hidden rounded-2xl bg-white p-0 shadow-2xl">
+            <div className="relative w-[300px] overflow-hidden rounded-[var(--radius-md)] bg-white p-0 shadow-2xl">
               <button
                 onClick={(e) => {
                   e.stopPropagation();

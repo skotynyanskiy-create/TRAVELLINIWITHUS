@@ -38,8 +38,8 @@ export default function ArticlePageSkeleton() {
         </div>
 
         <aside className="hidden lg:flex flex-col gap-6">
-          <Skeleton className="w-full h-48 rounded-2xl" />
-          <Skeleton className="w-full h-32 rounded-2xl" />
+          <Skeleton className="w-full h-48 rounded-[var(--radius-md)]" />
+          <Skeleton className="w-full h-32 rounded-[var(--radius-md)]" />
         </aside>
       </div>
     </div>

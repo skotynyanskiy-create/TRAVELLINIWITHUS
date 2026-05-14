@@ -82,7 +82,7 @@ export default function LatestArticlesCarousel({ articles }: LatestArticlesCarou
             >
               <Link
                 to={`/articolo/${article.slug || article.id}`}
-                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-black/8 bg-white transition-shadow duration-500 hover:shadow-[0_24px_60px_-20px_rgba(17,17,17,0.25)]"
+                className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-md)] border border-black/8 bg-white transition-shadow duration-500 hover:shadow-[0_24px_60px_-20px_rgba(17,17,17,0.25)]"
                 style={{ viewTransitionName: `article-${article.slug || article.id}` }}
               >
                 <div

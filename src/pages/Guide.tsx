@@ -167,7 +167,7 @@ function Guide() {
             </p>
           </div>
 
-          <div className="rounded-[2rem] border border-black/5 bg-white p-6 shadow-sm md:p-8">
+          <div className="rounded-[var(--radius-lg)] border border-black/5 bg-white p-6 shadow-sm md:p-8">
             <div className="mb-6 flex items-center gap-3">
               <BookOpen className="text-[var(--color-accent)]" size={22} />
               <p className="text-sm font-bold uppercase tracking-[0.22em] text-black/65">
@@ -211,7 +211,7 @@ function Guide() {
           />
         )}
 
-        <div className="mt-14 rounded-[2rem] border border-black/5 bg-white/75 p-4 shadow-sm backdrop-blur-md md:p-6">
+        <div className="mt-14 rounded-[var(--radius-lg)] border border-black/5 bg-white/75 p-4 shadow-sm backdrop-blur-md md:p-6">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex min-w-0 items-center gap-3 overflow-x-auto pb-1 hide-scrollbar">
               <Filter size={18} className="shrink-0 text-black/35" />
@@ -262,7 +262,7 @@ function Guide() {
             ))}
           </div>
         ) : filteredGuides.length === 0 ? (
-          <div className="mt-12 rounded-[2rem] border border-black/5 bg-white p-12 text-center shadow-sm">
+          <div className="mt-12 rounded-[var(--radius-lg)] border border-black/5 bg-white p-12 text-center shadow-sm">
             <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
               Nessuna guida trovata
             </p>

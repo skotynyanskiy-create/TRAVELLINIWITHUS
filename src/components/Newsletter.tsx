@@ -331,7 +331,7 @@ export default function Newsletter({
           key="success"
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`rounded-3xl p-5 ${isDark ? 'bg-white/10 text-white' : 'bg-[var(--color-accent-soft)] text-[var(--color-ink)]'}`}
+          className={`rounded-[var(--radius-lg)] p-5 ${isDark ? 'bg-white/10 text-white' : 'bg-[var(--color-accent-soft)] text-[var(--color-ink)]'}`}
         >
           <div className="flex items-start gap-4">
             <CheckCircle className="mt-0.5 shrink-0 text-[var(--color-accent)]" size={24} />
@@ -357,7 +357,7 @@ export default function Newsletter({
   return (
     <section
       id="newsletter"
-      className={`overflow-hidden rounded-[2.5rem] px-6 py-12 md:px-12 md:py-16 ${
+      className={`overflow-hidden rounded-[var(--radius-lg)] px-6 py-12 md:px-12 md:py-16 ${
         isDark
           ? 'bg-[var(--color-ink)] text-white'
           : variant === 'white'
@@ -400,11 +400,11 @@ export default function Newsletter({
         </div>
 
         <div
-          className={`rounded-[2rem] border p-6 md:p-8 ${isDark ? 'border-white/10 bg-white/5' : 'border-black/5 bg-white/80'}`}
+          className={`rounded-[var(--radius-lg)] border p-6 md:p-8 ${isDark ? 'border-white/10 bg-white/5' : 'border-black/5 bg-white/80'}`}
         >
           <div className="mb-6 flex items-start gap-4">
             <div
-              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${isDark ? 'bg-white/10' : 'bg-[var(--color-accent-soft)]'}`}
+              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-md)] ${isDark ? 'bg-white/10' : 'bg-[var(--color-accent-soft)]'}`}
             >
               <Gift className="text-[var(--color-accent)]" size={22} />
             </div>

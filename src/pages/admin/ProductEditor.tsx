@@ -174,7 +174,7 @@ export default function ProductEditor() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
+            <div className="rounded-[var(--radius-md)] border border-zinc-200 bg-zinc-50 p-4">
               <label
                 htmlFor="isDigital"
                 className="flex items-center justify-between gap-6 cursor-pointer"
@@ -212,7 +212,7 @@ export default function ProductEditor() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4">
+          <div className="rounded-[var(--radius-md)] border border-zinc-200 bg-zinc-50 p-4">
             <label
               htmlFor="published"
               className="flex items-center justify-between gap-6 cursor-pointer"

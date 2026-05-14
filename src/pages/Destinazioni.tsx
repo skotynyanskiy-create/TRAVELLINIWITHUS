@@ -499,7 +499,7 @@ export default function Destinazioni() {
             {TRUST_STRIP.map((item) => (
               <div
                 key={item}
-                className="rounded-2xl border border-white/12 bg-white/10 p-4 backdrop-blur"
+                className="rounded-[var(--radius-md)] border border-white/12 bg-white/10 p-4 backdrop-blur"
               >
                 <ShieldCheck size={16} className="mb-3 text-[var(--color-accent)]" />
                 <p className="text-xs font-semibold leading-relaxed text-white/75">{item}</p>
@@ -510,7 +510,7 @@ export default function Destinazioni() {
       </section>
 
       <Section>
-        <div className="-mt-24 mb-14 rounded-[2rem] border border-black/5 bg-white p-5 shadow-[var(--shadow-premium)] md:p-8">
+        <div className="-mt-24 mb-14 rounded-[var(--radius-lg)] border border-black/5 bg-white p-5 shadow-[var(--shadow-premium)] md:p-8">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.4fr)] lg:items-center">
             <div>
               <span className="mb-3 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
@@ -730,7 +730,7 @@ export default function Destinazioni() {
         </div>
 
         {usingDemo && (
-          <div className="mb-8 rounded-2xl border border-[var(--color-accent)]/25 bg-[var(--color-accent-soft)] px-5 py-4 text-sm leading-relaxed text-[var(--color-accent-text)]">
+          <div className="mb-8 rounded-[var(--radius-md)] border border-[var(--color-accent)]/25 bg-[var(--color-accent-soft)] px-5 py-4 text-sm leading-relaxed text-[var(--color-accent-text)]">
             Questa e una preview editoriale temporanea: serve a mostrare il layout finche non ci
             sono contenuti reali pubblicati. Prima del deploy pubblico va sostituita o disattivata.
           </div>

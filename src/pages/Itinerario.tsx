@@ -37,7 +37,7 @@ export default function Itinerario() {
         noindex={itinerary.isDemo}
       />
 
-      <article className="mx-4 my-8 overflow-hidden rounded-[2.5rem] border border-black/5 bg-white pb-24 shadow-xl shadow-black/5 md:mx-8 lg:mx-12">
+      <article className="mx-4 my-8 overflow-hidden rounded-[var(--radius-lg)] border border-black/5 bg-white pb-24 shadow-xl shadow-black/5 md:mx-8 lg:mx-12">
         <div className="relative aspect-[5/3] w-full overflow-hidden md:aspect-[16/7]">
           <OptimizedImage
             src={itinerary.image}
@@ -71,7 +71,7 @@ export default function Itinerario() {
             />
           )}
 
-          <div className="mt-10 rounded-[2rem] border border-[var(--color-accent)]/15 bg-[var(--color-accent-soft)] p-8 md:p-10">
+          <div className="mt-10 rounded-[var(--radius-lg)] border border-[var(--color-accent)]/15 bg-[var(--color-accent-soft)] p-8 md:p-10">
             <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
               In breve
             </p>
@@ -80,7 +80,7 @@ export default function Itinerario() {
             </p>
           </div>
 
-          <div className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-[2rem] border border-black/5 bg-black/5 md:grid-cols-4">
+          <div className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-[var(--radius-lg)] border border-black/5 bg-black/5 md:grid-cols-4">
             <FactCell
               icon={<Clock size={18} />}
               label="Durata"
@@ -100,7 +100,7 @@ export default function Itinerario() {
                 {itinerary.highlights.map((highlight) => (
                   <div
                     key={highlight}
-                    className="flex items-start gap-3 rounded-2xl bg-[var(--color-sand)] p-5"
+                    className="flex items-start gap-3 rounded-[var(--radius-md)] bg-[var(--color-sand)] p-5"
                   >
                     <CheckCircle2 className="mt-1 shrink-0 text-[var(--color-accent)]" size={18} />
                     <p className="text-sm leading-relaxed text-black/68">{highlight}</p>
@@ -120,7 +120,7 @@ export default function Itinerario() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4 }}
-                  className="grid gap-5 rounded-[2rem] border border-black/5 bg-[var(--color-sand)] p-6 md:grid-cols-[80px_1fr] md:p-8"
+                  className="grid gap-5 rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-sand)] p-6 md:grid-cols-[80px_1fr] md:p-8"
                 >
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-ink)] font-serif text-2xl text-white">
                     {stage.day}
@@ -144,7 +144,7 @@ export default function Itinerario() {
           {itinerary.costs && itinerary.costs.length > 0 && (
             <section className="mt-16">
               <h2 className="mb-8 text-3xl font-serif md:text-4xl">Quanto costa indicativamente</h2>
-              <div className="overflow-hidden rounded-2xl border border-black/5">
+              <div className="overflow-hidden rounded-[var(--radius-md)] border border-black/5">
                 <table className="w-full text-left">
                   <tbody>
                     {itinerary.costs.map((cost) => (
@@ -164,7 +164,7 @@ export default function Itinerario() {
           {(itinerary.bestFor || itinerary.notFor) && (
             <section className="mt-16 grid gap-6 md:grid-cols-2">
               {itinerary.bestFor && (
-                <div className="rounded-[2rem] bg-[var(--color-sand)] p-7">
+                <div className="rounded-[var(--radius-lg)] bg-[var(--color-sand)] p-7">
                   <h3 className="mb-5 flex items-center gap-2 font-serif text-2xl">
                     <CheckCircle2 className="text-[var(--color-accent)]" size={20} />
                     Pensato per
@@ -183,7 +183,7 @@ export default function Itinerario() {
                 </div>
               )}
               {itinerary.notFor && (
-                <div className="rounded-[2rem] bg-[var(--color-ink)] p-7 text-white">
+                <div className="rounded-[var(--radius-lg)] bg-[var(--color-ink)] p-7 text-white">
                   <h3 className="mb-5 flex items-center gap-2 font-serif text-2xl">
                     <XCircle className="text-[var(--color-accent)]" size={20} />
                     Non e per
@@ -208,7 +208,7 @@ export default function Itinerario() {
                 {itinerary.relatedArticleSlug && (
                   <Link
                     to={`/articolo/${itinerary.relatedArticleSlug}`}
-                    className="group flex items-center justify-between gap-5 rounded-2xl border border-black/5 bg-white p-6 transition-all hover:-translate-y-0.5 hover:border-[var(--color-accent)]"
+                    className="group flex items-center justify-between gap-5 rounded-[var(--radius-md)] border border-black/5 bg-white p-6 transition-all hover:-translate-y-0.5 hover:border-[var(--color-accent)]"
                   >
                     <div>
                       <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
@@ -224,7 +224,7 @@ export default function Itinerario() {
                 {itinerary.relatedGuideSlug && (
                   <Link
                     to={`/guide/${itinerary.relatedGuideSlug}`}
-                    className="group flex items-center justify-between gap-5 rounded-2xl border border-black/5 bg-[var(--color-accent-soft)] p-6 transition-all hover:-translate-y-0.5"
+                    className="group flex items-center justify-between gap-5 rounded-[var(--radius-md)] border border-black/5 bg-[var(--color-accent-soft)] p-6 transition-all hover:-translate-y-0.5"
                   >
                     <div>
                       <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">

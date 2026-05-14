@@ -70,7 +70,7 @@ export default function CrossLinkWidget({ variant }: CrossLinkWidgetProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
-      className={`rounded-[2.5rem] p-10 md:p-14 ${config.wrapClass}`}
+      className={`rounded-[var(--radius-lg)] p-10 md:p-14 ${config.wrapClass}`}
     >
       <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2">
         <div>
@@ -117,7 +117,7 @@ export default function CrossLinkWidget({ variant }: CrossLinkWidgetProps) {
                   style={{ transform: `rotate(${rotations[idx]}deg)` }}
                 >
                   <div
-                    className="flex h-16 w-16 items-center justify-center rounded-2xl shadow-lg"
+                    className="flex h-16 w-16 items-center justify-center rounded-[var(--radius-md)] shadow-lg"
                     style={{ backgroundColor: visual.colorLight, color: visual.color }}
                   >
                     <Icon size={28} />

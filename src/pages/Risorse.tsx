@@ -252,7 +252,7 @@ export default function Risorse() {
             </p>
           </div>
 
-          <div className="rounded-[2rem] border border-black/5 bg-white p-7 shadow-sm">
+          <div className="rounded-[var(--radius-lg)] border border-black/5 bg-white p-7 shadow-sm">
             <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
               Regola Travellini
             </p>
@@ -271,7 +271,7 @@ export default function Risorse() {
           {resourcePrinciples.map((item) => (
             <div
               key={item.title}
-              className="rounded-[2rem] border border-black/5 bg-white p-7 shadow-sm"
+              className="rounded-[var(--radius-lg)] border border-black/5 bg-white p-7 shadow-sm"
             >
               <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-sand)]">
                 {item.icon}
@@ -289,11 +289,11 @@ export default function Risorse() {
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-50px' }}
-              className="rounded-[2.5rem] border border-black/5 bg-white p-7 shadow-sm md:p-10"
+              className="rounded-[var(--radius-lg)] border border-black/5 bg-white p-7 shadow-sm md:p-10"
             >
               <div className="mb-8 flex flex-col gap-5 border-b border-black/5 pb-8 md:flex-row md:items-end md:justify-between">
                 <div className="flex items-start gap-5">
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[var(--color-sand)]">
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-sand)]">
                     {category.icon}
                   </div>
                   <div>
@@ -319,7 +319,7 @@ export default function Risorse() {
                         url: item.link,
                       })
                     }
-                    className="group flex min-h-[290px] flex-col rounded-[2rem] border border-black/5 bg-[var(--color-sand)] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-accent)]/35 hover:bg-white hover:shadow-xl"
+                    className="group flex min-h-[290px] flex-col rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-sand)] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-accent)]/35 hover:bg-white hover:shadow-xl"
                   >
                     <div className="mb-5 flex items-start justify-between gap-4">
                       <div>
@@ -351,7 +351,7 @@ export default function Risorse() {
                     <p className="text-sm leading-relaxed text-black/62">{item.description}</p>
 
                     <div className="mt-auto space-y-3 pt-7">
-                      <div className="rounded-2xl bg-white p-4">
+                      <div className="rounded-[var(--radius-md)] bg-white p-4">
                         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/35">
                           Per chi ha senso
                         </p>
@@ -370,7 +370,7 @@ export default function Risorse() {
           ))}
         </div>
 
-        <div className="mt-20 rounded-[2.5rem] bg-[var(--color-ink)] p-8 text-white md:p-12">
+        <div className="mt-20 rounded-[var(--radius-lg)] bg-[var(--color-ink)] p-8 text-white md:p-12">
           <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>
               <span className="mb-4 block text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
@@ -418,7 +418,7 @@ export default function Risorse() {
           <FinalCtaSection intent="discovery" />
         </div>
 
-        <div className="mt-12 rounded-[2rem] border border-black/5 bg-white p-7 text-sm leading-relaxed text-black/55">
+        <div className="mt-12 rounded-[var(--radius-lg)] border border-black/5 bg-white p-7 text-sm leading-relaxed text-black/55">
           Per dettagli completi sulla natura dei link affiliati, consulta la{' '}
           <Link
             to="/disclaimer"

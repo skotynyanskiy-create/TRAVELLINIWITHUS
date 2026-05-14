@@ -50,7 +50,7 @@ export default function HomeCollaborationCta() {
   return (
     <section ref={sectionRef} className="bg-[var(--color-ink)] py-16 text-white md:py-24">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
-        <div className="grid gap-10 overflow-hidden rounded-2xl border border-white/10 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="grid gap-10 overflow-hidden rounded-[var(--radius-md)] border border-white/10 lg:grid-cols-[0.9fr_1.1fr]">
           <div
             data-collab-image
             className="relative min-h-[280px] overflow-hidden lg:min-h-[480px]"

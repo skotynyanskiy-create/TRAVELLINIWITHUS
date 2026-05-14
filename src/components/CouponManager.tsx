@@ -113,7 +113,7 @@ export default function CouponManager() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Form */}
         <div className="lg:col-span-1">
-          <div className="bg-zinc-50 p-6 rounded-2xl border border-zinc-100">
+          <div className="bg-zinc-50 p-6 rounded-[var(--radius-md)] border border-zinc-100">
             <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
               <Plus size={20} className="text-[var(--color-accent)]" /> Nuovo Coupon
             </h3>
@@ -197,7 +197,7 @@ export default function CouponManager() {
               coupons.map((coupon) => (
                 <div
                   key={coupon.id}
-                  className="bg-white p-5 rounded-2xl border border-zinc-100 flex items-center justify-between shadow-sm"
+                  className="bg-white p-5 rounded-[var(--radius-md)] border border-zinc-100 flex items-center justify-between shadow-sm"
                 >
                   <div className="flex items-center gap-4">
                     <div className="p-3 bg-zinc-50 text-zinc-400 rounded-xl">

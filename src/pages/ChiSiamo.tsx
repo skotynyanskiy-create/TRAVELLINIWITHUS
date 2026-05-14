@@ -169,20 +169,26 @@ export default function ChiSiamo() {
             </div>
 
             <div className="mb-8 grid grid-cols-3 gap-4 sm:max-w-xl">
-              <div className="rounded-2xl border border-black/5 bg-white p-5 text-center shadow-sm">
-                <div className="text-3xl font-serif text-[var(--color-ink)]">{BRAND_STATS.yearsOfTravel}</div>
+              <div className="rounded-[var(--radius-md)] border border-black/5 bg-white p-5 text-center shadow-sm">
+                <div className="text-3xl font-serif text-[var(--color-ink)]">
+                  {BRAND_STATS.yearsOfTravel}
+                </div>
                 <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-black/42">
                   anni di viaggi
                 </div>
               </div>
-              <div className="rounded-2xl border border-black/5 bg-white p-5 text-center shadow-sm">
-                <div className="text-3xl font-serif text-[var(--color-ink)]">{BRAND_STATS.instagramFollowers}</div>
+              <div className="rounded-[var(--radius-md)] border border-black/5 bg-white p-5 text-center shadow-sm">
+                <div className="text-3xl font-serif text-[var(--color-ink)]">
+                  {BRAND_STATS.instagramFollowers}
+                </div>
                 <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-black/42">
                   community IG
                 </div>
               </div>
-              <div className="rounded-2xl border border-black/5 bg-white p-5 text-center shadow-sm">
-                <div className="text-3xl font-serif text-[var(--color-ink)]">{BRAND_STATS.tiktokFollowers}</div>
+              <div className="rounded-[var(--radius-md)] border border-black/5 bg-white p-5 text-center shadow-sm">
+                <div className="text-3xl font-serif text-[var(--color-ink)]">
+                  {BRAND_STATS.tiktokFollowers}
+                </div>
                 <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-black/42">
                   community TikTok
                 </div>
@@ -248,7 +254,10 @@ export default function ChiSiamo() {
           {pageContent.focusAreas.map((item, index) => {
             const Icon = focusIcons[index] ?? Compass;
             return (
-              <div key={item.title} className="card-info flex flex-col gap-6 md:flex-row md:items-start">
+              <div
+                key={item.title}
+                className="card-info flex flex-col gap-6 md:flex-row md:items-start"
+              >
                 <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[var(--radius-xl)] bg-white text-[var(--color-accent)] shadow-sm">
                   <Icon size={28} />
                 </div>
@@ -279,21 +288,27 @@ export default function ChiSiamo() {
         </div>
       </Section>
 
-      <Section className="rounded-[3rem] bg-[var(--color-sand)] p-12 md:p-20">
+      <Section className="rounded-[var(--radius-xl)] bg-[var(--color-sand)] p-12 md:p-20">
         <div className="mx-auto max-w-4xl">
           <div className="mb-10 text-center">
-            <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-[var(--color-accent)] shadow-sm">
+            <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-[var(--radius-md)] bg-white text-[var(--color-accent)] shadow-sm">
               <ShieldCheck size={24} />
             </div>
-            <h2 className="mb-4 text-4xl font-serif">Quello che difendiamo ogni volta che pubblichiamo</h2>
+            <h2 className="mb-4 text-4xl font-serif">
+              Quello che difendiamo ogni volta che pubblichiamo
+            </h2>
             <p className="mx-auto max-w-2xl text-lg leading-relaxed text-black/70">
-              Non ci interessa sembrare premium per lessico. Ci interessa essere utili, riconoscibili e credibili.
+              Non ci interessa sembrare premium per lessico. Ci interessa essere utili,
+              riconoscibili e credibili.
             </p>
           </div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             {EDITORIAL_GUARDRAILS.map((item) => (
-              <div key={item} className="rounded-3xl border border-black/5 bg-white p-8 shadow-sm">
+              <div
+                key={item}
+                className="rounded-[var(--radius-lg)] border border-black/5 bg-white p-8 shadow-sm"
+              >
                 <p className="leading-relaxed text-black/70">{item}</p>
               </div>
             ))}
@@ -301,7 +316,7 @@ export default function ChiSiamo() {
         </div>
       </Section>
 
-      <Section className="rounded-[3rem] bg-[var(--color-ink)] p-12 text-white md:p-20">
+      <Section className="rounded-[var(--radius-xl)] bg-[var(--color-ink)] p-12 text-white md:p-20">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="mb-6 text-4xl font-serif md:text-5xl">{pageContent.audienceTitle}</h2>
           <p className="mx-auto mb-12 max-w-2xl leading-relaxed text-white/85">
@@ -309,7 +324,10 @@ export default function ChiSiamo() {
           </p>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             {pageContent.audienceItems.map((item) => (
-              <div key={item} className="rounded-3xl border border-white/8 bg-[#1C1C1C] p-8 text-left">
+              <div
+                key={item}
+                className="rounded-[var(--radius-lg)] border border-white/8 bg-[#1C1C1C] p-8 text-left"
+              >
                 <p className="leading-relaxed text-white/80">{item}</p>
               </div>
             ))}

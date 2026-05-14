@@ -225,7 +225,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             role="dialog"
             aria-modal="true"
             aria-label="Ricerca nel sito"
-            className="fixed top-[10%] left-1/2 -translate-x-1/2 w-full max-w-2xl bg-white rounded-2xl shadow-2xl z-[120] overflow-hidden flex flex-col max-h-[80vh]"
+            className="fixed top-[10%] left-1/2 -translate-x-1/2 w-full max-w-2xl bg-white rounded-[var(--radius-md)] shadow-2xl z-[120] overflow-hidden flex flex-col max-h-[80vh]"
           >
             <div className="flex items-center px-6 py-4 border-b border-black/10">
               <Search className="text-black/40 mr-4" size={24} />

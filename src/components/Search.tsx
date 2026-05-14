@@ -26,14 +26,18 @@ export default function Search() {
     loadArticles();
   }, []);
 
-  const fuse = useMemo(() => new Fuse(articles, {
-    keys: ['title', 'description', 'category'],
-    threshold: 0.3,
-  }), [articles]);
+  const fuse = useMemo(
+    () =>
+      new Fuse(articles, {
+        keys: ['title', 'description', 'category'],
+        threshold: 0.3,
+      }),
+    [articles]
+  );
 
   const results = useMemo(() => {
     if (query.length > 2) {
-      return fuse.search(query).map(result => result.item);
+      return fuse.search(query).map((result) => result.item);
     }
     return [];
   }, [query, fuse]);
@@ -50,12 +54,16 @@ export default function Search() {
 
   return (
     <div className="relative" ref={searchRef}>
-      <button onClick={() => setIsOpen(!isOpen)} aria-label="Cerca nel sito" className="p-2 hover:bg-black/5 rounded-full transition-colors">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label="Cerca nel sito"
+        className="p-2 hover:bg-black/5 rounded-full transition-colors"
+      >
         <SearchIcon size={20} />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-80 bg-white rounded-2xl shadow-2xl border border-black/5 p-4 z-50">
+        <div className="absolute right-0 top-full mt-2 w-80 bg-white rounded-[var(--radius-md)] shadow-2xl border border-black/5 p-4 z-50">
           <div className="relative mb-4">
             <input
               type="text"
@@ -68,21 +76,21 @@ export default function Search() {
           </div>
 
           <div className="max-h-60 overflow-y-auto">
-            {results.length > 0 ? (
-              results.map((article) => (
-                <Link
-                  key={article.id}
-                  to={`/articolo/${article.slug}`}
-                  className="block p-3 hover:bg-black/5 rounded-xl transition-colors"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <h5 className="font-bold text-sm">{article.title}</h5>
-                  <p className="text-xs text-black/50">{article.category}</p>
-                </Link>
-              ))
-            ) : (
-              query.length > 2 && <p className="text-center text-sm text-black/50">Nessun risultato trovato.</p>
-            )}
+            {results.length > 0
+              ? results.map((article) => (
+                  <Link
+                    key={article.id}
+                    to={`/articolo/${article.slug}`}
+                    className="block p-3 hover:bg-black/5 rounded-xl transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <h5 className="font-bold text-sm">{article.title}</h5>
+                    <p className="text-xs text-black/50">{article.category}</p>
+                  </Link>
+                ))
+              : query.length > 2 && (
+                  <p className="text-center text-sm text-black/50">Nessun risultato trovato.</p>
+                )}
           </div>
         </div>
       )}

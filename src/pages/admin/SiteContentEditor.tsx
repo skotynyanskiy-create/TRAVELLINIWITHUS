@@ -21,7 +21,10 @@ function cloneDefaults<K extends SiteContentKey>(key: K) {
 }
 
 function createEmptyObject(field: SiteContentFieldDefinition) {
-  return Object.fromEntries((field.fields ?? []).map((item) => [item.key, ''])) as Record<string, string>;
+  return Object.fromEntries((field.fields ?? []).map((item) => [item.key, ''])) as Record<
+    string,
+    string
+  >;
 }
 
 export default function SiteContentEditor() {
@@ -78,7 +81,9 @@ export default function SiteContentEditor() {
 
   const handleStringListChange = (key: string, index: number, value: string) => {
     setFormState((prev) => {
-      const currentList = Array.isArray(prev?.[key]) ? ([...(prev?.[key] as string[])] as string[]) : [];
+      const currentList = Array.isArray(prev?.[key])
+        ? ([...(prev?.[key] as string[])] as string[])
+        : [];
       currentList[index] = value;
       return { ...(prev ?? {}), [key]: currentList };
     });
@@ -86,7 +91,9 @@ export default function SiteContentEditor() {
 
   const handleAddStringItem = (field: SiteContentFieldDefinition) => {
     setFormState((prev) => {
-      const currentList = Array.isArray(prev?.[field.key]) ? ([...(prev?.[field.key] as string[])] as string[]) : [];
+      const currentList = Array.isArray(prev?.[field.key])
+        ? ([...(prev?.[field.key] as string[])] as string[])
+        : [];
       currentList.push('');
       return { ...(prev ?? {}), [field.key]: currentList };
     });
@@ -94,7 +101,9 @@ export default function SiteContentEditor() {
 
   const handleRemoveStringItem = (key: string, index: number) => {
     setFormState((prev) => {
-      const currentList = Array.isArray(prev?.[key]) ? ([...(prev?.[key] as string[])] as string[]) : [];
+      const currentList = Array.isArray(prev?.[key])
+        ? ([...(prev?.[key] as string[])] as string[])
+        : [];
       currentList.splice(index, 1);
       return { ...(prev ?? {}), [key]: currentList };
     });
@@ -116,7 +125,9 @@ export default function SiteContentEditor() {
   const handleAddObjectItem = (field: SiteContentFieldDefinition) => {
     setFormState((prev) => {
       const currentList = Array.isArray(prev?.[field.key])
-        ? ([...(prev?.[field.key] as Array<Record<string, string>>)] as Array<Record<string, string>>)
+        ? ([...(prev?.[field.key] as Array<Record<string, string>>)] as Array<
+            Record<string, string>
+          >)
         : [];
       currentList.push(createEmptyObject(field));
       return { ...(prev ?? {}), [field.key]: currentList };
@@ -167,9 +178,11 @@ export default function SiteContentEditor() {
     return (
       <PageLayout>
         <Section className="pt-32 pb-24">
-          <div className="mx-auto max-w-3xl rounded-3xl border border-red-100 bg-white p-10 text-center shadow-sm">
+          <div className="mx-auto max-w-3xl rounded-[var(--radius-lg)] border border-red-100 bg-white p-10 text-center shadow-sm">
             <h1 className="mb-4 text-3xl font-serif">Sezione non trovata</h1>
-            <p className="mb-8 text-black/60">L editor richiesto non esiste o non e ancora stato configurato.</p>
+            <p className="mb-8 text-black/60">
+              L editor richiesto non esiste o non e ancora stato configurato.
+            </p>
             <Link
               to="/admin"
               className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-accent)]"
@@ -228,13 +241,14 @@ export default function SiteContentEditor() {
           </div>
 
           {isPreviewMode && (
-            <div className="mb-8 rounded-2xl border border-amber-200 bg-amber-50 px-6 py-4 text-sm text-amber-800 shadow-sm">
-              Modalita anteprima admin locale attiva. Puoi vedere struttura, campi e flusso editoriale, ma il salvataggio resta bloccato finche non completi il login admin reale.
+            <div className="mb-8 rounded-[var(--radius-md)] border border-amber-200 bg-amber-50 px-6 py-4 text-sm text-amber-800 shadow-sm">
+              Modalita anteprima admin locale attiva. Puoi vedere struttura, campi e flusso
+              editoriale, ma il salvataggio resta bloccato finche non completi il login admin reale.
             </div>
           )}
 
           {saveMessage && (
-            <div className="mb-8 rounded-2xl border border-black/5 bg-white px-6 py-4 text-sm text-black/70 shadow-sm">
+            <div className="mb-8 rounded-[var(--radius-md)] border border-black/5 bg-white px-6 py-4 text-sm text-black/70 shadow-sm">
               {saveMessage}
             </div>
           )}
@@ -250,15 +264,22 @@ export default function SiteContentEditor() {
 
                 if (field.type === 'text' || field.type === 'url') {
                   return (
-                    <div key={field.key} className="rounded-3xl border border-black/5 bg-white p-8 shadow-sm">
-                      <label className="mb-3 block text-sm font-semibold text-black">{field.label}</label>
-                      {field.description && <p className="mb-4 text-sm text-black/50">{field.description}</p>}
+                    <div
+                      key={field.key}
+                      className="rounded-[var(--radius-lg)] border border-black/5 bg-white p-8 shadow-sm"
+                    >
+                      <label className="mb-3 block text-sm font-semibold text-black">
+                        {field.label}
+                      </label>
+                      {field.description && (
+                        <p className="mb-4 text-sm text-black/50">{field.description}</p>
+                      )}
                       <input
                         type="text"
                         value={typeof value === 'string' ? value : ''}
                         onChange={(event) => updateField(field.key, event.target.value)}
                         placeholder={field.placeholder}
-                        className="w-full rounded-2xl border border-black/10 bg-[var(--color-sand)] px-5 py-4 text-sm outline-none transition-all focus:border-[var(--color-accent)]"
+                        className="w-full rounded-[var(--radius-md)] border border-black/10 bg-[var(--color-sand)] px-5 py-4 text-sm outline-none transition-all focus:border-[var(--color-accent)]"
                       />
                     </div>
                   );
@@ -267,11 +288,18 @@ export default function SiteContentEditor() {
                 if (field.type === 'boolean') {
                   const isEnabled = value === true;
                   return (
-                    <div key={field.key} className="rounded-3xl border border-black/5 bg-white p-8 shadow-sm">
+                    <div
+                      key={field.key}
+                      className="rounded-[var(--radius-lg)] border border-black/5 bg-white p-8 shadow-sm"
+                    >
                       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                         <div>
-                          <label className="mb-2 block text-sm font-semibold text-black">{field.label}</label>
-                          {field.description && <p className="text-sm text-black/50">{field.description}</p>}
+                          <label className="mb-2 block text-sm font-semibold text-black">
+                            {field.label}
+                          </label>
+                          {field.description && (
+                            <p className="text-sm text-black/50">{field.description}</p>
+                          )}
                         </div>
                         <button
                           type="button"
@@ -293,15 +321,22 @@ export default function SiteContentEditor() {
 
                 if (field.type === 'textarea') {
                   return (
-                    <div key={field.key} className="rounded-3xl border border-black/5 bg-white p-8 shadow-sm">
-                      <label className="mb-3 block text-sm font-semibold text-black">{field.label}</label>
-                      {field.description && <p className="mb-4 text-sm text-black/50">{field.description}</p>}
+                    <div
+                      key={field.key}
+                      className="rounded-[var(--radius-lg)] border border-black/5 bg-white p-8 shadow-sm"
+                    >
+                      <label className="mb-3 block text-sm font-semibold text-black">
+                        {field.label}
+                      </label>
+                      {field.description && (
+                        <p className="mb-4 text-sm text-black/50">{field.description}</p>
+                      )}
                       <textarea
                         rows={field.rows ?? 4}
                         value={typeof value === 'string' ? value : ''}
                         onChange={(event) => updateField(field.key, event.target.value)}
                         placeholder={field.placeholder}
-                        className="w-full rounded-2xl border border-black/10 bg-[var(--color-sand)] px-5 py-4 text-sm outline-none transition-all focus:border-[var(--color-accent)]"
+                        className="w-full rounded-[var(--radius-md)] border border-black/10 bg-[var(--color-sand)] px-5 py-4 text-sm outline-none transition-all focus:border-[var(--color-accent)]"
                       />
                     </div>
                   );
@@ -310,11 +345,16 @@ export default function SiteContentEditor() {
                 if (field.type === 'string-list') {
                   const items = Array.isArray(value) ? (value as string[]) : [];
                   return (
-                    <div key={field.key} className="rounded-3xl border border-black/5 bg-white p-8 shadow-sm">
+                    <div
+                      key={field.key}
+                      className="rounded-[var(--radius-lg)] border border-black/5 bg-white p-8 shadow-sm"
+                    >
                       <div className="mb-6 flex items-center justify-between gap-4">
                         <div>
                           <h2 className="text-lg font-semibold text-black">{field.label}</h2>
-                          {field.description && <p className="mt-1 text-sm text-black/50">{field.description}</p>}
+                          {field.description && (
+                            <p className="mt-1 text-sm text-black/50">{field.description}</p>
+                          )}
                         </div>
                         <button
                           type="button"
@@ -331,9 +371,11 @@ export default function SiteContentEditor() {
                             <input
                               type="text"
                               value={item}
-                              onChange={(event) => handleStringListChange(field.key, index, event.target.value)}
+                              onChange={(event) =>
+                                handleStringListChange(field.key, index, event.target.value)
+                              }
                               placeholder={field.itemLabel || 'Voce'}
-                              className="w-full rounded-2xl border border-black/10 bg-[var(--color-sand)] px-5 py-4 text-sm outline-none transition-all focus:border-[var(--color-accent)]"
+                              className="w-full rounded-[var(--radius-md)] border border-black/10 bg-[var(--color-sand)] px-5 py-4 text-sm outline-none transition-all focus:border-[var(--color-accent)]"
                             />
                             <button
                               type="button"
@@ -352,11 +394,16 @@ export default function SiteContentEditor() {
 
                 const items = Array.isArray(value) ? (value as Array<Record<string, string>>) : [];
                 return (
-                  <div key={field.key} className="rounded-3xl border border-black/5 bg-white p-8 shadow-sm">
+                  <div
+                    key={field.key}
+                    className="rounded-[var(--radius-lg)] border border-black/5 bg-white p-8 shadow-sm"
+                  >
                     <div className="mb-6 flex items-center justify-between gap-4">
                       <div>
                         <h2 className="text-lg font-semibold text-black">{field.label}</h2>
-                        {field.description && <p className="mt-1 text-sm text-black/50">{field.description}</p>}
+                        {field.description && (
+                          <p className="mt-1 text-sm text-black/50">{field.description}</p>
+                        )}
                       </div>
                       <button
                         type="button"
@@ -369,7 +416,10 @@ export default function SiteContentEditor() {
 
                     <div className="space-y-6">
                       {items.map((item, index) => (
-                        <div key={`${field.key}-${index}`} className="rounded-2xl border border-black/5 bg-[var(--color-sand)] p-6">
+                        <div
+                          key={`${field.key}-${index}`}
+                          className="rounded-[var(--radius-md)] border border-black/5 bg-[var(--color-sand)] p-6"
+                        >
                           <div className="mb-4 flex items-center justify-between gap-4">
                             <h3 className="text-sm font-bold uppercase tracking-widest text-black/50">
                               {field.itemLabel || 'Elemento'} {index + 1}
@@ -397,18 +447,28 @@ export default function SiteContentEditor() {
                                     rows={nestedField.rows ?? 3}
                                     value={item[nestedField.key] ?? ''}
                                     onChange={(event) =>
-                                      handleObjectListChange(field.key, index, nestedField.key, event.target.value)
+                                      handleObjectListChange(
+                                        field.key,
+                                        index,
+                                        nestedField.key,
+                                        event.target.value
+                                      )
                                     }
-                                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none transition-all focus:border-[var(--color-accent)]"
+                                    className="w-full rounded-[var(--radius-md)] border border-black/10 bg-white px-4 py-3 text-sm outline-none transition-all focus:border-[var(--color-accent)]"
                                   />
                                 ) : (
                                   <input
                                     type="text"
                                     value={item[nestedField.key] ?? ''}
                                     onChange={(event) =>
-                                      handleObjectListChange(field.key, index, nestedField.key, event.target.value)
+                                      handleObjectListChange(
+                                        field.key,
+                                        index,
+                                        nestedField.key,
+                                        event.target.value
+                                      )
                                     }
-                                    className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm outline-none transition-all focus:border-[var(--color-accent)]"
+                                    className="w-full rounded-[var(--radius-md)] border border-black/10 bg-white px-4 py-3 text-sm outline-none transition-all focus:border-[var(--color-accent)]"
                                   />
                                 )}
                               </div>

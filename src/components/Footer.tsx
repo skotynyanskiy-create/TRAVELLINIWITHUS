@@ -239,7 +239,7 @@ export default function Footer() {
                 </ul>
                 <button
                   onClick={handleNewsletterClick}
-                  className="w-full rounded-2xl border border-transparent bg-[var(--color-accent)] px-6 py-4 text-xs font-bold uppercase tracking-widest text-white shadow-sm transition-all hover:brightness-110"
+                  className="w-full rounded-[var(--radius-md)] border border-transparent bg-[var(--color-accent)] px-6 py-4 text-xs font-bold uppercase tracking-widest text-white shadow-sm transition-all hover:brightness-110"
                 >
                   {footer.newsletterButtonLabel}
                 </button>

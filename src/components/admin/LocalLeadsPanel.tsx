@@ -100,7 +100,7 @@ export default function LocalLeadsPanel() {
   const total = leads.contact.length + leads.newsletter.length;
 
   return (
-    <div className="mt-12 rounded-3xl border border-zinc-100 bg-white p-6 shadow-sm md:p-8">
+    <div className="mt-12 rounded-[var(--radius-lg)] border border-zinc-100 bg-white p-6 shadow-sm md:p-8">
       <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
         <div>
           <h3 className="flex items-center gap-2 font-serif text-xl">
@@ -122,7 +122,7 @@ export default function LocalLeadsPanel() {
       </div>
 
       {total === 0 ? (
-        <p className="rounded-2xl bg-zinc-50 px-6 py-8 text-center text-sm text-zinc-500">
+        <p className="rounded-[var(--radius-md)] bg-zinc-50 px-6 py-8 text-center text-sm text-zinc-500">
           Nessun lead salvato in locale su questo browser.
         </p>
       ) : (

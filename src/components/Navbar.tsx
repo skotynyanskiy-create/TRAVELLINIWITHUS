@@ -252,7 +252,7 @@ export default function Navbar() {
                 {(item.subLinks || item.subGroups) && (
                   <div className="invisible absolute top-full left-1/2 -translate-x-1/2 pt-6 opacity-0 transition-all duration-300 group-hover:visible group-hover:opacity-100">
                     <div
-                      className={`relative overflow-hidden rounded-3xl border border-[var(--color-ink)]/5 bg-[var(--color-surface)] py-4 shadow-2xl ${
+                      className={`relative overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-ink)]/5 bg-[var(--color-surface)] py-4 shadow-2xl ${
                         item.subGroups
                           ? item.subGroups.length >= 3
                             ? 'w-[46rem]'
@@ -271,7 +271,7 @@ export default function Navbar() {
                             <div key={group.label}>
                               <Link
                                 to={group.href}
-                                className="mb-2 block rounded-2xl bg-[var(--color-sand)] px-4 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+                                className="mb-2 block rounded-[var(--radius-md)] bg-[var(--color-sand)] px-4 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
                               >
                                 {group.label}
                               </Link>

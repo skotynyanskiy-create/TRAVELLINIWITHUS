@@ -10,8 +10,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { user, loading, signIn, signOut, isAdmin, authError, clearAuthError } = useAuth();
   const isDevBuild = import.meta.env.DEV;
   const isLocalHost =
-    typeof window !== 'undefined' &&
-    ['localhost', '127.0.0.1'].includes(window.location.hostname);
+    typeof window !== 'undefined' && ['localhost', '127.0.0.1'].includes(window.location.hostname);
   const canUsePreview = isDevBuild && isLocalHost;
   const hasPreviewParam = new URLSearchParams(location.search).get('previewAdmin') === '1';
 
@@ -45,10 +44,11 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
       <div className="flex min-h-screen flex-col items-center justify-center bg-[var(--color-sand)] p-8 text-center">
         <h1 className="mb-6 text-3xl font-serif">Accesso Riservato</h1>
         <p className="mb-8 max-w-md text-zinc-600">
-          Questa sezione e accessibile solo agli amministratori autorizzati. Effettua l accesso per continuare.
+          Questa sezione e accessibile solo agli amministratori autorizzati. Effettua l accesso per
+          continuare.
         </p>
         {authError && (
-          <div className="mb-6 max-w-md rounded-2xl border border-red-100 bg-red-50 px-5 py-4 text-sm text-red-700">
+          <div className="mb-6 max-w-md rounded-[var(--radius-md)] border border-red-100 bg-red-50 px-5 py-4 text-sm text-red-700">
             <p>{authError}</p>
             <button
               type="button"
@@ -82,7 +82,8 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
       <div className="flex min-h-screen flex-col items-center justify-center bg-[var(--color-sand)] p-8 text-center">
         <h1 className="mb-6 text-3xl font-serif">Accesso Negato</h1>
         <p className="mb-8 max-w-md text-zinc-600">
-          Questo account non risulta autorizzato per l area amministrativa. Se deve avere accesso, assegna il ruolo <strong>admin</strong> al relativo profilo utente in Firestore.
+          Questo account non risulta autorizzato per l area amministrativa. Se deve avere accesso,
+          assegna il ruolo <strong>admin</strong> al relativo profilo utente in Firestore.
         </p>
         <div className="flex flex-col gap-4 sm:flex-row">
           <Link

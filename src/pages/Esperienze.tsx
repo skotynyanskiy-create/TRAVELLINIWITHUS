@@ -135,7 +135,7 @@ function ExperienceCard({
       }`}
     >
       <div className="mb-5 flex items-start justify-between gap-4">
-        <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
+        <span className="flex h-12 w-12 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
           <Icon size={23} style={{ color: visual.color }} />
         </span>
         <span className="rounded-full bg-black/5 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-black/65">
@@ -371,7 +371,10 @@ export default function Esperienze() {
               'Categorie sostenute dai contenuti',
               'Ponte naturale verso guide e destinazioni',
             ].map((item) => (
-              <div key={item} className="rounded-2xl border border-black/5 bg-white p-4 shadow-sm">
+              <div
+                key={item}
+                className="rounded-[var(--radius-md)] border border-black/5 bg-white p-4 shadow-sm"
+              >
                 <ShieldCheck size={16} className="mb-3 text-[var(--color-accent)]" />
                 <p className="text-xs font-semibold leading-relaxed text-black/62">{item}</p>
               </div>
@@ -499,7 +502,7 @@ export default function Esperienze() {
         </div>
 
         {usingDemo && (
-          <div className="mb-8 rounded-2xl border border-[var(--color-accent)]/25 bg-[var(--color-accent-soft)] px-5 py-4 text-sm leading-relaxed text-[var(--color-accent-text)]">
+          <div className="mb-8 rounded-[var(--radius-md)] border border-[var(--color-accent)]/25 bg-[var(--color-accent-soft)] px-5 py-4 text-sm leading-relaxed text-[var(--color-accent-text)]">
             Questa e una preview editoriale temporanea: serve a mostrare il layout finche non ci
             sono contenuti reali pubblicati. Prima del deploy pubblico va sostituita o disattivata.
           </div>

@@ -13,7 +13,7 @@ export default function DemoContentNotice({
 }: DemoContentNoticeProps) {
   return (
     <div
-      className={`rounded-3xl border border-[var(--color-accent)]/25 bg-[var(--color-accent-soft)] px-6 py-5 text-[var(--color-ink)] ${className}`}
+      className={`rounded-[var(--radius-lg)] border border-[var(--color-accent)]/25 bg-[var(--color-accent-soft)] px-6 py-5 text-[var(--color-ink)] ${className}`}
     >
       <div className="flex items-start gap-4">
         <AlertCircle className="mt-0.5 shrink-0 text-[var(--color-accent-text)]" size={20} />

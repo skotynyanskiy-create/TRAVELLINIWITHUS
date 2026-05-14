@@ -49,7 +49,7 @@ export default function HomeMapTeaser() {
       <div className="mx-auto max-w-[82rem] px-6 md:px-10 xl:px-12">
         <Link
           to="/mappa"
-          className="group grid overflow-hidden rounded-2xl border border-black/8 bg-[var(--color-ink)] text-white md:grid-cols-[1.1fr_0.9fr]"
+          className="group grid overflow-hidden rounded-[var(--radius-md)] border border-black/8 bg-[var(--color-ink)] text-white md:grid-cols-[1.1fr_0.9fr]"
         >
           <div data-map-content className="p-7 md:p-10 lg:p-12">
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent)]">

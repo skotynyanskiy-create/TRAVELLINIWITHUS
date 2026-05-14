@@ -146,11 +146,11 @@ export default function AiAssistant() {
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             role="dialog"
             aria-label="Assistente viaggio Travelliniwithus"
-            className="fixed inset-x-4 bottom-24 z-[71] flex max-h-[68vh] flex-col overflow-hidden rounded-[2rem] border border-black/10 bg-white shadow-2xl sm:right-6 sm:left-auto sm:bottom-28 sm:w-[380px] md:right-8"
+            className="fixed inset-x-4 bottom-24 z-[71] flex max-h-[68vh] flex-col overflow-hidden rounded-[var(--radius-lg)] border border-black/10 bg-white shadow-2xl sm:right-6 sm:left-auto sm:bottom-28 sm:w-[380px] md:right-8"
           >
             <header className="flex items-start justify-between gap-3 border-b border-black/5 bg-[var(--color-ink)] p-5 text-white">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[var(--color-accent)]/15 text-[var(--color-accent)]">
+                <div className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-accent)]/15 text-[var(--color-accent)]">
                   <Sparkles size={18} />
                 </div>
                 <div>
@@ -180,7 +180,7 @@ export default function AiAssistant() {
                   className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm ${
+                    className={`max-w-[85%] rounded-[var(--radius-md)] px-4 py-3 text-sm leading-relaxed shadow-sm ${
                       message.role === 'user'
                         ? 'bg-[var(--color-ink)] text-white'
                         : 'bg-white text-[var(--color-ink)]'
@@ -192,7 +192,7 @@ export default function AiAssistant() {
               ))}
               {isThinking && (
                 <div className="flex justify-start">
-                  <div className="rounded-2xl bg-white px-4 py-3 shadow-sm">
+                  <div className="rounded-[var(--radius-md)] bg-white px-4 py-3 shadow-sm">
                     <span className="inline-flex items-center gap-1.5">
                       <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--color-accent)]" />
                       <span

@@ -61,7 +61,7 @@ function TeaserCard({ icon: Icon, eyebrow, title, description, cta, to, accent }
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
-      className={`group flex flex-col justify-between gap-8 rounded-[2rem] border p-8 transition-all hover:-translate-y-1 md:p-10 ${
+      className={`group flex flex-col justify-between gap-8 rounded-[var(--radius-lg)] border p-8 transition-all hover:-translate-y-1 md:p-10 ${
         accent
           ? 'border-[var(--color-accent)]/20 bg-[var(--color-ink)] text-white hover:bg-[var(--color-ink)]/95'
           : 'border-black/5 bg-white text-[var(--color-ink)] hover:border-[var(--color-accent)]'
@@ -69,7 +69,7 @@ function TeaserCard({ icon: Icon, eyebrow, title, description, cta, to, accent }
     >
       <div>
         <div
-          className={`mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl ${
+          className={`mb-6 inline-flex h-12 w-12 items-center justify-center rounded-[var(--radius-md)] ${
             accent
               ? 'bg-[var(--color-accent)]/15 text-[var(--color-accent)]'
               : 'bg-[var(--color-accent-soft)] text-[var(--color-accent)]'

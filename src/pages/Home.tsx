@@ -75,7 +75,7 @@ export default function Home() {
               newsletter riempita per forza.
             </p>
           </div>
-          <div className="rounded-2xl border border-black/6 bg-[var(--color-sand)] p-8 md:p-10">
+          <div className="rounded-[var(--radius-md)] border border-black/6 bg-[var(--color-sand)] p-8 md:p-10">
             <Newsletter compact variant="sand" source="homepage_compact" />
           </div>
         </div>

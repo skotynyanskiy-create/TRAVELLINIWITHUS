@@ -104,7 +104,7 @@ export default function Guida() {
               />
             )}
 
-            <div className="mt-10 rounded-[2rem] border border-black/5 bg-white p-7 shadow-sm md:p-9">
+            <div className="mt-10 rounded-[var(--radius-lg)] border border-black/5 bg-white p-7 shadow-sm md:p-9">
               <div className="flex flex-wrap items-end justify-between gap-5">
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
@@ -149,7 +149,7 @@ export default function Guida() {
                 {guide.inside.map((item) => (
                   <div
                     key={item}
-                    className="flex items-start gap-3 rounded-2xl bg-[var(--color-sand)] p-5"
+                    className="flex items-start gap-3 rounded-[var(--radius-md)] bg-[var(--color-sand)] p-5"
                   >
                     <Sparkles size={16} className="mt-1 shrink-0 text-[var(--color-accent)]" />
                     <p className="text-sm leading-relaxed text-black/68">{item}</p>
@@ -166,7 +166,7 @@ export default function Guida() {
             className="order-1 lg:order-2"
           >
             <div className="sticky top-32">
-              <div className="overflow-hidden rounded-[2rem] bg-[var(--color-sand)] shadow-lg">
+              <div className="overflow-hidden rounded-[var(--radius-lg)] bg-[var(--color-sand)] shadow-lg">
                 <div className="relative aspect-[4/5]">
                   <OptimizedImage
                     src={guide.previewImages[activePreview] || guide.coverImage}
@@ -203,7 +203,7 @@ export default function Guida() {
         </div>
       </Section>
 
-      <Section className="my-16 rounded-[3rem] bg-[var(--color-ink)] p-12 text-white md:p-16">
+      <Section className="my-16 rounded-[var(--radius-xl)] bg-[var(--color-ink)] p-12 text-white md:p-16">
         <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
             <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">
@@ -239,7 +239,7 @@ function SpecPill({
   value: string | number;
 }) {
   return (
-    <div className="rounded-2xl border border-black/5 bg-white px-4 py-3">
+    <div className="rounded-[var(--radius-md)] border border-black/5 bg-white px-4 py-3">
       <p className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-[0.22em] text-black/40">
         {icon} {label}
       </p>

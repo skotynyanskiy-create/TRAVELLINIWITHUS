@@ -111,7 +111,7 @@ export default function AdminMetricsOverview() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="rounded-2xl border border-zinc-100 bg-white p-6 shadow-sm"
+          className="rounded-[var(--radius-md)] border border-zinc-100 bg-white p-6 shadow-sm"
         >
           <div className="mb-4 flex items-center justify-between">
             <h3 className="font-serif text-lg">Trend 7 giorni</h3>
@@ -153,7 +153,7 @@ export default function AdminMetricsOverview() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.05 }}
-          className="rounded-2xl border border-zinc-100 bg-white p-6 shadow-sm"
+          className="rounded-[var(--radius-md)] border border-zinc-100 bg-white p-6 shadow-sm"
         >
           <div className="mb-4 flex items-center justify-between">
             <h3 className="font-serif text-lg">Funnel conversione</h3>
@@ -192,7 +192,7 @@ export default function AdminMetricsOverview() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="rounded-2xl border border-zinc-100 bg-white p-6 shadow-sm"
+          className="rounded-[var(--radius-md)] border border-zinc-100 bg-white p-6 shadow-sm"
         >
           <h3 className="mb-5 font-serif text-lg">Top 5 articoli (settimana)</h3>
           <ul className="space-y-3">
@@ -233,7 +233,7 @@ export default function AdminMetricsOverview() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className="rounded-2xl border border-zinc-100 bg-white p-6 shadow-sm"
+          className="rounded-[var(--radius-md)] border border-zinc-100 bg-white p-6 shadow-sm"
         >
           <h3 className="mb-5 font-serif text-lg">Lead pipeline</h3>
           <ResponsiveContainer width="100%" height={150}>
@@ -295,7 +295,7 @@ function KpiCard({ icon: Icon, label, value, deltaPct, color }: KpiCardProps) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="rounded-2xl border border-zinc-100 bg-white p-5 shadow-sm"
+      className="rounded-[var(--radius-md)] border border-zinc-100 bg-white p-5 shadow-sm"
     >
       <div className="mb-4 flex items-start justify-between">
         <div className={`rounded-xl p-2.5 ${color}`}>

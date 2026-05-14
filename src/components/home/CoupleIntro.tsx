@@ -87,7 +87,7 @@ export default function CoupleIntro() {
           <div className="relative lg:col-span-7">
             <div
               data-couple-image
-              className="aspect-[3/2] overflow-hidden rounded-2xl shadow-[0_30px_70px_-20px_rgba(17,17,17,0.25)] lg:aspect-[5/6]"
+              className="aspect-[3/2] overflow-hidden rounded-[var(--radius-md)] shadow-[0_30px_70px_-20px_rgba(17,17,17,0.25)] lg:aspect-[5/6]"
             >
               <img
                 src={COUPLE_IMG}

@@ -413,7 +413,7 @@ export default function Articolo() {
           style={{ scaleX }}
         />
 
-        <article className="mx-4 my-8 overflow-hidden rounded-[2.5rem] border border-black/5 bg-white pb-24 shadow-xl shadow-black/5 md:mx-8 lg:mx-12">
+        <article className="mx-4 my-8 overflow-hidden rounded-[var(--radius-lg)] border border-black/5 bg-white pb-24 shadow-xl shadow-black/5 md:mx-8 lg:mx-12">
           <div className="absolute left-8 top-8 z-50 hidden md:block">
             <Link
               to={categoryPath}
@@ -458,7 +458,7 @@ export default function Articolo() {
               className="mt-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start"
             >
               <div>
-                <div className="rounded-[2rem] border border-[var(--color-accent)]/15 bg-[var(--color-accent-soft)] p-8 md:p-10">
+                <div className="rounded-[var(--radius-lg)] border border-[var(--color-accent)]/15 bg-[var(--color-accent-soft)] p-8 md:p-10">
                   <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
                     In breve
                   </p>
@@ -482,7 +482,7 @@ export default function Articolo() {
             <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1fr)_320px]">
               <div className="min-w-0">
                 <section id="pratico" className="scroll-mt-32">
-                  <div className="grid grid-cols-1 gap-px overflow-hidden rounded-[2rem] border border-black/5 bg-black/5 md:grid-cols-4">
+                  <div className="grid grid-cols-1 gap-px overflow-hidden rounded-[var(--radius-lg)] border border-black/5 bg-black/5 md:grid-cols-4">
                     {[
                       { icon: <MapPin size={18} />, label: 'Dove', value: article.location },
                       { icon: <Clock size={18} />, label: 'Quando', value: article.period },
@@ -509,13 +509,16 @@ export default function Articolo() {
                 </section>
 
                 {article.highlights && article.highlights.length > 0 && (
-                  <section className="mt-14 rounded-[2rem] border border-black/5 bg-white p-8 shadow-sm">
+                  <section className="mt-14 rounded-[var(--radius-lg)] border border-black/5 bg-white p-8 shadow-sm">
                     <p className="mb-6 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
                       Perché salvarlo
                     </p>
                     <div className="grid gap-4 md:grid-cols-3">
                       {article.highlights.map((highlight) => (
-                        <div key={highlight} className="rounded-2xl bg-[var(--color-sand)] p-5">
+                        <div
+                          key={highlight}
+                          className="rounded-[var(--radius-md)] bg-[var(--color-sand)] p-5"
+                        >
                           <CheckCircle2 className="mb-4 text-[var(--color-accent)]" size={20} />
                           <p className="text-sm leading-relaxed text-black/68">{highlight}</p>
                         </div>
@@ -542,7 +545,7 @@ export default function Articolo() {
                       {article.itinerary.map((step) => (
                         <div
                           key={`${step.day}-${step.title}`}
-                          className="grid gap-5 rounded-[2rem] border border-black/5 bg-[var(--color-sand)] p-6 md:grid-cols-[80px_1fr]"
+                          className="grid gap-5 rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-sand)] p-6 md:grid-cols-[80px_1fr]"
                         >
                           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-ink)] font-serif text-2xl text-white">
                             {step.day}
@@ -562,7 +565,7 @@ export default function Articolo() {
                 {(article.mapUrl || article.mapMarkers?.length) && (
                   <section id="mappa" className="mt-20 scroll-mt-32">
                     <h2 className="mb-8 text-3xl font-serif md:text-4xl">Mappa del viaggio</h2>
-                    <div className="overflow-hidden rounded-[2.5rem] border border-black/5 shadow-sm">
+                    <div className="overflow-hidden rounded-[var(--radius-lg)] border border-black/5 shadow-sm">
                       {article.mapMarkers && article.mapMarkers.length > 0 ? (
                         <InteractiveMap
                           markers={article.mapMarkers}
@@ -588,7 +591,7 @@ export default function Articolo() {
 
                 <section id="consigli" className="mt-20 grid scroll-mt-32 gap-8 md:grid-cols-2">
                   {article.tips && article.tips.length > 0 && (
-                    <div className="rounded-[2rem] bg-[var(--color-sand)] p-8">
+                    <div className="rounded-[var(--radius-lg)] bg-[var(--color-sand)] p-8">
                       <h2 className="mb-6 flex items-center gap-3 font-serif text-2xl">
                         <Info size={20} className="text-[var(--color-accent)]" />
                         Consigli pratici
@@ -611,7 +614,7 @@ export default function Articolo() {
                   )}
 
                   {article.packingList && article.packingList.length > 0 && (
-                    <div className="rounded-[2rem] bg-[var(--color-ink)] p-8 text-white">
+                    <div className="rounded-[var(--radius-lg)] bg-[var(--color-ink)] p-8 text-white">
                       <h2 className="mb-6 font-serif text-2xl">Cosa tenere pronto</h2>
                       <ul className="space-y-4">
                         {article.packingList.map((item) => (
@@ -632,7 +635,7 @@ export default function Articolo() {
                 </section>
 
                 <section id="risorse" className="mt-20 scroll-mt-32">
-                  <div className="rounded-[2.5rem] border border-black/5 bg-white p-8 shadow-sm md:p-10">
+                  <div className="rounded-[var(--radius-lg)] border border-black/5 bg-white p-8 shadow-sm md:p-10">
                     <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
                       Risorse utili
                     </p>

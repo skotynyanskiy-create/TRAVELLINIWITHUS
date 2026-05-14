@@ -137,7 +137,7 @@ function FaqSection() {
           {FAQ_ITEMS.map((item, idx) => (
             <div
               key={item.q}
-              className="overflow-hidden rounded-2xl border border-black/5 bg-white"
+              className="overflow-hidden rounded-[var(--radius-md)] border border-black/5 bg-white"
             >
               <button
                 type="button"
@@ -369,7 +369,7 @@ export default function Collaborazioni() {
               {pageContent.heroChecklist.map((item) => (
                 <div
                   key={item}
-                  className="flex items-start gap-3 rounded-2xl bg-[var(--color-accent-soft)] px-5 py-4 text-sm text-black/72"
+                  className="flex items-start gap-3 rounded-[var(--radius-md)] bg-[var(--color-accent-soft)] px-5 py-4 text-sm text-black/72"
                 >
                   <CheckCircle size={18} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
                   <span>{item}</span>
@@ -414,7 +414,7 @@ export default function Collaborazioni() {
             transition={{ duration: 0.8 }}
             className="relative"
           >
-            <div className="aspect-[4/5] overflow-hidden rounded-3xl shadow-2xl transition-transform duration-700 lg:-rotate-2 lg:hover:rotate-0">
+            <div className="aspect-[4/5] overflow-hidden rounded-[var(--radius-lg)] shadow-2xl transition-transform duration-700 lg:-rotate-2 lg:hover:rotate-0">
               <OptimizedImage
                 src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1200&auto=format&fit=crop"
                 alt="Rodrigo e Betta in un contesto travel editoriale"
@@ -422,7 +422,7 @@ export default function Collaborazioni() {
               />
             </div>
 
-            <div className="absolute -bottom-8 -left-8 hidden rounded-2xl border border-white/30 bg-white/92 p-6 shadow-xl backdrop-blur-md md:block">
+            <div className="absolute -bottom-8 -left-8 hidden rounded-[var(--radius-md)] border border-white/30 bg-white/92 p-6 shadow-xl backdrop-blur-md md:block">
               <div className="mb-2 flex items-center gap-4">
                 <BriefcaseBusiness className="text-[var(--color-accent)]" size={24} />
                 <span className="text-2xl font-serif text-[var(--color-ink)]">
@@ -437,7 +437,7 @@ export default function Collaborazioni() {
         </div>
       </Section>
 
-      <Section className="my-20 rounded-[3rem] bg-[var(--color-accent-soft)] p-12 md:p-20">
+      <Section className="my-20 rounded-[var(--radius-xl)] bg-[var(--color-accent-soft)] p-12 md:p-20">
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <h2 className="mb-6 text-4xl font-serif">{pageContent.statsTitle}</h2>
           <p className="text-lg text-black/70">{pageContent.statsDescription}</p>
@@ -453,7 +453,7 @@ export default function Collaborazioni() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="flex flex-col items-center rounded-3xl border border-[var(--color-accent)]/20 bg-white/80 backdrop-blur-lg p-8 text-center shadow-[var(--shadow-premium)]"
+                className="flex flex-col items-center rounded-[var(--radius-lg)] border border-[var(--color-accent)]/20 bg-white/80 backdrop-blur-lg p-8 text-center shadow-[var(--shadow-premium)]"
               >
                 <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)]">
                   <item.icon size={26} />
@@ -490,7 +490,7 @@ export default function Collaborazioni() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.06 }}
-                className="flex items-start gap-4 rounded-2xl border border-black/5 bg-white p-6 shadow-sm"
+                className="flex items-start gap-4 rounded-[var(--radius-md)] border border-black/5 bg-white p-6 shadow-sm"
               >
                 <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
                   <item.icon size={20} />
@@ -505,7 +505,7 @@ export default function Collaborazioni() {
         </div>
       </Section>
 
-      <Section className="my-16 rounded-[3rem] bg-[var(--color-ink)] p-12 text-white md:p-20">
+      <Section className="my-16 rounded-[var(--radius-xl)] bg-[var(--color-ink)] p-12 text-white md:p-20">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[0.9fr_1.1fr]">
           <div>
             <div className="mb-4 flex items-center gap-2">
@@ -529,7 +529,7 @@ export default function Collaborazioni() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.08 }}
-                className="rounded-3xl border border-white/10 bg-white/6 p-7"
+                className="rounded-[var(--radius-lg)] border border-white/10 bg-white/6 p-7"
               >
                 <item.icon size={22} className="text-[var(--color-accent)]" />
                 <h3 className="mt-5 mb-3 text-2xl font-serif">{item.title}</h3>
@@ -551,9 +551,9 @@ export default function Collaborazioni() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.45, delay: index * 0.08 }}
-                className="flex flex-col rounded-3xl border border-black/5 bg-[var(--color-accent-soft)] p-8"
+                className="flex flex-col rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-accent-soft)] p-8"
               >
-                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-[var(--color-accent)] shadow-sm">
+                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-[var(--radius-md)] bg-white text-[var(--color-accent)] shadow-sm">
                   <Icon size={24} />
                 </div>
                 <h3 className="mb-3 text-2xl font-serif">{service.title}</h3>
@@ -564,7 +564,7 @@ export default function Collaborazioni() {
         </div>
       </Section>
 
-      <Section className="rounded-[3rem] bg-[var(--color-sand)] p-12 md:p-20">
+      <Section className="rounded-[var(--radius-xl)] bg-[var(--color-sand)] p-12 md:p-20">
         <div className="mx-auto max-w-4xl">
           <div className="mb-10 text-center">
             <span className="mb-2 block font-script text-xl text-[var(--color-accent)]">
@@ -580,7 +580,7 @@ export default function Collaborazioni() {
             {ANTI_TARGETS.map((item) => (
               <div
                 key={item}
-                className="flex gap-3 rounded-2xl border border-black/5 bg-white px-5 py-5"
+                className="flex gap-3 rounded-[var(--radius-md)] border border-black/5 bg-white px-5 py-5"
               >
                 <CheckCircle size={18} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
                 <p className="text-black/72">{item}</p>
@@ -595,7 +595,7 @@ export default function Collaborazioni() {
           {pageContent.processSteps.map((step) => (
             <div
               key={step.step}
-              className="relative rounded-3xl border border-black/5 bg-white p-8 shadow-sm"
+              className="relative rounded-[var(--radius-lg)] border border-black/5 bg-white p-8 shadow-sm"
             >
               <div className="absolute right-6 top-4 text-6xl font-serif text-[var(--color-accent-soft)]">
                 {step.step}
@@ -607,7 +607,7 @@ export default function Collaborazioni() {
         </div>
       </Section>
 
-      <Section className="relative overflow-hidden rounded-[3rem] bg-[var(--color-ink)] p-12 text-white md:p-20">
+      <Section className="relative overflow-hidden rounded-[var(--radius-xl)] bg-[var(--color-ink)] p-12 text-white md:p-20">
         <div className="pointer-events-none absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[length:20px_20px] opacity-40" />
         </div>
@@ -635,7 +635,7 @@ export default function Collaborazioni() {
               return (
                 <div
                   key={format.title}
-                  className={`flex flex-col rounded-3xl border p-10 transition-transform duration-500 hover:-translate-y-2 ${
+                  className={`flex flex-col rounded-[var(--radius-lg)] border p-10 transition-transform duration-500 hover:-translate-y-2 ${
                     isHighlighted
                       ? 'border-[var(--color-accent)]/50 bg-white/10 shadow-2xl shadow-[var(--color-accent)]/10'
                       : 'border-white/10 bg-white/5'

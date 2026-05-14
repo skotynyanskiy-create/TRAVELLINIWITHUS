@@ -59,7 +59,7 @@ export default function ConsentBanner() {
       role="dialog"
       aria-live="polite"
       aria-label="Informativa cookie"
-      className="fixed inset-x-3 bottom-3 z-[1000] mx-auto max-w-3xl rounded-2xl border border-black/10 bg-white/95 p-4 shadow-premium backdrop-blur-md sm:inset-x-4 sm:bottom-4 sm:p-6"
+      className="fixed inset-x-3 bottom-3 z-[1000] mx-auto max-w-3xl rounded-[var(--radius-md)] border border-black/10 bg-white/95 p-4 shadow-premium backdrop-blur-md sm:inset-x-4 sm:bottom-4 sm:p-6"
     >
       {mode === 'banner' ? (
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-6">
@@ -69,11 +69,12 @@ export default function ConsentBanner() {
             </h2>
             <p className="text-sm leading-relaxed text-zinc-600 sm:mt-2">
               <span className="sm:hidden">
-                Usiamo cookie per far funzionare il sito e, col tuo ok, per capire come viene usato.{' '}
+                Usiamo cookie per far funzionare il sito e, col tuo ok, per capire come viene
+                usato.{' '}
               </span>
               <span className="hidden sm:inline">
-                Usiamo cookie tecnici necessari al funzionamento del sito e, con il tuo consenso, cookie
-                analitici e di marketing per migliorare l&apos;esperienza.{' '}
+                Usiamo cookie tecnici necessari al funzionamento del sito e, con il tuo consenso,
+                cookie analitici e di marketing per migliorare l&apos;esperienza.{' '}
               </span>
               <Link
                 to="/cookie"

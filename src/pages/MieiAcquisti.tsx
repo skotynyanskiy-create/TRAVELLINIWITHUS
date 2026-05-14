@@ -63,7 +63,7 @@ function OrderCard({ order }: { order: Order }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-[2rem] border border-black/5 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+      className="bg-white rounded-[var(--radius-lg)] border border-black/5 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
     >
       <div className="p-8">
         <div className="flex items-start justify-between gap-4 flex-wrap mb-6">
@@ -175,12 +175,12 @@ export default function MieiAcquisti() {
             {[1, 2].map((i) => (
               <div
                 key={i}
-                className="bg-white rounded-[2rem] border border-black/5 h-36 animate-pulse"
+                className="bg-white rounded-[var(--radius-lg)] border border-black/5 h-36 animate-pulse"
               />
             ))}
           </div>
         ) : !user ? (
-          <div className="bg-white rounded-[2rem] border border-black/5 p-12 text-center">
+          <div className="bg-white rounded-[var(--radius-lg)] border border-black/5 p-12 text-center">
             <Package size={48} className="mx-auto mb-6 text-black/20" />
             <h2 className="font-serif text-2xl mb-4">Accedi per vedere i tuoi acquisti</h2>
             <p className="text-black/60 font-light mb-8">
@@ -194,7 +194,7 @@ export default function MieiAcquisti() {
             </Link>
           </div>
         ) : orders.length === 0 ? (
-          <div className="bg-white rounded-[2rem] border border-black/5 p-12 text-center">
+          <div className="bg-white rounded-[var(--radius-lg)] border border-black/5 p-12 text-center">
             <ShoppingBag size={48} className="mx-auto mb-6 text-black/20" />
             <h2 className="font-serif text-2xl mb-4">Nessun acquisto ancora</h2>
             <p className="text-black/60 font-light mb-8">

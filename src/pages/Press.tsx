@@ -85,7 +85,7 @@ export default function Press() {
               {PRESS_HIGHLIGHTS.map((item) => (
                 <div
                   key={item.title}
-                  className="rounded-2xl border border-black/5 bg-[var(--color-accent-soft)] p-5"
+                  className="rounded-[var(--radius-md)] border border-black/5 bg-[var(--color-accent-soft)] p-5"
                 >
                   <h3 className="mb-2 text-sm font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
                     {item.title}
@@ -100,7 +100,7 @@ export default function Press() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="rounded-[2rem] border border-black/5 bg-white p-8 shadow-sm md:p-10"
+            className="rounded-[var(--radius-lg)] border border-black/5 bg-white p-8 shadow-sm md:p-10"
           >
             <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
               Numeri pubblici
@@ -156,9 +156,9 @@ export default function Press() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => handleAssetClick(asset.trackingId)}
-                className="group flex items-start gap-5 rounded-3xl border border-black/5 bg-white p-7 transition-all hover:-translate-y-0.5 hover:border-[var(--color-accent)] hover:shadow-md"
+                className="group flex items-start gap-5 rounded-[var(--radius-lg)] border border-black/5 bg-white p-7 transition-all hover:-translate-y-0.5 hover:border-[var(--color-accent)] hover:shadow-md"
               >
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
                   <Icon size={22} />
                 </div>
                 <div className="flex-1">
@@ -176,7 +176,7 @@ export default function Press() {
         </div>
       </Section>
 
-      <Section className="my-16 rounded-[3rem] bg-[var(--color-ink)] p-12 text-white md:p-20">
+      <Section className="my-16 rounded-[var(--radius-xl)] bg-[var(--color-ink)] p-12 text-white md:p-20">
         <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
             <span className="mb-4 block text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">
@@ -194,7 +194,7 @@ export default function Press() {
             <a
               href={CONTACTS.mailto}
               onClick={() => trackEvent('press_email_click', { id: 'press_email' })}
-              className="flex items-center justify-between gap-4 rounded-2xl bg-white/5 p-5 transition-colors hover:bg-white/10"
+              className="flex items-center justify-between gap-4 rounded-[var(--radius-md)] bg-white/5 p-5 transition-colors hover:bg-white/10"
             >
               <div className="flex items-center gap-4">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-accent)]/15 text-[var(--color-accent)]">
@@ -211,7 +211,7 @@ export default function Press() {
             </a>
             <Link
               to="/contatti?topic=press"
-              className="flex items-center justify-between gap-4 rounded-2xl bg-white/5 p-5 transition-colors hover:bg-white/10"
+              className="flex items-center justify-between gap-4 rounded-[var(--radius-md)] bg-white/5 p-5 transition-colors hover:bg-white/10"
             >
               <div className="flex items-center gap-4">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-accent)]/15 text-[var(--color-accent)]">

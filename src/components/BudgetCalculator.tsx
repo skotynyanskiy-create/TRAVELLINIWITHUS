@@ -93,12 +93,12 @@ export default function BudgetCalculator({
 
   const containerClass = embedded
     ? 'w-full'
-    : 'rounded-[2rem] border border-black/5 bg-white p-8 shadow-sm md:p-12';
+    : 'rounded-[var(--radius-lg)] border border-black/5 bg-white p-8 shadow-sm md:p-12';
 
   return (
     <div className={containerClass} onMouseEnter={handleEstimate} onFocusCapture={handleEstimate}>
       <div className="mb-8 flex items-start gap-4">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
           <Wallet size={22} />
         </div>
         <div>
@@ -165,7 +165,7 @@ export default function BudgetCalculator({
 
       <motion.div
         layout
-        className="mt-8 grid gap-5 rounded-[2rem] bg-[var(--color-accent-soft)] p-7 md:grid-cols-[1.05fr_0.95fr]"
+        className="mt-8 grid gap-5 rounded-[var(--radius-lg)] bg-[var(--color-accent-soft)] p-7 md:grid-cols-[1.05fr_0.95fr]"
       >
         <div>
           <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">

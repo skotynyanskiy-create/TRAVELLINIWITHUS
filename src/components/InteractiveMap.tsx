@@ -53,7 +53,7 @@ export default function InteractiveMap({
   };
 
   return (
-    <div className="relative w-full overflow-hidden rounded-3xl border border-black/5 bg-[var(--color-sand)] shadow-inner">
+    <div className="relative w-full overflow-hidden rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-sand)] shadow-inner">
       <div className="pointer-events-none absolute left-6 top-6 z-10">
         <h3 className="text-2xl font-serif text-black/80">Esplora la mappa</h3>
         <p className="text-sm font-normal text-black/65">
@@ -167,7 +167,7 @@ export default function InteractiveMap({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-            className="absolute bottom-6 left-6 right-6 z-20 overflow-hidden rounded-2xl border border-black/5 bg-white shadow-2xl md:left-auto md:right-6 md:w-80"
+            className="absolute bottom-6 left-6 right-6 z-20 overflow-hidden rounded-[var(--radius-md)] border border-black/5 bg-white shadow-2xl md:left-auto md:right-6 md:w-80"
           >
             <button
               onClick={closeCards}
@@ -216,7 +216,7 @@ export default function InteractiveMap({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-            className="absolute bottom-6 left-6 right-6 z-20 overflow-hidden rounded-2xl border border-black/5 bg-white shadow-2xl md:left-auto md:right-6 md:w-80"
+            className="absolute bottom-6 left-6 right-6 z-20 overflow-hidden rounded-[var(--radius-md)] border border-black/5 bg-white shadow-2xl md:left-auto md:right-6 md:w-80"
           >
             <button
               onClick={closeCards}

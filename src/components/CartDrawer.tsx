@@ -373,7 +373,7 @@ export default function CartDrawer() {
                   role="dialog"
                   aria-modal="true"
                   aria-label="Conferma checkout"
-                  className="relative z-140 w-full max-w-sm rounded-3xl bg-white p-8 text-center shadow-2xl"
+                  className="relative z-140 w-full max-w-sm rounded-[var(--radius-lg)] bg-white p-8 text-center shadow-2xl"
                 >
                   <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-accent)]/15">
                     <CheckCircle className="text-[var(--color-accent)]" size={32} />

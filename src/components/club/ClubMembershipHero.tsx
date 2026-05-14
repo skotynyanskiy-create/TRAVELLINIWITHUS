@@ -66,7 +66,7 @@ export default function ClubMembershipHero() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="rounded-[2rem] border border-white/10 bg-white/5 p-8 md:p-10"
+            className="rounded-[var(--radius-lg)] border border-white/10 bg-white/5 p-8 md:p-10"
           >
             <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/55">
               Lettore — Gratis
@@ -88,7 +88,7 @@ export default function ClubMembershipHero() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="relative overflow-hidden rounded-[2rem] border border-[var(--color-accent)]/40 bg-gradient-to-br from-[var(--color-accent)]/12 to-white/4 p-8 md:p-10"
+            className="relative overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-accent)]/40 bg-gradient-to-br from-[var(--color-accent)]/12 to-white/4 p-8 md:p-10"
           >
             <div className="absolute right-8 top-8 inline-flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.24em] text-[var(--color-ink)]">
               <Sparkles size={11} /> Consigliato
@@ -115,7 +115,7 @@ export default function ClubMembershipHero() {
                   key={tier.id}
                   type="button"
                   onClick={() => handleInterest(tier.id)}
-                  className="group relative flex flex-col items-start gap-2 rounded-2xl border border-white/12 bg-white/5 p-5 text-left transition-all hover:border-[var(--color-accent)]/60 hover:bg-white/10"
+                  className="group relative flex flex-col items-start gap-2 rounded-[var(--radius-md)] border border-white/12 bg-white/5 p-5 text-left transition-all hover:border-[var(--color-accent)]/60 hover:bg-white/10"
                 >
                   {tier.badge && (
                     <span className="absolute right-4 top-4 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)]">
@@ -134,7 +134,7 @@ export default function ClubMembershipHero() {
               ))}
             </div>
 
-            <p className="mt-7 flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white/68">
+            <p className="mt-7 flex items-center gap-2 rounded-[var(--radius-md)] border border-white/10 bg-white/5 p-4 text-sm text-white/68">
               <Lock size={14} className="shrink-0 text-[var(--color-accent)]" />
               Checkout in arrivo. Lascia l email e ti avvisiamo appena il Club apre alle prime
               iscrizioni.

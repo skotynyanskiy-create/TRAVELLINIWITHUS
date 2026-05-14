@@ -82,7 +82,7 @@ export default function ProductPage() {
           noindex
         />
         <Section>
-          <div className="mx-auto max-w-3xl rounded-[2rem] border border-black/5 bg-white p-10 text-center shadow-sm">
+          <div className="mx-auto max-w-3xl rounded-[var(--radius-lg)] border border-black/5 bg-white p-10 text-center shadow-sm">
             <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
               Prodotto non disponibile
             </p>
@@ -149,7 +149,7 @@ export default function ProductPage() {
             transition={{ duration: 0.8 }}
             className="lg:col-span-7"
           >
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[2.5rem] bg-white shadow-2xl md:aspect-[3/2] lg:aspect-[4/5]">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[var(--radius-lg)] bg-white shadow-2xl md:aspect-[3/2] lg:aspect-[4/5]">
               {product.imageUrl ? (
                 <img
                   src={product.imageUrl}
@@ -159,7 +159,7 @@ export default function ProductPage() {
                 />
               ) : (
                 <div className="flex h-full w-full items-end bg-[var(--color-accent-soft)] p-8">
-                  <div className="w-full rounded-[2rem] border border-black/5 bg-white/80 p-6 backdrop-blur-md">
+                  <div className="w-full rounded-[var(--radius-lg)] border border-black/5 bg-white/80 p-6 backdrop-blur-md">
                     <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
                       Travelliniwithus
                     </span>
@@ -241,7 +241,7 @@ export default function ProductPage() {
             </div>
 
             {isDemoProduct ? (
-              <div className="rounded-2xl border border-[var(--color-accent)]/25 bg-white p-6">
+              <div className="rounded-[var(--radius-md)] border border-[var(--color-accent)]/25 bg-white p-6">
                 <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
                   In uscita prossimamente
                 </div>
@@ -272,7 +272,7 @@ export default function ProductPage() {
       </Section>
 
       {product.features && product.features.length > 0 && (
-        <Section className="mt-28 rounded-[3rem] bg-white shadow-sm">
+        <Section className="mt-28 rounded-[var(--radius-xl)] bg-white shadow-sm">
           <div className="mx-auto max-w-4xl">
             <div className="mb-12 text-center">
               <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
@@ -284,7 +284,7 @@ export default function ProductPage() {
               {product.features.map((feature) => (
                 <div
                   key={feature}
-                  className="flex items-start gap-4 rounded-2xl border border-black/5 bg-[var(--color-sand)] p-6"
+                  className="flex items-start gap-4 rounded-[var(--radius-md)] border border-black/5 bg-[var(--color-sand)] p-6"
                 >
                   <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-[var(--color-accent)]" />
                   <p className="text-sm font-light leading-relaxed text-black/70">{feature}</p>
@@ -310,10 +310,10 @@ export default function ProductPage() {
       )}
 
       <Section className="pt-12">
-        <div className="mx-auto max-w-5xl rounded-[2.5rem] bg-[var(--color-ink)] p-8 text-white md:p-12">
+        <div className="mx-auto max-w-5xl rounded-[var(--radius-lg)] bg-[var(--color-ink)] p-8 text-white md:p-12">
           <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
             <div>
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-accent)]/15">
+              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-accent)]/15">
                 <FileText className="text-[var(--color-accent)]" size={24} />
               </div>
               <h2 className="text-3xl font-serif md:text-5xl">Lo shop deve restare editoriale.</h2>

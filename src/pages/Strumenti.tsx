@@ -74,10 +74,10 @@ export default function Strumenti() {
               <Link
                 key={tool.href}
                 to={tool.href}
-                className="group flex items-center justify-between gap-5 rounded-3xl border border-black/5 bg-white p-7 transition-all hover:-translate-y-1 hover:border-[var(--color-accent)] hover:shadow-md"
+                className="group flex items-center justify-between gap-5 rounded-[var(--radius-lg)] border border-black/5 bg-white p-7 transition-all hover:-translate-y-1 hover:border-[var(--color-accent)] hover:shadow-md"
               >
                 <div className="flex items-center gap-5">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
                     <Icon size={22} />
                   </div>
                   <div>
