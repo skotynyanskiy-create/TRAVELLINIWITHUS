@@ -35,6 +35,9 @@ const Contatti = lazy(() => import('./pages/Contatti'));
 const MediaKit = lazy(() => import('./pages/MediaKit'));
 const Press = lazy(() => import('./pages/Press'));
 const Articolo = lazy(() => import('./pages/Articolo'));
+const Itinerari = lazy(() => import('./pages/Itinerari'));
+const Itinerario = lazy(() => import('./pages/Itinerario'));
+const Guida = lazy(() => import('./pages/Guida'));
 const Preferiti = lazy(() => import('./pages/Preferiti'));
 const Risorse = lazy(() => import('./pages/Risorse'));
 const Shop = lazy(() => import('./pages/Shop'));
@@ -95,6 +98,9 @@ export default function App() {
                       <Route path="press" element={<Press />} />
                       <Route path="contatti" element={<Contatti />} />
                       <Route path="articolo/:slug" element={<Articolo />} />
+                      <Route path="itinerari" element={<Itinerari />} />
+                      <Route path="itinerari/:slug" element={<Itinerario />} />
+                      <Route path="guide/:slug" element={<Guida />} />
                       <Route path="preferiti" element={<Preferiti />} />
                       <Route path="risorse" element={<Risorse />} />
                       <Route path="shop" element={<Shop />} />

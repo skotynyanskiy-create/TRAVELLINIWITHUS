@@ -35,9 +35,44 @@ export const GUIDE_CATEGORIES = [
   'Weekend & Day trip',
 ] as const;
 
+export const ITINERARY_DURATIONS = [
+  'Weekend (2-3 giorni)',
+  'Settimana (4-7 giorni)',
+  'Slow trip (8-14 giorni)',
+  'Long stay (15+ giorni)',
+] as const;
+
+export const ITINERARY_STYLES = [
+  'Slow & culturale',
+  'Romantico in coppia',
+  'Avventura outdoor',
+  'Food & vino',
+  'Boutique & design',
+  'Famiglia',
+  'Roadtrip',
+] as const;
+
+export const ITINERARY_BUDGETS = [
+  { id: 'lean', label: 'Sotto i 600 a testa' },
+  { id: 'medium', label: '600 - 1500 a testa' },
+  { id: 'premium', label: 'Sopra i 1500 a testa' },
+] as const;
+
+export const ITINERARY_PERIODS = [
+  'Primavera',
+  'Estate',
+  'Autunno',
+  'Inverno',
+  'Tutto l anno',
+] as const;
+
 export type DestinationGroup = (typeof DESTINATION_GROUPS)[number];
 export type ExperienceType = (typeof EXPERIENCE_TYPES)[number];
 export type GuideCategory = (typeof GUIDE_CATEGORIES)[number];
+export type ItineraryDuration = (typeof ITINERARY_DURATIONS)[number];
+export type ItineraryStyle = (typeof ITINERARY_STYLES)[number];
+export type ItineraryBudget = (typeof ITINERARY_BUDGETS)[number]['id'];
+export type ItineraryPeriod = (typeof ITINERARY_PERIODS)[number];
 
 export function slugifyExperienceType(value: string) {
   return value
