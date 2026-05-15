@@ -12,7 +12,7 @@ import HeroBackdrop from './HeroBackdrop';
 
 const HERO_IMAGE_DESKTOP = '/images/brand/couple-travel.png';
 const HERO_IMAGE_MOBILE = '/images/hero-amalfi.png';
-// videoSrc omitted finche public/videos/hero.webm non e disponibile (evita HEAD 404 in console)
+// videoSrc omitted finché public/videos/hero.webm non è disponibile (evita HEAD 404 in console)
 const HERO_VIDEO: string | undefined = undefined;
 const REEL_FALLBACK_IMAGE = '/images/brand/couple-travel.webp';
 
@@ -211,16 +211,14 @@ export default function HeroSection() {
 
           <div data-hero-cta className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
             <Button
-              to="/destinazioni"
+              to="/esplora"
               variant="cta"
               size="lg"
-              trackingId="home_hero_destinazioni"
+              trackingId="home_hero_esplora"
               magnetic
               className="group h-14 min-w-[230px] rounded-lg shadow-[0_18px_44px_rgba(0,0,0,0.18)] sm:h-16"
             >
-              <span className="text-sm font-bold uppercase tracking-widest">
-                Scopri destinazioni
-              </span>
+              <span className="text-sm font-bold uppercase tracking-widest">Apri Esplora</span>
               <ArrowRight
                 size={20}
                 className="ml-2 transition-transform group-hover:translate-x-1"

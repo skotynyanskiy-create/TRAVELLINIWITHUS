@@ -10,6 +10,8 @@ import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_ARTICLE_PREVIEW, DEMO_ARTICLE_PATH } from '../config/demoContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { trackEvent } from '../services/analytics';
+import { TYPES, ZONES, slugifyType } from '../config/contentTaxonomy';
+import { buildExploreUrl } from '../utils/discoveryQuery';
 
 const RECENT_SEARCHES_KEY = 'twu_recent_searches';
 const POPULAR_TAGS = ['Sicilia', 'Andalusia', 'Dolomiti', 'Weekend', 'Boutique hotel', 'Food'];
@@ -21,6 +23,7 @@ interface SearchResult {
   category: string;
   link: string;
   icon: LucideIcon;
+  keywords?: string;
 }
 
 interface SearchModalProps {
@@ -30,25 +33,28 @@ interface SearchModalProps {
 
 const STATIC_PAGE_RESULTS: SearchResult[] = [
   {
-    id: 'page-destinazioni',
-    title: 'Destinazioni',
+    id: 'page-esplora',
+    title: 'Esplora',
     category: 'Pagina',
-    link: '/destinazioni',
-    icon: MapPin,
-  },
-  {
-    id: 'page-esperienze',
-    title: 'Esperienze',
-    category: 'Pagina',
-    link: '/esperienze',
+    link: '/esplora',
     icon: Compass,
+    keywords: 'finder ricerca destinazioni esperienze mappa guide archivio',
   },
   {
-    id: 'page-guide',
-    title: 'Guide',
+    id: 'page-mappa',
+    title: 'Mappa',
     category: 'Pagina',
-    link: '/guide',
+    link: '/mappa',
+    icon: MapPin,
+    keywords: 'mappa visuale geo destinazioni continente',
+  },
+  {
+    id: 'page-itinerari',
+    title: 'Itinerari',
+    category: 'Pagina',
+    link: '/itinerari',
     icon: BookOpen,
+    keywords: 'itinerari giorno per giorno tappe roadtrip',
   },
   {
     id: 'page-risorse',
@@ -56,6 +62,7 @@ const STATIC_PAGE_RESULTS: SearchResult[] = [
     category: 'Pagina',
     link: '/risorse',
     icon: BookOpen,
+    keywords: 'assicurazione esim hotel attivita strumenti viaggio',
   },
   {
     id: 'page-collaborazioni',
@@ -63,6 +70,7 @@ const STATIC_PAGE_RESULTS: SearchResult[] = [
     category: 'Pagina',
     link: '/collaborazioni',
     icon: Compass,
+    keywords: 'partner brand destinazioni hotel B2B',
   },
   {
     id: 'page-chi-siamo',
@@ -70,6 +78,7 @@ const STATIC_PAGE_RESULTS: SearchResult[] = [
     category: 'Pagina',
     link: '/chi-siamo',
     icon: Compass,
+    keywords: 'rodrigo betta storia metodo coppia',
   },
   {
     id: 'page-media-kit',
@@ -77,6 +86,7 @@ const STATIC_PAGE_RESULTS: SearchResult[] = [
     category: 'Pagina',
     link: '/media-kit',
     icon: BookOpen,
+    keywords: 'media kit numeri partner',
   },
   {
     id: 'page-contatti',
@@ -84,6 +94,58 @@ const STATIC_PAGE_RESULTS: SearchResult[] = [
     category: 'Pagina',
     link: '/contatti',
     icon: Mail,
+    keywords: 'contatti email whatsapp instagram',
+  },
+];
+
+const DISCOVERY_RESULTS: SearchResult[] = [
+  ...ZONES.map((zone) => ({
+    id: `explore-zone-${zone}`,
+    title: zone,
+    category: 'Luogo',
+    link: buildExploreUrl({ zone }),
+    icon: MapPin,
+    keywords: `destinazioni ${zone} mappa viaggio zona`,
+  })),
+  ...TYPES.map((type) => ({
+    id: `explore-type-${slugifyType(type)}`,
+    title: type,
+    category: 'Esperienza',
+    link: buildExploreUrl({ type }),
+    icon: Compass,
+    keywords: `${type} ${slugifyType(type).replace(/-/g, ' ')}`,
+  })),
+  {
+    id: 'explore-weekend',
+    title: 'Weekend e viaggi brevi',
+    category: 'Percorso',
+    link: buildExploreUrl({ duration: 'Weekend' }),
+    icon: Clock,
+    keywords: 'weekend breve 2 giorni 3 giorni coppia',
+  },
+  {
+    id: 'explore-hotel',
+    title: 'Hotel con carattere',
+    category: 'Percorso',
+    link: buildExploreUrl({ type: 'Hotel con carattere' }),
+    icon: MapPin,
+    keywords: 'hotel dormire boutique soggiorno',
+  },
+  {
+    id: 'explore-food',
+    title: 'Food e ristoranti',
+    category: 'Percorso',
+    link: buildExploreUrl({ type: 'Food & Ristoranti' }),
+    icon: BookOpen,
+    keywords: 'food cibo ristoranti trattorie mercati',
+  },
+  {
+    id: 'explore-guide',
+    title: 'Guide pratiche',
+    category: 'Percorso',
+    link: buildExploreUrl({ format: 'Guida' }),
+    icon: BookOpen,
+    keywords: 'guide pratiche tips consigli pianificazione',
   },
 ];
 
@@ -110,8 +172,9 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
         keys: [
           { name: 'title', weight: 0.7 },
           { name: 'category', weight: 0.3 },
+          { name: 'keywords', weight: 0.6 },
         ],
-        threshold: 0.4,
+        threshold: 0.3,
         ignoreLocation: true,
         minMatchCharLength: 2,
       }),
@@ -128,7 +191,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
       try {
         const articles = await fetchArticles();
 
-        const fetchedData: SearchResult[] = [...STATIC_PAGE_RESULTS];
+        const fetchedData: SearchResult[] = [...STATIC_PAGE_RESULTS, ...DISCOVERY_RESULTS];
 
         articles.forEach((data) => {
           fetchedData.push({
@@ -170,6 +233,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
   useEffect(() => {
     if (isOpen) {
+      trackEvent('search_open', { source_page: window.location.pathname });
       setTimeout(() => inputRef.current?.focus(), 100);
       document.body.style.overflow = 'hidden';
     } else {
@@ -204,9 +268,54 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     if (trimmed === '') return [];
     return fuse
       .search(trimmed)
-      .slice(0, 8)
+      .slice(0, 12)
       .map((result) => result.item);
   }, [fuse, query]);
+
+  // Raggruppa risultati per categoria con ordine editoriale: prima i luoghi
+  // e le esperienze (decisioni di viaggio), poi articoli/guide, poi pagine
+  // di servizio. Mantiene il rank Fuse all'interno di ogni gruppo.
+  const groupedResults = useMemo(() => {
+    if (filteredResults.length === 0) return [];
+
+    const GROUP_ORDER: Array<{ label: string; matches: (cat: string) => boolean }> = [
+      { label: 'Luoghi', matches: (cat) => cat === 'Luogo' || cat === 'Destinazioni' },
+      { label: 'Esperienze', matches: (cat) => cat === 'Esperienza' || cat === 'Esperienze' },
+      { label: 'Percorsi consigliati', matches: (cat) => cat === 'Percorso' || cat === 'Finder' },
+      {
+        label: 'Articoli e guide',
+        matches: (cat) =>
+          cat === 'Articolo' ||
+          cat === 'Guide' ||
+          cat === 'Itinerari completi' ||
+          cat === 'Weekend & Day trips' ||
+          cat === 'Food & Ristoranti' ||
+          cat === 'Hotel con carattere' ||
+          cat === 'Posti particolari',
+      },
+      { label: 'Pagine', matches: (cat) => cat === 'Pagina' },
+    ];
+
+    const assigned = new Set<string>();
+    const groups = GROUP_ORDER.map(({ label, matches }) => {
+      const items = filteredResults.filter((item) => {
+        if (assigned.has(item.id)) return false;
+        if (matches(item.category)) {
+          assigned.add(item.id);
+          return true;
+        }
+        return false;
+      });
+      return { label, items };
+    }).filter((group) => group.items.length > 0);
+
+    const remaining = filteredResults.filter((item) => !assigned.has(item.id));
+    if (remaining.length > 0) {
+      groups.push({ label: 'Altri risultati', items: remaining });
+    }
+
+    return groups;
+  }, [filteredResults]);
 
   useEffect(() => {
     const trimmed = query.trim();
@@ -219,6 +328,18 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     }, 500);
     return () => clearTimeout(timer);
   }, [query, filteredResults.length]);
+
+  useEffect(() => {
+    const trimmed = query.trim();
+    if (trimmed.length < 3 || loading || filteredResults.length > 0) return;
+    const timer = setTimeout(() => {
+      trackEvent('search_no_results', {
+        query: trimmed.toLowerCase(),
+        source_page: window.location.pathname,
+      });
+    }, 700);
+    return () => clearTimeout(timer);
+  }, [filteredResults.length, loading, query]);
 
   const persistRecent = (term: string) => {
     if (!term.trim() || typeof window === 'undefined') return;
@@ -271,6 +392,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
               <Search className="text-black/40 mr-4" size={24} />
               <input
                 ref={inputRef}
+                aria-label="Cerca nel sito"
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -344,56 +466,75 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                       <Compass size={11} /> Sezioni
                     </div>
                     <div className="flex flex-wrap gap-2">
-                      {['Destinazioni', 'Esperienze', 'Guide', 'Itinerari', 'Risorse'].map(
-                        (label) => (
-                          <button
-                            key={label}
-                            type="button"
-                            onClick={() => setQuery(label)}
-                            className="rounded-full bg-black/5 px-3 py-1.5 text-xs font-medium text-black/70 transition-colors hover:bg-black/10"
-                          >
-                            {label}
-                          </button>
-                        )
-                      )}
+                      {[
+                        'Posti particolari',
+                        'Food & ristoranti',
+                        'Hotel con carattere',
+                        'Weekend romantici',
+                        'Itinerari',
+                      ].map((label) => (
+                        <button
+                          key={label}
+                          type="button"
+                          onClick={() => setQuery(label)}
+                          className="rounded-full bg-black/5 px-3 py-1.5 text-xs font-medium text-black/70 transition-colors hover:bg-black/10"
+                        >
+                          {label}
+                        </button>
+                      ))}
                     </div>
                   </div>
                 </div>
-              ) : filteredResults.length > 0 ? (
-                <ul className="space-y-2">
-                  {filteredResults.map((item, index) => {
-                    const Icon = item.icon;
-                    return (
-                      <li key={item.id}>
-                        <button
-                          onClick={() => handleSelect(item.link, item, index)}
-                          className="w-full flex items-center text-left px-4 py-3 hover:bg-[var(--color-sand)] rounded-xl transition-colors group"
-                        >
-                          <div className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center mr-4 group-hover:bg-white group-hover:shadow-sm transition-all text-black/60 group-hover:text-[var(--color-accent)]">
-                            <Icon size={18} />
-                          </div>
-                          <div>
-                            <h4 className="font-medium text-black group-hover:text-[var(--color-accent)] transition-colors">
-                              {item.title}
-                            </h4>
-                            <span className="text-xs uppercase tracking-widest text-black/50 font-semibold">
-                              {item.category}
-                            </span>
-                          </div>
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
+              ) : groupedResults.length > 0 ? (
+                <div className="space-y-5">
+                  {groupedResults.map((group) => (
+                    <section key={group.label} aria-label={`Risultati ${group.label}`}>
+                      <h3 className="mb-2 px-4 text-[10px] font-bold uppercase tracking-[0.22em] text-black/45">
+                        {group.label}
+                      </h3>
+                      <ul className="space-y-1">
+                        {group.items.map((item) => {
+                          const Icon = item.icon;
+                          const positionInAll = filteredResults.findIndex(
+                            (candidate) => candidate.id === item.id
+                          );
+                          return (
+                            <li key={item.id}>
+                              <button
+                                onClick={() => handleSelect(item.link, item, positionInAll)}
+                                className="w-full flex items-center text-left px-4 py-3 hover:bg-[var(--color-sand)] rounded-xl transition-colors group"
+                              >
+                                <div className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center mr-4 group-hover:bg-white group-hover:shadow-sm transition-all text-black/60 group-hover:text-[var(--color-accent)]">
+                                  <Icon size={18} />
+                                </div>
+                                <div>
+                                  <h4 className="font-medium text-black group-hover:text-[var(--color-accent)] transition-colors">
+                                    {item.title}
+                                  </h4>
+                                  <span className="text-xs uppercase tracking-widest text-black/50 font-semibold">
+                                    {item.category}
+                                  </span>
+                                </div>
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </section>
+                  ))}
+                </div>
               ) : (
-                <div className="text-center py-12 text-black/40">
-                  <p>Nessun risultato trovato per "{query}"</p>
+                <div className="text-center py-12 text-black/50">
+                  <p className="text-sm">Nessun risultato per "{query}".</p>
+                  <p className="mt-3 text-xs text-black/45">
+                    Prova con: Sicilia, Andalusia, Dolomiti, Bali, Marocco.
+                  </p>
                 </div>
               )}
             </div>
 
             <div className="bg-[var(--color-sand)] px-6 py-3 text-xs text-black/40 flex justify-between items-center border-t border-black/5">
-              <span>Usa le frecce per navigare</span>
+              <span>Scrivi e seleziona un risultato</span>
               <span className="flex items-center gap-1">
                 Premi{' '}
                 <kbd className="bg-white px-2 py-1 rounded border border-black/10 shadow-sm font-sans">

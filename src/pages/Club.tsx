@@ -64,7 +64,7 @@ export default function Club() {
             <div className="mx-auto w-16 h-16 rounded-full bg-[var(--color-sand)] flex items-center justify-center mb-8 shadow-sm">
               <MapPin size={24} className="text-[var(--color-accent)]" />
             </div>
-            <h1 className="text-4xl font-serif text-[var(--color-ink)] mb-3">The Travel Club</h1>
+            <h2 className="text-4xl font-serif text-[var(--color-ink)] mb-3">The Travel Club</h2>
             <p className="text-base font-normal text-black/70 mb-8 leading-relaxed">
               Il tuo spazio personale su Travelliniwithus.
             </p>
@@ -73,7 +73,7 @@ export default function Club() {
               {[
                 {
                   label: 'Salva gli articoli',
-                  text: 'Cuori roaming — tieni da parte gli itinerari che vuoi vivere.',
+                  text: 'Tieni da parte gli itinerari che vuoi vivere — restano qui, pronti.',
                 },
                 {
                   label: 'I tuoi acquisti',
@@ -236,7 +236,7 @@ export default function Club() {
                         guide che vuoi tenere da parte.
                       </p>
                       <Button
-                        to="/destinazioni"
+                        to="/esplora"
                         className="bg-white text-[var(--color-ink)] border border-black/10 hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] rounded-full px-6 py-2"
                       >
                         Esplora i Contenuti

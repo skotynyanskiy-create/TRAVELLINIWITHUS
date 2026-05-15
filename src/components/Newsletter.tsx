@@ -446,7 +446,7 @@ export default function Newsletter({
               <p
                 className={`mt-1 text-sm leading-relaxed ${isDark ? 'text-white/55' : 'text-black/50'}`}
               >
-                Il punto non e scrivere spesso: e mandare qualcosa che valga davvero un salvataggio.
+                Il punto non è scrivere spesso: è mandare qualcosa che valga davvero un salvataggio.
               </p>
             </div>
           </div>

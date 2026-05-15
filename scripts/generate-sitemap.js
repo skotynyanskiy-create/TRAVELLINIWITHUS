@@ -5,10 +5,9 @@ const BASE_URL = 'https://travelliniwithus.it';
 
 const staticRoutes = [
   '/',
-  '/destinazioni',
-  '/esperienze',
-  '/guide',
+  '/esplora',
   '/itinerari',
+  '/itinerari/compare',
   '/quiz',
   '/strumenti',
   '/press',
@@ -18,48 +17,26 @@ const staticRoutes = [
   '/media-kit',
   '/contatti',
   '/risorse',
+  '/shop',
+  '/club',
+  '/lead-magnet',
   '/privacy',
   '/cookie',
   '/termini',
   '/disclaimer',
 ];
 
-const DESTINATION_GROUPS = ['Italia', 'Europa', 'Asia', 'Americhe', 'Africa', 'Oceania'];
+// Consolidamento 2026-05-15: /destinazioni, /esperienze, /guide rimossi
+// come pagine standalone. Restano `/esplora` (archivio universale + finder)
+// e `/mappa` (vista geo) come unici hub discovery: entrambi sono ora in
+// staticRoutes come hub canonici.
+const discoveryRoutes = [];
 
-const EXPERIENCE_TYPES = [
-  'Posti particolari',
-  'Food & Ristoranti',
-  'Locali insoliti',
-  'Hotel con carattere',
-  'Weekend romantici',
-  "Borghi e città d'arte",
-  'Passeggiate panoramiche',
-  'Relax, terme e spa',
-  'Esperienze insolite',
-  'Gite e day trip',
-];
-
-function slugifyExperienceType(value) {
-  return value
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .toLowerCase()
-    .replace(/&/g, 'e')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
-
-// Filter routes (?group=, ?type=) are intentionally NOT in the sitemap:
-// Google treats ?param URLs as duplicate content of the index page,
-// diluting PageRank. Build the hub routes (/destinazioni/italia,
-// /esperienze/hotel-con-carattere) as proper pages when ready, then
-// add them to staticRoutes.
+// Filter routes (?zone=, ?type=) sono intenzionalmente esclusi dalla sitemap:
+// Google li tratta come duplicate content del canonical `/esplora`. Quando
+// avremo pagine fisiche `/esplora/italia` o `/esplora/posti-particolari`,
+// si aggiungono qui come staticRoutes.
 const filterRoutes = [];
-
-// Surface variables to silence "unused" warnings without exporting them.
-void DESTINATION_GROUPS;
-void EXPERIENCE_TYPES;
-void slugifyExperienceType;
 
 function urlEntry(route, { changefreq = 'weekly', priority = '0.8', lastmod } = {}) {
   const fullUrl = `${BASE_URL}${route === '/' ? '' : route}`;
@@ -137,7 +114,7 @@ async function buildSitemap() {
   const now = new Date().toISOString();
   const dynamic = await fetchDynamicRoutes();
 
-  const staticEntries = staticRoutes
+  const staticEntries = [...staticRoutes, ...discoveryRoutes]
     .map((route) =>
       urlEntry(route, {
         changefreq: route === '/' ? 'daily' : 'weekly',
@@ -177,7 +154,7 @@ async function buildSitemap() {
   fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), sitemap);
   const dynamicCount = (dynamic?.articleRoutes.length || 0) + (dynamic?.productRoutes.length || 0);
   console.log(
-    `Sitemap generated. Static: ${staticRoutes.length}, filters: ${filterRoutes.length}, dynamic: ${dynamicCount}.`
+    `Sitemap generated. Static: ${staticRoutes.length + discoveryRoutes.length}, filters: ${filterRoutes.length}, dynamic: ${dynamicCount}.`
   );
 
   // robots.txt: keep public routes crawlable (incl. /shop, /vieni-con-noi,

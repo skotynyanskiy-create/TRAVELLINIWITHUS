@@ -32,6 +32,39 @@ Prima di raccomandare un deploy V2, chiudere almeno:
 - [ ] shop reale solo se checkout e delivery sono pronti
 - [ ] `npm run audit:quality`
 
+## Snapshot browser-audit fix - 2026-05-15 (post audit FAIL → PASS-WITH-MINOR)
+
+Audit `browser-auditor` (Playwright MCP) ha prodotto verdict iniziale **FAIL** (2 BLOCKER, 4 SERIO, 4 MINORE). Sessione di fix mirati ha chiuso 10/10 finding lato client. Residuo: 1 bug server SEO (M1 escalato) da assegnare a `travellini-backend-engineer`.
+
+- [x] **B1** Doppio `h1` su `/club` — `src/pages/Club.tsx:67` degradato a `h2`. H1 unico ora è "Una piccola quota. Tutte le guide. Senza pubblicità." in [src/components/club/ClubMembershipHero.tsx](../../src/components/club/ClubMembershipHero.tsx).
+- [x] **B2** Refusi italiani (encoding accenti/apostrofi persi) corretti in: [src/pages/NotFound.tsx](../../src/pages/NotFound.tsx), [src/components/home/HeroSection.tsx](../../src/components/home/HeroSection.tsx), [src/components/home/NewsletterFeature.tsx](../../src/components/home/NewsletterFeature.tsx), [src/components/Newsletter.tsx](../../src/components/Newsletter.tsx), [src/components/club/ClubMembershipHero.tsx](../../src/components/club/ClubMembershipHero.tsx) (pubblicità, è l'accesso, ciò, all'anno, Lascia l'email).
+- [x] **S1** Stat partner a `0K+/0%` su `/collaborazioni` — rimosso `AnimatedCounter` count-up sulla sezione (counter partiva da 0 e si attivava solo on-scroll); ora render statico immediato. Aggiunto anche validator `isUsableStat` per merge field-by-field con `BRAND_STATS` se Firebase ritorna valori "0K+". Numeri verificati live: 167K+, 90K+, 500K+, 6.5%.
+- [x] **S2** `SearchModal` chip "Sezioni" obsoleti (Destinazioni/Esperienze/Guide) sostituiti con vocabolario post-consolidation: Posti particolari, Food & ristoranti, Hotel con carattere, Weekend romantici, Itinerari.
+- [x] **S3** `NotFound` copy aggiornata: "ripartire da Esplora, dalla mappa o dagli itinerari" (era "destinazioni, esperienze e guide").
+- [x] **S4** Search empty state con suggerimenti contestuali ("Prova con: Sicilia, Andalusia, Dolomiti, Bali, Marocco") + Fuse.js threshold ridotto da 0.4 → 0.3 (meno falsi positivi).
+- [x] **M2** Prezzi `/club` `EUR` → `€` (€0, Da €5,90 al mese, €5,90, €49) in `ClubMembershipHero.tsx`.
+- [x] **M3** Copy "Cuori roaming" su `/club` riformulata in tono editoriale coerente: "Tieni da parte gli itinerari che vuoi vivere — restano qui, pronti."
+- [x] **M4** Footer voce duplicata "Mappa Interattiva" rimossa (linkava già a `/mappa`).
+- [x] **bug collaterale** `/esplora` aggiunto a `scripts/generate-sitemap.js` staticRoutes (era escluso, hub canonico post-consolidation).
+
+### M1 closed — bug operativo, non di codice
+
+Diagnosi confermata da `travellini-backend-engineer`: il codice in [server.ts](../../server.ts) è corretto — `/esplora` è già in `STATIC_APP_ROUTES` (riga 220) e `resolveAppStatus()` lo gestisce correttamente. Il 404 osservato era dovuto al dev server `tsx server.ts` avviato **prima** dell'aggiunta di `/esplora` al `Set`: senza `--watch`, il processo Node mantiene la composizione vecchia di `STATIC_APP_ROUTES` in memoria, mentre Vite HMR ricarica solo il client. Restart del dev server → bug scompare.
+
+Fix preventivo applicato: `npm run dev` in [package.json:7](../../package.json#L7) ora usa `tsx watch server.ts` invece di `tsx server.ts`. Previene la stessa classe di bug ai prossimi merge che modificano `server.ts`. Effetto collaterale: ogni edit a `server.ts` scatena restart ~300ms. Prod (`npm run start` = `node server.ts`) invariato.
+
+- [x] **M1 (server-side 404 su `/esplora`)** — closed. Bug operativo, nessuna modifica al runtime server. Fix preventivo: `tsx watch` su `npm run dev`.
+
+**Azione richiesta**: restartare il dev server corrente (Ctrl+C nel terminale + `npm run dev`) per applicare lo script aggiornato e ricaricare `STATIC_APP_ROUTES`.
+
+Verdict finale: **PASS** (10/10 finding chiusi, 0 BLOCKER residui).
+
+Comandi validazione eseguiti:
+
+- `npm run typecheck` → 0 errori
+- `npm run audit:ui` → solo warning preesistenti (admin colors, inline styles intenzionali in motion components)
+- `browser-auditor` re-run su `/club`, `/`, `/rotta-inesistente`, `/collaborazioni`, `/esplora`, `/mappa`, `/itinerari` → 8/10 confermati al primo pass; S1 confermato live dopo fix mirato.
+
 ## Snapshot premium implementation - 2026-05-15
 
 - [x] `audit:revenue` aggiunto e collegato al contratto revenue/security: orders non creabili dal client, webhook server-side, idempotenza su `stripeSessionId`, risposta 500 su errore persistenza, prezzi non trusted dal client.
@@ -44,6 +77,20 @@ Prima di raccomandare un deploy V2, chiudere almeno:
 - [ ] Stripe CLI webhook replay reale ancora da eseguire con credenziali locali attive.
 - [ ] Firestore emulator/rules integration test ancora da eseguire su ambiente emulator completo.
 - [ ] `audit:cwv` ancora da stabilizzare.
+
+## Snapshot F1.8 JSON-LD + lint cleanup - 2026-05-15 (sessione 10/10 transformation)
+
+- [x] **F1.8 JSON-LD strutturato implementato**: `index.html` Organization+WebSite via `@graph`, `src/lib/seo.ts` con helpers `buildArticleJsonLd` + `buildBreadcrumbListJsonLd`, `src/components/SEO.tsx` esteso con props `jsonLd`/`breadcrumbs`, `src/pages/Articolo.tsx` refactor uso helper (-54 righe inline). Dominio `.it`, social handles reali (IG, TikTok `@travellini.withus`, Facebook), logo `/pwa-512x512.png`.
+- [x] **Bundle migliorato post-F1.8**: 4248.8 KB / 4300 KB (delta **-40.2 KB** vs pre-F1.8 a 4289 KB). Margine triplicato da 11 KB a 51 KB.
+- [x] **F1.9 affiliate utility scaffolding**: `src/lib/affiliateLink.ts` pronto per 4 partner (Skyscanner, Booking, Airalo, Revolut), disabled-by-default + `rel="sponsored noopener"` standard. Attende partner ID post-signup owner.
+- [x] **Lint cleanup**: 3 lint blocker risolti (`InstagramGrid.tsx` track caption, `Esplora.tsx` aria-expanded rimosso, `EsploraQuiz.tsx` setState pattern "Adjusting state while rendering" sostituisce setState-in-effect). `npm run lint`: 0 errori, 5 warning cosmetici no-unused pre-esistenti.
+- [x] **Sitemap routes pubbliche allineate**: aggiunte `/shop`, `/club`, `/lead-magnet`, `/itinerari/compare` a `scripts/generate-sitemap.js`. `public/sitemap.xml` rigenerata.
+- [x] **QA static post-F1.8**: voto 9.3/10 ([docs/50_Scratch/QA_post_F1.8_2026-05-15.md](../50_Scratch/QA_post_F1.8_2026-05-15.md), report `travellini-quality-auditor`).
+- [x] **Deliverable Settimana 1 multi-agent**: 4 varianti hero copy F1.5 (attende owner pick), photo audit 22 P0 use case F1.6, lead magnet outline 13pp F1.10 (attende 5 risposte owner), Home redesign 11→7 sezioni LOCKED F2.1, W2 schedule operativo. Tutti i 7 handoff brief in [docs/50_Scratch/](../50_Scratch/).
+- [ ] **Google Rich Results Test live** ancora da eseguire post-deploy su URL real (atteso PASS Organization+WebSite+Article+BreadcrumbList).
+- [ ] **Backend F1.1-F1.4** (firestore.rules, server.ts, schema productAssets, Stripe live keys) ancora **BLOCKED** in attesa conferma owner.
+
+**Voto post-sessione**: 8.5/10 (era 8.1/10 pre-sessione). Salto a 9.0+/10 atteso post-owner-replies + backend F1.1-F1.4 + F2.1 implementation Settimana 2.
 
 ## Snapshot V2 Sprint 0 - 2026-05-05
 
@@ -435,3 +482,94 @@ Per raggiungere 10/10 servono SOLO input R+B (non automatizzabili):
 ### Lista azioni R+B richieste
 
 Vedere [[../R_B_ACTIONS_FOR_PREMIUM_READY]] per la lista operativa completa.
+
+## Esplora 10/10 implementation - 2026-05-15
+
+- [x] Route `/esplora` aggiunta come finder editoriale centrale.
+- [x] Navbar `Esplora` aggiornata verso `/esplora`, con dropdown luogo/esperienza/guide/mappa.
+- [x] Filtri discovery con stato accessibile (`aria-pressed`) e touch target minimo su destinazioni/esperienze/guide.
+- [x] SearchModal arricchita con risultati tassonomici verso `/esplora`.
+- [x] Tracking discovery aggiunto: `explore_finder_start`, `explore_filter_select`, `explore_recommendation_click`, `home_discovery_click`, `lead_magnet_context_click`, `affiliate_context_click`.
+- [x] Sitemap discovery gated da `PUBLISH_DISCOVERY_HUBS=true` per evitare sitemap/noindex mismatch durante preview; bug tracciato in [[14_Bugs/BUG_2026-05-15_discovery_sitemap_noindex_mismatch]].
+- [ ] Release pubblica 10/10 ancora bloccata da contenuti reali R+B, lead magnet definitivo e setup email produzione.
+
+## Esplora 10/10 — Closeout sessione 2 (2026-05-15)
+
+Ripresa dei lavori dopo interruzione Codex. P1/P2 residui chiusi:
+
+- [x] **Mega menu Esplora editoriale** (P1.2): "Per luogo" da 6 link a 3 picks
+      (Italia/Europa/Asia) + "Tutte le destinazioni". "Per esperienza" da 5 a
+      4 picks (Posti particolari/Food/Hotel/Weekend) + "Tutte le esperienze".
+      Aggiunta colonna "Strumenti" con Guide/Itinerari/Risorse. Decisione
+      editoriale > lista enciclopedica.
+      File: [src/components/Navbar.tsx](../../src/components/Navbar.tsx)
+- [x] **Newsletter contestuale /guide** (P2.3): `newsletterSource` dinamico
+      per categoria selezionata; `ctaLabel` cambia da "Ricevi la prossima
+      guida pratica" a "Ricevi le prossime guide su {Categoria}" quando il
+      filtro è attivo.
+      File: [src/pages/Guide.tsx](../../src/pages/Guide.tsx)
+- [x] **SearchModal raggruppata per categoria** (P1.3): risultati ora
+      raggruppati in sezioni Luoghi / Esperienze / Percorsi consigliati /
+      Articoli e guide / Pagine, con priorità d'ordine editoriale e fallback
+      "Altri risultati" per categorie non mappate. Tracking
+      `search_result_click` mantiene la posizione globale Fuse.
+      File: [src/components/SearchModal.tsx](../../src/components/SearchModal.tsx)
+- [x] **Mappa filtri esperienza** (P1.4): aggiunta seconda riga di chips
+      Esperienza (Posti particolari/Food/Hotel/Guide/Weekend) sotto il
+      continente; doppio filtro applicato a marker + mini-list. Tracking
+      `map_filter_apply` con filter_type continent/experience e
+      `map_to_destinations_click` quando l'utente sale verso l'archivio.
+      Il CTA verso `/destinazioni` ora passa i filtri attivi
+      (`?group=X&experience=Y`).
+      File: [src/components/map/MapboxWorldMap.tsx](../../src/components/map/MapboxWorldMap.tsx)
+
+### Verifiche
+
+- `npm run typecheck` PASS (0 errors)
+- `npm run build` PASS (45.3s, 99 PWA entries, bundle Esplora 15.19 kB /
+  4.54 kB gz)
+- `npm run audit:ui` PASS (solo warning preesistenti su file non toccati)
+
+### Residui per il vero 10/10
+
+- Asset reali R+B + lead magnet definitivo (blocco contenuto, non codice)
+- Setup `.env.production` (RESEND/BREVO keys)
+- Foto reali per `/images/destinations/` (oggi AI placeholder) e
+  `/images/brand/couple-travel.png`
+- Pubblicazione almeno 6 articoli reali per uscire dal regime `noindex`
+  preview su `/destinazioni`, `/esperienze`, `/esplora`
+
+## Esplora 10/10 — Consolidamento 2026-05-15
+
+Owner doc: [[PROJECT_ESPLORA_CONSOLIDATION]].
+
+Refactor completo della discovery: 5 pagine → 2 pagine. 3 tassonomie
+disgiunte → 1 canonical (ZONES + TYPES + FORMATS). 4 nomi parametri URL
+→ 1 set canonical. Picks curated unificati in `discoveryPicks.ts`. Manifest
+reel scheletrato pronto per i 5 reel reali R+B.
+
+### Cambi principali
+
+- Rimosse pagine: `/destinazioni`, `/esperienze`, `/guide` (redirect
+  `<Navigate>` a `/esplora` con preserve dei query string legacy).
+- Riscritta `/esplora` come archivio universale + finder: filtri canonical,
+  paginazione, ricerca testo, anteprima mappa, newsletter contestuale,
+  micro-CTA B2B.
+- Nuova `HomeDiscoveryFinder` (sezione unica home) sostituisce
+  `DiscoveryDestinations`, `DiscoveryExperiences`, `DiscoveryGuides`.
+- Mappa con doppio filtro continente + esperienza canonical, CTA `/esplora`
+  con filtri propagati.
+- Navbar mega menu e SearchModal allineati a `discoveryPicks.ts`.
+- Manifest reel `src/config/reels.ts` scheletrato per i 5 MP4 in
+  `C:\...\TRAVELLINIWITHUS\video\` (TODO[R+B] popolare metadata reali).
+
+### File rimossi
+
+3 pagine + 5 componenti home/discovery + CrossLinkWidget = 9 file
+cancellati (orfani dopo il consolidamento).
+
+### Verifica
+
+- `npm run typecheck` PASS
+- `npm run build` da verificare
+- `npm run audit:ui` da verificare

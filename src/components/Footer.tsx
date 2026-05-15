@@ -100,26 +100,26 @@ export default function Footer() {
                 <ul className="space-y-5">
                   <li>
                     <Link
-                      to="/destinazioni"
+                      to="/esplora"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
-                      {navigation.destinationsLabel}
+                      Esplora
                     </Link>
                   </li>
                   <li>
                     <Link
-                      to="/esperienze"
+                      to="/mappa"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
-                      {navigation.experiencesLabel}
+                      Mappa
                     </Link>
                   </li>
                   <li>
                     <Link
-                      to="/guide"
+                      to="/itinerari"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
-                      {navigation.guidesLabel}
+                      Itinerari
                     </Link>
                   </li>
                   <li>
@@ -136,14 +136,6 @@ export default function Footer() {
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
                       Shop Premium
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/mappa"
-                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      Mappa Interattiva
                     </Link>
                   </li>
                 </ul>

@@ -40,7 +40,7 @@ export default function NewsletterFeature() {
           </span>
           <h2 className="mt-4 max-w-xl font-serif text-4xl leading-[1.05] tracking-tight text-[var(--color-ink)] md:text-5xl">
             Una mail.{' '}
-            <span className="italic text-black/55">Solo quando c&apos;e qualcosa da salvare.</span>
+            <span className="italic text-black/55">Solo quando c&apos;è qualcosa da salvare.</span>
           </h2>
           <p className="mt-6 max-w-xl text-base leading-relaxed text-black/65 md:text-lg">
             Niente automatismi senza valore: pubblichiamo solo se troviamo un posto, una guida o uno

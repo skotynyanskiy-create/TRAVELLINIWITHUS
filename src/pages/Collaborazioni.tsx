@@ -28,7 +28,6 @@ import SEO from '../components/SEO';
 import Section from '../components/Section';
 import StickyMobileCTA from '../components/StickyMobileCTA';
 import { BRAND_STATS } from '../config/site';
-import AnimatedCounter from '../components/AnimatedCounter';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { fetchStats, type SiteStats } from '../services/firebaseService';
@@ -80,13 +79,6 @@ const ANTI_TARGETS = [
   'No campagne solo sconto, coupon o volume senza qualità.',
   'No collaborazioni incoerenti solo per "esserci".',
 ];
-
-function parseStatString(stat: string | undefined): { value: number; suffix: string } {
-  if (!stat) return { value: 0, suffix: '' };
-  const value = parseFloat(stat.replace(/[^0-9.]/g, ''));
-  const suffix = stat.replace(/[0-9.]/g, '');
-  return { value: isNaN(value) ? 0 : value, suffix };
-}
 
 const FAQ_ITEMS = [
   {
@@ -306,11 +298,18 @@ export default function Collaborazioni() {
     void loadStats();
   }, []);
 
-  const resolvedStats = stats ?? {
-    igFollowers: BRAND_STATS.instagramFollowers,
-    monthlyReach: BRAND_STATS.monthlyReach,
-    uniqueUsers: BRAND_STATS.totalFollowers,
-    engagementRate: BRAND_STATS.engagementRate,
+  const isUsableStat = (v?: string) => !!v && !/^0(\D|$)/.test(v);
+  const resolvedStats = {
+    igFollowers: isUsableStat(stats?.igFollowers)
+      ? stats!.igFollowers
+      : BRAND_STATS.instagramFollowers,
+    monthlyReach: isUsableStat(stats?.monthlyReach)
+      ? stats!.monthlyReach
+      : BRAND_STATS.monthlyReach,
+    uniqueUsers: isUsableStat(stats?.uniqueUsers) ? stats!.uniqueUsers : BRAND_STATS.totalFollowers,
+    engagementRate: isUsableStat(stats?.engagementRate)
+      ? stats!.engagementRate
+      : BRAND_STATS.engagementRate,
   };
 
   const statsCards = [
@@ -456,29 +455,26 @@ export default function Collaborazioni() {
         </div>
 
         <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
-          {statsCards.map((item, index) => {
-            const parsed = parseStatString(item.rawValue);
-            return (
-              <motion.div
-                key={item.label}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="flex flex-col items-center rounded-[var(--radius-lg)] border border-[var(--color-accent)]/20 bg-white/80 backdrop-blur-lg p-8 text-center shadow-[var(--shadow-premium)]"
-              >
-                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)]">
-                  <item.icon size={26} />
-                </div>
-                <div className="mb-2 text-4xl font-serif text-[var(--color-ink)]">
-                  <AnimatedCounter value={parsed.value} suffix={parsed.suffix} duration={1800} />
-                </div>
-                <div className="text-[10px] font-bold uppercase tracking-widest text-black/65">
-                  {item.label}
-                </div>
-              </motion.div>
-            );
-          })}
+          {statsCards.map((item, index) => (
+            <motion.div
+              key={item.label}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+              className="flex flex-col items-center rounded-[var(--radius-lg)] border border-[var(--color-accent)]/20 bg-white/80 backdrop-blur-lg p-8 text-center shadow-[var(--shadow-premium)]"
+            >
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)]">
+                <item.icon size={26} />
+              </div>
+              <div className="mb-2 text-4xl font-serif text-[var(--color-ink)]">
+                {item.rawValue}
+              </div>
+              <div className="text-[10px] font-bold uppercase tracking-widest text-black/65">
+                {item.label}
+              </div>
+            </motion.div>
+          ))}
         </div>
       </Section>
 

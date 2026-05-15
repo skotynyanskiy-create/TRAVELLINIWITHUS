@@ -29,7 +29,7 @@ const PRICING_TIERS = [
     id: 'annual',
     label: 'Annuale',
     price: '49',
-    period: 'all anno',
+    period: "all'anno",
     sub: '2 mesi in regalo · paga una volta sola',
     badge: 'Risparmia 20%',
   },
@@ -95,10 +95,10 @@ export default function ClubMembershipHero() {
           <h1 className="mt-6 text-5xl font-serif leading-[1.05] tracking-tight md:text-6xl">
             Una piccola quota.
             <br />
-            <span className="italic text-white/55">Tutte le guide. Senza pubblicita.</span>
+            <span className="italic text-white/55">Tutte le guide. Senza pubblicità.</span>
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-white/72">
-            Il Club e l accesso continuo a tutto cio che pubblichiamo: guide digitali, itinerari
+            Il Club è l'accesso continuo a tutto ciò che pubblichiamo: guide digitali, itinerari
             aggiornati, contenuti riservati. Pensato per chi viaggia spesso e vuole leggere meno
             rumore.
           </p>
@@ -115,7 +115,7 @@ export default function ClubMembershipHero() {
             <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/55">
               Lettore — Gratis
             </p>
-            <p className="mt-4 font-serif text-4xl">0 EUR</p>
+            <p className="mt-4 font-serif text-4xl">€0</p>
             <p className="mt-1 text-xs text-white/50">Sempre. Per chi vuole leggere.</p>
             <ul className="mt-7 space-y-3">
               {FREE_BENEFITS.map((item) => (
@@ -140,7 +140,7 @@ export default function ClubMembershipHero() {
             <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">
               Travellini Club — Premium
             </p>
-            <p className="mt-4 font-serif text-4xl">Da 5,90 EUR al mese</p>
+            <p className="mt-4 font-serif text-4xl">Da €5,90 al mese</p>
             <p className="mt-1 text-xs text-white/50">
               IVA inclusa · accesso immediato a tutto il catalogo
             </p>
@@ -169,9 +169,7 @@ export default function ClubMembershipHero() {
                   <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-white/55">
                     {tier.label}
                   </p>
-                  <p className="font-serif text-3xl">
-                    {tier.price} <span className="text-base text-white/55">EUR</span>
-                  </p>
+                  <p className="font-serif text-3xl">€{tier.price}</p>
                   <p className="text-xs text-white/55">{tier.period}</p>
                   <p className="mt-2 text-xs text-white/45">{tier.sub}</p>
                 </button>
@@ -180,7 +178,7 @@ export default function ClubMembershipHero() {
 
             <p className="mt-7 flex items-center gap-2 rounded-[var(--radius-md)] border border-white/10 bg-white/5 p-4 text-sm text-white/68">
               <Lock size={14} className="shrink-0 text-[var(--color-accent)]" />
-              Checkout in arrivo. Lascia l email e ti avvisiamo appena il Club apre alle prime
+              Checkout in arrivo. Lascia l'email e ti avvisiamo appena il Club apre alle prime
               iscrizioni.
             </p>
 
