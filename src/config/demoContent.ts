@@ -1,5 +1,16 @@
 export const DEMO_ARTICLE_SLUG = 'dolomiti-rifugi-design';
 
+const LOCAL_IMAGES = {
+  dolomiti: '/images/destinations/dolomiti.webp',
+  puglia: '/images/destinations/puglia.webp',
+  toscana: '/images/destinations/toscana.webp',
+  costiera: '/images/hero-amalfi.webp',
+  filippine: '/images/destinations/giappone.webp',
+  islanda: '/images/destinations/islanda.webp',
+  giappone: '/images/destinations/giappone.webp',
+  africa: '/images/destinations/africa.webp',
+} as const;
+
 // Country/continent valorizzati per essere indicizzabili dalla mappa
 // interattiva (MapboxWorldMap.tsx fa lookup su COUNTRY_COORDS).
 // Per gli articoli italiani usiamo la regione come "country" per
@@ -11,8 +22,7 @@ export const DEMO_ARTICLE_PREVIEW = {
   category: 'Guide',
   country: 'Dolomiti',
   continent: 'Europa',
-  image:
-    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop',
+  image: LOCAL_IMAGES.dolomiti,
   excerpt:
     'Un itinerario tra rifugi di design, panorami iconici e spunti pratici per vivere le Dolomiti nel modo giusto.',
   readTime: '8 min',
@@ -35,8 +45,7 @@ export const DEMO_ARTICLES_EXTRA = [
     // con badge verde Star + label "Partner" nella mini-card.
     // R+B sostituisce con dati reali quando shortlist Q3 chiude un partner.
     isPartner: true,
-    image:
-      'https://images.unsplash.com/photo-1499695867787-12ace027e651?q=80&w=1200&auto=format&fit=crop',
+    image: LOCAL_IMAGES.puglia,
     excerpt:
       'Oltre il turismo di massa: i luoghi più autentici della Puglia, dalle grotte marine ai borghi in pietra.',
     readTime: '6 min',
@@ -49,8 +58,7 @@ export const DEMO_ARTICLES_EXTRA = [
     category: 'Posti particolari',
     country: 'Toscana',
     continent: 'Europa',
-    image:
-      'https://images.unsplash.com/photo-1516483638261-f40af5aa3463?q=80&w=1200&auto=format&fit=crop',
+    image: LOCAL_IMAGES.toscana,
     excerpt:
       'Lontano da Firenze e Siena, esiste una Toscana fatta di borghi sospesi nel tempo e panorami che tolgono il fiato.',
     readTime: '5 min',
@@ -63,8 +71,7 @@ export const DEMO_ARTICLES_EXTRA = [
     category: 'Weekend & Day trips',
     country: 'Costiera Amalfitana',
     continent: 'Europa',
-    image:
-      'https://images.unsplash.com/photo-1533418264835-9871c7c2dbf0?q=80&w=1200&auto=format&fit=crop',
+    image: LOCAL_IMAGES.costiera,
     excerpt:
       'Come godersi Positano, Amalfi e Ravello evitando i periodi peggiori e scoprendo calette intime e ristoranti segreti.',
     readTime: '7 min',
@@ -77,8 +84,7 @@ export const DEMO_ARTICLES_EXTRA = [
     category: 'Itinerari completi',
     country: 'Filippine',
     continent: 'Asia',
-    image:
-      'https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?q=80&w=1200&auto=format&fit=crop',
+    image: LOCAL_IMAGES.filippine,
     excerpt:
       'Dal caos di Manila ai terrazzamenti di riso di Banaue, fino alle tribù del Nord. Un viaggio per animi vagabondi.',
     readTime: '12 min',
@@ -89,8 +95,7 @@ export const DEMO_ARTICLES_EXTRA = [
 export const DEMO_DESTINATION_CARD = {
   id: `destination-${DEMO_ARTICLE_SLUG}`,
   title: 'Dolomiti da esplorare',
-  image:
-    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop',
+  image: LOCAL_IMAGES.dolomiti,
   link: DEMO_ARTICLE_PATH,
   region: 'Europa',
   category: 'Guide',
@@ -101,8 +106,7 @@ export const DEMO_DESTINATION_CARDS = [
   {
     id: 'destination-puglia-trulli-masserie',
     title: 'Puglia: trulli, masserie, mare',
-    image:
-      'https://images.unsplash.com/photo-1499695867787-12ace027e651?q=80&w=1200&auto=format&fit=crop',
+    image: LOCAL_IMAGES.puglia,
     link: '/guide',
     region: 'Italia',
     category: 'Destinazioni',
@@ -110,8 +114,7 @@ export const DEMO_DESTINATION_CARDS = [
   {
     id: 'destination-toscana-borghi-nascosti',
     title: 'Toscana: borghi sospesi nel tempo',
-    image:
-      'https://images.unsplash.com/photo-1516483638261-f40af5aa3463?q=80&w=1200&auto=format&fit=crop',
+    image: LOCAL_IMAGES.toscana,
     link: '/guide',
     region: 'Italia',
     category: 'Posti particolari',
@@ -119,8 +122,7 @@ export const DEMO_DESTINATION_CARDS = [
   {
     id: 'destination-costiera-amalfitana',
     title: 'Costiera Amalfitana fuori stagione',
-    image:
-      'https://images.unsplash.com/photo-1533418264835-9871c7c2dbf0?q=80&w=1200&auto=format&fit=crop',
+    image: LOCAL_IMAGES.costiera,
     link: '/guide',
     region: 'Italia',
     category: 'Weekend & Day trips',
@@ -128,8 +130,7 @@ export const DEMO_DESTINATION_CARDS = [
   {
     id: 'destination-nord-delle-filippine',
     title: 'Nord delle Filippine, lontano dai circuiti',
-    image:
-      'https://images.unsplash.com/photo-1518509562904-e7ef99cdcc86?q=80&w=1200&auto=format&fit=crop',
+    image: LOCAL_IMAGES.filippine,
     link: '/guide',
     region: 'Asia',
     category: 'Itinerari completi',
@@ -137,8 +138,7 @@ export const DEMO_DESTINATION_CARDS = [
   {
     id: 'destination-islanda-ring-road',
     title: 'Islanda: Ring Road in autonomia',
-    image:
-      'https://images.unsplash.com/photo-1476610182048-b716b8518aae?q=80&w=1200&auto=format&fit=crop',
+    image: LOCAL_IMAGES.islanda,
     link: '/guide',
     region: 'Europa',
     category: 'Itinerari completi',
@@ -150,8 +150,7 @@ export const DEMO_ARTICLE_MARKER = {
   name: 'Dolomiti',
   coordinates: [11.8598, 46.4102] as [number, number],
   link: DEMO_ARTICLE_PATH,
-  image:
-    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop',
+  image: LOCAL_IMAGES.dolomiti,
   category: 'Guide',
   title: 'Dolomiti: Tra Rifugi di Design e Vette Leggendarie',
 };
@@ -163,8 +162,7 @@ export const DEMO_PRODUCTS = [
     name: 'Guida Premium Dolomiti',
     price: 24.9,
     isDigital: true,
-    imageUrl:
-      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop',
+    imageUrl: LOCAL_IMAGES.dolomiti,
     category: 'Itinerari completi',
     description:
       'Una guida premium pensata per raccogliere tappe, indirizzi, consigli pratici e idee già selezionate in un formato ordinato.',
@@ -180,8 +178,7 @@ export const DEMO_PRODUCTS = [
     name: 'Guida Premium Giappone',
     price: 34.0,
     isDigital: true,
-    imageUrl:
-      'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1200&auto=format&fit=crop',
+    imageUrl: LOCAL_IMAGES.giappone,
     category: 'Itinerari completi',
     description:
       'Il nostro itinerario reale di 14 giorni in Giappone, ottimizzato per spostamenti, JR Pass e prenotazioni.',
@@ -197,8 +194,7 @@ export const DEMO_PRODUCTS = [
     name: 'Roadtrip in Puglia',
     price: 19.9,
     isDigital: true,
-    imageUrl:
-      'https://images.unsplash.com/photo-1499695867787-12ace027e651?q=80&w=1200&auto=format&fit=crop',
+    imageUrl: LOCAL_IMAGES.puglia,
     category: 'Weekend & Day trips',
     description:
       'Tutte le tappe perfette per un on-the-road nel sud Italia, tra masserie, mare e posticini segreti.',
@@ -214,8 +210,7 @@ export const DEMO_PRODUCTS = [
     name: 'Islanda Ring Road Planner',
     price: 29.0,
     isDigital: true,
-    imageUrl:
-      'https://images.unsplash.com/photo-1476610182048-b716b8518aae?q=80&w=1200&auto=format&fit=crop',
+    imageUrl: LOCAL_IMAGES.islanda,
     category: 'Planner & Template',
     description:
       'Come organizzare il viaggio in Islanda in autonomia. Documento Notion pronto da usare e personalizzare.',
@@ -231,8 +226,7 @@ export const DEMO_PRODUCTS = [
     name: 'Safari in Sudafrica - Kruger Planner',
     price: 22.5,
     isDigital: true,
-    imageUrl:
-      'https://images.unsplash.com/photo-1547471080-7fc2caa6f7ea?q=80&w=1200&auto=format&fit=crop',
+    imageUrl: LOCAL_IMAGES.africa,
     category: 'Planner & Template',
     description:
       "Tutte le informazioni, i contatti e l'organizzazione per fare un safari fai-da-te ed abbattere i costi senza rinunciare ai lodge di charme.",
@@ -248,8 +242,7 @@ export const DEMO_PRODUCTS = [
     name: 'Fuga in Trentino, 3 giorni spa & relax',
     price: 14.9,
     isDigital: true,
-    imageUrl:
-      'https://images.unsplash.com/photo-1551882547-ff40c0d129df?q=80&w=1200&auto=format&fit=crop',
+    imageUrl: LOCAL_IMAGES.dolomiti,
     category: 'Weekend & Day trips',
     description:
       'Solamente due notti e tre giorni pieni per ricaricarsi in montagna mangiando da Dio e riposando bene. Tutti i dettagli pronti.',

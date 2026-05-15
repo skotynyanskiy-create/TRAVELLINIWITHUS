@@ -172,7 +172,7 @@ export default function ChiSiamo() {
               <h1 className="text-display-1">
                 {pageContent.heroTitleMain}
                 <br />
-                <span className="italic text-black/60">{pageContent.heroTitleAccent}</span>
+                <span className="italic text-black/75">{pageContent.heroTitleAccent}</span>
               </h1>
               <motion.span
                 initial={{ opacity: 0, rotate: -10, scale: 0.8 }}
@@ -185,7 +185,7 @@ export default function ChiSiamo() {
               </motion.span>
             </div>
 
-            <div className="mb-10 space-y-5 text-lg leading-relaxed text-black/70">
+            <div className="mb-10 space-y-5 text-lg leading-relaxed text-[var(--color-ink-2)]">
               {pageContent.introParagraphs.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
@@ -196,7 +196,7 @@ export default function ChiSiamo() {
                 <div className="text-3xl font-serif text-[var(--color-ink)]">
                   {BRAND_STATS.yearsOfTravel}
                 </div>
-                <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-black/42">
+                <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink-2)]">
                   anni di viaggi
                 </div>
               </div>
@@ -204,7 +204,7 @@ export default function ChiSiamo() {
                 <div className="text-3xl font-serif text-[var(--color-ink)]">
                   {BRAND_STATS.instagramFollowers}
                 </div>
-                <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-black/42">
+                <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink-2)]">
                   community IG
                 </div>
               </div>
@@ -212,7 +212,7 @@ export default function ChiSiamo() {
                 <div className="text-3xl font-serif text-[var(--color-ink)]">
                   {BRAND_STATS.tiktokFollowers}
                 </div>
-                <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-black/42">
+                <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink-2)]">
                   community TikTok
                 </div>
               </div>
@@ -255,8 +255,8 @@ export default function ChiSiamo() {
           <div className="relative order-2 lg:order-2">
             <div className="aspect-[4/5] overflow-hidden rounded-[var(--radius-2xl)] shadow-[var(--shadow-premium)] transition-transform duration-700 lg:rotate-2 lg:hover:rotate-0">
               <OptimizedImage
-                src="https://images.unsplash.com/photo-1527631746610-bca00a040d60?q=80&w=1400&auto=format&fit=crop"
-                alt="Rodrigo e Betta in viaggio"
+                src="/images/brand/about-editorial.webp"
+                alt="Rodrigo e Betta — ritratto editoriale del progetto Travelliniwithus"
                 className="block h-full w-full object-cover"
               />
             </div>
@@ -264,7 +264,7 @@ export default function ChiSiamo() {
               <p className="mb-2 text-xl font-serif italic text-[var(--color-accent)]">
                 "{pageContent.quoteText}"
               </p>
-              <p className="text-xs font-bold uppercase tracking-widest text-black/40">
+              <p className="text-xs font-bold uppercase tracking-widest text-[var(--color-ink-2)]">
                 {pageContent.quoteAuthor}
               </p>
             </div>
@@ -286,7 +286,7 @@ export default function ChiSiamo() {
                 </div>
                 <div>
                   <h3 className="mb-3 text-2xl font-serif">{item.title}</h3>
-                  <p className="leading-relaxed text-black/70">{item.text}</p>
+                  <p className="leading-relaxed text-[var(--color-ink-2)]">{item.text}</p>
                 </div>
               </div>
             );
@@ -305,7 +305,7 @@ export default function ChiSiamo() {
                 {String(index + 1).padStart(2, '0')}
               </span>
               <h3 className="relative z-10 mb-4 text-2xl font-serif">{item.title}</h3>
-              <p className="relative z-10 leading-relaxed text-black/70">{item.text}</p>
+              <p className="relative z-10 leading-relaxed text-[var(--color-ink-2)]">{item.text}</p>
             </div>
           ))}
         </div>
@@ -320,7 +320,7 @@ export default function ChiSiamo() {
             <h2 className="mb-4 text-4xl font-serif">
               Quello che difendiamo ogni volta che pubblichiamo
             </h2>
-            <p className="mx-auto max-w-2xl text-lg leading-relaxed text-black/70">
+            <p className="mx-auto max-w-2xl text-lg leading-relaxed text-[var(--color-ink-2)]">
               Non ci interessa sembrare premium per lessico. Ci interessa essere utili,
               riconoscibili e credibili.
             </p>
@@ -332,7 +332,7 @@ export default function ChiSiamo() {
                 key={item}
                 className="rounded-[var(--radius-lg)] border border-black/5 bg-white p-8 shadow-sm"
               >
-                <p className="leading-relaxed text-black/70">{item}</p>
+                <p className="leading-relaxed text-[var(--color-ink-2)]">{item}</p>
               </div>
             ))}
           </div>
@@ -387,7 +387,7 @@ export default function ChiSiamo() {
               </div>
               <div className="pt-3">
                 <h3 className="mb-2 text-2xl font-serif">{milestone.title}</h3>
-                <p className="leading-relaxed text-black/70">{milestone.text}</p>
+                <p className="leading-relaxed text-[var(--color-ink-2)]">{milestone.text}</p>
               </div>
             </motion.div>
           ))}

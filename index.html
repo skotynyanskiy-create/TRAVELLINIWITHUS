@@ -11,9 +11,14 @@
     <title>Travelliniwithus</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://images.unsplash.com" />
+
+    <!-- Fonts are self-hosted via @fontsource (see src/index.css). Vite bundles
+         and hashes the woff2 files; browser discovers them when CSS is parsed.
+         A manual preload would need the hashed final path (post-build) and is
+         skipped here to avoid 404s. The browser starts the font fetch on first
+         CSS parse, which is fast enough on HTTP/2 multiplexed connections. -->
+
+    <!-- LCP image preload (hero). Matches <picture> sources in HeroBackdrop. -->
     <link
       rel="preload"
       as="image"
@@ -30,7 +35,6 @@
       media="(min-width: 769px)"
       fetchpriority="high"
     />
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600;700&family=Kalam:wght@300;400;700&display=swap" rel="stylesheet" />
   </head>
   <body>
     <div id="root"></div>

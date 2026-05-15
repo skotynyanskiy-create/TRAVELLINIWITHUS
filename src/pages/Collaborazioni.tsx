@@ -319,12 +319,20 @@ export default function Collaborazioni() {
     { icon: Users, rawValue: resolvedStats.monthlyReach, label: 'Reach mensile stimata' },
     { icon: BarChart, rawValue: resolvedStats.engagementRate, label: 'Engagement rate' },
   ];
+  const trackPartnerCta = (ctaId: string) => {
+    trackEvent('partner_cta_click', {
+      route: '/collaborazioni',
+      source: 'collaborazioni',
+      cta_id: ctaId,
+      content_id: 'partner_funnel',
+    });
+  };
 
   return (
     <PageLayout>
       <SEO
-        title="Collaborazioni"
-        description="Collaborazioni editoriali per hotel, destinazioni, brand travel e progetti lifestyle che hanno qualcosa da raccontare con credibilità."
+        title="Collaborazioni editoriali per hotel, destinazioni e brand travel"
+        description="Collaborazioni editoriali con hotel, destinazioni, brand travel e progetti lifestyle che hanno qualcosa da raccontare con credibilità."
       />
       <JsonLd data={faqStructuredData} />
 
@@ -384,6 +392,7 @@ export default function Collaborazioni() {
                 size="lg"
                 className="px-8 py-4"
                 trackingId="collaborazioni_hero_primary"
+                onClick={() => trackPartnerCta('collaborazioni_hero_primary')}
               >
                 {pageContent.primaryCtaLabel} <ArrowRight size={18} />
               </Button>
@@ -393,6 +402,7 @@ export default function Collaborazioni() {
                 size="lg"
                 className="px-8 py-4"
                 trackingId="collaborazioni_hero_secondary"
+                onClick={() => trackPartnerCta('collaborazioni_hero_secondary')}
               >
                 {pageContent.secondaryCtaLabel}
               </Button>
@@ -418,7 +428,7 @@ export default function Collaborazioni() {
           >
             <div className="aspect-[4/5] overflow-hidden rounded-[var(--radius-lg)] shadow-2xl transition-transform duration-700 lg:-rotate-2 lg:hover:rotate-0">
               <OptimizedImage
-                src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1200&auto=format&fit=crop"
+                src="/images/brand/collab-work.webp"
                 alt="Rodrigo e Betta in un contesto travel editoriale"
                 className="h-full w-full object-cover"
               />
@@ -463,7 +473,7 @@ export default function Collaborazioni() {
                 <div className="mb-2 text-4xl font-serif text-[var(--color-ink)]">
                   <AnimatedCounter value={parsed.value} suffix={parsed.suffix} duration={1800} />
                 </div>
-                <div className="text-[10px] font-bold uppercase tracking-widest text-black/50">
+                <div className="text-[10px] font-bold uppercase tracking-widest text-black/65">
                   {item.label}
                 </div>
               </motion.div>
@@ -665,6 +675,7 @@ export default function Collaborazioni() {
                     variant={isHighlighted ? 'primary' : 'outline-light'}
                     className={`w-full ${isHighlighted ? 'bg-[var(--color-accent)] hover:brightness-110' : ''}`}
                     trackingId={`collaborazioni_package_${index}`}
+                    onClick={() => trackPartnerCta(`collaborazioni_package_${index}`)}
                   >
                     {ctaLabels[index] ?? 'Richiedi info'}
                   </Button>
@@ -691,6 +702,7 @@ export default function Collaborazioni() {
               size="lg"
               className="px-10 py-5"
               trackingId="collaborazioni_footer_mediakit"
+              onClick={() => trackPartnerCta('collaborazioni_footer_mediakit')}
             >
               Richiedi il media kit <ArrowRight size={18} />
             </Button>
@@ -700,6 +712,7 @@ export default function Collaborazioni() {
               size="lg"
               className="px-10 py-5"
               trackingId="collaborazioni_footer_contact"
+              onClick={() => trackPartnerCta('collaborazioni_footer_contact')}
             >
               Scrivici per una proposta
             </Button>

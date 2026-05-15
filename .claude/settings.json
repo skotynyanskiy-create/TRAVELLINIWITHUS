@@ -1,5 +1,15 @@
 {
-  "enableAllProjectMcpServers": true,
+  "enableAllProjectMcpServers": false,
+  "enabledMcpjsonServers": [
+    "firebase",
+    "stripe",
+    "sentry",
+    "playwright",
+    "chrome-devtools",
+    "context7",
+    "github",
+    "obsidian"
+  ],
   "hooks": {
     "SessionStart": [
       {

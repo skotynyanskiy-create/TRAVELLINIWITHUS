@@ -29,3 +29,11 @@ Rules:
 - No padding, no summaries of what you read, just findings.
 - If asked to find something and it is not there, say so clearly.
 - Grep before reading when looking for a symbol.
+
+## Required project references
+
+- `AGENTS.md`
+- `CLAUDE.md`
+- `docs/`
+- `docs/MARKETING_OPERATIONS_HUB.md`
+- `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md`

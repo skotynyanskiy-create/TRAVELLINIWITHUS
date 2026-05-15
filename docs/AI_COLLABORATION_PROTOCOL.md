@@ -17,12 +17,15 @@ Make every AI tool work on the same project memory, same documentation system an
 ## System of record
 
 - repo root = source of code truth
-- `docs/` = source of operational truth
+- repository root = active Obsidian vault for Local REST API / MCP automation
+- `docs/` = source of operational truth and note storage
 - `DESIGN.md` = source of design-system truth for agents and design tools
 - `.agents/skills` = canonical local skill source
 - `docs/AI_AGENT_STACK.md` = source of AI stack and external-reference policy
 - `docs/MARKETING_OPERATIONS_HUB.md` = source of marketing truth
 - `docs/10_Projects/PROJECT_TRAVELLINIWITHUS_SITE.md` = source of project truth
+- `.mcp.json` = shared Claude Code project MCP declaration
+- `~/.codex/config.toml` = Codex runtime MCP declaration aligned to `.mcp.json`
 
 ## For every AI tool
 
@@ -32,7 +35,7 @@ Any assistant used on this repo should:
 2. read `CLAUDE.md`
 3. read `DESIGN.md` for UI and design-system work
 4. read `docs/AI_AGENT_STACK.md` for skill and agent workflow rules
-5. use `docs/` as the working documentation vault
+5. use the repository root as the Obsidian vault, with working notes stored under `docs/`
 6. update the relevant note when work changes scope, decisions or delivery state
 
 ## Multi-agent workflow
@@ -40,6 +43,7 @@ Any assistant used on this repo should:
 - Edit canonical local skills in `.agents/skills`.
 - Run `npm run sync:agents` to sync skill copies to agent-specific directories.
 - Run `npm run audit:agents` after agent, skill, instruction or workflow changes.
+- Keep Claude MCP (`.mcp.json`) and Codex MCP (`~/.codex/config.toml`) aligned when adding or removing project MCP servers.
 - Use Stitch/Figma as controlled design inputs only; implementation remains repo-native React/Tailwind.
 - Use `npm run audit:visual` for UI-heavy changes and `npm run audit:quality` for major release confidence.
 

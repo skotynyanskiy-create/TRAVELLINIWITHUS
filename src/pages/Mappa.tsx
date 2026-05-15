@@ -36,8 +36,8 @@ export default function Mappa() {
       style={{ isolation: 'isolate' }}
     >
       <SEO
-        title="Esplora la Mappa Globale"
-        description="Scopri gli itinerari e le destinazioni di Travelliniwithus attraverso la nostra mappa interattiva 3D."
+        title="Mappa dei posti che abbiamo visitato"
+        description="La mappa interattiva 3D di Travelliniwithus: destinazioni verificate sul posto, filtrate per regione, esperienza e periodo."
       />
 
       {shouldLoadMap ? (

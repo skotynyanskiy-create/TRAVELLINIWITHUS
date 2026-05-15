@@ -88,6 +88,51 @@ Workflow outreach partner (Q3 2026, ~1h R+B/settimana):
 - [[13_Content/LEAD_MAGNET_POSTI_ITALIANI]] — outline 10 luoghi + tone
 - [[12_Partnerships/PARTNER_PIPELINE_TRAVELLINIWITHUS]] — 5 categorie + outreach
 
+## Activation gate (May → Jun 2026)
+
+Tre check da spuntare prima che il funnel sia considerato live (post audit
+avanzato 2026-05-15). Vedere [[R_B_ACTIONS_FOR_PREMIUM_READY]] per dettagli
+operativi step-by-step.
+
+- [ ] **Affiliate signup completi**: Skyscanner BFCA + Booking BFCA + Airalo + Revolut (effort R+B ~90 min)
+- [ ] **PDF lead magnet compilato con 10 luoghi reali** + `RESEND_API_KEY` + `BREVO_API_KEY` attivi in `.env.production` + test end-to-end (welcome email arriva, PDF link 200) (effort R+B ~5h tra contenuti + setup)
+- [ ] **Bio IG + TikTok aggiornate** con link `travelliniwithus.it/vieni-con-noi?utm_source=ig_bio|tt_bio` (effort R+B 15 min)
+
+## Quality bar partner outreach
+
+Una sola regola hard prima del primo outreach reale:
+
+> Deve esistere almeno 1 case study (anche micro) o screenshot dashboard
+> creator (IG insights / TikTok analytics) salvato in repo privato come
+> prova.
+
+Senza, l'outreach va rimandato — la reply rate sui partner B2B sconta -20/-40%
+se "i numeri" non sono documentati. Salvare screenshot in `docs/12_Partnerships/proof/`
+(cartella gitignored).
+
+Inoltre rispettare la regola **1 partner content ogni 4 contenuti editoriali**
+per non diluire la credibilità del progetto.
+
+## Revenue surface — stato wired vs attivo
+
+| Surface                  | Wired                                          | Attivo                                   | Primo € atteso                            |
+| ------------------------ | ---------------------------------------------- | ---------------------------------------- | ----------------------------------------- |
+| Newsletter / lead magnet | sì                                             | no (Resend missing)                      | post activation gate                      |
+| Partner pipeline B2B     | sì                                             | no (0 outreach inviati)                  | Q3 2026                                   |
+| Affiliate stack          | parziale (2/6 attivi: Heymondo + GetYourGuide) | parziale                                 | entro 30gg se signup completati           |
+| Shop digitale            | sì                                             | no (cart disabled, preorder-first 1 SKU) | 60-90gg se waitlist ≥ 20                  |
+| MediaKit B2B             | sì                                             | sì (form attivo)                         | quando arriva prima richiesta qualificata |
+
+## Decision log Shop
+
+**2026-05-15** — Decisione preorder-first: lo shop viene lanciato in produzione
+solo con 1 sola SKU MVP (ipotesi: "Roadtrip in Puglia" 19,90€ o "Fuga in Trentino
+3 giorni spa & relax" 14,90€), in modalità waitlist. Stripe live non viene
+abilitato finché non ci sono ≥ 20 nominativi confermati in lista d'attesa che
+hanno espresso intent reale (CTA "iscriviti alla lista" in pagina prodotto).
+Motivazione: ridurre rischio post-vendita (Rodrigo & Betta non hanno banda per
+supporto multi-SKU) e validare prezzo prima dell'investimento contenuti reali.
+
 ## Main project links
 
 - [[10_Projects/PROJECT_TRAVELLINIWITHUS_SITE]]
@@ -95,3 +140,4 @@ Workflow outreach partner (Q3 2026, ~1h R+B/settimana):
 - [[10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT]]
 - [[10_Projects/PROJECT_DESTINATIONS_SECTION_REVIEW]]
 - [[10_Projects/PROJECT_RELEASE_READINESS]]
+- [[R_B_ACTIONS_FOR_PREMIUM_READY]]

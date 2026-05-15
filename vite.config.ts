@@ -2,11 +2,9 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import path from 'path';
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
 
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, '.', '');
-
   return {
     plugins: [
       react(),
@@ -49,9 +47,9 @@ export default defineConfig(({ mode }) => {
         },
       }),
     ],
-    define: {
-      'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-    },
+    // NOTE: rimosso `define` di GEMINI_API_KEY — la chiave non deve mai entrare
+    // nel bundle client. La verifica AI passa ora attraverso l'endpoint server
+    // admin-only `/api/admin/ai-verify` (vedi src/services/aiVerificationService.ts).
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),

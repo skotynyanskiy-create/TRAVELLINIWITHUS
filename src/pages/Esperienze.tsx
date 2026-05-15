@@ -54,8 +54,9 @@ const EXPERIENCE_DESCRIPTIONS: Record<string, string> = {
   'Gite e day trip': 'Uscite facili da organizzare per una giornata o un weekend vicino.',
 };
 
-const HERO_VISUAL =
-  'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1800&auto=format&fit=crop';
+// TODO[R+B]: sostituire con foto editoriale R+B che rappresenti l'archivio
+// "esperienze" (un dettaglio di viaggio, non una vista postcard).
+const HERO_VISUAL = '/images/experiences/insolito.webp';
 
 function uniqueValues(items: Array<string | undefined>) {
   return Array.from(
@@ -357,7 +358,7 @@ export default function Esperienze() {
             </span>
             <h1 className="text-5xl font-serif font-medium leading-[0.95] text-[var(--color-ink)] md:text-7xl lg:text-8xl">
               Scegli il ritmo
-              <span className="block italic text-black/50">del viaggio</span>
+              <span className="block italic text-black/65">del viaggio</span>
             </h1>
             <p className="mt-7 max-w-2xl text-lg leading-relaxed text-black/70 md:text-xl">
               Non sempre si parte da un Paese. A volte si parte da un tavolo, un hotel, un borgo,

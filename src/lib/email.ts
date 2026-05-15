@@ -178,7 +178,7 @@ export function renderWelcomeEmail(input: {
       <p style="font-size:18px;margin:0 0 16px;">Ciao,</p>
       <p style="margin:0 0 16px;">
         Sei nella lista di chi viaggia con criterio. Niente automazione cieca:
-        ti scriviamo solo quando c'e qualcosa di davvero utile da salvare —
+        ti scriviamo solo quando c'è qualcosa di davvero utile da salvare —
         guide pratiche, posti particolari, scelte ragionate.
       </p>
       ${leadMagnetBlock}
@@ -190,6 +190,9 @@ export function renderWelcomeEmail(input: {
         &middot; <a href="https://www.tiktok.com/@travelliniwithus" style="color:#9a3412;">TikTok</a> (90K)<br/>
         &middot; <a href="https://travelliniwithus.it/destinazioni" style="color:#9a3412;">Posti raccontati bene</a> sul sito
       </p>
+      <p style="margin:24px 0 0;color:#57534e;font-size:14px;">
+        P.S. Se hai 30 secondi: rispondi a questa email con la prossima destinazione che hai in mente. Leggiamo davvero, non c'è un bot.
+      </p>
       <p style="margin:32px 0 0;">
         A presto,<br/>
         <span style="font-family:'Fraunces',serif;font-style:italic;color:#ea580c;font-size:18px;">Rodrigo &amp; Betta</span>
@@ -199,12 +202,14 @@ export function renderWelcomeEmail(input: {
   const text = `Ciao,
 
 Sei nella lista di chi viaggia con criterio. Niente automazione cieca:
-ti scriviamo solo quando c'e qualcosa di davvero utile da salvare.
+ti scriviamo solo quando c'è qualcosa di davvero utile da salvare.
 ${input.leadMagnetUrl ? `\nScarica la guida "10 posti italiani non ovvi": ${input.leadMagnetUrl}\n` : ''}
 Intanto, se ti va, ci trovi qui:
 - Instagram: https://www.instagram.com/travelliniwithus/
 - TikTok: https://www.tiktok.com/@travelliniwithus
 - Sito: https://travelliniwithus.it/destinazioni
+
+P.S. Se hai 30 secondi: rispondi a questa email con la prossima destinazione che hai in mente. Leggiamo davvero, non c'è un bot.
 
 A presto,
 Rodrigo & Betta`;

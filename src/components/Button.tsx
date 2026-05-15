@@ -9,7 +9,7 @@ interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'outline' | 'outline-light' | 'cta';
   size?: 'sm' | 'md' | 'lg';
   className?: string;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  onClick?: React.MouseEventHandler<HTMLElement>;
   to?: string;
   href?: string;
   rel?: string;
@@ -45,8 +45,9 @@ export default function Button({
     }
   };
 
-  const handleAnchorClick = () => {
+  const handleAnchorClick: React.MouseEventHandler<HTMLElement> = (event) => {
     fireTracking();
+    onClick?.(event);
   };
 
   const handleButtonClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {

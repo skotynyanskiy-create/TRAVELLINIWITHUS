@@ -3,15 +3,15 @@ type: article
 status: idea
 priority: p2
 area: content
-pillar: ""
-destination: ""
-keyword_primaria: ""
+pillar: ''
+destination: ''
+keyword_primaria: ''
 keyword_secondarie: []
-route: ""
-published_at: ""
-author: ""
+route: ''
+published_at: ''
+author: ''
 related: []
-source: ""
+source: ''
 tags: []
 ---
 
@@ -19,50 +19,50 @@ tags: []
 
 ## Idea e angolo editoriale
 
-*Perché questo articolo? Qual è la promessa al lettore? Cosa lo rende diverso?*
+_Perché questo articolo? Qual è la promessa al lettore? Cosa lo rende diverso?_
 
 ## Keyword e SEO
 
-- **Keyword primaria**: 
-- **Keyword secondarie**: 
+- **Keyword primaria**:
+- **Keyword secondarie**:
 - **Search intent**: informazionale | navigazionale | commerciale | transazionale
-- **Concorrenti da battere**: 
+- **Concorrenti da battere**:
 
 ## Scaletta
 
-1. 
-2. 
-3. 
-4. 
-5. 
+1.
+2.
+3.
+4.
+5.
 
 ## Draft
 
-*Scrivi qui il testo completo dell'articolo.*
+_Scrivi qui il testo completo dell'articolo._
 
 ---
 
 ## Note SEO
 
-- **Title tag**: 
-- **Meta description**: 
-- **H1**: 
-- **Link interni da aggiungere**: 
-- **Link esterni autorevoli**: 
+- **Title tag**:
+- **Meta description**:
+- **H1**:
+- **Link interni da aggiungere**:
+- **Link esterni autorevoli**:
 
 ## CTA principale
 
-*Cosa deve fare il lettore alla fine? Newsletter / Guida / Prodotto / Collaborazione?*
+_Cosa deve fare il lettore alla fine? Newsletter / Guida / Prodotto / Collaborazione?_
 
 ## Link interni
 
-- [[]] 
-- [[]] 
-- [[]] 
+- [[]]
+- [[]]
+- [[]]
 
 ## Checklist pubblicazione
 
-- [ ] SEO page creata in `80_SEO/Pagine/`
+- [ ] SEO page creata in `13_Content/SEO_<slug>.md`
 - [ ] Link interni verificati
 - [ ] Immagini ottimizzate (alt text, dimensioni)
 - [ ] CTA presente

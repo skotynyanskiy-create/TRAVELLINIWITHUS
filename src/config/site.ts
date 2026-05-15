@@ -32,19 +32,14 @@ export const BRAND_STATS = {
 export const NEWSLETTER_RECENT_SIGNUPS = 184;
 
 /** Aggiornare url con lo shortcode del reel più recente pubblicato su Instagram.
- *  Nessuna API key necessaria — aggiornamento manuale dopo ogni nuovo reel.
- *  Esempio: url: 'https://www.instagram.com/reel/ABC123XYZ/'
- *
- *  Demo placeholder: thumbnail editoriale Unsplash + caption demo che
- *  comunica natura placeholder. R+B sostituisce con URL reel reale
- *  appena disponibile (l'iframe embed Instagram subentra automaticamente
- *  quando `url` punta a /reel/...).
+ *  Nessuna API key necessaria: quando `url` punta a /reel/... l'embed
+ *  Instagram subentra automaticamente. Fino ad allora usiamo un asset locale
+ *  controllato, non hotlink demo.
  */
 export const FEATURED_REEL = {
   url: '', // vuoto = fallback su thumbnail + caption sotto
-  thumbnail:
-    'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=900&auto=format&fit=crop',
-  caption: 'Demo · ultimo reel R+B in arrivo',
+  thumbnail: '/images/brand/couple-travel.webp',
+  caption: 'Il lato più immediato del progetto: luoghi, prove sul campo e scelte senza rumore.',
 } as const;
 
 export const SOCIAL_COLORS = {

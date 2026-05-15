@@ -16,11 +16,11 @@
     { "id": "art-insp", "type": "text", "text": "Articoli\nispirazione\nART_*", "x": 60, "y": 480, "width": 160, "height": 70, "color": "3" },
 
     { "id": "places", "type": "text", "text": "Luoghi\nHotel / Ristoranti\nPLACE_*", "x": -700, "y": 620, "width": 180, "height": 70, "color": "5" },
-    { "id": "seo", "type": "text", "text": "SEO Pages\nSEO_*\n80_SEO/Pagine/", "x": -400, "y": 620, "width": 180, "height": 70, "color": "6" },
+    { "id": "seo", "type": "text", "text": "SEO Pages\nSEO_*\n13_Content/", "x": -400, "y": 620, "width": 180, "height": 70, "color": "6" },
     { "id": "social", "type": "text", "text": "Social Posts\nInstagram / TikTok\nPOST_*", "x": -100, "y": 620, "width": 180, "height": 70, "color": "6" },
 
     { "id": "prod", "type": "text", "text": "Prodotti shop\nPROD_*", "x": 260, "y": 360, "width": 160, "height": 60, "color": "4" },
-    { "id": "affiliati", "type": "text", "text": "Affiliati\n85_Shop/Affiliati/", "x": 260, "y": 480, "width": 160, "height": 60, "color": "4" },
+    { "id": "affiliati", "type": "text", "text": "Affiliati\nPROD_* / partner", "x": 260, "y": 480, "width": 160, "height": 60, "color": "4" },
 
     { "id": "newsletter", "type": "text", "text": "Newsletter\nLead capture", "x": 500, "y": 360, "width": 160, "height": 60, "color": "4" },
     { "id": "collab", "type": "text", "text": "Collaborazioni\nCOLLAB_*", "x": 500, "y": 480, "width": 160, "height": 60, "color": "4" }

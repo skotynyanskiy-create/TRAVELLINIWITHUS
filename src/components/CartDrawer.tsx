@@ -79,6 +79,7 @@ export default function CartDrawer() {
     try {
       setIsLoading(true);
       trackEvent('begin_checkout', {
+        route: window.location.pathname,
         currency: 'EUR',
         value: finalTotal,
         coupon: appliedCoupon?.code,
@@ -88,6 +89,16 @@ export default function CartDrawer() {
           price: item.price,
           quantity: item.quantity,
         })),
+      });
+      trackEvent('checkout_intent', {
+        route: window.location.pathname,
+        source: 'cart_drawer',
+        cta_id: 'cart_checkout',
+        content_id: 'cart',
+        currency: 'EUR',
+        value: finalTotal,
+        coupon: appliedCoupon?.code,
+        item_count: items.length,
       });
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',

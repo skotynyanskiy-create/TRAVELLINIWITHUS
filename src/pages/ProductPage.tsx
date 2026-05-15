@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, CheckCircle, FileText, Map, Shield, Smartphone } from 'lucide-react';
 import { Link, useParams } from 'react-router-dom';
@@ -17,6 +18,7 @@ import { Product } from '../types';
 import { SITE_URL } from '../config/site';
 import { DEMO_PRODUCTS } from '../config/demoContent';
 import { formatPrice } from '../utils/format';
+import { trackEvent } from '../services/analytics';
 
 const trustPoints = [
   {
@@ -58,8 +60,29 @@ export default function ProductPage() {
   const product = fetchedProduct || demoFallback || null;
   const isDemoProduct = !fetchedProduct && Boolean(demoFallback);
 
+  useEffect(() => {
+    if (!product) return;
+    trackEvent('product_view', {
+      route: `/shop/${product.slug}`,
+      source: 'product_page',
+      content_id: product.id,
+      product_slug: product.slug,
+      demo: isDemoProduct,
+    });
+  }, [isDemoProduct, product]);
+
   const handleAddToCart = () => {
     if (!product || isDemoProduct) return;
+
+    trackEvent('checkout_intent', {
+      route: `/shop/${product.slug}`,
+      source: 'product_page',
+      cta_id: 'product_add_to_cart',
+      content_id: product.id,
+      product_slug: product.slug,
+      value: product.price,
+      currency: 'EUR',
+    });
 
     addToCart({
       id: product.id,

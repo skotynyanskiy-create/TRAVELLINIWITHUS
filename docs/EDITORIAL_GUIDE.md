@@ -39,13 +39,13 @@ Il sito è un luogo premium, non un aggregatore. Ogni contenuto è curato, perso
 
 ## Pillar editoriali
 
-| Pillar | Descrizione | Tono |
-|--------|-------------|------|
-| **Destinazione** | Guide città, regioni, paesi. La nostra prospettiva su dove andare e perché | Esperienziale, curato |
-| **Stile di viaggio** | Come viaggiamo: coppia, lento, estetico, sostenibile | Personale, ispirazionale |
-| **Pratico** | Consigli reali: booking, budget, trasporti, packing | Diretto, utile, specifico |
-| **Ispirazione** | Idee viaggio, trend, luoghi insoliti | Visivo, evocativo |
-| **Shop** | Prodotti, guide digitali, risorse per viaggiatori | Funzionale, credibile |
+| Pillar               | Descrizione                                                                | Tono                      |
+| -------------------- | -------------------------------------------------------------------------- | ------------------------- |
+| **Destinazione**     | Guide città, regioni, paesi. La nostra prospettiva su dove andare e perché | Esperienziale, curato     |
+| **Stile di viaggio** | Come viaggiamo: coppia, lento, estetico, sostenibile                       | Personale, ispirazionale  |
+| **Pratico**          | Consigli reali: booking, budget, trasporti, packing                        | Diretto, utile, specifico |
+| **Ispirazione**      | Idee viaggio, trend, luoghi insoliti                                       | Visivo, evocativo         |
+| **Shop**             | Prodotti, guide digitali, risorse per viaggiatori                          | Funzionale, credibile     |
 
 ---
 
@@ -53,12 +53,12 @@ Il sito è un luogo premium, non un aggregatore. Ogni contenuto è curato, perso
 
 ### Lunghezze consigliate
 
-| Tipo | Parole | Note |
-|------|--------|------|
-| Articolo pillar (guida destinazione) | 1800–3000 | SEO-friendly, completo |
-| Articolo medio (consigli pratici) | 900–1500 | Specifico, scannable |
-| Articolo breve (notizia, spunto) | 400–700 | Solo se c'è valore reale |
-| Guida destinazione completa | 2500–4000 | Struttura a sezioni |
+| Tipo                                 | Parole    | Note                     |
+| ------------------------------------ | --------- | ------------------------ |
+| Articolo pillar (guida destinazione) | 1800–3000 | SEO-friendly, completo   |
+| Articolo medio (consigli pratici)    | 900–1500  | Specifico, scannable     |
+| Articolo breve (notizia, spunto)     | 400–700   | Solo se c'è valore reale |
+| Guida destinazione completa          | 2500–4000 | Struttura a sezioni      |
 
 ### Struttura base
 
@@ -110,13 +110,13 @@ Il sito è un luogo premium, non un aggregatore. Ogni contenuto è curato, perso
 
 ## Naming contenuti nel vault
 
-| Tipo | Pattern | Esempio |
-|------|---------|---------|
-| Articolo | `ART_<slug>` | `ART_weekend-barcellona` |
-| Guida destinazione | `DEST_<Nome>` | `DEST_Lisbona` |
-| Itinerario | `ITIN_<dest>_<durata>` | `ITIN_Lisbona_3gg` |
-| Luogo/hotel | `PLACE_<Nome>` | `PLACE_Hotel_Neri_Barcelona` |
-| SEO page | `SEO_<route-slug>` | `SEO_guida-lisbona` |
+| Tipo               | Pattern                | Esempio                      |
+| ------------------ | ---------------------- | ---------------------------- |
+| Articolo           | `ART_<slug>`           | `ART_weekend-barcellona`     |
+| Guida destinazione | `DEST_<Nome>`          | `DEST_Lisbona`               |
+| Itinerario         | `ITIN_<dest>_<durata>` | `ITIN_Lisbona_3gg`           |
+| Luogo/hotel        | `PLACE_<Nome>`         | `PLACE_Hotel_Neri_Barcelona` |
+| SEO page           | `SEO_<route-slug>`     | `SEO_guida-lisbona`          |
 
 ---
 
@@ -128,7 +128,7 @@ Il sito è un luogo premium, non un aggregatore. Ogni contenuto è curato, perso
 - [ ] Minimo 3 link interni
 - [ ] CTA finale presente e specifico
 - [ ] Immagini con alt text
-- [ ] Nota SEO creata in `80_SEO/Pagine/`
+- [ ] Nota SEO creata in `13_Content/SEO_<slug>.md`
 - [ ] `route` nella nota Obsidian aggiornata
 - [ ] `status: published` e `published_at` compilata
 - [ ] Link bidirezionali aggiunti (da altri articoli verso questo)

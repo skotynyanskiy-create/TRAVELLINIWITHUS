@@ -41,7 +41,7 @@ export default function Breadcrumbs({ items, className }: BreadcrumbsProps) {
       <JsonLd data={breadcrumbSchema} />
       <nav
         aria-label="Breadcrumb"
-        className={`flex items-center text-xs uppercase tracking-widest font-semibold text-black/50 mb-8 overflow-x-auto whitespace-nowrap pb-2 ${className ?? ''}`}
+        className={`flex items-center text-xs uppercase tracking-widest font-semibold text-black/65 mb-8 overflow-x-auto whitespace-nowrap pb-2 ${className ?? ''}`}
       >
         <ol className="flex items-center space-x-2">
           <li>

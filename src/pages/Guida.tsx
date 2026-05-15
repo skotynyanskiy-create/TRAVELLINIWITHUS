@@ -143,7 +143,7 @@ export default function Guida() {
                   <p className="mt-2 font-serif text-5xl text-[var(--color-ink)]">
                     {formatPrice(guide.price)}
                   </p>
-                  <p className="mt-1 text-xs text-black/45">IVA inclusa · download immediato</p>
+                  <p className="mt-1 text-xs text-black/70">IVA inclusa · download immediato</p>
                 </div>
                 {guide.isDemo ? (
                   <span className="inline-flex min-w-[220px] cursor-not-allowed items-center justify-center gap-2 rounded-full bg-black/60 px-10 py-4 text-sm font-bold uppercase tracking-widest text-white opacity-60">
@@ -244,7 +244,7 @@ export default function Guida() {
             </h2>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-white/70">
               Accesso a guide nuove e aggiornate, newsletter privata, sconti partner. Stessa
-              identita editoriale, senza pagare ogni volta.
+              identità editoriale, senza pagare ogni volta.
             </p>
           </div>
           <Link

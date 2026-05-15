@@ -171,7 +171,7 @@ if (!fs.existsSync(claudeAgentsDir)) {
 } else {
   const agentFiles = fs
     .readdirSync(claudeAgentsDir, { withFileTypes: true })
-    .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.md') && entry.name !== 'README.md')
     .map((entry) => path.join(claudeAgentsDir, entry.name));
 
   if (agentFiles.length === 0) {

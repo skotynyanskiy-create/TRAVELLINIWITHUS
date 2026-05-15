@@ -8,6 +8,15 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import {
+  applicationDefault,
+  cert,
+  getApps,
+  initializeApp,
+  type App as FirebaseAdminApp,
+} from 'firebase-admin/app';
+import { FieldValue, getFirestore, type Firestore } from 'firebase-admin/firestore';
+import { getAuth } from 'firebase-admin/auth';
+import {
   sendEmail,
   renderContactNotification,
   renderContactAutoReply,
@@ -38,6 +47,7 @@ const stripe = stripeSecretKey
 
 const configPath = path.join(process.cwd(), 'firebase-applet-config.json');
 let firebaseConfig: Record<string, string> = {};
+let adminDb: Firestore | null | undefined;
 
 if (fs.existsSync(configPath)) {
   firebaseConfig = JSON.parse(fs.readFileSync(configPath, 'utf-8')) as Record<string, string>;
@@ -112,7 +122,6 @@ interface ProductRecord {
   imageUrl?: string;
   category?: string;
   isDigital?: boolean;
-  downloadUrl?: string;
 }
 
 interface CouponRecord {
@@ -124,9 +133,30 @@ interface CouponRecord {
   expiryDate: string | null;
 }
 
+interface ProductAssetRecord {
+  downloadUrl: string | null;
+}
+
 interface DemoSettings {
   showEditorialDemo: boolean;
   showShopDemo: boolean;
+}
+
+interface StripeOrderRecord {
+  customerName: string;
+  email: string;
+  total: number;
+  status: 'completed';
+  items: Array<{
+    id: string;
+    name: string;
+    price: number;
+    quantity: number;
+    downloadUrl: string | null;
+    isDigital: boolean;
+  }>;
+  userId: string | null;
+  stripeSessionId: string;
 }
 
 const DEMO_ARTICLE_SLUG = 'dolomiti-rifugi-design';
@@ -141,6 +171,9 @@ const DEMO_PRODUCT_SLUGS = new Set([
 
 const STATIC_APP_ROUTES = new Set([
   '/',
+  '/vieni-con-noi',
+  '/lead-magnet',
+  '/iscrivi',
   '/destinazioni',
   '/esperienze',
   '/guide',
@@ -185,6 +218,96 @@ function getArray(fields: Record<string, FirestoreValue> | undefined, key: strin
 
 function getMapFields(value: FirestoreValue | undefined) {
   return value?.mapValue?.fields;
+}
+
+function parseServiceAccount(raw: string) {
+  return raw.trim().startsWith('{')
+    ? JSON.parse(raw)
+    : JSON.parse(fs.readFileSync(path.resolve(raw), 'utf-8'));
+}
+
+function getFirebaseAdminDb() {
+  if (adminDb !== undefined) {
+    return adminDb;
+  }
+
+  try {
+    const serviceAccountRaw =
+      process.env.FIREBASE_SERVICE_ACCOUNT_JSON || process.env.FIREBASE_SERVICE_ACCOUNT;
+    let app: FirebaseAdminApp;
+
+    if (getApps().length > 0) {
+      app = getApps()[0];
+    } else if (serviceAccountRaw) {
+      app = initializeApp({
+        credential: cert(parseServiceAccount(serviceAccountRaw)),
+        projectId: firebaseConfig.projectId || undefined,
+      });
+    } else {
+      app = initializeApp({
+        credential: applicationDefault(),
+        projectId: firebaseConfig.projectId || undefined,
+      });
+    }
+
+    adminDb = firebaseConfig.firestoreDatabaseId
+      ? getFirestore(app, firebaseConfig.firestoreDatabaseId)
+      : getFirestore(app);
+    return adminDb;
+  } catch (error) {
+    console.error('[firebase-admin] Firestore admin init failed:', error);
+    adminDb = null;
+    return adminDb;
+  }
+}
+
+/**
+ * Verifica il bearer token Firebase nell'Authorization header.
+ * Ritorna { uid, email } se valido, null se assente o invalido.
+ * Non lancia: se la verifica fallisce torniamo null e il chiamante gestisce
+ * la richiesta come "anonima" (senza pollution di metadata altrui).
+ */
+async function verifyOptionalIdToken(authHeader: string | undefined): Promise<{
+  uid: string;
+  email: string | null;
+} | null> {
+  if (!authHeader || !authHeader.startsWith('Bearer ')) return null;
+  const token = authHeader.slice(7).trim();
+  if (!token) return null;
+
+  try {
+    if (!getApps().length) {
+      getFirebaseAdminDb();
+    }
+    const decoded = await getAuth().verifyIdToken(token);
+    return { uid: decoded.uid, email: decoded.email || null };
+  } catch {
+    return null;
+  }
+}
+
+async function saveStripeOrder(order: StripeOrderRecord, stripeEventId: string) {
+  const db = getFirebaseAdminDb();
+
+  if (!db) {
+    throw new Error('Firestore admin is not configured for Stripe order persistence.');
+  }
+
+  const orderRef = db.collection('orders').doc(order.stripeSessionId);
+  const existing = await orderRef.get();
+
+  if (existing.exists) {
+    return { created: false, id: orderRef.id };
+  }
+
+  await orderRef.create({
+    ...order,
+    source: 'stripe_webhook',
+    stripeEventId,
+    createdAt: FieldValue.serverTimestamp(),
+  });
+
+  return { created: true, id: orderRef.id };
 }
 
 function getDocumentId(doc: FirestoreDocument) {
@@ -497,7 +620,6 @@ async function fetchProductById(
       imageUrl: getString(fields, 'imageUrl') || undefined,
       category: getString(fields, 'category') || undefined,
       isDigital: getBoolean(fields, 'isDigital'),
-      downloadUrl: getString(fields, 'downloadUrl') || undefined,
     };
   } catch {
     return null;
@@ -564,7 +686,6 @@ async function fetchProductBySlug(
       imageUrl: getString(fields, 'imageUrl') || undefined,
       category: getString(fields, 'category') || undefined,
       isDigital: getBoolean(fields, 'isDigital'),
-      downloadUrl: getString(fields, 'downloadUrl') || undefined,
     };
     ssrCache.set(cacheKey, product);
     return product;
@@ -573,32 +694,61 @@ async function fetchProductBySlug(
   }
 }
 
+// Coupons are not publicly readable in firestore.rules — this lookup runs via
+// Firebase Admin SDK so the public discount catalog stays private.
 async function fetchCouponByCode(code: string): Promise<CouponRecord | null> {
-  if (!firebaseConfig.projectId || !firebaseConfig.firestoreDatabaseId) {
+  const db = getFirebaseAdminDb();
+
+  if (!db) {
     return null;
   }
 
   try {
-    const url = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/${firebaseConfig.firestoreDatabaseId}/documents/coupons/${encodeURIComponent(code)}`;
-    const data = await fetchJson<FirestoreDocument>(url);
-    const fields = data?.fields;
+    const snapshot = await db.collection('coupons').doc(code).get();
 
-    if (!fields) {
+    if (!snapshot.exists) {
       return null;
     }
 
-    const active = fields.active?.booleanValue ?? true;
-    const expiryDate = fields.expiryDate?.timestampValue || null;
-    const rawType = getString(fields, 'type') || getString(fields, 'discountType');
-    const numericValue = getNumber(fields, 'value') ?? 0;
-    const normalizedType =
+    const data = snapshot.data() as
+      | {
+          active?: boolean;
+          expiryDate?: { toDate?: () => Date } | string | null;
+          type?: string;
+          discountType?: string;
+          value?: number | string;
+          description?: string;
+        }
+      | undefined;
+
+    if (!data) {
+      return null;
+    }
+
+    const active = data.active ?? true;
+
+    let expiryDate: string | null = null;
+    if (data.expiryDate) {
+      if (typeof data.expiryDate === 'string') {
+        expiryDate = data.expiryDate;
+      } else if (typeof data.expiryDate.toDate === 'function') {
+        expiryDate = data.expiryDate.toDate().toISOString();
+      }
+    }
+
+    const rawType = (data.type ?? data.discountType ?? '').toString();
+    const rawValue = data.value;
+    const numericValue =
+      typeof rawValue === 'number' ? rawValue : typeof rawValue === 'string' ? Number(rawValue) : 0;
+    const safeValue = Number.isFinite(numericValue) ? numericValue : 0;
+    const normalizedType: 'percent' | 'fixed' =
       rawType === 'fixed'
         ? 'fixed'
         : rawType === 'percentage' || rawType === 'percent'
           ? 'percent'
           : 'percent';
 
-    if (!active || numericValue <= 0) {
+    if (!active || safeValue <= 0) {
       return null;
     }
 
@@ -606,22 +756,54 @@ async function fetchCouponByCode(code: string): Promise<CouponRecord | null> {
       return null;
     }
 
-    if (normalizedType === 'percent' && numericValue > 100) {
+    if (normalizedType === 'percent' && safeValue > 100) {
       return null;
     }
 
     return {
       code,
       type: normalizedType,
-      value: numericValue,
+      value: safeValue,
       description:
-        getString(fields, 'description') ||
-        `Sconto ${normalizedType === 'percent' ? `${numericValue}%` : `€${numericValue}`}`,
+        (typeof data.description === 'string' && data.description) ||
+        `Sconto ${normalizedType === 'percent' ? `${safeValue}%` : `€${safeValue}`}`,
       active,
       expiryDate,
     };
   } catch (error) {
     console.error('Error fetching coupon:', error);
+    return null;
+  }
+}
+
+// MIGRATION REQUIRED: move downloadUrl from products/{id} to productAssets/{id}
+// via admin script. Until the migration runs, paid orders will get
+// downloadUrl: null and the owner must email the file manually. Public
+// firestore.rules deny read/write on productAssets so only Admin SDK can
+// access this collection.
+async function fetchProductAssets(productId: string): Promise<ProductAssetRecord | null> {
+  const db = getFirebaseAdminDb();
+
+  if (!db) {
+    return null;
+  }
+
+  try {
+    const snapshot = await db.collection('productAssets').doc(productId).get();
+    if (!snapshot.exists) {
+      return null;
+    }
+
+    const data = snapshot.data() as { downloadUrl?: unknown } | undefined;
+    const value = data?.downloadUrl;
+
+    if (typeof value !== 'string' || value.length === 0) {
+      return { downloadUrl: null };
+    }
+
+    return { downloadUrl: value };
+  } catch (error) {
+    console.error('[productAssets] lookup failed:', error);
     return null;
   }
 }
@@ -834,6 +1016,14 @@ async function startServer() {
     max: 100,
     standardHeaders: true,
     legacyHeaders: false,
+    // Stripe webhook burst durante retry/outage NON deve cadere sotto rate
+    // limit (perderebbe ordini definitivamente dopo 3gg di tentativi).
+    // Anche /api/health resta libero per probe esterne (uptime monitor).
+    skip: (req) =>
+      req.path === '/webhook' ||
+      req.path === '/api/webhook' ||
+      req.path === '/health' ||
+      req.path === '/api/health',
   });
   const contactLimiter = rateLimit({
     windowMs: 10 * 60 * 1000,
@@ -846,7 +1036,10 @@ async function startServer() {
   app.use('/api/create-checkout-session', checkoutLimiter);
   app.use('/api/contact-lead', contactLimiter);
   app.use('/api/media-kit-lead', contactLimiter);
-  app.use('/api/', generalApiLimiter);
+  // Generic /api/* limiter, but skip /api/webhook so Stripe retry bursts are
+  // never throttled (signature verification + idempotent doc.create() already
+  // protect that route).
+  app.use(/^\/api\/(?!webhook(?:\/|$)).*/, generalApiLimiter);
 
   app.get('/api/health', (_req, res) => {
     res.json({ status: 'ok' });
@@ -894,12 +1087,14 @@ async function startServer() {
             const product = await fetchProductById(item.id, { includeUnpublished: true });
             if (!product) return null;
 
+            const assets = product.isDigital ? await fetchProductAssets(product.id) : null;
+
             return {
               id: product.id,
               name: product.name,
               price: product.price,
               quantity: item.quantity,
-              downloadUrl: product.downloadUrl || null,
+              downloadUrl: assets?.downloadUrl ?? null,
               isDigital: product.isDigital || false,
             };
           })
@@ -933,65 +1128,28 @@ async function startServer() {
           session.metadata?.userEmail ||
           '',
         total: (session.amount_total || 0) / 100,
-        status: 'completed',
+        status: 'completed' as const,
         createdAt: new Date().toISOString(),
         items: enrichedItems,
         userId: userId || null,
         stripeSessionId: session.id,
       };
 
-      if (firebaseConfig.projectId && firebaseConfig.firestoreDatabaseId) {
-        try {
-          const response = await fetch(
-            `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/${firebaseConfig.firestoreDatabaseId}/documents/orders`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                fields: {
-                  customerName: { stringValue: order.customerName },
-                  email: { stringValue: order.email },
-                  total: { doubleValue: order.total },
-                  status: { stringValue: order.status },
-                  createdAt: { timestampValue: order.createdAt },
-                  items: {
-                    arrayValue: {
-                      values: order.items.map((item) => ({
-                        mapValue: {
-                          fields: {
-                            id: { stringValue: item.id },
-                            name: { stringValue: item.name },
-                            price: { doubleValue: item.price },
-                            quantity: { integerValue: String(item.quantity) },
-                            downloadUrl: item.downloadUrl
-                              ? { stringValue: item.downloadUrl }
-                              : { nullValue: null },
-                            isDigital: { booleanValue: item.isDigital },
-                          },
-                        },
-                      })),
-                    },
-                  },
-                  userId: order.userId ? { stringValue: order.userId } : { nullValue: null },
-                  stripeSessionId: { stringValue: order.stripeSessionId },
-                },
-              }),
-            }
-          );
-          if (!response.ok) {
-            console.error(
-              'Failed to save order to Firestore:',
-              response.status,
-              await response.text()
-            );
-          } else {
-            console.log('Order saved to Firestore successfully with items.');
-          }
-        } catch (e) {
-          console.error('Failed to save order to Firestore:', e);
-        }
+      let orderSaveResult: { created: boolean; id: string };
+      try {
+        orderSaveResult = await saveStripeOrder(order, event.id);
+      } catch (error) {
+        console.error('[stripe-webhook] failed to persist order:', error);
+        res.status(500).json({ error: 'Order persistence failed.' });
+        return;
+      }
+
+      if (!orderSaveResult.created) {
+        console.log(
+          `[stripe-webhook] duplicate checkout.session.completed ignored for ${order.stripeSessionId}.`
+        );
+        res.json({ received: true, duplicate: true });
+        return;
       }
 
       // Order confirmation email: invia al customer se ho email + items.
@@ -1286,9 +1444,18 @@ async function startServer() {
       const body = req.body as {
         items?: unknown;
         couponCode?: string;
-        userId?: string;
-        userEmail?: string;
+        userId?: string; // accettato per backward-compat ma ignorato se id-token presente
+        userEmail?: string; // idem
       };
+
+      // M8 fix: verifica id-token Firebase se presente, e usa i valori
+      // verificati invece di quelli dal body (evita pollution storico ordini).
+      // Se l'id-token manca, l'ordine resta anonimo (userId vuoto): coerente
+      // con il pattern guest checkout, niente pollution lato Firestore.
+      const verifiedIdentity = await verifyOptionalIdToken(req.headers.authorization);
+      const trustedUserId = verifiedIdentity?.uid || '';
+      const trustedUserEmail = verifiedIdentity?.email || '';
+
       const requestedItems = Array.isArray(body.items)
         ? body.items.filter(isCheckoutRequestItem)
         : [];
@@ -1363,7 +1530,16 @@ async function startServer() {
       const stripeDiscount =
         coupon?.type === 'fixed'
           ? await stripe.coupons.create({
-              amount_off: Math.round(coupon.value * 100),
+              amount_off: Math.min(
+                Math.round(coupon.value * 100),
+                Math.max(
+                  0,
+                  lineItems.reduce(
+                    (sum, item) => sum + item.price_data.unit_amount * item.quantity,
+                    0
+                  )
+                )
+              ),
               currency: 'eur',
               duration: 'once',
               name: coupon.code,
@@ -1390,11 +1566,11 @@ async function startServer() {
         mode: 'payment',
         success_url: `${origin}/shop?success=true&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${origin}/shop?canceled=true`,
-        customer_email: body.userEmail || undefined,
+        customer_email: trustedUserEmail || body.userEmail || undefined,
         discounts: stripeDiscount ? [{ coupon: stripeDiscount.id }] : undefined,
         metadata: {
-          userId: body.userId || '',
-          userEmail: body.userEmail || '',
+          userId: trustedUserId,
+          userEmail: trustedUserEmail,
           couponCode: coupon?.code || '',
           cartItems: JSON.stringify(
             checkoutItems.map((item) => ({ id: item.id, quantity: item.quantity }))
@@ -1405,7 +1581,63 @@ async function startServer() {
       res.json({ url: session.url });
     } catch (error: unknown) {
       console.error('Stripe error:', error);
-      res.status(500).json({ error: error instanceof Error ? error.message : String(error) });
+      res.status(500).json({ error: 'Checkout non disponibile in questo momento.' });
+    }
+  });
+
+  /**
+   * AI verification — admin only. Sostituisce il vecchio client-side
+   * `aiVerificationService` che leggeva VITE_GEMINI_API_KEY (leak bundle).
+   * Verifica id-token + email whitelist, poi chiama Gemini server-side con
+   * `GEMINI_API_KEY` (mai esposta al client).
+   */
+  app.post('/api/admin/ai-verify', async (req, res) => {
+    try {
+      const identity = await verifyOptionalIdToken(req.headers.authorization);
+      const adminEmail = process.env.ADMIN_EMAIL || 'skotynyanskiy@gmail.com';
+      if (!identity || identity.email?.toLowerCase() !== adminEmail.toLowerCase()) {
+        res.status(403).json({ error: 'Forbidden: admin only.' });
+        return;
+      }
+
+      const geminiKey = process.env.GEMINI_API_KEY;
+      if (!geminiKey) {
+        res
+          .status(503)
+          .json({ error: 'AI verification non configurata (GEMINI_API_KEY mancante).' });
+        return;
+      }
+
+      const body = req.body as { mode?: 'search' | 'maps'; content?: string; title?: string };
+      const mode = body.mode === 'maps' ? 'maps' : 'search';
+      const content = typeof body.content === 'string' ? body.content : '';
+      const title = typeof body.title === 'string' ? body.title : '';
+
+      if (!content || content.length < 50 || content.length > 50000) {
+        res.status(400).json({ error: 'Contenuto non valido (50-50000 caratteri).' });
+        return;
+      }
+
+      // Dynamic import: non vogliamo che `@google/genai` finisca nel bundle
+      // server di partenza. Lazy.
+      const { GoogleGenAI } = await import('@google/genai');
+      const ai = new GoogleGenAI({ apiKey: geminiKey });
+
+      const prompt =
+        mode === 'search'
+          ? `Sei un editor esperto di viaggi. Verifica e arricchisci il seguente articolo. Usa la ricerca Google per fatti storici, culturali e generali precisi e aggiornati. Correggi inesattezze e aggiungi dettagli se utili. Mantieni tono diretto, concreto, autentico — niente retorica luxury/brochure.\n\nTitolo: ${title}\nContenuto:\n${content}\n\nRestituisci SOLO l'articolo revisionato in Markdown.`
+          : `Sei un editor esperto di viaggi. Verifica informazioni geografiche e logistiche dell'articolo. Usa Google Maps per nomi luoghi, indirizzi, distanze, vicinanze. Correggi e aggiungi dettagli utili (quartieri, punti d'interesse). Tono diretto, autentico — niente retorica luxury.\n\nTitolo: ${title}\nContenuto:\n${content}\n\nRestituisci SOLO l'articolo revisionato in Markdown.`;
+
+      const response = await ai.models.generateContent({
+        model: mode === 'search' ? 'gemini-2.5-flash' : 'gemini-2.5-flash',
+        contents: prompt,
+        config: { tools: [mode === 'search' ? { googleSearch: {} } : { googleMaps: {} }] },
+      });
+
+      res.json({ content: response.text || content });
+    } catch (err) {
+      console.error('[ai-verify] error:', err);
+      res.status(500).json({ error: 'AI verification failed.' });
     }
   });
 
@@ -1446,6 +1678,7 @@ async function startServer() {
 
     const staticRoutes = [
       '',
+      '/vieni-con-noi',
       '/destinazioni',
       '/esperienze',
       '/guide',
@@ -1502,6 +1735,13 @@ async function startServer() {
     xml += '</channel>\n</rss>';
     res.header('Content-Type', 'application/xml');
     res.send(xml);
+  });
+
+  // Legacy alias: la sezione editoriale e' /guide, ma vecchi link social
+  // possono ancora puntare a /articoli — redirect 301 verso la rotta corretta.
+  app.get(/^\/articoli(\/.*)?$/, (req, res) => {
+    const tail = req.path.replace(/^\/articoli/, '');
+    res.redirect(301, `/guide${tail}`);
   });
 
   if (process.env.NODE_ENV !== 'production') {

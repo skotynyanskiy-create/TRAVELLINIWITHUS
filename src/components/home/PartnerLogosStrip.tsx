@@ -10,6 +10,11 @@
  * (no logo unifor in absence di brand asset).
  */
 
+// Flip a `true` quando esistono almeno 5 partner reali con autorizzazione
+// scritta a comparire nella strip. Finche' e' false, il blocco non viene
+// renderizzato e nessun "(demo)" e' visibile in produzione.
+const HAS_REAL_PARTNERS = false;
+
 interface PartnerPlaceholder {
   name: string;
   type: string;
@@ -29,6 +34,8 @@ const PARTNERS: PartnerPlaceholder[] = [
 ];
 
 export default function PartnerLogosStrip() {
+  if (!HAS_REAL_PARTNERS) return null;
+
   // Duplichiamo la lista per loop seamless (la chiave del marquee infinito:
   // animare translateX al -50%, dove il primo set diventa esattamente la
   // posizione iniziale del secondo).

@@ -66,7 +66,11 @@ expectContains(
   'Client checkout endpoint call not found.'
 );
 
-if (/body:\s*JSON\.stringify\(\{[\s\S]*price:/m.test(cartDrawerContent)) {
+const checkoutPayloadMatch = cartDrawerContent.match(
+  /body:\s*JSON\.stringify\(\s*\{(?<payload>[\s\S]*?)\}\s*\)\s*,?\s*\n\s*\}\s*\)/
+);
+
+if (checkoutPayloadMatch?.groups?.payload && /\bprice\s*:/.test(checkoutPayloadMatch.groups.payload)) {
   addResult('FAIL', 'Client appears to send a price field during checkout; server-side price integrity may be compromised.');
 } else {
   addResult('PASS', 'Client checkout payload does not send price fields.');

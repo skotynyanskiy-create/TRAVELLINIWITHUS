@@ -164,7 +164,7 @@ export default function Contatti() {
   return (
     <PageLayout>
       <SEO
-        title="Contatti"
+        title="Contatti per collaborazioni, partnership e proposte editoriali"
         description="Scrivici per collaborazioni, proposte, media kit o richieste legate a Travelliniwithus. Qui trovi il canale giusto per contattarci."
       />
 

@@ -208,7 +208,7 @@ function Guide() {
           />
         </div>
 
-        {usingPreview && (
+        {usingPreview && import.meta.env.DEV && (
           <DemoContentNotice
             className="mt-12"
             message="Le guide mostrate sono preview controllate: servono a vedere ritmo, formato e qualità finale. Prima del deploy pubblico vanno approvate, completate o sostituite con contenuti reali."
@@ -226,7 +226,7 @@ function Guide() {
                   className={`whitespace-nowrap rounded-full px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] transition-all ${
                     selectedCategory === category
                       ? 'bg-[var(--color-ink)] text-white'
-                      : 'bg-white text-black/50 hover:bg-[var(--color-sand)] hover:text-black/75'
+                      : 'bg-white text-black/65 hover:bg-[var(--color-sand)] hover:text-black/75'
                   }`}
                 >
                   {category}

@@ -61,7 +61,7 @@ const KEYWORD_RESPONSES: { match: string[]; reply: string }[] = [
   {
     match: ['guida', 'pdf', 'planner', 'shop'],
     reply:
-      'Tutte le guide digitali stanno in /shop. La piu venduta in demo e "Weekend a Catania". Se viaggi spesso, valuta il Travellini Club per accesso a tutte.',
+      'Tutte le guide digitali stanno in /shop. La più venduta in demo e "Weekend a Catania". Se viaggi spesso, valuta il Travellini Club per accesso a tutte.',
   },
 ];
 

@@ -20,3 +20,11 @@ Rules:
 - Flag all touches to `server.ts`, `firestore.rules`, `src/config/admin.ts` as high-risk.
 - Do not implement changes yourself — return the plan for the implementer to execute.
 - If the problem is actually simple, say so and name which agent should handle it instead.
+
+## Required project references
+
+- `AGENTS.md`
+- `CLAUDE.md`
+- `docs/`
+- `docs/MARKETING_OPERATIONS_HUB.md`
+- `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md`

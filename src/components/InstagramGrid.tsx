@@ -13,57 +13,51 @@ interface InstaItem {
   span: 'feature' | 'tall' | 'wide' | 'square';
 }
 
+// TODO[R+B]: sostituire le 6 cover con screenshot reali dei reel/post di
+// @travelliniwithus salvati in /public/images/instagram/. Le caption sono
+// editoriali, non descrivono numeri di view (non li dichiariamo finche'
+// non c'e' uno screenshot dashboard creator verificabile).
 const INSTA_ITEMS: InstaItem[] = [
   {
-    image:
-      'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?q=80&w=900&auto=format&fit=crop',
+    image: '/images/brand/couple-travel.webp',
     type: 'reel',
-    caption: 'Catania prima dell alba — i posti che nessuno ti racconta',
+    caption: "Catania prima dell'alba — i posti che nessuno ti racconta",
     url: 'https://www.instagram.com/travelliniwithus/',
-    views: '180K',
     span: 'feature',
   },
   {
-    image:
-      'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?q=80&w=900&auto=format&fit=crop',
+    image: '/images/brand/about-editorial.webp',
     type: 'reel',
     caption: 'Tre rifugi delle Dolomiti che ti fanno cambiare idea',
     url: 'https://www.instagram.com/travelliniwithus/',
-    views: '92K',
     span: 'tall',
   },
   {
-    image:
-      'https://images.unsplash.com/photo-1543783207-ec64e4d95325?q=80&w=900&auto=format&fit=crop',
+    image: '/images/brand/collab-work.webp',
     type: 'reel',
     caption: 'Andalusia in 4 giorni: dove ci siamo persi davvero',
     url: 'https://www.instagram.com/travelliniwithus/',
-    views: '64K',
     span: 'square',
   },
   {
-    image:
-      'https://images.unsplash.com/photo-1498307833015-e7b400441eb8?q=80&w=900&auto=format&fit=crop',
+    image: '/images/brand/couple-travel.webp',
     type: 'post',
     caption: 'Mercato del pesce a Brucoli',
     url: 'https://www.instagram.com/travelliniwithus/',
     span: 'square',
   },
   {
-    image:
-      'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=900&auto=format&fit=crop',
+    image: '/images/brand/about-editorial.webp',
     type: 'post',
     caption: 'Tramonto in Triana, Siviglia',
     url: 'https://www.instagram.com/travelliniwithus/',
     span: 'wide',
   },
   {
-    image:
-      'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?q=80&w=900&auto=format&fit=crop',
+    image: '/images/brand/collab-work.webp',
     type: 'reel',
-    caption: 'Tre cose che NESSUNO ti dice prima di andare in Sicilia',
+    caption: 'Tre cose che nessuno ti dice prima di andare in Sicilia',
     url: 'https://www.instagram.com/travelliniwithus/',
-    views: '210K',
     span: 'tall',
   },
 ];
@@ -79,7 +73,6 @@ function handleClick(item: InstaItem, position: number) {
   trackEvent('instagram_grid_click', {
     type: item.type,
     position,
-    views: item.views,
   });
 }
 
@@ -146,12 +139,6 @@ export default function InstagramGrid() {
                 <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-black/65 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-white backdrop-blur-md">
                   <Play size={10} className="fill-white text-white" />
                   Reel
-                </div>
-              )}
-
-              {item.views && (
-                <div className="absolute left-3 top-3 rounded-full bg-white/95 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-[var(--color-ink)]">
-                  {item.views} view
                 </div>
               )}
 

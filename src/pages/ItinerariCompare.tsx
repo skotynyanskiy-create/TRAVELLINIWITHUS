@@ -49,7 +49,7 @@ export default function ItinerariCompare() {
               Tre itinerari, una decisione.
             </h1>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-black/65">
-              Stessa fascia di prezzo, ritmi diversi. Scegli quello che ti somiglia di piu.
+              Stessa fascia di prezzo, ritmi diversi. Scegli quello che ti somiglia di più.
             </p>
           </div>
           <Link

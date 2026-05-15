@@ -304,12 +304,12 @@ export function LeadMagnetDocument({
       {/* Intro + TOC */}
       <Page size="A4" style={styles.page}>
         <View style={styles.intro}>
-          <Text style={styles.introEyebrow}>Come e fatta questa guida</Text>
+          <Text style={styles.introEyebrow}>Come è fatta questa guida</Text>
           <Text style={styles.introTitle}>
             10 posti, 10 pagine. Ognuna risponde alle stesse 5 domande.
           </Text>
           <Text style={styles.introParagraph}>
-            Niente liste da SEO. Per ogni posto trovi: dove si trova davvero, perche ci siamo
+            Niente liste da SEO. Per ogni posto trovi: dove si trova davvero, perché ci siamo
             tornati, come arrivare senza stress, quando vale la pena partire e quanto costa
             indicativamente per una coppia. In fondo, un consiglio insider che non scriviamo
             altrove.
@@ -381,10 +381,10 @@ export function LeadMagnetDocument({
       {/* Final CTA */}
       <Page size="A4" style={[styles.page, styles.finalPage]}>
         <Text style={styles.finalEyebrow}>Continua con noi</Text>
-        <Text style={styles.finalTitle}>Se ti e servita, ce ne sono altri sul sito.</Text>
+        <Text style={styles.finalTitle}>Se ti è servita, ce ne sono altri sul sito.</Text>
         <Text style={styles.finalParagraph}>
           Guide pratiche, itinerari, e un quiz per capire dove andare la prossima volta. Niente
-          newsletter aggressiva: scriviamo solo quando c'e qualcosa da salvare davvero.
+          newsletter aggressiva: scriviamo solo quando c'è qualcosa da salvare davvero.
         </Text>
         <Link src={landingUrl} style={styles.ctaButton}>
           Esplora le destinazioni

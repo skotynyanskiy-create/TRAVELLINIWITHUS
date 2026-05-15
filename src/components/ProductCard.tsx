@@ -35,9 +35,9 @@ export default function ProductCard({
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="group flex flex-col h-full bg-white rounded-4xl p-4 border border-black/5 hover:border-accent/20 hover:shadow-2xl transition-all duration-700"
+      className="group flex h-full flex-col rounded-[var(--radius-lg)] border border-black/5 bg-white p-4 transition-all duration-700 hover:border-[var(--color-accent)]/20 hover:shadow-2xl focus-within:border-[var(--color-accent)]/30 focus-within:shadow-xl"
     >
-      <div className="relative mb-6 aspect-4/5 overflow-hidden rounded-4xl bg-[var(--color-muted-bg)]">
+      <div className="relative mb-6 aspect-4/5 overflow-hidden rounded-[var(--radius-lg)] bg-[var(--color-muted-bg)]">
         <Link
           to={productPath}
           aria-label={`Apri la scheda di ${name}`}
@@ -80,7 +80,7 @@ export default function ProductCard({
           </div>
         )}
 
-        <div className="absolute inset-0 z-30 flex translate-y-4 flex-col items-center justify-center gap-3 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+        <div className="absolute inset-0 z-30 flex translate-y-0 flex-col items-center justify-center gap-3 bg-black/20 opacity-100 transition-all duration-500 sm:translate-y-4 sm:bg-transparent sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100 sm:group-focus-within:translate-y-0 sm:group-focus-within:opacity-100">
           {!disableCart && (
             <Button
               onClick={(e) => {
@@ -96,7 +96,7 @@ export default function ProductCard({
           )}
           <Link
             to={productPath}
-            className="w-[80%] bg-white/95 backdrop-blur-md text-ink py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest text-center shadow-lg hover:bg-ink hover:text-white transition-all scale-90 group-hover:scale-100 duration-500"
+            className="w-[80%] bg-white/95 backdrop-blur-md text-ink py-2.5 rounded-full text-[10px] font-bold uppercase tracking-widest text-center shadow-lg hover:bg-ink hover:text-white transition-all scale-100 sm:scale-90 sm:group-hover:scale-100 sm:group-focus-within:scale-100 duration-500"
           >
             Anteprima rapida
           </Link>

@@ -1,59 +1,48 @@
-import { GoogleGenAI } from "@google/genai";
+/**
+ * AI verification client.
+ *
+ * La chiave Gemini NON sta nel bundle frontend: la chiamata passa attraverso
+ * l'endpoint server admin-only `/api/admin/ai-verify` che verifica id-token
+ * Firebase + whitelist admin email prima di invocare Gemini server-side
+ * (vedi server.ts `verifyOptionalIdToken` + `isAdminEmail`).
+ *
+ * Questo evita due leak path che il vecchio codice aveva:
+ *   1. `VITE_GEMINI_API_KEY` finiva nel bundle pubblico al build
+ *   2. `define: { 'process.env.GEMINI_API_KEY' }` in vite.config.ts sostituiva
+ *      la stringa con la chiave reale nel bundle
+ */
+import { auth } from '../lib/firebaseAuth';
 
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+type VerifyMode = 'search' | 'maps';
 
-export async function verifyWithSearch(content: string, title: string): Promise<string> {
-  if (!apiKey) throw new Error("API Key not found");
-  const ai = new GoogleGenAI({ apiKey });
+async function callAiVerify(mode: VerifyMode, content: string, title: string): Promise<string> {
+  const idToken = await auth.currentUser?.getIdToken();
+  if (!idToken) {
+    throw new Error('Non autenticato. Effettua login admin per usare la verifica AI.');
+  }
 
-  const prompt = `
-    Sei un editor esperto di viaggi. Il tuo compito è verificare e arricchire il seguente articolo di viaggio.
-    Usa la ricerca Google per assicurarti che tutte le informazioni storiche, culturali e generali siano precise, aggiornate e veritiere.
-    Correggi eventuali inesattezze e aggiungi dettagli interessanti se pertinenti.
-    Mantieni il tono di voce diretto, concreto e autentico — budget travel, food experience, posti reali. Niente retorica da luxury travel o da brochure turistica.
-    
-    Titolo: ${title}
-    Contenuto attuale:
-    ${content}
-    
-    Restituisci SOLO il contenuto dell'articolo revisionato in formato Markdown, senza introduzioni o conclusioni.
-  `;
-
-  const response = await ai.models.generateContent({
-    model: "gemini-3-flash-preview",
-    contents: prompt,
-    config: {
-      tools: [{ googleSearch: {} }],
+  const response = await fetch('/api/admin/ai-verify', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${idToken}`,
     },
+    body: JSON.stringify({ mode, content, title }),
   });
 
-  return response.text || content;
+  if (!response.ok) {
+    const err = (await response.json().catch(() => ({}))) as { error?: string };
+    throw new Error(err.error || `AI verify failed (${response.status})`);
+  }
+
+  const data = (await response.json()) as { content?: string };
+  return data.content || content;
 }
 
-export async function verifyWithMaps(content: string, title: string): Promise<string> {
-  if (!apiKey) throw new Error("API Key not found");
-  const ai = new GoogleGenAI({ apiKey });
+export function verifyWithSearch(content: string, title: string): Promise<string> {
+  return callAiVerify('search', content, title);
+}
 
-  const prompt = `
-    Sei un editor esperto di viaggi. Il tuo compito è verificare le informazioni geografiche e logistiche del seguente articolo.
-    Usa Google Maps per verificare che i nomi dei luoghi, gli indirizzi, le distanze e le descrizioni geografiche siano precise e veritiere.
-    Correggi eventuali inesattezze sui luoghi e aggiungi dettagli utili (es. quartieri corretti, vicinanza ad altri punti di interesse).
-    Mantieni il tono di voce diretto, concreto e autentico — budget travel, food experience, posti reali. Niente retorica da luxury travel o da brochure turistica.
-    
-    Titolo: ${title}
-    Contenuto attuale:
-    ${content}
-    
-    Restituisci SOLO il contenuto dell'articolo revisionato in formato Markdown, senza introduzioni o conclusioni.
-  `;
-
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
-    contents: prompt,
-    config: {
-      tools: [{ googleMaps: {} }],
-    },
-  });
-
-  return response.text || content;
+export function verifyWithMaps(content: string, title: string): Promise<string> {
+  return callAiVerify('maps', content, title);
 }

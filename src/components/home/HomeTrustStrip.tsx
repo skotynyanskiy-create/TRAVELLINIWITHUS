@@ -1,31 +1,16 @@
 import { Eye, Instagram, MapPin, Users } from 'lucide-react';
-import AnimatedCounter from '../AnimatedCounter';
-
-/**
- * Strip social proof post-hero. Conteggio animato su scroll-in via
- * AnimatedCounter (motion useSpring). Niente immagini -> nessuna
- * competizione LCP.
- */
 
 interface TrustItem {
   icon: React.ComponentType<{ size?: number; className?: string }>;
-  /** Valore numerico da animare (es. 167 per "167K+"). */
-  numericValue: number;
-  /** Suffisso visualizzato dopo il numero animato (es. "K+", "+", "%"). */
-  suffix: string;
+  display: string;
   label: string;
 }
 
-// Gerarchia mobile-first: il dato di pubblico mensile (reach) e il segnale
-// piu persuasivo per partner B2B; va nella prima colonna 375px.
-//
-// Valori parsati a mano da BRAND_STATS per consentire animazione numerica
-// (AnimatedCounter accetta number, non string formattata).
 const TRUST_ITEMS: TrustItem[] = [
-  { icon: Eye, numericValue: 500, suffix: 'K+', label: 'Pubblico mensile' },
-  { icon: Instagram, numericValue: 167, suffix: 'K+', label: 'Follower Instagram' },
-  { icon: Users, numericValue: 90, suffix: 'K+', label: 'Follower TikTok' },
-  { icon: MapPin, numericValue: 150, suffix: '+', label: 'Destinazioni esplorate' },
+  { icon: Eye, display: '500K+', label: 'Pubblico mensile' },
+  { icon: Instagram, display: '167K+', label: 'Follower Instagram' },
+  { icon: Users, display: '90K+', label: 'Follower TikTok' },
+  { icon: MapPin, display: '150+', label: 'Destinazioni esplorate' },
 ];
 
 export default function HomeTrustStrip() {
@@ -47,12 +32,9 @@ export default function HomeTrustStrip() {
             >
               <Icon size={18} className="shrink-0 text-[var(--color-accent)]" />
               <div className="flex flex-col leading-tight">
-                <AnimatedCounter
-                  value={item.numericValue}
-                  suffix={item.suffix}
-                  duration={1600 + idx * 120}
-                  className="font-serif text-2xl text-[var(--color-ink)] md:text-3xl"
-                />
+                <span className="font-serif text-2xl text-[var(--color-ink)] md:text-3xl">
+                  {item.display}
+                </span>
                 <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-muted)]">
                   {item.label}
                 </span>

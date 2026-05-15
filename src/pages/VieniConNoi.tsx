@@ -63,7 +63,15 @@ export default function VieniConNoi() {
         throw new Error('Subscription failed');
       }
 
-      trackEvent('newsletter_signup', { source, utm_source: utmSource });
+      const leadParams = {
+        route: '/vieni-con-noi',
+        source,
+        utm_source: utmSource,
+        cta_id: 'vieni_con_noi_download_form',
+        content_id: 'lead_magnet_10_posti_italiani',
+      };
+      trackEvent('newsletter_signup', leadParams);
+      trackEvent('lead_magnet_signup', leadParams);
       setIsSuccess(true);
     } catch {
       const saved = appendLeadFallback('twu_newsletter_leads', {
@@ -72,11 +80,16 @@ export default function VieniConNoi() {
         date: new Date().toISOString(),
       });
       if (saved) {
-        trackEvent('newsletter_signup', {
+        const leadParams = {
+          route: '/vieni-con-noi',
           source,
           utm_source: utmSource,
           fallback: 'localStorage',
-        });
+          cta_id: 'vieni_con_noi_download_form',
+          content_id: 'lead_magnet_10_posti_italiani',
+        };
+        trackEvent('newsletter_signup', leadParams);
+        trackEvent('lead_magnet_signup', leadParams);
         setIsSuccess(true);
       } else {
         setError('Iscrizione non riuscita. Riprova tra poco oppure scrivici direttamente.');

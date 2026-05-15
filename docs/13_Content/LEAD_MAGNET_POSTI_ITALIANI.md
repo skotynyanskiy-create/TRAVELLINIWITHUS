@@ -1,7 +1,7 @@
 ---
 project: Travelliniwithus
 type: content-asset
-status: scaffold-ready
+status: editorial-ready-needs-rb-review
 owner: Rodrigo & Betta
 created: 2026-05-14
 ---
@@ -11,14 +11,29 @@ created: 2026-05-14
 ## Stato
 
 - Componente PDF: `src/pdf/LeadMagnetDocument.tsx` ✓
-- Script generator: `scripts/generate-lead-magnet.tsx` ✓ (10 placeholder pronti)
+- Script generator: `scripts/generate-lead-magnet.tsx` ✓ (10 luoghi reali inseriti)
 - Route web: `/lead-magnet` ✓
 - Trigger welcome email con link al PDF: `server.ts` ✓ (via `LEAD_MAGNET_URL` env)
 - Build pipeline: `npm run generate:lead-magnet` integrato in `npm run build` ✓
-- **TODO R+B**: compilare 10 location reali nel file `scripts/generate-lead-magnet.tsx`
+- **TODO R+B**: revisione finale dei 10 luoghi prima della promozione in bio IG/TikTok
 
-Quando i 10 placeholder vengono sostituiti, il prossimo `npm run build`
-genera `public/lead-magnet-posti-italiani.pdf` reale.
+Il build del 2026-05-15 ha rigenerato `public/lead-magnet-posti-italiani.pdf`
+con una selezione editoriale completa. Prima di spingere traffico pubblico,
+Rodrigo & Betta devono confermare che i luoghi siano coerenti con esperienza,
+tono e promessa "posti provati".
+
+## Luoghi inseriti nel PDF
+
+1. Specchia, Puglia
+2. Tricase Porto, Puglia
+3. Acaya, Puglia
+4. Vico del Gargano, Puglia
+5. Scanno, Abruzzo
+6. Rasiglia, Umbria
+7. Castelluccio di Norcia, Umbria
+8. Lago di Tovel, Trentino
+9. Val di Funes, Alto Adige
+10. Bosa, Sardegna
 
 ## Posizionamento
 

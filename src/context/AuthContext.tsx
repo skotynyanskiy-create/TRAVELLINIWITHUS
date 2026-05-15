@@ -28,19 +28,20 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 function getAuthErrorMessage(error: unknown) {
-  const errorCode = typeof error === 'object' && error !== null && 'code' in error ? String(error.code) : '';
+  const errorCode =
+    typeof error === 'object' && error !== null && 'code' in error ? String(error.code) : '';
 
   switch (errorCode) {
     case 'auth/popup-closed-by-user':
-      return 'Il popup di accesso e stato chiuso prima del completamento.';
+      return 'Il popup di accesso è stato chiuso prima del completamento.';
     case 'auth/cancelled-popup-request':
-      return 'E gia presente una richiesta di accesso in corso. Attendi un attimo e riprova.';
+      return 'È già presente una richiesta di accesso in corso. Attendi un attimo e riprova.';
     case 'auth/popup-blocked':
       return 'Il browser ha bloccato il popup Google. Consenti i popup per localhost e riprova.';
     case 'auth/unauthorized-domain':
-      return 'Questo dominio non e autorizzato su Firebase Auth. Aggiungi localhost e 127.0.0.1 agli Authorized Domains.';
+      return 'Questo dominio non è autorizzato su Firebase Auth. Aggiungi localhost e 127.0.0.1 agli Authorized Domains.';
     case 'auth/operation-not-allowed':
-      return 'L accesso con Google non risulta abilitato in Firebase Authentication.';
+      return "L'accesso con Google non risulta abilitato in Firebase Authentication.";
     case 'auth/network-request-failed':
       return 'La richiesta a Firebase non e andata a buon fine. Controlla connessione e configurazione del progetto.';
     default:
@@ -57,13 +58,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
-      
+
       if (currentUser) {
         setAuthError(null);
         // Sync user profile with Firestore
         const userRef = doc(db, 'users', currentUser.uid);
         const userDoc = await getDoc(userRef);
-        
+
         if (!userDoc.exists()) {
           const newProfile: UserProfile = {
             uid: currentUser.uid,
@@ -71,7 +72,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             displayName: currentUser.displayName || '',
             photoURL: currentUser.photoURL || '',
             role: isAdminEmail(currentUser.email) ? 'admin' : 'user',
-            updatedAt: serverTimestamp()
+            updatedAt: serverTimestamp(),
           };
           await setDoc(userRef, newProfile);
           setProfile(newProfile);
@@ -82,7 +83,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             const upgradedProfile: UserProfile = {
               ...existingProfile,
               role: 'admin',
-              updatedAt: serverTimestamp()
+              updatedAt: serverTimestamp(),
             };
             await setDoc(userRef, upgradedProfile, { merge: true });
             setProfile(upgradedProfile);
@@ -93,7 +94,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         setProfile(null);
       }
-      
+
       setLoading(false);
     });
 

@@ -18,8 +18,8 @@ export const DEMO_ITINERARIES: Itinerary[] = [
     budget: '600 - 1500 a testa',
     budgetTier: 'medium',
     style: 'Slow & culturale',
-    image:
-      'https://images.unsplash.com/photo-1523905330026-b8bd1f5f320e?q=80&w=1800&auto=format&fit=crop',
+    // TODO[R+B]: cover reale per itinerario Sicilia orientale
+    image: '/images/destinations/sardegna.webp',
     excerpt:
       'Da Catania a Taormina passando per Siracusa: cinque giorni costruiti per leggere la Sicilia orientale senza farsi prendere dalla checklist.',
     highlights: [
@@ -91,10 +91,10 @@ export const DEMO_ITINERARIES: Itinerary[] = [
     budget: '600 - 1500 a testa',
     budgetTier: 'medium',
     style: 'Romantico in coppia',
-    image:
-      'https://images.unsplash.com/photo-1543783207-ec64e4d95325?q=80&w=1800&auto=format&fit=crop',
+    // TODO[R+B]: cover reale per itinerario Andalusia
+    image: '/images/destinations/toscana.webp',
     excerpt:
-      'Quattro giorni tra Siviglia e Cordoba pensati per chi non ha tempo ma vuole entrare nel ritmo dell Andalusia senza tirare diritto.',
+      "Quattro giorni tra Siviglia e Cordoba pensati per chi non ha tempo ma vuole entrare nel ritmo dell'Andalusia senza tirare diritto.",
     highlights: [
       'Siviglia di notte, tapas in Triana',
       'Alcazar la mattina presto, evita la fila',
@@ -154,8 +154,8 @@ export const DEMO_ITINERARIES: Itinerary[] = [
     budget: 'Sopra i 1500 a testa',
     budgetTier: 'premium',
     style: 'Boutique & design',
-    image:
-      'https://images.unsplash.com/photo-1533130061792-64b345e4a833?q=80&w=1800&auto=format&fit=crop',
+    // TODO[R+B]: cover reale per itinerario Dolomiti slow
+    image: '/images/destinations/dolomiti.webp',
     excerpt:
       'Tre giorni costruiti per leggere le Dolomiti senza affannarsi: una valle, due punti forti, un rifugio scelto bene.',
     highlights: [

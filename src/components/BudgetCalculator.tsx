@@ -105,7 +105,7 @@ export default function BudgetCalculator({
           <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
             Calcolatore budget viaggio
           </p>
-          <h3 className="mt-2 text-3xl font-serif leading-tight">Quanto puo costarti davvero?</h3>
+          <h3 className="mt-2 text-3xl font-serif leading-tight">Quanto può costarti davvero?</h3>
           <p className="mt-2 text-sm leading-relaxed text-black/55">
             Una stima indicativa basata sui nostri viaggi e su quelli verificati. Voli, alloggi,
             cibo e spostamenti inclusi.
@@ -115,7 +115,7 @@ export default function BudgetCalculator({
 
       <div className="grid gap-6 md:grid-cols-3">
         <label className="block">
-          <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.24em] text-black/45">
+          <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.24em] text-black/70">
             Giorni
           </span>
           <input
@@ -130,7 +130,7 @@ export default function BudgetCalculator({
           />
         </label>
         <label className="block">
-          <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.24em] text-black/45">
+          <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.24em] text-black/70">
             Area
           </span>
           <select
@@ -146,7 +146,7 @@ export default function BudgetCalculator({
           </select>
         </label>
         <label className="block">
-          <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.24em] text-black/45">
+          <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.24em] text-black/70">
             Stile
           </span>
           <select

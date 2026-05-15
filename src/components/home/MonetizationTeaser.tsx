@@ -15,26 +15,20 @@ interface TeaserCard {
   image: string;
   icon: React.ComponentType<{ size?: number; className?: string }>;
   status: Status;
-  badge?: string;
 }
 
-const STATUS_STYLES: Record<Status, { label: string; className: string }> = {
-  live: {
-    label: 'Disponibile',
-    className: 'bg-[var(--color-success-soft)] text-[var(--color-success-text)]',
-  },
-  beta: {
-    label: 'Beta',
-    className: 'bg-[var(--color-warning-soft)] text-[var(--color-warning-text)]',
-  },
-  'coming-soon': {
-    label: 'In arrivo',
-    className: 'bg-[var(--color-muted-bg-2)] text-[var(--color-ink-2)]',
-  },
-};
+// The status badges previously rendered ("Disponibile" / "Beta" / "In arrivo")
+// have been removed from the UI — the section now only shows cards with
+// status === 'live' (see VISIBLE_CARDS below), so a label is redundant.
+// The Status type stays as a gate to control visibility; STATUS_STYLES was
+// dropped to silence the unused-vars warning. Bring it back when we have
+// multiple live cards and want to label states.
 
 const featuredGuide = DEMO_GUIDES[0];
 
+// TODO[R+B]: quando shop reale (preorder-first 1 SKU) e Club saranno live,
+// passare status: 'live' e rimuovere il filtro `.filter(c => c.status === 'live')`
+// per renderizzare tutte e 3 le card. Per ora solo la Mappa e' live e visibile.
 const CARDS: TeaserCard[] = [
   {
     eyebrow: 'Shop guide',
@@ -44,12 +38,9 @@ const CARDS: TeaserCard[] = [
       'Tre giorni tra mercato, vulcano e cibo di strada. Guida PDF + mappa.',
     cta: 'Apri lo shop',
     to: '/shop',
-    image:
-      featuredGuide?.coverImage ||
-      'https://images.unsplash.com/photo-1556471013-0001958d2f12?q=80&w=1200&auto=format&fit=crop',
+    image: featuredGuide?.coverImage || '/images/brand/collab-work.webp',
     icon: BookMarked,
     status: 'coming-soon',
-    badge: 'Bestseller demo',
   },
   {
     eyebrow: 'Esplora dal vivo',
@@ -58,8 +49,7 @@ const CARDS: TeaserCard[] = [
       'Tutti i posti raccontati su una mappa. Filtra per zona, esperienza, stagione: l’archivio diventa visivo.',
     cta: 'Apri la mappa',
     to: '/mappa',
-    image:
-      'https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1200&auto=format&fit=crop',
+    image: '/images/brand/couple-travel.webp',
     icon: Map,
     status: 'live',
   },
@@ -70,30 +60,39 @@ const CARDS: TeaserCard[] = [
       'Accesso completo al catalogo digitale, newsletter privata, sconti partner selezionati.',
     cta: 'Scopri il Club',
     to: '/club',
-    image:
-      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop',
+    image: '/images/brand/about-editorial.webp',
     icon: Sparkles,
     status: 'coming-soon',
-    badge: 'Lancio Q4 2026',
   },
 ];
 
+const VISIBLE_CARDS = CARDS.filter((c) => c.status === 'live');
+
 export default function MonetizationTeaser() {
+  if (VISIBLE_CARDS.length === 0) return null;
+
+  const gridCols =
+    VISIBLE_CARDS.length === 1
+      ? 'md:max-w-2xl md:mx-auto'
+      : VISIBLE_CARDS.length === 2
+        ? 'md:grid-cols-2'
+        : 'md:grid-cols-3';
+
   return (
     <section className="bg-[var(--color-sand)] py-20 md:py-24">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="mb-10 max-w-2xl">
           <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
-            Tutto quello che pubblichiamo
+            Strumenti pubblicati
           </span>
           <h2 className="mt-3 text-3xl font-serif leading-tight tracking-tight text-[var(--color-ink)] md:text-5xl">
-            Oltre gli articoli pubblici:{' '}
-            <span className="italic text-black/55">guide, strumenti, Club.</span>
+            Oltre gli articoli:{' '}
+            <span className="italic text-black/55">strumenti che usiamo davvero.</span>
           </h2>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-3">
-          {CARDS.map((card, idx) => {
+        <div className={`grid gap-6 ${gridCols}`}>
+          {VISIBLE_CARDS.map((card, idx) => {
             const Icon = card.icon;
             return (
               <motion.div
@@ -115,18 +114,6 @@ export default function MonetizationTeaser() {
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent" />
-                  <div className="absolute right-4 top-4 flex flex-col items-end gap-2">
-                    <span
-                      className={`rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] shadow-sm backdrop-blur-md ${STATUS_STYLES[card.status].className}`}
-                    >
-                      {STATUS_STYLES[card.status].label}
-                    </span>
-                    {card.badge && (
-                      <span className="rounded-full bg-white/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-ink)] backdrop-blur-md">
-                        {card.badge}
-                      </span>
-                    )}
-                  </div>
                   <div className="absolute left-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-accent)] text-white">
                     <Icon size={16} />
                   </div>

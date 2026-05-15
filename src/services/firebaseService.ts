@@ -74,7 +74,11 @@ function normalizeFirestoreProduct(id: string, data: FirestoreProductData): Prod
     published: data.published === true,
     imageUrl: asString(data.imageUrl),
     isDigital: data.isDigital === true,
-    downloadUrl: asString(data.downloadUrl),
+    // downloadUrl NON viene piu' letto dal client: la collezione productAssets
+    // e' admin-only via firestore rules (read/write: false). L'URL reale del
+    // file viene iniettato dal webhook Stripe nel doc orders/{sessionId}.items[]
+    // dopo il pagamento. Vedi src/pages/MieiAcquisti.tsx per la lettura corretta.
+    downloadUrl: '',
     isBestseller: data.isBestseller === true,
     description: asString(data.description),
     features: asStringArray(data.features),
@@ -150,6 +154,11 @@ export async function fetchArticleBySlug(slug: string): Promise<NormalizedArticl
     return normalizeFirestoreArticle(articleDoc.id, articleDoc.data());
   }
 
+  // Fallback: slug === document ID. Le firestore rules deny `read` se
+  // `published != true`; questo si traduce in `FirebaseError permission-denied`
+  // che è il comportamento atteso (non un vero errore applicativo). Trattiamo
+  // il deny come "non trovato" silenzioso. Loggiamo solo errori non-permesso
+  // in DEV per facilitare debug futuro.
   try {
     const docRef = doc(db, 'articles', slug);
     const docSnap = await getDoc(docRef);
@@ -166,7 +175,15 @@ export async function fetchArticleBySlug(slug: string): Promise<NormalizedArticl
 
     return normalizeFirestoreArticle(docSnap.id, data);
   } catch (error) {
-    console.error(`Error fetching article by slug fallback for "${slug}":`, error);
+    const code =
+      typeof error === 'object' && error !== null && 'code' in error
+        ? String((error as { code: unknown }).code)
+        : '';
+    const isExpectedDeny = code === 'permission-denied';
+
+    if (!isExpectedDeny && import.meta.env.DEV) {
+      console.warn(`articleFetch.fallback.unexpected for "${slug}":`, error);
+    }
     return null;
   }
 }

@@ -14,8 +14,7 @@ const HERO_IMAGE_DESKTOP = '/images/brand/couple-travel.png';
 const HERO_IMAGE_MOBILE = '/images/hero-amalfi.png';
 // videoSrc omitted finche public/videos/hero.webm non e disponibile (evita HEAD 404 in console)
 const HERO_VIDEO: string | undefined = undefined;
-const REEL_FALLBACK_IMAGE =
-  'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800&auto=format&fit=crop';
+const REEL_FALLBACK_IMAGE = '/images/brand/couple-travel.webp';
 
 const HERO_TITLE = 'Posti particolari che valgono davvero.';
 const TRUST_PILLS = [
@@ -35,10 +34,12 @@ function FeaturedReelPreview() {
   const reelEmbedUrl = getInstagramEmbedUrl(reelUrl);
   const reelThumbnail = FEATURED_REEL.thumbnail.trim();
   const hasConfiguredReel = Boolean(reelEmbedUrl);
-  const hasConfiguredVisual = hasConfiguredReel || Boolean(reelThumbnail);
   const previewImage = reelThumbnail || REEL_FALLBACK_IMAGE;
 
-  const reelMessage = hasConfiguredVisual
+  // Quando non c'e' un reel Instagram reale configurato (URL vuoto in
+  // FEATURED_REEL), mostriamo un messaggio generico invece della caption
+  // grezza — evita di esporre stringhe "demo/placeholder" agli utenti.
+  const reelMessage = hasConfiguredReel
     ? FEATURED_REEL.caption
     : 'Guarda il lato più immediato del progetto sul nostro profilo Instagram.';
 
@@ -69,7 +70,7 @@ function FeaturedReelPreview() {
           ) : (
             <img
               src={previewImage}
-              alt={FEATURED_REEL.caption || 'Preview Instagram Travelliniwithus'}
+              alt={hasConfiguredReel ? FEATURED_REEL.caption : 'Preview Instagram Travelliniwithus'}
               className="h-full w-full object-cover object-center"
               loading="eager"
             />

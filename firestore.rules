@@ -146,7 +146,7 @@ service cloud.firestore {
     }
 
     function isValidProduct() {
-      return hasOnlyAllowedFields(['name', 'slug', 'description', 'price', 'imageUrl', 'category', 'isDigital', 'downloadUrl', 'published', 'createdAt', 'updatedAt']) &&
+      return hasOnlyAllowedFields(['name', 'slug', 'description', 'price', 'imageUrl', 'category', 'isDigital', 'published', 'createdAt', 'updatedAt']) &&
              request.resource.data.name is string && request.resource.data.name.size() > 0 && request.resource.data.name.size() < 200 &&
              request.resource.data.slug is string && request.resource.data.slug.size() > 0 && request.resource.data.slug.size() < 200 &&
              request.resource.data.price is number && request.resource.data.price >= 0 &&
@@ -154,7 +154,6 @@ service cloud.firestore {
              (!('description' in request.resource.data) || (request.resource.data.description is string && request.resource.data.description.size() < 2000)) &&
              (!('imageUrl' in request.resource.data) || (request.resource.data.imageUrl is string && request.resource.data.imageUrl.size() < 1000)) &&
              (!('isDigital' in request.resource.data) || request.resource.data.isDigital is bool) &&
-             (!('downloadUrl' in request.resource.data) || request.resource.data.downloadUrl == null || (request.resource.data.downloadUrl is string && request.resource.data.downloadUrl.size() < 2000)) &&
              (!('published' in request.resource.data) || request.resource.data.published is bool) &&
              (!('createdAt' in request.resource.data) || request.resource.data.createdAt is timestamp) &&
              (!('updatedAt' in request.resource.data) || request.resource.data.updatedAt is timestamp);
@@ -235,6 +234,15 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
+    // productAssets holds the private downloadUrl (and any future paid-only
+    // payload) separated from the public products collection. Reads happen
+    // only via Firebase Admin SDK from the Stripe webhook after order
+    // persistence; clients must never see this collection.
+    match /productAssets/{productId} {
+      allow read: if false;
+      allow write: if false;
+    }
+
     match /settings/{settingId} {
       allow read: if true;
       allow create: if isAdmin() && isValidSettings();
@@ -259,14 +267,24 @@ service cloud.firestore {
         (resource.data.userId is string && resource.data.userId == request.auth.uid) ||
         (resource.data.email is string && request.auth.token.email == resource.data.email)
       ));
-      allow create: if isValidOrder();
+      allow create: if false;
       allow update: if isAdmin() && isValidOrder();
       allow delete: if isAdmin();
     }
 
+    // Coupons are read only via Firebase Admin SDK from the server
+    // (/api/validate-coupon, /api/create-checkout-session). Public read is
+    // disabled so the live discount catalog is not enumerable.
     match /coupons/{couponId} {
-      allow read: if true;
+      allow read: if isAdmin();
       allow write: if isAdmin() && isValidCoupon();
+    }
+
+    // resources: toolkit editoriale della pagina /risorse. Read pubblico solo
+    // su documenti published==true, write admin-only.
+    match /resources/{resourceId} {
+      allow read: if (resource.data.published == true) || isAdmin();
+      allow create, update, delete: if isAdmin();
     }
 
     match /logs/{logId} {

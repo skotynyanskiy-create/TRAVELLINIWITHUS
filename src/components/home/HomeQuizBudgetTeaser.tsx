@@ -53,7 +53,7 @@ export default function HomeQuizBudgetTeaser() {
           <TeaserCard
             icon={Wallet}
             eyebrow="Budget viaggio"
-            title="Quanto puo costare davvero il prossimo viaggio?"
+            title="Quanto può costare davvero il prossimo viaggio?"
             description="Stima realistica con voli, alloggi, cibo e spostamenti. Per orientarti prima di prenotare."
             cta="Calcola la stima"
             to="/strumenti"

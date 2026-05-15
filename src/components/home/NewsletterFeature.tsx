@@ -4,43 +4,29 @@ import Newsletter from '../Newsletter';
 import { NEWSLETTER_RECENT_SIGNUPS } from '../../config/site';
 
 const BULLET_POINTS = [
-  'Una email al mese, mai di piu.',
+  'Una email al mese, mai di più.',
   'Solo posti, guide e idee davvero salvabili.',
   'Niente sequenze di vendita, niente noise.',
 ];
 
-/**
- * Archivio editoriale newsletter passate — anteprima 3 numeri recenti
- * (placeholder pronto per Brevo API o per dati statici curati R+B).
- * Trasforma il claim "scriviamo solo quando vale" da promessa a evidenza.
- *
- * TODO R+B: sostituire NEWSLETTER_ARCHIVE_PREVIEW con 3-5 numeri reali
- * appena la prima newsletter ufficiale e' pubblicata via Brevo.
- */
-interface NewsletterArchiveItem {
-  date: string;
-  subject: string;
-  preview: string;
+/** Preview editoriale: mostra il formato della newsletter senza fingere un archivio storico. */
+interface NewsletterPromiseItem {
+  title: string;
+  text: string;
 }
 
-const NEWSLETTER_ARCHIVE_PREVIEW: NewsletterArchiveItem[] = [
+const NEWSLETTER_PROMISES: NewsletterPromiseItem[] = [
   {
-    date: 'Maggio 2026',
-    subject: 'Posti veri, non liste',
-    preview:
-      'Perche abbiamo lanciato Travellini Club, 3 spa boutique italiane (no resort), e una guida pratica per Pasqua in Salento.',
+    title: 'Un posto da salvare',
+    text: 'Luogo, periodo migliore, motivo concreto per andarci e quando invece evitarlo.',
   },
   {
-    date: 'Aprile 2026',
-    subject: 'Tre cose che NESSUNO ti dice del Cilento',
-    preview:
-      "L'errore comune sui parcheggi, il borgo dove abbiamo dormito due volte, e la trattoria che cambia menu ogni giovedi.",
+    title: 'Una scelta pratica',
+    text: 'Dove dormire, cosa prenotare prima o quale errore tagliare dall’itinerario.',
   },
   {
-    date: 'Marzo 2026',
-    subject: "Slovenia in 5 giorni — l'itinerario reale",
-    preview:
-      'Cosa abbiamo prenotato, cosa abbiamo evitato, i 4 spostamenti che valgono 30 minuti di mappa in piu.',
+    title: 'Un aggiornamento sincero',
+    text: 'Niente calendario forzato: scriviamo solo quando c’è qualcosa che vale la tua attenzione.',
   },
 ];
 
@@ -95,7 +81,7 @@ export default function NewsletterFeature() {
             <Newsletter compact variant="sand" source="home_newsletter_feature" />
           </div>
 
-          <NewsletterArchivePreview items={NEWSLETTER_ARCHIVE_PREVIEW} />
+          <NewsletterPromise items={NEWSLETTER_PROMISES} />
         </div>
       </div>
     </section>
@@ -107,27 +93,22 @@ export default function NewsletterFeature() {
  * Pattern Substack/The Browser/Lenny's Newsletter — la trasparenza
  * sull'archivio aumenta CR del form sopra.
  */
-function NewsletterArchivePreview({ items }: { items: NewsletterArchiveItem[] }) {
+function NewsletterPromise({ items }: { items: NewsletterPromiseItem[] }) {
   return (
     <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white/60 p-6 md:p-7">
       <div className="mb-4 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
-        <Mail size={11} /> Ultime newsletter
+        <Mail size={11} /> Cosa ricevi
       </div>
       <ul className="space-y-3">
         {items.map((item) => (
           <li
-            key={item.subject}
+            key={item.title}
             className="border-b border-[var(--color-border)] pb-3 last:border-b-0 last:pb-0"
           >
-            <p className="text-[10px] font-medium uppercase tracking-[0.18em] text-black/70">
-              {item.date}
-            </p>
             <p className="mt-1 text-sm font-serif font-medium leading-snug text-[var(--color-ink)]">
-              {item.subject}
+              {item.title}
             </p>
-            <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-black/55">
-              {item.preview}
-            </p>
+            <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-black/55">{item.text}</p>
           </li>
         ))}
       </ul>

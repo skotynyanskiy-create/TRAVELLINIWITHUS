@@ -19,7 +19,7 @@ export default function Cookie() {
           <h1 className="mb-8 font-serif text-4xl md:text-5xl">Cookie Policy</h1>
           <div className="prose prose-slate max-w-none space-y-6 font-light leading-relaxed text-black/70">
             <p>
-              Questo sito puo&apos; utilizzare cookie e tecnologie simili per garantire il corretto
+              Questo sito può utilizzare cookie e tecnologie simili per garantire il corretto
               funzionamento delle pagine, migliorare la navigazione e raccogliere dati statistici in
               forma aggregata.
             </p>
@@ -40,9 +40,9 @@ export default function Cookie() {
 
             <h2 className="mt-10 mb-4 font-serif text-2xl text-black">3. Gestione dei cookie</h2>
             <p>
-              L&apos;utente puo&apos; gestire o disabilitare i cookie dalle impostazioni del proprio
-              browser. La disattivazione dei cookie tecnici puo&apos; limitare o compromettere
-              alcune funzioni essenziali del sito.
+              L&apos;utente può gestire o disabilitare i cookie dalle impostazioni del proprio
+              browser. La disattivazione dei cookie tecnici può limitare o compromettere alcune
+              funzioni essenziali del sito.
             </p>
 
             <h2 className="mt-10 mb-4 font-serif text-2xl text-black">4. Servizi di terze parti</h2>
@@ -54,7 +54,7 @@ export default function Cookie() {
 
             <h2 className="mt-10 mb-4 font-serif text-2xl text-black">5. Aggiornamenti</h2>
             <p>
-              Questa informativa puo&apos; essere aggiornata nel tempo in base a modifiche tecniche,
+              Questa informativa può essere aggiornata nel tempo in base a modifiche tecniche,
               normative o di configurazione del sito.
             </p>
           </div>

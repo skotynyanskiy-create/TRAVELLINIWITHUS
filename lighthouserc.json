@@ -1,0 +1,44 @@
+{
+  "ci": {
+    "collect": {
+      "startServerCommand": "npm run preview",
+      "startServerReadyPattern": "Local:",
+      "startServerReadyTimeout": 30000,
+      "url": [
+        "http://localhost:4173/",
+        "http://localhost:4173/destinazioni",
+        "http://localhost:4173/chi-siamo",
+        "http://localhost:4173/collaborazioni",
+        "http://localhost:4173/media-kit",
+        "http://localhost:4173/shop",
+        "http://localhost:4173/mappa",
+        "http://localhost:4173/vieni-con-noi"
+      ],
+      "numberOfRuns": 3,
+      "settings": {
+        "preset": "desktop",
+        "onlyCategories": ["performance", "accessibility", "best-practices", "seo"]
+      }
+    },
+    "assert": {
+      "preset": "lighthouse:recommended",
+      "assertions": {
+        "categories:performance": ["warn", { "minScore": 0.85 }],
+        "categories:accessibility": ["error", { "minScore": 0.95 }],
+        "categories:best-practices": ["warn", { "minScore": 0.9 }],
+        "categories:seo": ["error", { "minScore": 0.95 }],
+        "largest-contentful-paint": ["warn", { "maxNumericValue": 2500 }],
+        "cumulative-layout-shift": ["error", { "maxNumericValue": 0.1 }],
+        "total-blocking-time": ["warn", { "maxNumericValue": 200 }],
+        "uses-text-compression": "off",
+        "csp-xss": "off",
+        "is-on-https": "off",
+        "redirects-http": "off",
+        "uses-http2": "off"
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}

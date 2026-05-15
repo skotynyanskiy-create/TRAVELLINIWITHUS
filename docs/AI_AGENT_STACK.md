@@ -19,6 +19,7 @@ Keep every AI assistant aligned on the same local operating system for TRAVELLIN
 
 - Canonical project skills live in `.agents/skills`.
 - Synced copies live in `.claude/skills`, `.github/skills`, `.cursor/skills`, and `.gemini/skills`.
+- Codex uses the repo `AGENTS.md` plus the canonical `.agents/skills` skill source exposed in this workspace; its local runtime MCP parity is configured in `~/.codex/config.toml`.
 - Claude project agents live in `.claude/agents`.
 - External skills are reference material only until reviewed and adapted locally.
 - `DESIGN.md` is the design-system prompt source for Stitch, Figma, agents, and code reviews.
@@ -37,10 +38,10 @@ Use `npm run sync:agents` after editing `.agents/skills`. Use `npm run audit:age
 ## Current Integrations
 
 - Codex plugin: GitHub is enabled in the local Codex config for repository, issue, pull request and CI workflows.
-- Codex MCP: Playwright is enabled in the local Codex config for browser QA parity with Claude Code.
-- Claude Code project MCP: `.mcp.json` currently enables only Playwright.
+- Codex MCP: `~/.codex/config.toml` is aligned with `.mcp.json` for Playwright, Obsidian, Context7, Chrome DevTools, Sentry, GitHub, Firebase and Stripe.
+- Claude Code project MCP: `.mcp.json` enables Playwright, Obsidian, Context7, Chrome DevTools, Sentry, GitHub, Firebase and Stripe.
 - Claude Code project hooks: `.claude/settings.json` uses PowerShell-based safety hooks for this Windows workspace.
-- Obsidian memory: `docs/` is the project vault and operational memory. Do not duplicate stable project facts into a separate AI memory unless they are cross-project user preferences.
+- Obsidian memory: the repository root is the active Obsidian vault for Local REST API / MCP automation; `docs/` is the operational memory and note storage. Do not duplicate stable project facts into a separate AI memory unless they are cross-project user preferences.
 
 ## Curated External References
 
@@ -56,25 +57,54 @@ These sources informed the local stack and should be reviewed before importing f
 
 Do not install a whole upstream catalog into this repo. Copy, reduce, attribute, and adapt only the pieces that match the brand and workflow.
 
+## CLI Tooling (2026-05-14)
+
+Catalogo CLI integrate o documentate per il progetto, valutate il 2026-05-14. Vedi [docs/10_Projects/PROJECT_CLI_TOOLING_INTEGRATION.md](10_Projects/PROJECT_CLI_TOOLING_INTEGRATION.md) per la matrice completa, gli script package.json aggiunti e le decisioni aperte.
+
+Riepilogo:
+
+| Status          | CLI                      | Script npm                 | Quando                                            |
+| --------------- | ------------------------ | -------------------------- | ------------------------------------------------- |
+| installato      | `firebase-tools` 15.17   | `npm run emulators`        | Firestore/Auth locali per dev + bug investigation |
+| installato      | `gh` 2.89                | (non in scripts)           | PR / issue / API operations                       |
+| installato      | `docker` 29.3            | (non in scripts)           | container locale (non obbligatorio)               |
+| opt-in (npx)    | `@lhci/cli`              | `npm run audit:cwv`        | Core Web Vitals + budget pre-deploy               |
+| opt-in (npx)    | `unlighthouse`           | `npm run audit:bulk`       | Lighthouse bulk su tutte le pagine                |
+| opt-in (npx)    | `@axe-core/cli`          | `npm run audit:a11y`       | WCAG 2.2 AA automated                             |
+| opt-in (system) | `gitleaks`               | `npm run audit:secrets`    | Secret scanning pre-commit + scheduled            |
+| opt-in (npx)    | `size-limit`             | `npm run audit:size`       | Bundle budget enforcement                         |
+| opt-in (npx)    | `vite-bundle-visualizer` | `npm run audit:bundle:viz` | Exploration bundle                                |
+| opt-in (npx)    | `knip`                   | `npm run audit:deps`       | Unused deps + exports                             |
+| opt-in (npx)    | `markdownlint-cli2`      | `npm run lint:md`          | Lint docs/ markdown                               |
+| opt-in (system) | `stripe` CLI             | `npm run webhook:listen`   | Webhook live + replay events                      |
+| opt-in (npx)    | `@sentry/cli`            | `npm run release:sentry`   | Source maps + release tracking                    |
+
+Tutti gli script sono **opt-in** — NON inclusi in `audit:quality` per non rompere CI esistente. Vengono lanciati on-demand. Le CLI con `(npx)` non richiedono install esplicito (npx scarica al volo). Le CLI con `(system)` richiedono install OS-level documentato nel doc dedicato.
+
 ## MCP Policy
 
 Keep MCP servers minimal. Every added server must have a concrete use case, a trusted source, auth handled through environment variables, and documentation in this file or a linked project note.
 
-Current default:
+Current shared MCP set:
 
 - `playwright`: browser QA, visual review, responsive checks and smoke tests.
+- `obsidian`: optional vault automation against the local Obsidian REST API. Normal Travellini work should still read and edit `docs/` directly.
+- `context7`: official/library documentation lookup when implementation details may have changed.
+- `chrome-devtools`: Core Web Vitals, performance traces and real-browser diagnostics.
+- `sentry`: production error investigation when `SENTRY_ACCESS_TOKEN` is available.
+- `github`: pull requests, issues, review comments, CI and repository operations. Prefer the existing Codex GitHub plugin where available.
+- `firebase`: Firebase/Firestore inspection and debugging with task-scoped auth.
+- `stripe`: Stripe docs, checkout, webhook and sandbox work with `STRIPE_SECRET_KEY`.
 
 Approved candidates when the task requires them:
 
-- GitHub MCP or GitHub plugin: pull requests, issues, review comments, CI and repository operations. Prefer the existing Codex GitHub plugin where available.
-- Stripe MCP: Stripe docs, checkout, webhook and sandbox work. Enable only for Stripe tasks.
-- Firebase MCP: Firebase/Firestore inspection and debugging. Enable only with explicit auth and task scope.
 - Figma MCP: design-to-code context from real Figma files. Enable only when there is a concrete Figma file or Dev Mode workflow.
-- Obsidian MCP: optional for external vault automation. Not needed for normal Travellini work because `docs/` is already repo-local.
 
 Do not add broad MCP registries, random community servers or full external agent catalogs as default project tools.
 
 ## Local Skills
+
+### Strategic & operator skills
 
 - `travellini-design-director`: brand, visual direction, Italian copy, premium editorial UX.
 - `travellini-web-quality-auditor`: accessibility, performance, SEO, Core Web Vitals, responsive QA.
@@ -83,6 +113,36 @@ Do not add broad MCP registries, random community servers or full external agent
 - `travellini-release-quality`: release gates, visual QA, docs, and deployment readiness.
 - `travellini-social-content-operator`: social, editorial, campaign, creator, and partnership content planning adapted from the Agency Agents marketing patterns.
 - `travellini-growth-revenue-operator`: growth, partnerships, media kit conversion, affiliate/shop, campaign prioritization, and analytics planning adapted from agency-style commercial patterns.
+
+### Operational skills (canonicalized 2026-05-14)
+
+These short, action-scoped skills were originally Claude-local. They have been promoted to `.agents/skills` so Codex, Cursor and Gemini share the same operating manual. They are intentionally narrow: each one wraps a single task with concrete checks or scaffolding.
+
+- `audit-ui`: CSS vars, inline styles, Tailwind patterns, responsive, a11y, icons, layout wrappers.
+- `audit-browser`: real-browser UX audit via Playwright MCP (responsive, console, forms, regressions).
+- `cwv`: Core Web Vitals capture (LCP, CLS, INP, TBT) via Chrome DevTools MCP.
+- `a11y-check`: WCAG 2.2 AA pass via Playwright accessibility tree (contrast, alt, focus, aria, keyboard).
+- `responsive-check`: viewport sweep 320/375/768/1024/1440 with overflow and CTA visibility checks.
+- `smoke-test`: post-change browser smoke test (home loads, nav works, CTA visible, no console errors).
+- `seo-check`: meta tags, OG/Twitter, structured data, alt text, sitemap, robots, headings, CWV basics.
+- `firebase-check`: Firestore filters, indexes, error handling, client safety, security rules signals.
+- `stripe-flow`: cart, server-side price integrity, webhook signing, env vars, sandbox flows.
+- `predeploy`: full pre-deploy validation suite (typecheck/lint/test/build/audit:\* aggregator).
+- `deploy`: deploy procedure with preflight, Firebase Hosting, release docs (no auto-execution).
+- `copywriting-italian`: hero, sections, CTA, meta description, articles in Rodrigo & Betta voice.
+- `new-article`: scaffold editorial article + Obsidian content note with Italian metadata.
+- `new-page`: scaffold a new React page (PageLayout, SEO, Section, route wiring, sitemap).
+- `social-card`: 1200x630 OG / Instagram preview cards per page or article.
+- `design-research`: fetch and digest references from awwwards, siteinspire, godly.website, editorial travel sites.
+- `animate`: apply motion patterns (GSAP, motion, lenis, TiltCard, MagneticWrapper, AnimatedCounter).
+
+### Claude-only support skills (not canonicalized)
+
+These remain in `.claude/skills` because they encode Claude Code workflow ergonomics (TodoWrite, plan mode, conversational triage) rather than tool-agnostic procedures:
+
+- `bug-triage`, `small-fix`, `deep-refactor`, `quick-review`, `commit`, `explain-module`.
+
+Promoting them would require translating their conversational steps into tool-neutral instructions; until then, they stay scoped to Claude Code.
 
 ## Claude Project Agents
 

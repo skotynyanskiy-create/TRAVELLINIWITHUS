@@ -16,12 +16,9 @@ export const DEMO_GUIDES: Guide[] = [
     pages: 38,
     format: 'PDF + Notion',
     language: 'Italiano',
-    coverImage:
-      'https://images.unsplash.com/photo-1556471013-0001958d2f12?q=80&w=1400&auto=format&fit=crop',
-    previewImages: [
-      'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?q=80&w=1200&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1538334421852-687c439c92f4?q=80&w=1200&auto=format&fit=crop',
-    ],
+    // TODO[R+B]: cover + preview reali quando guida pubblicata
+    coverImage: '/images/destinations/sardegna.webp',
+    previewImages: ['/images/destinations/sardegna.webp', '/images/experiences/gastronomia.webp'],
     excerpt:
       'Un weekend a Catania scritto per chi vuole capire la citta senza la fila al monumento sbagliato. Mercati, cibo di strada, una sera all Etna e una colazione vera.',
     inside: [
@@ -47,11 +44,9 @@ export const DEMO_GUIDES: Guide[] = [
     pages: 64,
     format: 'PDF',
     language: 'Italiano',
-    coverImage:
-      'https://images.unsplash.com/photo-1543783207-ec64e4d95325?q=80&w=1400&auto=format&fit=crop',
-    previewImages: [
-      'https://images.unsplash.com/photo-1591259938712-fea8f5f1faa1?q=80&w=1200&auto=format&fit=crop',
-    ],
+    // TODO[R+B]: cover + preview reali quando guida pubblicata
+    coverImage: '/images/destinations/toscana.webp',
+    previewImages: ['/images/destinations/toscana.webp'],
     excerpt:
       'Sette giorni in Andalusia con tre basi e un ritmo che non brucia il viaggio. Pensato per coppie e viaggiatori lenti.',
     inside: [
@@ -77,11 +72,9 @@ export const DEMO_GUIDES: Guide[] = [
     pages: 0,
     format: 'Template Notion',
     language: 'Italiano',
-    coverImage:
-      'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1400&auto=format&fit=crop',
-    previewImages: [
-      'https://images.unsplash.com/photo-1517842645767-c639042777db?q=80&w=1200&auto=format&fit=crop',
-    ],
+    // TODO[R+B]: cover + preview reali quando guida pubblicata
+    coverImage: '/images/brand/about-editorial.webp',
+    previewImages: ['/images/brand/about-editorial.webp'],
     excerpt:
       'Lo stesso template che usiamo noi per pianificare ogni viaggio: idee, budget, alloggi, itinerario, checklist.',
     inside: [

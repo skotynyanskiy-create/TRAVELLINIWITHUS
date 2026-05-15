@@ -26,11 +26,11 @@ const STEPS = [
   {
     key: 'duration',
     question: 'Quanto tempo hai per il prossimo viaggio?',
-    helper: 'Niente bugie a te stesso: meglio un viaggio piu corto ma vero.',
+    helper: 'Niente bugie a te stesso: meglio un viaggio più corto ma vero.',
     options: [
       { id: 'weekend', label: 'Un weekend lungo', sub: '2-4 giorni' },
       { id: 'week', label: 'Una settimana', sub: '5-7 giorni' },
-      { id: 'long', label: 'Slow trip', sub: '8 giorni o piu' },
+      { id: 'long', label: 'Slow trip', sub: '8 giorni o più' },
     ],
   },
   {
@@ -297,8 +297,8 @@ export default function Quiz() {
                     Vuoi ricevere il PDF di questo itinerario?
                   </h3>
                   <p className="mt-4 text-base leading-relaxed text-black/65">
-                    Iscriviti alla newsletter: appena il content sara pubblicato ti arriva il
-                    download dell itinerario gia compilato, senza spam.
+                    Iscriviti alla newsletter: appena il content sarà pubblicato ti arriva il
+                    download dell'itinerario già compilato, senza spam.
                   </p>
                 </div>
                 <Newsletter compact variant="sand" source="quiz_result" />

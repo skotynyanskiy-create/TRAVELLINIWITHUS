@@ -355,7 +355,7 @@ export default function Newsletter({
               <p
                 className={`mt-1 text-sm leading-relaxed ${isDark ? 'text-white/65' : 'text-black/60'}`}
               >
-                Ti scriviamo solo quando c'e qualcosa di davvero utile da salvare. Intanto, se ti
+                Ti scriviamo solo quando c'è qualcosa di davvero utile da salvare. Intanto, se ti
                 va, ci trovi su{' '}
                 <a
                   href={CONTACTS.instagramUrl}

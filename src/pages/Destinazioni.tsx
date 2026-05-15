@@ -45,18 +45,16 @@ import {
 
 const ITEMS_PER_PAGE = 6;
 
+// TODO[R+B]: sostituire con foto editoriali R+B per ciascun gruppo (un singolo
+// frame iconico che rappresenti il gruppo, non un mosaico). Per ora usiamo
+// asset locali già curati in /public/images/destinations/.
 const GROUP_VISUALS: Record<string, string> = {
-  Italia:
-    'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?q=80&w=1600&auto=format&fit=crop',
-  Europa:
-    'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?q=80&w=1600&auto=format&fit=crop',
-  Asia: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1600&auto=format&fit=crop',
-  Americhe:
-    'https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?q=80&w=1600&auto=format&fit=crop',
-  Africa:
-    'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?q=80&w=1600&auto=format&fit=crop',
-  Oceania:
-    'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?q=80&w=1600&auto=format&fit=crop',
+  Italia: '/images/destinations/toscana.webp',
+  Europa: '/images/destinations/dolomiti.webp',
+  Asia: '/images/destinations/giappone.webp',
+  Americhe: '/images/destinations/americhe.webp',
+  Africa: '/images/destinations/africa.webp',
+  Oceania: '/images/destinations/oceania.webp',
 };
 
 const TRUST_STRIP = [

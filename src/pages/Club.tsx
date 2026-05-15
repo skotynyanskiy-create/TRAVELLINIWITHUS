@@ -231,7 +231,7 @@ export default function Club() {
                       <h3 className="text-2xl font-serif text-[var(--color-ink)] mb-2">
                         Nessun articolo salvato.
                       </h3>
-                      <p className="text-black/50 font-light mb-8 max-w-sm mx-auto">
+                      <p className="text-black/65 font-light mb-8 max-w-sm mx-auto">
                         Esplora i contenuti e usa l'icona del cuore per salvare gli itinerari e le
                         guide che vuoi tenere da parte.
                       </p>
@@ -310,7 +310,7 @@ export default function Club() {
                       <h3 className="text-2xl font-serif text-[var(--color-ink)] mb-2">
                         Nessun acquisto ancora.
                       </h3>
-                      <p className="text-black/50 font-light mb-8 max-w-sm mx-auto">
+                      <p className="text-black/65 font-light mb-8 max-w-sm mx-auto">
                         Scopri le nostre guide e i planner digitali — strumenti reali testati sui
                         nostri viaggi, pronti per i tuoi.
                       </p>

@@ -1,7 +1,7 @@
 ---
 project: Travelliniwithus
-type: pillar-article-outline
-status: outline-ready
+type: pillar-article-brief
+status: editorial-brief-ready-needs-assets
 owner: Rodrigo & Betta
 target_slug: cosa-fare-salento-agosto-coppia
 target_keywords:
@@ -31,6 +31,15 @@ Funziona come pillar perché:
 - E-E-A-T: R+B ci sono stati davvero, foto reali, prezzi reali.
 - Internal linking forte: si collega a articoli precedenti (mare,
   cibo, borghi), itinerario Salento 5gg, lead magnet, prodotti shop.
+
+## Cluster SEO collegato
+
+| Tipo       | Slug                                 |       Stato | Intento                                |
+| ---------- | ------------------------------------ | ----------: | -------------------------------------- |
+| Pillar     | `cosa-fare-salento-agosto-coppia`    | brief ready | Query principale agosto/coppia         |
+| Supporting | `itinerario-salento-5-giorni-coppia` | da scrivere | Organizzazione giorno per giorno       |
+| Supporting | `borghi-salento-sera-estate`         | da scrivere | Alternative serali a spiagge affollate |
+| Supporting | `dove-dormire-salento-agosto-coppia` | da scrivere | Hospitality, budget, zone              |
 
 ## Outline (~1500 parole)
 

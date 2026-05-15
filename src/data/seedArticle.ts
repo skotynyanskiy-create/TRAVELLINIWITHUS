@@ -6,7 +6,7 @@ export const SAMPLE_ARTICLE = {
   title: 'Dolomiti: Tra Rifugi di Design e Vette Leggendarie',
   category: 'Guide',
   slug: 'dolomiti-rifugi-design',
-  image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1400&auto=format&fit=crop',
+  image: '/images/destinations/dolomiti.webp',
   excerpt:
     'Un unico contenuto dimostrativo per mostrare come potranno apparire guide, itinerari e racconti quando inserirai il materiale definitivo.',
   description: 'Guida demo ai rifugi di design e ai percorsi panoramici delle Dolomiti.',
@@ -50,10 +50,7 @@ export const SAMPLE_ARTICLE = {
     'Borraccia termica',
     'Bastoncini telescopici',
   ],
-  gallery: [
-    'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?q=80&w=1200&auto=format&fit=crop',
-    'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1200&auto=format&fit=crop',
-  ],
+  gallery: ['/images/destinations/dolomiti.webp', '/images/destinations/dolomiti.webp'],
   content: `
 # Dolomiti: L'Estetica della Montagna
 
@@ -61,11 +58,11 @@ Questo contenuto demo serve a mostrare struttura, ritmo editoriale e profondità
 
 ## Rifugi di design e panorami forti
 
-Le Dolomiti sono perfette per raccontare come un contenuto Travelliniwithus può unire atmosfera, indicazioni utili e identita visiva.
+Le Dolomiti sono perfette per raccontare come un contenuto Travelliniwithus può unire atmosfera, indicazioni utili e identità visiva.
 
 ## Come usare questo demo
 
-Quando il sito sarà definitivo, questo articolo potra essere disattivato dal pannello admin e sostituito dai tuoi contenuti reali.
+Quando il sito sarà definitivo, questo articolo potrà essere disattivato dal pannello admin e sostituito dai tuoi contenuti reali.
   `,
 };
 
@@ -77,8 +74,12 @@ export async function seedSampleArticle() {
       ...SAMPLE_ARTICLE,
       createdAt: serverTimestamp(),
     });
-    console.log('Articolo demo creato con successo.');
+    if (import.meta.env.DEV) {
+      console.log('Articolo demo creato con successo.');
+    }
   } catch (error) {
-    console.error('Errore durante il seeding:', error);
+    if (import.meta.env.DEV) {
+      console.error('Errore durante il seeding:', error);
+    }
   }
 }

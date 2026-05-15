@@ -358,8 +358,8 @@ export default function Articolo() {
     if (navigator.share) {
       try {
         await navigator.share({ title: article.title, url });
-      } catch (err) {
-        console.log('Error sharing', err);
+      } catch {
+        // Share API failed silently (e.g., cancelled by user)
       }
     } else {
       await navigator.clipboard.writeText(url);

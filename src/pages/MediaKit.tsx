@@ -12,6 +12,7 @@ import {
   Mail,
   ShieldCheck,
   Target,
+  Wallet,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Breadcrumbs from '../components/Breadcrumbs';
@@ -19,6 +20,10 @@ import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import Section from '../components/Section';
 import StickyMobileCTA from '../components/StickyMobileCTA';
+import FormField from '../components/FormField';
+import Input from '../components/Input';
+import Select from '../components/Select';
+import Textarea from '../components/Textarea';
 import { BRAND_STATS, CONTACTS } from '../config/site';
 import { appendLeadFallback } from '../lib/leadFallback';
 import { trackEvent } from '../services/analytics';
@@ -77,11 +82,20 @@ const projectFocusOptions = [
   'Altro',
 ];
 
+const budgetOptions = [
+  '< €2.000',
+  '€2.000 - €5.000',
+  '€5.000 - €10.000',
+  '> €10.000',
+  'Preferisco discutere',
+];
+
 export default function MediaKit() {
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
   const [website, setWebsite] = useState('');
   const [projectFocus, setProjectFocus] = useState('');
+  const [budget, setBudget] = useState('');
   const [brief, setBrief] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -99,11 +113,17 @@ export default function MediaKit() {
     const normalizedWebsite = website.trim();
     const normalizedBrief = brief.trim();
 
-    trackEvent('media_kit_request_attempt', { topic: projectFocus || 'unset' });
+    trackEvent('media_kit_request_attempt', {
+      route: '/media-kit',
+      source: 'media_kit_form',
+      cta_id: 'media_kit_submit',
+      topic: projectFocus || 'unset',
+      budget_range: budget || 'unset',
+    });
 
-    if (!normalizedEmail || !normalizedCompany || !projectFocus || !normalizedBrief) {
+    if (!normalizedEmail || !normalizedCompany || !projectFocus || !budget || !normalizedBrief) {
       setSubmitError(
-        'Inserisci azienda, email lavorativa, focus del progetto e un contesto breve ma utile.'
+        'Inserisci azienda, email lavorativa, focus del progetto, budget indicativo e un contesto breve ma utile.'
       );
       return;
     }
@@ -127,6 +147,7 @@ export default function MediaKit() {
           company: normalizedCompany,
           website: normalizedWebsite || undefined,
           topic: projectFocus,
+          budget,
           message: normalizedBrief || undefined,
         }),
       });
@@ -136,7 +157,16 @@ export default function MediaKit() {
         throw new Error(payload?.error || 'Invio non riuscito');
       }
 
-      trackEvent('media_kit_request_success', { topic: projectFocus });
+      const submitParams = {
+        route: '/media-kit',
+        source: 'media_kit_form',
+        cta_id: 'media_kit_submit',
+        content_id: 'media_kit_partner_lead',
+        topic: projectFocus,
+        budget_range: budget,
+      };
+      trackEvent('media_kit_request_success', submitParams);
+      trackEvent('media_kit_submit', submitParams);
       setIsSuccess(true);
     } catch (error) {
       console.error('Error saving media kit lead:', error);
@@ -145,14 +175,22 @@ export default function MediaKit() {
         company: normalizedCompany,
         website: normalizedWebsite,
         topic: projectFocus,
+        budget,
         message: normalizedBrief,
         date: new Date().toISOString(),
       });
       if (saved) {
-        trackEvent('media_kit_request_success', {
+        const submitParams = {
+          route: '/media-kit',
+          source: 'media_kit_form',
+          cta_id: 'media_kit_submit',
+          content_id: 'media_kit_partner_lead',
           topic: projectFocus,
+          budget_range: budget,
           fallback: 'localStorage',
-        });
+        };
+        trackEvent('media_kit_request_success', submitParams);
+        trackEvent('media_kit_submit', submitParams);
         setIsSuccess(true);
       } else {
         setSubmitError(
@@ -167,7 +205,7 @@ export default function MediaKit() {
   return (
     <PageLayout>
       <SEO
-        title="Media Kit"
+        title="Media kit Travelliniwithus: audience, format e condizioni"
         description="Richiedi il media kit Travelliniwithus per capire audience, format, tono editoriale e condizioni giuste per una collaborazione coerente."
       />
 
@@ -271,82 +309,56 @@ export default function MediaKit() {
               </div>
 
               <form id="media-kit-form" onSubmit={handleSubmit} className="space-y-6" noValidate>
-                <div>
-                  <label
-                    htmlFor="company"
-                    className="mb-2 block text-sm font-medium text-[var(--color-ink-2)]"
-                  >
-                    Nome azienda / agenzia
-                  </label>
-                  <input
+                <FormField label="Nome azienda / agenzia" htmlFor="company" required>
+                  <Input
                     type="text"
                     id="company"
                     required
                     value={company}
                     onChange={(e) => setCompany(e.target.value)}
-                    className="w-full rounded-xl border border-[var(--color-border)] px-4 py-3 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-[var(--color-accent)]"
                     placeholder="Es. boutique hotel, agenzia travel, destination office"
                   />
-                </div>
+                </FormField>
 
-                <div>
-                  <label
-                    htmlFor="website"
-                    className="mb-2 block text-sm font-medium text-[var(--color-ink-2)]"
-                  >
-                    Sito o profilo brand
-                  </label>
+                <FormField label="Sito o profilo brand" htmlFor="website">
                   <div className="relative">
                     <Globe
                       className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-muted-fg)]"
                       size={18}
                     />
-                    <input
+                    <Input
                       type="url"
                       id="website"
                       value={website}
                       onChange={(e) => setWebsite(e.target.value)}
-                      className="w-full rounded-xl border border-[var(--color-border)] py-3 pl-11 pr-4 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-[var(--color-accent)]"
+                      className="pl-11"
                       placeholder="https://..."
                     />
                   </div>
-                </div>
+                </FormField>
 
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="mb-2 block text-sm font-medium text-[var(--color-ink-2)]"
-                  >
-                    Email lavorativa
-                  </label>
-                  <input
+                <FormField label="Email lavorativa" htmlFor="email" required>
+                  <Input
                     type="email"
                     id="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full rounded-xl border border-[var(--color-border)] px-4 py-3 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-[var(--color-accent)]"
                     placeholder="nome@azienda.com"
                   />
-                </div>
+                </FormField>
 
-                <div>
-                  <label
-                    htmlFor="project-focus"
-                    className="mb-2 block text-sm font-medium text-[var(--color-ink-2)]"
-                  >
-                    Focus della richiesta
-                  </label>
+                <FormField label="Focus della richiesta" htmlFor="project-focus" required>
                   <div className="relative">
                     <Target
                       className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-muted-fg)]"
                       size={18}
                     />
-                    <select
+                    <Select
                       id="project-focus"
                       value={projectFocus}
                       onChange={(e) => setProjectFocus(e.target.value)}
-                      className="w-full appearance-none rounded-xl border border-[var(--color-border)] bg-white py-3 pl-11 pr-4 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-[var(--color-accent)]"
+                      className="pl-11"
                     >
                       <option value="">Seleziona il tipo di progetto</option>
                       {projectFocusOptions.map((option) => (
@@ -354,26 +366,41 @@ export default function MediaKit() {
                           {option}
                         </option>
                       ))}
-                    </select>
+                    </Select>
                   </div>
-                </div>
+                </FormField>
 
-                <div>
-                  <label
-                    htmlFor="brief"
-                    className="mb-2 block text-sm font-medium text-[var(--color-ink-2)]"
-                  >
-                    Contesto breve ma utile
-                  </label>
-                  <textarea
+                <FormField label="Budget indicativo per il progetto" htmlFor="budget" required>
+                  <div className="relative">
+                    <Wallet
+                      className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-muted-fg)]"
+                      size={18}
+                    />
+                    <Select
+                      id="budget"
+                      value={budget}
+                      onChange={(e) => setBudget(e.target.value)}
+                      className="pl-11"
+                    >
+                      <option value="">Seleziona una fascia di budget</option>
+                      {budgetOptions.map((option) => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </Select>
+                  </div>
+                </FormField>
+
+                <FormField label="Contesto breve ma utile" htmlFor="brief" required>
+                  <Textarea
                     id="brief"
                     rows={5}
                     value={brief}
                     onChange={(e) => setBrief(e.target.value)}
-                    className="w-full rounded-xl border border-[var(--color-border)] px-4 py-3 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-[var(--color-accent)]"
                     placeholder="Obiettivo, periodo, tipo di attivazione o perché pensi che ci sia un fit reale."
                   />
-                </div>
+                </FormField>
 
                 <button
                   type="submit"
@@ -391,7 +418,11 @@ export default function MediaKit() {
                   )}
                 </button>
 
-                {submitError && <p className="text-sm text-[var(--color-error)]">{submitError}</p>}
+                {submitError && (
+                  <p role="alert" className="text-sm text-[var(--color-error)]">
+                    {submitError}
+                  </p>
+                )}
 
                 <p className="text-center text-xs font-medium text-[var(--color-accent)]">
                   Se il contatto è coerente, ricevi il link al media kit e un riscontro entro 48 ore

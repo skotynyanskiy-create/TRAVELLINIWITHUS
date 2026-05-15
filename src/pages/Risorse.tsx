@@ -61,7 +61,7 @@ const resourceCategories: Array<{
       {
         name: 'Heymondo',
         description:
-          'Una soluzione assicurativa che valutiamo quando il viaggio ha costi, distanze o imprevisti potenziali piu alti.',
+          'Una soluzione assicurativa che valutiamo quando il viaggio ha costi, distanze o imprevisti potenziali più alti.',
         link: 'https://heymondo.it/?utm_medium=Afiliado&utm_source=TRAVELLINIWITHUS&utm_campaign=PRINCIPAL&cod_descuento=TRAVELLINIWITHUS&ag_campaign=TRAVELLINI&agencia=JG4Tepc5b47oLeK3xGDmbAX9I25ExoDeoc8cbPFt',
         tags: ['Assicurazione', 'Sconto'],
         badge: '-10%',

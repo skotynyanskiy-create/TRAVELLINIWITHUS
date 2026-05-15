@@ -3,28 +3,77 @@ import { AnimatePresence, motion } from 'motion/react';
 import { X, Gift, ArrowRight } from 'lucide-react';
 import Newsletter from './Newsletter';
 
-const SESSION_KEY = 'twu_exit_popup_shown';
+/**
+ * Storage persistente cross-session: con sessionStorage (precedente impl)
+ * il popup riappariva a ogni nuovo tab/refresh dopo chiusura browser. Adesso:
+ * - dismissed/iscritto = mai piu' nei prossimi COOLDOWN_DAYS giorni
+ * - mai mostrato = trigger normale (mouseleave/scroll-up veloce)
+ */
+const STORAGE_KEY = 'twu_exit_popup_dismissed_at';
+const SUBSCRIBED_KEY = 'twu_newsletter_subscribed';
+const COOLDOWN_DAYS = 30;
+const COOLDOWN_MS = COOLDOWN_DAYS * 24 * 60 * 60 * 1000;
 const DELAY_BEFORE_ELIGIBLE_MS = 8000; // non mostrare prima di 8 secondi sulla pagina
+
+function readDismissedAt(): number | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const ts = Date.parse(raw);
+    return Number.isFinite(ts) ? ts : null;
+  } catch {
+    return null;
+  }
+}
+
+function isStillInCooldown(): boolean {
+  if (typeof window === 'undefined') return true;
+  // Mai mostrato di nuovo se l'utente si e' gia' iscritto.
+  try {
+    if (window.localStorage.getItem(SUBSCRIBED_KEY) === '1') return true;
+  } catch {
+    // ignore
+  }
+  const dismissedAt = readDismissedAt();
+  if (dismissedAt === null) return false;
+  return Date.now() - dismissedAt < COOLDOWN_MS;
+}
+
+function markDismissed(reason: 'closed' | 'subscribed') {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(STORAGE_KEY, new Date().toISOString());
+    if (reason === 'subscribed') {
+      window.localStorage.setItem(SUBSCRIBED_KEY, '1');
+    }
+  } catch {
+    // ignore quota / private mode
+  }
+}
 
 export default function ExitIntentPopup() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    // Non mostrare se già visto in questa sessione
-    if (sessionStorage.getItem(SESSION_KEY)) return;
+    if (isStillInCooldown()) return;
 
     let eligible = false;
+    let alreadyTriggered = false;
     const eligibilityTimer = setTimeout(() => {
       eligible = true;
     }, DELAY_BEFORE_ELIGIBLE_MS);
 
+    const trigger = () => {
+      if (alreadyTriggered) return;
+      alreadyTriggered = true;
+      setVisible(true);
+    };
+
     // Trigger desktop: mouse esce dalla finestra verso l'alto (intento di chiudere tab)
     const handleMouseLeave = (e: MouseEvent) => {
       if (!eligible) return;
-      if (e.clientY <= 0) {
-        setVisible(true);
-        sessionStorage.setItem(SESSION_KEY, '1');
-      }
+      if (e.clientY <= 0) trigger();
     };
 
     // Trigger mobile: scroll veloce verso l'alto (intento di uscire)
@@ -36,10 +85,7 @@ export default function ExitIntentPopup() {
       const delta = lastScrollY - window.scrollY;
       const timeDelta = now - lastScrollTime;
       // Scroll up veloce (> 80px in < 300ms) e siamo in alto nella pagina
-      if (delta > 80 && timeDelta < 300 && window.scrollY < 200) {
-        setVisible(true);
-        sessionStorage.setItem(SESSION_KEY, '1');
-      }
+      if (delta > 80 && timeDelta < 300 && window.scrollY < 200) trigger();
       lastScrollY = window.scrollY;
       lastScrollTime = now;
     };
@@ -54,7 +100,16 @@ export default function ExitIntentPopup() {
     };
   }, []);
 
-  const close = () => setVisible(false);
+  const close = () => {
+    setVisible(false);
+    markDismissed('closed');
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- reserved for Newsletter onSuccess wiring (post lead-magnet integration)
+  const _handleSubscribeSuccess = () => {
+    setVisible(false);
+    markDismissed('subscribed');
+  };
 
   return (
     <AnimatePresence>

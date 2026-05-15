@@ -1,14 +1,16 @@
 import type { ArticleData } from '../components/article';
 import { DEMO_ARTICLE_SLUG } from './demoContent';
 
-export const PREVIEW_ARTICLES: Record<string, ArticleData & { id: string; slug: string; excerpt: string }> = {
+export const PREVIEW_ARTICLES: Record<
+  string,
+  ArticleData & { id: string; slug: string; excerpt: string }
+> = {
   [DEMO_ARTICLE_SLUG]: {
     id: DEMO_ARTICLE_SLUG,
     slug: DEMO_ARTICLE_SLUG,
     title: 'Dolomiti: rifugi di design e sentieri da salvare',
     category: 'Guide',
-    image:
-      'https://images.unsplash.com/photo-1533130061792-64b345e4a833?q=80&w=2000&auto=format&fit=crop',
+    image: '/images/destinations/dolomiti.webp',
     excerpt:
       'Una preview editoriale per mostrare come potranno vivere insieme atmosfera, informazioni pratiche e selezione Travelliniwithus.',
     description:
@@ -30,7 +32,7 @@ Le Dolomiti funzionano quando il viaggio non viene ridotto a una foto panoramica
 
 ## Cosa sapere prima
 
-La finestra migliore va da giugno a ottobre. Luglio e agosto sono più pieni, quindi conviene prenotare rifugi e alloggi con anticipo. Settembre e spesso il mese più equilibrato per luce, temperature e tranquillita.
+La finestra migliore va da giugno a ottobre. Luglio e agosto sono più pieni, quindi conviene prenotare rifugi e alloggi con anticipo. Settembre è spesso il mese più equilibrato per luce, temperature e tranquillità.
 
 ## Quando andare
 
@@ -47,7 +49,7 @@ Non cercare di vedere tutto. Scegli una valle, due punti forti e un margine per 
     highlights: [
       'Rifugi con architettura contemporanea e vista aperta',
       'Sentieri panoramici gestibili in un weekend',
-      'Periodo e ritmo pensati per evitare l effetto checklist',
+      "Periodo e ritmo pensati per evitare l'effetto checklist",
     ],
     itinerary: [
       {
@@ -72,10 +74,10 @@ Non cercare di vedere tutto. Scegli una valle, due punti forti e un margine per 
     tips: [
       'Prenota in anticipo se viaggi nei weekend tra luglio e settembre.',
       'Tieni una alternativa breve per i cambi meteo improvvisi.',
-      'Scarica mappe offline: in quota la connessione non e sempre affidabile.',
+      'Scarica mappe offline: in quota la connessione non è sempre affidabile.',
     ],
     packingList: [
-      'Scarpe da trekking gia usate',
+      'Scarpe da trekking già usate',
       'Giacca antivento leggera',
       'Borraccia o thermos',
       'Power bank e mappe offline',
@@ -98,12 +100,11 @@ Non cercare di vedere tutto. Scegli una valle, due punti forti e un margine per 
     slug: 'weekend-borgo-lento',
     title: 'Weekend lento in un borgo: come sceglierlo bene',
     category: 'Guide',
-    image:
-      'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?q=80&w=2000&auto=format&fit=crop',
+    image: '/images/destinations/puglia.webp',
     excerpt:
       'Una guida preview per trasformare il classico weekend in borgo in una scelta più consapevole, utile e meno casuale.',
     description:
-      'Criteri pratici per scegliere un borgo che abbia davvero senso: accessibilita, atmosfera, cibo, ritmo e cose da fare senza correre.',
+      'Criteri pratici per scegliere un borgo che abbia davvero senso: accessibilità, atmosfera, cibo, ritmo e cose da fare senza correre.',
     location: 'Italia',
     period: 'Primavera e autunno',
     budget: 'Accessibile',
@@ -125,7 +126,7 @@ Prima di scegliere guarda tre cose: parcheggio o stazione, orari reali di ristor
 
 ## Quando andare
 
-Primavera e autunno sono spesso migliori dell estate. Meno folla, luce più morbida e prezzi più sensati.
+Primavera e autunno sono spesso migliori dell'estate. Meno folla, luce più morbida e prezzi più sensati.
 
 ## Consiglio Travellini
 
@@ -149,25 +150,24 @@ Scegli un posto dove puoi fare meno, ma farlo meglio: una trattoria, un belveder
     slug: 'guida-prima-di-prenotare',
     title: 'Prima di prenotare: la checklist Travellini',
     category: 'Guide',
-    image:
-      'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=2000&auto=format&fit=crop',
+    image: '/images/brand/about-editorial.webp',
     excerpt:
-      'Una preview di checklist editoriale per capire se una destinazione e coerente con tempo, budget e aspettative.',
+      'Una preview di checklist editoriale per capire se una destinazione è coerente con tempo, budget e aspettative.',
     description:
       'Domande semplici ma decisive da farsi prima di prenotare un viaggio, per evitare scelte belle online ma deboli nella pratica.',
     location: 'Metodo di viaggio',
-    period: 'Tutto l anno',
+    period: "Tutto l'anno",
     budget: 'Variabile',
     duration: 'Checklist',
     readTime: '5 min',
     date: '2 aprile 2026',
     author: 'Rodrigo & Betta',
     content: `
-La scelta migliore non e sempre quella più spettacolare. E quella che regge il tempo che hai, il budget reale e il tipo di energia che vuoi portare nel viaggio.
+La scelta migliore non è sempre quella più spettacolare. È quella che regge il tempo che hai, il budget reale e il tipo di energia che vuoi portare nel viaggio.
 
 ## Perché usarla
 
-Prima di prenotare conviene verificare se la destinazione e davvero compatibile con giorni, spostamenti, stagione e aspettative.
+Prima di prenotare conviene verificare se la destinazione è davvero compatibile con giorni, spostamenti, stagione e aspettative.
 
 ## Le domande base
 
@@ -175,7 +175,7 @@ Quanto tempo perdo negli spostamenti? Cosa succede se piove? Ho almeno due motiv
 
 ## Errori da evitare
 
-Prenotare solo per una foto, sottovalutare distanze, ignorare stagionalita e accumulare troppe tappe in pochi giorni.
+Prenotare solo per una foto, sottovalutare distanze, ignorare stagionalità e accumulare troppe tappe in pochi giorni.
 `,
     highlights: [
       'Domande pratiche prima di acquistare voli o hotel',

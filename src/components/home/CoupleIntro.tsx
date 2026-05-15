@@ -8,14 +8,7 @@ import { useReducedMotion } from '../../hooks/useReducedMotion';
 
 const COUPLE_IMG = '/images/brand/about-editorial.png';
 
-/**
- * Polaroid scatter: 3 momenti R+B in giro per il mondo. Demo placeholder
- * Unsplash people-led/travel-couple in attesa che R+B fornisca scatti
- * polaroid reali (4:5 portrait, lume naturale, scene di coppia).
- *
- * TODO R+B: sostituire image+caption con 3 foto reali (cartella
- * /images/brand/polaroid-{1,2,3}.jpg consigliata, 800x1000 webp).
- */
+/** Polaroid scatter con asset locali controllati, in attesa degli scatti R+B finali. */
 interface CouplePolaroid {
   image: string;
   alt: string;
@@ -28,26 +21,23 @@ interface CouplePolaroid {
 
 const POLAROIDS: CouplePolaroid[] = [
   {
-    image:
-      'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?q=80&w=600&auto=format&fit=crop',
-    alt: 'Coppia in viaggio — alba in montagna',
-    caption: 'Dolomiti, 2024',
+    image: '/images/brand/couple-travel.webp',
+    alt: 'Rodrigo e Betta in viaggio',
+    caption: 'In viaggio',
     rotate: -8,
     position: '-top-6 -left-10 z-10',
   },
   {
-    image:
-      'https://images.unsplash.com/photo-1530789253388-582c481c54b0?q=80&w=600&auto=format&fit=crop',
-    alt: 'Coppia in viaggio — borgo italiano',
-    caption: 'Cilento, 2025',
+    image: '/images/brand/about-editorial.webp',
+    alt: 'Rodrigo e Betta durante una selezione editoriale',
+    caption: 'Sul posto',
     rotate: 5,
     position: 'top-1/3 -right-8 z-10',
   },
   {
-    image:
-      'https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=600&auto=format&fit=crop',
-    alt: 'Coppia in viaggio — al tramonto',
-    caption: 'Andalusia, 2023',
+    image: '/images/brand/collab-work.webp',
+    alt: 'Travelliniwithus al lavoro su contenuti travel',
+    caption: 'Metodo',
     rotate: -4,
     position: '-bottom-10 left-1/3 z-10',
   },
@@ -61,8 +51,8 @@ const METHOD_STANDARDS = [
   },
   {
     icon: Camera,
-    title: 'Foto reali, non stock',
-    text: 'Ogni articolo usa scatti nostri: luce, prospettiva, dettagli che riconosci sul posto.',
+    title: 'Immagini al servizio del luogo',
+    text: 'Le foto devono aiutare a capire atmosfera, scala e dettagli, non solo riempire la pagina.',
   },
   {
     icon: BadgeCheck,

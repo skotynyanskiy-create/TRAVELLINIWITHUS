@@ -12,7 +12,12 @@ const PDF_URL = '/lead-magnet-posti-italiani.pdf';
 
 export default function LeadMagnet() {
   const handleDownload = () => {
-    trackEvent('lead_magnet_download', { source: 'lead_magnet_page' });
+    trackEvent('lead_magnet_download', {
+      route: '/lead-magnet',
+      source: 'lead_magnet_page',
+      cta_id: 'lead_magnet_pdf_download',
+      content_id: 'lead_magnet_10_posti_italiani',
+    });
   };
 
   return (

@@ -41,17 +41,25 @@ const EXPERIENCE_TYPES = [
 
 function slugifyExperienceType(value) {
   return value
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
     .toLowerCase()
     .replace(/&/g, 'e')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
 }
 
-const filterRoutes = [
-  ...DESTINATION_GROUPS.map((group) => `/destinazioni?group=${encodeURIComponent(group)}`),
-  ...DESTINATION_GROUPS.map((group) => `/guide?group=${encodeURIComponent(group)}`),
-  ...EXPERIENCE_TYPES.map((type) => `/esperienze?type=${slugifyExperienceType(type)}`),
-];
+// Filter routes (?group=, ?type=) are intentionally NOT in the sitemap:
+// Google treats ?param URLs as duplicate content of the index page,
+// diluting PageRank. Build the hub routes (/destinazioni/italia,
+// /esperienze/hotel-con-carattere) as proper pages when ready, then
+// add them to staticRoutes.
+const filterRoutes = [];
+
+// Surface variables to silence "unused" warnings without exporting them.
+void DESTINATION_GROUPS;
+void EXPERIENCE_TYPES;
+void slugifyExperienceType;
 
 function urlEntry(route, { changefreq = 'weekly', priority = '0.8', lastmod } = {}) {
   const fullUrl = `${BASE_URL}${route === '/' ? '' : route}`;
@@ -172,15 +180,15 @@ async function buildSitemap() {
     `Sitemap generated. Static: ${staticRoutes.length}, filters: ${filterRoutes.length}, dynamic: ${dynamicCount}.`
   );
 
+  // robots.txt: keep public routes crawlable (incl. /shop, /vieni-con-noi,
+  // /lead-magnet which use HTML <meta name="robots" noindex> on demo/preview
+  // pages). Blocking via robots.txt PREVENTS Googlebot from reading noindex,
+  // so noindex is the canonical mechanism.
   const robotsTxt = `User-agent: *
 Allow: /
-Disallow: /shop
-Disallow: /club
-Disallow: /account/acquisti
-Disallow: /vieni-con-noi
-Disallow: /lead-magnet
-Disallow: /iscrivi
 Disallow: /admin
+Disallow: /account/acquisti
+Disallow: /iscrivi
 
 Sitemap: ${BASE_URL}/sitemap.xml
 `;

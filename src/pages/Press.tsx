@@ -14,8 +14,8 @@ const PRESS_HIGHLIGHTS = [
     text: 'Articoli, guide e contenuti visual costruiti sulla ricerca diretta dei luoghi.',
   },
   {
-    title: 'Identita riconoscibile',
-    text: 'Tono caldo, ricerca della qualita visiva e selettivita nelle collaborazioni.',
+    title: 'Identità riconoscibile',
+    text: 'Tono caldo, ricerca della qualità visiva e selettività nelle collaborazioni.',
   },
   {
     title: 'Community attiva',
@@ -50,7 +50,7 @@ export default function Press() {
   return (
     <PageLayout>
       <SEO
-        title="Press"
+        title="Press: media kit e contatti per redazioni"
         description="Risorse stampa di Travelliniwithus: media kit, brand snapshot, contatti diretti per redazioni, riviste e media partner."
         canonical={`${SITE_URL}/press`}
       />

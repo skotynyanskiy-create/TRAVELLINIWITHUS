@@ -22,6 +22,7 @@ test.describe('Visual quality smoke checks', () => {
       });
 
       await page.goto(route.path, { waitUntil: 'domcontentloaded' });
+      await page.waitForTimeout(750);
       await expect(page.locator('body')).toBeVisible();
       await expect(page.locator('h1').first()).toBeVisible();
 

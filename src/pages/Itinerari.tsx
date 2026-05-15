@@ -50,7 +50,7 @@ export default function Itinerari() {
             Itinerari Travelliniwithus
           </span>
           <h1 className="mt-4 text-5xl font-serif leading-[1.05] tracking-tight md:text-6xl">
-            Viaggi gia letti.
+            Viaggi già letti.
             <br />
             <span className="italic text-black/55">Pronti da personalizzare.</span>
           </h1>
@@ -115,7 +115,7 @@ export default function Itinerari() {
               Nessun risultato
             </p>
             <p className="mt-4 text-base leading-relaxed text-black/65">
-              Allarga i filtri per vedere piu itinerari, oppure scrivici cosa stai cercando.
+              Allarga i filtri per vedere più itinerari, oppure scrivici cosa stai cercando.
             </p>
           </div>
         ) : (
@@ -183,7 +183,7 @@ export default function Itinerari() {
         <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-6 md:flex md:items-center md:justify-between md:p-8">
           <div>
             <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
-              Hai gia 2-3 candidati?
+              Hai già 2-3 candidati?
             </p>
             <p className="mt-2 font-serif text-2xl text-[var(--color-ink)]">
               Confronta itinerari side-by-side.

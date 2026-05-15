@@ -239,6 +239,8 @@ export default function Navbar() {
               <div key={item.name} className="group relative">
                 <Link
                   to={item.href || '/'}
+                  aria-current={isItemActive(item) ? 'page' : undefined}
+                  aria-haspopup={item.subLinks || item.subGroups ? 'menu' : undefined}
                   className={`relative flex items-center gap-1 whitespace-nowrap text-[11px] font-bold uppercase tracking-[0.15em] transition-all duration-300 xl:text-[12px] xl:tracking-[0.2em] hover:text-[var(--color-accent)] after:absolute after:-bottom-1 after:left-0 after:h-[1.5px] after:w-full after:bg-[var(--color-accent)] after:origin-left after:transition-transform after:duration-300 ${
                     isItemActive(item)
                       ? 'text-[var(--color-accent)] after:scale-x-100'
@@ -252,8 +254,9 @@ export default function Navbar() {
                 </Link>
 
                 {(item.subLinks || item.subGroups) && (
-                  <div className="invisible absolute top-full left-1/2 -translate-x-1/2 pt-6 opacity-0 transition-all duration-300 group-hover:visible group-hover:opacity-100">
+                  <div className="invisible absolute top-full left-1/2 -translate-x-1/2 pt-6 opacity-0 transition-all duration-300 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
                     <div
+                      role="menu"
                       className={`relative overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-ink)]/5 bg-[var(--color-surface)] py-4 shadow-2xl ${
                         item.subGroups
                           ? item.subGroups.length >= 3
@@ -273,6 +276,7 @@ export default function Navbar() {
                             <div key={group.label}>
                               <Link
                                 to={group.href}
+                                role="menuitem"
                                 className="mb-2 block rounded-[var(--radius-md)] bg-[var(--color-sand)] px-4 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
                               >
                                 {group.label}
@@ -282,6 +286,7 @@ export default function Navbar() {
                                   <Link
                                     key={subLink.name}
                                     to={subLink.href}
+                                    role="menuitem"
                                     className={`block rounded-xl px-4 py-2 text-[10px] uppercase tracking-[0.16em] transition-all duration-200 hover:bg-[var(--color-sand)] hover:text-[var(--color-accent)] ${
                                       isSubLinkActive(item, subLink.href)
                                         ? 'text-[var(--color-accent)]'
@@ -300,6 +305,7 @@ export default function Navbar() {
                           <Link
                             key={subLink.name}
                             to={subLink.href}
+                            role="menuitem"
                             className={`block px-8 py-3 text-[10px] uppercase tracking-[0.2em] transition-all duration-200 hover:bg-[var(--color-sand)] hover:text-[var(--color-accent)] ${
                               isSubLinkActive(item, subLink.href)
                                 ? 'text-[var(--color-accent)]'
@@ -585,6 +591,7 @@ export default function Navbar() {
                   <div className="flex flex-wrap items-center gap-5">
                     <Link
                       to="/preferiti"
+                      aria-label={navigation.favoritesLabel}
                       onClick={() => setIsMobileMenuOpen(false)}
                       className="relative text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
                     >
@@ -597,6 +604,7 @@ export default function Navbar() {
                     </Link>
                     <a
                       href={CONTACTS.instagramUrl}
+                      aria-label="Apri Instagram Travelliniwithus"
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => setIsMobileMenuOpen(false)}
@@ -606,6 +614,7 @@ export default function Navbar() {
                     </a>
                     <a
                       href={CONTACTS.tiktokUrl}
+                      aria-label="Apri TikTok Travelliniwithus"
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => setIsMobileMenuOpen(false)}
@@ -617,6 +626,7 @@ export default function Navbar() {
                     </a>
                     <a
                       href={CONTACTS.whatsappUrl}
+                      aria-label="Scrivici su WhatsApp"
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => setIsMobileMenuOpen(false)}
@@ -626,6 +636,7 @@ export default function Navbar() {
                     </a>
                     <a
                       href={CONTACTS.mailto}
+                      aria-label={`Scrivi a ${CONTACTS.email}`}
                       onClick={() => setIsMobileMenuOpen(false)}
                       className="text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
                     >
