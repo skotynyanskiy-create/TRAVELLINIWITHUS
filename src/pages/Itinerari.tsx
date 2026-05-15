@@ -63,7 +63,7 @@ export default function Itinerari() {
         <DemoContentNotice
           className="mt-10 max-w-3xl"
           title="Anteprima itinerari"
-          message="Stai vedendo 3 itinerari demo che mostrano la struttura. Quando pubblicheremo i contenuti reali, sostituiranno questi placeholder."
+          message="Stai vedendo 10 itinerari di anteprima che mostrano la struttura. Sostituiamo questi placeholder con i contenuti reali appena R+B chiudono il sopralluogo per ciascuno."
         />
       </Section>
 

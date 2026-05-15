@@ -21,6 +21,42 @@ import {
 import { fetchArticles } from '../../services/firebaseService';
 import type { NormalizedArticle } from '../../utils/articleData';
 import { DEMO_ARTICLE_PREVIEW, DEMO_ARTICLES_EXTRA } from '../../config/demoContent';
+import { DEMO_ARCHIVE_SEEDS } from '../../config/demoArchive';
+
+/**
+ * Adatta i seed di demoArchive al formato che la mappa si aspetta
+ * (id, slug, title, category, country, continent, image, excerpt + coordinate
+ * via campo `coordinates`). placeOnMap usa il country/continent per ricavare
+ * lng/lat, ma noi possiamo passare direttamente le coordinate vere.
+ *
+ * Dedup: escludo gli slug gia' presenti in DEMO_ARTICLE_PREVIEW (Dolomiti) e
+ * in DEMO_ARTICLES_EXTRA (Puglia, Toscana, Costiera, Filippine) per evitare
+ * collisioni React key + marker duplicati sulla mappa.
+ */
+const DEMO_LEGACY_MAP_SLUGS = new Set<string>([
+  DEMO_ARTICLE_PREVIEW.slug,
+  ...DEMO_ARTICLES_EXTRA.map((a) => a.slug),
+]);
+
+const DEMO_ARCHIVE_MAP_ARTICLES = DEMO_ARCHIVE_SEEDS.filter(
+  (seed) => !DEMO_LEGACY_MAP_SLUGS.has(seed.slug)
+).map((seed) => ({
+  id: seed.slug,
+  slug: seed.slug,
+  title: seed.title,
+  category: seed.category,
+  country: seed.country,
+  continent: seed.continent,
+  region: seed.region,
+  city: seed.city,
+  image: seed.image,
+  excerpt: seed.excerpt,
+  readTime: seed.readTime,
+  createdAt: '2026-05-15T08:00:00.000Z',
+  // Coordinate dirette (lng, lat) — placeOnMap dovrebbe usarle se presenti,
+  // altrimenti cade su country/continent lookup.
+  coordinates: seed.coordinates,
+}));
 
 /**
  * Categoria -> icona + colore badge nel marker.
@@ -176,6 +212,25 @@ export default function MapboxWorldMap() {
     const placeOnMap = (list: ReadonlyArray<Record<string, unknown>>) =>
       list
         .map((article, index) => {
+          // Priorita' 1: coordinate dirette [lng, lat] passate dal seed
+          // (demoArchive). Permette di ancorare 30 destinazioni con precisione
+          // senza dipendere da COUNTRY_COORDS.
+          const directCoords = article.coordinates;
+          if (
+            Array.isArray(directCoords) &&
+            directCoords.length === 2 &&
+            typeof directCoords[0] === 'number' &&
+            typeof directCoords[1] === 'number'
+          ) {
+            return {
+              ...(article as unknown as NormalizedArticle),
+              lat: directCoords[1],
+              lng: directCoords[0],
+              isPartner: Boolean(article.isPartner),
+            };
+          }
+
+          // Priorita' 2: lookup country/continent su COUNTRY_COORDS.
           const countryKey =
             (article.country as string | undefined) ||
             (article.continent as string | undefined) ||
@@ -208,9 +263,12 @@ export default function MapboxWorldMap() {
           // Firestore vuoto: fallback su anteprime editoriali per non
           // mostrare la mappa nuda. Quando R+B pubblica articoli reali
           // con campo `country`, il fallback viene saltato automaticamente.
+          // Include i 30 seed editoriali da demoArchive.ts per riempire
+          // la mappa con destinazioni distribuite su tutti i continenti.
           const demo = placeOnMap([
             DEMO_ARTICLE_PREVIEW,
             ...DEMO_ARTICLES_EXTRA,
+            ...DEMO_ARCHIVE_MAP_ARTICLES,
           ] as unknown as ReadonlyArray<Record<string, unknown>>);
           setArticles(demo);
           setUsingDemo(true);

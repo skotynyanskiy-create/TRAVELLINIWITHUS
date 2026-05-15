@@ -160,6 +160,49 @@ interface StripeOrderRecord {
 }
 
 const DEMO_ARTICLE_SLUG = 'dolomiti-rifugi-design';
+
+// Slug delle 30 anteprime editoriali generate da src/config/demoArchive.ts.
+// Mantenuto qui statico per evitare di importare client-side modules nel
+// server bundle. Aggiornare quando si aggiungono seed a DEMO_ARCHIVE_SEEDS.
+const DEMO_PREVIEW_ARTICLE_SLUGS = new Set([
+  // Italia (10)
+  'salento-agosto-coppia',
+  'cilento-mare-italiano',
+  'toscana-borghi-nascosti',
+  'costiera-amalfitana-fuori-stagione',
+  'puglia-trulli-masserie',
+  'dolomiti-rifugi-design',
+  'sicilia-orientale-5-giorni',
+  'sardegna-interna-barbagia',
+  'roma-quartieri-fuori-rotta',
+  'trentino-spa-weekend',
+  // Europa (8)
+  'islanda-ring-road',
+  'andalusia-4-giorni-coppia',
+  'praga-febbraio-coppia',
+  'slovenia-8-giorni-slow',
+  'cornovaglia-mare-inglese',
+  'lisbona-quartieri-locali',
+  'croazia-isole-dalmazia',
+  'norvegia-fiordi-roadtrip',
+  // Asia (5)
+  'giappone-14-giorni-itinerario',
+  'nord-delle-filippine',
+  'vietnam-nord-slow',
+  'indonesia-sumba-isola',
+  'bali-sud-uluwatu',
+  // Americhe (3)
+  'patagonia-trek-torres',
+  'cuba-strade-musica',
+  'messico-yucatan-cenotes',
+  // Africa (2)
+  'marocco-riad-fes',
+  'sudafrica-kruger-safari',
+  // Oceania (2)
+  'australia-outback-uluru',
+  'nuova-zelanda-south-island',
+]);
+
 const DEMO_PRODUCT_SLUGS = new Set([
   'guida-premium-dolomiti',
   'guida-premium-giappone',
@@ -521,7 +564,10 @@ async function resolveAppStatus(pathname: string) {
       return 404;
     }
 
-    if (slug === DEMO_ARTICLE_SLUG) {
+    // Preview slug noti (DEMO_ARTICLE_SLUG storico + 30 seed in demoArchive):
+    // serviti come SPA con preview body lato client. Tornano 200 sempre
+    // perche' PREVIEW_ARTICLES garantisce il render.
+    if (slug === DEMO_ARTICLE_SLUG || DEMO_PREVIEW_ARTICLE_SLUGS.has(slug)) {
       return 200;
     }
 

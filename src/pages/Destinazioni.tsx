@@ -26,6 +26,7 @@ import Pagination from '../components/Pagination';
 import Section from '../components/Section';
 import SEO from '../components/SEO';
 import { DEMO_DESTINATION_CARD, DEMO_DESTINATION_CARDS } from '../config/demoContent';
+import { DEMO_ARCHIVE_ITEMS, DEMO_ARCHIVE_MAP_MARKERS } from '../config/demoArchive';
 import {
   DESTINATION_GROUPS,
   EXPERIENCE_TYPES,
@@ -300,24 +301,31 @@ export default function Destinazioni() {
       .filter((item) => item.destinationGroup !== 'Altro');
 
     if (mapped.length > 0) return mapped;
-    return demoSettings.showDestinationDemo ? getEditorialSeedItems() : [];
+    if (!demoSettings.showDestinationDemo) return [];
+    // Demo archive: 30 voci editoriali distribuite su tutti i gruppi/tipi
+    // (Italia, Europa, Asia, Americhe, Africa, Oceania), oltre alle 6 seed
+    // cards storiche linkate a /guide. Mostriamo tutto.
+    const seedExtras = getEditorialSeedItems();
+    return [...DEMO_ARCHIVE_ITEMS, ...seedExtras];
   }, [articles, demoSettings.showDestinationDemo]);
 
-  const mapMarkers = useMemo(
-    () =>
-      articles.flatMap((article) =>
-        (article.mapMarkers ?? []).map((marker) => ({
-          id: marker.id,
-          name: marker.name,
-          coordinates: marker.coordinates,
-          title: marker.title || article.title,
-          category: marker.category || article.category,
-          image: article.image,
-          link: `/articolo/${article.slug || article.id}`,
-        }))
-      ),
-    [articles]
-  );
+  const mapMarkers = useMemo(() => {
+    const fromArticles = articles.flatMap((article) =>
+      (article.mapMarkers ?? []).map((marker) => ({
+        id: marker.id,
+        name: marker.name,
+        coordinates: marker.coordinates,
+        title: marker.title || article.title,
+        category: marker.category || article.category,
+        image: article.image,
+        link: `/articolo/${article.slug || article.id}`,
+      }))
+    );
+
+    if (fromArticles.length > 0) return fromArticles;
+    if (!demoSettings.showDestinationDemo) return [];
+    return DEMO_ARCHIVE_MAP_MARKERS;
+  }, [articles, demoSettings.showDestinationDemo]);
 
   const availableRegions = useMemo(() => {
     if (selectedGroup !== 'Italia') return ['Tutti'];

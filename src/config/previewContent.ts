@@ -1,10 +1,77 @@
 import type { ArticleData } from '../components/article';
 import { DEMO_ARTICLE_SLUG } from './demoContent';
+import { DEMO_ARCHIVE_SEEDS } from './demoArchive';
 
-export const PREVIEW_ARTICLES: Record<
-  string,
-  ArticleData & { id: string; slug: string; excerpt: string }
-> = {
+type PreviewArticle = ArticleData & { id: string; slug: string; excerpt: string };
+
+/**
+ * Builder per preview articles a partire dai seed di demoArchive.
+ * Genera body breve coerente con l'header (location, periodo, budget),
+ * mantenendo tutte le sezioni che il componente Articolo si aspetta:
+ * highlights, tips, packingList, mapMarkers, mapCenter, mapZoom.
+ *
+ * Sostituzione hot-swap: quando R+B pubblica l'articolo reale su Firestore
+ * con lo stesso slug, fetchArticleBySlug torna l'articolo Firestore e questa
+ * preview non viene piu' usata.
+ */
+function buildPreviewFromSeed(seed: (typeof DEMO_ARCHIVE_SEEDS)[number]): PreviewArticle {
+  const body = `\nQuesta e' una anteprima editoriale di **${seed.title}** — l'articolo definitivo arriva quando R+B pubblicano il contenuto reale, con foto originali e dettagli verificati sul posto.\n\n## Perche' andarci\n\n${seed.excerpt}\n\n## Cosa sapere prima\n\nPeriodo consigliato: ${seed.period}. Budget orientativo a testa: fascia ${seed.budget}. Durata ottimale: ${seed.duration}.\n\n## Dove ci troviamo\n\n${[seed.country, seed.region, seed.city].filter(Boolean).join(' / ')}. Coordinate area: ${seed.coordinates[1].toFixed(3)}° N, ${seed.coordinates[0].toFixed(3)}° E.\n\n## Cosa aspettarsi dall'articolo definitivo\n\nQuando R+B chiudono il sopralluogo, questa pagina ospitera':\n\n- itinerario giorno-per-giorno con tempi reali\n- indirizzi food selezionati e testati\n- alloggi per fascia di prezzo, con criterio di scelta\n- consigli pratici per evitare gli errori da prima volta\n- mappa interattiva con tappe e deviazioni utili\n\nIntanto, se l'intenzione e' chiara, salva la pagina e iscriviti alla newsletter: ti avvisiamo appena la guida diventa reale.\n`;
+  return {
+    id: seed.slug,
+    slug: seed.slug,
+    title: seed.title,
+    category: seed.category,
+    image: seed.image,
+    excerpt: seed.excerpt,
+    description: seed.excerpt,
+    location: [seed.country, seed.region, seed.city].filter(Boolean).join(', '),
+    period: seed.period,
+    budget: seed.budget,
+    duration: seed.duration,
+    readTime: seed.readTime,
+    date: '15 maggio 2026',
+    author: 'Rodrigo & Betta',
+    continent: seed.continent,
+    content: body,
+    highlights: [
+      `${seed.experienceTypes[0]} come filo conduttore`,
+      `Periodo consigliato: ${seed.period}`,
+      `Durata ottimale: ${seed.duration}`,
+    ],
+    tips: [
+      'Salva la pagina e torna quando R+B avranno aggiornato con foto reali.',
+      'Iscriviti alla newsletter per ricevere la guida appena pubblicata.',
+      'Se hai già esperienza del posto, scrivici: leggiamo tutte le mail.',
+    ],
+    packingList: ['Macchina fotografica', 'Mappe offline', 'Tempo per non correre'],
+    mapMarkers: [
+      {
+        id: seed.slug,
+        name: seed.city || seed.region || seed.country,
+        coordinates: seed.coordinates,
+        title: seed.title,
+        category: seed.experienceTypes[0],
+      },
+    ],
+    mapCenter: seed.coordinates,
+    mapZoom: 6,
+    isMarkdown: true,
+  };
+}
+
+const SEED_PREVIEWS: Record<string, PreviewArticle> = DEMO_ARCHIVE_SEEDS.reduce(
+  (acc, seed) => {
+    // dolomiti-rifugi-design ha gia' una preview manuale piu' ricca sotto;
+    // evita override automatico.
+    if (seed.slug === DEMO_ARTICLE_SLUG) return acc;
+    acc[seed.slug] = buildPreviewFromSeed(seed);
+    return acc;
+  },
+  {} as Record<string, PreviewArticle>
+);
+
+export const PREVIEW_ARTICLES: Record<string, PreviewArticle> = {
+  ...SEED_PREVIEWS,
   [DEMO_ARTICLE_SLUG]: {
     id: DEMO_ARTICLE_SLUG,
     slug: DEMO_ARTICLE_SLUG,

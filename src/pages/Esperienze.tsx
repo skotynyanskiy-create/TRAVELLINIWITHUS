@@ -15,6 +15,7 @@ import Pagination from '../components/Pagination';
 import Section from '../components/Section';
 import SEO from '../components/SEO';
 import { DEMO_DESTINATION_CARD } from '../config/demoContent';
+import { DEMO_ARCHIVE_ITEMS, DEMO_ARCHIVE_SLUGS } from '../config/demoArchive';
 import {
   DESTINATION_GROUPS,
   EXPERIENCE_TYPES,
@@ -232,7 +233,15 @@ export default function Esperienze() {
       .filter((item) => item.experienceTypes.length > 0);
 
     if (mapped.length > 0) return mapped;
-    return demoSettings.showEditorialDemo ? [getDemoArchiveItem()] : [];
+    // Demo archive: 30 voci editoriali distribuite su tutti i 10 experience
+    // types e 6 destination groups. Sempre attivo come fallback editoriale
+    // quando Firestore e' vuoto, indipendentemente da showEditorialDemo
+    // (quel flag governa solo il rendering del singolo articolo Dolomiti
+    // come "demo dichiarato" — non l'archivio editoriale di fallback).
+    return [
+      ...DEMO_ARCHIVE_ITEMS,
+      ...(demoSettings.showEditorialDemo ? [getDemoArchiveItem()] : []),
+    ];
   }, [articles, demoSettings.showEditorialDemo]);
 
   const availableGroups = useMemo(() => {
@@ -287,7 +296,10 @@ export default function Esperienze() {
     selectedGroup !== 'Tutti' ||
     selectedRegion !== 'Tutti' ||
     selectedCity !== 'Tutti';
-  const usingDemo = archiveItems.length === 1 && archiveItems[0]?.id === DEMO_DESTINATION_CARD.id;
+  // "Demo" = una qualsiasi voce dal seed editoriale (DEMO_DESTINATION_CARD
+  // o archivio demo 30 voci preview). Mostra il badge "Preview" sulle card.
+  const demoIds = new Set<string>([DEMO_DESTINATION_CARD.id, ...DEMO_ARCHIVE_SLUGS]);
+  const usingDemo = archiveItems.some((item) => demoIds.has(item.id));
 
   const updateSearch = (updates: Record<string, string | null>) => {
     setCurrentPage(1);
@@ -533,10 +545,7 @@ export default function Esperienze() {
                     exit={{ opacity: 0, scale: 0.96 }}
                     transition={{ duration: 0.35 }}
                   >
-                    <StoryCard
-                      item={item}
-                      isDemo={usingDemo && item.id === DEMO_DESTINATION_CARD.id}
-                    />
+                    <StoryCard item={item} isDemo={usingDemo && demoIds.has(item.id)} />
                   </motion.div>
                 ))}
               </AnimatePresence>
