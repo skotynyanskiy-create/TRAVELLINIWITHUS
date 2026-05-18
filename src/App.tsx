@@ -27,8 +27,8 @@ const queryClient = new QueryClient({
 
 // Lazy load pages for better performance
 const Home = lazy(() => import('./pages/Home'));
-const Destinazioni = lazy(() => import('./pages/Destinazioni'));
-const Esperienze = lazy(() => import('./pages/Esperienze'));
+const Esplora = lazy(() => import('./pages/Esplora'));
+const Destinazione = lazy(() => import('./pages/Destinazione'));
 const ChiSiamo = lazy(() => import('./pages/ChiSiamo'));
 const Collaborazioni = lazy(() => import('./pages/Collaborazioni'));
 const Contatti = lazy(() => import('./pages/Contatti'));
@@ -46,7 +46,6 @@ const Risorse = lazy(() => import('./pages/Risorse'));
 const Shop = lazy(() => import('./pages/Shop'));
 const ProductPage = lazy(() => import('./pages/ProductPage'));
 const Club = lazy(() => import('./pages/Club'));
-const Guide = lazy(() => import('./pages/Guide'));
 const Mappa = lazy(() => import('./pages/Mappa'));
 const MieiAcquisti = lazy(() => import('./pages/MieiAcquisti'));
 const LeadMagnet = lazy(() => import('./pages/LeadMagnet'));
@@ -98,9 +97,18 @@ export default function App() {
 
                     <Route path="/" element={<Layout />}>
                       <Route index element={<Home />} />
-                      <Route path="destinazioni" element={<Destinazioni />} />
-                      <Route path="esperienze" element={<Esperienze />} />
-                      <Route path="guide" element={<Guide />} />
+                      <Route path="esplora" element={<Esplora />} />
+                      <Route path="destinazione/:regionSlug" element={<Destinazione />} />
+                      {/* Legacy routes consolidate in /esplora (2026-05-15).
+                          I param sono compatibili: parseDiscoveryFilters
+                          legge group/area/region, experience, cat, search
+                          come alias dei canonical zone/type/format/q. */}
+                      <Route path="destinazioni" element={<Navigate to="/esplora" replace />} />
+                      <Route path="esperienze" element={<Navigate to="/esplora" replace />} />
+                      <Route
+                        path="guide"
+                        element={<Navigate to="/esplora?format=guida" replace />}
+                      />
                       <Route path="chi-siamo" element={<ChiSiamo />} />
                       <Route path="collaborazioni" element={<Collaborazioni />} />
                       <Route path="media-kit" element={<MediaKit />} />

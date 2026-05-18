@@ -32,6 +32,34 @@ const staticRoutes = [
 // staticRoutes come hub canonici.
 const discoveryRoutes = [];
 
+// Landing regione SEO (mantenuto in sync con src/lib/regions.ts → REGIONS_DATA
+// e server.ts → REGION_LANDING_SLUGS). Priority 0.8 perche' sono entry-point
+// per query come "viaggio in puglia", "cosa vedere in sicilia".
+const regionLandingSlugs = [
+  'puglia',
+  'sicilia',
+  'sardegna',
+  'toscana',
+  'campania',
+  'trentino-alto-adige',
+];
+
+// Slug del pillar article corrente. Riceve priority 0.9 nella sitemap.
+const PILLAR_ARTICLE_SLUG = 'salento-agosto-coppia';
+
+function extractDemoArticleSlugs() {
+  const seedFile = path.join(process.cwd(), 'src', 'config', 'demoArchive.ts');
+  if (!fs.existsSync(seedFile)) return [];
+  const source = fs.readFileSync(seedFile, 'utf8');
+  const slugs = [];
+  const regex = /slug:\s*['"]([a-z0-9-]+)['"]/g;
+  let match;
+  while ((match = regex.exec(source)) !== null) {
+    slugs.push(match[1]);
+  }
+  return slugs;
+}
+
 // Filter routes (?zone=, ?type=) sono intenzionalmente esclusi dalla sitemap:
 // Google li tratta come duplicate content del canonical `/esplora`. Quando
 // avremo pagine fisiche `/esplora/italia` o `/esplora/posti-particolari`,
@@ -124,6 +152,35 @@ async function buildSitemap() {
     )
     .join('');
 
+  const regionEntries = regionLandingSlugs
+    .map((slug) =>
+      urlEntry(`/destinazione/${slug}`, {
+        changefreq: 'weekly',
+        priority: '0.8',
+        lastmod: now,
+      })
+    )
+    .join('');
+
+  // Slug articoli demo letti staticamente da demoArchive.ts. Coesistono con i
+  // dynamic articleRoutes (Firestore): se Firestore pubblica un articolo con
+  // lo stesso slug, in sitemap apparira' due volte ma Google deduplica per
+  // <loc>. Quando R+B passa al CMS live, rimuovere questo blocco.
+  const demoArticleSlugs = extractDemoArticleSlugs();
+  const dynamicArticleSlugs = new Set(
+    (dynamic?.articleRoutes || []).map(({ route }) => route.replace('/articolo/', ''))
+  );
+  const demoArticleEntries = demoArticleSlugs
+    .filter((slug) => !dynamicArticleSlugs.has(slug))
+    .map((slug) =>
+      urlEntry(`/articolo/${slug}`, {
+        changefreq: 'monthly',
+        priority: slug === PILLAR_ARTICLE_SLUG ? '0.9' : '0.7',
+        lastmod: now,
+      })
+    )
+    .join('');
+
   const filterEntries = filterRoutes
     .map((route) => urlEntry(route, { changefreq: 'weekly', priority: '0.6', lastmod: now }))
     .join('');
@@ -142,7 +199,7 @@ async function buildSitemap() {
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  ${staticEntries}${filterEntries}${articleEntries}${productEntries}
+  ${staticEntries}${regionEntries}${demoArticleEntries}${filterEntries}${articleEntries}${productEntries}
 </urlset>
 `;
 
@@ -153,8 +210,9 @@ async function buildSitemap() {
 
   fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), sitemap);
   const dynamicCount = (dynamic?.articleRoutes.length || 0) + (dynamic?.productRoutes.length || 0);
+  const demoArticleCount = demoArticleSlugs.filter((s) => !dynamicArticleSlugs.has(s)).length;
   console.log(
-    `Sitemap generated. Static: ${staticRoutes.length + discoveryRoutes.length}, filters: ${filterRoutes.length}, dynamic: ${dynamicCount}.`
+    `Sitemap generated. Static: ${staticRoutes.length + discoveryRoutes.length}, regions: ${regionLandingSlugs.length}, demo articles: ${demoArticleCount}, filters: ${filterRoutes.length}, dynamic: ${dynamicCount}.`
   );
 
   // robots.txt: keep public routes crawlable (incl. /shop, /vieni-con-noi,

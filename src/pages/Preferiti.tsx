@@ -15,6 +15,7 @@ import ArticleSkeleton from '../components/ArticleSkeleton';
 import { fetchArticles } from '../services/firebaseService';
 import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_ARTICLE_PREVIEW } from '../config/demoContent';
+import { PREVIEW_ARTICLES } from '../config/previewContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 
 interface FavoriteArticle {
@@ -33,11 +34,30 @@ export default function Preferiti() {
   const demoSettings = demoContent ?? siteContentDefaults.demo;
 
   const { data: availableArticles = [], isLoading } = useQuery<FavoriteArticle[]>({
-    queryKey: ['articles', 'favorites-page', demoSettings.showEditorialDemo],
+    queryKey: ['articles', 'favorites-page'],
     queryFn: async () => {
-      const fetchedArticles = await fetchArticles();
-      if (fetchedArticles.length > 0) {
-        return fetchedArticles as FavoriteArticle[];
+      const fetchedArticles = (await fetchArticles()) as FavoriteArticle[];
+      const firestoreSlugs = new Set(fetchedArticles.map((a) => a.slug));
+
+      // Allinea con Articolo.tsx: la pagina articolo risolve gli slug SEMPRE
+      // prima da PREVIEW_ARTICLES poi da Firestore, indipendentemente dal
+      // flag showEditorialDemo (che controlla solo le sezioni demo pubbliche,
+      // non il rendering personale dei preferiti).
+      const previewArticles: FavoriteArticle[] = Object.values(PREVIEW_ARTICLES)
+        .filter((preview) => !firestoreSlugs.has(preview.slug))
+        .map((preview) => ({
+          id: preview.id,
+          slug: preview.slug,
+          title: preview.title,
+          category: preview.category || 'Guide',
+          image: preview.image,
+          excerpt: preview.excerpt,
+        }));
+
+      const combined = [...fetchedArticles, ...previewArticles];
+
+      if (combined.length > 0) {
+        return combined;
       }
 
       return demoSettings.showEditorialDemo ? ([DEMO_ARTICLE_PREVIEW] as FavoriteArticle[]) : [];
@@ -78,8 +98,8 @@ export default function Preferiti() {
             I tuoi <span className="italic text-black/60">preferiti</span>
           </h1>
           <p className="text-lg font-light leading-relaxed text-black/70">
-            Qui ritrovi le guide e i contenuti che hai deciso di salvare, così puoi tornarci quando vuoi senza perderli
-            nel flusso del sito.
+            Qui ritrovi le guide e i contenuti che hai deciso di salvare, così puoi tornarci quando
+            vuoi senza perderli nel flusso del sito.
           </p>
         </div>
 
@@ -92,24 +112,40 @@ export default function Preferiti() {
         ) : savedArticles.length === 0 ? (
           <div className="rounded-[var(--radius-xl)] border border-black/5 bg-[var(--color-sand)] py-20 text-center shadow-sm">
             <Heart size={48} className="mx-auto mb-4 text-[var(--color-ink)]/20" />
-            <span className="font-script text-2xl text-[var(--color-accent)]/50 mb-2 block">Inizia a esplorare</span>
+            <span className="font-script text-2xl text-[var(--color-accent)]/50 mb-2 block">
+              Inizia a esplorare
+            </span>
             <h3 className="mb-4 text-2xl font-serif">
-              {favorites.length === 0 ? 'Nessun contenuto salvato' : 'I tuoi preferiti non sono disponibili qui'}
+              {favorites.length === 0
+                ? 'Nessun contenuto salvato'
+                : 'I tuoi preferiti non sono disponibili qui'}
             </h3>
             <p className="mx-auto mb-8 max-w-xl text-black/60">
               {favorites.length === 0
                 ? 'Non hai ancora aggiunto nessun contenuto ai preferiti. Esplora le guide e salva quello che vuoi ritrovare più facilmente.'
                 : 'Hai contenuti salvati, ma non risultano tra quelli pubblici disponibili in questo momento. Potrebbero essere cambiati, rimossi o non ancora presenti nel catalogo attuale.'}
             </p>
-            <Button to="/destinazioni" variant="primary" size="lg">
-              Esplora i contenuti
+            <Button to="/esplora" variant="primary" size="lg">
+              Apri Esplora
             </Button>
             <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm">
-              <Link to="/destinazioni" className="text-[var(--color-accent)] hover:underline">Destinazioni</Link>
+              <Link
+                to="/esplora?zone=Italia"
+                className="text-[var(--color-accent)] hover:underline"
+              >
+                Italia
+              </Link>
               <span className="text-[var(--color-ink)]/20">·</span>
-              <Link to="/esperienze" className="text-[var(--color-accent)] hover:underline">Esperienze</Link>
+              <Link
+                to="/esplora?type=posti-particolari"
+                className="text-[var(--color-accent)] hover:underline"
+              >
+                Posti particolari
+              </Link>
               <span className="text-[var(--color-ink)]/20">·</span>
-              <Link to="/guide" className="text-[var(--color-accent)] hover:underline">Guide</Link>
+              <Link to="/mappa" className="text-[var(--color-accent)] hover:underline">
+                Mappa
+              </Link>
             </div>
           </div>
         ) : (
@@ -134,13 +170,21 @@ export default function Preferiti() {
                   <button
                     onClick={(e) => {
                       e.preventDefault();
-                      setPulseKeys((prev) => ({ ...prev, [article.slug]: (prev[article.slug] || 0) + 1 }));
+                      setPulseKeys((prev) => ({
+                        ...prev,
+                        [article.slug]: (prev[article.slug] || 0) + 1,
+                      }));
                       toggleFavorite(article.slug);
                     }}
                     className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-[var(--color-accent)] shadow-sm transition-colors hover:bg-[var(--color-accent)] hover:text-white"
                     aria-label={`Rimuovi ${article.title} dai preferiti`}
                   >
-                    <motion.span key={pulseKeys[article.slug] || 0} variants={heartPulse} animate="beat" className="flex items-center justify-center">
+                    <motion.span
+                      key={pulseKeys[article.slug] || 0}
+                      variants={heartPulse}
+                      animate="beat"
+                      className="flex items-center justify-center"
+                    >
                       <Heart size={18} className="fill-current" />
                     </motion.span>
                   </button>
@@ -162,7 +206,8 @@ export default function Preferiti() {
                         {article.title}
                       </h3>
                       <p className="mb-5 line-clamp-2 text-sm font-normal leading-relaxed text-black/70">
-                        {article.excerpt || 'Un contenuto salvato per ritrovarlo facilmente quando vorrai tornarci.'}
+                        {article.excerpt ||
+                          'Un contenuto salvato per ritrovarlo facilmente quando vorrai tornarci.'}
                       </p>
                       <span className="flex items-center gap-2 text-sm font-medium uppercase tracking-widest text-black/60 transition-colors group-hover:text-black">
                         Apri contenuto <ArrowRight size={14} />

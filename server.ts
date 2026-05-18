@@ -212,11 +212,25 @@ const DEMO_PRODUCT_SLUGS = new Set([
   'weekend-trentino-spa',
 ]);
 
+// Slug regione validi per /destinazione/:regionSlug (mantenuto in sync con
+// src/lib/regions.ts → REGIONS_DATA). Senza questo set, resolveAppStatus
+// ritornava 404 ai bot anche se la SPA renderizzava la pagina correttamente.
+const REGION_LANDING_SLUGS = new Set([
+  'puglia',
+  'sicilia',
+  'sardegna',
+  'toscana',
+  'campania',
+  'trentino-alto-adige',
+]);
+
 const STATIC_APP_ROUTES = new Set([
   '/',
   '/vieni-con-noi',
   '/lead-magnet',
   '/iscrivi',
+  '/esplora',
+  // Le 3 legacy restano come redirect client-side (App.tsx fa <Navigate to="/esplora">)
   '/destinazioni',
   '/esperienze',
   '/guide',
@@ -604,6 +618,14 @@ async function resolveAppStatus(pathname: string) {
   // Demo content types (Sprint 4): client renders NotFound if slug missing.
   if (pathname.startsWith('/itinerari/') || pathname.startsWith('/guide/')) {
     return 200;
+  }
+
+  if (pathname.startsWith('/destinazione/')) {
+    const slug = pathname.split('/').pop();
+    if (!slug) {
+      return 404;
+    }
+    return REGION_LANDING_SLUGS.has(slug) ? 200 : 404;
   }
 
   return 404;
@@ -1715,6 +1737,68 @@ async function startServer() {
     }
   });
 
+  /*
+   * /api/ai-companion — AI Travel Companion "Chiedi a R+B" (Marathon FASE 2.A)
+   *
+   * Stato attuale: STUB. Endpoint risponde 503 finche ANTHROPIC_API_KEY +
+   * OPENAI_API_KEY + vector store non sono configurati.
+   *
+   * Quando configurato:
+   *   1. Embedding query con OpenAI text-embedding-3-small
+   *   2. Cosine similarity contro Firestore vector store (collezione `ai_corpus`)
+   *   3. Top-K chunks → context window Claude Haiku
+   *   4. System prompt severo (vedi src/config/aiCompanion.ts)
+   *   5. Refusal patterns deterministic prima del LLM call
+   *   6. Cost cap tracking in `ai_companion_usage/{YYYY-MM}`
+   *   7. Citation enforcement nel response shape
+   *
+   * Rate limit: 100/15min generico copre. Per ulteriore protezione anti-abuse
+   * aggiungere cap per-session via cookie quando si attiva.
+   */
+  app.post('/api/ai-companion', async (req, res) => {
+    const { query } = req.body as { query?: string; history?: unknown };
+
+    if (!query || typeof query !== 'string' || !query.trim()) {
+      res.status(400).json({ error: 'Query mancante.' });
+      return;
+    }
+    if (query.length > 500) {
+      res.status(400).json({ error: 'Query troppo lunga (max 500 caratteri).' });
+      return;
+    }
+
+    const hasAnthropicKey = Boolean(process.env.ANTHROPIC_API_KEY);
+    const hasOpenAiKey = Boolean(process.env.OPENAI_API_KEY);
+    const corpusReady = process.env.AI_COMPANION_CORPUS_READY === 'true';
+
+    if (!hasAnthropicKey || !hasOpenAiKey || !corpusReady) {
+      // Mode 'disabled' — client cade su keyword matching demo.
+      res.status(503).json({
+        error: 'ai-companion-not-configured',
+        message: 'Il companion AI non e ancora attivo. Stiamo lavorando per accendere il backend.',
+        mode: 'disabled',
+      });
+      return;
+    }
+
+    // TODO Marathon FASE 2.A implementazione completa:
+    //   1. const embedding = await openai.embeddings.create({ ... });
+    //   2. const chunks = await vectorStore.query({ vector: embedding, topK: AI_COMPANION_TOP_K });
+    //   3. const context = chunks.map(c => `[${c.title}](${c.url})\n${c.text}`).join('\n---\n');
+    //   4. const response = await anthropic.messages.create({
+    //        model: AI_COMPANION_MODEL,
+    //        max_tokens: AI_COMPANION_MAX_OUTPUT_TOKENS,
+    //        system: AI_COMPANION_SYSTEM_PROMPT,
+    //        messages: [{ role: 'user', content: `Contesto:\n${context}\n\nDomanda: ${query}` }],
+    //      });
+    //   5. await incrementCostTracker({ inputTokens, outputTokens });
+    //   6. res.json({ reply: response.content[0].text, sources: chunks.map(c => ({ title, url })) });
+    res.status(503).json({
+      error: 'ai-companion-implementation-pending',
+      mode: 'maintenance',
+    });
+  });
+
   app.get('/sitemap.xml', async (req, res) => {
     const origin = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
     const articles = await fetchAllArticles();
@@ -1722,16 +1806,17 @@ async function startServer() {
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
     xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
 
+    // Consolidamento Esplora 2026-05-15: /destinazioni, /esperienze, /guide
+    // ora redirigono a /esplora — escluse dalla sitemap canonical.
     const staticRoutes = [
       '',
       '/vieni-con-noi',
-      '/destinazioni',
-      '/esperienze',
-      '/guide',
+      '/esplora',
+      '/mappa',
+      '/itinerari',
       '/risorse',
       '/shop',
       '/club',
-      '/mappa',
       '/collaborazioni',
       '/media-kit',
       '/contatti',
