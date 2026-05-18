@@ -12,13 +12,21 @@ test.describe('Homepage Navigation', () => {
     await expect(heroHeading).toBeVisible();
   });
 
-  test('should navigate to Destinazioni page', async ({ page }) => {
+  test('legacy /destinazioni redirects to /esplora', async ({ page }) => {
     await page.goto('/destinazioni');
 
-    // Check if the URL is stable for the direct public route
-    await expect(page).toHaveURL(/.*\/destinazioni/);
+    // Consolidamento 2026-05-15: legacy redirects via <Navigate replace> client-side
+    await expect(page).toHaveURL(/.*\/esplora/);
 
-    // Check if the page exposes a single visible page heading
+    // Esplora hero h1
+    const heading = page.locator('h1').first();
+    await expect(heading).toBeVisible();
+  });
+
+  test('should load Esplora page directly', async ({ page }) => {
+    await page.goto('/esplora');
+
+    await expect(page).toHaveURL(/.*\/esplora/);
     const heading = page.locator('h1').first();
     await expect(heading).toBeVisible();
   });

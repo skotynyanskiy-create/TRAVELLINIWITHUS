@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { type KeyboardEvent, useState } from 'react';
 import { ComposableMap, Geographies, Geography, Marker, ZoomableGroup } from 'react-simple-maps';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
@@ -6,6 +6,7 @@ import { MapPin, ArrowRight, X, Globe } from 'lucide-react';
 import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_ARTICLE_MARKER } from '../config/demoContent';
 import { useSiteContent } from '../hooks/useSiteContent';
+import { trackEvent } from '../services/analytics';
 
 const geoUrl = 'https://unpkg.com/world-atlas@2.0.2/countries-110m.json';
 
@@ -24,6 +25,12 @@ interface InteractiveMapProps {
   center?: [number, number];
   zoom?: number;
   className?: string;
+  /**
+   * Quando false (default true), i poligoni paese non sono clickable/focusable.
+   * Usato nel contesto articolo dove c'è un singolo marker focalizzato e i 160
+   * country button del world atlas sarebbero solo rumore tab/aria.
+   */
+  interactiveCountries?: boolean;
 }
 
 export default function InteractiveMap({
@@ -31,6 +38,7 @@ export default function InteractiveMap({
   center = [0, 30],
   zoom = 1,
   className = 'w-full h-[500px] md:h-[600px]',
+  interactiveCountries = true,
 }: InteractiveMapProps) {
   const { data: demoContent } = useSiteContent('demo');
   const demoSettings = demoContent ?? siteContentDefaults.demo;
@@ -45,6 +53,26 @@ export default function InteractiveMap({
       name: geo.properties.name,
       id: geo.id || geo.properties.name,
     });
+    trackEvent('map_country_click', {
+      source_page: window.location.pathname,
+      country: geo.properties.name,
+    });
+  };
+
+  const handleMarkerClick = (marker: MapMarker) => {
+    setActiveCountry(null);
+    setActiveMarker(marker);
+    trackEvent('map_marker_click', {
+      source_page: window.location.pathname,
+      marker_id: marker.id,
+      marker_name: marker.name,
+    });
+  };
+
+  const handleActivationKey = (event: KeyboardEvent<SVGElement>, callback: () => void) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    callback();
   };
 
   const closeCards = () => {
@@ -54,13 +82,6 @@ export default function InteractiveMap({
 
   return (
     <div className="relative w-full overflow-hidden rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-sand)] shadow-inner">
-      <div className="pointer-events-none absolute left-6 top-6 z-10">
-        <h3 className="text-2xl font-serif text-black/80">Esplora la mappa</h3>
-        <p className="text-sm font-normal text-black/65">
-          Clicca sui pin o sulle nazioni per orientarti tra i contenuti.
-        </p>
-      </div>
-
       <ComposableMap
         projection="geoMercator"
         projectionConfig={{
@@ -75,23 +96,35 @@ export default function InteractiveMap({
               geographies.map((geo) => {
                 const isCountryActive = activeCountry?.name === geo.properties.name;
 
+                const countryProps = interactiveCountries
+                  ? {
+                      role: 'button' as const,
+                      tabIndex: 0,
+                      'aria-label': `Apri destinazioni in ${geo.properties.name}`,
+                      onClick: () => handleCountryClick(geo),
+                      onKeyDown: (event: KeyboardEvent<SVGElement>) =>
+                        handleActivationKey(event, () => handleCountryClick(geo)),
+                    }
+                  : { 'aria-hidden': true as const };
                 return (
                   <Geography
                     key={geo.rsmKey}
                     geography={geo}
-                    onClick={() => handleCountryClick(geo)}
+                    {...countryProps}
                     fill={isCountryActive ? 'var(--color-accent)' : '#e5e0d8'}
                     stroke={isCountryActive ? '#fff' : 'var(--color-accent)'}
                     strokeWidth={isCountryActive ? 1 : 0.5}
                     strokeOpacity={isCountryActive ? 1 : 0.3}
                     style={{
                       default: { outline: 'none', transition: 'all 250ms' },
-                      hover: {
-                        fill: isCountryActive ? 'var(--color-accent)' : '#dcd5cb',
-                        outline: 'none',
-                        transition: 'all 250ms',
-                        cursor: 'pointer',
-                      },
+                      hover: interactiveCountries
+                        ? {
+                            fill: isCountryActive ? 'var(--color-accent)' : '#dcd5cb',
+                            outline: 'none',
+                            transition: 'all 250ms',
+                            cursor: 'pointer',
+                          }
+                        : { outline: 'none' },
                       pressed: { outline: 'none' },
                     }}
                   />
@@ -107,13 +140,17 @@ export default function InteractiveMap({
               <Marker
                 key={marker.id}
                 coordinates={marker.coordinates}
-                onClick={() => {
-                  setActiveCountry(null);
-                  setActiveMarker(marker);
-                }}
                 className="cursor-pointer outline-none"
               >
-                <g transform="translate(-12, -24)">
+                <g
+                  transform="translate(-12, -24)"
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Apri ${marker.title || marker.name} sulla mappa`}
+                  onClick={() => handleMarkerClick(marker)}
+                  onKeyDown={(event) => handleActivationKey(event, () => handleMarkerClick(marker))}
+                  className="outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+                >
                   {isActive && (
                     <motion.ellipse
                       cx="12"
@@ -171,6 +208,7 @@ export default function InteractiveMap({
           >
             <button
               onClick={closeCards}
+              aria-label="Chiudi scheda mappa"
               className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/20 text-white backdrop-blur-md transition-colors hover:bg-black/40"
             >
               <X size={16} />
@@ -200,6 +238,13 @@ export default function InteractiveMap({
               {activeMarker.link && (
                 <Link
                   to={activeMarker.link}
+                  onClick={() =>
+                    trackEvent('map_article_click', {
+                      source_page: window.location.pathname,
+                      marker_id: activeMarker.id,
+                      marker_name: activeMarker.name,
+                    })
+                  }
                   className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)] transition-colors hover:text-black"
                 >
                   Leggi articolo <ArrowRight size={14} />
@@ -220,6 +265,7 @@ export default function InteractiveMap({
           >
             <button
               onClick={closeCards}
+              aria-label="Chiudi scheda mappa"
               className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/5 text-black/50 transition-colors hover:bg-black/10"
             >
               <X size={16} />
@@ -233,13 +279,14 @@ export default function InteractiveMap({
               </div>
               <h4 className="mb-2 text-2xl font-serif leading-tight">{activeCountry.name}</h4>
               <p className="mb-6 text-sm font-normal leading-relaxed text-black/70">
-                Scopri tutte le nostre guide, consigli e itinerari dedicati a questa destinazione.
+                Usa il finder per incrociare luogo, esperienza, periodo e budget prima di aprire
+                l'archivio completo.
               </p>
               <Link
-                to="/destinazioni"
+                to="/esplora"
                 className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-black py-3 text-sm font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
               >
-                Esplora <ArrowRight size={16} />
+                Parti da Esplora <ArrowRight size={16} />
               </Link>
             </div>
           </motion.div>

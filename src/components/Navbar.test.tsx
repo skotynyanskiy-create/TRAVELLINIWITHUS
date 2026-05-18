@@ -8,10 +8,13 @@ describe('Navbar Component', () => {
     expect(getByText(/Travellini/i)).toBeInTheDocument();
   });
 
-  it('renders navigation links', () => {
+  it('renders navigation links (post-Esplora consolidation 2026-05-15)', () => {
     const { getAllByText } = render(<Navbar />);
-    expect(getAllByText(/Destinazioni/i).length).toBeGreaterThan(0);
-    expect(getAllByText(/Esperienze/i).length).toBeGreaterThan(0);
-    expect(getAllByText(/Guide/i).length).toBeGreaterThan(0);
+    expect(getAllByText(/Esplora/i).length).toBeGreaterThan(0);
+    // Default label 'Strumenti' (siteContent.ts:436) per la rotta /risorse;
+    // editabile da admin via SiteContentEditor.
+    expect(getAllByText(/Strumenti/i).length).toBeGreaterThan(0);
+    expect(getAllByText(/Collaborazioni/i).length).toBeGreaterThan(0);
+    expect(getAllByText(/Chi siamo/i).length).toBeGreaterThan(0);
   });
 });

@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import SEO from '../components/SEO';
+import { SITE_URL } from '../config/site';
 
 const MapboxWorldMap = lazy(() => import('../components/map/MapboxWorldMap'));
 
@@ -38,6 +39,10 @@ export default function Mappa() {
       <SEO
         title="Mappa dei posti che abbiamo visitato"
         description="La mappa interattiva 3D di Travelliniwithus: destinazioni verificate sul posto, filtrate per regione, esperienza e periodo."
+        breadcrumbs={[
+          { name: 'Home', url: SITE_URL },
+          { name: 'Mappa', url: `${SITE_URL}/mappa` },
+        ]}
       />
 
       {shouldLoadMap ? (

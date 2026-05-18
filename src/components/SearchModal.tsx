@@ -8,6 +8,7 @@ import Skeleton from './Skeleton';
 import { fetchArticles } from '../services/firebaseService';
 import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_ARTICLE_PREVIEW, DEMO_ARTICLE_PATH } from '../config/demoContent';
+import { PREVIEW_ARTICLES } from '../config/previewContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { trackEvent } from '../services/analytics';
 import { TYPES, ZONES, slugifyType } from '../config/contentTaxonomy';
@@ -192,13 +193,16 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
         const articles = await fetchArticles();
 
         const fetchedData: SearchResult[] = [...STATIC_PAGE_RESULTS, ...DISCOVERY_RESULTS];
+        const seenSlugs = new Set<string>();
 
         articles.forEach((data) => {
+          const slug = data.slug || data.id;
+          seenSlugs.add(slug);
           fetchedData.push({
             id: data.id,
             title: data.title,
             category: data.category || 'Articolo',
-            link: `/articolo/${data.slug || data.id}`,
+            link: `/articolo/${slug}`,
             icon:
               data.category === 'Destinazioni'
                 ? MapPin
@@ -208,14 +212,51 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
           });
         });
 
-        if (articles.length === 0 && demoSettings.showEditorialDemo) {
-          fetchedData.push({
-            id: DEMO_ARTICLE_PREVIEW.id,
-            title: DEMO_ARTICLE_PREVIEW.title,
-            category: DEMO_ARTICLE_PREVIEW.category,
-            link: DEMO_ARTICLE_PATH,
-            icon: BookOpen,
+        // Include preview articles (demo seeds + manual previews) cosi' la
+        // ricerca trova "puglia", "sicilia", "dolomiti" ecc. anche quando
+        // Firestore e' vuoto o non contiene ancora quegli articoli. Articolo.tsx
+        // gia' risolve gli stessi slug via PREVIEW_ARTICLES — search resta allineato.
+        if (demoSettings.showEditorialDemo) {
+          Object.values(PREVIEW_ARTICLES).forEach((preview) => {
+            if (seenSlugs.has(preview.slug)) return;
+            const keywords = [
+              preview.location,
+              preview.continent,
+              preview.category,
+              preview.excerpt,
+            ]
+              .filter((value): value is string => typeof value === 'string' && value.length > 0)
+              .join(' ');
+            fetchedData.push({
+              id: `preview-${preview.slug}`,
+              title: preview.title,
+              category: preview.category || 'Articolo',
+              link: `/articolo/${preview.slug}`,
+              icon:
+                preview.category === 'Destinazioni'
+                  ? MapPin
+                  : preview.category === 'Esperienze'
+                    ? Compass
+                    : BookOpen,
+              keywords,
+            });
           });
+        }
+
+        if (articles.length === 0 && demoSettings.showEditorialDemo) {
+          const demoSlug = DEMO_ARTICLE_PREVIEW.slug;
+          const alreadyIndexed = fetchedData.some(
+            (entry) => entry.link === DEMO_ARTICLE_PATH || entry.id === `preview-${demoSlug}`
+          );
+          if (!alreadyIndexed) {
+            fetchedData.push({
+              id: DEMO_ARTICLE_PREVIEW.id,
+              title: DEMO_ARTICLE_PREVIEW.title,
+              category: DEMO_ARTICLE_PREVIEW.category,
+              link: DEMO_ARTICLE_PATH,
+              icon: BookOpen,
+            });
+          }
         }
 
         setAllData(fetchedData);

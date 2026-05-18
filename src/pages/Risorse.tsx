@@ -164,7 +164,7 @@ const resourcePrinciples = [
   {
     icon: <Compass className="text-[var(--color-accent)]" size={20} />,
     title: 'Metodo prima del codice',
-    text: 'Il punto non e lo sconto: e capire quando uno strumento ha davvero senso.',
+    text: 'Il punto non è lo sconto: è capire quando uno strumento ha davvero senso.',
   },
   {
     icon: <BadgePercent className="text-[var(--color-accent)]" size={20} />,
@@ -246,7 +246,7 @@ export default function Risorse() {
               Strumenti scelti <span className="italic text-black/55">con criterio</span>
             </h1>
             <p className="mt-8 max-w-2xl text-lg leading-relaxed text-black/68">
-              Questa non e una pagina di link a caso. E una selezione editoriale di strumenti che
+              Questa non è una pagina di link a caso. È una selezione editoriale di strumenti che
               usiamo, valutiamo o riteniamo coerenti con il nostro modo di viaggiare: utili,
               dichiarati e mai coupon-first.
             </p>

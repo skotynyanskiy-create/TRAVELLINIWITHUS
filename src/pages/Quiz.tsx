@@ -8,119 +8,57 @@ import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import Section from '../components/Section';
 import Newsletter from '../components/Newsletter';
-import { DEMO_ITINERARIES } from '../config/demoItineraries';
+import {
+  ARCHETYPES,
+  QUIZ_QUESTIONS,
+  computeArchetype,
+  type ArchetypeId,
+} from '../config/quizArchetypes';
 import { SITE_URL } from '../config/site';
 import { trackEvent } from '../services/analytics';
 
-type DurationAnswer = 'weekend' | 'week' | 'long';
-type StyleAnswer = 'slow' | 'romantic' | 'outdoor' | 'design';
-type BudgetAnswer = 'lean' | 'medium' | 'premium';
-
-interface Answers {
-  duration?: DurationAnswer;
-  style?: StyleAnswer;
-  budget?: BudgetAnswer;
-}
-
-const STEPS = [
-  {
-    key: 'duration',
-    question: 'Quanto tempo hai per il prossimo viaggio?',
-    helper: 'Niente bugie a te stesso: meglio un viaggio più corto ma vero.',
-    options: [
-      { id: 'weekend', label: 'Un weekend lungo', sub: '2-4 giorni' },
-      { id: 'week', label: 'Una settimana', sub: '5-7 giorni' },
-      { id: 'long', label: 'Slow trip', sub: '8 giorni o più' },
-    ],
-  },
-  {
-    key: 'style',
-    question: 'Che ritmo cerchi?',
-    helper: 'Una sola risposta: prova a essere onesto su come ti riposi davvero.',
-    options: [
-      { id: 'slow', label: 'Slow & culturale', sub: 'Camminare, leggere, mangiare bene' },
-      { id: 'romantic', label: 'Romantico in coppia', sub: 'Boutique, tramonti, ritmi morbidi' },
-      { id: 'outdoor', label: 'Avventura outdoor', sub: 'Montagna, trek, lago' },
-      {
-        id: 'design',
-        label: 'Boutique & design',
-        sub: 'Hotel curati, architettura, food d autore',
-      },
-    ],
-  },
-  {
-    key: 'budget',
-    question: 'Budget indicativo a testa?',
-    helper: 'Voli e alloggi inclusi. Restiamo realisti, non aspirazionali.',
-    options: [
-      { id: 'lean', label: 'Sotto i 600 EUR', sub: 'Lean ma curato' },
-      { id: 'medium', label: '600 - 1500 EUR', sub: 'Equilibrio classico' },
-      { id: 'premium', label: 'Sopra i 1500 EUR', sub: 'Premium senza essere luxury' },
-    ],
-  },
-] as const;
-
-function durationMatchesAnswer(itineraryDays: number, answer: DurationAnswer): boolean {
-  if (answer === 'weekend') return itineraryDays <= 4;
-  if (answer === 'week') return itineraryDays >= 4 && itineraryDays <= 7;
-  return itineraryDays >= 8;
-}
-
-function scoreItinerary(itinerary: (typeof DEMO_ITINERARIES)[number], answers: Required<Answers>) {
-  let score = 0;
-  const styleMap: Record<StyleAnswer, string> = {
-    slow: 'Slow & culturale',
-    romantic: 'Romantico in coppia',
-    outdoor: 'Avventura outdoor',
-    design: 'Boutique & design',
-  };
-  const durationMap: Record<DurationAnswer, number> = { weekend: 3, week: 6, long: 10 };
-
-  // Hard filter: duration band is decisive — gli itinerari fuori range
-  // ricevono un grosso malus (non possono superare quelli in range).
-  if (durationMatchesAnswer(itinerary.durationDays, answers.duration)) {
-    score += 6;
-  }
-
-  // Soft signals
-  if (itinerary.style === styleMap[answers.style]) score += 4;
-  if (itinerary.budgetTier === answers.budget) score += 3;
-
-  // Continuita: fit fine sulla durata
-  const targetDays = durationMap[answers.duration];
-  const diff = Math.abs(itinerary.durationDays - targetDays);
-  score += Math.max(0, 3 - diff);
-
-  return score;
-}
-
 export default function Quiz() {
   const [stepIndex, setStepIndex] = useState(0);
-  const [answers, setAnswers] = useState<Answers>({});
-  const isComplete = stepIndex >= STEPS.length;
+  /** Array di optionId selezionate, una per ogni domanda risposta. */
+  const [selectedOptionIds, setSelectedOptionIds] = useState<string[]>([]);
+  const isComplete = stepIndex >= QUIZ_QUESTIONS.length;
 
-  const result = useMemo(() => {
+  /** Calcolo archetipo solo al completamento. */
+  const archetypeId: ArchetypeId | null = useMemo(() => {
     if (!isComplete) return null;
-    if (!answers.duration || !answers.style || !answers.budget) return null;
+    if (selectedOptionIds.length !== QUIZ_QUESTIONS.length) return null;
+    return computeArchetype(selectedOptionIds);
+  }, [isComplete, selectedOptionIds]);
 
-    const scored = DEMO_ITINERARIES.map((itinerary) => ({
-      itinerary,
-      score: scoreItinerary(itinerary, answers as Required<Answers>),
-    })).sort((a, b) => b.score - a.score);
+  const archetype = archetypeId ? ARCHETYPES[archetypeId] : null;
+  const currentQuestion = QUIZ_QUESTIONS[stepIndex];
 
-    return scored[0];
-  }, [isComplete, answers]);
+  const handleSelect = (questionId: string, optionId: string) => {
+    const next = [...selectedOptionIds];
+    next[stepIndex] = optionId;
+    setSelectedOptionIds(next);
+    trackEvent('quiz_answer', { step: questionId, value: optionId, step_index: stepIndex });
 
-  const handleSelect = (key: string, value: string) => {
-    const next = { ...answers, [key]: value };
-    setAnswers(next);
-    trackEvent('quiz_answer', { step: key, value });
-
-    if (stepIndex < STEPS.length - 1) {
+    if (stepIndex < QUIZ_QUESTIONS.length - 1) {
       setStepIndex(stepIndex + 1);
     } else {
-      setStepIndex(STEPS.length);
-      trackEvent('quiz_completed', { answers: next });
+      setStepIndex(QUIZ_QUESTIONS.length);
+      const computed = computeArchetype(next);
+      trackEvent('quiz_completed', {
+        archetype: computed,
+        ga4_archetype: ARCHETYPES[computed].ga4Tag,
+      });
+      trackEvent('archetype_assigned', {
+        archetype: computed,
+        segment: ARCHETYPES[computed].segmentLabel,
+      });
+      // Persist in localStorage per personalizzazione homepage successiva.
+      try {
+        window.localStorage.setItem('tw_archetype', computed);
+        window.localStorage.setItem('tw_archetype_at', new Date().toISOString());
+      } catch {
+        // localStorage non disponibile in alcune modalita private — ignore.
+      }
     }
   };
 
@@ -129,196 +67,226 @@ export default function Quiz() {
   };
 
   const handleRestart = () => {
-    setAnswers({});
+    setSelectedOptionIds([]);
     setStepIndex(0);
     trackEvent('quiz_restart');
   };
 
-  const progress = isComplete ? 100 : Math.round((stepIndex / STEPS.length) * 100);
-  const currentStep = STEPS[stepIndex];
+  const progress = isComplete ? 100 : Math.round((stepIndex / QUIZ_QUESTIONS.length) * 100);
 
   return (
     <PageLayout>
       <SEO
-        title="Quiz: trova il tuo prossimo viaggio"
-        description="Tre domande per ricevere un suggerimento di itinerario calibrato su tempo, stile e budget. Niente registrazione."
+        title="Che coppia di viaggiatori siete — quiz Travelliniwithus"
+        description="Sette domande per scoprire il vostro archetipo di viaggio: tre destinazioni firmate Rodrigo & Betta su misura, scelte tra otto anni di posti vissuti davvero."
         canonical={`${SITE_URL}/quiz`}
+        breadcrumbs={[
+          { name: 'Home', url: SITE_URL },
+          { name: 'Quiz', url: `${SITE_URL}/quiz` },
+        ]}
       />
 
       <Section className="pt-8">
         <Breadcrumbs items={[{ label: 'Quiz' }]} />
 
-        <div className="mt-8 max-w-2xl">
-          <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
-            Quiz viaggio
-          </span>
-          <h1 className="mt-4 text-5xl font-serif leading-[1.05] tracking-tight md:text-6xl">
-            Tre domande.
+        <div className="mt-10 max-w-2xl">
+          <span className="text-eyebrow">Quiz coppia</span>
+          <h1 className="mt-5 font-serif font-medium leading-[1.05] tracking-tight text-[var(--color-ink)] text-[clamp(2.5rem,5vw+0.5rem,5.5rem)]">
+            Che coppia di viaggiatori
             <br />
-            <span className="italic text-black/55">Una direzione.</span>
+            <span className="italic text-black/55">siete?</span>
           </h1>
-          <p className="mt-6 text-lg leading-relaxed text-black/70">
-            Niente form. Solo tre scelte per capire dove stai andando con la testa, e ricevere il
-            suggerimento giusto da cui partire.
+          <p className="mt-7 text-body-editorial">
+            Sette domande oneste, niente domande di marketing. Alla fine vi diciamo a quale dei
+            nostri sei archetipi italiani assomigliate di piu, e quali tre destinazioni del nostro
+            archivio sono pensate per voi.
           </p>
         </div>
 
-        <div className="mt-12 max-w-3xl">
-          <div className="mb-4 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.24em] text-black/40">
+        <div className="mt-14 max-w-3xl">
+          <div className="mb-4 flex items-center justify-between text-eyebrow">
             <span>
-              {isComplete ? 'Quiz completato' : `Domanda ${stepIndex + 1} di ${STEPS.length}`}
+              {isComplete
+                ? 'Quiz completato'
+                : `Domanda ${stepIndex + 1} di ${QUIZ_QUESTIONS.length}`}
             </span>
             <span>{progress}%</span>
           </div>
-          <div className="h-1 w-full overflow-hidden rounded-full bg-black/5">
+          <div className="h-px w-full overflow-hidden bg-black/10">
             <motion.div
               animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.4, ease: 'easeOut' }}
-              className="h-full bg-[var(--color-accent)]"
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="h-full bg-[var(--color-ink)]"
             />
           </div>
         </div>
       </Section>
 
-      <Section className="pt-8">
+      <Section className="pt-10">
         <AnimatePresence mode="wait">
-          {!isComplete && currentStep ? (
+          {!isComplete && currentQuestion ? (
             <motion.div
-              key={currentStep.key}
-              initial={{ opacity: 0, y: 16 }}
+              key={currentQuestion.id}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.4 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               className="max-w-3xl"
             >
-              <h2 className="text-3xl font-serif leading-tight md:text-4xl">
-                {currentStep.question}
+              <h2 className="font-serif leading-[1.1] tracking-tight text-[var(--color-ink)] text-[clamp(1.75rem,3vw+0.5rem,2.75rem)]">
+                {currentQuestion.question}
               </h2>
-              <p className="mt-3 text-base leading-relaxed text-black/55">{currentStep.helper}</p>
 
-              <div className="mt-10 grid gap-4 sm:grid-cols-2">
-                {currentStep.options.map((option) => (
-                  <button
-                    key={option.id}
-                    type="button"
-                    onClick={() => handleSelect(currentStep.key, option.id)}
-                    className="group flex flex-col items-start gap-2 rounded-[var(--radius-lg)] border border-black/8 bg-white p-7 text-left transition-all hover:-translate-y-1 hover:border-[var(--color-accent)] hover:shadow-md"
-                  >
-                    <span className="text-2xl font-serif text-[var(--color-ink)] group-hover:text-[var(--color-accent-text)]">
-                      {option.label}
-                    </span>
-                    <span className="text-sm text-black/55">{option.sub}</span>
-                    <ArrowRight
-                      size={16}
-                      className="mt-2 text-black/30 transition-all group-hover:translate-x-1 group-hover:text-[var(--color-accent)]"
-                    />
-                  </button>
-                ))}
+              <div className="mt-12 grid gap-4 sm:grid-cols-2">
+                {currentQuestion.options.map((option) => {
+                  const selected = selectedOptionIds[stepIndex] === option.id;
+                  return (
+                    <button
+                      key={option.id}
+                      type="button"
+                      onClick={() => handleSelect(currentQuestion.id, option.id)}
+                      aria-pressed={selected}
+                      className={`group flex items-start gap-4 rounded-[var(--radius-lg)] border bg-white p-7 text-left transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-[var(--color-ink)] hover:shadow-[var(--shadow-md)] ${
+                        selected
+                          ? 'border-[var(--color-ink)] shadow-[var(--shadow-sm)]'
+                          : 'border-black/10'
+                      }`}
+                    >
+                      <span className="flex-1 font-serif text-xl leading-snug text-[var(--color-ink)] md:text-2xl">
+                        {option.label}
+                      </span>
+                      <ArrowRight
+                        size={18}
+                        className="mt-1 shrink-0 text-black/30 transition-all duration-300 group-hover:translate-x-1 group-hover:text-[var(--color-ink)]"
+                      />
+                    </button>
+                  );
+                })}
               </div>
 
               {stepIndex > 0 && (
                 <button
                   type="button"
                   onClick={handleBack}
-                  className="mt-10 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-black/45 transition-colors hover:text-[var(--color-accent)]"
+                  className="mt-12 inline-flex items-center gap-2 text-eyebrow transition-colors hover:text-[var(--color-ink)]"
                 >
                   <ArrowLeft size={14} /> Risposta precedente
                 </button>
               )}
             </motion.div>
-          ) : result ? (
+          ) : archetype ? (
             <motion.div
               key="result"
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6 }}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className="grid gap-10 overflow-hidden rounded-[var(--radius-lg)] border border-black/5 bg-white shadow-xl md:grid-cols-[1.05fr_0.95fr]">
-                <div className="relative min-h-[260px] md:min-h-full">
+              <div className="grid gap-10 overflow-hidden rounded-[var(--radius-xl)] border border-black/8 bg-white shadow-[var(--shadow-lg)] md:grid-cols-[1.1fr_0.9fr]">
+                <div className="relative min-h-[320px] md:min-h-full">
                   <OptimizedImage
-                    src={result.itinerary.image}
-                    alt={result.itinerary.title}
+                    src={archetype.heroImage}
+                    alt={archetype.heroImageAlt}
                     className="absolute inset-0 h-full w-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-transparent" />
-                  <div className="absolute left-8 top-8 inline-flex items-center gap-2 rounded-full bg-white/95 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-ink)]">
-                    <Sparkles size={12} className="text-[var(--color-accent)]" />
-                    Suggerito per te
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+                  <div className="absolute left-8 top-8 inline-flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-ink)]">
+                    <Sparkles size={12} className="text-[var(--color-ink)]" />
+                    Il vostro archetipo
                   </div>
                 </div>
-                <div className="p-8 md:p-12">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
-                    {result.itinerary.destination}
-                  </p>
-                  <h2 className="mt-4 text-4xl font-serif leading-tight md:text-5xl">
-                    {result.itinerary.title}
+
+                <div className="p-9 md:p-12">
+                  <span className="text-eyebrow">{archetype.eyebrow}</span>
+                  <h2 className="mt-4 font-serif font-medium leading-[1.05] tracking-tight text-[var(--color-ink)] text-[clamp(2rem,3.5vw+0.5rem,3.5rem)]">
+                    {archetype.name}
                   </h2>
-                  <p className="mt-5 text-base leading-relaxed text-black/68">
-                    {result.itinerary.excerpt}
+                  <p className="mt-5 font-serif italic text-xl leading-snug text-black/65 md:text-2xl">
+                    {archetype.tagline}
                   </p>
-                  <ul className="mt-7 space-y-2 text-sm text-black/60">
-                    <li>
-                      <strong className="text-[var(--color-ink)]">Durata:</strong>{' '}
-                      {result.itinerary.durationDays} giorni
-                    </li>
-                    <li>
-                      <strong className="text-[var(--color-ink)]">Stile:</strong>{' '}
-                      {result.itinerary.style}
-                    </li>
-                    <li>
-                      <strong className="text-[var(--color-ink)]">Budget:</strong>{' '}
-                      {result.itinerary.budget}
-                    </li>
-                  </ul>
-                  <div className="mt-9 flex flex-wrap gap-4">
+                  <p className="mt-7 text-body-editorial">{archetype.description}</p>
+
+                  <div className="mt-10">
+                    <p className="text-eyebrow mb-5">Tre destinazioni per voi</p>
+                    <ul className="space-y-3">
+                      {archetype.signatureDestinations.map((slug, idx) => (
+                        <li key={slug} className="flex items-baseline gap-4">
+                          <span className="dispatch-index-number">
+                            {String(idx + 1).padStart(2, '0')}
+                          </span>
+                          <Link
+                            to={`/articolo/${slug}`}
+                            onClick={() =>
+                              trackEvent('archetype_destination_click', {
+                                archetype: archetype.id,
+                                destination: slug,
+                                position: idx,
+                              })
+                            }
+                            className="font-serif text-lg leading-snug text-[var(--color-ink)] underline-offset-4 transition-colors hover:underline hover:text-[var(--color-accent-text)]"
+                          >
+                            {slug
+                              .split('-')
+                              .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                              .join(' ')}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="mt-10 flex flex-wrap gap-3">
                     <Link
-                      to={`/itinerari/${result.itinerary.slug}`}
-                      className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-7 py-4 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
+                      to="/esplora"
+                      onClick={() =>
+                        trackEvent('archetype_cta_explore', { archetype: archetype.id })
+                      }
+                      className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-7 py-4 text-eyebrow text-white transition-colors hover:bg-[var(--color-accent)]"
                     >
-                      Apri l itinerario <ArrowRight size={14} />
+                      Apri l&apos;archivio <ArrowRight size={14} />
                     </Link>
                     <button
                       type="button"
                       onClick={handleRestart}
-                      className="inline-flex items-center gap-2 rounded-full border border-black/10 px-7 py-4 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)]"
+                      className="inline-flex items-center gap-2 rounded-full border border-black/12 px-7 py-4 text-eyebrow text-[var(--color-ink)] transition-colors hover:border-[var(--color-ink)]"
                     >
-                      <RotateCw size={14} /> Ricomincia
+                      <RotateCw size={14} /> Rifai il quiz
                     </button>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-14 grid gap-6 md:grid-cols-[1.05fr_0.95fr] md:items-center">
+              <div className="mt-20 grid gap-10 md:grid-cols-[1.05fr_0.95fr] md:items-center">
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
-                    Salva e continua
-                  </span>
-                  <h3 className="mt-4 text-3xl font-serif leading-tight md:text-4xl">
-                    Vuoi ricevere il PDF di questo itinerario?
+                  <span className="text-eyebrow">Ricevete il piano da 3 giorni</span>
+                  <h3 className="mt-5 font-serif font-medium leading-[1.05] tracking-tight text-[var(--color-ink)] text-[clamp(1.75rem,3vw+0.5rem,2.75rem)]">
+                    Un itinerario da tre giorni
+                    <br />
+                    cucito sul vostro archetipo.
                   </h3>
-                  <p className="mt-4 text-base leading-relaxed text-black/65">
-                    Iscriviti alla newsletter: appena il content sarà pubblicato ti arriva il
-                    download dell'itinerario già compilato, senza spam.
+                  <p className="mt-6 text-body-editorial">
+                    Iscrivetevi alla nostra mailing: ricevete il piano da 3 giorni sul vostro
+                    archetipo (preparato a mano da Rodrigo & Betta) + una mail al mese con il posto
+                    del momento. Nessun spam. Annullate quando volete.
                   </p>
                 </div>
-                <Newsletter compact variant="sand" source="quiz_result" />
+                <Newsletter compact variant="sand" source={`quiz_archetype_${archetype.id}`} />
               </div>
             </motion.div>
           ) : null}
         </AnimatePresence>
       </Section>
 
-      <Section className="my-12">
-        <div className="flex flex-wrap items-center justify-between gap-4 rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-sand)] p-7">
+      <Section className="my-16">
+        <div className="flex flex-wrap items-center justify-between gap-4 rounded-[var(--radius-lg)] border border-black/8 bg-[var(--color-sand)] p-8">
           <div className="flex items-center gap-3">
-            <Compass className="text-[var(--color-accent)]" size={22} />
-            <p className="text-sm leading-snug text-black/65">Vuoi vedere tutti gli itinerari?</p>
+            <Compass className="text-[var(--color-ink)]" size={22} />
+            <p className="text-body-editorial">Vuoi sfogliare tutto l&apos;archivio?</p>
           </div>
           <Link
-            to="/itinerari"
-            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+            to="/esplora"
+            className="inline-flex items-center gap-2 text-eyebrow text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
           >
-            Sfoglia gli itinerari <ArrowRight size={13} />
+            Apri Esplora <ArrowRight size={13} />
           </Link>
         </div>
       </Section>

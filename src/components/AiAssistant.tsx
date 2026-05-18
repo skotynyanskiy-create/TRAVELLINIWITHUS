@@ -41,7 +41,7 @@ const KEYWORD_RESPONSES: { match: string[]; reply: string }[] = [
   {
     match: ['dolomiti', 'montagna', 'rifugio'],
     reply:
-      'Sulle Dolomiti abbiamo l itinerario "Dolomiti slow in 3 giorni" — boutique, sentiero panoramico e una malga. E poi un articolo collegato con rifugi di design.',
+      'Sulle Dolomiti abbiamo l\'itinerario "Dolomiti slow in 3 giorni" — boutique, sentiero panoramico e una malga. E poi un articolo collegato con rifugi di design.',
   },
   {
     match: ['weekend', 'breve', 'corto'],
@@ -56,7 +56,7 @@ const KEYWORD_RESPONSES: { match: string[]; reply: string }[] = [
   {
     match: ['insoliti', 'particolari', 'segreti', 'nascosti'],
     reply:
-      'Posti particolari e il nostro mestiere. Apri /destinazioni filtrato per "Posti particolari" oppure il blog: ogni articolo cita almeno un luogo non ovvio.',
+      'Posti particolari e il nostro mestiere. Apri /esplora filtrato per "Posti particolari" oppure il blog: ogni articolo cita almeno un luogo non ovvio.',
   },
   {
     match: ['guida', 'pdf', 'planner', 'shop'],
@@ -108,26 +108,61 @@ export default function AiAssistant() {
     trackEvent(isOpen ? 'ai_assistant_close' : 'ai_assistant_open');
   };
 
-  const sendMessage = (text: string) => {
-    if (!text.trim()) return;
+  const sendMessage = async (text: string) => {
+    const trimmed = text.trim();
+    if (!trimmed) return;
     const userMessage: ChatMessage = {
       id: nextId('u'),
       role: 'user',
-      content: text.trim(),
+      content: trimmed,
     };
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
     setIsThinking(true);
-    trackEvent('ai_assistant_message', { length: text.trim().length, demo: true });
 
-    setTimeout(() => {
-      const replyContent = matchReply(text);
-      setMessages((prev) => [
-        ...prev,
-        { id: nextId('a'), role: 'assistant', content: replyContent },
-      ]);
-      setIsThinking(false);
-    }, 700);
+    // Marathon FASE 2.A: prova prima endpoint RAG, fallback su keyword matching demo.
+    // Endpoint ritorna 503 quando API keys non configurate (mode 'disabled').
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 12000);
+      const response = await fetch('/api/ai-companion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: trimmed, history: messages.slice(-4) }),
+        signal: controller.signal,
+      });
+      clearTimeout(timeout);
+
+      if (response.ok) {
+        const data = (await response.json()) as { reply?: string; sources?: unknown };
+        if (data.reply && typeof data.reply === 'string') {
+          trackEvent('ai_assistant_message', {
+            length: trimmed.length,
+            demo: false,
+            has_sources: Array.isArray(data.sources) && data.sources.length > 0,
+          });
+          setMessages((prev) => [
+            ...prev,
+            { id: nextId('a'), role: 'assistant', content: data.reply ?? '' },
+          ]);
+          setIsThinking(false);
+          return;
+        }
+      }
+      // Non-ok response → fallback demo (silenzioso, no error visibile in UI).
+      throw new Error('ai-companion-unavailable');
+    } catch {
+      trackEvent('ai_assistant_message', { length: trimmed.length, demo: true });
+      // Fallback su keyword matching demo (preserva UX se backend non pronto).
+      setTimeout(() => {
+        const replyContent = matchReply(trimmed);
+        setMessages((prev) => [
+          ...prev,
+          { id: nextId('a'), role: 'assistant', content: replyContent },
+        ]);
+        setIsThinking(false);
+      }, 400);
+    }
   };
 
   const handleSubmit = (event: FormEvent) => {

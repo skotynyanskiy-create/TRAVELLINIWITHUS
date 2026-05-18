@@ -31,6 +31,11 @@ export const BRAND_STATS = {
 /** Live counter newsletter (demo: aggiornare manualmente o connettere a Brevo API). */
 export const NEWSLETTER_RECENT_SIGNUPS = 184;
 
+/** Soglia minima sotto cui il counter pubblico non viene mostrato — evita
+ *  l'anti-conversion "0 lettori iscritti negli ultimi 30 giorni" quando la
+ *  lista e' giovane. Sopra soglia mostra il numero reale come trust signal. */
+export const NEWSLETTER_COUNTER_MIN_VISIBLE = 50;
+
 /** Aggiornare url con lo shortcode del reel più recente pubblicato su Instagram.
  *  Nessuna API key necessaria: quando `url` punta a /reel/... l'embed
  *  Instagram subentra automaticamente. Fino ad allora usiamo un asset locale

@@ -38,6 +38,9 @@ export default defineConfig(({ mode }) => {
         },
         workbox: {
           maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
+          // Esclude i reel video MP4 dal precache (sono ~5-6 MB ciascuno).
+          // Vengono caricati lazy via tag <video> quando l'utente li chiede.
+          globIgnores: ['**/video/**'],
           clientsClaim: true,
           skipWaiting: true,
           navigateFallback: '/offline.html',

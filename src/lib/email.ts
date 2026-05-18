@@ -107,7 +107,7 @@ export function renderContactAutoReply(lead: {
       <p>Ciao ${escapeHtml(lead.name)},</p>
       <p>Grazie per averci scritto. Leggiamo ogni messaggio personalmente e rispondiamo entro 48 ore (giorni feriali).</p>
       <p>Nel frattempo, se vuoi scoprire i posti particolari che stiamo raccontando in questi giorni:</p>
-      <p><a href="https://travelliniwithus.it/destinazioni" style="color:#C4A47C;">Esplora le destinazioni</a></p>
+      <p><a href="https://travelliniwithus.it/esplora" style="color:#C4A47C;">Esplora le destinazioni</a></p>
       <p>A presto,<br/>Rodrigo &amp; Betta</p>
     </div>
   `;
@@ -188,7 +188,7 @@ export function renderWelcomeEmail(input: {
       <p style="margin:0 0 24px;">
         &middot; <a href="https://www.instagram.com/travelliniwithus/" style="color:#9a3412;">Instagram</a> (167K travellini)<br/>
         &middot; <a href="https://www.tiktok.com/@travelliniwithus" style="color:#9a3412;">TikTok</a> (90K)<br/>
-        &middot; <a href="https://travelliniwithus.it/destinazioni" style="color:#9a3412;">Posti raccontati bene</a> sul sito
+        &middot; <a href="https://travelliniwithus.it/esplora" style="color:#9a3412;">Posti raccontati bene</a> sul sito
       </p>
       <p style="margin:24px 0 0;color:#57534e;font-size:14px;">
         P.S. Se hai 30 secondi: rispondi a questa email con la prossima destinazione che hai in mente. Leggiamo davvero, non c'è un bot.
@@ -207,7 +207,7 @@ ${input.leadMagnetUrl ? `\nScarica la guida "10 posti italiani non ovvi": ${inpu
 Intanto, se ti va, ci trovi qui:
 - Instagram: https://www.instagram.com/travelliniwithus/
 - TikTok: https://www.tiktok.com/@travelliniwithus
-- Sito: https://travelliniwithus.it/destinazioni
+- Sito: https://travelliniwithus.it/esplora
 
 P.S. Se hai 30 secondi: rispondi a questa email con la prossima destinazione che hai in mente. Leggiamo davvero, non c'è un bot.
 

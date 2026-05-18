@@ -92,3 +92,23 @@ serviceAccount*.json
 *.pem
 .firebase/
 .firebaserc.local
+
+# Browser-auditor ad-hoc snapshots and screenshots (root-level temp)
+*-snapshot.md
+snapshot-*.md
+reaudit_*.png
+reaudit_*.md
+art-*.png
+puglia-*.png
+salento-*.png
+salento-*.md
+esplora-*.png
+esplora-*.md
+giappone-*.png
+destinazione-*.png
+chisiamo-*.png
+risorse-*.png
+strumenti-*.png
+mobile-menu-*.png
+esperienze-food.yml
+mappa-asia.yml

@@ -1,6 +1,8 @@
-import { motion } from 'motion/react';
-import { Instagram, Play } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
+import { Instagram, Play, X } from 'lucide-react';
 import { CONTACTS } from '../config/site';
+import { getPublishedReels, type ReelEntry } from '../config/reels';
 import { trackEvent } from '../services/analytics';
 
 interface InstaItem {
@@ -8,16 +10,15 @@ interface InstaItem {
   type: 'reel' | 'post';
   caption: string;
   url: string;
-  views?: string;
-  /** Span on lg+ grid (col-span × row-span). 'feature' = 2×2, 'tall' = 1×2, 'wide' = 2×1, 'square' = 1×1 */
+  /** Span on lg+ grid. 'feature' = 2×2, 'tall' = 1×2, 'wide' = 2×1, 'square' = 1×1 */
   span: 'feature' | 'tall' | 'wide' | 'square';
+  /** Path locale del video MP4 (solo per reel live dal manifest). */
+  videoSrc?: string;
+  /** ID stabile del reel per tracking. */
+  reelId?: string;
 }
 
-// TODO[R+B]: sostituire le 6 cover con screenshot reali dei reel/post di
-// @travelliniwithus salvati in /public/images/instagram/. Le caption sono
-// editoriali, non descrivono numeri di view (non li dichiariamo finche'
-// non c'e' uno screenshot dashboard creator verificabile).
-const INSTA_ITEMS: InstaItem[] = [
+const FALLBACK_ITEMS: InstaItem[] = [
   {
     image: '/images/brand/couple-travel.webp',
     type: 'reel',
@@ -62,6 +63,22 @@ const INSTA_ITEMS: InstaItem[] = [
   },
 ];
 
+// Span pattern editoriale per i 5 reel live: feature, tall, square, wide, tall.
+// Crea ritmo masonry asimmetrico stesso del fallback.
+const REEL_SPAN_PATTERN: InstaItem['span'][] = ['feature', 'tall', 'square', 'wide', 'tall'];
+
+function reelsToItems(reels: ReelEntry[]): InstaItem[] {
+  return reels.map((reel, index) => ({
+    image: reel.cover,
+    type: 'reel' as const,
+    caption: reel.caption,
+    url: reel.instagramUrl ?? reel.tiktokUrl ?? CONTACTS.instagramUrl,
+    span: REEL_SPAN_PATTERN[index] ?? 'square',
+    videoSrc: reel.localPath,
+    reelId: reel.id,
+  }));
+}
+
 const SPAN_CLASS: Record<InstaItem['span'], string> = {
   feature: 'lg:col-span-2 lg:row-span-2',
   tall: 'lg:row-span-2',
@@ -69,24 +86,53 @@ const SPAN_CLASS: Record<InstaItem['span'], string> = {
   square: '',
 };
 
-function handleClick(item: InstaItem, position: number) {
-  trackEvent('instagram_grid_click', {
-    type: item.type,
-    position,
-  });
-}
-
 export default function InstagramGrid() {
+  const [openVideo, setOpenVideo] = useState<InstaItem | null>(null);
+
+  const publishedReels = getPublishedReels();
+  const items = publishedReels.length > 0 ? reelsToItems(publishedReels) : FALLBACK_ITEMS;
+  const usingLiveReels = publishedReels.length > 0;
+
+  // ESC chiude il modal video
+  useEffect(() => {
+    if (!openVideo) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpenVideo(null);
+    };
+    window.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = 'unset';
+    };
+  }, [openVideo]);
+
+  const handleItemClick = (event: React.MouseEvent, item: InstaItem, position: number) => {
+    if (item.videoSrc) {
+      // Reel live → apri modal inline player
+      event.preventDefault();
+      setOpenVideo(item);
+      trackEvent('reel_play', {
+        source_page: window.location.pathname,
+        reel_id: item.reelId,
+        position,
+      });
+      return;
+    }
+    // Fallback: link esterno IG
+    trackEvent('instagram_grid_click', { type: item.type, position });
+  };
+
   return (
     <section className="bg-white py-20 md:py-24">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="mb-10 flex flex-wrap items-end justify-between gap-6">
           <div>
             <span className="mb-3 block text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
-              Visto su Instagram
+              {usingLiveReels ? 'Reel del mese' : 'Visto su Instagram'}
             </span>
             <h2 className="text-3xl font-serif text-[var(--color-ink)] md:text-4xl">
-              Reel e foto di Rodrigo & Betta
+              Reel e foto di Rodrigo &amp; Betta
             </h2>
             <p className="mt-3 text-sm text-black/55 md:text-base">
               <span className="font-semibold text-black/70">{CONTACTS.instagramHandle}</span> ·
@@ -104,21 +150,14 @@ export default function InstagramGrid() {
           </a>
         </div>
 
-        {/*
-          Masonry asimmetrica (ref: Pinterest restrained, Cereal):
-          - lg+: grid 4-col, auto-rows-[220px], auto-flow dense
-          - span per item determinato dal type (feature/tall/wide/square)
-          - mobile: grid 2-col uniform (aspect-driven), tablet 3-col
-          Su mobile NON applichiamo gli span lg per evitare cells vuote.
-        */}
         <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:auto-rows-[220px] lg:grid-cols-4 lg:gap-4 [grid-auto-flow:dense]">
-          {INSTA_ITEMS.map((item, idx) => (
+          {items.map((item, idx) => (
             <motion.a
-              key={idx}
+              key={item.reelId ?? idx}
               href={item.url}
-              target="_blank"
+              target={item.videoSrc ? undefined : '_blank'}
               rel="noreferrer"
-              onClick={() => handleClick(item, idx)}
+              onClick={(event) => handleItemClick(event, item, idx)}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -142,6 +181,15 @@ export default function InstagramGrid() {
                 </div>
               )}
 
+              {/* Play badge centrale solo per reel live (cliccabili) */}
+              {item.videoSrc && (
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-[var(--color-ink)] shadow-lg">
+                    <Play size={22} className="ml-1 fill-current" />
+                  </span>
+                </div>
+              )}
+
               <div className="absolute inset-x-0 bottom-0 p-3 text-white md:p-4">
                 <p className="line-clamp-3 text-xs leading-tight md:text-sm">{item.caption}</p>
               </div>
@@ -161,6 +209,69 @@ export default function InstagramGrid() {
           </a>
         </div>
       </div>
+
+      {/* Modal video player inline */}
+      <AnimatePresence>
+        {openVideo && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setOpenVideo(null)}
+              className="fixed inset-0 z-[200] bg-black/85 backdrop-blur-md"
+            />
+            <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-label={`Reel: ${openVideo.caption}`}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-[210] flex items-center justify-center p-4"
+            >
+              <div className="relative max-h-[90vh] w-full max-w-md overflow-hidden rounded-[var(--radius-lg)] bg-black shadow-2xl">
+                <button
+                  type="button"
+                  onClick={() => setOpenVideo(null)}
+                  aria-label="Chiudi reel"
+                  className="absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-[var(--color-ink)] transition-colors hover:bg-white"
+                >
+                  <X size={18} />
+                </button>
+                <video
+                  src={openVideo.videoSrc}
+                  poster={openVideo.image}
+                  autoPlay
+                  loop
+                  playsInline
+                  controls
+                  aria-label={`Reel: ${openVideo.caption}`}
+                  className="block max-h-[90vh] w-full bg-black"
+                >
+                  {/* Track captions vuoto ma presente per a11y (jsx-a11y/media-has-caption).
+                      I reel Instagram non hanno VTT separato; la caption testuale e' gia
+                      mostrata sotto il video (descrizione accessibile). */}
+                  <track kind="captions" label="Italiano" srcLang="it" default />
+                </video>
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent p-5 text-white">
+                  <p className="text-sm leading-snug md:text-base">{openVideo.caption}</p>
+                  <a
+                    href={openVideo.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => trackEvent('reel_open_instagram', { reel_id: openVideo.reelId })}
+                    className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-white/85 underline-offset-4 hover:underline"
+                  >
+                    <Instagram size={13} /> Vedi su Instagram
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

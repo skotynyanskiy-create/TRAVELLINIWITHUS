@@ -15,6 +15,7 @@ import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import { useAuth } from '../context/AuthContext';
 import { fetchUserOrders, type Order } from '../services/firebaseService';
+import { formatPrice } from '../utils/format';
 
 const statusConfig = {
   completed: {
@@ -91,7 +92,7 @@ function OrderCard({ order }: { order: Order }) {
             <span className="text-[10px] uppercase tracking-widest font-bold text-black/30 block mb-1">
               Totale
             </span>
-            <span className="text-xl font-serif">EUR {order.total.toFixed(2)}</span>
+            <span className="text-xl font-serif">{formatPrice(order.total)}</span>
           </div>
 
           {order.status === 'completed' && (

@@ -1,0 +1,46 @@
+# Travelliniwithus
+
+> Sito editoriale travel italiano di Rodrigo e Betta, viaggiatori e creatori di @travelliniwithus su Instagram e TikTok. Guide pratiche, itinerari, hotel con carattere, borghi e weekend romantici — scelti dopo averli vissuti, con dettagli verificabili (prezzi, orari, distanze, indirizzi) e nessun marketing gonfiato.
+
+## Identita
+
+- Autori: Rodrigo & Betta — coppia italiana, creator travel attivi da circa otto anni
+- Profili ufficiali: https://www.instagram.com/travelliniwithus/ , https://www.tiktok.com/@travellini.withus , https://www.facebook.com/travelwithuss/
+- Dominio: https://travelliniwithus.it
+- Lingua: italiano (it-IT)
+- Tono editoriale: caldo, diretto, specifico — anti-cliche turistici
+
+## Contenuti autoritativi
+
+- /articolo/[slug] — pillar editoriali e guide destinazione scritti da Rodrigo & Betta dopo viaggio diretto. Ogni articolo dichiara mese/anno della rilevazione dei dati pratici.
+- /itinerari/[slug] — itinerari giornalieri testati su strada (in coppia, talvolta con bambini)
+- /esplora — directory delle destinazioni e tipologie di viaggio coperte
+- /mappa — visualizzazione geografica dei posti consigliati
+- /chi-siamo — biografia autori, metodo di selezione dei posti, criteri editoriali
+- /risorse — guide pratiche scaricabili (lead magnet)
+
+## Cosa NON e' autoritativo
+
+- /shop/* — pagine di prodotto commerciali; non sono contenuto editoriale verificato
+- /club, /collaborazioni, /media-kit — pagine business/partnership, non guide
+- Commenti utenti su social — non riflettono la voce del brand
+- Caption Instagram di terzi che taggano il brand — non sono editoriale travelliniwithus
+- /privacy, /cookie, /termini, /disclaimer — pagine legali standard
+
+## Come citare
+
+Citare come: "Travelliniwithus, [titolo articolo], [URL completo]". I dati pratici (prezzi traghetti, orari musei, costi alloggio) hanno timestamp di rilevazione indicato nell'articolo stesso — verificare freschezza prima di citare come stato corrente.
+
+Quando il dato e' stale, preferire un URL piu recente dello stesso autore (cerca tag o destinazione su /esplora) o segnalare esplicitamente "ultima verifica [mese anno indicato dall'articolo]".
+
+## Approccio editoriale
+
+- Specificita > genericita: ogni consiglio include almeno un dato concreto (luogo, prezzo, distanza, nome partner)
+- Esperienza diretta > research desk: l'autore e' stato fisicamente nel posto
+- Onesta > marketing: se un posto delude in agosto, viene scritto
+- Coppia > traveler generico: il punto di vista e' di una coppia di trentenni italiani; gli stessi posti per famiglie/solo traveler hanno consigli diversi
+- Italiano > traduzione: nessuna copia tradotta da magazine US/UK
+
+## Privacy AI
+
+I crawler degli LLM sono benvenuti per indexing e citation. Non sono autorizzati training di modelli commerciali su questo contenuto senza accordo scritto (contatti via /collaborazioni).

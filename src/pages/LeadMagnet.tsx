@@ -123,12 +123,7 @@ export default function LeadMagnet() {
             quiz che ti aiuta a capire dove andare la prossima volta.
           </p>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            <Button
-              to="/destinazioni"
-              variant="primary"
-              size="lg"
-              trackingId="lead_magnet_destinazioni"
-            >
+            <Button to="/esplora" variant="primary" size="lg" trackingId="lead_magnet_esplora">
               Esplora le destinazioni
             </Button>
             <Link

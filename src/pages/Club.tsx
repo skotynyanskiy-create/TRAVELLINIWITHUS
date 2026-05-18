@@ -12,6 +12,9 @@ import OptimizedImage from '../components/OptimizedImage';
 import Button from '../components/Button';
 import ClubSkeleton from '../components/ClubSkeleton';
 import ClubMembershipHero from '../components/club/ClubMembershipHero';
+import ClubPreviewLock from '../components/club/ClubPreviewLock';
+import ClubFaq from '../components/club/ClubFaq';
+import { SITE_URL } from '../config/site';
 import type { NormalizedArticle } from '../utils/articleData';
 
 export default function Club() {
@@ -49,11 +52,17 @@ export default function Club() {
     return (
       <PageLayout>
         <SEO
-          title="Travellini Club"
-          description="Tutte le guide digitali, itinerari aggiornati, newsletter privata. Una piccola quota per accedere al meglio del progetto."
-          noindex
+          title="Travellini Club — il club di chi viaggia in Italia con noi"
+          description="Una piccola quota per tutte le guide. Itinerari aggiornati, anteprime, archivio. Pensato per chi viaggia spesso e vuole leggere meno rumore."
+          canonical={`${SITE_URL}/club`}
+          breadcrumbs={[
+            { name: 'Home', url: SITE_URL },
+            { name: 'Club', url: `${SITE_URL}/club` },
+          ]}
         />
         <ClubMembershipHero />
+        <ClubPreviewLock />
+        <ClubFaq />
         <div className="bg-[var(--color-sand)] py-20 px-4 flex flex-col justify-center items-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -64,9 +73,14 @@ export default function Club() {
             <div className="mx-auto w-16 h-16 rounded-full bg-[var(--color-sand)] flex items-center justify-center mb-8 shadow-sm">
               <MapPin size={24} className="text-[var(--color-accent)]" />
             </div>
-            <h2 className="text-4xl font-serif text-[var(--color-ink)] mb-3">The Travel Club</h2>
+            <span className="mb-3 block text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
+              Accedi al Club
+            </span>
+            <h2 className="text-4xl font-serif text-[var(--color-ink)] mb-3">
+              Entra nel tuo spazio.
+            </h2>
             <p className="text-base font-normal text-black/70 mb-8 leading-relaxed">
-              Il tuo spazio personale su Travelliniwithus.
+              Un login veloce, e ritrovi qui i tuoi preferiti, gli acquisti e le guide riservate.
             </p>
 
             <div className="space-y-3 mb-10 text-left">
@@ -116,8 +130,8 @@ export default function Club() {
   return (
     <PageLayout>
       <SEO
-        title="La mia Dashboard | Travel Club"
-        description="La tua dashboard personale Travelliniwithus"
+        title="La mia area | Travellini Club"
+        description="La tua area riservata Travelliniwithus: preferiti, acquisti e guide salvate."
         noindex
       />
 

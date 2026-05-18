@@ -124,6 +124,16 @@ Decisione: mantenere il carattere visuale, ma togliere ogni elemento che sembra 
 - i numeri nel metodo diventano una riga di prova sobria, non un secondo blocco statistiche
 - l'editoriale riduce padding e testo nelle card, puntando su gerarchia e immagine
 
+## Sessione Esplora P0 - 2026-05-15
+
+Intervento eseguito su navigazione e discovery:
+
+- `Esplora` ora include anche la mappa visuale e resta attivo su `/mappa`
+- la CTA home discovery verso l'archivio non usa piu `?search=` perche la pagina destinazioni non implementa una ricerca inline
+- la ricerca globale traccia apertura e no-results e non promette piu navigazione con frecce non implementata
+- rimossi preload globali delle immagini home da `index.html`; i preload restano route-specifici in `Home`
+- rimosso il caricamento esterno del font script Kalam per evitare 404 in console
+
 ## Decisione homepage V2
 
 Direzione: editoriale pulita, utile all'utente finale e coerente con un brand creator people-led.
@@ -139,10 +149,39 @@ Direzione: editoriale pulita, utile all'utente finale e coerente con un brand cr
 
 La voce `Destinazioni` diventa `Esplora` e raggruppa:
 
+- `Inizia da qui`: `/esplora` come finder editoriale centrale
 - `Per luogo`: `/destinazioni` e filtri da `DESTINATION_GROUPS`
 - `Per esperienza`: `/esperienze` e filtri da `EXPERIENCE_TYPES`
+- `Guide` e `Mappa visuale`: percorsi specializzati collegati al finder
 
 Le voci `Guide`, `Esperienze` e `Shop` non compaiono piu nel menu principale. Le route restano disponibili per accesso diretto o collegamenti contestuali.
+
+## Sessione Esplora 10/10 - 2026-05-15
+
+- aggiunta route `/esplora` come porta centrale tra destinazioni, esperienze, guide e mappa
+- la navbar principale punta a `/esplora` e resta attiva anche su `/destinazioni`, `/esperienze`, `/guide`, `/mappa`
+- home discovery traccia `home_discovery_click` su card luogo, esperienza e guide
+- search globale include risultati diretti verso finder, gruppi destinazione e tipi esperienza
+- conversione soft: lead magnet, newsletter, risorse e collaborazioni restano contestuali, non invasive
+
+## Sessione Esplora 10/10 — closeout 2 (2026-05-15)
+
+Closeout dei P1/P2 lasciati aperti dalla sessione precedente:
+
+- **Mega menu Esplora** ricomposto come decisione editoriale invece di lista
+  enciclopedica. Le voci "Per luogo" e "Per esperienza" ora mostrano solo
+  3-4 picks editoriali (Italia/Europa/Asia · Posti particolari/Food/Hotel/Weekend)
+  con un "Tutte" finale per scendere nell'archivio completo. Aggiunta colonna
+  "Strumenti" che raggruppa Guide/Itinerari/Risorse — toglie l'iperestensione
+  dei link enciclopedici e accelera la scelta in 1 click.
+- **SearchModal raggruppata**: i risultati appaiono ora in sezioni separate
+  (Luoghi, Esperienze, Percorsi consigliati, Articoli e guide, Pagine) con
+  ordine editoriale e fallback "Altri risultati" per categorie non mappate.
+- **Mappa con filtri Esperienza** in aggiunta al continente: l'utente può
+  isolare Posti particolari / Food / Hotel / Guide / Weekend e poi salire
+  verso `/destinazioni` con i filtri già passati nell'URL.
+- **Newsletter contestuale /guide**: `source` dinamico per categoria e
+  `ctaLabel` adattivo ("Ricevi le prossime guide su {Categoria}").
 
 ## Asset e configurazione
 

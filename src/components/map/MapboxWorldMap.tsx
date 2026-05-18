@@ -17,8 +17,10 @@ import {
   Hotel,
   Sparkles,
   Star,
+  ArrowRight,
 } from 'lucide-react';
 import { fetchArticles } from '../../services/firebaseService';
+import { trackEvent } from '../../services/analytics';
 import type { NormalizedArticle } from '../../utils/articleData';
 import { DEMO_ARTICLE_PREVIEW, DEMO_ARTICLES_EXTRA } from '../../config/demoContent';
 import { DEMO_ARCHIVE_SEEDS } from '../../config/demoArchive';
@@ -86,6 +88,20 @@ const CONTINENT_FILTERS = [
 ] as const;
 
 type ContinentFilter = (typeof CONTINENT_FILTERS)[number]['id'];
+
+// Filtri esperienza editoriali: 5 picks dei TYPES canonical che coprono la
+// maggior parte degli articoli nel CATEGORY_VISUAL. Ridotti per non
+// trascinare l'intera taxonomy (ridurrebbe il segnale sulla mappa).
+const EXPERIENCE_FILTERS = [
+  { id: 'all', label: 'Tutte' },
+  { id: 'Posti particolari', label: 'Posti particolari' },
+  { id: 'Food & Ristoranti', label: 'Food' },
+  { id: 'Hotel con carattere', label: 'Hotel' },
+  { id: "Borghi e città d'arte", label: 'Borghi' },
+  { id: 'Weekend romantici', label: 'Weekend' },
+] as const;
+
+type ExperienceFilter = (typeof EXPERIENCE_FILTERS)[number]['id'];
 
 type ArticleWithCoords = NormalizedArticle & {
   lat: number;
@@ -184,14 +200,43 @@ export default function MapboxWorldMap() {
   const [isLoading, setIsLoading] = useState(true);
   const [usingDemo, setUsingDemo] = useState(false);
   const [activeContinent, setActiveContinent] = useState<ContinentFilter>('all');
+  const [activeExperience, setActiveExperience] = useState<ExperienceFilter>('all');
 
   const filteredArticles = useMemo(
     () =>
-      activeContinent === 'all'
-        ? articles
-        : articles.filter((a) => (a as { continent?: string }).continent === activeContinent),
-    [articles, activeContinent]
+      articles.filter((a) => {
+        const continent = (a as { continent?: string }).continent;
+        const matchContinent = activeContinent === 'all' || continent === activeContinent;
+        const matchExperience = activeExperience === 'all' || a.category === activeExperience;
+        return matchContinent && matchExperience;
+      }),
+    [articles, activeContinent, activeExperience]
   );
+
+  const handleContinentChange = (value: ContinentFilter) => {
+    setActiveContinent(value);
+    if (value !== 'all') {
+      trackEvent('map_filter_apply', {
+        source_page: '/mappa',
+        filter_type: 'continent',
+        filter_value: value,
+        results_count: articles.filter((a) => (a as { continent?: string }).continent === value)
+          .length,
+      });
+    }
+  };
+
+  const handleExperienceChange = (value: ExperienceFilter) => {
+    setActiveExperience(value);
+    if (value !== 'all') {
+      trackEvent('map_filter_apply', {
+        source_page: '/mappa',
+        filter_type: 'experience',
+        filter_value: value,
+        results_count: articles.filter((a) => a.category === value).length,
+      });
+    }
+  };
 
   /** Centra la mappa sull'articolo + apre popup. Usato sia dal click marker
    *  che dal click sulla card della mini-lista sottostante. */
@@ -354,12 +399,20 @@ export default function MapboxWorldMap() {
             Nel frattempo puoi già esplorare i luoghi uno a uno, divisi per continente e criterio di
             scelta.
           </p>
-          <Link
-            to="/destinazioni"
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:border-transparent hover:bg-white hover:text-[var(--color-ink)]"
-          >
-            <MapPin size={14} /> Vai alle destinazioni
-          </Link>
+          <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <Link
+              to="/esplora"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:bg-[var(--color-accent)] hover:text-white"
+            >
+              <Compass size={14} /> Parti da Esplora
+            </Link>
+            <Link
+              to="/esplora"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:border-transparent hover:bg-white hover:text-[var(--color-ink)]"
+            >
+              Archivio completo <ArrowRight size={14} />
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -389,16 +442,16 @@ export default function MapboxWorldMap() {
             {filteredArticles.length === 1 ? 'destinazione' : 'destinazioni'}
             {usingDemo ? ' (anteprime editoriali)' : ' esplorate'}
             {activeContinent !== 'all' && ` · ${activeContinent}`}
+            {activeExperience !== 'all' &&
+              ` · ${EXPERIENCE_FILTERS.find((f) => f.id === activeExperience)?.label ?? ''}`}
           </p>
         </div>
       </div>
 
       {/* Filter chips — wrapper outer è pointer-events-none (lascia passare
-          eventi alla mappa fuori dai chips). Il container interno e' invece
-          pointer-events-auto E ha overflow-x-auto in modo che su mobile
-          l'utente possa scrollare orizzontalmente i chip senza che il
-          canvas Mapbox intercetti il touch. */}
-      <div className="pointer-events-none absolute inset-x-0 top-8 z-10 flex justify-start px-4 md:justify-center">
+          eventi alla mappa fuori dai chips). Due righe: continente sopra,
+          esperienza sotto. Su mobile entrambe scrollabili orizzontalmente. */}
+      <div className="pointer-events-none absolute inset-x-0 top-8 z-10 flex flex-col items-center gap-2 px-4">
         <div
           role="tablist"
           aria-label="Filtra destinazioni per continente"
@@ -412,7 +465,7 @@ export default function MapboxWorldMap() {
                 type="button"
                 role="tab"
                 aria-selected={isActive}
-                onClick={() => setActiveContinent(f.id)}
+                onClick={() => handleContinentChange(f.id)}
                 className={`shrink-0 rounded-full px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] transition-colors ${
                   isActive
                     ? 'bg-[var(--color-accent)] text-white shadow-sm'
@@ -424,13 +477,65 @@ export default function MapboxWorldMap() {
             );
           })}
         </div>
+
+        <div
+          role="tablist"
+          aria-label="Filtra destinazioni per esperienza"
+          className="pointer-events-auto flex max-w-full gap-1.5 overflow-x-auto rounded-full border border-white/10 bg-[var(--color-ink)]/55 p-1.5 backdrop-blur-xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          {EXPERIENCE_FILTERS.map((f) => {
+            const isActive = activeExperience === f.id;
+            return (
+              <button
+                key={f.id}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                onClick={() => handleExperienceChange(f.id)}
+                className={`shrink-0 rounded-full px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.18em] transition-colors ${
+                  isActive
+                    ? 'bg-white text-[var(--color-ink)] shadow-sm'
+                    : 'text-white/60 hover:bg-white/8 hover:text-white'
+                }`}
+              >
+                {f.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       <Link
-        to="/destinazioni"
+        to={(() => {
+          // Costruisce URL canonical verso /esplora con i filtri attivi
+          // sulla mappa propagati (zone + type).
+          const params = new URLSearchParams();
+          if (activeContinent !== 'all') {
+            params.set('zone', activeContinent);
+          }
+          if (activeExperience !== 'all') {
+            params.set(
+              'type',
+              activeExperience
+                .toLowerCase()
+                .replace(/&/g, 'e')
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '')
+            );
+          }
+          const qs = params.toString();
+          return qs ? `/esplora?${qs}` : '/esplora';
+        })()}
+        onClick={() =>
+          trackEvent('map_to_explore_click', {
+            source_page: '/mappa',
+            zone: activeContinent,
+            type: activeExperience,
+          })
+        }
         className="absolute bottom-44 right-8 z-10 inline-flex items-center gap-2 rounded-full border border-[var(--color-ink)]/5 bg-[var(--color-surface)]/95 px-5 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] shadow-xl backdrop-blur-xl transition-all hover:border-transparent hover:bg-[var(--color-ink)] hover:text-white md:bottom-36"
       >
-        <MapPin size={14} /> Destinazioni
+        <MapPin size={14} /> Apri archivio
       </Link>
 
       {/* Mini-lista articoli orizzontale (scroll-snap) — sincronizzata con i marker.
@@ -440,13 +545,22 @@ export default function MapboxWorldMap() {
         <div className="pointer-events-none absolute inset-x-0 bottom-4 z-10 flex justify-center px-4 md:bottom-6">
           <div
             role="status"
-            className="pointer-events-auto inline-flex items-center gap-3 rounded-full border border-white/12 bg-[var(--color-ink)]/85 px-5 py-3 text-xs font-medium text-white/80 backdrop-blur-xl"
+            className="pointer-events-auto inline-flex flex-wrap items-center justify-center gap-2 rounded-full border border-white/12 bg-[var(--color-ink)]/85 px-5 py-3 text-xs font-medium text-white/80 backdrop-blur-xl"
           >
             <Compass size={14} className="text-[var(--color-accent)]" />
-            Nessuna destinazione in {activeContinent === 'all' ? 'archivio' : activeContinent}.{' '}
+            <span>
+              Nessuna destinazione
+              {activeContinent !== 'all' && ` in ${activeContinent}`}
+              {activeExperience !== 'all' &&
+                ` per ${EXPERIENCE_FILTERS.find((f) => f.id === activeExperience)?.label ?? ''}`}
+              .
+            </span>
             <button
               type="button"
-              onClick={() => setActiveContinent('all')}
+              onClick={() => {
+                setActiveContinent('all');
+                setActiveExperience('all');
+              }}
               className="font-bold uppercase tracking-[0.18em] text-[var(--color-accent)] hover:text-white"
             >
               Mostra tutte

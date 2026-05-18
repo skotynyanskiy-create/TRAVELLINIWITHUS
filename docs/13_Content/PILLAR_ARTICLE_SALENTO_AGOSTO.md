@@ -13,6 +13,21 @@ target_keywords:
 schema: [Article, FAQPage, BreadcrumbList]
 target_words: 1200-1500
 target_publish: 2026-07-15 (per intercept query agosto)
+fact_check_brief_at: 2026-05-17
+fact_check_brief_status: fixes-applied
+fact_check_brief_risk: 0
+fact_check_brief_unverified: 1
+fact_check_brief_checklist: docs/50_Scratch/VERIFY_FACTS_salento-agosto_2026-05-17.md
+fact_check_brief_fixes_applied:
+  - r76 Sant'Andrea→Torre Sant'Andrea/Porto Badisco disambiguato
+  - r122 45°C+→oltre 40°C con riferimento ARPA Puglia
+fact_check_at: pending-draft
+fact_check_status: blocked-needs-rb-placeholder-data
+blocking_inputs_from_owner:
+  - 4 nomi località mare + costi ombrellone agosto 2026
+  - 4 nomi strutture dove dormire + range prezzo agosto
+  - 5 indirizzi cibo (trattorie, forno, cantina) con piatto+prezzo
+  - verifica volume query SEO (Search Console / Keyword Planner)
 ---
 
 # Pillar article — "Cosa fare nel Salento ad agosto in coppia"
@@ -73,7 +88,8 @@ classico. Suggerito: Specchia, Acaya, Tricase Porto, Lido Marini.
 H2: I 4 tratti di costa che non scoppiano (anche a Ferragosto)
 
 - **[Località 1 — Adriatico nord]**: descrizione luogo, accesso,
-  consiglio insider. Es. "Sant'Andrea, vicino Otranto".
+  consiglio insider. Es. "Torre Sant'Andrea (Marina di Melendugno)"
+  o "Porto Badisco (frazione di Otranto)".
 - **[Località 2 — Adriatico sud]**: idem.
 - **[Località 3 — Ionio centro]**: idem.
 - **[Località 4 — Ionio sud]**: idem.
@@ -119,7 +135,9 @@ H2: Cosa evitare ad agosto se vuoi tornare
 
 1. Prenotare ombrellone solo nei lidi mainstream.
 2. Affittare auto a Lecce senza limite ZTL.
-3. Prendere il sole tra le 13 e le 17 (45°C+).
+3. Prendere il sole tra le 13 e le 17 (asfalto rovente, pieno sole
+   oltre 40°C in giornate da bollino rosso — verificare allerta ARPA
+   Puglia il giorno stesso).
 4. Programmare 3 spostamenti al giorno (distanze ingannevoli).
 5. Aspettare Ferragosto per spostarsi (tutti gli abitanti tornano
    dal Nord, traffico letale).

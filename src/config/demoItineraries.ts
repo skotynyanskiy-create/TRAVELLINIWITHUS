@@ -362,7 +362,7 @@ export const DEMO_ITINERARIES: Itinerary[] = [
   {
     id: 'giappone-14-giorni-itinerario',
     slug: 'giappone-14-giorni-itinerario',
-    title: 'Giappone in 14 giorni: l itinerario che usiamo davvero',
+    title: "Giappone in 14 giorni: l'itinerario che usiamo davvero",
     destination: 'Giappone',
     region: 'Honshu, Shikoku',
     continent: 'Asia',

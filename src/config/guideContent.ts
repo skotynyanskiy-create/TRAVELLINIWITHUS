@@ -1,21 +1,16 @@
 /**
- * Contenuto visivo e descrittivo per le categorie tematiche del blog Guide di Viaggio.
+ * Contenuto visivo e descrittivo per i FORMAT canonical Esplora.
+ *
+ * Sostituisce le 8 vecchie GUIDE_CATEGORIES (Itinerari completi, Consigli
+ * pratici, Cosa portare, Food guide, Dove dormire, Budget & Costi,
+ * Pianificazione, Weekend & Day trip) con i 4 FORMAT ortogonali della
+ * tassonomia 3.0.
  */
 
-import {
-  Backpack,
-  BookOpen,
-  CalendarDays,
-  DollarSign,
-  type LucideIcon,
-  Map,
-  Moon,
-  UtensilsCrossed,
-  Zap,
-} from 'lucide-react';
-import type { GuideCategory } from './contentTaxonomy';
+import { BookOpen, ClipboardList, Map, Sparkles, type LucideIcon } from 'lucide-react';
+import type { ContentFormat } from './contentTaxonomy';
 
-export interface GuideCategoryVisual {
+export interface FormatVisual {
   icon: LucideIcon;
   color: string;
   colorLight: string;
@@ -23,73 +18,44 @@ export interface GuideCategoryVisual {
   cta: string;
 }
 
-export const GUIDE_CATEGORY_VISUALS: Record<GuideCategory, GuideCategoryVisual> = {
-  'Itinerari completi': {
-    icon: Map,
-    color: '#6366F1',
-    colorLight: '#EEF2FF',
-    description:
-      'Giornate già organizzate, tappe, tempi e tutto quello che serve per partire senza pensieri.',
-    cta: 'Leggi gli itinerari',
-  },
-  'Consigli pratici': {
-    icon: Zap,
+export const FORMAT_VISUALS: Record<ContentFormat, FormatVisual> = {
+  Storia: {
+    icon: Sparkles,
     color: '#A8865A',
     colorLight: '#F3EFE9',
     description:
-      'Dritte concrete su trasporti, app, sim card, valuta locale e piccole cose che fanno la differenza.',
-    cta: 'Scopri i consigli',
+      'Racconti di un posto vissuto, con atmosfera, dettagli e quello che ci ha colpito davvero.',
+    cta: 'Leggi la storia',
   },
-  'Cosa portare': {
-    icon: Backpack,
+  Guida: {
+    icon: BookOpen,
+    color: '#6366F1',
+    colorLight: '#EEF2FF',
+    description:
+      'Tutto quello che ti serve per decidere se andare, quando, dove dormire e cosa salvare.',
+    cta: 'Apri la guida',
+  },
+  Itinerario: {
+    icon: Map,
     color: '#059669',
     colorLight: '#ECFDF5',
     description:
-      'Le packing list giuste per ogni tipo di viaggio: mare, montagna, city break o lungo raggio.',
-    cta: 'Prepara la valigia',
+      'Giorno per giorno, tappe, tempi reali e logistica già organizzata: parti senza pensieri.',
+    cta: "Leggi l'itinerario",
   },
-  'Food guide': {
-    icon: UtensilsCrossed,
-    color: '#DC2626',
-    colorLight: '#FEF2F2',
-    description:
-      'Dove mangiare davvero bene: indirizzi testati, mercati, specialità locali e come scegliere.',
-    cta: 'Esplora il food',
-  },
-  'Dove dormire': {
-    icon: Moon,
-    color: '#7C3AED',
-    colorLight: '#F5F3FF',
-    description:
-      'Hotel con carattere, B&B nascosti, agriturismi e strutture che valgono davvero il prezzo.',
-    cta: "Trova l'alloggio",
-  },
-  'Budget & Costi': {
-    icon: DollarSign,
+  'Lista pratica': {
+    icon: ClipboardList,
     color: '#B45309',
     colorLight: '#FFFBEB',
-    description:
-      "Cifre reali, trucchi per risparmiare e come ottimizzare il budget senza rinunciare all'esperienza.",
-    cta: 'Calcola il budget',
-  },
-  Pianificazione: {
-    icon: CalendarDays,
-    color: '#0891B2',
-    colorLight: '#ECFEFF',
-    description:
-      'Quando andare, come prenotare, quanto tempo serve e tutto quello da fare prima di partire.',
-    cta: 'Pianifica il viaggio',
-  },
-  'Weekend & Day trip': {
-    icon: BookOpen,
-    color: '#BE185D',
-    colorLight: '#FDF2F8',
-    description:
-      'Idee per uscite brevi, weekend fuori porta e gite di un giorno da organizzare in pochi minuti.',
-    cta: "Trova l'idea",
+    description: 'Dritte concrete: cosa portare, quanto costa, come muoversi, dove non sbagliare.',
+    cta: 'Apri la lista',
   },
 };
 
-export function getGuideCategoryVisual(category: GuideCategory): GuideCategoryVisual {
-  return GUIDE_CATEGORY_VISUALS[category];
+export function getFormatVisual(format: ContentFormat): FormatVisual {
+  return FORMAT_VISUALS[format];
 }
+
+// Back-compat alias durante la migrazione
+export const GUIDE_CATEGORY_VISUALS = FORMAT_VISUALS;
+export const getGuideCategoryVisual = getFormatVisual;

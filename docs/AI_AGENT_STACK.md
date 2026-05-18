@@ -144,6 +144,28 @@ These remain in `.claude/skills` because they encode Claude Code workflow ergono
 
 Promoting them would require translating their conversational steps into tool-neutral instructions; until then, they stay scoped to Claude Code.
 
+### Editorial leverage skills (added 2026-05-17, Claude-local)
+
+Aggiunte dopo audit confronto vs catalogo skills esterno @avatarist.ai. Reimplementate Travellini-style anziché importate, per evitare conflitti con routing CLAUDE.md, anti-brand patterns e rischi prompt injection da skill di terzi. Tutte vivono in `.claude/skills/` e attendono promozione a `.agents/skills` dopo prima validazione operativa.
+
+- `anti-ai-slop`: rifinitura italiano long-form post-editorial-writer per togliere pattern AI (ritmo monotono, cliché, transizioni "inoltre/tuttavia", superlativi vuoti, generalita). Preserva fatti; segnala `[VERIFY]` per dati incerti.
+- `hook`: generatore 5 hook scroll-stopper italiani su 7 framework testati (curiosity gap onesto, specificita numerica, contrarian autentico, scena, stake personale, contraddizione, domanda specifica). Per Reel/TikTok opener, lead pillar, hero subtitle, oggetto newsletter, headline lead magnet. Mai clickbait.
+- `repurpose`: trasforma pillar article in pacchetto multi-canale (carosello IG 8 slide + Reel 30s + quiz 5 domande + bullet newsletter + OG brief). Orchestra `social-content-operator` + `seo-strategist` + `asset-curator`. Scrive `docs/13_Content/REPURPOSE_*.md` + handoff brief.
+- `ai-seo`: audit Generative Engine Optimization su 7 assi (entity clarity, claim citabili, structured authorship, llms.txt, snippet density, headline onesti, freshness signals). Complementa `/seo-check` (SERP classica) con AI search (Perplexity, ChatGPT search, Google AI Overviews, Claude).
+- `verify-facts`: fact-check sistematico pre-pubblicazione. Estrae ogni claim verificabile (prezzi, orari, distanze, indirizzi, eventi, codici) e classifica `verified` / `dated` / `stale` / `unverified` / `risk` / `missing-attr`. Aggiorna `fact_check_status` nel frontmatter dell'articolo. Blocca pubblicazione se >30% claim problematici.
+
+Sequenza canonica suggerita per nuovo pillar article:
+
+```
+/new-article → editorial-writer → /anti-ai-slop → /verify-facts → /ai-seo → /seo-check → quality-auditor → publish → /repurpose
+```
+
+Sequenza canonica per Reel/IG opener nuovo:
+
+```
+/hook (genera 5 varianti) → social-content-operator (finalizza caption + scheduling) → /social-card (OG opzionale)
+```
+
 ## Claude Project Agents
 
 - `travellini-ui-designer`: read-only design critique.

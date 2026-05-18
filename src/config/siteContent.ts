@@ -170,7 +170,7 @@ export const siteContentDefaults: SiteContentMap = {
     heroDescription:
       'Guide pratiche scritte da chi ha vissuto il viaggio. Atmosfera, dettagli utili e consigli che aiutano a capire se un posto merita davvero.',
     primaryCtaLabel: 'Scopri destinazioni',
-    primaryCtaLink: '/destinazioni',
+    primaryCtaLink: '/esplora',
     secondaryCtaLabel: 'Ultime storie',
     secondaryCtaLink: '/#storie',
     quickPillars: [
@@ -184,7 +184,7 @@ export const siteContentDefaults: SiteContentMap = {
         title: 'Posti particolari',
         description:
           'Destinazioni, luoghi e soggiorni che meritano davvero di entrare nei tuoi piani.',
-        to: '/destinazioni',
+        to: '/esplora',
         cta: 'Esplora i luoghi',
       },
       {

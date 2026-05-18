@@ -176,10 +176,14 @@ function Shop() {
     <PageLayout>
       <>
         <SEO
-          title="Shop editoriale"
+          title="Shop editoriale — guide premium e planner"
           description="Guide premium, planner e toolkit Travelliniwithus pensati per organizzare viaggi con più criterio. Catalogo reale in preparazione."
           canonical={`${SITE_URL}/shop`}
-          noindex={usingShopDemo || products.length === 0}
+          breadcrumbs={[
+            { name: 'Home', url: SITE_URL },
+            { name: 'Shop', url: `${SITE_URL}/shop` },
+          ]}
+          noindex={usingShopDemo}
         />
 
         <AnimatePresence>
@@ -382,8 +386,8 @@ function Shop() {
                   Dal viaggio reale al formato utile.
                 </h2>
                 <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/68 md:text-lg">
-                  Dopo {BRAND_STATS.yearsOfTravel} anni di viaggi, il valore non e aggiungere file:
-                  e distillare decisioni, mappe, priorita e indirizzi in qualcosa che puoi usare in
+                  Dopo {BRAND_STATS.yearsOfTravel} anni di viaggi, il valore non è aggiungere file:
+                  è distillare decisioni, mappe, priorità e indirizzi in qualcosa che puoi usare in
                   fretta.
                 </p>
               </div>
@@ -395,7 +399,7 @@ function Shop() {
                   Regola prodotto
                 </p>
                 <p className="mt-4 text-2xl font-serif leading-relaxed">
-                  Se non e utile da consultare mentre stai decidendo o viaggiando, non entra nello
+                  Se non è utile da consultare mentre stai decidendo o viaggiando, non entra nello
                   shop.
                 </p>
               </div>

@@ -40,6 +40,10 @@ export default function Itinerari() {
         title="Itinerari di viaggio in Italia e nel mondo"
         description="Itinerari pratici giorno per giorno, filtrabili per durata, stile e budget. Italia, Europa, oltre. Per coppie che vogliono decidere meglio."
         canonical={`${SITE_URL}/itinerari`}
+        breadcrumbs={[
+          { name: 'Home', url: SITE_URL },
+          { name: 'Itinerari', url: `${SITE_URL}/itinerari` },
+        ]}
       />
 
       <Section className="pt-8">

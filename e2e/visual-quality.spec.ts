@@ -2,7 +2,8 @@ import { expect, test } from '@playwright/test';
 
 const routes = [
   { path: '/', label: 'home' },
-  { path: '/destinazioni', label: 'destinazioni' },
+  { path: '/esplora', label: 'esplora' },
+  { path: '/mappa', label: 'mappa' },
   { path: '/collaborazioni', label: 'collaborazioni' },
   { path: '/media-kit', label: 'media-kit' },
   { path: '/shop', label: 'shop' },

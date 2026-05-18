@@ -9,16 +9,14 @@ import { SITE_URL } from '../config/site';
 import HeroSection from '../components/home/HeroSection';
 import HomeTrustStrip from '../components/home/HomeTrustStrip';
 import HomePartnerSignal from '../components/home/HomePartnerSignal';
-import DiscoveryDestinations from '../components/home/DiscoveryDestinations';
+import HomeDiscoveryFinder from '../components/home/HomeDiscoveryFinder';
 import CoupleIntro from '../components/home/CoupleIntro';
 
 // Below-fold: lazy. L'initial bundle home si alleggerisce di ~8-12 KB gz,
 // le sezioni vengono caricate quando l'utente si avvicina (Suspense fallback
 // di altezza riservata previene CLS).
-const DiscoveryExperiences = lazy(() => import('../components/home/DiscoveryExperiences'));
 const LatestArticles = lazy(() => import('../components/home/LatestArticles'));
 const HomeQuizBudgetTeaser = lazy(() => import('../components/home/HomeQuizBudgetTeaser'));
-const DiscoveryGuides = lazy(() => import('../components/home/DiscoveryGuides'));
 const InstagramGrid = lazy(() => import('../components/InstagramGrid'));
 const NewsletterFeature = lazy(() => import('../components/home/NewsletterFeature'));
 const MonetizationTeaser = lazy(() => import('../components/home/MonetizationTeaser'));
@@ -41,24 +39,30 @@ export default function Home() {
   return (
     <div className="min-h-screen overflow-x-clip bg-sand selection:bg-[var(--color-accent)] selection:text-white">
       <SEO
-        title="Posti particolari in Italia e nel mondo per chi viaggia in coppia"
-        description="Guide a posti particolari, hotel con carattere, borghi e weekend romantici — scritte da chi li ha vissuti. Archivio filtrabile per luogo e stile. Travelliniwithus."
+        title="Posti particolari in Italia e nel mondo, in coppia"
+        description="Otto anni di viaggi reali, oltre 200 posti raccontati con dettagli pratici: dove dormire, cosa evitare, quanto costa davvero. Niente marketing — solo cose vissute."
         canonical={`${SITE_URL}/`}
       />
       <Helmet>
+        {/* HeroSection usa .png come HERO_IMAGE_DESKTOP/MOBILE (no AVIF fallback
+            nel <img>). Preloadare AVIF qui scatena una richiesta in piu' senza
+            essere usata. Preloadiamo lo stesso PNG che il componente effettivamente
+            renderizza, cosi il browser parallelizza con CSS/JS. */}
         <link
           rel="preload"
           as="image"
-          href="/images/brand/couple-travel.avif"
-          type="image/avif"
+          href="/images/brand/couple-travel.png"
+          type="image/png"
           media="(min-width: 769px)"
+          fetchPriority="high"
         />
         <link
           rel="preload"
           as="image"
-          href="/images/hero-amalfi.avif"
-          type="image/avif"
+          href="/images/hero-amalfi.png"
+          type="image/png"
           media="(max-width: 768px)"
+          fetchPriority="high"
         />
       </Helmet>
 
@@ -80,40 +84,35 @@ export default function Home() {
       {/* 1. Hero */}
       <HeroSection />
 
-      {/* 2. Trust strip — social proof immediato */}
-      <HomeTrustStrip />
+      {/* 2. Discovery unico — sostituisce DiscoveryDestinations + Experiences + Guides
+          (consolidamento 2026-05-15). Una sola sezione "Da dove vuoi partire?"
+          con 4 ingressi coerenti verso /esplora e /mappa. */}
+      <HomeDiscoveryFinder />
 
-      {/* 3. Partner entry — visibile sopra la prima meta pagina */}
-      <HomePartnerSignal />
-
-      {/* 3. Discovery destinations */}
-      <DiscoveryDestinations />
-
-      {/* 4. Creator showcase (Couple intro) — umanizza brand + metodo */}
+      {/* 3. Creator showcase (Couple intro) — umanizza brand + metodo PRIMA
+          di qualunque segnale business/partner (riordino 2026-05-17 audit:
+          editoriale prima del business). */}
       <CoupleIntro />
 
-      {/* 5. Discovery experiences */}
-      <Suspense fallback={<SectionPlaceholder minHeight="640px" />}>
-        <DiscoveryExperiences />
-      </Suspense>
+      {/* 4. Trust strip — social proof. Spostato sotto CoupleIntro per evitare
+          pattern "landing SaaS B2B" nei primi 3 fold. */}
+      <HomeTrustStrip />
 
-      {/* 6. Latest articles (grid, no carousel). id="storie" appartiene
+      {/* 5. Partner entry — visibile dopo il segnale editoriale. */}
+      <HomePartnerSignal />
+
+      {/* 5. Latest articles (grid, no carousel). id="storie" appartiene
           alla <section> interna di LatestArticles, qui niente wrapper. */}
       <Suspense fallback={<SectionPlaceholder minHeight="720px" />}>
         <LatestArticles />
       </Suspense>
 
-      {/* 7. Quiz + Budget interactive (mid-page, post-content) */}
+      {/* 6. Quiz + Budget interactive (mid-page, post-content) */}
       <Suspense fallback={<SectionPlaceholder minHeight="480px" />}>
         <HomeQuizBudgetTeaser />
       </Suspense>
 
-      {/* 8. Discovery guides */}
-      <Suspense fallback={<SectionPlaceholder minHeight="560px" />}>
-        <DiscoveryGuides />
-      </Suspense>
-
-      {/* 9. Instagram feed */}
+      {/* 7. Instagram feed */}
       <Suspense fallback={<SectionPlaceholder minHeight="640px" />}>
         <InstagramGrid />
       </Suspense>

@@ -116,8 +116,12 @@ export default function ChiSiamo() {
   return (
     <PageLayout>
       <SEO
-        title="Chi Siamo"
-        description="Chi sono Rodrigo e Betta, come lavorano e perché Travelliniwithus consiglia solo posti particolari raccontati con criterio."
+        title="Chi siamo — Rodrigo e Betta, travel creator italiani"
+        description="Otto anni di viaggi in coppia raccontati con criterio. Come scegliamo i posti, perché ne consigliamo pochi, cosa garantiamo a chi ci legge."
+        breadcrumbs={[
+          { name: 'Home', url: SITE_URL },
+          { name: 'Chi siamo', url: `${SITE_URL}/chi-siamo` },
+        ]}
       />
       <JsonLd
         data={{
@@ -356,7 +360,7 @@ export default function ChiSiamo() {
             ))}
           </div>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button to="/destinazioni" variant="cta" size="lg">
+            <Button to="/esplora" variant="cta" size="lg">
               Esplora i posti
             </Button>
             <Button to="/collaborazioni" variant="outline-light" size="lg">

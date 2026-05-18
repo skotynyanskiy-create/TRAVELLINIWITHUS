@@ -70,7 +70,7 @@ export default function LatestArticles() {
             </p>
           </div>
           <Link
-            to="/guide"
+            to="/esplora"
             className="hidden items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-transform hover:translate-x-0.5 sm:inline-flex"
           >
             Tutti gli articoli <ArrowRight size={12} />
@@ -96,7 +96,7 @@ export default function LatestArticles() {
                 Intanto puoi esplorare l&apos;archivio per luogo o per esperienza.
               </p>
               <Link
-                to="/destinazioni"
+                to="/esplora"
                 className="mt-6 inline-flex items-center gap-2 rounded-lg bg-ink px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
               >
                 Esplora l&apos;archivio <ArrowRight size={14} />
@@ -107,7 +107,7 @@ export default function LatestArticles() {
 
         <div className="mt-12 flex justify-center sm:hidden">
           <Link
-            to="/guide"
+            to="/esplora"
             className="inline-flex items-center gap-2 rounded-lg border border-black/10 px-5 py-2.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
           >
             Tutti gli articoli <ArrowRight size={12} />

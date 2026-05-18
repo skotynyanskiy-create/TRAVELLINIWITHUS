@@ -178,7 +178,28 @@ Prefer these when they match the request:
 - `/smoke-test` dopo modifiche visive importanti
 - `/audit-ui`, `/seo-check`, `/firebase-check`, `/stripe-flow`, `/predeploy`, `/deploy`, `/commit`
 - `/new-page`, `/new-article`
+- **Editorial leverage** (added 2026-05-17): `/anti-ai-slop` (rifinitura long-form), `/hook` (5 hook scroll-stopper), `/repurpose` (pillar → pacchetto multi-canale), `/ai-seo` (GEO/AI search), `/verify-facts` (fact-check pre-publish)
 - Specialist agents: `travellini-ui-designer`, `travellini-seo-conversion-strategist`, `travellini-growth-revenue-operator`, `travellini-social-content-operator`, `travellini-frontend-builder`, `travellini-backend-engineer`, `travellini-quality-auditor`, `browser-auditor`
+
+### Canonical sequences with editorial leverage skills
+
+**New pillar article (full pipeline):**
+
+```
+/new-article → editorial-writer → /anti-ai-slop → /verify-facts → /ai-seo → /seo-check → quality-auditor → publish → /repurpose
+```
+
+**New Reel / TikTok / IG opener:**
+
+```
+/hook → social-content-operator → /social-card (opzionale)
+```
+
+**Lead magnet / media kit copy refresh:**
+
+```
+seo-strategist (copy) → /anti-ai-slop → /verify-facts → /ai-seo → quality-auditor
+```
 
 ## When to update `docs/`
 

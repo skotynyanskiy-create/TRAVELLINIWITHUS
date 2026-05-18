@@ -1,0 +1,720 @@
+/**
+ * Travelliniwithus — POI catalog per Itinerary Builder.
+ *
+ * Marathon FASE 3.A 2026-05-18 (MVP).
+ *
+ * Catalogo "Punti di Interesse" curato manualmente da R+B per destinazione:
+ * mare, ristorante, hotel, vista, borgo, museo, evento.
+ *
+ * MVP: 8-12 POI per destinazione pilot (Salento). Estendibile su altre
+ * destinazioni quando R+B aggiornano i field report.
+ *
+ * Il builder permette all'utente di comporre un itinerario giorno-per-giorno
+ * pescando da questi POI. Versione MVP: click-to-add (no drag&drop).
+ * Drag&drop con dnd-kit = roadmap step successivo se adoption funziona.
+ */
+
+export type PoiCategory =
+  | 'mare'
+  | 'ristorante'
+  | 'hotel'
+  | 'vista'
+  | 'borgo'
+  | 'museo'
+  | 'evento'
+  | 'esperienza';
+
+export interface Poi {
+  id: string;
+  /** Nome breve italiano (max 4 parole) */
+  name: string;
+  /** Categoria — usato per UI grouping + iconografia */
+  category: PoiCategory;
+  /** Destinazione slug (collega a costBaselines + seasonalGuide) */
+  destinationSlug: string;
+  /** Descrizione 1 frase, max 100 char, voce R+B */
+  description: string;
+  /** Coordinate geografiche per integrazione Mapbox futura */
+  geo: { latitude: number; longitude: number };
+  /** Tempo medio raccomandato (in minuti) per il POI */
+  durationMin: number;
+  /** Mesi consigliati per visitare (1-12) — se assente: tutto l'anno */
+  bestMonths?: number[];
+  /** Mese da evitare (sovrappopolato/chiuso) */
+  avoidMonths?: number[];
+  /** Nota R+B specifica, max 120 char */
+  rbNote?: string;
+}
+
+/**
+ * POI Catalog — partenza con Salento (pilot), 10 POI rappresentativi.
+ * Quando R+B aggiornano i field report, estendere a Sicilia, Toscana, ecc.
+ */
+export const POI_CATALOG: Record<string, Poi> = {
+  // ═══ SALENTO ═══
+  'sal-marina-serra': {
+    id: 'sal-marina-serra',
+    name: 'Marina Serra',
+    category: 'mare',
+    destinationSlug: 'salento',
+    description: 'Piscina naturale di tufo + costa libera 90 metri a sinistra.',
+    geo: { latitude: 39.8978, longitude: 18.3658 },
+    durationMin: 180,
+    bestMonths: [6, 9],
+    avoidMonths: [8],
+    rbNote: 'Andateci alle 7 del mattino per il tuffo nella piscina senza fila.',
+  },
+  'sal-porto-badisco': {
+    id: 'sal-porto-badisco',
+    name: 'Porto Badisco',
+    category: 'mare',
+    destinationSlug: 'salento',
+    description: 'Caletta a scendere, 200 gradini. Acqua trasparente.',
+    geo: { latitude: 40.0786, longitude: 18.4869 },
+    durationMin: 180,
+    bestMonths: [5, 6, 9],
+    rbNote: 'Parcheggio gratis sulla provinciale, 10 min a piedi.',
+  },
+  'sal-lecce-centro': {
+    id: 'sal-lecce-centro',
+    name: 'Lecce centro storico',
+    category: 'borgo',
+    destinationSlug: 'salento',
+    description: "Barocco leccese, piazza Sant'Oronzo, anfiteatro romano.",
+    geo: { latitude: 40.3528, longitude: 18.1742 },
+    durationMin: 240,
+    bestMonths: [4, 5, 9, 10],
+    avoidMonths: [7, 8],
+    rbNote: 'Camminata mattino o sera tardi (>20°C). Mezzogiorno = forno.',
+  },
+  'sal-otranto-castello': {
+    id: 'sal-otranto-castello',
+    name: 'Otranto e castello aragonese',
+    category: 'borgo',
+    destinationSlug: 'salento',
+    description: 'Cattedrale + mosaico medievale + lungomare. 2 ore minimo.',
+    geo: { latitude: 40.1467, longitude: 18.4906 },
+    durationMin: 180,
+    bestMonths: [5, 9],
+    rbNote: "Mattino presto o tramonto. A mezzogiorno e' un imbuto turistico.",
+  },
+  'sal-tricase-porto': {
+    id: 'sal-tricase-porto',
+    name: 'Trattoria a Tricase Porto',
+    category: 'ristorante',
+    destinationSlug: 'salento',
+    description: 'Trattoria family-run, pesce del giorno, 25-35€ a testa.',
+    geo: { latitude: 39.9197, longitude: 18.3933 },
+    durationMin: 120,
+    bestMonths: [5, 6, 9, 10],
+    rbNote: 'Prenotare 24h prima da giugno. Chiede contanti, niente carta.',
+  },
+  'sal-santa-maria-leuca': {
+    id: 'sal-santa-maria-leuca',
+    name: 'Santa Maria di Leuca',
+    category: 'vista',
+    destinationSlug: 'salento',
+    description: 'Punta sud Italia. Faro + santuario + grotte in barca.',
+    geo: { latitude: 39.7976, longitude: 18.3528 },
+    durationMin: 180,
+    bestMonths: [5, 6, 9],
+    avoidMonths: [8],
+    rbNote: 'Tramonto top. Le grotte si visitano solo con barca prenotata (15€).',
+  },
+  'sal-acaya-castello': {
+    id: 'sal-acaya-castello',
+    name: 'Acaya — borgo fortificato',
+    category: 'borgo',
+    destinationSlug: 'salento',
+    description: 'Borgo del XVI secolo, 200 abitanti. Castello visitabile.',
+    geo: { latitude: 40.3683, longitude: 18.2367 },
+    durationMin: 90,
+    bestMonths: [4, 5, 10, 11],
+    rbNote: 'Tappa ideale al rientro da Lecce. Quasi sempre vuoto.',
+  },
+  'sal-presicce-acquarica': {
+    id: 'sal-presicce-acquarica',
+    name: 'Presicce-Acquarica',
+    category: 'borgo',
+    destinationSlug: 'salento',
+    description: 'Borgo dei Borghi 2024 (Presicce), case bianche + frantoi ipogei.',
+    geo: { latitude: 39.8767, longitude: 18.2667 },
+    durationMin: 120,
+    bestMonths: [4, 5, 9, 10],
+    rbNote: 'Visita frantoio ipogeo Comune — 3€, prenotare proloco.',
+  },
+  'sal-galatina-pasticciotto': {
+    id: 'sal-galatina-pasticciotto',
+    name: 'Pasticciotto a Galatina',
+    category: 'esperienza',
+    destinationSlug: 'salento',
+    description: 'Il pasticciotto originale di Pasticceria Ascalone, dal 1745.',
+    geo: { latitude: 40.1731, longitude: 18.1681 },
+    durationMin: 30,
+    bestMonths: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    rbNote: 'Si fa colazione, costa 1,80€ nel 2025. Aperto 7-13, 16-20.',
+  },
+  'sal-notte-taranta': {
+    id: 'sal-notte-taranta',
+    name: 'Notte della Taranta',
+    category: 'evento',
+    destinationSlug: 'salento',
+    description: 'Concertone finale a Melpignano, ultima domenica di agosto.',
+    geo: { latitude: 40.0892, longitude: 18.3056 },
+    durationMin: 360,
+    bestMonths: [8],
+    rbNote: '100k persone, traffico folle. Concertone gratis, navetta da Lecce.',
+  },
+
+  // ═══ SICILIA ═══
+  'sic-noto-corso': {
+    id: 'sic-noto-corso',
+    name: 'Corso Vittorio Emanuele, Noto',
+    category: 'borgo',
+    destinationSlug: 'sicilia',
+    description: 'Asse barocco di Noto: cattedrale + palazzi + caffe storici.',
+    geo: { latitude: 36.8911, longitude: 15.0667 },
+    durationMin: 180,
+    bestMonths: [4, 5, 10],
+    rbNote: "Caffe Sicilia (granita mandorla) e' un'istituzione: 5€ ma vale.",
+  },
+  'sic-favignana-cala': {
+    id: 'sic-favignana-cala',
+    name: 'Cala Rossa, Favignana',
+    category: 'mare',
+    destinationSlug: 'sicilia',
+    description: 'Cava di tufo a picco sul mare. Acqua azzurra cobalto.',
+    geo: { latitude: 37.9333, longitude: 12.3333 },
+    durationMin: 180,
+    bestMonths: [6, 9],
+    avoidMonths: [8],
+    rbNote: 'Bici per arrivarci, parcheggio piccolo. Pranzo arancina + tonno locale.',
+  },
+  'sic-taormina-teatro': {
+    id: 'sic-taormina-teatro',
+    name: 'Teatro Antico di Taormina',
+    category: 'museo',
+    destinationSlug: 'sicilia',
+    description: 'Teatro greco-romano col vulcano sullo sfondo. Vista che pesa.',
+    geo: { latitude: 37.8526, longitude: 15.2926 },
+    durationMin: 120,
+    bestMonths: [5, 6, 9, 10],
+    avoidMonths: [8],
+    rbNote: 'Mattino presto evita la folla. Biglietto 10€, gratis prima domenica del mese.',
+  },
+  'sic-catania-pescheria': {
+    id: 'sic-catania-pescheria',
+    name: 'Pescheria di Catania',
+    category: 'esperienza',
+    destinationSlug: 'sicilia',
+    description: 'Mercato del pesce sotto Piazza Duomo, dalle 6 alle 14.',
+    geo: { latitude: 37.5023, longitude: 15.0875 },
+    durationMin: 90,
+    bestMonths: [1, 2, 3, 4, 5, 9, 10, 11, 12],
+    rbNote: 'Andateci verso le 10: meno caotico, ancora pesce fresco. Cannolo da Prestipino dopo.',
+  },
+  'sic-etna-rifugio': {
+    id: 'sic-etna-rifugio',
+    name: 'Etna versante sud — Rifugio Sapienza',
+    category: 'vista',
+    destinationSlug: 'sicilia',
+    description: 'Base 1900m per escursione ai crateri. Funivia o sentieri.',
+    geo: { latitude: 37.6967, longitude: 14.9981 },
+    durationMin: 360,
+    bestMonths: [5, 6, 9, 10],
+    avoidMonths: [1, 2, 12],
+    rbNote:
+      "Vestiti a strati anche d'estate: -10°C dal fondovalle. Guida obbligatoria sopra 2900m.",
+  },
+  'sic-ragusa-ibla': {
+    id: 'sic-ragusa-ibla',
+    name: 'Ragusa Ibla',
+    category: 'borgo',
+    destinationSlug: 'sicilia',
+    description: 'Citta barocca su due livelli. Ibla sotto = labirinto di vicoli.',
+    geo: { latitude: 36.9258, longitude: 14.7406 },
+    durationMin: 180,
+    bestMonths: [4, 5, 10, 11],
+    rbNote: 'Tramonto da Santa Maria delle Scale. Cena al Duomo: Ciccio Sultano sopra 50€.',
+  },
+  'sic-modica-cioccolato': {
+    id: 'sic-modica-cioccolato',
+    name: 'Cioccolato di Modica',
+    category: 'esperienza',
+    destinationSlug: 'sicilia',
+    description:
+      'Cioccolato granuloso a freddo, ricetta azteca. Antica Dolceria Bonajuto dal 1880.',
+    geo: { latitude: 36.8569, longitude: 14.7619 },
+    durationMin: 60,
+    bestMonths: [1, 2, 3, 4, 5, 9, 10, 11, 12],
+    rbNote: 'Provate cannella + sale. Tavolette 4-6€, regali low-cost di alta qualita.',
+  },
+
+  // ═══ TOSCANA ═══
+  'tos-firenze-duomo': {
+    id: 'tos-firenze-duomo',
+    name: 'Duomo + Cupola del Brunelleschi',
+    category: 'museo',
+    destinationSlug: 'toscana',
+    description: 'Cupola da salire (463 gradini). Biglietto cumulativo Opera del Duomo.',
+    geo: { latitude: 43.7731, longitude: 11.2558 },
+    durationMin: 180,
+    bestMonths: [3, 4, 5, 10, 11],
+    avoidMonths: [7, 8],
+    rbNote: 'Prenotare salita cupola online giorni prima. Slot 8:15 = zero fila.',
+  },
+  'tos-san-gimignano': {
+    id: 'tos-san-gimignano',
+    name: 'San Gimignano',
+    category: 'borgo',
+    destinationSlug: 'toscana',
+    description: 'Torri medievali, vista colline senesi. Pernottare = vivere il borgo dopo le 19.',
+    geo: { latitude: 43.4675, longitude: 11.0428 },
+    durationMin: 240,
+    bestMonths: [4, 5, 9, 10],
+    avoidMonths: [7, 8],
+    rbNote: "Gelato Dondoli (Piazza Cisterna) e' top mondiale ma fila lunga.",
+  },
+  'tos-val-orcia': {
+    id: 'tos-val-orcia',
+    name: "Val d'Orcia — strada bianca tra cipressi",
+    category: 'vista',
+    destinationSlug: 'toscana',
+    description: 'Le colline da cartolina: Pienza-Montalcino-San Quirico. Auto obbligatoria.',
+    geo: { latitude: 43.0775, longitude: 11.6794 },
+    durationMin: 300,
+    bestMonths: [4, 5, 6, 9, 10],
+    rbNote: 'Tramonto presso Vitaleta (cappella nei campi): meta pomeriggio = luce migliore.',
+  },
+  'tos-siena-piazza': {
+    id: 'tos-siena-piazza',
+    name: 'Piazza del Campo, Siena',
+    category: 'borgo',
+    destinationSlug: 'toscana',
+    description: 'Piazza conchiglia + Torre del Mangia 88m. Vista totale citta.',
+    geo: { latitude: 43.3186, longitude: 11.3306 },
+    durationMin: 180,
+    bestMonths: [3, 4, 5, 10, 11],
+    rbNote: 'Sedersi sui mattoni, ordinare birra dal bar piu vicino, aspettare le 17.',
+  },
+  'tos-lucca-mura': {
+    id: 'tos-lucca-mura',
+    name: 'Mura di Lucca in bici',
+    category: 'esperienza',
+    destinationSlug: 'toscana',
+    description: 'Cintura muraria 4.2 km percorribile in bici. Noleggi in centro.',
+    geo: { latitude: 43.8429, longitude: 10.5028 },
+    durationMin: 90,
+    bestMonths: [3, 4, 5, 6, 9, 10],
+    rbNote: 'Bici 5€/3h. Mattino presto o tramonto. Evitare 12-14 sole alto.',
+  },
+  'tos-chianti-cantina': {
+    id: 'tos-chianti-cantina',
+    name: 'Cantina nel Chianti',
+    category: 'esperienza',
+    destinationSlug: 'toscana',
+    description: 'Visita + degustazione tipica da Greve a Castellina. 35-60€ a persona.',
+    geo: { latitude: 43.5833, longitude: 11.3167 },
+    durationMin: 180,
+    bestMonths: [4, 5, 6, 9, 10, 11],
+    rbNote: 'Prenotare sempre, anche fuori stagione. Eviti i tour pullman.',
+  },
+
+  // ═══ DOLOMITI ═══
+  'dol-tre-cime': {
+    id: 'dol-tre-cime',
+    name: 'Tre Cime di Lavaredo',
+    category: 'vista',
+    destinationSlug: 'dolomiti',
+    description: 'Giro classico ~10 km, dislivello 350m. Sentieri ben segnati.',
+    geo: { latitude: 46.6178, longitude: 12.3061 },
+    durationMin: 300,
+    bestMonths: [6, 7, 9, 10],
+    avoidMonths: [12, 1, 2, 3, 4, 11],
+    rbNote: 'Pedaggio auto 30€ in alta stagione. Mattino presto evita masse weekend.',
+  },
+  'dol-seceda': {
+    id: 'dol-seceda',
+    name: 'Seceda — cresta da cartolina',
+    category: 'vista',
+    destinationSlug: 'dolomiti',
+    description: 'Funivia da Ortisei + sentiero panoramico facile. Vista 360° gruppo Odle.',
+    geo: { latitude: 46.6, longitude: 11.7833 },
+    durationMin: 240,
+    bestMonths: [6, 7, 8, 9, 12, 1, 2, 3],
+    rbNote: 'Salire prima delle 9 = piattaforma cresta vuota per foto.',
+  },
+  'dol-braies': {
+    id: 'dol-braies',
+    name: 'Lago di Braies',
+    category: 'vista',
+    destinationSlug: 'dolomiti',
+    description: 'Lago smeraldo coi capanni-barca classici. Giro 3.5 km piano.',
+    geo: { latitude: 46.6948, longitude: 12.0852 },
+    durationMin: 120,
+    bestMonths: [6, 9, 10, 1, 2, 3],
+    avoidMonths: [7, 8],
+    rbNote: "D'estate prenotare ingresso online (saturato). Inverno ghiacciato = silenzio.",
+  },
+  'dol-alpe-siusi': {
+    id: 'dol-alpe-siusi',
+    name: 'Alpe di Siusi al tramonto',
+    category: 'vista',
+    destinationSlug: 'dolomiti',
+    description: "Altopiano alpino piu esteso d'Europa. Funivia da Siusi/Compatsch.",
+    geo: { latitude: 46.5333, longitude: 11.6333 },
+    durationMin: 240,
+    bestMonths: [6, 7, 9, 1, 2],
+    rbNote: 'Auto chiusa 9-17. Salire in funivia, cenare in malga, scendere in seggiovia ultima.',
+  },
+  'dol-val-pusteria': {
+    id: 'dol-val-pusteria',
+    name: 'Val Pusteria in bici',
+    category: 'esperienza',
+    destinationSlug: 'dolomiti',
+    description: 'Ciclabile pianeggiante 65 km, da Dobbiaco a Lienz. Treno+bici ritorno.',
+    geo: { latitude: 46.7333, longitude: 12.2167 },
+    durationMin: 360,
+    bestMonths: [6, 7, 8, 9],
+    rbNote: 'Bici a noleggio 25€/giorno con servizio rientro treno incluso.',
+  },
+  'dol-rifugio-cena': {
+    id: 'dol-rifugio-cena',
+    name: 'Cena in rifugio + dormita in quota',
+    category: 'hotel',
+    destinationSlug: 'dolomiti',
+    description: 'Esperienza signature: rifugio CAI a 2000+ m, mezza pensione 70-90€.',
+    geo: { latitude: 46.55, longitude: 11.85 },
+    durationMin: 720,
+    bestMonths: [6, 7, 8, 9],
+    rbNote: 'Prenotare 2-3 mesi prima per i top (Locatelli, Lagazuoi, Pisciadu).',
+  },
+
+  // ═══ SARDEGNA ═══
+  'sar-cala-goloritze': {
+    id: 'sar-cala-goloritze',
+    name: 'Cala Goloritze',
+    category: 'mare',
+    destinationSlug: 'sardegna',
+    description: 'Cala accessibile via trek 1h30 + scoglio aculeo dalla foto. Patrimonio UNESCO.',
+    geo: { latitude: 40.1083, longitude: 9.6661 },
+    durationMin: 360,
+    bestMonths: [5, 6, 9, 10],
+    avoidMonths: [8],
+    rbNote: 'Ingresso a numero chiuso: prenotare il giorno prima, 8€. Scarpe da trek serie.',
+  },
+  'sar-bosa-fluviale': {
+    id: 'sar-bosa-fluviale',
+    name: 'Bosa — case colorate sul fiume',
+    category: 'borgo',
+    destinationSlug: 'sardegna',
+    description: 'Unica citta sarda affacciata su fiume navigabile. Castello dei Malaspina.',
+    geo: { latitude: 40.2964, longitude: 8.4983 },
+    durationMin: 180,
+    bestMonths: [4, 5, 6, 9, 10],
+    rbNote: 'Tramonto dalle mura del castello. Cena di malloreddus al ristorante Sa Pischedda.',
+  },
+  'sar-stintino-pelosa': {
+    id: 'sar-stintino-pelosa',
+    name: 'La Pelosa di Stintino',
+    category: 'mare',
+    destinationSlug: 'sardegna',
+    description: 'Spiaggia caraibica con torre aragonese. Fondale basso 200m off-shore.',
+    geo: { latitude: 40.9667, longitude: 8.225 },
+    durationMin: 240,
+    bestMonths: [5, 6, 9],
+    avoidMonths: [7, 8],
+    rbNote: 'Numero chiuso 1500/giorno + 3,50€ ingresso. Prenotare obbligatorio.',
+  },
+  'sar-castelsardo-mura': {
+    id: 'sar-castelsardo-mura',
+    name: 'Castelsardo — borgo fortificato',
+    category: 'borgo',
+    destinationSlug: 'sardegna',
+    description: 'Borgo medievale arroccato, mura genovesi. Vista isola del Toro al tramonto.',
+    geo: { latitude: 40.9133, longitude: 8.7106 },
+    durationMin: 180,
+    bestMonths: [4, 5, 6, 9, 10],
+    rbNote: 'Salita ripida ma macchina si parcheggia ai piedi. Cestini di palma souvenir vero.',
+  },
+  'sar-maddalena-arcipelago': {
+    id: 'sar-maddalena-arcipelago',
+    name: 'Arcipelago della Maddalena in barca',
+    category: 'esperienza',
+    destinationSlug: 'sardegna',
+    description: '7 isole tra Sardegna e Corsica. Tour barca giornaliero o noleggio gommone.',
+    geo: { latitude: 41.2167, longitude: 9.4 },
+    durationMin: 480,
+    bestMonths: [5, 6, 9],
+    avoidMonths: [8],
+    rbNote: 'Gommone 200-300€/giorno tra 4 persone = libertà di scelta. Tour pullman = no.',
+  },
+  'sar-alghero-bastioni': {
+    id: 'sar-alghero-bastioni',
+    name: 'Bastioni di Alghero al tramonto',
+    category: 'vista',
+    destinationSlug: 'sardegna',
+    description: 'Passeggiata sui bastioni catalani affacciati sul mare aperto.',
+    geo: { latitude: 40.5589, longitude: 8.3145 },
+    durationMin: 120,
+    bestMonths: [4, 5, 6, 9, 10],
+    rbNote: 'Aperitivo al Caffe Latino sui bastioni: 8-10€ e una vista da rotocalco.',
+  },
+
+  // ═══ PROCIDA ═══
+  'pro-corricella': {
+    id: 'pro-corricella',
+    name: 'Marina di Corricella',
+    category: 'vista',
+    destinationSlug: 'procida',
+    description: 'Borgo pescatori a case colorate da cartolina. No auto.',
+    geo: { latitude: 40.7569, longitude: 14.0292 },
+    durationMin: 180,
+    bestMonths: [5, 6, 9],
+    avoidMonths: [8],
+    rbNote: 'Cena da Da Mariano (Ristorante Marina): pesce del giorno, conto 35-45€.',
+  },
+  'pro-pozzo-vecchio': {
+    id: 'pro-pozzo-vecchio',
+    name: 'Spiaggia Pozzo Vecchio',
+    category: 'mare',
+    destinationSlug: 'procida',
+    description: 'Spiaggia del film "Il Postino" con Massimo Troisi. Sabbia nera.',
+    geo: { latitude: 40.7625, longitude: 14.0044 },
+    durationMin: 180,
+    bestMonths: [5, 6, 9],
+    rbNote: 'Poco affollata vs Chiaiolella. Bar Marie chiude alle 19.',
+  },
+  'pro-san-michele': {
+    id: 'pro-san-michele',
+    name: 'Abbazia di San Michele Arcangelo',
+    category: 'museo',
+    destinationSlug: 'procida',
+    description: 'Sulla rupe di Terra Murata, vista panoramica sul golfo.',
+    geo: { latitude: 40.7611, longitude: 14.0356 },
+    durationMin: 90,
+    bestMonths: [4, 5, 6, 9, 10],
+    rbNote: 'Aperta 9-12, 15-18. Vista da Punta dei Monaci compresa nel biglietto 3€.',
+  },
+  'pro-trattoria-graziella': {
+    id: 'pro-trattoria-graziella',
+    name: 'Pranzo da Graziella, Marina Chiaiolella',
+    category: 'ristorante',
+    destinationSlug: 'procida',
+    description: 'Trattoria storica famiglia di pescatori. Spaghetti vongole serie.',
+    geo: { latitude: 40.7444, longitude: 14.0156 },
+    durationMin: 120,
+    bestMonths: [4, 5, 6, 9, 10, 11],
+    rbNote: 'Aprire un menu li dentro = sbagliato. Si chiede cosa hanno preso oggi.',
+  },
+
+  // ═══ MARCHE ═══
+  'mar-conero-numana': {
+    id: 'mar-conero-numana',
+    name: 'Spiaggia delle Due Sorelle (Conero)',
+    category: 'mare',
+    destinationSlug: 'marche',
+    description: 'Due faraglioni, raggiungibile via barca da Numana o trek 1h.',
+    geo: { latitude: 43.5269, longitude: 13.6228 },
+    durationMin: 360,
+    bestMonths: [6, 9],
+    avoidMonths: [8],
+    rbNote: 'Barca da Numana 15€ a/r. Trek pericoloso senza scarpe serie.',
+  },
+  'mar-urbino-palazzo': {
+    id: 'mar-urbino-palazzo',
+    name: 'Palazzo Ducale di Urbino',
+    category: 'museo',
+    destinationSlug: 'marche',
+    description: 'Capolavoro rinascimentale. Galleria Nazionale delle Marche dentro.',
+    geo: { latitude: 43.7264, longitude: 12.6361 },
+    durationMin: 180,
+    bestMonths: [3, 4, 5, 6, 9, 10, 11],
+    rbNote: 'Mattino. Ingresso 6,50€, gratis prima domenica. Caffe del Sole in piazza.',
+  },
+  'mar-ascoli-piazza': {
+    id: 'mar-ascoli-piazza',
+    name: 'Piazza del Popolo, Ascoli Piceno',
+    category: 'borgo',
+    destinationSlug: 'marche',
+    description: '"Salotto d\'Italia" con travertino lucidato. Caffe Meletti dal 1907.',
+    geo: { latitude: 42.8531, longitude: 13.5742 },
+    durationMin: 120,
+    bestMonths: [4, 5, 6, 9, 10, 11],
+    rbNote: 'Aperitivo al Meletti con olive ascolane fritte (4€): rito locale serio.',
+  },
+  'mar-fermo-cisterne': {
+    id: 'mar-fermo-cisterne',
+    name: 'Cisterne romane di Fermo',
+    category: 'museo',
+    destinationSlug: 'marche',
+    description: '30 ambienti sotterranei perfettamente conservati, II sec.',
+    geo: { latitude: 43.1597, longitude: 13.7186 },
+    durationMin: 60,
+    bestMonths: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    rbNote: "Anche d'estate dentro = 12°C. Biglietto 4,50€, visita guidata inclusa.",
+  },
+
+  // ═══ LIGURIA (Levante) ═══
+  'lig-tellaro': {
+    id: 'lig-tellaro',
+    name: 'Tellaro al tramonto',
+    category: 'borgo',
+    destinationSlug: 'liguria',
+    description: 'Borgo a picco sul mare, "uno dei piu belli d\'Italia". 800 abitanti.',
+    geo: { latitude: 44.0628, longitude: 9.8847 },
+    durationMin: 120,
+    bestMonths: [4, 5, 6, 9, 10],
+    rbNote: 'Parcheggio fuori 5€/giorno. Aperitivo al Bar Bonta sui bastioni.',
+  },
+  'lig-vernazza-sentiero': {
+    id: 'lig-vernazza-sentiero',
+    name: 'Sentiero Azzurro: Vernazza-Monterosso',
+    category: 'vista',
+    destinationSlug: 'liguria',
+    description: 'Tratto piu suggestivo delle Cinque Terre, 3.5 km a strapiombo.',
+    geo: { latitude: 44.135, longitude: 9.6839 },
+    durationMin: 150,
+    bestMonths: [5, 6, 9, 10],
+    avoidMonths: [7, 8],
+    rbNote: 'Biglietto Cinque Terre Card 7,50€. Parti da Monterosso, scendi a Vernazza.',
+  },
+  'lig-camogli-portovenere': {
+    id: 'lig-camogli-portovenere',
+    name: 'Camogli — case alte e basilica',
+    category: 'borgo',
+    destinationSlug: 'liguria',
+    description: 'Camogli senza folla Cinque Terre, case altissime, focacceria storica.',
+    geo: { latitude: 44.3489, longitude: 9.1572 },
+    durationMin: 180,
+    bestMonths: [4, 5, 6, 9, 10],
+    rbNote: 'Focaccia col formaggio da Revello (in centro): si fila ma vale.',
+  },
+  'lig-portofino-castello': {
+    id: 'lig-portofino-castello',
+    name: 'Castello Brown, Portofino',
+    category: 'vista',
+    destinationSlug: 'liguria',
+    description: 'Posizione rara sopra la baia. Sentiero a piedi 20 min dalla piazza.',
+    geo: { latitude: 44.305, longitude: 9.2092 },
+    durationMin: 120,
+    bestMonths: [5, 6, 9, 10],
+    avoidMonths: [7, 8],
+    rbNote: 'Biglietto 5€. Bicchiere di bianco al bar del castello = picnic premium.',
+  },
+
+  // ═══ MARRAKECH ═══
+  'mrk-jemaa-el-fnaa': {
+    id: 'mrk-jemaa-el-fnaa',
+    name: 'Piazza Jemaa el-Fnaa al tramonto',
+    category: 'esperienza',
+    destinationSlug: 'marrakech',
+    description: 'La piazza piu famosa del Marocco: cantastorie, cobra, banchi cibo.',
+    geo: { latitude: 31.6258, longitude: -7.9892 },
+    durationMin: 180,
+    bestMonths: [3, 4, 10, 11],
+    avoidMonths: [7, 8],
+    rbNote: 'Andateci 17-20, mai mezzogiorno. Aperitivo terrazza Glacier Cafe sopra la piazza.',
+  },
+  'mrk-jardin-majorelle': {
+    id: 'mrk-jardin-majorelle',
+    name: 'Jardin Majorelle + Yves Saint Laurent museo',
+    category: 'museo',
+    destinationSlug: 'marrakech',
+    description: 'Giardino blu di Berber, palme + boungainville + museo YSL.',
+    geo: { latitude: 31.6411, longitude: -8.0028 },
+    durationMin: 150,
+    bestMonths: [2, 3, 4, 10, 11],
+    rbNote: 'Prenotare online: ingresso 70 MAD ($7), giardino + museo 200 MAD ($20).',
+  },
+  'mrk-bahia-palace': {
+    id: 'mrk-bahia-palace',
+    name: 'Palazzo Bahia',
+    category: 'museo',
+    destinationSlug: 'marrakech',
+    description: '"La Splendida" del XIX sec: cortili, stucchi, soffitti dipinti.',
+    geo: { latitude: 31.6217, longitude: -7.9817 },
+    durationMin: 120,
+    bestMonths: [3, 4, 10, 11, 12, 1, 2],
+    rbNote: 'Mattino presto, 70 MAD. Pochi metri dalla medina ebraica (Mellah).',
+  },
+  'mrk-riad-experience': {
+    id: 'mrk-riad-experience',
+    name: 'Cena in Riad nella medina',
+    category: 'esperienza',
+    destinationSlug: 'marrakech',
+    description: 'Cena tradizionale in riad storico restaurato. Tajine + couscous.',
+    geo: { latitude: 31.6306, longitude: -7.9856 },
+    durationMin: 180,
+    bestMonths: [10, 11, 12, 1, 2, 3, 4],
+    rbNote: 'Riad El Fenn o Riad Yima: 30-50€ a testa. Riservazione 1-2 giorni prima.',
+  },
+
+  // ═══ LISBONA ═══
+  'lis-alfama-tram28': {
+    id: 'lis-alfama-tram28',
+    name: 'Tram 28 attraverso Alfama',
+    category: 'esperienza',
+    destinationSlug: 'lisbona',
+    description: 'Storico tram giallo. Sale da Estrela ad Alfama via Graca e Sao Vicente.',
+    geo: { latitude: 38.7117, longitude: -9.1317 },
+    durationMin: 90,
+    bestMonths: [3, 4, 5, 9, 10, 11],
+    avoidMonths: [7, 8],
+    rbNote: 'Salire al capolinea Praca Martim Moniz per posto a sedere. 3€ a corsa.',
+  },
+  'lis-belem-pasteis': {
+    id: 'lis-belem-pasteis',
+    name: 'Pasteis de Belem',
+    category: 'esperienza',
+    destinationSlug: 'lisbona',
+    description: 'Ricetta segreta dal 1837. Pastelarista storica vicino al monastero Jeronimos.',
+    geo: { latitude: 38.6975, longitude: -9.2031 },
+    durationMin: 60,
+    bestMonths: [1, 2, 3, 4, 5, 6, 9, 10, 11, 12],
+    rbNote: '1,50€ uno. Banco di mescita interno = no fila. Banco asporto = fila lunga.',
+  },
+  'lis-bairro-alto': {
+    id: 'lis-bairro-alto',
+    name: 'Bairro Alto al tramonto',
+    category: 'vista',
+    destinationSlug: 'lisbona',
+    description: 'Quartiere alto della citta. Miradouro de Sao Pedro de Alcantara.',
+    geo: { latitude: 38.7144, longitude: -9.1431 },
+    durationMin: 180,
+    bestMonths: [3, 4, 5, 9, 10, 11],
+    rbNote: "Aperitivo al miradouro, poi cena alle 21 (mai prima — non c'e nessuno).",
+  },
+  'lis-fado-clube': {
+    id: 'lis-fado-clube',
+    name: 'Cena con Fado in Alfama',
+    category: 'esperienza',
+    destinationSlug: 'lisbona',
+    description: 'Casa di fado autentica (non turistica). Mesa de Frades o Clube de Fado.',
+    geo: { latitude: 38.7117, longitude: -9.1289 },
+    durationMin: 180,
+    bestMonths: [3, 4, 5, 9, 10, 11, 12, 1, 2],
+    rbNote: 'Prenotare giorni prima. Cena + spettacolo 40-60€. No applausi durante il canto.',
+  },
+};
+
+/**
+ * Helper: ottieni POI per destinazione slug.
+ */
+export function getPoisByDestination(destSlug: string): Poi[] {
+  return Object.values(POI_CATALOG).filter((p) => p.destinationSlug === destSlug);
+}
+
+/**
+ * Labels italiani per categoria — riusabili in UI.
+ */
+export const POI_CATEGORY_LABELS: Record<PoiCategory, string> = {
+  mare: 'Mare & coste',
+  ristorante: 'Ristoranti',
+  hotel: 'Dormire',
+  vista: 'Viste & panorami',
+  borgo: 'Borghi & citta',
+  museo: 'Musei & arte',
+  evento: 'Eventi',
+  esperienza: 'Esperienze',
+};

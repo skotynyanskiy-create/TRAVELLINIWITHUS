@@ -4,6 +4,7 @@ import { X, Trash2, ShoppingBag, CheckCircle, Tag, Loader2 } from 'lucide-react'
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { trackEvent } from '../services/analytics';
+import { formatPrice } from '../utils/format';
 
 interface AppliedCoupon {
   code: string;
@@ -223,7 +224,7 @@ export default function CartDrawer() {
                             <h3 className="line-clamp-1 font-semibold text-[var(--color-ink)]">
                               {item.name}
                             </h3>
-                            <p className="font-medium text-accent">EUR {item.price.toFixed(2)}</p>
+                            <p className="font-medium text-accent">{formatPrice(item.price)}</p>
                           </div>
                           <div className="mt-2 flex items-center justify-between">
                             {!item.isDigital ? (
@@ -340,14 +341,14 @@ export default function CartDrawer() {
                     <>
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-[var(--color-muted-fg)]">Subtotale</span>
-                        <span className="text-[var(--color-ink-2)]">EUR {total.toFixed(2)}</span>
+                        <span className="text-[var(--color-ink-2)]">{formatPrice(total)}</span>
                       </div>
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-[var(--color-accent)]">
                           Sconto ({appliedCoupon.code})
                         </span>
                         <span className="font-medium text-[var(--color-accent)]">
-                          - EUR {discountAmount.toFixed(2)}
+                          − {formatPrice(discountAmount)}
                         </span>
                       </div>
                     </>
@@ -361,7 +362,7 @@ export default function CartDrawer() {
                       animate={{ scale: 1, color: 'inherit' }}
                       className="text-2xl font-serif font-semibold"
                     >
-                      EUR {finalTotal.toFixed(2)}
+                      {formatPrice(finalTotal)}
                     </motion.span>
                   </div>
                 </div>

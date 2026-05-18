@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ShoppingCart } from 'lucide-react';
 import Button from './Button';
+import { formatPrice } from '../utils/format';
 
 interface ProductCardProps {
   id: string;
@@ -111,7 +112,7 @@ export default function ProductCard({
             </h3>
           </Link>
           <span className="text-sm font-bold text-accent whitespace-nowrap bg-sand px-3 py-1 rounded-lg">
-            EUR {price.toFixed(2)}
+            {formatPrice(price)}
           </span>
         </div>
 

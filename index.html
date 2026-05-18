@@ -18,23 +18,112 @@
          skipped here to avoid 404s. The browser starts the font fetch on first
          CSS parse, which is fast enough on HTTP/2 multiplexed connections. -->
 
-    <!-- LCP image preload (hero). Matches <picture> sources in HeroBackdrop. -->
-    <link
-      rel="preload"
-      as="image"
-      href="/images/hero-amalfi.avif"
-      type="image/avif"
-      media="(max-width: 768px)"
-      fetchpriority="high"
-    />
-    <link
-      rel="preload"
-      as="image"
-      href="/images/brand/couple-travel.avif"
-      type="image/avif"
-      media="(min-width: 769px)"
-      fetchpriority="high"
-    />
+    <!-- Route-specific LCP image preloads are managed from React pages with Helmet. -->
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://travelliniwithus.it/#organization",
+            "name": "Travelliniwithus",
+            "url": "https://travelliniwithus.it",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://travelliniwithus.it/pwa-512x512.png",
+              "width": 512,
+              "height": 512
+            },
+            "description": "Sito editoriale travel italiano di Rodrigo e Betta. Guide pratiche per coppie con dettagli verificabili e nessun marketing.",
+            "founder": [
+              { "@id": "https://travelliniwithus.it/#rodrigo" },
+              { "@id": "https://travelliniwithus.it/#betta" }
+            ],
+            "knowsAbout": [
+              "viaggi in Italia",
+              "destinazioni Sud Italia",
+              "borghi italiani",
+              "itinerari di coppia",
+              "hotel boutique",
+              "guide pratiche viaggio",
+              "travel editorial"
+            ],
+            "areaServed": {
+              "@type": "Country",
+              "name": "Italia",
+              "sameAs": "https://www.wikidata.org/wiki/Q38"
+            },
+            "sameAs": [
+              "https://www.instagram.com/travelliniwithus/",
+              "https://www.tiktok.com/@travellini.withus",
+              "https://www.facebook.com/travelwithuss/"
+            ]
+          },
+          {
+            "@type": "Person",
+            "@id": "https://travelliniwithus.it/#rodrigo",
+            "name": "Rodrigo",
+            "url": "https://travelliniwithus.it/chi-siamo",
+            "jobTitle": "Travel creator, fotografo e autore editoriale",
+            "nationality": "IT",
+            "knowsLanguage": ["it", "en"],
+            "knowsAbout": [
+              "viaggi in coppia",
+              "Sud Italia",
+              "isole minori italiane",
+              "hotel boutique",
+              "fotografia di viaggio"
+            ],
+            "worksFor": { "@id": "https://travelliniwithus.it/#organization" },
+            "sameAs": [
+              "https://www.instagram.com/travelliniwithus/",
+              "https://www.tiktok.com/@travellini.withus",
+              "https://www.facebook.com/travelwithuss/"
+            ]
+          },
+          {
+            "@type": "Person",
+            "@id": "https://travelliniwithus.it/#betta",
+            "name": "Betta",
+            "url": "https://travelliniwithus.it/chi-siamo",
+            "jobTitle": "Travel creator, scrittrice e autrice editoriale",
+            "nationality": "IT",
+            "knowsLanguage": ["it", "en"],
+            "knowsAbout": [
+              "viaggi narrativi",
+              "borghi italiani",
+              "food editorial",
+              "Estero raccontato da italiani",
+              "destinazioni culturali"
+            ],
+            "worksFor": { "@id": "https://travelliniwithus.it/#organization" },
+            "sameAs": [
+              "https://www.instagram.com/travelliniwithus/",
+              "https://www.tiktok.com/@travellini.withus",
+              "https://www.facebook.com/travelwithuss/"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://travelliniwithus.it/#website",
+            "url": "https://travelliniwithus.it",
+            "name": "Travelliniwithus",
+            "inLanguage": "it-IT",
+            "description": "Travelliniwithus racconta posti particolari, esperienze memorabili e consigli utili da salvare e vivere davvero.",
+            "publisher": { "@id": "https://travelliniwithus.it/#organization" },
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://travelliniwithus.it/esplora?q={search_term_string}"
+              },
+              "query-input": "required name=search_term_string"
+            }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

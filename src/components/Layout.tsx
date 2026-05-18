@@ -39,7 +39,7 @@ const WEBSITE_JSONLD = {
     '@type': 'SearchAction',
     target: {
       '@type': 'EntryPoint',
-      urlTemplate: `${SITE_URL}/destinazioni?q={search_term_string}`,
+      urlTemplate: `${SITE_URL}/esplora?q={search_term_string}`,
     },
     'query-input': 'required name=search_term_string',
   },

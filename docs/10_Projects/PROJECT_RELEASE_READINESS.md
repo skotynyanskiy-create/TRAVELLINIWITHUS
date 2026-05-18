@@ -570,6 +570,26 @@ cancellati (orfani dopo il consolidamento).
 
 ### Verifica
 
-- `npm run typecheck` PASS
-- `npm run build` da verificare
-- `npm run audit:ui` da verificare
+- `npm run typecheck` PASS (verificato 2026-05-17 dopo fix audit)
+- `npm run build` PASS (~34.23s — confermato da quality-auditor 2026-05-17)
+- `npm run audit:ui` PASS con ~94 warning preesistenti su `AdminMetricsOverview.tsx` (raw hex colors, rotta admin non blocca deploy)
+
+### Full Site Audit 2026-05-17
+
+Eseguito audit completo parallelo con 6 specialisti (quality, security, perf, ui-designer, seo, browser-auditor). Report consolidato in [AUDIT_FULL_SITE_2026-05-17.md](../50_Scratch/AUDIT_FULL_SITE_2026-05-17.md).
+
+**Stato post-fix stessa sessione:**
+
+- 4 CRITICAL lint/test risolti (Navbar.test, EsploraQuiz set-state, InstagramGrid track, EditorialCollections keyboard)
+- 1 CRITICAL perf risolto (preload AVIF spurio → PNG path effettivo)
+- 1 CRITICAL SEO risolto (noindex su Esplora/Shop separato da `articles.length === 0`)
+- 1 CRITICAL UI risolto (riordino Home: editoriale prima del business)
+- 2 CRITICAL declassati a falso positivo (404 articoli — backend-engineer ha verificato che il comportamento è corretto, slug inesistenti devono ritornare 404)
+- 9 HIGH risolti (llms.txt, title Home + ChiSiamo, BreadcrumbList schema, link `/destinazioni` → `/esplora`, copy seed nascosto, newsletter counter guard, sitemap mismatch)
+
+**Residui da affrontare:**
+
+- 2 HIGH bloccati su owner (GCP referrer restrictions su Firebase Web API key + rimozione key da docs)
+- 2 CRITICAL UI bloccati su direzione (TrustStrip riduzione + DiscoveryFinder 2 card image-led) — richiedono ui-designer + asset-curator
+- 1 CRITICAL perf bloccato su misura PROD (LCP Fraunces preload — dev mode non rappresentativo, rimisurare su build prod)
+- 1 CRITICAL SEO long-term (sitemap dinamica articoli — serve build script quando Firestore popolato)

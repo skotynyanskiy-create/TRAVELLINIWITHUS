@@ -2,6 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 import { CONTACTS, SITE_URL, THEME_COLOR } from '../config/site';
+import { buildBreadcrumbListJsonLd, type BreadcrumbItem } from '../lib/seo';
 
 interface SEOProps {
   title: string;
@@ -10,6 +11,8 @@ interface SEOProps {
   image?: string;
   type?: 'website' | 'article';
   noindex?: boolean;
+  jsonLd?: object | object[];
+  breadcrumbs?: BreadcrumbItem[];
 }
 
 const DEFAULT_SITE_NAME = 'Travelliniwithus';
@@ -22,6 +25,8 @@ export default function SEO({
   image = DEFAULT_OG_IMAGE,
   type = 'website',
   noindex = false,
+  jsonLd,
+  breadcrumbs,
 }: SEOProps) {
   const { pathname } = useLocation();
   const resolvedCanonical =
@@ -29,6 +34,14 @@ export default function SEO({
   const finalTitle = title.toLowerCase().includes(DEFAULT_SITE_NAME.toLowerCase())
     ? title
     : `${title} | ${DEFAULT_SITE_NAME}`;
+
+  const schemas: object[] = [];
+  if (breadcrumbs && breadcrumbs.length > 0) {
+    schemas.push(buildBreadcrumbListJsonLd(breadcrumbs));
+  }
+  if (jsonLd) {
+    schemas.push(...(Array.isArray(jsonLd) ? jsonLd : [jsonLd]));
+  }
 
   return (
     <Helmet>
@@ -60,6 +73,11 @@ export default function SEO({
       <meta name="twitter:site" content={CONTACTS.instagramHandle} />
       <meta name="twitter:creator" content={CONTACTS.instagramHandle} />
       <link rel="canonical" href={resolvedCanonical} />
+      {schemas.map((schema, i) => (
+        <script key={`ld-${i}`} type="application/ld+json">
+          {JSON.stringify(schema)}
+        </script>
+      ))}
     </Helmet>
   );
 }
