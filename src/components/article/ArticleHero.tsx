@@ -53,6 +53,7 @@ export default function ArticleHero({
             src={article.image}
             alt={article.title}
             className="w-full h-full object-cover saturate-[0.85] brightness-[0.8]"
+            priority
             fetchPriority="high"
             decoding="async"
           />
@@ -65,22 +66,22 @@ export default function ArticleHero({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="max-w-3xl"
+          className="max-w-4xl"
         >
-          <div className="flex flex-wrap items-center gap-4 mb-8 text-[10px] uppercase tracking-[0.2em] font-bold">
+          <div className="flex flex-wrap items-center gap-4 mb-8">
             <Link
               to={categoryPath}
-              className="bg-accent text-white px-4 py-1.5 rounded-full shadow-lg shadow-accent/20"
+              className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/80 transition-colors hover:text-white"
             >
               {article.category}
             </Link>
             <span className="w-8 h-px bg-white/30"></span>
-            <span className="flex items-center gap-2 text-white/80">
+            <span className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/80">
               <Clock size={14} /> {readingTime} di lettura
             </span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif leading-[1.1] mb-8 tracking-tight">
+          <h1 className="text-[clamp(2.25rem,6vw,3rem)] md:text-7xl lg:text-8xl font-serif leading-[1.1] mb-8 tracking-tight">
             {article.title}
           </h1>
 
@@ -100,7 +101,7 @@ export default function ArticleHero({
       </div>
 
       {/* Floating Action Buttons */}
-      <div className="absolute bottom-10 right-10 z-20 flex gap-3">
+      <div className="absolute bottom-10 right-10 z-20 hidden md:flex gap-3">
         <button
           onClick={handleFavorite}
           aria-label={isSaved ? 'Rimuovi dai preferiti' : 'Salva nei preferiti'}

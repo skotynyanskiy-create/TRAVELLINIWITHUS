@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import type { TocItem } from './types';
 
 interface TableOfContentsProps {
@@ -12,6 +13,38 @@ export default function TableOfContents({
   variant = 'desktop',
 }: TableOfContentsProps) {
   const visibleItems = items.filter((item) => item.show);
+  const [activeId, setActiveId] = useState<string | null>(null);
+
+  // Section "accesa" appena entra nella meta superiore del viewport.
+  // Solo desktop: su mobile il TOC e inline/overlay, l'indicatore visivo
+  // non serve. Marathon polish 2026-05-18.
+  useEffect(() => {
+    if (variant !== 'desktop' || typeof window === 'undefined') return;
+
+    const ids = visibleItems.map((item) => item.id);
+    const elements = ids
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+
+    if (elements.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((entry) => entry.isIntersecting);
+        if (visible.length === 0) return;
+        // Prendi la sezione piu in alto fra quelle visibili
+        const topmost = visible.reduce((prev, curr) =>
+          prev.boundingClientRect.top < curr.boundingClientRect.top ? prev : curr
+        );
+        setActiveId(topmost.target.id);
+      },
+      { threshold: 0.3, rootMargin: '-120px 0px -50% 0px' }
+    );
+
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, [variant, visibleItems]);
 
   if (variant === 'mobile-inline') {
     return (
@@ -73,17 +106,27 @@ export default function TableOfContents({
   // Desktop sidebar variant
   return (
     <ul className="space-y-5 text-sm font-medium text-[var(--color-muted-fg)] list-none pl-0 m-0">
-      {visibleItems.map((item) => (
-        <li key={item.id} className="m-0">
-          <a
-            href={`#${item.id}`}
-            className="flex items-center gap-4 hover:text-accent transition-all group"
-          >
-            <span className="w-5 h-px bg-[var(--color-muted-bg-2)] group-hover:bg-accent transition-all group-hover:w-8"></span>
-            <span>{item.label}</span>
-          </a>
-        </li>
-      ))}
+      {visibleItems.map((item) => {
+        const isActive = item.id === activeId;
+        return (
+          <li key={item.id} className="m-0">
+            <a
+              href={`#${item.id}`}
+              data-active={isActive ? 'true' : undefined}
+              className={`flex items-center gap-4 hover:text-accent transition-all group ${
+                isActive ? 'text-[var(--color-ink)] font-semibold' : ''
+              }`}
+            >
+              <span
+                className={`h-px transition-all group-hover:bg-accent group-hover:w-8 ${
+                  isActive ? 'w-8 bg-[var(--color-accent)]' : 'w-5 bg-[var(--color-muted-bg-2)]'
+                }`}
+              ></span>
+              <span>{item.label}</span>
+            </a>
+          </li>
+        );
+      })}
     </ul>
   );
 }

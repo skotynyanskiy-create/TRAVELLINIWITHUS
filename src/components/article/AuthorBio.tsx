@@ -7,26 +7,26 @@ export default function AuthorBio() {
       <div className="bg-[var(--color-sand)] p-8 md:p-12 rounded-[var(--radius-lg)] flex flex-col md:flex-row gap-8 items-center md:items-start">
         {/* Avatar coppia */}
         <div className="shrink-0 flex -space-x-4">
-          <div className="w-20 h-20 rounded-full bg-accent text-white flex items-center justify-center text-sm font-bold uppercase tracking-widest border-4 border-[var(--color-sand)] shadow-sm">
+          <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-accent text-white flex items-center justify-center text-sm font-bold uppercase tracking-widest border-4 border-[var(--color-sand)] shadow-sm">
             R
           </div>
-          <div className="w-20 h-20 rounded-full bg-ink text-white flex items-center justify-center text-sm font-bold uppercase tracking-widest border-4 border-[var(--color-sand)] shadow-sm">
+          <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-ink text-white flex items-center justify-center text-sm font-bold uppercase tracking-widest border-4 border-[var(--color-sand)] shadow-sm">
             B
           </div>
         </div>
         <div className="flex-1">
           <div className="flex flex-wrap items-center gap-3 mb-2">
-            <h4 className="text-xl font-serif">Gaetano Rodrigo & Betta</h4>
+            <h4 className="text-xl font-serif">Rodrigo &amp; Betta</h4>
             <span className="text-[10px] uppercase tracking-widest font-bold text-accent bg-accent/10 px-3 py-1 rounded-full">
               Travel Couple
             </span>
           </div>
           <p className="text-black/65 font-light text-sm mb-5 leading-relaxed">
-            Siamo una coppia che viaggia insieme da 10 anni. Raccontiamo posti particolari, food
+            Siamo una coppia che viaggia insieme da 8 anni. Raccontiamo posti particolari, food
             experience e itinerari reali — con budget accessibile e senza filtri. Tutto quello che
             trovate qui lo abbiamo vissuto davvero.
           </p>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-col md:flex-row md:flex-wrap gap-2 md:gap-3">
             <a
               href="https://www.instagram.com/travelliniwithus/"
               target="_blank"

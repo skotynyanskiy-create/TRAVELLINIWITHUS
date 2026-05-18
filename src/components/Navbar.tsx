@@ -16,11 +16,6 @@ import {
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { CONTACTS } from '../config/site';
-import {
-  DESTINATION_GROUPS,
-  EXPERIENCE_TYPES,
-  slugifyExperienceType,
-} from '../config/contentTaxonomy';
 import { siteContentDefaults } from '../config/siteContent';
 import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
@@ -31,19 +26,25 @@ const SearchModal = lazy(() => import('./SearchModal'));
 interface NavSubLink {
   name: string;
   href: string;
+  description?: string;
 }
 
-interface NavSubGroup {
-  label: string;
+interface NavFeature {
+  eyebrow: string;
+  title: string;
+  description: string;
   href: string;
-  links: NavSubLink[];
+  image: string;
 }
 
 interface NavItem {
   name: string;
   href?: string;
   subLinks?: NavSubLink[];
-  subGroups?: NavSubGroup[];
+  /** Quando presente, il dropdown desktop renderizza in 2 colonne (link a sx, foto editoriale a dx). */
+  feature?: NavFeature;
+  /** Lista di link primari editoriali (max 4-5) per il layout 2-colonne. */
+  primaryLinks?: NavSubLink[];
 }
 
 export default function Navbar() {
@@ -103,51 +104,57 @@ export default function Navbar() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const destinationLinks = useMemo(
-    () =>
-      DESTINATION_GROUPS.map((group) => ({
-        name: group,
-        href: `/destinazioni?group=${encodeURIComponent(group)}`,
-      })),
-    []
-  );
-
-  const experienceLinks = useMemo(
-    () =>
-      EXPERIENCE_TYPES.map((type) => ({
-        name: type,
-        href: `/esperienze?type=${slugifyExperienceType(type)}`,
-      })),
-    []
-  );
-
-  const exploreGroups = useMemo<NavSubGroup[]>(
+  // Mega menu editoriale 2 colonne: 4 link primary (decisione rapida) +
+  // anteprima foto featured (anchor visivo). Le picks restano nella single
+  // source `discoveryPicks.ts` ma vengono usate altrove (Home discovery,
+  // SearchModal); qui privilegiamo la decisione editoriale.
+  const explorePrimaryLinks = useMemo<NavSubLink[]>(
     () => [
       {
-        label: 'Per luogo',
-        href: '/destinazioni',
-        links: [{ name: 'Tutte le destinazioni', href: '/destinazioni' }, ...destinationLinks],
+        name: 'Apri il finder',
+        href: '/esplora',
+        description: 'Cerca per zona, intenzione o ritmo.',
       },
       {
-        label: 'Per esperienza',
-        href: '/esperienze',
-        links: [{ name: 'Tutte le esperienze', href: '/esperienze' }, ...experienceLinks],
+        name: 'Vista sulla mappa',
+        href: '/mappa',
+        description: 'I posti che abbiamo vissuto, geo-localizzati.',
       },
       {
-        label: 'Guide',
-        href: '/guide',
-        links: [{ name: 'Tutte le guide', href: '/guide' }],
+        name: 'Guide pratiche',
+        href: '/esplora?format=guida',
+        description: 'Come organizzare, cosa portare, dove dormire.',
+      },
+      {
+        name: 'Itinerari',
+        href: '/itinerari',
+        description: 'Giorno per giorno, già impostati.',
       },
     ],
-    [destinationLinks, experienceLinks]
+    []
+  );
+
+  // Featured editoriale del menu — placeholder demo. Quando l'archivio reale
+  // ha un articolo "in primo piano" del mese, va sostituito programmaticamente
+  // (es. via siteContent CMS). Per ora linka al finder filtrato Italia.
+  const exploreFeature = useMemo<NavFeature>(
+    () => ({
+      eyebrow: 'In evidenza',
+      title: 'Salento ad agosto, in coppia',
+      description: '3 giorni reali, niente fila — il metodo R+B applicato.',
+      href: '/esplora?zone=Italia&type=posti-particolari',
+      image: '/images/destinations/puglia.webp',
+    }),
+    []
   );
 
   const navItems = useMemo<NavItem[]>(
     () => [
       {
         name: 'Esplora',
-        href: '/destinazioni',
-        subGroups: exploreGroups,
+        href: '/esplora',
+        primaryLinks: explorePrimaryLinks,
+        feature: exploreFeature,
       },
       { name: navigation.resourcesLabel, href: '/risorse' },
       {
@@ -161,15 +168,16 @@ export default function Navbar() {
         subLinks: [{ name: navigation.contactsLabel, href: '/contatti' }],
       },
     ],
-    [exploreGroups, navigation]
+    [explorePrimaryLinks, exploreFeature, navigation]
   );
 
   const isItemActive = (item: NavItem) => {
     if (item.name === 'Esplora') {
       return (
-        location.pathname === '/destinazioni' ||
-        location.pathname === '/esperienze' ||
-        location.pathname === '/guide'
+        location.pathname === '/esplora' ||
+        location.pathname === '/mappa' ||
+        location.pathname === '/itinerari' ||
+        location.pathname.startsWith('/itinerari/')
       );
     }
 
@@ -177,31 +185,22 @@ export default function Navbar() {
       return true;
     }
 
-    if (item.subGroups) {
-      return item.subGroups.some((group) => {
-        if (location.pathname === group.href) return true;
-        return group.links.some((subLink) => location.pathname === subLink.href);
+    if (item.primaryLinks) {
+      return item.primaryLinks.some((link) => {
+        const [path] = link.href.split('?');
+        return location.pathname === path;
       });
     }
 
     if (!item.subLinks) return false;
 
-    return item.subLinks.some((subLink) => {
-      if (subLink.href.startsWith('/destinazioni?') || subLink.href.startsWith('/esperienze?')) {
-        return location.pathname === item.href;
-      }
-      return location.pathname === subLink.href;
-    });
+    return item.subLinks.some((subLink) => location.pathname === subLink.href);
   };
 
   const isSubLinkActive = (item: NavItem, href: string) => {
     const [subLinkPath, subLinkSearch] = href.split('?');
 
-    if (
-      href.startsWith('/destinazioni?') ||
-      href.startsWith('/esperienze?') ||
-      href.startsWith('/guide?')
-    ) {
+    if (href.startsWith('/esplora?')) {
       return location.pathname === subLinkPath && location.search === `?${subLinkSearch}`;
     }
 
@@ -240,7 +239,7 @@ export default function Navbar() {
                 <Link
                   to={item.href || '/'}
                   aria-current={isItemActive(item) ? 'page' : undefined}
-                  aria-haspopup={item.subLinks || item.subGroups ? 'menu' : undefined}
+                  aria-haspopup={item.subLinks || item.primaryLinks ? 'menu' : undefined}
                   className={`relative flex items-center gap-1 whitespace-nowrap text-[11px] font-bold uppercase tracking-[0.15em] transition-all duration-300 xl:text-[12px] xl:tracking-[0.2em] hover:text-[var(--color-accent)] after:absolute after:-bottom-1 after:left-0 after:h-[1.5px] after:w-full after:bg-[var(--color-accent)] after:origin-left after:transition-transform after:duration-300 ${
                     isItemActive(item)
                       ? 'text-[var(--color-accent)] after:scale-x-100'
@@ -248,74 +247,120 @@ export default function Navbar() {
                   }`}
                 >
                   {item.name}
-                  {(item.subLinks || item.subGroups) && (
+                  {(item.subLinks || item.primaryLinks) && (
                     <ChevronDown size={12} className="opacity-50" />
                   )}
                 </Link>
 
-                {(item.subLinks || item.subGroups) && (
+                {item.primaryLinks && item.feature && (
+                  // Mega menu editoriale 2 colonne (Esplora). Layout calmo,
+                  // foto-led, niente liste enciclopediche.
                   <div className="invisible absolute top-full left-1/2 -translate-x-1/2 pt-6 opacity-0 transition-all duration-300 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
                     <div
                       role="menu"
-                      className={`relative overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-ink)]/5 bg-[var(--color-surface)] py-4 shadow-2xl ${
-                        item.subGroups
-                          ? item.subGroups.length >= 3
-                            ? 'w-[46rem]'
-                            : 'w-[34rem]'
-                          : 'w-60'
-                      }`}
+                      className="relative overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-ink)]/5 bg-[var(--color-surface)] shadow-2xl w-[44rem]"
                     >
                       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full bg-[var(--color-accent)]" />
-                      {item.subGroups ? (
-                        <div
-                          className={`grid gap-3 px-4 py-2 ${
-                            item.subGroups.length >= 3 ? 'grid-cols-3' : 'grid-cols-2'
-                          }`}
-                        >
-                          {item.subGroups.map((group) => (
-                            <div key={group.label}>
-                              <Link
-                                to={group.href}
-                                role="menuitem"
-                                className="mb-2 block rounded-[var(--radius-md)] bg-[var(--color-sand)] px-4 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
-                              >
-                                {group.label}
-                              </Link>
-                              <div className="space-y-1">
-                                {group.links.map((subLink) => (
+                      <div className="grid grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
+                        <div className="flex flex-col p-7">
+                          <span className="mb-4 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
+                            {item.name}
+                          </span>
+                          <ul className="flex flex-1 flex-col gap-1">
+                            {item.primaryLinks.map((link) => {
+                              const [path] = link.href.split('?');
+                              const active =
+                                location.pathname === path ||
+                                (path === '/itinerari' &&
+                                  location.pathname.startsWith('/itinerari/'));
+                              return (
+                                <li key={link.name}>
                                   <Link
-                                    key={subLink.name}
-                                    to={subLink.href}
+                                    to={link.href}
                                     role="menuitem"
-                                    className={`block rounded-xl px-4 py-2 text-[10px] uppercase tracking-[0.16em] transition-all duration-200 hover:bg-[var(--color-sand)] hover:text-[var(--color-accent)] ${
-                                      isSubLinkActive(item, subLink.href)
-                                        ? 'text-[var(--color-accent)]'
-                                        : 'text-[var(--color-ink)]/50'
+                                    className={`group/link block rounded-[var(--radius-md)] px-4 py-3 transition-colors hover:bg-[var(--color-sand)] ${
+                                      active ? 'bg-[var(--color-sand)]' : ''
                                     }`}
                                   >
-                                    {subLink.name}
+                                    <span
+                                      className={`block font-serif text-[17px] leading-tight transition-colors ${
+                                        active
+                                          ? 'text-[var(--color-accent)]'
+                                          : 'text-[var(--color-ink)] group-hover/link:text-[var(--color-accent)]'
+                                      }`}
+                                    >
+                                      {link.name}
+                                    </span>
+                                    {link.description && (
+                                      <span className="mt-1 block text-[12px] leading-snug text-black/55">
+                                        {link.description}
+                                      </span>
+                                    )}
                                   </Link>
-                                ))}
-                              </div>
-                            </div>
-                          ))}
+                                </li>
+                              );
+                            })}
+                          </ul>
                         </div>
-                      ) : (
-                        item.subLinks?.map((subLink) => (
-                          <Link
-                            key={subLink.name}
-                            to={subLink.href}
-                            role="menuitem"
-                            className={`block px-8 py-3 text-[10px] uppercase tracking-[0.2em] transition-all duration-200 hover:bg-[var(--color-sand)] hover:text-[var(--color-accent)] ${
-                              isSubLinkActive(item, subLink.href)
-                                ? 'text-[var(--color-accent)]'
-                                : 'text-[var(--color-ink)]/50'
-                            }`}
-                          >
-                            {subLink.name}
-                          </Link>
-                        ))
-                      )}
+                        <Link
+                          to={item.feature.href}
+                          role="menuitem"
+                          className="group/feat relative flex flex-col justify-end overflow-hidden bg-[var(--color-ink)] p-7 text-white"
+                        >
+                          <img
+                            src={item.feature.image}
+                            alt=""
+                            aria-hidden="true"
+                            className="absolute inset-0 h-full w-full object-cover opacity-65 transition-all duration-700 group-hover/feat:scale-105 group-hover/feat:opacity-85"
+                            loading="lazy"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
+                          <div className="relative z-10">
+                            <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+                              {item.feature.eyebrow}
+                            </span>
+                            <p className="mt-3 font-serif text-[22px] leading-tight">
+                              {item.feature.title}
+                            </p>
+                            <p className="mt-2 text-[13px] leading-snug text-white/82">
+                              {item.feature.description}
+                            </p>
+                            <span className="mt-4 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent)]">
+                              Leggi
+                              <ArrowRight
+                                size={12}
+                                className="transition-transform group-hover/feat:translate-x-1"
+                              />
+                            </span>
+                          </div>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {item.subLinks && (
+                  // Dropdown semplice per gli altri voci (Collaborazioni, Chi siamo).
+                  <div className="invisible absolute top-full left-1/2 -translate-x-1/2 pt-6 opacity-0 transition-all duration-300 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                    <div
+                      role="menu"
+                      className="relative overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-ink)]/5 bg-[var(--color-surface)] py-4 shadow-2xl w-60"
+                    >
+                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full bg-[var(--color-accent)]" />
+                      {item.subLinks.map((subLink) => (
+                        <Link
+                          key={subLink.name}
+                          to={subLink.href}
+                          role="menuitem"
+                          className={`block px-8 py-3 text-[10px] uppercase tracking-[0.2em] transition-all duration-200 hover:bg-[var(--color-sand)] hover:text-[var(--color-accent)] ${
+                            isSubLinkActive(item, subLink.href)
+                              ? 'text-[var(--color-accent)]'
+                              : 'text-[var(--color-ink)]/50'
+                          }`}
+                        >
+                          {subLink.name}
+                        </Link>
+                      ))}
                     </div>
                   </div>
                 )}
@@ -487,13 +532,13 @@ export default function Navbar() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.05 }}
                   >
-                    {item.subLinks || item.subGroups ? (
+                    {item.subLinks || item.primaryLinks ? (
                       <div className="space-y-4">
                         <div className="flex items-start justify-between gap-4">
                           <Link
                             to={item.href || '/'}
                             onClick={() => setIsMobileMenuOpen(false)}
-                            className={`block text-3xl font-serif uppercase tracking-widest transition-colors ${
+                            className={`block text-3xl font-serif transition-colors ${
                               isItemActive(item)
                                 ? 'text-[var(--color-accent)]'
                                 : 'text-[var(--color-ink)]'
@@ -523,29 +568,23 @@ export default function Navbar() {
                               exit={{ height: 0, opacity: 0 }}
                               className="space-y-4 border-l border-[var(--color-accent)]/20 pl-4"
                             >
-                              {item.subGroups
-                                ? item.subGroups.map((group) => (
-                                    <div key={group.label} className="space-y-3">
-                                      <Link
-                                        to={group.href}
-                                        onClick={() => setIsMobileMenuOpen(false)}
-                                        className="block text-sm font-bold uppercase tracking-widest text-[var(--color-accent)]"
-                                      >
-                                        {group.label}
-                                      </Link>
-                                      <div className="space-y-3 pl-3">
-                                        {group.links.map((subLink) => (
-                                          <Link
-                                            key={subLink.name}
-                                            to={subLink.href}
-                                            onClick={() => setIsMobileMenuOpen(false)}
-                                            className="block text-lg text-[var(--color-ink)]/60 transition-colors hover:text-[var(--color-accent)]"
-                                          >
-                                            {subLink.name}
-                                          </Link>
-                                        ))}
-                                      </div>
-                                    </div>
+                              {item.primaryLinks
+                                ? item.primaryLinks.map((subLink) => (
+                                    <Link
+                                      key={subLink.name}
+                                      to={subLink.href}
+                                      onClick={() => setIsMobileMenuOpen(false)}
+                                      className="block"
+                                    >
+                                      <span className="block font-serif text-xl text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]">
+                                        {subLink.name}
+                                      </span>
+                                      {subLink.description && (
+                                        <span className="mt-1 block text-sm text-black/55">
+                                          {subLink.description}
+                                        </span>
+                                      )}
+                                    </Link>
                                   ))
                                 : item.subLinks?.map((subLink) => (
                                     <Link
@@ -565,7 +604,7 @@ export default function Navbar() {
                       <Link
                         to={item.href || '/'}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className={`block text-3xl font-serif uppercase tracking-widest transition-colors ${
+                        className={`block text-3xl font-serif transition-colors ${
                           isItemActive(item)
                             ? 'text-[var(--color-accent)]'
                             : 'text-[var(--color-ink)]'

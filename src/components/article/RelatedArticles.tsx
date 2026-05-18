@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, Calendar, Clock, Plus } from 'lucide-react';
+import { ArrowRight, Calendar, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import OptimizedImage from '../OptimizedImage';
 import { trackEvent } from '../../services/analytics';
@@ -47,11 +47,6 @@ function RelatedCard({
           <Calendar size={12} className="text-[var(--color-accent)]" />
           <span>{date || 'In evidenza'}</span>
         </div>
-        <span className="h-1 w-1 rounded-full bg-black/10" />
-        <div className="flex items-center gap-1.5">
-          <Clock size={12} className="text-[var(--color-accent)]" />
-          <span>5 min</span>
-        </div>
       </div>
       <h4 className="text-2xl font-serif leading-tight transition-colors group-hover:text-[var(--color-accent-text)]">
         {title}
@@ -92,7 +87,7 @@ export default function RelatedArticles({
       transition={{ duration: 0.8, ease: 'easeOut' }}
       className="mt-24 border-t border-black/10 pt-12"
     >
-      <h3 className="mb-12 text-3xl font-serif">Potrebbe interessarti anche</h3>
+      <h3 className="mb-12 text-3xl md:text-4xl font-serif">Potrebbe interessarti anche</h3>
       <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
         {hasRelated ? (
           personalizedArticles
@@ -123,17 +118,17 @@ export default function RelatedArticles({
         ) : (
           <div className="rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-sand)] p-10 md:col-span-2">
             <p className="text-sm font-bold uppercase tracking-[0.2em] text-[var(--color-accent-text)]">
-              Nessun correlato disponibile
+              Continua a esplorare
             </p>
             <p className="mt-4 text-base font-normal leading-relaxed text-black/70">
-              Quando inizierai a pubblicare i contenuti reali, qui potremo mostrare articoli
-              collegati in modo più preciso per tema, luogo o intento di lettura.
+              Stiamo costruendo i collegamenti per tema, luogo e intento di lettura. Nel frattempo
+              puoi sfogliare tutto l&apos;archivio editoriale dal finder.
             </p>
             <Link
-              to="/guide"
+              to="/esplora"
               className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent-text)]"
             >
-              Vai alle guide
+              Apri Esplora
               <ArrowRight size={14} />
             </Link>
           </div>

@@ -1,7 +1,7 @@
 /* Self-hosted fonts via @fontsource (Vite bundles + hashes them).
  * Critical weights only — Fraunces 400/500/600 + Inter 400/500/600.
- * Kalam (font-script) is decorative-only and loaded with font-display:
- * optional below so it never blocks LCP. */
+ * font-script uses local system cursive fallbacks to avoid external font
+ * requests on public routes. */
 @import '@fontsource/fraunces/latin-400.css';
 @import '@fontsource/fraunces/latin-500.css';
 @import '@fontsource/fraunces/latin-600.css';
@@ -12,22 +12,10 @@
 @import 'tailwindcss';
 @import 'react-quill-new/dist/quill.snow.css';
 
-/* Kalam decorative only (font-script class, ~3-4 occurrences).
- * font-display: optional => never blocks render; falls back to cursive
- * stack if not available within ~100ms. */
-@font-face {
-  font-family: 'Kalam';
-  font-style: normal;
-  font-weight: 400;
-  font-display: optional;
-  src: url('https://fonts.gstatic.com/s/kalam/v18/YA9dr0Wd4kDdMtD6GgLLmCUItqGt.woff2')
-    format('woff2');
-}
-
 @theme {
   --font-serif: 'Fraunces', 'Times New Roman', serif;
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-script: 'Kalam', cursive;
+  --font-script: 'Segoe Print', 'Bradley Hand ITC', cursive;
 
   /* Product Premium 2026 — neutrali sistematici + accent terracotta */
   --color-sand: #fafafa; /* Sfondo pagina — neutro chiaro */
@@ -83,16 +71,29 @@
 
   --tracking-tight: -0.025em;
   --tracking-wide: 0.05em;
+  --tracking-eyebrow: 0.18em;
 
-  /* Fluid Typography Scale (tighter, product premium) */
-  --text-h1: clamp(2.5rem, 5vw + 0.5rem, 4.5rem);
-  --text-h2: clamp(2rem, 3.5vw + 0.5rem, 3.25rem);
-  --text-h3: clamp(1.5rem, 2vw + 0.5rem, 2.25rem);
-  --text-body: clamp(1rem, 0.25vw + 0.95rem, 1.0625rem);
+  /* Fluid Typography Scale — Editorial Slow (Marathon FASE 1.A 2026-05-17).
+     Direzione: serif statica e contenuta 56-88px desktop, body 17/28,
+     eyebrow tracking 0.18em. */
+  --text-h1: clamp(2.25rem, 4.5vw + 0.5rem, 4rem); /* 36-64px */
+  --text-h2: clamp(1.75rem, 3vw + 0.5rem, 2.75rem); /* 28-44px */
+  --text-h3: clamp(1.375rem, 1.75vw + 0.5rem, 1.875rem); /* 22-30px */
+  --text-body: clamp(
+    1.0625rem,
+    0.15vw + 1.0625rem,
+    1.125rem
+  ); /* 17-18px (Editorial Slow body 17/28) */
+  --text-body-leading: 1.65; /* 28px / 17px = ~1.65 — leading editorial */
+  --text-eyebrow: 0.6875rem; /* 11px — eyebrow contenuto */
 
-  /* Editorial display scale (Fraunces variable) */
-  --text-display-1: clamp(3rem, 6vw + 0.5rem, 6rem);
-  --text-display-2: clamp(2.25rem, 4vw + 0.5rem, 4rem);
+  /* Editorial display scale (Fraunces variable) — meno aggressivo, piu' contenuto */
+  --text-display-1: clamp(2.5rem, 5vw + 0.5rem, 5.5rem); /* 40-88px */
+  --text-display-2: clamp(2rem, 3.5vw + 0.5rem, 3.5rem); /* 32-56px */
+
+  /* Section padding — Editorial Slow respira di piu' */
+  --space-section-y: clamp(4rem, 6vw + 1rem, 7rem); /* 64-112px padding verticale */
+  --space-section-x: clamp(1.25rem, 3vw + 0.5rem, 2rem); /* 20-32px padding orizzontale */
 
   /* Radius — product premium contenuto (10-20px) */
   --radius-sm: 0.375rem; /* 6 */
@@ -131,10 +132,62 @@
     font-optical-sizing: auto;
   }
   .text-eyebrow {
-    @apply text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-muted)];
+    /* Editorial Slow eyebrow: 11px sans semibold, tracking 0.18em, color muted */
+    font-size: var(--text-eyebrow);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-eyebrow);
+    color: var(--color-muted);
   }
   .text-body-lg {
     @apply text-lg leading-relaxed text-[var(--color-ink-2)];
+  }
+
+  /* Editorial Slow body — 17/28 leading editoriale per long-form articolo */
+  .text-body-editorial {
+    font-size: var(--text-body);
+    line-height: var(--text-body-leading);
+    color: var(--color-ink-2);
+  }
+
+  /* Drop cap utility for editorial primitive P1 (DropCap component).
+     Applied via <span class="drop-cap"> inside the first <p> of the body
+     when the paragraph is >= 280 chars. */
+  .drop-cap {
+    float: left;
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 3.5em;
+    line-height: 0.85;
+    margin: 0.1em 0.75rem 0 0;
+    color: var(--color-ink);
+  }
+  @media (min-width: 768px) {
+    .drop-cap {
+      font-size: 4.5em;
+      margin-right: 1rem;
+    }
+  }
+
+  /* Sezione editoriale con respiro generoso */
+  .section-editorial {
+    padding-top: var(--space-section-y);
+    padding-bottom: var(--space-section-y);
+    padding-left: var(--space-section-x);
+    padding-right: var(--space-section-x);
+  }
+
+  /* Dispatch index — lista numerata 01-12 tipografica pura per homepage
+     (Editorial Slow signature, ispirato a Off Guide / Cereal index) */
+  .dispatch-index-number {
+    font-family: var(--font-sans);
+    font-size: 0.75rem; /* 12px */
+    font-weight: 600;
+    color: var(--color-muted);
+    letter-spacing: var(--tracking-eyebrow);
+    font-variant-numeric: tabular-nums;
+    display: inline-block;
+    min-width: 2.5rem;
   }
 
   /* Card tiers — product premium */

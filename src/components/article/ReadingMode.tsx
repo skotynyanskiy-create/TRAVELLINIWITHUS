@@ -94,11 +94,14 @@ export default function ReadingMode({
             </div>
 
             <div className="mt-16 border-t border-[var(--color-border)] pt-8 text-center text-xs text-[var(--color-muted)]">
-              Premi{' '}
-              <kbd className="rounded border border-[var(--color-border)] bg-[var(--color-surface-2)] px-1.5 py-0.5 font-mono">
-                ESC
-              </kbd>{' '}
-              o il pulsante X per tornare al sito.
+              <span className="hidden md:inline-flex items-center gap-1.5">
+                Premi{' '}
+                <kbd className="rounded border border-[var(--color-border)] bg-[var(--color-surface-2)] px-1.5 py-0.5 font-mono">
+                  ESC
+                </kbd>{' '}
+                o il pulsante X per tornare al sito.
+              </span>
+              <span className="md:hidden">Tap × per tornare al sito.</span>
             </div>
           </motion.article>
         </motion.div>

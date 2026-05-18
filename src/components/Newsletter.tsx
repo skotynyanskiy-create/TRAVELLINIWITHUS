@@ -4,8 +4,11 @@ import { CheckCircle, Gift, Loader2, Mail, ShieldCheck, TrendingUp } from 'lucid
 import { Link } from 'react-router-dom';
 import { trackEvent } from '../services/analytics';
 import { appendLeadFallback } from '../lib/leadFallback';
-import { CONTACTS, NEWSLETTER_RECENT_SIGNUPS } from '../config/site';
-import AnimatedCounter from './AnimatedCounter';
+import {
+  CONTACTS,
+  NEWSLETTER_RECENT_SIGNUPS,
+  NEWSLETTER_COUNTER_MIN_VISIBLE,
+} from '../config/site';
 import Button from './Button';
 
 type NewsletterVariant = 'sand' | 'white' | 'editorial' | 'compact' | 'article' | 'business';
@@ -312,17 +315,20 @@ export default function Newsletter({
                 <span aria-hidden="true">·</span>
                 <span>Disiscrizione con un click</span>
               </p>
-              <p
-                className={`inline-flex items-center gap-2 text-[11px] font-semibold ${
-                  isDark ? 'text-[var(--color-accent)]' : 'text-[var(--color-accent-text)]'
-                }`}
-              >
-                <TrendingUp size={12} />
-                <AnimatedCounter value={NEWSLETTER_RECENT_SIGNUPS} duration={1500} />
-                <span className={isDark ? 'text-white/65' : 'text-black/60'}>
-                  lettori iscritti negli ultimi 30 giorni
-                </span>
-              </p>
+              {NEWSLETTER_RECENT_SIGNUPS > 0 &&
+                NEWSLETTER_RECENT_SIGNUPS >= NEWSLETTER_COUNTER_MIN_VISIBLE && (
+                  <p
+                    className={`inline-flex items-center gap-2 text-[11px] font-semibold ${
+                      isDark ? 'text-[var(--color-accent)]' : 'text-[var(--color-accent-text)]'
+                    }`}
+                  >
+                    <TrendingUp size={12} />
+                    <span className="font-semibold">{NEWSLETTER_RECENT_SIGNUPS}</span>
+                    <span className={isDark ? 'text-white/65' : 'text-black/60'}>
+                      lettori iscritti negli ultimi 30 giorni
+                    </span>
+                  </p>
+                )}
             </>
           )}
 

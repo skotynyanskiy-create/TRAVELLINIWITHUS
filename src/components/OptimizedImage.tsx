@@ -118,14 +118,14 @@ export default function OptimizedImage({
     );
   }
 
-  const localMatch = /^\/(?:images\/[^?#]+)\.(png|jpe?g)(\?[^#]*)?(#.*)?$/i.exec(src);
+  const localMatch = /^\/(?:images\/[^?#]+)\.(png|jpe?g|webp)(\?[^#]*)?(#.*)?$/i.exec(src);
   if (localMatch) {
-    const avifSrc = src.replace(/\.(png|jpe?g)(?=$|[?#])/i, '.avif');
-    const webpSrc = src.replace(/\.(png|jpe?g)(?=$|[?#])/i, '.webp');
+    const avifSrc = src.replace(/\.(png|jpe?g|webp)(?=$|[?#])/i, '.avif');
+    const webpSrc = src.replace(/\.(png|jpe?g|webp)(?=$|[?#])/i, '.webp');
     return (
       <picture>
         <source type="image/avif" srcSet={avifSrc} />
-        <source type="image/webp" srcSet={webpSrc} />
+        {!/\.webp(?:$|[?#])/i.test(src) && <source type="image/webp" srcSet={webpSrc} />}
         <img alt={alt} src={src} {...sharedProps} />
       </picture>
     );

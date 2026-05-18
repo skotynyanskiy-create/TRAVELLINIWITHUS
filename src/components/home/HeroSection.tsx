@@ -111,7 +111,7 @@ export default function HeroSection() {
       // perche' accompagna l'entry dei testi nei primi 1.4s.
       gsap.set('[data-hero-image]', { clipPath: 'inset(0 100% 0 0)' });
       gsap.set('[data-hero-eyebrow]', { opacity: 0, y: 12 });
-      gsap.set('[data-hero-title]', { opacity: 0, y: 16 });
+      gsap.set('[data-hero-title]', { y: 16 });
       gsap.set('[data-hero-paragraph]', { opacity: 0, y: 12 });
       gsap.set('[data-hero-pills]', { opacity: 0, y: 8 });
       gsap.set('[data-hero-cta]', { opacity: 0, y: 12 });
@@ -127,7 +127,7 @@ export default function HeroSection() {
           0
         )
         .to('[data-hero-eyebrow]', { opacity: 1, y: 0 }, 0.35)
-        .to('[data-hero-title]', { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+        .to('[data-hero-title]', { y: 0, duration: 0.6 }, '-=0.3')
         .to('[data-hero-paragraph]', { opacity: 1, y: 0 }, '-=0.35')
         .to('[data-hero-pills]', { opacity: 1, y: 0 }, '-=0.35')
         .to('[data-hero-cta]', { opacity: 1, y: 0 }, '-=0.35')

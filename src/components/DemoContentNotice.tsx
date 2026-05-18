@@ -11,6 +11,7 @@ export default function DemoContentNotice({
   message = 'Questo contenuto serve a mostrare la direzione finale del sito. Prima della pubblicazione va sostituito o approvato con testi, foto e dettagli verificati.',
   className = '',
 }: DemoContentNoticeProps) {
+  if (!import.meta.env.DEV) return null;
   return (
     <div
       className={`rounded-[var(--radius-lg)] border border-[var(--color-accent)]/25 bg-[var(--color-accent-soft)] px-6 py-5 text-[var(--color-ink)] ${className}`}

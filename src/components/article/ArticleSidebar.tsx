@@ -24,7 +24,7 @@ export default function ArticleSidebar({
   onOpenReadingMode,
 }: ArticleSidebarProps) {
   return (
-    <div className="lg:w-1/3 hidden lg:block">
+    <div className="hidden xl:block">
       <div className="sticky top-32 p-8 border border-[var(--color-border)] bg-[var(--color-muted-bg)]/50 backdrop-blur-sm rounded-[var(--radius-lg)] shadow-sm mb-8">
         <h4
           id="indice"
@@ -38,16 +38,14 @@ export default function ArticleSidebar({
           <button
             type="button"
             onClick={onOpenReadingMode}
-            className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-white px-4 py-3 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-ink)] transition-all hover:border-[var(--color-ink)] hover:bg-[var(--color-surface-2)]"
+            className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-white px-4 py-3 text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--color-ink)] transition-all hover:border-[var(--color-ink)] hover:bg-[var(--color-surface-2)]"
           >
             <BookOpen size={14} /> Modalita lettura
           </button>
         )}
 
         <div className="mt-10 pt-10 border-t border-black/10">
-          <h4 className="text-[10px] uppercase tracking-[0.2em] font-bold mb-6 text-black/40">
-            Condividi l&apos;ispirazione
-          </h4>
+          <h4 className="font-serif text-2xl mb-6 text-[var(--color-ink)]">Condividi</h4>
           <ShareButtons
             articleUrl={articleUrl}
             articleTitle={articleTitle}
