@@ -106,13 +106,9 @@ Do not add broad MCP registries, random community servers or full external agent
 
 ### Strategic & operator skills
 
-- `travellini-design-director`: brand, visual direction, Italian copy, premium editorial UX.
-- `travellini-web-quality-auditor`: accessibility, performance, SEO, Core Web Vitals, responsive QA.
 - `travellini-stitch-figma-bridge`: controlled Stitch/Figma usage and design-to-code handoff.
-- `travellini-page-builder`: route-aware React page creation with SEO and docs.
-- `travellini-release-quality`: release gates, visual QA, docs, and deployment readiness.
-- `travellini-social-content-operator`: social, editorial, campaign, creator, and partnership content planning adapted from the Agency Agents marketing patterns.
-- `travellini-growth-revenue-operator`: growth, partnerships, media kit conversion, affiliate/shop, campaign prioritization, and analytics planning adapted from agency-style commercial patterns.
+
+> Retired 2026-05-21: the legacy `travellini-design-director`, `travellini-web-quality-auditor`, `travellini-page-builder`, `travellini-release-quality`, `travellini-social-content-operator`, and `travellini-growth-revenue-operator` wrapper skills were removed. Their scope is owned by the specialist agents (see "Claude Project Agents") plus narrow operational skills (`new-page`, `predeploy`, `audit-ui`, etc.).
 
 ### Operational skills (canonicalized 2026-05-14)
 
