@@ -26,6 +26,9 @@ const experienceDescriptions: Record<string, string> = {
   'Posti particolari': 'Luoghi fuori dall\'ordinario, indirizzi curiosi e scorci che danno personalità al viaggio.',
   'Food & Ristoranti': 'Ristoranti, tavole e indirizzi che meritano davvero una deviazione o una serata dedicata.',
   'Locali insoliti': 'Posti con atmosfera, concept o posizione che li rendono subito memorabili.',
+  'Escape Room': 'Le migliori escape room in Italia e in Europa: recensioni, difficoltà e consigli per chi vuole un\'avventura diversa.',
+  'Parchi divertimento': 'Da Gardaland a Disneyland, da Europa-Park ai parchi acquatici: guide complete per viverli al meglio.',
+  'Itinerari': 'Percorsi giornalieri e multi-tappa costruiti sul campo, con tempi reali, priorità chiare e consigli pratici.',
   'Hotel con carattere': 'Strutture in cui design, atmosfera e contesto fanno parte dell\'esperienza.',
   'Weekend romantici': 'Idee e luoghi da vivere in coppia con un taglio più bello, utile e concreto.',
   'Borghi e città d\'arte': 'Centri storici, borghi e città che hanno fascino, patrimonio e una visita ben costruita.',
@@ -35,8 +38,8 @@ const experienceDescriptions: Record<string, string> = {
   'Gite e day trip': 'Uscite facili da organizzare per una giornata o un weekend vicino.',
 };
 
-/* Mood board span pattern for 10 types */
-const spanPattern = [2, 2, 1, 1, 1, 2, 1, 1, 1, 2];
+/* Mood board span pattern for 13 types — wide cards for top 3 new categories */
+const spanPattern = [2, 2, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 2];
 
 export default function Esperienze() {
   const { data: demoContent } = useSiteContent('demo');

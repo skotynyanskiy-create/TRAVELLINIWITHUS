@@ -9,6 +9,9 @@ import {
   Droplets,
   Zap,
   Route,
+  Lock,
+  Ticket,
+  Map,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -37,6 +40,24 @@ export const EXPERIENCE_VISUALS: Record<string, ExperienceVisual> = {
     color: '#9333EA',
     colorLight: '#F5F0FF',
     emoji: '🍷',
+  },
+  'Escape Room': {
+    icon: Lock,
+    color: '#1E40AF',
+    colorLight: '#EFF6FF',
+    emoji: '🔐',
+  },
+  'Parchi divertimento': {
+    icon: Ticket,
+    color: '#EC4899',
+    colorLight: '#FDF2F8',
+    emoji: '🎡',
+  },
+  'Itinerari': {
+    icon: Map,
+    color: '#0F766E',
+    colorLight: '#F0FDFA',
+    emoji: '🗺️',
   },
   'Hotel con carattere': {
     icon: BedDouble,
