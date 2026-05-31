@@ -10,6 +10,8 @@ export default function HeroSection() {
   const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const heroScale = useTransform(heroScroll, [0, 1], [1, 1.15]);
   const heroOpacity = useTransform(heroScroll, [0, 0.8], [1, 0]);
+  const floatY1 = useTransform(heroScroll, [0, 1], [0, -80]);
+  const floatY2 = useTransform(heroScroll, [0, 1], [0, -140]);
 
   return (
     <section ref={heroRef} className="relative h-[85vh] md:h-svh w-full flex items-center justify-center overflow-hidden bg-ink">
@@ -23,6 +25,15 @@ export default function HeroSection() {
           /* TODO: sostituire con foto reale del brand */
         />
         <div className="absolute inset-0 bg-linear-to-b from-[var(--color-ink)]/80 via-[var(--color-ink)]/55 to-[var(--color-ink)]" />
+      </motion.div>
+
+      {/* Depth layer 1 — slow warm orb */}
+      <motion.div className="absolute inset-0 z-[1] pointer-events-none" style={{ y: floatY1 }}>
+        <div className="absolute top-1/3 left-[15%] w-72 h-72 rounded-full bg-[var(--color-accent)]/10 blur-[90px]" />
+      </motion.div>
+      {/* Depth layer 2 — fast cool orb */}
+      <motion.div className="absolute inset-0 z-[1] pointer-events-none" style={{ y: floatY2 }}>
+        <div className="absolute bottom-1/3 right-[20%] w-96 h-96 rounded-full bg-white/5 blur-[110px]" />
       </motion.div>
 
       <motion.div className="relative z-10 w-full max-w-5xl px-6 text-center" style={{ opacity: heroOpacity }}>

@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import Section from '../Section';
+import TiltCard from '../TiltCard';
 import { EXPERIENCE_TYPES, slugifyExperienceType } from '../../config/contentTaxonomy';
 import { getExperienceVisual } from '../../config/experienceVisuals';
 
@@ -47,9 +48,10 @@ export default function CategoriesShowcase() {
               viewport={{ once: true }}
               transition={{ duration: 0.55, delay: idx * 0.1 }}
             >
+              <TiltCard className="h-full" intensity={6}>
               <Link
                 to={`/esperienze?type=${slugifyExperienceType(category)}`}
-                className="group relative flex flex-col justify-between overflow-hidden rounded-3xl p-7 shadow-sm transition-all duration-400 hover:-translate-y-1 hover:shadow-xl"
+                className="group relative flex flex-col justify-between overflow-hidden rounded-3xl p-7 shadow-sm transition-all duration-400 hover:shadow-xl h-full"
                 style={{ backgroundColor: visual.colorLight, borderLeft: `4px solid ${visual.color}` }}
               >
                 <span
@@ -72,6 +74,7 @@ export default function CategoriesShowcase() {
                   Scopri <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
                 </span>
               </Link>
+              </TiltCard>
             </motion.div>
           );
         })}

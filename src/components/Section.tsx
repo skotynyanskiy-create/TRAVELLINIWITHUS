@@ -30,10 +30,11 @@ export default function Section({ children, className = '', title, subtitle, id,
     <section id={id} className={`${spacingMap[spacing]} ${className}`}>
       <motion.div
         className={`${maxWidthMap[maxWidth]} mx-auto px-6 md:px-12 ${divider ? 'editorial-divider' : ''}`}
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        style={{ transformPerspective: 1400 }}
+        initial={{ opacity: 0, y: 60, rotateX: 5 }}
+        whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
         viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 1, ease: [0.21, 0.47, 0.32, 0.98] }}
+        transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
       >
         {(title || subtitle) && (
           <div className="text-center mb-12 md:mb-16">
