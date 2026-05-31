@@ -25,7 +25,13 @@ Tenere sotto controllo cio che manca per una release pulita e verificabile della
 - [ ] verificare destinazioni
 - [ ] verificare navbar e navigazione
 - [ ] verificare contenuti, funnel e shop
-- [ ] verificare build e smoke test
+- [x] verificare build e smoke test
+
+## Deploy log
+
+| Data | Versione | URL | Note |
+|------|----------|-----|------|
+| 2026-05-31 | categoria-structure + itinerari | https://travelliniwithus.vercel.app | Nuove categorie (Escape Room, Parchi, Itinerari), CategoriesShowcase, pagina /itinerari, fix TS/lint/test |
 
 ## Link
 
