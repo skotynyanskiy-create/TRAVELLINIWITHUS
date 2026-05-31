@@ -1537,7 +1537,7 @@ let _app: ReturnType<typeof express> | undefined;
 const _ready = startServer().then(a => { _app = a; });
 
 // Vercel serverless handler
-export default async function handler(req: any, res: any) {
+export default async function handler(req: express.Request, res: express.Response) {
   if (!_app) await _ready;
   _app!(req, res);
 }
