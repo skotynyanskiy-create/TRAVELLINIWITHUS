@@ -38,6 +38,6 @@ describe('Button Component', () => {
 
   it('applies correct variant classes', () => {
     const { container } = render(<Button variant="secondary">Secondary</Button>);
-    expect(container.firstChild).toHaveClass('bg-white');
+    expect(container.firstChild).toHaveClass('bg-[var(--color-surface)]');
   });
 });

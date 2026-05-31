@@ -4,7 +4,12 @@ import { fetchArticles } from '../services/firebaseService';
 import { Link } from 'react-router-dom';
 import { MapPin, Navigation, X } from 'lucide-react';
 import SEO from '../components/SEO';
-import OptimizedImage from '../components/OptimizedImage';
+import type { NormalizedArticle } from '../utils/articleData';
+
+interface MapArticle extends NormalizedArticle {
+  lat: number;
+  lng: number;
+}
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -78,8 +83,8 @@ const COUNTRY_COORDS: Record<string, { lat: number, lng: number }> = {
 };
 
 export default function Mappa() {
-  const [articles, setArticles] = useState<any[]>([]);
-  const [selectedArticle, setSelectedArticle] = useState<any | null>(null);
+  const [articles, setArticles] = useState<MapArticle[]>([]);
+  const [selectedArticle, setSelectedArticle] = useState<MapArticle | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -102,7 +107,7 @@ export default function Mappa() {
               lng: coords.lng + offset,
             };
           })
-          .filter(Boolean);
+          .filter((a): a is MapArticle => a !== null);
         setArticles(mappedData);
       } finally {
         setIsLoading(false);
@@ -227,7 +232,7 @@ export default function Mappa() {
                     {selectedArticle.excerpt}
                   </p>
                   <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
-                    Leggi la guida →
+                    Leggi la guida &#8594;
                   </div>
                 </div>
               </Link>

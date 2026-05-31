@@ -51,7 +51,7 @@ function Guide() {
         return fetchedGuides as GuideArticle[];
       }
 
-      return demoSettings.showEditorialDemo ? ([DEMO_ARTICLE_PREVIEW] as GuideArticle[]) : [];
+      return demoSettings.showEditorialDemo ? ([DEMO_ARTICLE_PREVIEW] as unknown as GuideArticle[]) : [];
     },
   });
 

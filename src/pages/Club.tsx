@@ -2,7 +2,16 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CheckCircle, LogIn, MapPin, Heart, ShoppingBag, LogOut, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import type { NormalizedArticle } from '../utils/articleData';
 import { useAuth } from '../context/AuthContext';
+
+interface Order {
+  id: string;
+  status?: string;
+  createdAt?: { seconds: number };
+  total?: number;
+  [key: string]: unknown;
+}
 import { useFavorites } from '../context/FavoritesContext';
 import { fetchArticles } from '../services/firebaseService';
 import { collection, query, where, getDocs } from 'firebase/firestore';
@@ -17,13 +26,17 @@ export default function Club() {
   const { user, profile, loading, signIn, signOut } = useAuth();
   const { favorites } = useFavorites();
   const [activeTab, setActiveTab] = useState<'favorites' | 'purchases'>('favorites');
-  const [savedArticles, setSavedArticles] = useState<any[]>([]);
-  const [orders, setOrders] = useState<any[]>([]);
+  const [savedArticles, setSavedArticles] = useState<NormalizedArticle[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [isLoadingData, setIsLoadingData] = useState(false);
 
   useEffect(() => {
     if (user && activeTab === 'favorites') {
       const loadFavorites = async () => {
+        if (favorites.length === 0) {
+          setSavedArticles([]);
+          return;
+        }
         setIsLoadingData(true);
         try {
           const allArticles = await fetchArticles();
@@ -34,11 +47,7 @@ export default function Club() {
         }
         setIsLoadingData(false);
       };
-      if (favorites.length > 0) {
-        loadFavorites();
-      } else {
-        setSavedArticles([]);
-      }
+      void loadFavorites();
     }
   }, [user, activeTab, favorites]);
 
@@ -49,7 +58,7 @@ export default function Club() {
         try {
           const q = query(collection(db, 'orders'), where('email', '==', user.email));
           const snapshot = await getDocs(q);
-          const userOrders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          const userOrders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Order));
           setOrders(userOrders);
         } catch (error) {
           console.error("Error fetching orders", error);
@@ -206,8 +215,8 @@ export default function Club() {
                                 <span className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink)]">Ordine #{order.id.slice(-6).toUpperCase()}</span>
                                 <span className={`px-2 py-0.5 rounded-full text-[9px] uppercase tracking-widest font-bold ${order.status === 'completed' ? 'bg-[var(--color-accent-soft)] text-[var(--color-accent-text)]' : 'bg-yellow-100 text-yellow-700'}`}>{order.status}</span>
                              </div>
-                             <p className="font-light text-sm text-black/60">{new Date(order.createdAt?.seconds * 1000).toLocaleDateString('it-IT')}</p>
-                             <p className="font-serif text-xl text-[var(--color-ink)] mt-2">Totale: €{order.total.toFixed(2)}</p>
+                             <p className="font-light text-sm text-black/60">{new Date((order.createdAt?.seconds ?? 0) * 1000).toLocaleDateString('it-IT')}</p>
+                             <p className="font-serif text-xl text-[var(--color-ink)] mt-2">Totale: &#8364;{order.total?.toFixed(2)}</p>
                            </div>
                            <div>
                              <Button variant="outline" size="sm" className="rounded-full flex items-center gap-2">
