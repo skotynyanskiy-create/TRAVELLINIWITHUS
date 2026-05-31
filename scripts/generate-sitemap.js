@@ -12,6 +12,7 @@ const staticRoutes = [
   '/media-kit',
   '/contatti',
   '/risorse',
+  '/itinerari',
   '/shop',
   '/club',
   '/privacy',

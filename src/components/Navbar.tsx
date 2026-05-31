@@ -113,7 +113,7 @@ export default function Navbar() {
       {
         name: navigation.resourcesLabel,
         href: '/risorse',
-        subLinks: [{ name: 'Guide di Viaggio', href: '/guide' }],
+        subLinks: [{ name: 'Guide di Viaggio', href: '/guide' }, { name: 'Itinerari', href: '/itinerari' }],
       },
       {
         name: navigation.collaborationsLabel,
