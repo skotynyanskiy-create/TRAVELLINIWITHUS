@@ -9,6 +9,7 @@ import { SITE_URL } from '../config/site';
 import HeroSection from '../components/home/HeroSection';
 import StatsStrip from '../components/home/StatsStrip';
 import LatestArticles from '../components/home/LatestArticles';
+import CategoriesShowcase from '../components/home/CategoriesShowcase';
 import DestinationsGrid from '../components/home/DestinationsGrid';
 import AboutPreview from '../components/home/AboutPreview';
 import CommunitySection from '../components/home/CommunitySection';
@@ -76,22 +77,25 @@ export default function Home() {
       {/* 3. Articoli — contenuto prima, dimostra il valore */}
       <LatestArticles />
 
-      {/* 4. Destinazioni/Esperienze — navigazione utile */}
+      {/* 4. Categorie — navigazione per tipo di esperienza */}
+      <CategoriesShowcase />
+
+      {/* 5. Destinazioni/Esperienze — navigazione utile */}
       <DestinationsGrid />
 
-      {/* 5. Chi Siamo — conoscere il brand */}
+      {/* 6. Chi Siamo — conoscere il brand */}
       <AboutPreview />
 
-      {/* 6. Community/Social — dopo aver dimostrato valore */}
+      {/* 7. Community/Social — dopo aver dimostrato valore */}
       <CommunitySection />
 
-      {/* 7. Shop — dopo credibilita */}
+      {/* 8. Shop — dopo credibilita */}
       <ShopPreview />
 
-      {/* 8. Newsletter */}
+      {/* 9. Newsletter */}
       <Newsletter variant="sand" />
 
-      {/* 9. Instagram Feed — chiusura visual */}
+      {/* 10. Instagram Feed — chiusura visual */}
       <InstagramFeed />
     </div>
   );
