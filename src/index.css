@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Kalam:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Kalam:wght@300&display=swap');
 @import "tailwindcss";
 @import "react-quill-new/dist/quill.snow.css";
 
@@ -7,68 +7,90 @@
   --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
   --font-script: "Kalam", cursive;
 
-  /* Nero & Sabbia — Minimal Premium */
-  --color-sand: #F7F7F8;         /* Sfondo pagina — grigio neutro */
-  --color-surface: #FFFFFF;      /* Card, form — bianco puro */
-  --color-ink: #111111;          /* Testo, bottoni primary — nero */
-  --color-accent: #C4A47C;       /* Accento unico — sabbia/champagne */
-  --color-accent-hover: #B39369; /* Accento hover — sabbia scura */
-  --color-accent-text: #7D6A4B;  /* Accento testo — WCAG AA su bianco */
-  --color-accent-warm: #C4A47C;  /* Alias accento — unificato */
-  --color-accent-warm-hover: #B39369; /* Alias hover — unificato */
-  --color-accent-soft: #F4F2EF;  /* Sezioni soft — appena caldo */
-  --color-footer: #141414;       /* Footer — nero profondo */
-  --color-gold: #C4A47C;         /* Decorazioni — uguale accento */
-  --color-gold-soft: #F4F2EF;    /* Highlight boxes — uguale soft */
+  /* Palette editoriale lusso — avorio caldo, gold antico */
+  --color-sand: #FAF9F6;              /* Sfondo — avorio caldo (non grigio freddo) */
+  --color-surface: #FFFFFF;           /* Card, form — bianco puro */
+  --color-ink: #0E0E0E;               /* Testo — nero caldo profondo */
+  --color-accent: #B8956A;            /* Gold antico — più ricco del champagne */
+  --color-accent-hover: #A48059;      /* Gold hover */
+  --color-accent-text: #7A5F38;       /* Gold testo — WCAG AA su bianco */
+  --color-accent-warm: #B8956A;
+  --color-accent-warm-hover: #A48059;
+  --color-accent-soft: #F2EDE5;       /* Sezioni soft — avorio profondo */
+  --color-footer: #0A0A0A;            /* Footer — nero assoluto */
+  --color-gold: #B8956A;
+  --color-gold-soft: #F2EDE5;
 
   /* Social Brand Colors */
   --color-social-facebook: #1877F2;
   --color-social-twitter: #1DA1F2;
   --color-social-pinterest: #E60023;
 
-  --tracking-tight: -0.025em;
-  --tracking-wide: 0.05em;
+  --tracking-tight: -0.035em;
+  --tracking-wide: 0.1em;
 
-  /* Fluid Typography Scale */
-  --text-h1: clamp(2.75rem, 6vw + 1rem, 5.5rem);
-  --text-h2: clamp(2.25rem, 4vw + 1rem, 4rem);
-  --text-h3: clamp(1.5rem, 2vw + 1rem, 2.5rem);
+  /* Fluid Typography Scale — più drammatica */
+  --text-h1: clamp(3.5rem, 8vw + 1rem, 7.5rem);
+  --text-h2: clamp(2.75rem, 5vw + 1rem, 5.25rem);
+  --text-h3: clamp(1.75rem, 2.5vw + 1rem, 3rem);
   --text-body: clamp(1rem, 0.5vw + 0.875rem, 1.125rem);
 
-  /* Premium Design System */
-  --radius-xl: 1.5rem;
-  --radius-2xl: 2.5rem;
-  --radius-3xl: 3rem;
-  --shadow-premium: 0 20px 40px -10px rgba(17, 17, 17, 0.08), 0 10px 20px -5px rgba(17, 17, 17, 0.04);
-  --shadow-glass: 0 8px 32px 0 rgba(17, 17, 17, 0.06);
+  /* Radius editoriale — meno tondo, più sofisticato */
+  --radius-xl: 0.875rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+
+  /* Shadows raffinate — quasi invisibili, profondità sottile */
+  --shadow-premium: 0 40px 80px -20px rgba(14, 14, 14, 0.10), 0 8px 20px -4px rgba(14, 14, 14, 0.05);
+  --shadow-glass: 0 2px 20px 0 rgba(14, 14, 14, 0.06);
 }
 
 @layer utilities {
+  /* Display — light serif a grande scala, firma editoriale */
   .text-display-1 {
-    @apply text-5xl md:text-7xl font-serif font-medium leading-tight;
+    @apply text-6xl md:text-8xl font-serif font-light leading-none;
+    letter-spacing: -0.03em;
   }
   .text-display-2 {
-    @apply text-4xl md:text-5xl font-serif leading-tight;
+    @apply text-4xl md:text-6xl font-serif font-light leading-tight;
+    letter-spacing: -0.025em;
+  }
+  .text-display-3 {
+    @apply text-3xl md:text-4xl font-serif font-light leading-snug;
+    letter-spacing: -0.02em;
   }
   .text-eyebrow {
-    @apply text-[10px] font-bold uppercase tracking-[0.25em];
+    @apply text-[9px] font-bold uppercase tracking-[0.35em];
   }
   .text-body-lg {
     @apply text-lg font-light leading-relaxed;
-    color: color-mix(in srgb, var(--color-ink) 60%, transparent);
+    color: color-mix(in srgb, var(--color-ink) 55%, transparent);
+  }
+  /* Hairline rule — ornamento editoriale */
+  .hairline {
+    display: block;
+    width: 2.5rem;
+    height: 1px;
+    background: var(--color-accent);
+  }
+  .hairline-full {
+    display: block;
+    height: 1px;
+    background: color-mix(in srgb, var(--color-ink) 8%, transparent);
   }
 
   /* Card tiers */
   .card-editorial {
-    @apply rounded-2xl bg-[var(--color-surface)] shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-1;
-    border: 1px solid color-mix(in srgb, var(--color-ink) 5%, transparent);
+    @apply rounded-[var(--radius-xl)] bg-[var(--color-surface)] transition-all duration-500 hover:shadow-[var(--shadow-premium)] hover:-translate-y-1;
+    border: 1px solid color-mix(in srgb, var(--color-ink) 6%, transparent);
+    box-shadow: 0 1px 4px rgba(14, 14, 14, 0.04);
   }
   .card-info {
     @apply rounded-[var(--radius-xl)] bg-[var(--color-sand)] p-8 md:p-10;
-    border: 1px solid color-mix(in srgb, var(--color-ink) 5%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-ink) 6%, transparent);
   }
   .card-dark {
-    @apply rounded-xl border border-white/8 bg-[#1C1C1C] p-5 transition-colors hover:bg-[#242424];
+    @apply rounded-[var(--radius-xl)] border border-white/8 bg-[#1A1A1A] p-5 transition-colors hover:bg-[#222222];
   }
 
   /* Editorial divider */
@@ -133,10 +155,23 @@ body {
   background-color: var(--color-sand);
   color: var(--color-ink);
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
 }
 
 h1, h2, h3, h4, h5, h6, .font-serif {
   font-family: var(--font-serif);
+}
+
+/* Serif heading default: light weight per stile editoriale */
+h1, h2 {
+  font-weight: 300;
+  letter-spacing: -0.02em;
+}
+h3 {
+  font-weight: 400;
+  letter-spacing: -0.015em;
 }
 
 /* Smooth scrolling */
@@ -144,9 +179,9 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar — sottile, editoriale */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 3px;
 }
 ::-webkit-scrollbar-track {
   background: var(--color-sand);
