@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import {
   ArrowRight,
   BarChart,
@@ -7,7 +8,7 @@ import {
   CheckCircle,
   ChevronDown,
   Clapperboard,
-  Download,
+  ExternalLink,
   Globe,
   Instagram,
   MessageSquareText,
@@ -27,7 +28,7 @@ import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import Section from '../components/Section';
 import StickyMobileCTA from '../components/StickyMobileCTA';
-import { BRAND_STATS } from '../config/site';
+import { BRAND_STATS, BRAND_STATS_SOURCE, PUBLIC_PROOF_SIGNALS } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { fetchStats, type SiteStats } from '../services/firebaseService';
@@ -129,18 +130,20 @@ function FaqSection() {
           {FAQ_ITEMS.map((item, idx) => (
             <div
               key={item.q}
-              className="overflow-hidden rounded-[var(--radius-md)] border border-black/5 bg-white"
+              className="overflow-hidden rounded-2xl border border-black/5 bg-white/70 backdrop-blur-md hover:bg-white/95 hover:border-[var(--color-accent)]/20 transition-all duration-500 shadow-xs"
             >
               <button
                 type="button"
                 onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
-                className="flex w-full items-center justify-between gap-4 p-6 text-left transition-colors hover:bg-[var(--color-sand)]"
+                className="flex w-full items-center justify-between gap-4 p-6 text-left transition-colors cursor-pointer"
                 aria-expanded={openIndex === idx}
               >
-                <span className="text-lg font-serif font-medium">{item.q}</span>
+                <span className="text-lg font-serif font-medium text-[var(--color-ink)]">
+                  {item.q}
+                </span>
                 <ChevronDown
                   size={20}
-                  className={`shrink-0 text-black/40 transition-transform duration-300 ${openIndex === idx ? 'rotate-180' : ''}`}
+                  className={`shrink-0 text-[var(--color-accent)] transition-transform duration-500 ${openIndex === idx ? 'rotate-180' : ''}`}
                 />
               </button>
               <AnimatePresence initial={false}>
@@ -149,9 +152,9 @@ function FaqSection() {
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.24 }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    <div className="px-6 pb-6 text-base leading-relaxed text-black/70">
+                    <div className="px-6 pb-6 text-base leading-relaxed text-[var(--color-ink-2)] border-t border-black/5 pt-4">
                       {item.a}
                     </div>
                   </motion.div>
@@ -248,39 +251,47 @@ export default function Collaborazioni() {
           'Pubblichiamo in modo trasparente e poi misuriamo quello che conta davvero per il contesto del progetto.',
       },
     ],
-    formatsTitle: 'Tre modi per partire bene',
+    formatsTitle: 'Tre punti di partenza per capire subito il perimetro',
     formatsDescription:
-      'Partiamo da format chiari per orientare la conversazione, ma i progetti migliori restano calibrati sul contesto reale.',
+      'Sono tracce di lavoro, non listini rigidi. Servono a capire cosa può uscire da una collaborazione prima di costruire una proposta su misura.',
     collaborationFormats: [
       {
-        title: 'Presenza editoriale',
-        subtitle: 'Per racconti mirati e ben contestualizzati',
+        title: 'Stay editoriale',
+        subtitle: 'Per hotel, masserie, relais e soggiorni speciali',
+        output: '1 contenuto long-form + copertura social coerente',
+        idealFor: 'Quando la struttura ha identità, atmosfera e un motivo reale per essere scelta.',
         features: [
-          'Articolo, guida o inserimento editoriale sul sito',
-          'Menzione o supporto social coerente al formato',
-          'Tono pulito e integrato nel progetto',
-          'Pensato per partner che vogliono chiarezza e credibilità',
+          'Articolo o guida editoriale sul sito con disclosure chiara',
+          'Reel o short video pensato per salvabilità, non solo reach',
+          'Stories di contesto durante o dopo l’esperienza',
+          'Asset visuali selezionati per uso editoriale e report sintetico',
         ],
       },
       {
-        title: 'Attivazione destinazione',
-        subtitle: 'Per territori, soggiorni o storytelling più ampi',
+        title: 'Destinazione da costruire',
+        subtitle: 'Per territori, DMO e progetti travel più ampi',
+        output: 'Itinerario narrativo + contenuti cross-canale',
+        idealFor:
+          'Quando serve posizionare una zona con più profondità di una singola pubblicazione.',
         features: [
-          'Contenuto cross-canale con più profondità',
-          'Integrazione tra guida, visual e social',
-          'Ideale per hospitality e destinazioni',
-          'Pensato per valorizzare il contesto, non solo il lancio',
+          'Itinerario o pillar editoriale con tappe e motivazione',
+          'Più contenuti social distribuiti nel tempo',
+          'Possibile integrazione newsletter o mappa editoriale',
+          'Report finale con link, contenuti pubblicati e segnali utili',
         ],
         highlight: 'true',
       },
       {
-        title: 'Progetto su misura',
-        subtitle: 'Per format speciali o esigenze non standard',
+        title: 'Content kit per brand',
+        subtitle: 'Per travel gear, servizi e lifestyle compatibili',
+        output: 'UGC/editorial asset + racconto integrato',
+        idealFor:
+          'Quando il prodotto è davvero usato in viaggio e può essere raccontato senza forzature.',
         features: [
-          'Formato costruito sul progetto',
-          'Maggiore flessibilità tra contenuto, visual e contesto',
-          'Possibile uso UGC o contenuti dedicati',
-          'Adatto quando il progetto merita una struttura propria',
+          'Review o contenuto editoriale con pro e limiti dichiarabili',
+          'Video breve o serie visuale orientata all’uso reale',
+          'Possibile codice o link affiliato se coerente',
+          'Materiali riutilizzabili dal brand secondo accordo',
         ],
       },
     ],
@@ -330,9 +341,18 @@ export default function Collaborazioni() {
   return (
     <PageLayout>
       <SEO
-        title="Collaborazioni editoriali per hotel, destinazioni e brand travel"
+        title="Collaborazioni travel con hotel e brand"
         description="Collaborazioni editoriali con hotel, destinazioni, brand travel e progetti lifestyle che hanno qualcosa da raccontare con credibilità."
       />
+      <Helmet>
+        <link
+          rel="preload"
+          as="image"
+          href="/images/brand/collab-work.avif"
+          type="image/avif"
+          fetchPriority="high"
+        />
+      </Helmet>
       <JsonLd data={faqStructuredData} />
 
       <Section className="pt-8">
@@ -355,7 +375,9 @@ export default function Collaborazioni() {
             <div className="relative mb-8 inline-block">
               <h1 className="text-5xl font-serif leading-tight md:text-7xl">
                 {pageContent.heroTitleMain} <br />
-                <span className="italic text-black/60">{pageContent.heroTitleAccent}</span>
+                <span className="italic text-[var(--color-muted-fg)]">
+                  {pageContent.heroTitleAccent}
+                </span>
               </h1>
               <motion.span
                 initial={{ opacity: 0, rotate: -10, scale: 0.8 }}
@@ -368,7 +390,7 @@ export default function Collaborazioni() {
               </motion.span>
             </div>
 
-            <p className="mb-10 max-w-2xl text-lg leading-relaxed text-black/70">
+            <p className="mb-10 max-w-2xl text-lg leading-relaxed text-[var(--color-ink-2)]">
               {pageContent.heroDescription}
             </p>
 
@@ -376,7 +398,7 @@ export default function Collaborazioni() {
               {pageContent.heroChecklist.map((item) => (
                 <div
                   key={item}
-                  className="flex items-start gap-3 rounded-[var(--radius-md)] bg-[var(--color-accent-soft)] px-5 py-4 text-sm text-black/72"
+                  className="flex items-start gap-3 rounded-[var(--radius-md)] bg-[var(--color-accent-soft)] px-5 py-4 text-sm text-[var(--color-ink-2)]"
                 >
                   <CheckCircle size={18} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
                   <span>{item}</span>
@@ -392,6 +414,7 @@ export default function Collaborazioni() {
                 className="px-8 py-4"
                 trackingId="collaborazioni_hero_primary"
                 onClick={() => trackPartnerCta('collaborazioni_hero_primary')}
+                magnetic={true}
               >
                 {pageContent.primaryCtaLabel} <ArrowRight size={18} />
               </Button>
@@ -402,21 +425,22 @@ export default function Collaborazioni() {
                 className="px-8 py-4"
                 trackingId="collaborazioni_hero_secondary"
                 onClick={() => trackPartnerCta('collaborazioni_hero_secondary')}
+                magnetic={true}
               >
                 {pageContent.secondaryCtaLabel}
               </Button>
             </div>
-            <a
-              href="/media-kit.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Button
+              to="/media-kit#media-kit-preview"
+              variant="outline"
+              size="sm"
               onClick={() =>
-                trackEvent('media_kit_preview_download', { source: 'collaborazioni_hero' })
+                trackEvent('media_kit_preview_click', { source: 'collaborazioni_hero' })
               }
-              className="mt-5 inline-flex w-fit items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)] underline-offset-4 transition-colors hover:text-[var(--color-accent)] hover:underline"
+              className="mt-5 w-fit"
             >
-              <Download size={14} /> Sfoglia l&apos;anteprima del media kit (PDF)
-            </a>
+              Sfoglia l&apos;anteprima del media kit
+            </Button>
           </motion.div>
 
           <motion.div
@@ -429,6 +453,10 @@ export default function Collaborazioni() {
               <OptimizedImage
                 src="/images/brand/collab-work.webp"
                 alt="Rodrigo e Betta in un contesto travel editoriale"
+                priority
+                sizes="(max-width: 1024px) 100vw, 46vw"
+                width={1440}
+                height={1800}
                 className="h-full w-full object-cover"
               />
             </div>
@@ -440,7 +468,7 @@ export default function Collaborazioni() {
                   Hospitality, destinazioni, lifestyle
                 </span>
               </div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-black/65">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-muted-fg)]">
                 Con priorità alla qualità del racconto
               </p>
             </div>
@@ -448,10 +476,10 @@ export default function Collaborazioni() {
         </div>
       </Section>
 
-      <Section className="my-20 rounded-[var(--radius-xl)] bg-[var(--color-accent-soft)] p-12 md:p-20">
+      <Section className="my-20 border-y border-black/10 bg-[var(--color-accent-soft)]/45 py-16 md:py-20">
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <h2 className="mb-6 text-4xl font-serif">{pageContent.statsTitle}</h2>
-          <p className="text-lg text-black/70">{pageContent.statsDescription}</p>
+          <p className="text-lg text-[var(--color-ink-2)]">{pageContent.statsDescription}</p>
         </div>
 
         <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
@@ -462,20 +490,25 @@ export default function Collaborazioni() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="flex flex-col items-center rounded-[var(--radius-lg)] border border-[var(--color-accent)]/20 bg-white/80 backdrop-blur-lg p-8 text-center shadow-[var(--shadow-premium)]"
+              className="flex flex-col items-center border-t border-[var(--color-accent)]/20 pt-7 text-center"
             >
-              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)]">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-white text-[var(--color-accent)]">
                 <item.icon size={26} />
               </div>
               <div className="mb-2 text-4xl font-serif text-[var(--color-ink)]">
                 {item.rawValue}
               </div>
-              <div className="text-[10px] font-bold uppercase tracking-widest text-black/65">
+              <div className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-muted-fg)]">
                 {item.label}
               </div>
             </motion.div>
           ))}
         </div>
+        <p className="mx-auto mt-10 max-w-3xl text-center text-xs leading-relaxed text-[var(--color-muted-fg)]">
+          {BRAND_STATS_SOURCE.label}. Snapshot pubblico osservato il {BRAND_STATS_SOURCE.observedAt}
+          ; le proposte partner vanno sempre aggiornate con export Meta Business Suite, TikTok
+          Analytics e report campagna.
+        </p>
       </Section>
 
       <Section>
@@ -485,7 +518,7 @@ export default function Collaborazioni() {
               Partner ideali
             </span>
             <h2 className="mb-4 text-4xl font-serif">Con chi lavoriamo meglio</h2>
-            <p className="text-lg text-black/70">
+            <p className="text-lg text-[var(--color-ink-2)]">
               Restiamo aperti a progetti diversi, ma lavoriamo meglio quando c'è identità, contesto
               e una storia che vale la pena raccontare.
             </p>
@@ -498,14 +531,18 @@ export default function Collaborazioni() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.06 }}
-                className="flex items-start gap-4 rounded-[var(--radius-md)] border border-black/5 bg-white p-6 shadow-sm"
+                className="flex items-start gap-4 border-t border-black/10 pt-6"
               >
-                <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
+                <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
                   <item.icon size={20} />
                 </div>
                 <div>
-                  <h3 className="mb-1.5 text-lg font-serif leading-tight">{item.title}</h3>
-                  <p className="text-sm leading-relaxed text-black/62">{item.text}</p>
+                  <h3 className="mb-1.5 text-lg font-serif leading-tight text-[var(--color-ink)]">
+                    {item.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-[var(--color-muted-fg)]">
+                    {item.text}
+                  </p>
                 </div>
               </motion.div>
             ))}
@@ -513,8 +550,8 @@ export default function Collaborazioni() {
         </div>
       </Section>
 
-      <Section className="my-16 rounded-[var(--radius-xl)] bg-[var(--color-ink)] p-12 text-white md:p-20">
-        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+      <Section className="my-16 bg-[var(--color-ink-deep)] p-10 text-white md:p-16">
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] relative z-10">
           <div>
             <div className="mb-4 flex items-center gap-2">
               <ShieldCheck size={14} className="text-[var(--color-accent)]" />
@@ -537,14 +574,65 @@ export default function Collaborazioni() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.08 }}
-                className="rounded-[var(--radius-lg)] border border-white/10 bg-white/6 p-7"
+                className="border-t border-white/12 pt-7"
               >
                 <item.icon size={22} className="text-[var(--color-accent)]" />
-                <h3 className="mt-5 mb-3 text-2xl font-serif">{item.title}</h3>
+                <h3 className="mt-5 mb-3 text-2xl font-serif text-white">{item.title}</h3>
                 <p className="text-sm leading-relaxed text-white/72">{item.text}</p>
               </motion.div>
             ))}
           </div>
+        </div>
+      </Section>
+
+      <Section>
+        <div className="mb-10 max-w-3xl">
+          <span className="mb-3 block font-script text-xl text-[var(--color-accent)]">
+            Proof pubbliche
+          </span>
+          <h2 className="text-4xl font-serif">Cosa si può già verificare online</h2>
+          <p className="mt-4 text-base leading-relaxed text-[var(--color-muted-fg)]">
+            Prima dei dati riservati di campagna, questi sono segnali esterni già collegabili al
+            profilo pubblico: progetti territoriali, menzioni partner e contenuti ripresi da media.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+          {PUBLIC_PROOF_SIGNALS.map((item, idx) => (
+            <motion.a
+              key={item.title}
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() =>
+                trackEvent('public_proof_click', {
+                  route: '/collaborazioni',
+                  source: 'collaborazioni',
+                  proof: item.title,
+                })
+              }
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.06 }}
+              className="group flex min-h-[230px] flex-col border-t border-black/10 pt-7"
+            >
+              <div className="mb-5 flex items-center justify-between gap-4">
+                <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
+                  {item.label}
+                </span>
+                <ExternalLink
+                  size={15}
+                  className="text-[var(--color-muted-fg)] opacity-40 transition-colors group-hover:text-[var(--color-accent)] group-hover:opacity-100"
+                />
+              </div>
+              <h3 className="text-2xl font-serif leading-tight text-[var(--color-ink)]">
+                {item.title}
+              </h3>
+              <p className="mt-4 text-sm leading-relaxed text-[var(--color-muted-fg)]">
+                {item.description}
+              </p>
+            </motion.a>
+          ))}
         </div>
       </Section>
 
@@ -559,13 +647,13 @@ export default function Collaborazioni() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.45, delay: index * 0.08 }}
-                className="flex flex-col rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-accent-soft)] p-8"
+                className="flex flex-col border-t border-black/10 pt-8"
               >
-                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-[var(--radius-md)] bg-white text-[var(--color-accent)] shadow-sm">
+                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
                   <Icon size={24} />
                 </div>
                 <h3 className="mb-3 text-2xl font-serif">{service.title}</h3>
-                <p className="leading-relaxed text-black/70">{service.description}</p>
+                <p className="leading-relaxed text-[var(--color-ink-2)]">{service.description}</p>
               </motion.div>
             );
           })}
@@ -579,7 +667,7 @@ export default function Collaborazioni() {
               Limiti chiari
             </span>
             <h2 className="mb-4 text-4xl font-serif">Quello che non facciamo</h2>
-            <p className="mx-auto max-w-2xl text-lg text-black/70">
+            <p className="mx-auto max-w-2xl text-lg text-[var(--color-ink-2)]">
               Mettere dei confini non ci rende rigidi: rende più pulita la collaborazione e più
               forte il contenuto finale.
             </p>
@@ -588,10 +676,13 @@ export default function Collaborazioni() {
             {ANTI_TARGETS.map((item) => (
               <div
                 key={item}
-                className="flex gap-3 rounded-[var(--radius-md)] border border-black/5 bg-white px-5 py-5"
+                className="group flex gap-3 rounded-[var(--radius-lg)] border border-black/5 bg-white px-5 py-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:border-black/10 hover:bg-[var(--color-muted-bg)]"
               >
-                <CheckCircle size={18} className="mt-0.5 shrink-0 text-[var(--color-accent)]" />
-                <p className="text-black/72">{item}</p>
+                <CheckCircle
+                  size={18}
+                  className="mt-0.5 shrink-0 text-[var(--color-accent)] transition-transform duration-300 group-hover:scale-110"
+                />
+                <p className="text-[var(--color-ink-2)]">{item}</p>
               </div>
             ))}
           </div>
@@ -601,25 +692,20 @@ export default function Collaborazioni() {
       <Section title={pageContent.processTitle}>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           {pageContent.processSteps.map((step) => (
-            <div
-              key={step.step}
-              className="relative rounded-[var(--radius-lg)] border border-black/5 bg-white p-8 shadow-sm"
-            >
-              <div className="absolute right-6 top-4 text-6xl font-serif text-[var(--color-accent-soft)]">
+            <div key={step.step} className="relative border-l border-black/10 pl-8">
+              <div className="absolute right-6 top-4 text-6xl font-serif text-[var(--color-accent-soft)] transition-all duration-500 group-hover:scale-110 group-hover:rotate-6">
                 {step.step}
               </div>
               <h3 className="relative z-10 mb-3 text-2xl font-serif">{step.title}</h3>
-              <p className="relative z-10 leading-relaxed text-black/70">{step.description}</p>
+              <p className="relative z-10 leading-relaxed text-[var(--color-ink-2)]">
+                {step.description}
+              </p>
             </div>
           ))}
         </div>
       </Section>
 
-      <Section className="relative overflow-hidden rounded-[var(--radius-xl)] bg-[var(--color-ink)] p-12 text-white md:p-20">
-        <div className="pointer-events-none absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[length:20px_20px] opacity-40" />
-        </div>
-
+      <Section className="relative scroll-mt-28 overflow-hidden rounded-[var(--radius-xl)] bg-[var(--color-ink)] px-0 py-16 text-white md:p-20">
         <div className="relative z-20">
           <div className="mx-auto mb-16 max-w-3xl text-center">
             <h2 className="mb-6 text-4xl font-serif md:text-5xl">{pageContent.formatsTitle}</h2>
@@ -643,7 +729,7 @@ export default function Collaborazioni() {
               return (
                 <div
                   key={format.title}
-                  className={`flex flex-col rounded-[var(--radius-lg)] border p-10 transition-transform duration-500 hover:-translate-y-2 ${
+                  className={`flex flex-col rounded-2xl border p-10 transition-transform duration-500 hover:-translate-y-2 ${
                     isHighlighted
                       ? 'border-[var(--color-accent)]/50 bg-white/10 shadow-2xl shadow-[var(--color-accent)]/10'
                       : 'border-white/10 bg-white/5'
@@ -654,10 +740,21 @@ export default function Collaborazioni() {
                       Il formato più completo
                     </div>
                   )}
-                  <h3 className="mb-2 text-2xl font-serif">{format.title}</h3>
+                  <h3 className="mb-2 text-2xl font-serif text-white">{format.title}</h3>
                   <div className="mb-6 text-sm uppercase tracking-[0.2em] text-white/45">
                     {format.subtitle}
                   </div>
+                  {'output' in format && (
+                    <div className="mb-4 rounded-2xl border border-white/10 bg-white/6 px-4 py-3">
+                      <div className="mb-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
+                        Output indicativo
+                      </div>
+                      <p className="text-sm leading-relaxed text-white/78">{format.output}</p>
+                    </div>
+                  )}
+                  {'idealFor' in format && (
+                    <p className="mb-6 text-sm leading-relaxed text-white/62">{format.idealFor}</p>
+                  )}
                   <ul className="mb-10 flex-grow space-y-4">
                     {format.features.map((feature) => (
                       <li key={feature} className="flex items-center gap-3 text-sm text-white/80">
@@ -672,6 +769,7 @@ export default function Collaborazioni() {
                     className={`w-full ${isHighlighted ? 'bg-[var(--color-accent)] hover:brightness-110' : ''}`}
                     trackingId={`collaborazioni_package_${index}`}
                     onClick={() => trackPartnerCta(`collaborazioni_package_${index}`)}
+                    magnetic={true}
                   >
                     {ctaLabels[index] ?? 'Richiedi info'}
                   </Button>
@@ -687,7 +785,7 @@ export default function Collaborazioni() {
       <Section className="my-16">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="mb-6 text-4xl font-serif">Se ha senso, costruiamolo bene.</h2>
-          <p className="mb-10 text-lg text-black/70">
+          <p className="mb-10 text-lg text-[var(--color-ink-2)]">
             Parti dal media kit se vuoi orientarti in modo ordinato, oppure scrivici direttamente se
             hai già una proposta chiara.
           </p>
@@ -699,6 +797,7 @@ export default function Collaborazioni() {
               className="px-10 py-5"
               trackingId="collaborazioni_footer_mediakit"
               onClick={() => trackPartnerCta('collaborazioni_footer_mediakit')}
+              magnetic={true}
             >
               Richiedi il media kit <ArrowRight size={18} />
             </Button>
@@ -709,6 +808,7 @@ export default function Collaborazioni() {
               className="px-10 py-5"
               trackingId="collaborazioni_footer_contact"
               onClick={() => trackPartnerCta('collaborazioni_footer_contact')}
+              magnetic={true}
             >
               Scrivici per una proposta
             </Button>
@@ -717,9 +817,10 @@ export default function Collaborazioni() {
       </Section>
 
       <StickyMobileCTA
-        label="Richiedi una proposta"
-        to="/contatti?topic=collab"
+        label="Richiedi il media kit"
+        to="/media-kit"
         trackingId="collaborazioni_sticky_mobile"
+        revealAfter={-1}
       />
     </PageLayout>
   );

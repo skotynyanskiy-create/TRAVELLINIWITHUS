@@ -1,30 +1,21 @@
 import fs from 'fs';
 import path from 'path';
+import { PUBLIC_ROUTE_MANIFEST } from './public-route-manifest.js';
 
 const BASE_URL = 'https://travelliniwithus.it';
+const LITE_MODE = process.env.VITE_LITE_MODE === 'true';
+const LITE_DISABLED_PREFIXES = ['/esplora', '/itinerari', '/shop', '/club', '/preferiti'];
 
-const staticRoutes = [
-  '/',
-  '/esplora',
-  '/itinerari',
-  '/itinerari/compare',
-  '/quiz',
-  '/strumenti',
-  '/press',
-  '/mappa',
-  '/chi-siamo',
-  '/collaborazioni',
-  '/media-kit',
-  '/contatti',
-  '/risorse',
-  '/shop',
-  '/club',
-  '/lead-magnet',
-  '/privacy',
-  '/cookie',
-  '/termini',
-  '/disclaimer',
-];
+function isLiteDisabled(route) {
+  if (!LITE_MODE) return false;
+  return LITE_DISABLED_PREFIXES.some((p) => route === p || route.startsWith(`${p}/`));
+}
+
+const allStaticRoutes = PUBLIC_ROUTE_MANIFEST.filter((route) => route.sitemap).map(
+  (route) => route.path
+);
+
+const staticRoutes = allStaticRoutes.filter((route) => !isLiteDisabled(route));
 
 // Consolidamento 2026-05-15: /destinazioni, /esperienze, /guide rimossi
 // come pagine standalone. Restano `/esplora` (archivio universale + finder)
@@ -35,36 +26,44 @@ const discoveryRoutes = [];
 // Landing regione SEO (mantenuto in sync con src/lib/regions.ts → REGIONS_DATA
 // e server.ts → REGION_LANDING_SLUGS). Priority 0.8 perche' sono entry-point
 // per query come "viaggio in puglia", "cosa vedere in sicilia".
-const regionLandingSlugs = [
-  'puglia',
-  'sicilia',
-  'sardegna',
-  'toscana',
-  'campania',
-  'trentino-alto-adige',
-];
-
-// Slug del pillar article corrente. Riceve priority 0.9 nella sitemap.
-const PILLAR_ARTICLE_SLUG = 'salento-agosto-coppia';
-
-function extractDemoArticleSlugs() {
-  const seedFile = path.join(process.cwd(), 'src', 'config', 'demoArchive.ts');
-  if (!fs.existsSync(seedFile)) return [];
-  const source = fs.readFileSync(seedFile, 'utf8');
-  const slugs = [];
-  const regex = /slug:\s*['"]([a-z0-9-]+)['"]/g;
-  let match;
-  while ((match = regex.exec(source)) !== null) {
-    slugs.push(match[1]);
-  }
-  return slugs;
-}
+// 2026-05-29 (audit): le pagine /destinazione/* mostrano contenuti DEMO come reali
+// (esperienze/date inventate, byline R&B) e sono ora noindex finche' non hanno contenuto
+// verificato. Tenute fuori dalla sitemap fino ad allora. Rimettere a true quando
+// src/lib/regions.ts ha contenuti reali e si toglie il noindex da Destinazione.tsx.
+const REGION_LANDINGS_PUBLISHED = false;
+const regionLandingSlugs = REGION_LANDINGS_PUBLISHED
+  ? ['puglia', 'sicilia', 'sardegna', 'toscana', 'campania', 'trentino-alto-adige']
+  : [];
 
 // Filter routes (?zone=, ?type=) sono intenzionalmente esclusi dalla sitemap:
 // Google li tratta come duplicate content del canonical `/esplora`. Quando
 // avremo pagine fisiche `/esplora/italia` o `/esplora/posti-particolari`,
 // si aggiungono qui come staticRoutes.
 const filterRoutes = [];
+
+// Priority differenziata per ruolo: evita il segnale piatto 0.8 su tutto.
+// Le legali e le utility scendono; discovery/brand/B2B restano alte.
+const ROLE_BY_PATH = new Map(PUBLIC_ROUTE_MANIFEST.map((r) => [r.path, r.role]));
+const PRIORITY_BY_ROLE = {
+  home: '1.0',
+  discovery: '0.9',
+  brand: '0.8',
+  'b2b-sales': '0.8',
+  'b2b-lead': '0.8',
+  resources: '0.7',
+  press: '0.6',
+  contact: '0.6',
+  map: '0.6',
+  tools: '0.6',
+  waitlist: '0.5',
+  legal: '0.3',
+};
+
+function priorityForRoute(route) {
+  if (route === '/') return '1.0';
+  const role = ROLE_BY_PATH.get(route);
+  return (role && PRIORITY_BY_ROLE[role]) || '0.7';
+}
 
 function urlEntry(route, { changefreq = 'weekly', priority = '0.8', lastmod } = {}) {
   const fullUrl = `${BASE_URL}${route === '/' ? '' : route}`;
@@ -95,17 +94,18 @@ async function fetchDynamicRoutes() {
     }
 
     const db = getFirestore();
-    const [articlesSnap, productsSnap] = await Promise.all([
-      db.collection('articles').where('published', '==', true).get(),
-      db.collection('products').where('published', '==', true).get(),
-    ]);
+    const articlesSnap = await db.collection('articles').where('published', '==', true).get();
+    const productsSnap = LITE_MODE
+      ? { docs: [] }
+      : await db.collection('products').where('published', '==', true).get();
 
     const articleRoutes = articlesSnap.docs
       .map((doc) => doc.data())
       .filter((data) => typeof data.slug === 'string' && data.slug.length > 0)
       .map((data) => ({
         route: `/articolo/${data.slug}`,
-        lastmod: toIsoLastmod(data.updatedAt) || toIsoLastmod(data.date) || new Date().toISOString(),
+        lastmod:
+          toIsoLastmod(data.updatedAt) || toIsoLastmod(data.date) || new Date().toISOString(),
       }));
 
     const productRoutes = productsSnap.docs
@@ -146,7 +146,7 @@ async function buildSitemap() {
     .map((route) =>
       urlEntry(route, {
         changefreq: route === '/' ? 'daily' : 'weekly',
-        priority: route === '/' ? '1.0' : '0.8',
+        priority: priorityForRoute(route),
         lastmod: now,
       })
     )
@@ -157,25 +157,6 @@ async function buildSitemap() {
       urlEntry(`/destinazione/${slug}`, {
         changefreq: 'weekly',
         priority: '0.8',
-        lastmod: now,
-      })
-    )
-    .join('');
-
-  // Slug articoli demo letti staticamente da demoArchive.ts. Coesistono con i
-  // dynamic articleRoutes (Firestore): se Firestore pubblica un articolo con
-  // lo stesso slug, in sitemap apparira' due volte ma Google deduplica per
-  // <loc>. Quando R+B passa al CMS live, rimuovere questo blocco.
-  const demoArticleSlugs = extractDemoArticleSlugs();
-  const dynamicArticleSlugs = new Set(
-    (dynamic?.articleRoutes || []).map(({ route }) => route.replace('/articolo/', ''))
-  );
-  const demoArticleEntries = demoArticleSlugs
-    .filter((slug) => !dynamicArticleSlugs.has(slug))
-    .map((slug) =>
-      urlEntry(`/articolo/${slug}`, {
-        changefreq: 'monthly',
-        priority: slug === PILLAR_ARTICLE_SLUG ? '0.9' : '0.7',
         lastmod: now,
       })
     )
@@ -199,7 +180,7 @@ async function buildSitemap() {
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  ${staticEntries}${regionEntries}${demoArticleEntries}${filterEntries}${articleEntries}${productEntries}
+  ${staticEntries}${regionEntries}${filterEntries}${articleEntries}${productEntries}
 </urlset>
 `;
 
@@ -210,21 +191,29 @@ async function buildSitemap() {
 
   fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), sitemap);
   const dynamicCount = (dynamic?.articleRoutes.length || 0) + (dynamic?.productRoutes.length || 0);
-  const demoArticleCount = demoArticleSlugs.filter((s) => !dynamicArticleSlugs.has(s)).length;
   console.log(
-    `Sitemap generated. Static: ${staticRoutes.length + discoveryRoutes.length}, regions: ${regionLandingSlugs.length}, demo articles: ${demoArticleCount}, filters: ${filterRoutes.length}, dynamic: ${dynamicCount}.`
+    `Sitemap generated. Static: ${staticRoutes.length + discoveryRoutes.length}, regions: ${regionLandingSlugs.length}, filters: ${filterRoutes.length}, dynamic: ${dynamicCount}.`
   );
 
   // robots.txt: keep public routes crawlable (incl. /shop, /vieni-con-noi,
   // /lead-magnet which use HTML <meta name="robots" noindex> on demo/preview
   // pages). Blocking via robots.txt PREVENTS Googlebot from reading noindex,
   // so noindex is the canonical mechanism.
+  const liteDisallow = LITE_MODE
+    ? `Disallow: /esplora
+Disallow: /itinerari
+Disallow: /shop
+Disallow: /club
+Disallow: /preferiti
+`
+    : '';
+
   const robotsTxt = `User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /account/acquisti
 Disallow: /iscrivi
-
+${liteDisallow}
 Sitemap: ${BASE_URL}/sitemap.xml
 `;
 

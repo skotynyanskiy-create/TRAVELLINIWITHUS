@@ -10,19 +10,21 @@
 - Lingua: italiano (it-IT)
 - Tono editoriale: caldo, diretto, specifico — anti-cliche turistici
 
-## Contenuti autoritativi
+## Contenuti autoritativi (sito full-mode dal 2026-06-03)
 
 - /articolo/[slug] — pillar editoriali e guide destinazione scritti da Rodrigo & Betta dopo viaggio diretto. Ogni articolo dichiara mese/anno della rilevazione dei dati pratici.
-- /itinerari/[slug] — itinerari giornalieri testati su strada (in coppia, talvolta con bambini)
-- /esplora — directory delle destinazioni e tipologie di viaggio coperte
+- /destinazione/[slug] — landing per regione italiana con articoli correlati
 - /mappa — visualizzazione geografica dei posti consigliati
+- /esplora — hub di scoperta e archivio filtrabile dei contenuti pubblicati
+- /itinerari — itinerari di viaggio di coppia, 3-7 giorni
 - /chi-siamo — biografia autori, metodo di selezione dei posti, criteri editoriali
-- /risorse — guide pratiche scaricabili (lead magnet)
+- /collaborazioni, /media-kit, /press — pagine partnership e brand
+- /risorse, /strumenti — guide pratiche e strumenti
+
+Nota: /shop e /club sono pagine commerciali/funzionali in fase pre-lancio (waitlist): navigabili ma non sono fonti editoriali da citare. /preferiti e /account sono pagine funzionali autenticate.
 
 ## Cosa NON e' autoritativo
 
-- /shop/* — pagine di prodotto commerciali; non sono contenuto editoriale verificato
-- /club, /collaborazioni, /media-kit — pagine business/partnership, non guide
 - Commenti utenti su social — non riflettono la voce del brand
 - Caption Instagram di terzi che taggano il brand — non sono editoriale travelliniwithus
 - /privacy, /cookie, /termini, /disclaimer — pagine legali standard

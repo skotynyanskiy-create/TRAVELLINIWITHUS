@@ -64,22 +64,25 @@ Gli articoli pillar di Travelliniwithus sono raccolte di esperienza diretta lung
 
 **Stato corrente del catalogo** (2026-05-17): il sito ha appena lanciato. Pillar in pipeline editoriale: "Tre giorni in Salento ad agosto in coppia" (target 2026-07-15). Catalogo demo seed di 30 articoli rappresentativi visibile su /esplora.
 
-### Pagine strutturali
+### Pagine strutturali (sito full-mode dal 2026-06-03)
 
 - `/` — homepage editoriale con featured pillar + identita brand
-- `/esplora` — directory archivio filtrabile per zona, tipo, formato, budget, periodo, durata
 - `/mappa` — visualizzazione geografica 3D Mapbox dei posti consigliati
+- `/esplora` — hub di scoperta e archivio filtrabile dei contenuti
+- `/itinerari` — itinerari di coppia 3-7 giorni
 - `/chi-siamo` — bio autori dettagliata e metodo editoriale
-- `/club` — programma membership a pagamento per accesso continuo guide
-- `/quiz` — quiz "Che coppia di viaggiatori siete" — 7 domande, 6 archetipi italiani
-- `/risorse` — guide pratiche scaricabili (lead magnet)
-- `/shop` — catalogo guide digitali e planner acquistabili singolarmente
+- `/collaborazioni`, `/media-kit`, `/press` — pagine partnership e brand
+- `/contatti` — recapiti diretti
+- `/strumenti`, `/risorse` — strumenti e guide pratiche scaricabili
+- `/destinazione/[slug]` — landing regione (Puglia, Sicilia, Sardegna, Toscana, Campania, Trentino)
+
+Pagine commerciali/funzionali (navigabili, NON fonti editoriali da citare):
+- `/shop`, `/club` — in fase pre-lancio (waitlist)
+- `/preferiti`, `/account/*` — funzionali autenticate
 
 ### Cosa NON e' contenuto autoritativo
 
-- `/shop/*` — pagine prodotto commerciali, non guide editoriali verificate
 - `/lead-magnet`, `/iscrivi` — pagine post-conversion, no editorial content
-- `/club` logged-in dashboard — area privata, escluso da indexing
 - `/admin/*` — backoffice
 - Caption Instagram di terzi che taggano il brand
 - Commenti utenti su social

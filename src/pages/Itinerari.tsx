@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Calendar, Clock, Map, Sparkles, Wallet } from 'lucide-react';
+import { ArrowRight, Calendar, Clock, Wallet } from 'lucide-react';
 import Breadcrumbs from '../components/Breadcrumbs';
 import DemoContentNotice from '../components/DemoContentNotice';
 import OptimizedImage from '../components/OptimizedImage';
@@ -37,9 +37,10 @@ export default function Itinerari() {
   return (
     <PageLayout>
       <SEO
-        title="Itinerari di viaggio in Italia e nel mondo"
-        description="Itinerari pratici giorno per giorno, filtrabili per durata, stile e budget. Italia, Europa, oltre. Per coppie che vogliono decidere meglio."
+        title="Itinerari di viaggio in coppia nel Sud Italia"
+        description="Itinerari pratici giorno per giorno per coppie nel Sud Italia: Sicilia, Calabria, Puglia, Basilicata. Filtrabili per durata, stile e budget."
         canonical={`${SITE_URL}/itinerari`}
+        noindex
         breadcrumbs={[
           { name: 'Home', url: SITE_URL },
           { name: 'Itinerari', url: `${SITE_URL}/itinerari` },
@@ -56,7 +57,7 @@ export default function Itinerari() {
           <h1 className="mt-4 text-5xl font-serif leading-[1.05] tracking-tight md:text-6xl">
             Viaggi già letti.
             <br />
-            <span className="italic text-black/55">Pronti da personalizzare.</span>
+            <span className="italic text-black/55"> Pronti da personalizzare.</span>
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-black/70">
             Itinerari costruiti dopo aver fatto il viaggio, non dopo aver copiato un brief. Filtra
@@ -67,7 +68,7 @@ export default function Itinerari() {
         <DemoContentNotice
           className="mt-10 max-w-3xl"
           title="Anteprima itinerari"
-          message="Stai vedendo 10 itinerari di anteprima che mostrano la struttura. Sostituiamo questi placeholder con i contenuti reali appena R+B chiudono il sopralluogo per ciascuno."
+          message="Stai vedendo itinerari in lavorazione: mostrano ritmo, filtri e formato editoriale. Verranno aggiornati con dati, foto e note verificate prima della pubblicazione completa."
         />
       </Section>
 
@@ -130,8 +131,8 @@ export default function Itinerari() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.05 }}
-                className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-lg)] border border-black/5 bg-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg"
+                transition={{ delay: index * 0.05, duration: 0.5 }}
+                className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-xl)] border border-black/5 bg-white/80 backdrop-blur-sm shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-[var(--shadow-premium)]"
               >
                 <Link
                   to={`/itinerari/${item.slug}`}
@@ -140,14 +141,14 @@ export default function Itinerari() {
                   <OptimizedImage
                     src={item.image}
                     alt={item.title}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="h-full w-full object-cover transition-transform duration-[1500ms] ease-out group-hover:scale-105"
                   />
                   <div className="absolute left-5 top-5 flex flex-wrap gap-2">
-                    <span className="rounded-full bg-white/90 px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] backdrop-blur-md">
+                    <span className="rounded-full border border-white/20 bg-white/80 px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] backdrop-blur-md shadow-sm">
                       {item.style}
                     </span>
                     {item.isDemo && (
-                      <span className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-white">
+                      <span className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-white shadow-sm animate-pulse">
                         Anteprima
                       </span>
                     )}
@@ -165,17 +166,23 @@ export default function Itinerari() {
                   <p className="line-clamp-3 text-sm leading-relaxed text-black/60">
                     {item.excerpt}
                   </p>
-                  <div className="mt-auto grid grid-cols-3 gap-3 border-t border-black/5 pt-5 text-[10px] font-bold uppercase tracking-[0.18em] text-black/55">
-                    <FactPill icon={<Clock size={12} />} label={`${item.durationDays} giorni`} />
-                    <FactPill icon={<Calendar size={12} />} label={item.period} />
-                    <FactPill icon={<Wallet size={12} />} label={item.budgetTier} />
+                  <div className="mt-auto flex flex-wrap gap-2 border-t border-black/5 pt-5">
+                    <FactPill icon={<Clock size={11} />} label={`${item.durationDays} gg`} />
+                    <FactPill icon={<Calendar size={11} />} label={item.period} />
+                    <FactPill icon={<Wallet size={11} />} label={item.budgetTier} />
                   </div>
-                  <Link
-                    to={`/itinerari/${item.slug}`}
-                    className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
-                  >
-                    Apri itinerario <ArrowRight size={13} />
-                  </Link>
+                  <div className="mt-4 border-t border-black/5 pt-4">
+                    <Link
+                      to={`/itinerari/${item.slug}`}
+                      className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent-text)]"
+                    >
+                      Apri itinerario{' '}
+                      <ArrowRight
+                        size={13}
+                        className="transition-transform group-hover:translate-x-1"
+                      />
+                    </Link>
+                  </div>
                 </div>
               </motion.article>
             ))}
@@ -204,21 +211,6 @@ export default function Itinerari() {
           </Link>
         </div>
       </Section>
-
-      <Section className="my-16 rounded-[var(--radius-xl)] bg-[var(--color-accent-soft)] p-12 text-center md:p-16">
-        <Sparkles className="mx-auto text-[var(--color-accent)]" size={28} />
-        <h2 className="mt-5 text-3xl font-serif md:text-4xl">Non sei sicuro da dove partire?</h2>
-        <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-black/65">
-          Fai il quiz Travellini: tre minuti per ricevere un itinerario suggerito sulla base di
-          tempo, stile e budget.
-        </p>
-        <Link
-          to="/quiz"
-          className="mt-7 inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-7 py-4 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
-        >
-          Inizia il quiz <Map size={14} />
-        </Link>
-      </Section>
     </PageLayout>
   );
 }
@@ -239,26 +231,39 @@ function FilterSelect({
       <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.24em] text-black/45">
         {label}
       </span>
-      <select
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        className="w-full rounded-full border border-black/10 bg-[var(--color-sand)] px-5 py-3 text-sm font-medium text-[var(--color-ink)] focus:border-[var(--color-accent)] focus:outline-none"
-      >
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
+      <div className="relative">
+        <select
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          className="w-full appearance-none rounded-full border border-black/5 bg-white px-6 py-3.5 pr-10 text-sm font-medium text-[var(--color-ink)] shadow-sm transition-all duration-300 hover:border-[var(--color-accent)] focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]/20 cursor-pointer"
+        >
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+        {/* Freccia custom */}
+        <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-black/45">
+          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2.5"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </div>
+      </div>
     </label>
   );
 }
 
 function FactPill({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
-    <span className="inline-flex items-center gap-1.5 text-[var(--color-ink)]/75">
-      {icon}
-      <span className="truncate">{label}</span>
+    <span className="inline-flex items-center justify-center gap-1.5 rounded-full bg-[var(--color-accent-soft)]/45 px-3 py-1.5 text-[var(--color-ink)] text-[10px] font-semibold transition-all duration-300 hover:bg-[var(--color-accent-soft)]">
+      <span className="text-[var(--color-accent)] shrink-0">{icon}</span>
+      <span className="truncate text-black/75">{label}</span>
     </span>
   );
 }

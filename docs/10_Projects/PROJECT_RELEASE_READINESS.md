@@ -19,6 +19,130 @@ tags:
 
 Tenere sotto controllo cio che manca per una release pulita e verificabile della V1.
 
+## Public footprint release candidate — 2026-06-07
+
+Scope: audit pubblico influencer Travelliniwithus, bio hub, media kit proof, disclosure affiliate, metriche pubbliche, hardening Firebase client config.
+
+**Incluso nel release candidate:**
+
+- `/vieni-con-noi` trasformata in bio hub proprietario con percorsi verso Esplora, Risorse e Media Kit.
+- `/media-kit`, `/collaborazioni` e `/press` aggiornate con fonte metriche datata e proof pubbliche linkate.
+- `/risorse` separa tracking affiliate/editoriale e applica `rel="sponsored"` solo ai link commerciali.
+- Email welcome newsletter allineata a `src/config/site.ts` invece di numeri social hard-coded.
+- Counter newsletter pubblico disattivato finche Brevo/Firestore non forniscono un numero verificato.
+- Firebase Web API key rimossa dai file correnti (`firebase-applet-config.json` e docs); valore reale spostato su `VITE_FIREBASE_API_KEY`.
+- Auth provider reso tollerante a config Firebase mancante in locale: niente errore console su pagine pubbliche.
+
+**Predeploy/code gate — PASS:**
+
+- `npm run predeploy` PASS
+- `npm run typecheck` PASS
+- `npm run lint` PASS
+- `npm run test` PASS — 4 file, 10 test
+- `npm run build` PASS
+- `npm run audit:ui` PASS — 0 errori, 92 warning noti
+- `npm run audit:firebase` PASS
+- `npm run audit:stripe` PASS — 9/9
+- `npm run audit:revenue` PASS
+- `npm run audit:agents` PASS
+- `npm run audit:size` PASS
+- `npm run audit:public-footprint` PASS — 39 pass, 0 fail, 2 warning owner/GCP
+- `npm run audit:visual` PASS — 14/14
+- Browser smoke PASS su `/`, `/vieni-con-noi`, `/media-kit`, `/collaborazioni`, `/press`, `/risorse`
+
+**Security gate — BLOCKED:**
+
+- `npm run audit:secrets` FAIL: 3 leak storici `gcp-api-key` in git history.
+- File correnti ripuliti: `rg "AIza..."` fuori da `.git` non trova piu valori.
+- Directory scan rileva segreti locali in `.env` e `.obsidian/`, entrambi gitignored; non sono da committare.
+- `npm run audit:public-footprint` conferma che nessun file corrente tracciato/non tracciato contiene pattern GCP API key.
+
+**Azione owner obbligatoria prima del deploy pubblico:**
+
+- Ruotare o restringere la Firebase Web API key su GCP.
+- Impostare `VITE_FIREBASE_API_KEY` in env produzione.
+- Confermare restrizioni HTTP referrer e API allow-list in GCP.
+- Decidere se riscrivere la history remota o accettare il leak storico dopo rotazione/restrizione.
+- Aggiornare bio IG/TikTok live con il link proprietario.
+
+**Verdict:** codice pronto, deploy produzione bloccato da secret history/GCP owner action.
+
+**Preview Hosting — LIVE:**
+
+- URL: https://gen-lang-client-0138696306--public-footprint-20260607-y3k31dtl.web.app
+- Scadenza: 2026-06-14 14:49 UTC
+- Smoke live PASS su `/`, `/vieni-con-noi`, `/media-kit`, `/collaborazioni`, `/press`, `/risorse`
+- Nota: preview build senza `VITE_FIREBASE_API_KEY`; pagine pubbliche ok, funzioni Auth/Admin non operative finche la key non viene impostata in env.
+
+**Nuovo gate locale:**
+
+- Script: `scripts/check-public-footprint.mjs`
+- Comando: `npm run audit:public-footprint`
+- Scopo: controllare bio hub, proof docs, fonte metriche, disclosure/link commerciali, assenza di Firebase Web API key nei file correnti e presenza del wiring `VITE_FIREBASE_API_KEY`.
+
+## Full-mode release candidate — 2026-06-03
+
+Decisione: il sito passa da lite launch a full-mode pubblico con `VITE_LITE_MODE=false`.
+
+**Incluso nel release candidate:**
+
+- `/esplora`, `/shop`, `/club`, `/itinerari`, `/preferiti` navigabili nel percorso pubblico.
+- `/shop` in stato waitlist con un solo SKU prioritario, senza checkout attivo finche il prodotto non e consegnabile.
+- `/club` riallineato a pre-lancio credibile: waitlist, preview formato, FAQ senza promesse di checkout live.
+- `/risorse` con label commerciali visibili (`Affiliato`, `Non affiliato`, `Codice sconto`).
+- Media kit e press funnel senza download diretto del kit completo come CTA primaria.
+- H1 e copy critici riallineati per accessibilita, SEO e tono pubblico italiano.
+- Test navbar isolati da Firebase reale; lead magnet sblocco sessione senza `setState` sincrono in effect.
+
+**Predeploy S6 — PASS:**
+
+- `npm run typecheck` PASS
+- `npm run lint` PASS
+- `npm run test` PASS — 4 file, 10 test
+- `npm run build` PASS
+- `npm run audit:ui` PASS — 0 errori, 134 warning gia noti su admin/inline/raw color
+- `npm run audit:firebase` PASS
+- `npm run audit:stripe` PASS — 9/9
+- `npm run audit:agents` PASS
+- Static files presenti: `public/sitemap.xml`, `public/robots.txt`, `public/media-kit.pdf`, `.env.example`
+
+**Nota build:** resta warning CSS minifier su classe tipo `[file:line]`; non blocca build.
+
+**Stato:** ready for deploy gate lato codice. Prima del deploy produzione confermare env operativi: `APP_URL`, `BREVO_API_KEY`, `BREVO_LIST_ID`, Sentry token se si vuole upload sourcemap, dominio Firebase Hosting/SSL.
+
+## Lite Launch — 2026-05-28
+
+Pubblicazione lite su `travelliniwithus.it`: 5 sezioni WIP nascoste via feature flag `VITE_LITE_MODE=true` per consentire il go-live mentre il lavoro sotto continua.
+
+**Sezioni OFF (route ritornano 404, nessun link in nav/footer, escluse da sitemap, Disallow in robots.txt):**
+
+- `/esplora`
+- `/itinerari`, `/itinerari/compare`, `/itinerari/:slug`
+- `/shop`, `/shop/:slug`
+- `/club`
+- `/preferiti`
+
+**Componenti OFF in lite:** AiAssistant (demo), ExitIntentPopup, HomeDiscoveryFinder, MonetizationTeaser, InstagramGrid, HomeLeadMagnet (sezione home).
+
+**Riattivazione sezione per sezione:**
+
+1. Rimuovere il prefisso da `LITE_DISABLED_ROUTES` in `src/config/liteMode.ts`
+2. Rimuovere lo stesso prefisso da `LITE_DISABLED_PREFIXES` in `server.ts`
+3. Rimuovere lo stesso da `LITE_DISABLED_PREFIXES` in `scripts/generate-sitemap.js`
+4. `npm run build && firebase deploy --only hosting`
+
+**Disattivazione lite totale:** `VITE_LITE_MODE=false` in env, rebuild.
+
+**Stato:** typecheck verde, build prod OK (29s), 11/11 status code corretti (200 attive / 404 disabilitate), browser smoke test PASS (1 round con 2 dead CTA + 1 round con 6 link residui — entrambi corretti).
+
+**Da chiudere PRIMA del go-live:**
+
+- [ ] Sentry: rigenerare `SENTRY_ACCESS_TOKEN` (scaduto 2026-05-21) o disattivare DSN
+- [ ] Verificare `BREVO_API_KEY` + `BREVO_LIST_ID` in env produzione (altrimenti newsletter silent fail)
+- [ ] Verificare consent banner GDPR (Meta/TikTok pixel non devono sparare prima del consent)
+- [ ] Firestore: confermare `articles.published == true` count > 0 (altrimenti LatestArticles home vuoto)
+- [ ] Firebase Hosting: aggiungere custom domain `travelliniwithus.it` + `www.travelliniwithus.it`, attendere SSL Let's Encrypt
+
 ## Piano V2 collegato
 
 La pianificazione V2 avanzata e tracciata in [[10_Projects/PROJECT_SITE_V2_ADVANCED_IMPROVEMENT_PLAN]].
@@ -31,6 +155,99 @@ Prima di raccomandare un deploy V2, chiudere almeno:
 - [ ] roundtrip lead Firestore/fallback verificato
 - [ ] shop reale solo se checkout e delivery sono pronti
 - [ ] `npm run audit:quality`
+
+## Rimozione quiz/budget pubblico - 2026-05-24
+
+- [x] Homepage: rimossa la sezione `HomeQuizBudgetTeaser` con "Quiz viaggio" e "Budget viaggio".
+- [x] `/strumenti`: rimossi calcolatori budget; restano calendario quando andare, builder itinerario e mappa.
+- [x] `/quiz`: non e piu una rotta pubblica, ora reindirizza a `/esplora`.
+- [x] SEO/crawler: `/quiz` rimosso da sitemap e `llms-full.txt`.
+- [x] Copy pubblico: assistente demo, Club e PDF lead magnet non propongono piu quiz/calcolatore.
+
+## Hero homepage refinement - 2026-05-24
+
+- [x] Rimossa la card "Ultimo reel Instagram" dalla prima piega per ridurre competizione visiva con H1 e CTA.
+- [x] Copy hero accorciato e reso piu concreto.
+- [x] Proof line trasformata in tre segnali editoriali sobri: metodo, focus, filtro.
+- [x] CTA primaria mantenuta sopra il banner cookie su desktop e mobile.
+- [x] Mobile: nessun overflow orizzontale, CTA primaria visibile, CTA secondaria nascosta.
+
+## Audit completo + remediation - 2026-05-24
+
+Audit multi-dominio in parallelo (quality statico + security + perf/CWV reale + browser reale) seguito da remediation. Lo snapshot "100% PASS" del 2026-05-21 non rifletteva piu lo stato: l'audit ha trovato 4 blocker, 3 HIGH perf, 5 MEDIUM, ~8 LOW.
+
+**Blocker chiusi:**
+
+- [x] **B1** — lint error `role="img"` ridondante in `OptimizedImage.tsx` (bloccava `predeploy`/`lint-staged`). Rimosso.
+- [x] **B2** — sitemap con 22 URL `/articolo` morti (404) + 6 noindex. `scripts/generate-sitemap.js` ripulito dai demo seed (`extractDemoArticleSlugs`, `demoArticleEntries`, `PILLAR_ARTICLE_SLUG`); ora solo articoli Firestore `published==true`. `public/sitemap.xml` rigenerata (0 URL /articolo pre-launch, corretto). `noindex` preview e robots invariati per direttiva seo-strategist.
+- [x] **B4** — open-redirect su callback Stripe: `success_url`/`cancel_url` derivavano l'origin da `req.get('host')`. Aggiunto guard fail-fast in `server.ts` (`startServer`): in produzione `APP_URL` obbligatorio, altrimenti boot abortito. Fallback su Host header irraggiungibile in prod.
+- [ ] **B3** — Firebase Web API key senza restrizioni GCP (`firebase-applet-config.json`). AZIONE OWNER su Google Cloud Console (HTTP-referrer + API allow-list + App Check). Unico blocker pre-launch residuo.
+
+**HIGH perf chiusi:**
+
+- [x] **H1** — Firebase caricato eager su ogni rotta. Init deferito dietro `import()` dinamico (AuthContext, FavoritesContext, firestoreErrorHandler, useSiteContent). Modulepreload eager: firebase-core/auth/firestore rimossi → **~157 KB gz fuori dal preload iniziale** (`firebase` in `dist/index.html`: 3→0).
+- [x] **H2** — hero PNG fallback da ~1.19 MB. Rigenerati AVIF (≤195 KB) + WebP fallback (≤247 KB); preload PNG sostituito da preload AVIF `fetchpriority=high`. **-84%** sul peso LCP.
+- [x] **H3** — GSAP + motion entrambi eager sull'hero. Consolidato su `motion/react` (wipe+stagger+parallax replicati 1:1), GSAP rimosso dall'hero (resta in package.json: usato in altri 4 componenti). **-46 KB gz**.
+
+**MEDIUM chiusi:**
+
+- [x] **Perf #4** — SW precache 6.36 MB → **2.60 MB** (-3.75 MB). mapbox/charts/editor/react-pdf tolti dal precache (`globIgnores`) e serviti via `runtimeCaching` CacheFirst on-demand.
+- [x] **M1** — CSP `script-src`: `'unsafe-eval'` → `'wasm-unsafe-eval'` in `firebase.json` + `server.ts` (cspProd). Indagine: zero `eval`/`new Function` reali nel bundle, solo WASM (mapbox-gl + react-pdf) richiede eval-class. `'unsafe-inline'` mantenuto (JSON-LD + GA inline).
+- [x] **Perf #5** — `InteractiveMap` su Articolo reso lazy (`maps` chunk ~37 KB gz fuori dall'eager di Articolo).
+- [x] **Perf #6** — quill CSS confinato al chunk admin lazy (fuori dal CSS critico pubblico). Fraunces 500-italic mantenuto (usato negli h1).
+- [ ] **M2** — migrazione `productAssets` non eseguita (ordini digitali `downloadUrl: null`). AZIONE OWNER: eseguire script migrazione prima dello shop live.
+
+**LOW chiusi:** ~30 refusi ortografici italiani user-visible (è/già/più/caffè/città) in ClubFaq, quizArchetypes, regions, poiCatalog, previewContent, seasonalGuide, WhenToGoCalendar, Strumenti, ItineraryDocument, ecc. (commenti e chiavi oggetto correttamente non toccati). Import morti rimossi (MediaKit, ProductPage). `.gitignore` esteso agli artefatti audit (`.lh-*.json`, screenshot full-page).
+
+**Falso-blocker chiarito:** `/articolo` + `/strumenti` non caricavano nel browser-audit per cache Vite stale (`node_modules/.vite`), non bug di codice. Risolto con restart pulito; verificato 0 errori console.
+
+Verifiche finali: `npm run typecheck` 0 errori · `npm run lint` 0 errori/0 warning · `npm run build` PASS (precache 96 entries / 2.6 MB) · `audit:stripe` 9/9 · smoke browser home/shop/articolo 0 errori console.
+
+**Residui pre-deploy:** B3 (GCP, owner) · M2 (migrazione productAssets, owner) · smoke reale login+preferiti e mappa/PDF con nuovo CSP via browser-auditor · confermare `APP_URL` settato in env produzione (ora hard-fail al boot se manca) · rigenerare `SENTRY_ACCESS_TOKEN` scaduto.
+
+## Sessione UX browser-audit - 2026-05-22
+
+Audit browser reale (Playwright MCP) su 7 rotte ai viewport 375/768/1280: 0 blocker, 4 seri, 5 minori. Fix applicati e ri-verificati nel browser (7/7 PASS, 0 errori console, 0 regressioni).
+
+- [x] **S3** — Contatti: link "Apri il media kit" puntava a `/collaborazioni`, ora a `/media-kit`. [src/pages/Contatti.tsx](../../src/pages/Contatti.tsx).
+- [x] **S4** — Ambiguità "Strumenti": la voce di menu "Strumenti" puntava a `/risorse`. Decisione originale: "Strumenti" → `/strumenti`; aggiornata il 2026-05-24 a pagina di supporto senza quiz/budget pubblico (calendario, builder itinerario, mappa). `/risorse` (app/gear/affiliate) resta come "Risorse di viaggio". Allineati Navbar + Footer (2 link). [src/components/Navbar.tsx](../../src/components/Navbar.tsx), [src/components/Footer.tsx](../../src/components/Footer.tsx).
+- [x] **S1+S2** — Mappa mobile (vedi sezione dedicata sotto).
+- [x] **MINORE** — Hero home: tap target link "Lavora con noi"/"Media Kit" da ~15px a 44px (`min-h-11`). [src/components/home/HeroSection.tsx](../../src/components/home/HeroSection.tsx).
+- [x] **MINORE** — Esplora: banner "preview editoriale" spostato sopra la card filtri (non più incuneato tra contatore risultati e card). [src/pages/Esplora.tsx](../../src/pages/Esplora.tsx).
+
+Residui minori non chiusi (bassa priorità): hero home mobile lungo (blocco Instagram statico), ricerca "bali→Italia" (seed-related, atteso in preview), nit "10 itinerari" vs 3 mostrati, warning preload `couple-travel.png`/`hero-amalfi.avif`.
+
+Verifiche: `npm run typecheck` 0 errori · `npm run audit:ui` 0 errori · `Navbar.test` 2/2 · browser-auditor re-verify 7/7 PASS.
+
+## Fix mobile `/mappa` - 2026-05-22
+
+Direzione lockata da `travellini-ui-designer`, implementata in `src/components/map/MapboxWorldMap.tsx` (file unico).
+
+- [x] **S1 risolto** — filtri continente+esperienza: niente piu overflow muto. Sotto `md` ogni riga e scroll orizzontale con fade-edge + chevron + `scrollIntoView` sul chip attivo. Chip tap target `min-h-11` (>=44px). Da `md` in su layout invariato.
+- [x] **S2 risolto** — lista destinazioni: da carosello orizzontale nascosto sovrapposto alla mappa a lista verticale full-width in-flow sotto la mappa (sotto `md`). Da `md` in su resta carosello overlay invariato.
+- [x] **Struttura** — switch a singolo breakpoint `md` (768px). Sotto `md`: layout verticale impilato (`static`/`sticky`, niente `absolute`): titolo → filtri (sticky) → mappa `h-[52vh]` → lista verticale → CTA "Apri archivio" in coda. Da `md` in su: layout desktop assoluto pixel-identico.
+- [x] **Motion** — stagger fade+y sulle card lista mobile (`whileInView once`, rispetta `useReducedMotion`). Fade/chevron 200ms. Niente scale-pulse sui chip mobile.
+- [x] **Token** — `bg-black/60` e `bg-black/45` sostituiti con `bg-[var(--color-ink-deep)]/80`.
+- [x] `npm run typecheck` 0 errori · `npm run audit:ui` 0 errori (warning residui pre-esistenti, non introdotti dal fix).
+- Non toccati: marker, popup, `flyTo`, fetch/demo fallback, validazione token Mapbox, doppio filtro, URL builder verso `/esplora`.
+
+## Snapshot di Validazione e Pre-deploy - 2026-05-21 (Sprint V2-Verification)
+
+Eseguita la suite completa di test end-to-end e di pre-deploy con esito **100% PASS** (zero fallimenti, zero errori bloccanti).
+
+- [x] **Audit Visivo e Responsive (Playwright E2E)**: Eseguiti **34 test passati su 34** sia su Desktop (Chromium) che su Mobile (Pixel 5). Verificate tutte le pagine chiave (`/`, `/esplora`, `/mappa`, `/collaborazioni`, `/media-kit`, `/shop`, `/contatti`) con zero overflow orizzontale, zero immagini rotte, e H1/CTA stabili.
+- [x] **Pre-deploy Pipeline (`npm run predeploy`)**:
+  - `typecheck` -> PASS (0 errori)
+  - `lint` -> PASS (0 errori)
+  - `test` -> PASS (10/10 test unitari passati)
+  - `build` -> PASS (compilazione Vite a 48s con ottimizzazione AVIF/WebP delle immagini all'85% e rigenerazione sitemap/robots.txt statici)
+  - `audit:ui` -> PASS (analisi design system e markup)
+  - `audit:firebase` -> PASS (0 errori)
+  - `audit:stripe` -> PASS (rate limits, webhook, price integrity passati a 9/9)
+  - `audit:agents` -> PASS (sincronizzazione agenti e skill a 18/18)
+- [x] **File Statici**: Sitemap, robots, media-kit.pdf e .env.example tutti generati e pronti.
+
+Verdict finale: **PASS (TUTTI I GATE COMPLETATI CON SUCCESSO)**
 
 ## Snapshot browser-audit fix - 2026-05-15 (post audit FAIL → PASS-WITH-MINOR)
 
@@ -295,6 +512,7 @@ Verification: HTTP 200 ✓
 
 ## Link
 
+- [[PROJECT_FULL_SITE_MARKETING_TECH_AUDIT]] — audit consolidato 2026-06-07 (tech+marketing+SEO+social+UX+agent stack)
 - [[DEPLOYMENT_RUNBOOK]]
 - [[LAUNCH_CHECKLIST]]
 - [[OPERATIONAL_VERIFICATION_REPORT]]
@@ -590,6 +808,83 @@ Eseguito audit completo parallelo con 6 specialisti (quality, security, perf, ui
 **Residui da affrontare:**
 
 - 2 HIGH bloccati su owner (GCP referrer restrictions su Firebase Web API key + rimozione key da docs)
-- 2 CRITICAL UI bloccati su direzione (TrustStrip riduzione + DiscoveryFinder 2 card image-led) — richiedono ui-designer + asset-curator
 - 1 CRITICAL perf bloccato su misura PROD (LCP Fraunces preload — dev mode non rappresentativo, rimisurare su build prod)
 - 1 CRITICAL SEO long-term (sitemap dinamica articoli — serve build script quando Firestore popolato)
+
+### C-UI-1 + C-UI-3 chiusi — 2026-05-22 (direzione ui-designer → implementazione frontend-builder)
+
+I 2 CRITICAL UI rimasti bloccati su direzione sono stati chiusi.
+
+- [x] **C-UI-1 HomeTrustStrip** — i 4 KPI box (numero serif + icona) convertiti in una singola trust-line editoriale inline (prosa, niente icone/box/bordi/hover), per eliminare il pattern "overbuilt statistic strip" vietato da DESIGN.md:48. Numeri senza "+": 500K lettori/mese · 167K IG · 90K TikTok · 150 destinazioni. File: [src/components/home/HomeTrustStrip.tsx](../../src/components/home/HomeTrustStrip.tsx).
+- [x] **C-UI-3 HomeDiscoveryFinder** — 4 card icon+title+arrow (pattern Linear/Notion) sostituite con 2 tessere image-led (grid md:2-col, scrim + Ken Burns coerente coi picks adiacenti). "Per zona" → toscana.webp → `/esplora?zone=Italia`; "Per intenzione" → romantico.webp → `/esplora?type=posti-particolari`. `loading="eager"` sulle 2 immagini above-fold (chiude anche H-PERF-2). `HOMEPAGE_DISCOVERY_ENTRIES` non rimosso dal config (ancora consumato da Navbar/SearchModal). File: [src/components/home/HomeDiscoveryFinder.tsx](../../src/components/home/HomeDiscoveryFinder.tsx).
+
+Verifiche: `npm run typecheck` PASS (0 errori), `npm run audit:ui` PASS (0 errori, solo WARN scrim rgba preesistenti uguali ai picks). Residuo opzionale: giro `browser-auditor` a 375px per confermare zero overflow sulle nuove tessere.
+
+### Landing lead magnet demo — 2026-05-24
+
+La route standalone `/vieni-con-noi` e stata riallineata alla nuova homepage e al
+lead magnet demo.
+
+- [x] Landing trasformata da singola card su immagine a pagina demo completa:
+      hero editoriale, cover della guida, form, anteprima contenuti e FAQ.
+- [x] Asset `public/images/lead-magnets/posti-italiani-cover-demo.webp` usato
+      come copertina preview anche nella landing.
+- [x] Copy riscritto in tono editoriale: promessa concreta, zero superlativi
+      vuoti, CTA "Ricevi la guida".
+- [x] Mobile: CTA visibile nel primo fold e form ancorato con `#lead-form`;
+      dettagli secondari nascosti prima della conversione.
+- [x] Tracking e fallback lead esistenti preservati:
+      `newsletter_signup`, `lead_magnet_signup`, honeypot e localStorage fallback.
+
+Verifiche:
+
+- `npm run typecheck` PASS
+- `npm run audit:ui` PASS (0 errori, warning non blocking)
+- `npm run build` PASS
+- Browser preview `/vieni-con-noi` desktop/mobile: zero overflow orizzontale,
+  h1 corretto, CTA mobile presente, form renderizzato.
+
+### Collaborazioni pacchetti demo — 2026-05-24
+
+La pagina `/collaborazioni` e stata resa piu commerciale senza inventare prove
+non disponibili.
+
+- [x] Sezione format riscritta come 3 pacchetti demo: Stay editoriale,
+      Destinazione da costruire, Content kit per brand.
+- [x] Ogni pacchetto ora dichiara output demo, caso ideale e deliverable
+      concreti.
+- [x] Nessun prezzo pubblico, logo partner o case study fittizio inserito:
+      la proposta resta credibile finche non arrivano dati reali.
+- [x] Layout mobile corretto nella sezione pacchetti: card da 231px a 327px su
+      viewport 375px, zero overflow orizzontale.
+
+Verifiche:
+
+- `npm run typecheck` PASS
+- `npm run audit:ui` PASS (0 errori, warning non blocking)
+- `npm run build` PASS
+- Browser `/collaborazioni` desktop/mobile: zero overflow orizzontale e zero
+  errori console su dev server.
+
+### Media kit allineato ai pacchetti demo — 2026-05-24
+
+La pagina `/media-kit` e il PDF generato sono stati riallineati alla nuova
+proposta commerciale di `/collaborazioni`.
+
+- [x] Hero riscritto: meno "PDF brochure", piu filtro commerciale qualificato.
+- [x] Anteprima PDF aggiornata: rimossi segnali troppo assertivi come metriche
+      di conversione non documentate; usati segnali pubblici e da verificare.
+- [x] Aggiunta sezione "I 3 punti di partenza" con Stay editoriale,
+      Destinazione da costruire e Content kit per brand.
+- [x] `siteContentDefaults.collaborations.collaborationFormats` aggiornato:
+      anche `public/media-kit.pdf` viene rigenerato con gli stessi format.
+- [x] Fix mobile sulle sezioni finali: card e CTA tornano a 327px su viewport
+      375px, zero overflow orizzontale.
+
+Verifiche:
+
+- `npm run typecheck` PASS
+- `npm run audit:ui` PASS (0 errori, warning non blocking)
+- `npm run build` PASS
+- Browser preview produzione `/media-kit` desktop/mobile: zero overflow
+  orizzontale, form presente, tre pacchetti visibili, zero errori console.

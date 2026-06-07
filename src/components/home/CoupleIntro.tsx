@@ -5,16 +5,17 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, BadgeCheck, Camera, MapPinned } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
+import OptimizedImage from '../OptimizedImage';
 
-const COUPLE_IMG = '/images/brand/about-editorial.png';
+const COUPLE_IMG = '/images/brand/about-editorial.webp';
 
 /** Polaroid scatter con asset locali controllati, in attesa degli scatti R+B finali. */
 interface CouplePolaroid {
   image: string;
   alt: string;
   caption: string;
-  /** Rotazione iniziale (deg) - stagger per effetto scatter. */
-  rotate: number;
+  /** Rotazione iniziale come classe Tailwind. */
+  rotateClass: string;
   /** Posizione absolute classi Tailwind. */
   position: string;
 }
@@ -24,21 +25,21 @@ const POLAROIDS: CouplePolaroid[] = [
     image: '/images/brand/couple-travel.webp',
     alt: 'Rodrigo e Betta in viaggio',
     caption: 'In viaggio',
-    rotate: -8,
+    rotateClass: 'rotate-[-8deg]',
     position: '-top-6 -left-10 z-10',
   },
   {
     image: '/images/brand/about-editorial.webp',
     alt: 'Rodrigo e Betta durante una selezione editoriale',
     caption: 'Sul posto',
-    rotate: 5,
+    rotateClass: 'rotate-[5deg]',
     position: 'top-1/3 -right-8 z-10',
   },
   {
     image: '/images/brand/collab-work.webp',
     alt: 'Travelliniwithus al lavoro su contenuti travel',
     caption: 'Metodo',
-    rotate: -4,
+    rotateClass: 'rotate-[-4deg]',
     position: '-bottom-10 left-1/3 z-10',
   },
 ];
@@ -142,13 +143,14 @@ export default function CoupleIntro() {
           <div className="relative lg:col-span-7">
             <div
               data-couple-image
-              className="aspect-[3/2] overflow-hidden rounded-[var(--radius-md)] shadow-[0_30px_70px_-20px_rgba(17,17,17,0.25)] lg:aspect-[5/6]"
+              className="aspect-[3/2] overflow-hidden rounded-[var(--radius-md)] shadow-[var(--shadow-xl)] lg:aspect-[5/6]"
             >
-              <img
+              <OptimizedImage
                 src={COUPLE_IMG}
                 alt="Rodrigo e Betta — Travelliniwithus"
                 className="h-full w-full object-cover"
-                loading="lazy"
+                responsiveWidths={[320, 480, 768]}
+                sizes="(max-width: 1024px) 92vw, 54vw"
               />
             </div>
 
@@ -156,7 +158,7 @@ export default function CoupleIntro() {
               <div className="font-script text-xl text-[var(--color-accent)]">
                 Rodrigo &amp; Betta
               </div>
-              <div className="text-[10px] uppercase tracking-widest text-black/50">
+              <div className="text-[10px] uppercase tracking-widest text-[var(--color-muted-fg)]">
                 8 anni, 150 destinazioni, niente scrivania
               </div>
             </div>
@@ -174,15 +176,15 @@ export default function CoupleIntro() {
                 <div
                   key={idx}
                   data-couple-polaroid
-                  className={`absolute ${p.position} w-40 rounded-[2px] bg-white p-2 pb-4 shadow-[0_18px_36px_-12px_rgba(17,17,17,0.35)]`}
-                  style={{ transform: `rotate(${p.rotate}deg)` }}
+                  className={`absolute ${p.position} ${p.rotateClass} w-40 rounded-[2px] bg-white p-2 pb-4 shadow-[var(--shadow-lg)]`}
                 >
                   <div className="aspect-[4/5] overflow-hidden bg-[var(--color-muted-bg)]">
-                    <img
+                    <OptimizedImage
                       src={p.image}
                       alt={p.alt}
-                      loading="lazy"
                       className="h-full w-full object-cover"
+                      responsiveWidths={[320, 480]}
+                      sizes="160px"
                     />
                   </div>
                   <div className="mt-2 px-1 text-center font-script text-[13px] leading-none text-[var(--color-ink-2)]">
@@ -197,11 +199,7 @@ export default function CoupleIntro() {
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
               Il metodo
             </span>
-            <h2
-              data-couple-heading
-              className="mt-3 max-w-2xl font-serif leading-[1.02] tracking-tight text-ink"
-              style={{ fontSize: 'var(--text-display-2, clamp(2.25rem, 4vw + 1rem, 4rem))' }}
-            >
+            <h2 data-couple-heading className="text-display-2 mt-3 max-w-2xl text-ink">
               <span className="sr-only">
                 Andiamo, proviamo, raccontiamo. Solo dopo consigliamo.
               </span>
@@ -216,15 +214,15 @@ export default function CoupleIntro() {
                 </span>
               </span>
             </h2>
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-black/70 md:text-lg">
-              Travelliniwithus non nasce per mostrare più posti possibile. Nasce per selezionare
-              quelli che meritano davvero, con un racconto abbastanza concreto da aiutarti a
-              decidere.
+            <p className="mt-6 max-w-2xl text-base leading-relaxed text-[var(--color-ink-2)] md:text-lg">
+              Travelliniwithus non nasce come catalogo turistico o elenco di attrazioni. Esiste per
+              selezionare i luoghi che hanno un'anima reale e raccontarli con la cura e i dettagli
+              pratici di cui hai bisogno prima di partire in coppia.
             </p>
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/65 md:text-lg">
-              Rodrigo e Betta tengono insieme sguardo personale, immagini, ricerca e dettagli
-              pratici: è questo che rende il progetto utile sia per chi legge sia per i partner
-              giusti.
+            <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--color-muted-fg)] md:text-lg">
+              Otto anni di viaggi insieme ci hanno insegnato a unire lo sguardo editoriale con foto
+              oneste e informazioni reali. Perché un viaggio riuscito non si misura in chilometri,
+              ma nella scelta del posto giusto al momento giusto.
             </p>
 
             <div data-couple-cards className="mt-7 grid gap-3 md:grid-cols-3">
@@ -234,11 +232,15 @@ export default function CoupleIntro() {
                   <div
                     key={standard.title}
                     data-couple-card
-                    className="rounded-xl border border-black/8 bg-white/70 p-4 backdrop-blur-sm"
+                    className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-accent)]/20"
                   >
-                    <Icon size={18} className="text-[var(--color-accent)]" />
-                    <h3 className="mt-3 text-sm font-bold text-ink">{standard.title}</h3>
-                    <p className="mt-2 text-xs leading-relaxed text-black/55">{standard.text}</p>
+                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
+                      <Icon size={18} />
+                    </div>
+                    <h3 className="mt-4 text-sm font-bold text-ink">{standard.title}</h3>
+                    <p className="mt-2 text-xs leading-relaxed text-[var(--color-muted-fg)]">
+                      {standard.text}
+                    </p>
                   </div>
                 );
               })}
@@ -246,9 +248,13 @@ export default function CoupleIntro() {
 
             <Link
               to="/chi-siamo"
-              className="mt-6 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-ink transition-colors hover:text-[var(--color-accent)]"
+              className="group mt-6 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-ink transition-colors hover:text-[var(--color-accent)]"
             >
-              Come lavoriamo davvero <ArrowRight size={14} />
+              Come lavoriamo davvero{' '}
+              <ArrowRight
+                size={14}
+                className="transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:translate-x-1"
+              />
             </Link>
           </div>
         </div>
