@@ -1,5 +1,5 @@
 import { useEffect, useId, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import {
   type ConsentState,
   acceptAll,
@@ -59,15 +59,15 @@ export default function ConsentBanner() {
       role="dialog"
       aria-live="polite"
       aria-label="Informativa cookie"
-      className="fixed inset-x-3 bottom-3 z-[1000] mx-auto max-w-3xl rounded-[var(--radius-md)] border border-black/10 bg-white/95 p-4 shadow-premium backdrop-blur-md sm:inset-x-4 sm:bottom-4 sm:p-6"
+      className="fixed inset-x-3 bottom-3 z-[1000] mx-auto max-w-3xl rounded-[var(--radius-md)] border border-white/10 bg-[#0b0805]/85 p-4 text-white shadow-premium backdrop-blur-md sm:inset-x-4 sm:bottom-4 sm:p-5"
     >
       {mode === 'banner' ? (
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-6">
           <div className="flex-1">
-            <h2 className="hidden text-base font-serif font-semibold text-[var(--color-ink)] sm:block">
+            <h2 className="hidden text-base font-serif font-semibold text-white sm:block">
               Cookie e privacy
             </h2>
-            <p className="text-sm leading-relaxed text-[var(--color-ink-2)] sm:mt-2">
+            <p className="text-sm leading-relaxed text-white/80 sm:mt-2">
               <span className="sm:hidden">
                 Usiamo cookie per far funzionare il sito e, col tuo ok, per capire come viene
                 usato.{' '}
@@ -78,7 +78,7 @@ export default function ConsentBanner() {
               </span>
               <Link
                 to="/cookie"
-                className="underline decoration-[var(--color-accent)] underline-offset-2"
+                className="underline decoration-[var(--color-accent)] underline-offset-2 text-white hover:text-[var(--color-accent)] transition-colors"
               >
                 Cookie Policy
               </Link>
@@ -90,14 +90,14 @@ export default function ConsentBanner() {
               <button
                 type="button"
                 onClick={handleAcceptAll}
-                className="rounded-full bg-[var(--color-ink)] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[var(--color-accent)]"
+                className="rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-[var(--color-ink)] transition-colors hover:bg-[var(--color-accent)] hover:text-white cursor-pointer"
               >
                 Accetta
               </button>
               <button
                 type="button"
                 onClick={handleRejectAll}
-                className="rounded-full border border-black/15 px-4 py-2.5 text-sm font-medium text-[var(--color-ink)] transition-colors hover:border-black/30"
+                className="rounded-full border border-white/20 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/5 hover:border-white/40 cursor-pointer"
               >
                 Rifiuta
               </button>
@@ -105,7 +105,7 @@ export default function ConsentBanner() {
             <button
               type="button"
               onClick={() => setMode('customize')}
-              className="text-xs font-semibold uppercase tracking-widest text-[var(--color-muted-fg)] transition-colors hover:text-[var(--color-ink)]"
+              className="text-xs font-semibold uppercase tracking-widest text-white/55 transition-colors hover:text-white cursor-pointer"
             >
               Personalizza
             </button>
@@ -113,9 +113,7 @@ export default function ConsentBanner() {
         </div>
       ) : (
         <div className="flex flex-col gap-4">
-          <h2 className="text-base font-serif font-semibold text-[var(--color-ink)]">
-            Preferenze cookie
-          </h2>
+          <h2 className="text-base font-serif font-semibold text-white">Preferenze cookie</h2>
           <div className="flex flex-col gap-3 text-sm">
             <ConsentRow
               title="Necessari"
@@ -140,14 +138,14 @@ export default function ConsentBanner() {
             <button
               type="button"
               onClick={handleSave}
-              className="rounded-full bg-[var(--color-ink)] px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[var(--color-accent)]"
+              className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-[var(--color-ink)] transition-colors hover:bg-[var(--color-accent)] hover:text-white cursor-pointer"
             >
               Salva preferenze
             </button>
             <button
               type="button"
               onClick={() => setMode('banner')}
-              className="rounded-full border border-black/15 px-5 py-2.5 text-sm font-medium text-[var(--color-ink)] transition-colors hover:border-black/30"
+              className="rounded-full border border-white/20 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/5 hover:border-white/40 cursor-pointer"
             >
               Indietro
             </button>
@@ -174,18 +172,18 @@ function ConsentRow({
   const inputId = useId();
 
   return (
-    <div className="flex items-start gap-3 rounded-xl border border-black/5 bg-[var(--color-sand)]/60 p-3">
+    <div className="flex items-start gap-3 rounded-xl border border-white/5 bg-white/5 p-3">
       <input
         id={inputId}
         type="checkbox"
         checked={checked}
         disabled={disabled}
         onChange={(e) => onChange?.(e.target.checked)}
-        className="mt-1 h-4 w-4 shrink-0 accent-[var(--color-accent)] disabled:opacity-60"
+        className="mt-1 h-4 w-4 shrink-0 accent-[var(--color-accent)] disabled:opacity-60 cursor-pointer"
       />
       <label htmlFor={inputId} className="cursor-pointer">
-        <span className="block text-sm font-semibold text-[var(--color-ink)]">{title}</span>
-        <span className="block text-xs text-[var(--color-ink-2)]">{description}</span>
+        <span className="block text-sm font-semibold text-white">{title}</span>
+        <span className="block text-xs text-white/60">{description}</span>
       </label>
     </div>
   );

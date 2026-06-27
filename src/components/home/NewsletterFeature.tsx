@@ -69,9 +69,12 @@ export default function NewsletterFeature() {
         </div>
 
         <div className="flex flex-col gap-6">
-          <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-8 shadow-[var(--shadow-sm)] md:p-10">
+          <div className="group rounded-2xl border border-[var(--color-border)] bg-white/80 backdrop-blur-md p-8 shadow-[var(--shadow-sm)] transition-all duration-500 hover:bg-white/95 hover:shadow-[var(--shadow-premium)] md:p-10">
             <div className="mb-6 flex items-start gap-3 text-sm leading-relaxed text-black/68">
-              <ShieldCheck size={18} className="shrink-0 text-[var(--color-accent)]" />
+              <ShieldCheck
+                size={18}
+                className="shrink-0 text-[var(--color-accent)] transition-transform duration-500 group-hover:scale-105"
+              />
               <span>
                 Disiscrizione con un click in ogni email. Non passiamo mai i tuoi dati a terzi.
               </span>
@@ -93,15 +96,16 @@ export default function NewsletterFeature() {
  */
 function NewsletterPromise({ items }: { items: NewsletterPromiseItem[] }) {
   return (
-    <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white/60 p-6 md:p-7">
+    <div className="group rounded-2xl border border-[var(--color-border)]/60 bg-white/40 backdrop-blur-md p-6 md:p-7 transition-all duration-500 hover:bg-white/60 hover:shadow-[var(--shadow-premium)]">
       <div className="mb-4 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
-        <Mail size={11} /> Cosa ricevi
+        <Mail size={11} className="transition-transform duration-500 group-hover:scale-110" /> Cosa
+        ricevi
       </div>
       <ul className="space-y-3">
         {items.map((item) => (
           <li
             key={item.title}
-            className="border-b border-[var(--color-border)] pb-3 last:border-b-0 last:pb-0"
+            className="border-b border-[var(--color-border)]/40 pb-3 last:border-b-0 last:pb-0"
           >
             <p className="mt-1 text-sm font-serif font-medium leading-snug text-[var(--color-ink)]">
               {item.title}

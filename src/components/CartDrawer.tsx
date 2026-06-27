@@ -129,7 +129,7 @@ export default function CartDrawer() {
       }
     } catch (error) {
       console.error('Checkout error:', error);
-      alert('Si e verificato un errore durante il checkout. Riprova.');
+      alert('Si è verificato un errore durante il checkout. Riprova.');
     } finally {
       setIsLoading(false);
     }

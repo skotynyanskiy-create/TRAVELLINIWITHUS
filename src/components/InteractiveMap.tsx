@@ -1,12 +1,13 @@
 import { type KeyboardEvent, useState } from 'react';
 import { ComposableMap, Geographies, Geography, Marker, ZoomableGroup } from 'react-simple-maps';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { motion, AnimatePresence } from 'motion/react';
 import { MapPin, ArrowRight, X, Globe } from 'lucide-react';
 import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_ARTICLE_MARKER } from '../config/demoContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { trackEvent } from '../services/analytics';
+import { LITE_MODE } from '../config/liteMode';
 
 const geoUrl = 'https://unpkg.com/world-atlas@2.0.2/countries-110m.json';
 
@@ -279,14 +280,15 @@ export default function InteractiveMap({
               </div>
               <h4 className="mb-2 text-2xl font-serif leading-tight">{activeCountry.name}</h4>
               <p className="mb-6 text-sm font-normal leading-relaxed text-black/70">
-                Usa il finder per incrociare luogo, esperienza, periodo e budget prima di aprire
-                l'archivio completo.
+                {LITE_MODE
+                  ? 'Apri la mappa completa per esplorare tutti i posti che abbiamo visitato.'
+                  : "Usa il finder per incrociare luogo, esperienza, periodo e budget prima di aprire l'archivio completo."}
               </p>
               <Link
-                to="/esplora"
+                to={LITE_MODE ? '/mappa' : '/esplora'}
                 className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-black py-3 text-sm font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
               >
-                Parti da Esplora <ArrowRight size={16} />
+                {LITE_MODE ? 'Vedi sulla mappa' : 'Parti da Esplora'} <ArrowRight size={16} />
               </Link>
             </div>
           </motion.div>

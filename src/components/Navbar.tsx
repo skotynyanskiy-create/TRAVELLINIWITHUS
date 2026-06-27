@@ -14,12 +14,15 @@ import {
   User as UserIcon,
   X,
 } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { CONTACTS } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
 import { useSiteContent } from '../hooks/useSiteContent';
+import { LITE_MODE } from '../config/liteMode';
+import OptimizedImage from './OptimizedImage';
 
 const SearchModal = lazy(() => import('./SearchModal'));
 
@@ -108,8 +111,8 @@ export default function Navbar() {
   // anteprima foto featured (anchor visivo). Le picks restano nella single
   // source `discoveryPicks.ts` ma vengono usate altrove (Home discovery,
   // SearchModal); qui privilegiamo la decisione editoriale.
-  const explorePrimaryLinks = useMemo<NavSubLink[]>(
-    () => [
+  const explorePrimaryLinks = useMemo<NavSubLink[]>(() => {
+    const all: NavSubLink[] = [
       {
         name: 'Apri il finder',
         href: '/esplora',
@@ -130,9 +133,17 @@ export default function Navbar() {
         href: '/itinerari',
         description: 'Giorno per giorno, già impostati.',
       },
-    ],
-    []
-  );
+    ];
+    if (!LITE_MODE) return all;
+    return all.filter(
+      (l) =>
+        !l.href.startsWith('/esplora') &&
+        !l.href.startsWith('/itinerari') &&
+        !l.href.startsWith('/shop') &&
+        !l.href.startsWith('/club') &&
+        !l.href.startsWith('/preferiti')
+    );
+  }, []);
 
   // Featured editoriale del menu — placeholder demo. Quando l'archivio reale
   // ha un articolo "in primo piano" del mese, va sostituito programmaticamente
@@ -148,28 +159,27 @@ export default function Navbar() {
     []
   );
 
-  const navItems = useMemo<NavItem[]>(
-    () => [
+  const navItems = useMemo<NavItem[]>(() => {
+    const all: NavItem[] = [
       {
         name: 'Esplora',
         href: '/esplora',
         primaryLinks: explorePrimaryLinks,
         feature: exploreFeature,
       },
-      { name: navigation.resourcesLabel, href: '/risorse' },
-      {
-        name: navigation.collaborationsLabel,
-        href: '/collaborazioni',
-        subLinks: [{ name: navigation.mediaKitLabel, href: '/media-kit' }],
-      },
+      { name: navigation.resourcesLabel, href: '/strumenti' },
+      { name: 'Shop', href: '/shop' },
+      { name: 'Club', href: '/club' },
       {
         name: navigation.aboutLabel,
         href: '/chi-siamo',
         subLinks: [{ name: navigation.contactsLabel, href: '/contatti' }],
       },
-    ],
-    [explorePrimaryLinks, exploreFeature, navigation]
-  );
+    ];
+    if (!LITE_MODE) return all;
+    const disabledHrefs = ['/esplora', '/shop', '/club', '/preferiti', '/itinerari'];
+    return all.filter((item) => !item.href || !disabledHrefs.includes(item.href));
+  }, [explorePrimaryLinks, exploreFeature, navigation]);
 
   const isItemActive = (item: NavItem) => {
     if (item.name === 'Esplora') {
@@ -219,7 +229,7 @@ export default function Navbar() {
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className={`fixed top-4 left-4 right-4 z-50 w-[calc(100%-2rem)] rounded-full border px-6 py-3 text-[var(--color-ink)] transition-all duration-700 md:top-6 md:left-1/2 md:w-[96%] md:-translate-x-1/2 md:px-8 md:py-4 lg:w-[calc(100%-4rem)] max-w-[1400px] ${
           isScrolled
-            ? 'border-[var(--color-ink)]/5 bg-[var(--color-surface)]/80 saturate-[150%] shadow-[0_8px_32px_0_rgba(10,10,10,0.08)] backdrop-blur-[40px]'
+            ? 'border-[var(--color-ink)]/5 bg-[var(--color-surface)]/80 saturate-[150%] shadow-[var(--shadow-lg)] backdrop-blur-[40px]'
             : 'border-white/40 bg-white/50 shadow-sm backdrop-blur-xl'
         }`}
       >
@@ -233,7 +243,7 @@ export default function Navbar() {
             </Link>
           </div>
 
-          <div className="hidden flex-1 items-center justify-center space-x-4 px-4 lg:flex xl:space-x-6 2xl:space-x-8">
+          <div className="hidden flex-1 items-center justify-center space-x-4 px-4 xl:flex xl:space-x-6 2xl:space-x-8">
             {navItems.map((item) => (
               <div key={item.name} className="group relative">
                 <Link
@@ -260,7 +270,6 @@ export default function Navbar() {
                       role="menu"
                       className="relative overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-ink)]/5 bg-[var(--color-surface)] shadow-2xl w-[44rem]"
                     >
-                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full bg-[var(--color-accent)]" />
                       <div className="grid grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
                         <div className="flex flex-col p-7">
                           <span className="mb-4 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
@@ -307,12 +316,13 @@ export default function Navbar() {
                           role="menuitem"
                           className="group/feat relative flex flex-col justify-end overflow-hidden bg-[var(--color-ink)] p-7 text-white"
                         >
-                          <img
+                          <OptimizedImage
                             src={item.feature.image}
                             alt=""
                             aria-hidden="true"
                             className="absolute inset-0 h-full w-full object-cover opacity-65 transition-all duration-700 group-hover/feat:scale-105 group-hover/feat:opacity-85"
-                            loading="lazy"
+                            responsiveWidths={[320, 480, 768]}
+                            sizes="22rem"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
                           <div className="relative z-10">
@@ -346,7 +356,6 @@ export default function Navbar() {
                       role="menu"
                       className="relative overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-ink)]/5 bg-[var(--color-surface)] py-4 shadow-2xl w-60"
                     >
-                      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 rounded-full bg-[var(--color-accent)]" />
                       {item.subLinks.map((subLink) => (
                         <Link
                           key={subLink.name}
@@ -368,7 +377,7 @@ export default function Navbar() {
             ))}
           </div>
 
-          <div className="hidden shrink-0 items-center space-x-4 text-[var(--color-ink-2)] lg:flex xl:space-x-6">
+          <div className="hidden shrink-0 items-center space-x-4 text-[var(--color-ink-2)] xl:flex xl:space-x-6">
             <Link
               to="/collaborazioni"
               className="inline-flex items-center gap-1 rounded-full border border-[var(--color-accent)]/30 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-colors hover:bg-[var(--color-accent-soft)]"
@@ -385,18 +394,20 @@ export default function Navbar() {
               <span className="hidden xl:inline">{navigation.searchLabel}</span>
             </button>
 
-            <Link
-              to="/preferiti"
-              className="relative transition-colors hover:text-[var(--color-accent)]"
-              aria-label={navigation.favoritesLabel}
-            >
-              <Heart size={18} strokeWidth={1.5} />
-              {favorites.length > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[9px] font-bold text-white">
-                  {favorites.length}
-                </span>
-              )}
-            </Link>
+            {!LITE_MODE && (
+              <Link
+                to="/preferiti"
+                className="relative transition-colors hover:text-[var(--color-accent)]"
+                aria-label={navigation.favoritesLabel}
+              >
+                <Heart size={18} strokeWidth={1.5} />
+                {favorites.length > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[9px] font-bold text-white">
+                    {favorites.length}
+                  </span>
+                )}
+              </Link>
+            )}
 
             <div className="relative">
               {user ? (
@@ -470,7 +481,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          <div className="flex items-center gap-1 text-[var(--color-ink)] lg:hidden">
+          <div className="flex items-center gap-1 text-[var(--color-ink)] xl:hidden">
             <button
               onClick={() => setIsSearchOpen(true)}
               className="p-2 transition-colors hover:text-[var(--color-accent)]"
@@ -497,7 +508,7 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="fixed inset-0 z-[110] bg-black/90 backdrop-blur-md lg:hidden"
+              className="fixed inset-0 z-[110] bg-black/90 backdrop-blur-md xl:hidden"
             />
 
             <motion.div
@@ -505,7 +516,7 @@ export default function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="fixed inset-y-0 right-0 z-[120] flex w-full flex-col bg-white shadow-2xl md:w-96 lg:hidden"
+              className="fixed inset-y-0 right-0 z-[120] flex w-full flex-col bg-white shadow-2xl md:w-96 xl:hidden"
             >
               <div className="flex items-center justify-between border-b border-[var(--color-border)] px-6 py-6">
                 <Link
@@ -628,19 +639,21 @@ export default function Navbar() {
                     <ArrowRight size={14} />
                   </Link>
                   <div className="flex flex-wrap items-center gap-5">
-                    <Link
-                      to="/preferiti"
-                      aria-label={navigation.favoritesLabel}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="relative text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      <Heart size={24} />
-                      {favorites.length > 0 && (
-                        <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-accent)] text-[10px] font-bold text-white">
-                          {favorites.length}
-                        </span>
-                      )}
-                    </Link>
+                    {!LITE_MODE && (
+                      <Link
+                        to="/preferiti"
+                        aria-label={navigation.favoritesLabel}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="relative text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+                      >
+                        <Heart size={24} />
+                        {favorites.length > 0 && (
+                          <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-accent)] text-[10px] font-bold text-white">
+                            {favorites.length}
+                          </span>
+                        )}
+                      </Link>
+                    )}
                     <a
                       href={CONTACTS.instagramUrl}
                       aria-label="Apri Instagram Travelliniwithus"

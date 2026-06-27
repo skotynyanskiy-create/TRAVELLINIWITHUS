@@ -177,17 +177,3 @@ export function isGuideItem(item: ArchiveItem): boolean {
 // ─── Re-export delle costanti canonical per i consumer ─────────────────────
 
 export { ZONES, TYPES, FORMATS };
-
-// ─── Back-compat alias (rimuovere dopo migrazione completa) ────────────────
-
-export function buildDestinationUrl(filters: DiscoveryFilters): string {
-  return buildExploreUrl(filters);
-}
-
-export function buildExperienceUrl(filters: DiscoveryFilters): string {
-  return buildExploreUrl(filters);
-}
-
-export function resolveDestinationGroup(raw: string | null): Zone | null {
-  return getZoneFromQuery(raw);
-}

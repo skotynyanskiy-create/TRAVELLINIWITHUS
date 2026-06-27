@@ -1,6 +1,8 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import SEO from '../components/SEO';
+import StickyMobileCTA from '../components/StickyMobileCTA';
 import { SITE_URL } from '../config/site';
+import { isDisabled } from '../config/liteMode';
 
 const MapboxWorldMap = lazy(() => import('../components/map/MapboxWorldMap'));
 
@@ -9,7 +11,9 @@ function MapShellFallback() {
     <div className="absolute inset-0 flex items-center justify-center bg-[var(--color-ink-deep)]">
       <div className="flex flex-col items-center gap-4 text-white/60">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-[var(--color-accent)] border-t-transparent" />
-        <span className="text-xs font-bold uppercase tracking-widest">Prepariamo la mappa...</span>
+        <span className="text-xs font-bold uppercase tracking-widest">
+          Tracciamo i nostri passi...
+        </span>
       </div>
     </div>
   );
@@ -37,8 +41,8 @@ export default function Mappa() {
       style={{ isolation: 'isolate' }}
     >
       <SEO
-        title="Mappa dei posti che abbiamo visitato"
-        description="La mappa interattiva 3D di Travelliniwithus: destinazioni verificate sul posto, filtrate per regione, esperienza e periodo."
+        title="La mappa delle nostre tracce"
+        description="Ogni posto che abbiamo provato davvero, tracciato sulla mappa interattiva 3D di Travelliniwithus: filtra per regione, esperienza e periodo."
         breadcrumbs={[
           { name: 'Home', url: SITE_URL },
           { name: 'Mappa', url: `${SITE_URL}/mappa` },
@@ -52,6 +56,12 @@ export default function Mappa() {
       ) : (
         <MapShellFallback />
       )}
+      <StickyMobileCTA
+        label={isDisabled('/esplora') ? 'Vieni con noi' : 'Apri archivio'}
+        to={isDisabled('/esplora') ? '/vieni-con-noi' : '/esplora'}
+        trackingId="mappa_sticky_mobile"
+        revealAfter={-1}
+      />
     </div>
   );
 }

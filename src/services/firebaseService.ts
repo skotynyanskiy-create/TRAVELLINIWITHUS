@@ -14,9 +14,11 @@ import {
 import { db } from '../lib/firebaseDb';
 import { normalizeFirestoreArticle, type NormalizedArticle } from '../utils/articleData';
 import type { SiteContentKey, SiteContentMap } from '../config/siteContent';
-import { DEMO_PRODUCT, DEMO_ARTICLE_PREVIEW } from '../config/demoContent';
+import { siteContentDefaults } from '../config/siteContent';
+import { DEMO_PRODUCT, DEMO_ARTICLE_PREVIEW, DEMO_PRODUCTS } from '../config/demoContent';
 import type { Product } from '../types';
 import { isTimestamp } from '../utils/dateValue';
+import { isAuditMode } from '../config/auditMode';
 
 type FirestoreProductData = Partial<Omit<Product, 'id'>> & Record<string, unknown>;
 
@@ -106,6 +108,10 @@ function normalizeFirestoreProduct(id: string, data: FirestoreProductData): Prod
 }
 
 export async function fetchProducts(): Promise<Product[]> {
+  if (isAuditMode()) {
+    return DEMO_PRODUCTS as Product[];
+  }
+
   const productsQuery = query(
     collection(db, 'products'),
     where('published', '==', true),
@@ -118,6 +124,10 @@ export async function fetchProducts(): Promise<Product[]> {
 }
 
 export async function fetchProductBySlug(slug: string): Promise<Product | null> {
+  if (isAuditMode()) {
+    return (DEMO_PRODUCTS as Product[]).find((product) => product.slug === slug) ?? null;
+  }
+
   const q = query(
     collection(db, 'products'),
     where('slug', '==', slug),
@@ -131,6 +141,10 @@ export async function fetchProductBySlug(slug: string): Promise<Product | null> 
 }
 
 export async function fetchArticles() {
+  if (isAuditMode()) {
+    return [];
+  }
+
   const publicArticlesQuery = query(
     collection(db, 'articles'),
     where('published', '==', true),
@@ -141,6 +155,11 @@ export async function fetchArticles() {
 }
 
 export async function fetchArticleBySlug(slug: string): Promise<NormalizedArticle | null> {
+  if (isAuditMode()) {
+    void slug;
+    return null;
+  }
+
   const slugQuery = query(
     collection(db, 'articles'),
     where('slug', '==', slug),
@@ -209,6 +228,10 @@ export interface SiteStats {
 }
 
 export async function fetchStats(): Promise<SiteStats | null> {
+  if (isAuditMode()) {
+    return null;
+  }
+
   const docRef = doc(db, 'settings', 'stats');
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
@@ -228,6 +251,10 @@ export async function updateStats(stats: SiteStats) {
 export async function fetchSiteContent<K extends SiteContentKey>(
   key: K
 ): Promise<Partial<SiteContentMap[K]> | null> {
+  if (isAuditMode()) {
+    return siteContentDefaults[key];
+  }
+
   const docRef = doc(db, 'siteContent', key);
   const docSnap = await getDoc(docRef);
 

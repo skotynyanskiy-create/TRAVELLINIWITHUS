@@ -10,6 +10,7 @@ This repository is the website and marketing operating system for the travel cre
 - Operational Obsidian notes: `docs/`
 - Design-system truth for agents and design tools: `DESIGN.md`
 - Agent stack truth: `docs/AI_AGENT_STACK.md`
+- AI operations dashboard: `docs/AI_OPERATIONS_DASHBOARD.md`
 - Marketing operating hub: `docs/MARKETING_OPERATIONS_HUB.md`
 - Project hub: `docs/10_Projects/PROJECT_TRAVELLINIWITHUS_SITE.md`
 - Editorial rules: `docs/EDITORIAL_GUIDE.md`
@@ -42,6 +43,9 @@ This repository is the website and marketing operating system for the travel cre
 - Use `.agents/skills` as the canonical local skill source. Run `npm run sync:agents` after editing skills.
 - Use `DESIGN.md` for UI direction, Stitch/Figma prompts and design-system interpretation.
 - Do not import external skill behavior directly into the repo without adapting it locally and documenting the source in `docs/AI_AGENT_STACK.md`.
+- New AI/dev tooling is allowed in scouting. Follow `docs/AI_AGENT_STACK.md` and `docs/AI_TOOLING_RADAR.md`: research freely, test only in lab after confirmation, adopt only with a tooling evaluation card.
+- Use `docs/AI_OPERATIONS_DASHBOARD.md` to choose SAFE / BUILD / OWNER ONLY before AI/dev workflow changes.
+- Improve the AI operating system over time: when a task reveals a reusable lesson, tool candidate, guardrail, skill, workflow or simplification, capture it in the relevant AI operations note instead of leaving it only in chat.
 - When changing important UI, flows, positioning or operations, update the relevant note in `docs/`.
 - If a change affects homepage, navbar, collaborations, content architecture or release readiness, update or create a project note.
 - If a change introduces or resolves a bug, create or update a bug note.

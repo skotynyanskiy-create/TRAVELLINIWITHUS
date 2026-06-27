@@ -1,11 +1,17 @@
 import { motion } from 'motion/react';
-import { ArrowRight, Download, FileText, Mail, Newspaper } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { ArrowRight, Download, ExternalLink, FileText, Mail, Newspaper } from 'lucide-react';
+import { Link } from '@/src/components/TransitionLink';
 import Breadcrumbs from '../components/Breadcrumbs';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import Section from '../components/Section';
-import { BRAND_STATS, CONTACTS, SITE_URL } from '../config/site';
+import {
+  BRAND_STATS,
+  BRAND_STATS_SOURCE,
+  CONTACTS,
+  PUBLIC_PROOF_SIGNALS,
+  SITE_URL,
+} from '../config/site';
 import { trackEvent } from '../services/analytics';
 
 const PRESS_HIGHLIGHTS = [
@@ -19,29 +25,29 @@ const PRESS_HIGHLIGHTS = [
   },
   {
     title: 'Community attiva',
-    text: 'Pubblico italiano interessato a posti curiosi, esperienze pratiche e viaggio lento.',
+    text: 'Community interessata a posti curiosi, esperienze pratiche e viaggio lento.',
   },
 ];
 
 const ASSET_BUNDLES = [
   {
-    title: 'Media kit completo',
-    description: 'Profilo del progetto, audience, format collaborazioni, casi tipo.',
-    href: '/media-kit.pdf',
+    title: 'Anteprima media kit',
+    description: 'Profilo del progetto, audience e format: il PDF completo passa da richiesta.',
+    href: '/media-kit#media-kit-preview',
     icon: FileText,
     trackingId: 'press_media_kit',
   },
   {
     title: 'Brand snapshot',
-    description: 'Visione, posizionamento e pillar editoriali per pubblicazione redazionale.',
-    href: '/media-kit.pdf',
+    description: 'Visione, posizionamento e pillar editoriali da richiedere per uso redazionale.',
+    href: '/contatti?topic=press',
     icon: Newspaper,
     trackingId: 'press_brand_snapshot',
   },
 ];
 
 function handleAssetClick(trackingId: string) {
-  trackEvent('press_asset_download', { id: trackingId });
+  trackEvent('press_asset_request_click', { id: trackingId });
 }
 
 export default function Press() {
@@ -51,7 +57,7 @@ export default function Press() {
     <PageLayout>
       <SEO
         title="Press: media kit e contatti per redazioni"
-        description="Risorse stampa di Travelliniwithus: media kit, brand snapshot, contatti diretti per redazioni, riviste e media partner."
+        description="Risorse stampa Travelliniwithus per redazioni e media: brand snapshot, media kit, contatti diretti e materiali aggiornati."
         canonical={`${SITE_URL}/press`}
       />
 
@@ -73,7 +79,7 @@ export default function Press() {
             <h1 className="text-5xl font-serif leading-[1.05] tracking-tight md:text-6xl">
               Risorse per redazioni
               <br />
-              <span className="italic text-black/55">e media partner.</span>
+              <span className="italic text-black/55"> e media partner.</span>
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-relaxed text-black/70">
               Materiali ordinati per chi scrive su Travelliniwithus o vuole capire il progetto prima
@@ -134,7 +140,51 @@ export default function Press() {
                 <dd className="mt-1 font-serif text-3xl">{BRAND_STATS.engagementRate}</dd>
               </div>
             </dl>
+            <p className="mt-6 border-t border-black/5 pt-5 text-xs leading-relaxed text-black/45">
+              {BRAND_STATS_SOURCE.label}. Snapshot pubblico del {BRAND_STATS_SOURCE.observedAt}; per
+              articoli e interviste verifichiamo i dati prima della pubblicazione.
+            </p>
           </motion.div>
+        </div>
+      </Section>
+
+      <Section className="mt-12">
+        <div className="mb-10">
+          <h2 className="text-3xl font-serif md:text-4xl">Riferimenti pubblici</h2>
+          <p className="mt-3 max-w-2xl text-base leading-relaxed text-black/65">
+            Link esterni utili a redazioni e partner per contestualizzare attività, menzioni e
+            progetti collegati a Travelliniwithus.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          {PUBLIC_PROOF_SIGNALS.map((item) => (
+            <a
+              key={item.title}
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() =>
+                trackEvent('public_proof_click', {
+                  route: '/press',
+                  source: 'press',
+                  proof: item.title,
+                })
+              }
+              className="group flex min-h-[220px] flex-col rounded-[var(--radius-lg)] border border-black/5 bg-white p-7 shadow-sm transition-all hover:-translate-y-0.5 hover:border-[var(--color-accent)] hover:shadow-md"
+            >
+              <div className="mb-5 flex items-center justify-between gap-4">
+                <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
+                  {item.label}
+                </span>
+                <ExternalLink
+                  size={15}
+                  className="text-black/25 transition-colors group-hover:text-[var(--color-accent)]"
+                />
+              </div>
+              <h3 className="font-serif text-2xl leading-tight">{item.title}</h3>
+              <p className="mt-4 text-sm leading-relaxed text-black/60">{item.description}</p>
+            </a>
+          ))}
         </div>
       </Section>
 
@@ -142,19 +192,18 @@ export default function Press() {
         <div className="mb-10">
           <h2 className="text-3xl font-serif md:text-4xl">Bundle scaricabili</h2>
           <p className="mt-3 max-w-2xl text-base leading-relaxed text-black/65">
-            Documenti pronti per redazioni, blog di settore e media partner. Scarica subito, senza
-            compilare moduli.
+            Materiali ordinati per redazioni, blog di settore e media partner. L&apos;anteprima è
+            consultabile subito; i materiali completi passano da richiesta per evitare dati vecchi o
+            fuori contesto.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {ASSET_BUNDLES.map((asset) => {
             const Icon = asset.icon;
             return (
-              <a
+              <Link
                 key={asset.trackingId}
-                href={asset.href}
-                target="_blank"
-                rel="noopener noreferrer"
+                to={asset.href}
                 onClick={() => handleAssetClick(asset.trackingId)}
                 className="group flex items-start gap-5 rounded-[var(--radius-lg)] border border-black/5 bg-white p-7 transition-all hover:-translate-y-0.5 hover:border-[var(--color-accent)] hover:shadow-md"
               >
@@ -167,10 +216,10 @@ export default function Press() {
                   </h3>
                   <p className="text-sm leading-relaxed text-black/60">{asset.description}</p>
                   <span className="mt-4 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
-                    <Download size={12} /> Scarica
+                    <Download size={12} /> Apri
                   </span>
                 </div>
-              </a>
+              </Link>
             );
           })}
         </div>

@@ -3,7 +3,7 @@ import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight, BadgeCheck, Camera, MapPinned } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import OptimizedImage from '../OptimizedImage';
 
@@ -58,7 +58,7 @@ const METHOD_STANDARDS = [
   {
     icon: BadgeCheck,
     title: 'Zero marketing forzato',
-    text: 'Quando un partner non e coerente, non lo accettiamo. La linea editoriale resta nostra.',
+    text: 'Quando un partner non è coerente, non lo accettiamo. La linea editoriale resta nostra.',
   },
 ];
 
@@ -159,7 +159,7 @@ export default function CoupleIntro() {
                 Rodrigo &amp; Betta
               </div>
               <div className="text-[10px] uppercase tracking-widest text-[var(--color-muted-fg)]">
-                8 anni, 150 destinazioni, niente scrivania
+                8 anni, 150+ destinazioni, niente scrivania
               </div>
             </div>
 

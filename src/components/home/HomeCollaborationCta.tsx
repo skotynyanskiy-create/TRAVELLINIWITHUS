@@ -3,11 +3,12 @@ import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import PartnerLogosStrip from './PartnerLogosStrip';
+import Button from '../Button';
+import OptimizedImage from '../OptimizedImage';
 
-const COLLAB_IMG = '/images/brand/collab-work.png';
+const COLLAB_IMG = '/images/brand/collab-work.webp';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -50,22 +51,22 @@ export default function HomeCollaborationCta() {
   );
 
   return (
-    <section ref={sectionRef} className="bg-[var(--color-ink)] py-16 text-white md:py-20">
+    <section ref={sectionRef} className="bg-[var(--color-ink-deep)] py-16 text-white md:py-20">
       <PartnerLogosStrip />
       <div className="mx-auto mt-12 max-w-7xl px-6 md:mt-16 md:px-12">
-        <div className="grid gap-10 overflow-hidden rounded-[var(--radius-md)] border border-white/10 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="group/card grid gap-10 overflow-hidden rounded-[var(--radius-lg)] border border-white/10 bg-white/[0.04] transition-all duration-500 hover:border-white/16 hover:shadow-[var(--shadow-xl)] lg:grid-cols-[0.9fr_1.1fr]">
           <div
             data-collab-image
-            className="relative min-h-[280px] overflow-hidden lg:min-h-[480px]"
-            style={{ clipPath: 'inset(0 0 0 0)' }}
+            className="relative min-h-[280px] overflow-hidden rounded-t-[var(--radius-lg)] [clip-path:inset(0_0_0_0)] lg:min-h-[480px] lg:rounded-l-[var(--radius-lg)] lg:rounded-tr-none"
           >
-            <img
+            <OptimizedImage
               src={COLLAB_IMG}
               alt="Travelliniwithus al lavoro su una collaborazione editoriale"
-              className="h-full w-full object-cover"
-              loading="lazy"
+              className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover/card:scale-103"
+              responsiveWidths={[320, 480, 768]}
+              sizes="(max-width: 1024px) 100vw, 45vw"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[var(--color-ink)]/20 lg:bg-gradient-to-l lg:from-[var(--color-ink)]/40" />
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[var(--color-ink-deep)]/20 lg:bg-gradient-to-l lg:from-[var(--color-ink-deep)]/40" />
           </div>
 
           <div
@@ -75,10 +76,7 @@ export default function HomeCollaborationCta() {
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent)]">
               Per hotel, destinazioni, brand travel & lifestyle
             </span>
-            <h2
-              className="max-w-3xl font-serif leading-[1.05] tracking-tight"
-              style={{ fontSize: 'var(--text-display-2, clamp(2.25rem, 4vw + 1rem, 4rem))' }}
-            >
+            <h2 className="text-display-2 max-w-3xl">
               Hai un luogo, un hotel o un progetto che merita un racconto fatto bene?
             </h2>
             <p className="max-w-2xl text-base leading-relaxed text-white/70 md:text-lg">
@@ -86,19 +84,34 @@ export default function HomeCollaborationCta() {
               reale tra progetto, pubblico e libertà editoriale.
             </p>
 
-            <div className="mt-2 flex flex-col gap-3 sm:flex-row">
-              <Link
+            <div className="mt-2 flex flex-col gap-3.5 sm:flex-row">
+              <Button
                 to="/collaborazioni"
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-[var(--color-accent)] px-6 text-xs font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
+                variant="cta"
+                size="md"
+                magnetic
+                trackingId="collab_cta_lavora_con_noi"
+                className="group/btn h-12 rounded-full px-6 shadow-[var(--shadow-md)]"
               >
-                Lavora con noi <ArrowRight size={14} />
-              </Link>
-              <Link
+                <span className="text-xs font-bold uppercase tracking-widest">Lavora con noi</span>
+                <ArrowRight
+                  size={14}
+                  className="transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover/btn:translate-x-1"
+                />
+              </Button>
+
+              <Button
                 to="/media-kit"
-                className="inline-flex h-12 items-center justify-center rounded-lg border border-white/18 px-6 text-xs font-bold uppercase tracking-widest text-white/76 transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+                variant="outline-light"
+                size="md"
+                magnetic
+                trackingId="collab_cta_media_kit"
+                className="h-12 rounded-full px-6"
               >
-                Richiedi il media kit
-              </Link>
+                <span className="text-xs font-bold uppercase tracking-widest">
+                  Richiedi il media kit
+                </span>
+              </Button>
             </div>
           </div>
         </div>

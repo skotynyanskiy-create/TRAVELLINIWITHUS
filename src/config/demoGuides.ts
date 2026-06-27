@@ -20,7 +20,7 @@ export const DEMO_GUIDES: Guide[] = [
     coverImage: '/images/destinations/sardegna.webp',
     previewImages: ['/images/destinations/sardegna.webp', '/images/experiences/gastronomia.webp'],
     excerpt:
-      'Un weekend a Catania scritto per chi vuole capire la citta senza la fila al monumento sbagliato. Mercati, cibo di strada, una sera all Etna e una colazione vera.',
+      "Un weekend a Catania scritto per chi vuole capire la città senza la fila al monumento sbagliato. Mercati, cibo di strada, una sera all'Etna e una colazione vera.",
     inside: [
       'Itinerario giorno per giorno',
       '15 indirizzi food selezionati',

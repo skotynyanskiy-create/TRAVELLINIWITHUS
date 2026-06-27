@@ -6,15 +6,18 @@ import type { TocItem } from './types';
 
 interface ArticleSidebarProps {
   tocItems: TocItem[];
+  activeTocId?: string | null;
   articleUrl: string;
   articleTitle: string;
   articleDescription: string;
   articleImage: string;
   onCopyLink: () => void;
   onOpenReadingMode?: () => void;
+  readingProgress?: number;
 }
 
 export default function ArticleSidebar({
+  activeTocId,
   tocItems,
   articleUrl,
   articleTitle,
@@ -22,17 +25,46 @@ export default function ArticleSidebar({
   articleImage,
   onCopyLink,
   onOpenReadingMode,
+  readingProgress = 0,
 }: ArticleSidebarProps) {
+  const activeItem = tocItems.find((item) => item.id === activeTocId && item.show);
+  const progressPercent = Math.round(readingProgress * 100);
+
   return (
     <div className="hidden xl:block">
       <div className="sticky top-32 p-8 border border-[var(--color-border)] bg-[var(--color-muted-bg)]/50 backdrop-blur-sm rounded-[var(--radius-lg)] shadow-sm mb-8">
+        <div className="mb-8 rounded-[var(--radius-md)] bg-white p-4 shadow-xs">
+          <div className="mb-3 flex items-center justify-between gap-4">
+            <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-muted)]">
+              Lettura
+            </span>
+            <span className="font-serif text-lg text-[var(--color-ink)]">{progressPercent}%</span>
+          </div>
+          <div className="h-1 overflow-hidden rounded-full bg-black/8">
+            <div
+              className="h-full rounded-full bg-[var(--color-accent)] transition-transform duration-200 ease-out"
+              style={{ transform: `scaleX(${readingProgress})`, transformOrigin: 'left' }}
+            />
+          </div>
+          {activeItem && (
+            <p className="mt-3 text-xs leading-relaxed text-[var(--color-muted-fg-2)]">
+              Ora: <span className="font-medium text-[var(--color-ink)]">{activeItem.label}</span>
+            </p>
+          )}
+        </div>
+
         <h4
           id="indice"
           className="font-serif text-2xl mb-8 border-b border-[var(--color-border)] pb-4"
         >
-          Indice
+          In questa guida
         </h4>
-        <TableOfContents items={tocItems} variant="desktop" />
+        <TableOfContents
+          activeId={activeTocId}
+          items={tocItems}
+          readingProgress={readingProgress}
+          variant="desktop"
+        />
 
         {onOpenReadingMode && (
           <button

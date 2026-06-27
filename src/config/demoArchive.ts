@@ -52,7 +52,27 @@ interface ArchiveSeed {
   coordinates: [number, number]; // [lng, lat]
 }
 
-const SEEDS: ArchiveSeed[] = [
+/**
+ * Sfoltimento "1 per regione italiana" — 2026-05-19.
+ *
+ * RAW_SEEDS contiene tutti i 30 seed (archivio dormiente). SEEDS esporta
+ * solo 7: 6 articoli (1 per regione macro presidiata da /destinazione/) +
+ * dolomiti-rifugi-design (override manuale in previewContent.ts).
+ *
+ * Tutto a valle (SEED_PREVIEWS, DEMO_ARCHIVE_MAP_MARKERS, getArticlesByRegion)
+ * vede automaticamente solo i 7. Per ri-attivare un seed: aggiungere lo slug
+ * a VISIBLE_SEED_SLUGS.
+ */
+const VISIBLE_SEED_SLUGS = new Set<string>([
+  'puglia-trulli-masserie',
+  'sicilia-orientale-5-giorni',
+  'sardegna-interna-barbagia',
+  'toscana-borghi-nascosti',
+  'costiera-amalfitana-fuori-stagione',
+  'dolomiti-rifugi-design',
+]);
+
+const RAW_SEEDS: ArchiveSeed[] = [
   // ====== ITALIA (10) ======
   {
     slug: 'salento-agosto-coppia',
@@ -173,7 +193,9 @@ const SEEDS: ArchiveSeed[] = [
     title: 'Sicilia orientale in 5 giorni: Catania, Siracusa, Etna',
     excerpt:
       'Da Catania popolare a Ortigia lenta, passando per l Etna al tramonto e la cena di pesce a Brucoli.',
-    image: IMG.sardegna,
+    // TODO[asset-curator]: foto Sicilia reale (Etna/Ortigia barocca) — placeholder
+    // gastronomia per non duplicare la foto Sardegna nella griglia archivio.
+    image: IMG.gastronomia,
     category: 'Itinerari completi',
     country: 'Italia',
     region: 'Sicilia',
@@ -635,6 +657,8 @@ const SEEDS: ArchiveSeed[] = [
     coordinates: [167.9214, -44.6711], // Milford Sound
   },
 ];
+
+const SEEDS: ArchiveSeed[] = RAW_SEEDS.filter((seed) => VISIBLE_SEED_SLUGS.has(seed.slug));
 
 const BUDGET_TO_LABEL: Record<ArchiveSeed['budget'], string> = {
   Lean: 'Sotto i 600',

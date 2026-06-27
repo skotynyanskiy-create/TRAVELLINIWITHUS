@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import {
   ArrowRight,
   CheckCircle2,
@@ -13,12 +14,14 @@ import {
 } from 'lucide-react';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Button from '../components/Button';
+import { LITE_MODE } from '../config/liteMode';
 import DemoContentNotice from '../components/DemoContentNotice';
 import OptimizedImage from '../components/OptimizedImage';
 import JsonLd from '../components/JsonLd';
 import PageLayout from '../components/PageLayout';
 import Section from '../components/Section';
 import SEO from '../components/SEO';
+import StickyMobileCTA from '../components/StickyMobileCTA';
 import NotFound from './NotFound';
 import { DEMO_GUIDES } from '../config/demoGuides';
 import { SITE_URL } from '../config/site';
@@ -130,7 +133,7 @@ export default function Guida() {
               <DemoContentNotice
                 className="mt-10"
                 title="Guida in anteprima"
-                message="Questa scheda mostra come sara la guida quando il checkout reale sara attivo. Per ora e disabilitata: stai vedendo struttura, copy e ritmo finale."
+                message="Questa guida è in preparazione: la scheda mostra struttura, contenuti previsti e ritmo editoriale. Acquisto e download restano disabilitati finché file, prezzo e consegna non sono verificati."
               />
             )}
 
@@ -143,7 +146,11 @@ export default function Guida() {
                   <p className="mt-2 font-serif text-5xl text-[var(--color-ink)]">
                     {formatPrice(guide.price)}
                   </p>
-                  <p className="mt-1 text-xs text-black/70">IVA inclusa · download immediato</p>
+                  <p className="mt-1 text-xs text-black/70">
+                    {guide.isDemo
+                      ? 'Prezzo indicativo · download al lancio'
+                      : 'IVA inclusa · download immediato'}
+                  </p>
                 </div>
                 {guide.isDemo ? (
                   <span className="inline-flex min-w-[220px] cursor-not-allowed items-center justify-center gap-2 rounded-full bg-black/60 px-10 py-4 text-sm font-bold uppercase tracking-widest text-white opacity-60">
@@ -209,7 +216,7 @@ export default function Guida() {
                 <div className="mt-4 grid grid-cols-3 gap-3">
                   {[guide.coverImage, ...guide.previewImages].slice(0, 3).map((image, index) => (
                     <button
-                      key={image}
+                      key={`${image}-${index}`}
                       type="button"
                       onClick={() => setActivePreview(Math.max(0, index - 1))}
                       className={`relative aspect-[4/5] overflow-hidden rounded-xl border-2 transition-all ${
@@ -233,28 +240,37 @@ export default function Guida() {
         </div>
       </Section>
 
-      <Section className="my-16 rounded-[var(--radius-xl)] bg-[var(--color-ink)] p-12 text-white md:p-16">
-        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-[1.05fr_0.95fr]">
-          <div>
-            <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">
-              Travellini Club
-            </span>
-            <h2 className="mt-4 text-4xl font-serif leading-tight md:text-5xl">
-              Tutte le guide a 5 EUR al mese con il Club.
-            </h2>
-            <p className="mt-5 max-w-xl text-base leading-relaxed text-white/70">
-              Accesso a guide nuove e aggiornate, newsletter privata, sconti partner. Stessa
-              identità editoriale, senza pagare ogni volta.
-            </p>
+      {!LITE_MODE && (
+        <Section className="my-16 rounded-[var(--radius-xl)] bg-[var(--color-ink)] p-12 text-white md:p-16">
+          <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">
+                Travellini Club
+              </span>
+              <h2 className="mt-4 text-4xl font-serif leading-tight md:text-5xl">
+                Tutte le guide a 5 EUR al mese con il Club.
+              </h2>
+              <p className="mt-5 max-w-xl text-base leading-relaxed text-white/70">
+                Accesso a guide nuove e aggiornate, newsletter privata, sconti partner. Stessa
+                identità editoriale, senza pagare ogni volta.
+              </p>
+            </div>
+            <Link
+              to="/club"
+              className="inline-flex w-fit items-center gap-2 rounded-full bg-[var(--color-accent)] px-7 py-4 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:bg-white"
+            >
+              Scopri il Club <ArrowRight size={14} />
+            </Link>
           </div>
-          <Link
-            to="/club"
-            className="inline-flex w-fit items-center gap-2 rounded-full bg-[var(--color-accent)] px-7 py-4 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:bg-white"
-          >
-            Scopri il Club <ArrowRight size={14} />
-          </Link>
-        </div>
-      </Section>
+        </Section>
+      )}
+      <StickyMobileCTA
+        label={guide.isDemo ? 'Avvisami al lancio' : 'Acquista ora'}
+        to={guide.isDemo ? `/contatti?prodotto=${guide.slug}` : undefined}
+        onClick={guide.isDemo ? undefined : handleAddToCart}
+        trackingId="guida_sticky_mobile"
+        revealAfter={-1}
+      />
     </PageLayout>
   );
 }

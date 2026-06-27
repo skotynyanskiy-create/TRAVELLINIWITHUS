@@ -17,19 +17,67 @@ export const CONTACTS = {
   facebookUrl: 'https://www.facebook.com/travelwithuss/',
 } as const;
 
+export const BIO_LINKS = {
+  instagram: `${SITE_URL}/vieni-con-noi?utm_source=ig_bio&utm_medium=social&utm_campaign=bio_hub`,
+  tiktok: `${SITE_URL}/vieni-con-noi?utm_source=tt_bio&utm_medium=social&utm_campaign=bio_hub`,
+} as const;
+
+// Numeri allineati al profilo IG live (snapshot 2026-05-29).
+// IG verificato (badge Meta), iscritti elenco influencer AGCOM (Italia).
 export const BRAND_STATS = {
-  instagramFollowers: '167K+',
+  instagramFollowers: '170K',
   tiktokFollowers: '90K+',
   engagementRate: '6.5%',
   monthlyReach: '500K+',
-  postsPublished: '800+',
+  postsPublished: '1.236',
   destinationsExplored: '150+',
   yearsOfTravel: '8',
-  totalFollowers: '250K+',
+  totalFollowers: '260K+',
 } as const;
 
-/** Live counter newsletter (demo: aggiornare manualmente o connettere a Brevo API). */
-export const NEWSLETTER_RECENT_SIGNUPS = 184;
+export const BRAND_STATS_SOURCE = {
+  label: 'Snapshot pubblico da confermare con Insights R&B',
+  observedAt: '2026-05-29',
+  nextVerification: 'Aggiornare con export Meta Business Suite e TikTok Analytics',
+} as const;
+
+/** Credibility signals dichiarabili: AGCOM (autorita' garanzia comunicazioni
+ *  italiana) e verifica Meta (badge blu IG). Sono asset reali utilizzati nella
+ *  bio IG live — vanno valorizzati come trust signal sul sito. */
+export const BRAND_CREDENTIALS = {
+  agcomRegistered: true,
+  metaVerified: true,
+  agcomLabel: 'Iscritti elenco AGCOM',
+  metaVerifiedLabel: 'Profilo Instagram verificato',
+  disclosurePolicyLabel: 'Disclosure pubblicitaria sempre dichiarata',
+} as const;
+
+export const PUBLIC_PROOF_SIGNALS = [
+  {
+    title: 'Emilia-Fantastica / Castelli del Ducato',
+    label: 'Progetto territoriale',
+    description:
+      'Travellini with Us citati tra i creator coinvolti nel progetto di promozione territoriale tra Piacenza, borghi e Castelli del Ducato.',
+    url: 'https://www.castellidelducato.it/castellidelducato/notizia.asp?el=emilia-fantastica-5-influencer-in-arrivo-tra-castelli-ducato-citta-d-arte-borghi',
+  },
+  {
+    title: 'Storie in Viaggio a Piacenza',
+    label: 'Menzione partner',
+    description:
+      'Castelli del Ducato descrive il loro racconto come dinamico, curato nei dettagli e capace di coinvolgere la community.',
+    url: 'https://www.castellidelducato.it/castellidelducato/notizia.asp?el=travellini-with-us-a-piacenza-per-storie-in-viaggio-castelli-ducato',
+  },
+  {
+    title: 'Menzioni editoriali da post Instagram',
+    label: 'Earned media',
+    description:
+      'Articoli terzi riprendono contenuti Instagram di Rodrigo & Betta su luoghi particolari, eventi e locali scenografici.',
+    url: 'https://tuttonotizie.eu/2025/04/15/il-giardino-piu-romantico-del-nord-italia-passeggiate-da-sogno-e-un-acquario-segreto/',
+  },
+] as const;
+
+/** Counter pubblico disattivato finche la lista non e' verificata da Brevo/Firestore. */
+export const NEWSLETTER_RECENT_SIGNUPS = 0;
 
 /** Soglia minima sotto cui il counter pubblico non viene mostrato — evita
  *  l'anti-conversion "0 lettori iscritti negli ultimi 30 giorni" quando la

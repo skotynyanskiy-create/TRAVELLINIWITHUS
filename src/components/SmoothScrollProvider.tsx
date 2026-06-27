@@ -1,8 +1,6 @@
 import { createContext, useContext, useEffect, useRef, type ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
-import Lenis from 'lenis';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import type Lenis from 'lenis';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 
 interface SmoothScrollContextValue {
@@ -43,30 +41,54 @@ export default function SmoothScrollProvider({ children }: SmoothScrollProviderP
   useEffect(() => {
     if (reducedMotion) return;
     if (typeof window === 'undefined') return;
+    if (location.pathname === '/') return;
 
-    gsap.registerPlugin(ScrollTrigger);
+    let cleanup: (() => void) | undefined;
+    let cancelled = false;
 
-    const lenis = new Lenis({
-      duration: 1.1,
-      easing: (t: number) => Math.min(1, 1.001 - 2 ** (-10 * t)),
-      smoothWheel: true,
-    });
-    lenisRef.current = lenis;
+    const startSmoothScroll = () => {
+      void Promise.all([import('lenis'), import('gsap'), import('gsap/ScrollTrigger')]).then(
+        ([lenisModule, gsapModule, scrollTriggerModule]) => {
+          if (cancelled) return;
 
-    const onScroll = () => ScrollTrigger.update();
-    lenis.on('scroll', onScroll);
+          const LenisCtor = lenisModule.default;
+          const gsap = gsapModule.gsap;
+          const ScrollTrigger = scrollTriggerModule.ScrollTrigger;
 
-    const ticker = (time: number) => lenis.raf(time * 1000);
-    gsap.ticker.add(ticker);
-    gsap.ticker.lagSmoothing(0);
+          gsap.registerPlugin(ScrollTrigger);
+
+          const lenis = new LenisCtor({
+            duration: 1.1,
+            easing: (t: number) => Math.min(1, 1.001 - 2 ** (-10 * t)),
+            smoothWheel: true,
+          });
+          lenisRef.current = lenis;
+
+          const onScroll = () => ScrollTrigger.update();
+          lenis.on('scroll', onScroll);
+
+          const ticker = (time: number) => lenis.raf(time * 1000);
+          gsap.ticker.add(ticker);
+          gsap.ticker.lagSmoothing(0);
+
+          cleanup = () => {
+            lenis.off('scroll', onScroll);
+            gsap.ticker.remove(ticker);
+            lenis.destroy();
+            lenisRef.current = null;
+          };
+        }
+      );
+    };
+
+    const timeoutId = globalThis.setTimeout(startSmoothScroll, 3200);
 
     return () => {
-      lenis.off('scroll', onScroll);
-      gsap.ticker.remove(ticker);
-      lenis.destroy();
-      lenisRef.current = null;
+      cancelled = true;
+      globalThis.clearTimeout(timeoutId);
+      cleanup?.();
     };
-  }, [reducedMotion]);
+  }, [reducedMotion, location.pathname]);
 
   useEffect(() => {
     const lenis = lenisRef.current;

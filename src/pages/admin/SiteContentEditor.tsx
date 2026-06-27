@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { ArrowLeft, ExternalLink, Loader2, Plus, RotateCcw, Save, Trash2 } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import PageLayout from '../../components/PageLayout';

@@ -1,7 +1,8 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Mail, Instagram, MessageCircle, ArrowRight, CheckCircle, Loader2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Button from '../components/Button';
 import FormField from '../components/FormField';
@@ -10,22 +11,37 @@ import PageLayout from '../components/PageLayout';
 import Section from '../components/Section';
 import Select from '../components/Select';
 import SEO from '../components/SEO';
+import StickyMobileCTA from '../components/StickyMobileCTA';
 import Textarea from '../components/Textarea';
-import { CONTACTS, SOCIAL_COLORS } from '../config/site';
+import { CONTACTS } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { trackEvent } from '../services/analytics';
 import { appendLeadFallback } from '../lib/leadFallback';
 
 export default function Contatti() {
+  const [searchParams] = useSearchParams();
   const { data: content } = useSiteContent('contact');
   const pageContent = content ?? siteContentDefaults.contact;
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    topic: '',
-    message: '',
-    website: '',
+  const [formData, setFormData] = useState(() => {
+    const requestedTopic = searchParams.get('topic');
+    const productSlug = searchParams.get('prodotto');
+    const allowedTopics = new Set(['collab', 'press', 'content', 'article', 'other']);
+    const topic = productSlug
+      ? 'article'
+      : requestedTopic && allowedTopics.has(requestedTopic)
+        ? requestedTopic
+        : '';
+
+    return {
+      name: '',
+      email: '',
+      topic,
+      message: productSlug
+        ? `Vorrei essere avvisato quando il prodotto "${productSlug}" sarà disponibile.`
+        : '',
+      website: '',
+    };
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -164,8 +180,8 @@ export default function Contatti() {
   return (
     <PageLayout>
       <SEO
-        title="Contatti per collaborazioni, partnership e proposte editoriali"
-        description="Scrivici per collaborazioni, proposte, media kit o richieste legate a Travelliniwithus. Qui trovi il canale giusto per contattarci."
+        title="Contatti Travelliniwithus"
+        description="Scrivici per collaborazioni, press trip, media kit, domande editoriali o richieste legate al progetto Travelliniwithus."
       />
 
       <Section className="pt-8">
@@ -209,8 +225,8 @@ export default function Contatti() {
           <div className="space-y-8 lg:col-span-2">
             <h3 className="mb-6 text-2xl font-serif">I nostri recapiti</h3>
 
-            <div className="group flex items-start gap-4 rounded-[var(--radius-xl)] border border-black/5 bg-[var(--color-sand)] p-6 transition-all duration-500 hover:shadow-[var(--shadow-premium)]">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-xl)] bg-white text-[var(--color-accent)] shadow-sm transition-transform duration-500 group-hover:scale-110">
+            <div className="group flex items-start gap-4 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-6 transition-all duration-300 hover:border-[var(--color-accent)]/25 hover:shadow-[var(--shadow-sm)]">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-accent-soft)] text-[var(--color-accent)] transition-transform duration-300 group-hover:scale-105">
                 <Mail size={20} />
               </div>
               <div>
@@ -225,7 +241,7 @@ export default function Contatti() {
                   {CONTACTS.email}
                 </a>
                 <Link
-                  to="/collaborazioni"
+                  to="/media-kit"
                   className="mt-4 block text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] transition-colors hover:text-black"
                 >
                   {pageContent.emailCardLinkLabel}
@@ -237,12 +253,9 @@ export default function Contatti() {
               href={CONTACTS.whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-start gap-4 rounded-[var(--radius-xl)] border border-black/5 bg-[var(--color-sand)] p-6 transition-all duration-500 hover:shadow-[var(--shadow-premium)]"
+              className="group flex items-start gap-4 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-6 transition-all duration-300 hover:border-[var(--color-success)]/25 hover:shadow-[var(--shadow-sm)]"
             >
-              <div
-                className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-xl)] bg-white shadow-sm transition-transform duration-500 group-hover:scale-110`}
-                style={{ color: SOCIAL_COLORS.whatsapp }}
-              >
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-success-soft)] text-[var(--color-success)] transition-transform duration-300 group-hover:scale-105">
                 <MessageCircle size={20} />
               </div>
               <div>
@@ -250,7 +263,7 @@ export default function Contatti() {
                 <p className="mb-2 text-sm font-normal text-black/70">
                   {pageContent.whatsappCardDescription}
                 </p>
-                <span className="text-sm font-medium transition-colors group-hover:text-[#25D366]">
+                <span className="text-sm font-medium transition-colors group-hover:text-[var(--color-success)]">
                   {CONTACTS.whatsappDisplay}
                 </span>
               </div>
@@ -261,11 +274,11 @@ export default function Contatti() {
                 href={CONTACTS.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-col items-center justify-center gap-3 rounded-[var(--radius-xl)] border border-black/5 bg-[var(--color-sand)] p-6 transition-all duration-500 hover:shadow-[var(--shadow-premium)]"
+                className="group flex flex-col items-center justify-center gap-3 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-6 transition-all duration-300 hover:border-[var(--color-social-instagram-end)]/25 hover:shadow-[var(--shadow-sm)]"
               >
                 <Instagram
                   size={28}
-                  className="text-black/60 transition-colors duration-500 group-hover:scale-110 group-hover:text-[#E1306C]"
+                  className="text-black/60 transition-all duration-300 group-hover:scale-105 group-hover:text-[var(--color-social-instagram-end)]"
                 />
                 <span className="text-xs font-bold uppercase tracking-widest">Instagram</span>
               </a>
@@ -273,10 +286,10 @@ export default function Contatti() {
                 href={CONTACTS.tiktokUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-col items-center justify-center gap-3 rounded-[var(--radius-xl)] border border-black/5 bg-[var(--color-sand)] p-6 transition-all duration-500 hover:shadow-[var(--shadow-premium)]"
+                className="group flex flex-col items-center justify-center gap-3 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-6 transition-all duration-300 hover:border-[var(--color-ink)]/20 hover:shadow-[var(--shadow-sm)]"
               >
                 <svg
-                  className="h-7 w-7 text-black/60 transition-colors duration-500 group-hover:scale-110 group-hover:text-black"
+                  className="h-7 w-7 text-black/60 transition-all duration-300 group-hover:scale-105 group-hover:text-black"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                 >
@@ -286,17 +299,23 @@ export default function Contatti() {
               </a>
             </div>
 
-            <div className="rounded-[var(--radius-xl)] border border-black/5 bg-white p-6 shadow-sm">
+            <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-6 shadow-sm">
               <h4 className="mb-3 text-xl font-serif">{pageContent.helperTitle}</h4>
               <ul className="space-y-3 text-sm font-normal leading-relaxed text-black/70">
                 {pageContent.helperItems.map((item) => (
-                  <li key={item}>{item}</li>
+                  <li key={item} className="flex items-start gap-2">
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-accent)]"></span>
+                    <span>{item}</span>
+                  </li>
                 ))}
               </ul>
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-[var(--radius-2xl)] border border-black/5 bg-white p-8 shadow-[var(--shadow-premium)] md:p-12 lg:col-span-3">
+          <div
+            id="contact-form"
+            className="relative scroll-mt-28 overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-8 shadow-[var(--shadow-sm)] md:p-12 lg:col-span-3"
+          >
             <AnimatePresence mode="wait">
               {!isSubmitted ? (
                 <motion.div
@@ -420,6 +439,8 @@ export default function Contatti() {
                         variant="primary"
                         size="lg"
                         className="w-full px-12 md:w-auto"
+                        magnetic={true}
+                        disabled={isSubmitting}
                       >
                         {isSubmitting ? (
                           <>
@@ -467,6 +488,12 @@ export default function Contatti() {
           </div>
         </div>
       </Section>
+      <StickyMobileCTA
+        label="Scrivici ora"
+        href="#contact-form"
+        trackingId="contatti_sticky_mobile"
+        revealAfter={-1}
+      />
     </PageLayout>
   );
 }

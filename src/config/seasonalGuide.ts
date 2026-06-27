@@ -113,24 +113,24 @@ export const SEASONAL_GUIDES: Record<string, SeasonalGuide> = {
     slug: 'sicilia',
     name: 'Sicilia',
     yearSummary:
-      'Aprile-giugno e ottobre i mesi piu equilibrati. Luglio-agosto solo se sai dove muoverti.',
+      'Aprile-giugno e ottobre i mesi più equilibrati. Luglio-agosto solo se sai dove muoverti.',
     bestMonths: [4, 5, 10],
     avoidMonths: [8],
     months: [
-      m(1, 12, 8, 'low', false, 'Vento, mare mosso. Per citta storiche fattibile.'),
+      m(1, 12, 8, 'low', false, 'Vento, mare mosso. Per città storiche fattibile.'),
       m(2, 12, 7, 'medium', true, 'Mandorli in fiore in Val di Noto, Carnevale di Acireale.', [
         'Carnevale di Acireale',
         'Mandorli in fiore (Agrigento)',
       ]),
       m(3, 14, 6, 'medium', true, 'Pasqua siciliana spettacolare, ancora poca gente.'),
-      m(4, 17, 5, 'medium', true, 'Mese ideale per citta + entroterra. Mare ancora freddo.'),
+      m(4, 17, 5, 'medium', true, 'Mese ideale per città + entroterra. Mare ancora freddo.'),
       m(5, 21, 4, 'medium', true, 'Top per combinato mare+cultura. Etna ben visitabile.'),
-      m(6, 25, 3, 'high', true, 'Bello ma inizia il caldo. Eolie/Egadi gia affollate.'),
+      m(6, 25, 3, 'high', true, 'Bello ma inizia il caldo. Eolie/Egadi già affollate.'),
       m(7, 28, 2, 'high', false, 'Caldo intenso entroterra (>35°C), folla sulle isole.'),
       m(8, 28, 3, 'high', false, 'Evita: ferragosto = ovunque pieno, prezzi raddoppiano.'),
       m(9, 25, 4, 'medium', true, 'Settembre top: mare caldo, gente parte, prezzi calano.'),
       m(10, 21, 6, 'low', true, 'Mese romantico: vendemmia, cibo di stagione, no folla.'),
-      m(11, 17, 8, 'low', false, 'Pioggia frequente, sirocco. Solo citta.'),
+      m(11, 17, 8, 'low', false, 'Pioggia frequente, sirocco. Solo città.'),
       m(12, 13, 7, 'low', false, 'Natale catanese vivace, ma costa morta.'),
     ],
     updatedAt: '2025-10',
@@ -181,12 +181,12 @@ export const SEASONAL_GUIDES: Record<string, SeasonalGuide> = {
       m(2, 8, 8, 'low', false, 'Carnevale di Viareggio, ma campagna ancora morta.', [
         'Carnevale di Viareggio',
       ]),
-      m(3, 12, 7, 'medium', true, "Primi caldi in citta, fioriture in Val d'Orcia."),
+      m(3, 12, 7, 'medium', true, "Primi caldi in città, fioriture in Val d'Orcia."),
       m(4, 15, 7, 'medium', true, 'Pasqua + 25 aprile, agriturismi riaprono. Mese top.'),
-      m(5, 20, 6, 'high', true, 'Mese piu bello: papaveri, lavanda inizio, sole. Si riempie pero.'),
-      m(6, 24, 4, 'high', true, 'Inizia caldo serio. Costa ok, citta sopportabile.'),
-      m(7, 28, 2, 'high', false, '>32°C in citta, Firenze invivibile per camminare.'),
-      m(8, 28, 2, 'high', false, 'Evita Firenze. Costa pero meno orribile (sirocco fa pendere).'),
+      m(5, 20, 6, 'high', true, 'Mese più bello: papaveri, lavanda inizio, sole. Si riempie però.'),
+      m(6, 24, 4, 'high', true, 'Inizia caldo serio. Costa ok, città sopportabile.'),
+      m(7, 28, 2, 'high', false, '>32°C in città, Firenze invivibile per camminare.'),
+      m(8, 28, 2, 'high', false, 'Evita Firenze. Costa però meno orribile (sirocco fa pendere).'),
       m(9, 24, 4, 'medium', true, 'Vendemmia, top per cibo, ancora caldo per Costa.'),
       m(10, 18, 7, 'medium', true, 'Tartufo bianco, colori autunnali, prezzi calano.', [
         'Mostra Tartufo (San Miniato)',
@@ -227,7 +227,7 @@ export const SEASONAL_GUIDES: Record<string, SeasonalGuide> = {
     slug: 'lisbona',
     name: 'Lisbona',
     yearSummary:
-      "Citta tutto l'anno fattibile. Aprile-maggio e ottobre i mesi piu equilibrati clima/prezzi/folla.",
+      "Città tutto l'anno fattibile. Aprile-maggio e ottobre i mesi più equilibrati clima/prezzi/folla.",
     bestMonths: [4, 5, 10],
     avoidMonths: [],
     months: [
@@ -248,11 +248,11 @@ export const SEASONAL_GUIDES: Record<string, SeasonalGuide> = {
         1,
         'high',
         false,
-        'Evita: lisboeti partono, citta vuota di residenti, turisti ovunque.'
+        'Evita: lisboeti partono, città vuota di residenti, turisti ovunque.'
       ),
       m(9, 25, 3, 'medium', true, 'Settembre top: mare ancora caldo per gita a Cascais.'),
       m(10, 21, 6, 'medium', true, 'Ottobre top per ritmo lento: sole alterno, prezzi calano.'),
-      m(11, 16, 9, 'low', true, 'Sottovalutato. Pastel + caffe + libreria = stagione perfetta.'),
+      m(11, 16, 9, 'low', true, 'Sottovalutato. Pastel + caffè + libreria = stagione perfetta.'),
       m(12, 13, 8, 'low', true, 'Natale tranquillo, ottimi prezzi voli.'),
     ],
     updatedAt: '2025-11',
@@ -293,7 +293,7 @@ export const SEASONAL_GUIDES: Record<string, SeasonalGuide> = {
     slug: 'marche',
     name: 'Marche',
     yearSummary:
-      'Regione tre-stagioni: Conero estate, borghi entroterra autunno, citta universitarie inverno.',
+      'Regione tre-stagioni: Conero estate, borghi entroterra autunno, città universitarie inverno.',
     bestMonths: [5, 6, 9, 10],
     avoidMonths: [],
     months: [
@@ -312,7 +312,7 @@ export const SEASONAL_GUIDES: Record<string, SeasonalGuide> = {
       ]),
       m(9, 22, 5, 'medium', true, 'Settembre top: vendemmia, Conero quasi vuoto, mare 22°C.'),
       m(10, 17, 7, 'low', true, 'Tartufo, autunno colori bellissimi, no folla. Top mese.'),
-      m(11, 11, 9, 'low', false, 'Piove. Solo citta universitarie (Urbino, Macerata).'),
+      m(11, 11, 9, 'low', false, 'Piove. Solo città universitarie (Urbino, Macerata).'),
       m(12, 7, 8, 'low', false, 'Natale ad Ascoli (presepi), resto chiuso.'),
     ],
     updatedAt: '2025-08',

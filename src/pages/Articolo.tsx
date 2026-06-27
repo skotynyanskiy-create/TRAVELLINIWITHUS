@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react';
 import { ArrowRight, CheckCircle2, Clock, Info, MapPin, Route, WalletCards } from 'lucide-react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { Helmet } from 'react-helmet-async';
+import { LITE_MODE } from '../config/liteMode';
 import ReactMarkdown, { type Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkDirective from 'remark-directive';
@@ -12,11 +14,11 @@ import type { Root } from 'mdast';
 import { fetchArticleBySlug, fetchArticles } from '../services/firebaseService';
 import { useFavorites } from '../context/FavoritesContext';
 import { useArticleAnalytics } from '../hooks/useArticleAnalytics';
+import { useArticleReadingProgress } from '../hooks/useArticleReadingProgress';
 import { trackEvent } from '../services/analytics';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Newsletter from '../components/Newsletter';
 import PageLayout from '../components/PageLayout';
-import InteractiveMap from '../components/InteractiveMap';
 import SEO from '../components/SEO';
 import ArticlePageSkeleton from '../components/ArticlePageSkeleton';
 import DemoContentNotice from '../components/DemoContentNotice';
@@ -42,6 +44,8 @@ import InlineFigure from '../components/article/editorial/InlineFigure';
 import PullQuote from '../components/article/editorial/PullQuote';
 import SourceBlock from '../components/article/editorial/SourceBlock';
 import VerifiedBox from '../components/article/editorial/VerifiedBox';
+
+const InteractiveMap = lazy(() => import('../components/InteractiveMap'));
 
 const BRAND_AUTHOR = 'Rodrigo & Betta';
 
@@ -93,8 +97,9 @@ function toIsoDateString(value: unknown): string | null {
 }
 
 function getCategoryPath(category: string) {
-  // Post-consolidamento Esplora (2026-05-15): le 3 categorie storiche
-  // puntano tutte all'archivio unico, filtrato per format dove sensato.
+  // In lite mode /esplora e' disabilitato: la categoria torna stringa vuota,
+  // i consumer (ArticleHero, Breadcrumbs) la trattano come label senza link.
+  if (LITE_MODE) return '';
   if (category === 'Guide' || category === 'Guida') return '/esplora?format=guida';
   if (category === 'Itinerari' || category === 'Itinerario') return '/esplora?format=itinerario';
   if (category === 'Storie' || category === 'Storia') return '/esplora?format=storia';
@@ -692,6 +697,10 @@ export default function Articolo() {
     enabled: articleSource === 'published' && !loading,
   });
 
+  const tocItems = useMemo(() => (article ? buildTocItems(article) : []), [article]);
+  const { activeId: activeTocId, progress: readingProgress } = useArticleReadingProgress(tocItems);
+  const activeTocLabel = tocItems.find((item) => item.id === activeTocId && item.show)?.label;
+
   const previewRelatedArticles = useMemo(
     () =>
       Object.entries(PREVIEW_ARTICLES)
@@ -726,11 +735,9 @@ export default function Articolo() {
   const articleImage = article.image;
   const articleUrl = `${SITE_URL}/articolo/${currentSlug}`;
   // Branded OG image generated at build time for preview slugs; falls back to hero image otherwise.
-  const ogImage = isPreviewArticle ? `${SITE_URL}/og/${currentSlug}.webp` : articleImage;
+  const ogImage = isPreviewArticle ? `${SITE_URL}/og/${currentSlug}.jpg` : articleImage;
   const datePublished = toIsoDateString(article.date) || new Date().toISOString();
   const dateModified = toIsoDateString(article.updatedAt) || datePublished;
-  const tocItems = buildTocItems(article);
-
   const handleShare = async () => {
     const url = window.location.href;
     const channel = navigator.share ? 'native' : 'clipboard';
@@ -803,15 +810,17 @@ export default function Articolo() {
         />
 
         <article className="mx-4 my-8 overflow-hidden rounded-[var(--radius-lg)] border border-black/5 bg-white pb-24 shadow-xl shadow-black/5 md:mx-8 lg:mx-12">
-          <div className="absolute left-8 top-8 z-50 hidden md:block">
-            <Link
-              to={categoryPath}
-              className="inline-flex items-center gap-2 rounded-full bg-black/25 backdrop-blur-md px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-black/40"
-            >
-              <ArrowRight size={16} className="rotate-180" />
-              Torna alla sezione
-            </Link>
-          </div>
+          {categoryPath && (
+            <div className="absolute left-8 top-8 z-50 hidden md:block">
+              <Link
+                to={categoryPath}
+                className="inline-flex items-center gap-2 rounded-full bg-black/25 backdrop-blur-md px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-black/40"
+              >
+                <ArrowRight size={16} className="rotate-180" />
+                Torna alla sezione
+              </Link>
+            </div>
+          )}
 
           <ArticleHero
             article={article}
@@ -829,10 +838,12 @@ export default function Articolo() {
           <div className="mx-auto mt-12 max-w-6xl px-5 md:px-8">
             <Breadcrumbs
               items={[
-                { label: article.category, href: categoryPath },
+                { label: article.category, href: categoryPath || undefined },
                 {
                   label: article.location.split(',')[0],
-                  href: `/esplora?zone=${encodeURIComponent(article.location.split(',')[0])}`,
+                  href: LITE_MODE
+                    ? undefined
+                    : `/esplora?zone=${encodeURIComponent(article.location.split(',')[0])}`,
                 },
                 { label: article.title.split(':')[0] },
               ]}
@@ -841,7 +852,8 @@ export default function Articolo() {
             {isPreviewArticle && (
               <DemoContentNotice
                 className="mt-10"
-                message="Questo articolo e una preview controllata: mostra struttura, tono e livello finale. Prima della pubblicazione deve essere approvato, completato con dettagli verificati o sostituito da un contenuto reale."
+                title="Articolo in lavorazione"
+                message="Questo articolo mostra struttura, tono e taglio editoriale. Prima della pubblicazione completa deve essere approvato con dettagli, foto e informazioni verificate."
               />
             )}
 
@@ -858,10 +870,16 @@ export default function Articolo() {
                     {article.description}
                   </p>
                 </div>
-                <TableOfContents items={tocItems} variant="mobile-inline" />
+                <TableOfContents
+                  activeId={activeTocId}
+                  items={tocItems}
+                  readingProgress={readingProgress}
+                  variant="mobile-inline"
+                />
               </div>
 
               <ArticleSidebar
+                activeTocId={activeTocId}
                 tocItems={tocItems}
                 articleUrl={articleUrl}
                 articleTitle={articleTitle}
@@ -869,6 +887,7 @@ export default function Articolo() {
                 articleImage={articleImage}
                 onCopyLink={handleShare}
                 onOpenReadingMode={() => setIsReadingMode(true)}
+                readingProgress={readingProgress}
               />
             </div>
 
@@ -967,13 +986,19 @@ export default function Articolo() {
                     <h2 className="mb-8 text-3xl font-serif md:text-4xl">Mappa del viaggio</h2>
                     <div className="overflow-hidden rounded-[var(--radius-lg)] border border-black/5 shadow-sm">
                       {article.mapMarkers && article.mapMarkers.length > 0 ? (
-                        <InteractiveMap
-                          markers={article.mapMarkers}
-                          center={article.mapCenter || [0, 30]}
-                          zoom={article.mapZoom || 1}
-                          className="h-[320px] md:h-[420px] w-full"
-                          interactiveCountries={false}
-                        />
+                        <Suspense
+                          fallback={
+                            <div className="h-[320px] w-full animate-pulse bg-[var(--color-muted-bg)] md:h-[420px]" />
+                          }
+                        >
+                          <InteractiveMap
+                            markers={article.mapMarkers}
+                            center={article.mapCenter || [0, 30]}
+                            zoom={article.mapZoom || 1}
+                            className="h-[320px] md:h-[420px] w-full"
+                            interactiveCountries={false}
+                          />
+                        </Suspense>
                       ) : (
                         <iframe
                           src={article.mapUrl}
@@ -990,9 +1015,121 @@ export default function Articolo() {
                   </section>
                 )}
 
+                {/* La Selezione Travellini: Dove dormire, Cosa evitare, Quanto costa davvero */}
+                <section className="mt-20 scroll-mt-32 border-t border-[var(--color-border)] pt-12">
+                  <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
+                    La Selezione Travellini
+                  </p>
+                  <h2 className="mb-8 font-serif text-3xl md:text-4xl text-[var(--color-ink)]">
+                    Analisi sul posto & Dettagli
+                  </h2>
+                  <div className="grid gap-8 md:grid-cols-3">
+                    {/* 1. Dove dormire */}
+                    <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 transition-shadow hover:shadow-xs">
+                      <div className="mb-4 flex items-center gap-3">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[var(--color-accent-text)]">
+                          <MapPin size={16} />
+                        </span>
+                        <h3 className="font-serif text-xl font-medium text-[var(--color-ink)]">
+                          Dove dormire
+                        </h3>
+                      </div>
+                      <p className="text-sm font-semibold text-[var(--color-accent-text)] mb-2 uppercase tracking-wider text-[10px]">
+                        Budget consigliato: {article.budget}
+                      </p>
+                      <p className="text-sm leading-relaxed text-[var(--color-ink-2)]">
+                        {article.budget === 'Lean' &&
+                          "Opzioni sotto i 100€ a notte: agriturismi a gestione familiare e boutique B&B per vivere l'autenticità locale a contatto con chi ci abita."}
+                        {article.budget === 'Medio' &&
+                          "Fascia 100-200€ a notte: hotel storici con carattere forte e masserie restaurate che mantengono l'anima del posto intatta."}
+                        {article.budget === 'Premium' &&
+                          'Sopra i 200€ a notte: dimore storiche uniche e resort di design integrati nel paesaggio, scelti esclusivamente per atmosfera e ospitalità.'}
+                        {!['Lean', 'Medio', 'Premium'].includes(article.budget || '') &&
+                          `Selezioniamo alloggi autentici e strutture indipendenti coerenti con l'atmosfera di questa zona.`}
+                      </p>
+                    </div>
+
+                    {/* 2. Cosa evitare */}
+                    <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 transition-shadow hover:shadow-xs">
+                      <div className="mb-4 flex items-center gap-3">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-error-soft)] text-[var(--color-error-text)]">
+                          <Info size={16} />
+                        </span>
+                        <h3 className="font-serif text-xl font-medium text-[var(--color-ink)]">
+                          Cosa evitare
+                        </h3>
+                      </div>
+                      <ul className="space-y-2.5 text-sm leading-relaxed text-[var(--color-ink-2)]">
+                        <li className="flex gap-2">
+                          <span className="text-[var(--color-error)] font-bold">✕</span>
+                          <span>
+                            Evitare i giri commerciali negli orari di punta (10:00 - 15:00).
+                          </span>
+                        </li>
+                        <li className="flex gap-2">
+                          <span className="text-[var(--color-error)] font-bold">✕</span>
+                          <span>
+                            Non fermarsi nei ristoranti con menu turistici multilingua esposti
+                            fuori.
+                          </span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    {/* 3. Quanto costa davvero */}
+                    <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 transition-shadow hover:shadow-xs">
+                      <div className="mb-4 flex items-center gap-3">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-success-soft)] text-[var(--color-success-text)]">
+                          <WalletCards size={16} />
+                        </span>
+                        <h3 className="font-serif text-xl font-medium text-[var(--color-ink)]">
+                          Quanto costa
+                        </h3>
+                      </div>
+                      {article.costs ? (
+                        <div className="space-y-2 text-sm text-[var(--color-ink-2)]">
+                          <div className="flex justify-between border-b border-[var(--color-border)] pb-1.5">
+                            <span className="text-[var(--color-muted-fg-2)]">Alloggio:</span>
+                            <span className="font-medium text-[var(--color-ink)]">
+                              {article.costs.alloggio}
+                            </span>
+                          </div>
+                          <div className="flex justify-between border-b border-[var(--color-border)] pb-1.5">
+                            <span className="text-[var(--color-muted-fg-2)]">Cibo:</span>
+                            <span className="font-medium text-[var(--color-ink)]">
+                              {article.costs.cibo}
+                            </span>
+                          </div>
+                          <div className="flex justify-between border-b border-[var(--color-border)] pb-1.5">
+                            <span className="text-[var(--color-muted-fg-2)]">Trasporti:</span>
+                            <span className="font-medium text-[var(--color-ink)]">
+                              {article.costs.trasporti}
+                            </span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-[var(--color-muted-fg-2)]">Attività:</span>
+                            <span className="font-medium text-[var(--color-ink)]">
+                              {article.costs.attivita}
+                            </span>
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="text-sm leading-relaxed text-[var(--color-ink-2)]">
+                          Il budget stimato per questa zona è{' '}
+                          <span className="font-semibold text-[var(--color-ink)]">
+                            {article.budget}
+                          </span>
+                          . I costi locali sono mediamente in linea con una vacanza esperienziale
+                          curata ed autentica.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </section>
+
                 <section
                   id="consigli"
-                  className="mt-20 grid scroll-mt-32 gap-10 border-t border-black/8 pt-10 md:grid-cols-2 md:gap-12 md:pt-12"
+                  className="mt-20 grid scroll-mt-32 gap-10 border-t border-[var(--color-border)] pt-10 md:grid-cols-2 md:gap-12 md:pt-12"
                 >
                   {article.tips && article.tips.length > 0 && (
                     <div>
@@ -1061,12 +1198,14 @@ export default function Articolo() {
                       Vedi risorse selezionate
                       <ArrowRight size={15} />
                     </Link>
-                    <Link
-                      to="/esplora?format=guida"
-                      className="inline-flex items-center gap-2 rounded-full border border-black/10 px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)]"
-                    >
-                      Torna alle guide
-                    </Link>
+                    {!LITE_MODE && (
+                      <Link
+                        to="/esplora?format=guida"
+                        className="inline-flex items-center gap-2 rounded-full border border-black/10 px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)]"
+                      >
+                        Torna alle guide
+                      </Link>
+                    )}
                   </div>
                 </section>
 
@@ -1088,18 +1227,22 @@ export default function Articolo() {
         </article>
 
         <MobileTocOverlay
+          activeTocId={activeTocId}
           isOpen={isMobileMenuOpen}
           onClose={() => setIsMobileMenuOpen(false)}
+          readingProgress={readingProgress}
           tocItems={tocItems}
         />
 
         <MobileBottomBar
+          activeLabel={activeTocLabel}
           article={article}
           isSaved={isSaved}
           copied={copied}
           onToggleFavorite={() => toggleFavorite(currentSlug)}
           onOpenToc={() => setIsMobileMenuOpen(true)}
           onShare={handleShare}
+          readingProgress={readingProgress}
         />
 
         <ReadingMode

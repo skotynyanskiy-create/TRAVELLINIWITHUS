@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { ArrowRight } from 'lucide-react';
 import ArchiveCard from './ArchiveCard';
 import Section from '../Section';
@@ -67,8 +67,8 @@ export default function EditorialCollections({
           I posti che stiamo guardando questo mese.
         </h2>
         <p className="mt-4 text-base leading-relaxed text-black/62 md:text-lg">
-          Tre stanze editoriali curate da Rodrigo &amp; Betta. Non vengono dai filtri: le scegliamo
-          noi perché reggono adesso, non in teoria.
+          Tre collezioni scelte da Rodrigo &amp; Betta. Non escono dai filtri: le mettiamo qui
+          perché reggono adesso, in questo mese, non in teoria.
         </p>
       </div>
 

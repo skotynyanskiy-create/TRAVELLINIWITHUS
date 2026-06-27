@@ -1,4 +1,5 @@
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { useAuth } from '../context/AuthContext';
 
 interface ProtectedRouteProps {

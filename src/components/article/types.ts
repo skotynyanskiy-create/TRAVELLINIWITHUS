@@ -4,6 +4,9 @@ export interface ArticleData {
   title: string;
   description: string;
   image: string;
+  /** Alt descrittivo dell'immagine di copertina. Se assente, fallback su luogo + categoria
+      (evita di duplicare l'H1 per gli screen reader). */
+  imageAlt?: string;
   category: string;
   date: string;
   updatedAt?: unknown;
@@ -26,7 +29,13 @@ export interface ArticleData {
   localFood?: { name: string; description: string; image?: string }[];
   gear?: { title: string; description: string; link: string; image: string; cta?: string }[];
   mapUrl?: string;
-  mapMarkers?: { id: string | number; name: string; coordinates: [number, number]; title?: string; category?: string }[];
+  mapMarkers?: {
+    id: string | number;
+    name: string;
+    coordinates: [number, number];
+    title?: string;
+    category?: string;
+  }[];
   mapCenter?: [number, number];
   mapZoom?: number;
   duration?: string;

@@ -1,8 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { auth, signInWithGoogle, logOut } from '../lib/firebaseAuth';
-import { db } from '../lib/firebaseDb';
+import type { User } from 'firebase/auth';
 import { isAdminEmail } from '../config/admin';
 
 interface UserProfile {
@@ -26,6 +23,7 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const hasFirebaseApiKey = Boolean(import.meta.env.VITE_FIREBASE_API_KEY);
 
 function getAuthErrorMessage(error: unknown) {
   const errorCode =
@@ -44,6 +42,8 @@ function getAuthErrorMessage(error: unknown) {
       return "L'accesso con Google non risulta abilitato in Firebase Authentication.";
     case 'auth/network-request-failed':
       return 'La richiesta a Firebase non e andata a buon fine. Controlla connessione e configurazione del progetto.';
+    case 'auth/invalid-api-key':
+      return 'Firebase Auth non e configurato: manca VITE_FIREBASE_API_KEY.';
     default:
       return 'Accesso Google non riuscito. Controlla la configurazione Firebase Authentication e riprova.';
   }
@@ -56,55 +56,87 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [authError, setAuthError] = useState<string | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser);
+    if (!hasFirebaseApiKey) {
+      setLoading(false);
+      return;
+    }
 
-      if (currentUser) {
-        setAuthError(null);
-        // Sync user profile with Firestore
-        const userRef = doc(db, 'users', currentUser.uid);
-        const userDoc = await getDoc(userRef);
+    let unsubscribe: (() => void) | undefined;
+    let cancelled = false;
 
-        if (!userDoc.exists()) {
-          const newProfile: UserProfile = {
-            uid: currentUser.uid,
-            email: currentUser.email || '',
-            displayName: currentUser.displayName || '',
-            photoURL: currentUser.photoURL || '',
-            role: isAdminEmail(currentUser.email) ? 'admin' : 'user',
-            updatedAt: serverTimestamp(),
-          };
-          await setDoc(userRef, newProfile);
-          setProfile(newProfile);
-        } else {
-          const existingProfile = userDoc.data() as UserProfile;
+    // Defer Firebase auth/firestore init dietro import() dinamico: tiene i
+    // chunk firebase fuori dal modulepreload eager di ogni rotta. L'init parte
+    // dopo il primo mount, non a livello di modulo.
+    (async () => {
+      const [{ onAuthStateChanged }, { doc, getDoc, setDoc, serverTimestamp }, { auth }, { db }] =
+        await Promise.all([
+          import('firebase/auth'),
+          import('firebase/firestore'),
+          import('../lib/firebaseAuth'),
+          import('../lib/firebaseDb'),
+        ]);
 
-          if (existingProfile.role !== 'admin' && isAdminEmail(currentUser.email)) {
-            const upgradedProfile: UserProfile = {
-              ...existingProfile,
-              role: 'admin',
+      if (cancelled) return;
+
+      unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+        setUser(currentUser);
+
+        if (currentUser) {
+          setAuthError(null);
+          // Sync user profile with Firestore
+          const userRef = doc(db, 'users', currentUser.uid);
+          const userDoc = await getDoc(userRef);
+
+          if (!userDoc.exists()) {
+            const newProfile: UserProfile = {
+              uid: currentUser.uid,
+              email: currentUser.email || '',
+              displayName: currentUser.displayName || '',
+              photoURL: currentUser.photoURL || '',
+              role: isAdminEmail(currentUser.email) ? 'admin' : 'user',
               updatedAt: serverTimestamp(),
             };
-            await setDoc(userRef, upgradedProfile, { merge: true });
-            setProfile(upgradedProfile);
+            await setDoc(userRef, newProfile);
+            setProfile(newProfile);
           } else {
-            setProfile(existingProfile);
+            const existingProfile = userDoc.data() as UserProfile;
+
+            if (existingProfile.role !== 'admin' && isAdminEmail(currentUser.email)) {
+              const upgradedProfile: UserProfile = {
+                ...existingProfile,
+                role: 'admin',
+                updatedAt: serverTimestamp(),
+              };
+              await setDoc(userRef, upgradedProfile, { merge: true });
+              setProfile(upgradedProfile);
+            } else {
+              setProfile(existingProfile);
+            }
           }
+        } else {
+          setProfile(null);
         }
-      } else {
-        setProfile(null);
-      }
 
-      setLoading(false);
-    });
+        setLoading(false);
+      });
+    })();
 
-    return () => unsubscribe();
+    return () => {
+      cancelled = true;
+      unsubscribe?.();
+    };
   }, []);
 
   const signIn = async () => {
     setAuthError(null);
 
+    if (!hasFirebaseApiKey) {
+      setAuthError('Firebase Auth non e configurato: manca VITE_FIREBASE_API_KEY.');
+      return;
+    }
+
     try {
+      const { signInWithGoogle } = await import('../lib/firebaseAuth');
       await signInWithGoogle();
     } catch (error) {
       console.error('Auth sign-in failed', error);
@@ -114,6 +146,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signOut = async () => {
     setAuthError(null);
+    if (!hasFirebaseApiKey) {
+      setUser(null);
+      setProfile(null);
+      return;
+    }
+    const { logOut } = await import('../lib/firebaseAuth');
     await logOut();
   };
 

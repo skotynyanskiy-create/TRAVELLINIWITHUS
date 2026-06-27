@@ -16,7 +16,15 @@ interface SEOProps {
 }
 
 const DEFAULT_SITE_NAME = 'Travelliniwithus';
-const DEFAULT_OG_IMAGE = `${SITE_URL}/og/default.webp`;
+// JPG per massima compatibilità preview social (WhatsApp/LinkedIn renderizzano WebP
+// in modo inaffidabile nelle card di anteprima).
+const DEFAULT_OG_IMAGE = `${SITE_URL}/og/default.jpg`;
+
+function ogImageType(src: string): string {
+  if (/\.(jpe?g)(?=$|[?#])/i.test(src)) return 'image/jpeg';
+  if (/\.png(?=$|[?#])/i.test(src)) return 'image/png';
+  return 'image/webp';
+}
 
 export default function SEO({
   title,
@@ -35,12 +43,23 @@ export default function SEO({
     ? title
     : `${title} | ${DEFAULT_SITE_NAME}`;
 
+  // L'SSR (server.ts injectMetaTags) inietta gia uno schema Article ricco con
+  // marker data-ssr-jsonld="article". Se presente, il client non deve duplicarlo
+  // (i breadcrumbs restano sempre — vivono in <SEO breadcrumbs>, non in jsonLd).
+  const ssrArticlePresent =
+    typeof document !== 'undefined' &&
+    document.querySelector('script[data-ssr-jsonld="article"]') !== null;
+
   const schemas: object[] = [];
   if (breadcrumbs && breadcrumbs.length > 0) {
     schemas.push(buildBreadcrumbListJsonLd(breadcrumbs));
   }
   if (jsonLd) {
-    schemas.push(...(Array.isArray(jsonLd) ? jsonLd : [jsonLd]));
+    const incoming = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
+    const filtered = ssrArticlePresent
+      ? incoming.filter((schema) => (schema as { '@type'?: string })['@type'] !== 'Article')
+      : incoming;
+    schemas.push(...filtered);
   }
 
   return (
@@ -58,6 +77,7 @@ export default function SEO({
       <meta property="og:title" content={finalTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={image} />
+      <meta property="og:image:type" content={ogImageType(image)} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
       <meta

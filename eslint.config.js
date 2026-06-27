@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 
 export default tseslint.config(
-  { ignores: ['.claude', 'dist', 'playwright-report', 'test-results'] },
+  { ignores: ['.claude', 'dist', 'playwright-report', 'test-results', 'storybook-static', 'coverage'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended, jsxA11y.flatConfigs.recommended],
     files: ['**/*.{ts,tsx}'],
@@ -22,6 +22,17 @@ export default tseslint.config(
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': 'off',
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+    },
+  },
+  {
+    // React Three Fiber (src/experience): useFrame e' un render loop imperativo,
+    // fuori dalla reconciliation di React. Mutare ogni frame oggetti persistenti
+    // (Vector3 creati con useMemo) e' il pattern ufficiale R3F per evitare
+    // allocazioni nel loop. La regola react-compiler `immutability` non modella
+    // questo escape hatch e produrrebbe falsi positivi.
+    files: ['src/experience/**/*.{ts,tsx}'],
+    rules: {
+      'react-hooks/immutability': 'off',
     },
   }
 );

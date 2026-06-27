@@ -24,6 +24,46 @@ Keep every AI assistant aligned on the same local operating system for TRAVELLIN
 - External skills are reference material only until reviewed and adapted locally.
 - `DESIGN.md` is the design-system prompt source for Stitch, Figma, agents, and code reviews.
 
+## Innovation Policy
+
+Travellini does not block new AI/dev tooling by default. New skills, agents,
+subagents, MCP servers, CLI tools, Codex plugins, GitHub agent workflows and
+external references are welcome in research, but they move through three gates:
+
+1. **Scouting** — free research and comparison. No installs, no config changes,
+   no secrets, no stable adoption.
+2. **Lab** — controlled trial after manual confirmation. Use sandboxed or
+   temporary access, no production credentials, no deploy, no database writes.
+3. **Adoption** — stable configuration only after an evaluation card documents
+   source, purpose, benefit, risk, permissions, duplication, tests and rollback.
+
+This keeps the system creative and current without turning every interesting
+tool into permanent operational surface area. The working radar is
+`docs/AI_TOOLING_RADAR.md`; use `docs/90_Templates/TPL_Tooling_Evaluation.md`
+for every candidate before adoption.
+
+Always require explicit owner confirmation for deploy, push, force push,
+destructive filesystem operations, `.env` changes, secret access or printing,
+database migrations, Stripe/Firebase write operations, and changes to
+`server.ts`, `firestore.rules`, or `src/config/admin.ts`.
+Hook behavior is documented in `docs/AI_HOOKS_GUARDRAILS.md`; keep destructive
+actions blocking and creative/research actions advisory.
+
+## Operating Modes
+
+Use these modes to keep daily work fast without making irreversible actions too
+easy.
+
+| Mode       | Purpose                                        | Allowed                                                                         | Requires confirmation                                                                     |
+| ---------- | ---------------------------------------------- | ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| SAFE       | Research, audit, planning, read-only debugging | Read files, search, inspect logs, run non-mutating audits, browser smoke checks | Any write, install, auth flow, deploy, push                                               |
+| BUILD      | Normal repo work                               | Edit tracked project files, create local skills/docs, run tests and builds      | High-risk files, new stable tools, external writes                                        |
+| OWNER ONLY | Sensitive operations                           | Only after explicit owner approval                                              | Deploy, push, DB migrations, Stripe/Firebase writes, `.env`, secrets, destructive cleanup |
+
+Default to SAFE for unknown tasks, BUILD for normal implementation after the
+scope is clear, and OWNER ONLY for anything that can change production,
+credentials, payments, hosting or repository history.
+
 ## Commands
 
 ```bash
@@ -131,6 +171,14 @@ These short, action-scoped skills were originally Claude-local. They have been p
 - `social-card`: 1200x630 OG / Instagram preview cards per page or article.
 - `design-research`: fetch and digest references from awwwards, siteinspire, godly.website, editorial travel sites.
 - `animate`: apply motion patterns (GSAP, motion, lenis, TiltCard, MagneticWrapper, AnimatedCounter).
+- `innovation-radar`: scout and score emerging AI/dev tools before they enter the project.
+- `mcp-evaluator`: evaluate MCP servers before enabling or adopting them.
+- `cli-evaluator`: evaluate CLI tools before install, scripting or stable workflow use.
+- `plugin-evaluator`: evaluate Codex, GitHub, Figma, Canva, Drive and related plugins/connectors.
+- `github-agent-workflow`: design safe GitHub Copilot/agent workflows, custom instructions and PR automation.
+- `backup-rollback`: define backup, restore and rollback checks before sensitive work.
+- `secret-protection`: audit secret-handling behavior without reading or printing secret values.
+- `hooks-audit`: review Claude hooks, Husky hooks, GitHub Actions and local automation guardrails.
 
 ### Claude-only support skills (not canonicalized)
 

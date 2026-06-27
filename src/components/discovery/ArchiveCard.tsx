@@ -1,7 +1,8 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { motion } from 'motion/react';
 import { ArrowRight, Heart, MapPin } from 'lucide-react';
 import OptimizedImage from '../OptimizedImage';
+import TiltCard from '../TiltCard';
 import { cardItem } from '../../lib/animations';
 import type { ArchiveItem } from '../../utils/contentArchive';
 import { getArchiveLocationLabel } from '../../utils/contentArchive';
@@ -44,6 +45,9 @@ export default function ArchiveCard({
   const slug = extractSlug(item.link);
   const { isFavorite, toggleFavorite } = useFavorites();
   const saved = isFavorite(slug);
+  const responsiveWidths = item.image.startsWith('/images/destinations/')
+    ? [320, 480, 768]
+    : undefined;
 
   const handleFavoriteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -62,14 +66,23 @@ export default function ArchiveCard({
       onClick={handleFavoriteClick}
       aria-label={saved ? 'Rimuovi dai preferiti' : 'Salva nei preferiti'}
       aria-pressed={saved}
-      className={`absolute top-4 right-4 z-10 flex h-9 w-9 items-center justify-center rounded-full backdrop-blur-md transition-all duration-300 ${
+      className={`absolute top-4 right-4 z-10 flex h-9 w-9 items-center justify-center rounded-full transition-all duration-300 ${
         saved
           ? 'bg-[var(--color-accent)] text-white shadow-md'
-          : 'bg-white/85 text-[var(--color-ink)] hover:bg-white hover:text-[var(--color-accent)]'
+          : 'bg-white text-[var(--color-ink)] shadow-sm hover:text-[var(--color-accent)]'
       }`}
     >
       <Heart size={15} className={saved ? 'fill-current' : ''} strokeWidth={1.8} />
     </button>
+  );
+
+  // Wash caldo soft-light: unifica le saturazioni disparate delle foto (alcune
+  // calde, altre fredde) verso una palette editoriale coerente, senza scurire.
+  const warmWash = (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 bg-[var(--color-accent)] opacity-[0.08] mix-blend-soft-light"
+    />
   );
 
   if (variant === 'mood') {
@@ -79,37 +92,47 @@ export default function ArchiveCard({
         className={`group relative overflow-hidden rounded-[var(--radius-xl)] ${className}`}
       >
         {favoriteButton}
-        <Link
-          to={item.link}
-          state={linkState}
-          onClick={onCardClick}
-          className="block h-full w-full"
-        >
-          <div className="relative h-full w-full overflow-hidden">
-            <OptimizedImage
-              src={item.image}
-              alt={item.title}
-              className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06]"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
-            <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8">
-              {showExperience && label && (
-                <span className="mb-3 w-fit rounded-full bg-white/88 px-3 py-1 text-[9px] font-bold uppercase tracking-[0.24em] text-[var(--color-ink)] backdrop-blur-sm">
-                  {label}
-                </span>
-              )}
-              <h3 className="max-w-[20rem] text-2xl font-serif leading-tight text-white md:text-3xl">
-                {item.title}
-              </h3>
-              {showLocation && location && (
-                <p className="mt-2 flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-white/80">
-                  <MapPin size={11} />
-                  {location}
-                </p>
-              )}
+        <TiltCard maxTilt={4} className="h-full w-full">
+          <Link
+            to={item.link}
+            state={linkState}
+            onClick={onCardClick}
+            style={
+              item.link.startsWith('/articolo/')
+                ? { viewTransitionName: `article-${slug}` }
+                : undefined
+            }
+            className="block h-full w-full"
+          >
+            <div className="relative h-full w-full overflow-hidden">
+              <OptimizedImage
+                src={item.image}
+                alt={item.title}
+                className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06]"
+                responsiveWidths={responsiveWidths}
+                sizes="(max-width: 768px) 92vw, (max-width: 1024px) 46vw, 33vw"
+              />
+              {warmWash}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+              <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8">
+                {showExperience && label && (
+                  <span className="mb-3 w-fit rounded-full bg-white px-3 py-1 text-[9px] font-bold uppercase tracking-[0.24em] text-[var(--color-ink)] shadow-sm">
+                    {label}
+                  </span>
+                )}
+                <h3 className="max-w-[20rem] text-2xl font-serif leading-tight text-white md:text-3xl">
+                  {item.title}
+                </h3>
+                {showLocation && location && (
+                  <p className="mt-2 flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-white/80">
+                    <MapPin size={11} />
+                    {location}
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
-        </Link>
+          </Link>
+        </TiltCard>
       </motion.div>
     );
   }
@@ -117,23 +140,29 @@ export default function ArchiveCard({
   return (
     <motion.article
       variants={cardItem}
-      className={`group relative flex h-full flex-col overflow-hidden rounded-[var(--radius-xl)] border border-black/5 bg-white transition-all duration-500 hover:-translate-y-0.5 hover:border-black/10 hover:shadow-[0_20px_48px_-18px_rgba(17,17,17,0.22)] ${className}`}
+      className={`group relative flex h-full flex-col overflow-hidden rounded-[var(--radius-xl)] border border-black/5 bg-white shadow-sm transition-all duration-500 hover:-translate-y-0.5 hover:border-black/10 hover:shadow-[var(--shadow-premium)] ${className}`}
     >
       {favoriteButton}
       <Link
         to={item.link}
         state={linkState}
         onClick={onCardClick}
+        style={
+          item.link.startsWith('/articolo/') ? { viewTransitionName: `article-${slug}` } : undefined
+        }
         className="relative block aspect-[4/5] overflow-hidden"
       >
         <OptimizedImage
           src={item.image}
           alt={item.title}
           className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
+          responsiveWidths={responsiveWidths}
+          sizes="(max-width: 768px) 92vw, (max-width: 1024px) 46vw, 33vw"
         />
+        {warmWash}
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
         {label && (
-          <span className="absolute top-5 left-5 rounded-full bg-white/88 px-3.5 py-1 text-[9px] font-bold uppercase tracking-[0.22em] text-[var(--color-ink)] shadow-sm backdrop-blur-md">
+          <span className="absolute top-5 left-5 rounded-full bg-white px-3.5 py-1 text-[9px] font-bold uppercase tracking-[0.22em] text-[var(--color-ink)] shadow-sm">
             {label}
           </span>
         )}

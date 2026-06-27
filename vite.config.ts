@@ -38,9 +38,40 @@ export default defineConfig(({ mode }) => {
         },
         workbox: {
           maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
-          // Esclude i reel video MP4 dal precache (sono ~5-6 MB ciascuno).
-          // Vengono caricati lazy via tag <video> quando l'utente li chiede.
-          globIgnores: ['**/video/**'],
+          // Esclude dal precache-install i reel video MP4 (~5-6 MB ciascuno) e i
+          // chunk pesanti route-specific (mapbox-gl, recharts, react-quill editor,
+          // @react-pdf/renderer). Questi ultimi sono hashati/immutabili e vengono
+          // serviti on-demand al primo fetch via runtimeCaching CacheFirst,
+          // togliendo ~3.7 MB dal manifest di install del service worker.
+          globIgnores: [
+            '**/video/**',
+            '**/mapbox-*',
+            '**/charts-*',
+            '**/editor-*',
+            '**/react-pdf*',
+            '**/*-320.avif',
+            '**/*-320.webp',
+            '**/*-480.avif',
+            '**/*-480.webp',
+            '**/*-768.avif',
+            '**/*-768.webp',
+            '**/*-1024.avif',
+            '**/*-1024.webp',
+          ],
+          runtimeCaching: [
+            {
+              urlPattern: /\/assets\/(mapbox|charts|editor|react-pdf)[^/]*\.(?:js|css)$/,
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'heavy-route-chunks',
+                expiration: {
+                  maxEntries: 30,
+                  maxAgeSeconds: 60 * 60 * 24 * 30,
+                },
+                cacheableResponse: { statuses: [0, 200] },
+              },
+            },
+          ],
           clientsClaim: true,
           skipWaiting: true,
           navigateFallback: '/offline.html',
@@ -57,6 +88,15 @@ export default defineConfig(({ mode }) => {
       alias: {
         '@': path.resolve(__dirname, '.'),
       },
+      // R3F (@react-three/fiber) deve condividere LA STESSA copia di React del
+      // resto dell'app, altrimenti CanvasImpl chiama gli hook su un React nullo
+      // ("Invalid hook call" / "Cannot read properties of null (reading useMemo)").
+      dedupe: ['react', 'react-dom', 'three'],
+    },
+    optimizeDeps: {
+      // Pre-bundla lo stack 3D così il primo accesso a /sentiero non rompe il
+      // dynamic import e React resta deduplicato dentro le deps ottimizzate.
+      include: ['three', '@react-three/fiber', '@react-three/drei', '@react-three/postprocessing'],
     },
     build: {
       // The Mapbox route is already lazy-loaded and split into its own vendor chunk.
@@ -75,13 +115,18 @@ export default defineConfig(({ mode }) => {
               !d.includes('/charts-') &&
               !d.includes('/editor-') &&
               !d.includes('/maps-') &&
-              !d.includes('/markdown-')
+              !d.includes('/markdown-') &&
+              !d.includes('/motion-')
           );
         },
       },
       rollupOptions: {
         output: {
           manualChunks(id) {
+            if (id.includes('vite/preload-helper')) {
+              return 'vite-preload-helper';
+            }
+
             if (!id.includes('node_modules')) {
               return undefined;
             }
@@ -99,6 +144,20 @@ export default defineConfig(({ mode }) => {
               packagePath.startsWith('react-helmet-async/')
             ) {
               return 'react-core';
+            }
+
+            // Stack 3D (three + R3F + drei + postprocessing + maath): chunk
+            // dedicato, isolato dal vendor catch-all. La rotta /sentiero e gia
+            // lazy, quindi questo chunk non entra nell'initial bundle ed e
+            // tracciato dal budget `three-` in check-size.mjs. Regola PRIMA
+            // delle euristiche loose (es. `motion`) per evitare cattura errata.
+            if (
+              id.includes('node_modules/three/') ||
+              id.includes('node_modules/@react-three/') ||
+              id.includes('node_modules/postprocessing/') ||
+              id.includes('node_modules/maath/')
+            ) {
+              return 'three';
             }
 
             if (id.includes('firebase')) {
@@ -157,11 +216,7 @@ export default defineConfig(({ mode }) => {
               return 'editor';
             }
 
-            if (
-              id.includes('fuse.js') ||
-              id.includes('react-intersection-observer') ||
-              id.includes('react-error-boundary')
-            ) {
+            if (id.includes('fuse.js') || id.includes('react-error-boundary')) {
               return 'search-utils';
             }
 

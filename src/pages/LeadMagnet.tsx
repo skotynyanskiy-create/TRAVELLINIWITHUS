@@ -1,16 +1,24 @@
+import { useState } from 'react';
 import { motion } from 'motion/react';
 import { CheckCircle, Download, Instagram, MapPin } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import PageLayout from '../components/PageLayout';
 import Section from '../components/Section';
 import SEO from '../components/SEO';
 import Button from '../components/Button';
 import { CONTACTS, SITE_URL } from '../config/site';
 import { trackEvent } from '../services/analytics';
+import { LITE_MODE } from '../config/liteMode';
 
 const PDF_URL = '/lead-magnet-posti-italiani.pdf';
 
 export default function LeadMagnet() {
+  const [isUnlocked] = useState(
+    () =>
+      typeof window !== 'undefined' && sessionStorage.getItem('twu_lead_magnet_unlocked') === '1'
+  );
+
   const handleDownload = () => {
     trackEvent('lead_magnet_download', {
       route: '/lead-magnet',
@@ -20,13 +28,17 @@ export default function LeadMagnet() {
     });
   };
 
+  if (!isUnlocked) {
+    return <Navigate to="/vieni-con-noi?from=lead-magnet" replace />;
+  }
+
   return (
     <PageLayout>
       <SEO
         title="La tua mini-guida"
         description="Scarica '10 posti italiani non ovvi', mini guida Travelliniwithus per chi viaggia in coppia. Pratica, scelta dopo 8 anni di viaggi reali."
         canonical={`${SITE_URL}/lead-magnet`}
-        image={`${SITE_URL}/og/lead-magnet.webp`}
+        image={`${SITE_URL}/og/lead-magnet.jpg`}
         noindex
       />
 
@@ -65,7 +77,7 @@ export default function LeadMagnet() {
                 rel="noopener noreferrer"
                 className="inline-flex h-14 items-center justify-center gap-2 rounded-xl border border-black/10 px-8 text-sm font-bold uppercase tracking-widest text-[var(--color-ink)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
               >
-                <Instagram size={18} /> Seguici su IG
+                <Instagram size={18} /> Seguici su Instagram
               </a>
             </div>
 
@@ -119,19 +131,27 @@ export default function LeadMagnet() {
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="mb-4 text-3xl font-serif">E ora?</h2>
           <p className="mb-8 text-lg leading-relaxed text-black/70">
-            La guida e un assaggio. Sul sito trovi articoli completi, itinerari per coppie, e un
-            quiz che ti aiuta a capire dove andare la prossima volta.
+            La guida e un assaggio. Sul sito trovi articoli completi, itinerari per coppie e una
+            mappa editoriale per scegliere meglio il prossimo viaggio.
           </p>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            <Button to="/esplora" variant="primary" size="lg" trackingId="lead_magnet_esplora">
-              Esplora le destinazioni
-            </Button>
-            <Link
-              to="/quiz"
-              className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-[var(--color-accent-text)] underline-offset-4 hover:underline"
-            >
-              Prova il quiz
-            </Link>
+            {LITE_MODE ? (
+              <Button to="/mappa" variant="primary" size="lg" trackingId="lead_magnet_mappa">
+                Apri la mappa
+              </Button>
+            ) : (
+              <>
+                <Button to="/esplora" variant="primary" size="lg" trackingId="lead_magnet_esplora">
+                  Esplora le destinazioni
+                </Button>
+                <Link
+                  to="/mappa"
+                  className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-[var(--color-accent-text)] underline-offset-4 hover:underline"
+                >
+                  Apri la mappa
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </Section>

@@ -19,6 +19,19 @@ type PreviewArticle = ArticleData & { id: string; slug: string; excerpt: string 
 
 type Seed = (typeof DEMO_ARCHIVE_SEEDS)[number];
 
+/**
+ * Sfoltimento "1 per regione italiana" — 2026-05-19.
+ *
+ * Filtro applicato alla sorgente in demoArchive.ts (VISIBLE_SEED_SLUGS):
+ * DEMO_ARCHIVE_SEEDS contiene solo i 6 seed visibili. Tutto a valle
+ * (SEED_PREVIEWS, mappa, regions helper) e' coerente automaticamente.
+ *
+ * SHOW_HIDDEN_PREVIEW_OVERRIDES controlla i 2 override manuali
+ * (weekend-borgo-lento, guida-prima-di-prenotare) che vivono inline in
+ * RAW_PREVIEW_ARTICLES a fine file.
+ */
+const SHOW_HIDDEN_PREVIEW_OVERRIDES = false;
+
 const WHY_BY_TYPE: Record<string, string> = {
   'Posti particolari':
     'Si va dove i locali tornano dopo aver provato il giro standard. Sono posti che restano nella memoria perché non sono per tutti — solo per chi accetta che la prima volta richieda un minimo di lavoro di ricerca.',
@@ -423,9 +436,9 @@ function injectVerified(body: string, slug: string): string {
 
 const CUSTOM_BODIES: Record<string, string> = {
   'puglia-trulli-masserie': `
-La Puglia che si racconta su Instagram non e' quella che ti restera' addosso. La Puglia vera vive nelle ore sbagliate — alle 7 del mattino davanti a un caffe' in masseria, alle 22 quando il paese si svuota dei pullman e i tavoli della trattoria si allungano sulla strada. Per arrivarci ci vogliono tre giorni e tre regole.
+La Puglia che si racconta su Instagram non è quella che ti resterà addosso. La Puglia vera vive nelle ore sbagliate — alle 7 del mattino davanti a un caffè in masseria, alle 22 quando il paese si svuota dei pullman e i tavoli della trattoria si allungano sulla strada. Per arrivarci ci vogliono tre giorni e tre regole.
 
-La prima regola e' la stagione. Maggio, giugno, fine settembre: l'acqua e' calda, la luce non e' ancora quel giallo saturo che bruciacchia le foto di agosto, e nelle masserie c'e' ancora una camera libera senza pagarla 400 euro. La seconda e' il ritmo: niente "tour della Valle d'Itria in due giorni". Un paese al giorno, non tre. La terza la sapremo dopo, e ha a che fare con le strade bianche.
+La prima regola è la stagione. Maggio, giugno, fine settembre: l'acqua è calda, la luce non è ancora quel giallo saturo che bruciacchia le foto di agosto, e nelle masserie c'è ancora una camera libera senza pagarla 400 euro. La seconda è il ritmo: niente "tour della Valle d'Itria in due giorni". Un paese al giorno, non tre. La terza la sapremo dopo, e ha a che fare con le strade bianche.
 
 :::verified{visited="2025-09" pricesChecked="2026-04" contacts="true"}
 Costa adriatica e Valle d'Itria visitate dal 12 al 19 settembre 2025 — 3 cene testate, 4 masserie verificate, noleggio auto da Bari.
@@ -433,41 +446,41 @@ Costa adriatica e Valle d'Itria visitate dal 12 al 19 settembre 2025 — 3 cene 
 
 ## Vale davvero il viaggio?
 
-La Puglia funziona perche' tiene insieme cose che altrove sono separate. Hai la pietra bianca di Ostuni e gli ulivi millenari, hai la costa adriatica con il blu serio e quella ionica con il blu turchese, hai i trulli che da fuori sembrano cartolina e da dentro sono case fresche d'estate e pulite d'inverno. E hai il cibo — non i piatti instagrammabili, ma il pranzo lungo a 18 euro che cambia la giornata.
+La Puglia funziona perché tiene insieme cose che altrove sono separate. Hai la pietra bianca di Ostuni e gli ulivi millenari, hai la costa adriatica con il blu serio e quella ionica con il blu turchese, hai i trulli che da fuori sembrano cartolina e da dentro sono case fresche d'estate e pulite d'inverno. E hai il cibo — non i piatti instagrammabili, ma il pranzo lungo a 18 euro che cambia la giornata.
 
-Ostuni alle 7 del mattino, quando i pullman ancora dormono al parcheggio di sotto, e' un paese diverso. Il proprietario del bar in via Cattedrale tira giu' la saracinesca a meta', sposta due sedie sulla strada, ti porta un caffe' senza chiederti niente. A quell'ora la pietra bianca non e' un cliche': e' solo l'unica cosa che sta sveglia con te. Tre ore dopo arriva il primo gruppo organizzato e capisci che hai scelto bene a dormire dentro le mura, non fuori.
+Ostuni alle 7 del mattino, quando i pullman ancora dormono al parcheggio di sotto, è un paese diverso. Il proprietario del bar in via Cattedrale tira giù la saracinesca a metà, sposta due sedie sulla strada, ti porta un caffè senza chiederti niente. A quell'ora la pietra bianca non è un cliché: è solo l'unica cosa che sta sveglia con te. Tre ore dopo arriva il primo gruppo organizzato e capisci che hai scelto bene a dormire dentro le mura, non fuori.
 
-![Cortile interno di masseria pugliese con tavolo apparecchiato vista uliveto.](/images/placeholders/puglia-placeholder-43.svg "La masseria Il Frantoio a Ostuni — ulivi millenari e ospitalita' che non recita. | Foto: archivio Travellini")
+![Cortile interno di masseria pugliese con tavolo apparecchiato vista uliveto.](/images/placeholders/puglia-placeholder-43.svg "La masseria Il Frantoio a Ostuni — ulivi millenari e ospitalità che non recita. | Foto: archivio Travellini")
 
-Il vero salto di qualita' lo fai quando smetti di programmare il viaggio sui borghi e cominci a programmarlo sulle masserie. Le masserie buone — Il Frantoio a Ostuni, Cervarolo a Cisternino, Torre Coccaro lato mare — non sono hotel travestiti da agriturismo: sono aziende agricole che hanno deciso di farti dormire dentro. La colazione e' quella che si mangia in famiglia, l'olio sul pane lo hanno fatto in autunno, e la sera se chiedi "dove ceniamo?" la risposta e' un nome di persona, non una stella Michelin.
+Il vero salto di qualità lo fai quando smetti di programmare il viaggio sui borghi e cominci a programmarlo sulle masserie. Le masserie buone — Il Frantoio a Ostuni, Cervarolo a Cisternino, Torre Coccaro lato mare — non sono hotel travestiti da agriturismo: sono aziende agricole che hanno deciso di farti dormire dentro. La colazione è quella che si mangia in famiglia, l'olio sul pane lo hanno fatto in autunno, e la sera se chiedi "dove ceniamo?" la risposta è un nome di persona, non una stella Michelin.
 
 ## Quando andarci?
 
-La finestra editoriale e' maggio-settembre, ma dentro quei cinque mesi non sono uguali. Maggio e prima meta' di giugno: tutto aperto, mare gia' fattibile da nuoto vero (non solo da piedi), masserie ancora gestibili nei prezzi. Seconda meta' di giugno: si comincia a sentire la pressione, prenotare con due-tre settimane di anticipo diventa obbligatorio. Luglio e agosto: la Puglia che non amiamo, e ti diciamo perche' senza filtri.
+La finestra editoriale è maggio-settembre, ma dentro quei cinque mesi non sono uguali. Maggio e prima metà di giugno: tutto aperto, mare già fattibile da nuoto vero (non solo da piedi), masserie ancora gestibili nei prezzi. Seconda metà di giugno: si comincia a sentire la pressione, prenotare con due-tre settimane di anticipo diventa obbligatorio. Luglio e agosto: la Puglia che non amiamo, e ti diciamo perché senza filtri.
 
-In agosto ad Alberobello c'e' fila per entrare nei trulli vuoti. A Polignano si fa la coda fisica per fotografare Lama Monachile. Le trattorie buone — quelle dove i locali tornano — si trasformano in macchine da turisti: stessi piatti, prezzi raddoppiati, servizio nervoso. Non e' colpa loro. E' che la regione non e' dimensionata per il numero di persone che arrivano nel pieno della stagione.
+In agosto ad Alberobello c'è fila per entrare nei trulli vuoti. A Polignano si fa la coda fisica per fotografare Lama Monachile. Le trattorie buone — quelle dove i locali tornano — si trasformano in macchine da turisti: stessi piatti, prezzi raddoppiati, servizio nervoso. Non è colpa loro. È che la regione non è dimensionata per il numero di persone che arrivano nel pieno della stagione.
 
 :::fullbleed
-![Polignano a Mare vista dal porto vecchio con barche da pesca, luce tardo pomeriggio.](/images/placeholders/puglia-placeholder-169.svg "Polignano a Mare al tramonto, dal lato nord del porto vecchio. La folla e' due strade piu' in la. | Foto: Rodrigo Trav.")
+![Polignano a Mare vista dal porto vecchio con barche da pesca, luce tardo pomeriggio.](/images/placeholders/puglia-placeholder-169.svg "Polignano a Mare al tramonto, dal lato nord del porto vecchio. La folla è due strade più in là. | Foto: Rodrigo Trav.")
 :::
 
-Settembre e' il mese che ci sentiamo di consigliare a occhi chiusi, in particolare la seconda quindicina. L'acqua e' calda come a fine luglio (l'Adriatico restituisce il calore con qualche settimana di ritardo), le strade tornano percorribili, i prezzi delle masserie scendono del 25-30%, e nei paesi succede una cosa rara: tornano i locali a sedersi nei bar. Capisci che il posto e' loro, non tuo, e questo cambia tutto.
+Settembre è il mese che ci sentiamo di consigliare a occhi chiusi, in particolare la seconda quindicina. L'acqua è calda come a fine luglio (l'Adriatico restituisce il calore con qualche settimana di ritardo), le strade tornano percorribili, i prezzi delle masserie scendono del 25-30%, e nei paesi succede una cosa rara: tornano i locali a sedersi nei bar. Capisci che il posto è loro, non tuo, e questo cambia tutto.
 
 ## Dove dormiamo?
 
-Sulla scelta della base abbiamo cambiato opinione tre volte negli anni, e ora siamo convinti: una sola base per tutta la settimana, in Valle d'Itria — Ostuni, Cisternino o frazione di campagna. Niente cambio di alloggio a meta'. Le distanze in Puglia sembrano corte sulla mappa e lunghe sulle strade bianche, e la fatica di rifare la valigia il quinto giorno e' tempo che togli ai posti.
+Sulla scelta della base abbiamo cambiato opinione tre volte negli anni, e ora siamo convinti: una sola base per tutta la settimana, in Valle d'Itria — Ostuni, Cisternino o frazione di campagna. Niente cambio di alloggio a metà. Le distanze in Puglia sembrano corte sulla mappa e lunghe sulle strade bianche, e la fatica di rifare la valigia il quinto giorno è tempo che togli ai posti.
 
 ![Letto sfatto in camera di masseria con finestra aperta su uliveti pugliesi.](/images/placeholders/puglia-placeholder-43.svg "Camera della masseria Cervarolo, alle 8 del mattino — il letto come lo lasci tu, la vista come la prepara la Puglia. | Foto: archivio Travellini")
 
-Fascia 150-220 euro a notte ti porta in una masseria con carattere vero: cortile in pietra, colazione con prodotti dell'azienda, piscina che non e' una cosa da resort, staff piccolo che ti riconosce dal secondo giorno. Sopra i 300 euro entri in zona Borgo Egnazia / Masseria Torre Maizza — bellissime, ma cominciano a sapere di brand internazionale piu' che di Puglia. Sotto i 100 euro trovi B&B in centro storico che funzionano bene se ti basta dormire ed essere a piedi dalle trattorie. Sotto i 70 euro a notte in agosto inoltrato non aspettarti niente, e' un mercato che non perdona la fretta.
+Fascia 150-220 euro a notte ti porta in una masseria con carattere vero: cortile in pietra, colazione con prodotti dell'azienda, piscina che non è una cosa da resort, staff piccolo che ti riconosce dal secondo giorno. Sopra i 300 euro entri in zona Borgo Egnazia / Masseria Torre Maizza — bellissime, ma cominciano a sapere di brand internazionale più che di Puglia. Sotto i 100 euro trovi B&B in centro storico che funzionano bene se ti basta dormire ed essere a piedi dalle trattorie. Sotto i 70 euro a notte in agosto inoltrato non aspettarti niente, è un mercato che non perdona la fretta.
 
 ## Come ci si muove?
 
-Auto obbligatoria. Il treno tra Bari e Lecce funziona discretamente, ma la Puglia che vale e' quella delle strade secondarie tra ulivi, e li' non passa niente che non sia un'auto privata. Noleggio a Bari (aeroporto e stazione centrale, prezzi simili, evita Brindisi se possibile — meno offerta, piu' caro). Una utilitaria basta: le strade interne sono strette, parcheggiare a Ostuni o Locorotondo con una station wagon e' un piccolo dramma quotidiano.
+Auto obbligatoria. Il treno tra Bari e Lecce funziona discretamente, ma la Puglia che vale è quella delle strade secondarie tra ulivi, e lì non passa niente che non sia un'auto privata. Noleggio a Bari (aeroporto e stazione centrale, prezzi simili, evita Brindisi se possibile — meno offerta, più caro). Una utilitaria basta: le strade interne sono strette, parcheggiare a Ostuni o Locorotondo con una station wagon è un piccolo dramma quotidiano.
 
 ![Vespa parcheggiata su strada bianca pugliese con trullo sullo sfondo sfocato.](/images/placeholders/puglia-placeholder-43.svg "Sulla provinciale tra Cisternino e Locorotondo — qui le distanze sulla mappa mentono, sempre per difetto. | Foto: Rodrigo Trav.")
 
-La terza regola, quella che dicevamo all'inizio: rallenta sulle strade bianche. Google Maps ti da' venti minuti tra Cisternino e Locorotondo, ma il viaggio vero ne dura quaranta perche' a un certo punto vedi un cancello aperto su un uliveto, parcheggi, scendi, e capisci che e' la' che dovevi fermarti. Le strade bianche della Valle d'Itria non sono trasferimenti tra punti del programma: sono il programma. Trattale cosi.
+La terza regola, quella che dicevamo all'inizio: rallenta sulle strade bianche. Google Maps ti dà venti minuti tra Cisternino e Locorotondo, ma il viaggio vero ne dura quaranta perché a un certo punto vedi un cancello aperto su un uliveto, parcheggi, scendi, e capisci che è là che dovevi fermarti. Le strade bianche della Valle d'Itria non sono trasferimenti tra punti del programma: sono il programma. Trattale così.
 
 :::pullquote
 Le strade bianche della Valle d'Itria non sono trasferimenti tra punti del programma: sono il programma. Chi corre arriva, chi rallenta torna a casa con qualcosa.
@@ -477,24 +490,24 @@ Le strade bianche della Valle d'Itria non sono trasferimenti tra punti del progr
 
 ## Cosa NON fare?
 
-1. **Fare Alberobello dal Rione Monti alle 11 del mattino.** Lo trovi pieno di gente, pieno di negozi di magneti, e ti convinci che la Puglia sia una trappola. Vai invece al Rione Aia Piccola, due strade piu' in la, dove la gente abita davvero. Oppure entra ad Alberobello alle 7 del mattino o dopo le 19. Stesso paese, esperienze opposte.
-2. **Mangiare orecchiette ovunque vedi un menu turistico in quattro lingue.** Le orecchiette buone si fanno a casa o in trattorie senza tovaglia stirata. Cerca posti dove il menu e' scritto a mano, dove non c'e' carta dei vini in inglese, dove se chiedi "cosa c'e' di buono oggi" rispondono con due nomi di pasta, non con un sorriso da PR.
-3. **Sottovalutare i tempi reali di spostamento.** Tutti i siti dicono "Ostuni-Lecce un'ora". E' vero solo se prendi la superstrada e non ti fermi mai. Nella pratica, con due deviazioni intelligenti, sono tre ore e mezza. Pianifica due paesi al giorno, non tre.
-4. **Andare in spiaggia tra le 11 e le 16 in alta stagione senza prenotare il lido.** Sulle spiagge libere dell'Adriatico salentino (Torre Sant'Andrea, Punta della Suina) trovi parcheggio se arrivi alle 8 o dopo le 17. Tra le 11 e le 16 e' guerra di posizioni.
+1. **Fare Alberobello dal Rione Monti alle 11 del mattino.** Lo trovi pieno di gente, pieno di negozi di magneti, e ti convinci che la Puglia sia una trappola. Vai invece al Rione Aia Piccola, due strade più in là, dove la gente abita davvero. Oppure entra ad Alberobello alle 7 del mattino o dopo le 19. Stesso paese, esperienze opposte.
+2. **Mangiare orecchiette ovunque vedi un menu turistico in quattro lingue.** Le orecchiette buone si fanno a casa o in trattorie senza tovaglia stirata. Cerca posti dove il menu è scritto a mano, dove non c'è carta dei vini in inglese, dove se chiedi "cosa c'è di buono oggi" rispondono con due nomi di pasta, non con un sorriso da PR.
+3. **Sottovalutare i tempi reali di spostamento.** Tutti i siti dicono "Ostuni-Lecce un'ora". È vero solo se prendi la superstrada e non ti fermi mai. Nella pratica, con due deviazioni intelligenti, sono tre ore e mezza. Pianifica due paesi al giorno, non tre.
+4. **Andare in spiaggia tra le 11 e le 16 in alta stagione senza prenotare il lido.** Sulle spiagge libere dell'Adriatico salentino (Torre Sant'Andrea, Punta della Suina) trovi parcheggio se arrivi alle 8 o dopo le 17. Tra le 11 e le 16 è guerra di posizioni.
 
 :::source{href="https://www.istat.it/it/files/2024/12/Movimento-turistico-2024.pdf" author="Istat — Movimento turistico 2024" verified="true" date="2024"}
-Negli ultimi anni la Puglia ha superato i 16 milioni di presenze turistiche annue, con luglio e agosto che da soli concentrano oltre il 45% degli arrivi. Le code piu' lunghe a Polignano, le calette salentine sature dopo le 10 del mattino: e' la fotografia che spiega perche' il "fuori stagione" qui non e' un capriccio editoriale ma una scelta pratica.
+Negli ultimi anni la Puglia ha superato i 16 milioni di presenze turistiche annue, con luglio e agosto che da soli concentrano oltre il 45% degli arrivi. Le code più lunghe a Polignano, le calette salentine sature dopo le 10 del mattino: è la fotografia che spiega perché il "fuori stagione" qui non è un capriccio editoriale ma una scelta pratica.
 :::
 
 :::fullbleed
-![Costa rocciosa salentina con pini marittimi e figura in lontananza sulle rocce.](/images/placeholders/puglia-placeholder-169.svg "Costa di Otranto, fine settembre, ore 10 — il mare e' ancora caldo ma le sdraio non ci sono piu'. | Foto: Rodrigo Trav.")
+![Costa rocciosa salentina con pini marittimi e figura in lontananza sulle rocce.](/images/placeholders/puglia-placeholder-169.svg "Costa di Otranto, fine settembre, ore 10 — il mare è ancora caldo ma le sdraio non ci sono più. | Foto: Rodrigo Trav.")
 :::
 
 ## Quando NON andarci?
 
-Se la tua idea di vacanza e' tutto compreso in resort con piscina, animazione e ristorante interno, non e' il viaggio giusto — la Puglia che raccontiamo si svela quando esci dalla struttura, non quando ci resti. Se viaggi con bambini molto piccoli a luglio o agosto, valuta seriamente: caldo umido sui 35 gradi, strade bianche scomode con il passeggino, distanze auto che diventano stancanti. La stessa Puglia a maggio con un bimbo di tre anni e' un altro viaggio, gestibile e bello.
+Se la tua idea di vacanza è tutto compreso in resort con piscina, animazione e ristorante interno, non è il viaggio giusto — la Puglia che raccontiamo si svela quando esci dalla struttura, non quando ci resti. Se viaggi con bambini molto piccoli a luglio o agosto, valuta seriamente: caldo umido sui 35 gradi, strade bianche scomode con il passeggino, distanze auto che diventano stancanti. La stessa Puglia a maggio con un bimbo di tre anni è un altro viaggio, gestibile e bello.
 
-Se hai a disposizione solo tre giorni, fermati. Tre giorni in Puglia sono una toccata-e-fuga che non rende giustizia ne' a te ne' al posto. Meglio scegliere una sola area — solo Valle d'Itria, o solo Salento meridionale — e dargli tre giorni veri, anziche' provare a vedere tutto. La Puglia non si fa, si attraversa. E per attraversarla ci vogliono almeno cinque giorni pieni, meglio sette, meglio ancora dieci se ci aggiungi anche un pezzo di Basilicata o di Gargano. Tutto il resto e' compromesso che ricorderai male.
+Se hai a disposizione solo tre giorni, fermati. Tre giorni in Puglia sono una toccata-e-fuga che non rende giustizia né a te né al posto. Meglio scegliere una sola area — solo Valle d'Itria, o solo Salento meridionale — e dargli tre giorni veri, anziché provare a vedere tutto. La Puglia non si fa, si attraversa. E per attraversarla ci vogliono almeno cinque giorni pieni, meglio sette, meglio ancora dieci se ci aggiungi anche un pezzo di Basilicata o di Gargano. Tutto il resto è compromesso che ricorderai male.
 `.trim(),
 };
 
@@ -590,7 +603,7 @@ const SEED_PREVIEWS: Record<string, PreviewArticle> = DEMO_ARCHIVE_SEEDS.reduce(
   {} as Record<string, PreviewArticle>
 );
 
-export const PREVIEW_ARTICLES: Record<string, PreviewArticle> = {
+const RAW_PREVIEW_ARTICLES: Record<string, PreviewArticle> = {
   ...SEED_PREVIEWS,
   [DEMO_ARTICLE_SLUG]: {
     id: DEMO_ARTICLE_SLUG,
@@ -778,6 +791,17 @@ Prenotare solo per una foto, sottovalutare distanze, ignorare stagionalità e ac
     isMarkdown: true,
   },
 };
+
+// Sfoltimento 2026-05-19: nasconde 'weekend-borgo-lento' + 'guida-prima-di-prenotare'
+// quando SHOW_HIDDEN_PREVIEW_OVERRIDES = false. Restano in RAW_PREVIEW_ARTICLES
+// per ri-attivazione futura.
+const HIDDEN_OVERRIDE_SLUGS = new Set<string>(['weekend-borgo-lento', 'guida-prima-di-prenotare']);
+
+export const PREVIEW_ARTICLES: Record<string, PreviewArticle> = SHOW_HIDDEN_PREVIEW_OVERRIDES
+  ? RAW_PREVIEW_ARTICLES
+  : Object.fromEntries(
+      Object.entries(RAW_PREVIEW_ARTICLES).filter(([slug]) => !HIDDEN_OVERRIDE_SLUGS.has(slug))
+    );
 
 export const PREVIEW_GUIDES = Object.values(PREVIEW_ARTICLES).map((article) => ({
   id: article.id,

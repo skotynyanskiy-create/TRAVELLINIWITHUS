@@ -17,6 +17,16 @@ tags:
 
 # PROJECT_HOME_HERO_NAV_REFINEMENT
 
+## Superseded by cinematic rebuild — 2026-06-26
+
+Decisione owner: la homepage editoriale precedente viene messa in archivio e il
+Sentiero diventa la nuova home esperienziale del sito. Il lavoro futuro e
+tracciato in [[PROJECT_CINEMATIC_REBUILD_HOME_2026]].
+
+La vecchia home e conservata in `src/pages/HomeLegacy.tsx` come riferimento da
+cui recuperare componenti, contenuti e logiche utili senza tenere quella
+struttura come esperienza pubblica principale.
+
 ## Obiettivo
 
 Rendere la homepage piu chiara, editoriale e orientata alla conversione, portando in primo piano la coppia Rodrigo & Betta e semplificando la navigazione dell'archivio.
@@ -36,6 +46,8 @@ La homepage precedente aveva troppe sezioni, statistiche duplicate e tre voci di
 - repo_path secondario: `src/components/Navbar.tsx`
 - repo_path secondario: `src/components/home/CoupleIntro.tsx`
 - repo_path secondario: `src/components/home/HomeDiscoveryCards.tsx`
+- repo_path secondario: `src/components/home/HomeLeadMagnet.tsx`
+- repo_path secondario: `src/components/home/MonetizationTeaser.tsx`
 
 ## Focus attuale
 
@@ -52,6 +64,18 @@ La homepage precedente aveva troppe sezioni, statistiche duplicate e tre voci di
 - [x] nascondere il carrello quando non ci sono item
 - [x] pass grafico senior: radius piu controllati, meno ombre, gerarchia editoriale piu netta
 - [x] pass clean/modern: rimossi controlli finti, CTA duplicate e testo non necessario
+- [x] pass mobile 2026-05-24: nascosta la card reel e il micro-link B2B nella hero mobile per far arrivare prima la discovery
+- [x] copy discovery reso piu concreto: scelta per luogo o ritmo invece di metafora "libreria"
+- [x] layout articoli stabilizzato quando esiste un solo contenuto pubblicabile
+- [x] immagini home principali convertite da PNG a WebP dove gia disponibile
+- [x] pass grafico conversione 2026-05-24: aggiunto lead magnet editoriale con mockup PDF e form newsletter compatto
+- [x] pass grafico mappa 2026-05-24: sostituito teaser generico con blocco visuale "Mappa editoriale"
+- [x] riallineato `Newsletter` con opzione `stacked` per form compatti dentro card strette
+- [x] asset demo AI per lead magnet salvato in `public/images/lead-magnets/` e usato come copertina preview
+- [x] contenuti demo aggiunti alla mappa editoriale per simulare percorsi e filtri futuri
+- [x] controlli floating secondari nascosti su mobile per non coprire contenuti e CTA durante la lettura
+- [x] rimossi quiz viaggio e budget viaggio dalla homepage e dal percorso pubblico
+- [x] hero 10/10 pass 2026-05-24: rimossa card reel dalla prima piega, copy accorciato, CTA sopra overlay cookie, proof line piu editoriale
 - [ ] verificare composizione finale hero su desktop
 - [ ] verificare navbar desktop su viewport laptop e wide
 - [ ] verificare scroll orizzontale chip su mobile
@@ -80,13 +104,106 @@ La homepage precedente aveva troppe sezioni, statistiche duplicate e tre voci di
 Ordine sezioni:
 
 1. `HeroSection`
-2. `HomeDiscoveryCards`
+2. `HomeDiscoveryFinder`
 3. `CoupleIntro`
-4. `LatestArticles`
-5. `Newsletter` dentro wrapper dark
-6. `CommunitySection` come social strip compatta
+4. `HomeLeadMagnet`
+5. `HomeTrustStrip`
+6. `HomePartnerSignal`
+7. `LatestArticles`
+8. `InstagramGrid`
+9. `NewsletterFeature`
+10. `MonetizationTeaser`
+11. `HomeCollaborationCta`
 
-Ritmo visuale: dark, white, sand, white, dark/sand, dark.
+Ritmo visuale: hero immersiva, finder utile, metodo umano, conversione soft, proof,
+partner, magazine, community, newsletter, mappa, B2B.
+
+## Rimozione quiz/budget - 2026-05-24
+
+Decisione: quiz viaggio e budget viaggio non sono piu parte del percorso pubblico. La
+homepage deve portare verso archivio, mappa, lead magnet, newsletter e collaborazioni,
+senza strumenti che distraggono dal posizionamento editoriale.
+
+- rimosso `HomeQuizBudgetTeaser` dalla homepage
+- `/strumenti` resta una pagina di supporto con calendario, builder itinerario e mappa
+- `/quiz` viene reindirizzato a `/esplora`
+- tolti riferimenti a quiz/calcolatore da assistente demo, Club, PDF lead magnet,
+  sitemap e file `llms-full.txt`
+
+## Hero 10/10 pass - 2026-05-24
+
+Decisione: la hero deve far vincere H1, immagine e CTA primaria. La card
+"Ultimo reel Instagram" era coerente col brand, ma in prima piega competeva
+troppo con la promessa principale.
+
+- rimossa la colonna reel dalla hero: Instagram resta nelle sezioni successive
+- copy hero ridotto a una promessa piu concreta e leggibile
+- proof point trasformati in riga editoriale sobria, non pill/card
+- CTA secondaria "Ultime guide" nascosta su mobile per non comprimere il primo fold
+- micro CTA B2B rimossa dalla hero: il percorso resta nella navbar e nelle sezioni dedicate
+- mobile riallineato al centro per mantenere "Apri Esplora" visibile anche con banner cookie
+
+## Pass grafico conversione e mappa - 2026-05-24
+
+Decisione: migliorare la percezione premium senza inventare prove finte. Niente volti AI
+di Rodrigo & Betta e niente loghi partner inventati; le parti generate sono trattate come
+mockup/editorial UI.
+
+- aggiunto `HomeLeadMagnet` dopo `CoupleIntro`: promessa concreta, mockup PDF, chip di contenuto e form newsletter dedicato
+- il form newsletter supporta `stacked` per non comprimere input e CTA nelle card strette
+- generato asset demo AI per la copertina del lead magnet, senza persone, loghi o prove finte
+- sostituito `MonetizationTeaser` con una scena "Mappa editoriale": immagine locale, route overlay, marker e card di orientamento
+- arricchita la mappa con percorsi demo plausibili, da sostituire poi con contenuti reali
+- nascosti trigger assistente AI e back-to-top sotto `md` per evitare sovrapposizioni su mobile
+- verificato desktop e mobile: lead magnet leggibile, mappa senza overflow, CTA primaria visibile
+- prossimo miglioramento grafico utile: asset dedicato reale/AI controllato per il PDF lead magnet e contenuti reali dentro la mappa
+
+## Audit marketing homepage - 2026-05-28
+
+Decisione: la home deve evitare qualsiasi linguaggio pubblico da staging. Le sezioni di
+conversione devono sembrare parte del prodotto editoriale, non una demo interna.
+
+- aggiornato `HomeLeadMagnet`: promessa piu concreta, niente "demo/prodotto finale", bullet di valore e CTA piu chiara
+- aggiornata `/vieni-con-noi`: rimossi riferimenti a demo, preview e contenuti provvisori nel copy pubblico
+- aggiornata la mappa editoriale: niente "percorsi demo", CTA piu specifica e heading meno hero-scale
+- aggiornata la trust strip: `500K` diventa `reach mensile`, non "lettori al mese"
+- aggiornato `HomePartnerSignal`: posizionamento B2B piu selettivo e orientato al fit
+- nota QA: restano da verificare mobile 320/375 e gerarchia completa homepage con audit visuale
+
+## Audit full-site marketing/SEO - 2026-05-29
+
+Decisione: separare con piu rigore pagine indicizzabili, superfici in lavorazione e funnel privati.
+La sitemap non deve promuovere URL `noindex` o aree revenue non ancora consegnabili.
+
+- rimossi dalla sitemap statica `/itinerari`, `/itinerari/compare`, `/shop` e `/lead-magnet`
+- `/itinerari` ora e `noindex` finche resta basata su itinerari in lavorazione
+- `/lead-magnet` richiede sblocco post-submit in sessione e rimanda a `/vieni-con-noi` se aperta direttamente
+- newsletter con source `lead_magnet` sblocca il download e mostra link "scarica subito il PDF" nel success state
+- `/contatti` legge `topic` e `prodotto` dai query param per non perdere l'intento dai funnel
+- `Club` ha ancora waitlist, ma ora ancora corretta `#club-pricing`, piano selezionato e copy "accesso al lancio"
+- `MediaKit` ha CTA hero verso il form e form prima della preview su mobile
+- corretti title SEO troppo lunghi e rimosso il suffisso parziale `Travellini` da `/esplora`
+- rimosso `tracking-tight` dai display title globali e reso `Button` piu tollerante ai CTA lunghi su mobile
+
+### Closeout full-site funnel - 2026-06-03
+
+- `/shop` passa da catalogo fallback multiprodotto a lista d'attesa con un solo SKU prioritario, filtri nascosti quando il catalogo e in lavorazione e newsletter `shop_waitlist_first_product`
+- `/risorse` mostra una label commerciale vicino a ogni risorsa: `Affiliato`, `Non affiliato` o `Codice sconto`
+- `/collaborazioni` non spinge piu il PDF diretto in hero: manda alla preview del media kit e traccia `media_kit_preview_click`
+- `/press` non presenta piu bundle come download immediati: anteprima consultabile e materiali completi su richiesta
+- navbar desktop posticipata a `xl` per evitare affollamento tra 1024 e 1180px; tablet usa menu compatto
+- `npm run typecheck` PASS dopo il blocco
+
+### Decisione full-mode - 2026-06-03
+
+Decisione owner: il sito deve lavorare in full-mode, non in lite mode.
+
+- `.env` e `.env.example` portati a `VITE_LITE_MODE=false`
+- `Esplora`, `Shop`, `Club`, `Preferiti` e itinerari restano navigabili nel percorso pubblico
+- `Club` riallineato a pre-lancio credibile: non promette checkout live, ma mostra valore, waitlist e stato reale del catalogo
+- area autenticata del Club non chiama piu ogni login "membro": diventa area personale con preferiti, acquisti e futuri accessi Club
+- FAQ Club riscritta per waitlist/pre-lancio: nessun pagamento, nessun rinnovo, nessun regalo promesso prima del checkout
+- `npm run typecheck` PASS
 
 ## Decisione homepage V3
 
@@ -206,8 +323,127 @@ Lavoro eseguito con Antigravity su Sprint Visual Identity:
 
 Prossimi step: pagine interne (ChiSiamo, Collaborazioni, MediaKit, Contatti), fix form, Shop, SEO.
 
+## Hero 10/10 pass — 2026-05-24
+
+Rifinitura hero richiesta dall'owner ("voglio una hero da 10/10"), su direzione
+`travellini-ui-designer`. Immagine coppia mantenuta (scelta owner: brand
+people-led), resa più leggibile invece di sostituirla con foto-luogo.
+
+Cambi in [HeroSection.tsx](../../src/components/home/HeroSection.tsx):
+
+- H1: scala fluida `clamp(2.75rem, 6vw + 0.5rem, 7.5rem)` (no più step
+  `text-5xl→8xl`), `leading-[1.02]` mobile → `lg:leading-[0.95]`,
+  `tracking-[-0.01em]`, `[text-wrap:balance]`, `max-w-[15ch]` (2 righe
+  bilanciate), drop-shadow alleggerito 0.45 → 0.35.
+- Eyebrow: da 10px/bold/0.24em a `text-xs sm:text-sm`/`font-semibold`/0.18em
+  - micro drop-shadow (era il testo più debole della prima piega).
+- Scrim desktop ammorbidito: picco sinistro 0.82 → 0.74 così la coppia a
+  destra non finisce nel nero. Fondo mobile 0.84 → 0.88. Aggiunto micro-scrim
+  dal basso (h-1/3) per proteggere la proof line senza scurire il centro.
+- CTA: secondaria "Ultime guide" da bottone bordato pari-grado a link ghost
+  (no min-w, no border) → la primaria accent domina. Aggiunto micro-link di
+  fuga mobile "Oppure leggi le ultime guide" (sotto la primaria, sm:hidden).
+- Proof strip: ora visibile anche su mobile (riga inline ·-separata short),
+  griglia desktop invertita value-first (dato grande sopra, label occhiello
+  sotto).
+- Motion: wipe clip-path 1.4s → 1.0s, delay stagger compressi
+  (0.35→0.2 … 0.62→0.56), atterraggio intro ~1.1s.
+- [HeroBackdrop.tsx](../../src/components/home/HeroBackdrop.tsx): rimosso
+  `saturate-[1.04]` (look "stock vivido"), tenuto `brightness-[0.96]`.
+
+Verifiche:
+
+- `npm run typecheck` PASS.
+- Verifica browser reale via Chrome DevTools MCP (Playwright era lockato):
+  - Desktop 1280: H1 2 righe bilanciate, coppia leggibile, scrim morbido,
+    CTA primaria dominante, proof value-first. PASS.
+  - Mobile 375: zero overflow, H1 2 righe senza taglio, "Apri Esplora" in
+    prima piega, micro-link fuga presente, proof inline ·-separata,
+    secondario nascosto. PASS.
+  - Tablet 768: layout sm+ corretto, nessun overflow. PASS.
+  - Console: zero errori/warning, nessun 404 immagini hero. PASS.
+
+Pass rifinitura "best of best" (stessa sessione, verificato a schermo):
+
+- H1 clamp ridotto da `6vw+0.5rem,7.5rem` (120px a 1280, 3 righe che invadevano
+  la coppia) a `5vw+1rem,6rem` (~80px a 1280, 2 righe calme) — più on-brand
+  (calm editorial, non magazine-cover aggressivo).
+- Spazio insecabile (U+00A0) tra "che" e "valgono" in `HERO_TITLE`: il wrap
+  ora cade dopo "particolari" su tutti i breakpoint ("Posti particolari / che
+  valgono davvero."), niente pronome "che" orfano a fine riga.
+- Label proof METODO/FOCUS/FILTRO da `white/45` a `white/55` (più leggibili).
+- Link ghost "Ultime guide": underline animato (scale-x 0→1) su hover.
+- Ricontrollato 1280/375 a schermo + console pulita.
+
+## Nav IA cleanup — 2026-05-24
+
+Audit navbar vs rotte reali (decisioni owner):
+
+- Rimosso il duplicato top bar: la voce centrale "Collaborazioni" puntava a
+  `/collaborazioni` come la pill "Collabora con noi". Tenuta solo la pill;
+  voce centrale rimossa. Media Kit ora raggiungibile via footer + pagina
+  `/collaborazioni`.
+- Footer: aggiunti **Club** (colonna Scopri) e **Press** (colonna Progetto).
+  `/press` era orfana (nessun link interno) — ora raggiungibile.
+- Rinominato footer "Risorse di viaggio" → **"Cosa usiamo"** (toglie la
+  collisione di nome con "Strumenti": tool interattivi vs affiliate).
+
+### Verifica Shop/Club a schermo → decisione nav (2026-05-24)
+
+Verificate `/shop` e `/club` nel browser: **entrambe pre-lancio con un buco
+di contenuto vuoto.**
+
+- `/shop`: griglia prodotti totalmente vuota, carrello disabilitato, banner
+  "boutique in apertura". Header + sezioni editoriali presenti, ma 0 prodotti.
+- `/club`: prezzi (€5,90/mese · €49/anno) + FAQ + login presenti, MA checkout
+  in waitlist ("avvisami al lancio") e anteprima guida ("prime 200 parole")
+  non renderizzata → grande vuoto bianco.
+
+Principio: una voce di nav è una promessa; una pagina vuota dietro rompe la
+fiducia. Decisione iniziale era toglierle dalla top nav — **rovesciata
+dall'owner: Shop + Club restano in top nav.** Di conseguenza i due empty-state
+sotto diventano prioritari (la promessa di nav DEVE essere mantenuta).
+
+Top nav finale: **Esplora · Strumenti · Shop · Club · Chi siamo** + pill
+"Collabora con noi".
+
+### Bug aperti (pre-lancio, da fixare prima di ri-promuovere)
+
+- [x] `/shop`: griglia prodotti vuota mitigata — pagina convertita in waitlist
+      con un solo SKU prioritario e carrello disabilitato finche il file non e pronto.
+- [ ] `/club`: anteprima guida ("prime 200 parole") non renderizzata sotto
+      "Le guide del Club sono lunghe, lente, dettagliate" — buco bianco.
+
+- `npm run typecheck` PASS, navbar verificata a schermo a 1280 (3 voci + pill).
+
+## Audit visivo/copy/contenuti — 2026-06-07
+
+Audit full-site (grafica/estetica/copy/contenuti/immagini/conversione) con 4
+specialisti in parallelo + verifica browser. Report completo:
+[[PROJECT_VISUAL_COPY_CONTENT_AUDIT]].
+
+Fix sicuri implementati che toccano la home (typecheck/build/audit:ui/browser PASS):
+
+- `HomeEditorialPromise`: rimosso `twu-dot-grid` decorativo, corretta animazione
+  "morta" (`initial opacity:1` → vero fade), eyebrow tracking `0.36em → 0.3em`.
+- `HomeLeadMagnet`: rimosso blob `blur-2xl` arancione (anti-DESIGN.md).
+- `HomeFeaturedDestinations`: eyebrow `0.32em → 0.3em`, alt descrittivi per regione
+  (campo `alt` dedicato).
+- `LatestArticles` + `InstagramGrid`: H2 sezione `md:text-4xl → md:text-5xl`
+  (coerenza scala); InstagramGrid alt fedeli all'immagine (la caption descriveva
+  luoghi non mostrati dai placeholder brand).
+- `NewsletterFeature`: rimossi hover-color/border su `<li>` non interattivi.
+- `CoupleIntro` + `MonetizationTeaser`: refusi di encoding (accenti) + "150+".
+
+Aperti per la home (DA-APPROVARE, vedi report): consolidare i 3 discovery ridondanti,
+fondere le due sezioni partner, sostituire mappa finta del MonetizationTeaser e mockup
+costruito a mano del lead magnet con asset reali, conteggi "N racconti" non verificabili,
+trust badge accanto ai form. Blocco #1 invariato: foto reali R+B (hero people-led ancora
+su asset AI riciclati).
+
 ## Link
 
+- [[PROJECT_VISUAL_COPY_CONTENT_AUDIT]]
 - [[OBSIDIAN_DASHBOARD]]
 - [[TRAVELLINIWITHUS_EXECUTION_PLAN]]
 - [[AGENT_WORKFLOWS]]

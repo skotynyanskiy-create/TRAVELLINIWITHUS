@@ -1,6 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import { PUBLIC_ROUTE_MANIFEST } from './public-route-manifest.js';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const contentSeed = require('../src/data/content-seed.json');
 
 const BASE_URL = 'https://travelliniwithus.it';
 const LITE_MODE = process.env.VITE_LITE_MODE === 'true';
@@ -26,10 +29,9 @@ const discoveryRoutes = [];
 // Landing regione SEO (mantenuto in sync con src/lib/regions.ts → REGIONS_DATA
 // e server.ts → REGION_LANDING_SLUGS). Priority 0.8 perche' sono entry-point
 // per query come "viaggio in puglia", "cosa vedere in sicilia".
-// 2026-05-29 (audit): le pagine /destinazione/* mostrano contenuti DEMO come reali
-// (esperienze/date inventate, byline R&B) e sono ora noindex finche' non hanno contenuto
-// verificato. Tenute fuori dalla sitemap fino ad allora. Rimettere a true quando
-// src/lib/regions.ts ha contenuti reali e si toglie il noindex da Destinazione.tsx.
+// 2026-06-23: noindex rimosso da Destinazione.tsx (ContentItem reali). Rimettere
+// REGION_LANDINGS_PUBLISHED = true dopo verifica che ogni slug ha articoli pubblicati
+// su Firestore (articles collection) oppure ContentItem sufficienti.
 const REGION_LANDINGS_PUBLISHED = false;
 const regionLandingSlugs = REGION_LANDINGS_PUBLISHED
   ? ['puglia', 'sicilia', 'sardegna', 'toscana', 'campania', 'trentino-alto-adige']
@@ -178,9 +180,17 @@ async function buildSitemap() {
     )
     .join('');
 
+  // Pagine-posto indicizzabili: una per ogni ContentItem nel seed.
+  // Priority 0.7 (discovery content), changefreq monthly (dati stabili).
+  const postoEntries = contentSeed
+    .map((item) =>
+      urlEntry(`/posto/${item.id}`, { changefreq: 'monthly', priority: '0.7', lastmod: now })
+    )
+    .join('');
+
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  ${staticEntries}${regionEntries}${filterEntries}${articleEntries}${productEntries}
+  ${staticEntries}${regionEntries}${filterEntries}${articleEntries}${productEntries}${postoEntries}
 </urlset>
 `;
 
@@ -192,7 +202,7 @@ async function buildSitemap() {
   fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), sitemap);
   const dynamicCount = (dynamic?.articleRoutes.length || 0) + (dynamic?.productRoutes.length || 0);
   console.log(
-    `Sitemap generated. Static: ${staticRoutes.length + discoveryRoutes.length}, regions: ${regionLandingSlugs.length}, filters: ${filterRoutes.length}, dynamic: ${dynamicCount}.`
+    `Sitemap generated. Static: ${staticRoutes.length + discoveryRoutes.length}, regions: ${regionLandingSlugs.length}, filters: ${filterRoutes.length}, posto: ${contentSeed.length}, dynamic: ${dynamicCount}.`
   );
 
   // robots.txt: keep public routes crawlable (incl. /shop, /vieni-con-noi,
@@ -213,6 +223,8 @@ Allow: /
 Disallow: /admin
 Disallow: /account/acquisti
 Disallow: /iscrivi
+Disallow: /*?zone=
+Disallow: /*?type=
 ${liteDisallow}
 Sitemap: ${BASE_URL}/sitemap.xml
 `;

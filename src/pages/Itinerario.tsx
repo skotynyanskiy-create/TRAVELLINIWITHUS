@@ -1,5 +1,6 @@
 import { motion } from 'motion/react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import {
   ArrowRight,
   Calendar,
@@ -37,16 +38,16 @@ export default function Itinerario() {
         noindex={itinerary.isDemo}
       />
 
-      <article className="mx-4 my-8 overflow-hidden rounded-[var(--radius-lg)] border border-black/5 bg-white pb-24 shadow-xl shadow-black/5 md:mx-8 lg:mx-12">
+      <article className="group/article mx-4 my-8 overflow-hidden rounded-3xl border border-black/5 bg-white pb-24 shadow-[var(--shadow-premium)] md:mx-8 lg:mx-12">
         <div className="relative aspect-[5/3] w-full overflow-hidden md:aspect-[16/7]">
           <OptimizedImage
             src={itinerary.image}
             alt={itinerary.title}
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover/article:scale-103"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/15 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 p-8 text-white md:p-12">
-            <span className="rounded-full bg-white/15 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] backdrop-blur-md">
+            <span className="rounded-full bg-white/20 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] backdrop-blur-md border border-white/10 shadow-xs">
               {itinerary.style} · {itinerary.duration}
             </span>
             <h1 className="mt-5 max-w-3xl text-4xl font-serif leading-tight md:text-6xl">
@@ -67,11 +68,11 @@ export default function Itinerario() {
             <DemoContentNotice
               className="mt-8"
               title="Anteprima itinerario"
-              message="Questo itinerario e una preview controllata: mostra struttura, ritmo e livello finale. Sara aggiornato con dati e foto reali prima della pubblicazione."
+              message="Questo itinerario è in lavorazione: mostra struttura, ritmo e livello editoriale. Verrà aggiornato con dati e foto verificati prima della pubblicazione completa."
             />
           )}
 
-          <div className="mt-10 rounded-[var(--radius-lg)] border border-[var(--color-accent)]/15 bg-[var(--color-accent-soft)] p-8 md:p-10">
+          <div className="mt-10 rounded-2xl border border-[var(--color-accent)]/10 bg-gradient-to-br from-[var(--color-accent-soft)] to-white/40 p-8 backdrop-blur-md md:p-10">
             <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
               In breve
             </p>
@@ -80,7 +81,7 @@ export default function Itinerario() {
             </p>
           </div>
 
-          <div className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-[var(--radius-lg)] border border-black/5 bg-black/5 md:grid-cols-4">
+          <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
             <FactCell
               icon={<Clock size={18} />}
               label="Durata"
@@ -94,16 +95,19 @@ export default function Itinerario() {
           {itinerary.highlights.length > 0 && (
             <section className="mt-14">
               <p className="mb-5 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
-                Perche salvarlo
+                Perché salvarlo
               </p>
               <div className="grid gap-4 md:grid-cols-2">
                 {itinerary.highlights.map((highlight) => (
                   <div
                     key={highlight}
-                    className="flex items-start gap-3 rounded-[var(--radius-md)] bg-[var(--color-sand)] p-5"
+                    className="group/highlight flex items-start gap-3 rounded-2xl border border-black/5 bg-white/70 backdrop-blur-md p-5 transition-all duration-500 hover:-translate-y-1 hover:bg-white/95 hover:shadow-[var(--shadow-premium)]"
                   >
-                    <CheckCircle2 className="mt-1 shrink-0 text-[var(--color-accent)]" size={18} />
-                    <p className="text-sm leading-relaxed text-black/68">{highlight}</p>
+                    <CheckCircle2
+                      className="mt-1 shrink-0 text-[var(--color-accent)] transition-transform duration-500 group-hover/highlight:rotate-12 group-hover/highlight:scale-110"
+                      size={18}
+                    />
+                    <p className="text-sm leading-relaxed text-black/70">{highlight}</p>
                   </div>
                 ))}
               </div>
@@ -111,29 +115,42 @@ export default function Itinerario() {
           )}
 
           <section className="mt-16">
-            <h2 className="mb-8 text-3xl font-serif md:text-4xl">Itinerario giorno per giorno</h2>
-            <div className="space-y-5">
-              {itinerary.stages.map((stage) => (
+            <h2 className="mb-10 text-3xl font-serif md:text-4xl text-[var(--color-ink)]">
+              Itinerario giorno per giorno
+            </h2>
+            <div className="relative space-y-8">
+              {/* Linea verticale per la timeline */}
+              <div className="absolute left-8 top-8 bottom-8 w-px bg-gradient-to-b from-[var(--color-accent)] via-[var(--color-accent)]/30 to-transparent hidden md:block" />
+
+              {itinerary.stages.map((stage, idx) => (
                 <motion.div
                   key={stage.day}
-                  initial={{ opacity: 0, y: 16 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4 }}
-                  className="grid gap-5 rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-sand)] p-6 md:grid-cols-[80px_1fr] md:p-8"
+                  viewport={{ once: true, margin: '-100px' }}
+                  transition={{ duration: 0.5, delay: idx * 0.05 }}
+                  className="group/stage relative grid gap-6 md:grid-cols-[70px_1fr] md:gap-8"
                 >
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-ink)] font-serif text-2xl text-white">
-                    {stage.day}
+                  {/* Cerchio Milestone del giorno */}
+                  <div className="flex justify-start md:justify-center">
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full border border-black/5 bg-white font-serif text-2xl text-[var(--color-ink)] shadow-md transition-all duration-500 hover:scale-110 hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] z-10 cursor-pointer">
+                      {stage.day}
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-serif text-2xl">{stage.title}</h3>
-                    <p className="mt-2 text-base leading-relaxed text-black/70">
+
+                  {/* Card del giorno */}
+                  <div className="rounded-2xl border border-black/5 bg-white/70 p-6 backdrop-blur-md transition-all duration-500 hover:bg-white/95 hover:shadow-[var(--shadow-premium)] md:p-8">
+                    <h3 className="font-serif text-2.5xl text-[var(--color-ink)] transition-colors duration-300 group-hover/stage:text-[var(--color-accent)]">
+                      {stage.title}
+                    </h3>
+                    <p className="mt-3 text-base leading-relaxed text-black/60">
                       {stage.description}
                     </p>
                     {stage.sleep && (
-                      <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
-                        Dove dormire: {stage.sleep}
-                      </p>
+                      <div className="mt-5 flex items-center gap-2 rounded-xl bg-[var(--color-sand)]/60 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)] w-fit border border-black/5">
+                        <MapPin size={12} className="text-[var(--color-accent)]" />
+                        <span>Dove dormire: {stage.sleep}</span>
+                      </div>
                     )}
                   </div>
                 </motion.div>
@@ -144,13 +161,13 @@ export default function Itinerario() {
           {itinerary.costs && itinerary.costs.length > 0 && (
             <section className="mt-16">
               <h2 className="mb-8 text-3xl font-serif md:text-4xl">Quanto costa indicativamente</h2>
-              <div className="overflow-hidden rounded-[var(--radius-md)] border border-black/5">
+              <div className="overflow-hidden rounded-2xl border border-black/5 shadow-sm bg-white/70 backdrop-blur-md">
                 <table className="w-full text-left">
                   <tbody>
                     {itinerary.costs.map((cost) => (
                       <tr key={cost.label} className="border-b border-black/5 last:border-b-0">
-                        <td className="bg-white p-5 text-sm text-black/70">{cost.label}</td>
-                        <td className="bg-[var(--color-sand)] p-5 text-right font-serif text-base text-[var(--color-ink)]">
+                        <td className="p-5 text-sm text-black/60 font-medium">{cost.label}</td>
+                        <td className="p-5 text-right font-serif text-base text-[var(--color-accent-text)] bg-white/20">
                           {cost.range} EUR
                         </td>
                       </tr>
@@ -164,35 +181,41 @@ export default function Itinerario() {
           {(itinerary.bestFor || itinerary.notFor) && (
             <section className="mt-16 grid gap-6 md:grid-cols-2">
               {itinerary.bestFor && (
-                <div className="rounded-[var(--radius-lg)] bg-[var(--color-sand)] p-7">
-                  <h3 className="mb-5 flex items-center gap-2 font-serif text-2xl">
-                    <CheckCircle2 className="text-[var(--color-accent)]" size={20} />
+                <div className="rounded-2xl border border-[var(--color-accent)]/10 bg-white/70 backdrop-blur-md p-8 shadow-sm">
+                  <h3 className="mb-6 flex items-center gap-2.5 font-serif text-2xl text-[var(--color-ink)]">
+                    <CheckCircle2 className="text-[var(--color-accent)]" size={22} />
                     Pensato per
                   </h3>
-                  <ul className="space-y-3">
+                  <ul className="space-y-4">
                     {itinerary.bestFor.map((item) => (
-                      <li key={item} className="flex gap-3 text-sm leading-relaxed text-black/68">
+                      <li
+                        key={item}
+                        className="flex items-start gap-3 text-sm leading-relaxed text-black/60"
+                      >
                         <CheckCircle2
                           className="mt-1 shrink-0 text-[var(--color-accent)]"
                           size={16}
                         />
-                        {item}
+                        <span>{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
               )}
               {itinerary.notFor && (
-                <div className="rounded-[var(--radius-lg)] bg-[var(--color-ink)] p-7 text-white">
-                  <h3 className="mb-5 flex items-center gap-2 font-serif text-2xl">
-                    <XCircle className="text-[var(--color-accent)]" size={20} />
-                    Non e per
+                <div className="rounded-2xl border border-white/5 bg-[var(--color-ink-deep)] p-8 text-white/90 shadow-[var(--shadow-premium)]">
+                  <h3 className="mb-6 flex items-center gap-2.5 font-serif text-2xl text-white">
+                    <XCircle className="text-[var(--color-accent)]" size={22} />
+                    Non è per
                   </h3>
-                  <ul className="space-y-3">
+                  <ul className="space-y-4">
                     {itinerary.notFor.map((item) => (
-                      <li key={item} className="flex gap-3 text-sm leading-relaxed text-white/70">
+                      <li
+                        key={item}
+                        className="flex items-start gap-3 text-sm leading-relaxed text-white/70"
+                      >
                         <XCircle className="mt-1 shrink-0 text-[var(--color-accent)]" size={16} />
-                        {item}
+                        <span>{item}</span>
                       </li>
                     ))}
                   </ul>
@@ -208,33 +231,39 @@ export default function Itinerario() {
                 {itinerary.relatedArticleSlug && (
                   <Link
                     to={`/articolo/${itinerary.relatedArticleSlug}`}
-                    className="group flex items-center justify-between gap-5 rounded-[var(--radius-md)] border border-black/5 bg-white p-6 transition-all hover:-translate-y-0.5 hover:border-[var(--color-accent)]"
+                    className="group flex items-center justify-between gap-5 rounded-2xl border border-black/5 bg-white/70 backdrop-blur-md p-6 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:border-[var(--color-accent)]/20 hover:bg-white/95 hover:shadow-[var(--shadow-premium)]"
                   >
                     <div>
                       <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
                         Approfondisci
                       </p>
-                      <p className="mt-2 font-serif text-xl group-hover:text-[var(--color-accent-text)]">
-                        Vai all articolo collegato
+                      <p className="mt-2 font-serif text-xl transition-colors duration-300 group-hover:text-[var(--color-accent-text)]">
+                        Vai all&apos;articolo collegato
                       </p>
                     </div>
-                    <ArrowRight size={18} className="text-black/40" />
+                    <ArrowRight
+                      size={18}
+                      className="text-black/40 transition-transform duration-500 group-hover:translate-x-1 group-hover:text-[var(--color-accent)]"
+                    />
                   </Link>
                 )}
                 {itinerary.relatedGuideSlug && (
                   <Link
                     to={`/guide/${itinerary.relatedGuideSlug}`}
-                    className="group flex items-center justify-between gap-5 rounded-[var(--radius-md)] border border-black/5 bg-[var(--color-accent-soft)] p-6 transition-all hover:-translate-y-0.5"
+                    className="group flex items-center justify-between gap-5 rounded-2xl border border-black/5 bg-white/70 backdrop-blur-md p-6 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:border-[var(--color-accent)]/20 hover:bg-white/95 hover:shadow-[var(--shadow-premium)]"
                   >
                     <div>
                       <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
                         Approfondisci ancora
                       </p>
-                      <p className="mt-2 font-serif text-xl group-hover:text-[var(--color-accent-text)]">
+                      <p className="mt-2 font-serif text-xl transition-colors duration-300 group-hover:text-[var(--color-accent-text)]">
                         Acquista la guida completa
                       </p>
                     </div>
-                    <ArrowRight size={18} className="text-black/40" />
+                    <ArrowRight
+                      size={18}
+                      className="text-black/40 transition-transform duration-500 group-hover:translate-x-1 group-hover:text-[var(--color-accent)]"
+                    />
                   </Link>
                 )}
               </div>
@@ -252,10 +281,12 @@ export default function Itinerario() {
 
 function FactCell({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <div className="bg-white p-6">
+    <div className="group/fact rounded-2xl border border-black/5 bg-white/70 p-6 backdrop-blur-md transition-all duration-500 hover:-translate-y-1 hover:bg-white/95 hover:shadow-[var(--shadow-premium)]">
       <div className="mb-4 flex items-center gap-2 text-[var(--color-accent-text)]">
-        {icon}
-        <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-black/40">
+        <span className="text-[var(--color-accent)] transition-transform duration-500 group-hover/fact:scale-110 group-hover/fact:rotate-12">
+          {icon}
+        </span>
+        <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-black/45">
           {label}
         </span>
       </div>

@@ -13,12 +13,12 @@ const INITIAL_MESSAGE: ChatMessage = {
   id: 'm-0',
   role: 'assistant',
   content:
-    'Ciao, sono l assistente Travelliniwithus (demo). Posso aiutarti a trovare itinerari, calcolare il budget o suggerirti destinazioni in base ai tuoi articoli letti.',
+    'Ciao, sono l assistente Travelliniwithus. Posso aiutarti a trovare itinerari, luoghi particolari o guide coerenti con il viaggio che hai in mente.',
 };
 
 const QUICK_PROMPTS = [
   'Itinerario weekend in Italia',
-  'Quanto costa una settimana in Andalusia?',
+  'Dove andare in Andalusia?',
   'Posti insoliti da scoprire',
 ];
 
@@ -51,7 +51,7 @@ const KEYWORD_RESPONSES: { match: string[]; reply: string }[] = [
   {
     match: ['budget', 'costo', 'prezzo', 'quanto', 'spesa'],
     reply:
-      'Apri il calcolatore budget in /strumenti: ti chiede durata, area e stile e ti da una stima realistica con voli, alloggi, cibo e spostamenti.',
+      'Per i costi preferiamo indicazioni dentro guide e itinerari, quando hanno senso: ti aiutano a capire stagione, ritmo e tipo di esperienza senza trasformare tutto in un calcolatore generico.',
   },
   {
     match: ['insoliti', 'particolari', 'segreti', 'nascosti'],
@@ -61,12 +61,12 @@ const KEYWORD_RESPONSES: { match: string[]; reply: string }[] = [
   {
     match: ['guida', 'pdf', 'planner', 'shop'],
     reply:
-      'Tutte le guide digitali stanno in /shop. La più venduta in demo e "Weekend a Catania". Se viaggi spesso, valuta il Travellini Club per accesso a tutte.',
+      'Le guide digitali stanno in /shop. Alcune sono ancora in preparazione: quando sono pronte trovi scheda, prezzo e stato di disponibilita. Se viaggi spesso, tieni d occhio anche il Travellini Club.',
   },
 ];
 
 const FALLBACK_REPLY =
-  'Questa e una demo: presto l assistente sara collegato ai contenuti reali del sito. Intanto puoi fare il quiz su /quiz oppure aprire la mappa interattiva /mappa.';
+  'Non ho ancora abbastanza contesto per rispondere bene. Intanto puoi aprire la mappa interattiva /mappa oppure esplorare gli articoli da /esplora.';
 
 function matchReply(message: string): string {
   const text = message.toLowerCase();
@@ -178,7 +178,7 @@ export default function AiAssistant() {
         aria-label={isOpen ? 'Chiudi assistente' : 'Apri assistente viaggio'}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="fixed bottom-6 right-6 z-[70] flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-ink)] text-white shadow-[0_18px_44px_rgba(0,0,0,0.28)] transition-all hover:bg-[var(--color-accent)] md:bottom-8 md:right-8 md:h-16 md:w-16"
+        className="fixed bottom-8 right-8 z-[70] hidden h-16 w-16 items-center justify-center rounded-full bg-[var(--color-ink)] text-white shadow-[0_18px_44px_rgba(0,0,0,0.28)] transition-all hover:bg-[var(--color-accent)] md:flex"
       >
         {isOpen ? <X size={22} /> : <Bot size={22} />}
       </motion.button>
@@ -203,7 +203,7 @@ export default function AiAssistant() {
                   <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
                     Assistente Travelliniwithus
                   </p>
-                  <p className="mt-1 font-serif text-lg leading-tight">Domande veloci · demo</p>
+                  <p className="mt-1 font-serif text-lg leading-tight">Domande veloci</p>
                 </div>
               </div>
               <button

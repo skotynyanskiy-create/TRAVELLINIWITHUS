@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, Calendar, Plus } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import OptimizedImage from '../OptimizedImage';
 import { trackEvent } from '../../services/analytics';
 import { scoreArticles } from '../../utils/recommendations';
 import type { ArticleData, RelatedArticleSummary } from './types';
+import { LITE_MODE } from '../../config/liteMode';
 
 const INITIAL_VISIBLE = 6;
 const LOAD_MORE_STEP = 6;
@@ -121,14 +122,15 @@ export default function RelatedArticles({
               Continua a esplorare
             </p>
             <p className="mt-4 text-base font-normal leading-relaxed text-black/70">
-              Stiamo costruendo i collegamenti per tema, luogo e intento di lettura. Nel frattempo
-              puoi sfogliare tutto l&apos;archivio editoriale dal finder.
+              {LITE_MODE
+                ? 'Stiamo costruendo i collegamenti per tema e per luogo. Nel frattempo, dai un’occhiata alla mappa dei posti che abbiamo già raccontato.'
+                : "Stiamo costruendo i collegamenti per tema, luogo e intento di lettura. Nel frattempo puoi sfogliare tutto l'archivio editoriale dal finder."}
             </p>
             <Link
-              to="/esplora"
+              to={LITE_MODE ? '/mappa' : '/esplora'}
               className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent-text)]"
             >
-              Apri Esplora
+              {LITE_MODE ? 'Apri la mappa' : 'Apri Esplora'}
               <ArrowRight size={14} />
             </Link>
           </div>

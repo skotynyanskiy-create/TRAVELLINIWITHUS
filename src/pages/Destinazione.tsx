@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { ArrowRight, MapPin } from 'lucide-react';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
@@ -12,6 +13,13 @@ import { SITE_URL } from '../config/site';
 import { DEMO_ARCHIVE_MAP_MARKERS } from '../config/demoArchive';
 import { getArticlesByRegion, getRegionMeta } from '../lib/regions';
 import type { ArchiveItem } from '../utils/contentArchive';
+import {
+  getContentByRegion,
+  groupByIntention,
+  INTENTION_LABEL,
+  INTENTION_ORDER,
+} from '../config/contentLibrary';
+import ContentCard from '../components/content/ContentCard';
 
 const PILLAR_CATEGORIES = new Set(['Guide', 'Guida', 'Hotel con carattere', 'Posti particolari']);
 
@@ -45,6 +53,17 @@ export default function Destinazione() {
   const articles = useMemo(() => (region ? getArticlesByRegion(region.slug) : []), [region]);
 
   const { pillars, itineraries, stories } = useMemo(() => classify(articles), [articles]);
+
+  // Posti particolari reali (ContentItem) per questa regione, raggruppati per
+  // intenzione. Oggi dal seed; domani dall'API IG via la stessa libreria.
+  const destinationContent = useMemo(
+    () => (region ? getContentByRegion(region.name) : []),
+    [region]
+  );
+  const contentByIntention = useMemo(
+    () => groupByIntention(destinationContent),
+    [destinationContent]
+  );
 
   const mapMarkers = useMemo(() => {
     const articleIds = new Set(articles.map((a) => a.id));
@@ -171,9 +190,9 @@ export default function Destinazione() {
             La guida completa: {region.name}
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--color-ink-2)]">
-            Il punto di ingresso editoriale per chi non e' mai stato — o per chi torna e vuole
-            capire dove abbiamo cambiato idea. Indirizzi testati, finestre stagionali e gli errori
-            che abbiamo fatto noi per primi.
+            Il punto di ingresso editoriale per chi non è mai stato — o per chi torna e vuole capire
+            dove abbiamo cambiato idea. Indirizzi testati, finestre stagionali e gli errori che
+            abbiamo fatto noi per primi.
           </p>
           <Link
             to={topArticleUrl}
@@ -183,6 +202,37 @@ export default function Destinazione() {
             <ArrowRight size={15} />
           </Link>
         </section>
+
+        {/* I posti particolari reali, raggruppati per intenzione (Mangiare /
+            Dormire / Esperienze / Vedere). Si popola dai ContentItem. */}
+        {destinationContent.length > 0 && (
+          <section className="mt-20">
+            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
+              Visti sul campo
+            </p>
+            <h2 className="mb-10 font-serif text-3xl text-[var(--color-ink)] md:text-4xl">
+              I posti particolari di {region.name}
+            </h2>
+            <div className="space-y-14">
+              {INTENTION_ORDER.map((intention) => {
+                const items = contentByIntention[intention];
+                if (items.length === 0) return null;
+                return (
+                  <div key={intention}>
+                    <h3 className="mb-6 font-serif text-2xl text-[var(--color-ink)]">
+                      {INTENTION_LABEL[intention]}
+                    </h3>
+                    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                      {items.map((item) => (
+                        <ContentCard key={item.id} item={item} />
+                      ))}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        )}
 
         {visiblePillars.length > 0 && (
           <section className="mt-20">

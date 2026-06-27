@@ -9,7 +9,7 @@ function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
       role="alert"
       className="p-6 bg-[var(--color-error-soft)] border border-[var(--color-error)]/30 rounded-xl text-[var(--color-error-text)]"
     >
-      <h2 className="text-lg font-semibold mb-2">Qualcosa e andato storto</h2>
+      <h2 className="text-lg font-semibold mb-2">Qualcosa è andato storto</h2>
       <p className="text-sm mb-4">{message}</p>
       <button
         onClick={resetErrorBoundary}

@@ -8,6 +8,8 @@ const FORMATS = [
   { ext: 'avif', options: { quality: 55, effort: 6 } },
   { ext: 'webp', options: { quality: 78, effort: 5 } },
 ];
+const RESPONSIVE_WIDTHS = [320, 480, 768];
+const RESPONSIVE_DIRS = new Set(['brand', 'destinations']);
 
 async function walk(dir) {
   const entries = await fs.readdir(dir, { withFileTypes: true });
@@ -33,6 +35,8 @@ async function convertOne(file, { force }) {
   const dir = path.dirname(file);
   const base = path.basename(file, path.extname(file));
   const srcStat = await fs.stat(file);
+  const relDir = path.relative(ROOT, dir).split(path.sep)[0];
+  const metadata = await sharp(file).metadata();
   const summary = { file, originalKB: srcStat.size / 1024, generated: [] };
 
   for (const { ext, options } of FORMATS) {
@@ -47,6 +51,34 @@ async function convertOne(file, { force }) {
     const buf = await sharp(file).toFormat(ext, options).toBuffer();
     await fs.writeFile(dest, buf);
     summary.generated.push({ ext, sizeKB: buf.length / 1024, skipped: false });
+  }
+
+  if (RESPONSIVE_DIRS.has(relDir) && metadata.width) {
+    for (const width of RESPONSIVE_WIDTHS) {
+      if (metadata.width <= width) continue;
+
+      for (const { ext, options } of FORMATS) {
+        const dest = path.join(dir, `${base}-${width}.${ext}`);
+        if (!force && (await fileExists(dest))) {
+          const s = await fs.stat(dest);
+          if (s.mtimeMs > srcStat.mtimeMs) {
+            summary.generated.push({
+              ext: `${width}.${ext}`,
+              sizeKB: s.size / 1024,
+              skipped: true,
+            });
+            continue;
+          }
+        }
+
+        const buf = await sharp(file)
+          .resize({ width, withoutEnlargement: true })
+          .toFormat(ext, options)
+          .toBuffer();
+        await fs.writeFile(dest, buf);
+        summary.generated.push({ ext: `${width}.${ext}`, sizeKB: buf.length / 1024, skipped: false });
+      }
+    }
   }
 
   return summary;

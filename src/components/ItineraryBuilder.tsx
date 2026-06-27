@@ -352,7 +352,7 @@ export default function ItineraryBuilder({
           days={pdfDays}
           contacts={{
             instagram: CONTACTS.instagramHandle,
-            tiktok: '@travellini.withus',
+            tiktok: CONTACTS.tiktokHandle,
             website: SITE_URL,
           }}
         />
@@ -481,7 +481,7 @@ export default function ItineraryBuilder({
           <p className="text-sm leading-snug text-[var(--color-ink)]">
             <strong>{DESTINATION_BASELINES[destSlug]?.name}</strong> non ha ancora tappe nel
             catalogo. Stiamo costruendo i POI per ogni destinazione — comincia con Salento, dove
-            abbiamo gia 10 tappe vere.
+            abbiamo già 10 tappe vere.
           </p>
         </div>
       )}

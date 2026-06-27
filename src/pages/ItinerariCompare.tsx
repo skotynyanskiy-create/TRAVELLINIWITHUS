@@ -1,7 +1,8 @@
 import { motion } from 'motion/react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { ArrowLeft, ArrowRight, Calendar, CheckCircle2, Clock, MapPin, Wallet } from 'lucide-react';
 import Breadcrumbs from '../components/Breadcrumbs';
+import DemoContentNotice from '../components/DemoContentNotice';
 import OptimizedImage from '../components/OptimizedImage';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
@@ -62,6 +63,11 @@ export default function ItinerariCompare() {
       </Section>
 
       <Section className="pt-0">
+        <DemoContentNotice
+          className="mb-8 max-w-3xl"
+          title="Anteprima confronto"
+          message="Prezzi, durate e tappe di questi itinerari sono dati dimostrativi: prima della pubblicazione vanno sostituiti con quelli reali e verificati."
+        />
         {/* Cards header con immagini */}
         <div className="grid gap-4 md:grid-cols-3">
           {ITINERARIES_TO_COMPARE.map((it, idx) => (

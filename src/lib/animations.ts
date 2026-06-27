@@ -1,9 +1,30 @@
 import type { Variants } from 'motion/react';
 
+/**
+ * Canonical editorial reveal easing (out-expo style). Single source of truth:
+ * i componenti devono importare questo invece di reinlinare `[0.22, 1, 0.36, 1]`.
+ */
+export const REVEAL_EASE = [0.22, 1, 0.36, 1] as const;
+
+/**
+ * Premium easing for the image clip-path wipe (D3 signature motion).
+ * Slightly more aggressive out-expo: perceivable as "film-like" without being flashy.
+ */
+export const IMAGE_WIPE_EASE = [0.16, 1, 0.3, 1] as const;
+
+/** Durate canoniche (allineate ai token CSS --duration*). */
+export const DURATION = { fast: 0.15, base: 0.22, slow: 0.32, reveal: 0.7 } as const;
+
 /** Fade + slide up — the most common reveal animation. */
 export const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] } },
+};
+
+/** Reveal editoriale canonico (fade + slide up sobrio) per sezioni e card. */
+export const revealUp: Variants = {
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: DURATION.reveal, ease: REVEAL_EASE } },
 };
 
 /** Slide from left — for 2-column layouts (left content). */

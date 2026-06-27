@@ -5,12 +5,12 @@ import Footer from './Footer';
 import ConsentBanner from './ConsentBanner';
 import ExitIntentPopup from './ExitIntentPopup';
 import AiAssistant from './AiAssistant';
-import AnalyticsScripts from './AnalyticsScripts';
 import JsonLd from './JsonLd';
 import ScrollProgressBar from './ScrollProgressBar';
 import SmoothScrollProvider from './SmoothScrollProvider';
 import { initAnalytics, trackPageview } from '../services/analytics';
 import { CONTACTS, SITE_URL } from '../config/site';
+import { LITE_MODE } from '../config/liteMode';
 
 const ORGANIZATION_JSONLD = {
   '@context': 'https://schema.org',
@@ -27,23 +27,33 @@ const ORGANIZATION_JSONLD = {
   ],
 };
 
-const WEBSITE_JSONLD = {
-  '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: 'Travelliniwithus',
-  url: `${SITE_URL}/`,
-  inLanguage: 'it-IT',
-  description:
-    'Posti particolari, esperienze vere e consigli pratici da chi li ha vissuti. Travelliniwithus.',
-  potentialAction: {
-    '@type': 'SearchAction',
-    target: {
-      '@type': 'EntryPoint',
-      urlTemplate: `${SITE_URL}/esplora?q={search_term_string}`,
-    },
-    'query-input': 'required name=search_term_string',
-  },
-};
+const WEBSITE_JSONLD = LITE_MODE
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'Travelliniwithus',
+      url: `${SITE_URL}/`,
+      inLanguage: 'it-IT',
+      description:
+        'Posti particolari, esperienze vere e consigli pratici da chi li ha vissuti. Travelliniwithus.',
+    }
+  : {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'Travelliniwithus',
+      url: `${SITE_URL}/`,
+      inLanguage: 'it-IT',
+      description:
+        'Posti particolari, esperienze vere e consigli pratici da chi li ha vissuti. Travelliniwithus.',
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: {
+          '@type': 'EntryPoint',
+          urlTemplate: `${SITE_URL}/esplora?q={search_term_string}`,
+        },
+        'query-input': 'required name=search_term_string',
+      },
+    };
 
 export default function Layout() {
   const location = useLocation();
@@ -59,6 +69,10 @@ export default function Layout() {
     trackPageview(location.pathname + location.search);
   }, [location.pathname, location.search]);
 
+  // La home è l'esperienza cinematografica "Il Sentiero": niente overlay flottanti
+  // (chat assistant, exit-intent) che rompono il primo frame e l'immersione.
+  const isCinematicHome = location.pathname === '/';
+
   return (
     <SmoothScrollProvider>
       <div className="min-h-screen bg-[var(--color-sand)] text-[var(--color-ink)] font-sans selection:bg-[var(--color-accent)] selection:text-white flex flex-col">
@@ -70,7 +84,6 @@ export default function Layout() {
         </a>
         <JsonLd data={ORGANIZATION_JSONLD} />
         <JsonLd data={WEBSITE_JSONLD} />
-        <AnalyticsScripts />
         <ScrollProgressBar />
         <Navbar />
         <main id="main-content" className="flex-grow">
@@ -78,8 +91,8 @@ export default function Layout() {
         </main>
         <Footer />
         <ConsentBanner />
-        <ExitIntentPopup />
-        <AiAssistant />
+        {!LITE_MODE && !isCinematicHome && <ExitIntentPopup />}
+        {!LITE_MODE && !isCinematicHome && <AiAssistant />}
       </div>
     </SmoothScrollProvider>
   );

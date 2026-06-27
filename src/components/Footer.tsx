@@ -1,9 +1,11 @@
 import { Instagram, Mail, ShieldCheck } from 'lucide-react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { useAuth } from '../context/AuthContext';
 import { CONTACTS } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
+import { LITE_MODE } from '../config/liteMode';
 // InstagramGrid e ora renderizzata da Home (sezione #9). Rimossa qui per evitare
 // duplicato DOM. Per altre pagine puo essere reinserita on-demand.
 
@@ -94,18 +96,20 @@ export default function Footer() {
               </div>
 
               <div>
-                <h3 className="mb-10 text-sm font-bold uppercase tracking-[0.3em] text-white">
+                <h3 className="mb-6 text-sm font-bold uppercase tracking-[0.3em] text-white">
                   {footer.discoverTitle}
                 </h3>
                 <ul className="space-y-5">
-                  <li>
-                    <Link
-                      to="/esplora"
-                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      Esplora
-                    </Link>
-                  </li>
+                  {!LITE_MODE && (
+                    <li>
+                      <Link
+                        to="/esplora"
+                        className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                      >
+                        Esplora
+                      </Link>
+                    </li>
+                  )}
                   <li>
                     <Link
                       to="/mappa"
@@ -114,35 +118,49 @@ export default function Footer() {
                       Mappa
                     </Link>
                   </li>
+                  {!LITE_MODE && (
+                    <li>
+                      <Link
+                        to="/itinerari"
+                        className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                      >
+                        Itinerari
+                      </Link>
+                    </li>
+                  )}
                   <li>
                     <Link
-                      to="/itinerari"
-                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      Itinerari
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/risorse"
+                      to="/strumenti"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
                       {navigation.resourcesLabel}
                     </Link>
                   </li>
-                  <li>
-                    <Link
-                      to="/shop"
-                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      Shop Premium
-                    </Link>
-                  </li>
+                  {!LITE_MODE && (
+                    <li>
+                      <Link
+                        to="/shop"
+                        className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                      >
+                        Shop Premium
+                      </Link>
+                    </li>
+                  )}
+                  {!LITE_MODE && (
+                    <li>
+                      <Link
+                        to="/club"
+                        className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                      >
+                        Club
+                      </Link>
+                    </li>
+                  )}
                 </ul>
               </div>
 
               <div>
-                <h3 className="mb-10 text-sm font-bold uppercase tracking-[0.3em] text-white">
+                <h3 className="mb-6 text-sm font-bold uppercase tracking-[0.3em] text-white">
                   {footer.resourcesTitle}
                 </h3>
                 <ul className="space-y-5">
@@ -154,20 +172,22 @@ export default function Footer() {
                       {footer.newsletterButtonLabel}
                     </button>
                   </li>
-                  <li>
-                    <Link
-                      to="/preferiti"
-                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      {navigation.favoritesLabel}
-                    </Link>
-                  </li>
+                  {!LITE_MODE && (
+                    <li>
+                      <Link
+                        to="/preferiti"
+                        className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                      >
+                        {navigation.favoritesLabel}
+                      </Link>
+                    </li>
+                  )}
                   <li>
                     <Link
                       to="/risorse"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
-                      Toolkit di viaggio
+                      Cosa usiamo
                     </Link>
                   </li>
                   <li>
@@ -182,7 +202,7 @@ export default function Footer() {
               </div>
 
               <div className="md:col-span-4 lg:col-span-1">
-                <h3 className="mb-10 text-sm font-bold uppercase tracking-[0.3em] text-white">
+                <h3 className="mb-6 text-sm font-bold uppercase tracking-[0.3em] text-white">
                   {footer.projectTitle}
                 </h3>
                 <ul className="mb-10 space-y-5">
@@ -208,6 +228,14 @@ export default function Footer() {
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
                       {navigation.mediaKitLabel}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/press"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      Press
                     </Link>
                   </li>
                   <li>

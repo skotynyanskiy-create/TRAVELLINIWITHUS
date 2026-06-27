@@ -1,5 +1,6 @@
 import { Instagram } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
+import { CONTACTS } from '../../config/site';
 
 export default function AuthorBio() {
   return (
@@ -28,16 +29,16 @@ export default function AuthorBio() {
           </p>
           <div className="flex flex-col md:flex-row md:flex-wrap gap-2 md:gap-3">
             <a
-              href="https://www.instagram.com/travelliniwithus/"
+              href={CONTACTS.instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#f09433] via-[#e6683c] to-[#dc2743] text-white text-xs font-bold uppercase tracking-widest rounded-full hover:opacity-90 transition-opacity"
             >
               <Instagram size={14} />
-              @travelliniwithus
+              {CONTACTS.instagramHandle}
             </a>
             <a
-              href="https://www.tiktok.com/@travelliniwithus"
+              href={CONTACTS.tiktokUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-5 py-2.5 bg-black text-white text-xs font-bold uppercase tracking-widest rounded-full hover:bg-[var(--color-ink-2)] transition-colors"
@@ -51,7 +52,7 @@ export default function AuthorBio() {
               >
                 <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.79 1.53V6.78a4.85 4.85 0 0 1-1.02-.09z" />
               </svg>
-              @travelliniwithus
+              {CONTACTS.tiktokHandle}
             </a>
             <Link
               to="/chi-siamo"

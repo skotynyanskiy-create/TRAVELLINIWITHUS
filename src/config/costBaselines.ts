@@ -151,7 +151,7 @@ export const DESTINATION_BASELINES: Record<string, DestinationBaseline> = {
     slug: 'toscana',
     name: 'Toscana',
     region: 'Italia-Centro',
-    notes: 'Firenze drains budget alloggio. Campagna senese 30% piu economica con qualita simile.',
+    notes: 'Firenze drains budget alloggio. Campagna senese 30% più economica con qualità simile.',
     costs: {
       lean: {
         alloggio: [55, 90],
@@ -213,7 +213,7 @@ export const DESTINATION_BASELINES: Record<string, DestinationBaseline> = {
     name: 'Lisbona',
     region: 'Europa',
     notes:
-      'Citta europea con costi cibo ancora abbordabili. Quartieri Alfama/Bairro Alto piu cari di Anjos/Marvila.',
+      'Città europea con costi cibo ancora abbordabili. Quartieri Alfama/Bairro Alto più cari di Anjos/Marvila.',
     costs: {
       lean: {
         alloggio: [55, 90],
@@ -245,7 +245,7 @@ export const DESTINATION_BASELINES: Record<string, DestinationBaseline> = {
     name: 'Procida',
     region: 'Italia-Isole',
     notes:
-      "Isola piccola, prezzi raddoppiano ad agosto. Marina di Corricella e' la zona piu cara. Traghetto Pozzuoli-Procida + voce extra.",
+      'Isola piccola, prezzi raddoppiano ad agosto. Marina di Corricella è la zona più cara. Traghetto Pozzuoli-Procida + voce extra.',
     costs: {
       lean: {
         alloggio: [70, 110],
@@ -341,7 +341,7 @@ export const DESTINATION_BASELINES: Record<string, DestinationBaseline> = {
     name: 'Marrakech',
     region: 'Mondo',
     notes:
-      'Voli stagionali. Riad in medina = esperienza, hotel Hivernage piu europei. Volo escluso, voce non trascurabile.',
+      'Voli stagionali. Riad in medina = esperienza, hotel Hivernage più europei. Volo escluso, voce non trascurabile.',
     costs: {
       lean: {
         alloggio: [30, 55],

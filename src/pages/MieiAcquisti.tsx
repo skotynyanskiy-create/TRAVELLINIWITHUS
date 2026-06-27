@@ -9,7 +9,7 @@ import {
   Package,
   ExternalLink,
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { useQuery } from '@tanstack/react-query';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';

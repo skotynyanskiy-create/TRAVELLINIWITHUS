@@ -209,10 +209,25 @@ e InstagramGrid usano fallback editoriale.
 - [x] `discoveryPicks.ts` come single source per Navbar/Home/SearchModal.
 - [x] 0 loop CTA: ogni superficie discovery porta a `/esplora` o `/mappa`.
 - [x] `npm run typecheck` PASS.
-- [ ] `npm run build` PASS (da verificare).
-- [ ] `npm run audit:ui` PASS (da verificare).
+- [x] `npm run build` PASS.
+- [x] `npm run audit:ui` PASS (0 errori).
 - [ ] Manifest reel popolato con i 5 reel reali (in attesa di input R+B).
 - [ ] ≥ 6 articoli reali pubblicati per uscire dal regime `noindex`.
+
+## Slice real-content-realign (2026-06-22)
+
+ContentItem reali ora visibili su `/esplora` come sezione "Posti particolari"
+(griglia social-first, sopra l'archivio articoli). Filtrabili per zona/tipo.
+
+- `ContentCard.tsx` — cover-fallback: gradiente saturo deterministico per tipo
+  (Food=arancio-rosso, Hotel=blu navy, Insolito=viola-bordeaux, ecc.). Hook a
+  domanda grande in primo piano, luogo + prezzo in evidenza. Inline `style`
+  giustificato: valore computato dinamico (tipo→gradiente).
+- `Esplora.tsx` — `filteredContentItems` memo reagisce a `filters.zone` e
+  `filters.type`. `usingPreview` e `noindex` attivi solo se `CONTENT_ITEMS.length === 0`.
+  Banner "anteprima editoriale" soppresso appena i posti reali esistono.
+
+Prossimi step: cover reali (frame reel IG), espansione seed 10→~40, sezione Home.
 
 ## Residui R+B (out of scope codice)
 
@@ -365,6 +380,157 @@ Kinfolk). 9 step eseguiti.
 - Caption / hashtag / URL post / views reali per `src/config/reels.ts`.
 - Articolo featured del mese da CMS per il mega menu Navbar (oggi hardcoded
   Salento).
+
+## Mappa prodotto demo — 2026-05-24
+
+`/mappa` e stata rifinita come prodotto editoriale demo, allineato alla nuova
+homepage e alla landing lead magnet.
+
+- [x] Head panel riscritto: non piu "Il nostro mondo", ma promessa operativa
+      "Scegli un posto partendo dalla mappa".
+- [x] Stato demo esplicito: i marker placeholder sono dichiarati come anteprime
+      editoriali, da sostituire con contenuti e foto reali R+B.
+- [x] Aggiunti tre preset "Percorsi demo" in
+      [MapboxWorldMap.tsx](../../src/components/map/MapboxWorldMap.tsx):
+      Italia non ovvia, Dove dormire bene, Weekend in coppia.
+- [x] Ogni preset applica i filtri mappa esistenti e traccia
+      `map_route_preset_click`.
+- [x] Mobile: pannello percorsi in-flow, filtri scrollabili, zero overflow
+      orizzontale verificato a 375px.
+- [x] Desktop: pannello percorsi in overlay a destra, head panel a sinistra,
+      filtri centrali preservati.
+
+Verifiche:
+
+- `npm run typecheck` PASS
+- `npm run audit:ui` PASS (0 errori, warning non blocking)
+- `npm run build` PASS
+- Browser preview `/mappa` desktop/mobile: titolo corretto, pannelli presenti,
+  preset interattivi, zero overflow orizzontale.
+
+## Direzione strategica 2026-05-24 — curatela-first, finder ridotto, 2 fasi
+
+Analisi multi-agente (orchestrator → growth + ui-designer in parallelo) +
+ricerca competitiva (Baymard travel UX, Algolia faceted search, Atlas
+Obscura/Kinfolk). Entrambi gli agenti hanno convergito indipendentemente.
+
+**Insight centrale:** Esplora è costruita come un finder da aggregatore di
+booking (6 dimensioni, faceted search) ma è un magazine editoriale con
+archivio quasi vuoto (<6 articoli, noindex). Modello sbagliato: un finder a 6
+dimensioni su 6 contenuti produce stati vuoti — il peggior primo impatto per
+un brand che vende fiducia. Riferimento giusto = Atlas Obscura/Kinfolk:
+discovery LEAD con curatela, filtro subordinato.
+
+**Decisioni lockate (fase ORA, archivio vuoto):**
+
+1. Curatela-first: collezioni editoriali primo blocco di contenuto, sempre
+   piene, sempre visibili (non spariscono quando si filtra).
+2. Finder ridotto: a vista solo **Zone + Type** con conteggi dinamici e chip a
+   0 nascosti. Formato/Periodo/Budget/Durata in accordion silenzioso o spenti.
+   La tassonomia in `contentTaxonomy.ts` resta intera — si riduce solo la UI.
+3. Header compatto editoriale al posto dell'hero cinematografico ink+parallax.
+4. **Stato vuoto vietato**: ogni filtro a 0 → fallback a collezione vicina +
+   messaggio onesto, mai schermo vuoto.
+5. Una sola superficie zona (eliminare ridondanza big-choice/accordion/
+   autocomplete) + eliminare il fake control "Resto del mondo" = `zone:all`.
+6. Quiz modal morto (confermato): rimuovere `EsploraQuiz.tsx`. Sostituibile da
+   UNA domanda-guida inline (4 scelte, risultato immediato, zero overlay).
+7. Ruoli netti con eyebrow-verbo: Esplora "sfoglia e filtra" · Mappa "per
+   luogo" · Itinerari "segui un percorso". Rimando a Itinerari quando
+   l'intenzione lo suggerisce (format=Itinerario / durata lunga).
+8. Monetizzazione: newsletter contestuale post-engagement = primario (gated da
+   Resend). Club/affiliate/shop NON su Esplora ora. B2B micro-CTA footer resta.
+9. Metrica primaria: `explore_to_article_rate` (sessioni che aprono ≥1
+   articolo). [VERIFY baseline GA4 con data-analyst.]
+
+**Fase DOPO (≥15-20 articoli, indicizzato):** finder sale di rango (Period/
+Budget/Duration riemergono, Type torna 8), sidebar filtri desktop, club teaser
+si attiva, esce da noindex. Crescita additiva per soglie su `archiveItems.length`,
+non layout duplicati.
+
+**Rischi:** terza ristrutturazione di Esplora in poche settimane senza utenti
+reali a validare; spingere CTA newsletter prima del gate Resend = lead senza
+delivery. Mitigazione: gate approvazione owner prima di toccare codice.
+
+Brief multi-agente in `docs/50_Scratch/HANDOFF_esplora-restructure_*.md`.
+
+### Rifinitura copy + asset — 2026-05-24
+
+- Copy finalizzato da seo-strategist (era provvisorio): H1 "Il prossimo posto,
+  prima ancora di sapere dove.", sottotitolo, pill domanda-guida accorciate
+  (In Italia · In coppia · Fuori rotta · Mostrami tutto), sottotitolo
+  collezione, lead-in empty-state, cross-link Itinerari, meta title+description.
+- Fix asset: card Sicilia (`demoArchive.ts`) non riusa più `sardegna.webp` →
+  `gastronomia.webp` placeholder (tematicamente coerente) per rompere il
+  duplicato visibile affiancato a Sardegna nell'archivio. TODO foto reale.
+- Verificato a schermo (1280/375), typecheck PASS.
+
+Follow-up aperti (non bloccanti, fuori frontend):
+
+- Foto reali R+B (ranking asset-curator: Sicilia → Puglia → Costiera → Sardegna)
+  - re-export 800×1000 AVIF ≤80KB.
+- Campo `alt` dedicato in `ArchiveItem` (oggi alt = titolo articolo) — a11y,
+  da fare con le foto reali.
+- `EmptyState` shared: testo no-results parametrizzabile via prop (oggi generico).
+- Baseline GA4 `explore_to_article_rate` (data-analyst, post-traffico).
+
+### Premium pass — hover + immagini coerenti (2026-05-24)
+
+In `ArchiveCard.tsx`:
+
+- **Wash caldo soft-light** (`bg-[#caa15e] opacity-12 mix-blend-soft-light`) su
+  tutte le immagini card: unifica le saturazioni disparate delle foto
+  (alcune calde, altre fredde/turchesi) verso una palette editoriale coerente,
+  senza scurire. Risolve metà del problema "foto AI incoerenti" senza nuove foto.
+  Nota: la classe `.img-warm`/prop `warm` di OptimizedImage è morta (mai
+  definita in CSS) e in conflitto col filter blur-up → usato overlay, non filter.
+- **Tilt 3D sobrio** (`TiltCard maxTilt={4}`) solo sulla cover-story (variante
+  mood), non sulla griglia (6 card che si inclinano = caos). Reduced-motion safe.
+- Verificato a schermo 1280/375, zero overflow, typecheck PASS.
+
+Premium proposti ma non implementati (scelta owner): firma curatori sulle
+collezioni, numero d'edizione, "riprendi da dove eri", save-search→newsletter.
+
+### Implementazione fase ORA — 2026-05-24 (frontend-builder)
+
+Decisioni lockate sopra rese vive su [src/pages/Esplora.tsx](../../src/pages/Esplora.tsx).
+Tassonomia (`contentTaxonomy.ts`) intatta — ridotta solo la UI.
+
+Cambi applicati:
+
+1. **Header compatto** al posto dell'hero ink cinematografico: banda
+   `bg-[var(--color-sand)]` (`pt-28 pb-10 md:pt-32 md:pb-12`), eyebrow
+   "Esplora · Sfoglia e filtra", h1 serif clamp, ricerca inline su superficie
+   chiara (riusa form + `AutocompleteResults`), "Anteprima mappa" demotato a
+   link testuale. Rimossi `useScroll/useTransform` e il preload Helmet di
+   `hero-amalfi` (non piu LCP image dominante).
+2. **Domanda-guida inline** "Cosa cerchi adesso?" — 4 pill scrollabili
+   (Italia / coppia / insolito / mostra tutto), risultato immediato via
+   `updateFilter`/`resetFilters`. Nuovo evento `explore_intent_click`
+   `{ source_page, intent }`. Copy [VERIFY seo-strategist].
+3. **Collezioni editoriali sempre montate**: sopra l'archivio senza filtri,
+   sotto i risultati quando si filtra (non spariscono piu).
+4. **Finder ridotto**: chip TYPE solo con >=1 risultato + conteggio dinamico
+   (`filterByScope` per type), chip a 0 nascosti. "Filtri avanzati" demotato
+   (no border, testo grigio), mostra "(N attivi)"; auto-apertura via URL
+   invariata. Accordion zona unica superficie oltre alla domanda-guida.
+5. **Eliminate big-choice 3 zone** + fake control `zone:'all'` ("Resto del
+   mondo").
+6. **Empty-state mai vuoto**: no-results → `EmptyState` + lead-in alle
+   collezioni (che restano montate sotto). no-content → `EmptyState` +
+   blocco newsletter `source=esplora_no_content`.
+7. **Cross-link Itinerari**: riga sopra i risultati quando
+   `format=Itinerario` o durata Settimana/Due settimane. Nuovo evento
+   `explore_to_itinerari_click` `{ source_page, format, duration }`.
+8. Newsletter + B2B footer invariati.
+
+`EsploraQuiz.tsx` confermato non referenziato (git deleted, nessun import).
+
+Verifica: `npm run typecheck` PASS (0 errori); `npm run audit:ui` 0 errori
+(solo warning preesistenti in altri file); eslint Esplora.tsx pulito.
+
+Residui [VERIFY]: copy domanda-guida → seo-strategist; foto/peso collezioni
+editoriali → asset-curator; baseline `explore_to_article_rate` → data-analyst.
 
 ## Link
 

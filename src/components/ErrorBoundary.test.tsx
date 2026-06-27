@@ -26,7 +26,7 @@ describe('ErrorBoundary Component', () => {
       </ErrorBoundary>
     );
 
-    expect(getByText('Qualcosa e andato storto')).toBeInTheDocument();
+    expect(getByText('Qualcosa è andato storto')).toBeInTheDocument();
     expect(getByRole('button', { name: /riprova/i })).toBeInTheDocument();
 
     vi.restoreAllMocks();

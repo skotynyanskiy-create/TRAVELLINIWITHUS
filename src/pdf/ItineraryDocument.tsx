@@ -364,8 +364,8 @@ export default function ItineraryDocument({
 
         <View style={styles.coverFooter}>
           <Text style={styles.coverNote}>
-            Questo PDF e&apos; un piano modificabile. I dati pratici (prezzi, orari) sono riferiti
-            al periodo dei nostri viaggi. Verifica freschezza prima della partenza.
+            Questo PDF è un piano modificabile. I dati pratici (prezzi, orari) sono riferiti al
+            periodo dei nostri viaggi. Verifica freschezza prima della partenza.
           </Text>
           <Text style={styles.coverDate}>{formatDate(generatedAt)}</Text>
         </View>
@@ -390,7 +390,7 @@ export default function ItineraryDocument({
 
           {day.pois.length === 0 ? (
             <Text style={styles.emptyDay}>
-              Giorno libero. Lo riempirete in viaggio o lo lasciate cosi&apos; di proposito.
+              Giorno libero. Lo riempirete in viaggio o lo lasciate così di proposito.
             </Text>
           ) : (
             day.pois.map((poi) => (

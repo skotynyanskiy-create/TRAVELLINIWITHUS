@@ -21,6 +21,13 @@ output/
 .claude/worktrees/
 .mcp.json
 
+# Local config backups (audit snapshots) + stray dev-server logs
+backups/
+.audit/
+.codex-*.log
+.dev-server*.log
+.vite-dev.log
+
 # Obsidian local user config + untitled canvas drafts
 .obsidian/
 docs/Senza nome*
@@ -116,3 +123,13 @@ home.yml
 shop.yml
 esplora-itinerario.yml
 home.png
+
+# Perf/quality audit artifacts (Lighthouse + ad-hoc full-page jpeg)
+.lighthouseci/
+.lh-*.json
+*-full.jpeg
+esplora-*.jpeg
+contatti-*.jpeg
+
+*storybook.log
+storybook-static

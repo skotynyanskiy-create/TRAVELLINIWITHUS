@@ -9,6 +9,9 @@ interface InstaItem {
   image: string;
   type: 'reel' | 'post';
   caption: string;
+  /** Alt descrittivo dell'immagine effettiva (per i placeholder brand la caption
+      descrive un luogo non mostrato — l'alt deve descrivere ciò che si vede). */
+  alt?: string;
   url: string;
   /** Span on lg+ grid. 'feature' = 2×2, 'tall' = 1×2, 'wide' = 2×1, 'square' = 1×1 */
   span: 'feature' | 'tall' | 'wide' | 'square';
@@ -23,6 +26,7 @@ const FALLBACK_ITEMS: InstaItem[] = [
     image: '/images/brand/couple-travel.webp',
     type: 'reel',
     caption: "Catania prima dell'alba — i posti che nessuno ti racconta",
+    alt: 'Rodrigo e Betta in viaggio',
     url: 'https://www.instagram.com/travelliniwithus/',
     span: 'feature',
   },
@@ -30,6 +34,7 @@ const FALLBACK_ITEMS: InstaItem[] = [
     image: '/images/brand/about-editorial.webp',
     type: 'reel',
     caption: 'Tre rifugi delle Dolomiti che ti fanno cambiare idea',
+    alt: 'Rodrigo e Betta durante la selezione dei contenuti',
     url: 'https://www.instagram.com/travelliniwithus/',
     span: 'tall',
   },
@@ -37,6 +42,7 @@ const FALLBACK_ITEMS: InstaItem[] = [
     image: '/images/brand/collab-work.webp',
     type: 'reel',
     caption: 'Andalusia in 4 giorni: dove ci siamo persi davvero',
+    alt: 'Travelliniwithus al lavoro su un contenuto travel',
     url: 'https://www.instagram.com/travelliniwithus/',
     span: 'square',
   },
@@ -44,6 +50,7 @@ const FALLBACK_ITEMS: InstaItem[] = [
     image: '/images/brand/couple-travel.webp',
     type: 'post',
     caption: 'Mercato del pesce a Brucoli',
+    alt: 'Rodrigo e Betta in viaggio',
     url: 'https://www.instagram.com/travelliniwithus/',
     span: 'square',
   },
@@ -51,6 +58,7 @@ const FALLBACK_ITEMS: InstaItem[] = [
     image: '/images/brand/about-editorial.webp',
     type: 'post',
     caption: 'Tramonto in Triana, Siviglia',
+    alt: 'Rodrigo e Betta durante la selezione dei contenuti',
     url: 'https://www.instagram.com/travelliniwithus/',
     span: 'wide',
   },
@@ -58,6 +66,7 @@ const FALLBACK_ITEMS: InstaItem[] = [
     image: '/images/brand/collab-work.webp',
     type: 'reel',
     caption: 'Tre cose che nessuno ti dice prima di andare in Sicilia',
+    alt: 'Travelliniwithus al lavoro su un contenuto travel',
     url: 'https://www.instagram.com/travelliniwithus/',
     span: 'tall',
   },
@@ -131,7 +140,7 @@ export default function InstagramGrid() {
             <span className="mb-3 block text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
               {usingLiveReels ? 'Reel del mese' : 'Visto su Instagram'}
             </span>
-            <h2 className="text-3xl font-serif text-[var(--color-ink)] md:text-4xl">
+            <h2 className="text-3xl font-serif text-[var(--color-ink)] md:text-5xl">
               Reel e foto di Rodrigo &amp; Betta
             </h2>
             <p className="mt-3 text-sm text-black/55 md:text-base">
@@ -168,7 +177,7 @@ export default function InstagramGrid() {
             >
               <img
                 src={item.image}
-                alt={item.caption}
+                alt={item.alt ?? item.caption}
                 loading="lazy"
                 className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />

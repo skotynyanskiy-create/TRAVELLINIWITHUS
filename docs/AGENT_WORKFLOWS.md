@@ -4,7 +4,7 @@ This repository now keeps the Claude-oriented setup and a Codex-usable equivalen
 
 See also `docs/AI_AGENT_STACK.md` for the current multi-agent skill stack and `DESIGN.md` for design-system rules.
 
-Current Travellini canonical skills: 7. Run `npm run sync:agents` after every change to `.agents/skills`.
+Current Travellini canonical skills: 26. Run `npm run sync:agents` after every change to `.agents/skills`.
 
 ## Mapping
 
@@ -29,6 +29,11 @@ Current Travellini canonical skills: 7. Run `npm run sync:agents` after every ch
 - `npm run audit:quality` is the full confidence pass and includes visual QA.
 - `npm run predeploy` includes agent stack validation but intentionally excludes visual QA to keep deployment preflight lighter.
 - MCP servers are tools with real permissions. Add them only when the task needs them and document the reason in `docs/AI_AGENT_STACK.md`.
+- New MCP, CLI, plugin, skill, agent or GitHub workflow candidates follow the
+  Scouting -> Lab -> Adoption policy in `docs/AI_AGENT_STACK.md` and are tracked
+  in `docs/AI_TOOLING_RADAR.md`.
+- `docs/AI_OPERATIONS_DASHBOARD.md` is the current AI/dev control room for
+  SAFE / BUILD / OWNER ONLY mode, open risks and next tooling decisions.
 
 ## When To Use What
 

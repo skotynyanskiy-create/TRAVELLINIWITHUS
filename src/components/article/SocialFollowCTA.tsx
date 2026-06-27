@@ -1,10 +1,11 @@
 import { Instagram, ArrowRight } from 'lucide-react';
+import { CONTACTS, BRAND_STATS } from '../../config/site';
 
 export default function SocialFollowCTA() {
   return (
     <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 gap-6">
       <a
-        href="https://www.instagram.com/travelliniwithus/"
+        href={CONTACTS.instagramUrl}
         target="_blank"
         rel="noopener noreferrer"
         className="group relative overflow-hidden rounded-[var(--radius-lg)] p-8 bg-gradient-to-br from-[#f09433] via-[#e6683c] to-[#dc2743] text-white flex items-center gap-6 hover:scale-[1.02] transition-transform duration-300"
@@ -14,10 +15,10 @@ export default function SocialFollowCTA() {
         </div>
         <div>
           <p className="text-[10px] uppercase tracking-[0.25em] font-bold text-white/70 mb-1">
-            167K+ persone ci seguono
+            {BRAND_STATS.instagramFollowers} persone ci seguono
           </p>
           <p className="text-lg font-serif leading-tight">Seguici su Instagram</p>
-          <p className="text-sm font-light text-white/80 mt-1">@travelliniwithus</p>
+          <p className="text-sm font-light text-white/80 mt-1">{CONTACTS.instagramHandle}</p>
         </div>
         <ArrowRight
           size={20}
@@ -26,7 +27,7 @@ export default function SocialFollowCTA() {
       </a>
 
       <a
-        href="https://www.tiktok.com/@travelliniwithus"
+        href={CONTACTS.tiktokUrl}
         target="_blank"
         rel="noopener noreferrer"
         className="group relative overflow-hidden rounded-[var(--radius-lg)] p-8 bg-black text-white flex items-center gap-6 hover:scale-[1.02] transition-transform duration-300"
@@ -38,10 +39,10 @@ export default function SocialFollowCTA() {
         </div>
         <div>
           <p className="text-[10px] uppercase tracking-[0.25em] font-bold text-white/50 mb-1">
-            90.000 Travellini su TikTok
+            {BRAND_STATS.tiktokFollowers} Travellini su TikTok
           </p>
           <p className="text-lg font-serif leading-tight">Guardaci su TikTok</p>
-          <p className="text-sm font-normal text-white/80 mt-1">@travelliniwithus</p>
+          <p className="text-sm font-normal text-white/80 mt-1">{CONTACTS.tiktokHandle}</p>
         </div>
         <ArrowRight
           size={20}

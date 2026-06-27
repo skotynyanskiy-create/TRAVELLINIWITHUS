@@ -88,7 +88,7 @@ export default function AutocompleteResults({
     <div
       role="listbox"
       aria-label="Suggerimenti di ricerca"
-      className="absolute left-0 right-0 top-full z-30 mt-2 overflow-hidden rounded-[var(--radius-md)] border border-black/10 bg-white shadow-[0_24px_60px_-30px_rgba(17,17,17,0.35)]"
+      className="absolute left-0 right-0 top-full z-30 mt-2 overflow-hidden rounded-[var(--radius-md)] border border-black/10 bg-white shadow-[var(--shadow-xl)]"
     >
       <ul className="py-1.5">
         {suggestions.map((suggestion) => {

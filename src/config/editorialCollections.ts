@@ -35,14 +35,18 @@ export interface EditorialCollection {
 
 export const MONTH_LABEL = 'Maggio 2026';
 
-export const EDITORIAL_COLLECTIONS: EditorialCollection[] = [
+const RAW_EDITORIAL_COLLECTIONS: EditorialCollection[] = [
   {
     id: 'italia-estate-senza-fila',
     eyebrow: 'Stagione · Estate',
     title: "Italia d'estate, senza fila",
     description:
       'Tre posti italiani che reggono ad agosto senza diventare un parcheggio. Dove andiamo noi quando serve mare buono e meno gente.',
-    slugs: ['salento-agosto-coppia', 'cilento-mare-italiano', 'sardegna-interna-barbagia'],
+    slugs: [
+      'puglia-trulli-masserie',
+      'costiera-amalfitana-fuori-stagione',
+      'sardegna-interna-barbagia',
+    ],
     ctaHref: '/esplora?zone=Italia',
     ctaLabel: 'Vedi tutta Italia',
   },
@@ -67,3 +71,20 @@ export const EDITORIAL_COLLECTIONS: EditorialCollection[] = [
     ctaLabel: 'Itinerari lunghi',
   },
 ];
+
+/**
+ * Sfoltimento "solo la collection piu' forte" — 2026-05-19.
+ *
+ * RAW_EDITORIAL_COLLECTIONS contiene 3 collection (archivio dormiente).
+ * EDITORIAL_COLLECTIONS esporta solo "italia-estate-senza-fila" — coerente
+ * con tesi pillar Puglia ("fuori stagione"). Le altre 2 referenziano slug
+ * di articoli nascosti dallo sfoltimento (cilento, trentino-spa, giappone,
+ * vietnam, slovenia) e renderizzerebbero card vuote.
+ *
+ * Per ri-attivare: aggiungere id a VISIBLE_COLLECTION_IDS.
+ */
+const VISIBLE_COLLECTION_IDS = new Set<string>(['italia-estate-senza-fila']);
+
+export const EDITORIAL_COLLECTIONS: EditorialCollection[] = RAW_EDITORIAL_COLLECTIONS.filter(
+  (collection) => VISIBLE_COLLECTION_IDS.has(collection.id)
+);

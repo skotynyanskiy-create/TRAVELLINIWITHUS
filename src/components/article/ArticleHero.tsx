@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, MotionValue } from 'motion/react';
 import { Clock, Heart, Share2, CheckCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import OptimizedImage from '../OptimizedImage';
 import { heartPulse } from '../../lib/animations';
 import type { ArticleData } from './types';
@@ -51,14 +51,14 @@ export default function ArticleHero({
         >
           <OptimizedImage
             src={article.image}
-            alt={article.title}
-            className="w-full h-full object-cover saturate-[0.85] brightness-[0.8]"
+            alt={article.imageAlt ?? `${article.location} — ${article.category}`}
+            className="w-full h-full object-cover saturate-[0.9] brightness-[0.88]"
             priority
             fetchPriority="high"
             decoding="async"
           />
         </motion.div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 w-full text-white">
@@ -69,12 +69,18 @@ export default function ArticleHero({
           className="max-w-4xl"
         >
           <div className="flex flex-wrap items-center gap-4 mb-8">
-            <Link
-              to={categoryPath}
-              className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/80 transition-colors hover:text-white"
-            >
-              {article.category}
-            </Link>
+            {categoryPath ? (
+              <Link
+                to={categoryPath}
+                className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/80 transition-colors hover:text-white"
+              >
+                {article.category}
+              </Link>
+            ) : (
+              <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/80">
+                {article.category}
+              </span>
+            )}
             <span className="w-8 h-px bg-white/30"></span>
             <span className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/80">
               <Clock size={14} /> {readingTime} di lettura

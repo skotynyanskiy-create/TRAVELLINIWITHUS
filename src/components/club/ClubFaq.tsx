@@ -23,23 +23,23 @@ const FAQ_ITEMS: FaqItem[] = [
   {
     q: 'Quando vale la pena entrare nel Club?',
     aPlain:
-      "Se nei prossimi 12 mesi pianificate almeno 4 viaggi (anche brevi) e cercate guide concrete con prezzi reali, indirizzi specifici e itinerari testati. Se viaggiate due volte all'anno seguendo il programma di una guida cartacea, il Club non vi serve.",
-    a: "Se nei prossimi 12 mesi pianificate almeno 4 viaggi (anche brevi) e cercate guide concrete con prezzi reali, indirizzi specifici e itinerari testati. Se viaggiate due volte all'anno seguendo il programma di una guida cartacea, il Club non vi serve.",
+      'Se nei prossimi 12 mesi pianificate più viaggi e cercate guide concrete con prezzi reali, indirizzi specifici e itinerari testati. In questa fase conviene mettersi in lista solo se volete essere avvisati quando il catalogo apre.',
+    a: 'Se nei prossimi 12 mesi pianificate più viaggi e cercate guide concrete con prezzi reali, indirizzi specifici e itinerari testati. In questa fase conviene mettersi in lista solo se volete essere avvisati quando il catalogo apre.',
   },
   {
     q: 'Quando NON vale entrare nel Club?',
     aPlain:
-      "Se cercate ispirazione visiva (siamo specifici, non Pinterest), se vi interessano solo grandi destinazioni internazionali (siamo Italia-first, l'estero copre il 30%), o se preferite consigli rapidi su Instagram (il Club e' formato lungo, 1500-3500 parole per guida).",
-    a: "Se cercate ispirazione visiva (siamo specifici, non Pinterest), se vi interessano solo grandi destinazioni internazionali (siamo Italia-first, l'estero copre il 30%), o se preferite consigli rapidi su Instagram (il Club e' formato lungo, 1500-3500 parole per guida).",
+      'Se cercate solo ispirazione visiva, se volete consigli rapidi da social o se vi basta comprare una guida singola quando serve. Il Club ha senso per chi vuole archivio, aggiornamenti e formato lungo.',
+    a: 'Se cercate solo ispirazione visiva, se volete consigli rapidi da social o se vi basta comprare una guida singola quando serve. Il Club ha senso per chi vuole archivio, aggiornamenti e formato lungo.',
   },
   {
-    q: "Come si cancella l'iscrizione?",
+    q: "L'iscrizione è già attiva?",
     aPlain:
-      'Un click dall\'area riservata "La mia area" → Sottoscrizione → Annulla. Conferma immediata via email. Niente form, niente "sicuro di voler andare via?", niente trattenuta retention. Restate fino alla fine del mese gia pagato.',
-    a: 'Un click dall\'area riservata "La mia area" → Sottoscrizione → Annulla. Conferma immediata via email. Niente form, niente "sicuro di voler andare via?", niente trattenuta retention. Restate fino alla fine del mese gia pagato.',
+      'No. Oggi il Club è in pre-lancio: puoi metterti in lista, vedere il formato e capire se ti interessa. Il checkout verrà aperto solo quando catalogo, condizioni e consegna saranno verificati.',
+    a: 'No. Oggi il Club è in pre-lancio: puoi metterti in lista, vedere il formato e capire se ti interessa. Il checkout verrà aperto solo quando catalogo, condizioni e consegna saranno verificati.',
   },
   {
-    q: "Cosa NON e' incluso nel Club?",
+    q: 'Cosa NON è incluso nel Club?',
     aPlain:
       "Prenotazioni alberghi o esperienze (forniamo i link, prenotate voi). Consulenze 1-a-1 personalizzate. Sconti diretti su prodotti di terzi (gli affiliate link che usiamo sono visibili come tali). Garanzia di rimborso viaggio in caso di problemi (lo fa l'assicurazione, non noi).",
     a: "Prenotazioni alberghi o esperienze (forniamo i link, prenotate voi). Consulenze 1-a-1 personalizzate. Sconti diretti su prodotti di terzi (gli affiliate link che usiamo sono visibili come tali). Garanzia di rimborso viaggio in caso di problemi (lo fa l'assicurazione, non noi).",
@@ -47,14 +47,14 @@ const FAQ_ITEMS: FaqItem[] = [
   {
     q: 'Posso regalare il Club a qualcuno?',
     aPlain:
-      "Si, l'iscrizione annuale e' regalabile (scriveteci a hello@travelliniwithus.it dopo l'acquisto e attiviamo il codice sull'email del destinatario). Il regalo non si rinnova automaticamente alla scadenza.",
-    a: "Si, l'iscrizione annuale e' regalabile (scriveteci a hello@travelliniwithus.it dopo l'acquisto e attiviamo il codice sull'email del destinatario). Il regalo non si rinnova automaticamente alla scadenza.",
+      'Non ancora. Quando apriremo il checkout valuteremo anche un accesso annuale regalabile, ma non vogliamo prometterlo prima di avere il flusso pronto.',
+    a: 'Non ancora. Quando apriremo il checkout valuteremo anche un accesso annuale regalabile, ma non vogliamo prometterlo prima di avere il flusso pronto.',
   },
   {
-    q: "Cosa succede se annullo? Perdo l'archivio?",
+    q: 'Cosa succede se mi metto in lista?',
     aPlain:
-      "Perdete l'accesso alle guide e all'archivio Club. Mantenete le guide singole eventualmente acquistate dallo shop (sono vostre per sempre). Mantenete l'account e i preferiti, accessibili anche da non-membro.",
-    a: "Perdete l'accesso alle guide e all'archivio Club. Mantenete le guide singole eventualmente acquistate dallo shop (sono vostre per sempre). Mantenete l'account e i preferiti, accessibili anche da non-membro.",
+      'Riceviamo la tua email e il piano che ti interessa. Ti scriveremo quando il Club apre: nessun pagamento, nessun rinnovo automatico, nessun vincolo.',
+    a: 'Riceviamo la tua email e il piano che ti interessa. Ti scriveremo quando il Club apre: nessun pagamento, nessun rinnovo automatico, nessun vincolo.',
   },
 ];
 

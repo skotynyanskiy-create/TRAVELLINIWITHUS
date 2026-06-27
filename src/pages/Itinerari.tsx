@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { motion } from 'motion/react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { ArrowRight, Calendar, Clock, Wallet } from 'lucide-react';
 import Breadcrumbs from '../components/Breadcrumbs';
 import DemoContentNotice from '../components/DemoContentNotice';

@@ -36,7 +36,7 @@ export default function HeroBackdrop({ imageDesktop, imageMobile, videoSrc }: He
   }, [videoSrc, reducedMotion]);
 
   const toFmt = (src: string, ext: 'avif' | 'webp') =>
-    src.replace(/\.(png|jpe?g)(?=$|[?#])/i, `.${ext}`);
+    src.replace(/\.(png|jpe?g|webp)(?=$|[?#])/i, `.${ext}`);
   const mobAvif = toFmt(imageMobile, 'avif');
   const mobWebp = toFmt(imageMobile, 'webp');
   const deskAvif = toFmt(imageDesktop, 'avif');
@@ -55,7 +55,9 @@ export default function HeroBackdrop({ imageDesktop, imageMobile, videoSrc }: He
           alt=""
           aria-hidden="true"
           fetchPriority="high"
-          className="h-full w-full object-cover object-center brightness-[0.96] saturate-[1.04]"
+          width={1024}
+          height={1024}
+          className="h-full w-full object-cover object-center brightness-[0.96]"
           referrerPolicy="no-referrer"
         />
       </picture>

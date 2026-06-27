@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../../lib/firebaseDb';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import {
   Users as UsersIcon,
   Plus,
@@ -625,9 +625,9 @@ export default function AdminDashboard() {
             <div className="p-8">
               <div className="mb-8 max-w-3xl">
                 <p className="text-zinc-600">
-                  Qui trovi gli editor guidati per le pagine istituzionali del sito. L obiettivo e
+                  Qui trovi gli editor guidati per le pagine istituzionali del sito. L'obiettivo è
                   permetterti di aggiornare contenuti chiave senza toccare il codice, mantenendo
-                  pero struttura, stile e logica del progetto.
+                  però struttura, stile e logica del progetto.
                 </p>
               </div>
 

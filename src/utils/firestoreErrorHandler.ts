@@ -1,4 +1,18 @@
-import { auth } from '../lib/firebaseAuth';
+import type { Auth } from 'firebase/auth';
+
+// auth viene risolto pigramente per non trascinare firebase/auth nel
+// modulepreload eager di ogni rotta. e' usato solo nel ramo errore (diagnostica):
+// alla prima chiamata avvia il caricamento del chunk, intanto currentUser resta
+// null. Le chiamate successive lo trovano popolato.
+let authRef: Auth | null = null;
+let authLoading = false;
+function ensureAuth() {
+  if (authRef || authLoading) return;
+  authLoading = true;
+  void import('../lib/firebaseAuth').then((mod) => {
+    authRef = mod.auth;
+  });
+}
 
 export enum OperationType {
   CREATE = 'create',
@@ -25,28 +39,35 @@ export interface FirestoreErrorInfo {
       email: string | null;
       photoUrl: string | null;
     }[];
-  }
+  };
 }
 
-export function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
+export function handleFirestoreError(
+  error: unknown,
+  operationType: OperationType,
+  path: string | null
+) {
+  ensureAuth();
+  const currentUser = authRef?.currentUser;
   const errInfo: FirestoreErrorInfo = {
     error: error instanceof Error ? error.message : String(error),
     authInfo: {
-      userId: auth.currentUser?.uid,
-      email: auth.currentUser?.email,
-      emailVerified: auth.currentUser?.emailVerified,
-      isAnonymous: auth.currentUser?.isAnonymous,
-      tenantId: auth.currentUser?.tenantId,
-      providerInfo: auth.currentUser?.providerData.map(provider => ({
-        providerId: provider.providerId,
-        displayName: provider.displayName,
-        email: provider.email,
-        photoUrl: provider.photoURL
-      })) || []
+      userId: currentUser?.uid,
+      email: currentUser?.email,
+      emailVerified: currentUser?.emailVerified,
+      isAnonymous: currentUser?.isAnonymous,
+      tenantId: currentUser?.tenantId,
+      providerInfo:
+        currentUser?.providerData.map((provider) => ({
+          providerId: provider.providerId,
+          displayName: provider.displayName,
+          email: provider.email,
+          photoUrl: provider.photoURL,
+        })) || [],
     },
     operationType,
-    path
-  }
+    path,
+  };
   console.error('Firestore Error: ', JSON.stringify(errInfo));
   throw new Error(JSON.stringify(errInfo));
 }

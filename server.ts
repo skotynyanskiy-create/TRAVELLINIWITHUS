@@ -224,13 +224,38 @@ const REGION_LANDING_SLUGS = new Set([
   'trentino-alto-adige',
 ]);
 
-const STATIC_APP_ROUTES = new Set([
+const LITE_MODE = process.env.VITE_LITE_MODE === 'true';
+const LITE_DISABLED_PREFIXES = [
+  '/esplora',
+  '/itinerari',
+  '/shop',
+  '/club',
+  '/preferiti',
+  '/destinazioni',
+  '/esperienze',
+  '/guide',
+  '/quiz',
+  '/strumenti',
+  '/press',
+  '/risorse',
+  '/futuro',
+  '/lead-magnet',
+];
+
+function isLiteDisabledPath(pathname: string): boolean {
+  if (!LITE_MODE) return false;
+  return LITE_DISABLED_PREFIXES.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`) || pathname.startsWith(`${p}?`)
+  );
+}
+
+const ALL_STATIC_APP_ROUTES = [
   '/',
+  '/sentiero',
   '/vieni-con-noi',
   '/lead-magnet',
   '/iscrivi',
   '/esplora',
-  // Le 3 legacy restano come redirect client-side (App.tsx fa <Navigate to="/esplora">)
   '/destinazioni',
   '/esperienze',
   '/guide',
@@ -255,7 +280,11 @@ const STATIC_APP_ROUTES = new Set([
   '/admin',
   '/admin/editor',
   '/admin/product-editor',
-]);
+];
+
+const STATIC_APP_ROUTES = new Set(
+  ALL_STATIC_APP_ROUTES.filter((route) => !isLiteDisabledPath(route))
+);
 
 function getString(fields: Record<string, FirestoreValue> | undefined, key: string) {
   return fields?.[key]?.stringValue || '';
@@ -382,6 +411,13 @@ function escapeHtml(value: string) {
 
 function safeJsonLd(data: unknown) {
   return JSON.stringify(data).replace(/</g, '\\u003c');
+}
+
+function firstSentence(text: string) {
+  const trimmed = text.trim();
+  const match = trimmed.match(/^.*?[.!?](?=\s|$)/);
+  const sentence = (match ? match[0] : trimmed).trim();
+  return sentence.length > 0 ? sentence : trimmed;
 }
 
 function isCheckoutRequestItem(value: unknown): value is CheckoutRequestItem {
@@ -564,6 +600,10 @@ async function fetchDemoSettings(): Promise<DemoSettings> {
 }
 
 async function resolveAppStatus(pathname: string) {
+  if (isLiteDisabledPath(pathname)) {
+    return 404;
+  }
+
   if (STATIC_APP_ROUTES.has(pathname)) {
     return 200;
   }
@@ -882,8 +922,9 @@ function injectMetaTags(html: string, article: ArticleMeta, url: string) {
   const structuredData: Record<string, unknown>[] = [
     {
       '@context': 'https://schema.org',
-      '@type': 'BlogPosting',
-      headline: title,
+      '@type': 'Article',
+      headline: article.title.slice(0, 110),
+      description: article.description,
       image: article.image ? [article.image] : [],
       datePublished: article.date,
       dateModified: article.updatedAt || article.date,
@@ -894,6 +935,24 @@ function injectMetaTags(html: string, article: ArticleMeta, url: string) {
           url: 'https://travelliniwithus.it/chi-siamo',
         },
       ],
+      publisher: {
+        '@type': 'Organization',
+        '@id': 'https://travelliniwithus.it/#organization',
+        name: 'Travelliniwithus',
+        logo: {
+          '@type': 'ImageObject',
+          url: 'https://travelliniwithus.it/pwa-512x512.png',
+          width: 512,
+          height: 512,
+        },
+      },
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': url,
+      },
+      articleSection: article.category,
+      inLanguage: 'it-IT',
+      url,
     },
   ];
 
@@ -917,7 +976,7 @@ function injectMetaTags(html: string, article: ArticleMeta, url: string) {
       '@type': 'FAQPage',
       mainEntity: article.tips.map((tip) => ({
         '@type': 'Question',
-        name: `Consiglio utile per ${article.location || article.title}`,
+        name: firstSentence(tip),
         acceptedAnswer: {
           '@type': 'Answer',
           text: tip,
@@ -956,7 +1015,7 @@ function injectMetaTags(html: string, article: ArticleMeta, url: string) {
     <meta property="twitter:description" content="${escapeHtml(article.description)}">
     <meta property="twitter:image" content="${escapeHtml(article.image)}">
     <meta property="twitter:site" content="@travelliniwithus">
-    <script type="application/ld+json">${safeJsonLd(structuredData)}</script>
+    <script type="application/ld+json" data-ssr-jsonld="article">${safeJsonLd(structuredData)}</script>
   `;
 
   return html.replace(/<title>.*?<\/title>/, '').replace('</head>', `${metaTags}</head>`);
@@ -967,7 +1026,7 @@ function injectProductMetaTags(html: string, product: ProductRecord, url: string
   const description =
     product.description ||
     'Prodotto premium Travelliniwithus pensato per organizzare meglio il viaggio.';
-  const image = product.imageUrl || 'https://travelliniwithus.it/og-default.svg';
+  const image = product.imageUrl || 'https://travelliniwithus.it/og/default.jpg';
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -1008,6 +1067,122 @@ function injectProductMetaTags(html: string, product: ProductRecord, url: string
   return html.replace(/<title>.*?<\/title>/, '').replace('</head>', `${metaTags}</head>`);
 }
 
+// SSR meta per le rotte statiche indicizzabili. Le stringhe rispecchiano i <SEO>
+// delle pagine (non vanno reinventate: sono copy SEO italiano). Le rotte noindex
+// (/vieni-con-noi, /itinerari, /lead-magnet, preview) restano FUORI da qui.
+const STATIC_ROUTE_META: Record<string, { title: string; description: string; ogImage?: string }> =
+  {
+    '/': {
+      title: 'Viaggi reali e posti particolari',
+      description:
+        'Rodrigo e Betta raccontano posti particolari, guide pratiche e idee viaggio provate sul campo, in Italia e nel mondo.',
+    },
+    '/chi-siamo': {
+      title: 'Rodrigo e Betta: chi siamo',
+      description:
+        'Otto anni di viaggi in coppia raccontati con criterio. Come scegliamo i posti, perché ne consigliamo pochi, cosa garantiamo a chi ci legge.',
+    },
+    '/esplora': {
+      title: 'Esplora viaggi scelti a mano',
+      description:
+        'Le idee di viaggio che scegliamo davvero noi: posti, weekend in coppia e mete fuori rotta da filtrare per zona, periodo e budget. Archivio Travellini.',
+    },
+    '/mappa': {
+      title: 'Mappa dei posti che abbiamo visitato',
+      description:
+        'La mappa interattiva 3D di Travelliniwithus: destinazioni verificate sul posto, filtrate per regione, esperienza e periodo.',
+    },
+    '/collaborazioni': {
+      title: 'Collaborazioni travel con hotel e brand',
+      description:
+        'Collaborazioni editoriali con hotel, destinazioni, brand travel e progetti lifestyle che hanno qualcosa da raccontare con credibilità.',
+    },
+    '/media-kit': {
+      title: 'Media kit Travelliniwithus: audience, format e condizioni',
+      description:
+        'Richiedi il media kit Travelliniwithus per capire audience, format, tono editoriale e condizioni giuste per una collaborazione coerente.',
+    },
+    '/contatti': {
+      title: 'Contatti Travelliniwithus',
+      description:
+        'Scrivici per collaborazioni, press trip, media kit, domande editoriali o richieste legate al progetto Travelliniwithus.',
+    },
+    '/risorse': {
+      title: 'Risorse di viaggio selezionate',
+      description:
+        'Strumenti, app, servizi e gear che Travelliniwithus usa o valuta con criterio per organizzare, vivere e raccontare meglio i viaggi.',
+    },
+    '/club': {
+      title: 'Travellini Club — il club di chi viaggia in Italia con noi',
+      description:
+        'Una piccola quota per tutte le guide. Itinerari aggiornati, anteprime, archivio. Pensato per chi viaggia spesso e vuole leggere meno rumore.',
+    },
+    '/shop': {
+      title: 'Shop editoriale — guide premium e planner',
+      description:
+        'Guide premium, planner e toolkit Travelliniwithus pensati per organizzare viaggi con più criterio. Catalogo reale in preparazione.',
+    },
+    '/press': {
+      title: 'Press: media kit e contatti per redazioni',
+      description:
+        'Risorse stampa Travelliniwithus per redazioni e media: brand snapshot, media kit, contatti diretti e materiali aggiornati.',
+    },
+    '/strumenti': {
+      title: 'Strumenti di viaggio',
+      description:
+        'Calendario meteo e affollamento, builder itinerario e mappa interattiva Travelliniwithus. Strumenti pratici per decidere meglio.',
+    },
+  };
+
+function injectStaticMeta(html: string, pathname: string, origin: string) {
+  const meta = STATIC_ROUTE_META[pathname];
+  if (!meta) return html;
+
+  const title = meta.title.toLowerCase().includes('travelliniwithus')
+    ? meta.title
+    : `${meta.title} | Travelliniwithus`;
+  const image = meta.ogImage || 'https://travelliniwithus.it/og/default.jpg';
+  const url = `${origin}${pathname}`;
+
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description: meta.description,
+    url,
+    inLanguage: 'it-IT',
+    isPartOf: {
+      '@type': 'WebSite',
+      '@id': 'https://travelliniwithus.it/#website',
+      name: 'Travelliniwithus',
+      url: 'https://travelliniwithus.it/',
+    },
+  };
+
+  const metaTags = `
+    <title>${escapeHtml(title)}</title>
+    <meta name="description" content="${escapeHtml(meta.description)}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="${escapeHtml(url)}">
+    <meta property="og:title" content="${escapeHtml(title)}">
+    <meta property="og:description" content="${escapeHtml(meta.description)}">
+    <meta property="og:image" content="${escapeHtml(image)}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="it_IT">
+    <meta property="og:site_name" content="Travelliniwithus">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="${escapeHtml(url)}">
+    <meta property="twitter:title" content="${escapeHtml(title)}">
+    <meta property="twitter:description" content="${escapeHtml(meta.description)}">
+    <meta property="twitter:image" content="${escapeHtml(image)}">
+    <meta property="twitter:site" content="@travelliniwithus">
+    <script type="application/ld+json">${safeJsonLd(structuredData)}</script>
+  `;
+
+  return html.replace(/<title>.*?<\/title>/, '').replace('</head>', `${metaTags}</head>`);
+}
+
 async function startServer() {
   const app = express();
   const PORT = Number(process.env.PORT) || 3000;
@@ -1017,9 +1192,20 @@ async function startServer() {
   app.set('trust proxy', 1);
 
   const isProd = process.env.NODE_ENV === 'production';
+
+  // Security (open-redirect): in produzione APP_URL deve essere settato.
+  // Senza, success_url/cancel_url Stripe e i canonical SSR cadrebbero sul
+  // fallback `req.get('host')` (attacker-controllable). Fail-fast all'avvio.
+  if (isProd && !process.env.APP_URL) {
+    console.error(
+      '[startup] APP_URL non impostata in produzione. Necessaria per Stripe callback URL e canonical SSR sicuri. Avvio interrotto.'
+    );
+    process.exit(1);
+  }
+
   const cspProd =
     "default-src 'self'; " +
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://m.stripe.network https://connect.facebook.net https://www.facebook.com https://apis.google.com https://www.googletagmanager.com https://www.google-analytics.com; " +
+    "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://js.stripe.com https://m.stripe.network https://connect.facebook.net https://www.facebook.com https://apis.google.com https://www.googletagmanager.com https://www.google-analytics.com; " +
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://api.mapbox.com; " +
     "font-src 'self' data: https://fonts.gstatic.com; " +
     "img-src 'self' data: blob: https:; " +
@@ -1050,6 +1236,8 @@ async function startServer() {
     'https://www.travelliniwithus.it',
     'http://localhost:3000',
     'http://localhost:5173',
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:5173',
   ].filter((origin): origin is string => Boolean(origin));
 
   app.use(
@@ -1261,6 +1449,8 @@ async function startServer() {
     website,
     topic,
     message,
+    budget,
+    period,
   }: {
     type: 'contact' | 'newsletter' | 'media-kit';
     source: string;
@@ -1270,6 +1460,8 @@ async function startServer() {
     website?: string;
     topic?: string;
     message?: string;
+    budget?: string;
+    period?: string;
   }) => {
     if (!firebaseConfig.projectId || !firebaseConfig.firestoreDatabaseId) {
       return;
@@ -1287,6 +1479,8 @@ async function startServer() {
     if (website) fields.website = { stringValue: website };
     if (topic) fields.topic = { stringValue: topic };
     if (message) fields.message = { stringValue: message };
+    if (budget) fields.budget = { stringValue: budget };
+    if (period) fields.period = { stringValue: period };
 
     const response = await fetch(
       `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/${firebaseConfig.firestoreDatabaseId}/documents/leads`,
@@ -1447,16 +1641,25 @@ async function startServer() {
   });
 
   app.post('/api/media-kit-lead', async (req, res) => {
-    const { email, company, website, topic, message } = req.body as {
+    const { email, company, website, topic, message, budget, period } = req.body as {
       email?: string;
       company?: string;
       website?: string;
       topic?: string;
       message?: string;
+      budget?: string;
+      period?: string;
     };
 
-    if (!email?.trim() || !company?.trim() || !topic?.trim() || !message?.trim()) {
-      res.status(400).json({ error: 'Compila azienda, email, focus e brief.' });
+    if (
+      !email?.trim() ||
+      !company?.trim() ||
+      !topic?.trim() ||
+      !message?.trim() ||
+      !budget?.trim() ||
+      !period?.trim()
+    ) {
+      res.status(400).json({ error: 'Compila azienda, email, focus, budget, periodo e brief.' });
       return;
     }
 
@@ -1471,6 +1674,8 @@ async function startServer() {
       website: website?.trim(),
       focus: topic.trim(),
       brief: message.trim(),
+      budget: budget.trim(),
+      period: period.trim(),
     };
 
     try {
@@ -1482,6 +1687,8 @@ async function startServer() {
         website: lead.website,
         topic: lead.focus,
         message: lead.brief,
+        budget: lead.budget,
+        period: lead.period,
       });
     } catch (error) {
       console.error('Media kit lead save failed:', error);
@@ -1821,6 +2028,14 @@ async function startServer() {
       '/media-kit',
       '/contatti',
       '/chi-siamo',
+      '/press',
+      '/strumenti',
+      '/destinazione/puglia',
+      '/destinazione/sicilia',
+      '/destinazione/sardegna',
+      '/destinazione/toscana',
+      '/destinazione/campania',
+      '/destinazione/trentino-alto-adige',
       '/privacy',
       '/cookie',
       '/termini',
@@ -1875,6 +2090,16 @@ async function startServer() {
     res.redirect(301, `/guide${tail}`);
   });
 
+  // Consolidamento Esplora 2026-05-15: /destinazioni e /esperienze sono confluite
+  // in /esplora. Redirect 301 server-side per trasferire link-equity ai bot
+  // (prima era solo <Navigate> client-side, invisibile ai crawler).
+  app.get(/^\/destinazioni(\/.*)?$/, (_req, res) => {
+    res.redirect(301, '/esplora');
+  });
+  app.get(/^\/esperienze(\/.*)?$/, (_req, res) => {
+    res.redirect(301, '/esplora');
+  });
+
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
       server: { middlewareMode: true },
@@ -1891,6 +2116,7 @@ async function startServer() {
         let template = fs.readFileSync(path.resolve('index.html'), 'utf-8');
         template = await vite.transformIndexHtml(url, template);
 
+        let metaInjected = false;
         if (url.startsWith('/articolo/')) {
           const slug = url.split('/').pop();
           if (slug) {
@@ -1898,19 +2124,27 @@ async function startServer() {
             if (article) {
               const fullUrl = (process.env.APP_URL || `http://localhost:${PORT}`) + url;
               template = injectMetaTags(template, article, fullUrl);
+              metaInjected = true;
             }
           }
         }
 
-        if (url.startsWith('/shop/')) {
+        if (!metaInjected && !LITE_MODE && url.startsWith('/shop/')) {
           const slug = url.split('/').pop();
           if (slug) {
             const product = await fetchProductBySlug(slug);
             if (product) {
               const fullUrl = (process.env.APP_URL || `http://localhost:${PORT}`) + url;
               template = injectProductMetaTags(template, product, fullUrl);
+              metaInjected = true;
             }
           }
+        }
+
+        if (!metaInjected) {
+          const normalizedPath = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;
+          const origin = process.env.APP_URL || `http://localhost:${PORT}`;
+          template = injectStaticMeta(template, normalizedPath, origin);
         }
 
         res.status(status).set({ 'Content-Type': 'text/html' }).end(template);
@@ -1930,6 +2164,7 @@ async function startServer() {
         const status = await resolveAppStatus(pathname);
         let template = fs.readFileSync(path.join(distPath, 'index.html'), 'utf-8');
 
+        let metaInjected = false;
         if (url.startsWith('/articolo/')) {
           const slug = url.split('/').pop();
           if (slug) {
@@ -1937,19 +2172,27 @@ async function startServer() {
             if (article) {
               const fullUrl = (process.env.APP_URL || `https://${req.headers.host}`) + url;
               template = injectMetaTags(template, article, fullUrl);
+              metaInjected = true;
             }
           }
         }
 
-        if (url.startsWith('/shop/')) {
+        if (!metaInjected && !LITE_MODE && url.startsWith('/shop/')) {
           const slug = url.split('/').pop();
           if (slug) {
             const product = await fetchProductBySlug(slug);
             if (product) {
               const fullUrl = (process.env.APP_URL || `https://${req.headers.host}`) + url;
               template = injectProductMetaTags(template, product, fullUrl);
+              metaInjected = true;
             }
           }
+        }
+
+        if (!metaInjected) {
+          const normalizedPath = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;
+          const origin = process.env.APP_URL || `https://${req.headers.host}`;
+          template = injectStaticMeta(template, normalizedPath, origin);
         }
 
         res.status(status).set({ 'Content-Type': 'text/html' }).send(template);

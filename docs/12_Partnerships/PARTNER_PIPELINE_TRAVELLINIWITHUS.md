@@ -31,7 +31,21 @@ Tenere ordinata la pipeline di collaborazioni coerenti con il brand.
 ## Next step
 
 - [x] definire schema media kit sul sito (in `MediaKit.tsx` + form lead capture + tracking GA4 attivo da 2026-05-14)
+- [x] rendere piu concreti i pacchetti demo della pagina `/collaborazioni` (Stay editoriale, Destinazione da costruire, Content kit per brand) senza inserire prezzi, loghi o case study non verificati — 2026-05-24
+- [x] allineare `/media-kit` e PDF generato agli stessi 3 pacchetti demo commerciali — 2026-05-24
 - [ ] creare shortlist brand partner ideali — **5 categorie target Q3 2026 (R+B compila nomi reali)**
+
+## Website commercial page update — 2026-05-24
+
+Aggiornata la sezione format della pagina `/collaborazioni` per trasformarla da elenco generico a primo schema commerciale leggibile:
+
+- `Stay editoriale`: proposta per hotel, masserie, relais e soggiorni speciali.
+- `Destinazione da costruire`: proposta piu completa per DMO, territori e itinerari multi-contenuto.
+- `Content kit per brand`: proposta per prodotti, servizi e travel gear usati in viaggio.
+
+Nota di posizionamento: i pacchetti restano demo, non listini rigidi. Finche non ci sono case study reali e dati autorizzati, evitare loghi partner, testimonianze inventate, risultati numerici non documentati e prezzi pubblici.
+
+Aggiornamento successivo: anche `/media-kit` e il PDF generato da `scripts/generate-media-kit.tsx` usano gli stessi format tramite `siteContentDefaults.collaborations.collaborationFormats`, cosi landing, pagina business e documento scaricabile restano coerenti.
 
 ## Shortlist 5 categorie (framework Q3 2026)
 

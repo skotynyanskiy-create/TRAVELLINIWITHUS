@@ -45,21 +45,12 @@ export default function PartnerLogosStrip() {
     <div className="border-y border-white/10 bg-black/30 backdrop-blur-sm">
       <div className="mx-auto max-w-6xl px-6 py-6 md:px-12 md:py-8">
         <p className="mb-5 text-center text-[10px] font-semibold uppercase tracking-[0.28em] text-white/55">
-          Tra i progetti che raccontiamo (demo)
+          Tra i progetti che raccontiamo
         </p>
-        <div
-          className="group relative overflow-hidden"
-          // Fade soft ai bordi per nascondere il "taglio" del marquee
-          style={{
-            maskImage:
-              'linear-gradient(to right, transparent 0, black 8%, black 92%, transparent 100%)',
-            WebkitMaskImage:
-              'linear-gradient(to right, transparent 0, black 8%, black 92%, transparent 100%)',
-          }}
-        >
+        <div className="twu-marquee-mask group relative overflow-hidden">
           <ul
             className="flex w-max gap-10 [animation:twu-marquee_42s_linear_infinite] group-hover:[animation-play-state:paused] motion-reduce:[animation:none] md:gap-14"
-            aria-label="Partner placeholder"
+            aria-label="Partner Travelliniwithus"
           >
             {items.map((partner, idx) => (
               <li
@@ -77,14 +68,6 @@ export default function PartnerLogosStrip() {
           </ul>
         </div>
       </div>
-
-      {/* Keyframes locali (Tailwind v4 + arbitrary animation values) */}
-      <style>{`
-        @keyframes twu-marquee {
-          from { transform: translateX(0); }
-          to   { transform: translateX(-50%); }
-        }
-      `}</style>
     </div>
   );
 }

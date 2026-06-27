@@ -71,11 +71,13 @@ export default function VerifiedBox({
 
   const vintage = isVintage(visited);
   const badgeLabel = vintage ? 'Verificato · da aggiornare' : 'Verificato';
-  const badgeColor = vintage ? 'text-amber-700' : 'text-[var(--color-accent-text)]';
+  const badgeColor = vintage
+    ? 'text-[var(--color-warning-text)]'
+    : 'text-[var(--color-accent-text)]';
 
   return (
     <aside
-      className="my-8 rounded-r-[var(--radius-md)] border-l-2 border-[var(--color-accent)] bg-[var(--color-sand)] p-4 md:p-5"
+      className="my-8 rounded-[var(--radius-md)] border border-[var(--color-border)] border-l-4 border-l-[var(--color-accent)] bg-[var(--color-accent-soft)] p-5 transition-shadow hover:shadow-xs"
       aria-label="Box verifica esperienza diretta"
     >
       <div className="mb-3 flex items-center gap-2">

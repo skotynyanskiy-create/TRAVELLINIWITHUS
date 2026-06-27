@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { trackEvent } from '../services/analytics';
 import MagneticWrapper from './MagneticWrapper';
 
@@ -19,6 +20,8 @@ interface ButtonProps {
   trackingId?: string;
   /** Apply subtle magnetic pointer attraction (premium CTAs only). */
   magnetic?: boolean;
+  /** Disable the button interaction and visual state. */
+  disabled?: boolean;
 }
 
 /**
@@ -37,6 +40,7 @@ export default function Button({
   type = 'button',
   trackingId,
   magnetic = false,
+  disabled = false,
 }: ButtonProps) {
   const location = useLocation();
   const fireTracking = () => {
@@ -46,16 +50,24 @@ export default function Button({
   };
 
   const handleAnchorClick: React.MouseEventHandler<HTMLElement> = (event) => {
+    if (disabled) {
+      event.preventDefault();
+      return;
+    }
     fireTracking();
     onClick?.(event);
   };
 
   const handleButtonClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    if (disabled) {
+      event.preventDefault();
+      return;
+    }
     fireTracking();
     onClick?.(event);
   };
   const baseStyles =
-    'inline-flex items-center justify-center gap-2 rounded-[var(--radius-md)] font-semibold tracking-tight transition-all ease-out duration-200 whitespace-nowrap';
+    'inline-flex items-center justify-center gap-2 rounded-[var(--radius-md)] text-center font-semibold tracking-normal transition-all ease-out duration-200 whitespace-normal sm:whitespace-nowrap';
 
   const variants = {
     primary:
@@ -75,15 +87,15 @@ export default function Button({
     lg: 'px-7 py-3.5 text-sm md:text-base',
   };
 
-  const combinedStyles = `${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`;
+  const combinedStyles = `${baseStyles} ${variants[variant]} ${sizes[size]} ${disabled ? 'opacity-50 pointer-events-none' : ''} ${className}`;
 
   const wrap = (node: React.ReactNode) =>
-    magnetic ? <MagneticWrapper>{node}</MagneticWrapper> : node;
+    magnetic && !disabled ? <MagneticWrapper>{node}</MagneticWrapper> : node;
 
   if (to) {
     return wrap(
-      <motion.div whileTap={{ scale: 0.98 }} className="inline-block">
-        <Link to={to} onClick={handleAnchorClick} className={combinedStyles}>
+      <motion.div whileTap={disabled ? undefined : { scale: 0.98 }} className="inline-block">
+        <Link to={disabled ? '#' : to} onClick={handleAnchorClick} className={combinedStyles}>
           {children}
         </Link>
       </motion.div>
@@ -93,8 +105,8 @@ export default function Button({
   if (href) {
     return wrap(
       <motion.a
-        whileTap={{ scale: 0.98 }}
-        href={href}
+        whileTap={disabled ? undefined : { scale: 0.98 }}
+        href={disabled ? undefined : href}
         onClick={handleAnchorClick}
         target={target || '_blank'}
         rel={rel || 'noopener noreferrer'}
@@ -107,9 +119,10 @@ export default function Button({
 
   return wrap(
     <motion.button
-      whileTap={{ scale: 0.98 }}
+      whileTap={disabled ? undefined : { scale: 0.98 }}
       onClick={handleButtonClick}
       type={type}
+      disabled={disabled}
       className={combinedStyles}
     >
       {children}

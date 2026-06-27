@@ -4,7 +4,8 @@ Premium editorial travel site for Rodrigo & Betta (@travelliniwithus). Italian U
 Role: single-owner marketing lead + website builder. Quality > speed > features.
 
 `AGENTS.md` is the root operating guide. `DESIGN.md` is the design-system source.
-The repository root is the active Obsidian vault for Local REST API / MCP automation; `docs/` is the operational note store. Update relevant notes when UI, positioning, campaigns, or release state change.
+The repository root is the active Obsidian vault for Local REST API / MCP automation; `docs/` is the operational note store. Use `docs/AI_OPERATIONS_DASHBOARD.md` for AI/dev operating mode and tooling decisions. Update relevant notes when UI, positioning, campaigns, or release state change.
+Every meaningful session should also look for one reusable operating improvement: a clearer skill, stronger guardrail, better workflow, tooling candidate, rollback note, or simplification. Capture it in the relevant `docs/` note when it is genuinely useful.
 
 ## Stack
 
@@ -25,6 +26,9 @@ React 19 · TypeScript (non-strict) · Vite 6 · Tailwind 4 + CSS variables · E
 - No new `any`. No error handling for impossible cases. No comments unless WHY is non-obvious.
 - Three similar lines is fine; abstract only at 4+ occurrences with a clear name.
 - Run `npm run typecheck` after TypeScript edits. Run `npm run audit:ui` / `audit:visual` for UI work.
+- **Verify before claiming done.** For any previewable UI change, verify in a real browser (preview tools / `chrome-devtools` MCP) and share visual proof — never ask the owner to check manually.
+- **Trust live docs over memory.** For React 19 / Tailwind 4 / Vite 6 / Firebase / Stripe API questions, query `context7` before relying on recall — these versions move fast.
+- **CI gates the PR.** `.github/workflows/ci.yml` runs `quality` (typecheck/lint/test/build + static audits), `lighthouse` (CWV: a11y≥0.95 & CLS≤0.1 are blocking), `e2e` (Playwright), `secrets` (gitleaks). Reproduce failures locally (`npm run audit:cwv`, `npm run e2e`, `npm run audit:secrets`) before pushing.
 - High-risk files (require owner confirmation): `server.ts`, `firestore.rules`, `src/config/admin.ts`.
 
 ## Model routing (cost discipline)
@@ -75,11 +79,11 @@ When in doubt: **invoke `travellini-orchestrator` first.** A 30-second plan save
 | Growth strategy, offer design, partner pipeline, analytics contracts | `travellini-growth-revenue-operator` (opus)    |
 | Read & interpret analytics / Stripe / Sentry / Firestore data        | `travellini-data-analyst` (opus)               |
 | Photo selection, crop, alt text, image performance, OG cards         | `travellini-asset-curator` (opus)              |
-| React/Tailwind implementation of a clear plan                        | `travellini-frontend-builder` (opus)           |
+| React/Tailwind implementation of a clear plan                        | `travellini-frontend-builder` (sonnet)         |
 | `server.ts`, `firestore.rules`, `admin.ts`, Stripe webhooks, API     | `travellini-backend-engineer` (opus)           |
 | Web-stack security audit (secrets, Stripe, Firebase, Vite env, CORS) | `travellini-security-auditor` (opus)           |
 | Core Web Vitals deep-dive (LCP/INP/CLS), bundle, fonts, code-split   | `travellini-perf-engineer` (opus)              |
-| Real-browser UX/responsive/console audit                             | `browser-auditor` (opus) via Playwright MCP    |
+| Real-browser UX/responsive/console audit                             | `browser-auditor` (sonnet) via Playwright MCP  |
 | Release-wide QA, static checks, audit script runs, regressions       | `travellini-quality-auditor` (opus)            |
 | Multi-file refactor, architecture, hard debugging                    | `code-architect` (opus) — rare                 |
 
@@ -121,7 +125,7 @@ An agent's response is acceptable only when:
 - [ ] **No inventions**: no fabricated numbers, partner names, prices, audience figures, quotes, or analytics data. Unknown facts marked `[VERIFY: ...]`.
 - [ ] **Hand-off explicit**: if work continues to another agent, a handoff brief is written or referenced.
 - [ ] **Output contract honored**: the structured fields the agent's own definition lists are present and non-empty.
-- [ ] **No secrets**: no `sk_live_`, `whsec_`, private keys, service-account JSON, or `VITE_*_SECRET` in any output, even redacted-looking strings.
+- [ ] **No secrets**: no Stripe key prefixes, webhook secret prefixes, private keys, service-account JSON, or `VITE_*_SECRET` in any output, even redacted-looking strings.
 - [ ] **Docs/ updated** when state changed: campaigns, partnerships, releases, bugs, projects.
 
 When an agent's output fails any of these, the invoking thread (main or orchestrator) should reject and re-prompt rather than passing it downstream.
@@ -140,7 +144,7 @@ After consuming a handoff, mark `status: consumed` in the file's frontmatter. Af
 
 ### Routing rules
 
-- Default model resta **sonnet**. Gli agent travellini-\* + `browser-auditor` sono escalati a opus 4.7 perché producono decisioni strategiche o QA che condizionano il brand. Tutto ciò che è esecuzione triviale resta su sonnet/haiku.
+- Default model resta **sonnet**. Gli agent travellini-\* sono escalati a opus 4.8 perché producono decisioni strategiche/creative o QA che condizionano il brand. **Eccezioni su sonnet** (lavoro esecutivo/meccanico): `travellini-frontend-builder` (implementazione React da piano già deciso) e `browser-auditor` (guida Playwright). Tutto ciò che è esecuzione triviale resta su sonnet/haiku.
 - Per **lookup, grep, read, "dove sta X"** → sempre `code-explorer` (haiku). Mai opus.
 - Per **single-file edit, typecheck, rename, bugfix lineare** → default sonnet, non invocare agent opus.
 - **Never edit `server.ts`, `firestore.rules`, or `src/config/admin.ts` from the default thread or from `travellini-frontend-builder`.** Those files belong exclusively to `travellini-backend-engineer`, which requires user confirmation before editing.
@@ -149,6 +153,34 @@ After consuming a handoff, mark `status: consumed` in the file's frontmatter. Af
 - For a new pillar article, the canonical sequence is: `growth-operator` → `seo-strategist` (meta/H1) → `editorial-writer` (body) → `asset-curator` (photos) → `frontend-builder` (page) → `social-content-operator` (repurpose) → `quality-auditor` + `browser-auditor` (gate).
 - For a deploy to production, the canonical gate is: `quality-auditor` (static) + `travellini-security-auditor` (secrets/rules/Stripe) + `travellini-perf-engineer` (CWV on all public routes) + `browser-auditor` (real-browser smoke).
 - **Travellini uses only its own `travellini-*` agents + `code-explorer` + `code-architect` + `browser-auditor`.** Global agents under `~/.claude/agents/` (`security-auditor`, `obsidian-librarian`, `python-implementer`, `risk-reviewer`, `test-runner`, `parser-debugger`, `solana-analyst`, `strategy-designer`) belong to other projects and must NOT be invoked from this repo.
+
+### Codex (cross-model support, opt-in)
+
+Codex CLI (`@openai/codex`, auth via ChatGPT subscription) is wired as the `codex` MCP server. It is a **separate OpenAI agent**, not a model Claude Code can run — use it as a second opinion, never as a silent replacement.
+
+- **Default: do not call Codex.** Claude Code (+ its agents) owns the work. Only delegate when the user asks, or when a code-heavy task genuinely benefits from cross-model verification.
+- **Good fits:** adversarial review of a non-trivial diff, an alternative implementation to compare, a sanity check on algorithmic/backend logic. **Not** for: Italian copy, editorial, design, brand decisions (Claude's specialized agents are better here).
+- **Always surface that output came from Codex** and reconcile it against the project quality bar before applying — Codex does not share this repo's CLAUDE.md context.
+- Each `mcp__codex__*` call is **not** auto-approved: it prompts, because Codex can edit files and run commands. Keep it that way.
+
+### Dynamic workflows (subagent orchestration, on-demand)
+
+Dynamic workflows run a script that fans work out to many subagents (up to 16 concurrent, 1000 per run) in the background. Enabled on this account — use **on demand only**, never as the session default.
+
+- **When to reach for one:** genuine fan-out a single conversation can't coordinate — a repo-wide sweep ("audit every public route for mobile overflow + missing meta"), a large multi-file migration, or multi-source research that needs cross-checking (`/deep-research <domanda>`). Anything touching **one domain** stays on the matching `travellini-*` agent; a workflow there just burns tokens.
+- **How to trigger:** prefix a prompt with `ultracode:` (`ultracode: <task>`), run `/deep-research <domanda>`, or a saved `/workflows` command. **Do NOT set `/effort ultracode` as a standing default** — it turns every task into a workflow swarm and breaks the cost discipline above. On-demand only.
+- **Cost guard:** a run costs far more than the same task in conversation. Prove value on a small slice first (one directory / one route), watch token use in `/workflows`, stop if it diverges. Same "taglia spreco" rule as model routing.
+- **Safety:** workflow subagents always run in `acceptEdits` and inherit the project tool allowlist regardless of session mode. So **never point a workflow at the high-risk files** (`server.ts`, `firestore.rules`, `src/config/admin.ts`) — those still require `travellini-backend-engineer` + owner confirmation. Pre-allow the commands a run needs (`npm run audit:*`, `npm run typecheck`, git read) so it doesn't stall mid-run; most are already in the allowlist.
+- **Save reusable ones** to `.claude/workflows/` (shared, via `s` in `/workflows`) when a fan-out becomes routine — e.g. a pre-deploy route sweep.
+
+### Innovation scouting
+
+New skills, agents, subagents, MCP servers, CLI tools, Codex plugins, GitHub
+workflows and external references are not banned. Use the Scouting -> Lab ->
+Adoption policy in `docs/AI_AGENT_STACK.md`, track candidates in
+`docs/AI_TOOLING_RADAR.md`, and create a
+`docs/90_Templates/TPL_Tooling_Evaluation.md` card before stable adoption.
+Scouting is free; lab trials and adoption require manual confirmation.
 
 ## Commands
 
@@ -178,6 +210,7 @@ Prefer these when they match the request:
 - `/smoke-test` dopo modifiche visive importanti
 - `/audit-ui`, `/seo-check`, `/firebase-check`, `/stripe-flow`, `/predeploy`, `/deploy`, `/commit`
 - `/new-page`, `/new-article`
+- `/innovation-radar`, `/mcp-evaluator`, `/cli-evaluator`, `/plugin-evaluator`, `/github-agent-workflow`, `/backup-rollback`, `/secret-protection`, `/hooks-audit` for AI/dev tooling governance
 - **Editorial leverage** (added 2026-05-17): `/anti-ai-slop` (rifinitura long-form), `/hook` (5 hook scroll-stopper), `/repurpose` (pillar → pacchetto multi-canale), `/ai-seo` (GEO/AI search), `/verify-facts` (fact-check pre-publish)
 - Specialist agents: `travellini-ui-designer`, `travellini-seo-conversion-strategist`, `travellini-growth-revenue-operator`, `travellini-social-content-operator`, `travellini-frontend-builder`, `travellini-backend-engineer`, `travellini-quality-auditor`, `browser-auditor`
 

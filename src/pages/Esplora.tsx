@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { useQuery } from '@tanstack/react-query';
-import { AnimatePresence, motion, useScroll, useTransform } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import {
   ArrowRight,
   ChevronDown,
   Mail,
   Map as MapIcon,
+  Route,
   Search,
   SlidersHorizontal,
   X,
@@ -18,17 +19,17 @@ import ArticleSkeleton from '../components/ArticleSkeleton';
 import AutocompleteResults, {
   type AutocompleteSuggestion,
 } from '../components/discovery/AutocompleteResults';
+import ContentCard from '../components/content/ContentCard';
 import EditorialCollections from '../components/discovery/EditorialCollections';
 import EmptyState from '../components/EmptyState';
-import EsploraQuiz from '../components/discovery/EsploraQuiz';
 import InteractiveMap from '../components/InteractiveMap';
 import JsonLd from '../components/JsonLd';
 import Newsletter from '../components/Newsletter';
-import OptimizedImage from '../components/OptimizedImage';
 import PageLayout from '../components/PageLayout';
 import Pagination from '../components/Pagination';
 import Section from '../components/Section';
 import SEO from '../components/SEO';
+import StickyMobileCTA from '../components/StickyMobileCTA';
 import {
   BUDGETS,
   DURATIONS,
@@ -44,6 +45,7 @@ import {
   type Period,
   type Zone,
 } from '../config/contentTaxonomy';
+import { CONTENT_ITEMS } from '../config/contentLibrary';
 import {
   DEMO_ARCHIVE_ITEMS,
   DEMO_ARCHIVE_MAP_MARKERS,
@@ -66,37 +68,16 @@ import {
 
 const ITEMS_PER_PAGE = 9;
 
-// Hero cover photo — placeholder editoriale fino a quando R+B fornisce
-// asset dedicato in /images/esplora/hero-cover.webp.
-const HERO_COVER_IMAGE = '/images/hero-amalfi.webp';
-
-// Big-choice cards: 3 ingressi geografici primari con foto editoriale.
-// Le altre zone (Americhe / Africa / Oceania) restano accessibili dai
-// "filtri avanzati" o digitando in ricerca.
-const BIG_CHOICE_ZONES: Array<{
-  zone: Zone | 'all';
+// Domanda-guida inline: 4 scelte, risultato immediato (no modal, no quiz).
+// Label corte (sostantivi nudi) per chip scrollabili mobile senza wrap.
+const GUIDE_INTENTS: Array<{
   label: string;
-  description: string;
-  image: string;
+  apply: Partial<DiscoveryFilters> | 'reset';
 }> = [
-  {
-    zone: 'Italia',
-    label: 'Italia',
-    description: 'I posti di casa, raccontati con criterio.',
-    image: '/images/destinations/toscana.webp',
-  },
-  {
-    zone: 'Europa',
-    label: 'Europa',
-    description: 'Vicino ma diverso, dalle Dolomiti al Portogallo.',
-    image: '/images/destinations/dolomiti.webp',
-  },
-  {
-    zone: 'all',
-    label: 'Resto del mondo',
-    description: 'Asia, Americhe, Africa, Oceania.',
-    image: '/images/destinations/giappone.webp',
-  },
+  { label: 'In Italia', apply: { zone: 'Italia' } },
+  { label: 'In coppia', apply: { type: 'Weekend romantici' } },
+  { label: 'Fuori rotta', apply: { type: 'Insolito' } },
+  { label: 'Mostrami tutto', apply: 'reset' },
 ];
 
 // Chip "type" sobri (calmo, lowercase, niente uppercase aggressive).
@@ -117,10 +98,10 @@ function TypeChip({
       aria-pressed={active}
       aria-label={ariaLabel}
       onClick={onClick}
-      className={`min-h-11 whitespace-nowrap rounded-full border px-4 py-2 text-sm transition-all ${
+      className={`min-h-11 whitespace-nowrap rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-300 ease-out hover:scale-[1.03] active:scale-[0.98] cursor-pointer ${
         active
-          ? 'border-[var(--color-ink)] bg-[var(--color-ink)] text-white'
-          : 'border-black/10 bg-white text-black/65 hover:border-[var(--color-ink)]/40 hover:text-[var(--color-ink)]'
+          ? 'border-[var(--color-ink)] bg-[var(--color-ink)] text-white shadow-[var(--shadow-premium)]'
+          : 'border-black/10 bg-white text-black/65 hover:border-[var(--color-ink)]/40 hover:text-[var(--color-ink)] hover:bg-[var(--color-sand)]/40'
       }`}
     >
       {children}
@@ -141,7 +122,7 @@ function AdvancedFilterRow({
 }) {
   return (
     <div className="min-w-0">
-      <p className="mb-2 text-xs font-medium text-black/55">{label}</p>
+      <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-black/45">{label}</p>
       <div className="flex flex-wrap gap-2">
         {values.map((value) => (
           <button
@@ -149,10 +130,10 @@ function AdvancedFilterRow({
             type="button"
             aria-pressed={activeValue === value}
             onClick={() => onSelect(activeValue === value ? null : value)}
-            className={`min-h-10 rounded-full border px-3.5 py-1.5 text-xs transition-colors ${
+            className={`min-h-10 rounded-full border px-4 py-2 text-xs font-medium transition-all duration-300 ease-out hover:scale-[1.03] active:scale-[0.98] cursor-pointer ${
               activeValue === value
-                ? 'border-[var(--color-ink)] bg-[var(--color-ink)] text-white'
-                : 'border-black/10 bg-white text-black/55 hover:border-black/30 hover:text-black/80'
+                ? 'border-[var(--color-ink)] bg-[var(--color-ink)] text-white shadow-[var(--shadow-premium)]'
+                : 'border-black/10 bg-white text-black/55 hover:border-black/30 hover:text-black/80 hover:bg-[var(--color-sand)]/40'
             }`}
           >
             {value}
@@ -173,15 +154,8 @@ export default function Esplora() {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [searchInput, setSearchInput] = useState('');
   const [showAutocomplete, setShowAutocomplete] = useState(false);
-  const [showQuiz, setShowQuiz] = useState(false);
   const viewLoggedRef = useRef(false);
-  const heroRef = useRef<HTMLElement>(null);
   const searchFormRef = useRef<HTMLFormElement>(null);
-
-  // Parallax leggero sul background del hero (translate y 0 → -60px sui
-  // primi 600px di scroll). Genera profondità senza dramma eccessivo.
-  const { scrollY } = useScroll();
-  const heroParallaxY = useTransform(scrollY, [0, 600], [0, -60]);
 
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ['explore-archive', demoSettings.showEditorialDemo, demoSettings.showDestinationDemo],
@@ -201,6 +175,15 @@ export default function Esplora() {
     () => sanitizeDiscoveryFilters(parseDiscoveryFilters(searchParams)),
     [searchParams]
   );
+
+  // Posti particolari reali — filtrati per zona e tipo attivi.
+  const filteredContentItems = useMemo(() => {
+    return CONTENT_ITEMS.filter((item) => {
+      if (filters.zone && item.zone !== filters.zone) return false;
+      if (filters.type && !item.types.includes(filters.type)) return false;
+      return true;
+    });
+  }, [filters.zone, filters.type]);
 
   useEffect(() => {
     setSearchInput(filters.search ?? '');
@@ -285,6 +268,18 @@ export default function Esplora() {
 
   const resetFilters = () => setSearchParams({}, { replace: true });
 
+  const handleGuideIntent = (intent: (typeof GUIDE_INTENTS)[number]) => {
+    trackEvent('explore_intent_click', {
+      source_page: '/esplora',
+      intent: intent.label,
+    });
+    if (intent.apply === 'reset') {
+      resetFilters();
+    } else {
+      updateFilter(intent.apply);
+    }
+  };
+
   const removeFilter = (key: keyof DiscoveryFilters) => {
     updateFilter({ [key]: null } as Partial<DiscoveryFilters>);
   };
@@ -323,8 +318,12 @@ export default function Esplora() {
     }
   };
 
+  // Banner "anteprima editoriale" e noindex solo quando si usano demo E non ci
+  // sono ContentItem reali da mostrare. Con ContentItem reali la pagina è pubblica.
   const usingPreview =
-    archiveItems.length > 0 && archiveItems.some((item) => DEMO_ARCHIVE_SLUGS.includes(item.id));
+    CONTENT_ITEMS.length === 0 &&
+    archiveItems.length > 0 &&
+    archiveItems.some((item) => DEMO_ARCHIVE_SLUGS.includes(item.id));
   const active = hasAnyFilter(filters);
 
   const mapMarkers = useMemo(() => {
@@ -354,22 +353,37 @@ export default function Esplora() {
     return parts.join('_') || 'esplora_bottom';
   }, [filters.zone, filters.type, filters.format]);
 
-  // Zone Italia/Europa hanno una big-choice card dedicata; tutte le altre
-  // (Asia/Americhe/Africa/Oceania) ricadono nel terzo card "Resto del mondo".
-  const activeBigChoice: Zone | 'all' = filters.zone ?? 'all';
-  const hasDedicatedBigChoice =
-    activeBigChoice !== 'all' && BIG_CHOICE_ZONES.some((entry) => entry.zone === activeBigChoice);
+  // Chip TYPE con conteggio dinamico nel contesto dei filtri attuali.
+  // Type a 0 risultati vengono nascosti (non disabilitati): un finder su
+  // archivio quasi vuoto non deve mostrare opzioni morte.
+  const typeCounts = useMemo(
+    () =>
+      TYPES.map((type) => ({
+        type,
+        count: filterByScope(archiveItems, { ...filters, type }).length,
+      })).filter((entry) => entry.count > 0 || filters.type === entry.type),
+    [archiveItems, filters]
+  );
+
+  // Conteggio dei filtri avanzati attualmente applicati (per il trigger).
+  const advancedActiveCount =
+    (filters.format ? 1 : 0) +
+    (filters.period ? 1 : 0) +
+    (filters.budget ? 1 : 0) +
+    (filters.duration ? 1 : 0);
+
+  // Rimando agli Itinerari quando l'intenzione lo suggerisce: format=Itinerario
+  // oppure durata lunga (Settimana / Due settimane).
+  const suggestsItinerari =
+    filters.format === 'Itinerario' ||
+    filters.duration === 'Settimana' ||
+    filters.duration === 'Due settimane';
 
   return (
     <PageLayout>
-      <Helmet>
-        {/* LCP hero cover: preload prioritario per ridurre il time-to-paint */}
-        <link rel="preload" as="image" href="/images/hero-amalfi.avif" type="image/avif" />
-        <link rel="preload" as="image" href="/images/hero-amalfi.webp" type="image/webp" />
-      </Helmet>
       <SEO
-        title="Esplora — posti, esperienze, guide per viaggiare con criterio"
-        description="Il finder editoriale Travelliniwithus: zona, tipo di posto, formato, periodo, budget e durata in un unico archivio."
+        title="Esplora viaggi scelti a mano"
+        description="Le idee di viaggio che scegliamo davvero noi: posti, weekend in coppia e mete fuori rotta da filtrare per zona, periodo e budget. Archivio Travellini."
         canonical={`${SITE_URL}/esplora`}
         breadcrumbs={[
           { name: 'Home', url: SITE_URL },
@@ -395,66 +409,21 @@ export default function Esplora() {
         }}
       />
 
-      {/* HERO — photographer-first: foto full-width + parallax + h1 overlay. */}
-      <section
-        ref={heroRef}
-        className="relative overflow-hidden bg-[var(--color-ink)] pb-24 pt-32 text-white md:pb-32 md:pt-44"
-      >
-        {/* Background image con parallax leggero */}
-        <motion.div
-          style={{ y: heroParallaxY }}
-          className="absolute inset-0 h-[120%] w-full"
-          aria-hidden="true"
-        >
-          <img
-            src={HERO_COVER_IMAGE}
-            alt=""
-            className="h-full w-full object-cover opacity-65"
-            // Hero LCP — caricamento prioritario
-            fetchPriority="high"
-          />
-        </motion.div>
-        {/* Overlay gradient per leggibilità del testo */}
-        <div
-          className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/40 to-[var(--color-ink)]/95"
-          aria-hidden="true"
-        />
+      {/* HEADER COMPATTO — banda sand editoriale, ricerca inline. */}
+      <section className="bg-[var(--color-sand)] pt-28 pb-10 md:pt-32 md:pb-12">
+        <div className="mx-auto max-w-5xl px-6 md:px-12">
+          <p className="text-xs font-medium uppercase tracking-[0.32em] text-[var(--color-accent-text)]">
+            Esplora · Sfoglia e filtra
+          </p>
+          <h1 className="mt-4 font-serif text-[clamp(2.25rem,4vw+1rem,3.75rem)] leading-[1.02] text-[var(--color-ink)]">
+            Il prossimo posto, prima ancora di sapere dove.
+          </h1>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/62 md:text-lg">
+            Inizia dalle collezioni che scegliamo a mano, poi stringi per zona, tipo di posto e
+            periodo.
+          </p>
 
-        <div className="relative z-10 mx-auto max-w-5xl px-6 text-center md:px-12">
-          <motion.p
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-xs font-medium uppercase tracking-[0.32em] text-white/72"
-          >
-            Esplora
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 14, clipPath: 'inset(0 100% 0 0)' }}
-            animate={{ opacity: 1, y: 0, clipPath: 'inset(0 0% 0 0)' }}
-            transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-6 font-serif text-[44px] leading-[0.95] md:text-[72px]"
-          >
-            Trova il prossimo posto
-            <br />
-            <span className="italic text-white/82">che vale il viaggio.</span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.25 }}
-            className="mx-auto mt-7 max-w-2xl text-base leading-relaxed text-white/82 md:text-lg"
-          >
-            Cerca per zona, intenzione o ritmo. Un solo archivio editoriale curato dalle storie e
-            dalle guide di Rodrigo &amp; Betta.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
-            className="relative mx-auto mt-10 max-w-2xl"
-          >
+          <div className="relative mt-8 max-w-2xl">
             <form
               ref={searchFormRef}
               role="search"
@@ -462,9 +431,13 @@ export default function Esplora() {
                 event.preventDefault();
                 submitSearch(searchInput);
               }}
-              className="relative flex items-center gap-2 rounded-full border border-white/20 bg-white px-2 py-1.5 shadow-[0_30px_70px_-20px_rgba(0,0,0,0.4)]"
+              className="relative flex items-center gap-2 rounded-full border border-black/10 bg-white px-2 py-1.5 shadow-sm"
             >
-              <Search size={18} className="ml-4 text-black/40" aria-hidden="true" />
+              <Search
+                size={18}
+                className="ml-3 shrink-0 text-black/40 md:ml-4"
+                aria-hidden="true"
+              />
               <input
                 aria-label="Cerca nei posti, nelle esperienze e nelle guide"
                 aria-autocomplete="list"
@@ -478,11 +451,11 @@ export default function Esplora() {
                   if (searchInput.trim().length >= 2) setShowAutocomplete(true);
                 }}
                 placeholder="es. Puglia, hotel con vista, weekend in Toscana…"
-                className="flex-1 bg-transparent py-3 text-base text-[var(--color-ink)] placeholder:text-black/35 focus:outline-none"
+                className="min-w-0 flex-1 bg-transparent py-3 text-base text-[var(--color-ink)] placeholder:text-black/35 focus:outline-none"
               />
               <button
                 type="submit"
-                className="min-h-11 rounded-full bg-[var(--color-ink)] px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[var(--color-accent)]"
+                className="min-h-11 rounded-full bg-[var(--color-ink)] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[var(--color-accent)] sm:px-6"
               >
                 Cerca
               </button>
@@ -494,40 +467,43 @@ export default function Esplora() {
                 />
               )}
             </form>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-3"
-          >
-            <button
-              type="button"
-              onClick={() => {
-                setShowQuiz(true);
-                trackEvent('quiz_trigger_click', { source_page: '/esplora' });
-              }}
-              className="group inline-flex items-center gap-2 text-sm text-white/82 transition-colors hover:text-white"
-            >
-              <span className="border-b border-white/30 pb-0.5 group-hover:border-white">
-                Non sai da dove partire? Scopri in 30 secondi
-              </span>
-              <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />
-            </button>
-            <span className="text-white/30" aria-hidden="true">
-              ·
-            </span>
             <button
               type="button"
               onClick={() => setShowMap((prev) => !prev)}
               aria-expanded={showMap}
-              className="inline-flex items-center gap-2 text-sm text-white/72 transition-colors hover:text-white"
+              className="mt-3 inline-flex items-center gap-2 text-sm text-black/55 transition-colors hover:text-[var(--color-ink)]"
             >
-              <MapIcon size={14} />{' '}
-              {showMap ? 'Nascondi anteprima mappa' : 'Mostra anteprima mappa'}
+              <MapIcon size={14} /> {showMap ? 'Nascondi anteprima mappa' : 'Anteprima mappa'}
             </button>
-          </motion.div>
+          </div>
+
+          {/* DOMANDA-GUIDA INLINE — 4 scelte, risultato immediato. */}
+          <div className="mt-8 border-t border-black/10 pt-6">
+            <p className="text-sm font-medium text-[var(--color-ink)]">Cosa cerchi adesso?</p>
+            <div className="-mx-6 mt-3 flex gap-2 overflow-x-auto px-6 pb-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:px-0 [&::-webkit-scrollbar]:hidden">
+              {GUIDE_INTENTS.map((intent) => {
+                const isActive =
+                  intent.apply !== 'reset' &&
+                  ((intent.apply.zone && filters.zone === intent.apply.zone) ||
+                    (intent.apply.type && filters.type === intent.apply.type));
+                return (
+                  <button
+                    key={intent.label}
+                    type="button"
+                    aria-pressed={Boolean(isActive)}
+                    onClick={() => handleGuideIntent(intent)}
+                    className={`min-h-11 shrink-0 whitespace-nowrap rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-300 ease-out hover:scale-[1.03] active:scale-[0.98] cursor-pointer ${
+                      isActive
+                        ? 'border-[var(--color-ink)] bg-[var(--color-ink)] text-white shadow-[var(--shadow-premium)]'
+                        : 'border-black/10 bg-white text-black/65 hover:border-[var(--color-ink)]/40 hover:text-[var(--color-ink)]'
+                    }`}
+                  >
+                    {intent.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -546,54 +522,14 @@ export default function Esplora() {
         )}
       </AnimatePresence>
 
-      {/* BIG CHOICE — 3 ingressi geografici con foto */}
-      <Section spacing="tight" className="!pt-4">
-        <div className="grid gap-4 md:grid-cols-3">
-          {BIG_CHOICE_ZONES.map((entry, index) => {
-            // aria-pressed solo se l'URL ha esplicitamente questo filtro zone.
-            // Senza ?zone= nessuna big-choice e' "pressed": il default neutro
-            // evita di comunicare a screen-reader che un filtro e' gia' applicato.
-            const isActive = entry.zone !== 'all' && filters.zone === entry.zone;
-            return (
-              <button
-                key={entry.label}
-                type="button"
-                aria-pressed={isActive}
-                onClick={() =>
-                  updateFilter({
-                    zone: entry.zone === 'all' ? null : (entry.zone as Zone),
-                  })
-                }
-                className={`group relative aspect-[4/3] overflow-hidden rounded-[var(--radius-lg)] border text-left transition-all ${
-                  isActive
-                    ? 'border-[var(--color-ink)] shadow-[var(--shadow-premium)]'
-                    : 'border-black/5 shadow-sm hover:-translate-y-0.5 hover:shadow-[var(--shadow-premium)]'
-                }`}
-              >
-                <OptimizedImage
-                  src={entry.image}
-                  alt={entry.label}
-                  priority={index === 0}
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
-                <div className="absolute inset-x-6 bottom-6 text-white">
-                  <h2 className="font-serif text-3xl leading-tight md:text-4xl">{entry.label}</h2>
-                  <p className="mt-2 max-w-xs text-sm leading-snug text-white/85">
-                    {entry.description}
-                  </p>
-                  <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-white/90">
-                    {isActive ? 'Filtro attivo' : 'Apri'} <ArrowRight size={13} />
-                  </span>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      </Section>
-
       {/* CHIP TYPE + filtri avanzati progressivi */}
-      <Section spacing="tight" className="!pt-4">
+      <Section id="esplora-archivio" spacing="tight" className="!pt-4">
+        {usingPreview && (
+          <div className="mb-6 rounded-[var(--radius-md)] border border-[var(--color-accent)]/25 bg-[var(--color-accent-soft)] px-5 py-4 text-sm leading-relaxed text-[var(--color-accent-text)]">
+            Stai vedendo l'archivio in anteprima editoriale. I contenuti vengono aggiornati man mano
+            con foto, guide e dettagli verificati.
+          </div>
+        )}
         <div className="rounded-[var(--radius-xl)] border border-black/5 bg-white p-5 shadow-sm md:p-7">
           <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
             <p className="text-sm text-black/55">
@@ -614,9 +550,12 @@ export default function Esplora() {
                 type="button"
                 onClick={() => setShowAdvanced((prev) => !prev)}
                 aria-expanded={showAdvanced}
-                className="inline-flex min-h-10 items-center gap-2 rounded-full border border-black/10 px-4 py-2 text-sm text-[var(--color-ink)] transition-colors hover:border-[var(--color-ink)]/40"
+                className="inline-flex min-h-10 items-center gap-2 rounded-full px-3 py-2 text-sm text-black/50 transition-colors hover:text-[var(--color-ink)]"
               >
                 <SlidersHorizontal size={14} /> Filtri avanzati
+                {advancedActiveCount > 0 && (
+                  <span className="text-black/45">({advancedActiveCount} attivi)</span>
+                )}
                 <ChevronDown
                   size={14}
                   className={`transition-transform ${showAdvanced ? 'rotate-180' : ''}`}
@@ -625,18 +564,21 @@ export default function Esplora() {
             </div>
           </div>
 
-          {/* Chip Tipo — sempre visibile, sobri. Wrapper relative con gradient
-              fade right su mobile per indicare overflow scrollabile. */}
+          {/* Chip Tipo — solo i type con >=1 risultato, con conteggio dinamico.
+              Wrapper relative con gradient fade right su mobile per overflow. */}
           <div className="relative">
             <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-              {TYPES.map((type) => (
+              {typeCounts.map(({ type, count }) => (
                 <TypeChip
                   key={type}
                   active={filters.type === type}
-                  ariaLabel={`Filtra per tipo di posto: ${type}`}
+                  ariaLabel={`Filtra per tipo di posto: ${type}, ${count} risultati`}
                   onClick={() => updateFilter({ type: filters.type === type ? null : type })}
                 >
-                  {type}
+                  {type}{' '}
+                  <span className={filters.type === type ? 'text-white/65' : 'text-black/35'}>
+                    ({count})
+                  </span>
                 </TypeChip>
               ))}
             </div>
@@ -681,36 +623,26 @@ export default function Esplora() {
                     activeValue={filters.duration}
                     onSelect={(value) => updateFilter({ duration: value as Duration | null })}
                   />
-                  {/* Mostra lo switch zona completo nei filtri avanzati quando
-                      la zona attiva non ha una big-choice card dedicata
-                      (es. utente atterra con ?zone=Asia da link esterno). */}
-                  {!hasDedicatedBigChoice && (
-                    <div className="lg:col-span-2">
-                      <AdvancedFilterRow
-                        label="Zona specifica"
-                        values={ZONES}
-                        activeValue={filters.zone}
-                        onSelect={(value) => updateFilter({ zone: value as Zone | null })}
-                      />
-                    </div>
-                  )}
+                  {/* Unica superficie zona oltre alla domanda-guida: lo switch
+                      completo (Italia/Europa/Asia/Americhe/Africa/Oceania). */}
+                  <div className="lg:col-span-2">
+                    <AdvancedFilterRow
+                      label="Zona specifica"
+                      values={ZONES}
+                      activeValue={filters.zone}
+                      onSelect={(value) => updateFilter({ zone: value as Zone | null })}
+                    />
+                  </div>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
-
-        {usingPreview && (
-          <div className="mt-6 rounded-[var(--radius-md)] border border-[var(--color-accent)]/25 bg-[var(--color-accent-soft)] px-5 py-4 text-sm leading-relaxed text-[var(--color-accent-text)]">
-            Stai vedendo l'archivio in modalità preview editoriale (noindex). Mostra il prodotto
-            finale mentre R+B sostituiscono i seed con contenuti e foto reali.
-          </div>
-        )}
       </Section>
 
-      {/* COLLEZIONI EDITORIALI — pattern Atlas Obscura + Roadbook: curatela
-          visibile sopra l'archivio. Si nasconde quando l'utente filtra (focus
-          mode) e quando l'archivio è ancora in caricamento. */}
+      {/* COLLEZIONI EDITORIALI — curatela-first: primo blocco di contenuto,
+          sempre montate. Senza filtri stanno sopra l'archivio; quando si filtra
+          si spostano SOTTO i risultati (vedi più giù) per non sparire mai. */}
       {!active && !isLoading && (
         <EditorialCollections
           archive={archiveItems}
@@ -722,6 +654,35 @@ export default function Esplora() {
         />
       )}
 
+      {/* POSTI PARTICOLARI — griglia social-first dai ContentItem reali.
+          Sempre visibile (risponde a filtri zona/tipo). È il contenuto REALE
+          che prende priorità visiva sull'archivio articoli. */}
+      {filteredContentItems.length > 0 && (
+        <Section spacing="tight" className="!pt-0">
+          <div className="mb-6 flex items-baseline justify-between gap-4">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
+                Posti particolari
+              </p>
+              <h2 className="mt-1 font-serif text-2xl leading-tight text-[var(--color-ink)] md:text-3xl">
+                Quello che abbiamo visto davvero.
+              </h2>
+            </div>
+            {(filters.zone || filters.type) && (
+              <p className="shrink-0 text-xs text-black/45">
+                {filteredContentItems.length}{' '}
+                {filteredContentItems.length === 1 ? 'posto' : 'posti'}
+              </p>
+            )}
+          </div>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {filteredContentItems.map((item) => (
+              <ContentCard key={item.id} item={item} />
+            ))}
+          </div>
+        </Section>
+      )}
+
       {/* RISULTATI */}
       <Section spacing="tight" className="!pt-4">
         <ActiveFilterChips
@@ -730,6 +691,25 @@ export default function Esplora() {
           onResetAll={resetFilters}
           sourcePage="/esplora"
         />
+        {suggestsItinerari && (
+          <Link
+            to="/itinerari"
+            onClick={() =>
+              trackEvent('explore_to_itinerari_click', {
+                source_page: '/esplora',
+                format: filters.format,
+                duration: filters.duration,
+              })
+            }
+            className="mb-8 flex items-center gap-3 rounded-[var(--radius-lg)] border border-black/10 bg-white px-5 py-4 text-sm text-[var(--color-ink)] transition-colors hover:border-[var(--color-ink)]/40"
+          >
+            <Route size={18} className="shrink-0 text-[var(--color-accent)]" aria-hidden="true" />
+            <span className="flex-1">
+              Cerchi un piano giorno-per-giorno? Quello sta negli Itinerari.
+            </span>
+            <ArrowRight size={16} className="shrink-0" aria-hidden="true" />
+          </Link>
+        )}
         {!active && !isLoading && filteredItems.length > 0 && (
           <div className="mb-8">
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-black/45">
@@ -747,12 +727,33 @@ export default function Esplora() {
             ))}
           </div>
         ) : filteredItems.length === 0 ? (
-          <EmptyState
-            variant={archiveItems.length === 0 ? 'no-content' : 'no-results'}
-            onReset={archiveItems.length > 0 ? resetFilters : undefined}
-            secondaryHref="/mappa"
-            secondaryLabel="Apri la mappa"
-          />
+          archiveItems.length === 0 ? (
+            <div className="space-y-12">
+              <EmptyState
+                variant="no-content"
+                secondaryHref="/mappa"
+                secondaryLabel="Apri la mappa"
+              />
+              <div className="rounded-[var(--radius-xl)] border border-black/5 bg-white p-6 text-center shadow-sm md:p-8">
+                <h3 className="font-serif text-2xl leading-tight text-[var(--color-ink)]">
+                  Intanto lasciaci un indirizzo.
+                </h3>
+                <p className="mx-auto mt-3 max-w-md text-base leading-relaxed text-black/60">
+                  Ti scriviamo quando pubblichiamo i primi posti, senza spam.
+                </p>
+                <div className="mx-auto mt-6 max-w-md">
+                  <Newsletter variant="compact" source="esplora_no_content" />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <>
+              <EmptyState variant="no-results" onReset={resetFilters} />
+              <p className="mt-12 text-sm text-black/50">
+                Intanto, parti da quello che abbiamo scelto noi:
+              </p>
+            </>
+          )
         ) : (
           <>
             {/*
@@ -811,6 +812,19 @@ export default function Esplora() {
         )}
       </Section>
 
+      {/* COLLEZIONI EDITORIALI (sotto i risultati quando si filtra) — restano
+          sempre montate: niente schermo vuoto, curatela sempre raggiungibile. */}
+      {active && !isLoading && (
+        <EditorialCollections
+          archive={archiveItems}
+          sourcePage="/esplora"
+          linkState={{
+            from: `/esplora${searchParams.toString() ? `?${searchParams.toString()}` : ''}`,
+            fromLabel: 'Torna ai risultati',
+          }}
+        />
+      )}
+
       {/* NEWSLETTER + B2B — sobri, fondo pagina */}
       <Section className="!py-16">
         <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
@@ -865,8 +879,12 @@ export default function Esplora() {
           </Link>
         </div>
       </Section>
-
-      <EsploraQuiz isOpen={showQuiz} onClose={() => setShowQuiz(false)} />
+      <StickyMobileCTA
+        label="Apri archivio"
+        href="#esplora-archivio"
+        trackingId="esplora_sticky_mobile"
+        revealAfter={-1}
+      />
     </PageLayout>
   );
 }

@@ -67,8 +67,8 @@ interface WhenToGoCalendarProps {
  * - Click su mese → dettaglio: temp, pioggia, affollamento, nota R+B, eventi
  * - Riepilogo "Mesi migliori" (R+B picks) + "Mesi da evitare"
  *
- * Coerente con DestinationCostCalculator: stesso set destinazioni baseline,
- * stessa lingua, stesso tono. Insieme formano la "decision toolkit" /strumenti.
+ * Coerente con le baseline destinazione usate dal builder itinerario:
+ * stesso set destinazioni, stessa lingua, stesso tono.
  */
 export default function WhenToGoCalendar({
   initialSlug = 'salento',
@@ -115,7 +115,7 @@ export default function WhenToGoCalendar({
           <Calendar size={14} /> Quando andare
         </span>
         <h2 className="mt-5 font-serif font-medium leading-[1.1] tracking-tight text-[var(--color-ink)] text-[clamp(1.75rem,3vw+0.5rem,2.75rem)]">
-          Il calendario di chi ci e&apos; tornato
+          Il calendario di chi ci è tornato
           <br />
           <span className="italic text-black/55">in ogni stagione.</span>
         </h2>

@@ -84,9 +84,12 @@ Workflow outreach partner (Q3 2026, ~1h R+B/settimana):
 ## Content + partnership docs (H2 2026)
 
 - [[13_Content/CONTENT_CALENDAR_H2_2026]] — 8 slot mensili luglio→febbraio
+- [[13_Content/CONTENT_PROOF_LIBRARY_TRAVELLINIWITHUS]] — intake top 20 contenuti social e schede proof proprietarie
 - [[13_Content/PILLAR_ARTICLE_SALENTO_AGOSTO]] — outline 1500 parole + schema
 - [[13_Content/LEAD_MAGNET_POSTI_ITALIANI]] — outline 10 luoghi + tone
 - [[12_Partnerships/PARTNER_PIPELINE_TRAVELLINIWITHUS]] — 5 categorie + outreach
+- [[12_Partnerships/CASE_STUDY_EMILIA_FANTASTICA_CASTELLI_DUCATO]] — proof draft basato su fonti pubbliche
+- [[20_Decisions/DECISION_PUBLIC_METRICS_SOURCE_TRAVELLINIWITHUS_2026-06-07]] — fonte unica metriche pubbliche
 
 ## Activation gate (May → Jun 2026)
 
@@ -97,6 +100,23 @@ operativi step-by-step.
 - [ ] **Affiliate signup completi**: Skyscanner BFCA + Booking BFCA + Airalo + Revolut (effort R+B ~90 min)
 - [ ] **PDF lead magnet compilato con 10 luoghi reali** + `RESEND_API_KEY` + `BREVO_API_KEY` attivi in `.env.production` + test end-to-end (welcome email arriva, PDF link 200) (effort R+B ~5h tra contenuti + setup)
 - [ ] **Bio IG + TikTok aggiornate** con link `travelliniwithus.it/vieni-con-noi?utm_source=ig_bio|tt_bio` (effort R+B 15 min)
+
+## Public footprint sprint — 2026-06-07
+
+Implementazione da audit pubblico:
+
+- `src/config/site.ts` ora contiene bio link proprietari, fonte metriche datata e proof pubbliche.
+- `/vieni-con-noi` include tre percorsi da link-in-bio: esplora, risorse, media kit.
+- `/media-kit`, `/collaborazioni` e `/press` dichiarano fonte dei numeri e mostrano proof pubbliche linkate.
+- `/risorse` separa click affiliati da click editoriali e usa `rel="sponsored"` solo sui link commerciali.
+- email welcome newsletter usa i dati social dalla config, non numeri hard-coded.
+
+Blocchi owner:
+
+- confermare dati Insights ufficiali;
+- aggiornare bio IG/TikTok live;
+- fornire top 20 reel/post e metriche;
+- autorizzare case study Emilia-Fantastica / Castelli del Ducato.
 
 ## Quality bar partner outreach
 
@@ -136,6 +156,8 @@ supporto multi-SKU) e validare prezzo prima dell'investimento contenuti reali.
 ## Main project links
 
 - [[10_Projects/PROJECT_TRAVELLINIWITHUS_SITE]]
+- [[10_Projects/PROJECT_CINEMATIC_REBUILD_HOME_2026]]
+- [[10_Projects/PROJECT_PUBLIC_FOOTPRINT_ULTRA_IMPROVEMENT_PLAN_2026-06-07]]
 - [[10_Projects/PROJECT_SITE_V2_ADVANCED_IMPROVEMENT_PLAN]]
 - [[10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT]]
 - [[10_Projects/PROJECT_DESTINATIONS_SECTION_REVIEW]]

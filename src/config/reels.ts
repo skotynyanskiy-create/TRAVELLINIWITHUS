@@ -51,88 +51,104 @@ export interface ReelEntry {
 }
 
 /**
- * 5 reel LIVE — corrispondono ai 5 file MP4 in `public/video/` (copiati da
- * `C:\Users\ccocu\Desktop\TRAVELLINIWITHUS\video\` tramite `npm run prepare:reels`).
+ * 5 reel LIVE — corrispondono ai 5 file MP4 in `public/video/`.
  *
- * Cover sono placeholder editoriali dalle destinations (riusate da
- * `convert-reels.js` quando ffmpeg non è disponibile per estrazione frame).
+ * Cover = frame reali estratti dai video con ffmpeg (2026-06-18), salvati in
+ * `public/images/reels/reel-N-cover.webp`. Le vecchie cover stock placeholder
+ * sono in `backups/ultracode-2026-06-18/old-reel-covers/`.
  *
- * Metadata di transizione: location/zone/type/caption sono best-guess
- * editoriali che riflettono il mix abituale dei contenuti R+B sui social.
- * R+B sostituisce con i dati esatti del singolo post quando disponibili.
+ * Metadata (location/zone/type/caption/hook) derivati dal contenuto REALE dei
+ * video. Mancano ancora `instagramUrl`/`tiktokUrl`/`views` per ciascun post: il
+ * consumer usa il fallback al profilo IG finché R+B non li fornisce.
  */
-export const REELS: ReelEntry[] = [
+const RAW_REELS: ReelEntry[] = [
   {
-    id: 'reel-puglia-trulli',
+    id: 'reel-egitto-mar-rosso',
     localPath: '/video/reel-1.mp4',
     cover: '/images/reels/reel-1-cover.webp',
-    location: "Puglia · Valle d'Itria",
-    zone: 'Italia',
-    type: 'Posti particolari',
+    location: 'Egitto · Mar Rosso',
+    zone: 'Africa',
+    type: 'Relax, terme e spa',
     caption:
-      'Tra trulli, masserie e calette nascoste. Il sud che non si racconta sulle guide turistiche.',
-    hook: 'Il sud che non ti aspetti.',
-    hashtags: ['puglia', 'travelblog', 'viaggioincoppia', 'travelliniwithus'],
+      'Un resort economico sul Mar Rosso: acqua trasparente, reef a due passi dal pontile e ristoranti. Quanto costa davvero e se vale.',
+    hook: 'Mar Rosso senza spendere una fortuna.',
+    hashtags: ['egitto', 'marrosso', 'snorkeling', 'travelliniwithus'],
     publishedAt: '2026-05-14',
     isPlaceholder: false,
   },
   {
-    id: 'reel-toscana-borghi',
+    id: 'reel-toscana-sushi-kibo',
     localPath: '/video/reel-2.mp4',
     cover: '/images/reels/reel-2-cover.webp',
-    location: "Toscana · Val d'Orcia",
+    location: 'Toscana · Sushi Kibo',
     zone: 'Italia',
-    type: "Borghi e città d'arte",
+    type: 'Food & Ristoranti',
     caption:
-      'Cinque borghi toscani lontano dai circuiti del weekend. Mangiare bene, dormire bene, niente coda.',
-    hook: 'Toscana senza fila.',
-    hashtags: ['toscana', 'borghi', 'slowtravel', 'travelliniwithus'],
+      "Uno dei sushi più belli della Toscana: sala spettacolare sull'acqua, all-you-can-eat e un prezzo che non ti aspetti.",
+    hook: 'Il sushi più bello della Toscana?',
+    hashtags: ['sushi', 'toscana', 'ristoranti', 'travelliniwithus'],
     publishedAt: '2026-05-14',
     isPlaceholder: false,
   },
   {
-    id: 'reel-dolomiti-rifugi',
+    id: 'reel-toscana-tavernal',
     localPath: '/video/reel-3.mp4',
     cover: '/images/reels/reel-3-cover.webp',
-    location: 'Dolomiti · Alta Badia',
+    location: 'Toscana · Tavernal',
     zone: 'Italia',
-    type: 'Hotel con carattere',
+    type: 'Insolito',
     caption:
-      'Tre rifugi delle Dolomiti che ci hanno cambiato l\'idea di "andare in montagna". Niente catene, tutto carattere.',
-    hook: 'Tre rifugi, tre scoperte.',
-    hashtags: ['dolomiti', 'rifugi', 'altabadia', 'travelliniwithus'],
+      'Una taverna a tema tra draghi e nani dove ti senti dentro una leggenda. Porzioni abbondanti e una fiorentina come si deve.',
+    hook: 'Cenare nella tana dei draghi.',
+    hashtags: ['toscana', 'ristorantiatema', 'insolito', 'travelliniwithus'],
     publishedAt: '2026-05-14',
     isPlaceholder: false,
   },
   {
-    id: 'reel-sardegna-cale',
+    id: 'reel-malesia-batu-caves',
     localPath: '/video/reel-4.mp4',
     cover: '/images/reels/reel-4-cover.webp',
-    location: 'Sardegna · Costa orientale',
-    zone: 'Italia',
-    type: 'Weekend romantici',
+    location: 'Malesia · Batu Caves',
+    zone: 'Asia',
+    type: 'Posti particolari',
     caption:
-      'Cala Goloritzé, Cala Mariolu, Cala Luna. Tre giorni in barca per le cale più belle della Sardegna.',
-    hook: 'Tre cale, una barca, niente fila.',
-    hashtags: ['sardegna', 'calagoloritze', 'viaggioincoppia', 'travelliniwithus'],
+      'Vale la pena visitare le famosissime Batu Caves di Kuala Lumpur? È gratis, il posto è indescrivibile — e occhio alle scimmie.',
+    hook: 'Batu Caves: vale la pena?',
+    hashtags: ['malesia', 'batucaves', 'kualalumpur', 'travelliniwithus'],
     publishedAt: '2026-05-14',
     isPlaceholder: false,
   },
   {
-    id: 'reel-islanda-ring-road',
+    id: 'reel-toscana-volterra-volturi',
     localPath: '/video/reel-5.mp4',
     cover: '/images/reels/reel-5-cover.webp',
-    location: 'Islanda · Ring Road',
-    zone: 'Europa',
-    type: 'Passeggiate panoramiche',
+    location: 'Toscana · Volterra',
+    zone: 'Italia',
+    type: 'Insolito',
     caption:
-      'Ring Road in 7 giorni: come pianificare tappe, alloggi e meteo senza tour guidati. Tutto in autonomia.',
-    hook: 'Islanda da soli, ce la fai.',
-    hashtags: ['islanda', 'ringroad', 'roadtrip', 'travelliniwithus'],
+      "Un aperitivo dai Volturi a Volterra: drink che sembrano sangue, atmosfera gotica e un po' di scena. Per chi ama l'insolito.",
+    hook: 'Aperitivo coi vampiri a Volterra.',
+    hashtags: ['volterra', 'toscana', 'insolito', 'travelliniwithus'],
     publishedAt: '2026-05-14',
     isPlaceholder: false,
   },
 ];
+
+/**
+ * 5 reel reali pubblicati — 2026-06-18.
+ *
+ * Metadati e cover ora corrispondono ai video veri (frame estratti dai MP4).
+ * Tutti e 5 sono visibili. Per nasconderne uno: rimuovere il suo id da qui.
+ */
+const VISIBLE_REEL_IDS = new Set<string>([
+  'reel-egitto-mar-rosso',
+  'reel-toscana-sushi-kibo',
+  'reel-toscana-tavernal',
+  'reel-malesia-batu-caves',
+  'reel-toscana-volterra-volturi',
+]);
+
+export const REELS: ReelEntry[] = RAW_REELS.filter((reel) => VISIBLE_REEL_IDS.has(reel.id));
 
 /**
  * Helper: ritorna i reel pubblicabili (non placeholder), ordinati per views

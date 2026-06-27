@@ -6,15 +6,30 @@ import { appendLeadFallback } from '../../lib/leadFallback';
 
 const FREE_BENEFITS = [
   'Articoli editoriali pubblici',
-  'Mappa interattiva e quiz',
+  'Mappa interattiva e guide selezionate',
   'Newsletter mensile',
   'Carrello shop con guide singole',
 ];
 
 const CLUB_BENEFITS = [
-  'Accesso a tutte le guide digitali, sempre aggiornate',
-  'Anteprima nuovi itinerari prima della pubblicazione',
-  'Cancellazione in un click, nessun vincolo',
+  'Accesso al catalogo Club appena apre, senza dover ricomprare ogni guida singola',
+  'Guide lunghe con indirizzi, costi, orari, criteri e aggiornamenti dichiarati',
+  'Anteprime e priorità sui nuovi itinerari prima della pubblicazione pubblica',
+];
+
+const CLUB_DELIVERABLES = [
+  {
+    label: 'Guide riservate',
+    text: 'Formati lunghi, più pratici degli articoli pubblici: mappe, note logistiche, errori da evitare e aggiornamenti.',
+  },
+  {
+    label: 'Archivio ordinato',
+    text: 'Un solo posto dove ritrovare guide, preferiti e acquisti, senza dover cercare tra social, link e DM.',
+  },
+  {
+    label: 'Accesso early',
+    text: 'La waitlist serve a dare priorità alle prime iscrizioni quando checkout e catalogo saranno pronti.',
+  },
 ];
 
 const PRICING_TIERS = [
@@ -37,12 +52,14 @@ const PRICING_TIERS = [
 
 export default function ClubMembershipHero() {
   const [email, setEmail] = useState('');
+  const [selectedPlan, setSelectedPlan] = useState(PRICING_TIERS[0].id);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
   const handlePlanSelect = (planId: string) => {
-    trackEvent('club_interest', { plan: planId, demo: true });
+    setSelectedPlan(planId);
+    trackEvent('club_interest', { plan: planId });
   };
 
   const handleWaitlist = async (e: FormEvent) => {
@@ -58,24 +75,29 @@ export default function ClubMembershipHero() {
     }
     setError('');
     setIsSubmitting(true);
-    trackEvent('club_waitlist_attempt');
+    trackEvent('club_waitlist_attempt', { plan: selectedPlan });
     try {
       const response = await fetch('/api/newsletter-subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: normalized, source: 'club_waitlist', website: '' }),
+        body: JSON.stringify({
+          email: normalized,
+          source: `club_waitlist_${selectedPlan}`,
+          website: '',
+        }),
       });
       if (!response.ok) throw new Error('save failed');
-      trackEvent('club_waitlist_success', { fallback: false });
+      trackEvent('club_waitlist_success', { fallback: false, plan: selectedPlan });
       setIsSubscribed(true);
     } catch {
       const saved = appendLeadFallback('twu_club_waitlist', {
         email: normalized,
-        source: 'club_waitlist',
+        source: `club_waitlist_${selectedPlan}`,
+        plan: selectedPlan,
         date: new Date().toISOString(),
       });
       if (saved) {
-        trackEvent('club_waitlist_success', { fallback: true });
+        trackEvent('club_waitlist_success', { fallback: true, plan: selectedPlan });
         setIsSubscribed(true);
       } else {
         setError('Iscrizione non riuscita. Riprova tra poco oppure scrivici via email.');
@@ -86,7 +108,7 @@ export default function ClubMembershipHero() {
   };
 
   return (
-    <section className="bg-[var(--color-ink)] py-20 text-white md:py-28">
+    <section id="club-pricing" className="bg-[var(--color-ink)] py-20 text-white md:py-28">
       <div className="mx-auto max-w-6xl px-6 md:px-12">
         <div className="mx-auto max-w-3xl text-center">
           <span className="inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)]/15 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">
@@ -95,13 +117,24 @@ export default function ClubMembershipHero() {
           <h1 className="mt-6 text-5xl font-serif leading-[1.05] tracking-tight md:text-6xl">
             Una piccola quota.
             <br />
-            <span className="italic text-white/55">Tutte le guide. Senza pubblicità.</span>
+            <span className="italic text-white/55"> Tutte le guide. Senza pubblicità.</span>
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-white/72">
-            Il Club è l'accesso continuo a tutto ciò che pubblichiamo: guide digitali, itinerari
-            aggiornati, contenuti riservati. Pensato per chi viaggia spesso e vuole leggere meno
-            rumore.
+            Il Club è il livello riservato del progetto: guide più lunghe, archivio ordinato,
+            aggiornamenti e accesso prioritario quando il catalogo apre. Oggi è in pre-lancio: puoi
+            vedere il formato e metterti in lista.
           </p>
+        </div>
+
+        <div className="mt-12 grid gap-4 md:grid-cols-3">
+          {CLUB_DELIVERABLES.map((item) => (
+            <div key={item.label} className="border-t border-white/12 pt-5">
+              <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+                {item.label}
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-white/68">{item.text}</p>
+            </div>
+          ))}
         </div>
 
         <div className="mt-16 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10">
@@ -110,7 +143,7 @@ export default function ClubMembershipHero() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="rounded-[var(--radius-lg)] border border-white/10 bg-white/5 p-8 md:p-10"
+            className="border-t border-white/12 pt-8 md:pt-10"
           >
             <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/55">
               Lettore — Gratis
@@ -132,7 +165,7 @@ export default function ClubMembershipHero() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="relative overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-accent)]/40 bg-gradient-to-br from-[var(--color-accent)]/12 to-white/4 p-8 md:p-10"
+            className="relative border-t border-[var(--color-accent)]/45 pt-8 md:pt-10"
           >
             <div className="absolute right-8 top-8 inline-flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.24em] text-[var(--color-ink)]">
               <Sparkles size={11} /> Consigliato
@@ -142,7 +175,7 @@ export default function ClubMembershipHero() {
             </p>
             <p className="mt-4 font-serif text-4xl">Da €5,90 al mese</p>
             <p className="mt-1 text-xs text-white/50">
-              IVA inclusa · accesso immediato a tutto il catalogo
+              IVA inclusa · accesso al lancio appena il catalogo apre
             </p>
             <ul className="mt-7 space-y-3">
               {CLUB_BENEFITS.map((item) => (
@@ -159,7 +192,12 @@ export default function ClubMembershipHero() {
                   key={tier.id}
                   type="button"
                   onClick={() => handlePlanSelect(tier.id)}
-                  className="group relative flex flex-col items-start gap-2 rounded-[var(--radius-md)] border border-white/12 bg-white/5 p-5 text-left transition-all hover:border-[var(--color-accent)]/60 hover:bg-white/10"
+                  aria-pressed={selectedPlan === tier.id}
+                  className={`group relative flex flex-col items-start gap-2 rounded-[var(--radius-md)] border p-5 text-left transition-all hover:border-[var(--color-accent)]/60 hover:bg-white/10 ${
+                    selectedPlan === tier.id
+                      ? 'border-[var(--color-accent)]/70 bg-white/10'
+                      : 'border-white/12 bg-white/5'
+                  }`}
                 >
                   {tier.badge && (
                     <span className="absolute right-4 top-4 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)]">
@@ -178,8 +216,8 @@ export default function ClubMembershipHero() {
 
             <p className="mt-7 flex items-center gap-2 rounded-[var(--radius-md)] border border-white/10 bg-white/5 p-4 text-sm text-white/68">
               <Lock size={14} className="shrink-0 text-[var(--color-accent)]" />
-              Checkout in arrivo. Lascia l'email e ti avvisiamo appena il Club apre alle prime
-              iscrizioni.
+              Checkout in arrivo. Lascia l'email e ti avvisiamo quando apriamo le prime iscrizioni,
+              con catalogo e condizioni già verificati.
             </p>
 
             {isSubscribed ? (
@@ -190,7 +228,11 @@ export default function ClubMembershipHero() {
                 </span>
               </div>
             ) : (
-              <form onSubmit={handleWaitlist} className="mt-4 flex flex-col gap-2 sm:flex-row">
+              <form
+                id="club-waitlist"
+                onSubmit={handleWaitlist}
+                className="mt-4 flex scroll-mt-28 flex-col gap-2 sm:flex-row"
+              >
                 <input
                   type="email"
                   value={email}

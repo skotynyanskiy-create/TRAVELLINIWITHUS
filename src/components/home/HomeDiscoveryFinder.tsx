@@ -1,16 +1,12 @@
 import { useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowRight, BookOpen, Compass, Heart, MapPin } from 'lucide-react';
+import { Link } from '@/src/components/TransitionLink';
+import { ArrowRight } from 'lucide-react';
 import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import OptimizedImage from '../OptimizedImage';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
-import {
-  HOMEPAGE_DISCOVERY_ENTRIES,
-  HOMEPAGE_TYPES,
-  HOMEPAGE_ZONES,
-} from '../../config/discoveryPicks';
+import { HOMEPAGE_TYPES, HOMEPAGE_ZONES } from '../../config/discoveryPicks';
 import { slugifyType } from '../../config/contentTaxonomy';
 import { trackEvent } from '../../services/analytics';
 
@@ -31,13 +27,6 @@ const TYPE_VISUALS: Record<string, string> = {
   'Hotel con carattere': '/images/hero-amalfi.webp',
   'Weekend romantici': '/images/experiences/romantico.webp',
 };
-
-const ENTRY_ICONS = {
-  zone: MapPin,
-  type: Heart,
-  map: Compass,
-  guides: BookOpen,
-} as const;
 
 export default function HomeDiscoveryFinder() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -75,18 +64,18 @@ export default function HomeDiscoveryFinder() {
         <div className="mb-12 grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div className="max-w-3xl" data-finder-reveal>
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
-              Da dove vuoi partire?
+              Filtra l'archivio
             </span>
             <h2
               id="home-discovery-heading"
               className="mt-3 text-4xl font-serif leading-tight text-[var(--color-ink)] md:text-6xl"
             >
-              Una libreria, quattro modi per entrarci.
+              Scegli il prossimo viaggio per luogo o per ritmo.
             </h2>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/62 md:text-lg">
-              Zona, intenzione, mappa o guide pratiche: scegli il tuo punto d'ingresso. Tutto porta
-              alla stessa libreria curata da Rodrigo & Betta — niente archivi paralleli, niente
-              duplicati.
+              Parti da una zona che hai in mente oppure dal tipo di viaggio che vuoi vivere. Tutto
+              porta alla stessa libreria curata da Rodrigo & Betta, con mappa e guide sempre a un
+              passo.
             </p>
           </div>
 
@@ -106,37 +95,81 @@ export default function HomeDiscoveryFinder() {
           </Link>
         </div>
 
-        {/* 4 ingressi unificati */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {HOMEPAGE_DISCOVERY_ENTRIES.map((entry) => {
-            const Icon = ENTRY_ICONS[entry.kind];
-            return (
-              <Link
-                key={entry.kind}
-                to={entry.href}
-                onClick={() =>
-                  trackEvent('home_discovery_click', {
-                    source_page: '/',
-                    destination_url: entry.href,
-                    discovery_type: entry.kind,
-                  })
-                }
-                className="group flex h-full flex-col rounded-[var(--radius-lg)] border border-black/5 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-premium)]"
-                data-finder-reveal
-              >
-                <span className="flex h-11 w-11 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
-                  <Icon size={20} />
-                </span>
-                <h3 className="mt-5 font-serif text-2xl text-[var(--color-ink)]">{entry.label}</h3>
-                <p className="mt-3 flex-1 text-sm leading-relaxed text-black/62">
-                  {entry.description}
-                </p>
-                <span className="mt-6 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)]">
-                  Apri <ArrowRight size={13} />
-                </span>
-              </Link>
-            );
-          })}
+        {/* 2 tessere image-led */}
+        <div className="grid gap-4 md:grid-cols-2 md:gap-6">
+          <Link
+            to="/esplora?zone=Italia"
+            onClick={() =>
+              trackEvent('home_discovery_click', {
+                source_page: '/',
+                destination_url: '/esplora?zone=Italia',
+                discovery_type: 'zone',
+              })
+            }
+            className="group relative aspect-[3/2] overflow-hidden rounded-2xl border border-black/5 shadow-sm md:aspect-[16/10]"
+            data-finder-reveal
+          >
+            <OptimizedImage
+              src="/images/destinations/toscana.webp"
+              alt="Parti dal posto che hai in mente"
+              loading="eager"
+              className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
+              responsiveWidths={[320, 480, 768]}
+              sizes="(max-width: 768px) 92vw, 46vw"
+            />
+            <div className="twu-card-scrim absolute inset-0" />
+            <div className="absolute inset-x-5 bottom-5">
+              <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/75">
+                Per zona
+              </span>
+              <h3 className="mt-2 font-serif text-2xl leading-tight text-white md:text-3xl">
+                Parti dal posto che hai in mente
+              </h3>
+              <span className="mt-3 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-white/85">
+                Apri{' '}
+                <ArrowRight
+                  size={12}
+                  className="transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:translate-x-1"
+                />
+              </span>
+            </div>
+          </Link>
+
+          <Link
+            to="/esplora?type=posti-particolari"
+            onClick={() =>
+              trackEvent('home_discovery_click', {
+                source_page: '/',
+                destination_url: '/esplora?type=posti-particolari',
+                discovery_type: 'type',
+              })
+            }
+            className="group relative aspect-[3/2] overflow-hidden rounded-2xl border border-black/5 shadow-sm md:aspect-[16/10]"
+            data-finder-reveal
+          >
+            <OptimizedImage
+              src="/images/experiences/romantico.webp"
+              alt="Scegli il ritmo, poi la meta"
+              loading="eager"
+              className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
+            />
+            <div className="twu-card-scrim absolute inset-0" />
+            <div className="absolute inset-x-5 bottom-5">
+              <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/75">
+                Per intenzione
+              </span>
+              <h3 className="mt-2 font-serif text-2xl leading-tight text-white md:text-3xl">
+                Scegli il ritmo, poi la meta
+              </h3>
+              <span className="mt-3 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-white/85">
+                Apri{' '}
+                <ArrowRight
+                  size={12}
+                  className="transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:translate-x-1"
+                />
+              </span>
+            </div>
+          </Link>
         </div>
 
         {/* Picks zone + tipo (single source) */}
@@ -158,18 +191,24 @@ export default function HomeDiscoveryFinder() {
                       filter_value: zone,
                     })
                   }
-                  className="group relative aspect-[4/5] overflow-hidden rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-muted-bg)] shadow-sm"
+                  className="group relative aspect-[4/5] overflow-hidden rounded-2xl border border-black/5 bg-[var(--color-muted-bg)] shadow-sm"
                 >
                   <OptimizedImage
                     src={ZONE_VISUALS[zone] || '/images/destinations/toscana.webp'}
                     alt={`Posti particolari in ${zone}`}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
+                    responsiveWidths={[320, 480, 768]}
+                    sizes="(max-width: 640px) 92vw, (max-width: 1024px) 30vw, 14vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
-                  <div className="absolute inset-x-4 bottom-4">
+                  <div className="twu-card-scrim-balanced absolute inset-0" />
+                  <div className="absolute inset-x-4 bottom-4 transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:-translate-y-1">
                     <p className="font-serif text-xl leading-tight text-white">{zone}</p>
                     <span className="mt-2 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-white/85">
-                      Apri archivio <ArrowRight size={11} />
+                      Apri archivio{' '}
+                      <ArrowRight
+                        size={11}
+                        className="transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:translate-x-1"
+                      />
                     </span>
                   </div>
                 </Link>
@@ -194,18 +233,22 @@ export default function HomeDiscoveryFinder() {
                       filter_value: type,
                     })
                   }
-                  className="group relative aspect-[4/3] overflow-hidden rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-muted-bg)] shadow-sm"
+                  className="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-black/5 bg-[var(--color-muted-bg)] shadow-sm"
                 >
                   <OptimizedImage
                     src={TYPE_VISUALS[type] || '/images/experiences/insolito.webp'}
                     alt={type}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                  <div className="absolute inset-x-4 bottom-4">
+                  <div className="twu-card-scrim-strong absolute inset-0" />
+                  <div className="absolute inset-x-4 bottom-4 transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:-translate-y-1">
                     <p className="font-serif text-lg leading-tight text-white">{type}</p>
                     <span className="mt-1.5 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-white/82">
-                      Apri <ArrowRight size={11} />
+                      Apri{' '}
+                      <ArrowRight
+                        size={11}
+                        className="transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:translate-x-1"
+                      />
                     </span>
                   </div>
                 </Link>

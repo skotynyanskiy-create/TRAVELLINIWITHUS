@@ -19,9 +19,9 @@ tags:
 ## Contesto
 
 Il repository GitHub `skotynyanskiy-create/TRAVELLINIWITHUS` e' pubblico.
-Il file `firebase-applet-config.json` (root) contiene la Firebase Web API key
-del progetto `gen-lang-client-0138696306`. Gitleaks ha segnalato il valore
-come `gcp-api-key` nel commit `f43be44144`.
+Il file `firebase-applet-config.json` (root) non deve contenere la Firebase Web
+API key reale. Gitleaks ha segnalato un valore storico come `gcp-api-key` nel
+commit `f43be44144`.
 
 Una Web API key Firebase **non e' un secret tradizionale**: viene comunque
 spedita al client in produzione perche' fa parte di `firebaseConfig`. Identifica
@@ -37,15 +37,27 @@ Il rischio reale non e' la key in se ma le mancate barriere a valle:
 ## Obiettivo
 
 Indurire l'esposizione Firebase del progetto a livelli production-grade
-**prima del deploy pubblico**, senza ruotare la key (perche' non e' necessario
-per Web API key Firebase — se usato seriamente, vale lo stesso scenario).
+**prima del deploy pubblico**.
+
+## Stato 2026-06-07
+
+- Valore reale rimosso da `firebase-applet-config.json`.
+- Valore reale rimosso da questa nota.
+- `src/lib/firebaseApp.ts` legge la Web API key da `VITE_FIREBASE_API_KEY`.
+- `.env.example` documenta `VITE_FIREBASE_API_KEY`.
+- `src/context/AuthContext.tsx` evita init Auth se la key manca, cosi le pagine pubbliche non emettono `auth/invalid-api-key`.
+- `npm run audit:secrets` resta FAIL per leak storici in git history: serve azione owner su GCP e decisione su history rewrite.
+
+Decisione operativa: prima del deploy pubblico, impostare `VITE_FIREBASE_API_KEY`
+in env produzione e confermare restrizioni GCP. Dopo rotazione/restrizione,
+il leak storico diventa gestibile; senza conferma, resta blocker.
 
 ## Piano operativo
 
 ### Fase 1 — GCP Console: restrizioni sulla API key (15 minuti)
 
-Console GCP → APIs & Services → Credentials → trova la chiave
-`AIzaSyD_HRu36BJvJs9PAO29qOE8kAX2KaAMtDU` → Edit:
+Console GCP → APIs & Services → Credentials → trova la Firebase Web API key
+del progetto → Edit:
 
 1. **Application restrictions**: scegli "HTTP referrers (web sites)".
    Inserire come referrer accettati:
@@ -63,6 +75,10 @@ Console GCP → APIs & Services → Credentials → trova la chiave
 
 Salva. La chiave continua a funzionare dal sito ma non e' usabile da terzi
 ospitati su domini diversi.
+
+Nota repo: il valore reale della Web API key non deve essere scritto nei docs
+o in `firebase-applet-config.json`. Usare `VITE_FIREBASE_API_KEY` in `.env`
+locale/produzione.
 
 ### Fase 2 — Firestore Rules: verifica (gia' fatta)
 

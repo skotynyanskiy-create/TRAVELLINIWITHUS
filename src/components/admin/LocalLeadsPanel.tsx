@@ -108,7 +108,7 @@ export default function LocalLeadsPanel() {
             Lead salvati su questo browser
           </h3>
           <p className="mt-2 max-w-xl text-sm text-zinc-500">
-            Quando il backend non e' configurato (Brevo / Resend) o l'API e' irraggiungibile, i form
+            Quando il backend non è configurato (Brevo / Resend) o l'API è irraggiungibile, i form
             salvano i lead in localStorage. Qui li vedi e puoi esportarli in CSV.
           </p>
         </div>

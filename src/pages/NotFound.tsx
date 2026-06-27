@@ -1,8 +1,9 @@
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { ArrowRight, Compass } from 'lucide-react';
 import SEO from '../components/SEO';
 import PageLayout from '../components/PageLayout';
 import Section from '../components/Section';
+import { LITE_MODE } from '../config/liteMode';
 
 export default function NotFound() {
   return (
@@ -33,8 +34,9 @@ export default function NotFound() {
             Pagina <span className="italic opacity-60">non trovata</span>
           </h1>
           <p className="max-w-2xl mx-auto mb-10 text-lg font-light leading-relaxed text-black/70">
-            Il contenuto che stai cercando non è disponibile a questo indirizzo. Puoi tornare alla
-            home oppure ripartire da Esplora, dalla mappa o dagli itinerari.
+            {LITE_MODE
+              ? 'Il contenuto che stai cercando non è disponibile a questo indirizzo. Puoi tornare alla home o aprire la mappa dei posti che abbiamo vissuto.'
+              : 'Il contenuto che stai cercando non è disponibile a questo indirizzo. Puoi tornare alla home oppure ripartire da Esplora, dalla mappa o dagli itinerari.'}
           </p>
 
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -44,12 +46,14 @@ export default function NotFound() {
             >
               Torna alla home <ArrowRight size={14} />
             </Link>
-            <Link
-              to="/esplora"
-              className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-8 py-4 text-xs font-semibold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-            >
-              Apri Esplora
-            </Link>
+            {!LITE_MODE && (
+              <Link
+                to="/esplora"
+                className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-8 py-4 text-xs font-semibold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+              >
+                Apri Esplora
+              </Link>
+            )}
             <Link
               to="/mappa"
               className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-8 py-4 text-xs font-semibold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"

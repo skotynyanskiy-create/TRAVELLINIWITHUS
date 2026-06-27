@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { Compass, MapPin, Search, RotateCcw } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 
 interface EmptyStateProps {
   variant: 'no-content' | 'no-results';

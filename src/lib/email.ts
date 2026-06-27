@@ -1,3 +1,5 @@
+import { BRAND_STATS, CONTACTS, SITE_URL } from '../config/site';
+
 type EmailAddress = string | { name?: string; email: string };
 
 export interface SendEmailInput {
@@ -121,6 +123,8 @@ export function renderMediaKitNotification(lead: {
   website?: string;
   focus?: string;
   brief?: string;
+  budget?: string;
+  period?: string;
 }): Pick<SendEmailInput, 'subject' | 'html' | 'text'> {
   const subject = `Richiesta media kit — ${lead.company}`;
   const html = `
@@ -128,12 +132,14 @@ export function renderMediaKitNotification(lead: {
       <h2 style="margin:0 0 12px;">Nuova richiesta media kit</h2>
       <p><strong>Azienda:</strong> ${escapeHtml(lead.company)}</p>
       <p><strong>Email:</strong> ${escapeHtml(lead.email)}</p>
-      ${lead.website ? `<p><strong>Website:</strong> ${escapeHtml(lead.website)}</p>` : ''}
+      ${lead.website ? `<p><strong>Sito/Profilo:</strong> ${escapeHtml(lead.website)}</p>` : ''}
       ${lead.focus ? `<p><strong>Focus:</strong> ${escapeHtml(lead.focus)}</p>` : ''}
-      ${lead.brief ? `<p><strong>Brief:</strong></p><div style="white-space:pre-wrap;">${escapeHtml(lead.brief)}</div>` : ''}
+      ${lead.budget ? `<p><strong>Budget:</strong> ${escapeHtml(lead.budget)}</p>` : ''}
+      ${lead.period ? `<p><strong>Periodo:</strong> ${escapeHtml(lead.period)}</p>` : ''}
+      ${lead.brief ? `<p><strong>Brief:</strong></p><div style="white-space:pre-wrap;border-left:3px solid #C4A47C;padding-left:12px;color:#333;">${escapeHtml(lead.brief)}</div>` : ''}
     </div>
   `;
-  const text = `Media kit request\nAzienda: ${lead.company}\nEmail: ${lead.email}`;
+  const text = `Richiesta media kit\nAzienda: ${lead.company}\nEmail: ${lead.email}${lead.website ? `\nSito: ${lead.website}` : ''}${lead.focus ? `\nFocus: ${lead.focus}` : ''}${lead.budget ? `\nBudget: ${lead.budget}` : ''}${lead.period ? `\nPeriodo: ${lead.period}` : ''}\n\nBrief:\n${lead.brief || ''}`;
   return { subject, html, text };
 }
 
@@ -186,9 +192,9 @@ export function renderWelcomeEmail(input: {
         Intanto, se ti va, ci trovi qui:
       </p>
       <p style="margin:0 0 24px;">
-        &middot; <a href="https://www.instagram.com/travelliniwithus/" style="color:#9a3412;">Instagram</a> (167K travellini)<br/>
-        &middot; <a href="https://www.tiktok.com/@travelliniwithus" style="color:#9a3412;">TikTok</a> (90K)<br/>
-        &middot; <a href="https://travelliniwithus.it/esplora" style="color:#9a3412;">Posti raccontati bene</a> sul sito
+        &middot; <a href="${CONTACTS.instagramUrl}" style="color:#9a3412;">Instagram</a> (${BRAND_STATS.instagramFollowers} travellini)<br/>
+        &middot; <a href="${CONTACTS.tiktokUrl}" style="color:#9a3412;">TikTok</a> (${BRAND_STATS.tiktokFollowers})<br/>
+        &middot; <a href="${SITE_URL}/esplora" style="color:#9a3412;">Posti raccontati bene</a> sul sito
       </p>
       <p style="margin:24px 0 0;color:#57534e;font-size:14px;">
         P.S. Se hai 30 secondi: rispondi a questa email con la prossima destinazione che hai in mente. Leggiamo davvero, non c'è un bot.
@@ -205,9 +211,9 @@ Sei nella lista di chi viaggia con criterio. Niente automazione cieca:
 ti scriviamo solo quando c'è qualcosa di davvero utile da salvare.
 ${input.leadMagnetUrl ? `\nScarica la guida "10 posti italiani non ovvi": ${input.leadMagnetUrl}\n` : ''}
 Intanto, se ti va, ci trovi qui:
-- Instagram: https://www.instagram.com/travelliniwithus/
-- TikTok: https://www.tiktok.com/@travelliniwithus
-- Sito: https://travelliniwithus.it/esplora
+- Instagram: ${CONTACTS.instagramUrl}
+- TikTok: ${CONTACTS.tiktokUrl}
+- Sito: ${SITE_URL}/esplora
 
 P.S. Se hai 30 secondi: rispondi a questa email con la prossima destinazione che hai in mente. Leggiamo davvero, non c'è un bot.
 

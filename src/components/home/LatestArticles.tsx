@@ -1,5 +1,5 @@
 import { ArrowRight, Calendar, Clock } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { motion } from 'motion/react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchArticles } from '../../services/firebaseService';
@@ -10,6 +10,9 @@ import { siteContentDefaults } from '../../config/siteContent';
 import { DEMO_ARTICLE_PREVIEW, DEMO_ARTICLES_EXTRA } from '../../config/demoContent';
 import { useSiteContent } from '../../hooks/useSiteContent';
 import { toMillis, type DateValue } from '../../utils/dateValue';
+import { LITE_MODE } from '../../config/liteMode';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
+import { IMAGE_WIPE_EASE } from '../../lib/animations';
 
 interface Article {
   id: string;
@@ -62,19 +65,21 @@ export default function LatestArticles() {
             <span className="text-[10px] uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
               Editoriale
             </span>
-            <h2 className="mt-1 text-3xl font-serif text-ink md:text-4xl">
+            <h2 className="mt-1 text-3xl font-serif text-ink md:text-5xl">
               Storie da leggere prima di partire.
             </h2>
             <p className="mt-3 max-w-xl text-base leading-relaxed text-black/60">
               Luoghi, atmosfere e dettagli utili per capire cosa salvare per il prossimo viaggio.
             </p>
           </div>
-          <Link
-            to="/esplora"
-            className="hidden items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-transform hover:translate-x-0.5 sm:inline-flex"
-          >
-            Tutti gli articoli <ArrowRight size={12} />
-          </Link>
+          {!LITE_MODE && (
+            <Link
+              to="/esplora"
+              className="hidden items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-transform hover:translate-x-0.5 sm:inline-flex"
+            >
+              Tutti gli articoli <ArrowRight size={12} />
+            </Link>
+          )}
         </div>
 
         {loadingArticles ? (
@@ -93,26 +98,32 @@ export default function LatestArticles() {
               </span>
               <h3 className="mt-2 text-3xl font-serif text-ink">Le storie stanno arrivando.</h3>
               <p className="mt-3 text-base leading-relaxed text-black/60">
-                Intanto puoi esplorare l&apos;archivio per luogo o per esperienza.
+                {LITE_MODE
+                  ? 'Iscriviti alla newsletter per ricevere il primo pillar appena pubblicato.'
+                  : "Intanto puoi esplorare l'archivio per luogo o per esperienza."}
               </p>
-              <Link
-                to="/esplora"
-                className="mt-6 inline-flex items-center gap-2 rounded-lg bg-ink px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
-              >
-                Esplora l&apos;archivio <ArrowRight size={14} />
-              </Link>
+              {!LITE_MODE && (
+                <Link
+                  to="/esplora"
+                  className="mt-6 inline-flex items-center gap-2 rounded-lg bg-ink px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
+                >
+                  Esplora l&apos;archivio <ArrowRight size={14} />
+                </Link>
+              )}
             </div>
           </div>
         )}
 
-        <div className="mt-12 flex justify-center sm:hidden">
-          <Link
-            to="/esplora"
-            className="inline-flex items-center gap-2 rounded-lg border border-black/10 px-5 py-2.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-          >
-            Tutti gli articoli <ArrowRight size={12} />
-          </Link>
-        </div>
+        {!LITE_MODE && (
+          <div className="mt-12 flex justify-center sm:hidden">
+            <Link
+              to="/esplora"
+              className="inline-flex items-center gap-2 rounded-lg border border-black/10 px-5 py-2.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+            >
+              Tutti gli articoli <ArrowRight size={12} />
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );
@@ -138,6 +149,14 @@ function MagazineGrid({ articles }: { articles: Article[] }) {
   if (articles.length === 0) return null;
 
   const [cover, ...rest] = articles;
+  if (articles.length === 1) {
+    return (
+      <div className="mx-auto max-w-3xl">
+        <ArticleCard article={cover} variant="cover" index={0} />
+      </div>
+    );
+  }
+
   const subFeatures = rest.slice(0, 2);
   const secondary = rest.slice(2, 5);
 
@@ -180,6 +199,7 @@ interface ArticleCardProps {
 
 function ArticleCard({ article, variant, index, className = '' }: ArticleCardProps) {
   const href = `/articolo/${article.slug || article.id}`;
+  const reducedMotion = useReducedMotion();
 
   const aspect = {
     cover: 'aspect-[16/11] lg:aspect-[16/12]',
@@ -198,26 +218,29 @@ function ArticleCard({ article, variant, index, className = '' }: ArticleCardPro
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={reducedMotion ? false : { opacity: 0, y: 8 }}
+      whileInView={reducedMotion ? {} : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ duration: 0.5, delay: index * 0.06 }}
-      className={`group flex h-full flex-col overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white transition-all hover:-translate-y-1 hover:shadow-md ${className}`}
+      className={`group flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white transition-all duration-500 hover:-translate-y-1.5 hover:shadow-[var(--shadow-premium)] ${className}`}
     >
       <Link to={href} className={`relative block overflow-hidden ${aspect}`}>
-        <OptimizedImage
-          src={article.image}
-          alt={article.title}
-          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-        />
-        <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] backdrop-blur-md">
+        <motion.div
+          className="h-full w-full"
+          initial={reducedMotion ? false : { clipPath: 'inset(100% 0 0 0)' }}
+          whileInView={reducedMotion ? {} : { clipPath: 'inset(0% 0 0 0)' }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.85, ease: IMAGE_WIPE_EASE, delay: index * 0.06 + 0.1 }}
+        >
+          <OptimizedImage
+            src={article.image}
+            alt={article.title}
+            className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
+          />
+        </motion.div>
+        <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] shadow-sm backdrop-blur-md">
           {article.category}
         </span>
-        {variant === 'cover' && (
-          <span className="absolute right-4 top-4 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white shadow-sm">
-            Storia in evidenza
-          </span>
-        )}
       </Link>
       <div className="flex flex-1 flex-col gap-3 p-6">
         {showMeta && (
@@ -247,7 +270,11 @@ function ArticleCard({ article, variant, index, className = '' }: ArticleCardPro
           to={href}
           className="mt-auto inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
         >
-          Leggi <ArrowRight size={12} />
+          Leggi{' '}
+          <ArrowRight
+            size={12}
+            className="transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:translate-x-1"
+          />
         </Link>
       </div>
     </motion.article>

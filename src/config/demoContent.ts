@@ -32,7 +32,7 @@ export const DEMO_ARTICLE_PREVIEW = {
 export const DEMO_ARTICLE_PATH = `/articolo/${DEMO_ARTICLE_SLUG}`;
 
 /* Additional demo articles for homepage editorial section */
-export const DEMO_ARTICLES_EXTRA = [
+const RAW_DEMO_ARTICLES_EXTRA = [
   {
     id: 'puglia-trulli-masserie',
     slug: 'puglia-trulli-masserie',
@@ -91,6 +91,21 @@ export const DEMO_ARTICLES_EXTRA = [
     createdAt: '2026-04-05T09:15:00.000Z',
   },
 ];
+
+/**
+ * Sfoltimento "1 per regione" — 2026-05-19.
+ *
+ * RAW_DEMO_ARTICLES_EXTRA contiene 4 articoli inline (archivio dormiente).
+ * DEMO_ARTICLES_EXTRA esporta solo i 2 coerenti con gli slug visibili
+ * (puglia, toscana). Esclusi: costiera-amalfitana (duplica
+ * costiera-amalfitana-fuori-stagione gia in SEEDS) e nord-delle-filippine
+ * (hidden dallo sfoltimento articoli).
+ */
+const VISIBLE_EXTRA_SLUGS = new Set<string>(['puglia-trulli-masserie', 'toscana-borghi-nascosti']);
+
+export const DEMO_ARTICLES_EXTRA = RAW_DEMO_ARTICLES_EXTRA.filter((item) =>
+  VISIBLE_EXTRA_SLUGS.has(item.slug)
+);
 
 export const DEMO_DESTINATION_CARD = {
   id: `destination-${DEMO_ARTICLE_SLUG}`,
@@ -155,7 +170,7 @@ export const DEMO_ARTICLE_MARKER = {
   title: 'Dolomiti: Tra Rifugi di Design e Vette Leggendarie',
 };
 
-export const DEMO_PRODUCTS = [
+const RAW_DEMO_PRODUCTS = [
   {
     id: 'guida-premium-dolomiti',
     slug: 'guida-premium-dolomiti',
@@ -253,6 +268,21 @@ export const DEMO_PRODUCTS = [
     ],
   },
 ];
+
+/**
+ * Sfoltimento "1 per tipo" — 2026-05-19.
+ *
+ * RAW_DEMO_PRODUCTS contiene prodotti in lavorazione (archivio dormiente).
+ * DEMO_PRODUCTS esporta solo il primo SKU prioritario: la pagina shop deve
+ * sembrare una lista d'attesa curata, non un catalogo vendibile finto.
+ *
+ * Per ri-attivare un prodotto nascosto: aggiungere lo slug a VISIBLE_PRODUCT_SLUGS.
+ */
+const VISIBLE_PRODUCT_SLUGS = new Set<string>(['guida-premium-dolomiti']);
+
+export const DEMO_PRODUCTS = RAW_DEMO_PRODUCTS.filter((item) =>
+  VISIBLE_PRODUCT_SLUGS.has(item.slug)
+);
 
 // Manteniamo questi due export per compatibilità con altre parti del sito
 export const DEMO_PRODUCT_SLUG = DEMO_PRODUCTS[0].slug;

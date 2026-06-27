@@ -1,249 +1,227 @@
 import { useRef } from 'react';
-import { motion } from 'motion/react';
-import { useGSAP } from '@gsap/react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowDown, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { motion, useScroll, useTransform, type Variants } from 'motion/react';
+import { ArrowRight } from 'lucide-react';
+import { Link } from '@/src/components/TransitionLink';
 import Button from '../Button';
-import { FEATURED_REEL } from '../../config/site';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import HeroBackdrop from './HeroBackdrop';
+import { LITE_MODE } from '../../config/liteMode';
 
-const HERO_IMAGE_DESKTOP = '/images/brand/couple-travel.png';
-const HERO_IMAGE_MOBILE = '/images/hero-amalfi.png';
+const HERO_IMAGE_DESKTOP = '/images/brand/couple-travel.webp';
+const HERO_IMAGE_MOBILE = '/images/hero-amalfi.webp';
 // videoSrc omitted finché public/videos/hero.webm non è disponibile (evita HEAD 404 in console)
 const HERO_VIDEO: string | undefined = undefined;
-const REEL_FALLBACK_IMAGE = '/images/brand/couple-travel.webp';
 
-const HERO_TITLE = 'Posti particolari che valgono davvero.';
-const TRUST_PILLS = [
-  'Vissuto prima di scritto',
-  'Dettagli utili, zero marketing',
-  'Criterio, non hype',
+// Righe visive del titolo: wrap dopo "particolari" (editoriale pulito, evita
+// il pronome "che" orfano a fine riga).
+const HERO_TITLE_LINES = ['Posti particolari', 'che valgono davvero.'] as const;
+// Testo completo per aria-label (screen-reader legge il titolo per intero).
+const HERO_TITLE_FULL = 'Posti particolari che valgono davvero.';
+
+const PROOF_POINTS = [
+  { label: 'Metodo', value: 'Provato sul posto', short: 'Provato sul posto' },
+  { label: 'Focus', value: 'Coppie e viaggi reali', short: 'Coppie reali' },
+  { label: 'Filtro', value: 'Criterio, non hype', short: 'Criterio' },
 ];
 
-gsap.registerPlugin(ScrollTrigger);
+// Easing condiviso intro (cubic-bezier premium, ref ui-designer).
+const INTRO_EASE = [0.87, 0, 0.13, 1] as const;
 
-function getInstagramEmbedUrl(url: string) {
-  return url.includes('/reel/') ? `${url.replace(/\/?$/, '/')}embed/` : '';
-}
+// introItem: usato per eyebrow/paragraph/CTA/proof (fade+slide piccolo).
+const introItem = (delay: number): Variants => ({
+  hidden: { opacity: 0, y: 12 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: INTRO_EASE, delay } },
+});
 
-function FeaturedReelPreview() {
-  const reelUrl = FEATURED_REEL.url.trim();
-  const reelEmbedUrl = getInstagramEmbedUrl(reelUrl);
-  const reelThumbnail = FEATURED_REEL.thumbnail.trim();
-  const hasConfiguredReel = Boolean(reelEmbedUrl);
-  const previewImage = reelThumbnail || REEL_FALLBACK_IMAGE;
-
-  // Quando non c'e' un reel Instagram reale configurato (URL vuoto in
-  // FEATURED_REEL), mostriamo un messaggio generico invece della caption
-  // grezza — evita di esporre stringhe "demo/placeholder" agli utenti.
-  const reelMessage = hasConfiguredReel
-    ? FEATURED_REEL.caption
-    : 'Guarda il lato più immediato del progetto sul nostro profilo Instagram.';
-
-  return (
-    <motion.aside
-      data-hero-reel
-      className="w-full max-w-[21rem] justify-self-start lg:justify-self-end"
-      aria-label="Ultimo reel Instagram"
-    >
-      <div className="rounded-lg border border-white/14 bg-black/24 p-3 shadow-[0_24px_64px_rgba(0,0,0,0.3)] backdrop-blur-md">
-        <div className="mb-3 flex items-center justify-between gap-4 px-1">
-          <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/72">
-            Ultimo reel Instagram
-          </span>
-          <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" />
-        </div>
-
-        <div className="relative aspect-[9/12] overflow-hidden rounded-lg bg-ink">
-          {hasConfiguredReel ? (
-            <iframe
-              src={reelEmbedUrl}
-              className="absolute inset-0 h-full w-full"
-              frameBorder="0"
-              scrolling="no"
-              allowFullScreen
-              title="Ultimo reel Instagram"
-            />
-          ) : (
-            <img
-              src={previewImage}
-              alt={hasConfiguredReel ? FEATURED_REEL.caption : 'Preview Instagram Travelliniwithus'}
-              className="h-full w-full object-cover object-center"
-              loading="eager"
-            />
-          )}
-
-          <div className="pointer-events-none absolute inset-0 flex items-end bg-gradient-to-b from-black/8 via-black/4 to-black/72 p-5">
-            <p className="max-w-[14rem] text-sm font-semibold leading-snug text-white">
-              {reelMessage}
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-4 border-t border-white/10 px-1 pt-3">
-          <Link
-            to="/#storie"
-            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/68 transition-colors hover:text-[var(--color-accent)]"
-          >
-            Tutte le storie <ArrowRight size={12} />
-          </Link>
-        </div>
-      </div>
-    </motion.aside>
-  );
-}
+// titleLine: clip reveal puro (translateY senza opacity — LCP-safe).
+// Il testo è dipinto subito, solo mascherato dall'overflow-hidden del wrapper.
+const titleLine = (delay: number): Variants => ({
+  hidden: { y: '110%' },
+  show: { y: '0%', transition: { duration: 0.6, ease: INTRO_EASE, delay } },
+});
 
 export default function HeroSection() {
   const heroRef = useRef<HTMLElement>(null);
   const reducedMotion = useReducedMotion();
+  const animate = !reducedMotion;
 
-  useGSAP(
-    () => {
-      if (reducedMotion) return;
-      const root = heroRef.current;
-      if (!root) return;
-
-      // Hero image clipPath wipe da sinistra (premium editorial,
-      // ref: Hedwig Travel, Le Sirenuse). Non distrae dal soggetto
-      // perche' accompagna l'entry dei testi nei primi 1.4s.
-      gsap.set('[data-hero-image]', { clipPath: 'inset(0 100% 0 0)' });
-      gsap.set('[data-hero-eyebrow]', { opacity: 0, y: 12 });
-      gsap.set('[data-hero-title]', { y: 16 });
-      gsap.set('[data-hero-paragraph]', { opacity: 0, y: 12 });
-      gsap.set('[data-hero-pills]', { opacity: 0, y: 8 });
-      gsap.set('[data-hero-cta]', { opacity: 0, y: 12 });
-      gsap.set('[data-hero-reel]', { opacity: 0, y: 16 });
-
-      const intro = gsap.timeline({
-        defaults: { ease: 'power2.out', duration: 0.5 },
-      });
-      intro
-        .to(
-          '[data-hero-image]',
-          { clipPath: 'inset(0 0% 0 0)', duration: 1.4, ease: 'expo.inOut' },
-          0
-        )
-        .to('[data-hero-eyebrow]', { opacity: 1, y: 0 }, 0.35)
-        .to('[data-hero-title]', { y: 0, duration: 0.6 }, '-=0.3')
-        .to('[data-hero-paragraph]', { opacity: 1, y: 0 }, '-=0.35')
-        .to('[data-hero-pills]', { opacity: 1, y: 0 }, '-=0.35')
-        .to('[data-hero-cta]', { opacity: 1, y: 0 }, '-=0.35')
-        .to('[data-hero-reel]', { opacity: 1, y: 0 }, '-=0.4');
-
-      // Light background scale on scroll (no pin, no overlay opacity drama)
-      gsap.to('[data-hero-image]', {
-        scale: 1.03,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: root,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 0.4,
-        },
-      });
-    },
-    { scope: heroRef, dependencies: [reducedMotion] }
-  );
+  // Parallax scroll: l'immagine scala leggermente man mano che l'hero esce
+  // dalla viewport (sostituisce lo scrub di ScrollTrigger, niente pin).
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start'],
+  });
+  const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.03]);
 
   return (
     <section
       ref={heroRef}
-      className="relative flex min-h-[92svh] w-full items-center overflow-hidden bg-ink px-6 pb-12 pt-32 text-white md:px-12 md:pb-16 md:pt-28 xl:min-h-[94svh]"
+      className="relative flex min-h-[90svh] w-full items-center overflow-hidden bg-[var(--color-ink)] px-6 pb-14 pt-32 text-white md:items-end md:px-12 md:pb-20 md:pt-36 xl:min-h-[92svh]"
     >
-      <HeroBackdrop
-        imageDesktop={HERO_IMAGE_DESKTOP}
-        imageMobile={HERO_IMAGE_MOBILE}
-        videoSrc={HERO_VIDEO}
-      />
+      {/* L'immagine LCP deve essere visibile subito. Manteniamo solo il leggero
+          parallax in scroll: niente wipe iniziale su clip-path. */}
+      <motion.div
+        data-hero-image-wrap
+        className="absolute inset-0 z-0"
+        style={animate ? { scale: imageScale } : undefined}
+      >
+        <HeroBackdrop
+          imageDesktop={HERO_IMAGE_DESKTOP}
+          imageMobile={HERO_IMAGE_MOBILE}
+          videoSrc={HERO_VIDEO}
+        />
+      </motion.div>
 
       <div
         data-hero-overlay
-        // Single responsive scrim: verticale su mobile (no second column da
-        // oscurare), orizzontale su md+ per proteggere la leggibilita
-        // del copy nella colonna sinistra senza scurire il reel a destra.
-        className="absolute inset-0 z-[1] bg-[linear-gradient(180deg,rgba(17,17,17,0.2)_0%,rgba(17,17,17,0.5)_40%,rgba(17,17,17,0.78)_100%)] md:bg-[linear-gradient(90deg,rgba(17,17,17,0.78)_0%,rgba(17,17,17,0.46)_48%,rgba(17,17,17,0.2)_100%)]"
+        // Scrim responsive ammorbidito (ui-designer 10/10): verticale su mobile,
+        // orizzontale su md+ con picco sinistro ridotto a 0.74 così la coppia a
+        // destra resta leggibile invece di essere sepolta nel nero.
+        className="twu-hero-scrim absolute inset-0 z-[1]"
       />
 
+      {/* Micro-scrim dal basso: protegge solo la proof line senza scurire il
+          centro dell'immagine. Attivo su tutti i breakpoint. */}
       <div
-        data-hero-content
-        className="relative z-10 mx-auto grid w-full max-w-7xl gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-center lg:gap-16 xl:grid-cols-[minmax(0,1fr)_24rem]"
-      >
-        <div className="max-w-3xl">
-          <span
-            data-hero-eyebrow
-            className="block text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent)] sm:text-xs"
-          >
-            Coppia italiana &mdash; 8 anni di viaggio vero
-          </span>
+        aria-hidden
+        className="twu-bottom-scrim pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-1/3"
+      />
 
+      <div data-hero-content className="relative z-10 mx-auto w-full max-w-7xl">
+        <div className="max-w-[51rem]">
+          <motion.span
+            data-hero-eyebrow
+            className="block text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-accent)] drop-shadow sm:text-sm"
+            variants={animate ? introItem(0.1) : undefined}
+            initial={animate ? 'hidden' : false}
+            animate={animate ? 'show' : false}
+          >
+            Rodrigo & Betta · dal 2017
+          </motion.span>
+
+          {/* D1: clip reveal per riga — il titolo è il momento d'ingresso.
+              aria-label sull'h1 fornisce il testo completo per screen-reader.
+              Niente opacity:0 → LCP-safe (il testo è dipinto, solo traslato
+              fuori dal clip container). reducedMotion → h1 statico. */}
           <h1
             data-hero-title
-            className="mt-5 max-w-4xl font-serif font-medium leading-[0.95] tracking-tight text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.45)]"
-            style={{ fontSize: 'var(--text-display-1, clamp(3rem, 6vw + 1rem, 6.5rem))' }}
+            aria-label={HERO_TITLE_FULL}
+            className="mt-5 max-w-[15ch] font-serif text-[clamp(2.75rem,5vw+1rem,6rem)] font-medium leading-[1.02] text-white [text-wrap:balance] lg:leading-[0.95]"
           >
-            {HERO_TITLE}
+            {animate
+              ? HERO_TITLE_LINES.map((line, i) => (
+                  <span key={line} className="block overflow-hidden">
+                    <motion.span
+                      aria-hidden
+                      className="block"
+                      variants={titleLine(0.15 + i * 0.1)}
+                      initial="hidden"
+                      animate="show"
+                    >
+                      {line}
+                    </motion.span>
+                  </span>
+                ))
+              : HERO_TITLE_FULL}
           </h1>
 
-          <p
+          <motion.p
             data-hero-paragraph
-            className="mt-6 max-w-2xl text-base leading-relaxed text-white/86 drop-shadow-[0_2px_12px_rgba(0,0,0,0.3)] md:text-xl"
+            className="mt-6 max-w-2xl text-base leading-relaxed text-white/92 md:text-xl"
+            variants={animate ? introItem(0.4) : undefined}
+            initial={animate ? 'hidden' : false}
+            animate={animate ? 'show' : false}
           >
-            Guide pratiche scritte da chi ha vissuto il viaggio. Atmosfera, dettagli utili e
-            consigli che aiutano a capire se un posto merita davvero.{' '}
-            <strong className="font-semibold text-white">
-              Scriviamo per chi viaggia in coppia e vuole posti veri, non liste.
-            </strong>
-          </p>
+            Guide pratiche per coppie che cercano posti veri: cosa vedere, dove fermarsi, cosa
+            evitare e quando vale davvero la pena partire.
+          </motion.p>
 
-          <div data-hero-pills className="mt-7 flex flex-wrap gap-2">
-            {TRUST_PILLS.map((pill) => (
-              <span
-                key={pill}
-                className="rounded-full border border-white/14 bg-white/8 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/78 backdrop-blur-sm"
-              >
-                {pill}
-              </span>
-            ))}
-          </div>
-
-          <div data-hero-cta className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
+          <motion.div
+            data-hero-cta
+            className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center"
+            variants={animate ? introItem(0.48) : undefined}
+            initial={animate ? 'hidden' : false}
+            animate={animate ? 'show' : false}
+          >
             <Button
-              to="/esplora"
+              to={LITE_MODE ? '/#storie' : '/esplora'}
               variant="cta"
               size="lg"
-              trackingId="home_hero_esplora"
+              trackingId={LITE_MODE ? 'home_hero_storie' : 'home_hero_esplora'}
               magnetic
-              className="group h-14 min-w-[230px] rounded-lg shadow-[0_18px_44px_rgba(0,0,0,0.18)] sm:h-16"
+              className="group h-14 min-w-[230px] rounded-lg shadow-[var(--shadow-lg)] sm:h-16"
             >
-              <span className="text-sm font-bold uppercase tracking-widest">Apri Esplora</span>
+              <span className="text-sm font-bold uppercase tracking-widest">
+                {LITE_MODE ? 'Leggi le storie' : 'Apri Esplora'}
+              </span>
               <ArrowRight
                 size={20}
-                className="ml-2 transition-transform group-hover:translate-x-1"
+                className="ml-2 transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:translate-x-1.5"
               />
             </Button>
 
+            {/* Secondaria come link ghost (no min-w, no border): la primaria
+                accent resta visibilmente l'azione dominante. Solo da sm+. */}
             <Link
               to="/#storie"
               data-tracking-id="home_hero_storie"
-              className="group inline-flex h-14 min-w-[230px] items-center justify-center gap-2 rounded-lg border border-white/40 bg-black/10 px-8 text-sm font-bold uppercase tracking-widest text-white/90 transition-all duration-300 hover:border-white/70 hover:bg-white/15 hover:text-white sm:h-16"
+              className="group hidden h-14 items-center justify-center gap-2 px-2 text-sm font-bold uppercase tracking-widest text-white/82 transition-colors duration-300 hover:text-white sm:inline-flex sm:h-16"
             >
-              Leggi le storie
-              <ArrowDown
+              <span className="relative after:absolute after:inset-x-0 after:-bottom-1 after:h-px after:origin-left after:scale-x-0 after:bg-white/70 after:transition-transform after:duration-300 group-hover:after:scale-x-100">
+                Ultime guide
+              </span>
+              <ArrowRight
                 size={18}
-                className="transition-transform duration-300 group-hover:translate-y-0.5"
+                className="transition-transform duration-500 group-hover:translate-x-1"
               />
             </Link>
-          </div>
 
-          <p className="mt-6 max-w-xl text-xs font-semibold uppercase tracking-[0.18em] text-white/68">
-            Scoperta, utilità e uno sguardo personale prima di prenotare o partire.
-          </p>
+            {/* Via di fuga mobile: micro-link testuale sotto la primaria. */}
+            <Link
+              to="/#storie"
+              data-tracking-id="home_hero_storie_mobile"
+              className="inline-flex items-center gap-1.5 text-sm text-white/72 underline underline-offset-4 transition-colors hover:text-white sm:hidden"
+            >
+              Oppure leggi le ultime guide
+              <ArrowRight size={14} />
+            </Link>
+          </motion.div>
+
+          <motion.div
+            data-hero-proof
+            className="mt-8 max-w-2xl"
+            variants={animate ? introItem(0.56) : undefined}
+            initial={animate ? 'hidden' : false}
+            animate={animate ? 'show' : false}
+          >
+            {/* Mobile: riga inline ·-separata, value-first, sempre visibile. */}
+            <div className="flex flex-wrap items-center gap-2 border-t border-white/14 pt-4 text-xs font-semibold text-white/82 sm:hidden">
+              {PROOF_POINTS.map((point, index) => (
+                <span key={point.label} className="flex items-center gap-2">
+                  {index > 0 && (
+                    <span aria-hidden className="text-white/35">
+                      ·
+                    </span>
+                  )}
+                  {point.short}
+                </span>
+              ))}
+            </div>
+
+            {/* Desktop: griglia 3 colonne, value-first (il dato è forte, la
+                label è l'occhiello). */}
+            <div className="hidden gap-4 border-t border-white/14 pt-5 sm:grid sm:grid-cols-3">
+              {PROOF_POINTS.map((point) => (
+                <div key={point.label}>
+                  <p className="text-sm font-semibold text-white/90 sm:text-base">{point.value}</p>
+                  <p className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.16em] text-white/55">
+                    {point.label}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
         </div>
-
-        <FeaturedReelPreview />
       </div>
     </section>
   );

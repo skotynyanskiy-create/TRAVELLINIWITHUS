@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CheckCircle, Gift, Loader2, Mail, ShieldCheck, TrendingUp } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { trackEvent } from '../services/analytics';
 import { appendLeadFallback } from '../lib/leadFallback';
 import {
@@ -23,6 +23,7 @@ interface NewsletterProps {
   bullets?: string[];
   ctaLabel?: string;
   onSuccess?: () => void;
+  stacked?: boolean;
 }
 
 const variantCopy: Record<
@@ -136,6 +137,7 @@ export default function Newsletter({
   bullets,
   ctaLabel,
   onSuccess,
+  stacked = false,
 }: NewsletterProps) {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [email, setEmail] = useState('');
@@ -146,6 +148,7 @@ export default function Newsletter({
   const isCompact = compact || variant === 'compact';
   const isDark = variant === 'article' || variant === 'business';
   const errorId = `newsletter-error-${source}`;
+  const unlocksLeadMagnet = source.includes('lead_magnet');
 
   const handleSubscribe = async (e: FormEvent) => {
     e.preventDefault();
@@ -184,6 +187,9 @@ export default function Newsletter({
       }
 
       trackEvent('newsletter_signup', { source });
+      if (unlocksLeadMagnet) {
+        sessionStorage.setItem('twu_lead_magnet_unlocked', '1');
+      }
       setIsSubscribed(true);
       if (onSuccess) {
         setTimeout(onSuccess, 1200);
@@ -196,6 +202,9 @@ export default function Newsletter({
       });
       if (saved) {
         trackEvent('newsletter_signup', { source, fallback: 'localStorage' });
+        if (unlocksLeadMagnet) {
+          sessionStorage.setItem('twu_lead_magnet_unlocked', '1');
+        }
         setIsSubscribed(true);
         if (onSuccess) {
           setTimeout(onSuccess, 2000);
@@ -221,7 +230,7 @@ export default function Newsletter({
           onSubmit={handleSubscribe}
           className={isCompact ? 'space-y-3' : 'space-y-5'}
         >
-          <div className={isCompact ? 'flex flex-col gap-2 sm:flex-row' : 'space-y-2'}>
+          <div className={isCompact && !stacked ? 'flex flex-col gap-2 sm:flex-row' : 'space-y-2'}>
             {!isCompact && (
               <label
                 htmlFor={`newsletter-email-${source}`}
@@ -259,8 +268,7 @@ export default function Newsletter({
               tabIndex={-1}
               autoComplete="off"
               aria-hidden="true"
-              className="absolute h-0 w-0 overflow-hidden border-0 p-0 opacity-0"
-              style={{ left: '-10000px' }}
+              className="absolute -left-[10000px] h-0 w-0 overflow-hidden border-0 p-0 opacity-0"
             />
             {isCompact ? (
               <button
@@ -270,13 +278,13 @@ export default function Newsletter({
                   isDark
                     ? 'bg-[var(--color-accent)] text-[var(--color-ink)]'
                     : 'bg-[var(--color-ink)] text-white'
-                }`}
+                } ${stacked ? 'w-full' : ''}`}
               >
                 {isSubmitting ? <Loader2 size={14} className="animate-spin" /> : <Mail size={14} />}
                 {copy.ctaLabel}
               </button>
             ) : (
-              <Button type="submit" className="w-full">
+              <Button type="submit" disabled={isSubmitting} className="w-full">
                 {isSubmitting ? (
                   <>
                     Iscrizione in corso <Loader2 size={16} className="animate-spin" />
@@ -362,24 +370,36 @@ export default function Newsletter({
                 className={`mt-1 text-sm leading-relaxed ${isDark ? 'text-white/65' : 'text-black/60'}`}
               >
                 Ti scriviamo solo quando c'è qualcosa di davvero utile da salvare. Intanto, se ti
-                va, ci trovi su{' '}
-                <a
-                  href={CONTACTS.instagramUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline underline-offset-2 hover:text-[var(--color-accent)]"
-                >
-                  Instagram
-                </a>{' '}
-                e{' '}
-                <a
-                  href={CONTACTS.tiktokUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline underline-offset-2 hover:text-[var(--color-accent)]"
-                >
-                  TikTok
-                </a>
+                va,{' '}
+                {unlocksLeadMagnet ? (
+                  <Link
+                    to="/lead-magnet"
+                    className="underline underline-offset-2 hover:text-[var(--color-accent)]"
+                  >
+                    scarica subito il PDF
+                  </Link>
+                ) : (
+                  <>
+                    ci trovi su{' '}
+                    <a
+                      href={CONTACTS.instagramUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline underline-offset-2 hover:text-[var(--color-accent)]"
+                    >
+                      Instagram
+                    </a>{' '}
+                    e{' '}
+                    <a
+                      href={CONTACTS.tiktokUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline underline-offset-2 hover:text-[var(--color-accent)]"
+                    >
+                      TikTok
+                    </a>
+                  </>
+                )}
                 .
               </p>
             </div>

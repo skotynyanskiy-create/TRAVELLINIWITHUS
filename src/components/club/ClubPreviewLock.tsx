@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { Lock, ArrowRight } from 'lucide-react';
 
 /**
@@ -20,13 +20,14 @@ export default function ClubPreviewLock() {
     <section className="bg-[var(--color-sand)] py-20 md:py-28">
       <div className="mx-auto max-w-5xl px-6 md:px-12">
         <div className="mb-12 max-w-2xl">
-          <span className="text-eyebrow">Vedete com&apos;e&apos; fatta una guida</span>
+          <span className="text-eyebrow">Vedete com&apos;è fatta una guida</span>
           <h2 className="mt-5 font-serif font-medium leading-[1.1] tracking-tight text-[var(--color-ink)] text-[clamp(1.75rem,3vw+0.5rem,2.75rem)]">
             Le guide del Club sono lunghe, lente, dettagliate.
           </h2>
           <p className="mt-6 text-body-editorial">
-            Qui sotto trovate i primi 200 parole di una guida reale, scritta dopo dieci giorni in
-            Salento ad agosto 2025. Per leggere il resto, dovete entrare nel Club.
+            Qui sotto trovate un estratto rappresentativo del formato Club: voce diretta, dettagli
+            pratici, prezzi e note che aiutano a decidere. Il catalogo completo apre dopo la
+            waitlist.
           </p>
         </div>
 
@@ -54,12 +55,11 @@ export default function ClubPreviewLock() {
           {/* Preview body con drop cap editoriale */}
           <div className="article-body relative">
             <p className="text-body-editorial">
-              Marina Serra non e&apos; quella delle foto. Quella delle foto e&apos; una piscina
-              naturale di sette metri di diametro scavata dal mare in una roccia di tufo, dove alle
-              undici del mattino di un sabato d&apos;agosto c&apos;e&apos; gia&apos; gente a turno
-              per il tuffo perfetto. Quella che vi diciamo noi e&apos; il resto: i novanta metri di
-              costa a sinistra, dove l&apos;acqua e&apos; uguale ma non c&apos;e&apos; il rituale
-              del tuffo, e quindi nemmeno la fila.
+              Marina Serra non è quella delle foto. Quella delle foto è una piscina naturale di
+              sette metri di diametro scavata dal mare in una roccia di tufo, dove alle undici del
+              mattino di un sabato d&apos;agosto c&apos;è già gente a turno per il tuffo perfetto.
+              Quella che vi diciamo noi è il resto: i novanta metri di costa a sinistra, dove
+              l&apos;acqua è uguale ma non c&apos;è il rituale del tuffo, e quindi nemmeno la fila.
             </p>
             <p className="text-body-editorial mt-6">
               Ci siamo arrivati la prima volta tre estati fa, su consiglio del marito della padrona
@@ -70,9 +70,9 @@ export default function ClubPreviewLock() {
               3,00 € nel 2023).
             </p>
             <p className="text-body-editorial mt-6">
-              Quello che faremo qui non e&apos; raccontarvi Marina Serra come la conosce tutto il
-              sud Salento ad agosto — fila, lido, foto, ripartenza. Vi diciamo cosa abbiamo capito
-              noi in tre estati: dove parcheggiare per arrivare in
+              Quello che faremo qui non è raccontarvi Marina Serra come la conosce tutto il sud
+              Salento ad agosto — fila, lido, foto, ripartenza. Vi diciamo cosa abbiamo capito noi
+              in tre estati: dove parcheggiare per arrivare in
             </p>
 
             {/* Lock gradient + CTA */}
@@ -88,7 +88,7 @@ export default function ClubPreviewLock() {
               </p>
             </div>
             <Link
-              to="#pricing"
+              to="#club-pricing"
               onClick={(e) => {
                 // Smooth scroll alle tier pricing nell'hero sopra.
                 e.preventDefault();
@@ -96,7 +96,7 @@ export default function ClubPreviewLock() {
               }}
               className="inline-flex shrink-0 items-center gap-2 rounded-full bg-[var(--color-ink)] px-7 py-4 text-eyebrow text-white transition-colors hover:bg-[var(--color-accent)]"
             >
-              Entra nel Club <ArrowRight size={14} />
+              Mettimi in lista <ArrowRight size={14} />
             </Link>
           </div>
         </motion.article>

@@ -4,7 +4,7 @@ import type { Itinerary } from '../types';
  * Demo itinerari preview-only. Mostrano la struttura del tipo `Itinerary`
  * prima del seeding reale. Renderizzati con flag `isDemo: true` e DemoContentNotice.
  */
-export const DEMO_ITINERARIES: Itinerary[] = [
+const RAW_DEMO_ITINERARIES: Itinerary[] = [
   {
     id: 'sicilia-orientale-5gg',
     slug: 'sicilia-orientale-5gg',
@@ -584,5 +584,26 @@ export const DEMO_ITINERARIES: Itinerary[] = [
     isDemo: true,
   },
 ];
+
+/**
+ * Sfoltimento "1 per durata" — 2026-05-19.
+ *
+ * RAW_DEMO_ITINERARIES contiene 10 itinerari completi (archivio dormiente).
+ * DEMO_ITINERARIES esporta solo 3 (1 per durata):
+ * - weekend (2-3gg): salento-agosto-coppia
+ * - settimana (4-7gg): sicilia-orientale-5gg
+ * - slow trip (8-14gg): islanda-ring-road
+ *
+ * Per ri-attivare un itinerario nascosto: aggiungere lo slug a VISIBLE_ITINERARY_SLUGS.
+ */
+const VISIBLE_ITINERARY_SLUGS = new Set<string>([
+  'salento-agosto-coppia',
+  'sicilia-orientale-5gg',
+  'islanda-ring-road',
+]);
+
+export const DEMO_ITINERARIES: Itinerary[] = RAW_DEMO_ITINERARIES.filter((item) =>
+  VISIBLE_ITINERARY_SLUGS.has(item.slug)
+);
 
 export const DEMO_ITINERARY_SLUGS = DEMO_ITINERARIES.map((item) => item.slug);

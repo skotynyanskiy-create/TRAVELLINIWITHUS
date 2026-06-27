@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { motion } from 'motion/react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import {
   ArrowRight,
   BadgePercent,
@@ -21,6 +21,7 @@ import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import JsonLd from '../components/JsonLd';
 import FinalCtaSection from '../components/FinalCtaSection';
+import StickyMobileCTA from '../components/StickyMobileCTA';
 import { SITE_URL } from '../config/site';
 import { fetchResources } from '../services/firebaseService';
 import { trackEvent } from '../services/analytics';
@@ -31,6 +32,7 @@ interface ResourceItem {
   link: string;
   tags: string[];
   badge?: string;
+  commercialLabel: 'Affiliato' | 'Non affiliato' | 'Codice sconto';
   fit: string;
   avoid?: string;
 }
@@ -54,7 +56,7 @@ const resourceCategories: Array<{
           'Utile per ingressi, tour e attività quando vuoi capire disponibilita e orari prima di partire.',
         link: 'https://getyourguide.com/-cs552',
         tags: ['Esperienze', 'Prenotazioni'],
-        badge: 'Affiliato',
+        commercialLabel: 'Affiliato',
         fit: 'Per chi preferisce bloccare attività chiave prima del viaggio.',
         avoid: 'Da evitare se vuoi massima spontaneità o se il meteo e molto incerto.',
       },
@@ -65,6 +67,7 @@ const resourceCategories: Array<{
         link: 'https://heymondo.it/?utm_medium=Afiliado&utm_source=TRAVELLINIWITHUS&utm_campaign=PRINCIPAL&cod_descuento=TRAVELLINIWITHUS&ag_campaign=TRAVELLINI&agencia=JG4Tepc5b47oLeK3xGDmbAX9I25ExoDeoc8cbPFt',
         tags: ['Assicurazione', 'Sconto'],
         badge: '-10%',
+        commercialLabel: 'Codice sconto',
         fit: 'Per viaggi extra UE, itinerari lunghi o prenotazioni non banali.',
         avoid:
           'Non sostituisce la lettura delle condizioni: controlla sempre massimali e coperture.',
@@ -75,6 +78,7 @@ const resourceCategories: Array<{
           'Buono per confrontare tratte e capire il range prezzo prima di scegliere davvero una destinazione.',
         link: 'https://skyscanner.it',
         tags: ['Voli', 'Ricerca'],
+        commercialLabel: 'Non affiliato',
         fit: 'Per esplorare opzioni quando date o aeroporti sono flessibili.',
       },
       {
@@ -83,6 +87,7 @@ const resourceCategories: Array<{
           'Comodo per confrontare posizione, recensioni e condizioni di cancellazione in modo rapido.',
         link: 'https://booking.com',
         tags: ['Alloggi', 'Confronto'],
+        commercialLabel: 'Non affiliato',
         fit: 'Per scremare strutture e zone prima di decidere dove dormire.',
       },
     ],
@@ -99,6 +104,7 @@ const resourceCategories: Array<{
         link: 'https://airalo.com',
         tags: ['eSIM', 'Internet'],
         badge: 'Codice',
+        commercialLabel: 'Codice sconto',
         fit: 'Per viaggi in cui non vuoi perdere tempo a cercare SIM locali.',
         avoid: 'Verifica sempre copertura e compatibilita del telefono.',
       },
@@ -108,6 +114,7 @@ const resourceCategories: Array<{
           'Comoda per pagamenti, cambio valuta e controllo delle spese quando ti muovi tra paesi diversi.',
         link: 'https://revolut.com',
         tags: ['Pagamenti', 'Valuta'],
+        commercialLabel: 'Non affiliato',
         fit: 'Per tenere separate e leggibili le spese di viaggio.',
       },
       {
@@ -116,6 +123,7 @@ const resourceCategories: Array<{
           'Semplice per dividere costi tra coppia, amici o gruppo senza ricostruire tutto a fine viaggio.',
         link: 'https://splitwise.com',
         tags: ['Spese', 'Gratis'],
+        commercialLabel: 'Non affiliato',
         fit: 'Per viaggi in compagnia con spese condivise.',
       },
     ],
@@ -132,6 +140,7 @@ const resourceCategories: Array<{
           'Una soluzione pratica per tenere ordinati cavi, batterie e piccoli accessori senza perdere tempo nello zaino.',
         link: 'https://amazon.it',
         tags: ['Organizzazione', 'Gear'],
+        commercialLabel: 'Non affiliato',
         fit: 'Per chi porta camera, power bank, microfoni o più caricatori.',
       },
       {
@@ -140,6 +149,7 @@ const resourceCategories: Array<{
           'Camera full-frame per contenuti foto/video di livello alto quando il viaggio ha anche un obiettivo creator.',
         link: 'https://amzn.to/49Q6d10',
         tags: ['Camera', 'Creator'],
+        commercialLabel: 'Affiliato',
         fit: 'Per produzione visual seria, non per chi cerca solo ricordi rapidi.',
       },
       {
@@ -148,6 +158,7 @@ const resourceCategories: Array<{
           'Drone leggero per punti di vista ampi, da usare solo dove regole, condizioni e sicurezza lo permettono.',
         link: 'https://amzn.to/3P39XfN',
         tags: ['Drone', 'Visual'],
+        commercialLabel: 'Affiliato',
         fit: 'Per contenuti paesaggistici e destinazioni con spazi aperti.',
         avoid: 'Da evitare dove normative, vento o affollamento non lo consentono.',
       },
@@ -172,6 +183,10 @@ const resourcePrinciples = [
     text: 'Le affiliazioni sostengono il progetto senza trasformare il sito in una pagina coupon.',
   },
 ];
+
+function isCommercialResource(item: ResourceItem) {
+  return item.commercialLabel !== 'Non affiliato';
+}
 
 export default function Risorse() {
   const [copied, setCopied] = useState(false);
@@ -204,6 +219,7 @@ export default function Risorse() {
             link: resource.link,
             tags: resource.tags ?? [],
             badge: resource.badge,
+            commercialLabel: resource.badge ? 'Affiliato' : 'Non affiliato',
             fit: 'Risorsa inserita dal CMS: verifica descrizione, natura del link e coerenza prima del deploy.',
           })) ?? category.items,
       })),
@@ -282,7 +298,7 @@ export default function Risorse() {
           ))}
         </div>
 
-        <div className="mt-16 grid grid-cols-1 gap-8">
+        <div id="risorse-list" className="mt-16 grid scroll-mt-28 grid-cols-1 gap-8">
           {displayCategories.map((category) => (
             <motion.section
               key={category.id}
@@ -311,21 +327,32 @@ export default function Risorse() {
                     key={item.name}
                     href={item.link}
                     target="_blank"
-                    rel="nofollow sponsored noopener noreferrer"
+                    rel={
+                      isCommercialResource(item)
+                        ? 'nofollow sponsored noopener noreferrer'
+                        : 'noopener noreferrer'
+                    }
                     onClick={() =>
-                      trackEvent('affiliate_click', {
-                        name: item.name,
-                        category: category.id,
-                        url: item.link,
-                      })
+                      trackEvent(
+                        isCommercialResource(item) ? 'affiliate_click' : 'resource_click',
+                        {
+                          name: item.name,
+                          category: category.id,
+                          url: item.link,
+                          commercial_label: item.commercialLabel,
+                        }
+                      )
                     }
                     className="group flex min-h-[290px] flex-col rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-sand)] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-accent)]/35 hover:bg-white hover:shadow-xl"
                   >
                     <div className="mb-5 flex items-start justify-between gap-4">
                       <div>
                         <div className="mb-3 flex flex-wrap gap-2">
-                          {item.badge && (
-                            <span className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-white">
+                          <span className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-white">
+                            {item.commercialLabel}
+                          </span>
+                          {item.badge && item.badge !== item.commercialLabel && (
+                            <span className="rounded-full bg-[var(--color-ink)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
                               {item.badge}
                             </span>
                           )}
@@ -429,6 +456,13 @@ export default function Risorse() {
           .
         </div>
       </Section>
+
+      <StickyMobileCTA
+        label="Vedi risorse"
+        href="#risorse-list"
+        trackingId="risorse_sticky_mobile"
+        revealAfter={-1}
+      />
     </PageLayout>
   );
 }

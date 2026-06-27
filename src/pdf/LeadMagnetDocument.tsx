@@ -383,8 +383,8 @@ export function LeadMagnetDocument({
         <Text style={styles.finalEyebrow}>Continua con noi</Text>
         <Text style={styles.finalTitle}>Se ti è servita, ce ne sono altri sul sito.</Text>
         <Text style={styles.finalParagraph}>
-          Guide pratiche, itinerari, e un quiz per capire dove andare la prossima volta. Niente
-          newsletter aggressiva: scriviamo solo quando c'è qualcosa da salvare davvero.
+          Guide pratiche, itinerari e una mappa editoriale per capire dove andare la prossima volta.
+          Niente newsletter aggressiva: scriviamo solo quando c'è qualcosa da salvare davvero.
         </Text>
         <Link src={landingUrl} style={styles.ctaButton}>
           Esplora le destinazioni

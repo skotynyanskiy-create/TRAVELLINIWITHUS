@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'motion/react';
 import { CheckCircle, LogIn, MapPin, Heart, ShoppingBag, LogOut, Download } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
 import { fetchArticles, fetchUserOrders, type Order } from '../services/firebaseService';
@@ -14,6 +14,7 @@ import ClubSkeleton from '../components/ClubSkeleton';
 import ClubMembershipHero from '../components/club/ClubMembershipHero';
 import ClubPreviewLock from '../components/club/ClubPreviewLock';
 import ClubFaq from '../components/club/ClubFaq';
+import StickyMobileCTA from '../components/StickyMobileCTA';
 import { SITE_URL } from '../config/site';
 import type { NormalizedArticle } from '../utils/articleData';
 
@@ -63,24 +64,31 @@ export default function Club() {
         <ClubMembershipHero />
         <ClubPreviewLock />
         <ClubFaq />
-        <div className="bg-[var(--color-sand)] py-20 px-4 flex flex-col justify-center items-center">
+        <StickyMobileCTA
+          label="Avvisami al lancio"
+          href="#club-waitlist"
+          trackingId="club_waitlist_sticky_mobile"
+          revealAfter={-1}
+        />
+        <div className="bg-[var(--color-sand)]/50 py-20 px-4 flex flex-col justify-center items-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="max-w-lg w-full bg-white rounded-[var(--radius-xl)] p-10 md:p-16 text-center shadow-xl border border-[var(--color-accent)]/10"
+            className="max-w-lg w-full border-y border-black/10 bg-white/70 px-6 py-10 text-center md:px-10 md:py-14"
           >
-            <div className="mx-auto w-16 h-16 rounded-full bg-[var(--color-sand)] flex items-center justify-center mb-8 shadow-sm">
+            <div className="mx-auto w-14 h-14 rounded-full bg-[var(--color-accent-soft)] flex items-center justify-center mb-8">
               <MapPin size={24} className="text-[var(--color-accent)]" />
             </div>
             <span className="mb-3 block text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
-              Accedi al Club
+              Area personale
             </span>
             <h2 className="text-4xl font-serif text-[var(--color-ink)] mb-3">
               Entra nel tuo spazio.
             </h2>
-            <p className="text-base font-normal text-black/70 mb-8 leading-relaxed">
-              Un login veloce, e ritrovi qui i tuoi preferiti, gli acquisti e le guide riservate.
+            <p className="text-base font-normal text-black/70 mb-8 leading-relaxed font-light">
+              Un login veloce, e ritrovi qui preferiti, acquisti e le future guide riservate quando
+              il Club apre.
             </p>
 
             <div className="space-y-3 mb-10 text-left">
@@ -100,12 +108,14 @@ export default function Club() {
               ].map((b) => (
                 <div
                   key={b.label}
-                  className="flex items-start gap-4 rounded-[var(--radius-md)] bg-[var(--color-sand)] px-5 py-4"
+                  className="flex items-start gap-4 border-t border-black/10 px-1 py-4"
                 >
                   <CheckCircle size={18} className="text-[var(--color-accent)] shrink-0 mt-0.5" />
                   <div>
                     <p className="text-sm font-bold text-[var(--color-ink)]">{b.label}</p>
-                    <p className="text-xs font-light text-[var(--color-ink)]/50 mt-0.5">{b.text}</p>
+                    <p className="text-xs font-light text-[var(--color-ink)]/50 mt-0.5 leading-relaxed">
+                      {b.text}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -113,7 +123,8 @@ export default function Club() {
 
             <Button
               onClick={signIn}
-              className="w-full bg-[var(--color-ink)] text-white hover:bg-[var(--color-ink)]/85 py-4 rounded-full shadow-lg transition-all hover:-translate-y-1"
+              magnetic={true}
+              className="w-full bg-[var(--color-ink)] text-white hover:bg-[var(--color-ink)]/85 py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
             >
               <LogIn size={20} className="mr-3" />
               Accedi con Google
@@ -135,33 +146,35 @@ export default function Club() {
         noindex
       />
 
-      <div className="max-w-[1200px] mx-auto px-4 md:px-8 pt-8">
+      <div className="max-w-[1200px] mx-auto px-4 md:px-8 pt-8 pb-20">
         {/* HEADER DASHBOARD */}
-        <div className="bg-[var(--color-ink)] rounded-[var(--radius-xl)] p-10 md:p-16 text-white mb-12 shadow-xl relative overflow-hidden group">
-          <div className="absolute inset-0 bg-gradient-to-tr from-transparent to-[var(--color-accent)]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
+        <div className="bg-[var(--color-ink-deep)] border border-white/5 rounded-3xl p-10 md:p-16 text-white mb-12 shadow-[var(--shadow-premium)] relative overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-tr from-transparent to-[var(--color-accent)]/15 opacity-0 group-hover:opacity-100 transition-opacity duration-1000"></div>
           <div className="relative z-10 flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
-            <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-[var(--color-accent)]/30 p-1">
+            <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-[var(--color-accent)]/30 p-1 transition-transform duration-500 hover:scale-105">
               <img
                 src={
                   user.photoURL ||
                   `https://ui-avatars.com/api/?name=${user.displayName}&background=random`
                 }
-                alt="Avatar"
+                alt={`Foto profilo di ${user.displayName?.split(' ')[0] || 'utente'}`}
                 className="w-full h-full rounded-full object-cover"
               />
             </div>
             <div className="flex-1">
               <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--color-accent)] mb-2">
-                Membro del Club
+                Area personale
               </div>
               <h1 className="text-4xl md:text-5xl font-serif">
                 Benvenuto, {user.displayName?.split(' ')[0] || 'Viaggiatore'}
               </h1>
-              <p className="text-white/60 font-light mt-2">{user.email}</p>
+              <p className="text-white/60 font-light mt-2">
+                Preferiti, acquisti e accessi futuri del Club collegati a {user.email}
+              </p>
             </div>
             <button
               onClick={signOut}
-              className="mt-4 md:mt-0 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-white/50 hover:text-white transition-colors"
+              className="mt-4 md:mt-0 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-white/50 hover:text-[var(--color-accent)] hover:scale-105 transition-all duration-300"
             >
               <LogOut size={16} /> Esci
             </button>
@@ -169,27 +182,27 @@ export default function Club() {
         </div>
 
         {/* CONTENUTO DASHBOARD */}
-        <div className="bg-[var(--color-surface)] rounded-[var(--radius-xl)] shadow-sm border border-[var(--color-ink)]/5 overflow-hidden min-h-[500px]">
-          <div className="flex items-center justify-center gap-3 py-6 border-b border-[var(--color-ink)]/5">
+        <div className="bg-white/70 backdrop-blur-md border border-black/5 rounded-3xl shadow-[var(--shadow-premium)] overflow-hidden min-h-[500px]">
+          <div className="flex items-center justify-center gap-3 py-6 border-b border-black/5 bg-white/30">
             <button
               onClick={() => setActiveTab('favorites')}
-              className={`flex items-center gap-2 rounded-full px-6 py-2.5 text-xs font-bold uppercase tracking-widest transition-all ${
+              className={`flex items-center gap-2 rounded-2xl px-6 py-2.5 text-xs font-bold uppercase tracking-widest transition-all duration-300 ${
                 activeTab === 'favorites'
                   ? 'bg-[var(--color-ink)] text-white shadow-sm'
-                  : 'text-[var(--color-ink)]/50 hover:text-[var(--color-ink)]'
+                  : 'text-[var(--color-ink)]/50 hover:text-[var(--color-ink)] hover:bg-white/50'
               }`}
             >
               <Heart size={16} /> Preferiti
             </button>
             <button
               onClick={() => setActiveTab('purchases')}
-              className={`flex items-center gap-2 rounded-full px-6 py-2.5 text-xs font-bold uppercase tracking-widest transition-all ${
+              className={`flex items-center gap-2 rounded-2xl px-6 py-2.5 text-xs font-bold uppercase tracking-widest transition-all duration-300 ${
                 activeTab === 'purchases'
                   ? 'bg-[var(--color-ink)] text-white shadow-sm'
-                  : 'text-[var(--color-ink)]/50 hover:text-[var(--color-ink)]'
+                  : 'text-[var(--color-ink)]/50 hover:text-[var(--color-ink)] hover:bg-white/50'
               }`}
             >
-              <ShoppingBag size={16} /> I Miei Acquisti
+              <ShoppingBag size={16} /> I miei acquisti
             </button>
           </div>
 
@@ -221,14 +234,14 @@ export default function Club() {
                           to={`/articolo/${article.slug || article.id}`}
                           className="group block"
                         >
-                          <div className="relative aspect-[4/3] rounded-[var(--radius-lg)] overflow-hidden shadow-sm transition-all duration-500 group-hover:shadow-lg mb-4">
+                          <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-sm transition-all duration-500 group-hover:shadow-md mb-4 border border-black/5">
                             <OptimizedImage
                               src={article.image}
                               alt={article.title}
-                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103"
                             />
                             <div className="absolute top-4 left-4">
-                              <span className="bg-white/90 backdrop-blur-md px-3 py-1.5 rounded-full text-[9px] font-bold uppercase tracking-widest text-[var(--color-ink)]">
+                              <span className="bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl text-[9px] font-bold uppercase tracking-widest text-[var(--color-ink)] border border-black/5 shadow-xs">
                                 {article.category}
                               </span>
                             </div>
@@ -240,20 +253,24 @@ export default function Club() {
                       ))}
                     </div>
                   ) : (
-                    <div className="text-center py-24">
-                      <Heart size={48} className="mx-auto text-black/10 mb-6" />
+                    <div className="text-center py-20">
+                      <div className="mx-auto w-16 h-16 rounded-2xl bg-[var(--color-accent-soft)] flex items-center justify-center mb-6 shadow-inner">
+                        <Heart size={24} className="text-[var(--color-accent)] animate-pulse" />
+                      </div>
                       <h3 className="text-2xl font-serif text-[var(--color-ink)] mb-2">
                         Nessun articolo salvato.
                       </h3>
-                      <p className="text-black/65 font-light mb-8 max-w-sm mx-auto">
+                      <p className="text-black/65 font-light mb-8 max-w-sm mx-auto leading-relaxed text-sm">
                         Esplora i contenuti e usa l'icona del cuore per salvare gli itinerari e le
                         guide che vuoi tenere da parte.
                       </p>
                       <Button
                         to="/esplora"
-                        className="bg-white text-[var(--color-ink)] border border-black/10 hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] rounded-full px-6 py-2"
+                        magnetic={true}
+                        variant="outline"
+                        className="rounded-full"
                       >
-                        Esplora i Contenuti
+                        Esplora i contenuti
                       </Button>
                     </div>
                   )}
@@ -271,9 +288,9 @@ export default function Club() {
                       {orders.map((order) => (
                         <div
                           key={order.id}
-                          className="flex flex-col md:flex-row md:items-center gap-6 p-6 rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-muted-bg)]/50 hover:bg-[var(--color-muted-bg)] transition-colors"
+                          className="flex flex-col md:flex-row md:items-center gap-6 p-6 rounded-2xl border border-black/5 bg-white/50 backdrop-blur-xs hover:bg-white/80 transition-all duration-300 shadow-xs"
                         >
-                          <div className="w-16 h-16 rounded-[1rem] bg-[var(--color-accent)]/10 text-[var(--color-accent)] flex items-center justify-center shrink-0">
+                          <div className="w-16 h-16 rounded-2xl bg-[var(--color-accent)]/10 text-[var(--color-accent)] flex items-center justify-center shrink-0">
                             <ShoppingBag size={24} />
                           </div>
                           <div className="flex-1">
@@ -282,12 +299,12 @@ export default function Club() {
                                 Ordine #{order.id.slice(-6).toUpperCase()}
                               </span>
                               <span
-                                className={`px-2 py-0.5 rounded-full text-[9px] uppercase tracking-widest font-bold ${order.status === 'completed' ? 'bg-[var(--color-accent-soft)] text-[var(--color-accent-text)]' : 'bg-[var(--color-warning-soft)] text-[var(--color-warning-text)]'}`}
+                                className={`px-2.5 py-0.5 rounded-xl text-[9px] uppercase tracking-widest font-bold ${order.status === 'completed' ? 'bg-[var(--color-accent-soft)] text-[var(--color-accent-text)]' : 'bg-[var(--color-warning-soft)] text-[var(--color-warning-text)]'}`}
                               >
                                 {order.status}
                               </span>
                             </div>
-                            <p className="font-light text-sm text-black/60">
+                            <p className="font-light text-xs text-black/50">
                               {(() => {
                                 const createdAt = order.createdAt as
                                   | { toDate?: () => Date; seconds?: number }
@@ -310,6 +327,7 @@ export default function Club() {
                             <Button
                               variant="outline"
                               size="sm"
+                              magnetic={true}
                               className="rounded-full flex items-center gap-2"
                             >
                               <Download size={14} /> Ricevuta PDF
@@ -319,20 +337,19 @@ export default function Club() {
                       ))}
                     </div>
                   ) : (
-                    <div className="text-center py-24">
-                      <ShoppingBag size={48} className="mx-auto text-black/10 mb-6" />
+                    <div className="text-center py-20">
+                      <div className="mx-auto w-16 h-16 rounded-2xl bg-[var(--color-accent-soft)] flex items-center justify-center mb-6 shadow-inner">
+                        <ShoppingBag size={24} className="text-[var(--color-accent)]" />
+                      </div>
                       <h3 className="text-2xl font-serif text-[var(--color-ink)] mb-2">
                         Nessun acquisto ancora.
                       </h3>
-                      <p className="text-black/65 font-light mb-8 max-w-sm mx-auto">
-                        Scopri le nostre guide e i planner digitali — strumenti reali testati sui
-                        nostri viaggi, pronti per i tuoi.
+                      <p className="text-black/65 font-light mb-8 max-w-sm mx-auto leading-relaxed text-sm">
+                        Lo shop è in pre-apertura: puoi vedere il primo prodotto in lista d'attesa e
+                        lasciare l'email per il lancio.
                       </p>
-                      <Button
-                        to="/shop"
-                        className="bg-[var(--color-ink)] text-white hover:bg-[var(--color-ink)]/85 rounded-full px-6 py-2"
-                      >
-                        Vai allo Shop Premium
+                      <Button to="/shop" variant="cta" magnetic={true} className="rounded-full">
+                        Vai allo Shop
                       </Button>
                     </div>
                   )}

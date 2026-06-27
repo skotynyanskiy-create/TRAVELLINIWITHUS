@@ -1,5 +1,5 @@
 import { ArrowRight, BriefcaseBusiness, FileText } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { trackEvent } from '../../services/analytics';
 
 export default function HomePartnerSignal() {
@@ -13,32 +13,45 @@ export default function HomePartnerSignal() {
   };
 
   return (
-    <section className="border-y border-black/8 bg-white">
-      <div className="mx-auto grid max-w-7xl gap-5 px-6 py-7 md:grid-cols-[1fr_auto] md:items-center md:px-12">
-        <div className="max-w-3xl">
-          <div className="mb-2 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
-            <BriefcaseBusiness size={12} /> Per partner e territori
+    <section className="bg-[var(--color-sand)] py-8">
+      <div className="mx-auto max-w-7xl px-6 md:px-12">
+        <div className="rounded-2xl border border-black/5 bg-white/80 p-8 backdrop-blur-md shadow-sm grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
+          <div className="max-w-3xl">
+            <div className="mb-3 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
+              <span className="flex h-5 w-5 items-center justify-center rounded bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
+                <BriefcaseBusiness size={11} />
+              </span>
+              Per partner e territori
+            </div>
+            <p className="font-serif text-2xl leading-snug text-[var(--color-ink)] md:text-3xl">
+              Per hotel, territori e brand che vogliono un racconto utile, non una marchetta.
+            </p>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-black/58 md:text-base">
+              Audience travel couple-led, taglio editoriale e contenuti pensati per ispirare e
+              aiutare a decidere.
+            </p>
           </div>
-          <p className="font-serif text-2xl leading-tight text-[var(--color-ink)] md:text-3xl">
-            Collaboriamo solo quando il luogo merita un racconto utile e credibile.
-          </p>
-        </div>
 
-        <div className="flex flex-col gap-3 sm:flex-row md:justify-end">
-          <Link
-            to="/collaborazioni"
-            onClick={() => trackPartnerClick('home_partner_signal_collaborazioni')}
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-[var(--radius-md)] border border-black/10 px-5 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-          >
-            Collaborazioni <ArrowRight size={14} />
-          </Link>
-          <Link
-            to="/media-kit"
-            onClick={() => trackPartnerClick('home_partner_signal_media_kit')}
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-ink)] px-5 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
-          >
-            <FileText size={14} /> Media kit
-          </Link>
+          <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
+            <Link
+              to="/collaborazioni"
+              onClick={() => trackPartnerClick('home_partner_signal_collaborazioni')}
+              className="group inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-black/10 px-5 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+            >
+              Guarda le collaborazioni{' '}
+              <ArrowRight
+                size={14}
+                className="transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:translate-x-1"
+              />
+            </Link>
+            <Link
+              to="/media-kit"
+              onClick={() => trackPartnerClick('home_partner_signal_media_kit')}
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-[var(--color-ink)] px-5 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
+            >
+              <FileText size={14} /> Richiedi il media kit
+            </Link>
+          </div>
         </div>
       </div>
     </section>

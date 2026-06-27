@@ -102,6 +102,8 @@ Pass `error={Boolean(error)}` to apply the error border. The wrapping `FormField
 
 Stitch and Figma are for concepting, design-system extraction, mockups, and critique. They are not code truth.
 
+The brand design system lives in Figma at `https://www.figma.com/design/mDzCLduBV0uDAOH1XGUbHH` (file "TRAVELLINIWITHUS — Design System"). It is generated from these tokens (`Brand Colors` + `Radius` variable collections, type styles for Fraunces/Inter, and a primitives specimen). `src/index.css` remains the source of truth; if a token changes there, re-sync the Figma variables.
+
 Prompts must include:
 
 - Travelliniwithus, Rodrigo & Betta, Italian travel creator brand

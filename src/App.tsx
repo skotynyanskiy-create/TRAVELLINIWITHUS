@@ -4,7 +4,8 @@
  */
 
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { isRoutePublic } from './config/rebuildMode';
 import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Layout from './components/Layout';
@@ -13,6 +14,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { FavoritesProvider } from './context/FavoritesContext';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
+import { LITE_MODE } from './config/liteMode';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,7 +41,6 @@ const Itinerari = lazy(() => import('./pages/Itinerari'));
 const ItinerariCompare = lazy(() => import('./pages/ItinerariCompare'));
 const Itinerario = lazy(() => import('./pages/Itinerario'));
 const Guida = lazy(() => import('./pages/Guida'));
-const Quiz = lazy(() => import('./pages/Quiz'));
 const Strumenti = lazy(() => import('./pages/Strumenti'));
 const Preferiti = lazy(() => import('./pages/Preferiti'));
 const Risorse = lazy(() => import('./pages/Risorse'));
@@ -49,7 +50,9 @@ const Club = lazy(() => import('./pages/Club'));
 const Mappa = lazy(() => import('./pages/Mappa'));
 const MieiAcquisti = lazy(() => import('./pages/MieiAcquisti'));
 const LeadMagnet = lazy(() => import('./pages/LeadMagnet'));
+const Posto = lazy(() => import('./pages/Posto'));
 const VieniConNoi = lazy(() => import('./pages/VieniConNoi'));
+const Futuro = lazy(() => import('./pages/Futuro'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 // Admin pages
@@ -80,6 +83,14 @@ const PageLoader = () => (
   </div>
 );
 
+function RebuildGate() {
+  const location = useLocation();
+  if (!isRoutePublic(location.pathname)) {
+    return <Navigate to="/" replace />;
+  }
+  return null;
+}
+
 export default function App() {
   return (
     <HelmetProvider>
@@ -88,44 +99,61 @@ export default function App() {
           <CartProvider>
             <FavoritesProvider>
               <BrowserRouter>
+                <RebuildGate />
                 <ScrollToTop />
                 <Suspense fallback={<PageLoader />}>
                   <Routes>
                     {/* Standalone landings (no navbar/footer) — bio link IG/TikTok */}
                     <Route path="/vieni-con-noi" element={<VieniConNoi />} />
                     <Route path="/iscrivi" element={<Navigate to="/vieni-con-noi" replace />} />
+                    {/* Atlante Notturno — full-bleed, DNA isolato, additivo */}
+                    <Route path="/futuro" element={<Futuro />} />
+                    {/* Il Sentiero è ora la home (/). La vecchia rotta di anteprima
+                        redirige per dedup SEO e per non rompere link esterni. */}
+                    <Route path="/sentiero" element={<Navigate to="/" replace />} />
 
                     <Route path="/" element={<Layout />}>
                       <Route index element={<Home />} />
-                      <Route path="esplora" element={<Esplora />} />
+                      {!LITE_MODE && <Route path="esplora" element={<Esplora />} />}
                       <Route path="destinazione/:regionSlug" element={<Destinazione />} />
                       {/* Legacy routes consolidate in /esplora (2026-05-15).
                           I param sono compatibili: parseDiscoveryFilters
                           legge group/area/region, experience, cat, search
                           come alias dei canonical zone/type/format/q. */}
-                      <Route path="destinazioni" element={<Navigate to="/esplora" replace />} />
-                      <Route path="esperienze" element={<Navigate to="/esplora" replace />} />
-                      <Route
-                        path="guide"
-                        element={<Navigate to="/esplora?format=guida" replace />}
-                      />
+                      {!LITE_MODE && (
+                        <Route path="destinazioni" element={<Navigate to="/esplora" replace />} />
+                      )}
+                      {!LITE_MODE && (
+                        <Route path="esperienze" element={<Navigate to="/esplora" replace />} />
+                      )}
+                      {!LITE_MODE && (
+                        <Route
+                          path="guide"
+                          element={<Navigate to="/esplora?format=guida" replace />}
+                        />
+                      )}
                       <Route path="chi-siamo" element={<ChiSiamo />} />
                       <Route path="collaborazioni" element={<Collaborazioni />} />
                       <Route path="media-kit" element={<MediaKit />} />
                       <Route path="press" element={<Press />} />
                       <Route path="contatti" element={<Contatti />} />
                       <Route path="articolo/:slug" element={<Articolo />} />
-                      <Route path="itinerari" element={<Itinerari />} />
-                      <Route path="itinerari/compare" element={<ItinerariCompare />} />
-                      <Route path="itinerari/:slug" element={<Itinerario />} />
+                      {!LITE_MODE && <Route path="itinerari" element={<Itinerari />} />}
+                      {!LITE_MODE && (
+                        <Route path="itinerari/compare" element={<ItinerariCompare />} />
+                      )}
+                      {!LITE_MODE && <Route path="itinerari/:slug" element={<Itinerario />} />}
                       <Route path="guide/:slug" element={<Guida />} />
-                      <Route path="quiz" element={<Quiz />} />
+                      {!LITE_MODE && (
+                        <Route path="quiz" element={<Navigate to="/esplora" replace />} />
+                      )}
                       <Route path="strumenti" element={<Strumenti />} />
-                      <Route path="preferiti" element={<Preferiti />} />
+                      {!LITE_MODE && <Route path="preferiti" element={<Preferiti />} />}
                       <Route path="risorse" element={<Risorse />} />
-                      <Route path="shop" element={<Shop />} />
-                      <Route path="shop/:slug" element={<ProductPage />} />
-                      <Route path="club" element={<Club />} />
+                      {!LITE_MODE && <Route path="shop" element={<Shop />} />}
+                      {!LITE_MODE && <Route path="shop/:slug" element={<ProductPage />} />}
+                      {!LITE_MODE && <Route path="club" element={<Club />} />}
+                      <Route path="posto/:slug" element={<Posto />} />
                       <Route path="mappa" element={<Mappa />} />
                       <Route path="account/acquisti" element={<MieiAcquisti />} />
                       <Route path="lead-magnet" element={<LeadMagnet />} />

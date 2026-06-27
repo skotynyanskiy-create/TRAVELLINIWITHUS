@@ -6,7 +6,8 @@ import Map, {
   FullscreenControl,
   type MapRef,
 } from 'react-map-gl/mapbox';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
+import { motion } from 'motion/react';
 import {
   MapPin,
   Navigation,
@@ -18,12 +19,19 @@ import {
   Sparkles,
   Star,
   ArrowRight,
+  ChevronRight,
+  Route,
+  SlidersHorizontal,
 } from 'lucide-react';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { fetchArticles } from '../../services/firebaseService';
 import { trackEvent } from '../../services/analytics';
+import { LITE_MODE } from '../../config/liteMode';
 import type { NormalizedArticle } from '../../utils/articleData';
 import { DEMO_ARTICLE_PREVIEW, DEMO_ARTICLES_EXTRA } from '../../config/demoContent';
 import { DEMO_ARCHIVE_SEEDS } from '../../config/demoArchive';
+import { getGeocodedContentItems } from '../../config/contentLibrary';
+import mapboxCssUrl from 'mapbox-gl/dist/mapbox-gl.css?url';
 
 /**
  * Adatta i seed di demoArchive al formato che la mappa si aspetta
@@ -61,6 +69,28 @@ const DEMO_ARCHIVE_MAP_ARTICLES = DEMO_ARCHIVE_SEEDS.filter(
 }));
 
 /**
+ * I "posti particolari" reali (ContentItem geocodati) come marker della mappa.
+ * Riusano lo stesso shape degli articoli ma, avendo `externalUrl`, il popup
+ * linka al reel reale invece che a un articolo. Sono la fonte che l'API IG
+ * popolerà su scala; oggi sono il seed in `content-seed.json`.
+ */
+const CONTENT_MAP_INPUT = getGeocodedContentItems().map((item) => ({
+  id: item.id,
+  slug: item.id,
+  title: item.title || item.hook,
+  category: item.types[0] ?? 'Posti particolari',
+  country: item.place.region ?? item.place.country,
+  continent: item.zone === 'Italia' ? 'Europa' : item.zone,
+  region: item.place.region,
+  city: item.place.city,
+  image: item.cover,
+  excerpt: item.description,
+  coordinates: [item.place.coordinates!.lng, item.place.coordinates!.lat] as [number, number],
+  isPartner: false,
+  externalUrl: item.permalink,
+}));
+
+/**
  * Categoria -> icona + colore badge nel marker.
  * Permette di leggere a colpo d'occhio "qui c'e' una guida vs un hotel
  * vs un posto particolare" senza dover cliccare per scoprirlo.
@@ -74,7 +104,7 @@ const CATEGORY_VISUAL: Record<
   'Posti particolari': { Icon: Sparkles, label: 'Posto particolare' },
   'Weekend & Day trips': { Icon: MapPin, label: 'Weekend' },
   Destinazioni: { Icon: Compass, label: 'Destinazione' },
-  'Food & Ristoranti': { Icon: UtensilsCrossed, label: 'Food' },
+  'Food & Ristoranti': { Icon: UtensilsCrossed, label: 'Cucina' },
   'Hotel con carattere': { Icon: Hotel, label: 'Hotel' },
 };
 
@@ -95,7 +125,7 @@ type ContinentFilter = (typeof CONTINENT_FILTERS)[number]['id'];
 const EXPERIENCE_FILTERS = [
   { id: 'all', label: 'Tutte' },
   { id: 'Posti particolari', label: 'Posti particolari' },
-  { id: 'Food & Ristoranti', label: 'Food' },
+  { id: 'Food & Ristoranti', label: 'Cucina' },
   { id: 'Hotel con carattere', label: 'Hotel' },
   { id: "Borghi e città d'arte", label: 'Borghi' },
   { id: 'Weekend romantici', label: 'Weekend' },
@@ -103,13 +133,47 @@ const EXPERIENCE_FILTERS = [
 
 type ExperienceFilter = (typeof EXPERIENCE_FILTERS)[number]['id'];
 
+const MAP_ROUTE_PRESETS: Array<{
+  id: string;
+  title: string;
+  meta: string;
+  description: string;
+  continent: ContinentFilter;
+  experience: ExperienceFilter;
+}> = [
+  {
+    id: 'italia-non-ovvia',
+    title: 'Italia non ovvia',
+    meta: 'borghi · calette · strade lente',
+    description: 'Per partire da luoghi italiani con un ritmo più personale.',
+    continent: 'Europa',
+    experience: 'Posti particolari',
+  },
+  {
+    id: 'dove-dormire-bene',
+    title: 'Dove dormire bene',
+    meta: 'hotel · masserie · rifugi',
+    description: 'Per filtrare posti in cui l’alloggio è parte del viaggio.',
+    continent: 'all',
+    experience: 'Hotel con carattere',
+  },
+  {
+    id: 'weekend-coppia',
+    title: 'Weekend in coppia',
+    meta: '2-4 giorni · facile da salvare',
+    description: 'Per trasformare la mappa in una lista breve da scegliere.',
+    continent: 'Europa',
+    experience: 'Weekend romantici',
+  },
+];
+
 type ArticleWithCoords = NormalizedArticle & {
   lat: number;
   lng: number;
   isPartner: boolean;
+  /** Se presente, il popup linka qui (reel IG reale) invece che a /articolo. */
+  externalUrl?: string;
 };
-
-import 'mapbox-gl/dist/mapbox-gl.css';
 
 const RAW_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN as string | undefined;
 /**
@@ -195,12 +259,26 @@ const COUNTRY_COORDS: Record<string, { lat: number; lng: number }> = {
 
 export default function MapboxWorldMap() {
   const mapRef = useRef<MapRef | null>(null);
+  const continentChipRef = useRef<HTMLButtonElement | null>(null);
+  const experienceChipRef = useRef<HTMLButtonElement | null>(null);
+  const prefersReducedMotion = useReducedMotion();
   const [articles, setArticles] = useState<ArticleWithCoords[]>([]);
   const [selectedArticle, setSelectedArticle] = useState<ArticleWithCoords | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [usingDemo, setUsingDemo] = useState(false);
   const [activeContinent, setActiveContinent] = useState<ContinentFilter>('all');
   const [activeExperience, setActiveExperience] = useState<ExperienceFilter>('all');
+
+  useEffect(() => {
+    const existingLink = document.querySelector<HTMLLinkElement>('link[data-twu-mapbox-css]');
+    if (existingLink) return;
+
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = mapboxCssUrl;
+    link.dataset.twuMapboxCss = 'true';
+    document.head.appendChild(link);
+  }, []);
 
   const filteredArticles = useMemo(
     () =>
@@ -237,6 +315,37 @@ export default function MapboxWorldMap() {
       });
     }
   };
+
+  const handleRoutePreset = (preset: (typeof MAP_ROUTE_PRESETS)[number]) => {
+    setActiveContinent(preset.continent);
+    setActiveExperience(preset.experience);
+    setSelectedArticle(null);
+    trackEvent('map_route_preset_click', {
+      source_page: '/mappa',
+      preset_id: preset.id,
+      zone: preset.continent,
+      type: preset.experience,
+    });
+  };
+
+  // Mobile: porta il chip attivo nel viewport della barra scrollabile
+  // orizzontale, cosi' l'utente vede sempre il filtro selezionato anche se
+  // era fuori schermo. Su desktop la barra non scrolla, quindi e' un no-op.
+  useEffect(() => {
+    continentChipRef.current?.scrollIntoView({
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      inline: 'center',
+      block: 'nearest',
+    });
+  }, [activeContinent, prefersReducedMotion]);
+
+  useEffect(() => {
+    experienceChipRef.current?.scrollIntoView({
+      behavior: prefersReducedMotion ? 'auto' : 'smooth',
+      inline: 'center',
+      block: 'nearest',
+    });
+  }, [activeExperience, prefersReducedMotion]);
 
   /** Centra la mappa sull'articolo + apre popup. Usato sia dal click marker
    *  che dal click sulla card della mini-lista sottostante. */
@@ -300,9 +409,12 @@ export default function MapboxWorldMap() {
       try {
         const data = await fetchArticles();
         const mappedData = placeOnMap(data as unknown as ReadonlyArray<Record<string, unknown>>);
+        const contentMarkers = placeOnMap(
+          CONTENT_MAP_INPUT as unknown as ReadonlyArray<Record<string, unknown>>
+        );
 
         if (mappedData.length > 0) {
-          setArticles(mappedData);
+          setArticles([...mappedData, ...contentMarkers]);
           setUsingDemo(false);
         } else {
           // Firestore vuoto: fallback su anteprime editoriali per non
@@ -315,7 +427,7 @@ export default function MapboxWorldMap() {
             ...DEMO_ARTICLES_EXTRA,
             ...DEMO_ARCHIVE_MAP_ARTICLES,
           ] as unknown as ReadonlyArray<Record<string, unknown>>);
-          setArticles(demo);
+          setArticles([...demo, ...contentMarkers]);
           setUsingDemo(true);
         }
       } finally {
@@ -400,18 +512,29 @@ export default function MapboxWorldMap() {
             scelta.
           </p>
           <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Link
-              to="/esplora"
-              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:bg-[var(--color-accent)] hover:text-white"
-            >
-              <Compass size={14} /> Parti da Esplora
-            </Link>
-            <Link
-              to="/esplora"
-              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:border-transparent hover:bg-white hover:text-[var(--color-ink)]"
-            >
-              Archivio completo <ArrowRight size={14} />
-            </Link>
+            {LITE_MODE ? (
+              <Link
+                to="/"
+                className="inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:bg-[var(--color-accent)] hover:text-white"
+              >
+                <Compass size={14} /> Torna alla home
+              </Link>
+            ) : (
+              <>
+                <Link
+                  to="/esplora"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:bg-[var(--color-accent)] hover:text-white"
+                >
+                  <Compass size={14} /> Parti da Esplora
+                </Link>
+                <Link
+                  to="/esplora"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:border-transparent hover:bg-white hover:text-[var(--color-ink)]"
+                >
+                  Archivio completo <ArrowRight size={14} />
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -419,7 +542,7 @@ export default function MapboxWorldMap() {
   }
 
   return (
-    <div className="relative h-full w-full bg-[var(--color-ink)]">
+    <div className="relative flex h-auto min-h-full w-full flex-col bg-[var(--color-ink)] md:block md:h-full">
       {isLoading && (
         <div className="absolute inset-0 z-20 flex items-center justify-center bg-[var(--color-ink)]">
           <div className="flex flex-col items-center gap-4 text-white/60">
@@ -431,13 +554,19 @@ export default function MapboxWorldMap() {
         </div>
       )}
 
-      <div className="pointer-events-none absolute left-4 top-8 z-10 md:left-8">
-        <div className="pointer-events-auto max-w-xs rounded-[var(--radius-md)] border border-[var(--color-ink)]/5 bg-[var(--color-surface)]/95 p-6 shadow-xl backdrop-blur-xl">
+      <div className="pointer-events-none static z-10 px-4 pt-6 md:absolute md:left-8 md:top-8 md:px-0 md:pt-0">
+        <div className="pointer-events-auto max-w-none rounded-2xl border border-black/5 bg-white/80 p-5 shadow-2xl backdrop-blur-md transition-all duration-300 hover:bg-white/95 hover:border-[var(--color-accent)]/20 md:max-w-xs md:p-6">
           <div className="mb-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
-            <Navigation size={14} /> Mappa Interattiva
+            <Navigation size={14} className="animate-pulse" /> Mappa Interattiva
           </div>
-          <h1 className="mb-1 text-2xl font-serif text-[var(--color-ink)]">Il nostro mondo.</h1>
-          <p className="text-xs font-light text-[var(--color-ink)]/50">
+          <h1 className="mb-2 text-2xl font-serif text-[var(--color-ink)]">
+            Scegli un posto partendo dalla mappa.
+          </h1>
+          <p className="text-sm font-light leading-relaxed text-[var(--color-ink)]/58">
+            Filtra per zona o intenzione, poi apri la scheda giusta senza passare da un elenco
+            infinito.
+          </p>
+          <p className="mt-4 text-xs font-light text-[var(--color-ink)]/50">
             {filteredArticles.length}{' '}
             {filteredArticles.length === 1 ? 'destinazione' : 'destinazioni'}
             {usingDemo ? ' (anteprime editoriali)' : ' esplorate'}
@@ -445,104 +574,256 @@ export default function MapboxWorldMap() {
             {activeExperience !== 'all' &&
               ` · ${EXPERIENCE_FILTERS.find((f) => f.id === activeExperience)?.label ?? ''}`}
           </p>
+          {usingDemo && (
+            <div className="mt-4 rounded-xl border border-[var(--color-accent)]/15 bg-[var(--color-accent-soft)] px-4 py-3 text-[11px] leading-relaxed text-[var(--color-accent-text)]">
+              Stai vedendo anteprime editoriali: i marker mostrano la struttura della mappa mentre
+              l’archivio reale cresce con foto, guide e itinerari verificati.
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Filter chips — wrapper outer è pointer-events-none (lascia passare
-          eventi alla mappa fuori dai chips). Due righe: continente sopra,
-          esperienza sotto. Su mobile entrambe scrollabili orizzontalmente. */}
-      <div className="pointer-events-none absolute inset-x-0 top-8 z-10 flex flex-col items-center gap-2 px-4">
-        <div
-          role="tablist"
-          aria-label="Filtra destinazioni per continente"
-          className="pointer-events-auto flex max-w-full gap-1.5 overflow-x-auto rounded-full border border-white/12 bg-[var(--color-ink)]/70 p-1.5 backdrop-blur-xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        >
-          {CONTINENT_FILTERS.map((f) => {
-            const isActive = activeContinent === f.id;
-            return (
-              <button
-                key={f.id}
-                type="button"
-                role="tab"
-                aria-selected={isActive}
-                onClick={() => handleContinentChange(f.id)}
-                className={`shrink-0 rounded-full px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] transition-colors ${
-                  isActive
-                    ? 'bg-[var(--color-accent)] text-white shadow-sm'
-                    : 'text-white/70 hover:bg-white/8 hover:text-white'
-                }`}
-              >
-                {f.label}
-              </button>
-            );
-          })}
-        </div>
-
-        <div
-          role="tablist"
-          aria-label="Filtra destinazioni per esperienza"
-          className="pointer-events-auto flex max-w-full gap-1.5 overflow-x-auto rounded-full border border-white/10 bg-[var(--color-ink)]/55 p-1.5 backdrop-blur-xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        >
-          {EXPERIENCE_FILTERS.map((f) => {
-            const isActive = activeExperience === f.id;
-            return (
-              <button
-                key={f.id}
-                type="button"
-                role="tab"
-                aria-selected={isActive}
-                onClick={() => handleExperienceChange(f.id)}
-                className={`shrink-0 rounded-full px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.18em] transition-colors ${
-                  isActive
-                    ? 'bg-white text-[var(--color-ink)] shadow-sm'
-                    : 'text-white/60 hover:bg-white/8 hover:text-white'
-                }`}
-              >
-                {f.label}
-              </button>
-            );
-          })}
+      <div className="pointer-events-none static z-10 px-4 pt-3 md:absolute md:right-8 md:top-8 md:w-[22rem] md:px-0 md:pt-0">
+        <div className="pointer-events-auto rounded-2xl border border-white/10 bg-[var(--color-ink-deep)]/86 p-4 text-white shadow-2xl backdrop-blur-xl md:p-5">
+          <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent)]">
+            <Route size={14} /> Percorsi suggeriti
+          </div>
+          <p className="mt-3 text-sm leading-relaxed text-white/62">
+            Parti da una traccia editoriale: la mappa applica i filtri e ti mostra una selezione più
+            corta.
+          </p>
+          <div className="mt-4 grid gap-2">
+            {MAP_ROUTE_PRESETS.map((preset) => {
+              const isActive =
+                activeContinent === preset.continent && activeExperience === preset.experience;
+              return (
+                <button
+                  key={preset.id}
+                  type="button"
+                  onClick={() => handleRoutePreset(preset)}
+                  aria-pressed={isActive}
+                  className={`group rounded-xl border p-3 text-left transition-all duration-300 ${
+                    isActive
+                      ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white'
+                      : 'border-white/10 bg-white/6 hover:border-white/20 hover:bg-white/10'
+                  }`}
+                >
+                  <span className="flex items-center justify-between gap-3">
+                    <span className="text-xs font-bold uppercase tracking-[0.16em]">
+                      {preset.title}
+                    </span>
+                    <ArrowRight
+                      size={13}
+                      className="shrink-0 transition-transform duration-300 group-hover:translate-x-0.5"
+                    />
+                  </span>
+                  <span
+                    className={`mt-2 block text-xs leading-relaxed ${
+                      isActive ? 'text-white/78' : 'text-white/50'
+                    }`}
+                  >
+                    {preset.meta}
+                  </span>
+                  <span
+                    className={`mt-1 block text-xs leading-relaxed ${
+                      isActive ? 'text-white/80' : 'text-white/58'
+                    }`}
+                  >
+                    {preset.description}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
-      <Link
-        to={(() => {
-          // Costruisce URL canonical verso /esplora con i filtri attivi
-          // sulla mappa propagati (zone + type).
-          const params = new URLSearchParams();
-          if (activeContinent !== 'all') {
-            params.set('zone', activeContinent);
-          }
-          if (activeExperience !== 'all') {
-            params.set(
-              'type',
-              activeExperience
-                .toLowerCase()
-                .replace(/&/g, 'e')
-                .replace(/[^a-z0-9]+/g, '-')
-                .replace(/^-+|-+$/g, '')
-            );
-          }
-          const qs = params.toString();
-          return qs ? `/esplora?${qs}` : '/esplora';
-        })()}
-        onClick={() =>
-          trackEvent('map_to_explore_click', {
-            source_page: '/mappa',
-            zone: activeContinent,
-            type: activeExperience,
-          })
-        }
-        className="absolute bottom-44 right-8 z-10 inline-flex items-center gap-2 rounded-full border border-[var(--color-ink)]/5 bg-[var(--color-surface)]/95 px-5 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] shadow-xl backdrop-blur-xl transition-all hover:border-transparent hover:bg-[var(--color-ink)] hover:text-white md:bottom-36"
-      >
-        <MapPin size={14} /> Apri archivio
-      </Link>
+      {/* Filter chips — Sotto md: barra sticky in-flow, ogni riga scrollabile
+          orizzontalmente con fade-edge + chevron come affordance (la barra
+          spesso eccede la larghezza viewport). Da md in su: overlay assoluto
+          centrato sopra la mappa, identico a prima.
+          pointer-events-none sul wrapper lascia passare gli eventi alla mappa
+          fuori dai chips (rilevante solo desktop). */}
+      <div className="pointer-events-none static z-10 flex flex-col items-stretch gap-2 bg-[var(--color-ink)]/70 px-4 py-3 backdrop-blur-md md:sticky md:top-8 md:items-center md:bg-transparent md:py-0 md:backdrop-blur-none">
+        <div className="pointer-events-auto flex items-center gap-2 px-1 text-[10px] font-bold uppercase tracking-[0.2em] text-white/45 md:hidden">
+          <SlidersHorizontal size={13} className="text-[var(--color-accent)]" /> Filtra la mappa
+        </div>
+        <div className="relative w-full md:w-auto">
+          <div
+            role="tablist"
+            aria-label="Filtra destinazioni per continente"
+            className="pointer-events-auto flex min-h-11 max-w-full items-center gap-1.5 overflow-x-auto rounded-full border border-white/10 bg-[var(--color-ink-deep)]/80 p-1.5 backdrop-blur-md [scrollbar-width:none] [&::-webkit-scrollbar]:hidden shadow-lg"
+          >
+            {CONTINENT_FILTERS.map((f) => {
+              const isActive = activeContinent === f.id;
+              return (
+                <button
+                  key={f.id}
+                  ref={isActive ? continentChipRef : null}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => handleContinentChange(f.id)}
+                  className={`flex min-h-11 shrink-0 items-center rounded-full px-4 text-[10px] font-bold uppercase tracking-[0.18em] transition-all duration-300 cursor-pointer md:min-h-0 md:py-1.5 ${
+                    isActive
+                      ? 'bg-[var(--color-accent)] text-white shadow-md md:scale-105'
+                      : 'text-white/70 hover:bg-white/10 hover:text-white md:hover:scale-102'
+                  }`}
+                >
+                  {f.label}
+                </button>
+              );
+            })}
+          </div>
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-0 right-0 flex items-center gap-1 rounded-r-full bg-gradient-to-l from-[var(--color-ink-deep)]/90 to-transparent pl-6 pr-2 transition-opacity duration-200 md:hidden"
+          >
+            <ChevronRight size={14} className="text-white/60" />
+          </div>
+        </div>
 
-      {/* Mini-lista articoli orizzontale (scroll-snap) — sincronizzata con i marker.
+        <div className="relative w-full md:w-auto">
+          <div
+            role="tablist"
+            aria-label="Filtra destinazioni per esperienza"
+            className="pointer-events-auto flex min-h-11 max-w-full items-center gap-1.5 overflow-x-auto rounded-full border border-white/8 bg-[var(--color-ink-deep)]/80 p-1.5 backdrop-blur-md [scrollbar-width:none] [&::-webkit-scrollbar]:hidden shadow-lg"
+          >
+            {EXPERIENCE_FILTERS.map((f) => {
+              const isActive = activeExperience === f.id;
+              return (
+                <button
+                  key={f.id}
+                  ref={isActive ? experienceChipRef : null}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => handleExperienceChange(f.id)}
+                  className={`flex min-h-11 shrink-0 items-center rounded-full px-3 text-[9px] font-bold uppercase tracking-[0.18em] transition-all duration-300 cursor-pointer md:min-h-0 md:py-1.5 ${
+                    isActive
+                      ? 'bg-white text-[var(--color-ink)] shadow-md md:scale-105'
+                      : 'text-white/60 hover:bg-white/10 hover:text-white md:hover:scale-102'
+                  }`}
+                >
+                  {f.label}
+                </button>
+              );
+            })}
+          </div>
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-0 right-0 flex items-center gap-1 rounded-r-full bg-gradient-to-l from-[var(--color-ink-deep)]/90 to-transparent pl-6 pr-2 transition-opacity duration-200 md:hidden"
+          >
+            <ChevronRight size={14} className="text-white/60" />
+          </div>
+        </div>
+      </div>
+
+      {/* Mappa — Sotto md: blocco in-flow alto 52vh sotto i filtri. Da md in
+          su: riempie il container assoluto, con gli overlay sopra. */}
+      <div className="relative h-[52vh] w-full md:absolute md:inset-0 md:h-full">
+        <Map
+          ref={mapRef}
+          initialViewState={{
+            longitude: 12.5,
+            latitude: 42.0,
+            zoom: 3.5,
+            pitch: 45,
+          }}
+          mapStyle="mapbox://styles/mapbox/dark-v11"
+          mapboxAccessToken={MAPBOX_TOKEN}
+          attributionControl={false}
+        >
+          <NavigationControl position="bottom-right" />
+          <FullscreenControl position="bottom-right" />
+
+          {pins}
+
+          {selectedArticle && (
+            <Popup
+              anchor="bottom"
+              longitude={selectedArticle.lng}
+              latitude={selectedArticle.lat}
+              onClose={() => setSelectedArticle(null)}
+              // Solo closeOnClick=true: il close button visibile non e'
+              // praticamente cliccabile perche' il <Link> wrapper della card
+              // popup occupa tutta l'area in stacking sopra di esso (DOM
+              // order: close-button prima, Link dopo). UX pattern Google
+              // Maps: click ovunque sulla mappa chiude il popup, ESC chiude
+              // da tastiera (gestito da Mapbox di default).
+              closeButton={false}
+              closeOnClick={true}
+              className="twu-map-popup"
+              offset={[0, -40]}
+              maxWidth="320px"
+            >
+              {(() => {
+                const cardClass =
+                  'group relative block w-[300px] overflow-hidden rounded-2xl border border-white/10 bg-[var(--color-ink-deep)] shadow-2xl transition-all duration-500 hover:shadow-[0_15px_35px_rgba(0,0,0,0.4)] hover:border-white/20';
+                const inner = (
+                  <>
+                    <div className="relative aspect-video w-full overflow-hidden bg-neutral-900 rounded-t-2xl">
+                      {selectedArticle.image && (
+                        <img
+                          src={selectedArticle.image}
+                          alt={selectedArticle.title}
+                          className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-108"
+                        />
+                      )}
+                      <div className="absolute bottom-3 left-3 flex gap-2">
+                        <span className="rounded-xl bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-white shadow-md">
+                          {CATEGORY_VISUAL[selectedArticle.category]?.label ||
+                            selectedArticle.category}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="p-5">
+                      <h3 className="mb-2 line-clamp-2 font-serif text-xl leading-tight text-white transition-colors duration-300 group-hover:text-[var(--color-accent)]">
+                        {selectedArticle.title}
+                      </h3>
+                      <p className="mb-4 line-clamp-2 text-xs font-light text-white/70">
+                        {selectedArticle.excerpt}
+                      </p>
+                      <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)] flex items-center gap-1 transition-transform duration-300 group-hover:translate-x-1">
+                        {selectedArticle.externalUrl ? 'Guarda il reel' : 'Leggi la guida'}{' '}
+                        <ArrowRight
+                          size={10}
+                          className="transition-transform group-hover:translate-x-0.5"
+                        />
+                      </div>
+                    </div>
+                  </>
+                );
+                return selectedArticle.externalUrl ? (
+                  <a
+                    href={selectedArticle.externalUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={cardClass}
+                  >
+                    {inner}
+                  </a>
+                ) : (
+                  <Link
+                    to={`/articolo/${selectedArticle.slug || selectedArticle.id}`}
+                    className={cardClass}
+                  >
+                    {inner}
+                  </Link>
+                );
+              })()}
+            </Popup>
+          )}
+        </Map>
+      </div>
+
+      {/* Lista destinazioni — Sotto md: lista verticale full-width in-flow
+          sotto la mappa (niente piu' carosello orizzontale nascosto). Da md
+          in su: overlay assoluto in basso, carosello orizzontale come prima.
           Quando il filtro produce 0 risultati mostriamo un empty-state esplicito
           invece di nascondere il pannello (l'utente capisce perche' la mappa e' vuota). */}
       {filteredArticles.length === 0 && !isLoading ? (
-        <div className="pointer-events-none absolute inset-x-0 bottom-4 z-10 flex justify-center px-4 md:bottom-6">
+        <div className="pointer-events-none static z-10 flex justify-center px-4 py-6 md:absolute md:inset-x-0 md:bottom-6 md:top-auto md:py-0">
           <div
             role="status"
             className="pointer-events-auto inline-flex flex-wrap items-center justify-center gap-2 rounded-full border border-white/12 bg-[var(--color-ink)]/85 px-5 py-3 text-xs font-medium text-white/80 backdrop-blur-xl"
@@ -568,41 +849,45 @@ export default function MapboxWorldMap() {
           </div>
         </div>
       ) : filteredArticles.length > 0 ? (
-        <div className="pointer-events-none absolute inset-x-0 bottom-4 z-10 px-4 md:bottom-6">
+        <div className="pointer-events-none static z-10 px-4 py-6 md:absolute md:inset-x-0 md:bottom-6 md:top-auto md:py-0">
           <div
-            className="pointer-events-auto -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:mx-auto md:max-w-5xl md:gap-4"
+            className="pointer-events-auto flex flex-col gap-3 md:-mx-4 md:mx-auto md:max-w-5xl md:flex-row md:snap-x md:snap-mandatory md:gap-4 md:overflow-x-auto md:px-4 md:pb-2 md:[scrollbar-width:none] md:[&::-webkit-scrollbar]:hidden"
             aria-label={`${filteredArticles.length} destinazioni filtrate`}
           >
-            {filteredArticles.map((article) => {
+            {filteredArticles.map((article, index) => {
               const isActive = selectedArticle?.id === article.id;
               const cat = article.category;
               const visual = (cat && CATEGORY_VISUAL[cat]) || { Icon: MapPin, label: 'Posto' };
               const CatIcon = visual.Icon;
 
               return (
-                <button
+                <motion.button
                   key={`card-${article.id}`}
                   type="button"
                   onClick={() => focusArticle(article)}
                   aria-pressed={isActive}
                   aria-label={`Mostra ${article.title} sulla mappa`}
-                  className={`group flex shrink-0 basis-[78%] snap-start items-center gap-3 rounded-[var(--radius-md)] border bg-[var(--color-surface)]/95 px-3 py-2.5 text-left shadow-xl backdrop-blur-xl transition-all sm:basis-[44%] md:basis-[260px] ${
+                  initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }}
+                  whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.4 }}
+                  transition={{ duration: 0.35, delay: Math.min(index, 6) * 0.05 }}
+                  className={`group flex w-full items-center gap-3 rounded-2xl border px-3 py-3 text-left shadow-xl backdrop-blur-md transition-all duration-300 md:w-auto md:shrink-0 md:basis-[260px] md:snap-start md:py-2.5 cursor-pointer ${
                     isActive
-                      ? 'border-[var(--color-accent)] ring-2 ring-[var(--color-accent)]/30'
-                      : 'border-[var(--color-ink)]/5 hover:border-[var(--color-accent)]/40'
+                      ? 'border-[var(--color-accent)] bg-white/95 ring-2 ring-[var(--color-accent)]/20'
+                      : 'border-black/5 bg-white/80 hover:bg-white/95 hover:border-[var(--color-accent)]/20 hover:-translate-y-0.5'
                   }`}
                 >
-                  <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-md bg-[var(--color-muted-bg)]">
+                  <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-[var(--color-muted-bg)]">
                     {article.image && (
                       <img
                         src={article.image}
                         alt=""
                         loading="lazy"
-                        className="h-full w-full object-cover"
+                        className="h-full w-full object-cover transition-transform duration-750 group-hover:scale-110"
                       />
                     )}
                     <span
-                      className={`absolute -bottom-0 -right-0 flex h-5 w-5 items-center justify-center rounded-tl-md ${
+                      className={`absolute -bottom-0 -right-0 flex h-5 w-5 items-center justify-center rounded-tl-xl ${
                         article.isPartner
                           ? 'bg-[var(--color-success)] text-white'
                           : 'bg-[var(--color-accent)] text-white'
@@ -618,85 +903,50 @@ export default function MapboxWorldMap() {
                         'In viaggio'}
                       {article.isPartner && ' · Partner'}
                     </p>
-                    <p className="line-clamp-2 text-xs font-serif leading-tight text-[var(--color-ink)] md:text-sm">
+                    <p className="line-clamp-2 text-xs font-serif leading-tight text-[var(--color-ink)] md:text-sm transition-colors duration-300 group-hover:text-[var(--color-accent)]">
                       {article.title}
                     </p>
                   </div>
-                </button>
+                </motion.button>
               );
             })}
           </div>
         </div>
       ) : null}
 
-      <Map
-        ref={mapRef}
-        initialViewState={{
-          longitude: 12.5,
-          latitude: 42.0,
-          zoom: 3.5,
-          pitch: 45,
-        }}
-        mapStyle="mapbox://styles/mapbox/dark-v11"
-        mapboxAccessToken={MAPBOX_TOKEN}
-        attributionControl={false}
-      >
-        <NavigationControl position="bottom-right" />
-        <FullscreenControl position="bottom-right" />
-
-        {pins}
-
-        {selectedArticle && (
-          <Popup
-            anchor="bottom"
-            longitude={selectedArticle.lng}
-            latitude={selectedArticle.lat}
-            onClose={() => setSelectedArticle(null)}
-            // Solo closeOnClick=true: il close button visibile non e'
-            // praticamente cliccabile perche' il <Link> wrapper della card
-            // popup occupa tutta l'area in stacking sopra di esso (DOM
-            // order: close-button prima, Link dopo). UX pattern Google
-            // Maps: click ovunque sulla mappa chiude il popup, ESC chiude
-            // da tastiera (gestito da Mapbox di default).
-            closeButton={false}
-            closeOnClick={true}
-            className="twu-map-popup"
-            offset={[0, -40]}
-            maxWidth="320px"
-          >
-            <Link
-              to={`/articolo/${selectedArticle.slug || selectedArticle.id}`}
-              className="group relative block w-[300px] overflow-hidden rounded-[var(--radius-md)] bg-white shadow-2xl"
-            >
-              <div className="relative aspect-video w-full overflow-hidden bg-[var(--color-muted-bg)]">
-                {selectedArticle.image && (
-                  <img
-                    src={selectedArticle.image}
-                    alt={selectedArticle.title}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                )}
-                <div className="absolute bottom-3 left-3 flex gap-2">
-                  <span className="rounded-full bg-white/95 px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-[var(--color-ink)] shadow-md">
-                    {selectedArticle.category}
-                  </span>
-                </div>
-              </div>
-              <div className="p-5">
-                <h3 className="mb-2 line-clamp-2 font-serif text-xl leading-tight text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]">
-                  {selectedArticle.title}
-                </h3>
-                <p className="mb-4 line-clamp-2 text-xs font-light text-black/50">
-                  {selectedArticle.excerpt}
-                </p>
-                <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
-                  Leggi la guida →
-                </div>
-              </div>
-            </Link>
-          </Popup>
-        )}
-      </Map>
+      {/* CTA archivio — off in lite mode (linka /esplora disabilitato) */}
+      {!LITE_MODE && (
+        <Link
+          to={(() => {
+            const params = new URLSearchParams();
+            if (activeContinent !== 'all') {
+              params.set('zone', activeContinent);
+            }
+            if (activeExperience !== 'all') {
+              params.set(
+                'type',
+                activeExperience
+                  .toLowerCase()
+                  .replace(/&/g, 'e')
+                  .replace(/[^a-z0-9]+/g, '-')
+                  .replace(/^-+|-+$/g, '')
+              );
+            }
+            const qs = params.toString();
+            return qs ? `/esplora?${qs}` : '/esplora';
+          })()}
+          onClick={() =>
+            trackEvent('map_to_explore_click', {
+              source_page: '/mappa',
+              zone: activeContinent,
+              type: activeExperience,
+            })
+          }
+          className="static z-10 mx-4 mb-8 inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/85 px-5 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] shadow-2xl backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-white hover:text-[var(--color-accent)] md:absolute md:bottom-36 md:right-8 md:mx-0 md:mb-0"
+        >
+          <MapPin size={14} /> Apri archivio
+        </Link>
+      )}
     </div>
   );
 }

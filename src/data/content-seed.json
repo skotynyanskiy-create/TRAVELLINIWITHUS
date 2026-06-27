@@ -1,0 +1,1040 @@
+[
+  {
+    "id": "emilia-granduca-di-campigna",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Il posto perfetto per un weekend romantico?",
+    "title": "Granduca di Campigna",
+    "description": "Un wellness hotel immerso nelle foreste casentinesi (patrimonio UNESCO): appartamenti spaziosi, alcuni con jacuzzi in camera, spa con aperitivo nella grotta e cena di prodotti locali servita in camera. Vale la pena per chi cerca un weekend romantico vero, lontano dal caos.",
+    "place": {
+      "name": "Granduca di Campigna",
+      "city": "Santa Sofia",
+      "region": "Emilia Romagna",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 43.872585,
+        "lng": 11.746244
+      }
+    },
+    "zone": "Italia",
+    "types": ["Relax, terme e spa", "Weekend romantici"],
+    "partnership": {
+      "kind": "organic",
+      "partner": "@granducadicampigna"
+    },
+    "value": {
+      "price": "da 98€/notte",
+      "budget": "Medio"
+    },
+    "featured": true,
+    "isPlaceholder": true
+  },
+  {
+    "id": "toscana-mirror-house-spinofiorito",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DTw_JBJjBBd/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Dormiresti in una Mirror House?",
+    "title": "Mirror House in Toscana",
+    "description": "Una delle prime mirror house in Italia: una casa specchiata che sparisce nel bosco, dove passare la notte immersi nella natura toscana. Alloggio insolito per chi vuole un'esperienza, non solo un letto.",
+    "place": {
+      "name": "Spinofiorito Stay",
+      "region": "Toscana",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 44.023922,
+        "lng": 12.413669
+      }
+    },
+    "zone": "Italia",
+    "types": ["Hotel con carattere", "Insolito"],
+    "partnership": {
+      "kind": "organic",
+      "partner": "@spinofiorito_stay"
+    },
+    "isPlaceholder": true
+  },
+  {
+    "id": "roma-sushi-ayce",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DWqdI_JjAO_/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Uno dei migliori sushi all you can eat di Roma?",
+    "title": "Sushi AYCE a Roma",
+    "description": "Un nuovo ristorante giapponese all you can eat a Roma, sala curata e qualità sopra la media per il formato. Il dato che conta: 20,90€ a persona. Vale la pena per chi cerca sushi abbondante senza spendere una fortuna.",
+    "place": {
+      "name": "Sushi AYCE",
+      "city": "Roma",
+      "region": "Lazio",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 41.880584,
+        "lng": 12.543915
+      }
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "invited"
+    },
+    "value": {
+      "price": "20,90€",
+      "budget": "Basso"
+    },
+    "isPlaceholder": true
+  },
+  {
+    "id": "bergamo-terra-di-mezzo-lacaverna",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DS98_Q4DMEU/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Ceneresti nella Terra di Mezzo?",
+    "title": "La Caverna — ristorante fantasy",
+    "description": "Un ristorante a tema dove cenare dentro la Contea: ambientazione da Terra di Mezzo curata nei dettagli, porzioni abbondanti e carni alla griglia. Perfetto per chi ama i locali a tema e una cena-esperienza.",
+    "place": {
+      "name": "La Caverna",
+      "city": "Treviolo",
+      "region": "Lombardia",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 37.994781,
+        "lng": 13.65728
+      }
+    },
+    "zone": "Italia",
+    "types": ["Insolito", "Food & Ristoranti"],
+    "partnership": {
+      "kind": "adv",
+      "partner": "@lacavernatreviolo"
+    },
+    "isPlaceholder": true
+  },
+  {
+    "id": "campania-burton-juice",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DUSu96pDH_n/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Il primo ristorante a tema Tim Burton in Italia?",
+    "title": "The Burton Juice",
+    "description": "Il primo ristorante a tema Tim Burton in Italia: location iper-tematizzata tra Jack Skeleton, Beetlejuice e Alice, menù dedicato ai personaggi e spettacoli durante la serata. Da prenotare con anticipo. Per gli amanti dell'insolito.",
+    "place": {
+      "name": "The Burton Juice",
+      "city": "Somma Vesuviana",
+      "region": "Campania",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 40.872787,
+        "lng": 14.437711
+      }
+    },
+    "zone": "Italia",
+    "types": ["Insolito", "Food & Ristoranti"],
+    "partnership": {
+      "kind": "adv",
+      "partner": "@theburtonjuice"
+    },
+    "isPlaceholder": true
+  },
+  {
+    "id": "altoadige-plose-looping",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DWa2UlgjH2X/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Faresti il primo looping in bici sospeso sulle Dolomiti?",
+    "title": "Plose Looping",
+    "description": "A Bressanone esiste il Plose Looping: il primo looping in bici sospeso tra le Dolomiti, adrenalina pura con panorama. Costa 8€. Per chi cerca attività particolari in montagna.",
+    "place": {
+      "name": "Plose",
+      "city": "Bressanone",
+      "region": "Alto Adige",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 46.703663,
+        "lng": 11.659962
+      }
+    },
+    "zone": "Italia",
+    "types": ["Insolito", "Passeggiate panoramiche"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "value": {
+      "price": "8€",
+      "budget": "Basso"
+    },
+    "isPlaceholder": true
+  },
+  {
+    "id": "praga-dog-cafe-yorkmut",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DSPZ_sJjO9o/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Sapevi che esiste un vero dog café?",
+    "title": "Dog Café a Praga",
+    "description": "Un dog café nel cuore di Praga dove i cani ti accolgono appena entri: coccole garantite e atmosfera unica. Uno dei locali particolari che rendono Praga una città da tornarci.",
+    "place": {
+      "name": "Yorkmut Café",
+      "city": "Praga",
+      "country": "Repubblica Ceca",
+      "coordinates": {
+        "lat": 50.08584,
+        "lng": 14.422954
+      }
+    },
+    "zone": "Europa",
+    "types": ["Insolito", "Food & Ristoranti"],
+    "partnership": {
+      "kind": "organic",
+      "partner": "@yorkmutcafe"
+    },
+    "isPlaceholder": true
+  },
+  {
+    "id": "madrid-storyland-disney",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DVlQVgpjFIC/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Una cena nel mondo Disney?",
+    "title": "Storyland a Madrid",
+    "description": "Un ristorante a tema dove sentirsi principessa per una sera: ispirato ai cartoni e alle principesse più amate, piatti scenografici argentini e spettacolo a metà cena. Perfetto per famiglie e per chi non ha mai smesso di sognare.",
+    "place": {
+      "name": "Storyland",
+      "city": "Madrid",
+      "country": "Spagna",
+      "coordinates": {
+        "lat": 40.421345,
+        "lng": -3.701219
+      }
+    },
+    "zone": "Europa",
+    "types": ["Insolito", "Food & Ristoranti"],
+    "partnership": {
+      "kind": "invited",
+      "partner": "@storylandmadrid"
+    },
+    "isPlaceholder": true
+  },
+  {
+    "id": "lugano-parco-acquatico-spa",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Uno dei parchi acquatici con spa più belli d'Europa?",
+    "title": "Splash e Spa a Lugano",
+    "description": "Un parco acquatico con spa a poche ore dall'Italia: relax e divertimento per tutti, perfetto come fuga invernale di coppia o in famiglia.",
+    "place": {
+      "name": "Splash e Spa",
+      "city": "Lugano",
+      "country": "Svizzera",
+      "coordinates": {
+        "lat": 46.005764,
+        "lng": 8.953648
+      }
+    },
+    "zone": "Europa",
+    "types": ["Relax, terme e spa"],
+    "partnership": {
+      "kind": "collaboration",
+      "partner": "@lugano.region"
+    },
+    "isPlaceholder": true
+  },
+  {
+    "id": "egitto-marsa-alam-dream-lagoon",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DTUxc-GjAtf/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Un resort 5 stelle super conveniente a 4 ore dall'Italia?",
+    "title": "Dream Lagoon a Marsa Alam",
+    "description": "Uno splendido resort 5 stelle sul Mar Rosso a Marsa Alam, a sole 4 ore di volo: acqua trasparente, reef e tutto incluso a un prezzo che sorprende. Per chi vuole mare vero senza spendere una fortuna.",
+    "place": {
+      "name": "Dream Lagoon Resort",
+      "city": "Marsa Alam",
+      "country": "Egitto",
+      "coordinates": {
+        "lat": 25.071253,
+        "lng": 34.89386
+      }
+    },
+    "zone": "Africa",
+    "types": ["Relax, terme e spa"],
+    "partnership": {
+      "kind": "organic",
+      "partner": "@dreamlagoonresort"
+    },
+    "isPlaceholder": true
+  },
+  {
+    "id": "milano-omakase-azabu",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Un'esperienza omakase a Milano?",
+    "title": "Omakase da Azabu",
+    "description": "Un omakase a Milano: il sushi chef serve un percorso scelto da lui, pezzo dopo pezzo. Per chi vuole l'esperienza giapponese vera, non l'all you can eat.",
+    "place": {
+      "name": "Azabu",
+      "city": "Milano",
+      "region": "Lombardia",
+      "country": "Italia"
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "invited",
+      "partner": "@azabu10_"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Alto"
+    }
+  },
+  {
+    "id": "milano-pizza-lievita",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "La pizza migliore di Milano?",
+    "title": "Lievità a Milano",
+    "description": "Una delle pizze più premiate di Milano: impasto a lunga lievitazione e materie prime curate. Per chi cerca pizza d'autore senza fronzoli.",
+    "place": {
+      "name": "Lievità",
+      "city": "Milano",
+      "region": "Lombardia",
+      "country": "Italia"
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "adv",
+      "partner": "@thefork_it"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Medio"
+    }
+  },
+  {
+    "id": "milano-pizza-gigante-sleppa",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Una pizza gigante a Milano?",
+    "title": "Sleppa a Milano",
+    "description": "Pizza fuori scala da condividere: la 'sleppa' è enorme e va in due (o più). Goliardica e instagrammabile, ma si mangia davvero.",
+    "place": {
+      "name": "Sleppa",
+      "city": "Milano",
+      "region": "Lombardia",
+      "country": "Italia"
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "adv",
+      "partner": "@sleppa"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Basso"
+    }
+  },
+  {
+    "id": "parma-bbq-coreano-coalmate",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Un BBQ coreano a carbonella a Parma?",
+    "title": "Coalmate BBQ a Parma",
+    "description": "Barbecue coreano cotto a carbonella al tavolo: carni marinate e contorni a volontà. Per chi ama mangiare in modo conviviale e diverso dal solito.",
+    "place": {
+      "name": "Coalmate BBQ",
+      "city": "Parma",
+      "region": "Emilia Romagna",
+      "country": "Italia"
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "adv",
+      "partner": "@coalmatebbq"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Medio"
+    }
+  },
+  {
+    "id": "bologna-smashburger-cavallo",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Uno smashburger di cavallo a Bologna?",
+    "title": "Smashburger di cavallo a Bologna",
+    "description": "Uno smashburger fuori dagli schemi, di carne di cavallo, in una Bologna che di burger se ne intende. Per chi vuole provare qualcosa di insolito a tavola.",
+    "place": {
+      "name": "Smashburger di cavallo",
+      "city": "Bologna",
+      "region": "Emilia Romagna",
+      "country": "Italia"
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "adv"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Basso"
+    }
+  },
+  {
+    "id": "bologna-burlesque-king-cole",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Una serata burlesque a Bologna?",
+    "title": "King Cole Club a Bologna",
+    "description": "Cena-spettacolo con show burlesque dal vivo: serata diversa, tra musica e atmosfera da club. Per una serata fuori dagli schemi in coppia o tra amici.",
+    "place": {
+      "name": "King Cole Club",
+      "city": "Bologna",
+      "region": "Emilia Romagna",
+      "country": "Italia"
+    },
+    "zone": "Italia",
+    "types": ["Insolito", "Food & Ristoranti"],
+    "partnership": {
+      "kind": "adv",
+      "partner": "@lea.libeluna"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Medio"
+    }
+  },
+  {
+    "id": "roma-poke-pasta-eat",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Un poke di pasta fresca a Roma?",
+    "title": "Pasta Eat a Roma",
+    "description": "L'idea del poke ma con pasta fresca, vicino Piazza di Spagna. Veloce, sazia e costa 8€. Per un pranzo onesto nel centro di Roma senza spendere troppo.",
+    "place": {
+      "name": "Pasta Eat",
+      "city": "Roma",
+      "region": "Lazio",
+      "country": "Italia"
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "collaboration",
+      "partner": "@pastaeat"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "price": "8€",
+      "budget": "Basso"
+    }
+  },
+  {
+    "id": "verona-bbq-magi",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Un BBQ coreano illimitato a Verona?",
+    "title": "BBQ Magi a Verona",
+    "description": "Barbecue coreano illimitato a 19,90€: carni da grigliare al tavolo e contorni senza limite. Per chi vuole mangiare molto e bene spendendo poco.",
+    "place": {
+      "name": "BBQ Magi",
+      "city": "Verona",
+      "region": "Veneto",
+      "country": "Italia"
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "organic",
+      "partner": "@bbqmagi"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "price": "19,90€",
+      "budget": "Basso"
+    }
+  },
+  {
+    "id": "verona-dari-degustazione",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Un menù degustazione spettacolare a Verona?",
+    "title": "Dari a Verona",
+    "description": "Un percorso di alta cucina scenografica a Verona, da vivere come un'esperienza più che come una cena. 75€ a persona: occasione speciale.",
+    "place": {
+      "name": "Dari",
+      "city": "Verona",
+      "region": "Veneto",
+      "country": "Italia"
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "collaboration",
+      "partner": "@ristorantedari"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "price": "75€",
+      "budget": "Alto"
+    }
+  },
+  {
+    "id": "verona-vigna-benini",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Un aperitivo in vigna nel veronese?",
+    "title": "Alessandro Benini Wines",
+    "description": "Aperitivo tra i filari, con i vini della cantina e vista sulle colline veronesi. Per un pomeriggio lento, di coppia, lontano dalla città.",
+    "place": {
+      "name": "Alessandro Benini Wines",
+      "city": "Lavagno",
+      "region": "Veneto",
+      "country": "Italia"
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti", "Weekend romantici"],
+    "partnership": {
+      "kind": "invited"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Medio"
+    }
+  },
+  {
+    "id": "jesolo-caribe-bay",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Un parco acquatico caraibico in Veneto?",
+    "title": "Caribe Bay a Jesolo",
+    "description": "Un parco acquatico a tema caraibico a Jesolo: scivoli, lagune e atmosfera tropicale a due passi da casa. Per una giornata di puro divertimento d'estate.",
+    "place": {
+      "name": "Caribe Bay",
+      "city": "Jesolo",
+      "region": "Veneto",
+      "country": "Italia"
+    },
+    "zone": "Italia",
+    "types": ["Insolito", "Relax, terme e spa"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Medio"
+    }
+  },
+  {
+    "id": "padova-cinema-a-letto",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Un cinema dove guardi il film a letto?",
+    "title": "Cinema a letto a Padova",
+    "description": "Una sala dove si guarda il film sdraiati in veri letti, non in poltrona. Coccola perfetta per una serata diversa in coppia.",
+    "place": {
+      "name": "Cineplex Moderno",
+      "city": "Padova",
+      "region": "Veneto",
+      "country": "Italia"
+    },
+    "zone": "Italia",
+    "types": ["Insolito", "Weekend romantici"],
+    "partnership": {
+      "kind": "organic",
+      "partner": "@cineplexmoderno_duecarrare"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Basso"
+    }
+  },
+  {
+    "id": "chioggia-sand-beach",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Mare e ostriche a Chioggia?",
+    "title": "Sand Beach Club a Chioggia",
+    "description": "Una Chioggia diversa dalla cartolina: spiaggia, ostriche e ritmo lento al beach club. Per chi cerca mare veneto autentico senza la calca di Jesolo.",
+    "place": {
+      "name": "Sand Beach Club",
+      "city": "Chioggia",
+      "region": "Veneto",
+      "country": "Italia"
+    },
+    "zone": "Italia",
+    "types": ["Relax, terme e spa", "Posti particolari"],
+    "partnership": {
+      "kind": "adv"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Medio"
+    }
+  },
+  {
+    "id": "lombardia-fiaba-naturooms",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Dormiresti dentro una fiaba?",
+    "title": "Naturooms in Lombardia",
+    "description": "Stanze immerse nel bosco pensate come dentro una favola, per una notte fuori dall'ordinario. Alloggio insolito per chi vuole un'esperienza, non un hotel qualsiasi.",
+    "place": {
+      "name": "Naturooms",
+      "region": "Lombardia",
+      "country": "Italia"
+    },
+    "zone": "Italia",
+    "types": ["Hotel con carattere", "Insolito"],
+    "partnership": {
+      "kind": "adv",
+      "partner": "@naturooms"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Medio"
+    }
+  },
+  {
+    "id": "lombardia-al-mago-medievale",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Una cena in una locanda medievale con falconeria?",
+    "title": "Al Mago ad Albairate",
+    "description": "Locanda a tema medievale dove si cena tra spettacoli e falconeria. Porzioni generose e ambientazione curata: per chi ama le cene-esperienza.",
+    "place": {
+      "name": "Al Mago",
+      "city": "Albairate",
+      "region": "Lombardia",
+      "country": "Italia"
+    },
+    "zone": "Italia",
+    "types": ["Insolito", "Food & Ristoranti"],
+    "partnership": {
+      "kind": "adv"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Medio"
+    }
+  },
+  {
+    "id": "lombardia-agriturismo-graffignana",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Un agriturismo dove dormi tra gli animali?",
+    "title": "Contea del Vignolo Fiorito",
+    "description": "Un agriturismo dove gli animali fanno parte della giornata, tra natura e tavola contadina. Per chi viaggia in coppia o in famiglia e cerca un posto genuino.",
+    "place": {
+      "name": "Contea del Vignolo Fiorito",
+      "city": "Graffignana",
+      "region": "Lombardia",
+      "country": "Italia"
+    },
+    "zone": "Italia",
+    "types": ["Posti particolari", "Hotel con carattere"],
+    "partnership": {
+      "kind": "adv"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Medio"
+    }
+  },
+  {
+    "id": "toscana-glamping-cupole-suvereto",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Dormiresti in una cupola glamping?",
+    "title": "Le Stelle di Elisa a Suvereto",
+    "description": "Cupole glamping nella campagna toscana, per dormire sotto le stelle senza rinunciare al comfort. Alloggio insolito per una fuga di coppia nella natura.",
+    "place": {
+      "name": "Le Stelle di Elisa",
+      "city": "Suvereto",
+      "region": "Toscana",
+      "country": "Italia"
+    },
+    "zone": "Italia",
+    "types": ["Hotel con carattere", "Insolito"],
+    "partnership": {
+      "kind": "organic",
+      "partner": "@lestelledielisaglamping"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Medio"
+    }
+  },
+  {
+    "id": "toscana-suite-spa-follonica",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Una suite romantica con spa privata e cinema?",
+    "title": "Suite Spa a Follonica",
+    "description": "Una suite pensata per due, con spa privata in camera e angolo cinema. Per un weekend romantico senza dover uscire dalla porta.",
+    "place": {
+      "name": "Suite Spa civico 4",
+      "city": "Follonica",
+      "region": "Toscana",
+      "country": "Italia"
+    },
+    "zone": "Italia",
+    "types": ["Hotel con carattere", "Weekend romantici"],
+    "partnership": {
+      "kind": "invited"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Medio"
+    }
+  },
+  {
+    "id": "toscana-aperitivo-volterra",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Un aperitivo alchemico a Volterra?",
+    "title": "Antica Velathri a Volterra",
+    "description": "Aperitivo a tema alchemico nel cuore di Volterra, tra atmosfere gotiche e cocktail scenografici. Per chi ama i locali con un'identità precisa.",
+    "place": {
+      "name": "Antica Velathri Café",
+      "city": "Volterra",
+      "region": "Toscana",
+      "country": "Italia"
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti", "Insolito"],
+    "partnership": {
+      "kind": "organic",
+      "partner": "@anticavelathricafe.volterra"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Medio"
+    }
+  },
+  {
+    "id": "dolomiti-zipline-marebbe",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "La zipline più lunga d'Europa?",
+    "title": "Zipline in Val Marebbe",
+    "description": "Una delle zipline più lunghe d'Europa, sospesi sulle Dolomiti a tutta velocità. Adrenalina con panorama, per chi in montagna cerca l'avventura.",
+    "place": {
+      "name": "Adrenaline X-Treme",
+      "city": "San Vigilio di Marebbe",
+      "region": "Alto Adige",
+      "country": "Italia"
+    },
+    "zone": "Italia",
+    "types": ["Insolito", "Passeggiate panoramiche"],
+    "partnership": {
+      "kind": "adv",
+      "partner": "@adrenaline_dolomites"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Medio"
+    }
+  },
+  {
+    "id": "altoadige-hotel-vipiteno",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "L'hotel perfetto per una fuga a Vipiteno?",
+    "title": "Post Hotel Lamm a Vipiteno",
+    "description": "Un hotel di carattere a Vipiteno, base ideale per una vacanza invernale tra neve e relax. Per chi vuole l'Alto Adige autentico, fuori dai circuiti affollati.",
+    "place": {
+      "name": "Post Hotel Lamm",
+      "city": "Vipiteno",
+      "region": "Alto Adige",
+      "country": "Italia"
+    },
+    "zone": "Italia",
+    "types": ["Hotel con carattere", "Relax, terme e spa"],
+    "partnership": {
+      "kind": "organic",
+      "partner": "@post_hotel_lamm"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Medio"
+    }
+  },
+  {
+    "id": "praga-beer-spa",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Una spa nella birra a Praga?",
+    "title": "Beer Spa a Praga",
+    "description": "Una spa dove ci si immerge in vasche di birra mentre se ne spilla a volontà: l'esperienza più ceca che ci sia. Per chi vuole un relax fuori dal comune.",
+    "place": {
+      "name": "Beer Spa Bernard",
+      "city": "Praga",
+      "country": "Repubblica Ceca"
+    },
+    "zone": "Europa",
+    "types": ["Relax, terme e spa", "Insolito"],
+    "partnership": {
+      "kind": "organic",
+      "partner": "@beerspabernard.prague"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Medio"
+    }
+  },
+  {
+    "id": "praga-cinnamon-rolls",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "I cinnamon roll virali di Praga?",
+    "title": "Cinnamood a Praga",
+    "description": "I cinnamon roll diventati virali, caldi e farciti, nel centro di Praga. Una sosta golosa low cost mentre giri la città.",
+    "place": {
+      "name": "Cinnamood",
+      "city": "Praga",
+      "country": "Repubblica Ceca"
+    },
+    "zone": "Europa",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "organic",
+      "partner": "@cinnamood_"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Basso"
+    }
+  },
+  {
+    "id": "praga-natale",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Praga vestita di Natale?",
+    "title": "Praga d'inverno",
+    "description": "Praga nel periodo natalizio: mercatini, luci e città-presepe da vivere a piedi. Una delle mete invernali europee più scenografiche, a 52€ con il giro giusto.",
+    "place": {
+      "name": "Praga",
+      "city": "Praga",
+      "country": "Repubblica Ceca"
+    },
+    "zone": "Europa",
+    "types": ["Borghi e città d'arte", "Posti particolari"],
+    "partnership": {
+      "kind": "organic",
+      "partner": "@revelton_official"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "price": "52€",
+      "budget": "Medio"
+    }
+  },
+  {
+    "id": "alsazia-riquewihr",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Il paese della Bella e la Bestia?",
+    "title": "Riquewihr in Alsazia",
+    "description": "Il borgo alsaziano che avrebbe ispirato la Bella e la Bestia: case a graticcio, fiori e vicoli da fiaba. Per chi ama i borghi europei più scenografici.",
+    "place": {
+      "name": "Riquewihr",
+      "country": "Francia"
+    },
+    "zone": "Europa",
+    "types": ["Borghi e città d'arte", "Posti particolari"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Medio"
+    }
+  },
+  {
+    "id": "madrid-churros-1902",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "I migliori churros di Madrid?",
+    "title": "Chocolatería 1902 a Madrid",
+    "description": "Churros e cioccolata densa in una cioccolateria storica di Madrid, a 8€. La colazione (o merenda) madrilena per eccellenza, senza spendere.",
+    "place": {
+      "name": "Chocolatería 1902",
+      "city": "Madrid",
+      "country": "Spagna"
+    },
+    "zone": "Europa",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "price": "8€",
+      "budget": "Basso"
+    }
+  },
+  {
+    "id": "copenaghen-christiania",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "La città libera di Christiania?",
+    "title": "Christiania a Copenaghen",
+    "description": "Christiania, il quartiere autogestito e fuori dalle regole di Copenaghen: arte, murales e un'altra idea di città. Per chi viaggia per capire, non solo per vedere.",
+    "place": {
+      "name": "Christiania",
+      "city": "Copenaghen",
+      "country": "Danimarca"
+    },
+    "zone": "Europa",
+    "types": ["Posti particolari"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Medio"
+    }
+  },
+  {
+    "id": "germania-phantasialand",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Il parco con le attrazioni più adrenaliniche?",
+    "title": "Phantasialand in Germania",
+    "description": "Uno dei parchi divertimenti più spettacolari d'Europa, tra montagne russe da record e aree iper-tematizzate. Per chi cerca adrenalina vera.",
+    "place": {
+      "name": "Phantasialand",
+      "country": "Germania"
+    },
+    "zone": "Europa",
+    "types": ["Insolito"],
+    "partnership": {
+      "kind": "organic",
+      "partner": "@phantasialand"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Alto"
+    }
+  },
+  {
+    "id": "londra-bar-avatar",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Un bar a tema Avatar a Londra?",
+    "title": "Avora a Londra",
+    "description": "Un bar immersivo a tema Pandora/Avatar a Londra: ambientazione luminescente e cocktail scenografici. Per chi a Londra cerca le esperienze più insolite.",
+    "place": {
+      "name": "Avora Experience",
+      "city": "Londra",
+      "country": "Regno Unito"
+    },
+    "zone": "Europa",
+    "types": ["Insolito", "Food & Ristoranti"],
+    "partnership": {
+      "kind": "organic",
+      "partner": "@avora_experience"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Medio"
+    }
+  },
+  {
+    "id": "malesia-batu-caves",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "mediaType": "reel",
+    "cover": "",
+    "hook": "Kuala Lumpur vale il viaggio?",
+    "title": "Batu Caves a Kuala Lumpur",
+    "description": "Le Batu Caves con la loro scalinata arcobaleno e i templi nella grotta, vicino Kuala Lumpur: ingresso gratuito e scimmie ovunque. Una Malesia low cost e sorprendente.",
+    "place": {
+      "name": "Batu Caves",
+      "city": "Kuala Lumpur",
+      "country": "Malesia"
+    },
+    "zone": "Asia",
+    "types": ["Posti particolari"],
+    "partnership": {
+      "kind": "collaboration"
+    },
+    "isPlaceholder": true,
+    "value": {
+      "budget": "Basso"
+    }
+  }
+]

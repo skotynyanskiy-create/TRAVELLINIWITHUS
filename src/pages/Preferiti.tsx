@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { motion } from 'motion/react';
 import { Heart, ArrowRight, BookOpen } from 'lucide-react';
 import { heartPulse } from '../lib/animations';
