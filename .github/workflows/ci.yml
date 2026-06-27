@@ -2,13 +2,13 @@ name: CI
 
 on:
   push:
-    branches: [ main, 'codex/**', 'feat/**', 'fix/**' ]
+    branches: [ main, 'codex/**', 'feat/**', 'fix/**', 'audit/**' ]
   pull_request:
     branches: [ main ]
 
 jobs:
   quality:
-    name: Typecheck · Lint · Test · Build
+    name: Typecheck · Lint · Test · Build · Static audits
     runs-on: ubuntu-latest
 
     steps:
@@ -30,7 +30,7 @@ jobs:
         run: npm run lint
 
       - name: Unit tests
-        run: npm run test
+        run: npm run test:unit
 
       - name: Production build
         run: npm run build
@@ -45,3 +45,86 @@ jobs:
 
       - name: Audit Stripe
         run: npm run audit:stripe
+
+      - name: Audit public footprint
+        run: npm run audit:public-footprint
+
+      - name: Audit revenue security
+        run: npm run audit:revenue
+
+      - name: Audit bundle size
+        run: npm run audit:size
+
+  lighthouse:
+    name: Core Web Vitals · Lighthouse budgets
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lighthouse CI (perf · a11y · CLS budgets)
+        run: npm run audit:cwv
+        env:
+          VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
+
+  e2e:
+    name: Playwright e2e + visual quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run e2e + visual quality
+        run: npm run e2e
+        env:
+          VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
+
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  secrets:
+    name: Secret scan (working tree)
+    runs-on: ubuntu-latest
+
+    steps:
+      # Shallow checkout + no npm ci: scans only the committed source tree,
+      # never node_modules. --no-git skips history, so the redacted legacy
+      # GCP-key findings tracked in docs/AI_OPERATIONS_DASHBOARD.md (Open Risks)
+      # don't fail every run — this gate catches NEW leaks in shipping code.
+      - uses: actions/checkout@v4
+
+      - name: Install gitleaks
+        run: |
+          VERSION=8.30.1
+          curl -sSL -o /tmp/gitleaks.tar.gz "https://github.com/gitleaks/gitleaks/releases/download/v${VERSION}/gitleaks_${VERSION}_linux_x64.tar.gz"
+          tar -xzf /tmp/gitleaks.tar.gz -C /usr/local/bin gitleaks
+          gitleaks version
+
+      - name: Scan working tree
+        run: gitleaks detect --no-git --redact --source . --exit-code 1

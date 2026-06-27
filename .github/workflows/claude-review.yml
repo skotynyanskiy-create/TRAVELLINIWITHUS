@@ -1,0 +1,50 @@
+name: Claude PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  claude-review:
+    name: Claude review
+    runs-on: ubuntu-latest
+    # Skip on forks: secrets are not available there.
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Stay dormant (no-op, green) until ANTHROPIC_API_KEY is added in repo secrets,
+      # so missing the key never fails a PR check.
+      - name: Check for API key
+        id: key
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "ANTHROPIC_API_KEY not set — skipping Claude review. Add it in repo Settings → Secrets to activate."
+          else
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Claude review
+        if: ${{ steps.key.outputs.present == 'true' }}
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: "--max-turns 8"
+          prompt: |
+            Sei il revisore di TRAVELLINIWITHUS, sito editoriale travel premium (React 19 · TS non-strict · Vite 6 · Tailwind 4 · Express · Firebase · Stripe). UI italiana.
+            Rivedi SOLO il diff di questa PR. Niente nitpick di stile. Segnala, con file:riga, problemi concreti su:
+            - Correttezza e bug reali (logica, stato, edge case, race, error handling mancante che può davvero accadere).
+            - Sicurezza: secret/chiavi nel diff, modifiche a server.ts / firestore.rules / src/config/admin.ts / webhook Stripe (richiedono attenzione massima), CORS, env VITE_* esposte.
+            - Quality bar pubblico: copy in italiano (mai placeholder inglese), un solo h1 forte per pagina, niente overflow orizzontale su mobile, pattern editoriale premium (no SaaS/gradient blob/finti controlli), uso di PageLayout/Section/CSS vars.
+            - Performance: rischi LCP/CLS/INP, immagini non ottimizzate, import pesanti non code-split.
+            - SEO: meta/title/canonical/schema.org coerenti quando la PR tocca pagine pubbliche.
+            Per ogni rilievo dai severità (blocking / should-fix / nit) e una correzione concreta. Se il diff è pulito, dillo in una riga. Rispondi in italiano.

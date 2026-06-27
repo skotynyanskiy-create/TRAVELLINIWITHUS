@@ -144,6 +144,22 @@ Se un paragrafo non ha alcun dato concreto, va riscritto o tagliato.
 → Poi `travellini-quality-auditor` per gate finale
 ```
 
+## Taste pass — il check positivo
+
+Togliere i pattern AI non basta: un testo puo essere "pulito" e comunque
+anonimo. Dopo la rimozione, fai un passaggio che AGGIUNGE distintivita. Per ogni
+sezione chiediti:
+
+| Domanda                                                                  | Se la risposta è no                                                               |
+| ------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| C'è almeno un dettaglio che solo chi c'è stato saprebbe?                 | Aggiungi un'osservazione concreta (luce, prezzo, odore, orario, errore evitabile) |
+| Una frase è memorabile / riportabile a voce?                             | Crea un punto d'appoggio: un'immagine netta, un contrasto, una battuta            |
+| Si capisce che parlano Rodrigo & Betta e non un brand generico?          | Inserisci il punto di vista di coppia, una scelta reale, un'opinione              |
+| Toglieresti l'80% e resterebbe comunque vero per qualsiasi destinazione? | È filler: sostituisci con specifico o taglia                                      |
+
+Regola: meglio **una** osservazione vera e precisa che tre frasi levigate.
+La distintivita non si aggiunge con aggettivi, si aggiunge con fatti scelti.
+
 ## Esempi rapidi
 
 ### Prima

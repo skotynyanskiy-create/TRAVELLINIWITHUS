@@ -1,4 +1,5 @@
 {
+  "effortLevel": "high",
   "enableAllProjectMcpServers": false,
   "enabledMcpjsonServers": [
     "firebase",
@@ -8,7 +9,9 @@
     "chrome-devtools",
     "context7",
     "github",
-    "obsidian"
+    "obsidian",
+    "codex",
+    "analytics-mcp"
   ],
   "permissions": {
     "allow": [
@@ -33,9 +36,28 @@
       "mcp__firebase__firebase_get_environment",
       "mcp__firebase__firebase_get_sdk_config",
       "mcp__firebase__firebase_validate_security_rules"
+    ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git clean -fd:*)",
+      "Bash(git clean -f:*)"
     ]
   },
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"C:\\Users\\ccocu\\.claude\\hooks\\block_dangerous_bash.py\""
+          }
+        ]
+      }
+    ],
     "SessionStart": [
       {
         "matcher": "*",
@@ -47,22 +69,33 @@
         ]
       }
     ],
-    "PreToolUse": [
+    "UserPromptSubmit": [
       {
-        "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
-            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command '$cmd = $env:CLAUDE_TOOL_INPUT; if ($cmd -match \"rm\\s+-rf|git\\s+push\\s+--force|git\\s+reset\\s+--hard|git\\s+clean\\s+-f|DROP\\s+TABLE|firebase\\s+deploy\\s+--project\\s+prod\") { Write-Error \"BLOCKED / BLOCCATO: Risky command detected. Ask owner before proceeding. Comando pericoloso rilevato. Chiedi conferma al proprietario prima di procedere.\"; exit 2 }'"
+            "command": "python \"C:\\Users\\ccocu\\.claude\\hooks\\quality_bar_prompt_validator.py\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "if": "Bash(git commit:*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"C:\\Users\\ccocu\\.claude\\hooks\\quality_bar_precommit.py\""
           }
         ]
       },
       {
-        "matcher": "Edit|Write",
+        "matcher": "Task|Agent",
         "hooks": [
           {
             "type": "command",
-            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command '$file = $env:CLAUDE_FILE_PATH; if ($file -match \"server\\.ts$|firestore\\.rules$|src[\\\\/]config[\\\\/]admin\\.ts$\") { Write-Warning \"HIGH-RISK FILE / FILE AD ALTO RISCHIO: $file. Double-check the change before continuing. Verifica attentamente le modifiche prima di procedere.\" }'"
+            "command": "python \"C:\\Users\\ccocu\\.claude\\hooks\\quality_bar_agent_output.py\""
           }
         ]
       }
