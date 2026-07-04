@@ -109,19 +109,22 @@ export default function Navbar() {
 
   // IA definitiva (2026-07-04): due assi ortogonali — DOVE (Destinazioni) ×
   // COSA (Racconti). Mega-menu "Destinazioni" = browse geografico + anchor foto.
-  const destinazioniLinks = useMemo<NavSubLink[]>(() => {
-    const all: NavSubLink[] = [
+  const destinazioniLinks = useMemo<NavSubLink[]>(
+    () => [
       {
         name: 'Italia',
-        href: '/esplora?zone=Italia',
-        description: 'Borghi, food e posti insoliti.',
+        href: '/destinazione/italia',
+        description: 'Borghi, food e posti insoliti, regione per regione.',
       },
-      { name: 'Europa', href: '/esplora?zone=Europa', description: 'Fughe a portata di volo.' },
-      { name: 'Resto del mondo', href: '/esplora', description: 'Dove il viaggio vale il volo.' },
-    ];
-    if (!LITE_MODE) return all;
-    return all.filter((l) => !l.href.startsWith('/esplora'));
-  }, []);
+      { name: 'Europa', href: '/destinazione/europa', description: 'Fughe a portata di volo.' },
+      {
+        name: 'Tutte le destinazioni',
+        href: '/destinazione',
+        description: 'Zona per zona, fino alla regione.',
+      },
+    ],
+    []
+  );
 
   // Feature del menu Destinazioni — immagine brand reale (asset in repo, non
   // contenuto inventato). toscana.webp ha i derivati responsive fino a 768.
@@ -130,7 +133,7 @@ export default function Navbar() {
       eyebrow: 'In evidenza',
       title: 'Toscana insolita',
       description: 'Draghi, vampiri e sushi: i posti particolari che abbiamo provato.',
-      href: '/esplora?zone=Italia',
+      href: '/destinazione/italia',
       image: '/images/destinations/toscana.webp',
     }),
     []
@@ -151,7 +154,7 @@ export default function Navbar() {
     const all: NavItem[] = [
       {
         name: 'Destinazioni',
-        href: '/mappa',
+        href: '/destinazione',
         primaryLinks: LITE_MODE ? undefined : destinazioniLinks,
         feature: LITE_MODE ? undefined : destinazioniFeature,
       },
@@ -177,7 +180,7 @@ export default function Navbar() {
     const path = location.pathname;
 
     if (item.name === 'Destinazioni') {
-      return path === '/mappa' || path.startsWith('/destinazione');
+      return path.startsWith('/destinazione');
     }
     if (item.name === 'Esplora') {
       return path === '/esplora';

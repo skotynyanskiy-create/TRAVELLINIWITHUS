@@ -108,9 +108,10 @@ export default function App() {
                       <Route index element={<AtlanteHome />} />
                       <Route path="atlante" element={<Navigate to="/" replace />} />
                       {!LITE_MODE && <Route path="esplora" element={<Esplora />} />}
-                      {/* Spina gerarchica: /destinazione/:zoneSlug e
-                          /destinazione/:zoneSlug/:subSlug. Il singolo segmento
-                          resta back-compat per gli slug regione legacy. */}
+                      {/* Spina gerarchica: /destinazione (hub tutte le zone),
+                          /destinazione/:zoneSlug, /destinazione/:zoneSlug/:subSlug.
+                          Il singolo segmento resta back-compat per gli slug regione legacy. */}
+                      <Route path="destinazione" element={<Destinazione />} />
                       <Route path="destinazione/:zoneSlug" element={<Destinazione />} />
                       <Route path="destinazione/:zoneSlug/:subSlug" element={<Destinazione />} />
                       {/* Legacy routes consolidate in /esplora (2026-05-15).

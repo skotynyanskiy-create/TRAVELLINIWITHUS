@@ -24,6 +24,7 @@ import {
   getChildren,
   getContentForDestination,
   getDestination,
+  getZoneDestinations,
   getDestinationUrl,
   type DestinationNode,
 } from '../config/destinations';
@@ -31,7 +32,7 @@ import {
 // ─── Router: risolve zona / regione / paese, con back-compat legacy ──────────
 
 export default function Destinazione() {
-  const { zoneSlug, subSlug } = useParams<{ zoneSlug: string; subSlug?: string }>();
+  const { zoneSlug, subSlug } = useParams<{ zoneSlug?: string; subSlug?: string }>();
 
   const node = subSlug ? getDestination(subSlug) : zoneSlug ? getDestination(zoneSlug) : undefined;
 
@@ -39,14 +40,100 @@ export default function Destinazione() {
     return <DestinationWorld node={node} />;
   }
 
+  // /destinazione (senza slug) → hub con tutte le zone (la radice della spina).
+  if (!zoneSlug) {
+    return <DestinationsHub />;
+  }
+
   // Back-compat: slug regione legacy (puglia, sicilia, sardegna,
   // trentino-alto-adige, …) senza nodo nell'albero → vecchia landing.
-  const legacyRegion = zoneSlug ? getRegionMeta(zoneSlug) : undefined;
+  const legacyRegion = getRegionMeta(zoneSlug);
   if (legacyRegion) {
     return <LegacyRegionLanding region={legacyRegion} />;
   }
 
   return <Navigate to="/esplora" replace />;
+}
+
+// ─── Hub /destinazione: tutte le zone (radice della spina) ───────────────────
+
+function DestinationsHub() {
+  const zones = getZoneDestinations();
+  const canonical = `${SITE_URL}/destinazione`;
+
+  return (
+    <PageLayout>
+      <SEO
+        title="Destinazioni — dove siamo stati"
+        description="Le destinazioni Travelliniwithus: Italia, Europa e resto del mondo, zona per zona, coi posti particolari provati sul campo da Rodrigo e Betta."
+        canonical={canonical}
+        breadcrumbs={[
+          { name: 'Home', url: '/' },
+          { name: 'Esplora', url: '/esplora' },
+          { name: 'Destinazioni', url: '/destinazione' },
+        ]}
+      />
+
+      <div className="mx-auto max-w-6xl px-6 md:px-12">
+        <div className="mt-6">
+          <Breadcrumbs
+            items={[{ label: 'Esplora', href: '/esplora' }, { label: 'Destinazioni' }]}
+          />
+        </div>
+
+        <header className="mt-8 max-w-2xl">
+          <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
+            Destinazioni
+          </p>
+          <h1 className="font-serif text-5xl leading-tight text-[var(--color-ink)] md:text-6xl">
+            Dove siamo stati
+          </h1>
+          <p className="mt-5 font-serif text-lg italic leading-relaxed text-[var(--color-ink-2)] md:text-xl">
+            Scegli una zona e scendi fino alla regione. Il tema (food, insolito, relax…) si filtra
+            invece in Esplora.
+          </p>
+        </header>
+
+        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {zones.map((zone) => {
+            const count = countForDestination(zone);
+            return (
+              <Link
+                key={zone.slug}
+                to={getDestinationUrl(zone)}
+                className="group relative flex aspect-[4/3] flex-col justify-end overflow-hidden rounded-[var(--radius-xl)] bg-[var(--color-ink-deep)] shadow-[var(--shadow-md)] transition-transform duration-300 hover:-translate-y-1"
+              >
+                {zone.cover && (
+                  <>
+                    <OptimizedImage
+                      src={zone.cover}
+                      alt={zone.name}
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-105"
+                    />
+                    <div aria-hidden="true" className="twu-cover-scrim absolute inset-0" />
+                  </>
+                )}
+                <div className="relative z-10 p-6">
+                  <h2 className="font-serif text-3xl leading-none text-white drop-shadow-md">
+                    {zone.name}
+                  </h2>
+                  <p className="mt-2 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-white/85">
+                    {count} {count === 1 ? 'posto' : 'posti'}
+                    <ArrowRight
+                      size={13}
+                      className="transition-transform group-hover:translate-x-0.5"
+                    />
+                  </p>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+
+        <div className="mt-24" />
+      </div>
+    </PageLayout>
+  );
 }
 
 // ─── Template DESTINATION-WORLD (zona / regione / paese) ─────────────────────
