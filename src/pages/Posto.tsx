@@ -10,6 +10,7 @@ import DealCard from '../components/DealCard';
 import PostNavigation from '../components/PostNavigation';
 import { Link } from '@/src/components/TransitionLink';
 import { getContentById } from '../config/contentLibrary';
+import { findDestinationByRegionName, getDestinationUrl } from '../config/destinations';
 import { SITE_URL } from '../config/site';
 import type { ContentType } from '../config/contentTaxonomy';
 import type { PartnershipKind } from '../types/content';
@@ -66,6 +67,13 @@ export default function Posto() {
     .join(', ');
 
   const schemaType = TYPE_SCHEMA[item.types[0]] ?? TYPE_SCHEMA._default;
+
+  // Link alla pagina destinazione della regione/paese — solo se il nodo esiste
+  // nell'albero destinations (regioni italiane + paesi). Altrimenti testo semplice.
+  const destNode =
+    findDestinationByRegionName(item.place.region ?? '') ??
+    findDestinationByRegionName(item.place.country ?? '');
+  const destUrl = destNode ? getDestinationUrl(destNode) : undefined;
 
   const placeJsonLd = {
     '@context': 'https://schema.org',
@@ -136,12 +144,19 @@ export default function Posto() {
         breadcrumbs={[
           { name: 'Home', url: '/' },
           { name: 'Esplora', url: '/esplora' },
+          ...(destNode && destUrl ? [{ name: destNode.name, url: destUrl }] : []),
           { name: item.title, url: `/posto/${item.id}` },
         ]}
       />
 
       <div className="mx-auto max-w-4xl px-6 md:px-12">
-        <Breadcrumbs items={[{ label: 'Esplora', href: '/esplora' }, { label: item.title }]} />
+        <Breadcrumbs
+          items={[
+            { label: 'Esplora', href: '/esplora' },
+            ...(destNode && destUrl ? [{ label: destNode.name, href: destUrl }] : []),
+            { label: item.title },
+          ]}
+        />
 
         {/* Cover / hero */}
         <div className="relative aspect-video w-full overflow-hidden rounded-[var(--radius-lg)] bg-[var(--color-ink)]">
@@ -174,12 +189,16 @@ export default function Posto() {
           )}
 
           {/* Pulsante play — linka al reel IG */}
+          {/* Overlay play decorativo (mouse-hover): aria-hidden + non-focusabile,
+              così la stessa destinazione non crea un secondo tab stop. Il link
+              accessibile è il CTA visibile "Guarda il reel" più sotto. */}
           <a
             href={item.permalink}
             target="_blank"
             rel="noreferrer"
-            aria-label="Guarda il reel su Instagram"
-            className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity hover:opacity-100 focus-visible:opacity-100"
+            aria-hidden="true"
+            tabIndex={-1}
+            className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity hover:opacity-100"
           >
             <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm ring-2 ring-white/40 transition-transform hover:scale-110">
               <Play size={28} className="translate-x-0.5 text-white" fill="white" />
@@ -197,10 +216,20 @@ export default function Posto() {
 
             {/* Luogo + voto redazionale */}
             <div className="mt-4 flex flex-wrap items-center gap-3">
-              <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-[var(--color-accent-text)]">
-                <MapPin size={14} />
-                {placeLabel}
-              </p>
+              {destUrl ? (
+                <Link
+                  to={destUrl}
+                  className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-[var(--color-accent-text)] underline-offset-4 transition-colors hover:underline"
+                >
+                  <MapPin size={14} />
+                  {placeLabel}
+                </Link>
+              ) : (
+                <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-[var(--color-accent-text)]">
+                  <MapPin size={14} />
+                  {placeLabel}
+                </p>
+              )}
               <RatingPill overall={item.review?.overall} />
             </div>
 

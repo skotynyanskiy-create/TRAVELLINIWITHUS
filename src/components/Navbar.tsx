@@ -566,9 +566,14 @@ export default function Navbar() {
                             }
                             aria-expanded={openMobileSection === item.name}
                             aria-label={`Apri sottomenu ${item.name}`}
-                            className="pt-2 text-xl opacity-40 transition-opacity hover:opacity-100"
+                            className="-m-2 flex min-h-[44px] min-w-[44px] items-center justify-center text-[var(--color-ink-2)] transition-colors hover:text-[var(--color-accent)]"
                           >
-                            {openMobileSection === item.name ? '-' : '+'}
+                            <ChevronDown
+                              size={20}
+                              className={`transition-transform ${
+                                openMobileSection === item.name ? 'rotate-180' : ''
+                              }`}
+                            />
                           </button>
                         </div>
                         <AnimatePresence>
