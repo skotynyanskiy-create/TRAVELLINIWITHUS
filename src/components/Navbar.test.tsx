@@ -40,17 +40,16 @@ describe('Navbar Component', () => {
     expect(getByText(/Travellini/i)).toBeInTheDocument();
   });
 
-  it('renders navigation links (post-Esplora consolidation 2026-05-15)', () => {
+  it('renders navigation links (IA definitiva 2026-07-04)', () => {
     const { getAllByText } = renderNavbar();
+    // Due assi ortogonali: DOVE (Destinazioni) × COSA (Racconti), più Esplora,
+    // Chi siamo, Shop. Strumenti e Club sono ora nel footer, non in nav primaria.
+    expect(getAllByText(/Destinazioni/i).length).toBeGreaterThan(0);
     expect(getAllByText(/Esplora/i).length).toBeGreaterThan(0);
-    // Default label 'Strumenti' (siteContent.ts:436) per la rotta /strumenti;
-    // editabile da admin via SiteContentEditor.
-    expect(getAllByText(/Strumenti/i).length).toBeGreaterThan(0);
-    expect(getAllByText(/Shop/i).length).toBeGreaterThan(0);
-    expect(getAllByText(/Club/i).length).toBeGreaterThan(0);
+    expect(getAllByText(/Racconti/i).length).toBeGreaterThan(0);
     expect(getAllByText(/Chi siamo/i).length).toBeGreaterThan(0);
-    // Voce nav "Collaborazioni" rimossa il 2026-05-24 (era duplicato della pill):
-    // ora l'unico ingresso a /collaborazioni è la pill "Collabora con noi".
+    expect(getAllByText(/Shop/i).length).toBeGreaterThan(0);
+    // L'unico ingresso a /collaborazioni è la pill "Collabora con noi".
     expect(getAllByText(/Collabora con noi/i).length).toBeGreaterThan(0);
   });
 });
