@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import { Link } from '@/src/components/TransitionLink';
 import { ArrowRight, MapPin } from 'lucide-react';
 import PageLayout from '../components/PageLayout';
@@ -8,10 +8,10 @@ import Breadcrumbs from '../components/Breadcrumbs';
 import ArchiveCard from '../components/discovery/ArchiveCard';
 import InteractiveMap from '../components/InteractiveMap';
 import OptimizedImage from '../components/OptimizedImage';
-import NotFound from './NotFound';
+import ContentCard from '../components/content/ContentCard';
 import { SITE_URL } from '../config/site';
 import { DEMO_ARCHIVE_MAP_MARKERS } from '../config/demoArchive';
-import { getArticlesByRegion, getRegionMeta } from '../lib/regions';
+import { getArticlesByRegion, getRegionMeta, type RegionMeta } from '../lib/regions';
 import type { ArchiveItem } from '../utils/contentArchive';
 import {
   getContentByRegion,
@@ -19,7 +19,247 @@ import {
   INTENTION_LABEL,
   INTENTION_ORDER,
 } from '../config/contentLibrary';
-import ContentCard from '../components/content/ContentCard';
+import {
+  countForDestination,
+  getChildren,
+  getContentForDestination,
+  getDestination,
+  getDestinationUrl,
+  type DestinationNode,
+} from '../config/destinations';
+
+// ─── Router: risolve zona / regione / paese, con back-compat legacy ──────────
+
+export default function Destinazione() {
+  const { zoneSlug, subSlug } = useParams<{ zoneSlug: string; subSlug?: string }>();
+
+  const node = subSlug ? getDestination(subSlug) : zoneSlug ? getDestination(zoneSlug) : undefined;
+
+  if (node) {
+    return <DestinationWorld node={node} />;
+  }
+
+  // Back-compat: slug regione legacy (puglia, sicilia, sardegna,
+  // trentino-alto-adige, …) senza nodo nell'albero → vecchia landing.
+  const legacyRegion = zoneSlug ? getRegionMeta(zoneSlug) : undefined;
+  if (legacyRegion) {
+    return <LegacyRegionLanding region={legacyRegion} />;
+  }
+
+  return <Navigate to="/esplora" replace />;
+}
+
+// ─── Template DESTINATION-WORLD (zona / regione / paese) ─────────────────────
+
+function DestinationWorld({ node }: { node: DestinationNode }) {
+  const zoneNode = node.parentSlug ? getDestination(node.parentSlug) : undefined;
+  const children = useMemo(() => getChildren(node.slug), [node.slug]);
+  const content = useMemo(() => getContentForDestination(node), [node]);
+
+  const url = getDestinationUrl(node);
+  const canonical = `${SITE_URL}${url}`;
+  const count = content.length;
+
+  const breadcrumbTrail = [
+    { name: 'Esplora', url: '/esplora' },
+    ...(zoneNode ? [{ name: zoneNode.name, url: `/destinazione/${zoneNode.slug}` }] : []),
+    { name: node.name, url },
+  ];
+
+  const placeJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'TouristDestination',
+    name: node.name,
+    description: node.intro,
+    url: canonical,
+    inLanguage: 'it-IT',
+    isPartOf: {
+      '@type': 'WebSite',
+      '@id': `${SITE_URL}/#website`,
+      name: 'Travelliniwithus',
+      url: SITE_URL,
+    },
+    ...(node.matchCountry
+      ? { address: { '@type': 'PostalAddress', addressCountry: node.matchCountry } }
+      : {}),
+    ...(node.coordinates
+      ? {
+          geo: {
+            '@type': 'GeoCoordinates',
+            latitude: node.coordinates.lat,
+            longitude: node.coordinates.lng,
+          },
+        }
+      : {}),
+  };
+
+  return (
+    <PageLayout>
+      <SEO
+        title={`${node.name} — Le nostre destinazioni`}
+        description={node.intro ?? `I posti particolari di ${node.name} visti da Rodrigo & Betta.`}
+        canonical={canonical}
+        image={node.cover}
+        breadcrumbs={[{ name: 'Home', url: '/' }, ...breadcrumbTrail]}
+        jsonLd={placeJsonLd}
+      />
+
+      {/* Hero — cover se disponibile, altrimenti header sand editoriale. */}
+      {node.cover ? (
+        <section className="relative -mt-32 md:-mt-24 h-[55vh] min-h-[440px] w-full overflow-hidden bg-[var(--color-ink)]">
+          <OptimizedImage
+            src={node.cover}
+            alt={`${node.name} — destinazione`}
+            priority
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/70" />
+          <div className="absolute inset-x-0 bottom-0 px-6 pb-12 md:px-12 md:pb-16">
+            <div className="mx-auto max-w-6xl">
+              <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-white/85">
+                Destinazione
+              </p>
+              <h1 className="font-serif text-5xl leading-tight text-white md:text-7xl">
+                {node.name}
+              </h1>
+              {node.intro && (
+                <p className="mt-5 max-w-2xl font-serif text-lg italic leading-relaxed text-white/90 md:text-xl">
+                  {node.intro}
+                </p>
+              )}
+              <DestinationMeta count={count} />
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section className="-mt-32 md:-mt-24 bg-[var(--color-surface)] pt-40 md:pt-44">
+          <div className="mx-auto max-w-6xl px-6 pb-12 md:px-12 md:pb-16">
+            <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
+              Destinazione
+            </p>
+            <h1 className="font-serif text-5xl leading-tight text-[var(--color-ink)] md:text-7xl">
+              {node.name}
+            </h1>
+            {node.intro && (
+              <p className="mt-5 max-w-2xl font-serif text-lg italic leading-relaxed text-[var(--color-ink-2)] md:text-xl">
+                {node.intro}
+              </p>
+            )}
+            <div className="mt-5 flex flex-wrap items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-muted-fg)]">
+              <span>
+                {count} {count === 1 ? 'posto' : 'posti'}
+              </span>
+              <span aria-hidden="true" className="text-black/30">
+                ·
+              </span>
+              <span>Rodrigo & Betta</span>
+            </div>
+          </div>
+        </section>
+      )}
+
+      <div className="mx-auto max-w-6xl px-6 md:px-12">
+        <div className="mt-10">
+          <Breadcrumbs
+            items={[
+              { label: 'Esplora', href: '/esplora' },
+              ...(zoneNode
+                ? [{ label: zoneNode.name, href: `/destinazione/${zoneNode.slug}` }]
+                : []),
+              { label: node.name },
+            ]}
+          />
+        </div>
+
+        {/* Figli: regioni/paesi della zona. Il conteggio qui è contestuale. */}
+        {children.length > 0 && (
+          <section className="mt-6">
+            <h2 className="mb-8 font-serif text-3xl text-[var(--color-ink)] md:text-4xl">
+              {node.level === 'zone' && node.zone === 'Italia' ? 'Le regioni' : 'Dove siamo stati'}
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {children.map((child) => {
+                const childCount = countForDestination(child);
+                return (
+                  <Link
+                    key={child.slug}
+                    to={getDestinationUrl(child)}
+                    className="group flex items-center justify-between gap-4 rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-surface)] p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--color-accent)]/20 hover:shadow-[var(--shadow-premium)]"
+                  >
+                    <div>
+                      <p className="font-serif text-2xl leading-tight text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)]">
+                        {child.name}
+                      </p>
+                      <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-muted-fg)]">
+                        {childCount} {childCount === 1 ? 'posto' : 'posti'}
+                      </p>
+                    </div>
+                    <ArrowRight
+                      size={18}
+                      className="shrink-0 text-[var(--color-accent-text)] transition-transform group-hover:translate-x-0.5"
+                    />
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
+        {/* Griglia posti particolari reali del nodo. */}
+        {content.length > 0 ? (
+          <section className="mt-20">
+            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
+              Visti sul campo
+            </p>
+            <h2 className="mb-10 font-serif text-3xl text-[var(--color-ink)] md:text-4xl">
+              I posti particolari di {node.name}
+            </h2>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {content.map((item) => (
+                <ContentCard key={item.id} item={item} />
+              ))}
+            </div>
+          </section>
+        ) : (
+          <section className="mt-20 rounded-[var(--radius-lg)] border border-dashed border-black/15 bg-[var(--color-surface)] p-10 text-center">
+            <p className="text-sm uppercase tracking-[0.22em] text-[var(--color-muted-fg)]">
+              Presto nuovi posti
+            </p>
+            <p className="mt-3 max-w-xl mx-auto font-serif text-xl leading-relaxed text-[var(--color-ink-2)]">
+              Stiamo aggiungendo i posti particolari di {node.name}. Iscriviti alla newsletter per
+              non perderli.
+            </p>
+            <Link
+              to="/lead-magnet"
+              className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
+            >
+              Iscriviti alla newsletter
+              <ArrowRight size={15} />
+            </Link>
+          </section>
+        )}
+
+        <div className="mt-24" />
+      </div>
+    </PageLayout>
+  );
+}
+
+function DestinationMeta({ count }: { count: number }) {
+  return (
+    <div className="mt-5 flex flex-wrap items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-white/75">
+      <span>
+        {count} {count === 1 ? 'posto' : 'posti'}
+      </span>
+      <span aria-hidden="true" className="text-white/40">
+        ·
+      </span>
+      <span>Rodrigo & Betta</span>
+    </div>
+  );
+}
+
+// ─── Landing regione legacy (invariata) — back-compat inbound links ──────────
 
 const PILLAR_CATEGORIES = new Set(['Guide', 'Guida', 'Hotel con carattere', 'Posti particolari']);
 
@@ -46,20 +286,11 @@ function classify(articles: ArchiveItem[]) {
   return { pillars, itineraries, stories };
 }
 
-export default function Destinazione() {
-  const { regionSlug } = useParams<{ regionSlug: string }>();
-  const region = regionSlug ? getRegionMeta(regionSlug) : undefined;
-
-  const articles = useMemo(() => (region ? getArticlesByRegion(region.slug) : []), [region]);
-
+function LegacyRegionLanding({ region }: { region: RegionMeta }) {
+  const articles = useMemo(() => getArticlesByRegion(region.slug), [region.slug]);
   const { pillars, itineraries, stories } = useMemo(() => classify(articles), [articles]);
 
-  // Posti particolari reali (ContentItem) per questa regione, raggruppati per
-  // intenzione. Oggi dal seed; domani dall'API IG via la stessa libreria.
-  const destinationContent = useMemo(
-    () => (region ? getContentByRegion(region.name) : []),
-    [region]
-  );
+  const destinationContent = useMemo(() => getContentByRegion(region.name), [region.name]);
   const contentByIntention = useMemo(
     () => groupByIntention(destinationContent),
     [destinationContent]
@@ -69,10 +300,6 @@ export default function Destinazione() {
     const articleIds = new Set(articles.map((a) => a.id));
     return DEMO_ARCHIVE_MAP_MARKERS.filter((marker) => articleIds.has(marker.id));
   }, [articles]);
-
-  if (!region) {
-    return <NotFound />;
-  }
 
   const canonical = `${SITE_URL}/destinazione/${region.slug}`;
   const topArticleUrl = `/articolo/${region.topArticleSlug}`;
@@ -203,8 +430,7 @@ export default function Destinazione() {
           </Link>
         </section>
 
-        {/* I posti particolari reali, raggruppati per intenzione (Mangiare /
-            Dormire / Esperienze / Vedere). Si popola dai ContentItem. */}
+        {/* I posti particolari reali, raggruppati per intenzione. */}
         {destinationContent.length > 0 && (
           <section className="mt-20">
             <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">

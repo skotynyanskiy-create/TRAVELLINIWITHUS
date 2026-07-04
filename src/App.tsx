@@ -108,7 +108,11 @@ export default function App() {
                       <Route index element={<AtlanteHome />} />
                       <Route path="atlante" element={<Navigate to="/" replace />} />
                       {!LITE_MODE && <Route path="esplora" element={<Esplora />} />}
-                      <Route path="destinazione/:regionSlug" element={<Destinazione />} />
+                      {/* Spina gerarchica: /destinazione/:zoneSlug e
+                          /destinazione/:zoneSlug/:subSlug. Il singolo segmento
+                          resta back-compat per gli slug regione legacy. */}
+                      <Route path="destinazione/:zoneSlug" element={<Destinazione />} />
+                      <Route path="destinazione/:zoneSlug/:subSlug" element={<Destinazione />} />
                       {/* Legacy routes consolidate in /esplora (2026-05-15).
                           I param sono compatibili: parseDiscoveryFilters
                           legge group/area/region, experience, cat, search
