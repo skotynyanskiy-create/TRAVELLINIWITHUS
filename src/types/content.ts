@@ -94,6 +94,16 @@ export interface ContentItem {
   value?: { price?: string; budget?: Budget };
   /** Scheda redazionale R+B. Renderizzata SOLO se presente — mai inventata. */
   review?: ContentReview;
+  /** Offerta/deal affiliato collegato al posto. Rendered SOLO se presente — mai inventato. */
+  deal?: {
+    kind: 'code' | 'sale'; // codice promo vs sconto/offerta
+    url: string; // link (affiliato) all'offerta
+    code?: string; // codice promo (se kind==='code')
+    label?: string; // es. "-15% sulla prima notte"
+    provider?: string; // es. "Booking", "GetYourGuide"
+    validUntil?: string; // ISO date opzionale
+    terms?: string; // termini/condizioni (accordion)
+  };
   /** In evidenza in home/destinazione. */
   featured?: boolean;
   /** True finché mancano cover reale o dati API (consumer applica fallback). */

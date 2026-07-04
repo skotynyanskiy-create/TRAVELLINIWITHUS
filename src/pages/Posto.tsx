@@ -6,6 +6,8 @@ import Breadcrumbs from '../components/Breadcrumbs';
 import Newsletter from '../components/Newsletter';
 import ReviewBlock from '../components/ReviewBlock';
 import RatingPill from '../components/RatingPill';
+import DealCard from '../components/DealCard';
+import PostNavigation from '../components/PostNavigation';
 import { Link } from '@/src/components/TransitionLink';
 import { getContentById } from '../config/contentLibrary';
 import { SITE_URL } from '../config/site';
@@ -104,6 +106,16 @@ export default function Posto() {
             },
             author: { '@type': 'Organization', name: 'Travelliniwithus' },
             ...(item.review.summary ? { reviewBody: item.review.summary } : {}),
+          },
+        }
+      : {}),
+    ...(item.deal
+      ? {
+          offers: {
+            '@type': 'Offer',
+            url: item.deal.url,
+            availability: 'https://schema.org/InStock',
+            ...(item.deal.validUntil ? { priceValidUntil: item.deal.validUntil } : {}),
           },
         }
       : {}),
@@ -226,37 +238,45 @@ export default function Posto() {
             </div>
           </div>
 
-          {/* Riquadro valore — solo se c'è price o description */}
-          {(item.value?.price || item.description) && (
-            <aside className="w-full shrink-0 rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-surface)] p-6 md:w-64">
-              {item.value?.price && (
-                <div className="mb-4 border-b border-black/5 pb-4">
-                  <p className="mb-1 text-[9px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
-                    Prezzo indicativo
-                  </p>
-                  <p className="font-serif text-2xl font-medium text-[var(--color-ink)]">
-                    {item.value.price}
-                  </p>
-                  {item.value.budget && (
-                    <p className="mt-1 text-[11px] text-[var(--color-muted-fg)]">
-                      Budget: {item.value.budget}
-                    </p>
+          {/* Colonna destra — valore + offerta, solo se c'è almeno un dato reale */}
+          {(item.value?.price || item.description || item.deal) && (
+            <div className="w-full shrink-0 space-y-6 md:w-64">
+              {(item.value?.price || item.description) && (
+                <aside className="w-full rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-surface)] p-6">
+                  {item.value?.price && (
+                    <div className="mb-4 border-b border-black/5 pb-4">
+                      <p className="mb-1 text-[9px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
+                        Prezzo indicativo
+                      </p>
+                      <p className="font-serif text-2xl font-medium text-[var(--color-ink)]">
+                        {item.value.price}
+                      </p>
+                      {item.value.budget && (
+                        <p className="mt-1 text-[11px] text-[var(--color-muted-fg)]">
+                          Budget: {item.value.budget}
+                        </p>
+                      )}
+                    </div>
                   )}
-                </div>
+                  {item.description && (
+                    <>
+                      <p className="mb-2 text-[9px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
+                        Vale la pena?
+                      </p>
+                      <p className="text-sm leading-relaxed text-[var(--color-ink-2)]">
+                        {item.description}
+                      </p>
+                    </>
+                  )}
+                </aside>
               )}
-              {item.description && (
-                <>
-                  <p className="mb-2 text-[9px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
-                    Vale la pena?
-                  </p>
-                  <p className="text-sm leading-relaxed text-[var(--color-ink-2)]">
-                    {item.description}
-                  </p>
-                </>
-              )}
-            </aside>
+              <DealCard deal={item.deal} />
+            </div>
           )}
         </div>
+
+        {/* Navigazione prev/next tra posti */}
+        <PostNavigation currentId={item.id} />
 
         {/* Strip newsletter */}
         <div className="mt-20">
