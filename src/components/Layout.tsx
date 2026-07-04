@@ -5,57 +5,12 @@ import Footer from './Footer';
 import ConsentBanner from './ConsentBanner';
 import ExitIntentPopup from './ExitIntentPopup';
 import AiAssistant from './AiAssistant';
-import JsonLd from './JsonLd';
 import ScrollProgressBar from './ScrollProgressBar';
 import SmoothScrollProvider from './SmoothScrollProvider';
 import QuickViewDrawer from './QuickViewDrawer';
 import { QuickViewProvider } from '../context/QuickViewContext';
 import { initAnalytics, trackPageview } from '../services/analytics';
-import { CONTACTS, SITE_URL } from '../config/site';
 import { LITE_MODE } from '../config/liteMode';
-
-const ORGANIZATION_JSONLD = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: 'Travelliniwithus',
-  alternateName: 'Travellini With Us',
-  url: SITE_URL,
-  logo: `${SITE_URL}/apple-touch-icon.png`,
-  email: CONTACTS.email,
-  sameAs: [CONTACTS.instagramUrl, CONTACTS.tiktokUrl, CONTACTS.facebookUrl],
-  founder: [
-    { '@type': 'Person', name: 'Rodrigo' },
-    { '@type': 'Person', name: 'Betta' },
-  ],
-};
-
-const WEBSITE_JSONLD = LITE_MODE
-  ? {
-      '@context': 'https://schema.org',
-      '@type': 'WebSite',
-      name: 'Travelliniwithus',
-      url: `${SITE_URL}/`,
-      inLanguage: 'it-IT',
-      description:
-        'Posti particolari, esperienze vere e consigli pratici da chi li ha vissuti. Travelliniwithus.',
-    }
-  : {
-      '@context': 'https://schema.org',
-      '@type': 'WebSite',
-      name: 'Travelliniwithus',
-      url: `${SITE_URL}/`,
-      inLanguage: 'it-IT',
-      description:
-        'Posti particolari, esperienze vere e consigli pratici da chi li ha vissuti. Travelliniwithus.',
-      potentialAction: {
-        '@type': 'SearchAction',
-        target: {
-          '@type': 'EntryPoint',
-          urlTemplate: `${SITE_URL}/esplora?q={search_term_string}`,
-        },
-        'query-input': 'required name=search_term_string',
-      },
-    };
 
 export default function Layout() {
   const location = useLocation();
@@ -85,8 +40,6 @@ export default function Layout() {
           >
             Vai al contenuto principale
           </a>
-          <JsonLd data={ORGANIZATION_JSONLD} />
-          <JsonLd data={WEBSITE_JSONLD} />
           <ScrollProgressBar />
           <Navbar />
           <main id="main-content" className="flex-grow">

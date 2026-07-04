@@ -69,48 +69,6 @@ function buildPlaceJsonLd(place: PlaceEntity) {
   };
 }
 
-/**
- * Person schema per Rodrigo & Betta con autorita strutturata.
- * Marathon FASE 1.D 2026-05-17 — Author authority per AI citation.
- */
-export function buildAuthorPersonJsonLd(
-  name: 'Rodrigo' | 'Betta',
-  options?: { jobTitle?: string }
-) {
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
-    '@id': `${SITE_URL}/#${name.toLowerCase()}`,
-    name,
-    url: `${SITE_URL}/chi-siamo`,
-    sameAs: [
-      'https://www.instagram.com/travelliniwithus/',
-      'https://www.tiktok.com/@travellini.withus',
-      'https://www.facebook.com/travelwithuss/',
-    ],
-    jobTitle: options?.jobTitle ?? 'Travel creator e autore editoriale',
-    nationality: 'IT',
-    knowsLanguage: ['it', 'en'],
-    knowsAbout: [
-      'viaggi in Italia',
-      'destinazioni Sud Italia',
-      'borghi italiani',
-      'Salento',
-      'Sicilia',
-      'Dolomiti',
-      'travel editorial',
-      'itinerari di coppia',
-      'hotel boutique',
-      'guide pratiche viaggio',
-    ],
-    worksFor: {
-      '@type': 'Organization',
-      '@id': `${SITE_URL}/#organization`,
-      name: 'Travelliniwithus',
-    },
-  };
-}
-
 const DEFAULT_AUTHORS = [
   {
     name: 'Rodrigo',
