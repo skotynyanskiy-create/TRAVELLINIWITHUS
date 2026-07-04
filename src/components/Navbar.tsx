@@ -378,11 +378,19 @@ export default function Navbar() {
           </div>
 
           <div className="hidden shrink-0 items-center space-x-4 text-[var(--color-ink-2)] xl:flex xl:space-x-6">
+            {/* CTA primaria reader-first (il pubblico è ~99% lettori). "Collabora"
+                resta come link secondario discreto — B2B ha già Footer + card Esplora. */}
             <Link
               to="/collaborazioni"
+              className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink-2)] transition-colors hover:text-[var(--color-accent)]"
+            >
+              Collabora
+            </Link>
+            <Link
+              to="/vieni-con-noi"
               className="inline-flex items-center gap-1 rounded-full border border-[var(--color-accent)]/30 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-colors hover:bg-[var(--color-accent-soft)]"
             >
-              Collabora con noi
+              Vieni con noi
             </Link>
 
             <button
@@ -636,12 +644,19 @@ export default function Navbar() {
               <div className="border-t border-[var(--color-ink)]/5 bg-[var(--color-sand)]/50 p-8">
                 <div className="flex flex-col gap-6">
                   <Link
-                    to="/collaborazioni"
+                    to="/vieni-con-noi"
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-6 py-4 text-xs font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
                   >
-                    Collabora con noi
+                    Vieni con noi
                     <ArrowRight size={14} />
+                  </Link>
+                  <Link
+                    to="/collaborazioni"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-center text-[11px] font-bold uppercase tracking-widest text-[var(--color-ink-2)] transition-colors hover:text-[var(--color-accent)]"
+                  >
+                    Collabora con noi
                   </Link>
                   <div className="flex flex-wrap items-center gap-5">
                     {!LITE_MODE && (

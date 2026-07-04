@@ -49,7 +49,9 @@ describe('Navbar Component', () => {
     expect(getAllByText(/Racconti/i).length).toBeGreaterThan(0);
     expect(getAllByText(/Chi siamo/i).length).toBeGreaterThan(0);
     expect(getAllByText(/Shop/i).length).toBeGreaterThan(0);
-    // L'unico ingresso a /collaborazioni è la pill "Collabora con noi".
-    expect(getAllByText(/Collabora con noi/i).length).toBeGreaterThan(0);
+    // CTA nav reader-first (B2, 2026-07-04): la pill primaria è "Vieni con noi"
+    // (/vieni-con-noi); "Collabora" resta come link secondario a /collaborazioni.
+    expect(getAllByText(/Vieni con noi/i).length).toBeGreaterThan(0);
+    expect(getAllByText(/Collabora/i).length).toBeGreaterThan(0);
   });
 });
