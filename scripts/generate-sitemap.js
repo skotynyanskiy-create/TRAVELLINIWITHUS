@@ -180,9 +180,12 @@ async function buildSitemap() {
     )
     .join('');
 
-  // Pagine-posto indicizzabili: una per ogni ContentItem nel seed.
-  // Priority 0.7 (discovery content), changefreq monthly (dati stabili).
-  const postoEntries = contentSeed
+  // Pagine-posto: SOLO i posti reali (isPlaceholder:false). I placeholder sono
+  // noindex (vedi Posto.tsx) ed esclusi dalla sitemap — pass di onestà: niente
+  // ~40 pagine finte indicizzate. Tornano in sitemap quando l'import Instagram
+  // porta il dato reale. Priority 0.7, changefreq monthly.
+  const indexablePosti = contentSeed.filter((item) => !item.isPlaceholder);
+  const postoEntries = indexablePosti
     .map((item) =>
       urlEntry(`/posto/${item.id}`, { changefreq: 'monthly', priority: '0.7', lastmod: now })
     )
@@ -202,7 +205,7 @@ async function buildSitemap() {
   fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), sitemap);
   const dynamicCount = (dynamic?.articleRoutes.length || 0) + (dynamic?.productRoutes.length || 0);
   console.log(
-    `Sitemap generated. Static: ${staticRoutes.length + discoveryRoutes.length}, regions: ${regionLandingSlugs.length}, filters: ${filterRoutes.length}, posto: ${contentSeed.length}, dynamic: ${dynamicCount}.`
+    `Sitemap generated. Static: ${staticRoutes.length + discoveryRoutes.length}, regions: ${regionLandingSlugs.length}, filters: ${filterRoutes.length}, posto: ${indexablePosti.length}/${contentSeed.length} reali, dynamic: ${dynamicCount}.`
   );
 
   // robots.txt: keep public routes crawlable (incl. /shop, /vieni-con-noi,

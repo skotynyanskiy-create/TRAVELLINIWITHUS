@@ -128,6 +128,10 @@ export default function Posto() {
         description={item.description}
         canonical={canonical}
         image={item.cover || undefined}
+        // Pass di onestà: i posti placeholder restano visibili ma NON indicizzati
+        // (evita thin-content su ~40 pagine finte). Reversibile: quando l'import
+        // Instagram porta il dato reale (isPlaceholder:false) tornano indicizzabili.
+        noindex={item.isPlaceholder}
         jsonLd={placeJsonLd}
         breadcrumbs={[
           { name: 'Home', url: '/' },
