@@ -19,6 +19,30 @@ export type PartnershipKind =
   | 'collaboration' // collaborazione
   | 'affiliate'; // link affiliato
 
+/** Un criterio valutato della scheda redazionale (es. "Cucina", score 8.4). */
+export interface ReviewCriterion {
+  name: string;
+  /** Punteggio 0-10 (mezza cifra ok). */
+  score: number;
+}
+
+/**
+ * Scheda redazionale R+B di un posto. Renderizzata SOLO se presente — mai
+ * inventata: nessun ContentItem reale va popolato con dati fittizi.
+ */
+export interface ContentReview {
+  /** Voto complessivo 0-10, mezza cifra ok (es. 8.6). Opzionale. */
+  overall?: number;
+  /** Etichetta breve del verdetto (es. "Ci torneremmo"). */
+  verdict?: string;
+  /** Una riga di giudizio. */
+  summary?: string;
+  /** 2-5 criteri valutati. */
+  criteria?: ReviewCriterion[];
+  pros?: string[];
+  cons?: string[];
+}
+
 export interface ContentPlace {
   /** Nome del posto/locale (es. "Granduca di Campigna"). */
   name: string;
@@ -68,6 +92,8 @@ export interface ContentItem {
   partnership: { kind: PartnershipKind; partner?: string };
   /** Dato di valore: prezzo testuale (es. "98€/notte") + fascia budget. */
   value?: { price?: string; budget?: Budget };
+  /** Scheda redazionale R+B. Renderizzata SOLO se presente — mai inventata. */
+  review?: ContentReview;
   /** In evidenza in home/destinazione. */
   featured?: boolean;
   /** True finché mancano cover reale o dati API (consumer applica fallback). */

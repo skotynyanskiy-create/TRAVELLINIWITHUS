@@ -4,6 +4,8 @@ import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Newsletter from '../components/Newsletter';
+import ReviewBlock from '../components/ReviewBlock';
+import RatingPill from '../components/RatingPill';
 import { Link } from '@/src/components/TransitionLink';
 import { getContentById } from '../config/contentLibrary';
 import { SITE_URL } from '../config/site';
@@ -86,6 +88,25 @@ export default function Posto() {
           },
         }
       : {}),
+    // Recensione EDITORIALE di prima parte (Travelliniwithus recensisce il
+    // posto). NON usiamo aggregateRating: sarebbe un rating self-authored su
+    // un'attività terza — vietato dalle policy Google structured-data e segnale
+    // da content-farm. Un Review con author=Organization è corretto e onesto.
+    ...(item.review?.overall != null
+      ? {
+          review: {
+            '@type': 'Review',
+            reviewRating: {
+              '@type': 'Rating',
+              ratingValue: item.review.overall,
+              bestRating: 10,
+              worstRating: 0,
+            },
+            author: { '@type': 'Organization', name: 'Travelliniwithus' },
+            ...(item.review.summary ? { reviewBody: item.review.summary } : {}),
+          },
+        }
+      : {}),
   };
 
   return (
@@ -158,11 +179,14 @@ export default function Posto() {
               {item.hook}
             </h1>
 
-            {/* Luogo */}
-            <p className="mt-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-[var(--color-accent-text)]">
-              <MapPin size={14} />
-              {placeLabel}
-            </p>
+            {/* Luogo + voto redazionale */}
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-[var(--color-accent-text)]">
+                <MapPin size={14} />
+                {placeLabel}
+              </p>
+              <RatingPill overall={item.review?.overall} />
+            </div>
 
             {/* Descrizione */}
             {item.description && (
@@ -170,6 +194,9 @@ export default function Posto() {
                 {item.description}
               </p>
             )}
+
+            {/* Scheda redazionale — solo se ci sono dati reali */}
+            <ReviewBlock review={item.review} placeName={item.place?.name} />
 
             {/* CTA reel */}
             <div className="mt-8 flex flex-wrap items-center gap-3">

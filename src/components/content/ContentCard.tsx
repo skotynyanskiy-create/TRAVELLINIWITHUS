@@ -1,5 +1,6 @@
 import { ArrowUpRight, MapPin } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
+import RatingPill from '../RatingPill';
 import type { ContentItem, PartnershipKind } from '../../types/content';
 import type { ContentType } from '../../config/contentTaxonomy';
 
@@ -93,6 +94,7 @@ export default function ContentCard({ item }: { item: ContentItem }) {
           {item.value?.price && (
             <span className="text-xs font-bold text-[var(--color-ink)]">{item.value.price}</span>
           )}
+          <RatingPill overall={item.review?.overall} />
           <span className="ml-auto inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-transform group-hover:translate-x-0.5">
             Guarda il reel <ArrowUpRight size={12} />
           </span>
