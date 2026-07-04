@@ -132,6 +132,15 @@ export default function ReelStrip({ reels = getPublishedReels() }: ReelStripProp
                       </span>
                     </div>
 
+                    {/* Indice editoriale 01-05 — i 5 reel letti come sommario curato,
+                        non come scarsità (thin-content friendly). */}
+                    <span
+                      aria-hidden="true"
+                      className="absolute right-3.5 top-3 text-xs font-semibold tabular-nums tracking-eyebrow text-white/85"
+                    >
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+
                     {/* Play badge centrale */}
                     <span className="absolute inset-0 flex items-center justify-center">
                       <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/92 text-[var(--color-ink)] shadow-lg transition-transform duration-300 group-hover:scale-110">

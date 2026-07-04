@@ -1023,7 +1023,7 @@ export default function Articolo() {
                   <h2 className="mb-8 font-serif text-3xl md:text-4xl text-[var(--color-ink)]">
                     Analisi sul posto & Dettagli
                   </h2>
-                  <div className="grid gap-8 md:grid-cols-3">
+                  <div className="grid gap-8 md:grid-cols-2">
                     {/* 1. Dove dormire */}
                     <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 transition-shadow hover:shadow-xs">
                       <div className="mb-4 flex items-center gap-3">
@@ -1049,34 +1049,7 @@ export default function Articolo() {
                       </p>
                     </div>
 
-                    {/* 2. Cosa evitare */}
-                    <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 transition-shadow hover:shadow-xs">
-                      <div className="mb-4 flex items-center gap-3">
-                        <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-error-soft)] text-[var(--color-error-text)]">
-                          <Info size={16} />
-                        </span>
-                        <h3 className="font-serif text-xl font-medium text-[var(--color-ink)]">
-                          Cosa evitare
-                        </h3>
-                      </div>
-                      <ul className="space-y-2.5 text-sm leading-relaxed text-[var(--color-ink-2)]">
-                        <li className="flex gap-2">
-                          <span className="text-[var(--color-error)] font-bold">✕</span>
-                          <span>
-                            Evitare i giri commerciali negli orari di punta (10:00 - 15:00).
-                          </span>
-                        </li>
-                        <li className="flex gap-2">
-                          <span className="text-[var(--color-error)] font-bold">✕</span>
-                          <span>
-                            Non fermarsi nei ristoranti con menu turistici multilingua esposti
-                            fuori.
-                          </span>
-                        </li>
-                      </ul>
-                    </div>
-
-                    {/* 3. Quanto costa davvero */}
+                    {/* 2. Quanto costa davvero */}
                     <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 transition-shadow hover:shadow-xs">
                       <div className="mb-4 flex items-center gap-3">
                         <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-success-soft)] text-[var(--color-success-text)]">
