@@ -33,7 +33,11 @@ function ZoneChip({ to, children }: { to: string; children: React.ReactNode }) {
  */
 export default function HeroCopertina({ posterSrc = DEFAULT_POSTER }: HeroCopertinaProps) {
   const reduced = useReducedMotion();
-  const [isSmall, setIsSmall] = useState(false);
+  // Init sincrono: su mobile la prima render sceglie subito il branch statico,
+  // così non parte il fetch del chunk WebGL né il flash del pulse-ring.
+  const [isSmall, setIsSmall] = useState(
+    () => typeof window !== 'undefined' && window.innerWidth < 1024
+  );
 
   useEffect(() => {
     const update = () => setIsSmall(window.innerWidth < 1024);
