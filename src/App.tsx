@@ -14,7 +14,6 @@ import { FavoritesProvider } from './context/FavoritesContext';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { LITE_MODE } from './config/liteMode';
-import { ATLANTE_PREVIEW } from './config/atlantePreview';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,9 +27,8 @@ const queryClient = new QueryClient({
 });
 
 // Lazy load pages for better performance
-const Home = lazy(() => import('./pages/Home'));
-const HomeV2 = lazy(() => import('./pages/V2/HomeV2'));
-const AtlanteLab = lazy(() => import('./pages/AtlanteLab'));
+// Home: "Atlante Vivo" (cutover 2026-07-04). Le vecchie home (Sentiero = pages/Home,
+// V2, AtlanteLab) sono disattivate e conservate in repo/git per eventuale recupero.
 const AtlanteHome = lazy(() => import('./pages/AtlanteHome'));
 const Esplora = lazy(() => import('./pages/Esplora'));
 const Destinazione = lazy(() => import('./pages/Destinazione'));
@@ -97,17 +95,18 @@ export default function App() {
                 <Suspense fallback={<PageLoader />}>
                   <Routes>
                     {/* Standalone landings (no navbar/footer) — bio link IG/TikTok */}
-                    <Route path="/v2" element={<HomeV2 />} />
-                    <Route path="/atlante-lab" element={<AtlanteLab />} />
                     <Route path="/vieni-con-noi" element={<VieniConNoi />} />
                     <Route path="/iscrivi" element={<Navigate to="/vieni-con-noi" replace />} />
-                    {/* Il Sentiero è ora la home (/). La vecchia rotta di anteprima
-                        redirige per dedup SEO e per non rompere link esterni. */}
+                    {/* Cutover 2026-07-04: la home è "Atlante Vivo". Le home sperimentali
+                        (Sentiero /, V2, AtlanteLab, anteprima /atlante) sono disattivate →
+                        redirect sicuro, codice conservato in repo/git per recupero. */}
+                    <Route path="/v2" element={<Navigate to="/" replace />} />
+                    <Route path="/atlante-lab" element={<Navigate to="/" replace />} />
                     <Route path="/sentiero" element={<Navigate to="/" replace />} />
 
                     <Route path="/" element={<Layout />}>
-                      <Route index element={<Home />} />
-                      {ATLANTE_PREVIEW && <Route path="atlante" element={<AtlanteHome />} />}
+                      <Route index element={<AtlanteHome />} />
+                      <Route path="atlante" element={<Navigate to="/" replace />} />
                       {!LITE_MODE && <Route path="esplora" element={<Esplora />} />}
                       <Route path="destinazione/:regionSlug" element={<Destinazione />} />
                       {/* Legacy routes consolidate in /esplora (2026-05-15).

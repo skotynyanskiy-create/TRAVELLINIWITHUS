@@ -48,18 +48,17 @@ const CATEGORIES: CategoryCard[] = [
 ];
 
 /**
- * Home "Atlante Vivo" — rotta di anteprima /atlante (noindex, gated da
- * ATLANTE_PREVIEW). Navbar/Footer arrivano da Layout: qui solo il contenuto.
- * Nessuno <style> che nasconde il chrome: la hero convive con la navbar.
+ * Home "Atlante Vivo" — la home ufficiale (/) dal cutover del 2026-07-04.
+ * Navbar/Footer arrivano da Layout: qui solo il contenuto. Nessuno <style>
+ * che nasconde il chrome: la hero convive con la navbar.
  */
 export default function AtlanteHome() {
   return (
     <>
       <SEO
-        noindex
-        title="Atlante Vivo — anteprima home"
-        description="Anteprima della nuova home Travelliniwithus: posti particolari provati da Rodrigo e Betta, reel reali e un metodo editoriale onesto."
-        canonical={`${SITE_URL}/atlante`}
+        title="Viaggi reali e posti particolari in Italia e nel mondo"
+        description="La casa di Rodrigo e Betta: posti particolari provati sul campo, con atmosfera, costi reali e il consiglio onesto se un posto merita il viaggio."
+        canonical={`${SITE_URL}/`}
       />
 
       <HeroCopertina />

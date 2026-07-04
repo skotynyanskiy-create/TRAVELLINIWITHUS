@@ -14,7 +14,6 @@ export const LITE_DISABLED_ROUTES: ReadonlyArray<string> = [
   '/strumenti',
   '/press',
   '/risorse',
-  '/futuro',
   '/lead-magnet',
 ];
 
@@ -31,7 +30,6 @@ const PREFIX_DISABLED = [
   '/strumenti',
   '/press',
   '/risorse',
-  '/futuro',
   '/lead-magnet',
 ];
 
