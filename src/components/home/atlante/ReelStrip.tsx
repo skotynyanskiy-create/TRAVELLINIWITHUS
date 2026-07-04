@@ -54,17 +54,17 @@ export default function ReelStrip({ reels = getPublishedReels() }: ReelStripProp
   if (reels.length === 0) return null;
 
   return (
-    <section className="bg-sand py-20 md:py-24">
+    <section className="bg-[var(--color-ink)] py-20 md:py-24">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="mb-10 flex flex-wrap items-end justify-between gap-6">
           <div>
-            <span className="mb-3 block text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
+            <span className="mb-3 block text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent)]">
               Le storie
             </span>
-            <h2 className="font-serif text-3xl text-[var(--color-ink)] md:text-5xl">
+            <h2 className="font-serif text-3xl text-[var(--color-sand)] md:text-5xl">
               I reel di Rodrigo &amp; Betta
             </h2>
-            <p className="mt-3 max-w-xl text-sm text-[var(--color-muted-fg)] md:text-base">
+            <p className="mt-3 max-w-xl text-sm text-white/70 md:text-base">
               Posti particolari, food insolito e dietro le quinte. Tocca per guardare il video.
             </p>
           </div>
@@ -74,7 +74,7 @@ export default function ReelStrip({ reels = getPublishedReels() }: ReelStripProp
               type="button"
               onClick={scrollPrev}
               aria-label="Reel precedenti"
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--color-ink)]/12 text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-white transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
             >
               <ChevronLeft size={18} />
             </button>
@@ -82,7 +82,7 @@ export default function ReelStrip({ reels = getPublishedReels() }: ReelStripProp
               type="button"
               onClick={scrollNext}
               aria-label="Reel successivi"
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-[var(--color-ink)]/12 text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-white transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
             >
               <ChevronRight size={18} />
             </button>
@@ -168,7 +168,7 @@ export default function ReelStrip({ reels = getPublishedReels() }: ReelStripProp
             target="_blank"
             rel="noreferrer"
             onClick={() => trackEvent('reel_strip_profile_click')}
-            className="inline-flex items-center gap-2 rounded-full border border-[var(--color-ink)]/12 px-7 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+            className="inline-flex items-center gap-2 rounded-full border border-white/20 px-7 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
           >
             <Instagram size={15} /> Apri il profilo
           </a>
