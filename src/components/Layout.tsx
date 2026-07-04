@@ -8,6 +8,8 @@ import AiAssistant from './AiAssistant';
 import JsonLd from './JsonLd';
 import ScrollProgressBar from './ScrollProgressBar';
 import SmoothScrollProvider from './SmoothScrollProvider';
+import QuickViewDrawer from './QuickViewDrawer';
+import { QuickViewProvider } from '../context/QuickViewContext';
 import { initAnalytics, trackPageview } from '../services/analytics';
 import { CONTACTS, SITE_URL } from '../config/site';
 import { LITE_MODE } from '../config/liteMode';
@@ -75,25 +77,28 @@ export default function Layout() {
 
   return (
     <SmoothScrollProvider>
-      <div className="min-h-screen bg-[var(--color-sand)] text-[var(--color-ink)] font-sans selection:bg-[var(--color-accent)] selection:text-white flex flex-col">
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[200] focus:rounded-lg focus:bg-[var(--color-accent)] focus:px-4 focus:py-2 focus:text-white"
-        >
-          Vai al contenuto principale
-        </a>
-        <JsonLd data={ORGANIZATION_JSONLD} />
-        <JsonLd data={WEBSITE_JSONLD} />
-        <ScrollProgressBar />
-        <Navbar />
-        <main id="main-content" className="flex-grow">
-          <Outlet />
-        </main>
-        <Footer />
-        <ConsentBanner />
-        {!LITE_MODE && !isCinematicHome && <ExitIntentPopup />}
-        {!LITE_MODE && !isCinematicHome && <AiAssistant />}
-      </div>
+      <QuickViewProvider>
+        <div className="min-h-screen bg-[var(--color-sand)] text-[var(--color-ink)] font-sans selection:bg-[var(--color-accent)] selection:text-white flex flex-col">
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[200] focus:rounded-lg focus:bg-[var(--color-accent)] focus:px-4 focus:py-2 focus:text-white"
+          >
+            Vai al contenuto principale
+          </a>
+          <JsonLd data={ORGANIZATION_JSONLD} />
+          <JsonLd data={WEBSITE_JSONLD} />
+          <ScrollProgressBar />
+          <Navbar />
+          <main id="main-content" className="flex-grow">
+            <Outlet />
+          </main>
+          <Footer />
+          <ConsentBanner />
+          {!LITE_MODE && !isCinematicHome && <ExitIntentPopup />}
+          {!LITE_MODE && !isCinematicHome && <AiAssistant />}
+          <QuickViewDrawer />
+        </div>
+      </QuickViewProvider>
     </SmoothScrollProvider>
   );
 }

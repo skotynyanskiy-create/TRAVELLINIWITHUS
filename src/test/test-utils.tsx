@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from '../context/AuthContext';
 import { FavoritesProvider } from '../context/FavoritesContext';
 import { CartProvider } from '../context/CartContext';
+import { QuickViewProvider } from '../context/QuickViewContext';
 
 const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
   const queryClient = new QueryClient({
@@ -20,7 +21,9 @@ const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
       <BrowserRouter>
         <AuthProvider>
           <CartProvider>
-            <FavoritesProvider>{children}</FavoritesProvider>
+            <FavoritesProvider>
+              <QuickViewProvider>{children}</QuickViewProvider>
+            </FavoritesProvider>
           </CartProvider>
         </AuthProvider>
       </BrowserRouter>
