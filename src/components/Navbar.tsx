@@ -107,104 +107,101 @@ export default function Navbar() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Mega menu editoriale 2 colonne: 4 link primary (decisione rapida) +
-  // anteprima foto featured (anchor visivo). Le picks restano nella single
-  // source `discoveryPicks.ts` ma vengono usate altrove (Home discovery,
-  // SearchModal); qui privilegiamo la decisione editoriale.
-  const explorePrimaryLinks = useMemo<NavSubLink[]>(() => {
+  // IA definitiva (2026-07-04): due assi ortogonali — DOVE (Destinazioni) ×
+  // COSA (Racconti). Mega-menu "Destinazioni" = browse geografico + anchor foto.
+  const destinazioniLinks = useMemo<NavSubLink[]>(() => {
     const all: NavSubLink[] = [
       {
-        name: 'Apri il finder',
-        href: '/esplora',
-        description: 'Cerca per zona, intenzione o ritmo.',
+        name: 'Italia',
+        href: '/esplora?zone=Italia',
+        description: 'Borghi, food e posti insoliti.',
       },
-      {
-        name: 'Vista sulla mappa',
-        href: '/mappa',
-        description: 'I posti che abbiamo vissuto, geo-localizzati.',
-      },
-      {
-        name: 'Guide pratiche',
-        href: '/esplora?format=guida',
-        description: 'Come organizzare, cosa portare, dove dormire.',
-      },
-      {
-        name: 'Itinerari',
-        href: '/itinerari',
-        description: 'Giorno per giorno, già impostati.',
-      },
+      { name: 'Europa', href: '/esplora?zone=Europa', description: 'Fughe a portata di volo.' },
+      { name: 'Resto del mondo', href: '/esplora', description: 'Dove il viaggio vale il volo.' },
     ];
     if (!LITE_MODE) return all;
-    return all.filter(
-      (l) =>
-        !l.href.startsWith('/esplora') &&
-        !l.href.startsWith('/itinerari') &&
-        !l.href.startsWith('/shop') &&
-        !l.href.startsWith('/club') &&
-        !l.href.startsWith('/preferiti')
-    );
+    return all.filter((l) => !l.href.startsWith('/esplora'));
   }, []);
 
-  // Featured editoriale del menu — placeholder demo. Quando l'archivio reale
-  // ha un articolo "in primo piano" del mese, va sostituito programmaticamente
-  // (es. via siteContent CMS). Per ora linka al finder filtrato Italia.
-  const exploreFeature = useMemo<NavFeature>(
+  // Feature del menu Destinazioni — immagine brand reale (asset in repo, non
+  // contenuto inventato). toscana.webp ha i derivati responsive fino a 768.
+  const destinazioniFeature = useMemo<NavFeature>(
     () => ({
       eyebrow: 'In evidenza',
-      title: 'Salento ad agosto, in coppia',
-      description: '3 giorni reali, niente fila — il metodo R+B applicato.',
-      href: '/esplora?zone=Italia&type=posti-particolari',
-      image: '/images/destinations/puglia.webp',
+      title: 'Toscana insolita',
+      description: 'Draghi, vampiri e sushi: i posti particolari che abbiamo provato.',
+      href: '/esplora?zone=Italia',
+      image: '/images/destinations/toscana.webp',
     }),
     []
   );
 
+  // Dropdown "Racconti" — l'asse editoriale (COSA leggere).
+  const raccontiLinks = useMemo<NavSubLink[]>(() => {
+    const all: NavSubLink[] = [
+      { name: 'Articoli', href: '/esplora?format=storia' },
+      { name: 'Guide', href: '/esplora?format=guida' },
+      { name: 'Itinerari', href: '/itinerari' },
+    ];
+    if (!LITE_MODE) return all;
+    return all.filter((l) => !l.href.startsWith('/esplora') && !l.href.startsWith('/itinerari'));
+  }, []);
+
   const navItems = useMemo<NavItem[]>(() => {
     const all: NavItem[] = [
       {
-        name: 'Esplora',
-        href: '/esplora',
-        primaryLinks: explorePrimaryLinks,
-        feature: exploreFeature,
+        name: 'Destinazioni',
+        href: '/mappa',
+        primaryLinks: LITE_MODE ? undefined : destinazioniLinks,
+        feature: LITE_MODE ? undefined : destinazioniFeature,
       },
-      { name: navigation.resourcesLabel, href: '/strumenti' },
-      { name: 'Shop', href: '/shop' },
-      { name: 'Club', href: '/club' },
+      { name: 'Esplora', href: '/esplora' },
+      { name: 'Racconti', href: '/esplora?format=storia', subLinks: raccontiLinks },
       {
         name: navigation.aboutLabel,
         href: '/chi-siamo',
         subLinks: [{ name: navigation.contactsLabel, href: '/contatti' }],
       },
+      { name: 'Shop', href: '/shop' },
     ];
     if (!LITE_MODE) return all;
     const disabledHrefs = ['/esplora', '/shop', '/club', '/preferiti', '/itinerari'];
-    return all.filter((item) => !item.href || !disabledHrefs.includes(item.href));
-  }, [explorePrimaryLinks, exploreFeature, navigation]);
+    // In LITE, rimuovi le voci il cui target primario è disabilitato e le voci
+    // (es. Racconti) rimaste senza sotto-link utilizzabili.
+    return all
+      .filter((item) => !(item.name === 'Racconti' && (item.subLinks?.length ?? 0) === 0))
+      .filter((item) => !item.href || !disabledHrefs.includes(item.href.split('?')[0]));
+  }, [destinazioniLinks, destinazioniFeature, raccontiLinks, navigation]);
 
   const isItemActive = (item: NavItem) => {
+    const path = location.pathname;
+
+    if (item.name === 'Destinazioni') {
+      return path === '/mappa' || path.startsWith('/destinazione');
+    }
     if (item.name === 'Esplora') {
+      return path === '/esplora';
+    }
+    if (item.name === 'Racconti') {
       return (
-        location.pathname === '/esplora' ||
-        location.pathname === '/mappa' ||
-        location.pathname === '/itinerari' ||
-        location.pathname.startsWith('/itinerari/')
+        path.startsWith('/articolo') ||
+        path.startsWith('/guide') ||
+        path === '/itinerari' ||
+        path.startsWith('/itinerari/')
       );
     }
 
-    if (item.href && item.href !== '#' && location.pathname === item.href) {
+    if (item.href && item.href !== '#' && path === item.href.split('?')[0]) {
       return true;
     }
 
     if (item.primaryLinks) {
-      return item.primaryLinks.some((link) => {
-        const [path] = link.href.split('?');
-        return location.pathname === path;
-      });
+      return item.primaryLinks.some((link) => path === link.href.split('?')[0]);
     }
 
     if (!item.subLinks) return false;
 
-    return item.subLinks.some((subLink) => location.pathname === subLink.href);
+    return item.subLinks.some((subLink) => path === subLink.href.split('?')[0]);
   };
 
   const isSubLinkActive = (item: NavItem, href: string) => {
