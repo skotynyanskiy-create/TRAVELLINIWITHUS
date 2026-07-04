@@ -38,6 +38,16 @@
   --color-accent-soft: #fff7ed; /* Sezioni soft — orange-50 */
   --color-footer: #0a0a0a; /* Footer — allineato a ink */
 
+  /* Category colors — vivono SOLO nel contenuto (tag, bordi, hover tint).
+     Introdotti con la home "Atlante Vivo" (2026-07-04). La cornice resta
+     sand/ink; il colore entra per tipo di contenuto. Mai testo load-bearing
+     su sand (contrasto): usali su bordi/icone/chip, il testo resta --color-ink. */
+  --color-cat-food: #fe6d73; /* Food & Ristoranti */
+  --color-cat-insolito: #c0afff; /* Insolito */
+  --color-cat-relax: #4cb2be; /* Relax, terme e spa */
+  --color-cat-borghi: #fdaf40; /* Borghi e città d'arte */
+  --color-cat-panoramiche: #11884f; /* Passeggiate panoramiche */
+
   /* Semantic state tokens (error/success/warning/info) */
   --color-error: #dc2626; /* Errori form, alerts critici */
   --color-error-soft: #fee2e2; /* Background errore tenue */

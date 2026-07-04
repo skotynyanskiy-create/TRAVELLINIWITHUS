@@ -4,8 +4,7 @@
  */
 
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { isRoutePublic } from './config/rebuildMode';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Layout from './components/Layout';
@@ -15,6 +14,7 @@ import { FavoritesProvider } from './context/FavoritesContext';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { LITE_MODE } from './config/liteMode';
+import { ATLANTE_PREVIEW } from './config/atlantePreview';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,6 +29,9 @@ const queryClient = new QueryClient({
 
 // Lazy load pages for better performance
 const Home = lazy(() => import('./pages/Home'));
+const HomeV2 = lazy(() => import('./pages/V2/HomeV2'));
+const AtlanteLab = lazy(() => import('./pages/AtlanteLab'));
+const AtlanteHome = lazy(() => import('./pages/AtlanteHome'));
 const Esplora = lazy(() => import('./pages/Esplora'));
 const Destinazione = lazy(() => import('./pages/Destinazione'));
 const ChiSiamo = lazy(() => import('./pages/ChiSiamo'));
@@ -52,7 +55,6 @@ const MieiAcquisti = lazy(() => import('./pages/MieiAcquisti'));
 const LeadMagnet = lazy(() => import('./pages/LeadMagnet'));
 const Posto = lazy(() => import('./pages/Posto'));
 const VieniConNoi = lazy(() => import('./pages/VieniConNoi'));
-const Futuro = lazy(() => import('./pages/Futuro'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 // Admin pages
@@ -83,14 +85,6 @@ const PageLoader = () => (
   </div>
 );
 
-function RebuildGate() {
-  const location = useLocation();
-  if (!isRoutePublic(location.pathname)) {
-    return <Navigate to="/" replace />;
-  }
-  return null;
-}
-
 export default function App() {
   return (
     <HelmetProvider>
@@ -99,21 +93,21 @@ export default function App() {
           <CartProvider>
             <FavoritesProvider>
               <BrowserRouter>
-                <RebuildGate />
                 <ScrollToTop />
                 <Suspense fallback={<PageLoader />}>
                   <Routes>
                     {/* Standalone landings (no navbar/footer) — bio link IG/TikTok */}
+                    <Route path="/v2" element={<HomeV2 />} />
+                    <Route path="/atlante-lab" element={<AtlanteLab />} />
                     <Route path="/vieni-con-noi" element={<VieniConNoi />} />
                     <Route path="/iscrivi" element={<Navigate to="/vieni-con-noi" replace />} />
-                    {/* Atlante Notturno — full-bleed, DNA isolato, additivo */}
-                    <Route path="/futuro" element={<Futuro />} />
                     {/* Il Sentiero è ora la home (/). La vecchia rotta di anteprima
                         redirige per dedup SEO e per non rompere link esterni. */}
                     <Route path="/sentiero" element={<Navigate to="/" replace />} />
 
                     <Route path="/" element={<Layout />}>
                       <Route index element={<Home />} />
+                      {ATLANTE_PREVIEW && <Route path="atlante" element={<AtlanteHome />} />}
                       {!LITE_MODE && <Route path="esplora" element={<Esplora />} />}
                       <Route path="destinazione/:regionSlug" element={<Destinazione />} />
                       {/* Legacy routes consolidate in /esplora (2026-05-15).

@@ -9,7 +9,11 @@ const FORMATS = [
   { ext: 'webp', options: { quality: 78, effort: 5 } },
 ];
 const RESPONSIVE_WIDTHS = [320, 480, 768];
-const RESPONSIVE_DIRS = new Set(['brand', 'destinations']);
+const RESPONSIVE_DIRS = new Set(['brand', 'destinations', 'reels']);
+// Directories whose .webp files are ORIGINAL sources (not PNG-derived variants).
+// For them we generate the .avif + responsive derivatives; the base .webp IS the
+// source, so it is never re-written. Reel covers are extracted video frames (.webp).
+const WEBP_SOURCE_DIRS = new Set(['reels']);
 
 async function walk(dir) {
   const entries = await fs.readdir(dir, { withFileTypes: true });
@@ -18,6 +22,12 @@ async function walk(dir) {
     const p = path.join(dir, e.name);
     if (e.isDirectory()) files.push(...(await walk(p)));
     else if (/\.(png|jpe?g)$/i.test(e.name)) files.push(p);
+    else if (
+      /\.webp$/i.test(e.name) &&
+      !/-\d+\.webp$/i.test(e.name) && // skip generated responsive variants
+      WEBP_SOURCE_DIRS.has(path.relative(ROOT, dir).split(path.sep)[0])
+    )
+      files.push(p);
   }
   return files;
 }
@@ -38,8 +48,11 @@ async function convertOne(file, { force }) {
   const relDir = path.relative(ROOT, dir).split(path.sep)[0];
   const metadata = await sharp(file).metadata();
   const summary = { file, originalKB: srcStat.size / 1024, generated: [] };
+  const srcIsWebp = /\.webp$/i.test(file);
 
   for (const { ext, options } of FORMATS) {
+    // A .webp source is already its own base .webp — never overwrite it; only add .avif.
+    if (ext === 'webp' && srcIsWebp) continue;
     const dest = path.join(dir, `${base}.${ext}`);
     if (!force && (await fileExists(dest))) {
       const s = await fs.stat(dest);
