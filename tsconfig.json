@@ -16,7 +16,22 @@
     },
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
-    "noEmit": true
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
-  "exclude": ["node_modules", "dist", "docs"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "docs",
+    "backups",
+    "claude-plugins-official",
+    ".claude",
+    "lighthouse",
+    "components",
+    "src/components/animate-ui",
+    "src/components/kokonutui",
+    "src/components/ui/3d-marquee.tsx",
+    "src/components/ui/bento-grid.tsx"
+  ]
 }

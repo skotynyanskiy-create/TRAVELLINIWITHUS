@@ -28,6 +28,56 @@ backups/
 .dev-server*.log
 .vite-dev.log
 
+# Nested third-party git clones (scouting artifacts, never commit)
+lighthouse/
+claude-plugins-official/
+
+# Foreign project clones parked in the repo root (owner to relocate; never commit)
+Finance/
+RustQuant/
+abideify/
+agents/
+aws-generativeai-partner-samples/
+backhacker/
+backtesting.py/
+calendlex/
+cap_comp_openbb_example/
+commands/
+cookbook/
+eiten/
+financial-chat/
+financial-machine-learning/
+flowgre/
+ftcourse/
+get_all_tickers/
+ip_sniffer/
+maverick-mcp/
+mcp-trader/
+minimax-dgx-spark/
+nomad_nibbles/
+notebooks/
+pivot-peak/
+programming-collective-intelligence-code/
+python-cheatsheet/
+report-mAIstro/
+simple_chat/
+volatility-trading/
+wshobson/
+zipline_bundles/
+
+# Stray root-level component drop (correct home is src/components/)
+/components/
+
+# Global design skills leaked into the sync source by skills.sh installer
+.agents/skills/impeccable/
+.agents/skills/emil-design-eng/
+.agents/skills/redesign-existing-projects/
+.agents/skills/animation-vocabulary/
+.agents/skills/review-animations/
+
+# Sentiero audit screenshots
+sentiero-*.jpeg
+
 # Obsidian local user config + untitled canvas drafts
 .obsidian/
 docs/Senza nome*

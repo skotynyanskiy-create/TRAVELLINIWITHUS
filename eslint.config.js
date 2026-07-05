@@ -6,7 +6,28 @@ import tseslint from 'typescript-eslint';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 
 export default tseslint.config(
-  { ignores: ['.claude', 'dist', 'playwright-report', 'test-results', 'storybook-static', 'coverage'] },
+  {
+    // Junk/quarantine dirs (mirror of tsconfig "exclude"): third-party clones,
+    // stray project drops, and dead V2 scaffolding awaiting owner triage.
+    ignores: [
+      '.claude',
+      'dist',
+      'playwright-report',
+      'test-results',
+      'storybook-static',
+      'coverage',
+      'lighthouse',
+      'claude-plugins-official',
+      'calendlex',
+      'components',
+      'backups',
+      '.remember',
+      'src/components/animate-ui',
+      'src/components/kokonutui',
+      'src/components/ui/3d-marquee.tsx',
+      'src/components/ui/bento-grid.tsx',
+    ],
+  },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended, jsxA11y.flatConfigs.recommended],
     files: ['**/*.{ts,tsx}'],
