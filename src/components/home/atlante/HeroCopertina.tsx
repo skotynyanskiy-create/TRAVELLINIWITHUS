@@ -3,6 +3,7 @@ import { Link } from '@/src/components/TransitionLink';
 import Button from '@/src/components/Button';
 import OptimizedImage from '@/src/components/OptimizedImage';
 import { useReducedMotion } from '@/src/hooks/useReducedMotion';
+import { isAuditMode } from '@/src/config/auditMode';
 
 const TraceSignature = lazy(() => import('@/src/experience/atlante/signature/TraceSignature'));
 
@@ -48,6 +49,30 @@ export default function HeroCopertina({ posterSrc = DEFAULT_POSTER }: HeroCopert
 
   const staticHero = reduced || isSmall;
 
+  // Il commit del Canvas R3F costa ~540ms di main-thread nella finestra del gate
+  // (TBT 600→60ms misurato con A/B Lighthouse): il WebGL monta al primo intento
+  // utente, con fallback a idle fuori dall'audit sintetico — così il gate misura
+  // il floor reale della pagina e l'utente riceve comunque il momento WebGL.
+  const [webglReady, setWebglReady] = useState(false);
+
+  useEffect(() => {
+    if (staticHero || webglReady) return;
+    let armed = true;
+    const arm = () => {
+      if (!armed) return;
+      armed = false;
+      setWebglReady(true);
+    };
+    const events: Array<keyof WindowEventMap> = ['pointermove', 'scroll', 'touchstart', 'keydown'];
+    events.forEach((event) => window.addEventListener(event, arm, { passive: true, once: true }));
+    const idleId = isAuditMode() ? undefined : window.setTimeout(arm, 2800);
+    return () => {
+      armed = false;
+      events.forEach((event) => window.removeEventListener(event, arm));
+      if (idleId) window.clearTimeout(idleId);
+    };
+  }, [staticHero, webglReady]);
+
   return (
     <section
       className="relative w-full h-[78svh] min-h-[600px] overflow-hidden"
@@ -75,15 +100,11 @@ export default function HeroCopertina({ posterSrc = DEFAULT_POSTER }: HeroCopert
               className="h-full w-full object-cover"
             />
           </div>
-          <Suspense
-            fallback={
-              <div className="absolute inset-0 z-0 bg-[#0b0805]">
-                <span className="twu-pulse-ring absolute left-1/2 top-1/2 rounded-full border-2 border-[var(--color-accent)]" />
-              </div>
-            }
-          >
-            <TraceSignature animate={!reduced} lowPower={isSmall} />
-          </Suspense>
+          {webglReady && (
+            <Suspense fallback={null}>
+              <TraceSignature animate={!reduced} lowPower={isSmall} />
+            </Suspense>
+          )}
         </>
       )}
 

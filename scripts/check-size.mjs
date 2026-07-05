@@ -28,7 +28,7 @@ const budgets = [
   { name: 'mapbox-lazy-route', match: /^mapbox-/, maxKb: 1850 },
   { name: 'react-pdf-lazy-export', match: /^react-pdf\.browser-/, maxKb: 1650, maxGzipKb: 560 },
   { name: 'charts-lazy-route', match: /^charts-/, maxKb: 410 },
-  { name: 'home-route', match: /^Home-/, maxKb: 110 },
+  { name: 'home-route', match: /^AtlanteHome-/, maxKb: 110 },
   { name: 'article-route', match: /^Articolo-/, maxKb: 90 },
   { name: 'shop-route', match: /^Shop-/, maxKb: 35 },
   { name: 'product-route', match: /^ProductPage-/, maxKb: 30 },

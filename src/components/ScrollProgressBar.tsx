@@ -9,22 +9,30 @@ export default function ScrollProgressBar() {
     if (reducedMotion) return;
     if (typeof window === 'undefined') return;
 
-    const compute = () => {
-      const scrollTop = window.scrollY;
+    // Letture di layout (scrollHeight) coalizzate in rAF: al massimo una per
+    // frame invece che una per evento scroll — era una fonte di forced reflow
+    // (~100ms) nella finestra di load.
+    let frame = 0;
+    const update = () => {
+      frame = 0;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       if (docHeight <= 0) {
         setProgress(0);
         return;
       }
-      setProgress(Math.min(1, Math.max(0, scrollTop / docHeight)));
+      setProgress(Math.min(1, Math.max(0, window.scrollY / docHeight)));
+    };
+    const schedule = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
     };
 
-    compute();
-    window.addEventListener('scroll', compute, { passive: true });
-    window.addEventListener('resize', compute);
+    schedule();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
     return () => {
-      window.removeEventListener('scroll', compute);
-      window.removeEventListener('resize', compute);
+      if (frame) window.cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
     };
   }, [reducedMotion]);
 
