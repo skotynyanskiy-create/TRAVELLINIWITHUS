@@ -227,17 +227,17 @@ export default function Navbar() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-4 left-4 right-4 z-50 w-[calc(100%-2rem)] rounded-full border px-6 py-3 text-[var(--color-ink)] transition-all duration-700 md:top-6 md:left-1/2 md:w-[96%] md:-translate-x-1/2 md:px-8 md:py-4 lg:w-[calc(100%-4rem)] max-w-[1400px] ${
+        className={`fixed top-0 right-0 left-0 z-50 w-full border-b px-6 py-3 text-[var(--color-ink)] transition-all duration-500 md:px-10 md:py-4 ${
           isScrolled
-            ? 'border-[var(--color-ink)]/5 bg-[var(--color-surface)]/80 saturate-[150%] shadow-[var(--shadow-lg)] backdrop-blur-[40px]'
-            : 'border-white/40 bg-white/50 shadow-sm backdrop-blur-xl'
+            ? 'border-[var(--color-ink)]/12 bg-[var(--color-sand)]/95 shadow-[0_1px_0_rgba(10,10,10,0.04)] backdrop-blur-md'
+            : 'border-[var(--color-ink)]/8 bg-[var(--color-sand)]/80 backdrop-blur-md'
         }`}
       >
-        <div className="flex items-center justify-between gap-4">
+        <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4">
           <div className="flex shrink-0 items-center">
             <Link
               to="/"
-              className="whitespace-nowrap text-lg font-serif font-medium tracking-tight text-[var(--color-ink)] transition-all duration-500 md:text-xl xl:text-2xl"
+              className="whitespace-nowrap font-serif text-xl font-medium tracking-tight text-[var(--color-ink)] transition-all duration-500 md:text-2xl xl:text-[1.7rem]"
             >
               Travellini<span className="font-bold text-[var(--color-accent)]">with</span>us
             </Link>
