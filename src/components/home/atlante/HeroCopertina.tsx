@@ -55,11 +55,13 @@ export default function HeroCopertina({ posterSrc = DEFAULT_POSTER }: HeroCopert
     >
       {staticHero ? (
         <div className="absolute inset-0 z-0">
+          {/* Hero mobile bespoke: Ken-Burns lento sul poster invece del rettangolo
+              statico. Solo se mobile E motion-ok — i reduced-motion restano fermi. */}
           <OptimizedImage
             src={posterSrc}
             alt="Un posto particolare provato da Rodrigo e Betta"
             priority
-            className="h-full w-full object-cover"
+            className={`h-full w-full object-cover${isSmall && !reduced ? ' twu-kenburns' : ''}`}
           />
         </div>
       ) : (

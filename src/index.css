@@ -479,10 +479,32 @@
   }
 }
 
+@keyframes twu-kenburns {
+  from {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.08) translate3d(0, -1.6%, 0);
+  }
+}
+
+/* Ken-Burns lento per l'hero mobile (branch statico): l'immagine "vive" senza
+   il costo WebGL, che resta desktop-only. Gated in JS a isSmall && !reduced;
+   qui il doppio guard reduced-motion sotto. */
+.twu-kenburns {
+  animation: twu-kenburns 20s var(--ease-out, ease-out) both;
+  transform-origin: center;
+  will-change: transform;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .twu-pulse-ring {
     animation: none;
     opacity: 0.4;
+  }
+
+  .twu-kenburns {
+    animation: none;
   }
 }
 
