@@ -17,10 +17,8 @@ export default function HomePartnerSignal() {
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="rounded-2xl border border-black/5 bg-white/80 p-8 backdrop-blur-md shadow-sm grid gap-6 lg:grid-cols-[1fr_auto] lg:items-center">
           <div className="max-w-3xl">
-            <div className="mb-3 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
-              <span className="flex h-5 w-5 items-center justify-center rounded bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
-                <BriefcaseBusiness size={11} />
-              </span>
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)]">
+              <BriefcaseBusiness size={12} className="text-[var(--color-accent)]" />
               Per partner e territori
             </div>
             <p className="font-serif text-2xl leading-snug text-[var(--color-ink)] md:text-3xl">

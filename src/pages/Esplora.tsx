@@ -122,7 +122,9 @@ function AdvancedFilterRow({
 }) {
   return (
     <div className="min-w-0">
-      <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-black/45">{label}</p>
+      <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-[var(--color-muted-fg-2)]">
+        {label}
+      </p>
       <div className="flex flex-wrap gap-2">
         {values.map((value) => (
           <button

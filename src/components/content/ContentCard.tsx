@@ -2,30 +2,18 @@ import { ArrowUpRight, Eye, MapPin } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import RatingPill from '../RatingPill';
 import { useQuickView } from '../../context/QuickViewContext';
+import { catColor } from '../../config/categoryColors';
 import type { ContentItem, PartnershipKind } from '../../types/content';
-import type { ContentType } from '../../config/contentTaxonomy';
 
 /**
  * Card editoriale per un "posto particolare" (ContentItem). Linka al reel IG
  * reale. Gestisce sia cover presente sia placeholder (seed senza frame).
  * Mostra hook, luogo, prezzo e badge di trasparenza partnership (AGCOM).
  *
- * Cover-fallback: gradiente saturo deterministico per tipo — scelta editoriale
- * energica, non indicatore di dato mancante.
+ * Cover-fallback: targa editoriale ink-deep con filo colore-categoria
+ * (`--color-cat-*` via `catColor`) — scelta editoriale sobria, non indicatore
+ * di dato mancante.
  */
-
-/** Gradiente saturo per tipo canonical — coppia colori vivaci. */
-const TYPE_GRADIENT: Record<ContentType | '_default', string> = {
-  'Food & Ristoranti': 'linear-gradient(145deg, #b45309 0%, #dc2626 100%)',
-  'Hotel con carattere': 'linear-gradient(145deg, #0f4c81 0%, #1e3a5f 100%)',
-  Insolito: 'linear-gradient(145deg, #6d28d9 0%, #be185d 100%)',
-  'Passeggiate panoramiche': 'linear-gradient(145deg, #065f46 0%, #0f766e 100%)',
-  'Relax, terme e spa': 'linear-gradient(145deg, #0e7490 0%, #0c4a6e 100%)',
-  'Posti particolari': 'linear-gradient(145deg, #92400e 0%, #b45309 100%)',
-  "Borghi e città d'arte": 'linear-gradient(145deg, #7c3aed 0%, #4338ca 100%)',
-  'Weekend romantici': 'linear-gradient(145deg, #9d174d 0%, #c2410c 100%)',
-  _default: 'linear-gradient(145deg, #1c1917 0%, #292524 100%)',
-};
 
 const PARTNERSHIP_LABEL: Record<PartnershipKind, string> = {
   organic: '',
@@ -70,10 +58,12 @@ export default function ContentCard({ item }: { item: ContentItem }) {
               className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
           ) : (
-            <div
-              className="flex h-full w-full flex-col justify-end p-5"
-              style={{ background: TYPE_GRADIENT[item.types[0]] ?? TYPE_GRADIENT._default }}
-            >
+            <div className="flex h-full w-full flex-col justify-end bg-[var(--color-ink-deep)] p-5">
+              <span
+                aria-hidden="true"
+                className="mb-3 h-px w-8"
+                style={{ backgroundColor: catColor(item.types[0]) }}
+              />
               {/* Hook grande in primo piano — scelta editoriale, non placeholder */}
               <p className="font-serif text-xl leading-snug text-white drop-shadow-sm">
                 {item.hook}
@@ -87,11 +77,11 @@ export default function ContentCard({ item }: { item: ContentItem }) {
             </div>
           )}
 
-          <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-[var(--color-ink)] backdrop-blur-md">
+          <span className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink)] backdrop-blur-md">
             {item.types[0]}
           </span>
           {partnerLabel && (
-            <span className="absolute right-3 top-3 rounded-full bg-[var(--color-ink)]/80 px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
+            <span className="absolute right-3 top-3 rounded-full bg-[var(--color-ink)]/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
               {partnerLabel}
             </span>
           )}

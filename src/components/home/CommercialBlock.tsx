@@ -110,7 +110,7 @@ export default function CommercialBlock() {
         {/* ================= RIGHT COLUMN: B2B (40%) ================= */}
         <div className="lg:col-span-4 flex flex-col justify-between gap-12">
           <div className="flex flex-col gap-4">
-            <span className="text-[10px] uppercase tracking-[0.25em] font-semibold text-white/40">
+            <span className="text-[10px] uppercase tracking-[0.25em] font-semibold text-white/70">
               Lavora con Noi
             </span>
             <h2 className="font-serif text-2xl font-medium tracking-tight leading-tight">

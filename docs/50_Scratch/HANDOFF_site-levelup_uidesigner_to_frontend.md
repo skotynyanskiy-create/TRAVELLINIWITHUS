@@ -1,6 +1,6 @@
 ---
 title: HANDOFF_site-levelup_uidesigner_to_frontend
-status: open
+status: consumed
 created: 2026-07-05
 from: travellini-ui-designer
 to: travellini-frontend-builder
@@ -9,6 +9,29 @@ expires: 2026-07-19
 type: handoff
 area: delivery
 ---
+
+## Implementation note (travellini-frontend-builder, 2026-07-05)
+
+P0.1-P0.4 + P1.1-P1.4 implemented across 13 files (index.css token +
+Shop/ProductCard/demoGuides, Navbar, MonetizationTeaser/CommercialBlock/
+HomeEditorialPromise/HomePartnerSignal/NewsletterFeature, Esplora,
+Destinazione, ContentCard). typecheck/eslint/audit:ui all clean.
+
+Scope decisions (not relitigating, just recording):
+
+- Contrast map (P0.3) applied to the named confirmed offenders plus any
+  matching instance found within the exact block already being edited for
+  another reason (e.g. same dark card). Did NOT sweep files not otherwise
+  touched (Esplora.tsx / CommercialBlock.tsx keep other black/40-55,
+  white/30-40 instances outside the named lines) — candidate for a
+  follow-up contrast pass if the axe-core audit surfaces them.
+- Guida.tsx left untouched: removing `isBestseller: true` from
+  demoGuides.ts already makes its Bestseller badge dead code (condition is
+  always false), satisfying the "0 nodi Bestseller su /guide/\*" criterion
+  without touching a file outside the spec's list.
+
+Next: browser-auditor (audit:a11y + 375/1440 screenshots) +
+travellini-quality-auditor, per the handoff's own "Next hand-off" section.
 
 # Handoff: implementa la remediation LOCKED TIER 1 (trust + a11y + eyebrow)
 

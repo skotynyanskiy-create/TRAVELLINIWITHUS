@@ -27,10 +27,10 @@ export default function MonetizationTeaser() {
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="grid overflow-hidden rounded-[var(--radius-lg)] bg-[var(--color-ink-deep)] text-white shadow-[var(--shadow-xl)] lg:grid-cols-[0.9fr_1.1fr]">
           <div className="flex flex-col justify-center p-8 md:p-12 lg:p-14">
-            <span className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent)]">
+            <span className="inline-flex items-center gap-2 text-eyebrow !text-[var(--color-accent-on-dark)]">
               <Map size={13} /> Mappa editoriale
             </span>
-            <h2 className="mt-5 max-w-xl font-serif text-4xl leading-[1.05] tracking-tight md:text-5xl">
+            <h2 className="mt-3 max-w-xl font-serif text-4xl leading-[1.05] tracking-tight md:text-5xl">
               Trova i posti sulla mappa, poi scegli con più criterio.
             </h2>
             <p className="mt-6 max-w-xl text-base leading-relaxed text-white/68 md:text-lg">
@@ -50,14 +50,14 @@ export default function MonetizationTeaser() {
                     <p className="mt-3 text-xs font-bold uppercase tracking-[0.18em] text-white/74">
                       {item.label}
                     </p>
-                    <p className="mt-2 text-xs leading-relaxed text-white/48">{item.detail}</p>
+                    <p className="mt-2 text-xs leading-relaxed text-white/70">{item.detail}</p>
                   </div>
                 );
               })}
             </div>
 
             <div className="mt-8 space-y-3 border-l border-white/12 pl-5">
-              <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-white/42">
+              <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-white/70">
                 Percorsi in evidenza
               </p>
               {FEATURED_ROUTES.map((route) => (

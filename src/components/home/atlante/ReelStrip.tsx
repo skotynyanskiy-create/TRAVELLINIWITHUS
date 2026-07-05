@@ -107,7 +107,7 @@ export default function ReelStrip({ reels = getPublishedReels() }: ReelStripProp
                   >
                     <OptimizedImage
                       src={reel.cover}
-                      alt={`${reel.location} — ${reel.hook}`}
+                      alt={reel.alt}
                       width={405}
                       height={720}
                       sizes="(max-width: 640px) 78vw, (max-width: 1024px) 44vw, 24vw"

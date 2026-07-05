@@ -39,7 +39,7 @@ export interface DestinationNode {
   matchCountry?: string;
   /** `ContentPlace.region` da matchare (solo nodi region). */
   matchRegion?: string;
-  /** Cover da /images/destinations/*.webp — solo dove esiste un match sensato. */
+  /** Cover FOTO REALE del posto. Vuoto = targa editoriale (mai stock/AI). */
   cover?: string;
   /** Inquadratura editoriale onesta (1-2 frasi, nessun dato/prezzo inventato). */
   intro?: string;
@@ -66,7 +66,6 @@ export const DESTINATIONS: DestinationNode[] = [
     zone: 'Italia',
     matchCountry: 'Italia',
     matchRegion: 'Toscana',
-    cover: '/images/destinations/toscana.webp',
     intro:
       'Oltre Firenze e Siena: i borghi, le cene di famiglia e i posti insoliti che ci hanno fatto tornare.',
     coordinates: { lat: 43.7711, lng: 11.2486 },
@@ -134,7 +133,6 @@ export const DESTINATIONS: DestinationNode[] = [
     zone: 'Italia',
     matchCountry: 'Italia',
     matchRegion: 'Alto Adige',
-    cover: '/images/destinations/dolomiti.webp',
     intro: 'Le Dolomiti e le valli altoatesine: rifugi, tavole e posti che valgono la salita.',
     coordinates: { lat: 46.4983, lng: 11.3548 },
   },
@@ -226,7 +224,6 @@ export const DESTINATIONS: DestinationNode[] = [
     name: 'Africa',
     level: 'zone',
     zone: 'Africa',
-    cover: '/images/destinations/africa.webp',
     intro: 'I nostri viaggi nel continente, per ora raccontati dall’Egitto e dal Mar Rosso.',
     coordinates: { lat: 8.0, lng: 21.0 },
   },
@@ -237,7 +234,6 @@ export const DESTINATIONS: DestinationNode[] = [
     parentSlug: 'africa',
     zone: 'Africa',
     matchCountry: 'Egitto',
-    cover: '/images/destinations/africa.webp',
     intro: 'Il Mar Rosso e quello che abbiamo visto sott’acqua e a riva in Egitto.',
     coordinates: { lat: 26.8, lng: 30.8 },
   },

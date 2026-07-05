@@ -30,7 +30,6 @@ export const DEMO_GUIDES: Guide[] = [
     ],
     bestFor: ['Coppie short break', 'Lettori che amano il cibo', 'Primo viaggio in Sicilia'],
     updatedAt: '2026-04-12',
-    isBestseller: true,
     isDemo: true,
   },
   {

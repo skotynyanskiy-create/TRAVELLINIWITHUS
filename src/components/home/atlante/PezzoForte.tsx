@@ -69,7 +69,7 @@ export default function PezzoForte({
             >
               <OptimizedImage
                 src={reel.cover}
-                alt={`${reel.location} — ${reel.hook}`}
+                alt={reel.alt}
                 priority
                 width={880}
                 height={1100}

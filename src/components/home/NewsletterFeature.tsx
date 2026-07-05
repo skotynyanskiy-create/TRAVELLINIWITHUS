@@ -34,10 +34,11 @@ export default function NewsletterFeature() {
     <section id="newsletter" className="bg-[var(--color-surface-2)] py-20 md:py-28">
       <div className="mx-auto grid max-w-6xl gap-12 px-6 md:px-12 lg:grid-cols-[1fr_1fr] lg:items-center lg:gap-20">
         <div>
-          <span className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
-            <Mail size={12} /> Newsletter
-          </span>
-          <h2 className="mt-4 max-w-xl font-serif text-4xl leading-[1.05] tracking-tight text-[var(--color-ink)] md:text-5xl">
+          <div className="inline-flex items-center gap-3">
+            <span aria-hidden="true" className="h-px w-8 bg-[var(--color-accent)]" />
+            <p className="text-eyebrow">Newsletter</p>
+          </div>
+          <h2 className="mt-3 max-w-xl font-serif text-4xl leading-[1.05] tracking-tight text-[var(--color-ink)] md:text-5xl">
             Una mail.{' '}
             <span className="italic text-black/55">Solo quando c&apos;è qualcosa da salvare.</span>
           </h2>

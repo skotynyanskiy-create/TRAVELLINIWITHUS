@@ -38,6 +38,7 @@
   --color-accent: #c2410c; /* Accento — terracotta (WCAG AA su bianco) */
   --color-accent-hover: #9a3412; /* Accento hover — terracotta scura */
   --color-accent-text: #9a3412; /* Accento testo readable (WCAG AA su bianco) */
+  --color-accent-on-dark: #e8834e; /* Accento testo AA (~6:1) su ink/ink-deep — eyebrow/testo su scuro */
   --color-accent-soft: #fff7ed; /* Sezioni soft — orange-50 */
   --color-footer: #0a0a0a; /* Footer — allineato a ink */
 

@@ -82,9 +82,7 @@ function DestinationsHub() {
         </div>
 
         <header className="mt-8 max-w-2xl">
-          <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
-            Destinazioni
-          </p>
+          <p className="mb-3 text-eyebrow !text-[var(--color-accent-text)]">Destinazioni</p>
           <h1 className="font-serif text-5xl leading-tight text-[var(--color-ink)] md:text-6xl">
             Dove siamo stati
           </h1>
@@ -97,13 +95,16 @@ function DestinationsHub() {
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {zones.map((zone) => {
             const count = countForDestination(zone);
+            const hasCover = Boolean(zone.cover);
             return (
               <Link
                 key={zone.slug}
                 to={getDestinationUrl(zone)}
-                className="group relative flex aspect-[4/3] flex-col justify-end overflow-hidden rounded-[var(--radius-xl)] bg-[var(--color-ink-deep)] shadow-[var(--shadow-md)] transition-transform duration-300 hover:-translate-y-1"
+                className={`group relative flex aspect-[4/3] flex-col justify-end overflow-hidden rounded-[var(--radius-xl)] shadow-[var(--shadow-md)] transition-transform duration-300 hover:-translate-y-1 ${
+                  hasCover ? 'bg-[var(--color-ink-deep)]' : 'bg-[var(--color-surface-2)]'
+                }`}
               >
-                {zone.cover && (
+                {hasCover ? (
                   <>
                     <OptimizedImage
                       src={zone.cover}
@@ -111,20 +112,46 @@ function DestinationsHub() {
                       className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-105"
                     />
                     <div aria-hidden="true" className="twu-cover-scrim absolute inset-0" />
+                    <div className="relative z-10 p-6">
+                      <h2 className="font-serif text-3xl leading-none text-white drop-shadow-md">
+                        {zone.name}
+                      </h2>
+                      <p className="mt-2 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-white/85">
+                        {count} {count === 1 ? 'posto' : 'posti'}
+                        <ArrowRight
+                          size={13}
+                          className="transition-transform group-hover:translate-x-0.5"
+                        />
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {/* Targa editoriale: watermark iniziale Fraunces, decorativo e clippato dall'overflow-hidden del contenitore. */}
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute -top-8 -right-4 select-none font-serif text-[10rem] leading-none text-[var(--color-border)]"
+                    >
+                      {zone.name.charAt(0)}
+                    </span>
+                    <div className="relative z-10 p-6">
+                      <span
+                        aria-hidden="true"
+                        className="mb-4 block h-px w-8 bg-[var(--color-accent)]"
+                      />
+                      <h2 className="font-serif text-3xl leading-none text-[var(--color-ink)]">
+                        {zone.name}
+                      </h2>
+                      <p className="mt-2 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-muted-fg-2)]">
+                        {count} {count === 1 ? 'posto' : 'posti'}
+                        <ArrowRight
+                          size={13}
+                          className="transition-transform group-hover:translate-x-0.5"
+                        />
+                      </p>
+                    </div>
                   </>
                 )}
-                <div className="relative z-10 p-6">
-                  <h2 className="font-serif text-3xl leading-none text-white drop-shadow-md">
-                    {zone.name}
-                  </h2>
-                  <p className="mt-2 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-white/85">
-                    {count} {count === 1 ? 'posto' : 'posti'}
-                    <ArrowRight
-                      size={13}
-                      className="transition-transform group-hover:translate-x-0.5"
-                    />
-                  </p>
-                </div>
               </Link>
             );
           })}
@@ -203,9 +230,7 @@ function DestinationWorld({ node }: { node: DestinationNode }) {
           <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/70" />
           <div className="absolute inset-x-0 bottom-0 px-6 pb-12 md:px-12 md:pb-16">
             <div className="mx-auto max-w-6xl">
-              <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-white/85">
-                Destinazione
-              </p>
+              <p className="mb-3 text-eyebrow !text-[var(--color-accent-on-dark)]">Destinazione</p>
               <h1 className="font-serif text-5xl leading-tight text-white md:text-7xl">
                 {node.name}
               </h1>
@@ -221,9 +246,7 @@ function DestinationWorld({ node }: { node: DestinationNode }) {
       ) : (
         <section className="-mt-32 md:-mt-24 bg-[var(--color-surface)] pt-40 md:pt-44">
           <div className="mx-auto max-w-6xl px-6 pb-12 md:px-12 md:pb-16">
-            <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
-              Destinazione
-            </p>
+            <p className="mb-3 text-eyebrow !text-[var(--color-accent-text)]">Destinazione</p>
             <h1 className="font-serif text-5xl leading-tight text-[var(--color-ink)] md:text-7xl">
               {node.name}
             </h1>
@@ -295,9 +318,10 @@ function DestinationWorld({ node }: { node: DestinationNode }) {
         {/* Griglia posti particolari reali del nodo. */}
         {content.length > 0 ? (
           <section className="mt-20">
-            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
-              Visti sul campo
-            </p>
+            <div className="mb-3 flex items-center gap-3">
+              <span aria-hidden="true" className="h-px w-8 bg-[var(--color-accent)]" />
+              <p className="text-eyebrow">Visti sul campo</p>
+            </div>
             <h2 className="mb-10 font-serif text-3xl text-[var(--color-ink)] md:text-4xl">
               I posti particolari di {node.name}
             </h2>
@@ -497,7 +521,7 @@ function LegacyRegionLanding({ region }: { region: RegionMeta }) {
 
         {/* CTA pillar di partenza */}
         <section className="mt-14 rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-surface)] p-8 md:p-10">
-          <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
+          <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)]">
             Il nostro pillar di partenza
           </p>
           <h2 className="font-serif text-3xl text-[var(--color-ink)] md:text-4xl">
@@ -520,9 +544,10 @@ function LegacyRegionLanding({ region }: { region: RegionMeta }) {
         {/* I posti particolari reali, raggruppati per intenzione. */}
         {destinationContent.length > 0 && (
           <section className="mt-20">
-            <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
-              Visti sul campo
-            </p>
+            <div className="mb-3 flex items-center gap-3">
+              <span aria-hidden="true" className="h-px w-8 bg-[var(--color-accent)]" />
+              <p className="text-eyebrow">Visti sul campo</p>
+            </div>
             <h2 className="mb-10 font-serif text-3xl text-[var(--color-ink)] md:text-4xl">
               I posti particolari di {region.name}
             </h2>

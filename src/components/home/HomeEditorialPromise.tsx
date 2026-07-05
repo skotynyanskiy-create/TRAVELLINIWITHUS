@@ -24,7 +24,7 @@ export default function HomeEditorialPromise() {
     >
       <div className="relative mx-auto max-w-7xl px-6 md:px-12">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent)]">
+          <span className="text-eyebrow !text-[var(--color-accent-on-dark)]">
             Promessa editoriale
           </span>
           <h2
@@ -46,7 +46,7 @@ export default function HomeEditorialPromise() {
               transition={{ duration: 0.55, delay: idx * 0.08, ease: REVEAL_EASE }}
               className="bg-[var(--color-ink-deep)] p-8 md:p-10"
             >
-              <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">
+              <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-on-dark)]">
                 {p.label}
               </span>
               <p className="mt-5 font-serif text-2xl leading-[1.2] text-white md:text-3xl">

@@ -26,6 +26,8 @@ export interface ReelEntry {
   localPath: string;
   /** Cover statica per browser preview / lazy load (webp consigliato). */
   cover: string;
+  /** Alt text IT della cover: descrive la scena visibile, non l'hook. */
+  alt: string;
   /** Localita' descrittiva (es. "Salento · Spiaggia di Pescoluse"). */
   location: string;
   /** Zona canonical (per filtraggio in /esplora). */
@@ -66,6 +68,7 @@ const RAW_REELS: ReelEntry[] = [
     id: 'reel-egitto-mar-rosso',
     localPath: '/video/reel-1.mp4',
     cover: '/images/reels/reel-1-cover.webp',
+    alt: "Acqua trasparente del Mar Rosso vista da sott'acqua, con reef e fondale sabbioso a Marsa Alam",
     location: 'Egitto · Mar Rosso',
     zone: 'Africa',
     type: 'Relax, terme e spa',
@@ -80,6 +83,7 @@ const RAW_REELS: ReelEntry[] = [
     id: 'reel-toscana-sushi-kibo',
     localPath: '/video/reel-2.mp4',
     cover: '/images/reels/reel-2-cover.webp',
+    alt: "Sala di un ristorante di sushi in Toscana con passerella sull'acqua e pareti in legno",
     location: 'Toscana · Sushi Kibo',
     zone: 'Italia',
     type: 'Food & Ristoranti',
@@ -94,6 +98,7 @@ const RAW_REELS: ReelEntry[] = [
     id: 'reel-toscana-tavernal',
     localPath: '/video/reel-3.mp4',
     cover: '/images/reels/reel-3-cover.webp',
+    alt: 'Vetrata a tema fantasy con drago rosso e torre in una taverna a tema in Toscana',
     location: 'Toscana · Tavernal',
     zone: 'Italia',
     type: 'Insolito',
@@ -108,6 +113,7 @@ const RAW_REELS: ReelEntry[] = [
     id: 'reel-malesia-batu-caves',
     localPath: '/video/reel-4.mp4',
     cover: '/images/reels/reel-4-cover.webp',
+    alt: 'La statua dorata e la scalinata arcobaleno delle Batu Caves a Kuala Lumpur',
     location: 'Malesia · Batu Caves',
     zone: 'Asia',
     type: 'Posti particolari',
@@ -122,6 +128,7 @@ const RAW_REELS: ReelEntry[] = [
     id: 'reel-toscana-volterra-volturi',
     localPath: '/video/reel-5.mp4',
     cover: '/images/reels/reel-5-cover.webp',
+    alt: 'Portone medievale a Volterra con persone in abiti gotici sui gradini in pietra',
     location: 'Toscana · Volterra',
     zone: 'Italia',
     type: 'Insolito',

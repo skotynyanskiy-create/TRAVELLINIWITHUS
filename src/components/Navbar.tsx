@@ -326,7 +326,7 @@ export default function Navbar() {
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
                           <div className="relative z-10">
-                            <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+                            <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-on-dark)]">
                               {item.feature.eyebrow}
                             </span>
                             <p className="mt-3 font-serif text-[22px] leading-tight">
@@ -335,7 +335,7 @@ export default function Navbar() {
                             <p className="mt-2 text-[13px] leading-snug text-white/82">
                               {item.feature.description}
                             </p>
-                            <span className="mt-4 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent)]">
+                            <span className="mt-4 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-on-dark)]">
                               Leggi
                               <ArrowRight
                                 size={12}
@@ -364,7 +364,7 @@ export default function Navbar() {
                           className={`block px-8 py-3 text-[10px] uppercase tracking-[0.2em] transition-all duration-200 hover:bg-[var(--color-sand)] hover:text-[var(--color-accent)] ${
                             isSubLinkActive(item, subLink.href)
                               ? 'text-[var(--color-accent)]'
-                              : 'text-[var(--color-ink)]/50'
+                              : 'text-[var(--color-muted-fg-2)]'
                           }`}
                         >
                           {subLink.name}
@@ -395,7 +395,7 @@ export default function Navbar() {
 
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-muted-bg)] px-3 py-2 text-[9px] font-bold uppercase tracking-[0.2em] transition-all hover:border-[var(--color-muted-bg-2)] xl:px-4 whitespace-nowrap"
+              className="flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-muted-bg)] px-3 py-2 text-[11px] font-bold uppercase tracking-[0.2em] transition-all hover:border-[var(--color-muted-bg-2)] xl:px-4 whitespace-nowrap"
               aria-label={navigation.searchLabel}
             >
               <Search size={12} />
@@ -410,7 +410,7 @@ export default function Navbar() {
               >
                 <Heart size={18} strokeWidth={1.5} />
                 {favorites.length > 0 && (
-                  <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[9px] font-bold text-white">
+                  <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[10px] font-bold text-white">
                     {favorites.length}
                   </span>
                 )}
@@ -462,7 +462,7 @@ export default function Navbar() {
                       <p className="truncate text-[10px] font-semibold text-[var(--color-ink)]">
                         {user.displayName}
                       </p>
-                      <p className="truncate text-[9px] text-[var(--color-muted-fg)]">
+                      <p className="truncate text-[11px] text-[var(--color-muted-fg)]">
                         {user.email}
                       </p>
                     </div>

@@ -1,5 +1,5 @@
 import { Link } from '@/src/components/TransitionLink';
-import { ArrowRight, ShoppingCart, Sparkles } from 'lucide-react';
+import { ArrowRight, ShoppingCart } from 'lucide-react';
 import Button from './Button';
 import OptimizedImage from './OptimizedImage';
 import { formatPrice } from '../utils/format';
@@ -59,23 +59,14 @@ export default function ProductCard({
         <div className="absolute inset-0 bg-black/0 transition-all duration-500 group-hover:bg-ink/10" />
 
         <div className="absolute top-5 left-5 z-20">
-          <span className="rounded-full bg-white px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-black shadow-sm">
+          <span className="rounded-full bg-white px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-black shadow-sm">
             {category}
           </span>
         </div>
 
-        {isBestseller && (
-          <div className="absolute top-5 right-5 z-20">
-            <span className="rounded-xl bg-[var(--color-ink)] px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)] shadow-md border border-[var(--color-accent)]/25 flex items-center gap-1.5">
-              <Sparkles size={10} className="text-[var(--color-accent)]" />
-              Bestseller
-            </span>
-          </div>
-        )}
-
         {badgeLabel && !isBestseller && (
           <div className="absolute top-5 right-5 z-20">
-            <span className="rounded-full bg-[var(--color-accent)] px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-white shadow-sm">
+            <span className="rounded-full bg-[var(--color-accent)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white shadow-sm">
               {badgeLabel}
             </span>
           </div>

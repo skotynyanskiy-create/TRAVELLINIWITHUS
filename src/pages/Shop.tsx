@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
-import { ArrowRight, FileText, Map, Shield, Sparkles, Smartphone } from 'lucide-react';
+import { ArrowRight, FileText, Map, Shield, Smartphone } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 import Breadcrumbs from '../components/Breadcrumbs';
@@ -134,7 +134,7 @@ function Shop() {
 
           <div className="mt-8 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
             <div>
-              <span className="mb-6 block text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
+              <span className="mb-3 block text-eyebrow !text-[var(--color-accent-text)]">
                 Boutique editoriale
               </span>
               <h1 className="text-display-1">
@@ -151,10 +151,8 @@ function Shop() {
 
             <div className="border-t border-black/10 pt-7">
               <div className="mb-5 flex items-center gap-3">
-                <Sparkles className="text-[var(--color-accent)]" size={22} />
-                <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-black/60">
-                  Lancio in preparazione
-                </p>
+                <span aria-hidden="true" className="h-px w-8 bg-[var(--color-accent)]" />
+                <p className="text-eyebrow">Lancio in preparazione</p>
               </div>
               <p className="text-2xl font-serif leading-relaxed">
                 Nessun carrello o pagamento Stripe attivo finché il Planner e le Guide non saranno
@@ -249,7 +247,7 @@ function Shop() {
                       category={product.category}
                       onAddToCart={() => {}}
                       disableCart={alwaysDisableCart}
-                      isBestseller={product.isBestseller || isLarge}
+                      isBestseller={false}
                       badgeLabel="Lista d'Attesa"
                     />
                   </div>
@@ -275,7 +273,7 @@ function Shop() {
           <div className="mt-20 bg-[var(--color-ink-deep)] p-8 text-white md:p-14">
             <div className="grid gap-10 lg:grid-cols-[1fr_0.8fr] lg:items-center relative z-10">
               <div>
-                <span className="mb-5 block text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">
+                <span className="mb-5 block text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-on-dark)]">
                   L'Approccio al Viaggio
                 </span>
                 <h2 className="text-4xl font-serif md:text-6xl">
@@ -291,7 +289,7 @@ function Shop() {
                 <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-accent)]/15">
                   <Smartphone className="text-[var(--color-accent)]" size={24} />
                 </div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-white/45">
+                <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-white/70">
                   Regola del Diario
                 </p>
                 <p className="mt-4 text-2xl font-serif leading-relaxed">
