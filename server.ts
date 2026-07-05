@@ -26,6 +26,7 @@ import {
   renderOrderConfirmation,
 } from './src/lib/email';
 import { SENTIERO_STAGES } from './src/experience/sentiero/sentieroData';
+import { DESTINATIONS, getDestinationUrl } from './src/config/destinations';
 
 dotenv.config();
 
@@ -220,6 +221,15 @@ const REGION_LANDING_SLUGS = new Set([
   'trentino-alto-adige',
 ]);
 
+// Pathname completi validi dell'albero /destinazione, derivati dalla STESSA
+// logica client (getDestinationUrl su DESTINATIONS) per zone/paesi/regioni, piu'
+// gli slug regione legacy. Cosi il route-registry SSR resta in sync con la
+// taxonomy senza duplicarla: un path fuori da questo set resta 404 ai bot.
+const VALID_DESTINATION_PATHS = new Set([
+  ...DESTINATIONS.map((node) => getDestinationUrl(node)),
+  ...[...REGION_LANDING_SLUGS].map((slug) => `/destinazione/${slug}`),
+]);
+
 const LITE_MODE = process.env.VITE_LITE_MODE === 'true';
 const LITE_DISABLED_PREFIXES = [
   '/esplora',
@@ -253,6 +263,7 @@ const ALL_STATIC_APP_ROUTES = [
   '/iscrivi',
   '/esplora',
   '/destinazioni',
+  '/destinazione',
   '/esperienze',
   '/guide',
   '/itinerari',
@@ -625,11 +636,7 @@ async function resolveAppStatus(pathname: string) {
   }
 
   if (pathname.startsWith('/destinazione/')) {
-    const slug = pathname.split('/').pop();
-    if (!slug) {
-      return 404;
-    }
-    return REGION_LANDING_SLUGS.has(slug) ? 200 : 404;
+    return VALID_DESTINATION_PATHS.has(pathname) ? 200 : 404;
   }
 
   return 404;
