@@ -70,7 +70,7 @@ const RAW_STAGES: Omit<SentieroStage, 'index' | 't' | 'position'>[] = [
     description:
       'Nessuna foto stock, nessun itinerario copiato. Viaggiamo di persona, testiamo i letti, assaggiamo i piatti e scopriamo i dettagli che fanno la differenza.',
     fieldNote: 'La presenza reale è la nostra unica garanzia. Niente filtri da cartolina.',
-    route: '/mappa',
+    route: '/chi-siamo#metodo',
     cta: 'Guarda il nostro metodo',
     media: { type: 'video', src: '/video/reel-1.mp4' },
     theme: { bg: '#070a12', fog: '#0c1424', light: '#aec6ff', sparkle: '#7fa6ff' },
@@ -95,8 +95,7 @@ const RAW_STAGES: Omit<SentieroStage, 'index' | 't' | 'position'>[] = [
     description:
       "Le tessere del nostro diario di viaggio non restano pixel su uno schermo. Si trasformano in pin salvabili su una mappa interattiva pronta all'uso.",
     fieldNote: 'Dal reel alla scelta pratica: un click e la traccia è sul tuo telefono.',
-    route: '/club',
-    routeFallback: '/vieni-con-noi',
+    route: '/mappa',
     cta: 'Apri la Mappa',
     media: { type: 'video', src: '/video/reel-3.mp4' },
     theme: { bg: '#140f05', fog: '#241a08', light: '#ffe6a0', sparkle: '#f2c46b' },
@@ -108,7 +107,7 @@ const RAW_STAGES: Omit<SentieroStage, 'index' | 't' | 'position'>[] = [
     description:
       'Boutique hotel insoliti, glamping sotto le stelle, ristoranti a tema e borghi medievali nascosti. Questo è il DNA Travellini.',
     fieldNote: 'I viaggi più belli iniziano con le deviazioni improvvise.',
-    route: '/collaborazioni',
+    route: '/esplora?tag=deviazioni',
     cta: 'Esplora i posti particolari',
     media: { type: 'video', src: '/video/reel-2.mp4' },
     theme: { bg: '#0b0d10', fog: '#141a20', light: '#dfe7ef', sparkle: '#cdd8e6' },

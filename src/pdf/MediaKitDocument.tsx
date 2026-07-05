@@ -1,4 +1,3 @@
-import React from 'react';
 import { Document, Link, Page, StyleSheet, Text, View } from '@react-pdf/renderer';
 
 export interface MediaKitStat {
@@ -219,7 +218,10 @@ export function MediaKitDocument({
         <View style={styles.footerBand}>
           <Text>Versione generata il {generatedAt}</Text>
           <Text>
-            Download pubblico: <Link src={downloadUrl} style={styles.link}>{downloadUrl}</Link>
+            Download pubblico:{' '}
+            <Link src={downloadUrl} style={styles.link}>
+              {downloadUrl}
+            </Link>
           </Text>
         </View>
       </Page>
@@ -278,7 +280,10 @@ export function MediaKitDocument({
 
         <View style={styles.footerBand}>
           <Text>
-            Per richieste partnership: <Link src={`mailto:${contacts.email}`} style={styles.link}>{contacts.email}</Link>
+            Per richieste partnership:{' '}
+            <Link src={`mailto:${contacts.email}`} style={styles.link}>
+              {contacts.email}
+            </Link>
           </Text>
         </View>
       </Page>

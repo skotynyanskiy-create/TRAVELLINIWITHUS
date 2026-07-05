@@ -5,7 +5,7 @@ import Map, {
   NavigationControl,
   FullscreenControl,
   type MapRef,
-} from 'react-map-gl/mapbox';
+} from 'react-map-gl/maplibre';
 import { Link } from '@/src/components/TransitionLink';
 import { motion } from 'motion/react';
 import {
@@ -31,7 +31,7 @@ import type { NormalizedArticle } from '../../utils/articleData';
 import { DEMO_ARTICLE_PREVIEW, DEMO_ARTICLES_EXTRA } from '../../config/demoContent';
 import { DEMO_ARCHIVE_SEEDS } from '../../config/demoArchive';
 import { getGeocodedContentItems } from '../../config/contentLibrary';
-import mapboxCssUrl from 'mapbox-gl/dist/mapbox-gl.css?url';
+import maplibreCssUrl from 'maplibre-gl/dist/maplibre-gl.css?url';
 
 /**
  * Adatta i seed di demoArchive al formato che la mappa si aspetta
@@ -175,17 +175,7 @@ type ArticleWithCoords = NormalizedArticle & {
   externalUrl?: string;
 };
 
-const RAW_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN as string | undefined;
-/**
- * Valida il token Mapbox prima di passarlo a react-map-gl.
- * Mapbox pubblici sono nel formato `pk.eyJ...` (JWT base64). Qualunque
- * altra stringa (incluso il placeholder `INSERISCI_QUI` di .env.example)
- * causa un 401 silenzioso che renderizza la mappa tutta nera. Il
- * fallback editoriale di sotto subentra solo quando questa funzione
- * ritorna false.
- */
-const MAPBOX_TOKEN =
-  RAW_MAPBOX_TOKEN && RAW_MAPBOX_TOKEN.startsWith('pk.') ? RAW_MAPBOX_TOKEN : undefined;
+// MapLibre GL JS non richiede token client-side per basemap liberi o self-hosted.
 
 const COUNTRY_COORDS: Record<string, { lat: number; lng: number }> = {
   Italia: { lat: 41.8719, lng: 12.5674 },
@@ -270,13 +260,13 @@ export default function MapboxWorldMap() {
   const [activeExperience, setActiveExperience] = useState<ExperienceFilter>('all');
 
   useEffect(() => {
-    const existingLink = document.querySelector<HTMLLinkElement>('link[data-twu-mapbox-css]');
+    const existingLink = document.querySelector<HTMLLinkElement>('link[data-twu-maplibre-css]');
     if (existingLink) return;
 
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = mapboxCssUrl;
-    link.dataset.twuMapboxCss = 'true';
+    link.href = maplibreCssUrl;
+    link.dataset.twuMaplibreCss = 'true';
     document.head.appendChild(link);
   }, []);
 
@@ -494,52 +484,7 @@ export default function MapboxWorldMap() {
     [filteredArticles, selectedArticle]
   );
 
-  if (!MAPBOX_TOKEN) {
-    return (
-      <div className="relative flex h-full w-full items-center justify-center bg-[var(--color-ink)] px-6 text-center text-white">
-        <div className="max-w-md">
-          <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[var(--color-accent)]">
-            <Compass size={24} />
-          </div>
-          <div className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">
-            Mappa in preparazione
-          </div>
-          <h1 className="mb-4 font-serif text-3xl leading-tight md:text-4xl">
-            Stiamo caricando le destinazioni sulla mappa.
-          </h1>
-          <p className="mb-8 text-sm font-light text-white/60">
-            Nel frattempo puoi già esplorare i luoghi uno a uno, divisi per continente e criterio di
-            scelta.
-          </p>
-          <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-            {LITE_MODE ? (
-              <Link
-                to="/"
-                className="inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:bg-[var(--color-accent)] hover:text-white"
-              >
-                <Compass size={14} /> Torna alla home
-              </Link>
-            ) : (
-              <>
-                <Link
-                  to="/esplora"
-                  className="inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:bg-[var(--color-accent)] hover:text-white"
-                >
-                  <Compass size={14} /> Parti da Esplora
-                </Link>
-                <Link
-                  to="/esplora"
-                  className="inline-flex min-h-11 items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:border-transparent hover:bg-white hover:text-[var(--color-ink)]"
-                >
-                  Archivio completo <ArrowRight size={14} />
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // MapLibre è attiva di default senza controlli sul token.
 
   return (
     <div className="relative flex h-auto min-h-full w-full flex-col bg-[var(--color-ink)] md:block md:h-full">
@@ -730,9 +675,7 @@ export default function MapboxWorldMap() {
             zoom: 3.5,
             pitch: 45,
           }}
-          mapStyle="mapbox://styles/mapbox/dark-v11"
-          mapboxAccessToken={MAPBOX_TOKEN}
-          attributionControl={false}
+          mapStyle="https://tiles.openfreemap.org/styles/dark"
         >
           <NavigationControl position="bottom-right" />
           <FullscreenControl position="bottom-right" />

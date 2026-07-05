@@ -32,19 +32,7 @@ export default function SentieroBackdrop({ active }: { active: number }) {
           // morbida di colore e movimento, non un video busy in primo piano.
           style={{ filter: 'blur(28px) brightness(0.45) saturate(0.4)' }}
         >
-          {stage.media.type === 'video' ? (
-            <video
-              src={stage.media.src}
-              poster={posterFor(stage.media)}
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="h-full w-full object-cover"
-            />
-          ) : (
-            <img src={stage.media.src} alt="" className="h-full w-full object-cover" />
-          )}
+          <img src={posterFor(stage.media)} alt="" className="h-full w-full object-cover" />
         </motion.div>
       </AnimatePresence>
 

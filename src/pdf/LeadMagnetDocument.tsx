@@ -1,4 +1,3 @@
-import React from 'react';
 import { Document, Link, Page, StyleSheet, Text, View } from '@react-pdf/renderer';
 
 export interface LeadMagnetLocation {

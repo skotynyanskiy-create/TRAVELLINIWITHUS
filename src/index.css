@@ -12,6 +12,8 @@
 @import '@fontsource/inter/latin-600.css';
 @import 'tailwindcss' source(none);
 
+@custom-variant dark (&:is(.dark *));
+
 @source '.';
 @source '../index.html';
 
@@ -249,7 +251,9 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: var(--tracking-eyebrow);
-    color: var(--color-muted);
+    /* muted-fg-2 (#57534e ~7:1) invece di muted (#78716c, fallisce su surface-2):
+       l'eyebrow e' testo normale 11px e deve passare AA anche sulle card alternate. */
+    color: var(--color-muted-fg-2);
   }
   .text-body-lg {
     @apply text-lg leading-relaxed text-[var(--color-ink-2)];
@@ -311,7 +315,7 @@
     font-family: var(--font-sans);
     font-size: 0.75rem; /* 12px */
     font-weight: 600;
-    color: var(--color-muted);
+    color: var(--color-muted-fg-2);
     letter-spacing: var(--tracking-eyebrow);
     font-variant-numeric: tabular-nums;
     display: inline-block;
@@ -610,5 +614,26 @@ html {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+@theme inline {
+  --animate-marquee: marquee var(--duration) infinite linear;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes marquee-vertical {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc(-100% - var(--gap)));
+    }
   }
 }

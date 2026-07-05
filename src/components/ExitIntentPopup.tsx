@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { X, Gift, Download } from 'lucide-react';
 import Newsletter from './Newsletter';
+import { trackEvent } from '../services/analytics';
 
 const STORAGE_KEY = 'twu_exit_popup_dismissed_at';
 const SUBSCRIBED_KEY = 'twu_newsletter_subscribed';
@@ -96,16 +97,10 @@ export default function ExitIntentPopup() {
   };
 
   const handleDownloadClick = () => {
-    try {
-      // Dispatch custom tracking event
-      window.dispatchEvent(
-        new CustomEvent('lead_magnet_click', {
-          detail: { source: 'exit_intent_popup', file: 'lead-magnet-posti-italiani.pdf' },
-        })
-      );
-    } catch {
-      // ignore
-    }
+    trackEvent('lead_magnet_click', {
+      source: 'exit_intent_popup',
+      file: 'lead-magnet-posti-italiani.pdf',
+    });
     markDismissed('subscribed');
     setVisible(false);
   };

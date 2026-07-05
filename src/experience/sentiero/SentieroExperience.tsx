@@ -79,20 +79,6 @@ export default function SentieroExperience() {
       <AnimatePresence>
         {!entered && <SentieroPortal key="portal" onEnter={handleEnter} />}
       </AnimatePresence>
-
-      {/* Contenuto reale nel DOM per crawler / screen reader. L'h1 della pagina
-          è il wordmark visibile nel SentieroPortal; qui restano le tappe come h2. */}
-      <div className="sr-only">
-        {SENTIERO_STAGES.map((stage) => (
-          <section key={stage.id}>
-            <h2>
-              {stage.kicker} — {stage.title}
-            </h2>
-            <p>{stage.description}</p>
-            <a href={stage.routeFallback ?? stage.route}>{stage.cta}</a>
-          </section>
-        ))}
-      </div>
     </div>
   );
 }

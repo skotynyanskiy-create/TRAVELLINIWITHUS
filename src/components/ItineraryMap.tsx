@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
-import Map, { Marker, Popup, NavigationControl, Source, Layer } from 'react-map-gl/mapbox';
-import type { LineLayerSpecification } from 'mapbox-gl';
+import Map, { Marker, Popup, NavigationControl, Source, Layer } from 'react-map-gl/maplibre';
+import type { LineLayerSpecification } from 'maplibre-gl';
 import { MapPin } from 'lucide-react';
 import { POI_CATALOG, POI_CATEGORY_LABELS, type Poi } from '../config/poiCatalog';
 
@@ -22,9 +22,7 @@ import { POI_CATALOG, POI_CATEGORY_LABELS, type Poi } from '../config/poiCatalog
  * ma scope diverso (mini-mappa di pianificazione, non globe esploratorio).
  */
 
-const RAW_MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN as string | undefined;
-const MAPBOX_TOKEN =
-  RAW_MAPBOX_TOKEN && RAW_MAPBOX_TOKEN.startsWith('pk.') ? RAW_MAPBOX_TOKEN : undefined;
+// MapLibre GL JS non richiede token client-side per basemap liberi o self-hosted.
 
 interface ItineraryMapProps {
   /** POI ids per il giorno attivo, in ordine */
@@ -134,18 +132,7 @@ export default function ItineraryMap({ poiIds, day }: ItineraryMapProps) {
     },
   };
 
-  // Fallback se token mancante o nessun POI con coords.
-  if (!MAPBOX_TOKEN) {
-    return (
-      <div className="rounded-[var(--radius-md)] border border-black/8 bg-[var(--color-sand)] p-6 text-center">
-        <MapPin size={20} className="mx-auto mb-3 text-black/30" />
-        <p className="text-sm leading-snug text-black/65">
-          Mappa non disponibile (token Mapbox non configurato in questo ambiente). Le coordinate dei
-          POI rimangono salvate nel piano.
-        </p>
-      </div>
-    );
-  }
+  // MapLibre non richiede controlli sul token client-side.
 
   if (resolvedPois.length === 0) {
     return (
@@ -168,9 +155,7 @@ export default function ItineraryMap({ poiIds, day }: ItineraryMapProps) {
       <Map
         key={`day-${day}-${resolvedPois.length}`}
         initialViewState={initialViewState}
-        mapStyle="mapbox://styles/mapbox/light-v11"
-        mapboxAccessToken={MAPBOX_TOKEN}
-        attributionControl={false}
+        mapStyle="https://tiles.openfreemap.org/styles/positron"
       >
         <NavigationControl position="bottom-right" showCompass={false} />
 
