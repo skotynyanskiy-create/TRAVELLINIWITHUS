@@ -49,6 +49,7 @@ export default defineConfig(({ mode }) => {
             '**/charts-*',
             '**/editor-*',
             '**/react-pdf*',
+            '**/three-*',
             '**/*-320.avif',
             '**/*-320.webp',
             '**/*-480.avif',
@@ -60,7 +61,7 @@ export default defineConfig(({ mode }) => {
           ],
           runtimeCaching: [
             {
-              urlPattern: /\/assets\/(mapbox|charts|editor|react-pdf)[^/]*\.(?:js|css)$/,
+              urlPattern: /\/assets\/(mapbox|charts|editor|react-pdf|three)[^/]*\.(?:js|css)$/,
               handler: 'CacheFirst',
               options: {
                 cacheName: 'heavy-route-chunks',
@@ -116,7 +117,8 @@ export default defineConfig(({ mode }) => {
               !d.includes('/editor-') &&
               !d.includes('/maps-') &&
               !d.includes('/markdown-') &&
-              !d.includes('/motion-')
+              !d.includes('/motion-') &&
+              !d.includes('/three-')
           );
         },
       },

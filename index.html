@@ -18,7 +18,10 @@
          skipped here to avoid 404s. The browser starts the font fetch on first
          CSS parse, which is fast enough on HTTP/2 multiplexed connections. -->
 
-    <!-- Route-specific LCP image preloads are managed from React pages with Helmet. -->
+    <!-- Route-specific LCP image preloads are managed from React pages with Helmet.
+         Exception: the home poster is preloaded statically because Helmet preloads
+         only fire after the lazy route chunk loads — too late for the LCP. -->
+    <link rel="preload" as="image" href="/images/reels/reel-3-cover.webp" fetchpriority="high" />
 
     <script type="application/ld+json">
       {
