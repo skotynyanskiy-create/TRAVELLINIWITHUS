@@ -1,3 +1,18 @@
+---
+type: project
+area: site-evolution
+status: open
+priority: p2
+owner: team
+repo: TRAVELLINIWITHUS
+created: 2026-07-04
+source: review multi-lente (6 angoli) + sintesi creative director
+tags:
+  - project
+  - site-evolution
+  - brainstorm
+---
+
 # PROJECT — Brainstorming: raffinare ed elevare il sito
 
 - **Data**: 2026-07-04

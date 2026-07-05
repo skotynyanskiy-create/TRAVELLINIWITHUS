@@ -41,11 +41,12 @@ Initial candidates:
 - GitHub Copilot custom agents and `.instructions.md` files.
 - Travellini-specific skills for backup, rollback, secrets and tooling audits.
 
-| Candidate                         | Status | Why it matters                                                     | Next action                                        |
-| --------------------------------- | ------ | ------------------------------------------------------------------ | -------------------------------------------------- |
-| Official Agent Skills examples    | scout  | Portable patterns across Claude, Codex, Copilot, Cursor and Gemini | Review before creating new local skills            |
-| GitHub Copilot custom agents      | scout  | Could route GitHub tasks without bloating repo instructions        | Evaluate with `github-agent-workflow`              |
-| Travellini backup/security skills | adopt  | Already project-specific and low-risk                              | Keep synchronized and validate with `audit:agents` |
+| Candidate                         | Status | Why it matters                                                     | Next action                                         |
+| --------------------------------- | ------ | ------------------------------------------------------------------ | --------------------------------------------------- |
+| Official Agent Skills examples    | scout  | Portable patterns across Claude, Codex, Copilot, Cursor and Gemini | Review before creating new local skills             |
+| GitHub Copilot custom agents      | scout  | Could route GitHub tasks without bloating repo instructions        | Evaluate with `github-agent-workflow`               |
+| Travellini backup/security skills | adopt  | Already project-specific and low-risk                              | Keep synchronized and validate with `audit:agents`  |
+| Graphify (PyPI graphifyy CLI)     | watch  | Code graph for AI agents; near-zero delta vs stack; risky install  | Re-evaluate at Next.js rebuild (card in 50_Scratch) |
 
 ### MCP
 

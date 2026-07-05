@@ -88,7 +88,7 @@ In `src/services/firebaseService.ts` (riga ~131 secondo audit), verificare che i
 npm install -g firebase-tools
 firebase emulators:start --only firestore,auth
 # In .env.local: VITE_USE_FIREBASE_EMULATOR=true
-# Aggiungere connectFirestoreEmulator in src/services/firebaseInit.ts
+# Aggiungere connectFirestoreEmulator in src/lib/firebaseApp.ts
 ```
 
 Caricare un articolo mock con `published: true` e verificare lettura anonima.
@@ -109,7 +109,7 @@ La doppia chiamata che vede l'audit (`Error fetching article by slug fallback` x
 
 - [firestore.rules](../../firestore.rules) — verificare rule `articles/{id}` per match e read condition
 - [src/services/firebaseService.ts](../../src/services/firebaseService.ts) riga ~131 (fetchArticleBySlug + fallback retry)
-- [src/services/firebaseInit.ts](../../src/services/firebaseInit.ts) — verificare connessione emulator opzionale
+- [src/lib/firebaseApp.ts](../../src/lib/firebaseApp.ts) — verificare connessione emulator opzionale
 - [.env.example](../../.env.example) — documentare `VITE_USE_FIREBASE_EMULATOR`
 - [src/pages/Articolo.tsx](../../src/pages/Articolo.tsx) — gestione errore visiva (oggi cade in 404 silenzioso)
 

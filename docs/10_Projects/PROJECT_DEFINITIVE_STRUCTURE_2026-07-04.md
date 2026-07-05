@@ -1,3 +1,19 @@
+---
+type: project
+area: site-evolution
+status: blocked
+priority: p1
+owner: team
+repo: TRAVELLINIWITHUS
+created: 2026-07-04
+related: '[[10_Projects/PROJECT_ATLANTE_VIVO_HOME_2026-07-04]]'
+source: sintesi multi-agente struttura definitiva (Tripp come riferimento IA)
+tags:
+  - project
+  - site-evolution
+  - information-architecture
+---
+
 # PROJECT — Struttura Definitiva del Sito (Atlante Vivo)
 
 - **Data**: 2026-07-04
