@@ -35,9 +35,14 @@ export default function MetodoBand({ className = '', id }: MetodoBandProps) {
     <Section id={id} spacing="spacious" className={`bg-[var(--color-surface-2)] ${className}`}>
       <div className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16">
         <div>
-          <span className="mb-3 block text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-accent-text)]">
-            {copy.aboutEyebrow}
-          </span>
+          {/* Entry device "rule + label" — rompe la ripetizione dell'occhiello
+              accent-uppercase centrato usato altrove sulla home. */}
+          <div className="mb-4 flex items-center gap-3">
+            <span aria-hidden className="h-px w-8 bg-[var(--color-accent)]" />
+            <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--color-ink-2)]">
+              {copy.aboutEyebrow}
+            </span>
+          </div>
           <h2 className="font-serif font-medium leading-tight tracking-tight text-[var(--color-ink)] text-3xl md:text-4xl lg:text-5xl">
             {copy.aboutTitleMain}
             <br />

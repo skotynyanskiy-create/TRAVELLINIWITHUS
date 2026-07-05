@@ -67,13 +67,12 @@ export default function ZoneBand({ className = '' }: ZoneBandProps) {
       className={`relative bg-[var(--color-sand)] py-20 md:py-28 ${className}`.trim()}
     >
       <div className="mx-auto max-w-7xl px-6 md:px-12">
+        {/* Entry device "frase-lead" senza occhiello — variazione di ritmo
+            rispetto alle sezioni con eyebrow accent-uppercase. */}
         <div className="mb-10 max-w-2xl md:mb-12">
-          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
-            Esplora per zona
-          </span>
           <h2
             id="zone-band-title"
-            className="mt-2 text-3xl font-serif leading-[1.05] text-ink md:text-5xl"
+            className="text-3xl font-serif leading-[1.05] text-ink md:text-5xl"
           >
             Da vicino a casa,{' '}
             <span className="italic text-muted-fg-2">fino al resto del mondo</span>.
