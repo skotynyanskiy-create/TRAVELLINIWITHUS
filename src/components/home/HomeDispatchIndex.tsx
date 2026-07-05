@@ -47,7 +47,7 @@ export default function HomeDispatchIndex() {
               <Link
                 to={`/destinazione/${region.slug}`}
                 className="group flex min-h-11 items-baseline gap-4 border-b border-[var(--color-border)] py-6 transition-colors hover:bg-black/[0.015] md:gap-8 md:py-8"
-                onPointerEnter={() => enablePeek && setActiveImage(region.heroImage)}
+                onPointerEnter={() => enablePeek && setActiveImage(region.heroImage ?? null)}
                 onPointerLeave={() => enablePeek && setActiveImage(null)}
               >
                 <span aria-hidden className="dispatch-index-number pt-2 md:pt-3">

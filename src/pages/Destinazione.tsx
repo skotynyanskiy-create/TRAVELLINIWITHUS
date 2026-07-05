@@ -474,38 +474,61 @@ function LegacyRegionLanding({ region }: { region: RegionMeta }) {
         jsonLd={collectionJsonLd}
       />
 
-      {/* Hero — medium height (55vh) per segnalare "indice di regione" vs pillar 85vh. */}
-      <section className="relative -mt-32 md:-mt-24 h-[55vh] min-h-[440px] w-full overflow-hidden bg-[var(--color-ink)]">
-        <OptimizedImage
-          src={region.heroImage}
-          alt={`${region.name} — destinazione`}
-          priority
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/70" />
-        <div className="absolute inset-x-0 bottom-0 px-6 pb-12 md:px-12 md:pb-16">
-          <div className="mx-auto max-w-6xl">
-            <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-white/85">
-              Destinazione
-            </p>
-            <h1 className="font-serif text-5xl leading-tight text-white md:text-7xl">
+      {/* Hero — cover se disponibile, altrimenti header sand editoriale (come DestinationWorld). */}
+      {region.heroImage ? (
+        <section className="relative -mt-32 md:-mt-24 h-[55vh] min-h-[440px] w-full overflow-hidden bg-[var(--color-ink)]">
+          <OptimizedImage
+            src={region.heroImage}
+            alt={`${region.name} — destinazione`}
+            priority
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/70" />
+          <div className="absolute inset-x-0 bottom-0 px-6 pb-12 md:px-12 md:pb-16">
+            <div className="mx-auto max-w-6xl">
+              <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-white/85">
+                Destinazione
+              </p>
+              <h1 className="font-serif text-5xl leading-tight text-white md:text-7xl">
+                {region.name}
+              </h1>
+              <p className="mt-5 max-w-2xl font-serif text-lg italic leading-relaxed text-white/90 md:text-xl">
+                {region.chapeau}
+              </p>
+              <div className="mt-5 flex flex-wrap items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-white/75">
+                <span>
+                  {totalArticles} {totalArticles === 1 ? 'articolo' : 'articoli'}
+                </span>
+                <span aria-hidden="true" className="text-white/40">
+                  ·
+                </span>
+                <span>Rodrigo & Betta</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section className="-mt-32 md:-mt-24 bg-[var(--color-surface)] pt-40 md:pt-44">
+          <div className="mx-auto max-w-6xl px-6 pb-12 md:px-12 md:pb-16">
+            <p className="mb-3 text-eyebrow !text-[var(--color-accent-text)]">Destinazione</p>
+            <h1 className="font-serif text-5xl leading-tight text-[var(--color-ink)] md:text-7xl">
               {region.name}
             </h1>
-            <p className="mt-5 max-w-2xl font-serif text-lg italic leading-relaxed text-white/90 md:text-xl">
+            <p className="mt-5 max-w-2xl font-serif text-lg italic leading-relaxed text-[var(--color-ink-2)] md:text-xl">
               {region.chapeau}
             </p>
-            <div className="mt-5 flex flex-wrap items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-white/75">
+            <div className="mt-5 flex flex-wrap items-center gap-3 text-[11px] uppercase tracking-[0.18em] text-[var(--color-muted-fg)]">
               <span>
                 {totalArticles} {totalArticles === 1 ? 'articolo' : 'articoli'}
               </span>
-              <span aria-hidden="true" className="text-white/40">
+              <span aria-hidden="true" className="text-black/30">
                 ·
               </span>
               <span>Rodrigo & Betta</span>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <div className="mx-auto max-w-6xl px-6 md:px-12">
         <div className="mt-10">

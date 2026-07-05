@@ -20,7 +20,8 @@ export interface RegionMeta {
   /** Nome canonical in italiano, usato come H1 e per matching nei demo seed. */
   name: string;
   country: string;
-  heroImage: string;
+  /** Assente finché non esiste una foto reale (no stock/AI): la landing mostra l'header sand editoriale. */
+  heroImage?: string;
   /** Frase singola R+B (max 160 char) usata sotto l'H1 e come og:description. */
   chapeau: string;
   /** Paragrafo introduttivo autoriale (100-180 parole). */
@@ -36,7 +37,7 @@ const REGIONS_DATA: RegionMeta[] = [
     slug: 'puglia',
     name: 'Puglia',
     country: 'Italia',
-    heroImage: '/images/destinations/puglia.png',
+    // heroImage ritirata 2026-07-05: cover AI/stock, no foto reale disponibile.
     chapeau:
       "La Puglia che ci è rimasta addosso — settembre 2025, tre giorni dentro la luce della Valle d'Itria e una settimana sulla costa adriatica.",
     intro:
@@ -48,8 +49,8 @@ const REGIONS_DATA: RegionMeta[] = [
     slug: 'sicilia',
     name: 'Sicilia',
     country: 'Italia',
-    // TODO[asset-curator]: sostituire con foto Sicilia reale (Ortigia/Etna/Taormina)
-    heroImage: '/images/destinations/puglia.webp',
+    // TODO[asset-curator]: foto Sicilia reale (Ortigia/Etna/Taormina). heroImage
+    // ritirata 2026-07-05: era una cover AI/stock di Puglia, geograficamente disonesta.
     chapeau:
       "La Sicilia che si capisce solo restando — Catania popolare, Ortigia lenta, l'Etna al tramonto e la cena di pesce a Brucoli.",
     intro:
@@ -61,7 +62,7 @@ const REGIONS_DATA: RegionMeta[] = [
     slug: 'sardegna',
     name: 'Sardegna',
     country: 'Italia',
-    heroImage: '/images/destinations/sardegna.png',
+    // heroImage ritirata 2026-07-05: cover AI/stock, no foto reale disponibile.
     chapeau:
       'La Sardegna che chiede di entrarci dentro — Barbagia, supramonti, pani carasau caldo e il silenzio che cambia il viaggio.',
     intro:
@@ -73,7 +74,7 @@ const REGIONS_DATA: RegionMeta[] = [
     slug: 'toscana',
     name: 'Toscana',
     country: 'Italia',
-    heroImage: '/images/destinations/toscana.png',
+    // heroImage ritirata 2026-07-05: cover AI/stock, no foto reale disponibile.
     chapeau:
       'La Toscana oltre Firenze e Siena — Pitigliano sospesa sul tufo, Lucignano circolare, il Casentino di Camaldoli.',
     intro:
@@ -97,7 +98,7 @@ const REGIONS_DATA: RegionMeta[] = [
     slug: 'trentino-alto-adige',
     name: 'Trentino-Alto Adige',
     country: 'Italia',
-    heroImage: '/images/destinations/dolomiti.png',
+    // heroImage ritirata 2026-07-05: cover AI/stock, no foto reale disponibile.
     chapeau:
       'Le Dolomiti che hanno cambiato lo standard — rifugi di design, Val di Funes a settembre, weekend spa che funziona.',
     intro:

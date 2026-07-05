@@ -177,7 +177,8 @@ const RAW_DEMO_PRODUCTS = [
     name: 'Guida Premium Dolomiti',
     price: 24.9,
     isDigital: true,
-    imageUrl: LOCAL_IMAGES.dolomiti,
+    // imageUrl ritirata 2026-07-05: cover AI/stock, no foto reale disponibile
+    // (ProductCard/ProductPage mostrano già un fallback editoriale senza foto).
     category: 'Itinerari completi',
     description:
       'Una guida premium pensata per raccogliere tappe, indirizzi, consigli pratici e idee già selezionate in un formato ordinato.',

@@ -1,7 +1,6 @@
 import { motion } from 'motion/react';
 import { Link } from '@/src/components/TransitionLink';
 import { ArrowRight, Filter, Map, MapPinned, Route } from 'lucide-react';
-import OptimizedImage from '../OptimizedImage';
 
 const MAP_POINTS = [
   { label: 'Salento lento', detail: 'calette, masserie, paesi bianchi' },
@@ -84,23 +83,18 @@ export default function MonetizationTeaser() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.6 }}
-            className="relative min-h-[420px] overflow-hidden lg:min-h-[620px]"
+            className="relative min-h-[420px] overflow-hidden bg-[var(--color-ink)] lg:min-h-[620px]"
           >
-            <OptimizedImage
-              src="/images/destinations/toscana.webp"
-              alt="Paesaggio toscano tra colline e borghi"
-              className="h-full w-full object-cover"
-              responsiveWidths={[320, 480, 768]}
-              sizes="(max-width: 1024px) 100vw, 55vw"
+            {/* Targa editoriale: niente foto stock/AI, watermark Map coerente col blocco scuro. */}
+            <Map
+              aria-hidden="true"
+              strokeWidth={0.75}
+              className="pointer-events-none absolute -top-16 -right-16 h-[26rem] w-[26rem] text-white/5"
             />
-            <div className="twu-map-scrim absolute inset-0" />
 
             <div className="absolute bottom-8 left-8 right-8 hidden gap-3 md:grid md:grid-cols-3">
               {MAP_POINTS.map((point) => (
-                <div
-                  key={point.label}
-                  className="rounded-xl border border-white/12 bg-black/35 p-4 backdrop-blur-md"
-                >
+                <div key={point.label} className="rounded-xl border border-white/12 bg-white/6 p-4">
                   <p className="font-serif text-xl leading-none text-white">{point.label}</p>
                   <p className="mt-2 text-xs leading-relaxed text-white/62">{point.detail}</p>
                 </div>

@@ -35,6 +35,14 @@ export default function Guida() {
 
   if (!guide) return <NotFound />;
 
+  // Galleria opzionale: alcune guide non hanno ancora una cover reale (niente
+  // foto stock/AI). In quel caso la card mostra la targa editoriale sotto.
+  const gallery = guide.previewImages ?? [];
+  const activeImage = gallery[activePreview] ?? guide.coverImage;
+  const thumbnails = [guide.coverImage, ...gallery].filter((image): image is string =>
+    Boolean(image)
+  );
+
   const handleAddToCart = () => {
     trackEvent('guide_add_to_cart_attempt', { slug: guide.slug, demo: true });
   };
@@ -205,16 +213,27 @@ export default function Guida() {
             <div className="sticky top-32">
               <div className="overflow-hidden rounded-[var(--radius-lg)] bg-[var(--color-sand)] shadow-lg">
                 <div className="relative aspect-[4/5]">
-                  <OptimizedImage
-                    src={guide.previewImages[activePreview] || guide.coverImage}
-                    alt={guide.title}
-                    className="h-full w-full object-cover transition-opacity duration-500"
-                  />
+                  {activeImage ? (
+                    <OptimizedImage
+                      src={activeImage}
+                      alt={guide.title}
+                      className="h-full w-full object-cover transition-opacity duration-500"
+                    />
+                  ) : (
+                    // Targa editoriale: nessuna cover reale ancora disponibile (niente foto stock/AI).
+                    <div className="flex h-full w-full flex-col justify-end bg-[var(--color-ink-deep)] p-6">
+                      <span aria-hidden="true" className="mb-3 h-px w-8 bg-[var(--color-accent)]" />
+                      <p className="font-serif text-2xl leading-snug text-white">{guide.title}</p>
+                      <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.2em] text-white/70">
+                        {guide.category}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
-              {guide.previewImages.length > 0 && (
+              {thumbnails.length > 0 && (
                 <div className="mt-4 grid grid-cols-3 gap-3">
-                  {[guide.coverImage, ...guide.previewImages].slice(0, 3).map((image, index) => (
+                  {thumbnails.slice(0, 3).map((image, index) => (
                     <button
                       key={`${image}-${index}`}
                       type="button"

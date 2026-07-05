@@ -1,5 +1,5 @@
 import { Link } from '@/src/components/TransitionLink';
-import { ArrowRight, ShoppingCart } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import Button from './Button';
 import OptimizedImage from './OptimizedImage';
 import { formatPrice } from '../utils/format';
@@ -51,8 +51,13 @@ export default function ProductCard({
             sizes="(max-width: 768px) 92vw, (max-width: 1024px) 45vw, 30vw"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-[var(--color-muted-fg)]">
-            <ShoppingCart size={48} className="opacity-20" />
+          // Targa editoriale (P1.3): ink-deep + filetto terracotta, nessuna foto stock.
+          <div className="flex h-full w-full flex-col justify-end bg-[var(--color-ink-deep)] p-5">
+            <span aria-hidden="true" className="mb-3 h-px w-8 bg-[var(--color-accent)]" />
+            <p className="font-serif text-xl leading-snug text-white drop-shadow-sm">{name}</p>
+            <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.22em] text-white/70">
+              {category}
+            </p>
           </div>
         )}
 

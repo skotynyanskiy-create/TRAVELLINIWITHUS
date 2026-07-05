@@ -16,9 +16,7 @@ export const DEMO_GUIDES: Guide[] = [
     pages: 38,
     format: 'PDF + Notion',
     language: 'Italiano',
-    // TODO[R+B]: cover + preview reali quando guida pubblicata
-    coverImage: '/images/destinations/sardegna.webp',
-    previewImages: ['/images/destinations/sardegna.webp', '/images/experiences/gastronomia.webp'],
+    // TODO[R+B]: cover + preview reali quando guida pubblicata (ritirata cover AI 2026-07-05)
     excerpt:
       "Un weekend a Catania scritto per chi vuole capire la città senza la fila al monumento sbagliato. Mercati, cibo di strada, una sera all'Etna e una colazione vera.",
     inside: [
@@ -43,9 +41,7 @@ export const DEMO_GUIDES: Guide[] = [
     pages: 64,
     format: 'PDF',
     language: 'Italiano',
-    // TODO[R+B]: cover + preview reali quando guida pubblicata
-    coverImage: '/images/destinations/toscana.webp',
-    previewImages: ['/images/destinations/toscana.webp'],
+    // TODO[R+B]: cover + preview reali quando guida pubblicata (ritirata cover AI 2026-07-05)
     excerpt:
       'Sette giorni in Andalusia con tre basi e un ritmo che non brucia il viaggio. Pensato per coppie e viaggiatori lenti.',
     inside: [

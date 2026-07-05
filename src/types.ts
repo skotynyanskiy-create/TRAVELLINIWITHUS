@@ -57,8 +57,8 @@ export interface Guide {
   pages: number;
   format: string;
   language: string;
-  coverImage: string;
-  previewImages: string[];
+  coverImage?: string;
+  previewImages?: string[];
   excerpt: string;
   inside: string[];
   bestFor: string[];

@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import {
   ArrowRight,
   ChevronDown,
+  Compass,
   Heart,
   Instagram,
   LogOut,
@@ -22,7 +23,6 @@ import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { LITE_MODE } from '../config/liteMode';
-import OptimizedImage from './OptimizedImage';
 
 const SearchModal = lazy(() => import('./SearchModal'));
 
@@ -37,7 +37,6 @@ interface NavFeature {
   title: string;
   description: string;
   href: string;
-  image: string;
 }
 
 interface NavItem {
@@ -126,15 +125,14 @@ export default function Navbar() {
     []
   );
 
-  // Feature del menu Destinazioni — immagine brand reale (asset in repo, non
-  // contenuto inventato). toscana.webp ha i derivati responsive fino a 768.
+  // Feature del menu Destinazioni — targa editoriale (P1.3), niente foto
+  // stock/AI: ink-deep + watermark Compass, coerente col resto della card scura.
   const destinazioniFeature = useMemo<NavFeature>(
     () => ({
       eyebrow: 'In evidenza',
       title: 'Toscana insolita',
       description: 'Draghi, vampiri e sushi: i posti particolari che abbiamo provato.',
       href: '/destinazione/italia',
-      image: '/images/destinations/toscana.webp',
     }),
     []
   );
@@ -314,17 +312,13 @@ export default function Navbar() {
                         <Link
                           to={item.feature.href}
                           role="menuitem"
-                          className="group/feat relative flex flex-col justify-end overflow-hidden bg-[var(--color-ink)] p-7 text-white"
+                          className="group/feat relative flex flex-col justify-end overflow-hidden bg-[var(--color-ink-deep)] p-7 text-white"
                         >
-                          <OptimizedImage
-                            src={item.feature.image}
-                            alt=""
+                          <Compass
                             aria-hidden="true"
-                            className="absolute inset-0 h-full w-full object-cover opacity-65 transition-all duration-700 group-hover/feat:scale-105 group-hover/feat:opacity-85"
-                            responsiveWidths={[320, 480, 768]}
-                            sizes="22rem"
+                            strokeWidth={1}
+                            className="pointer-events-none absolute -top-10 -right-10 h-44 w-44 text-[var(--color-border)] transition-transform duration-700 group-hover/feat:scale-105"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent" />
                           <div className="relative z-10">
                             <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-on-dark)]">
                               {item.feature.eyebrow}
