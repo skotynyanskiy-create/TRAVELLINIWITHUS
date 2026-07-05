@@ -25,6 +25,7 @@ import {
   renderWelcomeEmail,
   renderOrderConfirmation,
 } from './src/lib/email';
+import { SENTIERO_STAGES } from './src/experience/sentiero/sentieroData';
 
 dotenv.config();
 
@@ -135,11 +136,6 @@ interface CouponRecord {
 
 interface ProductAssetRecord {
   downloadUrl: string | null;
-}
-
-interface DemoSettings {
-  showEditorialDemo: boolean;
-  showShopDemo: boolean;
 }
 
 interface StripeOrderRecord {
@@ -448,10 +444,6 @@ function getProductsCollectionUrl() {
   return `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/${firebaseConfig.firestoreDatabaseId}/documents/products`;
 }
 
-function getSiteContentDocumentUrl(documentId: string) {
-  return `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/${firebaseConfig.firestoreDatabaseId}/documents/siteContent/${documentId}`;
-}
-
 function getNumber(fields: Record<string, FirestoreValue> | undefined, key: string) {
   const value = fields?.[key];
 
@@ -568,34 +560,6 @@ async function fetchArticle(slug: string): Promise<ArticleMeta | null> {
   } catch (error) {
     console.error('Error fetching article:', error);
     return null;
-  }
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars -- kept for future SSR demo gating; unused at runtime today
-async function fetchDemoSettings(): Promise<DemoSettings> {
-  if (!firebaseConfig.projectId || !firebaseConfig.firestoreDatabaseId) {
-    return {
-      showEditorialDemo: false,
-      showShopDemo: false,
-    };
-  }
-
-  try {
-    const data = await fetchJson<FirestoreDocument>(getSiteContentDocumentUrl('demo'));
-    const fields = data?.fields;
-    const showEditorialDemo = fields?.showEditorialDemo?.booleanValue;
-    const showShopDemo = fields?.showShopDemo?.booleanValue;
-
-    return {
-      showEditorialDemo: typeof showEditorialDemo === 'boolean' ? showEditorialDemo : false,
-      showShopDemo: typeof showShopDemo === 'boolean' ? showShopDemo : false,
-    };
-  } catch (error) {
-    console.error('Error fetching demo settings:', error);
-    return {
-      showEditorialDemo: false,
-      showShopDemo: false,
-    };
   }
 }
 
@@ -1181,6 +1145,27 @@ function injectStaticMeta(html: string, pathname: string, origin: string) {
   `;
 
   return html.replace(/<title>.*?<\/title>/, '').replace('</head>', `${metaTags}</head>`);
+}
+
+function injectSentieroPrerender(html: string): string {
+  const prerenderHtml = SENTIERO_STAGES.map(
+    (stage) => `
+    <section id="stage-${stage.id}" style="margin: 4rem 0;">
+      <h2>${escapeHtml(stage.kicker)} — ${escapeHtml(stage.title)}</h2>
+      <p>${escapeHtml(stage.description)}</p>
+      <p><em>Note di campo: ${escapeHtml(stage.fieldNote)}</em></p>
+      <a href="${escapeHtml(stage.routeFallback ?? stage.route)}">${escapeHtml(stage.cta)}</a>
+    </section>
+  `
+  ).join('\n');
+
+  const container = `
+    <div class="sr-only" data-twu-prerender="sentiero">
+      ${prerenderHtml}
+    </div>
+  `;
+
+  return html.replace('<div id="root"></div>', `<div id="root">${container}</div>`);
 }
 
 async function startServer() {
@@ -2145,6 +2130,9 @@ async function startServer() {
           const normalizedPath = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;
           const origin = process.env.APP_URL || `http://localhost:${PORT}`;
           template = injectStaticMeta(template, normalizedPath, origin);
+          if (normalizedPath === '/') {
+            template = injectSentieroPrerender(template);
+          }
         }
 
         res.status(status).set({ 'Content-Type': 'text/html' }).end(template);
@@ -2193,6 +2181,9 @@ async function startServer() {
           const normalizedPath = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;
           const origin = process.env.APP_URL || `https://${req.headers.host}`;
           template = injectStaticMeta(template, normalizedPath, origin);
+          if (normalizedPath === '/') {
+            template = injectSentieroPrerender(template);
+          }
         }
 
         res.status(status).set({ 'Content-Type': 'text/html' }).send(template);
