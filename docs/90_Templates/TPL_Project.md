@@ -1,6 +1,6 @@
 ---
 type: project
-area:
+area: workspace
 status: open
 priority: p1
 owner:
@@ -16,7 +16,7 @@ tags:
   - project
 ---
 
-# PROJECT_<topic>
+# PROJECT\_<topic>
 
 ## Obiettivo
 
@@ -37,7 +37,7 @@ tags:
 
 ## Todo
 
-- [ ] 
+- [ ]
 
 ## QA
 

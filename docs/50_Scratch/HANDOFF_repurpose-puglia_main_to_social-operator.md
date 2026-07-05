@@ -1,11 +1,13 @@
 ---
 title: HANDOFF_repurpose-puglia_main_to_social-operator
-status: open
+status: obsolete
 created: 2026-05-19
 from: main-thread (via /repurpose skill)
 to: travellini-social-content-operator
 slug: repurpose-puglia
 expires: 2026-06-15
+type: handoff
+area: workspace
 ---
 
 # Handoff: Repurpose pillar Puglia → pacchetto multi-canale

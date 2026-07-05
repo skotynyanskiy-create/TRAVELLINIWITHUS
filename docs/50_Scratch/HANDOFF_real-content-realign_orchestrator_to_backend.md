@@ -6,6 +6,8 @@ from: travellini-orchestrator
 to: travellini-backend-engineer
 slug: real-content-realign
 expires: 2026-07-20
+type: handoff
+area: workspace
 ---
 
 # Handoff: integrazione Instagram Graph API → adapter ContentItem (HIGH-RISK, conferma owner)

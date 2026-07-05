@@ -1,8 +1,15 @@
+---
+type: reference
+area: product
+status: active
+---
+
 # TRAVELLINIWITHUS — Demo Products for Firestore
 
 Copy-paste these products into Firestore Console to populate the shop.
 
 **How to use**:
+
 1. Go to: Firebase Console → Firestore → products collection
 2. Click "+ Add document"
 3. Copy each document below and paste into Firebase

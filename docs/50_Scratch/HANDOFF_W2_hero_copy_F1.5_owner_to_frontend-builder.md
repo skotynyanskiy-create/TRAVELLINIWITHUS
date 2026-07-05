@@ -1,11 +1,13 @@
 ---
 title: HANDOFF_W2_hero_copy_F1.5_owner_to_frontend-builder
-status: open
+status: obsolete
 created: 2026-05-15
 from: owner (after pick)
 to: travellini-frontend-builder
 slug: hero-copy-f1.5-apply
 expires: 2026-05-29
+type: handoff
+area: workspace
 ---
 
 # Handoff: Applicare hero copy F1.5 scelta dall'owner

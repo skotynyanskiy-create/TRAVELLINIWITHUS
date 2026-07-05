@@ -1,3 +1,9 @@
+---
+type: runbook
+area: delivery
+status: active
+---
+
 # TRAVELLINIWITHUS — Deployment & Operations Runbook
 
 **Status**: 🟡 PRE-PRODUCTION  
@@ -171,6 +177,7 @@ curl -I https://travelliniwithus.it
 ### Issue: Stripe checkout returns 503
 
 **Solution**: Check `STRIPE_SECRET_KEY` env var is set
+
 ```bash
 # Verify
 echo $STRIPE_SECRET_KEY
@@ -182,6 +189,7 @@ export STRIPE_SECRET_KEY=sk_live_xxxxx
 ### Issue: Admin login fails with "unauthorized-domain"
 
 **Solution**: Add localhost and production domain to Firebase Auth
+
 ```
 Firebase Console → Authentication → Settings
 → Authorized domains
@@ -191,6 +199,7 @@ Firebase Console → Authentication → Settings
 ### Issue: Newsletter subscription not working
 
 **Solution**: Verify Firestore `leads` collection exists
+
 ```
 Firestore → Create collection "leads"
 → Security rules checked for PUBLIC create permission
@@ -199,6 +208,7 @@ Firestore → Create collection "leads"
 ### Issue: Products not showing in shop
 
 **Solution**: Verify products have `published: true`
+
 ```
 Firestore Console → products collection
 → Each product document must have: published = true
@@ -245,16 +255,19 @@ firebase firestore:import backup/20260320_143000
 ## 7. SCALING CONSIDERATIONS
 
 ### Current Limits
+
 - Firestore: Free tier = 1 write/sec per document
 - Storage: 5GB free
 - Functions: 2M invocations/month free
 
 ### When to Scale
+
 - Newsletter subscribers > 1000 → upgrade Firestore
 - Product images > 5GB → upgrade Storage
 - Traffic > 1M/month → consider CDN upgrade
 
 ### Scaling Steps
+
 1. Upgrade Firestore plan in Firebase Console
 2. Configure CDN (Cloudflare recommended)
 3. Add caching headers to static assets
@@ -265,6 +278,7 @@ firebase firestore:import backup/20260320_143000
 ## 8. SECURITY MAINTENANCE
 
 ### Monthly Tasks
+
 - [ ] Review Firebase security rules
 - [ ] Check admin access logs
 - [ ] Verify SSL certificate valid
@@ -272,6 +286,7 @@ firebase firestore:import backup/20260320_143000
 - [ ] Backup Firestore
 
 ### Quarterly Tasks
+
 - [ ] Security audit of codebase
 - [ ] Update dependencies (npm audit)
 - [ ] Review error logs for suspicious activity
@@ -327,4 +342,3 @@ npm run preview
    - [ ] Load test under expected traffic
    - [ ] Have rollback plan ready
    - [ ] Schedule post-launch monitoring
-

@@ -1,7 +1,7 @@
 ---
 type: project
 area: delivery
-status: completed
+status: done
 priority: p0
 owner: codex
 repo: TRAVELLINIWITHUS

@@ -1,9 +1,11 @@
 ---
 title: PROJECT_COMPETITIVE_DESTINATIONS_ANALYSIS
-status: shipped
+status: done
 created: 2026-05-18
 owner: Rodrigo
-type: research
+type: project
+area: operations
+priority: p2
 ---
 
 # Analisi competitiva — sezione destinazioni Travelliniwithus

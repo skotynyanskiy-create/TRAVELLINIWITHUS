@@ -1,12 +1,12 @@
 ---
 type: content-brief
 area: content
-status: active
+status: in-progress
 priority: p1
 owner: marketing
 channel: instagram + website
 pillar: brand
-related: "[[10_Projects/PROJECT_TRAVELLINIWITHUS_SITE]]"
+related: '[[10_Projects/PROJECT_TRAVELLINIWITHUS_SITE]]'
 source: public brand observation
 tags:
   - content

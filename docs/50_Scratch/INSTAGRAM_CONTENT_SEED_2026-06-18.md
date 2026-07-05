@@ -3,7 +3,8 @@ title: Instagram Content Seed — Travelliniwithus
 date: 2026-06-18
 type: scratch
 source: instagram.com/travelliniwithus (raccolta via Claude-in-Chrome, sessione loggata)
-status: seed — campione 12 post recenti (profilo ha 1.251 post)
+status: active
+area: workspace
 ---
 
 # Instagram Content Seed (campione 2026-06-18)

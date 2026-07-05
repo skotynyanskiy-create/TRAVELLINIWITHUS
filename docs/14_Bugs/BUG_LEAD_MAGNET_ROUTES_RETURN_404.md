@@ -1,7 +1,7 @@
 ---
 type: bug
 area: seo
-status: fixed
+status: done
 priority: p1
 owner: team
 severity: high

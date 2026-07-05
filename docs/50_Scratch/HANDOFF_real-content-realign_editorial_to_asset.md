@@ -6,6 +6,8 @@ from: travellini-editorial-writer
 to: travellini-asset-curator
 slug: real-content-realign
 expires: 2026-07-13
+type: handoff
+area: workspace
 ---
 
 # Handoff: strategia cover/asset per le schede ContentItem reali

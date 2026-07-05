@@ -1,7 +1,7 @@
 ---
 type: bug
 area: security
-status: fixed-pending-integration-test
+status: in-progress
 priority: p1
 owner: team
 severity: high

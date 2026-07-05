@@ -7,6 +7,8 @@ generator: /verify-facts (skill v1.0)
 target_state: brief (not draft)
 verdict: pre-draft — fact-checklist generated for editorial-writer
 tags: [fact-check, salento, brief-precheck]
+area: content
+status: archived
 ---
 
 # /verify-facts — Salento agosto pillar

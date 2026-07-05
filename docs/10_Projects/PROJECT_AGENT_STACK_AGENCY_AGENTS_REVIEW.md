@@ -1,12 +1,14 @@
 ---
 type: project
 area: ai
-status: active
+status: in-progress
 tags:
   - ai
   - agents
   - marketing
   - workflow
+priority: p2
+owner: team
 ---
 
 # Agency Agents Review

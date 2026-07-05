@@ -1,7 +1,7 @@
 ---
 project: Travelliniwithus
-type: supporting-article-brief
-status: brief-ready-needs-rb-assets
+type: content-brief
+status: in-progress
 pillar: [[PILLAR_ARTICLE_SALENTO_AGOSTO]]
 target_slug: dove-dormire-salento-agosto-coppia
 target_keywords:
@@ -9,6 +9,9 @@ target_keywords:
   - zone migliori salento coppia
   - hotel salento coppia agosto
 schema: [Article, FAQPage, BreadcrumbList]
+area: content
+priority: p2
+owner: team
 ---
 
 # Supporting article — Dove dormire nel Salento ad agosto in coppia

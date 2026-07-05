@@ -1,14 +1,15 @@
 ---
 title: BUG — Homepage placeholder asset R+B (couple photos, newsletter archive, partner shortlist)
-status: mitigated-pending-real-assets
+status: in-progress
 priority: P1
-type: content
+type: bug
 owner: R+B
 related-projects:
   - [[PROJECT_HOME_HERO_NAV_REFINEMENT]]
   - [[PROJECT_RELEASE_READINESS]]
   - [[MARKETING_OPERATIONS_HUB]]
 created: 2026-05-14
+area: engineering
 ---
 
 # BUG — Homepage placeholder asset R+B

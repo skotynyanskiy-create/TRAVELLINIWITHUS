@@ -1,9 +1,11 @@
 ---
 project: Travelliniwithus
-type: content-asset
-status: editorial-ready-needs-rb-review
+type: content-brief
+status: in-progress
 owner: Rodrigo & Betta
 created: 2026-05-14
+area: content
+priority: p2
 ---
 
 # Lead magnet: 10 posti italiani non ovvi

@@ -1,3 +1,9 @@
+---
+type: plan
+area: operations
+status: active
+---
+
 # Travelliniwithus Master Plan
 
 Last updated: 2026-03-18
@@ -154,7 +160,7 @@ Questi punti non sono dettagli. Sono blocchi reali per la nuova pubblicazione.
 
 ### Blocchi di affidabilita`
 
-- la rotta prodotto non e` coerente: il sito linka `/shop/{slug}` ma il router espone solo `/shop` e `/shop/senza-confini-planner`
+- la rotta prodotto non e`coerente: il sito linka`/shop/{slug}`ma il router espone solo`/shop`e`/shop/senza-confini-planner`
 - la pagina prodotto dipende dal database e oggi non gestisce bene il prodotto hero statico
 - la pagina articolo ha gia` mostrato rotture in runtime
 - la route admin accetta qualunque utente loggato

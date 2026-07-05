@@ -3,8 +3,9 @@ title: AI/Dev Environment Audit — ULTRACODE
 date: 2026-06-18
 type: audit
 scope: Claude Code · Codex · Antigravity/Gemini · VS Code Agent · MCP · hooks · skills · agents · security
-status: findings + safe fixes applied; medium-risk items awaiting owner approval
+status: active
 backup: backups/ultracode-2026-06-18/
+area: workspace
 ---
 
 # AI/Dev Environment Audit — ULTRACODE (2026-06-18)

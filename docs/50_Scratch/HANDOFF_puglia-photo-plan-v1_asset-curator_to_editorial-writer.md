@@ -1,12 +1,14 @@
 ---
 title: HANDOFF_puglia-photo-plan-v1_asset-curator_to_editorial-writer
-status: body-written
+status: obsolete
 created: 2026-05-18
 updated: 2026-05-18
 from: travellini-asset-curator
 to: travellini-editorial-writer
 slug: puglia-trulli-masserie
 expires: 2026-06-01
+type: handoff
+area: workspace
 ---
 
 > **Editorial-writer update (2026-05-18)** — Body custom Puglia scritto in [`src/config/previewContent.ts`](../../src/config/previewContent.ts) via dict `CUSTOM_BODIES['puglia-trulli-masserie']`. Lunghezza ~1850 parole. Primitives integrate: DropCap auto-attivato sul primo paragrafo (380+ char), 5 marker `IMG_SLOT_2`...`IMG_SLOT_6` ai punti narrativi del photo plan, 1 PullQuote dopo sezione "Come muoversi", 1 SourceBlock Istat dopo "Errori da non fare" (cifre marcate `[VERIFY: ...]`). Prossimo step: frontend-builder sostituisce `IMG_SLOT_N` con path AVIF/WebP reali; in parallelo `/verify-facts` valida il dato Istat sul movimento turistico 2024.

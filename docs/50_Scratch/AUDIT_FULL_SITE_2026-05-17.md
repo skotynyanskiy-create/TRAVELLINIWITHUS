@@ -1,5 +1,5 @@
 ---
-type: full-site-audit
+type: audit
 generated: 2026-05-17
 specialists: [quality, security, perf, ui-designer, seo, browser]
 parallel: true
@@ -9,6 +9,8 @@ post_fix_at: 2026-05-17
 post_fix_status: applied
 ownership_priority: backend-engineer > frontend-builder > seo-strategist > ui-designer
 tags: [audit, full-site, release-readiness]
+area: workspace
+status: archived
 ---
 
 ## Update post-fix 2026-05-17 (stessa sessione)
@@ -43,7 +45,7 @@ Eseguiti in autonomia da Claude main thread + delegated backend-engineer:
 ### Bloccati su input umano
 
 - ⏸ H-SEC-1: conferma scritta su GCP Console che restrizioni HTTP referrers + API restrictions sono attive sulla Firebase Web API key. Owner-only step, da fare oggi su https://console.cloud.google.com/
-- ⏸ H-SEC-2: rimuovere API key duplicata da [PROJECT_FIREBASE_HARDENING.md:48](docs/10_Projects/PROJECT_FIREBASE_HARDENING.md) — owner deve confermare che le restrizioni GCP sono attive prima, altrimenti la rotazione potrebbe rompere prod
+- ⏸ H-SEC-2: rimuovere API key duplicata da [PROJECT_FIREBASE_HARDENING.md:48](../10_Projects/PROJECT_FIREBASE_HARDENING.md) — owner deve confermare che le restrizioni GCP sono attive prima, altrimenti la rotazione potrebbe rompere prod
 - ⏸ Articoli sitemap dinamica: serve script `npm run sitemap:build` che fetcha Firestore articles published. Da implementare quando il primo pillar reale esce dalla pipeline /verify-facts → /anti-ai-slop
 
 ### Da fare con agent dedicato (fuori scope quick-fix session)
@@ -76,11 +78,11 @@ Tutto risolvibile in 2-3 settimane focused. Dopo i fix CRITICAL la base e' deplo
 
 ### SEO infrastruttura (3 critical, owner: backend-engineer + seo-strategist)
 
-| #           | Issue                                                                                                                                                                                            | File                                                                                                                       | Owner                             |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
-| **C-SEO-1** | `/articolo/[slug]` restituisce HTTP 404 anche se la SPA renderizza. Google legge "soft 404" → zero indexing articoli pillar.                                                                     | [server.ts](server.ts) catch-all SPA fallback                                                                              | backend-engineer                  |
-| **C-SEO-2** | `sitemap.xml` fuori sync con `App.tsx`. Mancano `/articolo/:slug`, `/itinerari/:slug`, `/guide/:slug`, `/vieni-con-noi`, `/preferiti`, `/quiz`. Articoli pillar **non esistono per il crawler**. | [public/sitemap.xml](public/sitemap.xml)                                                                                   | seo-strategist                    |
-| **C-SEO-3** | `noindex` su `/esplora`, `/shop`, `/lead-magnet`, `/club` (rotta marketing). Hub di scoperta invisibile a Google finche Firestore non popola.                                                    | [src/pages/Esplora.tsx](src/pages/Esplora.tsx), [Shop.tsx](src/pages/Shop.tsx), [LeadMagnet.tsx](src/pages/LeadMagnet.tsx) | seo-strategist + frontend-builder |
+| #           | Issue                                                                                                                                                                                            | File                                                                                                                                         | Owner                             |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| **C-SEO-1** | `/articolo/[slug]` restituisce HTTP 404 anche se la SPA renderizza. Google legge "soft 404" → zero indexing articoli pillar.                                                                     | [server.ts](../../server.ts) catch-all SPA fallback                                                                                          | backend-engineer                  |
+| **C-SEO-2** | `sitemap.xml` fuori sync con `App.tsx`. Mancano `/articolo/:slug`, `/itinerari/:slug`, `/guide/:slug`, `/vieni-con-noi`, `/preferiti`, `/quiz`. Articoli pillar **non esistono per il crawler**. | [public/sitemap.xml](../../public/sitemap.xml)                                                                                               | seo-strategist                    |
+| **C-SEO-3** | `noindex` su `/esplora`, `/shop`, `/lead-magnet`, `/club` (rotta marketing). Hub di scoperta invisibile a Google finche Firestore non popola.                                                    | [src/pages/Esplora.tsx](../../src/pages/Esplora.tsx), [Shop.tsx](../../src/pages/Shop.tsx), [LeadMagnet.tsx](../../src/pages/LeadMagnet.tsx) | seo-strategist + frontend-builder |
 
 ### Performance (2 critical, owner: frontend-builder)
 
@@ -91,12 +93,12 @@ Tutto risolvibile in 2-3 settimane focused. Dopo i fix CRITICAL la base e' deplo
 
 ### Lint/test (4 critical, owner: frontend-builder)
 
-| #            | Issue                                                                                                                                                               | File:line                                                                                                       |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| **C-LINT-1** | Test obsoleto fallisce: cerca "Destinazioni / Esperienze / Guide" rimossi post-Esplora consolidation.                                                               | [src/components/Navbar.test.tsx:13-15](src/components/Navbar.test.tsx#L13)                                      |
-| **C-LINT-2** | `set-state-in-effect` error in `useEffect(() => setStepIndex(0))`.                                                                                                  | [src/components/discovery/EsploraQuiz.tsx:76](src/components/discovery/EsploraQuiz.tsx#L76)                     |
-| **C-LINT-3** | `<video>` senza `<track>` per captions (jsx-a11y/media-has-caption). Snapshot F1.8 lo dichiarava chiuso → regressione.                                              | [src/components/InstagramGrid.tsx:243](src/components/InstagramGrid.tsx#L243)                                   |
-| **C-LINT-4** | `<div onClick>` senza keyboard handler/role — accessibility blocker su componente discovery pubblico. Fix: `<button>` o `role="button"` + `onKeyDown` + `tabIndex`. | [src/components/discovery/EditorialCollections.tsx:112](src/components/discovery/EditorialCollections.tsx#L112) |
+| #            | Issue                                                                                                                                                               | File:line                                                                                                             |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| **C-LINT-1** | Test obsoleto fallisce: cerca "Destinazioni / Esperienze / Guide" rimossi post-Esplora consolidation.                                                               | [src/components/Navbar.test.tsx:13-15](../../src/components/Navbar.test.tsx#L13)                                      |
+| **C-LINT-2** | `set-state-in-effect` error in `useEffect(() => setStepIndex(0))`.                                                                                                  | [src/components/discovery/EsploraQuiz.tsx:76](src/components/discovery/EsploraQuiz.tsx#L76)                           |
+| **C-LINT-3** | `<video>` senza `<track>` per captions (jsx-a11y/media-has-caption). Snapshot F1.8 lo dichiarava chiuso → regressione.                                              | [src/components/InstagramGrid.tsx:243](../../src/components/InstagramGrid.tsx#L243)                                   |
+| **C-LINT-4** | `<div onClick>` senza keyboard handler/role — accessibility blocker su componente discovery pubblico. Fix: `<button>` o `role="button"` + `onKeyDown` + `tabIndex`. | [src/components/discovery/EditorialCollections.tsx:112](../../src/components/discovery/EditorialCollections.tsx#L112) |
 
 ### Browser regression (1 critical aggregato, owner: backend-engineer)
 
@@ -106,11 +108,11 @@ Tutto risolvibile in 2-3 settimane focused. Dopo i fix CRITICAL la base e' deplo
 
 ### UI top-of-homepage SaaS-y (3 critical aggregati, owner: ui-designer → frontend-builder)
 
-| #          | Issue                                                                                                                                                                                                                                              | File                                                                                |
-| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| **C-UI-1** | `HomeTrustStrip` 4 KPI numeri serif + icone = pattern "overbuilt statistic strip" vietato da [DESIGN.md:48](DESIGN.md#L48). Direzione: convertire in 1 riga editoriale o spostare sotto fold.                                                      | [HomeTrustStrip.tsx](src/components/home/HomeTrustStrip.tsx)                        |
-| **C-UI-2** | Sequenza `Hero → TrustStrip → PartnerSignal → DiscoveryFinder` = 3 sezioni "business-first" prima del primo segnale editoriale. Direzione: rimuovere/ridurre TrustStrip, spostare PartnerSignal dopo CoupleIntro, promuovere DiscoveryFinder a #2. | [Home.tsx:78-90](src/pages/Home.tsx#L78)                                            |
-| **C-UI-3** | `HomeDiscoveryFinder` 4 card icon+title+arrow generiche tipo Linear/Notion. Direzione: 2 ingressi image-led basati sulle foto picks gia presenti sotto.                                                                                            | [HomeDiscoveryFinder.tsx:106-136](src/components/home/HomeDiscoveryFinder.tsx#L106) |
+| #          | Issue                                                                                                                                                                                                                                              | File                                                                                      |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| **C-UI-1** | `HomeTrustStrip` 4 KPI numeri serif + icone = pattern "overbuilt statistic strip" vietato da [DESIGN.md:48](../../DESIGN.md#L48). Direzione: convertire in 1 riga editoriale o spostare sotto fold.                                                | [HomeTrustStrip.tsx](../../src/components/home/HomeTrustStrip.tsx)                        |
+| **C-UI-2** | Sequenza `Hero → TrustStrip → PartnerSignal → DiscoveryFinder` = 3 sezioni "business-first" prima del primo segnale editoriale. Direzione: rimuovere/ridurre TrustStrip, spostare PartnerSignal dopo CoupleIntro, promuovere DiscoveryFinder a #2. | [Home.tsx:78-90](../../src/pages/Home.tsx#L78)                                            |
+| **C-UI-3** | `HomeDiscoveryFinder` 4 card icon+title+arrow generiche tipo Linear/Notion. Direzione: 2 ingressi image-led basati sulle foto picks gia presenti sotto.                                                                                            | [HomeDiscoveryFinder.tsx:106-136](../../src/components/home/HomeDiscoveryFinder.tsx#L106) |
 
 ---
 
@@ -118,8 +120,8 @@ Tutto risolvibile in 2-3 settimane focused. Dopo i fix CRITICAL la base e' deplo
 
 ### Security (sblocco deploy condizionato)
 
-- **H-SEC-1**: Firebase Web API key `AIzaSyD_HR...AMtDU` committata in chiaro in `firebase-applet-config.json:4`. Tollerabile SOLO se restrizioni GCP referrer + API attive (vedi [PROJECT_FIREBASE_HARDENING.md Fase 1](docs/10_Projects/PROJECT_FIREBASE_HARDENING.md)). **Azione**: confermare oggi su GCP Console che Application restrictions = HTTP referrers e API restrictions = solo Identity Toolkit/Firestore/FCM. Senza, qualsiasi attaccante puo' fare quota-burn / auth abuse.
-- **H-SEC-2**: Stessa API key ripetuta in chiaro in [PROJECT_FIREBASE_HARDENING.md:48](docs/10_Projects/PROJECT_FIREBASE_HARDENING.md#L48). Anche con restrizioni attive, evitare di committare chiavi in docs.
+- **H-SEC-1**: Firebase Web API key `AIzaSyD_HR...AMtDU` committata in chiaro in `firebase-applet-config.json:4`. Tollerabile SOLO se restrizioni GCP referrer + API attive (vedi [PROJECT_FIREBASE_HARDENING.md Fase 1](../10_Projects/PROJECT_FIREBASE_HARDENING.md)). **Azione**: confermare oggi su GCP Console che Application restrictions = HTTP referrers e API restrictions = solo Identity Toolkit/Firestore/FCM. Senza, qualsiasi attaccante puo' fare quota-burn / auth abuse.
+- **H-SEC-2**: Stessa API key ripetuta in chiaro in [PROJECT_FIREBASE_HARDENING.md:48](../10_Projects/PROJECT_FIREBASE_HARDENING.md#L48). Anche con restrizioni attive, evitare di committare chiavi in docs.
 
 ### Perf (oltre i 2 CRITICAL)
 
@@ -143,13 +145,13 @@ Tutto risolvibile in 2-3 settimane focused. Dopo i fix CRITICAL la base e' deplo
 
 ### Browser regressioni copy/route
 
-- **H-BROW-1**: `/articolo/*` body link "Continua a esplorare" ancora puntano a `/destinazioni`, `/esperienze` (rotte rimosse → redirect a `/esplora`). Hop SEO inutile + breadcrumb mostra "Destinazione". Refactor in [Articolo.tsx](src/pages/Articolo.tsx) + `RelatedArticles` + breadcrumb generator.
+- **H-BROW-1**: `/articolo/*` body link "Continua a esplorare" ancora puntano a `/destinazioni`, `/esperienze` (rotte rimosse → redirect a `/esplora`). Hop SEO inutile + breadcrumb mostra "Destinazione". Refactor in [Articolo.tsx](../../src/pages/Articolo.tsx) + `RelatedArticles` + breadcrumb generator.
 - **H-BROW-2**: `/articolo/*` sezione "Potrebbe interessarti anche" mostra copy seed di sviluppo: "Quando inizierai a pubblicare i contenuti reali...". Voce dev visibile in produzione. Nascondere blocco se array vuoto o fallback editoriale.
 
 ### Quality docs/release stale
 
-- **H-QUAL-1**: [docs/LAUNCH_CHECKLIST.md](docs/LAUNCH_CHECKLIST.md) totalmente stale — parla ancora di "Destinazioni e Guide" come sezioni separate. Bloccante per onboarding R+B. Riscrittura sezione 1 contenuti.
-- **H-QUAL-2**: [PROJECT_RELEASE_READINESS.md:573-575](docs/10_Projects/PROJECT_RELEASE_READINESS.md#L573) — "npm run build da verificare / audit:ui da verificare" rimasti aperti. Aggiornare con esiti (build PASS 34.23s, audit:ui PASS warning preesistenti, test FAIL come C-LINT-1).
+- **H-QUAL-1**: [docs/LAUNCH_CHECKLIST.md](../LAUNCH_CHECKLIST.md) totalmente stale — parla ancora di "Destinazioni e Guide" come sezioni separate. Bloccante per onboarding R+B. Riscrittura sezione 1 contenuti.
+- **H-QUAL-2**: [PROJECT_RELEASE_READINESS.md:573-575](../10_Projects/PROJECT_RELEASE_READINESS.md#L573) — "npm run build da verificare / audit:ui da verificare" rimasti aperti. Aggiornare con esiti (build PASS 34.23s, audit:ui PASS warning preesistenti, test FAIL come C-LINT-1).
 
 ---
 
@@ -159,7 +161,7 @@ Tutto risolvibile in 2-3 settimane focused. Dopo i fix CRITICAL la base e' deplo
 - **Eyebrow inconsistente**: 5 valori `tracking` diversi. Allineare a `.text-eyebrow` gia definito in `index.css:121`.
 - **AdminMetricsOverview**: 94 warning audit:ui per raw hex colors `#1c1a17`. Rotta admin, non blocca, ma drift dai tokens.
 - **Sentry CSP**: `script-src` include `unsafe-inline` + `unsafe-eval`. Necessario per Stripe/GTM ora, ma pianificare nonce-based post-launch.
-- **Admin gate drift**: `ADMIN_EMAIL` hardcoded in 3 file ([server.ts:1645](server.ts#L1645), [firestore.rules:84](firestore.rules#L84), [src/config/admin.ts:1](src/config/admin.ts#L1)). Centralizzare.
+- **Admin gate drift**: `ADMIN_EMAIL` hardcoded in 3 file ([server.ts:1645](../../server.ts#L1645), [firestore.rules:84](../../firestore.rules#L84), [src/config/admin.ts:1](../../src/config/admin.ts#L1)). Centralizzare.
 - **`firestore.rules:isAdmin()`** fallback su `request.auth.token.email` senza custom claim canonical. Considerare claim `admin: true`.
 - **Hero CTA copy**: "Apri Esplora" gergale per un utente nuovo. Sostituire con CTA che spiega cosa fa.
 - **Alt text generici** in HomeDiscoveryFinder (`alt={type}`). Sostituire con descrizioni italiane.
@@ -167,7 +169,7 @@ Tutto risolvibile in 2-3 settimane focused. Dopo i fix CRITICAL la base e' deplo
 - **Refusi accenti** in ChiSiamo (`l anno`, `non e`). Pass copy-edit.
 - **Footer + CollaborationCta entrambi `bg-ink-deep`** → 2 sezioni nere in coda. Separatore o footer su sand.
 - **`/articolo/*` body content thin**: copy seed che salta direttamente a CTA. Editorial-writer per draft pieni.
-- **Bug aperto** [BUG_2026-05-15_discovery_sitemap_noindex_mismatch.md](docs/14_Bugs/BUG_2026-05-15_discovery_sitemap_noindex_mismatch.md): verificare se chiuso dal consolidamento o marcare risolto.
+- **Bug aperto** [BUG_2026-05-15_discovery_sitemap_noindex_mismatch.md](../14_Bugs/BUG_2026-05-15_discovery_sitemap_noindex_mismatch.md): verificare se chiuso dal consolidamento o marcare risolto.
 - **CoupleIntro polaroid scatter**: verificare che le 3 foto siano reali R+B non placeholder.
 
 ---

@@ -1,7 +1,7 @@
 ---
 type: bug
 area: quality
-status: partially-fixed
+status: in-progress
 priority: p2
 owner: team
 severity: medium

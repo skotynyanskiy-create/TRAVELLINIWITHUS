@@ -1,5 +1,5 @@
 ---
-type: content-system
+type: reference
 area: content
 status: active
 date: 2026-06-07

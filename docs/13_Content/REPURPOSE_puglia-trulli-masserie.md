@@ -1,11 +1,14 @@
 ---
-type: repurpose
+type: content-brief
 source_article: puglia-trulli-masserie
 source_path: src/config/previewContent.ts (CUSTOM_BODIES)
 generated: 2026-05-19
 channels: [ig-carousel, reel, quiz, newsletter, og]
-status: draft
+status: open
 tags: [repurpose, social, newsletter, puglia]
+area: content
+priority: p2
+owner: team
 ---
 
 # Repurpose — Puglia: trulli, masserie e costa adriatica

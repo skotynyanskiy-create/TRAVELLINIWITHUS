@@ -82,7 +82,7 @@ Suddivise per priorita (impatto sul progetto + chiusura gap audit). Tutti gli sc
   ```bash
   npm install --save-dev @lhci/cli
   ```
-- **Config:** [.lighthouserc.json](../../.lighthouserc.json) (da creare):
+- **Config:** [`lighthouserc.json`](../../lighthouserc.json):
   ```json
   {
     "ci": {
@@ -188,7 +188,7 @@ Suddivise per priorita (impatto sul progetto + chiusura gap audit). Tutti gli sc
 - **Cosa risolve:** docs/ ha 100+ file markdown. Lint per consistenza (heading levels, trailing whitespace, line length).
 - **Install:** `npx markdownlint-cli2 "docs/**/*.md"`
 - **Script proposto:** `npm run lint:md` → `npx markdownlint-cli2 "docs/**/*.md" "*.md"`.
-- **Config:** [.markdownlint-cli2.jsonc](../../.markdownlint-cli2.jsonc) (da creare) con esclusioni per template Obsidian (`[[wikilink]]`, `^callout`).
+- **Config proposta:** `.markdownlint-cli2.jsonc` (non ancora presente) con esclusioni per template Obsidian (`[[wikilink]]`, `^callout`).
 
 #### 11. Vite Bundle Visualizer
 
@@ -294,7 +294,7 @@ npm run audit:bundle:viz  # ~10s post-build, apre browser HTML
 - [ ] Owner: install `@lhci/cli` come devDep (raccomandato) o solo via npx?
 - [ ] Owner: aggiungere `gitleaks protect --staged` al pre-commit husky? (raccomandato — basso overhead)
 - [ ] Owner: `release:sentry` parte di `predeploy` automatic? Richiede `SENTRY_AUTH_TOKEN` in env CI.
-- [ ] Owner: target budget LCP/INP/CLS in `.lighthouserc.json` — i miei valori suggeriti (2500/300/0.1) sono soglie warn. Si vuole error?
+- [ ] Owner: target budget LCP/INP/CLS in `lighthouserc.json` — i miei valori suggeriti (2500/300/0.1) sono soglie warn. Si vuole error?
 - [ ] Owner: aggiungere `audit:cwv` + `audit:size` a `audit:quality` o lasciare opt-in?
 
 ## Riferimenti

@@ -1,5 +1,5 @@
 ---
-type: guide
+type: reference
 area: workspace
 status: active
 tags:
@@ -69,17 +69,24 @@ credentials, payments, hosting or repository history.
 ```bash
 npm run sync:agents
 npm run audit:agents
+npm run audit:obsidian
 npm run audit:visual
 npm run audit:quality
 ```
 
 Use `npm run sync:agents` after editing `.agents/skills`. Use `npm run audit:agents` before committing agent, skill, or workflow changes.
+Use `npm run audit:obsidian` after vault structure, metadata, template, Base or
+dashboard changes.
 
 ## Current Integrations
 
 - Codex plugin: GitHub is enabled in the local Codex config for repository, issue, pull request and CI workflows.
 - Codex MCP: `~/.codex/config.toml` is aligned with `.mcp.json` for Playwright, Obsidian, Context7, Chrome DevTools, Sentry, GitHub, Firebase and Stripe.
 - Claude Code project MCP: `.mcp.json` enables Playwright, Obsidian, Context7, Chrome DevTools, Sentry, GitHub, Firebase and Stripe.
+- Obsidian credential rotation: after regenerating the Local REST API key,
+  update the ignored `.mcp.json` entry for Claude Code and the matching
+  `~/.codex/config.toml` entry for Codex, then restart both MCP clients. Never
+  paste the key into chat, tracked files, docs or logs.
 - Claude Code project hooks: `.claude/settings.json` uses PowerShell-based safety hooks for this Windows workspace.
 - Obsidian memory: the repository root is the active Obsidian vault for Local REST API / MCP automation; `docs/` is the operational memory and note storage. Do not duplicate stable project facts into a separate AI memory unless they are cross-project user preferences.
 

@@ -1,3 +1,9 @@
+---
+type: plan
+area: operations
+status: active
+---
+
 # Travelliniwithus Execution Plan
 
 Last updated: 2026-03-18

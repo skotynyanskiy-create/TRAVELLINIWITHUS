@@ -1,7 +1,7 @@
 ---
 title: Site Blueprint 2026 — il sito perfetto per travelliniwithus
-type: strategy
-status: active
+type: project
+status: in-progress
 created: 2026-06-22
 owner: Rodrigo & Betta
 objective: sito posseduto, a scala piena (1.251 post via IG API), che monetizza i 170K
@@ -9,6 +9,8 @@ related:
   - docs/50_Scratch/INSTAGRAM_CONTENT_SEED_2026-06-18.md
   - docs/10_Projects/RUNBOOK_INSTAGRAM_GRAPH_API.md
   - docs/AI_TOOLING_RADAR.md
+area: operations
+priority: p2
 ---
 
 # Site Blueprint 2026

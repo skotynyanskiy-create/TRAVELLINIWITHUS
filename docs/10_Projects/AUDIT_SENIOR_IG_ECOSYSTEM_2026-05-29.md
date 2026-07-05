@@ -6,6 +6,7 @@ status: draft
 owner: web/marketing lead (per conto di Rodrigo & Betta)
 method: 9 lenti senior + sintesi + stress-test avversariale · analisi reel reali frame-by-frame · typecheck/audit:ui · sweep integrità (asset/rotte/pagine/SEO) · audit live browser
 scope: profilo IG osservabile + intero repo travelliniwithus.it
+area: operations
 ---
 
 # Audit Senior — @travelliniwithus + ecosistema

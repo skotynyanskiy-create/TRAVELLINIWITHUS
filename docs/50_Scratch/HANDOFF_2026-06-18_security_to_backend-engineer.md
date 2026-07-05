@@ -6,6 +6,8 @@ from: travellini-security-auditor
 to: travellini-backend-engineer
 slug: security-hardening-2026-06-18
 expires: 2026-07-02
+type: handoff
+area: workspace
 ---
 
 # Handoff: hardening security pre-deploy "definitivo" (oltre i blocker owner noti)

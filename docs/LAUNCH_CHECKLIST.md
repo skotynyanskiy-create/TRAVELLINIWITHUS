@@ -1,3 +1,9 @@
+---
+type: checklist
+area: delivery
+status: active
+---
+
 # TRAVELLINIWITHUS — Checklist Finale di Lancio
 
 Questo documento riassume i passi necessari per portare il sito dallo stato attuale (sviluppo/predisposizione) al lancio ufficiale in produzione. La struttura tecnica, il design e la logica di navigazione sono completati e verificati.

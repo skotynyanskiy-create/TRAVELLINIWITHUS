@@ -79,6 +79,7 @@ npm run audit:ui
 npm run audit:firebase
 npm run audit:stripe
 npm run audit:agents
+npm run audit:obsidian
 npm run predeploy
 ```
 

@@ -2,41 +2,42 @@
 type: web-clip
 category: articolo
 area: brand
-source_url: ""
-saved_at: ""
-summary: ""
-action: ""
+source_url: ''
+saved_at: ''
+summary: ''
+action: ''
 tags: []
+status: da-processare
 ---
 
 # Clip — [Titolo]
 
 ## Fonte
 
-- URL: 
-- Autore / Sito: 
-- Salvato il: 
+- URL:
+- Autore / Sito:
+- Salvato il:
 
 ## Categoria
 
-*competitor | design | luogo | hotel | trend | articolo | idea-commerciale*
+_competitor | design | luogo | hotel | trend | articolo | idea-commerciale_
 
 ## Sintesi
 
-*2-3 righe. Cosa dice / mostra / propone.*
+_2-3 righe. Cosa dice / mostra / propone._
 
 ## Perché è rilevante per Travellini
 
-*Connessione diretta con il brand, il sito, la strategia.*
+_Connessione diretta con il brand, il sito, la strategia._
 
 ## Azione
 
-*Cosa fare con questa clip: studiare, adattare, rispondere, ignorare, archiviare.*
+_Cosa fare con questa clip: studiare, adattare, rispondere, ignorare, archiviare._
 
-- [ ] Azione: 
-- Owner: 
-- Scadenza: 
+- [ ] Azione:
+- Owner:
+- Scadenza:
 
 ## Collegato a
 
-- [[]] — 
+- [[]] —

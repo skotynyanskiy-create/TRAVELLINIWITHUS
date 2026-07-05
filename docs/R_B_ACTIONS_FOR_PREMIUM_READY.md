@@ -1,5 +1,5 @@
 ---
-type: action-list
+type: checklist
 area: operations
 status: active
 priority: p0

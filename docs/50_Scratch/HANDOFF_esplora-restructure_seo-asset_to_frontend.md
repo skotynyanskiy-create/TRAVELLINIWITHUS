@@ -6,6 +6,8 @@ from: travellini-seo-conversion-strategist + travellini-asset-curator
 to: travellini-frontend-builder
 slug: esplora-restructure
 expires: 2026-06-07
+type: handoff
+area: workspace
 ---
 
 # Handoff: implementazione della nuova Esplora

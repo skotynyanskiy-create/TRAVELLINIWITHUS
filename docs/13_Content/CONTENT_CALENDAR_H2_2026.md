@@ -1,10 +1,11 @@
 ---
 project: Travelliniwithus
-type: editorial-plan
-status: framework
+type: plan
+status: active
 owner: Rodrigo & Betta
 created: 2026-05-14
 covers: 2026-07 — 2027-02 (H2 + early 2027)
+area: content
 ---
 
 # Content calendar H2 2026 — Travelliniwithus

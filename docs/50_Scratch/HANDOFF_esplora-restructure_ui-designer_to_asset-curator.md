@@ -1,11 +1,13 @@
 ---
 title: HANDOFF_esplora-restructure_ui-designer_to_asset-curator
-status: open
+status: obsolete
 created: 2026-05-24
 from: travellini-ui-designer
 to: travellini-asset-curator
 slug: esplora-restructure
 expires: 2026-06-07
+type: handoff
+area: workspace
 ---
 
 # Handoff: piano foto per big-choice e collezioni di Esplora

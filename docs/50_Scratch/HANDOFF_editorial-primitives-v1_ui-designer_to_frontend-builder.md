@@ -8,6 +8,8 @@ from: travellini-ui-designer
 to: travellini-frontend-builder
 slug: editorial-primitives-v1
 expires: 2026-06-01
+type: handoff
+area: workspace
 ---
 
 # Handoff: 5 primitive editoriali per template articolo

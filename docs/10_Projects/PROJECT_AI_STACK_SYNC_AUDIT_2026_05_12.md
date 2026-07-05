@@ -1,7 +1,7 @@
 ---
 type: project
 area: workspace
-status: active
+status: in-progress
 priority: p1
 owner: team
 repo: TRAVELLINIWITHUS

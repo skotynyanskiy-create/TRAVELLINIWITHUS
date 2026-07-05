@@ -1,7 +1,7 @@
 ---
 project: Travelliniwithus
-type: supporting-article-brief
-status: brief-ready-needs-rb-assets
+type: content-brief
+status: in-progress
 pillar: [[PILLAR_ARTICLE_SALENTO_AGOSTO]]
 target_slug: borghi-salento-sera-estate
 target_keywords:
@@ -9,6 +9,9 @@ target_keywords:
   - cosa fare salento sera
   - mangiare salento borghi
 schema: [Article, FAQPage, BreadcrumbList]
+area: content
+priority: p2
+owner: team
 ---
 
 # Supporting article — Borghi e cene nel Salento quando il mare e pieno

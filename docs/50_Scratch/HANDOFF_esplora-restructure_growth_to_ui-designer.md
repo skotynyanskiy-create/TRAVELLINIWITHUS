@@ -1,11 +1,13 @@
 ---
 title: HANDOFF_esplora-restructure_growth_to_ui-designer
-status: open
+status: obsolete
 created: 2026-05-24
 from: travellini-growth-revenue-operator
 to: travellini-ui-designer
 slug: esplora-restructure
 expires: 2026-06-07
+type: handoff
+area: workspace
 ---
 
 # Handoff: information architecture, flow e gerarchia visiva di Esplora

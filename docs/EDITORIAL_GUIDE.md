@@ -1,5 +1,5 @@
 ---
-type: guide
+type: reference
 area: brand
 status: active
 tags:

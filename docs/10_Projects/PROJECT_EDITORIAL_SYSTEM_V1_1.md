@@ -1,7 +1,7 @@
 ---
 type: project
 area: product
-status: active
+status: in-progress
 priority: p1
 owner: codex
 repo: TRAVELLINIWITHUS

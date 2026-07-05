@@ -6,6 +6,8 @@ from: travellini-growth-revenue-operator
 to: travellini-seo-conversion-strategist
 slug: real-content-realign
 expires: 2026-07-06
+type: handoff
+area: workspace
 ---
 
 # Handoff: copy schede ContentItem + meta/schema hub regione + voce ADV

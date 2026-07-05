@@ -1,7 +1,7 @@
 ---
 type: project
 area: product
-status: closed
+status: done
 priority: p1
 owner: team
 repo: TRAVELLINIWITHUS

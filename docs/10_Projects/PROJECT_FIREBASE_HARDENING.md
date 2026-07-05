@@ -139,9 +139,9 @@ grep -rn "firebase-applet-config" src/ server.ts scripts/
 
 Risultati attuali (audit 2026-05-14):
 
-- [src/lib/firebaseApp.ts](src/lib/firebaseApp.ts) — import diretto
-- [server.ts](server.ts) — referenza
-- [scripts/generate-media-kit.tsx](scripts/generate-media-kit.tsx) — referenza
+- [src/lib/firebaseApp.ts](../../src/lib/firebaseApp.ts) — import diretto
+- [server.ts](../../server.ts) — referenza
+- [scripts/generate-media-kit.tsx](../../scripts/generate-media-kit.tsx) — referenza
 
 **Opzione A (raccomandata)**: spostare i valori in `.env` come
 `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_PROJECT_ID`, ecc. Costruire

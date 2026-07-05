@@ -1,7 +1,7 @@
 ---
 type: template
 area: workspace
-status: template
+status: active
 tags:
   - ai
   - tooling

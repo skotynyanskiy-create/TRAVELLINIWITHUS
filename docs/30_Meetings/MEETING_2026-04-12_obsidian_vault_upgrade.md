@@ -1,11 +1,11 @@
 ---
 type: meeting
 area: workspace
-status: done
+status: archived
 priority: p2
 owner: codex
 attendees: codex, user
-related: "[[10_Projects/PROJECT_TRAVELLINIWITHUS_SITE]]"
+related: '[[10_Projects/PROJECT_TRAVELLINIWITHUS_SITE]]'
 source: obsidian setup follow-up
 tags:
   - meeting

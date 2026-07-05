@@ -20,37 +20,41 @@ Apri la root del progetto (`C:\Users\ccocu\Desktop\TRAVELLINIWITHUS`) con **Open
 ## Cabina di regia
 
 - [[OBSIDIAN_DASHBOARD]] — priorità, contenuti in corso, SEO, pipeline
+- [[OBSIDIAN_INDEX]] — indice completo delle note operative
 - [[MARKETING_OPERATIONS_HUB]] — campagne, partner, content
 
 ---
 
 ## Fast paths
 
+I link seguenti aprono i modelli canonici. Duplicali nella cartella indicata
+prima di compilare la nuova nota.
+
 ### Editoriale
 
-- nuovo articolo: [[90_Templates/TPL_Article]]
-- nuova guida destinazione: [[90_Templates/TPL_Destination_Guide]]
-- nuovo itinerario: [[90_Templates/TPL_Itinerary]]
-- nuovo luogo/hotel: [[90_Templates/TPL_Place]]
+- modello articolo: [[90_Templates/TPL_Article]]
+- modello guida destinazione: [[90_Templates/TPL_Destination_Guide]]
+- modello itinerario: [[90_Templates/TPL_Itinerary]]
+- modello luogo/hotel: [[90_Templates/TPL_Place]]
 
 ### Commerciale
 
-- nuovo prodotto shop: [[90_Templates/TPL_Product]]
-- nuova collaborazione: [[90_Templates/TPL_Collaboration]]
-- nuova campagna: [[90_Templates/TPL_Campaign]]
+- modello prodotto shop: [[90_Templates/TPL_Product]]
+- modello collaborazione: [[90_Templates/TPL_Collaboration]]
+- modello campagna: [[90_Templates/TPL_Campaign]]
 
 ### SEO e social
 
-- nuova SEO page: [[90_Templates/TPL_SEO_Page]]
+- modello SEO page: [[90_Templates/TPL_SEO_Page]]
 - web clip rapida: [[90_Templates/TPL_Web_Clip]]
 - design reference: [[90_Templates/TPL_Design_Reference]]
 
 ### Sito e operazioni
 
-- nuova feature sito: [[90_Templates/TPL_Project]]
-- tweak UI: [[90_Templates/TPL_UI_Change]]
-- nuovo bug: [[90_Templates/TPL_Bug]]
-- nuova decisione: [[90_Templates/TPL_Decision]]
+- modello feature sito: [[90_Templates/TPL_Project]]
+- modello tweak UI: [[90_Templates/TPL_UI_Change]]
+- modello bug: [[90_Templates/TPL_Bug]]
+- modello decisione: [[90_Templates/TPL_Decision]]
 - cattura rapida: [[50_Scratch/INBOX]]
 
 ---

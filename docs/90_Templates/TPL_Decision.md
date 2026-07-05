@@ -1,6 +1,6 @@
 ---
 type: decision
-area:
+area: workspace
 status: active
 priority: p2
 owner:
@@ -10,13 +10,13 @@ tags:
   - decision
 ---
 
-# DECISION_<nnnn>_<topic>
+# DECISION*<nnnn>*<topic>
 
 ## Context
 
 ## Opzioni
 
-1. 
+1.
 
 ## Decisione
 

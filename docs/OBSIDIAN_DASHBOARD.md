@@ -12,14 +12,28 @@ tags:
 
 # Travellini — Dashboard
 
+> [!tip] Inizia da qui
+> [[50_Scratch/INBOX|Cattura un’idea o un follow-up]] ·
+> [[OBSIDIAN_WORKFLOW|Apri le routine operative]] ·
+> [[MARKETING_OPERATIONS_HUB|Vai al marketing hub]]
+
 ## Focus settimanale
 
-> *Cosa pubblichiamo questa settimana? Qual è la priorità sito? Chi contattare?*
+> _Cosa pubblichiamo questa settimana? Qual è la priorità sito? Chi contattare?_
 
-**Settimana del**: 
-**Focus editoriale**: 
-**Focus sito**: 
-**Follow-up commerciale**: 
+**Settimana del**: 2026-06-29
+
+**Focus editoriale**: completare il lead magnet con 10 luoghi reali
+
+**Focus sito**: chiudere gli activation gate in [[10_Projects/PROJECT_RELEASE_READINESS]]
+
+**Follow-up commerciale**: completare affiliazioni e aggiornare bio Instagram/TikTok
+
+---
+
+## Lavoro aperto
+
+![[95_Bases/Active_Work.base#Open Work]]
 
 ---
 
@@ -85,25 +99,31 @@ tags:
 
 ## Link rapidi
 
-### Crea nuovo
-- [[90_Templates/TPL_Article|+ Articolo]]
-- [[90_Templates/TPL_Destination_Guide|+ Guida destinazione]]
-- [[90_Templates/TPL_Place|+ Luogo/Hotel]]
-- [[90_Templates/TPL_Itinerary|+ Itinerario]]
-- [[90_Templates/TPL_SEO_Page|+ SEO page]]
-- [[90_Templates/TPL_Collaboration|+ Collaborazione]]
-- [[90_Templates/TPL_Product|+ Prodotto]]
-- [[90_Templates/TPL_Web_Clip|+ Web clip]]
-- [[90_Templates/TPL_Project|+ Progetto sito]]
-- [[90_Templates/TPL_Bug|+ Bug]]
+### Modelli
+
+Apri il modello, duplicalo nella cartella indicata e rinomina la nuova nota.
+
+- [[90_Templates/TPL_Article|Articolo]]
+- [[90_Templates/TPL_Destination_Guide|Guida destinazione]]
+- [[90_Templates/TPL_Place|Luogo/Hotel]]
+- [[90_Templates/TPL_Itinerary|Itinerario]]
+- [[90_Templates/TPL_SEO_Page|SEO page]]
+- [[90_Templates/TPL_Collaboration|Collaborazione]]
+- [[90_Templates/TPL_Product|Prodotto]]
+- [[90_Templates/TPL_Web_Clip|Web clip]]
+- [[90_Templates/TPL_Project|Progetto sito]]
+- [[90_Templates/TPL_Bug|Bug]]
 
 ### Hub principali
+
 - [[MARKETING_OPERATIONS_HUB]] — campagne, partner, contenuti
+- [[OBSIDIAN_INDEX]] — indice completo del vault
 - [[EDITORIAL_GUIDE]] — regole editoriali
 - [[OBSIDIAN_TAXONOMY]] — naming e properties
 - [[OBSIDIAN_WORKFLOW]] — tutti i flussi
 
 ### Pipeline
+
 - [[95_Bases/Content_Pipeline.base|Content pipeline]]
 - [[95_Bases/Editorial_Archive.base|Archivio editoriale]]
 - [[95_Bases/Place_Library.base|Library luoghi]]

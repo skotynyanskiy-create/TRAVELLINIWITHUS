@@ -1,7 +1,7 @@
 ---
 type: project
 area: product
-status: active
+status: in-progress
 priority: p1
 owner: team
 repo: TRAVELLINIWITHUS
@@ -537,4 +537,4 @@ editoriali → asset-curator; baseline `explore_to_article_rate` → data-analys
 - [[PROJECT_HOME_HERO_NAV_REFINEMENT]]
 - [[PROJECT_DESTINATIONS_SECTION_REVIEW]] (chiuso, assorbito qui)
 - [[PROJECT_RELEASE_READINESS]]
-- [[../../C:\Users\ccocu\.claude\plans\analizza-in-modo-completo-snoopy-sunbeam.md]]
+- Piano Claude originale archiviato fuori dal repository (riferimento non portabile rimosso)

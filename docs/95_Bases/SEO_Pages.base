@@ -1,54 +1,55 @@
-{
-  "filters": {
-    "filterOperator": "and",
-    "conditions": [
-      {
-        "field": "type",
-        "operator": "is",
-        "value": ["seo-page"]
-      }
-    ]
-  },
-  "order": [
-    {
-      "field": "priority",
-      "direction": "asc"
-    }
-  ],
-  "views": [
-    {
-      "id": "da-ottimizzare",
-      "name": "Da ottimizzare",
-      "type": "table",
-      "filters": {
-        "filterOperator": "and",
-        "conditions": [
-          {
-            "field": "status",
-            "operator": "is",
-            "value": ["da-ottimizzare", "in-corso"]
-          }
-        ]
-      },
-      "columns": ["file.name", "status", "priority", "route", "keyword_primaria", "score", "last_audit"]
-    },
-    {
-      "id": "all-pages",
-      "name": "Tutte le pagine",
-      "type": "table",
-      "columns": ["file.name", "status", "priority", "route", "keyword_primaria", "score", "last_audit"]
-    },
-    {
-      "id": "ottimizzate",
-      "name": "Ottimizzate",
-      "type": "table",
-      "filters": {
-        "filterOperator": "and",
-        "conditions": [
-          {"field": "status", "operator": "is", "value": ["ottimizzato"]}
-        ]
-      },
-      "columns": ["file.name", "route", "keyword_primaria", "score", "last_audit"]
-    }
-  ]
-}
+filters:
+  and:
+    - 'file.ext == "md"'
+    - 'type == "seo-page"'
+properties:
+  file.name:
+    displayName: Pagina
+  status:
+    displayName: Stato
+  priority:
+    displayName: Priorità
+  route:
+    displayName: Route
+  keyword_primaria:
+    displayName: Keyword primaria
+  score:
+    displayName: Score
+  last_audit:
+    displayName: Ultimo audit
+views:
+  - type: table
+    name: Da ottimizzare
+    filters:
+      or:
+        - 'status == "da-ottimizzare"'
+        - 'status == "in-corso"'
+    order:
+      - file.name
+      - status
+      - priority
+      - route
+      - keyword_primaria
+      - score
+      - last_audit
+  - type: table
+    name: Tutte le pagine
+    order:
+      - file.name
+      - status
+      - priority
+      - route
+      - keyword_primaria
+      - score
+      - last_audit
+  - type: table
+    name: Ottimizzate
+    filters:
+      and:
+        - 'status == "ottimizzato"'
+    order:
+      - file.name
+      - route
+      - keyword_primaria
+      - score
+      - last_audit

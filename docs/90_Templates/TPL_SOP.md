@@ -2,30 +2,31 @@
 type: sop
 area: operations
 frequency: una-tantum
-last_run: ""
+last_run: ''
 tags: []
+status: active
 ---
 
 # SOP — [Nome procedura]
 
 ## Obiettivo
 
-*Cosa deve produrre questa procedura. Il risultato atteso.*
+_Cosa deve produrre questa procedura. Il risultato atteso._
 
 ## Quando eseguire
 
-*Frequenza: settimanale / mensile / pre-deploy / post-pubblicazione / al bisogno.*
+_Frequenza: settimanale / mensile / pre-deploy / post-pubblicazione / al bisogno._
 
 ## Prerequisiti
 
-- [ ] 
-- [ ] 
+- [ ]
+- [ ]
 
 ## Procedura
 
 ### Step 1 — [Nome]
 
-*Istruzione chiara e concreta.*
+_Istruzione chiara e concreta._
 
 ### Step 2 — [Nome]
 
@@ -33,16 +34,16 @@ tags: []
 
 ## Checklist finale
 
-- [ ] 
-- [ ] 
-- [ ] 
+- [ ]
+- [ ]
+- [ ]
 
 ## Note e varianti
 
-*Casi particolari, eccezioni, contesto.*
+_Casi particolari, eccezioni, contesto._
 
 ## Storico esecuzioni
 
 | Data | Chi | Esito | Note |
-|------|-----|-------|------|
-| | | | |
+| ---- | --- | ----- | ---- |
+|      |     |       |      |

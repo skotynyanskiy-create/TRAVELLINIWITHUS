@@ -1,6 +1,6 @@
 ---
 type: task
-area:
+area: workspace
 status: open
 priority: p1
 owner:
@@ -15,7 +15,7 @@ tags:
   - task
 ---
 
-# TASK_<topic>
+# TASK\_<topic>
 
 ## Done when
 
@@ -28,7 +28,7 @@ tags:
 
 ## Passi
 
-- [ ] 
+- [ ]
 
 ## Test
 

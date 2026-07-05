@@ -1,7 +1,7 @@
 ---
 type: partner
 area: commercial
-status: open
+status: lead
 priority: p2
 owner:
 contact:
@@ -15,7 +15,7 @@ tags:
   - commercial
 ---
 
-# PARTNER_<brand>
+# PARTNER\_<brand>
 
 ## Brand
 
@@ -35,7 +35,7 @@ tags:
 
 ## Next step
 
-- [ ] 
+- [ ]
 
 ## Links
 

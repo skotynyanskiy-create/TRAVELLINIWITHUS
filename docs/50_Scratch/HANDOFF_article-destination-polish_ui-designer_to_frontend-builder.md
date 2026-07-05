@@ -6,6 +6,8 @@ from: travellini-ui-designer
 to: travellini-frontend-builder
 slug: article-destination-polish
 expires: 2026-06-01
+type: handoff
+area: workspace
 ---
 
 # Direzione visiva — Polish chirurgico template articolo + ArchiveCard

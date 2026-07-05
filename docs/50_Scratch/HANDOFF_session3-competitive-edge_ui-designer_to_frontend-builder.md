@@ -11,6 +11,8 @@ sources:
   - docs/10_Projects/PROJECT_COMPETITIVE_DESTINATIONS_ANALYSIS.md
   - docs/10_Projects/PROJECT_ARTICLE_EDITORIAL_PRIMITIVES_V1.md
   - docs/10_Projects/PROJECT_ARTICLE_DESTINATION_POLISH.md
+type: handoff
+area: workspace
 ---
 
 # Handoff: Sessione 3 — Competitive edge (VerifiedBox + landing destinazione + H2 domanda)
@@ -69,7 +71,7 @@ Attributi tutti opzionali:
   - `BadgeCheck` 14px + "Prezzi verificati: " + "aprile 2026"
   - Se `contacts="true"`: terzo datapoint icona `Phone` 14px "Contatti aggiornati ad aprile 2026".
 - Body opzionale: `text-sm leading-relaxed text-[var(--color-ink-2)]` sotto i datapoint.
-- Date format italiano: "settembre 2025", "aprile 2026" (months map gia' esiste in [src/pages/Articolo.tsx](src/pages/Articolo.tsx) funzione `toIsoDateString`).
+- Date format italiano: "settembre 2025", "aprile 2026" (months map gia' esiste in [src/pages/Articolo.tsx](../../src/pages/Articolo.tsx) funzione `toIsoDateString`).
 
 ### A.4 Componente React
 
@@ -101,7 +103,7 @@ Calcolo: `(today - visitedDate) > 730 giorni`. Lato client OK.
 
 ### B.2 Routing
 
-Aggiungi rotta in [src/App.tsx](src/App.tsx): `<Route path="/destinazione/:regionSlug" element={<Destinazione />} />`.
+Aggiungi rotta in [src/App.tsx](../../src/App.tsx): `<Route path="/destinazione/:regionSlug" element={<Destinazione />} />`.
 
 Nuova pagina: `src/pages/Destinazione.tsx`.
 
@@ -155,7 +157,7 @@ Mostra solo i primi 6 in grid + "Vedi tutti gli articoli sulla Puglia →" che l
 
 ### B.9 Cosa serve nei dati
 
-Verifica in [src/config/demoArchive.ts](src/config/demoArchive.ts) e [src/config/previewContent.ts](src/config/previewContent.ts) che gli articoli abbiano almeno un campo `region` o `country` o `regionSlug`. Se manca, aggiungi (chirurgico, no schema migration).
+Verifica in [src/config/demoArchive.ts](../../src/config/demoArchive.ts) e [src/config/previewContent.ts](../../src/config/previewContent.ts) che gli articoli abbiano almeno un campo `region` o `country` o `regionSlug`. Se manca, aggiungi (chirurgico, no schema migration).
 
 Crea un helper `src/lib/regions.ts` con:
 
@@ -203,9 +205,9 @@ Forma corta nel TOC ≠ forma lunga in H2. Pattern UX corretto.
 
 Articoli demo procedurali (29) usano `generateBody()` con H2 vecchie. Aggiorna `generateBody` per emettere le nuove H2-domanda. Articoli custom (`CUSTOM_BODIES['puglia-trulli-masserie']`) gia' devono essere aggiornati a mano.
 
-File: [src/config/previewContent.ts](src/config/previewContent.ts).
+File: [src/config/previewContent.ts](../../src/config/previewContent.ts).
 
-Anche il TOC dinamico (`buildTocItems` in [src/pages/Articolo.tsx](src/pages/Articolo.tsx) riga 137) usa label fissi. Aggiorna i label corti per le voci TOC.
+Anche il TOC dinamico (`buildTocItems` in [src/pages/Articolo.tsx](../../src/pages/Articolo.tsx) riga 137) usa label fissi. Aggiorna i label corti per le voci TOC.
 
 ---
 

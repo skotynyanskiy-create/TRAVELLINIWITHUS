@@ -1,7 +1,7 @@
 ---
 type: bug
 area: seo
-status: mitigated
+status: in-progress
 priority: p1
 owner: team
 severity: medium

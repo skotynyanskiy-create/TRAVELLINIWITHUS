@@ -1,7 +1,7 @@
 ---
 type: release
 area: delivery
-status: active
+status: published
 priority: p2
 owner: Antigravity
 due: 2026-05-21

@@ -1,11 +1,13 @@
 ---
 title: HANDOFF_esplora-restructure_orchestrator_to_growth
-status: open
+status: obsolete
 created: 2026-05-24
 from: travellini-orchestrator
 to: travellini-growth-revenue-operator
 slug: esplora-restructure
 expires: 2026-06-07
+type: handoff
+area: workspace
 ---
 
 # Handoff: definire il workflow utile e l'innesto monetizzazione di Esplora

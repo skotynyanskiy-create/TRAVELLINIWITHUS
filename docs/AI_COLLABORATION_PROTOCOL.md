@@ -1,5 +1,5 @@
 ---
-type: guide
+type: workflow
 area: workspace
 status: active
 tags:

@@ -1,3 +1,9 @@
+---
+type: reference
+area: brand
+status: active
+---
+
 # Travelliniwithus Brand Memory
 
 Last updated: 2026-03-18
@@ -223,7 +229,7 @@ Observed from the public site:
   - destinations
   - experiences
   - guides
-  currently appear empty or not meaningfully populated
+    currently appear empty or not meaningfully populated
 - the shop page publicly says it is still under construction
 - the site is stronger as a positioning shell than as a content or conversion engine
 
@@ -237,7 +243,7 @@ Important inconsistencies currently visible online:
   - `travelliniagency@gmail.com`
 - Privacy policy references:
   - `https://travelliniwithus.com`
-  while the live site is on:
+    while the live site is on:
   - `https://www.travelliniwithus.it/`
 
 This creates avoidable trust friction.
@@ -262,7 +268,7 @@ Notable external signals:
   - group trips
   - activities
   - discounts
-  and said the brand engages millions on TikTok and Instagram
+    and said the brand engages millions on TikTok and Instagram
 
 These are useful authority signals even if not all of them are independently verified from first-party dashboards.
 

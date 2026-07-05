@@ -66,7 +66,7 @@ Backlog operativo prossimi 30 giorni dal Growth & Revenue audit del
 
 ### QW.1 — Lead magnet nel popup di uscita (&lt;2h)
 
-Modificare [src/components/ExitIntentPopup.tsx](src/components/ExitIntentPopup.tsx):
+Modificare [src/components/ExitIntentPopup.tsx](../../src/components/ExitIntentPopup.tsx):
 aggiungere link diretto al PDF `/public/lead-magnet-posti-italiani.pdf` come CTA
 secondaria o principale, sostituendo il copy generico. Tracciare `lead_magnet_click`
 con `source: exit_popup`.
@@ -74,15 +74,15 @@ con `source: exit_popup`.
 ### QW.2 — URL reel reale + screenshot media kit (&lt;1h totali)
 
 - R+B mandano URL ultimo reel pubblicato → Skott aggiorna `FEATURED_REEL.url`
-  in [src/config/site.ts](src/config/site.ts)
+  in [src/config/site.ts](../../src/config/site.ts)
 - Screenshot di una pagina del media kit PDF → aggiunto nella sezione
-  "Cosa troverai" in [src/pages/MediaKit.tsx](src/pages/MediaKit.tsx)
+  "Cosa troverai" in [src/pages/MediaKit.tsx](../../src/pages/MediaKit.tsx)
 
 ### QW.3 — Budget + periodo nel form media kit (&lt;1h)
 
 Aggiungere select "Budget indicativo" (&lt;500€ / 500-1500 / 1500-3000 / &gt;3000 /
 da definire) e "Periodo previsto" (input month o text libero) al form in
-[src/pages/MediaKit.tsx](src/pages/MediaKit.tsx). Non bloccare submit, include
+[src/pages/MediaKit.tsx](../../src/pages/MediaKit.tsx). Non bloccare submit, include
 valori nel payload Firestore e nelle email Resend.
 
 ## Esperimento serio in corso

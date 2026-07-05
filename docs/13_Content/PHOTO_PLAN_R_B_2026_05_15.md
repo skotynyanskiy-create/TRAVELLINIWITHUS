@@ -1,5 +1,5 @@
 ---
-type: photo-plan
+type: plan
 area: editorial-assets
 status: active
 priority: p0

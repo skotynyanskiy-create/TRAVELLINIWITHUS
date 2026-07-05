@@ -1,7 +1,7 @@
 ---
 type: bug
 area: product
-status: fixed
+status: done
 priority: p0
 owner: codex
 repo: TRAVELLINIWITHUS

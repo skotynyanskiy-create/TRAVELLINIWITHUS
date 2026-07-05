@@ -7,6 +7,8 @@ from: travellini-seo-conversion-strategist
 to: travellini-frontend-builder
 slug: jsonld-schema-org
 expires: 2026-05-29
+type: handoff
+area: workspace
 ---
 
 > **Status consumed (2026-05-15)**: implementato in [src/lib/seo.ts](../../src/lib/seo.ts), [src/components/SEO.tsx](../../src/components/SEO.tsx), [src/pages/Articolo.tsx](../../src/pages/Articolo.tsx), [index.html](../../index.html). Typecheck PASS. Bundle 4248.8 KB / 4300 KB (delta -40.2 KB vs pre-F1.8). Logo path adattato a `/pwa-512x512.png` (icon-512x512 non esistente). QA voto 9.3/10 ([QA_post_F1.8_2026-05-15.md](QA_post_F1.8_2026-05-15.md)).

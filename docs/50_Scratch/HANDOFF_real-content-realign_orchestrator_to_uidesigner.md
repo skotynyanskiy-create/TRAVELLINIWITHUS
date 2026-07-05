@@ -6,6 +6,8 @@ from: travellini-orchestrator
 to: travellini-ui-designer
 slug: real-content-realign
 expires: 2026-07-06
+type: handoff
+area: workspace
 ---
 
 # Handoff: direzione visiva social-first + aggiornamento DESIGN.md

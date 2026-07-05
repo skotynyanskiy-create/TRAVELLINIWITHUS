@@ -1,11 +1,13 @@
 ---
 title: HANDOFF_lead-magnet_F1.10_editorial-writer_to_owner
-status: open
+status: obsolete
 created: 2026-05-15
 from: travellini-editorial-writer
 to: owner (Rodrigo & Betta) — approval + downstream agents
 slug: lead-magnet-10-posti-italiani-particolari
 expires: 2026-06-15
+type: handoff
+area: workspace
 ---
 
 # Handoff: Lead magnet PDF "10 Posti Italiani Particolari" — outline editoriale

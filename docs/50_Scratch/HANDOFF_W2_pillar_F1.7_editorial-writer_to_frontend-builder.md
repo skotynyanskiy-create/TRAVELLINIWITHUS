@@ -1,11 +1,13 @@
 ---
 title: HANDOFF_W2_pillar_F1.7_editorial-writer_to_frontend-builder
-status: open
+status: obsolete
 created: 2026-05-15
 from: travellini-editorial-writer
 to: travellini-frontend-builder
 slug: pillar-f1.7-publish
 expires: 2026-05-29
+type: handoff
+area: workspace
 ---
 
 # Handoff: Pubblicare 3 pillar reali su Firestore (F1.7)

@@ -1,8 +1,8 @@
 ---
 title: BUG — Statistiche "0K+" rilevate dal browser audit Playwright (FALSO POSITIVO)
-status: closed-false-positive
+status: done
 priority: P3
-type: tooling+a11y
+type: bug
 owner: skotxx
 related-projects:
   - [[PROJECT_FULL_SITE_MARKETING_TECH_AUDIT]]
@@ -11,6 +11,7 @@ created: 2026-05-14
 closed: 2026-05-14
 discovered-via: browser-auditor Playwright audit 2026-05-14
 resolved-via: visual screenshot review owner + code inspection
+area: engineering
 ---
 
 # BUG — Statistiche "0K+" — FALSO POSITIVO

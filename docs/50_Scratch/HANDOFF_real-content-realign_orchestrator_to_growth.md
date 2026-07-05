@@ -6,6 +6,8 @@ from: travellini-orchestrator
 to: travellini-growth-revenue-operator
 slug: real-content-realign
 expires: 2026-07-06
+type: handoff
+area: workspace
 ---
 
 # Handoff: definire il modello-contenuto reale e la tassonomia partnership/ADV

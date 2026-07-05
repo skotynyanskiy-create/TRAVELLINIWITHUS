@@ -1,11 +1,13 @@
 ---
 title: HANDOFF_W2_photos_F1.6_asset-curator_to_frontend-builder
-status: open
+status: obsolete
 created: 2026-05-15
 from: travellini-asset-curator
 to: travellini-frontend-builder
 slug: photos-f1.6-rb-real
 expires: 2026-05-29
+type: handoff
+area: workspace
 ---
 
 # Handoff: Sostituire foto stock con foto reali R+B (F1.6)

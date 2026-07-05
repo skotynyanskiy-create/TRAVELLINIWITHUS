@@ -1,11 +1,13 @@
 ---
 title: HANDOFF_home_redesign_F2.1_ui-designer_to_frontend-builder
-status: open
+status: obsolete
 created: 2026-05-15
 from: travellini-ui-designer
 to: travellini-frontend-builder
 slug: home-redesign-11-to-7
 expires: 2026-05-29
+type: handoff
+area: workspace
 ---
 
 # Handoff: Home redesign 11 → 7 sezioni — direction LOCKED

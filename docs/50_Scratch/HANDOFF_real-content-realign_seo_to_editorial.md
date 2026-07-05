@@ -6,6 +6,8 @@ from: travellini-seo-conversion-strategist
 to: travellini-editorial-writer
 slug: real-content-realign
 expires: 2026-07-13
+type: handoff
+area: workspace
 ---
 
 # Handoff: scrivere le 70 schede ContentItem reali (seed) dal dataset IG

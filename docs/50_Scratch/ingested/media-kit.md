@@ -1,11 +1,13 @@
 ---
 title: media-kit
-type: reference
+type: content-asset
 source: media-kit.pdf
 ingested: 2026-06-22
 tags:
   - ingested
   - markitdown
+area: commercial
+status: archived
 ---
 
 T R A V E L L I N I W I T H U S M E D I A K I T

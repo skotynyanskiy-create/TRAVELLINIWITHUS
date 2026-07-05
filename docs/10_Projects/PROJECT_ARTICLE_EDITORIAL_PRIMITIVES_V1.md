@@ -1,12 +1,14 @@
 ---
 title: PROJECT_ARTICLE_EDITORIAL_PRIMITIVES_V1
-status: shipped
+status: done
 started: 2026-05-18
 shipped: 2026-05-18
 slug: editorial-primitives-v1
 owner: Rodrigo
-type: editorial-tooling
+type: project
 risk: low
+area: operations
+priority: p2
 ---
 
 # Primitive editoriali v1 — DropCap, PullQuote, FullBleedFigure, InlineFigure, SourceBlock

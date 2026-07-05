@@ -1,3 +1,9 @@
+---
+type: workflow
+area: workspace
+status: active
+---
+
 # Agent Workflows
 
 This repository now keeps the Claude-oriented setup and a Codex-usable equivalent side by side.

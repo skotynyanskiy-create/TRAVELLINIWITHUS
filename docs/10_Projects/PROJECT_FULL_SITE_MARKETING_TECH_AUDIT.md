@@ -1,7 +1,7 @@
 ---
 type: project
 area: site
-status: in-review
+status: in-progress
 owner: skotxx
 created: 2026-05-14
 updated: 2026-06-07

@@ -1,11 +1,13 @@
 ---
 title: HANDOFF_W2_home_redesign_F2.1_start_frontend-builder
-status: open
+status: obsolete
 created: 2026-05-15
 from: travellini-orchestrator
 to: travellini-frontend-builder
 slug: home-redesign-f2.1-start
 expires: 2026-05-29
+type: handoff
+area: workspace
 ---
 
 # Handoff: Inizio implementazione Home redesign 11→7 sezioni (F2.1)

@@ -1,7 +1,7 @@
 ---
 project: Travelliniwithus
-type: supporting-article-brief
-status: brief-ready-needs-rb-assets
+type: content-brief
+status: in-progress
 pillar: [[PILLAR_ARTICLE_SALENTO_AGOSTO]]
 target_slug: itinerario-salento-5-giorni-coppia
 target_keywords:
@@ -9,6 +9,9 @@ target_keywords:
   - salento in coppia
   - salento agosto itinerario
 schema: [Article, BreadcrumbList]
+area: content
+priority: p2
+owner: team
 ---
 
 # Supporting article — Itinerario Salento 5 giorni in coppia

@@ -6,6 +6,8 @@ from: travellini-frontend-builder
 to: travellini-quality-auditor + browser-auditor
 slug: real-content-realign
 expires: 2026-07-20
+type: handoff
+area: workspace
 ---
 
 # Handoff: gate qualità finale del riallineamento contenuto reale

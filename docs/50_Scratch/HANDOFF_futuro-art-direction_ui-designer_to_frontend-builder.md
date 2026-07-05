@@ -6,6 +6,8 @@ from: travellini-ui-designer
 to: travellini-frontend-builder
 slug: futuro-art-direction
 expires: 2026-07-07
+type: handoff
+area: workspace
 ---
 
 # Handoff: art direction "Atlante Notturno" per il prototipo full-fidelity su /futuro

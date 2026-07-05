@@ -1,11 +1,13 @@
 ---
 title: lead-magnet-posti-italiani
-type: reference
+type: content-asset
 source: lead-magnet-posti-italiani.pdf
 ingested: 2026-06-22
 tags:
   - ingested
   - markitdown
+area: content
+status: archived
 ---
 
 Travelliniwithus

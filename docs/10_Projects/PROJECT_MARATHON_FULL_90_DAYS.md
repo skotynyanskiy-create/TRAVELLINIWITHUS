@@ -7,6 +7,7 @@ target_completion: 2026-08-17
 owner: Rodrigo & Betta + Claude main thread + travellini-* agents
 scope: full-site upgrade to "best-in-class 2026" editorial travel premium
 tags: [marathon, premium, ui, content, ai, funnel]
+priority: p2
 ---
 
 # PROJECT — Marathon Full 90 giorni

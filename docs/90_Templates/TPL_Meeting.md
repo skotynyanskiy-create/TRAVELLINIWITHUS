@@ -1,7 +1,7 @@
 ---
 type: meeting
-area:
-status: open
+area: operations
+status: active
 priority: p2
 owner:
 attendees:
@@ -11,7 +11,7 @@ tags:
   - meeting
 ---
 
-# MEETING_<yyyy-mm-dd>_<topic>
+# MEETING*<yyyy-mm-dd>*<topic>
 
 ## Agenda
 
@@ -21,7 +21,7 @@ tags:
 
 ## Action items
 
-- [ ] 
+- [ ]
 
 ## Repo context
 

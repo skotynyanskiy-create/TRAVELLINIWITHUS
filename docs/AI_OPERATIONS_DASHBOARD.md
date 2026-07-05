@@ -129,7 +129,8 @@ Expanded 2026-06-18 (owner opted into higher-leverage automation).
 
 ## Weekly Routine
 
-1. Run `npm run audit:agents` after AI stack changes.
+1. Run `npm run audit:agents` after AI stack changes and
+   `npm run audit:obsidian` after vault structure or metadata changes.
 2. Review `docs/AI_TOOLING_RADAR.md` for new candidates.
 3. Promote only one or two candidates to lab at a time.
 4. Create a tooling evaluation card before adoption.

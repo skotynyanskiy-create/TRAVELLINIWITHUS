@@ -1,11 +1,13 @@
 ---
 title: HANDOFF_esplora-restructure_ui-designer_to_seo
-status: open
+status: obsolete
 created: 2026-05-24
 from: travellini-ui-designer
 to: travellini-seo-conversion-strategist
 slug: esplora-restructure
 expires: 2026-06-07
+type: handoff
+area: workspace
 ---
 
 # Handoff: findability, copy dei filtri e discovery SEO di Esplora

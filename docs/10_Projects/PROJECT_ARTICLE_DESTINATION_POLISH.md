@@ -1,12 +1,14 @@
 ---
 title: PROJECT_ARTICLE_DESTINATION_POLISH
-status: shipped
+status: done
 started: 2026-05-18
 shipped: 2026-05-18
 slug: article-destination-polish
 owner: Rodrigo
-type: ui-polish
+type: project
 risk: low
+area: operations
+priority: p2
 ---
 
 # Article + Destination + ArchiveCard — Polish chirurgico premium

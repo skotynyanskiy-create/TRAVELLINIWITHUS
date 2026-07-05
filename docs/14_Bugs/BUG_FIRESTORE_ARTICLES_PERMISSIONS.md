@@ -1,8 +1,8 @@
 ---
 title: BUG — FirebaseError "Missing or insufficient permissions" su articoli reali Firestore
-status: fixed-2026-05-15
+status: done
 priority: P0
-type: content+firestore+security
+type: bug
 owner: skotxx
 related-projects:
   - [[PROJECT_FULL_SITE_MARKETING_TECH_AUDIT]]
@@ -15,6 +15,7 @@ resolution: |
   il deny atteso per articoli con published != true viene ora trattato come
   silent "not found" (no console error). Errori non-permesso continuano a essere
   loggati in DEV per debug. Le rules restano correctly restrictive senza weakening.
+area: engineering
 ---
 
 # BUG — FirebaseError permissions su articoli reali

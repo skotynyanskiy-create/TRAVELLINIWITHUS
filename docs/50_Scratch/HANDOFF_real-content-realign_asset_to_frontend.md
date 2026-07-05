@@ -6,6 +6,8 @@ from: travellini-asset-curator
 to: travellini-frontend-builder
 slug: real-content-realign
 expires: 2026-07-13
+type: handoff
+area: workspace
 ---
 
 # Handoff: implementare modello ContentItem, seed, /esplora social-first, /destinazione/:regione

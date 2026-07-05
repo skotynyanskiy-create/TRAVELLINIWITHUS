@@ -1,12 +1,13 @@
 ---
 title: Runbook — Instagram Graph API (importare i 1.251 post)
 type: runbook
-status: owner-action-required
+status: active
 created: 2026-06-22
 owner: Rodrigo & Betta
 related:
   - src/services/instagramContentAdapter.ts
   - docs/50_Scratch/INSTAGRAM_CONTENT_SEED_2026-06-18.md
+area: operations
 ---
 
 # Runbook — Instagram Graph API
@@ -34,23 +35,29 @@ legge `IG_GRAPH_TOKEN` da `.env`, scarica tutti i media, li mappa+arricchisce
 (`enrichInstagramFeed`) e scrive `src/data/instagram-import.json` (file di review,
 non tocca `content-seed.json`). Appena hai il token, l'import è un comando solo.
 
-## Passi (owner — una tantum)
+## Passi (owner — una tantum) · percorso Instagram Login
+
+Verificato 2026-07-04 su doc Meta corrente. **Nessuna Pagina FB necessaria**:
+si autorizza direttamente l'account IG professionale. Questi passi combaciano
+con `scripts/import-instagram.ts`, che legge solo `IG_GRAPH_TOKEN` e chiama
+`/me/media` (nessun `IG_USER_ID` richiesto).
 
 1. **App Meta**: https://developers.facebook.com → _Crea app_ → tipo **Business**.
-2. **Collega gli asset**: nell'app, aggiungi il prodotto _Instagram Graph API_ e
-   collega la **Pagina FB** associata a `@travelliniwithus`.
-3. **Permessi token**: genera un _User access token_ con almeno
-   `instagram_basic`, `pages_show_list`, `business_management`
-   (aggiungi `instagram_manage_insights` se vuoi anche le metriche per post).
-4. **Trova l'IG User ID**: chiama
-   `GET /{page-id}?fields=instagram_business_account` → restituisce l'ID
-   dell'account IG business.
-5. **Token long-lived**: scambia il token breve con uno a 60 giorni
-   (`GET /oauth/access_token?grant_type=fb_exchange_token&...`). Va poi
-   rinfrescato periodicamente (job lato server).
-6. **Consegna a me** (in modo sicuro, NON in chat/Git): l'**IG User ID** e il
-   **token long-lived**. Li metto in env server (`IG_GRAPH_TOKEN`,
-   `IG_USER_ID`), mai nel repo o nel client.
+2. **Prodotto Instagram**: aggiungi _Instagram_ → riquadro **"Instagram API con
+   Instagram Login"** (API setup with Instagram login).
+3. **Collega l'account**: nel pannello di setup collega l'account IG
+   professionale (Business/Creator) `@travelliniwithus` come account dell'app.
+4. **Scope**: per leggere i propri media basta `instagram_business_basic`.
+   (I vecchi `instagram_basic` / `pages_show_list` / `business_management` NON
+   servono su questo percorso — erano il flusso Pagina FB, ora non usato.)
+5. **Genera lo short-lived token** dal pannello di setup (o via Business Login
+   flow) → ottieni token breve + IG user id.
+6. **Scambia in long-lived (60 gg)**:
+   `GET https://graph.instagram.com/access_token?grant_type=ig_exchange_token&client_secret={app-secret}&access_token={short-lived}`.
+   Rinfresca prima della scadenza con `refresh_access_token` (endpoint sopra).
+7. **Consegna il token** in modo sicuro (NON chat/Git): lo metto in `.env` come
+   `IG_GRAPH_TOKEN`. Da lì l'import è un comando solo: `npm run import:instagram`
+   → scrive `src/data/instagram-import.json` (review, non tocca `content-seed.json`).
 
 ## Cosa costruisco io dopo (Track 1)
 

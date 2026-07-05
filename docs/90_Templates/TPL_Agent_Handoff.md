@@ -1,11 +1,13 @@
 ---
 title: HANDOFF_<slug>_<from-agent>_to_<to-agent>
-status: open | consumed | obsolete
+status: open
 created: YYYY-MM-DD
 from: <agent name>
 to: <agent name>
 slug: <feature or article slug, e.g. salento-agosto-2026 or media-kit-v3>
 expires: YYYY-MM-DD # delete or mark obsolete after this date
+type: handoff
+area: delivery
 ---
 
 # Handoff: <one-line summary>

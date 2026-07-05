@@ -1,61 +1,79 @@
-{
-  "filters": {
-    "filterOperator": "and",
-    "conditions": [
-      {
-        "field": "type",
-        "operator": "is",
-        "value": ["article", "guide", "itinerary"]
-      }
-    ]
-  },
-  "order": [
-    {
-      "field": "published_at",
-      "direction": "desc"
-    }
-  ],
-  "views": [
-    {
-      "id": "all-content",
-      "name": "Tutti i contenuti",
-      "type": "table",
-      "columns": ["file.name", "type", "status", "pillar", "destination", "keyword_primaria", "published_at", "author"]
-    },
-    {
-      "id": "in-progress",
-      "name": "In Progress",
-      "type": "table",
-      "filters": {
-        "filterOperator": "and",
-        "conditions": [
-          {
-            "field": "status",
-            "operator": "is",
-            "value": ["draft", "review", "idea"]
-          }
-        ]
-      },
-      "columns": ["file.name", "type", "status", "priority", "pillar", "destination", "keyword_primaria"]
-    },
-    {
-      "id": "by-destination",
-      "name": "Per destinazione",
-      "type": "table",
-      "order": [{"field": "destination", "direction": "asc"}],
-      "columns": ["file.name", "type", "status", "destination", "country", "published_at"]
-    },
-    {
-      "id": "published",
-      "name": "Pubblicati",
-      "type": "table",
-      "filters": {
-        "filterOperator": "and",
-        "conditions": [
-          {"field": "status", "operator": "is", "value": ["published"]}
-        ]
-      },
-      "columns": ["file.name", "type", "destination", "keyword_primaria", "published_at", "route"]
-    }
-  ]
-}
+filters:
+  and:
+    - 'file.ext == "md"'
+    - 'area == "content"'
+    - or:
+      - 'type == "article"'
+      - 'type == "guide"'
+      - 'type == "itinerary"'
+properties:
+  file.name:
+    displayName: Contenuto
+  type:
+    displayName: Tipo
+  status:
+    displayName: Stato
+  priority:
+    displayName: Priorità
+  pillar:
+    displayName: Pilastro
+  destination:
+    displayName: Destinazione
+  country:
+    displayName: Paese
+  keyword_primaria:
+    displayName: Keyword primaria
+  published_at:
+    displayName: Pubblicato
+  author:
+    displayName: Autore
+  route:
+    displayName: Route
+views:
+  - type: table
+    name: Tutti i contenuti
+    order:
+      - file.name
+      - type
+      - status
+      - pillar
+      - destination
+      - keyword_primaria
+      - published_at
+      - author
+  - type: table
+    name: In Progress
+    filters:
+      or:
+        - 'status == "draft"'
+        - 'status == "review"'
+        - 'status == "idea"'
+    order:
+      - file.name
+      - type
+      - status
+      - priority
+      - pillar
+      - destination
+      - keyword_primaria
+  - type: table
+    name: Per destinazione
+    order:
+      - destination
+      - file.name
+      - type
+      - status
+      - country
+      - published_at
+  - type: table
+    name: Pubblicati
+    filters:
+      and:
+        - 'status == "published"'
+    order:
+      - file.name
+      - type
+      - destination
+      - keyword_primaria
+      - published_at
+      - route

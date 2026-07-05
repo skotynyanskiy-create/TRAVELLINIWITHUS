@@ -2,7 +2,7 @@
 type: bug
 area: security
 severity: medium
-status: fixed-2026-05-15
+status: done
 priority: p1
 owner: travellini-backend-engineer
 opened: 2026-05-15

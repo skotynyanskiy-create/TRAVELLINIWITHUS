@@ -8,6 +8,7 @@ created: 2026-06-18
 expires: 2026-07-02
 requires: owner-confirmation (server.ts è high-risk)
 related: '[[10_Projects/PROJECT_ULTRACODE_FULL_SITE_AUDIT_2026-06-18]]'
+area: workspace
 ---
 
 # HANDOFF — SSR meta universale + coerenza schema (server.ts)

@@ -1,7 +1,7 @@
 ---
 type: project
 area: design
-status: completed
+status: done
 priority: p1
 owner: team
 repo: TRAVELLINIWITHUS

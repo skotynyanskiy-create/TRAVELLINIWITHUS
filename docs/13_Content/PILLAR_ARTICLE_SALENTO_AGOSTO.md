@@ -1,7 +1,7 @@
 ---
 project: Travelliniwithus
-type: pillar-article-brief
-status: editorial-brief-ready-needs-assets
+type: content-brief
+status: in-progress
 owner: Rodrigo & Betta
 target_slug: cosa-fare-salento-agosto-coppia
 target_keywords:
@@ -28,6 +28,8 @@ blocking_inputs_from_owner:
   - 4 nomi strutture dove dormire + range prezzo agosto
   - 5 indirizzi cibo (trattorie, forno, cantina) con piatto+prezzo
   - verifica volume query SEO (Search Console / Keyword Planner)
+area: content
+priority: p2
 ---
 
 # Pillar article — "Cosa fare nel Salento ad agosto in coppia"

@@ -2,7 +2,7 @@ filters:
   and:
     - 'file.ext == "md"'
     - or:
-      - 'file.inFolder("10_Projects")'
+      - 'file.inFolder("docs/10_Projects")'
       - 'type == "bug"'
 properties:
   file.name:
@@ -25,7 +25,9 @@ views:
   - type: table
     name: Open Bugs
     filters:
-      - 'type == "bug"'
+      and:
+        - 'type == "bug"'
+        - 'status != "done"'
     order:
       - priority
       - severity

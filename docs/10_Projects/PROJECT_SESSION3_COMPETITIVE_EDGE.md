@@ -1,12 +1,14 @@
 ---
 title: PROJECT_SESSION3_COMPETITIVE_EDGE
-status: shipped
+status: done
 started: 2026-05-18
 shipped: 2026-05-18
 slug: session3-competitive-edge
 owner: Rodrigo
-type: editorial-tooling + routing
+type: project
 risk: medium
+area: operations
+priority: p2
 ---
 
 # Sessione 3 — Competitive edge (VerifiedBox + landing destinazione + H2 forma domanda)

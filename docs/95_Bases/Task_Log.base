@@ -2,7 +2,7 @@ filters:
   and:
     - 'file.ext == "md"'
     - or:
-      - 'file.inFolder("10_Projects")'
+      - 'file.inFolder("docs/10_Projects")'
       - 'type == "task"'
       - 'type == "ui-change"'
 properties:
@@ -28,9 +28,14 @@ views:
   - type: table
     name: Open Tasks
     filters:
-      or:
-        - 'type == "task"'
-        - 'type == "ui-change"'
+      and:
+        - or:
+          - 'type == "task"'
+          - 'type == "ui-change"'
+        - or:
+          - 'status == "open"'
+          - 'status == "in-progress"'
+          - 'status == "blocked"'
     order:
       - status
       - priority

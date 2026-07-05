@@ -1,7 +1,7 @@
 ---
 type: project
 area: marketing
-status: active
+status: in-progress
 priority: p0
 owner: marketing
 date: 2026-06-07

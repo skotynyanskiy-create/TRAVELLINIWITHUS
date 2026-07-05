@@ -1,7 +1,7 @@
 filters:
   and:
     - 'file.ext == "md"'
-    - 'file.inFolder("10_Projects")'
+    - 'file.inFolder("docs/10_Projects")'
 properties:
   file.name:
     displayName: Project
