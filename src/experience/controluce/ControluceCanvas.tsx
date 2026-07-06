@@ -10,7 +10,7 @@ function LinenPlane({ tRef }: { tRef: MutableRefObject<number> }) {
   const material = useMemo(() => createLinenMaterial(), []);
   const { viewport } = useThree();
   const titleCache = useRef(new Map<string, THREE.CanvasTexture>());
-  const lastActId = useRef('');
+  const lastTitleKey = useRef('');
 
   useFrame(({ clock }) => {
     const t = tRef.current;
@@ -26,12 +26,13 @@ function LinenPlane({ tRef }: { tRef: MutableRefObject<number> }) {
     u.uWind.value = light.wind;
 
     const { act, local } = getActAt(t);
-    if (act.id !== lastActId.current) {
-      lastActId.current = act.id;
-      if (!titleCache.current.has(act.id)) {
-        titleCache.current.set(act.id, makeTitleTexture(act.title, viewport.aspect));
+    const titleKey = act.id + ':' + viewport.aspect.toFixed(2);
+    if (titleKey !== lastTitleKey.current) {
+      lastTitleKey.current = titleKey;
+      if (!titleCache.current.has(titleKey)) {
+        titleCache.current.set(titleKey, makeTitleTexture(act.title, viewport.aspect));
       }
-      u.uTitleTex.value = titleCache.current.get(act.id)!;
+      u.uTitleTex.value = titleCache.current.get(titleKey)!;
     }
     // title pressed only in the act's middle band, absent at the seams
     const ramp = Math.min(1, Math.max(0, Math.min(local * 4, (1 - local) * 4)));
