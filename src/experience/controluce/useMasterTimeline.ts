@@ -6,11 +6,12 @@ import { mapScrollToTimeline } from './acts';
  * cover standalone routes, so the experience owns its own instance.
  * Exposes refs (no React state) so the canvas reads t at frame rate.
  */
-export function useMasterTimeline(scrollerRef: RefObject<HTMLElement | null>) {
+export function useMasterTimeline(scrollerRef: RefObject<HTMLElement | null>, enabled = true) {
   const tRef = useRef(0);
   const rawRef = useRef(0);
 
   useEffect(() => {
+    if (!enabled) return;
     let cleanup: (() => void) | undefined;
     let cancelled = false;
 
@@ -50,7 +51,7 @@ export function useMasterTimeline(scrollerRef: RefObject<HTMLElement | null>) {
       window.removeEventListener('scroll', update);
       cleanup?.();
     };
-  }, [scrollerRef]);
+  }, [scrollerRef, enabled]);
 
   return { tRef, rawRef };
 }

@@ -10,9 +10,11 @@ const ControluceCanvas = lazy(() => import('./ControluceCanvas'));
 
 export default function ControluceExperience() {
   const prefersReducedMotion = useReducedMotion();
-  const [isSmall, setIsSmall] = useState(false);
+  const [isSmall, setIsSmall] = useState(
+    () => typeof window !== 'undefined' && window.innerWidth < 768
+  );
   const scrollerRef = useRef<HTMLDivElement>(null);
-  const { tRef } = useMasterTimeline(scrollerRef);
+  const { tRef } = useMasterTimeline(scrollerRef, !(prefersReducedMotion || isSmall));
 
   useEffect(() => {
     const check = () => setIsSmall(window.innerWidth < 768);
