@@ -26,7 +26,7 @@ export default function ControluceOverlay({ tRef }: { tRef: MutableRefObject<num
       if (root) {
         if (t > 0.005) scrolledRef.current = true;
         const cue = root.querySelector<HTMLElement>('[data-cue]');
-        if (cue) cue.style.opacity = scrolledRef.current ? '0' : '1';
+        if (cue) cue.style.visibility = scrolledRef.current ? 'hidden' : 'visible';
         ACTS.forEach((act, i) => {
           const [a, b] = act.window;
           const verse = root.querySelector<HTMLElement>(`[data-act="${i}"]`);
