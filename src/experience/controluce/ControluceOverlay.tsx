@@ -42,7 +42,11 @@ export default function ControluceOverlay({ tRef }: { tRef: MutableRefObject<num
             );
         });
         const end = root.querySelector<HTMLElement>('[data-act-end]');
-        if (end) end.style.opacity = String(window01(t, 0.93, 1.001, 0.04));
+        if (end) {
+          const v = window01(t, 0.93, 1.08, 0.04);
+          end.style.opacity = String(v);
+          end.style.visibility = v > 0.05 ? 'visible' : 'hidden';
+        }
       }
       raf = requestAnimationFrame(tick);
     };
