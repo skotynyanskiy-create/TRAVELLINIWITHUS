@@ -97,7 +97,17 @@ export default defineConfig(({ mode }) => {
     optimizeDeps: {
       // Pre-bundla lo stack 3D così il primo accesso a /sentiero non rompe il
       // dynamic import e React resta deduplicato dentro le deps ottimizzate.
-      include: ['three', '@react-three/fiber', '@react-three/drei', '@react-three/postprocessing'],
+      // react-map-gl/maplibre è nello stesso caso: scoperto tardi (lazy chunk
+      // 'mapbox'), Vite lo ri-ottimizza a runtime e ricarica la pagina mentre
+      // il componente Map è già montato, causando "Invalid hook call" /
+      // "Cannot read properties of null (reading 'useContext')" su /mappa.
+      include: [
+        'three',
+        '@react-three/fiber',
+        '@react-three/drei',
+        '@react-three/postprocessing',
+        'react-map-gl/maplibre',
+      ],
     },
     build: {
       // The Mapbox route is already lazy-loaded and split into its own vendor chunk.
