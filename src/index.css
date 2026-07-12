@@ -453,6 +453,12 @@
   color: #ffffff;
 }
 
+/* Popup mappa: deve vincere sugli overlay persistenti (chips z-10, card z-10)
+   mentre e' aperto — e' transiente e invocato dall'utente. */
+.twu-map-popup {
+  z-index: 20;
+}
+
 /* Map marker pulse — anello che cresce e dissolve, pattern Mapbox luxury */
 .twu-pulse-ring {
   width: 14px;

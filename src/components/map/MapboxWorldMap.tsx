@@ -719,11 +719,11 @@ export default function MapboxWorldMap() {
               closeOnClick={true}
               className="twu-map-popup"
               offset={[0, -40]}
-              maxWidth="320px"
+              maxWidth="min(320px, calc(100vw - 32px))"
             >
               {(() => {
                 const cardClass =
-                  'group relative block w-[300px] overflow-hidden rounded-2xl border border-white/10 bg-[var(--color-ink-deep)] shadow-2xl transition-all duration-500 hover:shadow-[0_15px_35px_rgba(0,0,0,0.4)] hover:border-white/20';
+                  'group relative block w-[min(300px,calc(100vw-48px))] overflow-hidden rounded-2xl border border-white/10 bg-[var(--color-ink-deep)] shadow-2xl transition-all duration-500 hover:shadow-[0_15px_35px_rgba(0,0,0,0.4)] hover:border-white/20';
                 const inner = (
                   <>
                     <div className="relative aspect-video w-full overflow-hidden bg-neutral-900 rounded-t-2xl">
