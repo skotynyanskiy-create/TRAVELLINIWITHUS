@@ -24,11 +24,10 @@ Durante l'indagine è emerso e **già risolto** un bug bloccante indipendente: `
 
 File: `src/components/map/MapboxWorldMap.tsx`, componente `<Map>` (riga ~670).
 
-- Aggiungere `projection="vertical-perspective"` (nome API confermato nei typing installati di `@vis.gl/react-maplibre` v8.1.0 / `maplibre-gl` v5.24.0 — **non** `"globe"`, quello è solo il termine descrittivo).
+- Aggiungere `projection="globe"` sul componente `<Map>`. Verificato direttamente nei typing installati (`node_modules/@vis.gl/react-maplibre/dist/components/map.d.ts:39`): il prop accetta `ProjectionSpecification | "mercator" | "globe"`. **Correzione rispetto a una ricerca precedente**: `"globe"` e `"vertical-perspective"` sono ENTRAMBI valori validi ma con comportamento diverso (documentato in `node_modules/maplibre-gl/dist/maplibre-gl.d.ts:10136-10151`) — `"globe"` è uno sferoide che si appiattisce automaticamente in proiezione Mercator quando lo zoom si avvicina al livello via (comportamento standard "Google Earth"); `"vertical-perspective"` resta sfera anche a zoom ravvicinato e non è accessibile come stringa breve sul componente `<Map>` (richiederebbe l'oggetto completo `{ type: 'vertical-perspective' }`). Dato che `focusArticle` fa già `flyTo` fino a zoom 5.2 su singole destinazioni, `"globe"` è la scelta corretta: la mappa torna a comportarsi normalmente (piatta, leggibile) una volta zoomati su un posto.
 - Impostare esplicitamente `sky={{ 'atmosphere-blend': 0.8, 'sky-color': '#0a0a0a', 'fog-color': '#1a1a1a', 'horizon-fog-blend': 1.0 }}` per allineare l'atmosfera di default (procedurale, attiva automaticamente in globe mode) al brand dark invece di lasciare il default MapLibre.
 - Lo stile remoto (`https://tiles.openfreemap.org/styles/dark`) non richiede modifiche: la proiezione è impostata client-side.
 - `initialViewState` resta invariato come punto di partenza (longitude 12.5, latitude 42.0, zoom 3.5, pitch 45) — nessuna nuova sequenza d'apertura cinematica in questa iterazione: la priorità è la proiezione + il clustering, non una coreografia d'ingresso.
-- **[DA VERIFICARE IN BUILD]** comportamento a zoom alto (transizione automatica globe→mercator flat oltre una soglia) — verificare empiricamente, non documentato con certezza nei typing.
 
 ### 2. Clustering nativo (fix del groviglio di marker)
 
