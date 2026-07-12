@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import Map, {
   Marker,
   Popup,
@@ -339,15 +339,19 @@ export default function MapboxWorldMap() {
 
   /** Centra la mappa sull'articolo + apre popup. Usato sia dal click marker
    *  che dal click sulla card della mini-lista sottostante. */
-  const focusArticle = (article: ArticleWithCoords) => {
-    setSelectedArticle(article);
-    mapRef.current?.flyTo({
-      center: [article.lng, article.lat],
-      zoom: 5.2,
-      duration: 1200,
-      essential: true,
-    });
-  };
+  const focusArticle = useCallback(
+    (article: ArticleWithCoords) => {
+      setSelectedArticle(article);
+      mapRef.current?.flyTo({
+        center: [article.lng, article.lat],
+        zoom: 5.2,
+        duration: prefersReducedMotion ? 0 : 1200,
+        curve: prefersReducedMotion ? 1 : 1.42,
+        essential: true,
+      });
+    },
+    [prefersReducedMotion]
+  );
 
   useEffect(() => {
     // Permissive input type — accettiamo sia NormalizedArticle (Firebase, con
@@ -448,8 +452,10 @@ export default function MapboxWorldMap() {
             }}
           >
             <div
-              className={`relative cursor-pointer transition-transform ${
-                isActive ? 'scale-125' : 'hover:scale-110'
+              className={`relative cursor-pointer ${
+                prefersReducedMotion
+                  ? ''
+                  : `transition-transform ${isActive ? 'scale-125' : 'hover:scale-110'}`
               }`}
               aria-label={`${visual.label}: ${article.title}`}
             >
@@ -481,7 +487,7 @@ export default function MapboxWorldMap() {
           </Marker>
         );
       }),
-    [filteredArticles, selectedArticle]
+    [filteredArticles, selectedArticle, prefersReducedMotion, focusArticle]
   );
 
   // MapLibre è attiva di default senza controlli sul token.
