@@ -452,7 +452,15 @@ export default function MapboxWorldMap() {
             }}
           >
             <div
-              className={`relative cursor-pointer ${
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  focusArticle(article);
+                }
+              }}
+              className={`relative flex h-11 w-11 cursor-pointer items-center justify-center ${
                 prefersReducedMotion
                   ? ''
                   : `transition-transform ${isActive ? 'scale-125' : 'hover:scale-110'}`
