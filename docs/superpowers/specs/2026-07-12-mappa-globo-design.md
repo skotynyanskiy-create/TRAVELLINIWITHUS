@@ -84,7 +84,7 @@ I marker con `isPartner: true` mantengono il trattamento verde/stella già esist
 File: `src/components/Navbar.tsx`.
 
 - Aggiungere `{ name: 'Mappa', href: '/mappa' }` come voce standalone nell'array `navItems` (righe 151-175), posizionata dopo "Esplora" e prima di "Racconti".
-- Icona `Globe` da `lucide-react`, coerente con la nuova proiezione.
+- ~~Icona `Globe` da `lucide-react`, coerente con la nuova proiezione.~~ **Deviazione deliberata in build (2026-07-12):** le voci del nav esistente (Esplora, Shop) non portano icone — aggiungere un'icona solo a Mappa avrebbe rotto il pattern. Voce testuale semplice, coerente con i sibling.
 - Estendere `isItemActive()` (righe 177-206) con il case `path === '/mappa'`.
 - Il drawer mobile la eredita automaticamente (righe 541, 622-632) — nessuna voce senza `subLinks` richiede markup dedicato.
 - **[DA VERIFICARE IN BUILD]** eventuale pattern di tracking click sulle voci nav esistente in `TransitionLink.tsx`, da replicare per coerenza analytics — non confermato nell'audit.
