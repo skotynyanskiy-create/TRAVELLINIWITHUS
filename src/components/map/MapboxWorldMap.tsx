@@ -2,10 +2,14 @@ import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import Map, {
   Marker,
   Popup,
+  Source,
+  Layer,
   NavigationControl,
   FullscreenControl,
   type MapRef,
+  type MapLayerMouseEvent,
 } from 'react-map-gl/maplibre';
+import type { GeoJSONSource } from 'maplibre-gl';
 import { Link } from '@/src/components/TransitionLink';
 import { motion } from 'motion/react';
 import {
@@ -258,6 +262,9 @@ export default function MapboxWorldMap() {
   const [usingDemo, setUsingDemo] = useState(false);
   const [activeContinent, setActiveContinent] = useState<ContinentFilter>('all');
   const [activeExperience, setActiveExperience] = useState<ExperienceFilter>('all');
+  const [viewZoom, setViewZoom] = useState(3.5);
+
+  const CLUSTER_MAX_ZOOM = 6;
 
   useEffect(() => {
     const existingLink = document.querySelector<HTMLLinkElement>('link[data-twu-maplibre-css]');
@@ -279,6 +286,21 @@ export default function MapboxWorldMap() {
         return matchContinent && matchExperience;
       }),
     [articles, activeContinent, activeExperience]
+  );
+
+  const clusterGeoJSON = useMemo(
+    () => ({
+      type: 'FeatureCollection' as const,
+      features: filteredArticles.map((article, index) => ({
+        type: 'Feature' as const,
+        properties: { id: String(article.id || index) },
+        geometry: {
+          type: 'Point' as const,
+          coordinates: [article.lng, article.lat],
+        },
+      })),
+    }),
+    [filteredArticles]
   );
 
   const handleContinentChange = (value: ContinentFilter) => {
@@ -351,6 +373,38 @@ export default function MapboxWorldMap() {
       });
     },
     [prefersReducedMotion]
+  );
+
+  const handleClusterClick = useCallback(
+    async (e: MapLayerMouseEvent) => {
+      const feature = e.features?.[0];
+      if (!feature || feature.properties?.cluster !== true) return;
+
+      const clusterId = feature.properties.cluster_id as number;
+      const source = mapRef.current?.getSource('destinations') as GeoJSONSource | undefined;
+      if (!source) return;
+
+      const zoom = await source.getClusterExpansionZoom(clusterId);
+      const [lng, lat] = (feature.geometry as GeoJSON.Point).coordinates;
+      mapRef.current?.easeTo({
+        center: [lng, lat],
+        zoom,
+        duration: prefersReducedMotion ? 0 : 800,
+        essential: true,
+      });
+    },
+    [prefersReducedMotion]
+  );
+
+  const handleUnclusteredPointClick = useCallback(
+    (e: MapLayerMouseEvent) => {
+      const feature = e.features?.[0];
+      const id = feature?.properties?.id as string | undefined;
+      if (!id) return;
+      const article = filteredArticles.find((a, index) => String(a.id || index) === id);
+      if (article) focusArticle(article);
+    },
+    [filteredArticles, focusArticle]
   );
 
   useEffect(() => {
@@ -525,7 +579,11 @@ export default function MapboxWorldMap() {
             Filtra per zona o intenzione, poi apri la scheda giusta senza passare da un elenco
             infinito.
           </p>
-          <p className="mt-4 text-xs font-light text-[var(--color-ink)]/50">
+          <p
+            className="mt-4 text-xs font-light text-[var(--color-ink)]/50"
+            role="status"
+            aria-live="polite"
+          >
             {filteredArticles.length}{' '}
             {filteredArticles.length === 1 ? 'destinazione' : 'destinazioni'}
             {usingDemo ? ' (anteprime editoriali)' : ' esplorate'}
@@ -697,11 +755,68 @@ export default function MapboxWorldMap() {
             'fog-color': '#1a1a1a',
             'horizon-fog-blend': 1.0,
           }}
+          onZoom={(e) => setViewZoom(e.viewState.zoom)}
+          interactiveLayerIds={viewZoom < CLUSTER_MAX_ZOOM ? ['clusters', 'unclustered-point'] : []}
+          onClick={(e) => {
+            const feature = e.features?.[0];
+            if (!feature) return;
+            if (feature.layer?.id === 'clusters') {
+              void handleClusterClick(e);
+            } else if (feature.layer?.id === 'unclustered-point') {
+              handleUnclusteredPointClick(e);
+            }
+          }}
         >
           <NavigationControl position="bottom-right" />
           <FullscreenControl position="bottom-right" />
 
-          {pins}
+          <Source
+            id="destinations"
+            type="geojson"
+            data={clusterGeoJSON}
+            cluster
+            clusterMaxZoom={CLUSTER_MAX_ZOOM}
+            clusterRadius={50}
+          >
+            <Layer
+              id="clusters"
+              type="circle"
+              filter={['has', 'point_count']}
+              layout={{ visibility: viewZoom < CLUSTER_MAX_ZOOM ? 'visible' : 'none' }}
+              paint={{
+                'circle-color': '#c2410c',
+                'circle-radius': ['step', ['get', 'point_count'], 16, 10, 20, 50, 26],
+                'circle-stroke-width': 2,
+                'circle-stroke-color': '#ffffff',
+              }}
+            />
+            <Layer
+              id="cluster-count"
+              type="symbol"
+              filter={['has', 'point_count']}
+              layout={{
+                visibility: viewZoom < CLUSTER_MAX_ZOOM ? 'visible' : 'none',
+                'text-field': '{point_count_abbreviated}',
+                'text-size': 12,
+                'text-font': ['Noto Sans Bold'],
+              }}
+              paint={{ 'text-color': '#ffffff' }}
+            />
+            <Layer
+              id="unclustered-point"
+              type="circle"
+              filter={['!', ['has', 'point_count']]}
+              layout={{ visibility: viewZoom < CLUSTER_MAX_ZOOM ? 'visible' : 'none' }}
+              paint={{
+                'circle-color': '#c2410c',
+                'circle-radius': 7,
+                'circle-stroke-width': 2,
+                'circle-stroke-color': '#ffffff',
+              }}
+            />
+          </Source>
+
+          {viewZoom >= CLUSTER_MAX_ZOOM && pins}
 
           {selectedArticle && (
             <Popup
