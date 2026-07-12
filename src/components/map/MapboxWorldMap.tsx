@@ -676,6 +676,13 @@ export default function MapboxWorldMap() {
             pitch: 45,
           }}
           mapStyle="https://tiles.openfreemap.org/styles/dark"
+          projection="globe"
+          sky={{
+            'atmosphere-blend': 0.8,
+            'sky-color': '#0a0a0a',
+            'fog-color': '#1a1a1a',
+            'horizon-fog-blend': 1.0,
+          }}
         >
           <NavigationControl position="bottom-right" />
           <FullscreenControl position="bottom-right" />
