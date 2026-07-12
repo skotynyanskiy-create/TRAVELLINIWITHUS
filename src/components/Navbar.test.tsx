@@ -46,6 +46,7 @@ describe('Navbar Component', () => {
     // Chi siamo, Shop. Strumenti e Club sono ora nel footer, non in nav primaria.
     expect(getAllByText(/Destinazioni/i).length).toBeGreaterThan(0);
     expect(getAllByText(/Esplora/i).length).toBeGreaterThan(0);
+    expect(getAllByText(/Mappa/i).length).toBeGreaterThan(0);
     expect(getAllByText(/Racconti/i).length).toBeGreaterThan(0);
     expect(getAllByText(/Chi siamo/i).length).toBeGreaterThan(0);
     expect(getAllByText(/Shop/i).length).toBeGreaterThan(0);

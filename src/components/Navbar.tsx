@@ -157,6 +157,7 @@ export default function Navbar() {
         feature: LITE_MODE ? undefined : destinazioniFeature,
       },
       { name: 'Esplora', href: '/esplora' },
+      { name: 'Mappa', href: '/mappa' },
       { name: 'Racconti', href: '/esplora?format=storia', subLinks: raccontiLinks },
       {
         name: navigation.aboutLabel,
