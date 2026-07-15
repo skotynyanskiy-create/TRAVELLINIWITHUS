@@ -100,6 +100,7 @@ Indice generato automaticamente delle note operative versionate. Rigenerare con
 - [[13_Content/CONTENT_PILLARS_TRAVELLINIWITHUS]]
 - [[13_Content/CONTENT_PROOF_LIBRARY_TRAVELLINIWITHUS]]
 - [[13_Content/DRAFT_PILLAR_SALENTO_AGOSTO]]
+- [[13_Content/IG_CONTENT_ANALYSIS_2026-07-15]]
 - [[13_Content/INSTAGRAM_IMPORT_RUNBOOK]]
 - [[13_Content/LEAD_MAGNET_POSTI_ITALIANI]]
 - [[13_Content/PHOTO_PLAN_R_B_2026_05_15]]
