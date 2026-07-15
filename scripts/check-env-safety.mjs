@@ -128,6 +128,7 @@ function checkShape(key, value) {
     GEMINI_API_KEY: /^(AIza|AQ)[0-9A-Za-z_.-]{30,}$/,
     VITE_MAPBOX_TOKEN: /^(pk|sk)\.[A-Za-z0-9._-]+$/,
     GITHUB_PERSONAL_ACCESS_TOKEN: /^(ghp_|github_pat_|gho_|ghu_|ghs_|ghr_)[A-Za-z0-9_]+$/,
+    IG_GRAPH_TOKEN: /^IG[A-Za-z0-9_.-]{20,}$/,
   };
 
   if (!checks[key]) return null;
