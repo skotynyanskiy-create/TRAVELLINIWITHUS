@@ -41,12 +41,52 @@ prenotazioni online, parcheggio, foto. Cluster affine: "ristorante a tema
 harry potter/one piece + città", "posti particolari dove mangiare [città]",
 "vicino a me".
 
-## Brief (compilato da travellini-growth-revenue-operator nella prossima fase)
+## Brief (compilato da travellini-growth-revenue-operator)
 
-- Why now:
-- Audience:
-- Business goal:
-- Primary metric:
+- **Why now:** il reel The Burton Juice è il pinned più forte di
+  @travelliniwithus (63K like / 918 commenti, mag 2024) e le 918 domande sono
+  quasi tutte "dove si trova / come prenoto" = domanda di ricerca reale che oggi
+  si disperde su Instagram. Nessuna pagina italiana autorevole presidia
+  "ristorante tema Tim Burton in Italia", quindi la finestra per diventare la
+  fonte è aperta ora. È anche lo slice a rischio minimo per validare il format
+  "pinned → pillar" prima di replicarlo su Bled e Kuala Lumpur.
+- **Audience:** UNA persona — appassionato/a di esperienze immersive
+  pop-culture/cinema, 25-40 anni, in coppia o piccolo gruppo di amici, fandom
+  Tim Burton / Beetlejuice / Nightmare Before Christmas, disposto/a a spostarsi
+  in Campania per una serata unica e a prenotare con anticipo. (Confermo la
+  proposta del handoff.) Sub-audience secondaria: famiglie con figli grandicelli
+  attratte da bakery + area Alice — presidiata da una sezione dedicata, non dal
+  frame principale.
+- **Business goal:** cattura organica long-tail + costruzione dell'autorevolezza
+  editoriale del verticale "esperienze particolari in Italia". Nessuna
+  monetizzazione diretta (contenuto organico). Valore strategico: pagina-modello
+  che dimostra la resa SEO del formato recensione-vissuta e apre la strada agli
+  altri 2 pinned.
+- **Primary metric:** sessioni organiche/mese alla pagina, misurate a 90 giorni
+  dall'indicizzazione (go/no-go per estendere il format agli altri pinned).
+  Guardrail secondario: engagement sulla scheda recensione (scroll-depth ≥ 50% +
+  dwell time sopra la mediana delle pagine articolo). Target numerico da fissare
+  sulla baseline GA4 reale [VERIFY: baseline sessioni organiche pagine articolo]
+  — non stimato qui. Kill: se a 90 gg la pagina non entra in top-20 per
+  "ristorante tema tim burton italia" e le sessioni organiche restano piatte, il
+  format pinned→pillar non si estende (si rivede angolo o offerta).
+
+### Risposte alle 3 open questions del handoff
+
+1. **Relazione col locale → organico puro (locked, salvo smentita owner):** il
+   reel non ha disclosure e non risulta relazione commerciale, quindi nessun
+   #ADV e nessuna disclosure in pagina; un'eventuale collaborazione futura con
+   The Burton Juice resta decisione owner separata che non condiziona il pillar.
+2. **Registro → serata adulti/coppie/gruppi di amici (primario), nota famiglia
+   secondaria:** il cuore del locale è cocktail bar + teatro + attori + temi
+   dark (Beetlejuice, Jack Skeleton, Edward) = esperienza serale che matcha il
+   fandom 25-40; la dimensione family (bakery + area Alice) è sotto-intento e
+   vive in una sezione dedicata, non nel frame.
+3. **Metrica primaria → SEO organico puro, nessuna conversione forzata:**
+   coerente con obiettivo organico e senza monetizzazione, la CTA in pagina
+   resta editoriale/soft (salva-condividi + segui @travelliniwithus +
+   predisposizione newsletter), non un click da ottimizzare; a decidere è la
+   sessione organica, non il click.
 
 ## SEO (compilato da travellini-seo-conversion-strategist)
 

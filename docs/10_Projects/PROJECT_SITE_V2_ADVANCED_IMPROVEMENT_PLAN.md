@@ -416,6 +416,14 @@ Eventi minimi:
 - `affiliate_click`
 - `checkout_start`
 - `purchase_success`
+- `place_directions_click` (nuovo, 2026-07-15 — vedi `/posto/:slug` sotto)
+- `place_google_listing_click`
+- `place_booking_click`
+- `place_phone_click`
+- `place_share_click`
+- `place_reel_click`
+- `nearby_search_use`
+- `telegram_community_click`
 
 File principali:
 
@@ -653,6 +661,35 @@ Done:
 - related content piu intelligente
 - salvataggio e newsletter contestuale
 - structured data robusto
+
+### `/posto/:slug`
+
+Decisione 2026-07-15 (vedi `docs/50_Scratch/TOOLS_INTEGRATIONS_STRATEGY_2026-07-15.md`):
+la domanda dominante degli utenti reali (918 commenti sul reel pinned Burton
+Juice + Google Suggest) e "dove si trova / come ci arrivo / come prenoto" —
+la pagina-posto deve rispondervi sopra la piega, prima di ogni altra feature.
+
+Contratto informativo minimo (P0, tutto derivato, zero dato owner richiesto):
+
+- riga indirizzo leggibile + bottone **Indicazioni** (Google Maps deep-link
+  da coordinate o nome+citta) — oggi il bottone porta alla `/mappa` generica,
+  non al pin del posto
+- **"Vedi su Google"** (Business Profile deep-link) per prenota/contatti/orari
+  finche l'owner non fornisce dati nativi
+- **Condividi** (Web Share API, fallback copia-link) accanto a **Salva nei
+  preferiti** (gia esiste via FavoritesContext, va esposto con CTA esplicita
+  sulla pagina-posto)
+
+Campi opzionali da aggiungere a `ContentPlace` (pattern render-solo-se-presente,
+come `review`/`deal`): `address`, `hours`, `phone`, `website`, `bookingUrl`,
+`googlePlaceQuery`.
+
+Non fare: motore prenotazione interno, database orari/telefoni proprietario,
+WhatsApp booking instradato su Rodrigo & Betta, affiliate fuori contesto
+(assicurazione su un ristorante locale).
+
+Metrica primaria: `place_directions_click` >= 15% dei visitatori pagina-posto
+(kill <5% dopo traffico reale sufficiente).
 
 ### `/mappa`
 

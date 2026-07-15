@@ -118,6 +118,18 @@ Blocchi owner:
 - fornire top 20 reel/post e metriche;
 - autorizzare case study Emilia-Fantastica / Castelli del Ducato.
 
+## Canali di relazione — regola di priorità (2026-07-15)
+
+Il brand ha già una community Telegram attiva (link in bio IG/TikTok, non
+ancora esposta sul sito). Decisione da [[50_Scratch/TOOLS_INTEGRATIONS_STRATEGY_2026-07-15]]:
+Telegram va esposto come CTA **secondaria** (footer, `/vieni-con-noi`,
+pagina preferiti) e mai messo in competizione testa-a-testa con la
+newsletter su una pagina-posto — la newsletter (canale owned, dati nostri)
+resta la conversione primaria di relazione; Telegram è un canale in
+affitto utile per pianificazione sociale ("dobbiamo andare"), non per lead
+capture. Owner action: fornire l'URL community per `src/config/site.ts`
+(~10 min).
+
 ## Quality bar partner outreach
 
 Una sola regola hard prima del primo outreach reale:
