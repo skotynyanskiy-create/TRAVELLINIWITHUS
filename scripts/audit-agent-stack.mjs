@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { CANONICAL_SKILLS } from './lib/canonical-skills.mjs';
 
 const rootDir = process.cwd();
 const canonicalDir = path.join(rootDir, '.agents', 'skills');
@@ -137,7 +138,9 @@ for (const requiredFile of requiredFiles) {
   }
 }
 
-const canonicalSkills = getSkillDirs(canonicalDir);
+const canonicalSkills = getSkillDirs(canonicalDir).filter((dir) =>
+  CANONICAL_SKILLS.has(path.basename(dir))
+);
 if (canonicalSkills.length === 0) {
   addIssue('error', canonicalDir, 'No canonical skills found.');
 }

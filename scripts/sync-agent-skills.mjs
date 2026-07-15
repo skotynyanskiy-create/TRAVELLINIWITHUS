@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { CANONICAL_SKILLS } from './lib/canonical-skills.mjs';
 
 const rootDir = process.cwd();
 const sourceDir = path.join(rootDir, '.agents', 'skills');
@@ -9,38 +10,6 @@ const targetDirs = [
   path.join(rootDir, '.cursor', 'skills'),
   path.join(rootDir, '.gemini', 'skills'),
 ];
-
-// Explicit whitelist: external skill installers (skills.sh, impeccable install)
-// drop global skills into .agents/skills, and a blind mirror would spray them
-// into every harness dir + git. Only the canonical Travellini set syncs.
-const CANONICAL_SKILLS = new Set([
-  'a11y-check',
-  'animate',
-  'audit-browser',
-  'audit-ui',
-  'backup-rollback',
-  'cli-evaluator',
-  'copywriting-italian',
-  'cwv',
-  'deploy',
-  'design-research',
-  'firebase-check',
-  'github-agent-workflow',
-  'hooks-audit',
-  'innovation-radar',
-  'mcp-evaluator',
-  'new-article',
-  'new-page',
-  'plugin-evaluator',
-  'predeploy',
-  'responsive-check',
-  'secret-protection',
-  'seo-check',
-  'smoke-test',
-  'social-card',
-  'stripe-flow',
-  'travellini-stitch-figma-bridge',
-]);
 
 function getSkillDirs(baseDir) {
   if (!fs.existsSync(baseDir)) {

@@ -1,0 +1,68 @@
+[mcp_servers.chrome-devtools]
+command = "npx"
+args = [
+    "-y",
+    "chrome-devtools-mcp@latest",
+]
+
+[mcp_servers.codex]
+command = "codex"
+args = ["mcp-server"]
+
+[mcp_servers.context7]
+command = "npx"
+args = [
+    "-y",
+    "@upstash/context7-mcp@latest",
+]
+
+[mcp_servers.firebase]
+command = "npx"
+args = [
+    "-y",
+    "firebase-tools@latest",
+    "experimental:mcp",
+]
+
+[mcp_servers.github]
+command = "npx"
+args = [
+    "-y",
+    "--package=@modelcontextprotocol/server-github@latest",
+    "mcp-server-github",
+]
+env_vars = ["GITHUB_PERSONAL_ACCESS_TOKEN"]
+
+[mcp_servers.obsidian]
+command = 'C:\Users\ccocu\AppData\Roaming\Python\Python314\Scripts\uvx.exe'
+args = ["mcp-obsidian"]
+env_vars = ["OBSIDIAN_API_KEY"]
+
+[mcp_servers.obsidian.env]
+OBSIDIAN_HOST = "127.0.0.1"
+OBSIDIAN_PORT = "27124"
+
+[mcp_servers.playwright]
+command = "npx"
+args = [
+    "@playwright/mcp@latest",
+    "--headless",
+]
+
+[mcp_servers.sentry]
+command = "npx"
+args = [
+    "-y",
+    "@sentry/mcp-server@latest",
+]
+env_vars = ["SENTRY_ACCESS_TOKEN"]
+
+[mcp_servers.stripe]
+command = "npx"
+args = [
+    "-y",
+    "@stripe/mcp@latest",
+    "--tools=all",
+    "--read-only",
+]
+env_vars = ["STRIPE_SECRET_KEY"]
