@@ -125,7 +125,7 @@ function checkShape(key, value) {
     STRIPE_SECRET_KEY: /^(sk|rk)_(test|live)_[A-Za-z0-9]+$/,
     STRIPE_WEBHOOK_SECRET: /^whsec_[A-Za-z0-9]+$/,
     STRIPE_CLUB_PRICE_ID: /^price_[A-Za-z0-9]+$/,
-    GEMINI_API_KEY: /^AIza[0-9A-Za-z_-]{30,}$/,
+    GEMINI_API_KEY: /^(AIza|AQ)[0-9A-Za-z_.-]{30,}$/,
     VITE_MAPBOX_TOKEN: /^(pk|sk)\.[A-Za-z0-9._-]+$/,
     GITHUB_PERSONAL_ACCESS_TOKEN: /^(ghp_|github_pat_|gho_|ghu_|ghs_|ghr_)[A-Za-z0-9_]+$/,
   };

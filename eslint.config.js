@@ -11,6 +11,8 @@ export default tseslint.config(
     // stray project drops, and dead V2 scaffolding awaiting owner triage.
     ignores: [
       '.claude',
+      '.obsidian',
+      'docs/.obsidian',
       'dist',
       'playwright-report',
       'test-results',
