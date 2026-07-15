@@ -10,7 +10,7 @@ import ReelStrip from '@/src/components/home/atlante/ReelStrip';
 import MetodoBand from '@/src/components/home/atlante/MetodoBand';
 import ZoneBand from '@/src/components/home/atlante/ZoneBand';
 import { slugifyType, type ContentType } from '@/src/config/contentTaxonomy';
-import { SITE_URL } from '@/src/config/site';
+import { CONTACTS, SITE_URL } from '@/src/config/site';
 
 interface CategoryCard {
   label: string;
@@ -59,6 +59,32 @@ export default function AtlanteHome() {
         title="Viaggi reali e posti particolari in Italia e nel mondo"
         description="La casa di Rodrigo e Betta: posti particolari provati sul campo, con atmosfera, costi reali e il consiglio onesto se un posto merita il viaggio."
         canonical={`${SITE_URL}/`}
+        jsonLd={[
+          {
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: 'Travelliniwithus',
+            url: SITE_URL,
+            inLanguage: 'it-IT',
+            potentialAction: {
+              '@type': 'SearchAction',
+              target: {
+                '@type': 'EntryPoint',
+                urlTemplate: `${SITE_URL}/esplora?q={search_term_string}`,
+              },
+              'query-input': 'required name=search_term_string',
+            },
+          },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            name: 'Travelliniwithus',
+            url: SITE_URL,
+            logo: `${SITE_URL}/og/default.jpg`,
+            email: CONTACTS.email,
+            sameAs: [CONTACTS.instagramUrl, CONTACTS.tiktokUrl, CONTACTS.facebookUrl],
+          },
+        ]}
       />
 
       <HeroCopertina />

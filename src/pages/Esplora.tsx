@@ -408,6 +408,23 @@ export default function Esplora() {
               { '@type': 'ListItem', position: 2, name: 'Esplora', item: `${SITE_URL}/esplora` },
             ],
           },
+          // ItemList dei contenuti reali: aiuta crawler classici e AI search
+          // (GEO) a capire cosa contiene l'archivio. Escluso in anteprima demo
+          // (pagina già noindex) per non esporre contenuti fittizi.
+          ...(usingPreview || archiveItems.length === 0
+            ? {}
+            : {
+                mainEntity: {
+                  '@type': 'ItemList',
+                  numberOfItems: archiveItems.length,
+                  itemListElement: archiveItems.slice(0, 20).map((item, position) => ({
+                    '@type': 'ListItem',
+                    position: position + 1,
+                    name: item.title,
+                    url: `${SITE_URL}${item.link}`,
+                  })),
+                },
+              }),
         }}
       />
 
