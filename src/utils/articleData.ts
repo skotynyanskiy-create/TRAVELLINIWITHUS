@@ -1,11 +1,14 @@
 import type { Timestamp } from 'firebase/firestore';
+import type { ContentReview } from '@/src/types/content';
 
 const DEFAULT_ARTICLE_IMAGE = '/images/hero-amalfi.png';
 
 const asString = (value: unknown) => (typeof value === 'string' ? value.trim() : '');
 
 const asStringArray = (value: unknown) =>
-  Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string' && item.trim().length > 0) : undefined;
+  Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === 'string' && item.trim().length > 0)
+    : undefined;
 
 const asTimestamp = (value: unknown) =>
   value && typeof value === 'object' && 'toDate' in value ? (value as Timestamp) : undefined;
@@ -20,7 +23,11 @@ type ArticleMapMarker = {
 };
 
 const asNumberTuple = (value: unknown): NumberTuple | undefined => {
-  if (!Array.isArray(value) || value.length !== 2 || !value.every((item) => typeof item === 'number')) {
+  if (
+    !Array.isArray(value) ||
+    value.length !== 2 ||
+    !value.every((item) => typeof item === 'number')
+  ) {
     return undefined;
   }
 
@@ -76,7 +83,9 @@ const asObjectArray = <T>(value: unknown, mapper: (item: Record<string, unknown>
   }
 
   const items = value
-    .map((item) => (item && typeof item === 'object' ? mapper(item as Record<string, unknown>) : null))
+    .map((item) =>
+      item && typeof item === 'object' ? mapper(item as Record<string, unknown>) : null
+    )
     .filter((item): item is T => item !== null);
 
   return items.length > 0 ? items : undefined;
@@ -88,6 +97,7 @@ export interface NormalizedArticle {
   slug: string;
   excerpt: string;
   description: string;
+  review?: ContentReview;
   content: string;
   image: string;
   coverImage: string;
@@ -125,11 +135,17 @@ export interface NormalizedArticle {
   videoUrl?: string;
 }
 
-export function normalizeFirestoreArticle(id: string, data: Record<string, unknown>): NormalizedArticle {
+export function normalizeFirestoreArticle(
+  id: string,
+  data: Record<string, unknown>
+): NormalizedArticle {
   const title = asString(data.title) || 'Articolo Travelliniwithus';
   const slug = asString(data.slug) || id;
   const excerpt = asString(data.excerpt);
-  const description = asString(data.description) || excerpt || 'Guida e ispirazione di viaggio firmata Travelliniwithus.';
+  const description =
+    asString(data.description) ||
+    excerpt ||
+    'Guida e ispirazione di viaggio firmata Travelliniwithus.';
   const coverImage = asString(data.coverImage) || asString(data.image) || DEFAULT_ARTICLE_IMAGE;
   const image = asString(data.image) || coverImage;
   const category = asString(data.category) || 'Guide';
@@ -163,6 +179,7 @@ export function normalizeFirestoreArticle(id: string, data: Record<string, unkno
     coverImage,
     category,
     published: data.published === true,
+    review: data.review ? (data.review as ContentReview) : undefined,
     author: asString(data.author) || undefined,
     authorId: asString(data.authorId) || undefined,
     date,

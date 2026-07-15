@@ -1,9 +1,11 @@
 import React from 'react';
+import type { ContentReview } from '@/src/types/content';
 
 export interface ArticleData {
   title: string;
   description: string;
   image: string;
+  review?: ContentReview;
   /** Alt descrittivo dell'immagine di copertina. Se assente, fallback su luogo + categoria
       (evita di duplicare l'H1 per gli screen reader). */
   imageAlt?: string;

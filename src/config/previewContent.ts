@@ -623,6 +623,27 @@ const RAW_PREVIEW_ARTICLES: Record<string, PreviewArticle> = {
     date: '17 marzo 2026',
     author: 'Rodrigo & Betta',
     continent: 'Europa',
+    review: {
+      overall: 8.8,
+      verdict: 'Consigliatissimo',
+      summary:
+        "Le Dolomiti offrono un'esperienza in quota unica, tra panorami verticali e rifugi di design contemporaneo che ridefiniscono l'ospitalità alpina.",
+      criteria: [
+        { name: 'Atmosfera', score: 9.5 },
+        { name: 'Accoglienza', score: 8.5 },
+        { name: 'Cibo in rifugio', score: 8.2 },
+        { name: 'Sentieri', score: 9.0 },
+      ],
+      pros: [
+        'Viste spettacolari a 360 gradi sulla roccia rosa',
+        'Architettura contemporanea ed eco-sostenibile dei nuovi rifugi',
+        'Rete sentieristica estremamente curata e sicura',
+      ],
+      cons: [
+        'Affollamento intenso nei weekend di luglio e agosto',
+        'Prezzi medio-alti per rifugi premium e cabinovie',
+      ],
+    },
     content: `
 Questa preview mostra la direzione editoriale del sito: non un diario generico, ma una guida costruita per capire se un posto merita davvero il viaggio.
 

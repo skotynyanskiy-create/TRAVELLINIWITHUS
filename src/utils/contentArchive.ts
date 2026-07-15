@@ -1,5 +1,6 @@
 import type { NormalizedArticle } from './articleData';
 import { DESTINATION_GROUPS } from '../config/contentTaxonomy';
+import type { ContentReview } from '@/src/types/content';
 
 export interface ArchiveItem {
   id: string;
@@ -19,6 +20,7 @@ export interface ArchiveItem {
   period?: string;
   budget?: string;
   duration?: string;
+  review?: ContentReview;
 }
 
 export function getDestinationGroup(article: Pick<NormalizedArticle, 'country' | 'continent'>) {
@@ -26,7 +28,10 @@ export function getDestinationGroup(article: Pick<NormalizedArticle, 'country' |
     return 'Italia';
   }
 
-  if (article.continent && DESTINATION_GROUPS.includes(article.continent as (typeof DESTINATION_GROUPS)[number])) {
+  if (
+    article.continent &&
+    DESTINATION_GROUPS.includes(article.continent as (typeof DESTINATION_GROUPS)[number])
+  ) {
     return article.continent;
   }
 
@@ -54,6 +59,7 @@ export function mapArticleToArchiveItem(article: NormalizedArticle): ArchiveItem
     period: article.period,
     budget: article.budget,
     duration: article.duration,
+    review: article.review,
   };
 }
 

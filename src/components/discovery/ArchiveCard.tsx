@@ -8,6 +8,7 @@ import type { ArchiveItem } from '../../utils/contentArchive';
 import { getArchiveLocationLabel } from '../../utils/contentArchive';
 import { useFavorites } from '../../context/FavoritesContext';
 import { trackEvent } from '../../services/analytics';
+import RatingPill from '../RatingPill';
 
 function extractSlug(link: string): string {
   return link.split('/').filter(Boolean).pop() || link;
@@ -123,11 +124,16 @@ export default function ArchiveCard({
                 <h3 className="max-w-[20rem] text-2xl font-serif leading-tight text-white md:text-3xl">
                   {item.title}
                 </h3>
-                {showLocation && location && (
-                  <p className="mt-2 flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-white/80">
-                    <MapPin size={11} />
-                    {location}
-                  </p>
+                {(location || item.review?.overall != null) && (
+                  <div className="mt-2 flex items-center justify-between gap-3">
+                    {showLocation && location && (
+                      <p className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.18em] text-white/80">
+                        <MapPin size={11} />
+                        {location}
+                      </p>
+                    )}
+                    <RatingPill overall={item.review?.overall} />
+                  </div>
                 )}
               </div>
             </div>
@@ -169,11 +175,16 @@ export default function ArchiveCard({
       </Link>
 
       <div className="flex flex-1 flex-col gap-4 p-6 md:p-7">
-        {showLocation && location && (
-          <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
-            <MapPin size={11} />
-            {location}
-          </p>
+        {(location || item.review?.overall != null) && (
+          <div className="flex items-center justify-between gap-2">
+            {showLocation && location && (
+              <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
+                <MapPin size={11} />
+                {location}
+              </p>
+            )}
+            <RatingPill overall={item.review?.overall} />
+          </div>
         )}
         <Link to={item.link} state={linkState} className="block">
           <h3 className="line-clamp-2 text-xl font-serif leading-tight text-[var(--color-ink)] transition-colors group-hover:text-[var(--color-accent)] md:text-2xl">

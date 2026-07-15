@@ -23,6 +23,7 @@ import SEO from '../components/SEO';
 import ArticlePageSkeleton from '../components/ArticlePageSkeleton';
 import DemoContentNotice from '../components/DemoContentNotice';
 import NotFound from './NotFound';
+import ReviewBlock from '../components/ReviewBlock';
 import { SITE_URL } from '../config/site';
 import { PREVIEW_ARTICLES } from '../config/previewContent';
 import { buildArticleJsonLd } from '../lib/seo';
@@ -145,6 +146,7 @@ function ensureArticleData(
     mapZoom: article.mapZoom,
     videoUrl: article.videoUrl,
     updatedAt: article.updatedAt,
+    review: article.review,
   };
 }
 
@@ -949,6 +951,10 @@ export default function Articolo() {
                 <section className="prose-reset article-body mt-14">
                   <ArticleBody article={article} />
                 </section>
+
+                {article.review && (
+                  <ReviewBlock review={article.review} placeName={article.title} />
+                )}
 
                 {article.itinerary && article.itinerary.length > 0 && (
                   <section id="itinerario" className="mt-20 scroll-mt-32">
