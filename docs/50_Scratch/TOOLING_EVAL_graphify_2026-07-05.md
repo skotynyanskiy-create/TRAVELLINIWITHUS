@@ -1,5 +1,5 @@
 ---
-type: template
+type: reference
 area: workspace
 status: active
 tags:
@@ -14,9 +14,11 @@ tags:
 
 - **Name**: Graphify (PyPI package `graphifyy`, CLI `graphify`)
 - **Type**: CLI + Claude Code skill/hooks + optional MCP server
-- **Source**: https://github.com/safishamsi/graphify (MIT, ~78k stars, created 2026-04, latest release v0.9.6 on 2026-07-04, pushed daily — very active, hype-velocity project). Article: dev.to/mir_mursalin_ankur (reviewer, not author; also covers sibling tool `code-review-graph`).
-- **Status**: scout
-- **Owner**: Claude (scouting) → Rodrigo for any lab decision
+- **Source**: https://github.com/Graphify-Labs/graphify and
+  https://graphifylabs.ai (MIT; the former `safishamsi/graphify` URL redirects
+  to the Graphify Labs organization). Official PyPI package: `graphifyy`.
+- **Status**: adopted-limited
+- **Owner**: Rodrigo
 - **Date**: 2026-07-05
 
 ## Use Case
@@ -43,24 +45,51 @@ tags:
   - Entity memory: MCP `server-memory` already allowlisted at user level.
   - Net incremental value = call-graph queries / blast-radius analysis, which a ~1-domain Vite SPA with "smallest change" discipline rarely needs.
 
-## Lab Plan
+## Lab Result
 
-(only if reopened — not proposed now)
+- **Scope tested**: repository-local Python 3.12 virtual environment; code-only
+  allowlist in `.graphifyignore`; no platform installer, hook, MCP, semantic
+  extraction, labeling, media handling or Obsidian export.
+- **Installed version**: `graphifyy==0.9.6`.
+- **Index result**: 304 files, 1,981 nodes, 3,766 edges, 138 communities.
+- **Scope validation**: zero graph source references to `docs/`, `.obsidian/`,
+  `public/`, `.env*` or agent configuration directories.
+- **Useful cases**: component import path and reverse impact were correct
+  (`AtlanteHome() → AtlanteHome.tsx → HeroCopertina.tsx`; `HeroCopertina.tsx`
+  affects `AtlanteHome.tsx`).
+- **Weak cases**: natural-language route queries were broad; checkout-to-server
+  flow missed the string-based `fetch('/api/create-checkout-session')`
+  relationship. Route literals and dynamic/runtime wiring still require `rg`
+  and source verification.
+- **Benchmark**: 10.8x estimated token reduction versus naive full-corpus reads.
 
-- **Sandbox scope**: throwaway clone of the repo OUTSIDE the vault; code-only mode; NO `graphify install` (no hooks), CLI one-shot only; `--obsidian-dir` pointed at a scratch folder, never at repo root (repo root IS the live vault — wiki export would pollute it).
-- **Commands or actions**: `uvx graphifyy` one-shot index; `graphify query` on 3 real questions (e.g. "what renders /atlante", "what touches server.ts CORS"); compare answer quality + time vs `code-explorer`.
-- **Test data**: this repo's `src/` only.
-- **Success criteria**: answers materially better/faster than code-explorer + memory files on ≥2 of 3 questions.
-- **Failure criteria**: parity or worse; any file written outside sandbox; any network call in code-only mode.
+## Adoption
 
-## Adoption Plan
-
-Not applicable at this stage (verdict below). If ever adopted: `.claude/settings.json` hooks would need owner confirmation per security policy; `graphify-out/` gitignored; documented in `docs/AI_AGENT_STACK.md`; rollback = `graphify uninstall` + hook diff revert + delete output dir.
-
-- **Manual confirmation required**: yes (hooks + new package install are both owner-gated).
+- **Install scope**: local-only under `.tools/graphify`; pinned and recreated by
+  `npm run graphify:setup`.
+- **Generated output**: local-only `graphify-out/`, ignored by Git.
+- **Agent integration**: locally adapted canonical `graphify` skill, synchronized
+  to Claude, Codex-compatible agent sources, Cursor, GitHub and Gemini.
+- **Commands**: `graphify:index`, `graphify:query`, `graphify:affected`,
+  `graphify:explain`, `graphify:path`, `graphify:benchmark`,
+  `graphify:check`, `graphify:watch`.
+- **Excluded deliberately**: Graphify's platform installers, always-on hooks,
+  git hooks, MCP mode, global graph, LLM extraction/labeling, URL/media ingestion
+  and Obsidian export.
+- **Rollback**: after owner confirmation, remove `.tools/graphify` and
+  `graphify-out/`; revert the tracked Graphify integration files with Git. No
+  `graphify uninstall` is needed because no upstream installer was run.
+- **Obsidian coexistence**: `docs/` is the dedicated Obsidian vault; Graphify
+  runs from the repository root and remains code-only. This removes Graphify
+  output, dependencies and code from Obsidian's filesystem watcher. Extended
+  Graph owns the note graph. Watch mode is opt-in, never auto-started.
 
 ## Decision
 
-- **Decision**: defer (watch)
-- **Reason**: strong, healthy project (MIT, massive traction, local-first for code) but near-zero incremental value here: the vault already has a native graph + Extended Graph, the codebase already has curated memory maps and a near-free explorer agent, and the repo is too small for blast-radius tooling to pay for its cost — which is real (hook mutations in `.claude/settings.json`, git hooks, new Python dep, output dir, and the repo-root-is-vault pollution hazard). Violates the lean-tooling stance for no current pain.
-- **Next review date**: at Next.js+Sanity migration kickoff (Definitive Rebuild) — a multi-workspace repo with two stacks is exactly the profile where Graphify starts earning its keep. Track on `docs/AI_TOOLING_RADAR.md`.
+- **Decision**: adopt-limited.
+- **Reason**: the owner explicitly reopened adoption. The local, code-only setup
+  captures useful static dependency and blast-radius relationships without
+  modifying existing hooks or exposing the Obsidian vault. Query quality is not
+  sufficient to replace source search, so Graphify remains an optional
+  architecture aid and never a release gate.
+- **Next review date**: on Graphify upgrade or Next.js+Sanity migration kickoff.

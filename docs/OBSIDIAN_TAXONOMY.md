@@ -89,6 +89,7 @@ Usa queste properties nelle note operative:
 | `partner`       | lead \| active \| paused \| done                                    |
 | `product`       | idea \| in-sviluppo \| live \| archiviato                           |
 | `content-brief` | open \| in-progress \| done                                         |
+| `content-draft` | draft-needs-rb-inputs \| draft \| review \| published \| archived   |
 
 ### Social / References
 
@@ -145,7 +146,7 @@ Usa solo nelle note editoriali:
 - `TASK_<TOPIC>` — task atomici
 - `BUG_<TOPIC>` — bug
 - `UI_<TOPIC>` — modifiche visive
-- `DECISION_<nnnn>_<TOPIC>` — decisioni (es. `DECISION_0001_VAULT_STRATEGY`)
+- `DECISION_<nnnn>_<TOPIC>` — decisioni (es. `DECISION_0001_VAULT_STRATEGY`). `nnnn` è un contatore sequenziale univoco: prima di crearne una nuova, controlla `ls docs/20_Decisions/` per il numero libero più alto — non esiste un check automatico contro le collisioni.
 - `MEETING_<yyyy-mm-dd>_<topic>` — meeting / handoff
 - `RELEASE_<yyyy-mm-dd>_<topic>` — release note
 
@@ -176,6 +177,10 @@ Usa solo nelle note editoriali:
 
 - MAIUSCOLO: hub, workflow, taxonomy, progetti, decisioni
 - lowercase-trattini: contenuti editoriali, luoghi, itinerari, SEO
+
+## Eccezioni cartella
+
+- `docs/superpowers/` (`plans/`, `specs/`) — scritta dalla skill Claude Code `superpowers:writing-plans`/`superpowers:writing-skills`, con proprio schema di frontmatter indipendente da questa tassonomia. Esclusa deliberatamente dal walk YAML di `scripts/audit-obsidian.mjs` (stesso trattamento di `99_Archive`) invece di forzare le proprietà standard su file che un'altra skill possiede e riscrive.
 
 ## Link policy
 

@@ -1,0 +1,21 @@
+# TRAVELLINIWITHUS: index code and architecture only.
+# Keep the Obsidian vault, media, generated assets and local configuration out.
+*
+!src/
+!src/**
+!scripts/
+!scripts/**
+!e2e/
+!e2e/**
+!.storybook/
+!.storybook/**
+!server.ts
+!firestore.rules
+!package.json
+!tsconfig.json
+!tsconfig.*.json
+!vite.config.ts
+!vitest.config.ts
+!playwright.config.ts
+!eslint.config.js
+!lighthouserc.json

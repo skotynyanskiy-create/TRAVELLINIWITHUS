@@ -1,7 +1,7 @@
 ---
 type: decision
 area: workspace
-status: active
+status: superseded
 priority: p2
 owner: team
 tags:
@@ -11,6 +11,10 @@ tags:
 ---
 
 # DECISION_0001_OBSIDIAN_VAULT_STRATEGY
+
+> [!warning] Superseded
+> Sostituita da [[DECISION_0004_OBSIDIAN_GRAPHIFY_SPLIT_VAULT_STRATEGY]] il
+> 2026-07-05 dopo misurazioni reali di carico sul vault root.
 
 ## Context
 

@@ -35,7 +35,7 @@ Agent, Antigravity e strumenti futuri senza perdere controllo operativo.
 
 - Canonical source: `.agents/skills`.
 - Synced targets: `.claude/skills`, `.github/skills`, `.cursor/skills`, `.gemini/skills`.
-- Current canonical count: 26.
+- Current canonical count: 27.
 - Required validation after skill edits: `npm run sync:agents` then `npm run audit:agents`.
 
 ## Continuous Self-Improvement Rule
@@ -58,19 +58,25 @@ system gets sharper over time.
 
 ## Innovation Queue
 
-| Candidate                 | Type         | Current status       | Next step                                                                                                           |
-| ------------------------- | ------------ | -------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| Figma MCP                 | MCP/design   | connected, on-demand | Use via `/travellini-stitch-figma-bridge` on the next design-heavy task (design->React, React->Figma art direction) |
-| GitHub managed MCP        | MCP/repo     | scout                | Compare with existing Codex GitHub plugin                                                                           |
-| `gh skill`                | CLI/GitHub   | scout                | Evaluate skill management value                                                                                     |
-| Gemini CLI                | CLI/agent    | scout                | Lab as comparison agent only                                                                                        |
-| Research/crawl MCP        | MCP/research | scout                | Check privacy, crawl scope and SEO value                                                                            |
-| GitHub `.instructions.md` | workflow     | scout                | Consider modular instructions after Copilot cleanup                                                                 |
+| Candidate                          | Type          | Current status                  | Next step                                                                                                                                        |
+| ---------------------------------- | ------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Figma MCP                          | MCP/design    | connected, on-demand            | Use via `/travellini-stitch-figma-bridge` on the next design-heavy task (design->React, React->Figma art direction)                              |
+| GitHub managed MCP                 | MCP/repo      | scout                           | Compare with existing Codex GitHub plugin                                                                                                        |
+| `gh skill`                         | CLI/GitHub    | scout                           | Evaluate skill management value                                                                                                                  |
+| Gemini CLI                         | CLI/agent     | scout                           | Lab as comparison agent only                                                                                                                     |
+| Research/crawl MCP                 | MCP/research  | scout                           | Check privacy, crawl scope and SEO value                                                                                                         |
+| GitHub `.instructions.md`          | workflow      | scout                           | Consider modular instructions after Copilot cleanup                                                                                              |
+| Headroom (context compression)     | MCP/proxy/lib | scout, verified real 2026-07-06 | See `docs/AI_TOOLING_RADAR.md` + `docs/50_Scratch/TOOLING_EVAL_headroom_2026-07-06.md`; do not lab until proxy/MCP data-flow is read from source |
+| superdesign.dev (IDE design agent) | plugin/design | lab, scope narrowed 2026-07-06  | Trial only the current official listing in an isolated sandbox; see eval card in `docs/50_Scratch/`                                              |
 
 ## Open Risks
 
 - Worktree is currently very dirty; separate AI/dev config work from site,
   backend, generated asset and content changes before commit.
+- Graphify and Obsidian deliberately use separate corpora: Graphify indexes
+  code from the repository root, while Obsidian/Extended Graph use the `docs/`
+  vault. Do not enable Graphify's Obsidian export or document/media extraction
+  in the live vault.
 - `npm run audit:secrets` still fails because Git history contains three
   redacted GCP/Firebase API-key findings. Owner action is required in
   Google Cloud/Firebase: rotate or strictly restrict the affected key, then

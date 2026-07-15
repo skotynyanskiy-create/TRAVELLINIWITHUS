@@ -88,7 +88,14 @@ dashboard changes.
   `~/.codex/config.toml` entry for Codex, then restart both MCP clients. Never
   paste the key into chat, tracked files, docs or logs.
 - Claude Code project hooks: `.claude/settings.json` uses PowerShell-based safety hooks for this Windows workspace.
-- Obsidian memory: the repository root is the active Obsidian vault for Local REST API / MCP automation; `docs/` is the operational memory and note storage. Do not duplicate stable project facts into a separate AI memory unless they are cross-project user preferences.
+- Obsidian memory: `docs/` is the active vault for Local REST API / MCP
+  automation and operational note storage. The repository root remains code
+  truth and the Graphify corpus. Do not duplicate stable project facts into a
+  separate AI memory unless they are cross-project user preferences.
+- Graphify Labs: `graphifyy==0.9.6` is installed in the ignored local
+  `.tools/graphify` environment. It indexes code only; Obsidian ignores
+  `.tools/` and `graphify-out/`. `graphify:watch` is an explicit session mode,
+  not a startup service or git hook.
 
 ## Curated External References
 
@@ -115,6 +122,7 @@ Riepilogo:
 | installato      | `firebase-tools` 15.17   | `npm run emulators`        | Firestore/Auth locali per dev + bug investigation |
 | installato      | `gh` 2.89                | (non in scripts)           | PR / issue / API operations                       |
 | installato      | `docker` 29.3            | (non in scripts)           | container locale (non obbligatorio)               |
+| locale isolato  | `graphifyy` 0.9.6        | `npm run graphify:*`       | grafo code-only per architettura e blast radius   |
 | opt-in (npx)    | `@lhci/cli`              | `npm run audit:cwv`        | Core Web Vitals + budget pre-deploy               |
 | opt-in (npx)    | `unlighthouse`           | `npm run audit:bulk`       | Lighthouse bulk su tutte le pagine                |
 | opt-in (npx)    | `@axe-core/cli`          | `npm run audit:a11y`       | WCAG 2.2 AA automated                             |
@@ -183,6 +191,7 @@ These short, action-scoped skills were originally Claude-local. They have been p
 - `cli-evaluator`: evaluate CLI tools before install, scripting or stable workflow use.
 - `plugin-evaluator`: evaluate Codex, GitHub, Figma, Canva, Drive and related plugins/connectors.
 - `github-agent-workflow`: design safe GitHub Copilot/agent workflows, custom instructions and PR automation.
+- `graphify`: query and refresh the local code-only knowledge graph for architecture, dependency and blast-radius work.
 - `backup-rollback`: define backup, restore and rollback checks before sensitive work.
 - `secret-protection`: audit secret-handling behavior without reading or printing secret values.
 - `hooks-audit`: review Claude hooks, Husky hooks, GitHub Actions and local automation guardrails.
@@ -229,6 +238,10 @@ Sequenza canonica per Reel/IG opener nuovo:
 ## Operating Rules
 
 - Every agent must treat `docs/` as operational truth.
+- Graphify is a local supplementary index: use scoped queries for static
+  dependency work from the repository root, verify source before decisions,
+  and keep the `docs/` vault, media, secrets and Obsidian configuration outside
+  its corpus.
 - UI, positioning, collaboration, homepage, navbar, release, bug, campaign, partner, and content changes must update the relevant note.
 - Stitch/Figma outputs must pass through repo adaptation and QA before becoming code.
 - `npm run predeploy` excludes visual QA by design; use `npm run audit:quality` for the full pass.

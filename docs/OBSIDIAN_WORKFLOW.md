@@ -155,16 +155,27 @@ docs/
 
 ## Config condivisa
 
-- `.obsidian/` nella root contiene la configurazione locale del vault ed è
-  esclusa da Git perché include stato macchina e credenziali Local REST API.
-- `docs/` contiene le note operative portabili e versionate.
-- Il vault usa le funzionalità core di Obsidian; non richiede plugin editoriali
-  aggiuntivi.
+- `docs/.obsidian/` versiona solo una selezione minima e portabile di config
+  (`app.json`, `appearance.json`, `core-plugins.json`, `daily-notes.json`,
+  `graph.json`, `snippets/travellini-vault.css`, `templates.json` — vedi
+  [[DECISION_0001_OBSIDIAN_VAULT_STRATEGY]] e
+  [[DECISION_0004_OBSIDIAN_GRAPHIFY_SPLIT_VAULT_STRATEGY]]). Stato macchina
+  (`workspace.json`, `community-plugins.json`, `plugins/`) resta locale e
+  gitignorato.
+- `.obsidian/` nella root resta solo come rollback/configurazione legacy; non
+  aprire la root come vault operativo.
+- La configurazione Local REST API è riutilizzata localmente senza duplicare o
+  versionare credenziali.
+- `docs/` contiene le note operative portabili e versionate; Graphify indicizza
+  separatamente il codice dalla root.
+- Il vault usa Dataview, Obsidian Kanban e Templater oltre alle funzionalità
+  core: sono già installati e la dashboard operativa dipende da query
+  Dataview live. `npm run setup:obsidian-plugins` li installa/reinstalla da
+  zero su una macchina nuova (scarica le release GitHub pinnate, nessuna
+  versione committata perché `docs/.obsidian/plugins/` è gitignored).
 - `Local REST API` è l’unico plugin community richiesto per l’automazione MCP.
   Dopo una rotazione della chiave, aggiorna `.mcp.json` e
   `~/.codex/config.toml`, quindi riavvia i client MCP.
-- Nuovi plugin come Templater, Readwise o Dataview vanno valutati prima
-  dell’adozione stabile secondo [[AI_AGENT_STACK]].
 - `npm run generate:obsidian-index` rigenera [[OBSIDIAN_INDEX]].
 - `npm run audit:obsidian` verifica frontmatter, tassonomia, Bases, dashboard e
   configurazione locale senza leggere credenziali.

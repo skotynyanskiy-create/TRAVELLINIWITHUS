@@ -45,6 +45,7 @@ const allowedStatuses = {
   partner: ["lead", "active", "paused", "done"],
   product: ["idea", "in-sviluppo", "live", "archiviato"],
   "content-brief": ["open", "in-progress", "done"],
+  "content-draft": ["draft-needs-rb-inputs", "draft", "review", "published", "archived"],
   "social-post": ["idea", "in-produzione", "review", "schedulato", "pubblicato"],
   "design-reference": ["active", "archived"],
   "web-clip": ["da-processare", "processato", "archiviato"],
@@ -54,7 +55,10 @@ function walk(directory, extensions, files = []) {
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
     const filepath = path.join(directory, entry.name);
     if (entry.isDirectory()) {
-      if (entry.name !== "99_Archive") walk(filepath, extensions, files);
+      // docs/superpowers/ is written by the superpowers:writing-plans Claude
+      // Code skill, which has its own plan/spec conventions unrelated to this
+      // vault's YAML schema — see DECISION taxonomy exception in OBSIDIAN_TAXONOMY.md.
+      if (entry.name !== "99_Archive" && entry.name !== "superpowers") walk(filepath, extensions, files);
     } else if (extensions.includes(path.extname(entry.name))) {
       files.push(filepath);
     }

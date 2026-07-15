@@ -4,7 +4,11 @@ Premium editorial travel site for Rodrigo & Betta (@travelliniwithus). Italian U
 Role: single-owner marketing lead + website builder. Quality > speed > features.
 
 `AGENTS.md` is the root operating guide. `DESIGN.md` is the design-system source.
-The repository root is the active Obsidian vault for Local REST API / MCP automation; `docs/` is the operational note store. Use `docs/AI_OPERATIONS_DASHBOARD.md` for AI/dev operating mode and tooling decisions. Update relevant notes when UI, positioning, campaigns, or release state change.
+`docs/` is the active Obsidian vault and operational note store; the repository
+root remains code truth and the Graphify code corpus. Local REST API / MCP
+automation targets the `docs/` vault. Use `docs/AI_OPERATIONS_DASHBOARD.md` for
+AI/dev operating mode and tooling decisions. Update relevant notes when UI,
+positioning, campaigns, or release state change.
 Every meaningful session should also look for one reusable operating improvement: a clearer skill, stronger guardrail, better workflow, tooling candidate, rollback note, or simplification. Capture it in the relevant `docs/` note when it is genuinely useful.
 
 ## Stack
@@ -274,7 +278,11 @@ Do not load the full `docs/` tree at session start. Read only what the task requ
 
 ## Tooling — lean set (anti-regression, audit 2026-07-05)
 
-- Project plugin target: the ~10 marked `true` in `.claude/settings.local.json`.
+- Project plugin target: the 7 marked `true` in `.claude/settings.local.json`
+  (superpowers, frontend-design, code-review, skill-creator,
+  security-guidance, typescript-lsp, claude-md-management). `context7` and
+  `github` are deliberately `false` here — both are served by root `.mcp.json`
+  instead, per the "one source per MCP capability" rule below.
   Global level: `superpowers` only. Do NOT re-enable off-stack plugins
   (LSPs for unused languages, AWS/Jira/ML, redundant reviewers) — re-enabling is
   always a deliberate per-project decision, never a default.

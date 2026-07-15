@@ -31,63 +31,91 @@ tags:
 
 ---
 
-## Lavoro aperto
-
-![[95_Bases/Active_Work.base#Open Work]]
-
----
-
 ## Contenuti in corso
 
-![[95_Bases/Editorial_Archive.base#In Progress]]
+```dataview
+TABLE status, priority, pillar
+FROM "13_Content"
+WHERE type = "content-brief" AND (status = "in-progress" OR status = "draft")
+SORT priority ASC
+```
 
 ---
 
-## Priorità sito
+## Priorità sito (Progetti)
 
-![[95_Bases/Project_Log.base#Active Projects]]
+```dataview
+TABLE status, priority, owner
+FROM "10_Projects"
+WHERE type = "project" AND (status = "in-progress" OR status = "active")
+SORT priority ASC
+```
 
 ---
 
 ## Task aperti
 
-![[95_Bases/Task_Log.base#Open Tasks]]
+```dataview
+TASK
+WHERE !completed AND (file.folder = "10_Projects" OR file.folder = "11_Campaigns" OR file.folder = "12_Partnerships" OR file.folder = "13_Content")
+LIMIT 15
+```
 
 ---
 
 ## SEO — Da ottimizzare
 
-![[95_Bases/SEO_Pages.base#Da ottimizzare]]
+```dataview
+TABLE target_keywords, priority
+FROM "13_Content" OR "10_Projects"
+WHERE type = "seo-page" OR contains(tags, "seo")
+SORT priority ASC
+```
 
 ---
 
 ## Partner pipeline
 
-![[95_Bases/Partnership_Pipeline.base#Partner Pipeline]]
+```dataview
+TABLE stage, priority, owner
+FROM "12_Partnerships"
+WHERE type = "partner" AND status != "closed"
+SORT priority ASC
+```
 
 ---
 
 ## Campagne attive
 
-![[95_Bases/Campaign_Pipeline.base#Active Campaigns]]
-
----
-
-## Social — Prossima settimana
-
-![[95_Bases/Social_Calendar.base#Prossima settimana]]
+```dataview
+TABLE status, priority, owner
+FROM "11_Campaigns"
+WHERE type = "campaign" AND status = "active"
+SORT priority ASC
+```
 
 ---
 
 ## Bug aperti
 
-![[95_Bases/Bug_Log.base#Open Bugs]]
+```dataview
+TABLE severity, priority, owner
+FROM "14_Bugs"
+WHERE type = "bug" AND status != "resolved" AND status != "closed"
+SORT priority ASC
+```
 
 ---
 
 ## Decisioni recenti
 
-![[95_Bases/Decision_Log.base#Recent Decisions]]
+```dataview
+TABLE owner, status, priority
+FROM "20_Decisions"
+WHERE type = "decision"
+SORT file.mtime DESC
+LIMIT 5
+```
 
 ---
 

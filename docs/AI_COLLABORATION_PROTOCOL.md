@@ -17,8 +17,9 @@ Make every AI tool work on the same project memory, same documentation system an
 ## System of record
 
 - repo root = source of code truth
-- repository root = active Obsidian vault for Local REST API / MCP automation
-- `docs/` = source of operational truth and note storage
+- `docs/` = active Obsidian vault for Local REST API / MCP automation and source
+  of operational truth
+- repository root = source of code truth and Graphify code corpus
 - `DESIGN.md` = source of design-system truth for agents and design tools
 - `.agents/skills` = canonical local skill source
 - `docs/AI_AGENT_STACK.md` = source of AI stack and external-reference policy
@@ -35,7 +36,8 @@ Any assistant used on this repo should:
 2. read `CLAUDE.md`
 3. read `DESIGN.md` for UI and design-system work
 4. read `docs/AI_AGENT_STACK.md` for skill and agent workflow rules
-5. use the repository root as the Obsidian vault, with working notes stored under `docs/`
+5. use `docs/` as the Obsidian vault and the repository root as the Graphify
+   code corpus
 6. update the relevant note when work changes scope, decisions or delivery state
 
 ## Multi-agent workflow
