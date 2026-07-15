@@ -54,6 +54,7 @@ const LeadMagnet = lazy(() => import('./pages/LeadMagnet'));
 const Posto = lazy(() => import('./pages/Posto'));
 const VieniConNoi = lazy(() => import('./pages/VieniConNoi'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const ManifestoPage = lazy(() => import('./experience/controluce/ManifestoPage'));
 
 // Admin pages
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
@@ -103,6 +104,8 @@ export default function App() {
                     <Route path="/v2" element={<Navigate to="/" replace />} />
                     <Route path="/atlante-lab" element={<Navigate to="/" replace />} />
                     <Route path="/sentiero" element={<Navigate to="/" replace />} />
+                    {/* Lab Controluce: manifesto WebGL, noindex, fuori da nav/sitemap */}
+                    <Route path="/manifesto" element={<ManifestoPage />} />
 
                     <Route path="/" element={<Layout />}>
                       <Route index element={<AtlanteHome />} />
@@ -123,6 +126,9 @@ export default function App() {
                       )}
                       {!LITE_MODE && (
                         <Route path="esperienze" element={<Navigate to="/esplora" replace />} />
+                      )}
+                      {!LITE_MODE && (
+                        <Route path="blog" element={<Navigate to="/esplora" replace />} />
                       )}
                       {!LITE_MODE && (
                         <Route
