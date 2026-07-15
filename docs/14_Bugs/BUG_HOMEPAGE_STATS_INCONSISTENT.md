@@ -26,7 +26,7 @@ Il browser-auditor (Playwright MCP) ha riportato "0K+" follower / "0+" destinazi
 
 ## Causa root del falso positivo
 
-[src/components/home/HomeTrustStrip.tsx](../../src/components/home/HomeTrustStrip.tsx) usa [AnimatedCounter](../../src/components/AnimatedCounter.tsx) per renderizzare i numeri:
+[src/components/home/HomeTrustStrip.tsx](../../src/components/home/HomeTrustStrip.tsx) usa `AnimatedCounter` (`src/components/AnimatedCounter.tsx`, rimosso) per renderizzare i numeri:
 
 ```tsx
 // HomeTrustStrip.tsx:24-29
@@ -98,6 +98,6 @@ Aggiungere allo skill [`audit-browser`](../../.agents/skills/audit-browser/SKILL
 
 - [src/config/site.ts:20-29](../../src/config/site.ts)
 - [src/components/home/HomeTrustStrip.tsx](../../src/components/home/HomeTrustStrip.tsx)
-- [src/components/AnimatedCounter.tsx](../../src/components/AnimatedCounter.tsx)
+- `src/components/AnimatedCounter.tsx` (rimosso)
 - [docs/10_Projects/PROJECT_FULL_SITE_MARKETING_TECH_AUDIT.md](../10_Projects/PROJECT_FULL_SITE_MARKETING_TECH_AUDIT.md) sezione 5 #1 — aggiornata in stessa sessione
 - Screenshot owner 2026-05-14 — homepage mostra valori finali animati correttamente

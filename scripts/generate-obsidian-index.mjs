@@ -82,5 +82,16 @@ Indice generato automaticamente delle note operative versionate. Rigenerare con
 ${sections}
 `;
 
-fs.writeFileSync(output, content, "utf8");
-console.log(`Generated ${path.relative(root, output)} with ${noteCount} links`);
+if (process.argv.includes("--check")) {
+  const existing = fs.existsSync(output) ? fs.readFileSync(output, "utf8") : "";
+  if (existing !== content) {
+    console.error(
+      `DRIFT ${path.relative(root, output)} non riflette le note correnti - eseguire npm run generate:obsidian-index`,
+    );
+    process.exit(2);
+  }
+  console.log(`${path.relative(root, output)} is up to date (${noteCount} links)`);
+} else {
+  fs.writeFileSync(output, content, "utf8");
+  console.log(`Generated ${path.relative(root, output)} with ${noteCount} links`);
+}

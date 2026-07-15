@@ -134,20 +134,20 @@ Fix: Firebase custom claims (`admin: true`) gestiti via script server-side; rule
 - [src/components/InstagramGrid.tsx](../../src/components/InstagramGrid.tsx) — view inventate rimosse + Unsplash → local
 - [src/components/home/MonetizationTeaser.tsx](../../src/components/home/MonetizationTeaser.tsx) — badge demo rimossi + filter live + Unsplash → local
 - [src/config/previewContent.ts](../../src/config/previewContent.ts) — 8 fix encoding + Unsplash → local
-- [src/data/seedArticle.ts](../../src/data/seedArticle.ts) — 2 fix accenti + console.log gated DEV
+- `src/data/seedArticle.ts` (rimosso) — 2 fix accenti + console.log gated DEV
 - [src/lib/email.ts](../../src/lib/email.ts) — welcome email c'è
 - [src/pdf/LeadMagnetDocument.tsx](../../src/pdf/LeadMagnetDocument.tsx) — 2 fix accenti
-- [src/components/BudgetCalculator.tsx](../../src/components/BudgetCalculator.tsx) — puo→può
+- `src/components/BudgetCalculator.tsx` (rimosso) — puo→può
 - [src/pages/Itinerari.tsx](../../src/pages/Itinerari.tsx) — 2 fix gia→già
 - [src/pages/Guida.tsx](../../src/pages/Guida.tsx) — identità
 - [src/pages/Press.tsx](../../src/pages/Press.tsx) — 3 fix
-- [src/pages/Quiz.tsx](../../src/pages/Quiz.tsx) — 3 fix
+- `src/pages/Quiz.tsx` (rimosso) — 3 fix
 - [src/pages/legal/Cookie.tsx](../../src/pages/legal/Cookie.tsx) — 4 fix
 - [src/pages/legal/Disclaimer.tsx](../../src/pages/legal/Disclaimer.tsx) — 3 fix
 - [src/pages/legal/Termini.tsx](../../src/pages/legal/Termini.tsx) — 3 fix
 - [src/components/Newsletter.tsx](../../src/components/Newsletter.tsx) — c'è
 - [src/components/home/HomeCollaborationCta.tsx](../../src/components/home/HomeCollaborationCta.tsx) — 3 fix
-- [src/components/home/HomeQuizBudgetTeaser.tsx](../../src/components/home/HomeQuizBudgetTeaser.tsx) — può
+- `src/components/home/HomeQuizBudgetTeaser.tsx` (rimosso) — può
 - [src/context/AuthContext.tsx](../../src/context/AuthContext.tsx) — 5 fix error messages
 
 ### Security / backend

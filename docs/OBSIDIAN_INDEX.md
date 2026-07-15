@@ -99,6 +99,7 @@ Indice generato automaticamente delle note operative versionate. Rigenerare con
 - [[13_Content/CONTENT_CALENDAR_H2_2026]]
 - [[13_Content/CONTENT_PILLARS_TRAVELLINIWITHUS]]
 - [[13_Content/CONTENT_PROOF_LIBRARY_TRAVELLINIWITHUS]]
+- [[13_Content/DRAFT_PILLAR_SALENTO_AGOSTO]]
 - [[13_Content/LEAD_MAGNET_POSTI_ITALIANI]]
 - [[13_Content/PHOTO_PLAN_R_B_2026_05_15]]
 - [[13_Content/PILLAR_ARTICLE_SALENTO_AGOSTO]]
@@ -133,6 +134,7 @@ Indice generato automaticamente delle note operative versionate. Rigenerare con
 - [[20_Decisions/DECISION_0001_OBSIDIAN_VAULT_STRATEGY]]
 - [[20_Decisions/DECISION_0002_AI_SYSTEM_OF_RECORD]]
 - [[20_Decisions/DECISION_0003_CLAUDE_CODE_SESSION_PROTOCOL]]
+- [[20_Decisions/DECISION_0004_OBSIDIAN_GRAPHIFY_SPLIT_VAULT_STRATEGY]]
 - [[20_Decisions/DECISION_PUBLIC_METRICS_SOURCE_TRAVELLINIWITHUS_2026-06-07]]
 
 ## Meeting

@@ -302,7 +302,7 @@ Comandi validazione eseguiti:
 - [x] **F1.9 affiliate utility scaffolding**: `src/lib/affiliateLink.ts` pronto per 4 partner (Skyscanner, Booking, Airalo, Revolut), disabled-by-default + `rel="sponsored noopener"` standard. Attende partner ID post-signup owner.
 - [x] **Lint cleanup**: 3 lint blocker risolti (`InstagramGrid.tsx` track caption, `Esplora.tsx` aria-expanded rimosso, `EsploraQuiz.tsx` setState pattern "Adjusting state while rendering" sostituisce setState-in-effect). `npm run lint`: 0 errori, 5 warning cosmetici no-unused pre-esistenti.
 - [x] **Sitemap routes pubbliche allineate**: aggiunte `/shop`, `/club`, `/lead-magnet`, `/itinerari/compare` a `scripts/generate-sitemap.js`. `public/sitemap.xml` rigenerata.
-- [x] **QA static post-F1.8**: voto 9.3/10 ([docs/50_Scratch/QA_post_F1.8_2026-05-15.md](../50_Scratch/QA_post_F1.8_2026-05-15.md), report `travellini-quality-auditor`).
+- [x] **QA static post-F1.8**: voto 9.3/10 (`docs/50_Scratch/QA_post_F1.8_2026-05-15.md`, nota scratch rimossa; report `travellini-quality-auditor`).
 - [x] **Deliverable Settimana 1 multi-agent**: 4 varianti hero copy F1.5 (attende owner pick), photo audit 22 P0 use case F1.6, lead magnet outline 13pp F1.10 (attende 5 risposte owner), Home redesign 11→7 sezioni LOCKED F2.1, W2 schedule operativo. Tutti i 7 handoff brief in [docs/50_Scratch/](../50_Scratch/).
 - [ ] **Google Rich Results Test live** ancora da eseguire post-deploy su URL real (atteso PASS Organization+WebSite+Article+BreadcrumbList).
 - [ ] **Backend F1.1-F1.4** (firestore.rules, server.ts, schema productAssets, Stripe live keys) ancora **BLOCKED** in attesa conferma owner.
@@ -725,7 +725,7 @@ Ripresa dei lavori dopo interruzione Codex. P1/P2 residui chiusi:
       per categoria selezionata; `ctaLabel` cambia da "Ricevi la prossima
       guida pratica" a "Ricevi le prossime guide su {Categoria}" quando il
       filtro è attivo.
-      File: [src/pages/Guide.tsx](../../src/pages/Guide.tsx)
+      File: `src/pages/Guide.tsx` (rimosso — pagina confluita in [src/pages/Esplora.tsx](../../src/pages/Esplora.tsx) con la Esplora consolidation)
 - [x] **SearchModal raggruppata per categoria** (P1.3): risultati ora
       raggruppati in sezioni Luoghi / Esperienze / Percorsi consigliati /
       Articoli e guide / Pagine, con priorità d'ordine editoriale e fallback

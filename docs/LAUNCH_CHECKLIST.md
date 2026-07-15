@@ -25,12 +25,11 @@ Il sito e' attualmente in "Demo Mode": l'archivio mostra contenuti seed (`src/co
 
 Predisposizione gia' completata, solo da popolare con ID reali.
 
-- [ ] **ID Integrazioni**: Apri [src/config/integrations.ts](../src/config/integrations.ts).
-- [ ] **Inserimento ID**:
-  - Google Analytics 4 (`googleAnalyticsId`)
-  - Meta Pixel (`metaPixelId`)
-  - TikTok Pixel (se attivo)
-- [ ] **Newsletter**: Se usi un servizio esterno (Mailchimp/Brevo/Flodesk), inserisci l'URL del form in `newsletterActionUrl`. Counter pubblico ha guard `NEWSLETTER_COUNTER_MIN_VISIBLE = 50` per evitare anti-conversion da numeri bassi.
+- [ ] **ID Integrazioni**: gli ID sono letti da env var in [src/services/analytics.ts](../src/services/analytics.ts) — popolali nell'env di produzione:
+  - Google Analytics 4 (`VITE_GA_ID`)
+  - Meta Pixel (`VITE_META_PIXEL_ID`)
+  - TikTok Pixel (`VITE_TIKTOK_PIXEL_ID`, se attivo)
+- [ ] **Newsletter**: il form invia a `/api/newsletter-subscribe` gestito in `server.ts`; l'eventuale ESP esterno (Brevo/Mailerlite) si collega lato server. Counter pubblico ha guard `NEWSLETTER_COUNTER_MIN_VISIBLE = 50` in [src/config/site.ts](../src/config/site.ts) per evitare anti-conversion da numeri bassi.
 - [ ] **Sentry**: `SENTRY_DSN` in env e source maps upload via `npm run release:sentry`.
 
 ## 3. Sicurezza e Hardening (Azione richiesta: owner)

@@ -1,3 +1,4 @@
+import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import YAML from "yaml";
@@ -149,6 +150,15 @@ for (const match of dashboard.matchAll(/!\[\[([^#\]]+\.base)#([^\]]+)\]\]/g)) {
 
 if (!fs.existsSync(path.join(docsRoot, "OBSIDIAN_INDEX.md"))) {
   errors.push("docs/OBSIDIAN_INDEX.md mancante");
+} else {
+  const indexCheck = spawnSync(
+    process.execPath,
+    [path.join(root, "scripts", "generate-obsidian-index.mjs"), "--check"],
+    { cwd: root },
+  );
+  if (indexCheck.status !== 0) {
+    warnings.push("OBSIDIAN_INDEX.md non aggiornato: eseguire npm run generate:obsidian-index");
+  }
 }
 
 let missingRelativeLinks = 0;

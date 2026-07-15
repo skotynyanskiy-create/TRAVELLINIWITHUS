@@ -310,7 +310,7 @@ Kinfolk). 9 step eseguiti.
    - Active state visivo sui primary link che matchano il pathname.
 
 7. **Quiz inline "wow"**
-   - Nuovo [src/components/discovery/EsploraQuiz.tsx](../../src/components/discovery/EsploraQuiz.tsx):
+   - Nuovo `src/components/discovery/EsploraQuiz.tsx` (rimosso in v3):
      modal overlay 3 step (Dove? Quando? Per quanto tempo?), con progress bar
      in alto, animation slide tra step, "Salta e vedi tutto" come escape.
      All'output: redirect `/esplora?zone=X&period=Y&duration=Z&quiz=true`

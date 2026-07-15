@@ -500,7 +500,7 @@ Ogni POI include: geo coords (per Mapbox futuro), `durationMin`, `bestMonths`/`a
 ### Cross-link Cost ↔ When-to-go
 
 - ✏️ [src/components/WhenToGoCalendar.tsx](../../src/components/WhenToGoCalendar.tsx): aggiunta prop `onMonthSelect?: (month, destSlug) => void` + `onDestinationChange?`. Quando definita, mostra CTA "Calcola budget per [mese]" nel dettaglio mese. Evento `when_to_go_cta_cost`.
-- ✏️ [src/components/DestinationCostCalculator.tsx](../../src/components/DestinationCostCalculator.tsx): aggiunte prop `initialDest` e `initialMonth` con sync pattern adjust-state-during-render (React 19) per ricevere stato dal parent.
+- ✏️ `src/components/DestinationCostCalculator.tsx` (rimosso): aggiunte prop `initialDest` e `initialMonth` con sync pattern adjust-state-during-render (React 19) per ricevere stato dal parent.
 - ✏️ [src/pages/Strumenti.tsx](../../src/pages/Strumenti.tsx): orchestrazione cross-link — handler `handleWhenToGoCta` lifta state per pre-popolare CostCalculator + smooth scroll al calc ref. Click su "Calcola budget per settembre" in WhenToGoCalendar → CostCalculator si auto-popola + scroll automatico.
 
 ### Estensione cataloghi: 4 nuove destinazioni
@@ -578,16 +578,16 @@ Ogni POI include: geo coords (per Mapbox futuro), `durationMin`, `bestMonths`/`a
 
 ### FASE 2.B Audio guide scaffolding completo
 
-- 🆕 [src/config/audioGuides.ts](../../src/config/audioGuides.ts): tipi `AudioGuide` + `AudioGuidePoint`, catalogo con pilot Salento (4 placeholder strutturali pronti per riempimento R+B), helper `getAudioGuide()` + `isAudioGuidePublished()`. Schema include geo coords (per layer Mapbox futuro), transcript (per a11y + AI citation), narrator (R/B), recordedAt timestamp.
-- 🆕 [src/components/audio/AudioGuidePlayer.tsx](../../src/components/audio/AudioGuidePlayer.tsx): player premium Editorial Slow con HTML5 audio nativo, play/pause, scrubber + progress fill visuale, formato tempo MM:SS, transcript toggle a11y, stato placeholder se durationSec=0, eventi GA4 (audio_play / audio_pause / audio_complete / audio_transcript_open). Pattern adjust-state-during-render per reset al cambio punto (React 19 compliant).
-- 🆕 [src/components/audio/AudioGuideSection.tsx](../../src/components/audio/AudioGuideSection.tsx): sezione articolo con sidebar lista punti numerati (dispatch-index-number style) + player attivo. Sticky sidebar su desktop. Nasconde sezione se guida non publishable (isAudioGuidePublished). forceShow per preview admin.
+- 🆕 `src/config/audioGuides.ts` (rimosso): tipi `AudioGuide` + `AudioGuidePoint`, catalogo con pilot Salento (4 placeholder strutturali pronti per riempimento R+B), helper `getAudioGuide()` + `isAudioGuidePublished()`. Schema include geo coords (per layer Mapbox futuro), transcript (per a11y + AI citation), narrator (R/B), recordedAt timestamp.
+- 🆕 `src/components/audio/AudioGuidePlayer.tsx` (rimosso): player premium Editorial Slow con HTML5 audio nativo, play/pause, scrubber + progress fill visuale, formato tempo MM:SS, transcript toggle a11y, stato placeholder se durationSec=0, eventi GA4 (audio_play / audio_pause / audio_complete / audio_transcript_open). Pattern adjust-state-during-render per reset al cambio punto (React 19 compliant).
+- 🆕 `src/components/audio/AudioGuideSection.tsx` (rimosso): sezione articolo con sidebar lista punti numerati (dispatch-index-number style) + player attivo. Sticky sidebar su desktop. Nasconde sezione se guida non publishable (isAudioGuidePublished). forceShow per preview admin.
 - 🆕 [public/audio/README.md](../../public/audio/README.md): naming convention `{NN}-{slug}.mp3`, specifiche audio (128 kbps mono, -16 LUFS, 60-120s), workflow registrazione → editing → upload → config update, struttura cartelle.
 - 🆕 [public/audio/salento/](../../public/audio/salento/): cartella pronta per upload pilot.
 
 ### FASE 3.C Cost Calculator completo
 
 - 🆕 [src/config/costBaselines.ts](../../src/config/costBaselines.ts): catalogo `DESTINATION_BASELINES` per 6 destinazioni pillar (Salento, Sicilia, Dolomiti, Toscana, Sardegna, Lisbona) con costi giornalieri coppia × 4 voci (alloggio/cibo/trasporti/attivita) × 3 stili (lean/medium/premium) + moltiplicatore stagionale (alta/spalla/bassa) + mesi alta stagione + timestamp aggiornamento. Funzione `calculateBudget()` ritorna range min/max + breakdown + multiplier.
-- 🆕 [src/components/DestinationCostCalculator.tsx](../../src/components/DestinationCostCalculator.tsx): UI Editorial Slow con selettore destinazione + slider giorni 2-14 + selettore mese + bottoni stile. Output: range €min-max grande serif + warning alta stagione + breakdown 4 voci giornaliere + disclaimer "voli esclusi" + timestamp + CTA "Guide su [destinazione]". GA4 events `cost_calculator_first_compute` + `cost_calculator_destination_change` + `cost_calculator_cta_explore`.
+- 🆕 `src/components/DestinationCostCalculator.tsx` (rimosso): UI Editorial Slow con selettore destinazione + slider giorni 2-14 + selettore mese + bottoni stile. Output: range €min-max grande serif + warning alta stagione + breakdown 4 voci giornaliere + disclaimer "voli esclusi" + timestamp + CTA "Guide su [destinazione]". GA4 events `cost_calculator_first_compute` + `cost_calculator_destination_change` + `cost_calculator_cta_explore`.
 - ✏️ [src/pages/Strumenti.tsx](../../src/pages/Strumenti.tsx): nuovo `DestinationCostCalculator` come strumento principale, `BudgetCalculator` generico esistente diventa fallback per destinazioni non in catalogo. Ordine: granulare → generico.
 
 **Verifiche sessione #4**: typecheck ✓ · lint 0 errori 0 warning ✓ · test 10/10 ✓ · live 7/7 route 200 (`/`, `/quiz`, `/club`, `/strumenti`, `/llms.txt`, `/audio/README.md`, `/robots.txt`).
@@ -617,7 +617,7 @@ Ogni POI include: geo coords (per Mapbox futuro), `durationMin`, `bestMonths`/`a
 
 **Completato sessione #3:**
 
-- ✓ Foto archetype quiz: fallback intelligente in [quizArchetypes.ts](../../src/config/quizArchetypes.ts) per i 4 archetypes con foto mancanti (toscana per Cercatrice Borghi, sardegna per Coppia di Costa, dolomiti per Famiglia in Movimento, puglia per Notturno Urbano), alt text adeguato, TODO comment per sostituzione con foto autentiche
+- ✓ Foto archetype quiz: fallback intelligente in `src/config/quizArchetypes.ts` (rimosso) per i 4 archetypes con foto mancanti (toscana per Cercatrice Borghi, sardegna per Coppia di Costa, dolomiti per Famiglia in Movimento, puglia per Notturno Urbano), alt text adeguato, TODO comment per sostituzione con foto autentiche
 - ✓ FASE 1.D entity layer applicato a [Articolo.tsx](../../src/pages/Articolo.tsx): nuove funzioni `countWords()` + `inferPlaceEntities()` che cercano place names dal catalogo Wikidata nel titolo+description+location+content. La prima occorrenza diventa `Article.about`, le successive (max 4) `Article.mentions`. `wordCount` calcolato da contenuto plain text. Tutti i campi opzionali — se article non e' in catalogo, schema rimane invariato
 - ✓ **Gate FASE 1 PASS**: typecheck + lint 0/0 + test 10/10 (sessione #3)
 - ✓ FASE 2.A AI Companion scaffolding tecnico:
@@ -644,7 +644,7 @@ Ogni POI include: geo coords (per Mapbox futuro), `durationMin`, `bestMonths`/`a
 
 **Completato sessione #2:**
 
-- ✓ FASE 1.B Quiz UI integrato in [src/pages/Quiz.tsx](../../src/pages/Quiz.tsx): nuovo sistema 7 domande × 6 archetipi italiani, UI Editorial Slow (text-eyebrow, font-serif clamp, text-body-editorial), risultato con foto hero + 3 destinazioni signature + Newsletter compact per archetype, persist `tw_archetype` in localStorage per personalizzazione futura, GA4 events `quiz_answer`/`quiz_completed`/`archetype_assigned`/`archetype_destination_click`/`archetype_cta_explore`
+- ✓ FASE 1.B Quiz UI integrato in `src/pages/Quiz.tsx` (rimosso): nuovo sistema 7 domande × 6 archetipi italiani, UI Editorial Slow (text-eyebrow, font-serif clamp, text-body-editorial), risultato con foto hero + 3 destinazioni signature + Newsletter compact per archetype, persist `tw_archetype` in localStorage per personalizzazione futura, GA4 events `quiz_answer`/`quiz_completed`/`archetype_assigned`/`archetype_destination_click`/`archetype_cta_explore`
 - ✓ FASE 1.C Club hero ricostruito ([src/pages/Club.tsx](../../src/pages/Club.tsx)) — aggiunta `ClubPreviewLock` ([components/club/ClubPreviewLock.tsx](../../src/components/club/ClubPreviewLock.tsx)) con preview guida Marina Serra 200 parole + lock gradient + CTA scroll-to-pricing, e `ClubFaq` ([components/club/ClubFaq.tsx](../../src/components/club/ClubFaq.tsx)) con 6 domande oneste (quando NON vale, come cancellare, regalabilita, ecc.) + FAQPage JSON-LD schema. Rimosso `noindex` hardcoded sulla sales page (era bug SEO — pagina pubblica), `noindex` rimane solo sulla dashboard logged-in
 - ✓ FASE 1.D AI SEO Entity Layer completa:
   - [public/robots.txt](../../public/robots.txt) allowlist esplicita per GPTBot, ClaudeBot, PerplexityBot, Google-Extended, CCBot, anthropic-ai, cohere-ai, Applebot-Extended
@@ -680,7 +680,7 @@ Ogni POI include: geo coords (per Mapbox futuro), `durationMin`, `bestMonths`/`a
   - Drop cap: `.article-body > p:first-of-type::first-letter` — serif 4.5em, float left
   - `.text-eyebrow` aggiornato a `var(--text-eyebrow)` + `var(--tracking-eyebrow)`
 - ✓ Drop cap class applicata a [src/pages/Articolo.tsx:540](../../src/pages/Articolo.tsx#L540): `prose-reset article-body`
-- ✓ FASE 1.B Quiz archetipi config completa in [src/config/quizArchetypes.ts](../../src/config/quizArchetypes.ts):
+- ✓ FASE 1.B Quiz archetipi config completa in `src/config/quizArchetypes.ts` (rimosso):
   - 6 archetipi: Il Lento del Sud, La Cercatrice di Borghi, L'Alpinista Civile, La Coppia di Costa, La Famiglia in Movimento, Il Notturno Urbano
   - Ogni archetipo ha: nome IT, tagline, descrizione 2-3 frasi, eyebrow, foto hero + alt IT, 3 signature destinations slug, GA4 tag, segment label
   - 7 domande con scoring matrix (stagione, posto, ritmo, cibo, budget, mezzo, quando-felici)
@@ -691,7 +691,7 @@ Ogni POI include: geo coords (per Mapbox futuro), `durationMin`, `bestMonths`/`a
 
 **Resta da fare in FASE 1** (per la prossima sessione):
 
-1. **FASE 1.B Quiz UI**: integrare nuovo `quizArchetypes.ts` in [src/pages/Quiz.tsx](../../src/pages/Quiz.tsx) — UI Editorial Slow, flow domanda→domanda con keyboard nav, risultato con foto hero + 3 destinazioni signature + lead capture form. **Owner: `travellini-frontend-builder` + `travellini-seo-conversion-strategist`** per validare copy archetypes IT.
+1. **FASE 1.B Quiz UI**: integrare nuovo `quizArchetypes.ts` in `src/pages/Quiz.tsx` (rimosso) — UI Editorial Slow, flow domanda→domanda con keyboard nav, risultato con foto hero + 3 destinazioni signature + lead capture form. **Owner: `travellini-frontend-builder` + `travellini-seo-conversion-strategist`** per validare copy archetypes IT.
 2. **FASE 1.B Email automation post-quiz**: configurazione ESP esterna (Brevo/Mailerlite) con tag segment per archetype + 5 email onboarding. Fuori scope repo. **Owner: `travellini-growth-revenue-operator`**.
 3. **FASE 1.C Club hero ricostruito**: rebuild [src/pages/Club.tsx](../../src/pages/Club.tsx) con pricing in viewport (8€/72€), preview guida bloccata 200 parole, "Siamo 47 dentro" social proof, FAQ 6 voci, tabella free vs club.
 4. **FASE 1.D AI SEO Entity Layer**: Place schema + Wikidata Q-ID per top 20 destinazioni, Person schema R+B con `knowsAbout` + `worksFor`, `public/llms-full.txt` esteso, `robots.txt` allowlist esplicita per GPTBot/ClaudeBot/PerplexityBot/Google-Extended/CCBot.
