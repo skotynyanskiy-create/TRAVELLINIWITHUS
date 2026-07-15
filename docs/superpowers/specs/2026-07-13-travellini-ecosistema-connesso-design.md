@@ -17,10 +17,9 @@ tags:
 
 ## Stato della decisione
 
-Questa specifica formalizza la direzione approvata nella sessione del 13 luglio
-2026 ed è ora sottoposta alla revisione finale di Rodrigo e Betta. La homepage
-`Atlante Vivo` esistente resta la base. Il progetto non è un
-redesign totale: è un intervento coordinato su architettura informativa,
+Questa specifica formalizza la direzione approvata nella sessione del 13 luglio 2026. Rodrigo ha confermato l'approvazione finale il 13 luglio 2026. La homepage
+`Atlante Vivo` esistente resta la base. Il progetto non è un redesign totale:
+è un intervento coordinato su architettura informativa,
 contenuti, conversioni, dati, navigazione e attivazione del dominio pubblico.
 
 Priorità del sistema:

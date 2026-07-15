@@ -6,7 +6,7 @@ This repository is the website and marketing operating system for the travel cre
 
 - Code truth: repo root
 - Documentation and operational truth: `docs/`
-- Obsidian vault: repository root (`C:\Users\ccocu\Desktop\TRAVELLINIWITHUS`)
+- Obsidian vault: `docs/` (`C:\Users\ccocu\Desktop\TRAVELLINIWITHUS\docs`)
 - Operational Obsidian notes: `docs/`
 - Design-system truth for agents and design tools: `DESIGN.md`
 - Agent stack truth: `docs/AI_AGENT_STACK.md`

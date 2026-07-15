@@ -68,13 +68,16 @@ npm install
 npm run dev
 ```
 
-Then open Obsidian with the repository root as the vault:
+Then open the dedicated operational notes folder as the Obsidian vault:
 
 ```txt
-C:\Users\ccocu\Desktop\TRAVELLINIWITHUS
+C:\Users\ccocu\Desktop\TRAVELLINIWITHUS\docs
 ```
 
-The `docs/` folder is part of the repository on purpose. It contains the operational notes, project records, marketing hub and release tracking. The active Obsidian app configuration lives in the root `.obsidian/` folder so Local REST API and MCP automation can use the whole project while keeping notes organized under `docs/`.
+The `docs/` folder contains the operational notes, project records, marketing
+hub and release tracking. Its local `docs/.obsidian/` configuration keeps
+Obsidian fast by excluding the application code and `node_modules`; Graphify
+indexes the codebase separately from the repository root.
 
 ## Git workflow
 
@@ -130,7 +133,7 @@ For Codex sessions:
 
 Open this folder as vault:
 
-`C:\Users\ccocu\Desktop\TRAVELLINIWITHUS`
+`C:\Users\ccocu\Desktop\TRAVELLINIWITHUS\docs`
 
 Main notes:
 
