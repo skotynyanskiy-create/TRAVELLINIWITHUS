@@ -37,6 +37,12 @@ jobs:
         env:
           VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
 
+      - name: Audit agent stack
+        run: npm run audit:agents
+
+      - name: Audit Obsidian vault
+        run: npm run audit:obsidian
+
       - name: Audit UI
         run: npm run audit:ui
 
