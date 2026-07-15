@@ -55,6 +55,15 @@
             "command": "python \"C:\\Users\\ccocu\\.claude\\hooks\\block_dangerous_bash.py\""
           }
         ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"scripts/hooks/config_protection.py\""
+          }
+        ]
       }
     ],
     "SessionStart": [
@@ -80,21 +89,20 @@
     ],
     "PostToolUse": [
       {
-        "matcher": "Bash",
-        "if": "Bash(git commit:*)",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python \"C:\\Users\\ccocu\\.claude\\hooks\\quality_bar_precommit.py\""
-          }
-        ]
-      },
-      {
         "matcher": "Task|Agent",
         "hooks": [
           {
             "type": "command",
             "command": "python \"C:\\Users\\ccocu\\.claude\\hooks\\quality_bar_agent_output.py\""
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"scripts/hooks/loop_detector.py\""
           }
         ]
       }
