@@ -13,8 +13,22 @@ qa-shots/
 output/
 .playwright-cli/
 
+# Graphify local CLI/runtime and generated knowledge graph
+.tools/
+graphify-out/
+
+# Superpowers visual brainstorming companion (temp mockups)
+.superpowers/
+
 # Playwright MCP session cache (auto-generated per session)
 .playwright-mcp/
+.playwright/
+
+# AI-session local caches and hook state (never commit)
+.mypy_cache/
+.logs/
+.impeccable/
+.remember/
 
 # Claude Code local per-device settings (personal whitelist, not shared)
 .claude/settings.local.json
