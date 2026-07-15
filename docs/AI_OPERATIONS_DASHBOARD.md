@@ -35,7 +35,7 @@ Agent, Antigravity e strumenti futuri senza perdere controllo operativo.
 
 - Canonical source: `.agents/skills`.
 - Synced targets: `.claude/skills`, `.github/skills`, `.cursor/skills`, `.gemini/skills`.
-- Current canonical count: 27.
+- Current canonical count: 45 (per `npm run audit:agents`, 2026-07-15).
 - Required validation after skill edits: `npm run sync:agents` then `npm run audit:agents`.
 
 ## Continuous Self-Improvement Rule
@@ -68,6 +68,25 @@ system gets sharper over time.
 | GitHub `.instructions.md`          | workflow      | scout                           | Consider modular instructions after Copilot cleanup                                                                                              |
 | Headroom (context compression)     | MCP/proxy/lib | scout, verified real 2026-07-06 | See `docs/AI_TOOLING_RADAR.md` + `docs/50_Scratch/TOOLING_EVAL_headroom_2026-07-06.md`; do not lab until proxy/MCP data-flow is read from source |
 | superdesign.dev (IDE design agent) | plugin/design | lab, scope narrowed 2026-07-06  | Trial only the current official listing in an isolated sandbox; see eval card in `docs/50_Scratch/`                                              |
+
+## MCP Server Health (audit 2026-07-15)
+
+- `stripe`: `@stripe/mcp` 0.3.3 removed `--tools` and `--read-only`; the old
+  args killed the server at startup. Fixed in `.mcp.json` and
+  `~/.codex/config.toml` (no flags). OWNER ACTION: replace `STRIPE_SECRET_KEY`
+  with a read-only restricted key (`rk_*`) from the Stripe dashboard - that is
+  now the only read-only enforcement. Until then, permission prompts are the
+  only gate on Stripe write tools.
+- `firebase`: `npx firebase-tools@latest` cold-start exceeded the MCP connect
+  timeout. Fixed: both configs now launch the globally installed `firebase mcp`
+  (v15+; `experimental:mcp` graduated). Keep the global CLI updated.
+- `sentry`: healthy; occasional session-start timeout from npx cold start is
+  transient. Optional: set an LLM key to enable its agent-assisted search.
+- `analytics-mcp` (GA4): connects, but ADC is missing - calls will fail until
+  the owner runs `gcloud auth application-default login`.
+- `obsidian`, `playwright`, `chrome-devtools`, `context7`, `github`, `codex`:
+  verified healthy 2026-07-15.
+- MCP config changes take effect on the next session restart.
 
 ## Open Risks
 

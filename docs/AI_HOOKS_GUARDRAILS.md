@@ -24,15 +24,22 @@ else should be advisory or handled by explicit audit commands.
 
 ## Current Hook Map
 
-| Surface                   | Hook                              | Mode                          | Purpose                                                                                                     | Notes                                  |
-| ------------------------- | --------------------------------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------- | -------------------------------------- |
-| Claude `PreToolUse`       | `block_dangerous_bash.py`         | blocking                      | Blocks destructive Bash patterns such as hard reset, force push, broad clean and non-cache recursive delete | Enabled in `.claude/settings.json`     |
-| Claude `SessionStart`     | project health check              | reporting                     | Reports dev server, branch, dirty count and `.env` presence                                                 | Does not print secret values           |
-| Claude `UserPromptSubmit` | `quality_bar_prompt_validator.py` | advisory                      | Warns on invented-data requests and agent quality-bar reminders                                             | Does not block normal work             |
-| Claude `PostToolUse`      | `quality_bar_precommit.py`        | blocking on commit attempt    | Blocks staged `.env`, obvious secret patterns and new `any` in staged TS diffs                              | Runs when Claude attempts `git commit` |
-| Claude `PostToolUse`      | `quality_bar_agent_output.py`     | advisory                      | Warns on secrets, high-risk files and unverified estimates in agent output                                  | Does not block                         |
-| Husky `pre-commit`        | `lint-staged`                     | blocking                      | Runs staged lint/format pipeline                                                                            | Local Git hook                         |
-| GitHub Actions            | CI quality job                    | blocking for PR/branch health | Typecheck, lint, test, build, UI/Firebase/Stripe audits                                                     | Remote validation                      |
+| Surface                   | Hook                                 | Mode                          | Purpose                                                                                                     | Notes                                  |
+| ------------------------- | ------------------------------------ | ----------------------------- | ----------------------------------------------------------------------------------------------------------- | -------------------------------------- |
+| Claude `PreToolUse`       | `block_dangerous_bash.py`            | blocking                      | Blocks destructive Bash patterns such as hard reset, force push, broad clean and non-cache recursive delete | Enabled in `.claude/settings.json`     |
+| Claude `PreToolUse`       | `scripts/hooks/config_protection.py` | blocking                      | Blocks edits that weaken guardrail configs (eslint, tsconfig, gitleaks, markdownlint)                       | Override: `HOOK_ALLOW_CONFIG_EDIT=1`   |
+| Claude `SessionStart`     | project health check                 | reporting                     | Reports dev server, branch, dirty count and `.env` presence                                                 | Does not print secret values           |
+| Claude `UserPromptSubmit` | `quality_bar_prompt_validator.py`    | advisory                      | Warns on invented-data requests and agent quality-bar reminders                                             | Does not block normal work             |
+| Claude `PostToolUse`      | `quality_bar_agent_output.py`        | advisory                      | Warns on secrets, high-risk files and unverified estimates in agent output                                  | Does not block                         |
+| Claude `PostToolUse`      | `scripts/hooks/loop_detector.py`     | advisory                      | Warns when the same Bash call repeats 3+ times (stuck loop)                                                 | Non-blocking by design                 |
+| Claude `PostToolUse`      | impeccable `hook.mjs`                | advisory                      | Surfaces UI design findings after Edit/Write on UI files                                                    | Wired in `.claude/settings.local.json` |
+| Husky `pre-commit`        | `lint-staged` + gitleaks staged      | blocking                      | Staged lint/format pipeline plus `gitleaks protect --staged` secret scan                                    | Local Git hook                         |
+| Husky `post-commit`       | graphify staleness check             | advisory                      | Reminds to refresh the code graph when it falls behind HEAD                                                 | Never blocks a commit                  |
+| GitHub Actions            | CI quality job                       | blocking for PR/branch health | Typecheck, lint, test, build, UI/Firebase/Stripe audits                                                     | Remote validation                      |
+
+Retired 2026-07-15: `quality_bar_precommit.py` (invalid `if` hook schema; its
+coverage is superseded by lint-staged eslint `no-explicit-any` and
+`gitleaks protect --staged` in Husky pre-commit).
 
 ## Blocking Guardrails
 
