@@ -21,13 +21,15 @@ tags:
 
 ## Public details observed
 
-- account name pubblico: `GAETANO RODRIGO & BETTA`
+- account name pubblico: `GAETANO RODRIGO & BETTA ✈️ Travel couple`
 - positioning pubblico: travel couple / creator digitale
-- follower Instagram usati nel sito: `170K`
-- follower TikTok usati nel sito: `90K+`
+- follower Instagram usati nel sito: `172K` (og-meta profilo, verificato 2026-07-15: 172K follower, 306 seguiti, 1.268 post)
+- bio IG verbatim (2026-07-15): "VIAGGIA CON NOI✈️ / POSTI PARTICOLARI IN TUTTO IL MONDO / ADV DM O EMAIL / IN ELENCO AGCOM / SCONTI-ATTIVITÀ-ASSICURAZIONE IN BIO"
+- follower TikTok usati nel sito: `90K+` (non verificabile da sloggati: TikTok richiede login; da confermare con export)
 - community totale usata nel sito: `260K+`
+- footprint web extra-Instagram: quasi nullo (nessuna presenza indicizzata rilevante trovata 2026-07-15) — il sito è l'unica casa owned
 - fonte metriche: [[20_Decisions/DECISION_PUBLIC_METRICS_SOURCE_TRAVELLINIWITHUS_2026-06-07]]
-- stato metriche: snapshot pubblico da confermare con export Meta Business Suite e TikTok Analytics
+- stato metriche: IG verificato da og-meta pubblici 2026-07-15; TikTok da confermare con export Meta Business Suite e TikTok Analytics
 
 ## Notes for website and marketing
 

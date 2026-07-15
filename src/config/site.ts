@@ -25,11 +25,11 @@ export const BIO_LINKS = {
 // Numeri allineati al profilo IG live (snapshot 2026-05-29).
 // IG verificato (badge Meta), iscritti elenco influencer AGCOM (Italia).
 export const BRAND_STATS = {
-  instagramFollowers: '170K',
+  instagramFollowers: '172K',
   tiktokFollowers: '90K+',
   engagementRate: '6.5%',
   monthlyReach: '500K+',
-  postsPublished: '1.236',
+  postsPublished: '1.268',
   destinationsExplored: '150+',
   yearsOfTravel: '8',
   totalFollowers: '260K+',
