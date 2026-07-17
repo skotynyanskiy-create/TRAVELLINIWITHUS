@@ -2,6 +2,7 @@ import { ArrowRight, Compass } from 'lucide-react';
 import { motion } from 'motion/react';
 import { Link } from '@/src/components/TransitionLink';
 import OptimizedImage from '@/src/components/OptimizedImage';
+import RevealHeading from '@/src/components/RevealHeading';
 import { getPublishedReels } from '@/src/config/reels';
 import { slugifyZone } from '@/src/config/contentTaxonomy';
 import { REVEAL_EASE } from '@/src/lib/animations';
@@ -70,13 +71,16 @@ export default function ZoneBand({ className = '' }: ZoneBandProps) {
         {/* Entry device "frase-lead" senza occhiello — variazione di ritmo
             rispetto alle sezioni con eyebrow accent-uppercase. */}
         <div className="mb-10 max-w-2xl md:mb-12">
-          <h2
+          <RevealHeading
             id="zone-band-title"
             className="text-3xl font-serif leading-[1.05] text-ink md:text-5xl"
-          >
-            Vicino a casa,{' '}
-            <span className="italic text-muted-fg-2">e dall'altra parte del mondo</span>.
-          </h2>
+            lines={[
+              'Vicino a casa,',
+              <span key="accent" className="italic text-muted-fg-2">
+                e dall'altra parte del mondo.
+              </span>,
+            ]}
+          />
         </div>
 
         <div className="-mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 md:mx-0 md:grid md:grid-cols-3 md:gap-5 md:overflow-visible md:px-0 md:pb-0">

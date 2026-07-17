@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { useReducedMotion } from '@/src/hooks/useReducedMotion';
+import RevealHeading from '@/src/components/RevealHeading';
 
 /**
  * Device di apertura sezione. Alternarli rompe la monotonia dell'occhiello
@@ -56,11 +57,12 @@ export default function Section({
   return (
     <section id={id} className={`${spacingMap[spacing]} ${className}`}>
       {/* Reveal = enhancement, non gate di visibilita: con reduced-motion il
-          contenuto e' visibile subito (initial=false), mai opacity:0 permanente. */}
+          contenuto e' visibile subito (initial=false), mai opacity:0 permanente.
+          Entrata opacity-only: il movimento verticale è compito del titolo (RevealHeading). */}
       <motion.div
         className={`${maxWidthMap[maxWidth]} mx-auto px-6 md:px-12 ${divider ? 'subtle-divider' : ''}`}
-        initial={reduced ? false : { opacity: 0, y: 16 }}
-        whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
+        initial={reduced ? false : { opacity: 0 }}
+        whileInView={reduced ? undefined : { opacity: 1 }}
         viewport={{ once: true, margin: '-80px' }}
         transition={reduced ? undefined : { duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       >
@@ -92,9 +94,10 @@ export default function Section({
               </p>
             )}
             {title && (
-              <h2 className="font-serif text-3xl font-medium leading-tight tracking-tight text-[var(--color-ink)] md:text-4xl lg:text-5xl">
-                {title}
-              </h2>
+              <RevealHeading
+                lines={[title]}
+                className="font-serif text-3xl font-medium leading-tight tracking-tight text-[var(--color-ink)] md:text-4xl lg:text-5xl"
+              />
             )}
           </div>
         )}

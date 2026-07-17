@@ -6,6 +6,7 @@ import { ArrowRight, BadgeCheck, Camera, MapPinned } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import OptimizedImage from '../OptimizedImage';
+import RevealHeading from '../RevealHeading';
 
 const COUPLE_IMG = '/images/brand/about-editorial.webp';
 
@@ -86,19 +87,10 @@ export default function CoupleIntro() {
         },
       });
 
-      gsap.set('[data-couple-line]', { yPercent: 110, opacity: 0 });
-      gsap.to('[data-couple-line]', {
-        yPercent: 0,
-        opacity: 1,
-        duration: 0.85,
-        ease: 'power3.out',
-        stagger: 0.1,
-        scrollTrigger: {
-          trigger: '[data-couple-heading]',
-          start: 'top 78%',
-          once: true,
-        },
-      });
+      // Il reveal delle righe-titolo NON usa più GSAP: l'heading vive in un
+      // contenitore lg:sticky e ScrollTrigger calcola male lo start (titolo
+      // che resta nascosto per sempre). Ora è RevealHeading (motion/react),
+      // lo stesso gesto-firma del resto del sito.
 
       // Polaroid scatter: entry fan-out con stagger e rotazione finale.
       // Inizialmente "tutte vicine al centro" (translate 0, rotate 0),
@@ -199,21 +191,15 @@ export default function CoupleIntro() {
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
               Chi siamo
             </span>
-            <h2 data-couple-heading className="text-display-2 mt-3 max-w-2xl text-ink">
-              <span className="sr-only">
-                Andiamo, proviamo, raccontiamo. Solo dopo consigliamo.
-              </span>
-              <span aria-hidden="true" className="block overflow-hidden">
-                <span data-couple-line className="block">
-                  Andiamo, proviamo, raccontiamo.
-                </span>
-              </span>
-              <span aria-hidden="true" className="block overflow-hidden">
-                <span data-couple-line className="block text-[var(--color-accent)]">
+            <RevealHeading
+              className="text-display-2 mt-3 max-w-2xl text-ink"
+              lines={[
+                'Andiamo, proviamo, raccontiamo.',
+                <span key="accent" className="text-[var(--color-accent)]">
                   Solo dopo consigliamo.
-                </span>
-              </span>
-            </h2>
+                </span>,
+              ]}
+            />
             <p className="mt-6 max-w-2xl text-base leading-relaxed text-[var(--color-ink-2)] md:text-lg">
               Travelliniwithus non nasce come catalogo turistico o elenco di attrazioni. Esiste per
               selezionare i luoghi che hanno un'anima reale e raccontarli con la cura e i dettagli

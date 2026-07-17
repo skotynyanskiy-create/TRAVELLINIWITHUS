@@ -2,6 +2,7 @@ import { motion, useReducedMotion } from 'motion/react';
 import { BadgeCheck, FileCheck2, ShieldCheck, type LucideIcon } from 'lucide-react';
 import Section from '@/src/components/Section';
 import Button from '@/src/components/Button';
+import RevealHeading from '@/src/components/RevealHeading';
 import { BRAND_CREDENTIALS } from '@/src/config/site';
 import { siteContentDefaults } from '@/src/config/siteContent';
 import { useSiteContent } from '@/src/hooks/useSiteContent';
@@ -43,11 +44,15 @@ export default function MetodoBand({ className = '', id }: MetodoBandProps) {
               {copy.aboutEyebrow}
             </span>
           </div>
-          <h2 className="font-serif font-medium leading-tight tracking-tight text-[var(--color-ink)] text-3xl md:text-4xl lg:text-5xl">
-            {copy.aboutTitleMain}
-            <br />
-            <span className="text-[var(--color-accent-text)]">{copy.aboutTitleAccent}</span>
-          </h2>
+          <RevealHeading
+            className="font-serif font-medium leading-tight tracking-tight text-[var(--color-ink)] text-3xl md:text-4xl lg:text-5xl"
+            lines={[
+              copy.aboutTitleMain,
+              <span key="accent" className="text-[var(--color-accent-text)]">
+                {copy.aboutTitleAccent}
+              </span>,
+            ]}
+          />
 
           <blockquote className="mt-8 border-l-2 border-[var(--color-accent)] pl-5 font-serif text-xl italic leading-snug text-[var(--color-ink-2)] md:text-2xl">
             &ldquo;{quote}&rdquo;
