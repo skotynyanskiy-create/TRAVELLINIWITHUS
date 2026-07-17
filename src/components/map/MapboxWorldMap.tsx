@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Map, {
   Marker,
   Popup,
@@ -256,6 +257,8 @@ export default function MapboxWorldMap() {
   const continentChipRef = useRef<HTMLButtonElement | null>(null);
   const experienceChipRef = useRef<HTMLButtonElement | null>(null);
   const prefersReducedMotion = useReducedMotion();
+  const [searchParams] = useSearchParams();
+  const deepLinkAppliedRef = useRef(false);
   const [articles, setArticles] = useState<ArticleWithCoords[]>([]);
   const [selectedArticle, setSelectedArticle] = useState<ArticleWithCoords | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -374,6 +377,18 @@ export default function MapboxWorldMap() {
     },
     [prefersReducedMotion]
   );
+
+  // Deep-link da /posto: "Apri sulla mappa" passa ?place=<id> per centrare e
+  // aprire subito il pin reale invece di lasciare la mappa muta sulla vista
+  // globale. Applicato una sola volta, appena i marker sono disponibili.
+  useEffect(() => {
+    if (deepLinkAppliedRef.current || articles.length === 0) return;
+    const placeId = searchParams.get('place');
+    if (!placeId) return;
+    const match = articles.find((a) => a.id === placeId);
+    if (match) focusArticle(match);
+    deepLinkAppliedRef.current = true;
+  }, [articles, searchParams, focusArticle]);
 
   const handleClusterClick = useCallback(
     async (e: MapLayerMouseEvent) => {

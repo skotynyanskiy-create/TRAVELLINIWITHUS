@@ -19,6 +19,17 @@ export type PartnershipKind =
   | 'collaboration' // collaborazione
   | 'affiliate'; // link affiliato
 
+/** Etichetta IT visibile per la disclosure partnership (AGCOM/IAP Digital Chart:
+ * dicitura chiara, mai nascosta, visibile senza azioni aggiuntive dell'utente). */
+export const PARTNERSHIP_LABEL: Record<PartnershipKind, string> = {
+  organic: '',
+  adv: 'ADV',
+  invited: 'Su invito',
+  gifted: 'Gifted',
+  collaboration: 'In collaborazione',
+  affiliate: 'Affiliato',
+};
+
 /** Un criterio valutato della scheda redazionale (es. "Cucina", score 8.4). */
 export interface ReviewCriterion {
   name: string;
@@ -54,6 +65,16 @@ export interface ContentPlace {
   country: string;
   /** Coordinate per la mappa Mapbox. Riempite da `scripts/geocode-content.mjs`. */
   coordinates?: { lat: number; lng: number };
+  /** Orari testuali (es. "Mar-Dom 19:00-23:00"). Renderizzato SOLO se presente — mai inventato. */
+  hours?: string;
+  /** Numero di telefono. Renderizzato SOLO se presente — mai inventato. */
+  phone?: string;
+  /** Sito ufficiale del posto (non ancora renderizzato in UI — riservato a usi futuri). */
+  website?: string;
+  /** Link di prenotazione (Business/OpenTable/TheFork/sito). Renderizzato SOLO se presente. */
+  bookingUrl?: string;
+  /** Override della query di ricerca Google Maps (es. nome esatto scheda Business). */
+  googlePlaceQuery?: string;
 }
 
 export interface ContentItem {

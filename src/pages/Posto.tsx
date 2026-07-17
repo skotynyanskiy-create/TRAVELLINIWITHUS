@@ -1,5 +1,17 @@
+import { useState } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
-import { ExternalLink, MapPin, Play } from 'lucide-react';
+import {
+  ExternalLink,
+  MapPin,
+  Play,
+  Navigation,
+  Clock,
+  Phone,
+  CalendarCheck,
+  Heart,
+  Share2,
+  CheckCircle,
+} from 'lucide-react';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
@@ -12,8 +24,15 @@ import { Link } from '@/src/components/TransitionLink';
 import { getContentById } from '../config/contentLibrary';
 import { findDestinationByRegionName, getDestinationUrl } from '../config/destinations';
 import { SITE_URL } from '../config/site';
+import { useFavorites } from '../context/FavoritesContext';
+import { trackEvent } from '../services/analytics';
+import {
+  buildGoogleMapsDirectionsUrl,
+  buildGoogleMapsListingUrl,
+  getBookingProviderFromUrl,
+} from '../utils/placeLinks';
 import type { ContentType } from '../config/contentTaxonomy';
-import type { PartnershipKind } from '../types/content';
+import { PARTNERSHIP_LABEL } from '../types/content';
 
 /** Gradiente saturo per tipo canonical — identico a ContentCard per coerenza visiva. */
 const TYPE_GRADIENT: Record<ContentType | '_default', string> = {
@@ -26,15 +45,6 @@ const TYPE_GRADIENT: Record<ContentType | '_default', string> = {
   "Borghi e città d'arte": 'linear-gradient(145deg, #7c3aed 0%, #4338ca 100%)',
   'Weekend romantici': 'linear-gradient(145deg, #9d174d 0%, #c2410c 100%)',
   _default: 'linear-gradient(145deg, #1c1917 0%, #292524 100%)',
-};
-
-const PARTNERSHIP_LABEL: Record<PartnershipKind, string> = {
-  organic: '',
-  adv: 'ADV',
-  invited: 'Su invito',
-  gifted: 'Gifted',
-  collaboration: 'In collaborazione',
-  affiliate: 'Affiliato',
 };
 
 /** Mappa types[0] → @type Schema.org per il JSON-LD della pagina-posto. */
@@ -53,6 +63,8 @@ const TYPE_SCHEMA: Record<ContentType | '_default', string> = {
 export default function Posto() {
   const { slug } = useParams<{ slug: string }>();
   const item = slug ? getContentById(slug) : undefined;
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const [copied, setCopied] = useState(false);
 
   if (!item) {
     return <Navigate to="/esplora" replace />;
@@ -65,8 +77,73 @@ export default function Posto() {
   const placeLabel = [item.place.city, item.place.region, item.place.country]
     .filter(Boolean)
     .join(', ');
+  const placeDetailLabel = [item.place.name, placeLabel].filter(Boolean).join(' — ');
 
   const schemaType = TYPE_SCHEMA[item.types[0]] ?? TYPE_SCHEMA._default;
+
+  const saved = isFavorite(item.id);
+  const coordinates = item.place.coordinates;
+  const directionsUrl = buildGoogleMapsDirectionsUrl({
+    name: item.place.name,
+    city: item.place.city,
+    coordinates,
+    googlePlaceQuery: item.place.googlePlaceQuery,
+  });
+  const listingUrl = buildGoogleMapsListingUrl({
+    name: item.place.name,
+    city: item.place.city,
+    googlePlaceQuery: item.place.googlePlaceQuery,
+  });
+  const mapPinUrl = coordinates ? `/mappa?place=${encodeURIComponent(item.id)}` : undefined;
+  const bookingLabel = item.types[0] === 'Food & Ristoranti' ? 'Prenota un tavolo' : 'Prenota';
+
+  const handleDirectionsClick = () => {
+    trackEvent('place_directions_click', {
+      place_id: item.id,
+      has_coordinates: Boolean(coordinates),
+    });
+  };
+
+  const handleGoogleListingClick = () => {
+    trackEvent('place_google_listing_click', { place_id: item.id });
+  };
+
+  const handleBookingClick = () => {
+    trackEvent('place_booking_click', {
+      place_id: item.id,
+      provider: item.place.bookingUrl
+        ? getBookingProviderFromUrl(item.place.bookingUrl)
+        : 'unknown',
+    });
+  };
+
+  const handlePhoneClick = () => {
+    trackEvent('place_phone_click', { place_id: item.id });
+  };
+
+  const handleToggleFavorite = () => {
+    toggleFavorite(item.id);
+    if (!saved) {
+      trackEvent('place_favorite_add', { place_id: item.id, source: 'posto' });
+    }
+  };
+
+  const handleShare = async () => {
+    const method = navigator.share ? 'native' : 'copy';
+    trackEvent('place_share_click', { place_id: item.id, method });
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: item.title, url: canonical });
+      } catch {
+        // condivisione annullata dall'utente — nessuna azione
+      }
+    } else {
+      await navigator.clipboard.writeText(canonical);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   // Link alla pagina destinazione della regione/paese — solo se il nodo esiste
   // nell'albero destinations (regioni italiane + paesi). Altrimenti testo semplice.
@@ -233,9 +310,138 @@ export default function Posto() {
               <RatingPill overall={item.review?.overall} />
             </div>
 
+            {/* Riga Salva / Condividi — leggera, fuori dalla card Info pratiche */}
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm text-[var(--color-ink-2)]">
+                Salvalo, o mandalo a chi ci deve venire.
+              </p>
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={handleToggleFavorite}
+                  aria-pressed={saved}
+                  aria-label={saved ? 'Rimuovi dai preferiti' : 'Salva nei preferiti'}
+                  className={`inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-full px-5 text-xs font-bold uppercase tracking-widest transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 sm:flex-none ${
+                    saved
+                      ? 'bg-[var(--color-accent)] text-white'
+                      : 'border border-[var(--color-border)] text-[var(--color-ink)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]'
+                  }`}
+                >
+                  <Heart size={14} className={saved ? 'fill-current' : ''} aria-hidden />
+                  {saved ? 'Salvato' : 'Salva'}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleShare}
+                  aria-label="Condividi questo posto"
+                  className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-full border border-[var(--color-border)] px-5 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 sm:flex-none"
+                >
+                  {copied ? (
+                    <CheckCircle size={14} aria-hidden />
+                  ) : (
+                    <Share2 size={14} aria-hidden />
+                  )}
+                  {copied ? 'Link copiato' : 'Condividi'}
+                </button>
+              </div>
+              <span className="sr-only" role="status" aria-live="polite">
+                {copied ? 'Link copiato negli appunti' : ''}
+              </span>
+            </div>
+
+            {/* Card "Info pratiche" — Dove + Orari e contatti */}
+            <section
+              aria-label="Info pratiche"
+              className="mt-8 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-sm)] md:p-8"
+            >
+              <div className="grid gap-6 md:grid-cols-2 md:gap-8">
+                {/* DOVE */}
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
+                    Dove si trova
+                  </p>
+                  <p className="mt-3 flex items-start gap-2 text-sm text-[var(--color-ink-2)]">
+                    <MapPin size={14} className="mt-0.5 shrink-0" aria-hidden />
+                    {placeDetailLabel}
+                  </p>
+                  <a
+                    href={directionsUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={handleDirectionsClick}
+                    className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] px-6 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 md:w-auto"
+                  >
+                    <Navigation size={14} aria-hidden /> Indicazioni
+                  </a>
+                  {mapPinUrl && (
+                    <Link
+                      to={mapPinUrl}
+                      className="mt-3 inline-flex items-center gap-1.5 text-sm text-[var(--color-ink-2)] underline-offset-4 transition-colors hover:text-[var(--color-accent)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+                    >
+                      <MapPin size={14} aria-hidden /> Apri sulla mappa
+                    </Link>
+                  )}
+                </div>
+
+                {/* ORARI E CONTATTI */}
+                <div className="border-t border-[var(--color-border)] pt-6 md:border-t-0 md:border-l md:pt-0 md:pl-8">
+                  <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
+                    <Clock size={13} aria-hidden /> Orari e contatti
+                  </p>
+
+                  {(item.place.hours || item.place.phone) && (
+                    <div className="mt-3 space-y-2.5">
+                      {item.place.hours && (
+                        <p className="flex items-center gap-2 text-sm text-[var(--color-ink-2)]">
+                          <Clock size={14} className="shrink-0" aria-hidden /> {item.place.hours}
+                        </p>
+                      )}
+                      {item.place.phone && (
+                        <a
+                          href={`tel:${item.place.phone.replace(/\s+/g, '')}`}
+                          onClick={handlePhoneClick}
+                          className="flex items-center gap-2 text-sm text-[var(--color-ink-2)] underline-offset-4 transition-colors hover:text-[var(--color-accent)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+                        >
+                          <Phone size={14} className="shrink-0" aria-hidden /> Chiama ·{' '}
+                          {item.place.phone}
+                        </a>
+                      )}
+                    </div>
+                  )}
+
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    {item.place.bookingUrl && (
+                      <a
+                        href={item.place.bookingUrl}
+                        target="_blank"
+                        rel="sponsored noopener"
+                        onClick={handleBookingClick}
+                        className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[var(--color-border)] px-5 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+                      >
+                        <CalendarCheck size={14} aria-hidden /> {bookingLabel}
+                      </a>
+                    )}
+                    <a
+                      href={listingUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={handleGoogleListingClick}
+                      className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[var(--color-border)] px-5 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+                    >
+                      <ExternalLink size={14} aria-hidden /> Vedi su Google
+                    </a>
+                  </div>
+
+                  <p className="mt-4 text-[11px] text-[var(--color-muted-fg)]">
+                    Orari, telefono e prenotazione sono aggiornati direttamente da Google.
+                  </p>
+                </div>
+              </div>
+            </section>
+
             {/* Descrizione */}
             {item.description && (
-              <p className="mt-6 text-base leading-relaxed text-[var(--color-ink-2)] md:text-lg">
+              <p className="mt-8 text-base leading-relaxed text-[var(--color-ink-2)] md:text-lg">
                 {item.description}
               </p>
             )}
@@ -253,21 +459,6 @@ export default function Posto() {
               >
                 <Play size={14} fill="currentColor" /> Guarda il reel
               </a>
-              {item.place.coordinates ? (
-                <Link
-                  to={`/mappa`}
-                  className="inline-flex items-center gap-2 rounded-full border border-black/10 px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-                >
-                  <MapPin size={14} /> Apri sulla mappa
-                </Link>
-              ) : (
-                <Link
-                  to="/esplora"
-                  className="inline-flex items-center gap-2 rounded-full border border-black/10 px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-                >
-                  <ExternalLink size={14} /> Esplora altri posti
-                </Link>
-              )}
             </div>
           </div>
 
