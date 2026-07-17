@@ -1,5 +1,5 @@
 import type { Timestamp } from 'firebase/firestore';
-import type { ContentReview } from '@/src/types/content';
+import type { ContentReview, PartnershipKind } from '@/src/types/content';
 
 const DEFAULT_ARTICLE_IMAGE = '/images/hero-amalfi.png';
 
@@ -98,6 +98,8 @@ export interface NormalizedArticle {
   excerpt: string;
   description: string;
   review?: ContentReview;
+  /** Trasparenza partnership (AGCOM/IAP) — assente/'organic' = nessun badge mostrato. */
+  partnership?: { kind: PartnershipKind; partner?: string };
   content: string;
   image: string;
   coverImage: string;
@@ -180,6 +182,10 @@ export function normalizeFirestoreArticle(
     category,
     published: data.published === true,
     review: data.review ? (data.review as ContentReview) : undefined,
+    partnership:
+      data.partnership && typeof data.partnership === 'object'
+        ? (data.partnership as { kind: PartnershipKind; partner?: string })
+        : undefined,
     author: asString(data.author) || undefined,
     authorId: asString(data.authorId) || undefined,
     date,

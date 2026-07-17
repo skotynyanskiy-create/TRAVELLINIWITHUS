@@ -147,6 +147,7 @@ function ensureArticleData(
     videoUrl: article.videoUrl,
     updatedAt: article.updatedAt,
     review: article.review,
+    partnership: article.partnership,
   };
 }
 

@@ -1,11 +1,13 @@
 import React from 'react';
-import type { ContentReview } from '@/src/types/content';
+import type { ContentReview, PartnershipKind } from '@/src/types/content';
 
 export interface ArticleData {
   title: string;
   description: string;
   image: string;
   review?: ContentReview;
+  /** Trasparenza partnership (AGCOM/IAP) — assente = organico, nessun badge mostrato. */
+  partnership?: { kind: PartnershipKind; partner?: string };
   /** Alt descrittivo dell'immagine di copertina. Se assente, fallback su luogo + categoria
       (evita di duplicare l'H1 per gli screen reader). */
   imageAlt?: string;

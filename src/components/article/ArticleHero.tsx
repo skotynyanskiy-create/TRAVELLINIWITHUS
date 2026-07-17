@@ -6,6 +6,7 @@ import OptimizedImage from '../OptimizedImage';
 import { heartPulse } from '../../lib/animations';
 import type { ArticleData } from './types';
 import RatingPill from '../RatingPill';
+import { PARTNERSHIP_LABEL } from '@/src/types/content';
 
 interface ArticleHeroProps {
   article: ArticleData;
@@ -69,6 +70,17 @@ export default function ArticleHero({
           transition={{ duration: 0.8 }}
           className="max-w-4xl"
         >
+          {article.partnership && article.partnership.kind !== 'organic' && (
+            <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/15 backdrop-blur-md px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-white">
+              {PARTNERSHIP_LABEL[article.partnership.kind]}
+              {article.partnership.partner && (
+                <span className="font-normal normal-case tracking-normal text-white/80">
+                  · in collaborazione con {article.partnership.partner}
+                </span>
+              )}
+            </p>
+          )}
+
           <div className="flex flex-wrap items-center gap-4 mb-8">
             {categoryPath ? (
               <Link

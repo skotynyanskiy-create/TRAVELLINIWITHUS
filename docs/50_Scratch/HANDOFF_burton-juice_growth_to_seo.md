@@ -1,6 +1,6 @@
 ---
 title: HANDOFF_burton-juice_growth_to_seo
-status: open
+status: consumed
 created: 2026-07-15
 from: travellini-growth-revenue-operator
 to: travellini-seo-conversion-strategist

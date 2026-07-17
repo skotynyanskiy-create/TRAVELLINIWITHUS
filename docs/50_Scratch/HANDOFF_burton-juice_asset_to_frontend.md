@@ -1,23 +1,48 @@
 ---
 title: HANDOFF_burton-juice_asset_to_frontend
-status: open
+status: blocked
 created: 2026-07-15
+updated: 2026-07-16
 from: travellini-asset-curator
 to: travellini-frontend-builder
 slug: burton-juice-ristorante-tim-burton
-expires: 2026-07-29
+expires: 2026-07-30
 type: handoff
 area: delivery
 ---
 
 # Handoff: build pagina pillar "The Burton Juice" con scheda recensione
 
+## ASSET STATUS (aggiornato 2026-07-16 da travellini-asset-curator) — BLOCKED
+
+**Le foto reali NON esistono ancora in repo.** Non wirare immagini finché R+B
+non consegnano il materiale. Verificato: il reel pinned NON è tra i 5 MP4 in
+`public/video/`; `content-seed.json`/`campania-burton-juice` ha `cover: ""`;
+il seed usa il placeholder `/hero-adventure.jpg` (NON il locale). Nessun frame
+estraibile (manca anche il video-sorgente). Path con immagini inventate = 404 +
+violazione DNA (niente AI/stock).
+
+- **Fonte del piano immagini:** sezione `## Assets` della content note (tabella
+  path/ruoli/pesi + alt IT + OG brief + richiesta materiali a R+B). Leggila prima
+  di toccare le immagini.
+- **Sblocco immagini:** R+B consegnano almeno il set minimo (1 scatto
+  **orizzontale** ingresso/sala Alice per hero+OG + 1 attori in sala) E i diritti
+  sono confermati. Hero/OG da scatto orizzontale, NON da frame verticale del reel.
+- **Path target:** `public/images/articles/burton-juice/` con varianti responsive
+  `-320/-480/-768/-1280` in `.avif` + `.webp`. Hero `eager` + preload (LCP);
+  sezioni lazy; `<picture>` con fallback WebP; OG 1200×630 JPG ≤300KB.
+- **Rights da risolvere:** `content-seed.json` marca `adv @theburtonjuice`, il
+  brief editorial dice "organico puro". Discrepanza da chiarire con owner +
+  conferma diritti d'uso web di ogni immagine prima di pubblicare.
+- **Nel frattempo puoi comunque** procedere sul resto (seed testo, struttura,
+  review) tenendo `coverImage`/figure come placeholder e `published: false`.
+
 ## Why this work matters
 
-Tutti i pezzi (brief, SEO, body, foto reali, recensione) sono pronti nella
-content note. Ora vanno assemblati nel seed e resi live come pagina articolo
-funzionante, con la scheda recensione renderizzata correttamente e zero
-overflow mobile.
+Il body/SEO/recensione vanno assemblati nel seed e resi live come pagina
+articolo funzionante, con la scheda recensione renderizzata correttamente e zero
+overflow mobile. Le immagini reali si aggiungono a materiale ricevuto (vedi
+ASSET STATUS sopra).
 
 ## Decisions already made (locked)
 
