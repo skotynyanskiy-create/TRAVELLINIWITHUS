@@ -1,6 +1,6 @@
 ---
 title: HANDOFF_personality-d4_ui_to_frontend
-status: open
+status: consumed
 created: 2026-07-18
 from: travellini-ui-designer (workflow personality-briefs)
 to: travellini-frontend-builder

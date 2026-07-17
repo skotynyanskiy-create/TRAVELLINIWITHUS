@@ -101,7 +101,7 @@ export default function ArticleHero({
             {article.review?.overall != null && (
               <>
                 <span className="w-8 h-px bg-white/30"></span>
-                <RatingPill overall={article.review.overall} />
+                <RatingPill overall={article.review.overall} tone="dark" />
               </>
             )}
           </div>

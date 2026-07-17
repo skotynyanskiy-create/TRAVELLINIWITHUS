@@ -17,7 +17,7 @@ import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Newsletter from '../components/Newsletter';
 import ReviewBlock from '../components/ReviewBlock';
-import RatingPill from '../components/RatingPill';
+import VerdictSeal from '../components/VerdictSeal';
 import DealCard from '../components/DealCard';
 import PostNavigation from '../components/PostNavigation';
 import { Link } from '@/src/components/TransitionLink';
@@ -291,23 +291,28 @@ export default function Posto() {
               {item.hook}
             </h1>
 
-            {/* Luogo + voto redazionale */}
-            <div className="mt-4 flex flex-wrap items-center gap-3">
-              {destUrl ? (
-                <Link
-                  to={destUrl}
-                  className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-[var(--color-accent-text)] underline-offset-4 transition-colors hover:underline"
-                >
-                  <MapPin size={14} />
-                  {placeLabel}
-                </Link>
-              ) : (
-                <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-[var(--color-accent-text)]">
-                  <MapPin size={14} />
-                  {placeLabel}
-                </p>
-              )}
-              <RatingPill overall={item.review?.overall} />
+            {/* Cluster verdetto — il Timbro accanto a verdetto editoriale + luogo */}
+            <div className="mt-4 flex items-center gap-4">
+              <VerdictSeal overall={item.review?.overall} size="md" />
+              <div className="min-w-0">
+                {item.review?.verdict && (
+                  <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-text)]">
+                    {item.review.verdict}
+                  </p>
+                )}
+                {destUrl ? (
+                  <Link
+                    to={destUrl}
+                    className="mt-1 inline-flex items-center gap-2 rounded text-sm font-semibold uppercase tracking-[0.16em] text-[var(--color-accent-text)] underline-offset-4 transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+                  >
+                    <MapPin size={14} /> {placeLabel}
+                  </Link>
+                ) : (
+                  <p className="mt-1 flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.16em] text-[var(--color-accent-text)]">
+                    <MapPin size={14} /> {placeLabel}
+                  </p>
+                )}
+              </div>
             </div>
 
             {/* Riga Salva / Condividi — leggera, fuori dalla card Info pratiche */}

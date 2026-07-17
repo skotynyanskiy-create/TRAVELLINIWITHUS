@@ -1,10 +1,7 @@
 import { Check, Minus } from 'lucide-react';
 import type { ContentReview } from '../types/content';
-
-/** Formatta un voto 0-10 con la virgola decimale italiana (es. 8.6 → "8,6"). */
-function formatScore(value: number): string {
-  return value.toFixed(1).replace('.', ',');
-}
+import { formatScore } from '../utils/formatScore';
+import VerdictSeal from './VerdictSeal';
 
 /**
  * Scheda redazionale R+B di un posto — voto, verdetto, criteri, pro e contro.
@@ -39,16 +36,10 @@ export default function ReviewBlock({
       </p>
 
       {overall != null && (
-        <div className="mt-4 flex items-baseline gap-3">
-          <span
-            className="font-serif text-5xl leading-none text-[var(--color-ink)]"
-            aria-label={`Voto complessivo ${formatScore(overall)} su 10`}
-          >
-            {formatScore(overall)}
-          </span>
-          <span className="text-lg font-medium text-[var(--color-muted-fg)]">/10</span>
+        <div className="mt-4 flex items-center gap-4">
+          <VerdictSeal overall={overall} size="lg" />
           {verdict && (
-            <span className="ml-1 text-sm font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-text)]">
+            <span className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-text)]">
               {verdict}
             </span>
           )}
