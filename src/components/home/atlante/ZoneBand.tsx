@@ -74,8 +74,8 @@ export default function ZoneBand({ className = '' }: ZoneBandProps) {
             id="zone-band-title"
             className="text-3xl font-serif leading-[1.05] text-ink md:text-5xl"
           >
-            Da vicino a casa,{' '}
-            <span className="italic text-muted-fg-2">fino al resto del mondo</span>.
+            Vicino a casa,{' '}
+            <span className="italic text-muted-fg-2">e dall'altra parte del mondo</span>.
           </h2>
         </div>
 

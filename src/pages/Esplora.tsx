@@ -684,7 +684,7 @@ export default function Esplora() {
                 Posti particolari
               </p>
               <h2 className="mt-1 font-serif text-2xl leading-tight text-[var(--color-ink)] md:text-3xl">
-                Quello che abbiamo visto davvero.
+                Ci siamo stati per davvero.
               </h2>
             </div>
             {(filters.zone || filters.type) && (

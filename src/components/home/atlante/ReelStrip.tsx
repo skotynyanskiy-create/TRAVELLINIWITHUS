@@ -59,7 +59,7 @@ export default function ReelStrip({ reels = getPublishedReels() }: ReelStripProp
         <div className="mb-10 flex flex-wrap items-end justify-between gap-6">
           <div>
             <span className="mb-3 block text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent)]">
-              Le storie
+              Coi nostri occhi
             </span>
             <h2 className="font-serif text-3xl text-[var(--color-sand)] md:text-5xl">
               I reel di Rodrigo &amp; Betta
