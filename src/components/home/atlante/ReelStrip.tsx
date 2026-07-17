@@ -5,7 +5,8 @@ import { ChevronLeft, ChevronRight, Instagram, Play, X } from 'lucide-react';
 import OptimizedImage from '@/src/components/OptimizedImage';
 import { CONTACTS } from '@/src/config/site';
 import { getPublishedReels, type ReelEntry } from '@/src/config/reels';
-import { catColor } from '@/src/config/categoryColors';
+import { CAT_COLOR, CAT_SHORT_LABEL, catColor } from '@/src/config/categoryColors';
+import type { ContentType } from '@/src/config/contentTaxonomy';
 import { trackEvent } from '@/src/services/analytics';
 
 interface ReelStripProps {
@@ -53,39 +54,66 @@ export default function ReelStrip({ reels = getPublishedReels() }: ReelStripProp
 
   if (reels.length === 0) return null;
 
+  // Rubriche della riga-indice: solo i tipi mappati in CAT_COLOR, dedup in ordine di apparizione.
+  const rubriche = reels.reduce<ContentType[]>((acc, reel) => {
+    if (CAT_COLOR[reel.type] && !acc.includes(reel.type)) acc.push(reel.type);
+    return acc;
+  }, []);
+
   return (
     <section className="bg-[var(--color-ink)] py-20 md:py-24">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
-        <div className="mb-10 flex flex-wrap items-end justify-between gap-6">
-          <div>
-            <span className="mb-3 block text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent)]">
-              Coi nostri occhi
-            </span>
-            <h2 className="font-serif text-3xl text-[var(--color-sand)] md:text-5xl">
-              I reel di Rodrigo &amp; Betta
-            </h2>
-            <p className="mt-3 max-w-xl text-sm text-white/70 md:text-base">
-              Posti particolari, food insolito e dietro le quinte. Tocca per guardare il video.
-            </p>
+        <div className="mb-10">
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <span className="mb-3 block text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent)]">
+                In questo numero
+              </span>
+              <h2 className="font-serif text-3xl text-[var(--color-sand)] md:text-5xl">
+                I reel di Rodrigo &amp; Betta
+              </h2>
+              <p className="mt-3 max-w-xl text-sm text-white/70 md:text-base">
+                Posti particolari, food insolito e dietro le quinte. Tocca per guardare il video.
+              </p>
+            </div>
+
+            <div className="hidden items-center gap-2 md:flex">
+              <button
+                type="button"
+                onClick={scrollPrev}
+                aria-label="Reel precedenti"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-white transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+              >
+                <ChevronLeft size={18} />
+              </button>
+              <button
+                type="button"
+                onClick={scrollNext}
+                aria-label="Reel successivi"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-white transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+              >
+                <ChevronRight size={18} />
+              </button>
+            </div>
           </div>
 
-          <div className="hidden items-center gap-2 md:flex">
-            <button
-              type="button"
-              onClick={scrollPrev}
-              aria-label="Reel precedenti"
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-white transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-            >
-              <ChevronLeft size={18} />
-            </button>
-            <button
-              type="button"
-              onClick={scrollNext}
-              aria-label="Reel successivi"
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-white transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-            >
-              <ChevronRight size={18} />
-            </button>
+          {/* Regola d'indice: conteggio reale + rubriche colorate, come il sommario di un numero. */}
+          <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-white/10 pt-5">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/70">
+              {reels.length} {reels.length === 1 ? 'storia' : 'storie'}
+            </span>
+            {rubriche.map((type) => (
+              <span key={type} className="inline-flex items-center gap-1.5">
+                <span
+                  aria-hidden
+                  className="h-1.5 w-1.5 rounded-full"
+                  style={{ backgroundColor: catColor(type) }}
+                />
+                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/80">
+                  {CAT_SHORT_LABEL[type] ?? type}
+                </span>
+              </span>
+            ))}
           </div>
         </div>
 
@@ -136,7 +164,7 @@ export default function ReelStrip({ reels = getPublishedReels() }: ReelStripProp
                         non come scarsità (thin-content friendly). */}
                     <span
                       aria-hidden="true"
-                      className="absolute right-3.5 top-3 text-xs font-semibold tabular-nums tracking-eyebrow text-white/85"
+                      className="dispatch-index-number dispatch-index-number--invert absolute right-3.5 top-3 text-right"
                     >
                       {String(index + 1).padStart(2, '0')}
                     </span>

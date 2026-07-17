@@ -93,9 +93,10 @@ export default function AtlanteHome() {
       {/* §2 — Rail categorie: sfoglia per tipo di posto */}
       <Section subtitle="Cosa cerchi" title="Che tipo di posto ti va">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
-          {CATEGORIES.map((cat) => (
+          {CATEGORIES.map((cat, i) => (
             <CategoryPill
               key={cat.type}
+              index={i}
               label={cat.label}
               fullLabel={cat.fullLabel}
               type={cat.type}

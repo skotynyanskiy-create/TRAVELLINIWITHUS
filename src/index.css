@@ -323,6 +323,11 @@
     min-width: 2.5rem;
   }
 
+  /* Modificatore per fondo scuro (ReelStrip su --color-ink): sabbia invece di muted-fg-2. */
+  .dispatch-index-number--invert {
+    color: color-mix(in srgb, var(--color-sand) 88%, transparent);
+  }
+
   /* Card tiers — product premium */
   .card-editorial {
     @apply rounded-[var(--radius-lg)] bg-[var(--color-surface)] transition-all;

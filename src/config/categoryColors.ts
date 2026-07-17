@@ -17,6 +17,15 @@ export const CAT_COLOR: Partial<Record<ContentType, string>> = {
   'Passeggiate panoramiche': 'var(--color-cat-panoramiche)',
 };
 
+/** Label breve per la chiave-colore della riga-indice (i tipi lunghi wrappano male in uppercase 10px). */
+export const CAT_SHORT_LABEL: Partial<Record<ContentType, string>> = {
+  'Food & Ristoranti': 'Food',
+  Insolito: 'Insolito',
+  'Relax, terme e spa': 'Relax',
+  "Borghi e città d'arte": 'Borghi',
+  'Passeggiate panoramiche': 'Panorami',
+};
+
 /** Colore-categoria per un tipo, con fallback neutro per i tipi non mappati. */
 export function catColor(type?: ContentType): string {
   return (type && CAT_COLOR[type]) || 'var(--color-muted-fg-2)';
