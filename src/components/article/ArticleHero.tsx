@@ -112,8 +112,14 @@ export default function ArticleHero({
 
           <div className="flex flex-wrap items-center gap-8 text-sm text-white/70 font-light">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-xs font-semibold uppercase tracking-widest">
-                TWU
+              <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full border border-white/20">
+                <OptimizedImage
+                  src="/images/brand/about-editorial.webp"
+                  alt=""
+                  className="h-full w-full object-cover"
+                  responsiveWidths={[320]}
+                  sizes="40px"
+                />
               </div>
               <span>
                 Di <strong className="font-medium text-white">{authorName}</strong>

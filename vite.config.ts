@@ -107,6 +107,9 @@ export default defineConfig(({ mode }) => {
         '@react-three/drei',
         '@react-three/postprocessing',
         'react-map-gl/maplibre',
+        '@gsap/react',
+        'gsap',
+        'gsap/ScrollTrigger',
       ],
     },
     build: {

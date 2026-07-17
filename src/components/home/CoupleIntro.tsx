@@ -197,7 +197,7 @@ export default function CoupleIntro() {
 
           <div className="lg:col-span-5 lg:sticky lg:top-32">
             <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
-              Il metodo
+              Chi siamo
             </span>
             <h2 data-couple-heading className="text-display-2 mt-3 max-w-2xl text-ink">
               <span className="sr-only">

@@ -7,6 +7,7 @@ import HeroCopertina from '@/src/components/home/atlante/HeroCopertina';
 import CategoryPill from '@/src/components/home/atlante/CategoryPill';
 import PezzoForte from '@/src/components/home/atlante/PezzoForte';
 import ReelStrip from '@/src/components/home/atlante/ReelStrip';
+import CoupleIntro from '@/src/components/home/CoupleIntro';
 import MetodoBand from '@/src/components/home/atlante/MetodoBand';
 import ZoneBand from '@/src/components/home/atlante/ZoneBand';
 import { slugifyType, type ContentType } from '@/src/config/contentTaxonomy';
@@ -113,7 +114,10 @@ export default function AtlanteHome() {
         <ReelStrip />
       </div>
 
-      {/* §5 — Il metodo */}
+      {/* §4.5 — Chi c'è dietro: presenza umana reale, non un template anonimo. */}
+      <CoupleIntro />
+
+      {/* §5 — Il metodo (credenziali di fiducia: AGCOM, Meta Verified, disclosure) */}
       <MetodoBand />
 
       {/* §6 — Esplora per zona */}
