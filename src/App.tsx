@@ -55,6 +55,9 @@ const Posto = lazy(() => import('./pages/Posto'));
 const VieniConNoi = lazy(() => import('./pages/VieniConNoi'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const ManifestoPage = lazy(() => import('./experience/controluce/ManifestoPage'));
+// Dev-only: variante "Diario" in isolamento su fixture Burton Juice — mai nel build di
+// produzione (Route registrata solo se import.meta.env.DEV, vedi sotto).
+const DiarioPreview = lazy(() => import('./pages/dev/DiarioPreview'));
 
 // Admin pages
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
@@ -159,6 +162,12 @@ export default function App() {
                       {!LITE_MODE && <Route path="club" element={<Club />} />}
                       <Route path="posto/:slug" element={<Posto />} />
                       <Route path="mappa" element={<Mappa />} />
+                      {/* Dev-only: variante Diario in isolamento, fixture Burton Juice.
+                          Mai registrata in produzione (import.meta.env.DEV → false, chunk
+                          mai fetchato), non in nav, non indicizzabile. */}
+                      {import.meta.env.DEV && (
+                        <Route path="_dev/diario-preview" element={<DiarioPreview />} />
+                      )}
                       <Route path="account/acquisti" element={<MieiAcquisti />} />
                       <Route path="lead-magnet" element={<LeadMagnet />} />
 

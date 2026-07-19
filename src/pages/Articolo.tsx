@@ -32,6 +32,7 @@ import {
   ArticleHero,
   ArticleSidebar,
   AuthorBio,
+  Diary,
   MobileBottomBar,
   MobileTocOverlay,
   ReadingMode,
@@ -155,6 +156,7 @@ function buildTocItems(article: ArticleData): TocItem[] {
   return [
     { id: 'overview', label: 'Vale davvero?', show: true },
     { id: 'pratico', label: 'Quando?', show: true },
+    { id: 'diario', label: 'Diario', show: !!article.diary?.length },
     { id: 'itinerario', label: 'Itinerario', show: !!article.itinerary?.length },
     { id: 'mappa', label: 'Mappa', show: !!(article.mapUrl || article.mapMarkers?.length) },
     {
@@ -956,6 +958,8 @@ export default function Articolo() {
                 {article.review && (
                   <ReviewBlock review={article.review} placeName={article.title} />
                 )}
+
+                {article.diary && article.diary.length > 0 && <Diary beats={article.diary} />}
 
                 {article.itinerary && article.itinerary.length > 0 && (
                   <section id="itinerario" className="mt-20 scroll-mt-32">

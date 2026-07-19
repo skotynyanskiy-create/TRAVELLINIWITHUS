@@ -22,6 +22,8 @@ export interface ArticleData {
   continent?: string;
   content: React.ReactNode | string;
   isMarkdown?: boolean;
+  /** Flag di contenuto: presenza di beat = variante Diario attiva. Assente/vuoto = degrado pulito. */
+  diary?: DiaryBeat[];
   tips?: string[];
   packingList?: string[];
   gallery?: string[];
@@ -44,6 +46,25 @@ export interface ArticleData {
   mapZoom?: number;
   duration?: string;
   videoUrl?: string;
+}
+
+/**
+ * Un "beat" del Diario: registro emotivo/narrativo del viaggio, distinto
+ * dall'Itinerario leggibile (che resta la logistica). Titolo concreto del
+ * viaggio reale, mai etichette generiche ("Partenza/Tramonto/Sosta").
+ */
+export interface DiaryBeat {
+  id: string;
+  title: string;
+  text: string;
+  image: {
+    src: string;
+    alt: string;
+    caption?: string;
+    credit?: string;
+  };
+  /** Marca i beat con Rodrigo & Betta reali nel frame (requisito people-led). */
+  peopleInFrame?: boolean;
 }
 
 export interface RelatedArticleSummary {
