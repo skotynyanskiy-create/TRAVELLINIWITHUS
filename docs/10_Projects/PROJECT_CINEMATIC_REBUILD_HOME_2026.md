@@ -21,6 +21,12 @@ tags:
 
 # PROJECT_CINEMATIC_REBUILD_HOME_2026
 
+## Direzione corrente — Il montaggio delle tracce (2026-07-18)
+
+La home pubblica `/` è stata riallineata al concept approvato **Il montaggio delle tracce**. La composizione vive in `src/components/home/cinematic/CinematicHomepage.tsx` e usa scroll nativo, Fraunces/Inter, asset reali Batu Caves e Tavernal, tre capitoli e una CTA finale. Mobile e `prefers-reduced-motion` sono versioni intenzionali della stessa storia. Nessun backend o file ad alto rischio è stato modificato.
+
+Verifiche eseguite: un solo H1, zero overflow a 375/768/1280/1440, console pulita, link capitoli coerenti e build produzione completata. La documentazione operativa è in `docs/TRAVELLINI-HOMEPAGE.md`; il confronto visuale è in `design-qa.md`.
+
 ## Decisione owner
 
 Il sito viene ricostruito attorno a una nuova esperienza immersiva. `Il Sentiero`

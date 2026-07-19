@@ -1,52 +1,6 @@
-import { Landmark, Mountain, Sparkles, Utensils, Waves, type LucideIcon } from 'lucide-react';
 import SEO from '@/src/components/SEO';
-import Section from '@/src/components/Section';
-import Newsletter from '@/src/components/Newsletter';
-import FinalCtaSection from '@/src/components/FinalCtaSection';
-import HeroCopertina from '@/src/components/home/atlante/HeroCopertina';
-import CategoryPill from '@/src/components/home/atlante/CategoryPill';
-import PezzoForte from '@/src/components/home/atlante/PezzoForte';
-import ReelStrip from '@/src/components/home/atlante/ReelStrip';
-import CoupleIntro from '@/src/components/home/CoupleIntro';
-import MetodoBand from '@/src/components/home/atlante/MetodoBand';
-import ZoneBand from '@/src/components/home/atlante/ZoneBand';
-import { slugifyType, type ContentType } from '@/src/config/contentTaxonomy';
+import CinematicHomepage from '@/src/components/home/cinematic/CinematicHomepage';
 import { CONTACTS, SITE_URL } from '@/src/config/site';
-
-interface CategoryCard {
-  label: string;
-  fullLabel: string;
-  type: ContentType;
-  icon: LucideIcon;
-}
-
-const CATEGORIES: CategoryCard[] = [
-  {
-    label: 'Food & Ristoranti',
-    fullLabel: 'Dove mangiamo davvero',
-    type: 'Food & Ristoranti',
-    icon: Utensils,
-  },
-  { label: 'Insolito', fullLabel: 'Posti fuori dagli schemi', type: 'Insolito', icon: Sparkles },
-  {
-    label: 'Relax, terme e spa',
-    fullLabel: 'Acqua calda e lentezza',
-    type: 'Relax, terme e spa',
-    icon: Waves,
-  },
-  {
-    label: "Borghi e città d'arte",
-    fullLabel: 'Pietra, storia, bellezza',
-    type: "Borghi e città d'arte",
-    icon: Landmark,
-  },
-  {
-    label: 'Passeggiate panoramiche',
-    fullLabel: 'Cammini con vista',
-    type: 'Passeggiate panoramiche',
-    icon: Mountain,
-  },
-];
 
 /**
  * Home "Atlante Vivo" — la home ufficiale (/) dal cutover del 2026-07-04.
@@ -88,51 +42,7 @@ export default function AtlanteHome() {
         ]}
       />
 
-      <HeroCopertina />
-
-      {/* §2 — Rail categorie: sfoglia per tipo di posto */}
-      <Section subtitle="Cosa cerchi" title="Che tipo di posto ti va">
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
-          {CATEGORIES.map((cat, i) => (
-            <CategoryPill
-              key={cat.type}
-              index={i}
-              label={cat.label}
-              fullLabel={cat.fullLabel}
-              type={cat.type}
-              icon={cat.icon}
-              to={`/esplora?type=${slugifyType(cat.type)}`}
-            />
-          ))}
-        </div>
-      </Section>
-
-      {/* §3 — Il pezzo forte */}
-      <PezzoForte />
-
-      {/* §4 — Le storie (reel). Ancora #reel per la CTA della hero. */}
-      <div id="reel">
-        <ReelStrip />
-      </div>
-
-      {/* §4.5 — Chi c'è dietro: presenza umana reale, non un template anonimo. */}
-      <CoupleIntro />
-
-      {/* §5 — Il metodo (credenziali di fiducia: AGCOM, Meta Verified, disclosure) */}
-      <MetodoBand />
-
-      {/* §6 — Esplora per zona */}
-      <ZoneBand />
-
-      {/* §7 — Newsletter (id="newsletter" interno) + §8 — CTA finale */}
-      <div className="mx-auto max-w-7xl space-y-16 px-6 py-20 md:px-12 md:py-28">
-        <Newsletter variant="editorial" source="atlante_home_newsletter" />
-        <FinalCtaSection
-          intent="discovery"
-          secondaryLabel="Collabora con noi"
-          secondaryTo="/collaborazioni"
-        />
-      </div>
+      <CinematicHomepage />
     </>
   );
 }

@@ -36,8 +36,8 @@ const renderNavbar = () =>
 
 describe('Navbar Component', () => {
   it('renders the logo', () => {
-    const { getByText } = renderNavbar();
-    expect(getByText(/Travellini/i)).toBeInTheDocument();
+    const { getAllByText } = renderNavbar();
+    expect(getAllByText(/Travellini/i).length).toBeGreaterThan(0);
   });
 
   it('renders navigation links (IA definitiva 2026-07-04)', () => {

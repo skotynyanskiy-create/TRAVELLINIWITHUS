@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import type { User } from 'firebase/auth';
 import { isAdminEmail } from '../config/admin';
 
@@ -54,6 +54,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState<string | null>(null);
+  const startAuthRef = useRef<() => void>(() => undefined);
 
   useEffect(() => {
     if (!hasFirebaseApiKey) {
@@ -63,72 +64,84 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     let unsubscribe: (() => void) | undefined;
     let cancelled = false;
+    let started = false;
 
-    // Defer Firebase auth/firestore init dietro import() dinamico: tiene i
-    // chunk firebase fuori dal modulepreload eager di ogni rotta. L'init parte
-    // dopo il primo mount, non a livello di modulo.
-    (async () => {
-      const [{ onAuthStateChanged }, { doc, getDoc, setDoc, serverTimestamp }, { auth }, { db }] =
-        await Promise.all([
+    const startAuth = async () => {
+      if (started || cancelled) return;
+      started = true;
+
+      try {
+        const [{ onAuthStateChanged }, { auth }] = await Promise.all([
           import('firebase/auth'),
-          import('firebase/firestore'),
           import('../lib/firebaseAuth'),
-          import('../lib/firebaseDb'),
         ]);
 
-      if (cancelled) return;
+        if (cancelled) return;
 
-      unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-        setUser(currentUser);
+        unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+          setUser(currentUser);
 
-        if (currentUser) {
-          setAuthError(null);
-          // Sync user profile with Firestore
-          const userRef = doc(db, 'users', currentUser.uid);
-          const userDoc = await getDoc(userRef);
+          if (currentUser) {
+            setAuthError(null);
+            const [{ doc, getDoc, setDoc, serverTimestamp }, { db }] = await Promise.all([
+              import('firebase/firestore'),
+              import('../lib/firebaseDb'),
+            ]);
+            const userRef = doc(db, 'users', currentUser.uid);
+            const userDoc = await getDoc(userRef);
 
-          if (!userDoc.exists()) {
-            const newProfile: UserProfile = {
-              uid: currentUser.uid,
-              email: currentUser.email || '',
-              displayName: currentUser.displayName || '',
-              photoURL: currentUser.photoURL || '',
-              role: isAdminEmail(currentUser.email) ? 'admin' : 'user',
-              updatedAt: serverTimestamp(),
-            };
-            await setDoc(userRef, newProfile);
-            setProfile(newProfile);
-          } else {
-            const existingProfile = userDoc.data() as UserProfile;
-
-            if (existingProfile.role !== 'admin' && isAdminEmail(currentUser.email)) {
-              const upgradedProfile: UserProfile = {
-                ...existingProfile,
-                role: 'admin',
+            if (!userDoc.exists()) {
+              const newProfile: UserProfile = {
+                uid: currentUser.uid,
+                email: currentUser.email || '',
+                displayName: currentUser.displayName || '',
+                photoURL: currentUser.photoURL || '',
+                role: isAdminEmail(currentUser.email) ? 'admin' : 'user',
                 updatedAt: serverTimestamp(),
               };
-              await setDoc(userRef, upgradedProfile, { merge: true });
-              setProfile(upgradedProfile);
+              await setDoc(userRef, newProfile);
+              setProfile(newProfile);
             } else {
-              setProfile(existingProfile);
-            }
-          }
-        } else {
-          setProfile(null);
-        }
+              const existingProfile = userDoc.data() as UserProfile;
 
+              if (existingProfile.role !== 'admin' && isAdminEmail(currentUser.email)) {
+                const upgradedProfile: UserProfile = {
+                  ...existingProfile,
+                  role: 'admin',
+                  updatedAt: serverTimestamp(),
+                };
+                await setDoc(userRef, upgradedProfile, { merge: true });
+                setProfile(upgradedProfile);
+              } else {
+                setProfile(existingProfile);
+              }
+            }
+          } else {
+            setProfile(null);
+          }
+
+          setLoading(false);
+        });
+      } catch (error) {
+        console.error('Auth initialization failed', error);
         setLoading(false);
-      });
-    })();
+      }
+    };
+
+    startAuthRef.current = () => void startAuth();
+    const delay = /^\/admin(?:\/|$)/.test(window.location.pathname) ? 0 : 8000;
+    const timerId = window.setTimeout(startAuth, delay);
 
     return () => {
       cancelled = true;
+      window.clearTimeout(timerId);
       unsubscribe?.();
     };
   }, []);
 
   const signIn = async () => {
     setAuthError(null);
+    startAuthRef.current();
 
     if (!hasFirebaseApiKey) {
       setAuthError('Firebase Auth non e configurato: manca VITE_FIREBASE_API_KEY.');

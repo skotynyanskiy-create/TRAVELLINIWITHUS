@@ -496,6 +496,8 @@ export default function Navbar() {
               className="p-2 transition-colors hover:text-[var(--color-accent)]"
               onClick={handleMobileMenuToggle}
               aria-label="Menu"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="mobile-navigation"
             >
               {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
@@ -503,236 +505,222 @@ export default function Navbar() {
         </div>
       </motion.nav>
 
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="fixed inset-0 z-[110] bg-black/90 backdrop-blur-md xl:hidden"
-            />
+      <div
+        aria-hidden="true"
+        onClick={() => setIsMobileMenuOpen(false)}
+        className={`fixed inset-0 z-[110] bg-black/90 backdrop-blur-md transition-opacity duration-200 xl:hidden ${
+          isMobileMenuOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+        }`}
+      />
 
-            <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="fixed inset-y-0 right-0 z-[120] flex w-full flex-col bg-white shadow-2xl md:w-96 xl:hidden"
-            >
-              <div className="flex items-center justify-between border-b border-[var(--color-border)] px-6 py-6">
-                <Link
-                  to="/"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-xl font-serif font-medium tracking-tight text-[var(--color-ink)]"
-                >
-                  Travellini<span className="font-bold text-[var(--color-accent)]">with</span>us
-                </Link>
-                <button
-                  className="rounded-full p-3 text-[var(--color-ink)] transition-colors hover:bg-[var(--color-muted-bg)] hover:text-[var(--color-accent)]"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  aria-label="Chiudi Menu"
-                >
-                  <X size={24} />
-                </button>
-              </div>
+      <div
+        id="mobile-navigation"
+        inert={!isMobileMenuOpen}
+        aria-hidden={!isMobileMenuOpen}
+        className={`fixed inset-y-0 right-0 z-[120] flex w-full transform-gpu flex-col bg-white shadow-2xl transition-transform duration-300 ease-out md:w-96 xl:hidden ${
+          isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className="flex items-center justify-between border-b border-[var(--color-border)] px-6 py-6">
+          <Link
+            to="/"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="text-xl font-serif font-medium tracking-tight text-[var(--color-ink)]"
+          >
+            Travellini<span className="font-bold text-[var(--color-accent)]">with</span>us
+          </Link>
+          <button
+            className="rounded-full p-3 text-[var(--color-ink)] transition-colors hover:bg-[var(--color-muted-bg)] hover:text-[var(--color-accent)]"
+            onClick={() => setIsMobileMenuOpen(false)}
+            aria-label="Chiudi Menu"
+          >
+            <X size={24} />
+          </button>
+        </div>
 
-              <div className="flex flex-1 flex-col space-y-6 overflow-y-auto px-8 py-10">
-                {navItems.map((item, index) => (
-                  <motion.div
-                    key={item.name}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                  >
-                    {item.subLinks || item.primaryLinks ? (
-                      <div className="space-y-4">
-                        <div className="flex items-start justify-between gap-4">
-                          <Link
-                            to={item.href || '/'}
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className={`block text-3xl font-serif transition-colors ${
-                              isItemActive(item)
-                                ? 'text-[var(--color-accent)]'
-                                : 'text-[var(--color-ink)]'
-                            }`}
-                          >
-                            {item.name}
-                          </Link>
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setOpenMobileSection((prev) =>
-                                prev === item.name ? null : item.name
-                              )
-                            }
-                            aria-expanded={openMobileSection === item.name}
-                            aria-label={`Apri sottomenu ${item.name}`}
-                            className="-m-2 flex min-h-[44px] min-w-[44px] items-center justify-center text-[var(--color-ink-2)] transition-colors hover:text-[var(--color-accent)]"
-                          >
-                            <ChevronDown
-                              size={20}
-                              className={`transition-transform ${
-                                openMobileSection === item.name ? 'rotate-180' : ''
-                              }`}
-                            />
-                          </button>
-                        </div>
-                        <AnimatePresence>
-                          {openMobileSection === item.name && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              className="space-y-4 border-l border-[var(--color-accent)]/20 pl-4"
-                            >
-                              {item.primaryLinks
-                                ? item.primaryLinks.map((subLink) => (
-                                    <Link
-                                      key={subLink.name}
-                                      to={subLink.href}
-                                      onClick={() => setIsMobileMenuOpen(false)}
-                                      className="block"
-                                    >
-                                      <span className="block font-serif text-xl text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]">
-                                        {subLink.name}
-                                      </span>
-                                      {subLink.description && (
-                                        <span className="mt-1 block text-sm text-black/55">
-                                          {subLink.description}
-                                        </span>
-                                      )}
-                                    </Link>
-                                  ))
-                                : item.subLinks?.map((subLink) => (
-                                    <Link
-                                      key={subLink.name}
-                                      to={subLink.href}
-                                      onClick={() => setIsMobileMenuOpen(false)}
-                                      className="block text-xl text-[var(--color-ink)]/60 transition-colors hover:text-[var(--color-accent)]"
-                                    >
-                                      {subLink.name}
-                                    </Link>
-                                  ))}
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    ) : (
-                      <Link
-                        to={item.href || '/'}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className={`block text-3xl font-serif transition-colors ${
-                          isItemActive(item)
-                            ? 'text-[var(--color-accent)]'
-                            : 'text-[var(--color-ink)]'
+        <div className="flex flex-1 flex-col space-y-6 overflow-y-auto px-8 py-10">
+          {navItems.map((item) => (
+            <div key={item.name}>
+              {item.subLinks || item.primaryLinks ? (
+                <div className="space-y-4">
+                  <div className="flex items-start justify-between gap-4">
+                    <Link
+                      to={item.href || '/'}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`block text-3xl font-serif transition-colors ${
+                        isItemActive(item)
+                          ? 'text-[var(--color-accent)]'
+                          : 'text-[var(--color-ink)]'
+                      }`}
+                    >
+                      {item.name}
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setOpenMobileSection((prev) => (prev === item.name ? null : item.name))
+                      }
+                      aria-expanded={openMobileSection === item.name}
+                      aria-label={`Apri sottomenu ${item.name}`}
+                      className="-m-2 flex min-h-[44px] min-w-[44px] items-center justify-center text-[var(--color-ink-2)] transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      <ChevronDown
+                        size={20}
+                        className={`transition-transform ${
+                          openMobileSection === item.name ? 'rotate-180' : ''
                         }`}
-                      >
-                        {item.name}
-                      </Link>
-                    )}
-                  </motion.div>
-                ))}
-              </div>
-
-              <div className="border-t border-[var(--color-ink)]/5 bg-[var(--color-sand)]/50 p-8">
-                <div className="flex flex-col gap-6">
-                  <Link
-                    to="/vieni-con-noi"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-6 py-4 text-xs font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
-                  >
-                    Vieni con noi
-                    <ArrowRight size={14} />
-                  </Link>
-                  <Link
-                    to="/collaborazioni"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-center text-[11px] font-bold uppercase tracking-widest text-[var(--color-ink-2)] transition-colors hover:text-[var(--color-accent)]"
-                  >
-                    Collabora con noi
-                  </Link>
-                  <div className="flex flex-wrap items-center gap-5">
-                    {!LITE_MODE && (
-                      <Link
-                        to="/preferiti"
-                        aria-label={navigation.favoritesLabel}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="relative text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
-                      >
-                        <Heart size={24} />
-                        {favorites.length > 0 && (
-                          <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-accent)] text-[10px] font-bold text-white">
-                            {favorites.length}
-                          </span>
-                        )}
-                      </Link>
-                    )}
-                    <a
-                      href={CONTACTS.instagramUrl}
-                      aria-label="Apri Instagram Travelliniwithus"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      <Instagram size={24} />
-                    </a>
-                    <a
-                      href={CONTACTS.tiktokUrl}
-                      aria-label="Apri TikTok Travelliniwithus"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      <svg viewBox="0 0 24 24" className="h-6 w-6 fill-current" aria-hidden="true">
-                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.2 8.2 0 0 0 4.77 1.52V6.78a4.85 4.85 0 0 1-1-.09z" />
-                      </svg>
-                    </a>
-                    <a
-                      href={CONTACTS.whatsappUrl}
-                      aria-label="Scrivici su WhatsApp"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      <MessageCircle size={24} />
-                    </a>
-                    <a
-                      href={CONTACTS.mailto}
-                      aria-label={`Scrivi a ${CONTACTS.email}`}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      <Mail size={24} />
-                    </a>
+                      />
+                    </button>
                   </div>
-                  <div>
-                    {user ? (
-                      <button
-                        onClick={signOut}
-                        className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[var(--color-error)]"
+                  <AnimatePresence>
+                    {openMobileSection === item.name && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="space-y-4 border-l border-[var(--color-accent)]/20 pl-4"
                       >
-                        <LogOut size={20} /> Esci
-                      </button>
-                    ) : (
-                      <button
-                        onClick={signIn}
-                        className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[var(--color-ink)]"
-                      >
-                        <UserIcon size={20} /> Accedi
-                      </button>
+                        {item.primaryLinks
+                          ? item.primaryLinks.map((subLink) => (
+                              <Link
+                                key={subLink.name}
+                                to={subLink.href}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="block"
+                              >
+                                <span className="block font-serif text-xl text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]">
+                                  {subLink.name}
+                                </span>
+                                {subLink.description && (
+                                  <span className="mt-1 block text-sm text-black/55">
+                                    {subLink.description}
+                                  </span>
+                                )}
+                              </Link>
+                            ))
+                          : item.subLinks?.map((subLink) => (
+                              <Link
+                                key={subLink.name}
+                                to={subLink.href}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="block text-xl text-[var(--color-ink)]/60 transition-colors hover:text-[var(--color-accent)]"
+                              >
+                                {subLink.name}
+                              </Link>
+                            ))}
+                      </motion.div>
                     )}
-                  </div>
+                  </AnimatePresence>
                 </div>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+              ) : (
+                <Link
+                  to={item.href || '/'}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`block text-3xl font-serif transition-colors ${
+                    isItemActive(item) ? 'text-[var(--color-accent)]' : 'text-[var(--color-ink)]'
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div className="border-t border-[var(--color-ink)]/5 bg-[var(--color-sand)]/50 p-8">
+          <div className="flex flex-col gap-6">
+            <Link
+              to="/vieni-con-noi"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-6 py-4 text-xs font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
+            >
+              Vieni con noi
+              <ArrowRight size={14} />
+            </Link>
+            <Link
+              to="/collaborazioni"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="text-center text-[11px] font-bold uppercase tracking-widest text-[var(--color-ink-2)] transition-colors hover:text-[var(--color-accent)]"
+            >
+              Collabora con noi
+            </Link>
+            <div className="flex flex-wrap items-center gap-5">
+              {!LITE_MODE && (
+                <Link
+                  to="/preferiti"
+                  aria-label={navigation.favoritesLabel}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="relative text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+                >
+                  <Heart size={24} />
+                  {favorites.length > 0 && (
+                    <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-accent)] text-[10px] font-bold text-white">
+                      {favorites.length}
+                    </span>
+                  )}
+                </Link>
+              )}
+              <a
+                href={CONTACTS.instagramUrl}
+                aria-label="Apri Instagram Travelliniwithus"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+              >
+                <Instagram size={24} />
+              </a>
+              <a
+                href={CONTACTS.tiktokUrl}
+                aria-label="Apri TikTok Travelliniwithus"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+              >
+                <svg viewBox="0 0 24 24" className="h-6 w-6 fill-current" aria-hidden="true">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.2 8.2 0 0 0 4.77 1.52V6.78a4.85 4.85 0 0 1-1-.09z" />
+                </svg>
+              </a>
+              <a
+                href={CONTACTS.whatsappUrl}
+                aria-label="Scrivici su WhatsApp"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+              >
+                <MessageCircle size={24} />
+              </a>
+              <a
+                href={CONTACTS.mailto}
+                aria-label={`Scrivi a ${CONTACTS.email}`}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+              >
+                <Mail size={24} />
+              </a>
+            </div>
+            <div>
+              {user ? (
+                <button
+                  onClick={signOut}
+                  className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[var(--color-error)]"
+                >
+                  <LogOut size={20} /> Esci
+                </button>
+              ) : (
+                <button
+                  onClick={signIn}
+                  className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[var(--color-ink)]"
+                >
+                  <UserIcon size={20} /> Accedi
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

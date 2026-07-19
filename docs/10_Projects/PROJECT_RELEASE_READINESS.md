@@ -15,6 +15,29 @@ tags:
 
 # PROJECT_RELEASE_READINESS
 
+## Homepage cinematografica — gate 2026-07-18
+
+Scope: redesign della sola homepage `/`, direzione **Il montaggio delle tracce**.
+
+- TypeScript, lint, build produzione e audit UI: PASS.
+- Browser produzione 375/768/1280/1440: PASS, un H1, zero overflow e zero errori console.
+- Reduced motion: PASS; ordine narrativo e CTA restano disponibili.
+- Design QA: PASS (`design-qa.md`).
+- Due difetti CTA individuati durante il gate e corretti: anchor del capitolo 01 e slug della scheda Batu Caves.
+- Deploy e commit non eseguiti.
+
+Il verdetto S6 resta subordinato agli audit sicurezza/performance correnti e ai blocker owner storici già registrati sotto.
+
+### Esito S6 corrente
+
+- Quality delta: PASS dopo correzione CTA/anchor e aggiornamento test Navbar; 11 file e 56 test unitari verdi.
+- Build, typecheck, lint, audit UI e budget bundle: PASS.
+- Browser smoke: PASS a 375/768/1280/1440; CTA Batu Caves verificata sulla route reale `/posto/malesia-batu-caves`.
+- Performance mobile 4G/CPU 4×: **BLOCK** — LCP 3,05–3,48 s, TBT 1.008 ms, menu INP proxy 200–520 ms.
+- Security: **BLOCK owner** — tre occorrenze storiche redatte della Firebase/GCP Web API key; file correnti puliti. Prima del deploy servono restrizioni referrer/API, App Check e rotazione se la vecchia chiave è ancora attiva.
+
+**Verdetto:** homepage pronta per revisione locale, non pronta per deploy produzione.
+
 ## Obiettivo
 
 Tenere sotto controllo cio che manca per una release pulita e verificabile della V1.
