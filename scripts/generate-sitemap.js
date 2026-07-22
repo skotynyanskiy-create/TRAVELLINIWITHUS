@@ -41,6 +41,7 @@ const filterRoutes = [];
 const ROLE_BY_PATH = new Map([
   ['/', 'home'],
   ['/esplora', 'discovery'],
+  ['/destinazione', 'discovery'],
   ['/strumenti', 'tools'],
   ['/press', 'press'],
   ['/mappa', 'map'],
