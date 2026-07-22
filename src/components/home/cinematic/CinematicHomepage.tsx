@@ -35,7 +35,10 @@ export default function CinematicHomepage() {
         </section>
 
         {/* 6. Indice dei Posti Provati */}
-        <section id="indice-vivo" className="py-16 md:py-24 bg-white border-t border-[var(--color-border)]">
+        <section
+          id="indice-vivo"
+          className="py-16 md:py-24 bg-white border-t border-[var(--color-border)]"
+        >
           <div className="mx-auto max-w-7xl px-6 md:px-12">
             <HomeIndiceVivo />
           </div>

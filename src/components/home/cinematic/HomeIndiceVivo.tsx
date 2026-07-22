@@ -18,12 +18,15 @@ export default function HomeIndiceVivo() {
         <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent,#c85a32)]">
           Indice Vivo dei Posti Provati
         </span>
-        <h2 id="page-02-title" className="mt-2 font-serif text-3xl font-normal leading-tight text-[var(--color-ink)] md:text-4xl">
+        <h2
+          id="page-02-title"
+          className="mt-2 font-serif text-3xl font-normal leading-tight text-[var(--color-ink)] md:text-4xl"
+        >
           Posti provati, uno per uno.
         </h2>
         <p className="mt-3 text-sm leading-relaxed text-[var(--color-muted-fg)]">
-          Ogni voce nasce da un viaggio vero. Quando la scheda è completa trovi prezzo,
-          posizione e verdetto — pubblicati solo dopo averli verificati.
+          Ogni voce nasce da un viaggio vero. Quando la scheda è completa trovi prezzo, posizione e
+          verdetto — pubblicati solo dopo averli verificati.
         </p>
       </div>
 

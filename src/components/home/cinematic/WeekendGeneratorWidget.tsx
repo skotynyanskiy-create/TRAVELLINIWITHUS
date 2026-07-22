@@ -24,36 +24,41 @@ const IDEAS_DATABASE: Record<string, WeekendIdea> = {
     vibe: 'Romantico & Misterioso',
     costEstimate: '€ 140–180 / notte',
     duration: '48 Ore (Weekend)',
-    description: 'Cena a lume di candela in un sotterraneo in pietra del 1300, passeggiata al tramonto sulle balze e risveglio in dimora storica.',
+    description:
+      'Cena a lume di candela in un sotterraneo in pietra del 1300, passeggiata al tramonto sulle balze e risveglio in dimora storica.',
     coverImage: '/images/reels/reel-3-cover.webp',
     link: '/posto/taverna-volterra-toscana',
   },
   relax_puglia: {
     title: 'Masseria di Luce con Trulli Privati',
-    location: 'Val d\'Itria, Puglia',
+    location: "Val d'Itria, Puglia",
     zone: 'Italia',
     vibe: 'Natura & Relax',
     costEstimate: '€ 160–220 / notte',
     duration: '3 Giorni',
-    description: 'Piscina incastonata nella roccia bianca, colazione sotto gli ulivi secolari e silenzio totale a 15 minuti dal mare.',
+    description:
+      'Piscina incastonata nella roccia bianca, colazione sotto gli ulivi secolari e silenzio totale a 15 minuti dal mare.',
     coverImage: '/images/reels/reel-2-cover.webp',
     link: '/esplora?zone=italia',
   },
   avventura_europa: {
-    title: 'Fuga tra le Case sull\'Acqua nei Fiordi',
+    title: "Fuga tra le Case sull'Acqua nei Fiordi",
     location: 'Lofoten, Norvegia',
     zone: 'Europa',
     vibe: 'Grande Avventura',
     costEstimate: '€ 190–250 / notte',
     duration: '4 Giorni',
-    description: 'Antica rorbu di pescatori riconvertita, aurora boreale dal letto e zuppa di pesce fresca al porto.',
+    description:
+      'Antica rorbu di pescatori riconvertita, aurora boreale dal letto e zuppa di pesce fresca al porto.',
     coverImage: '/images/reels/reel-4-cover.webp',
     link: '/esplora?zone=europa',
   },
 };
 
 export default function WeekendGeneratorWidget() {
-  const [selectedVibe, setSelectedVibe] = useState<'romantico' | 'relax' | 'avventura'>('romantico');
+  const [selectedVibe, setSelectedVibe] = useState<'romantico' | 'relax' | 'avventura'>(
+    'romantico'
+  );
   const [selectedZone, setSelectedZone] = useState<'toscana' | 'puglia' | 'europa'>('toscana');
   const [generated, setGenerated] = useState<WeekendIdea | null>(IDEAS_DATABASE.romantico_toscana);
 
@@ -75,7 +80,8 @@ export default function WeekendGeneratorWidget() {
             Trova il tuo weekend perfetto in 3 click.
           </h2>
           <p className="mt-3 text-base text-[var(--color-muted-fg)] md:text-lg">
-            Seleziona atmosfera e destinazione: ti mostriamo un posto speciale provato di persona con costi reali.
+            Seleziona atmosfera e destinazione: ti mostriamo un posto speciale provato di persona
+            con costi reali.
           </p>
         </div>
 
@@ -89,7 +95,11 @@ export default function WeekendGeneratorWidget() {
               >
                 1. Che atmosfera cerchi?
               </span>
-              <div className="grid grid-cols-3 gap-2.5" role="group" aria-labelledby="weekend-vibe-label">
+              <div
+                className="grid grid-cols-3 gap-2.5"
+                role="group"
+                aria-labelledby="weekend-vibe-label"
+              >
                 {(
                   [
                     { id: 'romantico', label: 'Romantica', icon: Heart },
@@ -107,7 +117,10 @@ export default function WeekendGeneratorWidget() {
                         : 'border border-[var(--color-border)] bg-white text-[var(--color-muted-fg)] hover:border-gray-300'
                     }`}
                   >
-                    <vibe.icon size={18} className={selectedVibe === vibe.id ? 'text-[var(--color-accent)]' : ''} />
+                    <vibe.icon
+                      size={18}
+                      className={selectedVibe === vibe.id ? 'text-[var(--color-accent)]' : ''}
+                    />
                     {vibe.label}
                   </button>
                 ))}
@@ -121,7 +134,11 @@ export default function WeekendGeneratorWidget() {
               >
                 2. Dove ti piacerebbe andare?
               </span>
-              <div className="grid grid-cols-3 gap-2.5" role="group" aria-labelledby="weekend-zone-label">
+              <div
+                className="grid grid-cols-3 gap-2.5"
+                role="group"
+                aria-labelledby="weekend-zone-label"
+              >
                 {(
                   [
                     { id: 'toscana', label: 'Toscana' },
@@ -209,7 +226,12 @@ export default function WeekendGeneratorWidget() {
                           </span>
                         </div>
 
-                        <Button variant="outline" size="sm" to={generated.link} trackingId="view_weekend_detail">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          to={generated.link}
+                          trackingId="view_weekend_detail"
+                        >
                           Vedi dettagli
                         </Button>
                       </div>

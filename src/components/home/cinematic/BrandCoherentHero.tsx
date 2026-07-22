@@ -24,11 +24,14 @@ export default function BrandCoherentHero() {
 
             <h1 className="font-serif text-4xl font-normal leading-[1.06] text-[var(--color-ink)] sm:text-5xl lg:text-6xl">
               Posti che sembrano inventati. <br />
-              <span className="italic text-[var(--color-accent,#c85a32)]">Ma esistono davvero.</span>
+              <span className="italic text-[var(--color-accent,#c85a32)]">
+                Ma esistono davvero.
+              </span>
             </h1>
 
             <p className="mt-5 max-w-xl text-base leading-relaxed text-[var(--color-muted-fg)] sm:text-lg">
-              Siamo Rodrigo e Betta. Li proviamo prima di persona, poi vi diciamo se valgono davvero il viaggio — con prezzi reali, periodo giusto ed atmosfera.
+              Siamo Rodrigo e Betta. Li proviamo prima di persona, poi vi diciamo se valgono davvero
+              il viaggio — con prezzi reali, periodo giusto ed atmosfera.
             </p>
 
             {/* Actions */}

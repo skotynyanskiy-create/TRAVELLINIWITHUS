@@ -23,18 +23,20 @@ const FEATURED_PLACES: PlaceItem[] = [
     score: '10/10 Atmosfera',
     image: '/images/reels/reel-3-cover.webp',
     link: '/posto/taverna-volterra-toscana',
-    description: 'Cena a lume di candela in sotterranei in pietra del 1300. Atmosfera unica e cibo eccezionale.',
+    description:
+      'Cena a lume di candela in sotterranei in pietra del 1300. Atmosfera unica e cibo eccezionale.',
   },
   {
     id: '2',
     title: 'Masseria di Luce tra gli Ulivi',
-    location: 'Val d\'Itria, Puglia',
+    location: "Val d'Itria, Puglia",
     category: 'Dimora Storica',
     price: '€ 180 / notte',
     score: '9.8/10 Relax',
     image: '/images/reels/reel-2-cover.webp',
     link: '/esplora?zone=italia',
-    description: 'Piscina incastonata nella roccia bianca e colazione servita sotto gli ulivi secolari.',
+    description:
+      'Piscina incastonata nella roccia bianca e colazione servita sotto gli ulivi secolari.',
   },
   {
     id: '3',
@@ -45,7 +47,8 @@ const FEATURED_PLACES: PlaceItem[] = [
     score: '10/10 Panoramica',
     image: '/images/reels/reel-4-cover.webp',
     link: '/esplora?zone=europa',
-    description: 'Antica rorbu di pescatori sull\'acqua gelida per ammirare l\'aurora boreale direttamente dal letto.',
+    description:
+      "Antica rorbu di pescatori sull'acqua gelida per ammirare l'aurora boreale direttamente dal letto.",
   },
 ];
 
@@ -95,7 +98,10 @@ export default function CleanFeaturedPlaces() {
                     {place.location}
                   </span>
                   <span className="inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-bold text-[var(--color-ink)] shadow-sm">
-                    <Star size={10} className="fill-[var(--color-accent)] text-[var(--color-accent)]" />
+                    <Star
+                      size={10}
+                      className="fill-[var(--color-accent)] text-[var(--color-accent)]"
+                    />
                     {place.score}
                   </span>
                 </div>

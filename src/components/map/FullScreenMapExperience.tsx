@@ -1,5 +1,10 @@
 import { useState, useMemo, useRef, useCallback, useSyncExternalStore } from 'react';
-import Map, { Marker, NavigationControl, FullscreenControl, type MapRef } from 'react-map-gl/maplibre';
+import Map, {
+  Marker,
+  NavigationControl,
+  FullscreenControl,
+  type MapRef,
+} from 'react-map-gl/maplibre';
 import {
   X,
   ArrowRight,
@@ -38,9 +43,9 @@ const FLY_PRESETS = [
   { id: 'puglia', label: 'Puglia', center: [17.24, 40.78], zoom: 9 },
   { id: 'verona', label: 'Verona', center: [10.99, 45.44], zoom: 11 },
   { id: 'milano', label: 'Milano', center: [9.19, 45.46], zoom: 11 },
-  { id: 'dolomiti', label: 'Dolomiti', center: [11.66, 46.70], zoom: 9 },
+  { id: 'dolomiti', label: 'Dolomiti', center: [11.66, 46.7], zoom: 9 },
   { id: 'praga', label: 'Praga', center: [14.43, 50.08], zoom: 11 },
-  { id: 'madrid', label: 'Madrid', center: [-3.70, 40.42], zoom: 11 },
+  { id: 'madrid', label: 'Madrid', center: [-3.7, 40.42], zoom: 11 },
   { id: 'lofoten', label: 'Norvegia', center: [14.56, 68.23], zoom: 8 },
 ];
 
@@ -69,7 +74,8 @@ const subscribeDesktop = (onChange: () => void) => {
   return () => mql.removeEventListener('change', onChange);
 };
 
-const getDesktopSnapshot = () => typeof window !== 'undefined' && window.matchMedia(DESKTOP_QUERY).matches;
+const getDesktopSnapshot = () =>
+  typeof window !== 'undefined' && window.matchMedia(DESKTOP_QUERY).matches;
 
 const FALLBACK_COORDINATES: Record<string, { lat: number; lng: number }> = {
   toscana: { lat: 43.46, lng: 11.86 },
@@ -78,8 +84,8 @@ const FALLBACK_COORDINATES: Record<string, { lat: number; lng: number }> = {
   lombardia: { lat: 45.46, lng: 9.19 },
   veneto: { lat: 45.43, lng: 12.31 },
   trentino: { lat: 46.06, lng: 11.12 },
-  lazio: { lat: 41.90, lng: 12.49 },
-  sicilia: { lat: 37.50, lng: 15.08 },
+  lazio: { lat: 41.9, lng: 12.49 },
+  sicilia: { lat: 37.5, lng: 15.08 },
   sardegna: { lat: 39.22, lng: 9.12 },
   egitto: { lat: 27.25, lng: 33.81 },
   norvegia: { lat: 68.23, lng: 14.56 },
@@ -116,9 +122,14 @@ export default function FullScreenMapExperience() {
   // Filtered List
   const filteredItems = useMemo(() => {
     return allItems.filter((item) => {
-      const matchZone = selectedZone === 'all' || item.zone.toLowerCase() === selectedZone.toLowerCase();
-      const matchType = selectedType === 'all' || item.types.some((t) => t.toLowerCase().includes(selectedType.toLowerCase()));
-      const matchBudget = selectedBudget === 'all' || (item.value?.budget && item.value.budget.toLowerCase() === selectedBudget.toLowerCase());
+      const matchZone =
+        selectedZone === 'all' || item.zone.toLowerCase() === selectedZone.toLowerCase();
+      const matchType =
+        selectedType === 'all' ||
+        item.types.some((t) => t.toLowerCase().includes(selectedType.toLowerCase()));
+      const matchBudget =
+        selectedBudget === 'all' ||
+        (item.value?.budget && item.value.budget.toLowerCase() === selectedBudget.toLowerCase());
       const matchQuery =
         !searchQuery.trim() ||
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -132,7 +143,9 @@ export default function FullScreenMapExperience() {
   const playChime = useCallback(() => {
     if (!soundEnabled) return;
     try {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const AudioCtx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (!AudioCtx) return;
       const ctx = new AudioCtx();
       const now = ctx.currentTime;
@@ -153,32 +166,38 @@ export default function FullScreenMapExperience() {
   }, [soundEnabled]);
 
   // Handle Pin Selection with Fly-To & Chime
-  const handlePinClick = useCallback((item: ContentItem) => {
-    setSelectedItem(item);
-    setActiveTab('verdetto');
-    playChime();
-    if (mapRef.current && item.place.coordinates) {
-      mapRef.current.flyTo({
-        center: [item.place.coordinates.lng, item.place.coordinates.lat],
-        zoom: 12.5,
-        pitch: 50,
-        duration: 1800,
-      });
-    }
-  }, [playChime]);
+  const handlePinClick = useCallback(
+    (item: ContentItem) => {
+      setSelectedItem(item);
+      setActiveTab('verdetto');
+      playChime();
+      if (mapRef.current && item.place.coordinates) {
+        mapRef.current.flyTo({
+          center: [item.place.coordinates.lng, item.place.coordinates.lat],
+          zoom: 12.5,
+          pitch: 50,
+          duration: 1800,
+        });
+      }
+    },
+    [playChime]
+  );
 
   // Preset Fly-To
-  const handlePresetFly = useCallback((preset: typeof FLY_PRESETS[number]) => {
-    playChime();
-    if (mapRef.current) {
-      mapRef.current.flyTo({
-        center: [preset.center[0], preset.center[1]],
-        zoom: preset.zoom,
-        pitch: 45,
-        duration: 2000,
-      });
-    }
-  }, [playChime]);
+  const handlePresetFly = useCallback(
+    (preset: (typeof FLY_PRESETS)[number]) => {
+      playChime();
+      if (mapRef.current) {
+        mapRef.current.flyTo({
+          center: [preset.center[0], preset.center[1]],
+          zoom: preset.zoom,
+          pitch: 45,
+          duration: 2000,
+        });
+      }
+    },
+    [playChime]
+  );
 
   // Random "Sorprendimi!" 3D Surprise Picker
   const handleSurprisePick = useCallback(() => {
@@ -215,7 +234,12 @@ export default function FullScreenMapExperience() {
   };
 
   // Active filter count for badge
-  const activeFilterCount = [selectedZone !== 'all', selectedType !== 'all', selectedBudget !== 'all', searchQuery.trim() !== ''].filter(Boolean).length;
+  const activeFilterCount = [
+    selectedZone !== 'all',
+    selectedType !== 'all',
+    selectedBudget !== 'all',
+    searchQuery.trim() !== '',
+  ].filter(Boolean).length;
 
   // Dropdown state for type/budget
   const [showFiltersPanel, setShowFiltersPanel] = useState(false);
@@ -285,7 +309,11 @@ export default function FullScreenMapExperience() {
                 className="w-36 bg-transparent px-2 py-1 text-xs font-semibold text-white placeholder-stone-400 focus:outline-none sm:w-52"
               />
               {searchQuery && (
-                <button type="button" onClick={() => setSearchQuery('')} className="text-white/60 hover:text-white">
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="text-white/60 hover:text-white"
+                >
                   <X size={13} />
                 </button>
               )}
@@ -334,7 +362,10 @@ export default function FullScreenMapExperience() {
                   {activeFilterCount}
                 </span>
               )}
-              <ChevronDown size={12} className={`transition-transform ${filtersVisible ? 'rotate-180' : ''}`} />
+              <ChevronDown
+                size={12}
+                className={`transition-transform ${filtersVisible ? 'rotate-180' : ''}`}
+              />
             </button>
           </div>
 
@@ -378,7 +409,9 @@ export default function FullScreenMapExperience() {
             <button
               type="button"
               onClick={() =>
-                setMapStyleKey((s) => (s === 'dark' ? 'liberty' : s === 'liberty' ? 'bright' : 'dark'))
+                setMapStyleKey((s) =>
+                  s === 'dark' ? 'liberty' : s === 'liberty' ? 'bright' : 'dark'
+                )
               }
               className="flex h-10 w-10 items-center justify-center rounded-full border border-stone-700 bg-stone-900/95 text-white shadow-2xl backdrop-blur-2xl transition-all hover:bg-stone-800"
               title={`Stile: ${MAP_STYLES[mapStyleKey].label}`}
@@ -403,7 +436,9 @@ export default function FullScreenMapExperience() {
           <div className="pointer-events-auto flex shrink-0 flex-col gap-3 rounded-2xl border border-stone-700 bg-stone-900/95 p-4 shadow-2xl backdrop-blur-2xl sm:flex-row sm:items-center">
             {/* Type Filters */}
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-500 mr-1">Tipo:</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-500 mr-1">
+                Tipo:
+              </span>
               {TYPE_FILTERS.map((tf) => {
                 const Icon = tf.icon;
                 return (
@@ -428,7 +463,9 @@ export default function FullScreenMapExperience() {
 
             {/* Budget Filters */}
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-500 mr-1">Budget:</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-500 mr-1">
+                Budget:
+              </span>
               {BUDGET_FILTERS.map((bf) => (
                 <button
                   key={bf.id}
@@ -470,28 +507,30 @@ export default function FullScreenMapExperience() {
               >
                 <X size={18} />
               </button>
-          </div>
+            </div>
 
-          <div className="space-y-2.5">
-            {filteredItems.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => handlePinClick(item)}
-                className={`w-full text-left rounded-xl p-3 border transition-all ${
-                  selectedItem?.id === item.id
-                    ? 'border-[var(--color-accent,#c85a32)] bg-[var(--color-accent,#c85a32)]/25 text-white shadow-lg'
-                    : 'border-stone-800 bg-stone-800/60 hover:border-stone-600 text-stone-200 hover:text-white'
-                }`}
-              >
-                <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--color-accent,#c85a32)]">
-                  {item.zone} · {item.place.region || item.place.country}
-                </div>
-                <h4 className="mt-1 font-serif text-sm font-normal text-white">{item.title}</h4>
-                <span className="mt-2 block text-[10px] text-stone-400">{item.value?.price || 'Verificato sul posto'}</span>
-              </button>
-            ))}
-          </div>
+            <div className="space-y-2.5">
+              {filteredItems.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => handlePinClick(item)}
+                  className={`w-full text-left rounded-xl p-3 border transition-all ${
+                    selectedItem?.id === item.id
+                      ? 'border-[var(--color-accent,#c85a32)] bg-[var(--color-accent,#c85a32)]/25 text-white shadow-lg'
+                      : 'border-stone-800 bg-stone-800/60 hover:border-stone-600 text-stone-200 hover:text-white'
+                  }`}
+                >
+                  <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--color-accent,#c85a32)]">
+                    {item.zone} · {item.place.region || item.place.country}
+                  </div>
+                  <h4 className="mt-1 font-serif text-sm font-normal text-white">{item.title}</h4>
+                  <span className="mt-2 block text-[10px] text-stone-400">
+                    {item.value?.price || 'Verificato sul posto'}
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
         )}
       </div>
@@ -528,7 +567,9 @@ export default function FullScreenMapExperience() {
                 {/* Glowing Pulse Ring */}
                 <div
                   className={`absolute -inset-2 rounded-full opacity-75 blur-sm transition-all ${
-                    isSelected ? 'bg-[var(--color-accent,#c85a32)] animate-pulse' : 'bg-white/0 group-hover:bg-[var(--color-accent,#c85a32)]/50'
+                    isSelected
+                      ? 'bg-[var(--color-accent,#c85a32)] animate-pulse'
+                      : 'bg-white/0 group-hover:bg-[var(--color-accent,#c85a32)]/50'
                   }`}
                 />
 
@@ -540,7 +581,10 @@ export default function FullScreenMapExperience() {
                       : 'border border-white/30 bg-black/85 text-white hover:scale-105 hover:bg-[var(--color-accent)] z-10'
                   }`}
                 >
-                  <IconComp size={13} className={isSelected ? 'text-white' : 'text-[var(--color-accent)]'} />
+                  <IconComp
+                    size={13}
+                    className={isSelected ? 'text-white' : 'text-[var(--color-accent)]'}
+                  />
                   <span className="max-w-[120px] truncate">{item.title}</span>
                 </div>
 
@@ -548,7 +592,11 @@ export default function FullScreenMapExperience() {
                 <div className="absolute left-1/2 bottom-full mb-2 hidden -translate-x-1/2 rounded-xl border border-white/20 bg-black/90 p-2.5 shadow-2xl backdrop-blur-md group-hover:block z-40 w-48">
                   {item.cover ? (
                     <div className="aspect-[4/3] w-full overflow-hidden rounded-lg bg-black/20">
-                      <img src={item.cover} alt={item.title} className="h-full w-full object-cover" />
+                      <img
+                        src={item.cover}
+                        alt={item.title}
+                        className="h-full w-full object-cover"
+                      />
                     </div>
                   ) : (
                     <div className="aspect-[4/3] w-full overflow-hidden rounded-lg bg-gradient-to-br from-stone-800 to-stone-900 flex items-center justify-center">
@@ -556,7 +604,9 @@ export default function FullScreenMapExperience() {
                     </div>
                   )}
                   <p className="mt-1.5 text-[10px] font-bold text-white truncate">{item.title}</p>
-                  <span className="text-[9px] text-[var(--color-accent,#c85a32)] font-semibold">{item.place.region || item.place.country} · {item.zone}</span>
+                  <span className="text-[9px] text-[var(--color-accent,#c85a32)] font-semibold">
+                    {item.place.region || item.place.country} · {item.zone}
+                  </span>
                   {item.value?.price && (
                     <span className="ml-1.5 text-[9px] text-white/60">— {item.value.price}</span>
                   )}
@@ -620,9 +670,7 @@ export default function FullScreenMapExperience() {
           {/* Tab Content */}
           {activeTab === 'verdetto' ? (
             <div className="mt-4 space-y-3">
-              <p className="text-xs leading-relaxed text-white/80">
-                {selectedItem.description}
-              </p>
+              <p className="text-xs leading-relaxed text-white/80">{selectedItem.description}</p>
               {selectedItem.review?.verdict && (
                 <div className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs font-semibold text-[var(--color-accent,#c85a32)]">
                   <Star size={13} className="fill-current" />
@@ -634,7 +682,9 @@ export default function FullScreenMapExperience() {
             <div className="mt-4 space-y-3 text-xs text-white/80">
               <div className="flex items-center justify-between border-b border-white/10 pb-2">
                 <span className="text-white/60">Costo stimato:</span>
-                <span className="font-bold text-white">{selectedItem.value?.price || 'Verificato'}</span>
+                <span className="font-bold text-white">
+                  {selectedItem.value?.price || 'Verificato'}
+                </span>
               </div>
               <div className="flex items-center justify-between border-b border-white/10 pb-2">
                 <span className="text-white/60">Posizione:</span>

@@ -70,7 +70,8 @@ function DestinationsHub() {
   const filteredDestinations = useMemo(() => {
     return allDestinations.filter((dest) => {
       const matchZone =
-        selectedZoneFilter === 'all' || dest.zone.toLowerCase() === selectedZoneFilter.toLowerCase();
+        selectedZoneFilter === 'all' ||
+        dest.zone.toLowerCase() === selectedZoneFilter.toLowerCase();
       const matchQuery =
         !searchQuery.trim() ||
         dest.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -102,12 +103,15 @@ function DestinationsHub() {
         </div>
 
         <header className="mt-8 max-w-3xl">
-          <p className="mb-3 text-eyebrow !text-[var(--color-accent-text)]">Tutte le Destinazioni</p>
+          <p className="mb-3 text-eyebrow !text-[var(--color-accent-text)]">
+            Tutte le Destinazioni
+          </p>
           <h1 className="font-serif text-5xl leading-tight text-[var(--color-ink)] md:text-6xl">
             Dove siamo stati, regione per regione.
           </h1>
           <p className="mt-5 font-serif text-lg italic leading-relaxed text-[var(--color-ink-2)] md:text-xl">
-            Dai borghi d'Italia ai viaggi fuori dai confini. Cerca la tua regione o filtra per zona per scoprire tutte le nostre guide ed i posti provati.
+            Dai borghi d'Italia ai viaggi fuori dai confini. Cerca la tua regione o filtra per zona
+            per scoprire tutte le nostre guide ed i posti provati.
           </p>
         </header>
 
@@ -168,7 +172,9 @@ function DestinationsHub() {
                 key={dest.slug}
                 to={getDestinationUrl(dest)}
                 className={`group relative flex aspect-[4/3] flex-col justify-end overflow-hidden rounded-[var(--radius-xl)] shadow-[var(--shadow-md)] transition-transform duration-300 hover:-translate-y-1 ${
-                  hasCover ? 'bg-[var(--color-ink-deep)]' : 'bg-white border border-[var(--color-border)]'
+                  hasCover
+                    ? 'bg-[var(--color-ink-deep)]'
+                    : 'bg-white border border-[var(--color-border)]'
                 }`}
               >
                 {hasCover ? (

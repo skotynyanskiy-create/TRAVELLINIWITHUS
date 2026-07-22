@@ -43,7 +43,8 @@ export const DESTINATIONS: DestinationNode[] = [
     zone: 'Italia',
     matchCountry: 'Italia',
     matchRegion: 'Toscana',
-    intro: 'Oltre Firenze e Siena: i borghi, le cene di famiglia e i posti insoliti che ci hanno fatto tornare.',
+    intro:
+      'Oltre Firenze e Siena: i borghi, le cene di famiglia e i posti insoliti che ci hanno fatto tornare.',
     coordinates: { lat: 43.7711, lng: 11.2486 },
     cover: '/images/destinations/toscana.webp',
   },
@@ -282,7 +283,8 @@ export const DESTINATIONS: DestinationNode[] = [
     name: 'Europa',
     level: 'zone',
     zone: 'Europa',
-    intro: 'I weekend fuori dai confini: capitali, città medie e posti particolari raccolti paese per paese.',
+    intro:
+      'I weekend fuori dai confini: capitali, città medie e posti particolari raccolti paese per paese.',
     coordinates: { lat: 50.0, lng: 10.0 },
   },
   {

@@ -110,11 +110,22 @@ export default function InnovativeHomeHero() {
           </AnimatePresence>
 
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <Button variant="cta" size="lg" to="/esplora" magnetic trackingId="innovative_hero_esplora">
+            <Button
+              variant="cta"
+              size="lg"
+              to="/esplora"
+              magnetic
+              trackingId="innovative_hero_esplora"
+            >
               <Compass size={18} className="mr-2" />
               Esplora l'Atlante
             </Button>
-            <Button variant="outline-light" size="lg" to="/chi-siamo" trackingId="innovative_hero_chisiamo">
+            <Button
+              variant="outline-light"
+              size="lg"
+              to="/chi-siamo"
+              trackingId="innovative_hero_chisiamo"
+            >
               La nostra promessa
             </Button>
           </div>
@@ -140,7 +151,10 @@ export default function InnovativeHomeHero() {
                       : 'border border-white/20 bg-black/40 text-white/80 hover:border-white/40 hover:bg-black/60'
                   }`}
                 >
-                  <IconComponent size={14} style={{ color: isActive ? preset.accentColor : undefined }} />
+                  <IconComponent
+                    size={14}
+                    style={{ color: isActive ? preset.accentColor : undefined }}
+                  />
                   {preset.label}
                 </button>
               );

@@ -21,7 +21,8 @@ export default function HiggsfieldReelCarousel() {
             </h2>
           </div>
           <p className="mt-4 max-w-md text-sm text-white/70 md:mt-0 md:text-right">
-            Clicca su una storia per ascoltare la dritta vocale di Rodrigo e Betta con atmosfera ed i costi veri.
+            Clicca su una storia per ascoltare la dritta vocale di Rodrigo e Betta con atmosfera ed
+            i costi veri.
           </p>
         </div>
 

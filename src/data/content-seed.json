@@ -271,7 +271,7 @@
       "city": "Milano",
       "region": "Lombardia",
       "country": "Italia",
-      "coordinates": { "lat": 45.470130, "lng": 9.204217 }
+      "coordinates": { "lat": 45.47013, "lng": 9.204217 }
     },
     "zone": "Italia",
     "types": ["Food & Ristoranti"],

@@ -16,17 +16,25 @@ export default function CleanCuratedHero() {
 
             <h1 className="font-serif text-4xl font-normal leading-[1.06] text-[var(--color-ink)] sm:text-5xl lg:text-6xl">
               Consigliamo solo i posti che <br />
-              <span className="italic text-[var(--color-accent,#c85a32)]">meritano davvero il viaggio.</span>
+              <span className="italic text-[var(--color-accent,#c85a32)]">
+                meritano davvero il viaggio.
+              </span>
             </h1>
 
             <p className="mt-6 max-w-xl text-base leading-relaxed text-[var(--color-muted-fg)] sm:text-lg">
-              Siamo Rodrigo e Betta. Proviamo di persona hotel di charme, trattorie segrete e borghi fuori rotta.
-              Vi diciamo quanto costa, per chi è e se vale davvero la pena partire.
+              Siamo Rodrigo e Betta. Proviamo di persona hotel di charme, trattorie segrete e borghi
+              fuori rotta. Vi diciamo quanto costa, per chi è e se vale davvero la pena partire.
             </p>
 
             {/* CTA Actions */}
             <div className="mt-8 flex flex-wrap items-center gap-4">
-              <Button variant="cta" size="lg" to="/esplora" magnetic trackingId="clean_hero_esplora">
+              <Button
+                variant="cta"
+                size="lg"
+                to="/esplora"
+                magnetic
+                trackingId="clean_hero_esplora"
+              >
                 <Compass size={18} className="mr-2" />
                 Esplora le destinazioni
               </Button>
@@ -61,8 +69,12 @@ export default function CleanCuratedHero() {
                 />
               </div>
               <div className="mt-3 flex items-center justify-between px-2 text-xs font-medium text-[var(--color-muted-fg)]">
-                <span className="font-serif italic text-[var(--color-ink)]">The Burton Juice · Campania</span>
-                <span className="font-semibold text-[var(--color-accent,#c85a32)]">Provato &amp; Verificato</span>
+                <span className="font-serif italic text-[var(--color-ink)]">
+                  The Burton Juice · Campania
+                </span>
+                <span className="font-semibold text-[var(--color-accent,#c85a32)]">
+                  Provato &amp; Verificato
+                </span>
               </div>
             </div>
           </div>
