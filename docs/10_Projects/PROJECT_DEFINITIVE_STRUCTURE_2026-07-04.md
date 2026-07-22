@@ -1,7 +1,7 @@
 ---
 type: project
 area: site-evolution
-status: blocked
+status: archived
 priority: p1
 owner: team
 repo: TRAVELLINIWITHUS
@@ -15,6 +15,10 @@ tags:
 ---
 
 # PROJECT — Struttura Definitiva del Sito (Atlante Vivo)
+
+> **ARCHIVIATO (2026-07-22)** — documento storico, non descrive più il sito
+> spedito. Per l'architettura reale (rotte, rendering, build, debito) leggi
+> [[ARCHITECTURE]].
 
 - **Data**: 2026-07-04
 - **Branch**: audit/full-site-2026-06-07

@@ -81,15 +81,40 @@ When in doubt: **invoke `travellini-orchestrator` first.** A 30-second plan save
 | Long-form Italian article body (pillar / destination / itinerary)    | `travellini-editorial-writer` (opus)           |
 | Social calendars, Reels/TikTok, newsletter, content repurposing      | `travellini-social-content-operator` (opus)    |
 | Growth strategy, offer design, partner pipeline, analytics contracts | `travellini-growth-revenue-operator` (opus)    |
-| Read & interpret analytics / Stripe / Sentry / Firestore data        | `travellini-data-analyst` (opus)               |
-| Photo selection, crop, alt text, image performance, OG cards         | `travellini-asset-curator` (opus)              |
+| Read & interpret analytics / Stripe / Sentry / Firestore data        | `travellini-data-analyst` (sonnet)             |
+| Photo selection, crop, alt text, image performance, OG cards         | `travellini-asset-curator` (sonnet)            |
 | React/Tailwind implementation of a clear plan                        | `travellini-frontend-builder` (sonnet)         |
 | `server.ts`, `firestore.rules`, `admin.ts`, Stripe webhooks, API     | `travellini-backend-engineer` (opus)           |
-| Web-stack security audit (secrets, Stripe, Firebase, Vite env, CORS) | `travellini-security-auditor` (opus)           |
-| Core Web Vitals deep-dive (LCP/INP/CLS), bundle, fonts, code-split   | `travellini-perf-engineer` (opus)              |
+| Web-stack security audit (secrets, Stripe, Firebase, Vite env, CORS) | `travellini-security-auditor` (sonnet)         |
+| Core Web Vitals deep-dive (LCP/INP/CLS), bundle, fonts, code-split   | `travellini-perf-engineer` (sonnet)            |
 | Real-browser UX/responsive/console audit                             | `browser-auditor` (sonnet) via Playwright MCP  |
-| Release-wide QA, static checks, audit script runs, regressions       | `travellini-quality-auditor` (opus)            |
+| Release-wide QA, static checks, audit script runs, regressions       | `travellini-quality-auditor` (sonnet)          |
 | Multi-file refactor, architecture, hard debugging                    | `code-architect` (opus) — rare                 |
+
+### Effort routing (reasoning depth)
+
+Model and effort are **two separate dials**. Picking the right model but reasoning at max on a rename still burns tokens. Session default is `medium` (`.claude/settings.json`); adjust per operation, never as a standing setting.
+
+| Effort        | Use for                                                                                                                                  |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| **low**       | Lookups, greps, file reads, status reports, single-line edits, running a known script, git read ops.                                     |
+| **medium**    | Default. Component work, bugfix with a known cause, copy revision, applying a plan already decided.                                      |
+| **high**      | Design/brand direction, architecture, root-cause on a bug that resisted one fix, security & pre-deploy reasoning, anything irreversible. |
+| **ultracode** | Never a default. Only a genuine repo-wide fan-out, on explicit request. See Dynamic workflows below.                                     |
+
+Escalation is **evidence-driven, not anticipatory**: start at the tier the task looks like, and step up only when the work actually resists — a failed fix, a contradiction in the code, a decision with no clear default. Do not pre-escalate "just in case". Conversely, if a `high` task turns out mechanical once opened, finish it at low effort rather than performing depth.
+
+Two things override the table and always take `high`, regardless of how small the diff looks: edits to the high-risk files (`server.ts`, `firestore.rules`, `src/config/admin.ts`), and anything that ships to production or to the public site.
+
+### Routing self-improvement
+
+Every subagent dispatch is logged to `docs/20_Decisions/ROUTING_LOG.md` by `scripts/hooks/routing_log.py`. The log is the evidence base for tuning these rules — review it when it has accumulated enough runs, and look for:
+
+- an agent on `opus` whose runs are consistently mechanical (ran scripts, reported findings, made no judgment call) → downgrade it;
+- an agent on `sonnet` whose output was rejected or redone by the main thread → upgrade it, or sharpen its brief instead;
+- tasks that were routed to an agent but would have been faster inline → tighten the decision tree entry.
+
+Propose the change to the owner with the log lines that justify it. **Never rewrite these routing rules unattended** — the log informs the decision, it does not make it.
 
 ### Cross-agent ambiguity resolution
 
@@ -148,7 +173,7 @@ After consuming a handoff, mark `status: consumed` in the file's frontmatter. Af
 
 ### Routing rules
 
-- Default model resta **sonnet**. Gli agent travellini-\* sono escalati a opus 4.8 perché producono decisioni strategiche/creative o QA che condizionano il brand. **Eccezioni su sonnet** (lavoro esecutivo/meccanico): `travellini-frontend-builder` (implementazione React da piano già deciso) e `browser-auditor` (guida Playwright). Tutto ciò che è esecuzione triviale resta su sonnet/haiku.
+- Default model resta **sonnet**. Gli agent travellini-\* sono escalati a opus 4.8 perché producono decisioni strategiche/creative o QA che condizionano il brand. **Eccezioni su sonnet** (lavoro esecutivo/meccanico): `travellini-frontend-builder`, `travellini-asset-curator`, `travellini-data-analyst`, `travellini-perf-engineer`, `travellini-quality-auditor`, `travellini-security-auditor` e `browser-auditor`. Il frontmatter `model:` in `.claude/agents/` è la fonte unica, perché è quello che viene eseguito: la tabella qui sopra lo documenta e, se diverge, va riallineata al frontmatter (non il contrario). Tutto ciò che è esecuzione triviale resta su sonnet/haiku.
 - Per **lookup, grep, read, "dove sta X"** → sempre `code-explorer` (haiku). Mai opus.
 - Per **single-file edit, typecheck, rename, bugfix lineare** → default sonnet, non invocare agent opus.
 - **Never edit `server.ts`, `firestore.rules`, or `src/config/admin.ts` from the default thread or from `travellini-frontend-builder`.** Those files belong exclusively to `travellini-backend-engineer`, which requires user confirmation before editing.
@@ -174,7 +199,7 @@ Dynamic workflows run a script that fans work out to many subagents (up to 16 co
 - **When to reach for one:** genuine fan-out a single conversation can't coordinate — a repo-wide sweep ("audit every public route for mobile overflow + missing meta"), a large multi-file migration, or multi-source research that needs cross-checking (`/deep-research <domanda>`). Anything touching **one domain** stays on the matching `travellini-*` agent; a workflow there just burns tokens.
 - **How to trigger:** prefix a prompt with `ultracode:` (`ultracode: <task>`), run `/deep-research <domanda>`, or a saved `/workflows` command. **Do NOT set `/effort ultracode` as a standing default** — it turns every task into a workflow swarm and breaks the cost discipline above. On-demand only.
 - **Cost guard:** a run costs far more than the same task in conversation. Prove value on a small slice first (one directory / one route), watch token use in `/workflows`, stop if it diverges. Same "taglia spreco" rule as model routing.
-- **Safety:** workflow subagents always run in `acceptEdits` and inherit the project tool allowlist regardless of session mode. So **never point a workflow at the high-risk files** (`server.ts`, `firestore.rules`, `src/config/admin.ts`) — those still require `travellini-backend-engineer` + owner confirmation. Pre-allow the commands a run needs (`npm run audit:*`, `npm run typecheck`, git read) so it doesn't stall mid-run; most are already in the allowlist.
+- **Safety:** workflow subagents always run in `acceptEdits` and inherit the project tool allowlist regardless of session mode. So **never point a workflow at the high-risk files** (`server.ts`, `firestore.rules`, `src/config/admin.ts`) — those still require `travellini-backend-engineer` + owner confirmation. The read-only checks a run typically needs (`npm run typecheck`, `lint`, `test:*`, `build`, `audit:*`, `graphify` query/affected/explain/check, git `status`/`diff`/`log`/`show`/`ls-files`/`rev-parse`/`check-ignore`) are in `permissions.allow` of `.claude/settings.json`; anything outside that list still prompts, so pre-allow it before launching a run or it will stall mid-run.
 - **Save reusable ones** to `.claude/workflows/` (shared, via `s` in `/workflows`) when a fan-out becomes routine — e.g. a pre-deploy route sweep.
 
 ### Innovation scouting
