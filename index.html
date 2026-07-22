@@ -20,8 +20,21 @@
 
     <!-- Route-specific LCP image preloads are managed from React pages with Helmet.
          Exception: the home poster is preloaded statically because Helmet preloads
-         only fire after the lazy route chunk loads — too late for the LCP. -->
-    <link rel="preload" as="image" href="/images/reels/reel-4-cover.webp" fetchpriority="high" />
+         only fire after the lazy route chunk loads — too late for the LCP.
+         Deve restare allineato all'immagine `eager` di CinematicHomepage: preloadare
+         un file che la home non renderizza costa banda E ritarda l'LCP vero. -->
+    <link
+      rel="preload"
+      as="image"
+      type="image/avif"
+      imagesrcset="
+        /images/home-journal/hero-impossible-320.avif  320w,
+        /images/home-journal/hero-impossible-480.avif  480w,
+        /images/home-journal/hero-impossible-768.avif  768w,
+        /images/home-journal/hero-impossible.avif     1080w"
+      imagesizes="(max-width: 768px) 100vw, 1080px"
+      fetchpriority="high"
+    />
 
     <script type="application/ld+json">
       {

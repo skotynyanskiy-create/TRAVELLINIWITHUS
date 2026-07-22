@@ -1,7 +1,10 @@
 import type { Timestamp } from 'firebase/firestore';
 import type { ContentReview, PartnershipKind } from '@/src/types/content';
 
-const DEFAULT_ARTICLE_IMAGE = '/images/hero-amalfi.png';
+// .webp e non .png: 253 KB invece di 1,19 MB per lo stesso pixel. Non .avif
+// perche questo valore finisce anche in og:image, e i crawler social non lo
+// leggono tutti.
+const DEFAULT_ARTICLE_IMAGE = '/images/hero-amalfi.webp';
 
 const asString = (value: unknown) => (typeof value === 'string' ? value.trim() : '');
 

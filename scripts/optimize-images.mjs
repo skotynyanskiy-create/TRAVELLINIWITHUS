@@ -9,7 +9,15 @@ const FORMATS = [
   { ext: 'webp', options: { quality: 78, effort: 5 } },
 ];
 const RESPONSIVE_WIDTHS = [320, 480, 768];
-const RESPONSIVE_DIRS = new Set(['brand', 'destinations', 'reels']);
+const RESPONSIVE_DIRS = new Set([
+  'brand',
+  'destinations',
+  'reels',
+  // Senza queste due, il mobile scaricava l'arte full-size: home-journal pesa
+  // 9 MB e i suoi tre ambienti sono renderizzati dalla home.
+  'home-journal',
+  'experiences',
+]);
 // Directories whose .webp files are ORIGINAL sources (not PNG-derived variants).
 // For them we generate the .avif + responsive derivatives; the base .webp IS the
 // source, so it is never re-written. Reel covers are extracted video frames (.webp).

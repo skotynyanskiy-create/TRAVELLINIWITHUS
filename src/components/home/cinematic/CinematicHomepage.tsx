@@ -18,15 +18,37 @@ interface EditorialImageProps {
   eager?: boolean;
 }
 
+// Le sorgenti sono 1080x1920. Senza srcSet il mobile scaricava comunque il
+// full-size: le varianti -320/-480/-768 sono generate da optimize-images.mjs.
+const EDITORIAL_WIDTHS = [320, 480, 768, 1080];
+
+function editorialSrcSet(name: string, ext: 'avif' | 'webp') {
+  return EDITORIAL_WIDTHS.map((w) =>
+    w === 1080
+      ? `/images/home-journal/${name}.${ext} ${w}w`
+      : `/images/home-journal/${name}-${w}.${ext} ${w}w`
+  ).join(', ');
+}
+
 function EditorialImage({ name, alt, className, eager = false }: EditorialImageProps) {
   return (
     <picture>
-      <source srcSet={`/images/home-journal/${name}.avif`} type="image/avif" />
-      <source srcSet={`/images/home-journal/${name}.webp`} type="image/webp" />
+      <source
+        srcSet={editorialSrcSet(name, 'avif')}
+        sizes="(max-width: 768px) 100vw, 1080px"
+        type="image/avif"
+      />
+      <source
+        srcSet={editorialSrcSet(name, 'webp')}
+        sizes="(max-width: 768px) 100vw, 1080px"
+        type="image/webp"
+      />
       <img
         src={`/images/home-journal/${name}.png`}
         alt={alt}
         className={className}
+        width={1080}
+        height={1920}
         loading={eager ? 'eager' : 'lazy'}
         fetchPriority={eager ? 'high' : 'auto'}
       />
@@ -96,7 +118,18 @@ export default function CinematicHomepage() {
       </a>
 
       <div className="journal-binding" aria-hidden="true">
-        <img src="/images/home-journal/notebook-reference.webp" alt="" />
+        {/* Puramente decorativa: AVIF prima (139 KB contro 174 KB) e mai in
+            competizione con l'LCP. */}
+        <picture>
+          <source srcSet="/images/home-journal/notebook-reference.avif" type="image/avif" />
+          <img
+            src="/images/home-journal/notebook-reference.webp"
+            alt=""
+            loading="lazy"
+            decoding="async"
+            fetchPriority="low"
+          />
+        </picture>
       </div>
 
       <header className="journal-header">
