@@ -48,13 +48,29 @@ function parseFrontmatter(content) {
   const raw = content.slice(4, endIndex);
   const data = {};
 
-  for (const line of raw.split('\n')) {
-    const match = line.match(/^([a-zA-Z0-9_-]+):\s*(.*)$/);
+  const lines = raw.split('\n');
+
+  for (let i = 0; i < lines.length; i += 1) {
+    const match = lines[i].match(/^([a-zA-Z0-9_-]+):\s*(.*)$/);
     if (!match) {
       continue;
     }
 
-    data[match[1]] = match[2].replace(/^["']|["']$/g, '').trim();
+    const [, key, inline] = match;
+
+    // Block scalars ("description: |") keep their value on the following
+    // indented lines, so reading only the key line would yield just "|".
+    if (/^[|>][-+]?\d*$/.test(inline.trim())) {
+      const block = [];
+      while (i + 1 < lines.length && (lines[i + 1].trim() === '' || /^\s/.test(lines[i + 1]))) {
+        i += 1;
+        block.push(lines[i].trim());
+      }
+      data[key] = block.join(' ').trim();
+      continue;
+    }
+
+    data[key] = inline.replace(/^["']|["']$/g, '').trim();
   }
 
   return data;
@@ -73,7 +89,9 @@ function getSkillDirs(baseDir) {
 }
 
 function assertNoAbsolutePaths(filePath, content) {
-  const absolutePathPattern = /(?:[A-Za-z]:\\|file:\/\/|\/Users\/|\/home\/|\/var\/|\/tmp\/)/;
+  // "file://" must be followed by an actual path: prose that merely names the
+  // scheme (e.g. "serve over HTTP, not `file://`") is not a machine path.
+  const absolutePathPattern = /(?:[A-Za-z]:\\|file:\/\/[A-Za-z0-9._~/-]|\/Users\/|\/home\/|\/var\/|\/tmp\/)/;
   if (absolutePathPattern.test(content)) {
     addIssue('error', filePath, 'Absolute machine path found. Use repo-relative paths.');
   }

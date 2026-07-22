@@ -30,6 +30,7 @@ export const CANONICAL_SKILLS = new Set([
   'firebase-check',
   'github-agent-workflow',
   'graphify',
+  'higgsfield-hub',
   'hook',
   'hooks-audit',
   'innovation-radar',
