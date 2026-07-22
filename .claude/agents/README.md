@@ -2,7 +2,11 @@
 
 Single source of truth for which agent does what. All agents below are project-scoped (live in this directory). For routing rules and ambiguity resolution, see `CLAUDE.md`.
 
-**Default thread**: Opus 4.7 (1M context). **Default subagent for code work**: sonnet. **All `travellini-*` + `browser-auditor`**: opus. **`code-explorer`**: haiku. **`code-architect`**: opus (rare).
+**Default thread**: Opus 4.7 (1M context). **Default subagent for code work**: sonnet. Per-agent models (the `model:` frontmatter in each file is the source of truth):
+
+- **opus** — `travellini-orchestrator`, `travellini-growth-revenue-operator`, `travellini-seo-conversion-strategist`, `travellini-editorial-writer`, `travellini-social-content-operator`, `travellini-ui-designer`, `travellini-backend-engineer`, `code-architect` (rare)
+- **sonnet** — `travellini-data-analyst`, `travellini-asset-curator`, `travellini-frontend-builder`, `travellini-quality-auditor`, `travellini-security-auditor`, `travellini-perf-engineer`, `browser-auditor`
+- **haiku** — `code-explorer`
 
 ---
 

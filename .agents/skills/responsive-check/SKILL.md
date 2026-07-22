@@ -14,7 +14,7 @@ Audit responsive multi-viewport via `mcp__playwright__*`. Default: dev server su
 - "Responsive di /destinazioni"
 - Dopo cambi a hero, navbar, grid, hero CTA
 
-## Vincoli da [[design-dna]]
+## Vincoli da `DESIGN.md`
 
 - Mobile @375px MAI horizontal scroll (regola non negoziabile).
 - CTA primario sempre visibile in viewport mobile (above fold o sticky).
@@ -78,7 +78,7 @@ URL: [url]
 
 ## Skill correlate
 
-- `/audit-visual` per regression visiva
+- `npm run audit:visual` per regression visiva
 - `/cwv` per perf metric durante test
 - `/a11y-check` per WCAG su ogni viewport
 

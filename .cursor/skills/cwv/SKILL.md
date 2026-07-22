@@ -27,7 +27,7 @@ Audit performance reale via `mcp__chrome-devtools__*`. Va oltre il visual Playwr
    - Naviga alla URL
    - Cattura Lighthouse report
    - Estrai metriche: LCP, CLS, INP, TBT, FCP, Speed Index, TTI
-3. **Confronta con target da [[quality-bar]]**:
+3. **Confronta con i budget di `lighthouserc.json`**:
    - LCP < 2.5s
    - CLS < 0.1
    - INP < 200ms
@@ -75,7 +75,7 @@ Viewport: mobile (375px) / desktop (1440px)
 
 ## Skill correlate
 
-- `/audit-visual` per UX visiva
+- `npm run audit:visual` per UX visiva
 - `/audit-browser` per UX reale
 - `/predeploy` include CWV nel sweep finale
 

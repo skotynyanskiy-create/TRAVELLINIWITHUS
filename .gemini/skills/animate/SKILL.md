@@ -5,7 +5,7 @@ description: Applica pattern motion premium a un componente TRAVELLINIWITHUS usa
 
 # Animate — Pattern motion Travelliniwithus
 
-Aggiungere motion seguendo il DNA "cinematic ma trattenuto" definito in [[design-dna]].
+Aggiungere motion seguendo il DNA "cinematic ma trattenuto" definito in `DESIGN.md`.
 
 ## Quando attivare
 
@@ -37,7 +37,7 @@ Aggiungere motion seguendo il DNA "cinematic ma trattenuto" definito in [[design
    - Single componente, micro-interazione → `motion`
    - Timeline / ScrollTrigger / pin → GSAP + `useGSAP`
    - Smooth scroll page-level → gia attivo via lenis, non duplicare
-4. **Verifica vincoli [[design-dna]]**:
+4. **Verifica vincoli `DESIGN.md`**:
    - Motion trattenuto, MAI flashy
    - Nessun bounce esagerato, nessun rainbow
    - Durate: 200-600ms (UI), 800-1500ms (hero reveal)
@@ -102,7 +102,7 @@ useGSAP(() => {
 ## Skill correlate
 
 - `/cwv` dopo l'edit per verificare LCP/CLS non degradati
-- `/audit-visual` per screenshot regression
+- `npm run audit:visual` per screenshot regression
 - `travellini-ui-designer` per critique estetica
 
 ## Project context

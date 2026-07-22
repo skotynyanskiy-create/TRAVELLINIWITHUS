@@ -5,7 +5,7 @@ description: Genera copy editoriale italiano per TRAVELLINIWITHUS — hero copy,
 
 # Copywriting Italiano — Travelliniwithus
 
-Produce copy editoriale italiano coerente con [[brand-voice]] + [[design-dna]] + pillar editoriali.
+Produce copy editoriale italiano coerente con `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md` + `DESIGN.md` + pillar editoriali.
 
 ## Quando attivare
 
@@ -15,7 +15,7 @@ Produce copy editoriale italiano coerente con [[brand-voice]] + [[design-dna]] +
 - "Meta description per pagina collaborazioni"
 - "Caption Instagram per [topic]"
 
-## Tono obbligatorio (sintesi da [[brand-voice]])
+## Tono obbligatorio (sintesi da `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md`)
 
 | È          | Non è              |
 | ---------- | ------------------ |
@@ -36,7 +36,7 @@ Produce copy editoriale italiano coerente con [[brand-voice]] + [[design-dna]] +
 
 1. **Brief in 1 riga**: cosa deve dire e dove va (hero / intro / CTA / meta / caption)
 2. **Identifica intent del lettore**: informazione / ispirazione / decisione / azione
-3. **Scegli pillar di riferimento** (vedi [[brand-voice]]): Destinazione / Stile / Pratico / Ispirazione / Shop
+3. **Scegli pillar di riferimento** (vedi `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md`): Destinazione / Stile / Pratico / Ispirazione / Shop
 4. **Genera 3 varianti** (alternativa per scelta):
    - V1: massima specificità
    - V2: massima emozione

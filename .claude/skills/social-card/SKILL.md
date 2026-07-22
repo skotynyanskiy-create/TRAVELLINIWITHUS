@@ -24,7 +24,7 @@ Genera Open Graph image / Twitter Card brand-coherent per condivisioni social.
 | Aspect ratio    | 1.91:1                      |
 | Safe zone testo | margine 60px                |
 
-## Vincoli brand (da [[design-dna]] + [[brand-voice]])
+## Vincoli brand (da `DESIGN.md` + `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md`)
 
 - Palette: sand / ink / accent caldo, NO blu corporate
 - Tipografia: serif-led per titolo, sans per metadata

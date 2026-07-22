@@ -17,7 +17,7 @@ Quando l'utente chiede ispirazione visiva, nuovi pattern UI, o vuole sapere "cos
 ## Pipeline
 
 1. **Definisci il brief in 1 riga** — cosa stai cercando (es. "hero per destination page, image-led, motion sottile").
-2. **Vincoli da [[design-dna]]**:
+2. **Vincoli da `DESIGN.md`**:
    - Premium editorial, NO SaaS, NO gradient blob
    - Sand/ink palette, serif-led
    - Calm hierarchy, motion trattenuto
@@ -62,7 +62,7 @@ Per Travelliniwithus, la direzione consigliata e: [pattern + perche]
 
 ## Vincoli
 
-- Non proporre direzioni che violano [[design-dna]] o [[brand-voice]].
+- Non proporre direzioni che violano `DESIGN.md` o `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md`.
 - Se il riferimento e un SaaS dashboard, scartalo a priori.
 - Non scaricare immagini, solo URL reference.
 - Risultato finale deve essere actionable: deve includere come tradurre il pattern in `src/components/`.
