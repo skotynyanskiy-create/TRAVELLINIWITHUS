@@ -7,9 +7,13 @@ test.describe('Homepage Navigation', () => {
     // Check if the title is correct
     await expect(page).toHaveTitle(/Travelliniwithus/);
 
-    // Check if the current main hero text is visible
-    const heroHeading = page.locator('h1', { hasText: /Posti particolari/i });
+    // Asserisce l'invariante di CLAUDE.md ("one strong h1"), non la copy: il
+    // vecchio hasText /Posti particolari/ e rimasto indietro al redesign della
+    // home e faceva fallire la suite pur con la pagina perfettamente sana.
+    const heroHeading = page.locator('h1');
+    await expect(heroHeading).toHaveCount(1);
     await expect(heroHeading).toBeVisible();
+    await expect(heroHeading).not.toBeEmpty();
   });
 
   test('legacy /destinazioni redirects to /esplora', async ({ page }) => {
