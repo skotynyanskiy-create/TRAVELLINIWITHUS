@@ -5,5 +5,4 @@ Disallow: /account/acquisti
 Disallow: /iscrivi
 Disallow: /*?zone=
 Disallow: /*?type=
-
 Sitemap: https://travelliniwithus.it/sitemap.xml

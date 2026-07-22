@@ -1,24 +1,15 @@
 import fs from 'fs';
 import path from 'path';
-import { PUBLIC_ROUTE_MANIFEST } from './public-route-manifest.js';
+import { sitemapPaths } from '../src/config/surfaces.ts';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const contentSeed = require('../src/data/content-seed.json');
 
 const BASE_URL = 'https://travelliniwithus.it';
-const LITE_MODE = process.env.VITE_LITE_MODE === 'true';
-const LITE_DISABLED_PREFIXES = ['/esplora', '/itinerari', '/shop', '/club', '/preferiti'];
 
-function isLiteDisabled(route) {
-  if (!LITE_MODE) return false;
-  return LITE_DISABLED_PREFIXES.some((p) => route === p || route.startsWith(`${p}/`));
-}
-
-const allStaticRoutes = PUBLIC_ROUTE_MANIFEST.filter((route) => route.sitemap).map(
-  (route) => route.path
-);
-
-const staticRoutes = allStaticRoutes.filter((route) => !isLiteDisabled(route));
+// Lo stato delle superfici e la fonte unica: niente copia locale della logica
+// lite, che qui era riscritta a mano ed era la terza in giro per il repo.
+const staticRoutes = sitemapPaths();
 
 // Consolidamento 2026-05-15: /destinazioni, /esperienze, /guide rimossi
 // come pagine standalone. Restano `/esplora` (archivio universale + finder)
@@ -45,7 +36,25 @@ const filterRoutes = [];
 
 // Priority differenziata per ruolo: evita il segnale piatto 0.8 su tutto.
 // Le legali e le utility scendono; discovery/brand/B2B restano alte.
-const ROLE_BY_PATH = new Map(PUBLIC_ROUTE_MANIFEST.map((r) => [r.path, r.role]));
+// Mappa di sole priorita SEO: non e verita di superficie (quella vive in
+// surfaces.ts), e per questo resta locale a questo script.
+const ROLE_BY_PATH = new Map([
+  ['/', 'home'],
+  ['/esplora', 'discovery'],
+  ['/strumenti', 'tools'],
+  ['/press', 'press'],
+  ['/mappa', 'map'],
+  ['/chi-siamo', 'brand'],
+  ['/collaborazioni', 'b2b-sales'],
+  ['/media-kit', 'b2b-lead'],
+  ['/contatti', 'contact'],
+  ['/risorse', 'resources'],
+  ['/club', 'waitlist'],
+  ['/privacy', 'legal'],
+  ['/cookie', 'legal'],
+  ['/termini', 'legal'],
+  ['/disclaimer', 'legal'],
+]);
 const PRIORITY_BY_ROLE = {
   home: '1.0',
   discovery: '0.9',
@@ -97,9 +106,7 @@ async function fetchDynamicRoutes() {
 
     const db = getFirestore();
     const articlesSnap = await db.collection('articles').where('published', '==', true).get();
-    const productsSnap = LITE_MODE
-      ? { docs: [] }
-      : await db.collection('products').where('published', '==', true).get();
+    const productsSnap = await db.collection('products').where('published', '==', true).get();
 
     const articleRoutes = articlesSnap.docs
       .map((doc) => doc.data())
@@ -212,15 +219,6 @@ async function buildSitemap() {
   // /lead-magnet which use HTML <meta name="robots" noindex> on demo/preview
   // pages). Blocking via robots.txt PREVENTS Googlebot from reading noindex,
   // so noindex is the canonical mechanism.
-  const liteDisallow = LITE_MODE
-    ? `Disallow: /esplora
-Disallow: /itinerari
-Disallow: /shop
-Disallow: /club
-Disallow: /preferiti
-`
-    : '';
-
   const robotsTxt = `User-agent: *
 Allow: /
 Disallow: /admin
@@ -228,7 +226,6 @@ Disallow: /account/acquisti
 Disallow: /iscrivi
 Disallow: /*?zone=
 Disallow: /*?type=
-${liteDisallow}
 Sitemap: ${BASE_URL}/sitemap.xml
 `;
 
