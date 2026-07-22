@@ -81,6 +81,15 @@ docs/
 - `Risorse` e `Shop` sono stati riposizionati verso monetizzazione sobria: toolkit editoriale e boutique di prodotti digitali, non pagina coupon/catalogo demo
 - priorita successiva: QA visiva umana, roundtrip lead Firestore, sostituzione/approvazione contenuti preview e contenuti reali minimi prima del deploy pubblico
 
+## Snapshot 2026-07-21 — Diario e Mappa delle tracce
+
+- homepage `/` consolidata come `Diario delle meraviglie vere`, taccuino editoriale a cinque capitoli;
+- `/mappa` riallineata allo stesso oggetto narrativo con filtri, percorsi suggeriti e schede in-flow;
+- stack cartografico confermato su MapLibre + OpenFreeMap, senza chiave pubblica aggiuntiva;
+- contenuti demo dichiarati come anteprime e immagini subordinate a verifica esplicita;
+- prossima route del rebuild: `/esplora`, da portare allo stesso livello prima della riattivazione editoriale completa;
+- nessun deploy incluso in questo incremento locale.
+
 ## Registro collegato
 
 - [[20_Decisions/DECISION_0001_OBSIDIAN_VAULT_STRATEGY]]

@@ -1,41 +1,54 @@
-# Design QA — Homepage cinematografica
+# Design QA — Diario delle meraviglie vere
 
-- Source visual truth: `.audit-screenshots/homepage-cinematic-reference.png`
-- Implementation desktop: `.audit-screenshots/homepage-cinematic-desktop-full.png`
-- Implementation mobile: `.audit-screenshots/homepage-cinematic-mobile.png`
-- Combined comparison: `.audit-screenshots/homepage-cinematic-comparison.png`
-- Viewports: 1440 × 1000 and 375 × 844
-- State: homepage loaded, cookie consent accepted for final full-page capture
+- Source visual truth: `docs/30_Design/references/home-journal-target-2026-07-21.png`
+- Implementation desktop: `.audit-screenshots/home-journal-1536.png`
+- Implementation mobile: `.audit-screenshots/home-journal-320.png`
+- Combined comparison: `.audit-screenshots/home-journal-comparison.png`
+- Additional chapter captures: `.audit-screenshots/home-journal-page-02.png` through `home-journal-page-05.png`
+- Viewports: 1536 × 1024 source/desktop; responsive matrix 320, 375, 768, 1024 and 1536 px
+- State: homepage loaded with cookie choice pre-recorded for an unobstructed visual comparison
 
-**Findings**
+## Visual comparison
 
-- No actionable P0/P1/P2 mismatch remains. The implementation preserves the source's defining hierarchy: cinematic Batu Caves opening, oversized Fraunces display type, numbered narrative chapters, alternating ink/sand scenes, Tavernal memory and closing destination CTA.
-- Fonts and typography: self-hosted Fraunces Variable and Inter match the editorial serif/sans relationship. One H1 is present and wrapping remains intentional at both viewports.
-- Spacing and layout rhythm: desktop uses full-bleed hero and alternating split scenes; mobile becomes a vertical composition. Measured horizontal width equals client width at 1440 and 375.
-- Colors and visual tokens: all load-bearing colors use existing sand, ink and terracotta tokens. Contrast remains readable over the real reel imagery through a solid veil.
-- Image quality and asset fidelity: real Batu Caves and Tavernal reel covers are used; no placeholder, CSS illustration or fake visual asset is present.
-- Copy and content: Italian copy is specific to Rodrigo & Betta and the two real places, with working routes and reel link.
+- The implementation preserves the source hierarchy: navy textile binding, warm paper,
+  editorial serif title, quiet navigation, dated field note, terracotta action, large
+  landscape and a visible preview of the next page.
+- The generated hero is composed for the measured slot and retains the source focal balance:
+  headline on the left, extraordinary architecture and travelling couple on the right.
+- The lower-right reveal is implemented as a functional link to page 02 rather than a static
+  decoration. The exact torn-paper edge and drawn route from the concept are intentionally not
+  reproduced as fake CSS artwork.
+- Chapters 02–05 extend the same visual grammar with polaroid-like editorial frames, handwritten
+  notes, a dark-blue verdict spread and a quiet closing page.
 
-**Open Questions**
+## Findings and fixes
 
-- The source mock uses a cleaner photographic frame than the available Batu Caves reel cover, whose original frame contains social-video typography. This is accepted because the repository's real approved media takes priority over an invented replacement.
+1. P1 — the first internal-page capture rendered inside only one grid column. Cause: the chapter
+   class was attached to the scroll wrapper rather than the page surface. Fixed by moving the
+   modifier class onto `.journal-page`.
+2. P1 — the persistent header scrolled away after page 01. Cause: `perspective` on the root changed
+   the fixed-position containing block. Fixed by keeping perspective only on each page step.
+3. P2 — anchor destinations could sit too close to the fixed header. Fixed with an explicit
+   96 px scroll margin; normal mobile flow remains transform-free.
+4. Final comparison: no actionable P0, P1 or P2 visual mismatch remains.
 
-**Implementation Checklist**
+## Functional and responsive checks
 
-- [x] TypeScript passed.
-- [x] Production build passed.
-- [x] Desktop and mobile browser captures completed.
-- [x] No horizontal overflow.
-- [x] One H1.
-- [x] Browser console checked: zero errors.
-- [x] Native scroll and reduced-motion fallback preserved.
+- Exactly one H1 at every tested viewport.
+- Document width equals viewport width at 320, 375, 768, 1024 and 1536 px.
+- Desktop primary CTA reaches `#pagina-02` and updates the live page indicator to 02/05.
+- Mobile menu opens and exposes all four primary destinations.
+- Header and textile binding remain fixed across all five desktop chapters.
+- Images have explicit alt attributes; decorative instances use empty alt text.
+- Injected axe-core WCAG 2A/AA/2.1AA scan: zero violations on the homepage.
+- Browser console: zero errors in all five responsive captures.
+- Reduced-motion mode removes page transforms and non-essential transitions.
 
-**Follow-up Polish**
+## Automated verification
 
-- P3: extract a cleaner high-resolution Batu Caves frame from the original reel when an approved timestamp is selected.
-
-## Comparison history
-
-Initial desktop and mobile captures showed no P0/P1/P2 defects. No corrective visual iteration was required. The first desktop capture included the cookie banner; consent was accepted and a clean full-page implementation capture was produced for the final comparison.
+- `npm run typecheck`: passed.
+- `npm run build`: passed.
+- `npm run audit:ui`: passed with zero errors; repository-wide pre-existing warnings remain.
+- `npm run audit:visual`: 14/14 Playwright checks passed.
 
 final result: passed

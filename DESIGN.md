@@ -126,16 +126,26 @@ Before marking UI work as ready:
 
 ## Decision Log
 
-### Map provider — Mapbox
+### Typography delivery — Fraunces weight axis
 
-The `/mappa` page uses Mapbox GL via `react-map-gl` (`src/components/map/MapboxWorldMap.tsx`) with the `mapbox://styles/mapbox/dark-v11` style. The token is supplied through `VITE_MAPBOX_TOKEN`.
+Fraunces resta il serif di brand. Il sito carica le varianti variable `wght`
+normale e corsiva; i file multi-asse `full` non sono ammessi nel percorso
+pubblico perche aggiungono oltre 80 KB per stile senza un beneficio sufficiente
+sulla UI corrente. I display type usano pesi variabili espliciti, non gli assi
+`opsz`, `SOFT` o `WONK`.
 
-Google Maps is intentionally not adopted:
+### Map provider — MapLibre + OpenFreeMap
 
-- Mapbox is already integrated (`mapbox-gl@3.20.0`, `react-map-gl@8.1.0`)
-- pricing is lower beyond the free tier ($5/1000 loads vs $7/1000)
-- the editorial dark style is closer to brand than Google's stock styles
-- migration would touch 67 hard-coded country coordinates and the article-marker overlay for no measurable UX gain
+The `/mappa` page uses MapLibre GL through `react-map-gl/maplibre`
+(`src/components/map/MapboxWorldMap.tsx`) with the OpenFreeMap dark style. The
+public map does not require a Mapbox token.
+
+Google Maps and a return to Mapbox are intentionally not adopted:
+
+- MapLibre preserves the existing markers, clusters, popups, filters and deep links;
+- OpenFreeMap keeps the dark editorial canvas without adding a public API key;
+- changing provider would add cost and migration risk without improving the current discovery flow;
+- the filename `MapboxWorldMap.tsx` is retained only to avoid a broad rename during the route redesign.
 
 ### Page layout pattern — `<PageLayout>` is the public default
 
@@ -151,7 +161,7 @@ Custom-flat pages (no PageLayout) are reserved for full-bleed experiences only: 
 
 - TikTok logo — `src/components/Navbar.tsx`, `src/components/Footer.tsx`, `src/components/article/SocialFollowCTA.tsx`
 - Pinterest logo — `src/components/article/PinterestIcon.tsx`
-- Mapbox custom pin — `src/components/map/MapboxWorldMap.tsx`
+- Custom map pin — `src/components/map/MapboxWorldMap.tsx`
 - Brand mark variants — `src/pages/Collaborazioni.tsx`
 
 `/audit-ui` and `audit-ui` skill should treat these as documented exceptions, not regressions.

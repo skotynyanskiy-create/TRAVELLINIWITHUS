@@ -21,6 +21,67 @@ tags:
 
 # PROJECT_CINEMATIC_REBUILD_HOME_2026
 
+## Social baseline — Diario delle meraviglie vere (2026-07-21)
+
+Decisione owner: fermare la raccolta a 30 contenuti Instagram e usarli come
+base sufficiente. Il dossier e in
+[[13_Content/INSTAGRAM_CONTENT_AUDIT_2026-07-21]]. La nuova ipotesi creativa
+mantiene il calore vintage e personale richiesto, ma usa un'architettura web
+moderna: taccuino a capitoli, cambio pagina con scroll nativo, prova concreta e
+CTA reali.
+
+Evidenze che devono guidare la prossima iterazione:
+
+- meraviglia e sorpresa prima di sconto/prodotto;
+- `Sembra impossibile`, `Altrove, vicino`, `Dormire dentro una storia`,
+  `Mangiare dentro una storia`, `Vale davvero?` come capitoli;
+- Rodrigo & Betta come voce e filtro umano;
+- AI solo per art direction editoriale, non per falsificare persone o prove;
+- motion di pagina desktop progressivo e fallback mobile verticale intenzionale;
+- risorse/affiliazioni separate dalla prima impressione di brand.
+
+## Implementazione — Diario delle meraviglie vere (2026-07-21)
+
+La direzione è stata implementata sulla route pubblica `/` in
+`src/components/home/cinematic/CinematicHomepage.tsx`. Il concept approvato è stato tradotto in
+cinque pagine digitali: `Sembra impossibile`, `Altrove, vicino`, `Dentro una storia`, `Vale
+davvero?` e `Prossima traccia`.
+
+Decisioni bloccate:
+
+- rilegatura e testata persistenti come identità dell'oggetto;
+- scroll nativo con prospettiva Motion leggera solo su desktop;
+- versione mobile verticale, senza simulazione fisica della pagina;
+- tre immagini ImageGen dichiarate come visuali editoriali, non prove fotografiche;
+- CTA verso `/mappa`, `/destinazione/italia`, `/esplora`, `/chi-siamo` e
+  `/collaborazioni`;
+- capitolo `Vale davvero?` come differenza funzionale fra sito e social.
+
+Verifica finale: typecheck e build pass; audit UI con zero errori; visual smoke 14/14; matrice
+320/375/768/1024/1536 senza overflow né errori console; axe homepage zero violazioni. Il source
+of truth e il confronto visuale sono registrati in `design-qa.md`.
+
+## Prima pagina interna — Mappa delle tracce (2026-07-21)
+
+La route `/mappa` e stata ricomposta come il foglio cartografico successivo del
+taccuino: ingresso editoriale breve, filtri a linguetta, mappa MapLibre scura
+incorniciata, tre percorsi suggeriti, scheda contestuale e archivio finale.
+
+Decisioni bloccate:
+
+- motore `react-map-gl/maplibre` + OpenFreeMap preservato, senza token o nuovo provider;
+- desktop a tavola mappa/preset e mobile interamente in-flow;
+- cluster, marker, filtri, preset, deep link e tracking preservati;
+- immagini mostrate solo con `imageVerified: true`; le anteprime demo restano paper-first;
+- errore dati esclusivo con `Riprova` e uscita verso l'archivio;
+- assistente, exit intent e smooth scroll disattivati sulla route per non coprire o rallentare la mappa;
+- controlli e filtri con target touch di almeno 44 px, focus tastiera restituito al marker;
+- Fraunces alleggerito alla variante variable `wght` mantenendo famiglia e pesi del brand.
+
+Il contratto completo vive in
+`docs/50_Scratch/PLAN_mappa-delle-tracce-redesign-2026.md`; `/esplora` resta il
+prossimo incremento e non e stato ridisegnato in questo passaggio.
+
 ## Direzione corrente — Il montaggio delle tracce (2026-07-18)
 
 La home pubblica `/` è stata riallineata al concept approvato **Il montaggio delle tracce**. La composizione vive in `src/components/home/cinematic/CinematicHomepage.tsx` e usa scroll nativo, Fraunces/Inter, asset reali Batu Caves e Tavernal, tre capitoli e una CTA finale. Mobile e `prefers-reduced-motion` sono versioni intenzionali della stessa storia. Nessun backend o file ad alto rischio è stato modificato.
@@ -206,7 +267,7 @@ restando conforme a privacy/consenso.
 
 ### S4 — Nuova Architettura Pagine
 
-- [ ] progettare nuova `Mappa`;
+- [x] progettare e implementare nuova `Mappa delle tracce`;
 - [ ] progettare nuova pagina `Posto`;
 - [ ] progettare nuova `Collaborazioni`;
 - [ ] progettare nuovo `Vieni con noi`;

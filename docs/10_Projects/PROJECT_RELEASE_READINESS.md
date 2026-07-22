@@ -15,6 +15,34 @@ tags:
 
 # PROJECT_RELEASE_READINESS
 
+## Mappa delle tracce — gate locale 2026-07-21
+
+Scope: redesign della route `/mappa` come continuazione del `Diario delle
+meraviglie vere`.
+
+- TypeScript, ESLint mirato, build produzione e audit UI: PASS.
+- Test unitari: PASS, 56/56.
+- Visual smoke: PASS, 14/14 desktop/mobile, inclusa la homepage dopo
+  l'ottimizzazione tipografica.
+- Browser 375/768/1024/1440: PASS; un H1, zero overflow, zero immagini rotte,
+  zero errori console o pagina.
+- Flussi: filtri, preset, pin, card, deep link, CTA archivio, retry e stato errore: PASS.
+- Tastiera: Enter/Spazio sul marker, focus scheda, Esc e ritorno al marker: PASS.
+- Axe WCAG AA a 375 e 1440: zero violazioni.
+- Performance mobile 4G/CPU 4x, mediana di 5 cold run: FCP 1,30 s, LCP 1,72 s,
+  CLS 0,044, filtro 24 ms, TTFB locale 3,1 ms.
+- Font: un solo Fraunces variable `wght` normale da 36,9 KB; nessun file `full`.
+- MapLibre resta lazy e separato; Lenis/GSAP non vengono richiesti su `/mappa`.
+- Residuo non bloccante: warning provider OpenFreeMap per sprite `circle-11`
+  mancante, senza difetto visibile; TBT sintetico 381 ms legato soprattutto al
+  costo baseline MapLibre, con interazione filtro a 24 ms.
+- Audit Obsidian: i nuovi documenti non aggiungono errori; il comando resta rosso
+  per 10 errori storici in handoff/plan homepage e link relativi gia presenti.
+- Deploy e commit non eseguiti.
+
+**Verdetto slice `/mappa`: PASS locale.** Lo stato release complessivo resta
+subordinato ai blocker sicurezza/owner gia registrati in questa nota.
+
 ## Homepage cinematografica — gate 2026-07-18
 
 Scope: redesign della sola homepage `/`, direzione **Il montaggio delle tracce**.
