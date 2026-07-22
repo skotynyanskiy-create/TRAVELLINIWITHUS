@@ -199,3 +199,11 @@ contatti-*.jpeg
 storybook-static
 
 .codex-remote-attachments/
+
+# Skill Higgsfield del fornitore: installate localmente e aggiornate da loro,
+# quindi restano fuori da git e dai mirror (stessa regola di canonical-skills.mjs
+# per le skill esterne). higgsfield-hub e' nostra, resta tracciata.
+.agents/skills/higgsfield-*/
+.claude/skills/higgsfield-*/
+!.agents/skills/higgsfield-hub/
+!.claude/skills/higgsfield-hub/
