@@ -170,13 +170,13 @@ export default function Navbar() {
   const isItemActive = (item: NavItem) => {
     const path = location.pathname;
 
-    if (item.name === 'Destinazioni') {
+    if (item.href === '/destinazione') {
       return path.startsWith('/destinazione');
     }
-    if (item.name === 'Esplora') {
+    if (item.href === '/esplora') {
       return path === '/esplora';
     }
-    if (item.name === 'Racconti') {
+    if (item.href === '/esplora?format=storia') {
       return (
         path.startsWith('/articolo') ||
         path.startsWith('/guide') ||
