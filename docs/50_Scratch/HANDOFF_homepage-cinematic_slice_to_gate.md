@@ -1,6 +1,6 @@
 ---
 title: HANDOFF_homepage-cinematic_slice_to_gate
-status: pending
+status: consumed
 created: 2026-07-18
 from: travellini-frontend-builder
 to: travellini-perf-engineer + travellini-quality-auditor + browser-auditor

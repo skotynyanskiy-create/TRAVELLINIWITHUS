@@ -1,6 +1,6 @@
 ---
 title: HANDOFF_homepage-cinematic_extension_to_final-gate
-status: pending
+status: consumed
 created: 2026-07-18
 from: travellini-frontend-builder
 to: travellini-perf-engineer + travellini-quality-auditor + browser-auditor

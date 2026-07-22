@@ -30,8 +30,8 @@ Il Diario narrativo vive di verità fotografica: "la perfezione attira, l'imperf
 
 ## Context the receiver needs
 
-- Source files: [src/pages/Articolo.tsx](src/pages/Articolo.tsx) (dove atterrano le foto del Diario e dove resta la mappa funzionale, righe ~991-1023 — la mappa disegnata è un asset separato, non un rimpiazzo). La rotta reale da illustrare si ricava dai `mapMarkers`/itinerario dell'articolo.
-- Related docs: [DESIGN.md](DESIGN.md) (peso immagini, alt text, token colore), [docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md](docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md).
+- Source files: [src/pages/Articolo.tsx](../../src/pages/Articolo.tsx) (dove atterrano le foto del Diario e dove resta la mappa funzionale, righe ~991-1023 — la mappa disegnata è un asset separato, non un rimpiazzo). La rotta reale da illustrare si ricava dai `mapMarkers`/itinerario dell'articolo.
+- Related docs: [DESIGN.md](../../DESIGN.md) (peso immagini, alt text, token colore), [docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md](../BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md).
 - Brand / voice notes specific to this piece: sand #faf8f4 + terracotta #c2410c + Fraunces. Le foto imperfette sono la texture emotiva; la mappa disegnata è la firma artigianale. Crop editoriali (persone, gesto, luogo), non stock.
 
 ## What the receiver should produce

@@ -1,6 +1,6 @@
 ---
 title: HANDOFF_burton-juice_asset_to_frontend
-status: blocked
+status: open
 created: 2026-07-15
 updated: 2026-07-16
 from: travellini-asset-curator

@@ -1,6 +1,6 @@
 ---
 title: HANDOFF_homepage-cinematic_asset-seo_to_frontend-slice
-status: pending
+status: consumed
 created: 2026-07-18
 from: travellini-asset-curator + travellini-seo-conversion-strategist
 to: travellini-frontend-builder

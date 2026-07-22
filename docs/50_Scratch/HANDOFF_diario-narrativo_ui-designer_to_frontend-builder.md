@@ -32,8 +32,8 @@ Il funnel del sito (scopro -> vivo la storia -> esploro -> scelgo destinazione -
 
 ## Context the receiver needs
 
-- Source files: [src/pages/Articolo.tsx](src/pages/Articolo.tsx) (Itinerario leggibile righe ~960-988; Mappa del viaggio righe ~991-1023; ReviewBlock/"Il Timbro" righe ~956-958 — il Diario deve convivere anche con questo).
-- Related docs: [docs/10_Projects/PROJECT_CINEMATIC_REBUILD_HOME_2026.md](docs/10_Projects/PROJECT_CINEMATIC_REBUILD_HOME_2026.md) (per capire che il "capitolo immersivo" è già la HOME e NON va duplicato), [DESIGN.md](DESIGN.md), [docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md](docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md).
+- Source files: [src/pages/Articolo.tsx](../../src/pages/Articolo.tsx) (Itinerario leggibile righe ~960-988; Mappa del viaggio righe ~991-1023; ReviewBlock/"Il Timbro" righe ~956-958 — il Diario deve convivere anche con questo).
+- Related docs: [docs/10_Projects/PROJECT_CINEMATIC_REBUILD_HOME_2026.md](../10_Projects/PROJECT_CINEMATIC_REBUILD_HOME_2026.md) (per capire che il "capitolo immersivo" è già la HOME e NON va duplicato), [DESIGN.md](../../DESIGN.md), [docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md](../BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md).
 - Brand / voice notes specific to this piece: il Diario è il registro caldo/personale della coppia (people-led). Copy italiano, warm ma specifico, niente buzzword ("scopri", "esplora il mondo", "unico"). Il testo definitivo dei beat NON è compito tuo: è editoriale — usa placeholder chiaramente segnati [VERIFY con editorial-writer] se servono, non inventare dettagli del viaggio.
 
 ## What the receiver should produce

@@ -1,6 +1,6 @@
 ---
 title: PLAN_homepage-cinematic-redesign-2026
-status: blocked-on-owner-decisions
+status: active
 created: 2026-07-18
 type: plan
 area: product

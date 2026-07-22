@@ -1,6 +1,6 @@
 ---
 title: HANDOFF_homepage-cinematic_gate_to_owner
-status: pending
+status: open
 created: 2026-07-18
 from: gate team
 to: owner

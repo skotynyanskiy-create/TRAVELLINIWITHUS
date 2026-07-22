@@ -1,6 +1,6 @@
 ---
 title: HANDOFF_homepage-cinematic_orchestrator_to_recon
-status: blocked
+status: consumed
 created: 2026-07-18
 from: travellini-orchestrator
 to: code-explorer

@@ -42,6 +42,7 @@ Indice generato automaticamente delle note operative versionate. Rigenerare con
 - [[RELEASE_2026-05-21_v2-verification]]
 - [[RELEASE_2026-06-03_full-mode-predeploy]]
 - [[RELEASE_2026-06-07_public-footprint-predeploy]]
+- [[TRAVELLINI-HOMEPAGE]]
 - [[TRAVELLINIWITHUS_BRAND_MEMORY]]
 - [[TRAVELLINIWITHUS_EXECUTION_PLAN]]
 - [[TRAVELLINIWITHUS_MASTER_PLAN]]
@@ -102,6 +103,7 @@ Indice generato automaticamente delle note operative versionate. Rigenerare con
 - [[13_Content/CONTENT_PROOF_LIBRARY_TRAVELLINIWITHUS]]
 - [[13_Content/DRAFT_PILLAR_SALENTO_AGOSTO]]
 - [[13_Content/IG_CONTENT_ANALYSIS_2026-07-15]]
+- [[13_Content/INSTAGRAM_CONTENT_AUDIT_2026-07-21]]
 - [[13_Content/INSTAGRAM_IMPORT_RUNBOOK]]
 - [[13_Content/LEAD_MAGNET_POSTI_ITALIANI]]
 - [[13_Content/PHOTO_PLAN_R_B_2026_05_15]]
@@ -139,6 +141,7 @@ Indice generato automaticamente delle note operative versionate. Rigenerare con
 - [[20_Decisions/DECISION_0003_CLAUDE_CODE_SESSION_PROTOCOL]]
 - [[20_Decisions/DECISION_0004_OBSIDIAN_GRAPHIFY_SPLIT_VAULT_STRATEGY]]
 - [[20_Decisions/DECISION_PUBLIC_METRICS_SOURCE_TRAVELLINIWITHUS_2026-06-07]]
+- [[20_Decisions/ROUTING_LOG]]
 
 ## Meeting
 

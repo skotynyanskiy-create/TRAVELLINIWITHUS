@@ -1,6 +1,6 @@
 ---
 title: HANDOFF_homepage-cinematic_ui_to_asset-seo
-status: pending
+status: consumed
 created: 2026-07-18
 from: travellini-ui-designer
 to: travellini-asset-curator + travellini-seo-conversion-strategist

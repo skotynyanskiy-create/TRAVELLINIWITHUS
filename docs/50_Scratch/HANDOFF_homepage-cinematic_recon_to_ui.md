@@ -1,6 +1,6 @@
 ---
 title: HANDOFF_homepage-cinematic_recon_to_ui
-status: pending
+status: consumed
 created: 2026-07-18
 from: code-explorer
 to: travellini-ui-designer
