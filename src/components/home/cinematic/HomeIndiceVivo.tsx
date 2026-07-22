@@ -2,7 +2,6 @@ import { Map } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import AtlanteCard from '../../atlante/AtlanteCard';
 import { getRegistroItems } from '../../../config/contentLibrary';
-import { LITE_MODE } from '../../../config/liteMode';
 
 /**
  * Pagina 02 del taccuino — il registro: l'indice vivo dei posti provati.
@@ -40,11 +39,9 @@ export default function HomeIndiceVivo() {
         <Link to="/mappa" className="journal-button journal-button--ink">
           Apri la mappa <Map size={17} aria-hidden="true" />
         </Link>
-        {!LITE_MODE && (
-          <Link to="/esplora" className="journal-button journal-button--text">
-            Sfoglia tutto l&apos;archivio
-          </Link>
-        )}
+        <Link to="/esplora" className="journal-button journal-button--text">
+          Sfoglia tutto l&apos;archivio
+        </Link>
       </div>
     </>
   );

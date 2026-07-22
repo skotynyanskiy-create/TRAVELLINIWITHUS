@@ -20,7 +20,6 @@ import OptimizedImage from '../components/OptimizedImage';
 import { BIO_LINKS, CONTACTS, SITE_URL } from '../config/site';
 import { getContentById } from '../config/contentLibrary';
 import { getPublishedReels } from '../config/reels';
-import { isDisabled } from '../config/liteMode';
 import { trackEvent } from '../services/analytics';
 import { appendLeadFallback } from '../lib/leadFallback';
 
@@ -30,10 +29,8 @@ const HUB_LINKS = [
   {
     title: 'Posti particolari da salvare',
     description: 'Luoghi, esperienze e idee da tenere da parte prima del prossimo viaggio.',
-    to: isDisabled('/esplora')
-      ? '/mappa?utm_source=bio_hub&utm_medium=landing&utm_campaign=discovery'
-      : '/esplora?utm_source=bio_hub&utm_medium=landing&utm_campaign=discovery',
-    cta: isDisabled('/esplora') ? 'Apri la mappa' : 'Apri Esplora',
+    to: '/esplora?utm_source=bio_hub&utm_medium=landing&utm_campaign=discovery',
+    cta: 'Apri Esplora',
   },
   {
     title: 'Risorse che usiamo',

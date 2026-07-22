@@ -6,7 +6,6 @@ const envExamplePath = '.env.example';
 
 const requiredExampleKeys = [
   'APP_URL',
-  'VITE_LITE_MODE',
   'MEDIA_KIT_URL',
   'LEAD_MAGNET_URL',
   'MAIL_FROM',
@@ -51,7 +50,6 @@ const publicViteKeyAllowlist = new Set([
   'VITE_APP_VERSION',
   'VITE_FIREBASE_API_KEY',
   'VITE_GA_ID',
-  'VITE_LITE_MODE',
   'VITE_MAPBOX_TOKEN',
   'VITE_META_PIXEL_ID',
   'VITE_RECAPTCHA_ENTERPRISE_SITE_KEY',
@@ -208,7 +206,7 @@ if (local.exists) {
     }
   }
 
-  for (const key of ['STRIPE_SECRET_KEY', 'APP_URL', 'VITE_LITE_MODE', 'ALLOW_MOCK_CHECKOUT']) {
+  for (const key of ['STRIPE_SECRET_KEY', 'APP_URL', 'ALLOW_MOCK_CHECKOUT']) {
     if (!localKeys.has(key)) {
       add(results, 'WARN', `.env is missing ${key}; related local behavior may be disabled.`);
     }

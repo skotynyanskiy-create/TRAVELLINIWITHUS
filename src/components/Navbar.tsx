@@ -22,7 +22,6 @@ import { siteContentDefaults } from '../config/siteContent';
 import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
 import { useSiteContent } from '../hooks/useSiteContent';
-import { LITE_MODE } from '../config/liteMode';
 
 const SearchModal = lazy(() => import('./SearchModal'));
 
@@ -138,23 +137,22 @@ export default function Navbar() {
   );
 
   // Dropdown "Racconti" — l'asse editoriale (COSA leggere).
-  const raccontiLinks = useMemo<NavSubLink[]>(() => {
-    const all: NavSubLink[] = [
+  const raccontiLinks = useMemo<NavSubLink[]>(
+    () => [
       { name: 'Articoli', href: '/esplora?format=storia' },
       { name: 'Guide', href: '/esplora?format=guida' },
       { name: 'Itinerari', href: '/itinerari' },
-    ];
-    if (!LITE_MODE) return all;
-    return all.filter((l) => !l.href.startsWith('/esplora') && !l.href.startsWith('/itinerari'));
-  }, []);
+    ],
+    []
+  );
 
-  const navItems = useMemo<NavItem[]>(() => {
-    const all: NavItem[] = [
+  const navItems = useMemo<NavItem[]>(
+    () => [
       {
         name: 'Destinazioni',
         href: '/destinazione',
-        primaryLinks: LITE_MODE ? undefined : destinazioniLinks,
-        feature: LITE_MODE ? undefined : destinazioniFeature,
+        primaryLinks: destinazioniLinks,
+        feature: destinazioniFeature,
       },
       { name: 'Esplora', href: '/esplora' },
       { name: 'Mappa', href: '/mappa' },
@@ -165,15 +163,9 @@ export default function Navbar() {
         subLinks: [{ name: navigation.contactsLabel, href: '/contatti' }],
       },
       { name: 'Shop', href: '/shop' },
-    ];
-    if (!LITE_MODE) return all;
-    const disabledHrefs = ['/esplora', '/shop', '/club', '/preferiti', '/itinerari'];
-    // In LITE, rimuovi le voci il cui target primario è disabilitato e le voci
-    // (es. Racconti) rimaste senza sotto-link utilizzabili.
-    return all
-      .filter((item) => !(item.name === 'Racconti' && (item.subLinks?.length ?? 0) === 0))
-      .filter((item) => !item.href || !disabledHrefs.includes(item.href.split('?')[0]));
-  }, [destinazioniLinks, destinazioniFeature, raccontiLinks, navigation]);
+    ],
+    [destinazioniLinks, destinazioniFeature, raccontiLinks, navigation]
+  );
 
   const isItemActive = (item: NavItem) => {
     const path = location.pathname;
@@ -397,20 +389,18 @@ export default function Navbar() {
               <span className="hidden xl:inline">{navigation.searchLabel}</span>
             </button>
 
-            {!LITE_MODE && (
-              <Link
-                to="/preferiti"
-                className="relative transition-colors hover:text-[var(--color-accent)]"
-                aria-label={navigation.favoritesLabel}
-              >
-                <Heart size={18} strokeWidth={1.5} />
-                {favorites.length > 0 && (
-                  <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[10px] font-bold text-white">
-                    {favorites.length}
-                  </span>
-                )}
-              </Link>
-            )}
+            <Link
+              to="/preferiti"
+              className="relative transition-colors hover:text-[var(--color-accent)]"
+              aria-label={navigation.favoritesLabel}
+            >
+              <Heart size={18} strokeWidth={1.5} />
+              {favorites.length > 0 && (
+                <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[10px] font-bold text-white">
+                  {favorites.length}
+                </span>
+              )}
+            </Link>
 
             <div className="relative">
               {user ? (
@@ -645,21 +635,19 @@ export default function Navbar() {
               Collabora con noi
             </Link>
             <div className="flex flex-wrap items-center gap-5">
-              {!LITE_MODE && (
-                <Link
-                  to="/preferiti"
-                  aria-label={navigation.favoritesLabel}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="relative text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
-                >
-                  <Heart size={24} />
-                  {favorites.length > 0 && (
-                    <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-accent)] text-[10px] font-bold text-white">
-                      {favorites.length}
-                    </span>
-                  )}
-                </Link>
-              )}
+              <Link
+                to="/preferiti"
+                aria-label={navigation.favoritesLabel}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="relative text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+              >
+                <Heart size={24} />
+                {favorites.length > 0 && (
+                  <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-accent)] text-[10px] font-bold text-white">
+                    {favorites.length}
+                  </span>
+                )}
+              </Link>
               <a
                 href={CONTACTS.instagramUrl}
                 aria-label="Apri Instagram Travelliniwithus"

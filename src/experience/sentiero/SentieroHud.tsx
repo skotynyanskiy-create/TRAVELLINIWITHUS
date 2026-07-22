@@ -3,13 +3,12 @@ import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { Compass, ArrowDown, ArrowRight, ArrowUp } from 'lucide-react';
 import { SENTIERO_STAGES, type SentieroStage } from './sentieroData';
-import { isDisabled } from '../../config/liteMode';
 import { trackEvent } from '../../services/analytics';
 import SentieroLeadForm from './SentieroLeadForm';
 
-/** Varco verso la pagina reale, con fallback se la route è off in LITE_MODE. */
+/** Varco verso la pagina reale. */
 function stageHref(stage: SentieroStage): string {
-  return isDisabled(stage.route) && stage.routeFallback ? stage.routeFallback : stage.route;
+  return stage.route;
 }
 
 export default function SentieroHud({

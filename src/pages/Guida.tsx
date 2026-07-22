@@ -14,7 +14,6 @@ import {
 } from 'lucide-react';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Button from '../components/Button';
-import { LITE_MODE } from '../config/liteMode';
 import DemoContentNotice from '../components/DemoContentNotice';
 import OptimizedImage from '../components/OptimizedImage';
 import JsonLd from '../components/JsonLd';
@@ -259,30 +258,28 @@ export default function Guida() {
         </div>
       </Section>
 
-      {!LITE_MODE && (
-        <Section className="my-16 rounded-[var(--radius-xl)] bg-[var(--color-ink)] p-12 text-white md:p-16">
-          <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-[1.05fr_0.95fr]">
-            <div>
-              <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">
-                Travellini Club
-              </span>
-              <h2 className="mt-4 text-4xl font-serif leading-tight md:text-5xl">
-                Tutte le guide a 5 EUR al mese con il Club.
-              </h2>
-              <p className="mt-5 max-w-xl text-base leading-relaxed text-white/70">
-                Accesso a guide nuove e aggiornate, newsletter privata, sconti partner. Stessa
-                identità editoriale, senza pagare ogni volta.
-              </p>
-            </div>
-            <Link
-              to="/club"
-              className="inline-flex w-fit items-center gap-2 rounded-full bg-[var(--color-accent)] px-7 py-4 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:bg-white"
-            >
-              Scopri il Club <ArrowRight size={14} />
-            </Link>
+      <Section className="my-16 rounded-[var(--radius-xl)] bg-[var(--color-ink)] p-12 text-white md:p-16">
+        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-[1.05fr_0.95fr]">
+          <div>
+            <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">
+              Travellini Club
+            </span>
+            <h2 className="mt-4 text-4xl font-serif leading-tight md:text-5xl">
+              Tutte le guide a 5 EUR al mese con il Club.
+            </h2>
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-white/70">
+              Accesso a guide nuove e aggiornate, newsletter privata, sconti partner. Stessa
+              identità editoriale, senza pagare ogni volta.
+            </p>
           </div>
-        </Section>
-      )}
+          <Link
+            to="/club"
+            className="inline-flex w-fit items-center gap-2 rounded-full bg-[var(--color-accent)] px-7 py-4 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:bg-white"
+          >
+            Scopri il Club <ArrowRight size={14} />
+          </Link>
+        </div>
+      </Section>
       <StickyMobileCTA
         label={guide.isDemo ? 'Avvisami al lancio' : 'Acquista ora'}
         to={guide.isDemo ? `/contatti?prodotto=${guide.slug}` : undefined}

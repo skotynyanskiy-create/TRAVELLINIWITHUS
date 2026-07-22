@@ -26,7 +26,6 @@ import {
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { fetchArticles } from '../../services/firebaseService';
 import { trackEvent } from '../../services/analytics';
-import { LITE_MODE } from '../../config/liteMode';
 import type { NormalizedArticle } from '../../utils/articleData';
 import { DEMO_ARTICLE_PREVIEW, DEMO_ARTICLES_EXTRA } from '../../config/demoContent';
 import { DEMO_ARCHIVE_SEEDS } from '../../config/demoArchive';
@@ -718,7 +717,6 @@ export default function MapboxWorldMap({ onSummaryChange }: MapboxWorldMapProps)
   };
 
   const archivePath = (() => {
-    if (LITE_MODE) return '/vieni-con-noi';
     const params = new URLSearchParams();
     if (activeContinent !== 'all') params.set('zone', activeContinent);
     if (activeExperience !== 'all') {
@@ -813,7 +811,7 @@ export default function MapboxWorldMap({ onSummaryChange }: MapboxWorldMapProps)
                 Riprova
               </button>
               <Link className="map-traces__text-action" to={archivePath}>
-                {LITE_MODE ? 'Vieni con noi' : 'Apri l’archivio'}
+                Apri l’archivio
               </Link>
             </div>
           </div>
@@ -1041,7 +1039,7 @@ export default function MapboxWorldMap({ onSummaryChange }: MapboxWorldMapProps)
             }
           >
             <MapPin size={16} aria-hidden="true" />
-            {LITE_MODE ? 'Vieni con noi' : 'Apri l’archivio'}
+            Apri l’archivio
           </Link>
         </div>
       )}

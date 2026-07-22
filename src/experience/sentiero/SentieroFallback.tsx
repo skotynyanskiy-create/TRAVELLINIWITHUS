@@ -7,7 +7,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Compass, ArrowDown, ArrowUp, Volume2, VolumeX } from 'lucide-react';
 import { SENTIERO_STAGES, type SentieroStage } from './sentieroData';
-import { isDisabled } from '../../config/liteMode';
 import { trackEvent } from '../../services/analytics';
 import SentieroLeadForm from './SentieroLeadForm';
 
@@ -86,7 +85,7 @@ function LazyVideo({
 }
 
 function stageHref(stage: SentieroStage): string {
-  return isDisabled(stage.route) && stage.routeFallback ? stage.routeFallback : stage.route;
+  return stage.route;
 }
 
 /**

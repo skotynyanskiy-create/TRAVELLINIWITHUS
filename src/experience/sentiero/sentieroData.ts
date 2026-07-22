@@ -42,7 +42,7 @@ export interface SentieroStage {
   fieldNote: string;
   /** pagina reale che questo mondo apre */
   route: string;
-  /** fallback se la route è disabilitata in LITE_MODE */
+  /** fallback storico, non più letto da nessun consumer */
   routeFallback?: string;
   cta: string;
   media: { type: 'video' | 'image'; src: string };

@@ -6,7 +6,6 @@ import OptimizedImage from '../OptimizedImage';
 import { trackEvent } from '../../services/analytics';
 import { scoreArticles } from '../../utils/recommendations';
 import type { ArticleData, RelatedArticleSummary } from './types';
-import { LITE_MODE } from '../../config/liteMode';
 
 const INITIAL_VISIBLE = 6;
 const LOAD_MORE_STEP = 6;
@@ -122,15 +121,14 @@ export default function RelatedArticles({
               Continua a esplorare
             </p>
             <p className="mt-4 text-base font-normal leading-relaxed text-black/70">
-              {LITE_MODE
-                ? 'Stiamo costruendo i collegamenti per tema e per luogo. Nel frattempo, dai un’occhiata alla mappa dei posti che abbiamo già raccontato.'
-                : "Stiamo costruendo i collegamenti per tema, luogo e intento di lettura. Nel frattempo puoi sfogliare tutto l'archivio editoriale dal finder."}
+              Stiamo costruendo i collegamenti per tema, luogo e intento di lettura. Nel frattempo
+              puoi sfogliare tutto l'archivio editoriale dal finder.
             </p>
             <Link
-              to={LITE_MODE ? '/mappa' : '/esplora'}
+              to="/esplora"
               className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent-text)]"
             >
-              {LITE_MODE ? 'Apri la mappa' : 'Apri Esplora'}
+              Apri Esplora
               <ArrowRight size={14} />
             </Link>
           </div>

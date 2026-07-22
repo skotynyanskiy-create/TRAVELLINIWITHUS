@@ -5,7 +5,6 @@ import { useAuth } from '../context/AuthContext';
 import { CONTACTS } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
-import { LITE_MODE } from '../config/liteMode';
 // InstagramGrid e ora renderizzata da Home (sezione #9). Rimossa qui per evitare
 // duplicato DOM. Per altre pagine puo essere reinserita on-demand.
 
@@ -100,16 +99,14 @@ export default function Footer() {
                   {footer.discoverTitle}
                 </h3>
                 <ul className="space-y-5">
-                  {!LITE_MODE && (
-                    <li>
-                      <Link
-                        to="/esplora"
-                        className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                      >
-                        Esplora
-                      </Link>
-                    </li>
-                  )}
+                  <li>
+                    <Link
+                      to="/esplora"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      Esplora
+                    </Link>
+                  </li>
                   <li>
                     <Link
                       to="/mappa"
@@ -118,16 +115,14 @@ export default function Footer() {
                       Mappa
                     </Link>
                   </li>
-                  {!LITE_MODE && (
-                    <li>
-                      <Link
-                        to="/itinerari"
-                        className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                      >
-                        Itinerari
-                      </Link>
-                    </li>
-                  )}
+                  <li>
+                    <Link
+                      to="/itinerari"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      Itinerari
+                    </Link>
+                  </li>
                   <li>
                     <Link
                       to="/strumenti"
@@ -136,26 +131,22 @@ export default function Footer() {
                       {navigation.resourcesLabel}
                     </Link>
                   </li>
-                  {!LITE_MODE && (
-                    <li>
-                      <Link
-                        to="/shop"
-                        className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                      >
-                        Shop Premium
-                      </Link>
-                    </li>
-                  )}
-                  {!LITE_MODE && (
-                    <li>
-                      <Link
-                        to="/club"
-                        className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                      >
-                        Club
-                      </Link>
-                    </li>
-                  )}
+                  <li>
+                    <Link
+                      to="/shop"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      Shop Premium
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/club"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      Club
+                    </Link>
+                  </li>
                 </ul>
               </div>
 
@@ -172,16 +163,14 @@ export default function Footer() {
                       {footer.newsletterButtonLabel}
                     </button>
                   </li>
-                  {!LITE_MODE && (
-                    <li>
-                      <Link
-                        to="/preferiti"
-                        className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                      >
-                        {navigation.favoritesLabel}
-                      </Link>
-                    </li>
-                  )}
+                  <li>
+                    <Link
+                      to="/preferiti"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      {navigation.favoritesLabel}
+                    </Link>
+                  </li>
                   <li>
                     <Link
                       to="/risorse"

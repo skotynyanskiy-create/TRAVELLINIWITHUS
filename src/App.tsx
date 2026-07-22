@@ -13,7 +13,6 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { FavoritesProvider } from './context/FavoritesContext';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
-import { LITE_MODE } from './config/liteMode';
 // La shell editoriale della mappa e piccola e resta eager per rendere subito l'H1;
 // il motore MapLibre continua a essere lazy dentro Mappa.tsx.
 import Mappa from './pages/Mappa';
@@ -114,7 +113,7 @@ export default function App() {
                     <Route path="/" element={<Layout />}>
                       <Route index element={<AtlanteHome />} />
                       <Route path="atlante" element={<Navigate to="/" replace />} />
-                      {!LITE_MODE && <Route path="esplora" element={<Esplora />} />}
+                      <Route path="esplora" element={<Esplora />} />
                       {/* Spina gerarchica: /destinazione (hub tutte le zone),
                           /destinazione/:zoneSlug, /destinazione/:zoneSlug/:subSlug.
                           Il singolo segmento resta back-compat per gli slug regione legacy. */}
@@ -125,42 +124,30 @@ export default function App() {
                           I param sono compatibili: parseDiscoveryFilters
                           legge group/area/region, experience, cat, search
                           come alias dei canonical zone/type/format/q. */}
-                      {!LITE_MODE && (
-                        <Route path="destinazioni" element={<Navigate to="/esplora" replace />} />
-                      )}
-                      {!LITE_MODE && (
-                        <Route path="esperienze" element={<Navigate to="/esplora" replace />} />
-                      )}
-                      {!LITE_MODE && (
-                        <Route path="blog" element={<Navigate to="/esplora" replace />} />
-                      )}
-                      {!LITE_MODE && (
-                        <Route
-                          path="guide"
-                          element={<Navigate to="/esplora?format=guida" replace />}
-                        />
-                      )}
+                      <Route path="destinazioni" element={<Navigate to="/esplora" replace />} />
+                      <Route path="esperienze" element={<Navigate to="/esplora" replace />} />
+                      <Route path="blog" element={<Navigate to="/esplora" replace />} />
+                      <Route
+                        path="guide"
+                        element={<Navigate to="/esplora?format=guida" replace />}
+                      />
                       <Route path="chi-siamo" element={<ChiSiamo />} />
                       <Route path="collaborazioni" element={<Collaborazioni />} />
                       <Route path="media-kit" element={<MediaKit />} />
                       <Route path="press" element={<Press />} />
                       <Route path="contatti" element={<Contatti />} />
                       <Route path="articolo/:slug" element={<Articolo />} />
-                      {!LITE_MODE && <Route path="itinerari" element={<Itinerari />} />}
-                      {!LITE_MODE && (
-                        <Route path="itinerari/compare" element={<ItinerariCompare />} />
-                      )}
-                      {!LITE_MODE && <Route path="itinerari/:slug" element={<Itinerario />} />}
+                      <Route path="itinerari" element={<Itinerari />} />
+                      <Route path="itinerari/compare" element={<ItinerariCompare />} />
+                      <Route path="itinerari/:slug" element={<Itinerario />} />
                       <Route path="guide/:slug" element={<Guida />} />
-                      {!LITE_MODE && (
-                        <Route path="quiz" element={<Navigate to="/esplora" replace />} />
-                      )}
+                      <Route path="quiz" element={<Navigate to="/esplora" replace />} />
                       <Route path="strumenti" element={<Strumenti />} />
-                      {!LITE_MODE && <Route path="preferiti" element={<Preferiti />} />}
+                      <Route path="preferiti" element={<Preferiti />} />
                       <Route path="risorse" element={<Risorse />} />
-                      {!LITE_MODE && <Route path="shop" element={<Shop />} />}
-                      {!LITE_MODE && <Route path="shop/:slug" element={<ProductPage />} />}
-                      {!LITE_MODE && <Route path="club" element={<Club />} />}
+                      <Route path="shop" element={<Shop />} />
+                      <Route path="shop/:slug" element={<ProductPage />} />
+                      <Route path="club" element={<Club />} />
                       <Route path="posto/:slug" element={<Posto />} />
                       <Route path="mappa" element={<Mappa />} />
                       {/* Dev-only: variante Diario in isolamento, fixture Burton Juice.

@@ -10,7 +10,6 @@ import SmoothScrollProvider from './SmoothScrollProvider';
 import QuickViewDrawer from './QuickViewDrawer';
 import { QuickViewProvider } from '../context/QuickViewContext';
 import { initAnalytics, trackPageview } from '../services/analytics';
-import { LITE_MODE } from '../config/liteMode';
 
 export default function Layout() {
   const location = useLocation();
@@ -48,8 +47,8 @@ export default function Layout() {
           </main>
           <Footer />
           <ConsentBanner />
-          {!LITE_MODE && !suppressFloatingOverlays && <ExitIntentPopup />}
-          {!LITE_MODE && !suppressFloatingOverlays && <AiAssistant />}
+          {!suppressFloatingOverlays && <ExitIntentPopup />}
+          {!suppressFloatingOverlays && <AiAssistant />}
           <QuickViewDrawer />
         </div>
       </QuickViewProvider>

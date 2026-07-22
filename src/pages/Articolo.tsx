@@ -4,7 +4,6 @@ import { ArrowRight, CheckCircle2, Clock, Info, MapPin, Route, WalletCards } fro
 import { useParams } from 'react-router-dom';
 import { Link } from '@/src/components/TransitionLink';
 import { Helmet } from 'react-helmet-async';
-import { LITE_MODE } from '../config/liteMode';
 import ReactMarkdown, { type Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkDirective from 'remark-directive';
@@ -99,9 +98,6 @@ function toIsoDateString(value: unknown): string | null {
 }
 
 function getCategoryPath(category: string) {
-  // In lite mode /esplora e' disabilitato: la categoria torna stringa vuota,
-  // i consumer (ArticleHero, Breadcrumbs) la trattano come label senza link.
-  if (LITE_MODE) return '';
   if (category === 'Guide' || category === 'Guida') return '/esplora?format=guida';
   if (category === 'Itinerari' || category === 'Itinerario') return '/esplora?format=itinerario';
   if (category === 'Storie' || category === 'Storia') return '/esplora?format=storia';
@@ -846,9 +842,7 @@ export default function Articolo() {
                 { label: article.category, href: categoryPath || undefined },
                 {
                   label: article.location.split(',')[0],
-                  href: LITE_MODE
-                    ? undefined
-                    : `/esplora?zone=${encodeURIComponent(article.location.split(',')[0])}`,
+                  href: `/esplora?zone=${encodeURIComponent(article.location.split(',')[0])}`,
                 },
                 { label: article.title.split(':')[0] },
               ]}
@@ -1182,14 +1176,12 @@ export default function Articolo() {
                       Vedi risorse selezionate
                       <ArrowRight size={15} />
                     </Link>
-                    {!LITE_MODE && (
-                      <Link
-                        to="/esplora?format=guida"
-                        className="inline-flex items-center gap-2 rounded-full border border-black/10 px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)]"
-                      >
-                        Torna alle guide
-                      </Link>
-                    )}
+                    <Link
+                      to="/esplora?format=guida"
+                      className="inline-flex items-center gap-2 rounded-full border border-black/10 px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)]"
+                    >
+                      Torna alle guide
+                    </Link>
                   </div>
                 </section>
 

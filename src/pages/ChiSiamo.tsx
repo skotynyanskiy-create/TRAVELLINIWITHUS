@@ -19,7 +19,6 @@ import SEO from '../components/SEO';
 import { BRAND_CREDENTIALS, BRAND_STATS, CONTACTS, SITE_URL } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
-import { LITE_MODE } from '../config/liteMode';
 
 const EDITORIAL_GUARDRAILS = [
   'Se un posto funziona solo in foto e non nella vita reale, non ci interessa spingerlo.',
@@ -441,8 +440,8 @@ export default function ChiSiamo() {
             ))}
           </div>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button to={LITE_MODE ? '/mappa' : '/esplora'} variant="cta" size="lg" magnetic={true}>
-              {LITE_MODE ? 'Vedi sulla mappa' : 'Esplora i posti'}
+            <Button to="/esplora" variant="cta" size="lg" magnetic={true}>
+              Esplora i posti
             </Button>
             <Button to="/collaborazioni" variant="outline-light" size="lg" magnetic={true}>
               Lavora con noi

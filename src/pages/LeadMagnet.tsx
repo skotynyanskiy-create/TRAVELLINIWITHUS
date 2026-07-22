@@ -9,7 +9,6 @@ import SEO from '../components/SEO';
 import Button from '../components/Button';
 import { CONTACTS, SITE_URL } from '../config/site';
 import { trackEvent } from '../services/analytics';
-import { LITE_MODE } from '../config/liteMode';
 
 const PDF_URL = '/lead-magnet-posti-italiani.pdf';
 
@@ -135,23 +134,15 @@ export default function LeadMagnet() {
             mappa editoriale per scegliere meglio il prossimo viaggio.
           </p>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            {LITE_MODE ? (
-              <Button to="/mappa" variant="primary" size="lg" trackingId="lead_magnet_mappa">
-                Apri la mappa
-              </Button>
-            ) : (
-              <>
-                <Button to="/esplora" variant="primary" size="lg" trackingId="lead_magnet_esplora">
-                  Esplora le destinazioni
-                </Button>
-                <Link
-                  to="/mappa"
-                  className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-[var(--color-accent-text)] underline-offset-4 hover:underline"
-                >
-                  Apri la mappa
-                </Link>
-              </>
-            )}
+            <Button to="/esplora" variant="primary" size="lg" trackingId="lead_magnet_esplora">
+              Esplora le destinazioni
+            </Button>
+            <Link
+              to="/mappa"
+              className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-[var(--color-accent-text)] underline-offset-4 hover:underline"
+            >
+              Apri la mappa
+            </Link>
           </div>
         </div>
       </Section>

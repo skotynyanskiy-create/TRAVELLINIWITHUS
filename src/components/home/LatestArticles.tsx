@@ -10,7 +10,6 @@ import { siteContentDefaults } from '../../config/siteContent';
 import { DEMO_ARTICLE_PREVIEW, DEMO_ARTICLES_EXTRA } from '../../config/demoContent';
 import { useSiteContent } from '../../hooks/useSiteContent';
 import { toMillis, type DateValue } from '../../utils/dateValue';
-import { LITE_MODE } from '../../config/liteMode';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import { IMAGE_WIPE_EASE } from '../../lib/animations';
 
@@ -72,14 +71,12 @@ export default function LatestArticles() {
               Luoghi, atmosfere e dettagli utili per capire cosa salvare per il prossimo viaggio.
             </p>
           </div>
-          {!LITE_MODE && (
-            <Link
-              to="/esplora"
-              className="hidden items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-transform hover:translate-x-0.5 sm:inline-flex"
-            >
-              Tutti gli articoli <ArrowRight size={12} />
-            </Link>
-          )}
+          <Link
+            to="/esplora"
+            className="hidden items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-transform hover:translate-x-0.5 sm:inline-flex"
+          >
+            Tutti gli articoli <ArrowRight size={12} />
+          </Link>
         </div>
 
         {loadingArticles ? (
@@ -98,32 +95,26 @@ export default function LatestArticles() {
               </span>
               <h3 className="mt-2 text-3xl font-serif text-ink">Le storie stanno arrivando.</h3>
               <p className="mt-3 text-base leading-relaxed text-black/60">
-                {LITE_MODE
-                  ? 'Iscriviti alla newsletter per ricevere il primo pillar appena pubblicato.'
-                  : "Intanto puoi esplorare l'archivio per luogo o per esperienza."}
+                Intanto puoi esplorare l'archivio per luogo o per esperienza.
               </p>
-              {!LITE_MODE && (
-                <Link
-                  to="/esplora"
-                  className="mt-6 inline-flex items-center gap-2 rounded-lg bg-ink px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
-                >
-                  Esplora l&apos;archivio <ArrowRight size={14} />
-                </Link>
-              )}
+              <Link
+                to="/esplora"
+                className="mt-6 inline-flex items-center gap-2 rounded-lg bg-ink px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
+              >
+                Esplora l&apos;archivio <ArrowRight size={14} />
+              </Link>
             </div>
           </div>
         )}
 
-        {!LITE_MODE && (
-          <div className="mt-12 flex justify-center sm:hidden">
-            <Link
-              to="/esplora"
-              className="inline-flex items-center gap-2 rounded-lg border border-black/10 px-5 py-2.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-            >
-              Tutti gli articoli <ArrowRight size={12} />
-            </Link>
-          </div>
-        )}
+        <div className="mt-12 flex justify-center sm:hidden">
+          <Link
+            to="/esplora"
+            className="inline-flex items-center gap-2 rounded-lg border border-black/10 px-5 py-2.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+          >
+            Tutti gli articoli <ArrowRight size={12} />
+          </Link>
+        </div>
       </div>
     </section>
   );

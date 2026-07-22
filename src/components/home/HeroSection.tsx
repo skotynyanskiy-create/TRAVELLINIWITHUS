@@ -5,7 +5,6 @@ import { Link } from '@/src/components/TransitionLink';
 import Button from '../Button';
 import { useReducedMotion } from '../../hooks/useReducedMotion';
 import HeroBackdrop from './HeroBackdrop';
-import { LITE_MODE } from '../../config/liteMode';
 
 const HERO_IMAGE_DESKTOP = '/images/brand/couple-travel.webp';
 const HERO_IMAGE_MOBILE = '/images/hero-amalfi.webp';
@@ -144,16 +143,14 @@ export default function HeroSection() {
             animate={animate ? 'show' : false}
           >
             <Button
-              to={LITE_MODE ? '/#storie' : '/esplora'}
+              to="/esplora"
               variant="cta"
               size="lg"
-              trackingId={LITE_MODE ? 'home_hero_storie' : 'home_hero_esplora'}
+              trackingId="home_hero_esplora"
               magnetic
               className="group h-14 min-w-[230px] rounded-lg shadow-[var(--shadow-lg)] sm:h-16"
             >
-              <span className="text-sm font-bold uppercase tracking-widest">
-                {LITE_MODE ? 'Leggi le storie' : 'Apri Esplora'}
-              </span>
+              <span className="text-sm font-bold uppercase tracking-widest">Apri Esplora</span>
               <ArrowRight
                 size={20}
                 className="ml-2 transition-transform duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:translate-x-1.5"
