@@ -2,7 +2,7 @@
 title: TRAVELLINIWITHUS Homepage — Diario delle meraviglie vere
 type: reference
 status: active
-updated: 2026-07-21
+updated: 2026-07-22
 area: product
 ---
 
@@ -20,13 +20,22 @@ raccontati con prova, prezzo, periodo e un giudizio personale.
 Il sito completa ciò che un Reel non contiene: contesto, limiti, periodo giusto e una strada
 chiara verso mappa, diario e collaborazione.
 
-## Sequenza narrativa
+## Sequenza narrativa (evoluzione Atlante, 2026-07-22)
 
-1. **Sembra impossibile** — promessa di brand e ingresso nel diario.
-2. **Altrove, vicino** — luoghi italiani che sembrano appartenere a un altro mondo.
-3. **Dentro una storia** — soggiorni, tavole ed esperienze che diventano ricordi.
-4. **Vale davvero?** — metodo: prova, dati pratici e verdetto sincero.
-5. **Prossima traccia** — mappa, storia di Rodrigo e Betta, collaborazioni.
+1. **Sembra impossibile** — promessa di brand + **scheda di verifica** del posto
+   in evidenza (disclosure col timbro: dove/prezzo/per chi/verdetto/trasparenza,
+   dati da `content-seed`, link alla scheda completa `/posto/:slug`).
+2. **Il registro** — indice vivo dei posti provati (6 voci reali da
+   `content-seed`, tipografico, stato scheda dichiarato onestamente). Pagina
+   statica, non sticky: un registro lungo verrebbe coperto dallo stack sticky.
+3. **Vale davvero?** — metodo: prova, dati pratici e verdetto sincero.
+4. **Noi** — Rodrigo e Betta, metodo e trasparenza, CTA verso `/chi-siamo`.
+5. **Prossima traccia** — mappa, lead magnet ("Ricevi la prossima traccia",
+   lite-guarded), collaborazioni.
+
+Le vecchie pagine "Altrove, vicino" e "Dentro una storia" (2 delle 3 visuali
+ImageGen) sono state assorbite dal registro: i loro contenuti-destinazione ora
+passano dalle voci reali dell'indice.
 
 ## Interazione
 
@@ -40,21 +49,33 @@ chiara verso mappa, diario e collaborazione.
 ## Implementazione
 
 - entry page: `src/pages/AtlanteHome.tsx`;
-- esperienza: `src/components/home/cinematic/CinematicHomepage.tsx`;
-- stili: blocco `.journal-*` in `src/index.css`;
+- esperienza: `src/components/home/cinematic/CinematicHomepage.tsx`
+  (+ `HomeIndiceVivo.tsx` per il registro);
+- layer atlante riusabile: `src/styles/atlante.css` + tokens `--color-atlante-*`
+  in `src/index.css` @theme (i `--journal-*` locali ora sono alias dei globali);
+- componenti atlante condivisi con `/posto`: `src/components/atlante/`
+  (`PostoStamp`, `SchedaVerifica`, `AtlanteCard`);
+- dati registro/scheda: `src/data/content-seed.json` via
+  `getRegistroItems`/`getContentById` (`src/config/contentLibrary.ts`);
+- stili home-specifici: blocco `.journal-*` in `src/index.css`;
 - asset: `public/images/home-journal/` in AVIF, WebP e sorgente PNG;
 - reference approvata: `docs/30_Design/references/home-journal-target-2026-07-21.png`;
 - verifica visuale: `design-qa.md`.
 
 ## Asset e trasparenza
 
-I tre ambienti editoriali sono stati generati con ImageGen per questa composizione. Sono marcati
-nel DOM come visuali editoriali e non vengono presentati come prove fotografiche di un luogo
-specifico o di una collaborazione. La promessa `Esperienze reali` riguarda il metodo editoriale
-di Rodrigo e Betta, non la provenienza delle immagini di art direction.
+Regola di provenienza ratificata il 2026-07-22:
+`docs/20_Decisions/DECISION_IMAGERY_TRUTH_RULE_2026-07-22.md` (ruoli
+referenziali → solo foto/frame reali con etichetta per asset; generazione solo
+craft non-referenziale).
 
-Quando saranno disponibili fotografie proprietarie approvate, potranno sostituire gli asset
-senza modificare layout o motion.
+Stato home: delle tre visuali dichiarate ImageGen, **due sono uscite dalla
+composizione** (`altrove-vicino`, `dentro-storia` — assorbite dal registro
+tipografico); resta `hero-impossible`, la cui provenienza è **in certificazione
+owner** (i docs la dichiarano ImageGen ma coincide con la cover del reel reale
+The Burton Juice, title-card inclusa). Finché non è certificata, il posto
+`campania-burton-juice` resta `isPlaceholder: true` (noindex) e nessuna nuova
+superficie la adotta come prova.
 
 ## Vincoli rispettati
 
@@ -74,7 +95,22 @@ senza modificare layout o motion.
 - axe WCAG 2A/AA/2.1AA: zero violazioni homepage;
 - console browser: zero errori.
 
+## Verifica 2026-07-22 (evoluzione Atlante)
+
+- typecheck, lint (0 warning), unit 71/71, build: pass;
+- audit:size: home-route 12,5 KB / 110 KB;
+- e2e Playwright: 34/34 (desktop + Mobile Chrome);
+- Lighthouse `/`: performance 97 · accessibility 100 · best-practices 100 ·
+  CLS 0.000 · LCP 1,10 s (tutte le 6 rotte del gate passano);
+- browser reale: scheda copertina e flip `/posto` verificati a 555/1280/375,
+  console pulita;
+- bug pre-esistente scoperto e tracciato:
+  `docs/14_Bugs/BUG_2026-07-22_posto_routes_http_404.md` (fix gated su
+  `server.ts`, Fase 6 del piano).
+
 ## Prossimo incremento
 
-Sostituire una visuale AI con una prima storia proprietaria completa — foto reale, prezzo,
-periodo e limite — mantenendo identica la regia del taccuino.
+Certificare la provenienza di `hero-impossible` (owner) e completare la prima
+scheda verificata end-to-end (prezzo/voto reali di R+B sul Burton Juice) →
+primo posto `isPlaceholder: false` indicizzabile, dopo il fix del bug 404 di
+`/posto` (server.ts, Fase 6).

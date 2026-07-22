@@ -7,35 +7,6 @@
       "runtimeArgs": ["tsx", "server.ts"],
       "port": 3000,
       "autoPort": false
-    },
-    {
-      "name": "Scroll lab (sandbox)",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "C:/Users/ccocu/Desktop/travellini-scroll-lab", "run", "dev"],
-      "port": 5180,
-      "autoPort": false
-    },
-    {
-      "name": "Travellini 5180 (Sentiero)",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["tsx", "server.ts"],
-      "port": 5180,
-      "autoPort": false,
-      "env": { "PORT": "5180" }
-    },
-    {
-      "name": "Sentiero vite puro",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["vite", "--port", "5191", "--strictPort"],
-      "port": 5191,
-      "autoPort": false
-    },
-    {
-      "name": "Travellini dev (auto port)",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["vite"],
-      "port": 5173,
-      "autoPort": true
     }
   ]
 }

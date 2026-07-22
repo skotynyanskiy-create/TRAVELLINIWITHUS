@@ -56,7 +56,7 @@ export default function HomeEditorialPromise() {
           ))}
         </div>
 
-        <p className="mt-10 text-center font-script text-2xl text-[var(--color-accent)]/80 md:mt-14 md:text-3xl">
+        <p className="mt-10 text-center font-serif italic text-xl text-[var(--color-accent)]/90 md:mt-14 md:text-2xl">
           — Rodrigo &amp; Betta
         </p>
       </div>

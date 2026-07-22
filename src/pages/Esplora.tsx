@@ -14,6 +14,7 @@ import {
   X,
 } from 'lucide-react';
 import ActiveFilterChips from '../components/discovery/ActiveFilterChips';
+import AtlanteViews from '../components/atlante/AtlanteViews';
 import ArchiveCard from '../components/discovery/ArchiveCard';
 import ArticleSkeleton from '../components/ArticleSkeleton';
 import AutocompleteResults, {
@@ -428,12 +429,15 @@ export default function Esplora() {
         }}
       />
 
-      {/* HEADER COMPATTO — banda sand editoriale, ricerca inline. */}
-      <section className="bg-[var(--color-sand)] pt-28 pb-10 md:pt-32 md:pb-12">
+      {/* HEADER COMPATTO — banda carta atlante, ricerca inline. */}
+      <section className="bg-[var(--color-sand,#faf7f2)] border-b border-[var(--color-border)] pt-28 pb-10 md:pt-32 md:pb-12 text-[var(--color-ink,#1a2b3c)]">
         <div className="mx-auto max-w-5xl px-6 md:px-12">
-          <p className="text-xs font-medium uppercase tracking-[0.32em] text-[var(--color-accent-text)]">
-            Esplora · Sfoglia e filtra
-          </p>
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent,#c85a32)]">
+              Esplora &amp; Archivio
+            </p>
+            <AtlanteViews current="archivio" />
+          </div>
           <h1 className="mt-4 font-serif text-[clamp(2.25rem,4vw+1rem,3.75rem)] leading-[1.02] text-[var(--color-ink)]">
             Il prossimo posto, prima ancora di sapere dove.
           </h1>

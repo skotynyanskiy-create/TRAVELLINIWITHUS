@@ -771,7 +771,7 @@ Scegli un posto dove puoi fare meno, ma farlo meglio: una trattoria, un belveder
     slug: 'guida-prima-di-prenotare',
     title: 'Prima di prenotare: la checklist Travellini',
     category: 'Guide',
-    image: '/images/brand/about-editorial.webp',
+    image: '/images/reels/reel-5-cover.webp',
     excerpt:
       'Una preview di checklist editoriale per capire se una destinazione è coerente con tempo, budget e aspettative.',
     description:

@@ -239,8 +239,8 @@ export default function MediaKit() {
             </span>
           </div>
           <div className="my-auto space-y-3">
-            <p className="font-script text-3xl text-[var(--color-accent)] leading-none">
-              Rodrigo & Betta
+            <p className="font-serif italic text-2xl text-[var(--color-accent)] leading-none">
+              Rodrigo &amp; Betta
             </p>
             <h4 className="font-serif text-3xl leading-tight font-bold tracking-tight">
               Raccontare con <span className="italic">criterio</span>.

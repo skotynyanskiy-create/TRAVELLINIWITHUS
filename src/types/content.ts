@@ -52,6 +52,10 @@ export interface ContentReview {
   criteria?: ReviewCriterion[];
   pros?: string[];
   cons?: string[];
+  /** Una riga "per chi è" — solo dal materiale editoriale reale. */
+  forWho?: string;
+  /** Una riga "per chi no" — il limite onesto, mai inventato. */
+  notForWho?: string;
 }
 
 export interface ContentPlace {
@@ -89,6 +93,12 @@ export interface ContentItem {
   mediaType: 'reel' | 'post' | 'carousel';
   /** Cover statica (frame/thumbnail). ← IG API `media.thumbnail_url | media_url` */
   cover: string;
+  /** Focale verticale del crop della cover (0-100, default 50). Le cover dei
+   *  reel hanno la title-card in alto: un valore >50 la esclude dal crop. */
+  coverFocusY?: number;
+  /** Alt IT della cover: descrive la scena visibile, non l'hook. Senza questo
+   *  il consumer ripiega sul titolo, che descrive il posto e non l'immagine. */
+  coverAlt?: string;
   /** Video locale (mp4) se ospitato sul sito. */
   videoSrc?: string;
   /** Caption originale completa. ← IG API `media.caption` */

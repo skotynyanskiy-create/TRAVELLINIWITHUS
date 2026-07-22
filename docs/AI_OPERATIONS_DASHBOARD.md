@@ -35,7 +35,7 @@ Agent, Antigravity e strumenti futuri senza perdere controllo operativo.
 
 - Canonical source: `.agents/skills`.
 - Synced targets: `.claude/skills`, `.github/skills`, `.cursor/skills`, `.gemini/skills`.
-- Current canonical count: 45 (per `npm run audit:agents`, 2026-07-15).
+- Current canonical count: 53 (per `npm run audit:agents`, 2026-07-22).
 - Required validation after skill edits: `npm run sync:agents` then `npm run audit:agents`.
 
 ## Continuous Self-Improvement Rule
@@ -60,16 +60,17 @@ system gets sharper over time.
 
 | Candidate                          | Type          | Current status                  | Next step                                                                                                                                        |
 | ---------------------------------- | ------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Firecrawl MCP (`firecrawl`)        | MCP/research  | lab / adopt (2026-07-22)        | Server added to `.mcp.json`; use for deep SEO, competitor research and fact verification                                                         |
+| GA4 Analytics MCP (`analytics`)    | MCP/data      | lab (2026-07-22)                | Server added to `.mcp.json`; owner action: run `gcloud auth application-default login` for ADC credentials                                       |
+| Skill Creator 2.0 (`eval:skills`)  | testing/eval  | adopt (2026-07-22)              | `npm run eval:skills` suite active; validates description quality and project references across all 53 skills                                    |
+| superdesign.dev (IDE design agent) | plugin/design | lab (2026-07-22)                | Isolated sandbox configured (`.superdesign/` added to `.gitignore`); trial React 19 UI component mockups                                         |
 | Figma MCP                          | MCP/design    | connected, on-demand            | Use via `/travellini-stitch-figma-bridge` on the next design-heavy task (design->React, React->Figma art direction)                              |
 | GitHub managed MCP                 | MCP/repo      | scout                           | Compare with existing Codex GitHub plugin                                                                                                        |
 | `gh skill`                         | CLI/GitHub    | scout                           | Evaluate skill management value                                                                                                                  |
 | Gemini CLI                         | CLI/agent     | scout                           | Lab as comparison agent only                                                                                                                     |
-| Research/crawl MCP                 | MCP/research  | scout                           | Check privacy, crawl scope and SEO value                                                                                                         |
-| GitHub `.instructions.md`          | workflow      | scout                           | Consider modular instructions after Copilot cleanup                                                                                              |
 | Headroom (context compression)     | MCP/proxy/lib | scout, verified real 2026-07-06 | See `docs/AI_TOOLING_RADAR.md` + `docs/50_Scratch/TOOLING_EVAL_headroom_2026-07-06.md`; do not lab until proxy/MCP data-flow is read from source |
-| superdesign.dev (IDE design agent) | plugin/design | lab, scope narrowed 2026-07-06  | Trial only the current official listing in an isolated sandbox; see eval card in `docs/50_Scratch/`                                              |
 
-## MCP Server Health (audit 2026-07-15)
+## MCP Server Health (audit 2026-07-22)
 
 - `stripe`: `@stripe/mcp` 0.3.3 removed `--tools` and `--read-only`; the old
   args killed the server at startup. Fixed in `.mcp.json` and

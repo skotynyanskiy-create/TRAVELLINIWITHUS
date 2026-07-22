@@ -22,8 +22,8 @@ const DIARIO_PREVIEW_BEATS: DiaryBeat[] = [
     title: 'Attraversare lo specchio, prima ancora di cenare',
     text: 'Il primo gesto, al The Burton Juice, non è sederti a tavola. È attraversare uno specchio. Sei nella sala di Alice, la luce è quella storta dei film di Tim Burton — e capisci subito che non sei venuto solo per cenare: sei entrato dentro una scenografia che ha deciso di darti da mangiare.',
     image: {
-      src: '/images/brand/about-editorial.webp',
-      alt: 'Foto segnaposto di sviluppo — sostituita dal photo plan reale di Burton Juice.',
+      src: '/images/reels/reel-3-cover.webp',
+      alt: 'Frame reale da un nostro reel, segnaposto di sviluppo — sostituito dal photo plan reale di Burton Juice.',
       caption: 'Segnaposto di sviluppo, non la foto reale del locale.',
       credit: 'Fixture Diario',
     },
@@ -33,8 +33,8 @@ const DIARIO_PREVIEW_BEATS: DiaryBeat[] = [
     title: 'Quando il cameriere smette di essere cameriere',
     text: 'La differenza vera non è la scenografia — è che qui gli attori lavorano tra i tavoli. Non stanno su un palco lontano: entrano nella tua serata, coinvolgono i clienti in giochi a tema, e il confine tra chi mangia e chi recita si scioglie. Se sei una persona timida, qui difficilmente resti a guardare da fuori.',
     image: {
-      src: '/images/brand/collab-work.webp',
-      alt: 'Foto segnaposto di sviluppo — sostituita dal photo plan reale di Burton Juice.',
+      src: '/images/reels/reel-2-cover.webp',
+      alt: 'Frame reale da un nostro reel, segnaposto di sviluppo — sostituito dal photo plan reale di Burton Juice.',
       caption: 'Segnaposto di sviluppo, non la foto reale del locale.',
       credit: 'Fixture Diario',
     },
@@ -44,13 +44,11 @@ const DIARIO_PREVIEW_BEATS: DiaryBeat[] = [
     title: 'Non è un posto per tutti, ed è giusto così',
     text: "Per chi è: coppie e gruppi di amici che da una cena vogliono soprattutto il ricordo. Per chi no: se cerchi una cena tranquilla dove l'unico protagonista è il piatto, questo non è il posto giusto — la scena è ovunque, gli attori arrivano al tavolo. Meglio saperlo prima che a metà serata.",
     image: {
-      src: '/images/brand/couple-travel.webp',
-      alt: 'Rodrigo e Betta — foto reale della coppia, segnaposto di sviluppo per questo beat.',
-      caption:
-        'Beat people-led: Rodrigo & Betta nel frame (foto reale, non scattata da Burton Juice).',
-      credit: 'Travelliniwithus',
+      src: '/images/reels/reel-5-cover.webp',
+      alt: 'Frame reale da un nostro reel, segnaposto di sviluppo — sostituito dal photo plan reale di Burton Juice.',
+      caption: 'Segnaposto di sviluppo, non la foto reale del locale.',
+      credit: 'Fixture Diario',
     },
-    peopleInFrame: true,
   },
   {
     id: 'a-chi-lo-porteresti',

@@ -68,8 +68,8 @@ export const DEMO_GUIDES: Guide[] = [
     format: 'Template Notion',
     language: 'Italiano',
     // TODO[R+B]: cover + preview reali quando guida pubblicata
-    coverImage: '/images/brand/about-editorial.webp',
-    previewImages: ['/images/brand/about-editorial.webp'],
+    coverImage: '/images/reels/reel-4-cover.webp',
+    previewImages: ['/images/reels/reel-4-cover.webp'],
     excerpt:
       'Lo stesso template che usiamo noi per pianificare ogni viaggio: idee, budget, alloggi, itinerario, checklist.',
     inside: [

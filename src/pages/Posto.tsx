@@ -12,6 +12,7 @@ import {
   Share2,
   CheckCircle,
 } from 'lucide-react';
+import PostoStamp from '../components/atlante/PostoStamp';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
@@ -32,20 +33,6 @@ import {
   getBookingProviderFromUrl,
 } from '../utils/placeLinks';
 import type { ContentType } from '../config/contentTaxonomy';
-import { PARTNERSHIP_LABEL } from '../types/content';
-
-/** Gradiente saturo per tipo canonical — identico a ContentCard per coerenza visiva. */
-const TYPE_GRADIENT: Record<ContentType | '_default', string> = {
-  'Food & Ristoranti': 'linear-gradient(145deg, #b45309 0%, #dc2626 100%)',
-  'Hotel con carattere': 'linear-gradient(145deg, #0f4c81 0%, #1e3a5f 100%)',
-  Insolito: 'linear-gradient(145deg, #6d28d9 0%, #be185d 100%)',
-  'Passeggiate panoramiche': 'linear-gradient(145deg, #065f46 0%, #0f766e 100%)',
-  'Relax, terme e spa': 'linear-gradient(145deg, #0e7490 0%, #0c4a6e 100%)',
-  'Posti particolari': 'linear-gradient(145deg, #92400e 0%, #b45309 100%)',
-  "Borghi e città d'arte": 'linear-gradient(145deg, #7c3aed 0%, #4338ca 100%)',
-  'Weekend romantici': 'linear-gradient(145deg, #9d174d 0%, #c2410c 100%)',
-  _default: 'linear-gradient(145deg, #1c1917 0%, #292524 100%)',
-};
 
 /** Mappa types[0] → @type Schema.org per il JSON-LD della pagina-posto. */
 const TYPE_SCHEMA: Record<ContentType | '_default', string> = {
@@ -71,8 +58,6 @@ export default function Posto() {
   }
 
   const canonical = `${SITE_URL}/posto/${item.id}`;
-  const coverGradient = TYPE_GRADIENT[item.types[0]] ?? TYPE_GRADIENT._default;
-  const partnerLabel = PARTNERSHIP_LABEL[item.partnership.kind];
 
   const placeLabel = [item.place.city, item.place.region, item.place.country]
     .filter(Boolean)
@@ -235,53 +220,8 @@ export default function Posto() {
           ]}
         />
 
-        {/* Cover / hero */}
-        <div className="relative aspect-video w-full overflow-hidden rounded-[var(--radius-lg)] bg-[var(--color-ink)]">
-          {item.cover ? (
-            <img src={item.cover} alt={item.title} className="h-full w-full object-cover" />
-          ) : (
-            <div
-              className="flex h-full w-full flex-col justify-end p-8"
-              style={{ background: coverGradient }}
-            >
-              <p className="font-serif text-2xl leading-snug text-white drop-shadow-sm md:text-3xl">
-                {item.hook}
-              </p>
-              <p className="mt-2 text-[11px] font-bold uppercase tracking-[0.22em] text-white/70">
-                {placeLabel}
-              </p>
-            </div>
-          )}
-
-          {/* Badge tipo */}
-          <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-[var(--color-ink)] backdrop-blur-md">
-            {item.types[0]}
-          </span>
-
-          {/* Badge partnership */}
-          {partnerLabel && (
-            <span className="absolute right-4 top-4 rounded-full bg-[var(--color-ink)]/80 px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
-              {partnerLabel}
-            </span>
-          )}
-
-          {/* Pulsante play — linka al reel IG */}
-          {/* Overlay play decorativo (mouse-hover): aria-hidden + non-focusabile,
-              così la stessa destinazione non crea un secondo tab stop. Il link
-              accessibile è il CTA visibile "Guarda il reel" più sotto. */}
-          <a
-            href={item.permalink}
-            target="_blank"
-            rel="noreferrer"
-            aria-hidden="true"
-            tabIndex={-1}
-            className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity hover:opacity-100"
-          >
-            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm ring-2 ring-white/40 transition-transform hover:scale-110">
-              <Play size={28} className="translate-x-0.5 text-white" fill="white" />
-            </span>
-          </a>
-        </div>
+        {/* La carta del posto — fronte "Sembra inventato", retro "Esiste davvero" */}
+        <PostoStamp item={item} />
 
         {/* Corpo editoriale */}
         <div className="mt-10 grid gap-10 md:grid-cols-[1fr_auto]">

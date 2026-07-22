@@ -18,6 +18,8 @@ import {
 import SEO from '../components/SEO';
 import OptimizedImage from '../components/OptimizedImage';
 import { BIO_LINKS, CONTACTS, SITE_URL } from '../config/site';
+import { getContentById } from '../config/contentLibrary';
+import { getPublishedReels } from '../config/reels';
 import { isDisabled } from '../config/liteMode';
 import { trackEvent } from '../services/analytics';
 import { appendLeadFallback } from '../lib/leadFallback';
@@ -46,6 +48,12 @@ const HUB_LINKS = [
     cta: 'Media kit',
   },
 ];
+
+/** Reel reali → scheda del posto (quando esiste in content-seed). */
+const REEL_CARDS = getPublishedReels().map((reel) => ({
+  reel,
+  posto: reel.postoId ? getContentById(reel.postoId) : undefined,
+}));
 
 const GUIDE_DETAILS = [
   { icon: MapPin, label: '10 luoghi', detail: 'Schede brevi per partire da posti concreti.' },
@@ -328,6 +336,86 @@ export default function VieniConNoi() {
             </div>
           </div>
         </section>
+
+        {REEL_CARDS.length > 0 && (
+          <section className="py-14 md:py-20" aria-labelledby="reel-schede-heading">
+            <div className="mx-auto max-w-7xl px-6 md:px-12">
+              <div className="grid gap-5 md:grid-cols-[0.78fr_1.22fr] md:items-end">
+                <div>
+                  <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[var(--color-accent-text)]">
+                    Dai reel alle schede
+                  </span>
+                  <h2
+                    id="reel-schede-heading"
+                    className="mt-4 font-serif text-4xl leading-tight md:text-5xl"
+                  >
+                    Hai visto un posto nei reel? Qui trovi la sua scheda.
+                  </h2>
+                </div>
+                <p className="max-w-2xl text-base leading-relaxed text-black/62">
+                  Ogni reel racconta un posto vero: nella scheda mettiamo quello che nel video non
+                  entra — dove si trova, per chi è e, quando è verificato, il prezzo.
+                </p>
+              </div>
+
+              <div className="-mx-6 mt-9 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 [scrollbar-width:none] md:mx-0 md:px-0 [&::-webkit-scrollbar]:hidden">
+                {REEL_CARDS.map(({ reel, posto }) => {
+                  const cardBody = (
+                    <>
+                      <div className="relative aspect-[9/14] overflow-hidden rounded-[var(--radius-md)] bg-[var(--color-ink-deep)]">
+                        <OptimizedImage
+                          src={reel.cover}
+                          alt={reel.alt}
+                          responsiveWidths={[320, 480]}
+                          sizes="230px"
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                        />
+                        <div className="twu-bottom-scrim absolute inset-0" />
+                        <span className="absolute left-3 top-3 rounded-full bg-black/60 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-white backdrop-blur-md">
+                          {reel.location}
+                        </span>
+                      </div>
+                      <p className="mt-3 font-serif text-lg leading-snug text-[var(--color-ink)]">
+                        {reel.hook}
+                      </p>
+                      <span className="mt-2 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent-text)]">
+                        {posto ? 'Apri la scheda' : 'Vedi il reel'} <ArrowRight size={12} />
+                      </span>
+                    </>
+                  );
+                  const trackClick = () =>
+                    trackEvent('bio_hub_reel_click', {
+                      source,
+                      reel_id: reel.id,
+                      has_scheda: Boolean(posto),
+                    });
+
+                  return posto ? (
+                    <Link
+                      key={reel.id}
+                      to={`/posto/${posto.id}`}
+                      onClick={trackClick}
+                      className="group w-[230px] shrink-0 snap-start"
+                    >
+                      {cardBody}
+                    </Link>
+                  ) : (
+                    <a
+                      key={reel.id}
+                      href={reel.instagramUrl ?? reel.tiktokUrl ?? CONTACTS.instagramUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={trackClick}
+                      className="group w-[230px] shrink-0 snap-start"
+                    >
+                      {cardBody}
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+        )}
 
         <section
           className="bg-[var(--color-surface)] py-16 md:py-24"

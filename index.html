@@ -139,10 +139,44 @@
           }
         ]
       }
-    </script>
+    <style>
+      @keyframes twuLoaderPulse {
+        0%, 100% { opacity: 0.4; transform: scale(0.98); }
+        50% { opacity: 1; transform: scale(1.02); }
+      }
+      @keyframes twuLineGlow {
+        0% { width: 0%; opacity: 0.2; }
+        50% { width: 80px; opacity: 1; }
+        100% { width: 0%; opacity: 0.2; }
+      }
+      .twu-preloader-text {
+        font-family: 'Fraunces', Georgia, serif;
+        font-size: 1.85rem;
+        font-weight: 500;
+        letter-spacing: -0.02em;
+        color: #1a2b3c;
+        animation: twuLoaderPulse 2s ease-in-out infinite;
+      }
+      .twu-preloader-line {
+        height: 2px;
+        background: linear-gradient(90deg, #c85a32, #d4af37, #c85a32);
+        border-radius: 2px;
+        animation: twuLineGlow 1.8s ease-in-out infinite;
+      }
+    </style>
   </head>
-  <body>
-    <div id="root"></div>
+  <body style="background-color: #faf7f2; margin: 0; padding: 0;">
+    <div id="root">
+      <div style="min-height: 100vh; background-color: #faf7f2; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;">
+        <div className="twu-preloader-text" style="font-family: 'Fraunces', serif; font-size: 1.85rem; color: #1a2b3c;">
+          Travellini<span style="font-weight: 700; color: #c85a32;">with</span>us
+        </div>
+        <div style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.26em; color: #6b7280;">
+          Rodrigo &amp; Betta
+        </div>
+        <div style="height: 2px; width: 60px; background: linear-gradient(90deg, #c85a32, #d4af37); border-radius: 2px; margin-top: 4px;"></div>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -124,7 +124,9 @@ for (const filepath of walk(docsRoot, [".base", ".canvas"])) {
   }
 }
 
-const appConfigPath = path.join(root, ".obsidian", "app.json");
+const appConfigPath = fs.existsSync(path.join(docsRoot, ".obsidian", "app.json"))
+  ? path.join(docsRoot, ".obsidian", "app.json")
+  : path.join(root, ".obsidian", "app.json");
 if (fs.existsSync(appConfigPath)) {
   const appConfig = JSON.parse(fs.readFileSync(appConfigPath, "utf8"));
   const ignored = new Set(appConfig.userIgnoreFilters ?? []);

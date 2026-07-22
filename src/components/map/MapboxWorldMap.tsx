@@ -936,7 +936,7 @@ export default function MapboxWorldMap({ onSummaryChange }: MapboxWorldMapProps)
             </div>
 
             <aside className="map-traces__presets" aria-labelledby="map-presets-title">
-              <p className="map-traces__eyebrow">Tre segnalibri</p>
+              <p className="map-traces__eyebrow">Selezione di Viaggio</p>
               <h2 id="map-presets-title">Percorsi suggeriti</h2>
               <p className="map-traces__presets-intro">
                 Scegli una traccia: la mappa applica i filtri e restringe la selezione.
@@ -984,7 +984,7 @@ export default function MapboxWorldMap({ onSummaryChange }: MapboxWorldMapProps)
         <section className="map-traces__results" aria-labelledby="map-results-title">
           <div className="map-traces__results-heading">
             <div>
-              <p className="map-traces__eyebrow">Indice del foglio</p>
+              <p className="map-traces__eyebrow">Mappa &amp; Destinazioni</p>
               <h2 id="map-results-title">Tracce trovate</h2>
             </div>
             <p>

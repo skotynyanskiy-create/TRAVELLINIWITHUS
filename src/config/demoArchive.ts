@@ -29,8 +29,8 @@ const IMG = {
   gastronomia: '/images/experiences/gastronomia.webp',
   avventura: '/images/experiences/avventura.webp',
   insolito: '/images/experiences/insolito.webp',
-  about: '/images/brand/about-editorial.webp',
-  couple: '/images/brand/couple-travel.webp',
+  about: '/images/reels/reel-2-cover.webp',
+  couple: '/images/reels/reel-3-cover.webp',
 } as const;
 
 interface ArchiveSeed {

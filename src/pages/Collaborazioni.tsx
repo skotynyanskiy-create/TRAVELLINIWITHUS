@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 import {
   ArrowRight,
   BarChart,
@@ -28,6 +27,7 @@ import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import Section from '../components/Section';
 import StickyMobileCTA from '../components/StickyMobileCTA';
+import { getPublishedReels } from '../config/reels';
 import { BRAND_STATS, BRAND_STATS_SOURCE, PUBLIC_PROOF_SIGNALS } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
@@ -176,7 +176,11 @@ function TikTokIcon({ size = 20 }: { size?: number }) {
   );
 }
 
+/** 4 frame reali dai reel per il collage hero — prova visiva del contenuto. */
+const COLLAB_REELS = getPublishedReels().slice(0, 4);
+
 export default function Collaborazioni() {
+  const collabReels = COLLAB_REELS;
   const breadcrumbItems = [{ label: 'Collaborazioni' }];
   const [stats, setStats] = useState<SiteStats | null>(null);
   const { data: content } = useSiteContent('collaborations');
@@ -344,15 +348,6 @@ export default function Collaborazioni() {
         title="Collaborazioni travel con hotel e brand"
         description="Collaborazioni editoriali con hotel, destinazioni, brand travel e progetti lifestyle che hanno qualcosa da raccontare con credibilità."
       />
-      <Helmet>
-        <link
-          rel="preload"
-          as="image"
-          href="/images/brand/collab-work.avif"
-          type="image/avif"
-          fetchPriority="high"
-        />
-      </Helmet>
       <JsonLd data={faqStructuredData} />
 
       <Section className="pt-8">
@@ -379,15 +374,6 @@ export default function Collaborazioni() {
                   {pageContent.heroTitleAccent}
                 </span>
               </h1>
-              <motion.span
-                initial={{ opacity: 0, rotate: -10, scale: 0.8 }}
-                animate={{ opacity: 1, rotate: -4, scale: 1 }}
-                transition={{ delay: 0.9, duration: 0.7 }}
-                aria-hidden="true"
-                className="absolute -bottom-6 right-6 hidden font-script text-2xl text-[var(--color-accent)] opacity-80 md:block"
-              >
-                lavoriamo bene, non tanto
-              </motion.span>
             </div>
 
             <p className="mb-10 max-w-2xl text-lg leading-relaxed text-[var(--color-ink-2)]">
@@ -449,17 +435,28 @@ export default function Collaborazioni() {
             transition={{ duration: 0.8 }}
             className="relative"
           >
-            <div className="aspect-[4/5] overflow-hidden rounded-[var(--radius-lg)] shadow-2xl transition-transform duration-700 lg:-rotate-2 lg:hover:rotate-0">
-              <OptimizedImage
-                src="/images/brand/collab-work.webp"
-                alt="Rodrigo e Betta in un contesto travel editoriale"
-                priority
-                sizes="(max-width: 1024px) 100vw, 46vw"
-                width={1440}
-                height={1800}
-                className="h-full w-full object-cover"
-              />
+            {/* Collage di frame REALI dai reel del brand: la prova migliore
+                del tipo di contenuto che un partner riceve (truth rule). */}
+            <div className="grid aspect-[4/5] grid-cols-2 gap-3 transition-transform duration-700 lg:-rotate-2 lg:hover:rotate-0">
+              {collabReels.map((reel, index) => (
+                <div
+                  key={reel.id}
+                  className="overflow-hidden rounded-[var(--radius-md)] bg-[var(--color-ink-deep)] shadow-[var(--shadow-lg)]"
+                >
+                  <OptimizedImage
+                    src={reel.cover}
+                    alt={reel.alt}
+                    priority={index === 0}
+                    responsiveWidths={[320, 480]}
+                    sizes="(max-width: 1024px) 50vw, 23vw"
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+              ))}
             </div>
+            <p className="mt-3 text-right text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-muted-fg)]">
+              Frame reali dai nostri reel
+            </p>
 
             <div className="absolute -bottom-8 -left-8 hidden rounded-[var(--radius-md)] border border-white/30 bg-white/92 p-6 shadow-xl backdrop-blur-md md:block">
               <div className="mb-2 flex items-center gap-4">

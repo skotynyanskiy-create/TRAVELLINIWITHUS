@@ -77,15 +77,14 @@ const Disclaimer = lazy(() => import('./pages/legal/Disclaimer'));
 
 // Branded loading fallback
 const PageLoader = () => (
-  <div className="min-h-screen bg-[var(--color-sand)] flex flex-col items-center justify-center gap-6">
-    <div className="text-2xl font-serif font-medium tracking-tight text-[var(--color-ink)] animate-pulse">
-      Travellini<span className="font-bold text-[var(--color-accent)]">with</span>us
+  <div className="min-h-screen bg-[var(--color-sand,#faf7f2)] flex flex-col items-center justify-center gap-4">
+    <div className="text-3xl font-serif font-medium tracking-tight text-[var(--color-ink,#1a2b3c)] animate-pulse">
+      Travellini<span className="font-bold text-[var(--color-accent,#c85a32)]">with</span>us
     </div>
-    <div className="flex items-center gap-1.5">
-      <div className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)] animate-bounce [animation-delay:0ms]"></div>
-      <div className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)] animate-bounce [animation-delay:150ms]"></div>
-      <div className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)] animate-bounce [animation-delay:300ms]"></div>
+    <div className="text-[10px] font-bold uppercase tracking-[0.26em] text-[var(--color-muted-fg,#6b7280)]">
+      Rodrigo &amp; Betta
     </div>
+    <div className="h-0.5 w-16 bg-gradient-to-r from-[var(--color-accent,#c85a32)] to-[var(--color-gold,#d4af37)] rounded-full animate-pulse"></div>
   </div>
 );
 

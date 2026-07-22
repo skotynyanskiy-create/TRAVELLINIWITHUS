@@ -17,6 +17,8 @@ const RESPONSIVE_DIRS = new Set([
   // 9 MB e i suoi tre ambienti sono renderizzati dalla home.
   'home-journal',
   'experiences',
+  // Cover reali dei posti + texture del layer atlante.
+  'atlante',
 ]);
 // Directories whose .webp files are ORIGINAL sources (not PNG-derived variants).
 // For them we generate the .avif + responsive derivatives; the base .webp IS the

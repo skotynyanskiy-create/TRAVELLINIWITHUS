@@ -74,10 +74,7 @@ export default function HeroCopertina({ posterSrc = DEFAULT_POSTER }: HeroCopert
   }, [staticHero, webglReady]);
 
   return (
-    <section
-      className="relative w-full h-[78svh] min-h-[600px] overflow-hidden"
-      style={{ background: '#0b0805' }}
-    >
+    <section className="relative w-full h-[78svh] min-h-[600px] overflow-hidden bg-[var(--color-ink-deep,#0b0805)]">
       {staticHero ? (
         <div className="absolute inset-0 z-0">
           {/* Hero mobile bespoke: Ken-Burns lento sul poster invece del rettangolo

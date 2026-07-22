@@ -64,8 +64,7 @@ export default function PezzoForte({
               type="button"
               onClick={openStory}
               aria-label={`Apri la storia: ${reel.hook}`}
-              className="group relative block w-full overflow-hidden rounded-[var(--radius-lg)] bg-[var(--color-ink)] shadow-2xl"
-              style={{ aspectRatio: '4 / 5' }}
+              className="group relative block w-full aspect-[4/5] overflow-hidden rounded-[var(--radius-lg)] bg-[var(--color-ink)] shadow-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ink)] focus-visible:ring-offset-2"
             >
               <OptimizedImage
                 src={reel.cover}

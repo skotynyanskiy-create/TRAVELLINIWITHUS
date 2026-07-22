@@ -41,7 +41,7 @@ export default function Footer() {
                 >
                   Travellini<span className="font-bold text-[var(--color-accent)]">with</span>us
                 </Link>
-                <span className="mb-8 block font-script text-lg text-white/55">
+                <span className="mb-8 block font-serif italic text-base text-white/55">
                   Posti particolari, esperienze vere.
                 </span>
                 <p className="mb-6 max-w-sm text-base font-light leading-relaxed text-white/55">

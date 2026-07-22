@@ -299,7 +299,13 @@ Do not load the full `docs/` tree at session start. Read only what the task requ
   `industrial-brutalist-ui`, `minimalist-ui`, `redesign-existing-projects`,
   `stitch-design-taste`, `full-output-enforcement`, `imagegen-frontend-web`,
   `imagegen-frontend-mobile`, `image-to-code`, `brandkit`.
-- No AI-generated imagery on the site: real photography only.
+- Imagery truth rule (docs/20_Decisions/DECISION_IMAGERY_TRUTH_RULE_2026-07-22.md):
+  referential imagery (places, people, experiences) must be REAL photography or
+  real reel frames, with a per-asset provenance label (`real-photo` /
+  `real-frame` / `craft`). AI generation is allowed ONLY for non-referential
+  craft assets (paper grain, ink, stamps, map washes, transition mattes),
+  labeled `craft`. Never generate people, places, or experiences presented as
+  real.
 
 ## Tooling — lean set (anti-regression, audit 2026-07-05)
 

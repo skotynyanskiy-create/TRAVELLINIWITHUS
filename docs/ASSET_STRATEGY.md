@@ -112,6 +112,10 @@ Gli asset sono `public/images/home-journal/hero-impossible.*`, `dentro-storia.*`
 art direction editoriale, non prova fotografica di un luogo, e che la promessa
 "esperienze reali" riguarda il metodo, non la provenienza delle immagini.
 
+**Risolta il 2026-07-22 sulle superfici live** — vedi la tabella per-superficie
+nella decisione. `public/images/brand/*` resta sul disco (usata solo da
+componenti non più raggiungibili, in coda alla Fase 5 di cancellazione).
+
 **Aggravante — imagery generata presentata come le persone reali.**
 Fonte: memoria di progetto `ai-images-fake-couple` (verificata 2026-07-21).
 `public/images/brand/couple-travel.*` e `public/images/brand/about-editorial.*` sono
@@ -120,24 +124,28 @@ immagini AI di una coppia generica — volti diversi tra i due file, luce da sto
 `CoupleIntro.tsx`, `HeroSection.tsx`, `ArticleHero.tsx`. Questo è un caso diverso e più
 grave dell'art direction della home: qui l'immagine afferma un fatto falso sulle persone.
 
-### OPEN OWNER DECISION — bloccante
+### DECISIONE PRESA — 2026-07-22
 
-> **Nessun agente può risolvere questa contraddizione.** Serve una decisione esplicita
-> dell'owner tra: (a) confermare "real photography only" e pianificare la sostituzione
-> degli asset generati già in produzione; (b) emendare `CLAUDE.md:302` per ammettere
-> imagery generata in ruoli espressamente delimitati (art direction non referenziale),
-> mantenendo il divieto assoluto sulle persone reali; (c) una terza formulazione.
->
-> **Finché la decisione non è presa, nessuna nuova generazione di immagini o video di
-> persone e luoghi è autorizzata.** Il lavoro consentito è solo quello di §7.
->
-> La decisione va registrata in `docs/20_Decisions/` e riflessa qui e in `CLAUDE.md`
-> nella stessa sessione.
+> Risolta con la variante **(b) delimitata**, ratificata dall'owner con
+> l'approvazione del piano redesign "L'Atlante delle Meraviglie Vere":
+> **ruoli referenziali (luoghi, persone, esperienze) → solo fotografia/frame
+> reali** con etichetta di provenienza per asset (`real-photo` / `real-frame` /
+> `craft`); **generazione ammessa SOLO per craft non-referenziale** (texture
+> carta, inchiostro, timbri, map wash, matte di transizione), etichettata
+> `craft`. La coppia AI viene rimossa da tutte le superfici live (fase 3 del
+> piano). Dettaglio completo, conseguenze e follow-up:
+> `docs/20_Decisions/DECISION_IMAGERY_TRUTH_RULE_2026-07-22.md`.
+> `CLAUDE.md:302` è stato emendato nella stessa sessione.
 
-Da chiarire nella stessa decisione: `public/images/home-journal/notebook-reference.png`
-(2.833.714 byte) nasce come reference di design ma è servito in pagina come
-`notebook-reference.webp` in `.journal-binding`. Se resta in pagina è un asset di
-produzione e ricade nella regola; se è solo reference, va fuori da `public/`.
+**Certificazione pendente (owner):** i quattro asset `home-journal/*` restano in
+pagina ma con provenienza da certificare — la documentazione interna è
+contraddittoria (dichiarati ImageGen qui sotto, ma `hero-impossible` corrisponde
+alla cover del reel reale The Burton Juice, testo title-card incluso). Finché non
+sono certificati, nessuna nuova superficie li adotta come "prova" e il posto
+`campania-burton-juice` resta `isPlaceholder: true` (noindex). Vale anche per
+`notebook-reference.png` (2.833.714 byte): nasce come reference di design ma è
+servito in pagina in `.journal-binding` — se resta in pagina è un asset `craft`
+da etichettare; se è solo reference, va fuori da `public/`.
 
 ---
 
@@ -257,9 +265,13 @@ Anche queste restano soggette ai divieti di §6 — `dubbing` e `voice_change` n
 far dire loro cose non dette, e `outpaint_image` non può inventare un luogo attorno al
 soggetto.
 
-**Bloccate** finché §2 non è risolta: generazione da zero di persone, luoghi, scene,
-video, Soul Character, product photoshoot, marketing studio, e ogni `generate_*`
-text-to-image / text-to-video destinato al sito pubblico.
+**Vietate per regola** (decisione §2, 2026-07-22 — non più "in attesa"): generazione
+da zero di persone, luoghi, scene ed esperienze presentate come reali; Soul
+Character; product photoshoot e marketing studio riferiti a viaggi/persone del
+brand. **Ammesse** (post-decisione): generazioni `craft` non-referenziali — texture
+carta, inchiostro, timbri, map wash, matte di transizione — con scheda metadata
+(§5), staging `generated/` (§4), approvazione owner per-asset e verifica crediti
+preventiva.
 
 ---
 

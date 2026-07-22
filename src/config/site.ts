@@ -91,7 +91,7 @@ export const NEWSLETTER_COUNTER_MIN_VISIBLE = 50;
  */
 export const FEATURED_REEL = {
   url: '', // vuoto = fallback su thumbnail + caption sotto
-  thumbnail: '/images/brand/couple-travel.webp',
+  thumbnail: '/images/reels/reel-1-cover.webp',
   caption: 'Il lato più immediato del progetto: luoghi, prove sul campo e scelte senza rumore.',
 } as const;
 

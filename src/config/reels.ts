@@ -44,6 +44,9 @@ export interface ReelEntry {
   instagramUrl?: string;
   /** URL pubblico del post TikTok (https://tiktok.com/@.../video/...). */
   tiktokUrl?: string;
+  /** Id del posto corrispondente in content-seed (per il deep link
+   *  reel → /posto/:slug dal bio hub). Assente = nessuna scheda ancora. */
+  postoId?: string;
   /** Views totali (Instagram + TikTok aggregato), se note. */
   views?: number;
   /** ISO date di pubblicazione. */
@@ -78,6 +81,7 @@ const RAW_REELS: ReelEntry[] = [
     hashtags: ['egitto', 'marrosso', 'snorkeling', 'travelliniwithus'],
     publishedAt: '2026-05-14',
     isPlaceholder: false,
+    postoId: 'egitto-marsa-alam-dream-lagoon',
   },
   {
     id: 'reel-toscana-sushi-kibo',
@@ -123,6 +127,7 @@ const RAW_REELS: ReelEntry[] = [
     hashtags: ['malesia', 'batucaves', 'kualalumpur', 'travelliniwithus'],
     publishedAt: '2026-05-14',
     isPlaceholder: false,
+    postoId: 'malesia-batu-caves',
   },
   {
     id: 'reel-toscana-volterra-volturi',
@@ -138,6 +143,7 @@ const RAW_REELS: ReelEntry[] = [
     hashtags: ['volterra', 'toscana', 'insolito', 'travelliniwithus'],
     publishedAt: '2026-05-14',
     isPlaceholder: false,
+    postoId: 'toscana-aperitivo-volterra',
   },
 ];
 

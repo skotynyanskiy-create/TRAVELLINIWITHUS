@@ -124,7 +124,7 @@ export default function SplashIntro({ onEnter }: SplashIntroProps) {
           transition={{ duration: 1, delay: 0.2, ease: 'easeOut' }}
           className="text-[10px] uppercase tracking-[0.25em] font-semibold text-white/50 mb-6 font-sans"
         >
-          Diario di Viaggio
+          Rodrigo &amp; Betta · Guida d'Autore
         </motion.span>
 
         {/* Titolo Logo */}
@@ -163,7 +163,7 @@ export default function SplashIntro({ onEnter }: SplashIntroProps) {
               data-cursor="Entra"
               className="px-10 py-5 rounded-full bg-white text-[var(--color-ink)] font-sans text-xs font-bold uppercase tracking-[0.18em] shadow-[0_12px_32px_rgba(255,255,255,0.06)] hover:bg-[var(--color-accent)] hover:text-white transition-all duration-300 ease-out flex items-center justify-center"
             >
-              Entra nel Diario
+              Entra nel Sito
             </button>
           </MagneticWrapper>
         </motion.div>

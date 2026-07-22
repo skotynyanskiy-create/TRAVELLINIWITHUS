@@ -179,7 +179,7 @@ export default function CoupleIntro() {
                       sizes="160px"
                     />
                   </div>
-                  <div className="mt-2 px-1 text-center font-script text-[13px] leading-none text-[var(--color-ink-2)]">
+                  <div className="mt-2 px-1 text-center font-serif italic text-xs leading-none text-[var(--color-ink-2)]">
                     {p.caption}
                   </div>
                 </div>

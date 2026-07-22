@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import { Link } from '@/src/components/TransitionLink';
 import { ArrowRight, MapPin } from 'lucide-react';
@@ -20,11 +20,11 @@ import {
   INTENTION_ORDER,
 } from '../config/contentLibrary';
 import {
+  DESTINATIONS,
   countForDestination,
   getChildren,
   getContentForDestination,
   getDestination,
-  getZoneDestinations,
   getDestinationUrl,
   type DestinationNode,
 } from '../config/destinations';
@@ -57,15 +57,35 @@ export default function Destinazione() {
 
 // ─── Hub /destinazione: tutte le zone (radice della spina) ───────────────────
 
+// ─── Hub /destinazione: tutte le zone, regioni e paesi ────────────────────────
+
 function DestinationsHub() {
-  const zones = getZoneDestinations();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedZoneFilter, setSelectedZoneFilter] = useState<string>('all');
+
+  const allDestinations = useMemo(() => {
+    return DESTINATIONS.filter((node) => node.level !== 'zone');
+  }, []);
+
+  const filteredDestinations = useMemo(() => {
+    return allDestinations.filter((dest) => {
+      const matchZone =
+        selectedZoneFilter === 'all' || dest.zone.toLowerCase() === selectedZoneFilter.toLowerCase();
+      const matchQuery =
+        !searchQuery.trim() ||
+        dest.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        dest.zone.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchZone && matchQuery;
+    });
+  }, [allDestinations, selectedZoneFilter, searchQuery]);
+
   const canonical = `${SITE_URL}/destinazione`;
 
   return (
     <PageLayout>
       <SEO
-        title="Destinazioni — dove siamo stati"
-        description="Le destinazioni Travelliniwithus: Italia, Europa e resto del mondo, zona per zona, coi posti particolari provati sul campo da Rodrigo e Betta."
+        title="Tutte le Destinazioni — Italia, Europa e Mondo"
+        description="Esplora tutte le 20 regioni italiane, i paesi europei e del mondo raccontati da Rodrigo e Betta con posti particolari provati sul posto."
         canonical={canonical}
         breadcrumbs={[
           { name: 'Home', url: '/' },
@@ -81,40 +101,90 @@ function DestinationsHub() {
           />
         </div>
 
-        <header className="mt-8 max-w-2xl">
-          <p className="mb-3 text-eyebrow !text-[var(--color-accent-text)]">Destinazioni</p>
+        <header className="mt-8 max-w-3xl">
+          <p className="mb-3 text-eyebrow !text-[var(--color-accent-text)]">Tutte le Destinazioni</p>
           <h1 className="font-serif text-5xl leading-tight text-[var(--color-ink)] md:text-6xl">
-            Dove siamo stati
+            Dove siamo stati, regione per regione.
           </h1>
           <p className="mt-5 font-serif text-lg italic leading-relaxed text-[var(--color-ink-2)] md:text-xl">
-            Scegli una zona e scendi fino alla regione. Il tema (food, insolito, relax…) si filtra
-            invece in Esplora.
+            Dai borghi d'Italia ai viaggi fuori dai confini. Cerca la tua regione o filtra per zona per scoprire tutte le nostre guide ed i posti provati.
           </p>
         </header>
 
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {zones.map((zone) => {
-            const count = countForDestination(zone);
-            const hasCover = Boolean(zone.cover);
+        {/* Control Bar: Search Input & Zone Filters */}
+        <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-white p-4 shadow-sm">
+          {/* Search Box */}
+          <div className="relative flex items-center flex-1 max-w-md">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Cerca regione o paese (es. Toscana, Puglia, Norvegia...)"
+              className="w-full rounded-full border border-[var(--color-border)] bg-[var(--color-sand)] px-4 py-2.5 text-sm text-[var(--color-ink)] placeholder-[var(--color-muted)] focus:border-[var(--color-accent)] focus:outline-none"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 text-[var(--color-muted)] hover:text-[var(--color-ink)]"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+
+          {/* Zone Filter Pills */}
+          <div className="flex flex-wrap items-center gap-2">
+            {[
+              { id: 'all', label: 'Tutte' },
+              { id: 'italia', label: 'Italia (20 Regioni)' },
+              { id: 'europa', label: 'Europa' },
+              { id: 'africa', label: 'Africa' },
+              { id: 'asia', label: 'Asia' },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setSelectedZoneFilter(tab.id)}
+                className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-all ${
+                  selectedZoneFilter === tab.id
+                    ? 'bg-[var(--color-ink)] text-white shadow-sm'
+                    : 'bg-[var(--color-sand)] text-[var(--color-ink-2)] hover:bg-[var(--color-border)]'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Destinations Grid */}
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {filteredDestinations.map((dest) => {
+            const count = countForDestination(dest);
+            const hasCover = Boolean(dest.cover);
             return (
               <Link
-                key={zone.slug}
-                to={getDestinationUrl(zone)}
+                key={dest.slug}
+                to={getDestinationUrl(dest)}
                 className={`group relative flex aspect-[4/3] flex-col justify-end overflow-hidden rounded-[var(--radius-xl)] shadow-[var(--shadow-md)] transition-transform duration-300 hover:-translate-y-1 ${
-                  hasCover ? 'bg-[var(--color-ink-deep)]' : 'bg-[var(--color-surface-2)]'
+                  hasCover ? 'bg-[var(--color-ink-deep)]' : 'bg-white border border-[var(--color-border)]'
                 }`}
               >
                 {hasCover ? (
                   <>
                     <OptimizedImage
-                      src={zone.cover}
-                      alt={zone.name}
+                      src={dest.cover}
+                      alt={dest.name}
                       className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-105"
                     />
                     <div aria-hidden="true" className="twu-cover-scrim absolute inset-0" />
                     <div className="relative z-10 p-6">
+                      <span className="mb-1 block text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
+                        {dest.zone}
+                      </span>
                       <h2 className="font-serif text-3xl leading-none text-white drop-shadow-md">
-                        {zone.name}
+                        {dest.name}
                       </h2>
                       <p className="mt-2 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-white/85">
                         {count} {count === 1 ? 'posto' : 'posti'}
@@ -127,22 +197,23 @@ function DestinationsHub() {
                   </>
                 ) : (
                   <>
-                    {/* Targa editoriale: watermark iniziale Fraunces, decorativo e clippato dall'overflow-hidden del contenitore. */}
                     <span
                       aria-hidden="true"
-                      className="pointer-events-none absolute -top-8 -right-4 select-none font-serif text-[10rem] leading-none text-[var(--color-border)]"
+                      className="pointer-events-none absolute -top-8 -right-4 select-none font-serif text-[10rem] leading-none text-[var(--color-border)] opacity-60"
                     >
-                      {zone.name.charAt(0)}
+                      {dest.name.charAt(0)}
                     </span>
                     <div className="relative z-10 p-6">
                       <span
                         aria-hidden="true"
-                        className="mb-4 block h-px w-8 bg-[var(--color-accent)]"
-                      />
+                        className="mb-3 block text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]"
+                      >
+                        {dest.zone}
+                      </span>
                       <h2 className="font-serif text-3xl leading-none text-[var(--color-ink)]">
-                        {zone.name}
+                        {dest.name}
                       </h2>
-                      <p className="mt-2 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-muted-fg-2)]">
+                      <p className="mt-3 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-muted-fg-2)]">
                         {count} {count === 1 ? 'posto' : 'posti'}
                         <ArrowRight
                           size={13}

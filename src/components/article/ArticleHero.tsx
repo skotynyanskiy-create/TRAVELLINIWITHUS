@@ -112,14 +112,15 @@ export default function ArticleHero({
 
           <div className="flex flex-wrap items-center gap-8 text-sm text-white/70 font-light">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full border border-white/20">
-                <OptimizedImage
-                  src="/images/brand/about-editorial.webp"
-                  alt=""
-                  className="h-full w-full object-cover"
-                  responsiveWidths={[320]}
-                  sizes="40px"
-                />
+              {/* Monogramma al posto della foto: nessun ritratto della coppia
+                  finché non esiste uno scatto reale certificato (truth rule). */}
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 bg-[var(--color-atlante-carta)]">
+                <span
+                  aria-hidden="true"
+                  className="font-serif text-[13px] font-semibold tracking-tight text-[var(--color-atlante-inchiostro)]"
+                >
+                  R&amp;B
+                </span>
               </div>
               <span>
                 Di <strong className="font-medium text-white">{authorName}</strong>

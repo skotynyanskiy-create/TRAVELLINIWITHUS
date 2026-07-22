@@ -15,7 +15,22 @@ const plugins = [
   {
     id: 'templater-obsidian',
     repo: 'SilentVoid13/Templater',
-    files: ['main.js', 'manifest.json'] // Templater non ha un file styles.css
+    files: ['main.js', 'manifest.json']
+  },
+  {
+    id: 'obsidian-linter',
+    repo: 'platers/obsidian-linter',
+    files: ['main.js', 'manifest.json', 'styles.css']
+  },
+  {
+    id: 'omnisearch',
+    repo: 'scambier/obsidian-omnisearch',
+    files: ['main.js', 'manifest.json', 'styles.css']
+  },
+  {
+    id: 'obsidian-excalidraw-plugin',
+    repo: 'zsviczian/obsidian-excalidraw-plugin',
+    files: ['main.js', 'manifest.json', 'styles.css']
   }
 ];
 

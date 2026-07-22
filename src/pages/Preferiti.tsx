@@ -112,7 +112,7 @@ export default function Preferiti() {
         ) : savedArticles.length === 0 ? (
           <div className="rounded-[var(--radius-xl)] border border-black/5 bg-[var(--color-sand)] py-20 text-center shadow-sm">
             <Heart size={48} className="mx-auto mb-4 text-[var(--color-ink)]/20" />
-            <span className="font-script text-2xl text-[var(--color-accent)]/50 mb-2 block">
+            <span className="font-serif italic text-xl text-[var(--color-accent)]/80 mb-2 block">
               Inizia a esplorare
             </span>
             <h3 className="mb-4 text-2xl font-serif">

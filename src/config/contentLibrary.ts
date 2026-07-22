@@ -35,6 +35,14 @@ export function getContentById(id: string): ContentItem | undefined {
   return CONTENT_ITEMS.find((item) => item.id === id);
 }
 
+/** Item per il registro in home: prima i `featured`, poi ordine seed.
+ *  (Il seed non ha date affidabili per un "più recenti"; l'ordine è curato.) */
+export function getRegistroItems(limit = 6): ContentItem[] {
+  const featured = CONTENT_ITEMS.filter((item) => item.featured);
+  const rest = CONTENT_ITEMS.filter((item) => !item.featured);
+  return [...featured, ...rest].slice(0, limit);
+}
+
 // ─── Intenzioni di viaggio (per le pagine destinazione) ──────────────────────
 
 export type Intention = 'mangiare' | 'dormire' | 'esperienze' | 'vedere';

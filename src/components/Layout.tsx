@@ -42,11 +42,11 @@ export default function Layout() {
             Vai al contenuto principale
           </a>
           <ScrollProgressBar />
-          {!isCinematicHome && <Navbar />}
+          <Navbar />
           <main id="main-content" className="flex-grow">
             <Outlet />
           </main>
-          {!isCinematicHome && <Footer />}
+          <Footer />
           <ConsentBanner />
           {!LITE_MODE && !suppressFloatingOverlays && <ExitIntentPopup />}
           {!LITE_MODE && !suppressFloatingOverlays && <AiAssistant />}

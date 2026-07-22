@@ -238,12 +238,26 @@ git commit -m "feat(surfaces): un registro solo per dire quanto e vera ogni sezi
 - Consumes: `sitemapPaths()` dal Task 1.
 - Produces: `public/sitemap.xml` rigenerata, contenente `/destinazione` e le sue zone.
 
-Nota per chi implementa: `scripts/generate-sitemap.js` è un modulo ESM eseguito da node.
-Per importare da `src/` deve essere eseguito con `tsx`, come già fanno
-`scripts/generate-lead-magnet.tsx` e `scripts/generate-media-kit.tsx`. Rinomina il file in
-`scripts/generate-sitemap.mjs` **solo se** già non lo è, e aggiorna lo script in
-`package.json` che lo invoca da `node scripts/generate-sitemap.js` a
-`npx tsx scripts/generate-sitemap.js`.
+**Nota obbligatoria per chi implementa.** `scripts/generate-sitemap.js` gira dentro
+`npm run build` come `node scripts/generate-sitemap.js`, e **node non sa importare un
+`.ts`**. Appena lo script importa da `src/config/surfaces.ts`, la build si rompe.
+
+Quindi in `package.json` lo script `build` va cambiato da
+
+```
+... && node scripts/generate-sitemap.js && vite build
+```
+
+a
+
+```
+... && tsx scripts/generate-sitemap.js && vite build
+```
+
+Non serve rinominare il file. Il precedente esiste già nella stessa riga di `build`:
+`generate:media-kit` e `generate:lead-magnet` sono entrambi invocati con `tsx`.
+
+Questo passaggio **non è opzionale**: senza, `npm run build` fallisce e con esso la CI.
 
 - [ ] **Step 1: Registra la sitemap attuale come baseline**
 

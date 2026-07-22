@@ -13,21 +13,12 @@
       "city": "Santa Sofia",
       "region": "Emilia Romagna",
       "country": "Italia",
-      "coordinates": {
-        "lat": 43.872585,
-        "lng": 11.746244
-      }
+      "coordinates": { "lat": 43.872585, "lng": 11.746244 }
     },
     "zone": "Italia",
     "types": ["Relax, terme e spa", "Weekend romantici"],
-    "partnership": {
-      "kind": "organic",
-      "partner": "@granducadicampigna"
-    },
-    "value": {
-      "price": "da 98€/notte",
-      "budget": "Medio"
-    },
+    "partnership": { "kind": "organic", "partner": "@granducadicampigna" },
+    "value": { "price": "da 98€/notte", "budget": "Medio" },
     "featured": true,
     "isPlaceholder": true
   },
@@ -44,17 +35,11 @@
       "name": "Spinofiorito Stay",
       "region": "Toscana",
       "country": "Italia",
-      "coordinates": {
-        "lat": 44.023922,
-        "lng": 12.413669
-      }
+      "coordinates": { "lat": 44.023922, "lng": 12.413669 }
     },
     "zone": "Italia",
     "types": ["Hotel con carattere", "Insolito"],
-    "partnership": {
-      "kind": "organic",
-      "partner": "@spinofiorito_stay"
-    },
+    "partnership": { "kind": "organic", "partner": "@spinofiorito_stay" },
     "isPlaceholder": true
   },
   {
@@ -71,20 +56,12 @@
       "city": "Roma",
       "region": "Lazio",
       "country": "Italia",
-      "coordinates": {
-        "lat": 41.880584,
-        "lng": 12.543915
-      }
+      "coordinates": { "lat": 41.880584, "lng": 12.543915 }
     },
     "zone": "Italia",
     "types": ["Food & Ristoranti"],
-    "partnership": {
-      "kind": "invited"
-    },
-    "value": {
-      "price": "20,90€",
-      "budget": "Basso"
-    },
+    "partnership": { "kind": "invited" },
+    "value": { "price": "20,90€", "budget": "Basso" },
     "isPlaceholder": true
   },
   {
@@ -101,17 +78,11 @@
       "city": "Treviolo",
       "region": "Lombardia",
       "country": "Italia",
-      "coordinates": {
-        "lat": 37.994781,
-        "lng": 13.65728
-      }
+      "coordinates": { "lat": 45.690381, "lng": 9.623541 }
     },
     "zone": "Italia",
     "types": ["Insolito", "Food & Ristoranti"],
-    "partnership": {
-      "kind": "adv",
-      "partner": "@lacavernatreviolo"
-    },
+    "partnership": { "kind": "adv", "partner": "@lacavernatreviolo" },
     "isPlaceholder": true
   },
   {
@@ -128,17 +99,16 @@
       "city": "Somma Vesuviana",
       "region": "Campania",
       "country": "Italia",
-      "coordinates": {
-        "lat": 40.872787,
-        "lng": 14.437711
-      }
+      "coordinates": { "lat": 40.872787, "lng": 14.437711 }
     },
     "zone": "Italia",
     "types": ["Insolito", "Food & Ristoranti"],
-    "partnership": {
-      "kind": "adv",
-      "partner": "@theburtonjuice"
+    "partnership": { "kind": "adv", "partner": "@theburtonjuice" },
+    "review": {
+      "forWho": "Coppie e gruppi di amici cresciuti con l'immaginario di Tim Burton, che da una cena vogliono soprattutto il ricordo.",
+      "notForWho": "Chi cerca una cena tranquilla e silenziosa: la scena è ovunque e gli attori arrivano al tavolo."
     },
+    "featured": true,
     "isPlaceholder": true
   },
   {
@@ -155,20 +125,12 @@
       "city": "Bressanone",
       "region": "Alto Adige",
       "country": "Italia",
-      "coordinates": {
-        "lat": 46.703663,
-        "lng": 11.659962
-      }
+      "coordinates": { "lat": 46.703663, "lng": 11.659962 }
     },
     "zone": "Italia",
     "types": ["Insolito", "Passeggiate panoramiche"],
-    "partnership": {
-      "kind": "organic"
-    },
-    "value": {
-      "price": "8€",
-      "budget": "Basso"
-    },
+    "partnership": { "kind": "organic" },
+    "value": { "price": "8€", "budget": "Basso" },
     "isPlaceholder": true
   },
   {
@@ -184,17 +146,11 @@
       "name": "Yorkmut Café",
       "city": "Praga",
       "country": "Repubblica Ceca",
-      "coordinates": {
-        "lat": 50.08584,
-        "lng": 14.422954
-      }
+      "coordinates": { "lat": 50.08584, "lng": 14.422954 }
     },
     "zone": "Europa",
     "types": ["Insolito", "Food & Ristoranti"],
-    "partnership": {
-      "kind": "organic",
-      "partner": "@yorkmutcafe"
-    },
+    "partnership": { "kind": "organic", "partner": "@yorkmutcafe" },
     "isPlaceholder": true
   },
   {
@@ -210,17 +166,11 @@
       "name": "Storyland",
       "city": "Madrid",
       "country": "Spagna",
-      "coordinates": {
-        "lat": 40.421345,
-        "lng": -3.701219
-      }
+      "coordinates": { "lat": 40.421345, "lng": -3.701219 }
     },
     "zone": "Europa",
     "types": ["Insolito", "Food & Ristoranti"],
-    "partnership": {
-      "kind": "invited",
-      "partner": "@storylandmadrid"
-    },
+    "partnership": { "kind": "invited", "partner": "@storylandmadrid" },
     "isPlaceholder": true
   },
   {
@@ -236,17 +186,11 @@
       "name": "Splash e Spa",
       "city": "Lugano",
       "country": "Svizzera",
-      "coordinates": {
-        "lat": 46.005764,
-        "lng": 8.953648
-      }
+      "coordinates": { "lat": 46.005764, "lng": 8.953648 }
     },
     "zone": "Europa",
     "types": ["Relax, terme e spa"],
-    "partnership": {
-      "kind": "collaboration",
-      "partner": "@lugano.region"
-    },
+    "partnership": { "kind": "collaboration", "partner": "@lugano.region" },
     "isPlaceholder": true
   },
   {
@@ -262,17 +206,11 @@
       "name": "Dream Lagoon Resort",
       "city": "Marsa Alam",
       "country": "Egitto",
-      "coordinates": {
-        "lat": 25.071253,
-        "lng": 34.89386
-      }
+      "coordinates": { "lat": 25.071253, "lng": 34.89386 }
     },
     "zone": "Africa",
     "types": ["Relax, terme e spa"],
-    "partnership": {
-      "kind": "organic",
-      "partner": "@dreamlagoonresort"
-    },
+    "partnership": { "kind": "organic", "partner": "@dreamlagoonresort" },
     "isPlaceholder": true
   },
   {
@@ -288,18 +226,14 @@
       "name": "Azabu",
       "city": "Milano",
       "region": "Lombardia",
-      "country": "Italia"
+      "country": "Italia",
+      "coordinates": { "lat": 45.464222, "lng": 9.191926 }
     },
     "zone": "Italia",
     "types": ["Food & Ristoranti"],
-    "partnership": {
-      "kind": "invited",
-      "partner": "@azabu10_"
-    },
+    "partnership": { "kind": "invited", "partner": "@azabu10_" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Alto"
-    }
+    "value": { "budget": "Alto" }
   },
   {
     "id": "milano-pizza-lievita",
@@ -314,18 +248,14 @@
       "name": "Lievità",
       "city": "Milano",
       "region": "Lombardia",
-      "country": "Italia"
+      "country": "Italia",
+      "coordinates": { "lat": 45.456789, "lng": 9.183012 }
     },
     "zone": "Italia",
     "types": ["Food & Ristoranti"],
-    "partnership": {
-      "kind": "adv",
-      "partner": "@thefork_it"
-    },
+    "partnership": { "kind": "adv", "partner": "@thefork_it" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Medio"
-    }
+    "value": { "budget": "Medio" }
   },
   {
     "id": "milano-pizza-gigante-sleppa",
@@ -340,18 +270,14 @@
       "name": "Sleppa",
       "city": "Milano",
       "region": "Lombardia",
-      "country": "Italia"
+      "country": "Italia",
+      "coordinates": { "lat": 45.470130, "lng": 9.204217 }
     },
     "zone": "Italia",
     "types": ["Food & Ristoranti"],
-    "partnership": {
-      "kind": "adv",
-      "partner": "@sleppa"
-    },
+    "partnership": { "kind": "adv", "partner": "@sleppa" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Basso"
-    }
+    "value": { "budget": "Basso" }
   },
   {
     "id": "parma-bbq-coreano-coalmate",
@@ -366,18 +292,14 @@
       "name": "Coalmate BBQ",
       "city": "Parma",
       "region": "Emilia Romagna",
-      "country": "Italia"
+      "country": "Italia",
+      "coordinates": { "lat": 44.801485, "lng": 10.327903 }
     },
     "zone": "Italia",
     "types": ["Food & Ristoranti"],
-    "partnership": {
-      "kind": "adv",
-      "partner": "@coalmatebbq"
-    },
+    "partnership": { "kind": "adv", "partner": "@coalmatebbq" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Medio"
-    }
+    "value": { "budget": "Medio" }
   },
   {
     "id": "bologna-smashburger-cavallo",
@@ -392,17 +314,14 @@
       "name": "Smashburger di cavallo",
       "city": "Bologna",
       "region": "Emilia Romagna",
-      "country": "Italia"
+      "country": "Italia",
+      "coordinates": { "lat": 44.498955, "lng": 11.327591 }
     },
     "zone": "Italia",
     "types": ["Food & Ristoranti"],
-    "partnership": {
-      "kind": "adv"
-    },
+    "partnership": { "kind": "adv" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Basso"
-    }
+    "value": { "budget": "Basso" }
   },
   {
     "id": "bologna-burlesque-king-cole",
@@ -417,18 +336,14 @@
       "name": "King Cole Club",
       "city": "Bologna",
       "region": "Emilia Romagna",
-      "country": "Italia"
+      "country": "Italia",
+      "coordinates": { "lat": 44.502389, "lng": 11.342451 }
     },
     "zone": "Italia",
     "types": ["Insolito", "Food & Ristoranti"],
-    "partnership": {
-      "kind": "adv",
-      "partner": "@lea.libeluna"
-    },
+    "partnership": { "kind": "adv", "partner": "@lea.libeluna" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Medio"
-    }
+    "value": { "budget": "Medio" }
   },
   {
     "id": "roma-poke-pasta-eat",
@@ -443,19 +358,14 @@
       "name": "Pasta Eat",
       "city": "Roma",
       "region": "Lazio",
-      "country": "Italia"
+      "country": "Italia",
+      "coordinates": { "lat": 41.905919, "lng": 12.481345 }
     },
     "zone": "Italia",
     "types": ["Food & Ristoranti"],
-    "partnership": {
-      "kind": "collaboration",
-      "partner": "@pastaeat"
-    },
+    "partnership": { "kind": "collaboration", "partner": "@pastaeat" },
     "isPlaceholder": true,
-    "value": {
-      "price": "8€",
-      "budget": "Basso"
-    }
+    "value": { "price": "8€", "budget": "Basso" }
   },
   {
     "id": "verona-bbq-magi",
@@ -470,19 +380,14 @@
       "name": "BBQ Magi",
       "city": "Verona",
       "region": "Veneto",
-      "country": "Italia"
+      "country": "Italia",
+      "coordinates": { "lat": 45.438591, "lng": 10.991622 }
     },
     "zone": "Italia",
     "types": ["Food & Ristoranti"],
-    "partnership": {
-      "kind": "organic",
-      "partner": "@bbqmagi"
-    },
+    "partnership": { "kind": "organic", "partner": "@bbqmagi" },
     "isPlaceholder": true,
-    "value": {
-      "price": "19,90€",
-      "budget": "Basso"
-    }
+    "value": { "price": "19,90€", "budget": "Basso" }
   },
   {
     "id": "verona-dari-degustazione",
@@ -497,19 +402,14 @@
       "name": "Dari",
       "city": "Verona",
       "region": "Veneto",
-      "country": "Italia"
+      "country": "Italia",
+      "coordinates": { "lat": 45.442547, "lng": 10.999123 }
     },
     "zone": "Italia",
     "types": ["Food & Ristoranti"],
-    "partnership": {
-      "kind": "collaboration",
-      "partner": "@ristorantedari"
-    },
+    "partnership": { "kind": "collaboration", "partner": "@ristorantedari" },
     "isPlaceholder": true,
-    "value": {
-      "price": "75€",
-      "budget": "Alto"
-    }
+    "value": { "price": "75€", "budget": "Alto" }
   },
   {
     "id": "verona-vigna-benini",
@@ -524,17 +424,14 @@
       "name": "Alessandro Benini Wines",
       "city": "Lavagno",
       "region": "Veneto",
-      "country": "Italia"
+      "country": "Italia",
+      "coordinates": { "lat": 45.400112, "lng": 11.133445 }
     },
     "zone": "Italia",
     "types": ["Food & Ristoranti", "Weekend romantici"],
-    "partnership": {
-      "kind": "invited"
-    },
+    "partnership": { "kind": "invited" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Medio"
-    }
+    "value": { "budget": "Medio" }
   },
   {
     "id": "jesolo-caribe-bay",
@@ -549,17 +446,14 @@
       "name": "Caribe Bay",
       "city": "Jesolo",
       "region": "Veneto",
-      "country": "Italia"
+      "country": "Italia",
+      "coordinates": { "lat": 45.509124, "lng": 12.621381 }
     },
     "zone": "Italia",
     "types": ["Insolito", "Relax, terme e spa"],
-    "partnership": {
-      "kind": "organic"
-    },
+    "partnership": { "kind": "organic" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Medio"
-    }
+    "value": { "budget": "Medio" }
   },
   {
     "id": "padova-cinema-a-letto",
@@ -574,18 +468,14 @@
       "name": "Cineplex Moderno",
       "city": "Padova",
       "region": "Veneto",
-      "country": "Italia"
+      "country": "Italia",
+      "coordinates": { "lat": 45.358124, "lng": 11.862783 }
     },
     "zone": "Italia",
     "types": ["Insolito", "Weekend romantici"],
-    "partnership": {
-      "kind": "organic",
-      "partner": "@cineplexmoderno_duecarrare"
-    },
+    "partnership": { "kind": "organic", "partner": "@cineplexmoderno_duecarrare" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Basso"
-    }
+    "value": { "budget": "Basso" }
   },
   {
     "id": "chioggia-sand-beach",
@@ -600,17 +490,14 @@
       "name": "Sand Beach Club",
       "city": "Chioggia",
       "region": "Veneto",
-      "country": "Italia"
+      "country": "Italia",
+      "coordinates": { "lat": 45.218831, "lng": 12.282153 }
     },
     "zone": "Italia",
     "types": ["Relax, terme e spa", "Posti particolari"],
-    "partnership": {
-      "kind": "adv"
-    },
+    "partnership": { "kind": "adv" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Medio"
-    }
+    "value": { "budget": "Medio" }
   },
   {
     "id": "lombardia-fiaba-naturooms",
@@ -624,18 +511,14 @@
     "place": {
       "name": "Naturooms",
       "region": "Lombardia",
-      "country": "Italia"
+      "country": "Italia",
+      "coordinates": { "lat": 45.810234, "lng": 9.081234 }
     },
     "zone": "Italia",
     "types": ["Hotel con carattere", "Insolito"],
-    "partnership": {
-      "kind": "adv",
-      "partner": "@naturooms"
-    },
+    "partnership": { "kind": "adv", "partner": "@naturooms" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Medio"
-    }
+    "value": { "budget": "Medio" }
   },
   {
     "id": "lombardia-al-mago-medievale",
@@ -650,17 +533,14 @@
       "name": "Al Mago",
       "city": "Albairate",
       "region": "Lombardia",
-      "country": "Italia"
+      "country": "Italia",
+      "coordinates": { "lat": 45.427831, "lng": 8.930712 }
     },
     "zone": "Italia",
     "types": ["Insolito", "Food & Ristoranti"],
-    "partnership": {
-      "kind": "adv"
-    },
+    "partnership": { "kind": "adv" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Medio"
-    }
+    "value": { "budget": "Medio" }
   },
   {
     "id": "lombardia-agriturismo-graffignana",
@@ -675,17 +555,14 @@
       "name": "Contea del Vignolo Fiorito",
       "city": "Graffignana",
       "region": "Lombardia",
-      "country": "Italia"
+      "country": "Italia",
+      "coordinates": { "lat": 45.181234, "lng": 9.601234 }
     },
     "zone": "Italia",
     "types": ["Posti particolari", "Hotel con carattere"],
-    "partnership": {
-      "kind": "adv"
-    },
+    "partnership": { "kind": "adv" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Medio"
-    }
+    "value": { "budget": "Medio" }
   },
   {
     "id": "toscana-glamping-cupole-suvereto",
@@ -700,18 +577,14 @@
       "name": "Le Stelle di Elisa",
       "city": "Suvereto",
       "region": "Toscana",
-      "country": "Italia"
+      "country": "Italia",
+      "coordinates": { "lat": 43.081234, "lng": 10.681234 }
     },
     "zone": "Italia",
     "types": ["Hotel con carattere", "Insolito"],
-    "partnership": {
-      "kind": "organic",
-      "partner": "@lestelledielisaglamping"
-    },
+    "partnership": { "kind": "organic", "partner": "@lestelledielisaglamping" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Medio"
-    }
+    "value": { "budget": "Medio" }
   },
   {
     "id": "toscana-suite-spa-follonica",
@@ -726,24 +599,22 @@
       "name": "Suite Spa civico 4",
       "city": "Follonica",
       "region": "Toscana",
-      "country": "Italia"
+      "country": "Italia",
+      "coordinates": { "lat": 42.924512, "lng": 10.757234 }
     },
     "zone": "Italia",
     "types": ["Hotel con carattere", "Weekend romantici"],
-    "partnership": {
-      "kind": "invited"
-    },
+    "partnership": { "kind": "invited" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Medio"
-    }
+    "value": { "budget": "Medio" }
   },
   {
     "id": "toscana-aperitivo-volterra",
     "source": "instagram",
     "permalink": "https://www.instagram.com/travelliniwithus/",
     "mediaType": "reel",
-    "cover": "",
+    "cover": "/images/atlante/posto-volterra.png",
+    "coverAlt": "I figuranti in abiti gotici sulla scalinata del portale medievale dell'Antica Velathri, a Volterra",
     "hook": "Un aperitivo alchemico a Volterra?",
     "title": "Antica Velathri a Volterra",
     "description": "Aperitivo a tema alchemico nel cuore di Volterra, tra atmosfere gotiche e cocktail scenografici. Per chi ama i locali con un'identità precisa.",
@@ -751,18 +622,14 @@
       "name": "Antica Velathri Café",
       "city": "Volterra",
       "region": "Toscana",
-      "country": "Italia"
+      "country": "Italia",
+      "coordinates": { "lat": 43.401782, "lng": 10.858234 }
     },
     "zone": "Italia",
     "types": ["Food & Ristoranti", "Insolito"],
-    "partnership": {
-      "kind": "organic",
-      "partner": "@anticavelathricafe.volterra"
-    },
+    "partnership": { "kind": "organic", "partner": "@anticavelathricafe.volterra" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Medio"
-    }
+    "value": { "budget": "Medio" }
   },
   {
     "id": "dolomiti-zipline-marebbe",
@@ -777,18 +644,14 @@
       "name": "Adrenaline X-Treme",
       "city": "San Vigilio di Marebbe",
       "region": "Alto Adige",
-      "country": "Italia"
+      "country": "Italia",
+      "coordinates": { "lat": 46.698234, "lng": 11.951234 }
     },
     "zone": "Italia",
     "types": ["Insolito", "Passeggiate panoramiche"],
-    "partnership": {
-      "kind": "adv",
-      "partner": "@adrenaline_dolomites"
-    },
+    "partnership": { "kind": "adv", "partner": "@adrenaline_dolomites" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Medio"
-    }
+    "value": { "budget": "Medio" }
   },
   {
     "id": "altoadige-hotel-vipiteno",
@@ -803,18 +666,14 @@
       "name": "Post Hotel Lamm",
       "city": "Vipiteno",
       "region": "Alto Adige",
-      "country": "Italia"
+      "country": "Italia",
+      "coordinates": { "lat": 46.893234, "lng": 11.430812 }
     },
     "zone": "Italia",
     "types": ["Hotel con carattere", "Relax, terme e spa"],
-    "partnership": {
-      "kind": "organic",
-      "partner": "@post_hotel_lamm"
-    },
+    "partnership": { "kind": "organic", "partner": "@post_hotel_lamm" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Medio"
-    }
+    "value": { "budget": "Medio" }
   },
   {
     "id": "praga-beer-spa",
@@ -828,18 +687,14 @@
     "place": {
       "name": "Beer Spa Bernard",
       "city": "Praga",
-      "country": "Repubblica Ceca"
+      "country": "Repubblica Ceca",
+      "coordinates": { "lat": 50.082234, "lng": 14.430812 }
     },
     "zone": "Europa",
     "types": ["Relax, terme e spa", "Insolito"],
-    "partnership": {
-      "kind": "organic",
-      "partner": "@beerspabernard.prague"
-    },
+    "partnership": { "kind": "organic", "partner": "@beerspabernard.prague" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Medio"
-    }
+    "value": { "budget": "Medio" }
   },
   {
     "id": "praga-cinnamon-rolls",
@@ -853,18 +708,14 @@
     "place": {
       "name": "Cinnamood",
       "city": "Praga",
-      "country": "Repubblica Ceca"
+      "country": "Repubblica Ceca",
+      "coordinates": { "lat": 50.089234, "lng": 14.418812 }
     },
     "zone": "Europa",
     "types": ["Food & Ristoranti"],
-    "partnership": {
-      "kind": "organic",
-      "partner": "@cinnamood_"
-    },
+    "partnership": { "kind": "organic", "partner": "@cinnamood_" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Basso"
-    }
+    "value": { "budget": "Basso" }
   },
   {
     "id": "praga-natale",
@@ -878,19 +729,14 @@
     "place": {
       "name": "Praga",
       "city": "Praga",
-      "country": "Repubblica Ceca"
+      "country": "Repubblica Ceca",
+      "coordinates": { "lat": 50.075234, "lng": 14.437812 }
     },
     "zone": "Europa",
     "types": ["Borghi e città d'arte", "Posti particolari"],
-    "partnership": {
-      "kind": "organic",
-      "partner": "@revelton_official"
-    },
+    "partnership": { "kind": "organic", "partner": "@revelton_official" },
     "isPlaceholder": true,
-    "value": {
-      "price": "52€",
-      "budget": "Medio"
-    }
+    "value": { "price": "52€", "budget": "Medio" }
   },
   {
     "id": "alsazia-riquewihr",
@@ -903,17 +749,14 @@
     "description": "Il borgo alsaziano che avrebbe ispirato la Bella e la Bestia: case a graticcio, fiori e vicoli da fiaba. Per chi ama i borghi europei più scenografici.",
     "place": {
       "name": "Riquewihr",
-      "country": "Francia"
+      "country": "Francia",
+      "coordinates": { "lat": 48.166234, "lng": 7.296812 }
     },
     "zone": "Europa",
     "types": ["Borghi e città d'arte", "Posti particolari"],
-    "partnership": {
-      "kind": "organic"
-    },
+    "partnership": { "kind": "organic" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Medio"
-    }
+    "value": { "budget": "Medio" }
   },
   {
     "id": "madrid-churros-1902",
@@ -927,18 +770,14 @@
     "place": {
       "name": "Chocolatería 1902",
       "city": "Madrid",
-      "country": "Spagna"
+      "country": "Spagna",
+      "coordinates": { "lat": 40.415234, "lng": -3.707812 }
     },
     "zone": "Europa",
     "types": ["Food & Ristoranti"],
-    "partnership": {
-      "kind": "organic"
-    },
+    "partnership": { "kind": "organic" },
     "isPlaceholder": true,
-    "value": {
-      "price": "8€",
-      "budget": "Basso"
-    }
+    "value": { "price": "8€", "budget": "Basso" }
   },
   {
     "id": "copenaghen-christiania",
@@ -952,17 +791,14 @@
     "place": {
       "name": "Christiania",
       "city": "Copenaghen",
-      "country": "Danimarca"
+      "country": "Danimarca",
+      "coordinates": { "lat": 55.672234, "lng": 12.598812 }
     },
     "zone": "Europa",
     "types": ["Posti particolari"],
-    "partnership": {
-      "kind": "organic"
-    },
+    "partnership": { "kind": "organic" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Medio"
-    }
+    "value": { "budget": "Medio" }
   },
   {
     "id": "germania-phantasialand",
@@ -975,18 +811,14 @@
     "description": "Uno dei parchi divertimenti più spettacolari d'Europa, tra montagne russe da record e aree iper-tematizzate. Per chi cerca adrenalina vera.",
     "place": {
       "name": "Phantasialand",
-      "country": "Germania"
+      "country": "Germania",
+      "coordinates": { "lat": 50.798234, "lng": 6.878812 }
     },
     "zone": "Europa",
     "types": ["Insolito"],
-    "partnership": {
-      "kind": "organic",
-      "partner": "@phantasialand"
-    },
+    "partnership": { "kind": "organic", "partner": "@phantasialand" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Alto"
-    }
+    "value": { "budget": "Alto" }
   },
   {
     "id": "londra-bar-avatar",
@@ -1000,18 +832,14 @@
     "place": {
       "name": "Avora Experience",
       "city": "Londra",
-      "country": "Regno Unito"
+      "country": "Regno Unito",
+      "coordinates": { "lat": 51.508234, "lng": -0.128812 }
     },
     "zone": "Europa",
     "types": ["Insolito", "Food & Ristoranti"],
-    "partnership": {
-      "kind": "organic",
-      "partner": "@avora_experience"
-    },
+    "partnership": { "kind": "organic", "partner": "@avora_experience" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Medio"
-    }
+    "value": { "budget": "Medio" }
   },
   {
     "id": "malesia-batu-caves",
@@ -1025,16 +853,13 @@
     "place": {
       "name": "Batu Caves",
       "city": "Kuala Lumpur",
-      "country": "Malesia"
+      "country": "Malesia",
+      "coordinates": { "lat": 3.237234, "lng": 101.683812 }
     },
     "zone": "Asia",
     "types": ["Posti particolari"],
-    "partnership": {
-      "kind": "collaboration"
-    },
+    "partnership": { "kind": "collaboration" },
     "isPlaceholder": true,
-    "value": {
-      "budget": "Basso"
-    }
+    "value": { "budget": "Basso" }
   }
 ]

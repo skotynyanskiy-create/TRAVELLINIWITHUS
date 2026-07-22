@@ -13,7 +13,6 @@ import {
 import Button from '../components/Button';
 import JsonLd from '../components/JsonLd';
 import Newsletter from '../components/Newsletter';
-import OptimizedImage from '../components/OptimizedImage';
 import PageLayout from '../components/PageLayout';
 import Section from '../components/Section';
 import SEO from '../components/SEO';
@@ -180,15 +179,6 @@ export default function ChiSiamo() {
                 {pageContent.heroTitleMain}
                 <br /> <span className="italic text-black/75">{pageContent.heroTitleAccent}</span>
               </h1>
-              <motion.span
-                initial={{ opacity: 0, rotate: -10, scale: 0.8 }}
-                animate={{ opacity: 1, rotate: -4, scale: 1 }}
-                transition={{ delay: 0.9, duration: 0.7 }}
-                aria-hidden="true"
-                className="absolute -bottom-4 right-6 hidden font-script text-2xl text-[var(--color-accent)] opacity-80 md:block"
-              >
-                metodo prima del rumore
-              </motion.span>
             </div>
 
             <div className="mb-10 space-y-5 text-lg leading-relaxed text-[var(--color-ink-2)]">
@@ -268,12 +258,34 @@ export default function ChiSiamo() {
           </div>
 
           <div className="relative order-2 lg:order-2">
-            <div className="aspect-[4/5] overflow-hidden rounded-[var(--radius-2xl)] shadow-[var(--shadow-premium)] transition-transform duration-700 lg:rotate-2 lg:hover:rotate-0">
-              <OptimizedImage
-                src="/images/brand/about-editorial.webp"
-                alt="Rodrigo e Betta — ritratto editoriale del progetto Travelliniwithus"
-                className="block h-full w-full object-cover"
-              />
+            {/* Pagina di taccuino al posto del ritratto: nessuna foto della
+                coppia finché non esiste uno scatto reale certificato
+                (imagery truth rule 2026-07-22). */}
+            <div className="flex aspect-[4/5] flex-col justify-between rounded-[var(--radius-2xl,24px)] border border-[var(--color-border)] bg-white p-8 shadow-lg md:p-10">
+              <span className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent,#c85a32)]">
+                Rodrigo &amp; Betta
+              </span>
+              <div>
+                <p className="font-serif text-5xl leading-[1.04] text-[var(--color-ink,#1a2b3c)] md:text-6xl">
+                  Rodrigo
+                  <br />
+                  &amp; Betta
+                </p>
+                <p className="mt-4 font-serif italic text-xl text-[var(--color-muted-fg)]">
+                  Meno posti, ma consigliati meglio.
+                </p>
+              </div>
+              <div className="flex items-center justify-between gap-4 border-t border-[var(--color-border)] pt-6">
+                <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-ink)]">
+                  {CONTACTS.instagramHandle}
+                </span>
+                <span
+                  aria-hidden="true"
+                  className="rounded-full bg-[var(--color-sand,#faf7f2)] border border-[var(--color-accent,#c85a32)]/30 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.15em] text-[var(--color-accent,#c85a32)]"
+                >
+                  8 Anni di Viaggi
+                </span>
+              </div>
             </div>
             <div className="z-10 hidden max-w-xs rounded-[var(--radius-xl)] border border-[var(--color-ink)]/5 bg-[var(--color-surface)] p-8 shadow-[var(--shadow-premium)] md:absolute md:-bottom-8 md:-left-8 md:block">
               <p className="mb-2 text-xl font-serif italic text-[var(--color-accent)]">

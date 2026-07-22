@@ -1,3 +1,13 @@
+---
+type: reference
+area: design
+status: active
+tags:
+  - design
+  - qa
+  - visual
+---
+
 # Design QA — Diario delle meraviglie vere
 
 - Source visual truth: `docs/30_Design/references/home-journal-target-2026-07-21.png`

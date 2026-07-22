@@ -205,15 +205,6 @@ export default function Contatti() {
                 {pageContent.heroTitleMain} <br />
                 <span className="italic text-black/60">{pageContent.heroTitleAccent}</span>
               </h1>
-              <motion.span
-                initial={{ opacity: 0, rotate: -10, scale: 0.8 }}
-                animate={{ opacity: 1, rotate: -5, scale: 1 }}
-                transition={{ delay: 0.8, duration: 0.8 }}
-                aria-hidden="true"
-                className="absolute -right-12 -bottom-6 hidden font-script text-2xl text-[var(--color-accent)] opacity-80 sm:block md:text-3xl"
-              >
-                scrivici!
-              </motion.span>
             </div>
             <p className="mt-8 text-lg font-light leading-relaxed text-black/70">
               {pageContent.heroDescription}

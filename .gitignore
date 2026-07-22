@@ -18,6 +18,7 @@ graphify-out/
 
 # Superpowers visual brainstorming companion (temp mockups)
 .superpowers/
+.superdesign/
 
 # Playwright MCP session cache (auto-generated per session)
 .playwright-mcp/
@@ -157,6 +158,7 @@ vienicons-*.png
 
 # WhatsApp / personal media not part of project
 video/
+video esempio/
 
 # Firebase admin service-account (NEVER commit)
 firebase-adminsdk-*.json
@@ -210,3 +212,9 @@ storybook-static
 .claude/skills/higgsfield-*/
 !.agents/skills/higgsfield-hub/
 !.claude/skills/higgsfield-hub/
+
+# Higgsfield — staging asset generati (ASSET_STRATEGY §4).
+# concepts/ e rejected/ sono scarti pesanti, non storia di progetto.
+# approved/, prompts/ e metadata/ restano tracciati: sono la prova di provenienza.
+generated/concepts/
+generated/rejected/
