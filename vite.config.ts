@@ -46,6 +46,9 @@ export default defineConfig(({ mode }) => {
           globIgnores: [
             '**/video/**',
             '**/mapbox-*',
+            // Il motore mappa vero è emesso come `maplibre-gl-*` (~1 MB): senza
+            // questa riga finiva nel precache di install pur restando lazy.
+            '**/maplibre-*',
             '**/charts-*',
             '**/editor-*',
             '**/react-pdf*',
@@ -61,7 +64,8 @@ export default defineConfig(({ mode }) => {
           ],
           runtimeCaching: [
             {
-              urlPattern: /\/assets\/(mapbox|charts|editor|react-pdf|three)[^/]*\.(?:js|css)$/,
+              urlPattern:
+                /\/assets\/(mapbox|maplibre|charts|editor|react-pdf|three)[^/]*\.(?:js|css)$/,
               handler: 'CacheFirst',
               options: {
                 cacheName: 'heavy-route-chunks',
@@ -126,6 +130,7 @@ export default defineConfig(({ mode }) => {
           return deps.filter(
             (d) =>
               !d.includes('/mapbox-') &&
+              !d.includes('/maplibre-') &&
               !d.includes('/charts-') &&
               !d.includes('/editor-') &&
               !d.includes('/maps-') &&
