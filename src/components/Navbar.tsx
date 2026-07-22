@@ -116,12 +116,12 @@ export default function Navbar() {
       },
       { name: 'Europa', href: '/destinazione/europa', description: 'Fughe a portata di volo.' },
       {
-        name: 'Tutte le destinazioni',
+        name: navigation.destinationsAllLabel,
         href: '/destinazione',
         description: 'Zona per zona, fino alla regione.',
       },
     ],
-    []
+    [navigation]
   );
 
   // Feature del menu Destinazioni — targa editoriale (P1.3), niente foto
@@ -141,28 +141,28 @@ export default function Navbar() {
     () => [
       { name: 'Articoli', href: '/esplora?format=storia' },
       { name: 'Guide', href: '/esplora?format=guida' },
-      { name: 'Itinerari', href: '/itinerari' },
+      { name: navigation.itinerariesLabel, href: '/itinerari' },
     ],
-    []
+    [navigation]
   );
 
   const navItems = useMemo<NavItem[]>(
     () => [
       {
-        name: 'Destinazioni',
+        name: navigation.destinationsLabel,
         href: '/destinazione',
         primaryLinks: destinazioniLinks,
         feature: destinazioniFeature,
       },
-      { name: 'Esplora', href: '/esplora' },
-      { name: 'Mappa', href: '/mappa' },
-      { name: 'Racconti', href: '/esplora?format=storia', subLinks: raccontiLinks },
+      { name: navigation.exploreLabel, href: '/esplora' },
+      { name: navigation.mapLabel, href: '/mappa' },
+      { name: navigation.storiesLabel, href: '/esplora?format=storia', subLinks: raccontiLinks },
       {
         name: navigation.aboutLabel,
         href: '/chi-siamo',
         subLinks: [{ name: navigation.contactsLabel, href: '/contatti' }],
       },
-      { name: 'Shop', href: '/shop' },
+      { name: navigation.shopLabel, href: '/shop' },
     ],
     [destinazioniLinks, destinazioniFeature, raccontiLinks, navigation]
   );

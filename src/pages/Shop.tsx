@@ -119,7 +119,7 @@ function Shop() {
     <PageLayout>
       <>
         <SEO
-          title="Boutique di Viaggio — guide premium e planner"
+          title="Shop — guide e planner di viaggio"
           description="In questa boutique condividiamo i nostri strumenti di viaggio curati. Al momento i prodotti sono in anteprima: iscriviti alla lista d'attesa per essere avvisato al lancio!"
           canonical={`${SITE_URL}/shop`}
           breadcrumbs={[
@@ -133,9 +133,7 @@ function Shop() {
 
           <div className="mt-8 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
             <div>
-              <span className="mb-3 block text-eyebrow !text-[var(--color-accent-text)]">
-                Boutique editoriale
-              </span>
+              <span className="mb-3 block text-eyebrow !text-[var(--color-accent-text)]">Shop</span>
               <h1 className="text-display-1">
                 Gli strumenti di viaggio{' '}
                 <span className="italic text-black/55">stanno prendendo forma</span>
@@ -174,7 +172,7 @@ function Shop() {
 
           <DemoContentNotice
             className="mt-12"
-            title="Boutique in anteprima"
+            title="Shop in anteprima"
             message="Le schede qui sotto rappresentano i prodotti e planner in lista d'attesa. Iscriviti alla newsletter in fondo per ricevere notifiche sul lancio ed anteprime gratuite."
           />
 

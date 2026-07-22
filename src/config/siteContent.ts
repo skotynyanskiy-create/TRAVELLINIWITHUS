@@ -141,6 +141,13 @@ export interface NavigationContent {
   contactsLabel: string;
   favoritesLabel: string;
   searchLabel: string;
+  exploreLabel: string;
+  mapLabel: string;
+  storiesLabel: string;
+  itinerariesLabel: string;
+  clubLabel: string;
+  pressLabel: string;
+  whatWeUseLabel: string;
 }
 
 export interface DemoContent {
@@ -441,6 +448,13 @@ export const siteContentDefaults: SiteContentMap = {
     contactsLabel: 'Contatti',
     favoritesLabel: 'Preferiti',
     searchLabel: 'Cerca',
+    exploreLabel: 'Esplora',
+    mapLabel: 'Mappa',
+    storiesLabel: 'Racconti',
+    itinerariesLabel: 'Itinerari',
+    clubLabel: 'Club',
+    pressLabel: 'Press',
+    whatWeUseLabel: 'Cosa usiamo',
   },
   demo: {
     showEditorialDemo: false,

@@ -230,7 +230,7 @@ export default function ProductPage() {
             )}
 
             <span className="mb-5 block text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
-              Boutique editoriale
+              Shop
             </span>
             <h1 className="mb-8 text-5xl font-serif font-light leading-[1.05] tracking-tighter md:text-7xl">
               {product.name}

@@ -104,7 +104,7 @@ export default function Footer() {
                       to="/esplora"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
-                      Esplora
+                      {navigation.exploreLabel}
                     </Link>
                   </li>
                   <li>
@@ -112,7 +112,7 @@ export default function Footer() {
                       to="/mappa"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
-                      Mappa
+                      {navigation.mapLabel}
                     </Link>
                   </li>
                   <li>
@@ -120,7 +120,7 @@ export default function Footer() {
                       to="/itinerari"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
-                      Itinerari
+                      {navigation.itinerariesLabel}
                     </Link>
                   </li>
                   <li>
@@ -136,7 +136,7 @@ export default function Footer() {
                       to="/shop"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
-                      Shop Premium
+                      {navigation.shopLabel}
                     </Link>
                   </li>
                   <li>
@@ -144,7 +144,7 @@ export default function Footer() {
                       to="/club"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
-                      Club
+                      {navigation.clubLabel}
                     </Link>
                   </li>
                 </ul>
@@ -176,15 +176,7 @@ export default function Footer() {
                       to="/risorse"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
-                      Cosa usiamo
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/disclaimer"
-                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      Affiliazioni
+                      {navigation.whatWeUseLabel}
                     </Link>
                   </li>
                 </ul>
@@ -224,7 +216,7 @@ export default function Footer() {
                       to="/press"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
-                      Press
+                      {navigation.pressLabel}
                     </Link>
                   </li>
                   <li>
