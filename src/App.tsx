@@ -14,6 +14,9 @@ import { FavoritesProvider } from './context/FavoritesContext';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { LITE_MODE } from './config/liteMode';
+// La shell editoriale della mappa e piccola e resta eager per rendere subito l'H1;
+// il motore MapLibre continua a essere lazy dentro Mappa.tsx.
+import Mappa from './pages/Mappa';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -48,7 +51,6 @@ const Risorse = lazy(() => import('./pages/Risorse'));
 const Shop = lazy(() => import('./pages/Shop'));
 const ProductPage = lazy(() => import('./pages/ProductPage'));
 const Club = lazy(() => import('./pages/Club'));
-const Mappa = lazy(() => import('./pages/Mappa'));
 const MieiAcquisti = lazy(() => import('./pages/MieiAcquisti'));
 const LeadMagnet = lazy(() => import('./pages/LeadMagnet'));
 const Posto = lazy(() => import('./pages/Posto'));

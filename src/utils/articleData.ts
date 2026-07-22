@@ -103,6 +103,8 @@ export interface NormalizedArticle {
   content: string;
   image: string;
   coverImage: string;
+  /** La cover può essere resa come asset editoriale solo dopo verifica esplicita. */
+  imageVerified?: boolean;
   category: string;
   published: boolean;
   author?: string;
@@ -179,6 +181,7 @@ export function normalizeFirestoreArticle(
     content: asString(data.content),
     image,
     coverImage,
+    imageVerified: data.imageVerified === true ? true : undefined,
     category,
     published: data.published === true,
     review: data.review ? (data.review as ContentReview) : undefined,

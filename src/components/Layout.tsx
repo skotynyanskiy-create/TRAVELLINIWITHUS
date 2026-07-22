@@ -26,9 +26,10 @@ export default function Layout() {
     trackPageview(location.pathname + location.search);
   }, [location.pathname, location.search]);
 
-  // La home è l'esperienza cinematografica "Il Sentiero": niente overlay flottanti
-  // (chat assistant, exit-intent) che rompono il primo frame e l'immersione.
+  // Le esperienze editoriali immersive non ospitano overlay flottanti: sulla home
+  // spezzano il primo frame, sulla mappa coprono filtri e percorsi suggeriti.
   const isCinematicHome = location.pathname === '/';
+  const suppressFloatingOverlays = isCinematicHome || location.pathname === '/mappa';
 
   return (
     <SmoothScrollProvider>
@@ -47,8 +48,8 @@ export default function Layout() {
           </main>
           {!isCinematicHome && <Footer />}
           <ConsentBanner />
-          {!LITE_MODE && !isCinematicHome && <ExitIntentPopup />}
-          {!LITE_MODE && !isCinematicHome && <AiAssistant />}
+          {!LITE_MODE && !suppressFloatingOverlays && <ExitIntentPopup />}
+          {!LITE_MODE && !suppressFloatingOverlays && <AiAssistant />}
           <QuickViewDrawer />
         </div>
       </QuickViewProvider>

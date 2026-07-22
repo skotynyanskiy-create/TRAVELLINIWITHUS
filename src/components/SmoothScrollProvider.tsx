@@ -41,7 +41,7 @@ export default function SmoothScrollProvider({ children }: SmoothScrollProviderP
   useEffect(() => {
     if (reducedMotion) return;
     if (typeof window === 'undefined') return;
-    if (location.pathname === '/') return;
+    if (location.pathname === '/' || location.pathname === '/mappa') return;
 
     let cleanup: (() => void) | undefined;
     let cancelled = false;

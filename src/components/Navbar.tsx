@@ -487,13 +487,13 @@ export default function Navbar() {
           <div className="flex items-center gap-1 text-[var(--color-ink)] xl:hidden">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="p-2 transition-colors hover:text-[var(--color-accent)]"
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center p-2 transition-colors hover:text-[var(--color-accent)]"
               aria-label={navigation.searchLabel}
             >
               <Search size={20} />
             </button>
             <button
-              className="p-2 transition-colors hover:text-[var(--color-accent)]"
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center p-2 transition-colors hover:text-[var(--color-accent)]"
               onClick={handleMobileMenuToggle}
               aria-label="Menu"
               aria-expanded={isMobileMenuOpen}
