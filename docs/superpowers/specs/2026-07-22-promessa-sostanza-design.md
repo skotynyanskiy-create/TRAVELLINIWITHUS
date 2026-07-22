@@ -1,6 +1,9 @@
 # Promessa = sostanza — design spec
 
-Status: in attesa di revisione owner (2026-07-22). Non ancora approvata per il piano di implementazione.
+Status: approvata dall'owner 2026-07-22. Pronta per il piano di implementazione.
+
+Confermato in revisione: il nome dello Shop resta **«Shop»**; `/preferiti` diventa
+**`noindex`** via `private`.
 
 ## Contesto e obiettivo
 
