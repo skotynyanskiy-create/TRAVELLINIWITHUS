@@ -34,9 +34,23 @@ RULES: list[tuple[str, str]] = [
     (r"\bgit\s+add\s+(-A\b|--all\b|\.(\s|$))",
      "CLAUDE.md requires staging selectively by path on this tree"),
     (r"\bgit\s+add\s+[^|;&]*\.(env|mcp\.json)\b", "would stage a secrets file"),
+    (r"\bgit\s+rebase\b", "rewrites local history mid-branch"),
+    (r"\bgit\s+filter-branch\b", "rewrites entire history"),
+    (r"\bgit\s+stash\s+(clear|drop)\b", "discards stashed work permanently"),
     (r"\bdd\s+if=", "raw disk write"),
     (r"\bfirebase\s+deploy\b", "production deploy needs owner confirmation"),
     (r"\bnpm\s+run\s+deploy\b", "production deploy needs owner confirmation"),
+    (r"\bnpm\s+publish\b", "publishing a package is public and irreversible"),
+    # This is a Windows host: the Bash tool can shell out to PowerShell/cmd, and
+    # every POSIX pattern above misses those spellings entirely.
+    (r"\bRemove-Item\b[^|;&]*-(Recurse|Force)\b", "recursive/force delete (PowerShell)"),
+    (r"(?i)\brd\s+/s\b", "recursive directory delete (cmd)"),
+    (r"(?i)\brmdir\s+/s\b", "recursive directory delete (cmd)"),
+    (r"(?i)\bdel\s+/[fsq]\b", "force delete (cmd)"),
+    (r"(?i)\bformat\s+[a-z]:", "disk format"),
+    # Piping a network download straight into a shell executes unreviewed code.
+    (r"(?i)\b(curl|wget|iwr|Invoke-WebRequest)\b[^|]*\|\s*(sh|bash|iex|Invoke-Expression)\b",
+     "pipes downloaded code straight into a shell"),
 ]
 
 INSTALL = re.compile(r"\b(?:npm\s+(?:install|i)|yarn\s+add|pnpm\s+add)\b(.*)")
@@ -76,8 +90,8 @@ def main() -> int:
     sys.stderr.write(
         f"BLOCKED: {reason}. Per CLAUDE.md this command is not yours to run "
         f"unilaterally — explain what you want to do and why, and let the owner "
-        f"decide. Do not rephrase the command to evade this check. If the owner "
-        f"has already approved it, re-run with HOOK_ALLOW_DANGEROUS_BASH=1.\n"
+        f"decide. Do not rephrase the command, switch shells, or route around "
+        f"this check.\n"
     )
     return 2
 

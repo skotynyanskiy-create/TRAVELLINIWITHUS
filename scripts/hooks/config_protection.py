@@ -28,6 +28,18 @@ PROTECTED = {
     ".markdownlint.json",
 }
 
+# CLAUDE.md's most-repeated rule (stated in 8 places): these belong exclusively
+# to travellini-backend-engineer and never move without owner confirmation.
+# Until now the rule was documentation only — tool grants in Claude Code carry
+# no path scoping, so any thread, subagent or acceptEdits workflow could write
+# them. Matched on path suffix, not basename: a bare `admin.ts` would over-match
+# unrelated files, while `src/config/admin.ts` is unambiguous.
+HIGH_RISK = (
+    "server.ts",
+    "firestore.rules",
+    "src/config/admin.ts",
+)
+
 
 def main() -> int:
     if os.environ.get("HOOK_ALLOW_CONFIG_EDIT", "").lower() in ("1", "true", "yes"):
@@ -42,7 +54,20 @@ def main() -> int:
     if not path:
         return 0
 
-    base = os.path.basename(path.replace("\\", "/"))
+    norm = path.replace("\\", "/")
+    base = os.path.basename(norm)
+
+    for risky in HIGH_RISK:
+        if norm == risky or norm.endswith("/" + risky):
+            sys.stderr.write(
+                f"BLOCKED: '{risky}' is a high-risk file. Per CLAUDE.md only "
+                f"travellini-backend-engineer edits it, and only after the owner "
+                f"has confirmed the specific change. Describe the change you want "
+                f"and why, and let the owner decide. Do not route around this by "
+                f"editing a different file or rephrasing the path.\n"
+            )
+            return 2
+
     if base not in PROTECTED:
         return 0
 
@@ -53,8 +78,8 @@ def main() -> int:
     sys.stderr.write(
         f"BLOCKED: '{base}' is a guardrail config. Fix the source so it passes "
         f"the existing rules - do not weaken {base} to make checks green. "
-        f"If this edit is genuinely intended, re-run with "
-        f"HOOK_ALLOW_CONFIG_EDIT=1 or say so explicitly.\n"
+        f"If this edit is genuinely intended, say so explicitly and let the "
+        f"owner confirm.\n"
     )
     return 2  # exit 2 = block + feed stderr back to the model
 
