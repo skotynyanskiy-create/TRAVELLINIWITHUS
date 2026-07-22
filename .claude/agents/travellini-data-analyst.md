@@ -1,7 +1,7 @@
 ---
 name: travellini-data-analyst
 description: Read and interpret Travelliniwithus analytics, Sentry errors, Stripe events, and Firestore data to extract decisions. Use for weekly/monthly insights, funnel analysis, A/B test interpretation, conversion attribution, bug-impact assessment, and "what is the data telling us?" questions. Defines what to investigate, not what to track (use growth-operator for event contracts).
-tools: Read, Bash, Glob, Grep, mcp__firebase__firestore_query_collection, mcp__firebase__firestore_list_documents, mcp__firebase__firestore_get_document, mcp__stripe__list_payment_intents, mcp__stripe__list_subscriptions, mcp__stripe__list_refunds, mcp__stripe__list_disputes, mcp__stripe__retrieve_balance, mcp__sentry__list_issues, mcp__sentry__list_events, mcp__sentry__get_profile_details, mcp__sentry__find_projects, mcp__sentry__analyze_issue_with_seer
+tools: Read, Bash, Glob, Grep, mcp__firebase__firestore_query_collection, mcp__firebase__firestore_list_documents, mcp__firebase__firestore_get_document, mcp__stripe__stripe_api_read, mcp__stripe__stripe_api_search, mcp__stripe__get_stripe_account_info, mcp__sentry__search_issues, mcp__sentry__search_events, mcp__sentry__find_projects, mcp__sentry__find_organizations, mcp__sentry__analyze_issue_with_seer
 model: sonnet
 ---
 
