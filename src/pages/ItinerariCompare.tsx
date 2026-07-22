@@ -35,7 +35,6 @@ export default function ItinerariCompare() {
         title="Confronta itinerari"
         description="Confronta gli itinerari Travelliniwithus side-by-side: durata, stile, budget, periodo e cosa li rende diversi."
         canonical={`${SITE_URL}/itinerari/compare`}
-        noindex
       />
 
       <Section className="pt-8">

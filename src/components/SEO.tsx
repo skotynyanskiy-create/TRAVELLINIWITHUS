@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
+import { isIndexable } from '../config/surfaces';
 import { CONTACTS, SITE_URL, THEME_COLOR } from '../config/site';
 import { buildBreadcrumbListJsonLd, type BreadcrumbItem } from '../lib/seo';
 
@@ -31,13 +32,17 @@ export default function SEO({
   canonical,
   image = DEFAULT_OG_IMAGE,
   type = 'website',
-  noindex = false,
+  noindex,
   jsonLd,
   breadcrumbs,
 }: SEOProps) {
   const { pathname } = useLocation();
   const resolvedCanonical =
     canonical || `${SITE_URL}${pathname === '/' ? '/' : pathname.replace(/\/+$/, '')}`;
+  // Il registro decide se la superficie e indicizzabile; la pagina puo solo
+  // aggiungere noindex per ragioni per-contenuto (isDemo, isPlaceholder),
+  // mai toglierlo.
+  const resolvedNoindex = !isIndexable(pathname) || noindex === true;
   const finalTitle = title.toLowerCase().includes(DEFAULT_SITE_NAME.toLowerCase())
     ? title
     : `${title} | ${DEFAULT_SITE_NAME}`;
@@ -67,7 +72,7 @@ export default function SEO({
       <meta name="description" content={description} />
       <meta
         name="robots"
-        content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'}
+        content={resolvedNoindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'}
       />
       <meta name="theme-color" content={THEME_COLOR} />
       <meta name="author" content={DEFAULT_SITE_NAME} />

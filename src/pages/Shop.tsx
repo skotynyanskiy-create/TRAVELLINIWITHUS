@@ -126,7 +126,6 @@ function Shop() {
             { name: 'Home', url: SITE_URL },
             { name: 'Shop', url: `${SITE_URL}/shop` },
           ]}
-          noindex={true}
         />
 
         <Section className="pt-8" spacing="tight">

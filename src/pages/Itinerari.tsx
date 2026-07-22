@@ -40,7 +40,6 @@ export default function Itinerari() {
         title="Itinerari di viaggio in coppia nel Sud Italia"
         description="Itinerari pratici giorno per giorno per coppie nel Sud Italia: Sicilia, Calabria, Puglia, Basilicata. Filtrabili per durata, stile e budget."
         canonical={`${SITE_URL}/itinerari`}
-        noindex
         breadcrumbs={[
           { name: 'Home', url: SITE_URL },
           { name: 'Itinerari', url: `${SITE_URL}/itinerari` },
