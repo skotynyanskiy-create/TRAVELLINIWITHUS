@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ main, 'codex/**', 'feat/**', 'fix/**', 'audit/**' ]
+    branches: [ main, 'codex/**', 'feat/**', 'fix/**', 'audit/**', 'chore/**', 'wip/**' ]
   pull_request:
     branches: [ main ]
 
@@ -51,6 +51,9 @@ jobs:
 
       - name: Audit Stripe
         run: npm run audit:stripe
+
+      - name: Audit env safety
+        run: npm run audit:env
 
       - name: Audit public footprint
         run: npm run audit:public-footprint

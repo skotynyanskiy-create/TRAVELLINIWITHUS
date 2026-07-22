@@ -26,6 +26,7 @@ const budgets = [
   { name: 'three-webgl-lazy', match: /^three-/, maxKb: 1650, maxGzipKb: 480 },
   { name: 'firebase-firestore-lazy', match: /^firebase-firestore-/, maxKb: 430, maxGzipKb: 105 },
   { name: 'mapbox-lazy-route', match: /^mapbox-/, maxKb: 1850 },
+  { name: 'maplibre-gl-lazy-route', match: /^maplibre-gl-/, maxKb: 1100 },
   { name: 'react-pdf-lazy-export', match: /^react-pdf\.browser-/, maxKb: 1650, maxGzipKb: 560 },
   { name: 'charts-lazy-route', match: /^charts-/, maxKb: 410 },
   { name: 'home-route', match: /^AtlanteHome-/, maxKb: 110 },

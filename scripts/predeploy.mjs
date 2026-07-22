@@ -13,6 +13,11 @@ const steps = [
   ['audit:firebase', ['run', 'audit:firebase']],
   ['audit:stripe', ['run', 'audit:stripe']],
   ['audit:agents', ['run', 'audit:agents']],
+  ['audit:public-footprint', ['run', 'audit:public-footprint']],
+  ['audit:revenue', ['run', 'audit:revenue']],
+  ['audit:size', ['run', 'audit:size']],
+  ['audit:obsidian', ['run', 'audit:obsidian']],
+  ['audit:env', ['run', 'audit:env']],
 ];
 
 let failed = false;

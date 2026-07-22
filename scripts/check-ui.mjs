@@ -155,7 +155,7 @@ for (const filePath of files) {
 
   const imgMatches = [...content.matchAll(/<img\b(?![^>]*\balt=)[^>]*>/g)];
   for (const match of imgMatches) {
-    pushIssue(issues, 'warn', filePath, getLineNumber(content, match.index), '<img> without alt attribute found.');
+    pushIssue(issues, 'error', filePath, getLineNumber(content, match.index), '<img> without alt attribute found.');
   }
 
   const iconLibraryMatches = [...content.matchAll(/from ['"]([^'"]+)['"]/g)];
@@ -186,7 +186,9 @@ console.log(`Files scanned: ${files.length}`);
 console.log(`Errors: ${errorCount}`);
 console.log(`Warnings: ${warnCount}`);
 
-for (const issue of issues.slice(0, maxPrintedIssues)) {
+const printedIssues = [...issues].sort((a, b) => Number(b.level === 'error') - Number(a.level === 'error'));
+
+for (const issue of printedIssues.slice(0, maxPrintedIssues)) {
   const prefix = issue.level.toUpperCase().padEnd(5, ' ');
   console.log(`${prefix} ${issue.filePath}:${issue.line} - ${issue.message}`);
 }
@@ -199,4 +201,4 @@ if (issues.length === 0) {
   console.log('PASS  No UI consistency issues detected by static heuristics.');
 }
 
-process.exitCode = 0;
+process.exitCode = errorCount > 0 ? 1 : 0;

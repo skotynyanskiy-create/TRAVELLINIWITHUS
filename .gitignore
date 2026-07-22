@@ -11,7 +11,6 @@ test-results/
 qa-final/
 qa-shots/
 output/
-.playwright-cli/
 
 # Graphify local CLI/runtime and generated knowledge graph
 .tools/
@@ -23,6 +22,10 @@ graphify-out/
 # Playwright MCP session cache (auto-generated per session)
 .playwright-mcp/
 .playwright/
+
+# Python bytecode from the scripts/hooks/ hooks (regenerated on every run)
+__pycache__/
+*.pyc
 
 # AI-session local caches and hook state (never commit)
 .mypy_cache/
