@@ -52,6 +52,22 @@ le annuncia.
 
 ## Architettura: il registro delle superfici
 
+**Correzione post-approvazione (2026-07-22).** Il registro esiste già, a metà:
+`scripts/public-route-manifest.js` dichiara `path`, `sitemap` e un `role` che porta
+la stessa semantica degli stati previsti qui (`work-in-progress`, `preorder-waitlist`,
+`personal-area`, `private`). Solo che vive lato build e l'app non lo vede — e **non
+contiene `/destinazione`**: è la causa esatta della lacuna in sitemap trovata dall'audit.
+
+Inoltre `scripts/generate-sitemap.js` contiene una **terza copia** della logica lite-mode
+(`LITE_DISABLED_PREFIXES` riscritti a mano), oltre a `src/config/liteMode.ts` e ai gate
+in `App.tsx`/`Navbar`/`Footer`.
+
+Quindi il registro **non nasce da zero**: `public-route-manifest.js` viene promosso a
+`src/config/surfaces.ts`, tipizzato ed esteso, e letto sia dall'app sia dagli script di
+build. È già fattibile con il tooling attuale — `scripts/generate-lead-magnet.tsx` e
+`scripts/generate-media-kit.tsx` importano già da `src/`. Il file
+`scripts/public-route-manifest.js` viene cancellato.
+
 Nuovo file `src/config/surfaces.ts`.
 
 ```ts
@@ -136,8 +152,9 @@ Il registro **non è un feature flag di build**: non nasconde rotte e non spegne
 ### Pensione di `liteMode.ts`
 
 `LITE_MODE` e `isDisabled()` spariscono da: `App.tsx`, `Navbar.tsx`, `Footer.tsx`,
-`NotFound.tsx`, `LeadMagnet.tsx`, `VieniConNoi.tsx`. Il file `src/config/liteMode.ts`
-viene cancellato.
+`NotFound.tsx`, `LeadMagnet.tsx`, `VieniConNoi.tsx` e `scripts/generate-sitemap.js`
+(che ne ha una copia autonoma, `LITE_DISABLED_PREFIXES`). Il file
+`src/config/liteMode.ts` viene cancellato.
 
 Motivo: dichiara `/strumenti`, `/press`, `/risorse` e `/lead-magnet` disabilitati mentre
 `App.tsx` li monta senza gate e il footer li linka senza gate. È già andato in deriva.
