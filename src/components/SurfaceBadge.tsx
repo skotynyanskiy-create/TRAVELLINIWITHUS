@@ -16,8 +16,11 @@ export default function SurfaceBadge({ path }: { path: string }) {
   if (!testo) return null;
 
   return (
-    <span className="ml-1.5 rounded-full border border-current/30 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] opacity-70">
-      {testo}
-    </span>
+    <>
+      {' '}
+      <span className="ml-1.5 rounded-full border border-current/30 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] opacity-70">
+        {testo}
+      </span>
+    </>
   );
 }
