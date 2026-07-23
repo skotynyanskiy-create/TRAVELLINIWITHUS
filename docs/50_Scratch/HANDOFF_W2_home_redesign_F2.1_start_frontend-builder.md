@@ -30,7 +30,7 @@ Tutte le 12 decisioni del handoff ui-designer originale restano valide. Sintesi:
 
 - Source direction: handoff F2.1 ui-designer link sopra
 - File principali:
-  - [src/pages/Home.tsx](../../src/pages/Home.tsx) — composizione attuale 11 sezioni
+  - `src/pages/Home.tsx` — composizione attuale 11 sezioni
   - [src/components/home/](../../src/components/home/) — componenti da rimuovere/aggiungere
   - [src/index.css](../../src/index.css) — CSS vars (non aggiungere, riusare)
 - Nuovi componenti da creare:

@@ -329,7 +329,7 @@ Rifinitura hero richiesta dall'owner ("voglio una hero da 10/10"), su direzione
 `travellini-ui-designer`. Immagine coppia mantenuta (scelta owner: brand
 people-led), resa più leggibile invece di sostituirla con foto-luogo.
 
-Cambi in [HeroSection.tsx](../../src/components/home/HeroSection.tsx):
+Cambi in `HeroSection.tsx`:
 
 - H1: scala fluida `clamp(2.75rem, 6vw + 0.5rem, 7.5rem)` (no più step
   `text-5xl→8xl`), `leading-[1.02]` mobile → `lg:leading-[0.95]`,
@@ -348,7 +348,7 @@ Cambi in [HeroSection.tsx](../../src/components/home/HeroSection.tsx):
   sotto).
 - Motion: wipe clip-path 1.4s → 1.0s, delay stagger compressi
   (0.35→0.2 … 0.62→0.56), atterraggio intro ~1.1s.
-- [HeroBackdrop.tsx](../../src/components/home/HeroBackdrop.tsx): rimosso
+- `HeroBackdrop.tsx`: rimosso
   `saturate-[1.04]` (look "stock vivido"), tenuto `brightness-[0.96]`.
 
 Verifiche:

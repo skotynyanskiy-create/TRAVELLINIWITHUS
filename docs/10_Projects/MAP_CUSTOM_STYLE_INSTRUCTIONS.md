@@ -94,7 +94,7 @@ Tieni solo:
 
 ### 5. Sostituisci in codice (1 min, lo faccio io quando me lo mandi)
 
-In [src/components/map/MapboxWorldMap.tsx](../../src/components/map/MapboxWorldMap.tsx):
+In `src/components/map/MapboxWorldMap.tsx`:
 
 ```tsx
 // Cambia da:

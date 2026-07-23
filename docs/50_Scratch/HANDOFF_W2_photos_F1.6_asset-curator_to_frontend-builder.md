@@ -29,8 +29,8 @@ Le superfici Home + ChiSiamo + MediaKit + template Articolo usano ancora asset l
 - Output asset-curator (in arrivo W1 weekend): photo plan + shopping list + alt text in `docs/50_Scratch/F1.6_photo_audit_*.md`
 - Foto reali R+B: location locale fornita dall'owner [VERIFY: path cartella]
 - File da editare:
-  - [src/components/home/HeroSection.tsx](../../src/components/home/HeroSection.tsx)
-  - [src/components/home/CoupleIntro.tsx](../../src/components/home/CoupleIntro.tsx)
+  - `src/components/home/HeroSection.tsx`
+  - `src/components/home/CoupleIntro.tsx`
   - [src/pages/ChiSiamo.tsx](../../src/pages/ChiSiamo.tsx)
   - [src/pages/MediaKit.tsx](../../src/pages/MediaKit.tsx)
   - Template articolo hero in [src/pages/Articolo.tsx](../../src/pages/Articolo.tsx)

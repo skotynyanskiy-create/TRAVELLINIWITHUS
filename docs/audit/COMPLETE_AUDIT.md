@@ -132,10 +132,12 @@ I report Lighthouse eseguiti sulla build compilata locale `dist/` `[LIGHTHOUSE]`
 - **Verifica**: `src/pages/VieniConNoi.bioHub.test.tsx`, 5 test verdi (un `cta_id` per card, propagazione `utm_source`, href corretti). Guardia non vuota: rimuovendo l'`onClick` 4 test falliscono e `audit:public-footprint` va a 1 FAIL. In browser reale, click su "Apri la mappa" → console `[analytics] event "bio_hub_path_click"` e navigazione a `/mappa`.
 - **Nota**: `lead_magnet_download` è già emesso da `src/pages/LeadMagnet.tsx:22`, quindi la consegna della guida era e resta tracciata: il buco riguardava solo i path secondari.
 
-### [AUDIT-005] 78 link markdown spezzati nella vault Obsidian `docs/`
+### [AUDIT-005] Link markdown spezzati nella vault Obsidian `docs/` — **RISOLTO 2026-07-23**
 
-- **Gravità**: **P2 (Documentazione)** | **Area**: Knowledge Vault `[COMMAND]`
-- **Evidenza**: `audit:obsidian` rileva 78 riferimenti a file inesistenti. `[COMMAND]`
+- **Gravità**: **P2 (Documentazione)** → **CLOSED** | **Area**: Knowledge Vault `[COMMAND]`
+- **Natura reale**: alla verifica erano **96** (non 78), e **tutti** riferimenti da note storiche a **codice sorgente** (`../../src/` × 95, `../../public/` × 1) poi cancellato — nessun link rotto tra note, nessun errore di path. Non un problema di integrità della vault, ma record di lavoro passato che puntano a file rimossi (home component in `545b4b0`, cluster itinerario in TASK-034).
+- **Fix applicato** (decisione owner: opzione C — scollegare, non riscrivere): per ogni link il cui target è genuinamente inesistente, `[testo](href-rotto)` → `` `testo` `` — l'href rotto sparisce, il testo (path + eventuale `:riga`) resta come codice. La logica di esistenza replica esattamente quella di `audit-obsidian.mjs`: i link a file **ancora esistenti restano cliccabili** (verificato: sulla stessa riga, `NotFound.tsx` resta link, `HeroSection.tsx` cancellato diventa codice).
+- **Verifica**: 96 link scollegati in 17 file, `npm run audit:obsidian` → **0 WARN, 0 ERROR**. Nessun `|` di tabella toccato (rimosso solo `](url)`).
 
 ### [AUDIT-006] HTTP 429 trattato come invio riuscito nel form contatti — **RISOLTO 2026-07-23**
 

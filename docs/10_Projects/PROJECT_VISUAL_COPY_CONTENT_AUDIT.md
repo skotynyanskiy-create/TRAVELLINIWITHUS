@@ -222,38 +222,38 @@ browser 0 overflow / 0 errori console.
 - P1 · testo · [Club.tsx:273](../../src/pages/Club.tsx) · "Esplora i Contenuti" → "Esplora i contenuti" · sì.
 - P2 · testo · [Club.tsx:160](../../src/pages/Club.tsx) · `alt="Avatar"` → `Foto profilo di {nome}` · sì.
 - P3 · testo · [LeadMagnet.tsx:79](../../src/pages/LeadMagnet.tsx) · "Seguici su IG" → "Seguici su Instagram" · sì.
-- P3 · testo · [CoupleIntro.tsx:162](../../src/components/home/CoupleIntro.tsx) · "150 destinazioni" → "150+ destinazioni" (allineato a `BRAND_STATS`) · sì.
+- P3 · testo · `CoupleIntro.tsx:162` · "150 destinazioni" → "150+ destinazioni" (allineato a `BRAND_STATS`) · sì.
 
 ### Encoding (accenti) — tutti user-visible, commenti/chiavi non toccati
 
-- P3 · testo · [CoupleIntro.tsx:61](../../src/components/home/CoupleIntro.tsx) · "non e coerente" → "non è coerente" · sì.
+- P3 · testo · `CoupleIntro.tsx:61` · "non e coerente" → "non è coerente" · sì.
 - P3 · testo · [Contatti.tsx:40](../../src/pages/Contatti.tsx) · "sara disponibile" → "sarà disponibile" · sì.
 - P3 · testo · [VieniConNoi.tsx:347](../../src/pages/VieniConNoi.tsx) · "piu senso… puo cambiare" → "più… può" · sì.
 - P3 · testo · [MediaKit.tsx:58,64,339](../../src/pages/MediaKit.tsx) · "identita/piu profondita" → "identità/più profondità" (×3) · sì.
 - P3 · testo · [Shop.tsx:380](../../src/pages/Shop.tsx) · "e pronto… finche" → "è pronto… finché" · sì.
-- P3 · testo · [MonetizationTeaser.tsx:9,15](../../src/components/home/MonetizationTeaser.tsx) · "citta/gia" → "città/già" · sì.
+- P3 · testo · `MonetizationTeaser.tsx:9,15` · "citta/gia" → "città/già" · sì.
 
 ### Alt text (accessibilità immagini)
 
 - P1 · immagini · [InstagramGrid.tsx:21-64,171](../../src/components/InstagramGrid.tsx) · caption-as-alt su immagini brand generiche → campo `alt` dedicato con descrizione fedele dell'immagine (la caption resta sotto); reel live mantengono caption come alt · sì.
-- P2 · immagini · [HomeFeaturedDestinations.tsx:174](../../src/components/home/HomeFeaturedDestinations.tsx) · alt "Puglia, Italia" → alt descrittivi per regione (campo `alt` dedicato) · sì.
+- P2 · immagini · `HomeFeaturedDestinations.tsx:174` · alt "Puglia, Italia" → alt descrittivi per regione (campo `alt` dedicato) · sì.
 
 ### Tweak visivi / gerarchia (no redesign)
 
-- P2 · grafica · [HomeEditorialPromise.tsx:26-29](../../src/components/home/HomeEditorialPromise.tsx) · rimosso `twu-dot-grid` decorativo sul manifesto · sì.
-- P2 · grafica · [HomeEditorialPromise.tsx:49](../../src/components/home/HomeEditorialPromise.tsx) · animazione "morta" `initial opacity:1` → vero fade `opacity:0 → 1` · sì.
-- P2 · grafica · [HomeEditorialPromise.tsx:33](../../src/components/home/HomeEditorialPromise.tsx) · eyebrow tracking `0.36em` → `0.3em` · sì.
-- P2 · grafica · [HomeFeaturedDestinations.tsx:79](../../src/components/home/HomeFeaturedDestinations.tsx) · eyebrow tracking `0.32em` → `0.3em` · sì.
-- P2 · grafica · [LatestArticles.tsx:66](../../src/components/home/LatestArticles.tsx) · H2 `md:text-4xl` → `md:text-5xl` (coerenza scala sezioni) · sì.
+- P2 · grafica · `HomeEditorialPromise.tsx:26-29` · rimosso `twu-dot-grid` decorativo sul manifesto · sì.
+- P2 · grafica · `HomeEditorialPromise.tsx:49` · animazione "morta" `initial opacity:1` → vero fade `opacity:0 → 1` · sì.
+- P2 · grafica · `HomeEditorialPromise.tsx:33` · eyebrow tracking `0.36em` → `0.3em` · sì.
+- P2 · grafica · `HomeFeaturedDestinations.tsx:79` · eyebrow tracking `0.32em` → `0.3em` · sì.
+- P2 · grafica · `LatestArticles.tsx:66` · H2 `md:text-4xl` → `md:text-5xl` (coerenza scala sezioni) · sì.
 - P2 · grafica · [InstagramGrid.tsx:134](../../src/components/InstagramGrid.tsx) · H2 `md:text-4xl` → `md:text-5xl` · sì.
-- P1 · grafica · [HomeLeadMagnet.tsx:106](../../src/components/home/HomeLeadMagnet.tsx) · rimosso blob `blur-2xl` arancione (anti-DESIGN.md) · sì.
-- P2 · grafica · [NewsletterFeature.tsx:102-106](../../src/components/home/NewsletterFeature.tsx) · rimossi hover-color/border su `<li>` non interattivi (falsa affordance) · sì.
+- P1 · grafica · `HomeLeadMagnet.tsx:106` · rimosso blob `blur-2xl` arancione (anti-DESIGN.md) · sì.
+- P2 · grafica · `NewsletterFeature.tsx:102-106` · rimossi hover-color/border su `<li>` non interattivi (falsa affordance) · sì.
 - P3 · grafica · [Footer.tsx:98,162,204](../../src/components/Footer.tsx) · gap header→lista `mb-10` → `mb-6` (ritmo verticale) · sì.
 
 ### Sessione 2 — fake control, numeri inventati, hero articolo
 
-- **P1** · grafica · [MonetizationTeaser.tsx:97-122,142-153](../../src/components/home/MonetizationTeaser.tsx) · "mappa finta" (rotta SVG tratteggiata + 3 pin arbitrari + cornice + componente `MapMarker`) su una foto che non è una mappa (fake control anti-DESIGN.md) → rimossa; restano foto + scrim + 3 card reali; alt corretto da "Mappa editoriale" a "Paesaggio toscano tra colline e borghi" · **sì** · verificato browser 0 overflow/0 errori.
-- **P1** · contenuto · [HomeFeaturedDestinations.tsx:194-200](../../src/components/home/HomeFeaturedDestinations.tsx) · conteggi inventati "8/6/5/4 racconti" (archivio non popolato → viola "niente numeri inventati") → rimosso il counter, resta il paese · **sì** · verificato in browser (nessun "racconti" nel DOM).
+- **P1** · grafica · `MonetizationTeaser.tsx:97-122,142-153` · "mappa finta" (rotta SVG tratteggiata + 3 pin arbitrari + cornice + componente `MapMarker`) su una foto che non è una mappa (fake control anti-DESIGN.md) → rimossa; restano foto + scrim + 3 card reali; alt corretto da "Mappa editoriale" a "Paesaggio toscano tra colline e borghi" · **sì** · verificato browser 0 overflow/0 errori.
+- **P1** · contenuto · `HomeFeaturedDestinations.tsx:194-200` · conteggi inventati "8/6/5/4 racconti" (archivio non popolato → viola "niente numeri inventati") → rimosso il counter, resta il paese · **sì** · verificato in browser (nessun "racconti" nel DOM).
 - **P1** · immagini/a11y · [ArticleHero.tsx:54](../../src/components/article/ArticleHero.tsx) + [types.ts](../../src/components/article/types.ts) · alt = titolo (duplica l'H1 per screen reader) → campo opzionale `imageAlt` con fallback `luogo — categoria` (es. "Trentino-Alto Adige, Italia — Guide") · **sì** · verificato in browser.
 - **P1** · grafica/a11y · [ArticleHero.tsx:55,61](../../src/components/article/ArticleHero.tsx) · doppio scurimento (`brightness-0.8` + gradient `from-black/95`) schiacciava la foto → `brightness-0.88` + gradient `from-black/85 via-black/30` · **sì** · verificato a schermo: immagine più luminosa, titolo bianco ancora pienamente leggibile (gradient inferiore preserva il contrasto AA).
 
@@ -266,8 +266,8 @@ browser 0 overflow / 0 errori console.
 
 ### Sessione 4 — densità lead magnet + ridondanza discovery (su delega "fai tutto")
 
-- **P1** · grafica · [HomeLeadMagnet.tsx:21-25,78-90](../../src/components/home/HomeLeadMagnet.tsx) · colonna sinistra con 7 gruppi impilati prima del form; `GUIDE_DETAILS` ("10 luoghi/Quando andarci/Quanto fermarsi") ridondante con i promise-point e i chip luoghi → rimosso il blocco + import inutilizzati (`CalendarDays`, `Timer`) · **sì** · typecheck/build PASS, browser conferma rimozione.
-- **P1** · grafica/contenuto · [HomeDiscoveryFinder.tsx:67](../../src/components/home/HomeDiscoveryFinder.tsx) · eyebrow "Da dove vuoi partire?" gemello di "Da dove iniziare" (HomeFeaturedDestinations) → "Filtra l'archivio" (inquadra il finder come strumento, non come secondo "inizio"): risolve la ridondanza **senza rimuovere** la sezione (l'architettura home è una decisione owner) · **sì** · typecheck/build PASS.
+- **P1** · grafica · `HomeLeadMagnet.tsx:21-25,78-90` · colonna sinistra con 7 gruppi impilati prima del form; `GUIDE_DETAILS` ("10 luoghi/Quando andarci/Quanto fermarsi") ridondante con i promise-point e i chip luoghi → rimosso il blocco + import inutilizzati (`CalendarDays`, `Timer`) · **sì** · typecheck/build PASS, browser conferma rimozione.
+- **P1** · grafica/contenuto · `HomeDiscoveryFinder.tsx:67` · eyebrow "Da dove vuoi partire?" gemello di "Da dove iniziare" (HomeFeaturedDestinations) → "Filtra l'archivio" (inquadra il finder come strumento, non come secondo "inizio"): risolve la ridondanza **senza rimuovere** la sezione (l'architettura home è una decisione owner) · **sì** · typecheck/build PASS.
 
 ### Non-azioni deliberate (decisioni owner già prese — NON toccate)
 
@@ -312,12 +312,12 @@ Formato: Pri · Area · Dove · Problema → Soluzione.
 
 ### Sistema / linguaggio visivo (decisione owner)
 
-- **P2** · grafica · [HomeLeadMagnet.tsx](../../src/components/home/HomeLeadMagnet.tsx) · mockup copertina costruito a mano (chip/righe finte) → usare la cover PDF reale ruotata.
+- **P2** · grafica · `HomeLeadMagnet.tsx` · mockup copertina costruito a mano (chip/righe finte) → usare la cover PDF reale ruotata.
 - ~~MonetizationTeaser "mappa finta"~~ → **rimossa in Sessione 2** (foto + card reali; vedi §10). Upgrade futuro opzionale: screenshot reale della mappa Mapbox.
-- **P2** · grafica · [CoupleIntro.tsx](../../src/components/home/CoupleIntro.tsx) / [ChiSiamo.tsx](../../src/pages/ChiSiamo.tsx) · polaroid scatter + `font-script` ruotato → max 1 "voce speciale" per viewport; limitare lo scrapbook.
+- **P2** · grafica · `CoupleIntro.tsx` / [ChiSiamo.tsx](../../src/pages/ChiSiamo.tsx) · polaroid scatter + `font-script` ruotato → max 1 "voce speciale" per viewport; limitare lo scrapbook.
 - **P3** · grafica · [index.css:20](../../src/index.css) · `font-script` è fallback di sistema (rende diverso per OS) → webfont self-hosted o `font-serif italic`.
 - **P3** · grafica · [Button.tsx](../../src/components/Button.tsx) + hero · radius CTA misti → scegliere una forma-firma (consiglio `rounded-full`).
-- **P2** · grafica · [HomeTrustStrip.tsx](../../src/components/home/HomeTrustStrip.tsx) · numeri brand trattati come caption inline → griglia 2/4-col con numero grande + label (restando sobri, no card).
+- **P2** · grafica · `HomeTrustStrip.tsx` · numeri brand trattati come caption inline → griglia 2/4-col con numero grande + label (restando sobri, no card).
 - **P3** · grafica · [ProductCard.tsx:86](../../src/components/ProductCard.tsx) · velo `bg-black/20` permanente su mobile sulle immagini prodotto → azioni sotto l'immagine o velo solo on-interaction.
 
 ### Copy (standardizzazione)
@@ -351,39 +351,39 @@ Formato: Pri · Area · Dove · Problema → Soluzione.
 **Nota** (asset-curator): IG live mostra Lombardia (Garda/Como/Bormio), Veneto e
 Trentino come cluster italiani più presenti — valutare di sostituire la card Sardegna
 con Lombardia quando ci sono scatti reali (TODO già in
-[HomeFeaturedDestinations.tsx:19-26](../../src/components/home/HomeFeaturedDestinations.tsx)).
+`HomeFeaturedDestinations.tsx:19-26`).
 
 ---
 
 ## 13. Pagine / componenti modificati
 
-| File                                                                                                       | Modifica                              |
-| ---------------------------------------------------------------------------------------------------------- | ------------------------------------- |
-| [src/pages/VieniConNoi.tsx](../../src/pages/VieniConNoi.tsx)                                               | cliché bio-hub + accenti              |
-| [src/pages/Club.tsx](../../src/pages/Club.tsx)                                                             | sentence case ×2 + alt avatar         |
-| [src/pages/LeadMagnet.tsx](../../src/pages/LeadMagnet.tsx)                                                 | "IG" → "Instagram"                    |
-| [src/pages/Contatti.tsx](../../src/pages/Contatti.tsx)                                                     | accento                               |
-| [src/pages/MediaKit.tsx](../../src/pages/MediaKit.tsx)                                                     | accenti ×3                            |
-| [src/pages/Shop.tsx](../../src/pages/Shop.tsx)                                                             | accenti                               |
-| [src/components/home/CoupleIntro.tsx](../../src/components/home/CoupleIntro.tsx)                           | accento + "150+"                      |
-| [src/components/home/MonetizationTeaser.tsx](../../src/components/home/MonetizationTeaser.tsx)             | accenti                               |
-| [src/components/home/HomeEditorialPromise.tsx](../../src/components/home/HomeEditorialPromise.tsx)         | dot-grid + anim + eyebrow             |
-| [src/components/home/HomeFeaturedDestinations.tsx](../../src/components/home/HomeFeaturedDestinations.tsx) | eyebrow + alt per regione             |
-| [src/components/home/HomeLeadMagnet.tsx](../../src/components/home/HomeLeadMagnet.tsx)                     | rimosso blob                          |
-| [src/components/home/LatestArticles.tsx](../../src/components/home/LatestArticles.tsx)                     | H2 scale                              |
-| [src/components/home/NewsletterFeature.tsx](../../src/components/home/NewsletterFeature.tsx)               | hover su non-interattivi              |
-| [src/components/InstagramGrid.tsx](../../src/components/InstagramGrid.tsx)                                 | alt fedeli + H2 scale                 |
-| [src/components/Footer.tsx](../../src/components/Footer.tsx)                                               | spacing header colonne                |
-| [src/components/home/MonetizationTeaser.tsx](../../src/components/home/MonetizationTeaser.tsx)             | rimossa mappa finta + alt (S2)        |
-| [src/components/article/ArticleHero.tsx](../../src/components/article/ArticleHero.tsx)                     | alt + alleggerimento scurimento (S2)  |
-| [src/components/article/types.ts](../../src/components/article/types.ts)                                   | campo `imageAlt` opzionale (S2)       |
-| [src/components/SEO.tsx](../../src/components/SEO.tsx)                                                     | OG default JPG + `og:image:type` (S3) |
-| [src/pages/Articolo.tsx](../../src/pages/Articolo.tsx)                                                     | OG preview → .jpg (S3)                |
-| public/og/{default,vieni-con-noi,lead-magnet,demo-articolo-dolomiti}.jpg                                   | nuove card OG JPG (S3)                |
-| src/config/destinationVisuals.ts · experienceContent.ts                                                    | **rimossi** — dead config (S3)        |
-| [src/pages/Press.tsx](../../src/pages/Press.tsx)                                                           | claim audience non verificabile (S3)  |
-| [src/config/siteContent.ts](../../src/config/siteContent.ts)                                               | footer "Scopri" → "Naviga" (S3)       |
-| [src/components/home/HomeDiscoveryFinder.tsx](../../src/components/home/HomeDiscoveryFinder.tsx)           | eyebrow differenziato (S4)            |
+| File                                                                                   | Modifica                              |
+| -------------------------------------------------------------------------------------- | ------------------------------------- |
+| [src/pages/VieniConNoi.tsx](../../src/pages/VieniConNoi.tsx)                           | cliché bio-hub + accenti              |
+| [src/pages/Club.tsx](../../src/pages/Club.tsx)                                         | sentence case ×2 + alt avatar         |
+| [src/pages/LeadMagnet.tsx](../../src/pages/LeadMagnet.tsx)                             | "IG" → "Instagram"                    |
+| [src/pages/Contatti.tsx](../../src/pages/Contatti.tsx)                                 | accento                               |
+| [src/pages/MediaKit.tsx](../../src/pages/MediaKit.tsx)                                 | accenti ×3                            |
+| [src/pages/Shop.tsx](../../src/pages/Shop.tsx)                                         | accenti                               |
+| `src/components/home/CoupleIntro.tsx`                                                  | accento + "150+"                      |
+| `src/components/home/MonetizationTeaser.tsx`                                           | accenti                               |
+| `src/components/home/HomeEditorialPromise.tsx`                                         | dot-grid + anim + eyebrow             |
+| `src/components/home/HomeFeaturedDestinations.tsx`                                     | eyebrow + alt per regione             |
+| `src/components/home/HomeLeadMagnet.tsx`                                               | rimosso blob                          |
+| `src/components/home/LatestArticles.tsx`                                               | H2 scale                              |
+| `src/components/home/NewsletterFeature.tsx`                                            | hover su non-interattivi              |
+| [src/components/InstagramGrid.tsx](../../src/components/InstagramGrid.tsx)             | alt fedeli + H2 scale                 |
+| [src/components/Footer.tsx](../../src/components/Footer.tsx)                           | spacing header colonne                |
+| `src/components/home/MonetizationTeaser.tsx`                                           | rimossa mappa finta + alt (S2)        |
+| [src/components/article/ArticleHero.tsx](../../src/components/article/ArticleHero.tsx) | alt + alleggerimento scurimento (S2)  |
+| [src/components/article/types.ts](../../src/components/article/types.ts)               | campo `imageAlt` opzionale (S2)       |
+| [src/components/SEO.tsx](../../src/components/SEO.tsx)                                 | OG default JPG + `og:image:type` (S3) |
+| [src/pages/Articolo.tsx](../../src/pages/Articolo.tsx)                                 | OG preview → .jpg (S3)                |
+| public/og/{default,vieni-con-noi,lead-magnet,demo-articolo-dolomiti}.jpg               | nuove card OG JPG (S3)                |
+| src/config/destinationVisuals.ts · experienceContent.ts                                | **rimossi** — dead config (S3)        |
+| [src/pages/Press.tsx](../../src/pages/Press.tsx)                                       | claim audience non verificabile (S3)  |
+| [src/config/siteContent.ts](../../src/config/siteContent.ts)                           | footer "Scopri" → "Naviga" (S3)       |
+| `src/components/home/HomeDiscoveryFinder.tsx`                                          | eyebrow differenziato (S4)            |
 
 ~24 file toccati (S1→S4): 37 fix UI/copy/alt/integrità + OG card social + 2 rimozioni
 dead config + 4 asset JPG generati. Nessun file high-risk (`server.ts`,

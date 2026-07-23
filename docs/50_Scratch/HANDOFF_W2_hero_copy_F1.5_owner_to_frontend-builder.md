@@ -14,7 +14,7 @@ area: workspace
 
 ## Why this work matters
 
-L'hero attuale è ancora "placeholder editoriale" (`Posti particolari che valgono davvero`). Il blocco F1.5 ha consegnato 4 varianti H1 + sub + CTA + meta in [docs/50_Scratch/F1.5_hero_copy_variants_for_owner.md](./F1.5_hero_copy_variants_for_owner.md). Una volta che l'owner pick una variante, va applicata in [src/components/home/HeroSection.tsx](../../src/components/home/HeroSection.tsx) + meta in [index.html](../../index.html) + SEO component.
+L'hero attuale è ancora "placeholder editoriale" (`Posti particolari che valgono davvero`). Il blocco F1.5 ha consegnato 4 varianti H1 + sub + CTA + meta in [docs/50_Scratch/F1.5_hero_copy_variants_for_owner.md](./F1.5_hero_copy_variants_for_owner.md). Una volta che l'owner pick una variante, va applicata in `src/components/home/HeroSection.tsx` + meta in [index.html](../../index.html) + SEO component.
 
 ## Decisions already made (LOCKED — non rilitigare)
 
@@ -28,9 +28,9 @@ L'hero attuale è ancora "placeholder editoriale" (`Posti particolari che valgon
 
 - Variante scelta: [VERIFY: pick owner — da inserire qui appena disponibile]
 - File da editare:
-  - [src/components/home/HeroSection.tsx](../../src/components/home/HeroSection.tsx) — H1, eyebrow, paragraph, CTA labels
+  - `src/components/home/HeroSection.tsx` — H1, eyebrow, paragraph, CTA labels
   - [index.html](../../index.html) — `<title>`, `<meta name="description">`, OG/Twitter
-  - [src/pages/Home.tsx](../../src/pages/Home.tsx) o componente SEO se title/description sono gestiti React-side
+  - `src/pages/Home.tsx` o componente SEO se title/description sono gestiti React-side
 - Sorgente varianti: [docs/50_Scratch/F1.5_hero_copy_variants_for_owner.md](./F1.5_hero_copy_variants_for_owner.md)
 
 ## What the receiver should produce

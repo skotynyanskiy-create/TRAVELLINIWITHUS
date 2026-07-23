@@ -278,7 +278,7 @@ Audit browser reale (Playwright MCP) su 7 rotte ai viewport 375/768/1280: 0 bloc
 - [x] **S3** — Contatti: link "Apri il media kit" puntava a `/collaborazioni`, ora a `/media-kit`. [src/pages/Contatti.tsx](../../src/pages/Contatti.tsx).
 - [x] **S4** — Ambiguità "Strumenti": la voce di menu "Strumenti" puntava a `/risorse`. Decisione originale: "Strumenti" → `/strumenti`; aggiornata il 2026-05-24 a pagina di supporto senza quiz/budget pubblico (calendario, builder itinerario, mappa). `/risorse` (app/gear/affiliate) resta come "Risorse di viaggio". Allineati Navbar + Footer (2 link). [src/components/Navbar.tsx](../../src/components/Navbar.tsx), [src/components/Footer.tsx](../../src/components/Footer.tsx).
 - [x] **S1+S2** — Mappa mobile (vedi sezione dedicata sotto).
-- [x] **MINORE** — Hero home: tap target link "Lavora con noi"/"Media Kit" da ~15px a 44px (`min-h-11`). [src/components/home/HeroSection.tsx](../../src/components/home/HeroSection.tsx).
+- [x] **MINORE** — Hero home: tap target link "Lavora con noi"/"Media Kit" da ~15px a 44px (`min-h-11`). `src/components/home/HeroSection.tsx`.
 - [x] **MINORE** — Esplora: banner "preview editoriale" spostato sopra la card filtri (non più incuneato tra contatore risultati e card). [src/pages/Esplora.tsx](../../src/pages/Esplora.tsx).
 
 Residui minori non chiusi (bassa priorità): hero home mobile lungo (blocco Instagram statico), ricerca "bali→Italia" (seed-related, atteso in preview), nit "10 itinerari" vs 3 mostrati, warning preload `couple-travel.png`/`hero-amalfi.avif`.
@@ -320,7 +320,7 @@ Verdict finale: **PASS (TUTTI I GATE COMPLETATI CON SUCCESSO)**
 Audit `browser-auditor` (Playwright MCP) ha prodotto verdict iniziale **FAIL** (2 BLOCKER, 4 SERIO, 4 MINORE). Sessione di fix mirati ha chiuso 10/10 finding lato client. Residuo: 1 bug server SEO (M1 escalato) da assegnare a `travellini-backend-engineer`.
 
 - [x] **B1** Doppio `h1` su `/club` — `src/pages/Club.tsx:67` degradato a `h2`. H1 unico ora è "Una piccola quota. Tutte le guide. Senza pubblicità." in [src/components/club/ClubMembershipHero.tsx](../../src/components/club/ClubMembershipHero.tsx).
-- [x] **B2** Refusi italiani (encoding accenti/apostrofi persi) corretti in: [src/pages/NotFound.tsx](../../src/pages/NotFound.tsx), [src/components/home/HeroSection.tsx](../../src/components/home/HeroSection.tsx), [src/components/home/NewsletterFeature.tsx](../../src/components/home/NewsletterFeature.tsx), [src/components/Newsletter.tsx](../../src/components/Newsletter.tsx), [src/components/club/ClubMembershipHero.tsx](../../src/components/club/ClubMembershipHero.tsx) (pubblicità, è l'accesso, ciò, all'anno, Lascia l'email).
+- [x] **B2** Refusi italiani (encoding accenti/apostrofi persi) corretti in: [src/pages/NotFound.tsx](../../src/pages/NotFound.tsx), `src/components/home/HeroSection.tsx`, `src/components/home/NewsletterFeature.tsx`, [src/components/Newsletter.tsx](../../src/components/Newsletter.tsx), [src/components/club/ClubMembershipHero.tsx](../../src/components/club/ClubMembershipHero.tsx) (pubblicità, è l'accesso, ciò, all'anno, Lascia l'email).
 - [x] **S1** Stat partner a `0K+/0%` su `/collaborazioni` — rimosso `AnimatedCounter` count-up sulla sezione (counter partiva da 0 e si attivava solo on-scroll); ora render statico immediato. Aggiunto anche validator `isUsableStat` per merge field-by-field con `BRAND_STATS` se Firebase ritorna valori "0K+". Numeri verificati live: 167K+, 90K+, 500K+, 6.5%.
 - [x] **S2** `SearchModal` chip "Sezioni" obsoleti (Destinazioni/Esperienze/Guide) sostituiti con vocabolario post-consolidation: Posti particolari, Food & ristoranti, Hotel con carattere, Weekend romantici, Itinerari.
 - [x] **S3** `NotFound` copy aggiornata: "ripartire da Esplora, dalla mappa o dagli itinerari" (era "destinazioni, esperienze e guide").
@@ -805,7 +805,7 @@ Ripresa dei lavori dopo interruzione Codex. P1/P2 residui chiusi:
       `map_to_destinations_click` quando l'utente sale verso l'archivio.
       Il CTA verso `/destinazioni` ora passa i filtri attivi
       (`?group=X&experience=Y`).
-      File: [src/components/map/MapboxWorldMap.tsx](../../src/components/map/MapboxWorldMap.tsx)
+      File: `src/components/map/MapboxWorldMap.tsx`
 
 ### Verifiche
 
@@ -881,8 +881,8 @@ Eseguito audit completo parallelo con 6 specialisti (quality, security, perf, ui
 
 I 2 CRITICAL UI rimasti bloccati su direzione sono stati chiusi.
 
-- [x] **C-UI-1 HomeTrustStrip** — i 4 KPI box (numero serif + icona) convertiti in una singola trust-line editoriale inline (prosa, niente icone/box/bordi/hover), per eliminare il pattern "overbuilt statistic strip" vietato da DESIGN.md:48. Numeri senza "+": 500K lettori/mese · 167K IG · 90K TikTok · 150 destinazioni. File: [src/components/home/HomeTrustStrip.tsx](../../src/components/home/HomeTrustStrip.tsx).
-- [x] **C-UI-3 HomeDiscoveryFinder** — 4 card icon+title+arrow (pattern Linear/Notion) sostituite con 2 tessere image-led (grid md:2-col, scrim + Ken Burns coerente coi picks adiacenti). "Per zona" → toscana.webp → `/esplora?zone=Italia`; "Per intenzione" → romantico.webp → `/esplora?type=posti-particolari`. `loading="eager"` sulle 2 immagini above-fold (chiude anche H-PERF-2). `HOMEPAGE_DISCOVERY_ENTRIES` non rimosso dal config (ancora consumato da Navbar/SearchModal). File: [src/components/home/HomeDiscoveryFinder.tsx](../../src/components/home/HomeDiscoveryFinder.tsx).
+- [x] **C-UI-1 HomeTrustStrip** — i 4 KPI box (numero serif + icona) convertiti in una singola trust-line editoriale inline (prosa, niente icone/box/bordi/hover), per eliminare il pattern "overbuilt statistic strip" vietato da DESIGN.md:48. Numeri senza "+": 500K lettori/mese · 167K IG · 90K TikTok · 150 destinazioni. File: `src/components/home/HomeTrustStrip.tsx`.
+- [x] **C-UI-3 HomeDiscoveryFinder** — 4 card icon+title+arrow (pattern Linear/Notion) sostituite con 2 tessere image-led (grid md:2-col, scrim + Ken Burns coerente coi picks adiacenti). "Per zona" → toscana.webp → `/esplora?zone=Italia`; "Per intenzione" → romantico.webp → `/esplora?type=posti-particolari`. `loading="eager"` sulle 2 immagini above-fold (chiude anche H-PERF-2). `HOMEPAGE_DISCOVERY_ENTRIES` non rimosso dal config (ancora consumato da Navbar/SearchModal). File: `src/components/home/HomeDiscoveryFinder.tsx`.
 
 Verifiche: `npm run typecheck` PASS (0 errori), `npm run audit:ui` PASS (0 errori, solo WARN scrim rgba preesistenti uguali ai picks). Residuo opzionale: giro `browser-auditor` a 375px per confermare zero overflow sulle nuove tessere.
 

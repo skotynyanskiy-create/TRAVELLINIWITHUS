@@ -14,7 +14,7 @@ area: workspace
 
 ## Why this work matters
 
-La Home attuale ([src/pages/Home.tsx](../../src/pages/Home.tsx)) ha **11 sezioni** con:
+La Home attuale (`src/pages/Home.tsx`) ha **11 sezioni** con:
 
 - 3 superfici social proof ridondanti (`HomeTrustStrip` + `HomePartnerSignal` + `PartnerLogosStrip`),
 - 2 push commerciali sovrapposti (`MonetizationTeaser` + `HomeCollaborationCta`),
@@ -60,7 +60,7 @@ Obiettivo: 7 sezioni con narrativa editoriale (copertina → autori → indice �
 
 ### File da modificare
 
-- [src/pages/Home.tsx](../../src/pages/Home.tsx) (127 righe → riscrivere imports + Suspense + ordine sezioni)
+- `src/pages/Home.tsx` (127 righe → riscrivere imports + Suspense + ordine sezioni)
 
 ### File da CREARE
 

@@ -66,7 +66,7 @@ A warm travel magazine printed on calm sand/ink paper, whose _cover_ is one cont
   - Primary CTA (`Button variant="cta"`, `magnetic`, `trackingId="hero_esplora"`): **"Scopri le destinazioni"** → `/esplora`
   - Ghost CTA (`variant="outline-light"`): **"Guarda gli ultimi reel"** → `#reel`
 - **Color/type/motion:** only dark surface on the page; trace draws in once (`animate={!reduced}`), terracotta on primary CTA + live pin glow. `MagneticWrapper` on primary CTA.
-- **Reuse:** [TraceSignature.tsx](../../src/experience/atlante/signature/TraceSignature.tsx) via `lazy`+`Suspense` mirroring [AtlanteLab.tsx](../../src/pages/AtlanteLab.tsx); [Button.tsx](../../src/components/Button.tsx); [MagneticWrapper.tsx](../../src/components/MagneticWrapper.tsx); [OptimizedImage.tsx](../../src/components/OptimizedImage.tsx) (poster). See §4 for fallback.
+- **Reuse:** [TraceSignature.tsx](../../src/experience/atlante/signature/TraceSignature.tsx) via `lazy`+`Suspense` mirroring `AtlanteLab.tsx`; [Button.tsx](../../src/components/Button.tsx); [MagneticWrapper.tsx](../../src/components/MagneticWrapper.tsx); [OptimizedImage.tsx](../../src/components/OptimizedImage.tsx) (poster). See §4 for fallback.
 
 ### §2 — Category rail "Sfoglia per tipo" (the color reveal)
 
@@ -120,7 +120,7 @@ A warm travel magazine printed on calm sand/ink paper, whose _cover_ is one cont
 - **Desktop:** 3 tall image-cards Italia / Europa / Mondo. **Mobile:** horizontal snap or stack.
 - **Real content:** zones from taxonomy; Italia leads (imagery from Toscana reels), Europa, Mondo (Egitto/Batu Caves). Links `/esplora?zone=…`. **Drop the "27 entries" count claim** — cover imagery carries it (per all 3 judges).
 - **Color/type/motion:** terracotta accent only; Fraunces labels overlaid on `.twu-cover-scrim`.
-- **Reuse:** [OptimizedImage.tsx]; `.twu-cover-scrim`; `Section`. Reference the grid logic in [HomeFeaturedDestinations.tsx](../../src/components/home/HomeFeaturedDestinations.tsx). Do **not** mount live Mapbox (perf).
+- **Reuse:** [OptimizedImage.tsx]; `.twu-cover-scrim`; `Section`. Reference the grid logic in `HomeFeaturedDestinations.tsx`. Do **not** mount live Mapbox (perf).
 
 ### §7 — Newsletter `id="newsletter"`
 
@@ -158,7 +158,7 @@ Add to the `@theme` block (after the accent block, ~line 40) so Tailwind auto-ge
 
 ## 4. WebGL hero behavior + static fallback + reduced-motion
 
-Follow the [AtlanteLab.tsx](../../src/pages/AtlanteLab.tsx) reuse pattern exactly, **branch BEFORE the lazy import** (the [SentieroExperience](../../src/experience/sentiero/SentieroExperience.tsx) convention):
+Follow the `AtlanteLab.tsx` reuse pattern exactly, **branch BEFORE the lazy import** (the [SentieroExperience](../../src/experience/sentiero/SentieroExperience.tsx) convention):
 
 ```tsx
 const TraceSignature = lazy(() => import('../experience/atlante/signature/TraceSignature'));
@@ -199,7 +199,7 @@ if (reduced || isSmall) return <HeroStatic />; // poster + overlaid H1, bg #0b08
 - **Poster `z-0` behind the canvas** gives `GLBoundary` resilience: on WebGL-init failure the boundary replaces the canvas and the poster shows through instead of bare gray text. On success the opaque canvas (`alpha:false`, bg `#0b0805`) covers it.
 - **`HeroStatic`** = `reel-3-cover.webp` via `OptimizedImage priority` + `.twu-hero-scrim` + the same overlaid H1/eyebrow/CTA on `#0b0805`, zero three.js. The **text H1 is the LCP**, never the canvas — model on [SentieroFallback.tsx](../../src/experience/sentiero/SentieroFallback.tsx).
 - **Do NOT** reuse `SentieroCanvas`/`AtlanteCanvas` (both need `ScrollControls` = full-viewport scroll hijack, incompatible with a page that scrolls past the hero). `TraceSignature` is the only correct reuse target.
-- **Do NOT** inject the chrome-hiding `<style>` block from [Home.tsx](../../src/pages/Home.tsx) / AtlanteLab (`html,body{overflow:hidden;100dvh}` + `nav/footer{display:none}`). Containment comes solely from the `position:relative h-[72svh]` wrapper; the navbar/footer stay visible and the page scrolls normally.
+- **Do NOT** inject the chrome-hiding `<style>` block from `Home.tsx` / AtlanteLab (`html,body{overflow:hidden;100dvh}` + `nav/footer{display:none}`). Containment comes solely from the `position:relative h-[72svh]` wrapper; the navbar/footer stay visible and the page scrolls normally.
 
 ---
 

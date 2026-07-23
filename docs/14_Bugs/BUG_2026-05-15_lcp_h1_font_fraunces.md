@@ -27,8 +27,8 @@ Il commit `10d2a8e fix(site): WCAG AA 100/100 lighthouse + LCP hero preload` ha 
 
 - [index.html](../../index.html) — `<link href="...googleapis.com/css2?...&display=swap">` con 3 famiglie (Fraunces, Inter, Kalam)
 - [src/index.css](../../src/index.css) — `@font-face` o `@import` Google Fonts
-- [src/components/home/HeroSection.tsx:182](../../src/components/home/HeroSection.tsx) — H1 element
-- [src/pages/Home.tsx:40-54](../../src/pages/Home.tsx) — preload hero AVIF (corretto ma non LCP-critical)
+- `src/components/home/HeroSection.tsx:182` — H1 element
+- `src/pages/Home.tsx:40-54` — preload hero AVIF (corretto ma non LCP-critical)
 
 ## Fix proposto
 

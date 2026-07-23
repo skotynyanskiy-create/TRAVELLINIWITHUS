@@ -302,7 +302,7 @@ Stato post-sessione documentato sotto.
 
 ### Mapbox layer in ItineraryBuilder
 
-- 🆕 [src/components/ItineraryMap.tsx](../../src/components/ItineraryMap.tsx): mini-mappa Mapbox per giorno attivo
+- 🆕 `src/components/ItineraryMap.tsx`: mini-mappa Mapbox per giorno attivo
   - **Marker numerati** 01..N stile brand (cerchio nero serif + ring bianco) per ogni POI del giorno in ordine
   - **Path linea connettiva** (GeoJSON LineString) tra POI consecutivi: nera, opacity 0.6, dashed 2/2
   - **Popup** click marker: eyebrow categoria + nome POI + descrizione breve
@@ -311,7 +311,7 @@ Stato post-sessione documentato sotto.
   - **Fallback graceful**: se `VITE_MAPBOX_TOKEN` mancante mostra pannello con info coords salvate
   - **Stati vuoti**: messaggio "aggiungete tappa al Giorno X" se nessun POI
   - Riusa pattern react-map-gl/mapbox stabilito in MapboxWorldMap (no dipendenze nuove)
-- ✏️ [src/components/ItineraryBuilder.tsx](../../src/components/ItineraryBuilder.tsx):
+- ✏️ `src/components/ItineraryBuilder.tsx`:
   - **Lazy import** `ItineraryMap` (~150KB gz mapbox-gl): caricato SOLO se utente clicca "Vedi su mappa", bundle iniziale `/strumenti` invariato
   - Toggle button "Vedi le tappe del giorno su mappa" / "Nascondi mappa" sotto la lista POI del giorno attivo
   - Sezione mappa con `Suspense` fallback (loader spinning) + `AnimatePresence` collapse/expand height
@@ -356,14 +356,14 @@ ItineraryMap è componente generico (prende `poiIds[]` + `day`). Puo essere rius
 
 `@react-pdf/renderer` era gia installato (usato da `LeadMagnetDocument` + `MediaKitDocument`). Riusato stesso pattern brand per coerenza visiva.
 
-- 🆕 [src/pdf/ItineraryDocument.tsx](../../src/pdf/ItineraryDocument.tsx): documento PDF React-style con:
+- 🆕 `src/pdf/ItineraryDocument.tsx`: documento PDF React-style con:
   - **Cover page**: brand header + eyebrow accent + titolo "X giorni in [destinazione], su tappe che abbiamo provato" + dek + meta (giorni / tappe totali / ore stimate) + footer disclaimer + data
   - **Pagine per giorno**: header con giorno X di Y + numero tappe + ore stimate, blocchi POI numerati con descrizione + box accent "Nota R+B"
   - **Page footer fisso**: handle social + URL travelliniwithus.it linkato
   - Palette identica al brand: sandWarm cover, accentSoft per note R+B, line per divider, tipografia con italic per accenti
   - Word wrap su POI block con `wrap={false}` (evita split tra pagine)
   - Auto title/author/keywords metadata per riconoscimento file
-- ✏️ [src/components/ItineraryBuilder.tsx](../../src/components/ItineraryBuilder.tsx):
+- ✏️ `src/components/ItineraryBuilder.tsx`:
   - Nuovo handler `handleExportPdf` con **lazy import** di `@react-pdf/renderer` + `ItineraryDocument` (riduce bundle iniziale `/strumenti`)
   - Mappa stato interno `plan` al formato `ItineraryPdfDay[]` ordinando POI con numerazione zero-padded
   - Trigger download via blob URL + revoke dopo 1s
@@ -412,7 +412,7 @@ Il pattern di `ItineraryDocument` (cover + page-per-giorno + footer brand + lazy
 ### Drag&drop con @dnd-kit/core
 
 - 🆕 Dipendenze aggiunte: `@dnd-kit/core` + `@dnd-kit/sortable` + `@dnd-kit/utilities` (install con `--legacy-peer-deps` per compat React 19 vs `react-simple-maps@3.0.0`)
-- ✏️ [src/components/ItineraryBuilder.tsx](../../src/components/ItineraryBuilder.tsx):
+- ✏️ `src/components/ItineraryBuilder.tsx`:
   - Nuovo componente esterno `SortablePoiItem` con `useSortable` hook — wrappa ogni POI list-item con drag transform + a11y keyboard support nativa
   - Drag handle dedicato (icona GripVertical, button con listeners + attributes) — pattern accessibilità best-practice di dnd-kit
   - Sensors: PointerSensor con `activationConstraint: { distance: 8 }` (evita drag accidentale al click su mobile) + KeyboardSensor con `sortableKeyboardCoordinates` (frecce keyboard funzionano)
@@ -451,7 +451,7 @@ Il pattern di `ItineraryDocument` (cover + page-per-giorno + footer brand + lazy
 
 ### POI catalog esteso
 
-- ✏️ [src/config/poiCatalog.ts](../../src/config/poiCatalog.ts): da 12 POI a **55 POI** distribuiti su tutte e 10 le destinazioni baseline (allineato con `costBaselines.ts` + `seasonalGuide.ts`).
+- ✏️ `src/config/poiCatalog.ts`: da 12 POI a **55 POI** distribuiti su tutte e 10 le destinazioni baseline (allineato con `costBaselines.ts` + `seasonalGuide.ts`).
 
 Breakdown finale per destinazione:
 
@@ -499,23 +499,23 @@ Ogni POI include: geo coords (per Mapbox futuro), `durationMin`, `bestMonths`/`a
 
 ### Cross-link Cost ↔ When-to-go
 
-- ✏️ [src/components/WhenToGoCalendar.tsx](../../src/components/WhenToGoCalendar.tsx): aggiunta prop `onMonthSelect?: (month, destSlug) => void` + `onDestinationChange?`. Quando definita, mostra CTA "Calcola budget per [mese]" nel dettaglio mese. Evento `when_to_go_cta_cost`.
+- ✏️ `src/components/WhenToGoCalendar.tsx`: aggiunta prop `onMonthSelect?: (month, destSlug) => void` + `onDestinationChange?`. Quando definita, mostra CTA "Calcola budget per [mese]" nel dettaglio mese. Evento `when_to_go_cta_cost`.
 - ✏️ `src/components/DestinationCostCalculator.tsx` (rimosso): aggiunte prop `initialDest` e `initialMonth` con sync pattern adjust-state-during-render (React 19) per ricevere stato dal parent.
-- ✏️ [src/pages/Strumenti.tsx](../../src/pages/Strumenti.tsx): orchestrazione cross-link — handler `handleWhenToGoCta` lifta state per pre-popolare CostCalculator + smooth scroll al calc ref. Click su "Calcola budget per settembre" in WhenToGoCalendar → CostCalculator si auto-popola + scroll automatico.
+- ✏️ `src/pages/Strumenti.tsx`: orchestrazione cross-link — handler `handleWhenToGoCta` lifta state per pre-popolare CostCalculator + smooth scroll al calc ref. Click su "Calcola budget per settembre" in WhenToGoCalendar → CostCalculator si auto-popola + scroll automatico.
 
 ### Estensione cataloghi: 4 nuove destinazioni
 
-- ✏️ [src/config/costBaselines.ts](../../src/config/costBaselines.ts): +4 destinazioni → **10 totali**:
+- ✏️ `src/config/costBaselines.ts`: +4 destinazioni → **10 totali**:
   - Procida (Italia-Isole) — alta stagione raddoppio prezzi
   - Marche (Italia-Centro) — 25-30% sotto Toscana
   - Liguria di Levante (Italia-Nord) — Cinque Terre vs Tellaro
   - Marrakech (Mondo) — primavera/autunno top
-- ✏️ [src/config/seasonalGuide.ts](../../src/config/seasonalGuide.ts): stesse 4 destinazioni → **10 totali** con dataset 12-mesi (temp, pioggia, affollamento, bollini R+B, eventi)
+- ✏️ `src/config/seasonalGuide.ts`: stesse 4 destinazioni → **10 totali** con dataset 12-mesi (temp, pioggia, affollamento, bollini R+B, eventi)
 
 ### FASE 3.A Itinerary Builder MVP
 
-- 🆕 [src/config/poiCatalog.ts](../../src/config/poiCatalog.ts): catalogo POI tipizzato con 8 categorie (mare, ristorante, hotel, vista, borgo, museo, evento, esperienza). Pilot Salento con **10 POI** reali (Marina Serra, Porto Badisco, Lecce centro, Otranto castello, Tricase Porto trattoria, Santa Maria di Leuca, Acaya, Presicce-Acquarica, Galatina pasticciotto, Notte della Taranta) + 2 seed Sicilia. Ogni POI: id, name, category, geo, durationMin, bestMonths/avoidMonths, rbNote.
-- 🆕 [src/components/ItineraryBuilder.tsx](../../src/components/ItineraryBuilder.tsx): MVP click-to-add (no drag&drop ancora). Layout 2 colonne: sx catalogo POI filtrabile per categoria, dx tabs giorni 2-10 con piano. Comportamenti:
+- 🆕 `src/config/poiCatalog.ts`: catalogo POI tipizzato con 8 categorie (mare, ristorante, hotel, vista, borgo, museo, evento, esperienza). Pilot Salento con **10 POI** reali (Marina Serra, Porto Badisco, Lecce centro, Otranto castello, Tricase Porto trattoria, Santa Maria di Leuca, Acaya, Presicce-Acquarica, Galatina pasticciotto, Notte della Taranta) + 2 seed Sicilia. Ogni POI: id, name, category, geo, durationMin, bestMonths/avoidMonths, rbNote.
+- 🆕 `src/components/ItineraryBuilder.tsx`: MVP click-to-add (no drag&drop ancora). Layout 2 colonne: sx catalogo POI filtrabile per categoria, dx tabs giorni 2-10 con piano. Comportamenti:
   - Click POI → aggiunto al giorno attivo
   - POI gia usati greyed out (no duplicati)
   - Click X → rimuovi POI dal giorno
@@ -523,7 +523,7 @@ Ogni POI include: geo coords (per Mapbox futuro), `durationMin`, `bestMonths`/`a
   - Export: copia testo formattato negli appunti (PDF = stretch goal)
   - Tabs giorni con conteggio POI per giorno + totale ore stimato
   - GA4 events: `itinerary_poi_add`, `itinerary_poi_remove`, `itinerary_reset`, `itinerary_export_copy`
-- ✏️ [src/pages/Strumenti.tsx](../../src/pages/Strumenti.tsx): ItineraryBuilder integrato come 3° strumento (When → Cost → Itinerary → Calc generico → Quiz/Mappa).
+- ✏️ `src/pages/Strumenti.tsx`: ItineraryBuilder integrato come 3° strumento (When → Cost → Itinerary → Calc generico → Quiz/Mappa).
 
 **Verifiche sessione #6**: typecheck ✓ · lint 0 errori 0 warning ✓ · test 10/10 ✓ · /strumenti 200 ✓.
 
@@ -550,9 +550,9 @@ Ogni POI include: geo coords (per Mapbox futuro), `durationMin`, `bestMonths`/`a
 
 ### FASE 3.B Calendar "Quando andare" completo
 
-- 🆕 [src/config/seasonalGuide.ts](../../src/config/seasonalGuide.ts): dataset 12-mesi per 6 destinazioni baseline (Salento, Sicilia, Dolomiti, Toscana, Sardegna, Lisbona) con temp media (°C), giorni piovosi, affollamento (low/medium/high), bollino R+B consigliato, nota R+B specifica per mese, eventi notabili (festival, sagre). Sintesi annuale R+B + mesi best + mesi avoid. Helper `getSeasonalGuide()` + labels italiani mese. Coerente con `costBaselines.ts` (mesi alta stagione cross-validati).
-- 🆕 [src/components/WhenToGoCalendar.tsx](../../src/components/WhenToGoCalendar.tsx): widget visuale Editorial Slow con selettore destinazione + sintesi annuale italic + strip 12 mesi con heatmap temperatura (scala blue→sand→accent), dots affollamento, bollino ✓ R+B consigliato / ⚠ da evitare. Click su mese → dettaglio collassabile con 3 metriche (temp, pioggia, affollamento) + nota R+B citata + lista eventi. Legenda accessibile + riepilogo mesi best/avoid. GA4 events `when_to_go_destination_change` + `when_to_go_month_select`.
-- ✏️ [src/pages/Strumenti.tsx](../../src/pages/Strumenti.tsx): integrato come PRIMO strumento (logica naturale: decidi quando → calcola budget). Ordine finale: Quando andare → Cost per destinazione → Cost generico → Quiz/Mappa link cards.
+- 🆕 `src/config/seasonalGuide.ts`: dataset 12-mesi per 6 destinazioni baseline (Salento, Sicilia, Dolomiti, Toscana, Sardegna, Lisbona) con temp media (°C), giorni piovosi, affollamento (low/medium/high), bollino R+B consigliato, nota R+B specifica per mese, eventi notabili (festival, sagre). Sintesi annuale R+B + mesi best + mesi avoid. Helper `getSeasonalGuide()` + labels italiani mese. Coerente con `costBaselines.ts` (mesi alta stagione cross-validati).
+- 🆕 `src/components/WhenToGoCalendar.tsx`: widget visuale Editorial Slow con selettore destinazione + sintesi annuale italic + strip 12 mesi con heatmap temperatura (scala blue→sand→accent), dots affollamento, bollino ✓ R+B consigliato / ⚠ da evitare. Click su mese → dettaglio collassabile con 3 metriche (temp, pioggia, affollamento) + nota R+B citata + lista eventi. Legenda accessibile + riepilogo mesi best/avoid. GA4 events `when_to_go_destination_change` + `when_to_go_month_select`.
+- ✏️ `src/pages/Strumenti.tsx`: integrato come PRIMO strumento (logica naturale: decidi quando → calcola budget). Ordine finale: Quando andare → Cost per destinazione → Cost generico → Quiz/Mappa link cards.
 
 **Funzione strategica**: completa la "decision toolkit" /strumenti. Insieme WhenToGoCalendar + DestinationCostCalculator coprono le 2 domande pre-decisione viaggio piu googlate ("quando andare a X" + "quanto costa X"). Cross-link possibile in futuro (es. click mese consigliato → pre-popola Cost Calculator con quel mese).
 
@@ -582,13 +582,13 @@ Ogni POI include: geo coords (per Mapbox futuro), `durationMin`, `bestMonths`/`a
 - 🆕 `src/components/audio/AudioGuidePlayer.tsx` (rimosso): player premium Editorial Slow con HTML5 audio nativo, play/pause, scrubber + progress fill visuale, formato tempo MM:SS, transcript toggle a11y, stato placeholder se durationSec=0, eventi GA4 (audio_play / audio_pause / audio_complete / audio_transcript_open). Pattern adjust-state-during-render per reset al cambio punto (React 19 compliant).
 - 🆕 `src/components/audio/AudioGuideSection.tsx` (rimosso): sezione articolo con sidebar lista punti numerati (dispatch-index-number style) + player attivo. Sticky sidebar su desktop. Nasconde sezione se guida non publishable (isAudioGuidePublished). forceShow per preview admin.
 - 🆕 [public/audio/README.md](../../public/audio/README.md): naming convention `{NN}-{slug}.mp3`, specifiche audio (128 kbps mono, -16 LUFS, 60-120s), workflow registrazione → editing → upload → config update, struttura cartelle.
-- 🆕 [public/audio/salento/](../../public/audio/salento/): cartella pronta per upload pilot.
+- 🆕 `public/audio/salento/`: cartella pronta per upload pilot.
 
 ### FASE 3.C Cost Calculator completo
 
-- 🆕 [src/config/costBaselines.ts](../../src/config/costBaselines.ts): catalogo `DESTINATION_BASELINES` per 6 destinazioni pillar (Salento, Sicilia, Dolomiti, Toscana, Sardegna, Lisbona) con costi giornalieri coppia × 4 voci (alloggio/cibo/trasporti/attivita) × 3 stili (lean/medium/premium) + moltiplicatore stagionale (alta/spalla/bassa) + mesi alta stagione + timestamp aggiornamento. Funzione `calculateBudget()` ritorna range min/max + breakdown + multiplier.
+- 🆕 `src/config/costBaselines.ts`: catalogo `DESTINATION_BASELINES` per 6 destinazioni pillar (Salento, Sicilia, Dolomiti, Toscana, Sardegna, Lisbona) con costi giornalieri coppia × 4 voci (alloggio/cibo/trasporti/attivita) × 3 stili (lean/medium/premium) + moltiplicatore stagionale (alta/spalla/bassa) + mesi alta stagione + timestamp aggiornamento. Funzione `calculateBudget()` ritorna range min/max + breakdown + multiplier.
 - 🆕 `src/components/DestinationCostCalculator.tsx` (rimosso): UI Editorial Slow con selettore destinazione + slider giorni 2-14 + selettore mese + bottoni stile. Output: range €min-max grande serif + warning alta stagione + breakdown 4 voci giornaliere + disclaimer "voli esclusi" + timestamp + CTA "Guide su [destinazione]". GA4 events `cost_calculator_first_compute` + `cost_calculator_destination_change` + `cost_calculator_cta_explore`.
-- ✏️ [src/pages/Strumenti.tsx](../../src/pages/Strumenti.tsx): nuovo `DestinationCostCalculator` come strumento principale, `BudgetCalculator` generico esistente diventa fallback per destinazioni non in catalogo. Ordine: granulare → generico.
+- ✏️ `src/pages/Strumenti.tsx`: nuovo `DestinationCostCalculator` come strumento principale, `BudgetCalculator` generico esistente diventa fallback per destinazioni non in catalogo. Ordine: granulare → generico.
 
 **Verifiche sessione #4**: typecheck ✓ · lint 0 errori 0 warning ✓ · test 10/10 ✓ · live 7/7 route 200 (`/`, `/quiz`, `/club`, `/strumenti`, `/llms.txt`, `/audio/README.md`, `/robots.txt`).
 

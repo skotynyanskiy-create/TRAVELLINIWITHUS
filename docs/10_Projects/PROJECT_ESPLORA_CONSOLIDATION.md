@@ -121,9 +121,9 @@ Usate da Navbar mega menu, `HomeDiscoveryFinder`, `SearchModal` DISCOVERY_RESULT
   canonical (zone/type/format/period/budget/duration + ricerca), paginazione,
   newsletter contestuale, micro-CTA B2B.
 - [src/pages/Mappa.tsx](../../src/pages/Mappa.tsx) +
-  [src/components/map/MapboxWorldMap.tsx](../../src/components/map/MapboxWorldMap.tsx)
+  `src/components/map/MapboxWorldMap.tsx`
   — doppio filtro continente/esperienza, CTA `/esplora` con filtri propagati.
-- [src/components/home/HomeDiscoveryFinder.tsx](../../src/components/home/HomeDiscoveryFinder.tsx)
+- `src/components/home/HomeDiscoveryFinder.tsx`
   — sezione unica "Da dove vuoi partire?" con 4 ingressi + picks zone + picks
   type. Sostituisce le precedenti `DiscoveryDestinations`, `DiscoveryExperiences`,
   `DiscoveryGuides`.
@@ -248,7 +248,7 @@ Kinfolk). 9 step eseguiti.
 
 1. **Asset critici risolti**
    - `amalfi.webp` mancante → ora `/images/hero-amalfi.webp` (asset esistente)
-     in [HomeDiscoveryFinder.tsx:25](../../src/components/home/HomeDiscoveryFinder.tsx).
+     in `HomeDiscoveryFinder.tsx:25`.
    - `priority` su prima big-choice card → LCP migliorato.
 
 2. **Reel video integration full**
@@ -343,7 +343,7 @@ Kinfolk). 9 step eseguiti.
   — consume reels live, modal video player.
 - [src/components/discovery/ArchiveCard.tsx](../../src/components/discovery/ArchiveCard.tsx)
   — prop `linkState`.
-- [src/components/home/HomeDiscoveryFinder.tsx](../../src/components/home/HomeDiscoveryFinder.tsx)
+- `src/components/home/HomeDiscoveryFinder.tsx`
   — fix `amalfi.webp`.
 - [src/components/ArticleSkeleton.tsx](../../src/components/ArticleSkeleton.tsx)
   - [src/components/Skeleton.tsx](../../src/components/Skeleton.tsx) — variant shimmer.
@@ -391,7 +391,7 @@ homepage e alla landing lead magnet.
 - [x] Stato demo esplicito: i marker placeholder sono dichiarati come anteprime
       editoriali, da sostituire con contenuti e foto reali R+B.
 - [x] Aggiunti tre preset "Percorsi demo" in
-      [MapboxWorldMap.tsx](../../src/components/map/MapboxWorldMap.tsx):
+      `MapboxWorldMap.tsx`:
       Italia non ovvia, Dove dormire bene, Weekend in coppia.
 - [x] Ogni preset applica i filtri mappa esistenti e traccia
       `map_route_preset_click`.

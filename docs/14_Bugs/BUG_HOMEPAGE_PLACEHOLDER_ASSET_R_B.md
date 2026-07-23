@@ -20,11 +20,11 @@ Tre componenti pubblici della homepage mostrano contenuti placeholder con `TODO 
 
 ## Punti coinvolti
 
-| File                                                                                            | TODO                                                         | Cosa serve                                                                                                                                                |
-| ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ | --------- | ------ | ---------- |
-| [src/components/home/CoupleIntro.tsx:16](../../src/components/home/CoupleIntro.tsx)             | "sostituire image+caption con 3 foto reali"                  | 3 foto coppia R+B in viaggio (orizzontali, ratio 4:3 o 16:10, formato `.webp` o `.avif`, larghezza min 1600px). Caption italiana 1-2 righe per ogni foto. |
-| [src/components/home/NewsletterFeature.tsx:17](../../src/components/home/NewsletterFeature.tsx) | "sostituire NEWSLETTER_ARCHIVE_PREVIEW con 3-5 numeri reali" | Lista 3-5 numeri pubblicati con: titolo, data, snippet 1 riga, link al numero archiviato (URL Brevo o sezione `/newsletter/archivio`).                    |
-| [src/components/home/PartnerLogosStrip.tsx:8](../../src/components/home/PartnerLogosStrip.tsx)  | "sostituire PARTNERS con 5+ partner reali quando shortlist"  | 5-7 logo partner reali con `name`, `slug`, `logoUrl` (SVG monocromo preferito), `category` (`hotel`                                                       | `food` | `outdoor` | `gear` | `travel`). |
+| File                                           | TODO                                                         | Cosa serve                                                                                                                                                |
+| ---------------------------------------------- | ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ | --------- | ------ | ---------- |
+| `src/components/home/CoupleIntro.tsx:16`       | "sostituire image+caption con 3 foto reali"                  | 3 foto coppia R+B in viaggio (orizzontali, ratio 4:3 o 16:10, formato `.webp` o `.avif`, larghezza min 1600px). Caption italiana 1-2 righe per ogni foto. |
+| `src/components/home/NewsletterFeature.tsx:17` | "sostituire NEWSLETTER_ARCHIVE_PREVIEW con 3-5 numeri reali" | Lista 3-5 numeri pubblicati con: titolo, data, snippet 1 riga, link al numero archiviato (URL Brevo o sezione `/newsletter/archivio`).                    |
+| `src/components/home/PartnerLogosStrip.tsx:8`  | "sostituire PARTNERS con 5+ partner reali quando shortlist"  | 5-7 logo partner reali con `name`, `slug`, `logoUrl` (SVG monocromo preferito), `category` (`hotel`                                                       | `food` | `outdoor` | `gear` | `travel`). |
 
 ## Impatto
 
@@ -89,9 +89,9 @@ Il bug non e chiuso: mancano ancora gli asset R+B definitivi e partner/newslette
 
 ## Riferimenti
 
-- [src/components/home/CoupleIntro.tsx](../../src/components/home/CoupleIntro.tsx)
-- [src/components/home/NewsletterFeature.tsx](../../src/components/home/NewsletterFeature.tsx)
-- [src/components/home/PartnerLogosStrip.tsx](../../src/components/home/PartnerLogosStrip.tsx)
+- `src/components/home/CoupleIntro.tsx`
+- `src/components/home/NewsletterFeature.tsx`
+- `src/components/home/PartnerLogosStrip.tsx`
 - [docs/10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT.md](../10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT.md)
 - [docs/10_Projects/PROJECT_RELEASE_READINESS.md](../10_Projects/PROJECT_RELEASE_READINESS.md)
 - [docs/MARKETING_OPERATIONS_HUB.md](../MARKETING_OPERATIONS_HUB.md) — sezione Partner Pipeline e Content Workflow
