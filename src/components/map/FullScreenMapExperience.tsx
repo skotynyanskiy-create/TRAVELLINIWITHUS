@@ -280,13 +280,17 @@ export default function FullScreenMapExperience() {
     <div className="mt-20 flex h-[calc(100dvh-80px)] w-full flex-col overflow-hidden bg-[#0a0705]">
       <header className="shrink-0 px-4 pb-3 pt-5 sm:px-8 sm:pb-4 sm:pt-6">
         <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent,#c85a32)]">
-          Mappa delle tracce
+          Mappa dei posti particolari
         </span>
         <h1 className="mt-1.5 font-serif text-2xl font-medium leading-tight text-white sm:text-3xl">
           Dove siamo stati davvero
         </h1>
+        {/* Il deck dichiara anche lo stato delle schede: promettere 40 posti
+            provati e aprirne uno vuoto e' la stessa frattura che il resto del
+            lavoro sta chiudendo. */}
         <p className="mt-1.5 hidden text-sm text-white/60 sm:block">
-          Ogni segno e un posto che abbiamo provato di persona. {allItems.length} in tutto.
+          {allItems.length} posti che abbiamo visitato di persona. Le schede si riempiono una alla
+          volta.
         </p>
       </header>
 

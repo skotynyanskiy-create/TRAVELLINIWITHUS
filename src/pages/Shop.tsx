@@ -120,7 +120,7 @@ function Shop() {
       <>
         <SEO
           title="Shop — guide e planner di viaggio"
-          description="In questa boutique condividiamo i nostri strumenti di viaggio curati. Al momento i prodotti sono in anteprima: iscriviti alla lista d'attesa per essere avvisato al lancio!"
+          description="Lo Shop non è ancora aperto: stiamo scrivendo il primo planner di viaggio. Qui trovi le anteprime e la lista d'attesa per sapere quando esce."
           canonical={`${SITE_URL}/shop`}
           breadcrumbs={[
             { name: 'Home', url: SITE_URL },
@@ -173,7 +173,7 @@ function Shop() {
           <DemoContentNotice
             className="mt-12"
             title="Shop in anteprima"
-            message="Le schede qui sotto rappresentano i prodotti e planner in lista d'attesa. Iscriviti alla newsletter in fondo per ricevere notifiche sul lancio ed anteprime gratuite."
+            message="Le schede qui sotto rappresentano i prodotti e planner in lista d'attesa. Iscriviti alla lista d'attesa per ricevere un avviso al lancio e le anteprime."
           />
 
           <div className="mt-12 flex flex-col gap-4 rounded-2xl border border-black/5 bg-white/60 p-4 shadow-xs backdrop-blur-md transition-all duration-300 hover:bg-white/80 md:flex-row md:items-center md:justify-between md:p-6">
@@ -303,7 +303,23 @@ function Shop() {
                 <div className="min-h-[360px] rounded-[var(--radius-lg)] bg-[var(--color-ink)]" />
               }
             >
-              <Newsletter variant="business" source="shop_waitlist_first_product" />
+              {/* La copy e' esplicita qui invece che nella variante `business`
+                  condivisa: il form diceva "Rimani vicino al progetto" mentre la
+                  sua source e' shop_waitlist_first_product, e chi arrivava per una
+                  lista d'attesa trovava una newsletter generica. */}
+              <Newsletter
+                variant="business"
+                source="shop_waitlist_first_product"
+                eyebrow="Lista d'attesa"
+                title="La lista d'attesa del primo planner."
+                description="Lasci la mail, ti scriviamo quando il planner è pronto e come averlo. Nient'altro."
+                bullets={[
+                  'Un avviso al rilascio, non prima.',
+                  'Anteprime delle pagine mentre le finiamo.',
+                  'Nessuna sequenza di vendita.',
+                ]}
+                ctaLabel="Entra nella lista d'attesa"
+              />
             </Suspense>
           </div>
 

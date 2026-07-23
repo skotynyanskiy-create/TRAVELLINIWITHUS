@@ -235,8 +235,8 @@ export default function Risorse() {
   return (
     <PageLayout>
       <SEO
-        title="Risorse di viaggio selezionate"
-        description="Strumenti, app, servizi e gear che Travelliniwithus usa o valuta con criterio per organizzare, vivere e raccontare meglio i viaggi."
+        title="App e attrezzatura che usiamo in viaggio"
+        description="Le app, i servizi e l'attrezzatura che usiamo o valutiamo in viaggio: a cosa serve ognuno, quando non serve e quali link sono in affiliazione."
         canonical={`${SITE_URL}/risorse`}
       />
       <JsonLd
@@ -256,10 +256,10 @@ export default function Risorse() {
         <div className="mt-8 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
           <div>
             <span className="mb-6 block text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
-              Travel toolkit
+              Prenotare, app, attrezzatura
             </span>
             <h1 className="text-display-1">
-              Strumenti scelti <span className="italic text-black/55">con criterio</span>
+              Cosa usiamo <span className="italic text-black/55">e quando serve</span>
             </h1>
             <p className="mt-8 max-w-2xl text-lg leading-relaxed text-black/68">
               Questa non è una pagina di link a caso. È una selezione editoriale di strumenti che
