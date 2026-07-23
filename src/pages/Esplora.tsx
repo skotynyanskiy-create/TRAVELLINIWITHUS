@@ -321,10 +321,13 @@ export default function Esplora() {
     }
   };
 
-  // Banner "anteprima editoriale" e noindex solo quando si usano demo E non ci
-  // sono ContentItem reali da mostrare. Con ContentItem reali la pagina è pubblica.
+  // Banner "anteprima editoriale" e noindex quando niente di cio' che mostriamo
+  // e' verificato. Attenzione al "reali": conta se i ContentItem sono veri, non
+  // se esistono — 40 item tutti isPlaceholder restano un'anteprima, e prima
+  // questa riga guardava .length, quindi la pagina si dichiarava pubblica.
+  const hasRealContentItems = CONTENT_ITEMS.some((item) => !item.isPlaceholder);
   const usingPreview =
-    CONTENT_ITEMS.length === 0 &&
+    !hasRealContentItems &&
     archiveItems.length > 0 &&
     archiveItems.some((item) => DEMO_ARCHIVE_SLUGS.includes(item.id));
   const active = hasAnyFilter(filters);
