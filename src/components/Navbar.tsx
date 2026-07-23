@@ -547,6 +547,7 @@ export default function Navbar() {
                       }`}
                     >
                       {item.name}
+                      <SurfaceBadge path={item.href?.split('?')[0] ?? ''} />
                     </Link>
                     <button
                       type="button"
@@ -583,6 +584,7 @@ export default function Navbar() {
                               >
                                 <span className="block font-serif text-xl text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]">
                                   {subLink.name}
+                                  <SurfaceBadge path={subLink.href.split('?')[0]} />
                                 </span>
                                 {subLink.description && (
                                   <span className="mt-1 block text-sm text-black/55">
@@ -599,6 +601,7 @@ export default function Navbar() {
                                 className="block text-xl text-[var(--color-ink)]/60 transition-colors hover:text-[var(--color-accent)]"
                               >
                                 {subLink.name}
+                                <SurfaceBadge path={subLink.href.split('?')[0]} />
                               </Link>
                             ))}
                       </motion.div>
@@ -614,6 +617,7 @@ export default function Navbar() {
                   }`}
                 >
                   {item.name}
+                  <SurfaceBadge path={item.href?.split('?')[0] ?? ''} />
                 </Link>
               )}
             </div>
