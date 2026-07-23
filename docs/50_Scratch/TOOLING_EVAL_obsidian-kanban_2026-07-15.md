@@ -11,6 +11,10 @@ tags:
 
 # Tooling Evaluation — Obsidian Kanban
 
+> **2026-07-23 — REJECTED / removed from stack.** Zero board nel vault; pipeline
+> coperta da Bases. Rimosso da `community-plugins.json` e
+> `scripts/install-obsidian-plugins.mjs`.
+
 Retroactive card, same context as [[TOOLING_EVAL_obsidian-dataview_2026-07-15]] —
 filed to close the documentation gap the 2026-07-15 workbench audit found.
 

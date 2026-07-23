@@ -1,5 +1,6 @@
 ---
 type: handoff
+area: content
 from: main-thread
 to: travellini-seo-conversion-strategist
 feature: promessa-sostanza
