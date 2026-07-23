@@ -104,6 +104,8 @@ export default function SEO({
         href={`${SITE_URL}/en${pathname === '/' ? '' : pathname}`}
       />
       <link rel="alternate" hrefLang="x-default" href={resolvedCanonical} />
+      <link rel="author" href={`${SITE_URL}/llms.txt`} type="text/plain" />
+
       {schemas.map((schema, i) => (
         <script key={`ld-${i}`} type="application/ld+json">
           {JSON.stringify(schema)}

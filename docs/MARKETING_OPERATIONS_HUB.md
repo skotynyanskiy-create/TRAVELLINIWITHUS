@@ -42,18 +42,18 @@ Implementazione tecnica completa al 2026-05-14. Sintesi in
 
 **Stato funnel (post-implementazione)**:
 
-| Funnel                      | Pre                     | Post (2026-05-14)                 | Attivo a regime                    |
-| --------------------------- | ----------------------- | --------------------------------- | ---------------------------------- |
-| BOFU GA4 + Meta tracking    | cieco                   | wired                             | dopo setup `RESEND_API_KEY`        |
-| Lead capture B2B            | tracking 0              | tracking + fallback localStorage  | live                               |
-| Welcome email automatica    | assente                 | template + trigger Resend         | dopo setup `RESEND_API_KEY`        |
-| Order confirmation email    | assente                 | template + trigger webhook        | dopo setup Stripe live             |
-| Lead magnet PDF             | inesistente             | 12 pagine A4 generato (23 KB)     | dopo compilazione 10 luoghi R+B    |
-| Landing bio IG/TikTok       | inesistente             | `/vieni-con-noi` standalone + UTM | dopo aggiornamento bio R+B         |
-| Content calendar            | inesistente             | 8 slot mensili documentati        | dopo compilazione destinazioni R+B |
-| Partner pipeline            | vuota                   | 5 categorie + outreach template   | dopo shortlist nomi R+B            |
-| Posizionamento couple-led   | non dichiarato sul sito | hero + caption + paragraph        | live                               |
-| Schema Person Rodrigo+Betta | assente                 | dedicato in `/chi-siamo`          | live (Google indexer entro 7gg)    |
+| Funnel                      | Pre                     | Post (2026-05-14)                | Attivo a regime                    |
+| --------------------------- | ----------------------- | -------------------------------- | ---------------------------------- |
+| BOFU GA4 + Meta tracking    | cieco                   | wired                            | dopo setup `RESEND_API_KEY`        |
+| Lead capture B2B            | tracking 0              | tracking + fallback localStorage | live                               |
+| Welcome email automatica    | assente                 | template + trigger Resend        | dopo setup `RESEND_API_KEY`        |
+| Order confirmation email    | assente                 | template + trigger webhook       | dopo setup Stripe live             |
+| Lead magnet PDF             | inesistente             | 12 pagine A4 generato (23 KB)    | dopo compilazione 10 luoghi R+B    |
+| Landing bio IG/TikTok       | hub pronto              | `/guida-in-regalo` + UTM (unica) | dopo aggiornamento bio R+B         |
+| Content calendar            | inesistente             | 8 slot mensili documentati       | dopo compilazione destinazioni R+B |
+| Partner pipeline            | vuota                   | 5 categorie + outreach template  | dopo shortlist nomi R+B            |
+| Posizionamento couple-led   | non dichiarato sul sito | hero + caption + paragraph       | live                               |
+| Schema Person Rodrigo+Betta | assente                 | dedicato in `/chi-siamo`         | live (Google indexer entro 7gg)    |
 
 ## Setup minimo per attivazione (R+B)
 
@@ -112,7 +112,7 @@ operativi step-by-step.
 Implementazione da audit pubblico:
 
 - `src/config/site.ts` ora contiene bio link proprietari, fonte metriche datata e proof pubbliche.
-- `/vieni-con-noi` include tre percorsi da link-in-bio: esplora, risorse, media kit.
+- `/guida-in-regalo` è l’unica landing lead/bio hub; `/vieni-con-noi` non esiste più come route.
 - `/media-kit`, `/collaborazioni` e `/press` dichiarano fonte dei numeri e mostrano proof pubbliche linkate.
 - `/risorse` separa click affiliati da click editoriali e usa `rel="sponsored"` solo sui link commerciali.
 - email welcome newsletter usa i dati social dalla config, non numeri hard-coded.

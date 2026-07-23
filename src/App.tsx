@@ -96,10 +96,6 @@ export default function App() {
                 <ScrollToTop />
                 <Suspense fallback={<PageLoader />}>
                   <Routes>
-                    <Route
-                      path="/vieni-con-noi"
-                      element={<Navigate to="/guida-in-regalo" replace />}
-                    />
                     <Route path="/iscrivi" element={<Navigate to="/guida-in-regalo" replace />} />
                     <Route
                       path="/italia-nascosta"

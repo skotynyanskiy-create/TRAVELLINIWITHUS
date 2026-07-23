@@ -76,12 +76,10 @@ registrata incondizionatamente.
 
 ### Fuori dal `Layout` (nessuna navbar/footer)
 
-| Rotta                              | Componente                                     | Note                              |
-| ---------------------------------- | ---------------------------------------------- | --------------------------------- |
-| `/vieni-con-noi`                   | `VieniConNoi`                                  | lazy — landing bio-link IG/TikTok |
-| `/iscrivi`                         | → redirect `/vieni-con-noi`                    |                                   |
-| `/v2`, `/atlante-lab`, `/sentiero` | → redirect `/`                                 | home sperimentali disattivate     |
-| `/manifesto`                       | `ManifestoPage` (`src/experience/controluce/`) | lazy — lab WebGL, noindex         |
+| Rotta                              | Componente                                     | Note                          |
+| ---------------------------------- | ---------------------------------------------- | ----------------------------- |
+| `/v2`, `/atlante-lab`, `/sentiero` | → redirect `/`                                 | home sperimentali disattivate |
+| `/manifesto`                       | `ManifestoPage` (`src/experience/controluce/`) | lazy — lab WebGL, noindex     |
 
 ### Dentro `<Layout />` (eager)
 
@@ -89,6 +87,8 @@ registrata incondizionatamente.
 | -------------------------------------------------------------------------------- | ---------------------------------- | ----------- | -------------------------------------------------------------------------------------- |
 | `/`                                                                              | `AtlanteHome`                      | lazy        | —                                                                                      |
 | `/atlante`                                                                       | → redirect `/`                     | —           | —                                                                                      |
+| `/guida-in-regalo`                                                               | `VieniConNoi`                      | lazy        | unica landing lead; private/noindex                                                    |
+| `/iscrivi` · `/italia-nascosta`                                                  | → redirect `/guida-in-regalo`      | —           | alias storici                                                                          |
 | `/esplora`                                                                       | `Esplora`                          | lazy        | —                                                                                      |
 | `/destinazione` · `/destinazione/:zoneSlug` · `/destinazione/:zoneSlug/:subSlug` | `Destinazione`                     | lazy        | —                                                                                      |
 | `/destinazioni` · `/esperienze` · `/blog`                                        | → redirect `/esplora`              | —           | —                                                                                      |
@@ -240,10 +240,10 @@ Divergenze già presenti oggi:
   `ALL_STATIC_APP_ROUTES`.
 - `/sentiero` è in `ALL_STATIC_APP_ROUTES` (200 ai bot) ma in `App.tsx` è un
   redirect a `/`.
-- La sitemap runtime di `server.ts` include `/vieni-con-noi`, `/itinerari` e le
-  sei landing `/destinazione/<regione>`; quella build-time le esclude
-  (`sitemap: false` per `/itinerari`, `REGION_LANDINGS_PUBLISHED = false`).
-  Le due sitemap non producono lo stesso set di URL.
+- La sitemap runtime (`src/server/seoRoutes.ts`) e quella build-time
+  (`generate-sitemap.js` via `surfaces.sitemapPaths()`) escludono entrambe
+  `/guida-in-regalo` (private/noindex). Restano divergenze su `/itinerari` e
+  landing `/destinazione/<regione>` (`REGION_LANDINGS_PUBLISHED = false`).
 - `server.ts` è l'ultimo residuo di `liteMode`: legge ancora `VITE_LITE_MODE` e
   con `true` risponde 404 su 14 prefissi (`LITE_DISABLED_PREFIXES`), mentre il
   client — dopo 29a2fb0, che ha cancellato `src/config/liteMode.ts` — registra e

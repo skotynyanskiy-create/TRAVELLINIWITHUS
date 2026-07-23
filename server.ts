@@ -27,6 +27,7 @@ import {
 } from './src/lib/email';
 import { SENTIERO_STAGES } from './src/experience/sentiero/sentieroData';
 import { DESTINATIONS, getDestinationUrl } from './src/config/destinations';
+import { createSeoRouter } from './src/server/seoRoutes';
 
 dotenv.config();
 
@@ -258,7 +259,7 @@ function isLiteDisabledPath(pathname: string): boolean {
 const ALL_STATIC_APP_ROUTES = [
   '/',
   '/sentiero',
-  '/vieni-con-noi',
+  '/guida-in-regalo',
   '/lead-magnet',
   '/iscrivi',
   '/esplora',
@@ -1040,7 +1041,7 @@ function injectProductMetaTags(html: string, product: ProductRecord, url: string
 
 // SSR meta per le rotte statiche indicizzabili. Le stringhe rispecchiano i <SEO>
 // delle pagine (non vanno reinventate: sono copy SEO italiano). Le rotte noindex
-// (/vieni-con-noi, /itinerari, /lead-magnet, preview) restano FUORI da qui.
+// (/guida-in-regalo, /itinerari, /lead-magnet, preview) restano FUORI da qui.
 const STATIC_ROUTE_META: Record<string, { title: string; description: string; ogImage?: string }> =
   {
     '/': {
@@ -1998,82 +1999,7 @@ async function startServer() {
     });
   });
 
-  app.get('/sitemap.xml', async (req, res) => {
-    const origin = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
-    const articles = await fetchAllArticles();
-
-    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
-    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
-
-    // Consolidamento Esplora 2026-05-15: /destinazioni, /esperienze, /guide
-    // ora redirigono a /esplora — escluse dalla sitemap canonical.
-    const staticRoutes = [
-      '',
-      '/vieni-con-noi',
-      '/esplora',
-      '/mappa',
-      '/itinerari',
-      '/risorse',
-      '/shop',
-      '/club',
-      '/collaborazioni',
-      '/media-kit',
-      '/contatti',
-      '/chi-siamo',
-      '/press',
-      '/strumenti',
-      '/destinazione/puglia',
-      '/destinazione/sicilia',
-      '/destinazione/sardegna',
-      '/destinazione/toscana',
-      '/destinazione/campania',
-      '/destinazione/trentino-alto-adige',
-      '/privacy',
-      '/cookie',
-      '/termini',
-      '/disclaimer',
-    ];
-    for (const route of staticRoutes) {
-      xml += `  <url>\n    <loc>${origin}${route}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>${route === '' ? '1.0' : '0.8'}</priority>\n  </url>\n`;
-    }
-
-    const now = Date.now();
-    for (const article of articles) {
-      const lastmod = article.date.includes('T') ? article.date.split('T')[0] : article.date;
-      const ageMs = now - new Date(article.date).getTime();
-      const ageDays = ageMs / (1000 * 60 * 60 * 24);
-      const priority = ageDays < 30 ? '0.9' : ageDays < 90 ? '0.7' : '0.5';
-      xml += `  <url>\n    <loc>${origin}/articolo/${article.slug}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>${priority}</priority>\n  </url>\n`;
-    }
-
-    xml += '</urlset>';
-    res.header('Content-Type', 'application/xml');
-    res.send(xml);
-  });
-
-  app.get('/rss.xml', async (req, res) => {
-    const origin = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
-    const articles = await fetchAllArticles();
-
-    let xml = '<?xml version="1.0" encoding="UTF-8" ?>\n';
-    xml += '<rss version="2.0">\n<channel>\n';
-    xml += '  <title>Travelliniwithus</title>\n';
-    xml += `  <link>${origin}</link>\n`;
-    xml += '  <description>Travel blog di Rodrigo &amp; Betta</description>\n';
-
-    for (const article of articles) {
-      xml += '  <item>\n';
-      xml += `    <title>${escapeHtml(article.title)}</title>\n`;
-      xml += `    <link>${origin}/articolo/${article.slug}</link>\n`;
-      xml += `    <description>${escapeHtml(article.description)}</description>\n`;
-      xml += `    <pubDate>${new Date(article.date).toUTCString()}</pubDate>\n`;
-      xml += '  </item>\n';
-    }
-
-    xml += '</channel>\n</rss>';
-    res.header('Content-Type', 'application/xml');
-    res.send(xml);
-  });
+  app.use(createSeoRouter(fetchAllArticles, escapeHtml));
 
   // Legacy alias: la sezione editoriale e' /guide, ma vecchi link social
   // possono ancora puntare a /articoli — redirect 301 verso la rotta corretta.

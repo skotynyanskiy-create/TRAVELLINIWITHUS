@@ -216,9 +216,9 @@ async function buildSitemap() {
     `Sitemap generated. Static: ${staticRoutes.length + discoveryRoutes.length}, regions: ${regionLandingSlugs.length}, filters: ${filterRoutes.length}, posto: ${indexablePosti.length}/${contentSeed.length} reali, dynamic: ${dynamicCount}.`
   );
 
-  // robots.txt: keep public routes crawlable (incl. /shop, /vieni-con-noi,
-  // /lead-magnet which use HTML <meta name="robots" noindex> on demo/preview
-  // pages). Blocking via robots.txt PREVENTS Googlebot from reading noindex,
+  // robots.txt: keep public routes crawlable (incl. /shop, /lead-magnet,
+  // /guida-in-regalo which use HTML <meta name="robots" noindex> on private/
+  // preview pages). Blocking via robots.txt PREVENTS Googlebot from reading noindex,
   // so noindex is the canonical mechanism.
   const robotsTxt = `User-agent: *
 Allow: /

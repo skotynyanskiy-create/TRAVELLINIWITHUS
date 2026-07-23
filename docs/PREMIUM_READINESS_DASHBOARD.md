@@ -19,7 +19,7 @@ Dashboard operativa per portare Travelliniwithus a standard premium completo.
 
 | Area                       |                          Stato | Note                                                                                                  |
 | -------------------------- | -----------------------------: | ----------------------------------------------------------------------------------------------------- |
-| Routing pubblico           |                          fixed | `/vieni-con-noi`, `/lead-magnet`, `/iscrivi` rispondono 200.                                          |
+| Routing pubblico           |                          fixed | `/guida-in-regalo` (200), `/lead-magnet`, `/iscrivi`→guida; `/vieni-con-noi` = 404.                   |
 | Broken images              |                          fixed | Sweep browser su route critiche: 0 immagini rotte.                                                    |
 | Stripe audit               |                          fixed | `npm run audit:stripe` PASS.                                                                          |
 | Firestore orders           | fixed-pending-integration-test | Create pubblica bloccata; `audit:revenue` verifica contratto server-side.                             |

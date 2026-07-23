@@ -50,7 +50,7 @@ export default function CleanCuratedHero() {
                 to="/guida-in-regalo"
                 trackingId="clean_hero_biohub"
               >
-                Vieni con noi
+                Guida in regalo
                 <ArrowRight size={16} className="ml-1.5" />
               </Button>
             </div>

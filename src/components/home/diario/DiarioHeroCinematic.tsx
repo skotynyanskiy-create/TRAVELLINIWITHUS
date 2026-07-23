@@ -61,7 +61,7 @@ export default function DiarioHeroCinematic() {
                 trackingId="diario_clean_hero_biohub"
                 className="border-neutral-300 bg-white text-neutral-900 hover:border-neutral-900 px-8 py-4 text-xs font-bold uppercase tracking-widest"
               >
-                Vieni con noi
+                Guida in regalo
                 <ArrowRight size={16} className="ml-2" />
               </Button>
             </MagneticWrapper>
