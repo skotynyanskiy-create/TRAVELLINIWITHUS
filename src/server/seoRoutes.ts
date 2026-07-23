@@ -28,7 +28,6 @@ export function createSeoRouter(
       '/contatti',
       '/chi-siamo',
       '/press',
-      '/strumenti',
       '/destinazione/puglia',
       '/destinazione/sicilia',
       '/destinazione/sardegna',

@@ -33,7 +33,6 @@ export const SURFACES: Surface[] = [
   { path: '/media-kit', state: 'live' },
   { path: '/press', state: 'live' },
   { path: '/contatti', state: 'live' },
-  { path: '/strumenti', state: 'live' },
   { path: '/risorse', state: 'live' },
   { path: '/club', state: 'live' },
   { path: '/posto/:slug', state: 'live' },

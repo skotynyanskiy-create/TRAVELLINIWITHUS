@@ -143,6 +143,10 @@ export default function App() {
                       <Route path="itinerari/:slug" element={<Itinerario />} />
                       <Route path="guide/:slug" element={<Guida />} />
                       <Route path="quiz" element={<Navigate to="/esplora" replace />} />
+                      {/* /strumenti: redirect permanente a /esplora (owner 2026-07-23,
+                          TASK-034). La pagina Strumenti e il cluster itinerario sono
+                          stati rimossi come codice orfano; il redirect resta per non
+                          rompere link esterni/bookmark, ma /strumenti esce dalla sitemap. */}
                       <Route path="strumenti" element={<Navigate to="/esplora" replace />} />
                       <Route path="preferiti" element={<Preferiti />} />
                       <Route path="risorse" element={<Risorse />} />

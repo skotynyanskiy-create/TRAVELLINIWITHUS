@@ -4,11 +4,13 @@ import { sitemapPaths } from './surfaces';
 /**
  * Guardia di non-regressione: i 15 URL gia in sitemap al 2026-07-22 devono
  * restarci, tranne quelli che l'owner ha deciso di togliere.
+ * 2026-07-23 (TASK-034): /strumenti rimosso — la pagina e il cluster itinerario
+ * erano codice orfano dietro un redirect a /esplora; l'owner ha reso il redirect
+ * definitivo, quindi l'URL esce dalla sitemap (restano 14).
  */
 const GIA_IN_SITEMAP = [
   '/',
   '/esplora',
-  '/strumenti',
   '/press',
   '/mappa',
   '/chi-siamo',

@@ -42,7 +42,6 @@ const ROLE_BY_PATH = new Map([
   ['/', 'home'],
   ['/esplora', 'discovery'],
   ['/destinazione', 'discovery'],
-  ['/strumenti', 'tools'],
   ['/press', 'press'],
   ['/mappa', 'map'],
   ['/chi-siamo', 'brand'],
@@ -66,7 +65,6 @@ const PRIORITY_BY_ROLE = {
   press: '0.6',
   contact: '0.6',
   map: '0.6',
-  tools: '0.6',
   waitlist: '0.5',
   legal: '0.3',
 };

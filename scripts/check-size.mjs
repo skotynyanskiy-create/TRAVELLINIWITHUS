@@ -27,18 +27,12 @@ const budgets = [
   { name: 'firebase-firestore-lazy', match: /^firebase-firestore-/, maxKb: 430, maxGzipKb: 105 },
   { name: 'mapbox-lazy-route', match: /^mapbox-/, maxKb: 1850 },
   { name: 'maplibre-gl-lazy-route', match: /^maplibre-gl-/, maxKb: 1100 },
-  // optional: /strumenti e' un redirect a /esplora (src/App.tsx:146), quindi
-  // Strumenti.tsx -> ItineraryBuilder -> import('@react-pdf/renderer') non e'
-  // piu nel grafo dei moduli e il chunk non viene emesso. Il budget resta
-  // dichiarato: se l'export PDF torna lato client, il limite si riapplica da
-  // solo. Assente != regressione, ma solo per questa voce.
-  {
-    name: 'react-pdf-lazy-export',
-    match: /^react-pdf\.browser-/,
-    maxKb: 1650,
-    maxGzipKb: 560,
-    optional: true,
-  },
+  // Nota: nessun budget react-pdf lato client. L'unico import client di
+  // @react-pdf/renderer viveva in ItineraryBuilder (pagina /strumenti), rimosso
+  // come codice orfano il 2026-07-23 (TASK-034, redirect reso definitivo). La
+  // dipendenza resta solo per gli script build-time generate-media-kit /
+  // generate-lead-magnet, che non emettono chunk nel bundle Vite. Se l'export
+  // PDF torna lato client, ridichiarare qui il budget react-pdf.browser.
   { name: 'charts-lazy-route', match: /^charts-/, maxKb: 410 },
   { name: 'home-route', match: /^AtlanteHome-/, maxKb: 110 },
   { name: 'article-route', match: /^Articolo-/, maxKb: 90 },
