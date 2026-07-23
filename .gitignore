@@ -210,11 +210,14 @@ storybook-static
 # per le skill esterne). higgsfield-hub e' nostra, resta tracciata.
 .agents/skills/higgsfield-*/
 .claude/skills/higgsfield-*/
+.cursor/skills/higgsfield-*/
+.gemini/skills/higgsfield-*/
+.github/skills/higgsfield-*/
 !.agents/skills/higgsfield-hub/
 !.claude/skills/higgsfield-hub/
+!.cursor/skills/higgsfield-hub/
+!.gemini/skills/higgsfield-hub/
+!.github/skills/higgsfield-hub/
 
 # Higgsfield — staging asset generati (ASSET_STRATEGY §4).
-# concepts/ e rejected/ sono scarti pesanti, non storia di progetto.
-# approved/, prompts/ e metadata/ restano tracciati: sono la prova di provenienza.
-generated/concepts/
-generated/rejected/
+generated/
