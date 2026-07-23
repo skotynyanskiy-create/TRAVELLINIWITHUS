@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { CONTACTS } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
+import SurfaceBadge from './SurfaceBadge';
 // InstagramGrid e ora renderizzata da Home (sezione #9). Rimossa qui per evitare
 // duplicato DOM. Per altre pagine puo essere reinserita on-demand.
 
@@ -121,6 +122,7 @@ export default function Footer() {
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
                       {navigation.itinerariesLabel}
+                      <SurfaceBadge path="/itinerari" />
                     </Link>
                   </li>
                   <li>
@@ -137,6 +139,7 @@ export default function Footer() {
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
                       {navigation.shopLabel}
+                      <SurfaceBadge path="/shop" />
                     </Link>
                   </li>
                   <li>

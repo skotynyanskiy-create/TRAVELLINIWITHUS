@@ -22,6 +22,7 @@ import { siteContentDefaults } from '../config/siteContent';
 import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
 import { useSiteContent } from '../hooks/useSiteContent';
+import SurfaceBadge from './SurfaceBadge';
 
 const SearchModal = lazy(() => import('./SearchModal'));
 
@@ -248,6 +249,7 @@ export default function Navbar() {
                   }`}
                 >
                   {item.name}
+                  <SurfaceBadge path={item.href?.split('?')[0] ?? ''} />
                   {(item.subLinks || item.primaryLinks) && (
                     <ChevronDown size={12} className="opacity-50" />
                   )}
@@ -355,6 +357,7 @@ export default function Navbar() {
                           }`}
                         >
                           {subLink.name}
+                          <SurfaceBadge path={subLink.href.split('?')[0]} />
                         </Link>
                       ))}
                     </div>
