@@ -175,14 +175,14 @@ Pubblicazione lite su `travelliniwithus.it`: 5 sezioni WIP nascoste via feature 
 
 **Componenti OFF in lite:** AiAssistant (demo), ExitIntentPopup, HomeDiscoveryFinder, MonetizationTeaser, InstagramGrid, HomeLeadMagnet (sezione home).
 
-**Riattivazione sezione per sezione:**
-
-1. Rimuovere il prefisso da `LITE_DISABLED_ROUTES` in `src/config/liteMode.ts`
-2. Rimuovere lo stesso prefisso da `LITE_DISABLED_PREFIXES` in `server.ts`
-3. Rimuovere lo stesso da `LITE_DISABLED_PREFIXES` in `scripts/generate-sitemap.js`
-4. `npm run build && firebase deploy --only hosting`
-
-**Disattivazione lite totale:** `VITE_LITE_MODE=false` in env, rebuild.
+> **Procedura superata (2026-07-23).** `liteMode` è andato in pensione: 29a2fb0
+> ha cancellato `src/config/liteMode.ts` e ogni gate client, e la copia di
+> `LITE_DISABLED_PREFIXES` in `scripts/generate-sitemap.js` non esiste più — i
+> passi 1 e 3 di questa riattivazione puntavano a codice che non c'è. Le sezioni
+> elencate sopra sono online e raggiungibili. L'ultimo lettore di
+> `VITE_LITE_MODE` è `server.ts`: la rimozione è approvata e in attesa di
+> sblocco. Per nascondere una superficie oggi si usa il registro in
+> `src/config/surfaces.ts`, non un flag d'ambiente.
 
 **Stato:** typecheck verde, build prod OK (29s), 11/11 status code corretti (200 attive / 404 disabilitate), browser smoke test PASS (1 round con 2 dead CTA + 1 round con 6 link residui — entrambi corretti).
 

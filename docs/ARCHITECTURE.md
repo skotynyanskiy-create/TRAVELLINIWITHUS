@@ -16,9 +16,8 @@ pianificata. Ogni affermazione è derivata leggendo i file citati. Se una nota d
 progetto contraddice questo documento, vince il codice.
 
 Fonti lette: `src/App.tsx`, `server.ts`, `vite.config.ts`, `package.json`,
-`src/config/liteMode.ts`, `src/components/ProtectedRoute.tsx`,
-`scripts/public-route-manifest.js`, `scripts/generate-sitemap.js`,
-`src/context/`, `src/lib/`, `src/services/`.
+`src/components/ProtectedRoute.tsx`, `scripts/public-route-manifest.js`,
+`scripts/generate-sitemap.js`, `src/context/`, `src/lib/`, `src/services/`.
 
 ---
 
@@ -72,9 +71,8 @@ in produzione.
 
 ## 2. Mappa delle rotte (`src/App.tsx`)
 
-`LITE_MODE` = `import.meta.env.VITE_LITE_MODE === 'true'`
-(`src/config/liteMode.ts`). Le rotte marcate _lite-gated_ **non vengono proprio
-registrate** quando è attivo.
+Dal commit 29a2fb0 il client non ha più gate di rotta: ogni rotta elencata qui è
+registrata incondizionatamente.
 
 ### Fuori dal `Layout` (nessuna navbar/footer)
 
@@ -91,27 +89,27 @@ registrate** quando è attivo.
 | -------------------------------------------------------------------------------- | ---------------------------------- | ----------- | -------------------------------------------------------------------------------------- |
 | `/`                                                                              | `AtlanteHome`                      | lazy        | —                                                                                      |
 | `/atlante`                                                                       | → redirect `/`                     | —           | —                                                                                      |
-| `/esplora`                                                                       | `Esplora`                          | lazy        | lite-gated                                                                             |
+| `/esplora`                                                                       | `Esplora`                          | lazy        | —                                                                                      |
 | `/destinazione` · `/destinazione/:zoneSlug` · `/destinazione/:zoneSlug/:subSlug` | `Destinazione`                     | lazy        | —                                                                                      |
-| `/destinazioni` · `/esperienze` · `/blog`                                        | → redirect `/esplora`              | —           | lite-gated                                                                             |
-| `/guide`                                                                         | → redirect `/esplora?format=guida` | —           | lite-gated                                                                             |
+| `/destinazioni` · `/esperienze` · `/blog`                                        | → redirect `/esplora`              | —           | —                                                                                      |
+| `/guide`                                                                         | → redirect `/esplora?format=guida` | —           | —                                                                                      |
 | `/chi-siamo`                                                                     | `ChiSiamo`                         | lazy        | —                                                                                      |
 | `/collaborazioni`                                                                | `Collaborazioni`                   | lazy        | —                                                                                      |
 | `/media-kit`                                                                     | `MediaKit`                         | lazy        | —                                                                                      |
 | `/press`                                                                         | `Press`                            | lazy        | —                                                                                      |
 | `/contatti`                                                                      | `Contatti`                         | lazy        | —                                                                                      |
 | `/articolo/:slug`                                                                | `Articolo`                         | lazy        | —                                                                                      |
-| `/itinerari`                                                                     | `Itinerari`                        | lazy        | lite-gated                                                                             |
-| `/itinerari/compare`                                                             | `ItinerariCompare`                 | lazy        | lite-gated                                                                             |
-| `/itinerari/:slug`                                                               | `Itinerario`                       | lazy        | lite-gated                                                                             |
+| `/itinerari`                                                                     | `Itinerari`                        | lazy        | —                                                                                      |
+| `/itinerari/compare`                                                             | `ItinerariCompare`                 | lazy        | —                                                                                      |
+| `/itinerari/:slug`                                                               | `Itinerario`                       | lazy        | —                                                                                      |
 | `/guide/:slug`                                                                   | `Guida`                            | lazy        | —                                                                                      |
-| `/quiz`                                                                          | → redirect `/esplora`              | —           | lite-gated                                                                             |
+| `/quiz`                                                                          | → redirect `/esplora`              | —           | —                                                                                      |
 | `/strumenti`                                                                     | `Strumenti`                        | lazy        | —                                                                                      |
-| `/preferiti`                                                                     | `Preferiti`                        | lazy        | lite-gated                                                                             |
+| `/preferiti`                                                                     | `Preferiti`                        | lazy        | —                                                                                      |
 | `/risorse`                                                                       | `Risorse`                          | lazy        | —                                                                                      |
-| `/shop`                                                                          | `Shop`                             | lazy        | lite-gated                                                                             |
-| `/shop/:slug`                                                                    | `ProductPage`                      | lazy        | lite-gated                                                                             |
-| `/club`                                                                          | `Club`                             | lazy        | lite-gated                                                                             |
+| `/shop`                                                                          | `Shop`                             | lazy        | —                                                                                      |
+| `/shop/:slug`                                                                    | `ProductPage`                      | lazy        | —                                                                                      |
+| `/club`                                                                          | `Club`                             | lazy        | —                                                                                      |
 | `/posto/:slug`                                                                   | `Posto`                            | lazy        | —                                                                                      |
 | `/mappa`                                                                         | `Mappa`                            | **eager**   | shell editoriale eager per rendere subito l'H1; MapLibre resta lazy dentro `Mappa.tsx` |
 | `/_dev/diario-preview`                                                           | `DiarioPreview`                    | lazy        | **solo `import.meta.env.DEV`** — mai registrata in produzione                          |
@@ -246,10 +244,12 @@ Divergenze già presenti oggi:
   sei landing `/destinazione/<regione>`; quella build-time le esclude
   (`sitemap: false` per `/itinerari`, `REGION_LANDINGS_PUBLISHED = false`).
   Le due sitemap non producono lo stesso set di URL.
-- `src/config/liteMode.ts` elenca `/strumenti`, `/press`, `/risorse`,
-  `/lead-magnet` fra le rotte lite-disabled e `server.ts` le tratta come 404 in
-  LITE_MODE, ma in `App.tsx` quelle rotte sono registrate **senza** guardia
-  `!LITE_MODE`. In LITE_MODE il client le renderizza e il server risponde 404.
+- `server.ts` è l'ultimo residuo di `liteMode`: legge ancora `VITE_LITE_MODE` e
+  con `true` risponde 404 su 14 prefissi (`LITE_DISABLED_PREFIXES`), mentre il
+  client — dopo 29a2fb0, che ha cancellato `src/config/liteMode.ts` — registra e
+  linka quelle stesse rotte incondizionatamente. Oggi il flag è `false`, quindi
+  la divergenza resta latente; la rimozione da `server.ts` è approvata e in
+  attesa di sblocco.
 
 Costo: ogni nuova pagina va aggiunta in quattro posti diversi, e nulla lo verifica.
 
