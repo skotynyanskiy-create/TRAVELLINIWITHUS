@@ -158,6 +158,16 @@ function Shop() {
             </div>
           </div>
 
+          <div className="mt-12">
+            <Suspense
+              fallback={
+                <div className="min-h-[360px] rounded-[var(--radius-lg)] bg-[var(--color-sand)]" />
+              }
+            >
+              <Newsletter source="shop_waitlist" />
+            </Suspense>
+          </div>
+
           <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-3">
             {shopPrinciples.map((item) => (
               <div key={item.title} className="border-t border-black/10 pt-7">
