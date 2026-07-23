@@ -43,6 +43,21 @@ meraviglie vere`.
 **Verdetto slice `/mappa`: PASS locale.** Lo stato release complessivo resta
 subordinato ai blocker sicurezza/owner gia registrati in questa nota.
 
+> **Superato il 2026-07-22.** Questo gate certificava la mappa editoriale
+> (`MapboxWorldMap` + `Mappa.css`), sostituita nel frattempo dall'esperienza
+> full-screen `FullScreenMapExperience`. Nella sostituzione l'H1 era andato
+> perso — la riga «un H1, zero overflow» qui sopra descriveva una pagina che
+> non esisteva piu'. La testata editoriale e' stata reintrodotta (commit
+> `b8273bd`) e la mappa vecchia cancellata perche' morta con `HomeLegacy`
+> (commit `9affb15`, ripescabile da git).
+>
+> Rimisurato sulla nuova slice, 7 viewport da 375x667 a 1440x900, con elenco,
+> pannello filtri e scheda aperti dove la larghezza lo consente: un H1 ovunque,
+> zero collisioni fra testata, barra, pannello, elenco e scheda, controlli zoom
+> e attribuzione OSM sempre raggiungibili, nessun overflow orizzontale.
+> Restano da rifare le misure di performance e l'audit axe, che questo gate
+> copriva e che la nuova slice non ha ancora ripetuto.
+
 ## Homepage cinematografica — gate 2026-07-18
 
 Scope: redesign della sola homepage `/`, direzione **Il montaggio delle tracce**.
