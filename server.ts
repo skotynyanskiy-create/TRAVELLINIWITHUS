@@ -1196,6 +1196,17 @@ async function startServer() {
     process.exit(1);
   }
 
+  // Pagamenti: senza STRIPE_WEBHOOK_SECRET in produzione ogni evento webhook
+  // cade nel ramo 400 (server.ts:1303) e gli ordini pagati non vengono mai
+  // registrati. Stripe ritenta per 3 giorni, poi rinuncia. Fail-fast all'avvio,
+  // come per APP_URL.
+  if (isProd && !process.env.STRIPE_WEBHOOK_SECRET) {
+    console.error(
+      '[startup] STRIPE_WEBHOOK_SECRET non impostata in produzione. Gli ordini pagati Stripe verrebbero rifiutati e persi. Avvio interrotto.'
+    );
+    process.exit(1);
+  }
+
   const cspProd =
     "default-src 'self'; " +
     "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://js.stripe.com https://m.stripe.network https://connect.facebook.net https://www.facebook.com https://apis.google.com https://www.googletagmanager.com https://www.google-analytics.com; " +

@@ -159,20 +159,21 @@ I report Lighthouse eseguiti sulla build compilata locale `dist/` `[LIGHTHOUSE]`
   - `server.ts:1264-1292`: il webhook è escluso dal `generalApiLimiter`, così un burst di retry non viene throttlato
 - **Verifica**: `e2e/stripe-webhook-signature.spec.ts`, 5 test verdi — richiesta senza header, firma malformata, e **firma ben formata prodotta con un secret arbitrario** (il caso che conta) restituiscono tutte **HTTP 400**; `received` non compare mai in una risposta non firmata; 120 richieste consecutive non producono un solo 429. Guardie statiche aggiunte in `scripts/check-stripe.mjs` su raw body, idempotenza e documentazione del secret (`npm run audit:stripe` → 13 PASS / 0 FAIL).
 
-### [AUDIT-008] Nessun fail-fast se `STRIPE_WEBHOOK_SECRET` manca in produzione
+### [AUDIT-008] Nessun fail-fast se `STRIPE_WEBHOOK_SECRET` manca in produzione — **RISOLTO 2026-07-23**
 
-- **Gravità**: **P1 (Sicurezza Pagamenti)** | **Area**: Payments / Startup Config `[FILE]`
-- **Evidenza**: `server.ts:1193-1198` interrompe l'avvio in produzione se manca `APP_URL`, ma non esiste il controllo equivalente per `STRIPE_WEBHOOK_SECRET`. Con il secret assente o errato il server parte normalmente, il checkout funziona e **il cliente paga**, ma `server.ts:1303` respinge ogni evento con 400: Stripe ritenta per 3 giorni e poi rinuncia. Risultato: nessun ordine in Firestore, nessuna email di conferma, nessun allarme — i 400 sono indistinguibili da un tentativo di forgiatura respinto.
-- **Intervento proposto** (mirror di `:1193-1198`, da applicare in `startServer()` subito dopo il controllo `APP_URL`):
+- **Gravità**: **P1 (Sicurezza Pagamenti)** → **CLOSED** | **Area**: Payments / Startup Config `[RUNTIME]`
+- **Causa**: il check di avvio su `APP_URL` (`server.ts`) non aveva l'equivalente per `STRIPE_WEBHOOK_SECRET`. Con il secret assente o errato il server partiva, il checkout funzionava e **il cliente pagava**, ma il webhook respingeva ogni evento con 400: Stripe ritentava per 3 giorni e poi rinunciava. Risultato: nessun ordine in Firestore, nessuna email di conferma, nessun allarme — i 400 indistinguibili da un tentativo di forgiatura respinto.
+- **Fix applicato** — `server.ts`, gemello del check `APP_URL`, subito dopo di esso:
   ```ts
   if (isProd && !process.env.STRIPE_WEBHOOK_SECRET) {
     console.error(
-      '[startup] STRIPE_WEBHOOK_SECRET non impostata in produzione. Gli ordini pagati non verrebbero mai registrati. Avvio interrotto.'
+      '[startup] STRIPE_WEBHOOK_SECRET non impostata in produzione. Gli ordini pagati Stripe verrebbero rifiutati e persi. Avvio interrotto.'
     );
     process.exit(1);
   }
   ```
-- **Bloccato**: `server.ts` è file ad alto rischio (`Edit(server.ts)` è in `deny` in `.claude/settings.json`). Richiede `travellini-backend-engineer` e conferma esplicita dell'owner. Tracciato come `TASK-033`.
+- **Governance**: `server.ts` è protetto da due guardie indipendenti — il `deny` in `.claude/settings.json` **e** l'hook `scripts/hooks/config_protection.py`. L'owner ha tolto il deny, ma l'hook (per design) continua a bloccare ogni edit del file da parte dell'agente. La modifica è stata quindi **applicata dall'owner nel proprio editor**; nessuna guardia è stata disattivata. Il fail-fast va reso a `travellini-backend-engineer` per future modifiche.
+- **Verifica** (runtime): `NODE_ENV=production` + `APP_URL` valorizzata + secret **vuoto** → stampa il messaggio ed esce con **codice 1** prima di bindare la porta; con secret **presente** → il server parte regolarmente (`Server running on :3999`); in dev non scatta. `npm run typecheck` verde. Guardia anti-regressione aggiunta in `scripts/check-stripe.mjs` (`audit:stripe` → 14 PASS / 0 FAIL).
 
 ### [AUDIT-009] Il gate `npm run predeploy` non era mai stato eseguito — **RISOLTO 2026-07-23**
 

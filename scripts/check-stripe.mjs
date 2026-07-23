@@ -55,6 +55,17 @@ expectContains(
   'Stripe webhook signature verification is missing.'
 );
 
+// Senza il secret in produzione ogni evento cade nel ramo 400 e gli ordini
+// pagati non vengono mai registrati, in silenzio. Fail-fast all'avvio, gemello
+// del check APP_URL. Senza questa guardia il fail-fast potrebbe sparire da
+// server.ts senza che nessuno se ne accorga (TASK-033 / AUDIT-008).
+expectContains(
+  serverContent,
+  'isProd && !process.env.STRIPE_WEBHOOK_SECRET',
+  'Server fails fast when STRIPE_WEBHOOK_SECRET is missing in production.',
+  'Missing production fail-fast for STRIPE_WEBHOOK_SECRET; paid orders would be lost silently.'
+);
+
 // Il raw body e' il presupposto della verifica di firma: se qualcuno montasse
 // express.json prima di questa route, constructEvent fallirebbe su OGNI evento
 // e gli ordini sparirebbero in silenzio.
