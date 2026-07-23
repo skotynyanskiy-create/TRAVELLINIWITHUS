@@ -38,13 +38,11 @@ const ChiSiamo = lazy(() => import('./pages/ChiSiamo'));
 const Collaborazioni = lazy(() => import('./pages/Collaborazioni'));
 const Contatti = lazy(() => import('./pages/Contatti'));
 const MediaKit = lazy(() => import('./pages/MediaKit'));
-const Press = lazy(() => import('./pages/Press'));
 const Articolo = lazy(() => import('./pages/Articolo'));
 const Itinerari = lazy(() => import('./pages/Itinerari'));
 const ItinerariCompare = lazy(() => import('./pages/ItinerariCompare'));
 const Itinerario = lazy(() => import('./pages/Itinerario'));
 const Guida = lazy(() => import('./pages/Guida'));
-const Strumenti = lazy(() => import('./pages/Strumenti'));
 const Preferiti = lazy(() => import('./pages/Preferiti'));
 const Risorse = lazy(() => import('./pages/Risorse'));
 const Shop = lazy(() => import('./pages/Shop'));
@@ -98,9 +96,15 @@ export default function App() {
                 <ScrollToTop />
                 <Suspense fallback={<PageLoader />}>
                   <Routes>
-                    {/* Standalone landings (no navbar/footer) — bio link IG/TikTok */}
-                    <Route path="/vieni-con-noi" element={<VieniConNoi />} />
-                    <Route path="/iscrivi" element={<Navigate to="/vieni-con-noi" replace />} />
+                    <Route
+                      path="/vieni-con-noi"
+                      element={<Navigate to="/guida-in-regalo" replace />}
+                    />
+                    <Route path="/iscrivi" element={<Navigate to="/guida-in-regalo" replace />} />
+                    <Route
+                      path="/italia-nascosta"
+                      element={<Navigate to="/guida-in-regalo" replace />}
+                    />
                     {/* Cutover 2026-07-04: la home è "Atlante Vivo". Le home sperimentali
                         (Sentiero /, V2, AtlanteLab, anteprima /atlante) sono disattivate →
                         redirect sicuro, codice conservato in repo/git per recupero. */}
@@ -112,6 +116,7 @@ export default function App() {
 
                     <Route path="/" element={<Layout />}>
                       <Route index element={<AtlanteHome />} />
+                      <Route path="guida-in-regalo" element={<VieniConNoi />} />
                       <Route path="atlante" element={<Navigate to="/" replace />} />
                       <Route path="esplora" element={<Esplora />} />
                       {/* Spina gerarchica: /destinazione (hub tutte le zone),
@@ -134,7 +139,7 @@ export default function App() {
                       <Route path="chi-siamo" element={<ChiSiamo />} />
                       <Route path="collaborazioni" element={<Collaborazioni />} />
                       <Route path="media-kit" element={<MediaKit />} />
-                      <Route path="press" element={<Press />} />
+                      <Route path="press" element={<Navigate to="/collaborazioni" replace />} />
                       <Route path="contatti" element={<Contatti />} />
                       <Route path="articolo/:slug" element={<Articolo />} />
                       <Route path="itinerari" element={<Itinerari />} />
@@ -142,7 +147,7 @@ export default function App() {
                       <Route path="itinerari/:slug" element={<Itinerario />} />
                       <Route path="guide/:slug" element={<Guida />} />
                       <Route path="quiz" element={<Navigate to="/esplora" replace />} />
-                      <Route path="strumenti" element={<Strumenti />} />
+                      <Route path="strumenti" element={<Navigate to="/esplora" replace />} />
                       <Route path="preferiti" element={<Preferiti />} />
                       <Route path="risorse" element={<Risorse />} />
                       <Route path="shop" element={<Shop />} />
@@ -150,11 +155,11 @@ export default function App() {
                       <Route path="club" element={<Club />} />
                       <Route path="posto/:slug" element={<Posto />} />
                       <Route path="mappa" element={<Mappa />} />
-                      {/* Dev-only: variante Diario in isolamento, fixture Burton Juice.
-                          Mai registrata in produzione (import.meta.env.DEV → false, chunk
-                          mai fetchato), non in nav, non indicizzabile. */}
                       {import.meta.env.DEV && (
-                        <Route path="_dev/diario-preview" element={<DiarioPreview />} />
+                        <>
+                          <Route path="diario-preview" element={<DiarioPreview />} />
+                          <Route path="_dev/diario-preview" element={<DiarioPreview />} />
+                        </>
                       )}
                       <Route path="account/acquisti" element={<MieiAcquisti />} />
                       <Route path="lead-magnet" element={<LeadMagnet />} />

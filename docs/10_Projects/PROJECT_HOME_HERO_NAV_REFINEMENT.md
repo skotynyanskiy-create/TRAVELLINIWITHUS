@@ -447,3 +447,47 @@ su asset AI riciclati).
 - [[OBSIDIAN_DASHBOARD]]
 - [[TRAVELLINIWITHUS_EXECUTION_PLAN]]
 - [[AGENT_WORKFLOWS]]
+
+## Semplificazione navbar editoriale — 2026-07-23
+
+- Ridotte le voci B2C a due assi distinti: `Mete` per la navigazione geografica e `Guide e racconti` per la navigazione editoriale.
+- Rimossa la voce autonoma `Esplora`, perché duplicava l'accesso agli stessi contenuti di `Guide e racconti`.
+- Il menu editoriale ora raccoglie `Guide`, `Itinerari`, `Racconti` e `Tutti i contenuti`.
+- La sequenza principale diventa `Mete · Guide e racconti · Mappa · Chi siamo`.
+- La CTA reader passa da `Vieni con noi` a `La guida in regalo`: la landing esplicita il funnel newsletter e usa `Ricevi la prima guida` come azione finale.
+- La landing reader viene riposizionata su `/italia-nascosta` (slug poi sostituito da `/guida-in-regalo` nel rework sotto — vedi sezione successiva); `/vieni-con-noi` e `/iscrivi` restano redirect compatibili. La pagina è breve e focalizzata sulla prima guida: 10 destinazioni particolari, nessun nome anticipato e un solo funnel newsletter.
+
+## Rework funnel lead magnet — slug + naming + imagery — 2026-07-23
+
+Rework completo su handoff `seo → ui → asset → frontend` (vedi
+`docs/50_Scratch/HANDOFF_lead-magnet-rework_*.md`). Slug definitivo
+`/guida-in-regalo` (la CTA navbar "La guida in regalo" ora coincide
+verbatim con lo slug — label invariata, solo il target cambia).
+`/italia-nascosta`, `/vieni-con-noi`, `/iscrivi` diventano tutti e tre
+redirect diretti a `/guida-in-regalo` (nessuna catena doppia).
+
+- Naming disaccoppiato: TITOLO invariato ("Alla scoperta dell'Italia
+  nascosta"), nuovo DESCRITTORE unico ("10 posti provati e consigliati da
+  noi") sostituisce le 5 varianti frammentate su landing, teaser home,
+  popup, download page e welcome email.
+- Cover del lead magnet: niente più placeholder demo. Route B (craft
+  tipografica) — riusa la texture carta dell'Atlante (`atlante-carta-tile`)
+  invece di una foto, perché nessuno dei 10 posti reali della guida ha uno
+  scatto certificato in libreria. Un solo componente (`LeadMagnetCover`,
+  `src/components/LeadMagnetCover.tsx`) su landing, teaser home e thumbnail
+  popup.
+- Hero `hero-amalfi.webp` rimosso dalla landing `/guida-in-regalo`:
+  contraddiceva la promessa "non ovvio" (la guida esclude esplicitamente
+  Amalfi standard) e creava un doppio candidato LCP con la cover.
+- `HomeLeadMagnet` consolidato: via il form `<Newsletter>` embedded, via i
+  chip con nomi di luogo reali (non presenti nei 10 posti veri — errore
+  fattuale, non solo di posizionamento), un solo CTA verso la landing.
+- `ExitIntentPopup` ora è gated al 100%: rimosso il download PDF diretto
+  ungated. Bug corretto: `source` passava `"exit_intent_popup"` (non
+  sbloccava nulla in `Newsletter.tsx`, che richiede la sottostringa
+  `lead_magnet`) → ora `"lead_magnet_exit_popup"`.
+- Token analytics (`source`/`content_id`/`cta_id`) resi evergreen
+  (`lead_magnet_landing_*`, `lead_magnet_guida`), disaccoppiati da slug e
+  titolo così un futuro rename non forka la metrica di conversione.
+- Dettaglio completo, deviazioni e stato check:
+  `docs/50_Scratch/HANDOFF_lead-magnet-rework_frontend_to_gate.md`.

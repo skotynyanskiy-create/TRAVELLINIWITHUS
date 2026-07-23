@@ -1,5 +1,6 @@
 import { ArrowUpRight, MapPin, Sparkles, Star } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
+import OptimizedImage from '@/src/components/OptimizedImage';
 
 interface PlaceItem {
   id: string;
@@ -13,42 +14,43 @@ interface PlaceItem {
   description: string;
 }
 
+/** Solo posti con scheda seed reale (/posto/:id) + cover leggera. */
 const FEATURED_PLACES: PlaceItem[] = [
   {
-    id: '1',
-    title: 'La Taverna dei Draghi sotterranea',
-    location: 'Volterra, Toscana',
-    category: 'Cena Particolare',
-    price: '€ 45 / persona',
-    score: '10/10 Atmosfera',
-    image: '/images/reels/reel-3-cover.webp',
-    link: '/posto/taverna-volterra-toscana',
+    id: 'campania-burton-juice',
+    title: 'The Burton Juice',
+    location: 'Somma Vesuviana, Campania',
+    category: 'Cena particolare',
+    price: 'Su prenotazione',
+    score: 'Pinned IG',
+    image: '/images/home-journal/hero-impossible.webp',
+    link: '/posto/campania-burton-juice',
     description:
-      'Cena a lume di candela in sotterranei in pietra del 1300. Atmosfera unica e cibo eccezionale.',
+      'Il ristorante a tema Tim Burton: sale, attori e cocktail. Scheda dal viaggio vero.',
   },
   {
-    id: '2',
-    title: 'Masseria di Luce tra gli Ulivi',
-    location: "Val d'Itria, Puglia",
-    category: 'Dimora Storica',
-    price: '€ 180 / notte',
-    score: '9.8/10 Relax',
-    image: '/images/reels/reel-2-cover.webp',
-    link: '/esplora?zone=italia',
-    description:
-      'Piscina incastonata nella roccia bianca e colazione servita sotto gli ulivi secolari.',
-  },
-  {
-    id: '3',
-    title: 'Rorbu di Pescatori sui Fiordi',
-    location: 'Lofoten, Norvegia',
-    category: 'Esperienza Unica',
-    price: '€ 210 / notte',
-    score: '10/10 Panoramica',
+    id: 'malesia-batu-caves',
+    title: 'Batu Caves a Kuala Lumpur',
+    location: 'Kuala Lumpur, Malesia',
+    category: 'Posto particolare',
+    price: 'Ingresso gratis',
+    score: 'Low cost',
     image: '/images/reels/reel-4-cover.webp',
-    link: '/esplora?zone=europa',
+    link: '/posto/malesia-batu-caves',
     description:
-      "Antica rorbu di pescatori sull'acqua gelida per ammirare l'aurora boreale direttamente dal letto.",
+      'Scalinata arcobaleno, templi e scimmie: vale la pena? Dettagli pratici nella scheda.',
+  },
+  {
+    id: 'toscana-aperitivo-volterra',
+    title: 'Aperitivo a Volterra',
+    location: 'Volterra, Toscana',
+    category: 'Insolito',
+    price: 'Aperitivo',
+    score: 'Atmosfera',
+    image: '/images/reels/reel-5-cover.webp',
+    link: '/posto/toscana-aperitivo-volterra',
+    description:
+      'Atmosfera gotica e drink scenografici nel cuore del borgo. Per chi ama l’insolito.',
   },
 ];
 
@@ -85,9 +87,11 @@ export default function CleanFeaturedPlaces() {
               className="group flex flex-col overflow-hidden rounded-[var(--radius-lg,16px)] border border-[var(--color-border)] bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             >
               <div className="relative aspect-[4/5] w-full overflow-hidden bg-black/5">
-                <img
+                <OptimizedImage
                   src={place.image}
                   alt={place.title}
+                  sizes="(max-width: 768px) 92vw, 30vw"
+                  responsiveWidths={[320, 480, 768]}
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />

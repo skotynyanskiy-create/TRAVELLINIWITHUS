@@ -287,7 +287,7 @@ export function LeadMagnetDocument({
         <View>
           <Text style={styles.coverTitle}>10 posti italiani non ovvi</Text>
           <Text style={styles.coverSubtitle}>
-            Una lista corta, scelta dopo 8 anni di viaggi reali. Per chi viaggia in coppia e cerca
+            Una lista corta, scelta da viaggi reali dal 2018. Per chi viaggia in coppia e cerca
             posti veri, non liste su Pinterest.
           </Text>
           <Text style={[styles.brandTag, { color: colors.ink }]}>By Rodrigo &amp; Betta</Text>

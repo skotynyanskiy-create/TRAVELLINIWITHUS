@@ -24,6 +24,9 @@ repository e sono indicizzati separatamente da Graphify.
 - [[OBSIDIAN_DASHBOARD]] — priorità, contenuti in corso, SEO, pipeline
 - [[OBSIDIAN_INDEX]] — indice completo delle note operative
 - [[MARKETING_OPERATIONS_HUB]] — campagne, partner, content
+- [[BRAND_KNOWLEDGE_MOC]] — **mappa brand / social / Family / presence**
+- [[VAULT_AND_GRAPHIFY_OPERATING_STATE]] — Obsidian + Graphify dual-graph
+- [[OBSIDIAN_PLUGIN_CONFIG_AUDIT_2026-07-23]] — plugin, settings, sicurezza, pulizia
 
 ---
 
@@ -72,8 +75,12 @@ prima di compilare la nuova nota.
 
 ### Brand e visual
 
+- [[BRAND_KNOWLEDGE_MOC]] — hub canonico (parti da qui)
+- [[BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS]] — handle e metriche pubbliche
+- [[BRAND_TRAVELLINI_FAMILY]] — sub-brand Family (parte del progetto)
+- [[13_Content/DOSSIER_PRESENZA_ONLINE_TRAVELLINIWITHUS_2026-07-23]] — ricerca presence
 - [[BRAND_MESSAGING_STRATEGY]] — voce, personas, messaging
-- [[TRAVELLINIWITHUS_BRAND_MEMORY]] — memoria brand estesa
+- [[TRAVELLINIWITHUS_BRAND_MEMORY]] — memoria brand estesa (verificare date)
 - [[70_Assets/]] — asset, immagini, materiali di supporto
 
 ### Commerciale

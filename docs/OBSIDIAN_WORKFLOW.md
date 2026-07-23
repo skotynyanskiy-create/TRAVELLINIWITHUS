@@ -168,12 +168,13 @@ docs/
   versionare credenziali.
 - `docs/` contiene le note operative portabili e versionate; Graphify indicizza
   separatamente il codice dalla root.
-- Il vault usa Dataview, Obsidian Kanban e Templater oltre alle funzionalità
-  core: sono già installati e la dashboard operativa dipende da query
-  Dataview live. `npm run setup:obsidian-plugins` li installa/reinstalla da
-  zero su una macchina nuova (scarica le release GitHub pinnate, nessuna
-  versione committata perché `docs/.obsidian/plugins/` è gitignored).
-- `Local REST API` è l’unico plugin community richiesto per l’automazione MCP.
+- Il vault usa **Dataview, Templater, Omnisearch, Linter** oltre alle
+  funzionalità core (Bases, Canvas, Graph, Daily notes). Kanban ed Excalidraw
+  sono stati **rimossi** (2026-07-23): zero board/file; pipeline = Bases,
+  diagrammi = Canvas. `npm run setup:obsidian-plugins` reinstalla lo stack
+  minimo da GitHub latest (`docs/.obsidian/plugins/` è gitignored).
+- `Local REST API` è l’unico plugin community richiesto per l’automazione MCP
+  (installazione manuale: ha secret locale).
   Dopo una rotazione della chiave, aggiorna `.mcp.json` e
   `~/.codex/config.toml`, quindi riavvia i client MCP.
 - `npm run generate:obsidian-index` rigenera [[OBSIDIAN_INDEX]].

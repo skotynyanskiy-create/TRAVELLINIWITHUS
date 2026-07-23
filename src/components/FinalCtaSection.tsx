@@ -46,10 +46,10 @@ const defaults: Record<
     title: 'Ricevi contenuti utili quando sono pronti.',
     description:
       'La newsletter raccoglie solo aggiornamenti selezionati: nuovi posti, guide pratiche e risorse davvero utili.',
-    primaryLabel: 'Vai alla newsletter',
-    primaryTo: '#newsletter',
-    secondaryLabel: 'Leggi le guide',
-    secondaryTo: '/guide',
+    primaryLabel: 'Ricevi la guida',
+    primaryTo: '/guida-in-regalo',
+    secondaryLabel: 'Esplora i contenuti',
+    secondaryTo: '/esplora',
   },
   business: {
     eyebrow: 'Per brand e territori',

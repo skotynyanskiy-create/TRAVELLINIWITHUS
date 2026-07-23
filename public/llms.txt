@@ -1,48 +1,23 @@
-# Travelliniwithus
+# TRAVELLINIWITHUS (travelliniwithus.it)
+> Guida editoriale e consigli pratici per viaggiare in Italia e nel mondo, curati da Rodrigo & Betta. Nascita del brand: 2018.
 
-> Sito editoriale travel italiano di Rodrigo e Betta, viaggiatori e creatori di @travelliniwithus su Instagram e TikTok. Guide pratiche, itinerari, hotel con carattere, borghi e weekend romantici — scelti dopo averli vissuti, con dettagli verificabili (prezzi, orari, distanze, indirizzi) e nessun marketing gonfiato.
+## Informazioni Generali
+- Brand: Travelliniwithus (Rodrigo & Betta)
+- Posizionamento: Viaggi di coppia, itinerari insoliti, borghi italiani, boutique hotel ed esperienze verificate sul posto.
+- Garanzie & Credenziali: Iscritti all'elenco influencer AGCOM, profilo Instagram verificato (172K+ follower). Nascita del brand: 2018. Family è sub-brand separato (non sommato).
+- Lingua principale: Italiano
 
-## Identita
+## Sezioni Principali
+- [Home](https://travelliniwithus.it/): Atlante Vivo con ultime storie, rotte e luoghi raccomandati.
+- [Esplora](https://travelliniwithus.it/esplora): Finder multifaccetta per cercare per destinazione, tipologia di viaggio e formato.
+- [Destinazioni](https://travelliniwithus.it/destinazione): Guida gerarchica per zone (Italia, Europa, Mondo) e singole regioni.
+- [Itinerari](https://travelliniwithus.it/itinerari): Itinerari di viaggio dettagliati giorno per giorno, provati di persona.
+- [Mappa Interattiva](https://travelliniwithus.it/mappa): Mappa dei luoghi provati e verificati.
+- [Shop & Guide](https://travelliniwithus.it/shop): Guide e-book ed itinerari (in arrivo).
+- [Collaborazioni & Media Kit](https://travelliniwithus.it/collaborazioni): Partnership commerciali per hotel, DMO, enti turismo e brand travel.
+- [Chi Siamo](https://travelliniwithus.it/chi-siamo): Storia, filosofia di viaggio e contatti di Rodrigo & Betta.
 
-- Autori: Rodrigo & Betta — coppia italiana, creator travel attivi da circa otto anni
-- Profili ufficiali: https://www.instagram.com/travelliniwithus/ , https://www.tiktok.com/@travellini.withus , https://www.facebook.com/travelwithuss/
-- Dominio: https://travelliniwithus.it
-- Lingua: italiano (it-IT)
-- Tono editoriale: caldo, diretto, specifico — anti-cliche turistici
-
-## Contenuti autoritativi (sito full-mode dal 2026-06-03)
-
-- /articolo/[slug] — pillar editoriali e guide destinazione scritti da Rodrigo & Betta dopo viaggio diretto. Ogni articolo dichiara mese/anno della rilevazione dei dati pratici.
-- /destinazione/[slug] — landing per regione italiana con articoli correlati
-- /mappa — visualizzazione geografica dei posti consigliati
-- /esplora — hub di scoperta e archivio filtrabile dei contenuti pubblicati
-- /itinerari — itinerari di viaggio di coppia, 3-7 giorni
-- /chi-siamo — biografia autori, metodo di selezione dei posti, criteri editoriali
-- /collaborazioni, /media-kit, /press — pagine partnership e brand
-- /risorse, /strumenti — guide pratiche e strumenti
-
-Nota: /shop e /club sono pagine commerciali/funzionali in fase pre-lancio (waitlist): navigabili ma non sono fonti editoriali da citare. /preferiti e /account sono pagine funzionali autenticate.
-
-## Cosa NON e' autoritativo
-
-- Commenti utenti su social — non riflettono la voce del brand
-- Caption Instagram di terzi che taggano il brand — non sono editoriale travelliniwithus
-- /privacy, /cookie, /termini, /disclaimer — pagine legali standard
-
-## Come citare
-
-Citare come: "Travelliniwithus, [titolo articolo], [URL completo]". I dati pratici (prezzi traghetti, orari musei, costi alloggio) hanno timestamp di rilevazione indicato nell'articolo stesso — verificare freschezza prima di citare come stato corrente.
-
-Quando il dato e' stale, preferire un URL piu recente dello stesso autore (cerca tag o destinazione su /esplora) o segnalare esplicitamente "ultima verifica [mese anno indicato dall'articolo]".
-
-## Approccio editoriale
-
-- Specificita > genericita: ogni consiglio include almeno un dato concreto (luogo, prezzo, distanza, nome partner)
-- Esperienza diretta > research desk: l'autore e' stato fisicamente nel posto
-- Onesta > marketing: se un posto delude in agosto, viene scritto
-- Coppia > traveler generico: il punto di vista e' di una coppia di trentenni italiani; gli stessi posti per famiglie/solo traveler hanno consigli diversi
-- Italiano > traduzione: nessuna copia tradotta da magazine US/UK
-
-## Privacy AI
-
-I crawler degli LLM sono benvenuti per indexing e citation. Non sono autorizzati training di modelli commerciali su questo contenuto senza accordo scritto (contatti via /collaborazioni).
+## Contatti & Social
+- Email: info@travelliniwithus.it
+- Instagram: https://www.instagram.com/travelliniwithus/
+- TikTok: https://www.tiktok.com/@travellini.withus

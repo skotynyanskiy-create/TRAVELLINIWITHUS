@@ -28,7 +28,9 @@ export default function Layout() {
   // Le esperienze editoriali immersive non ospitano overlay flottanti: sulla home
   // spezzano il primo frame, sulla mappa coprono filtri e percorsi suggeriti.
   const isCinematicHome = location.pathname === '/';
-  const suppressFloatingOverlays = isCinematicHome || location.pathname === '/mappa';
+  const isGuideLanding = location.pathname === '/guida-in-regalo';
+  const suppressFloatingOverlays =
+    isCinematicHome || location.pathname === '/mappa' || isGuideLanding;
 
   return (
     <SmoothScrollProvider>
@@ -45,7 +47,7 @@ export default function Layout() {
           <main id="main-content" className="flex-grow">
             <Outlet />
           </main>
-          <Footer />
+          {!isGuideLanding && <Footer />}
           <ConsentBanner />
           {!suppressFloatingOverlays && <ExitIntentPopup />}
           {!suppressFloatingOverlays && <AiAssistant />}

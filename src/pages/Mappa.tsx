@@ -8,7 +8,7 @@ function MapLoaderFallback() {
   return (
     <div className="mt-20 h-[calc(100dvh-80px)] w-full bg-[#0b0805] flex flex-col items-center justify-center gap-4 text-white">
       <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/20 border-t-[var(--color-accent,#c85a32)]" />
-      <p className="font-serif italic text-sm text-white/70">Caricamento della Mappa Mappa...</p>
+      <p className="font-serif italic text-sm text-white/70">Caricamento della Mappa...</p>
     </div>
   );
 }

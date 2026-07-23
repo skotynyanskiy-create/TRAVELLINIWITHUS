@@ -16,6 +16,12 @@ tags:
 - profilo Instagram: [travelliniwithus](https://www.instagram.com/travelliniwithus/?hl=it)
 - sito: [travelliniwithus.it](https://www.travelliniwithus.it/)
 - riferimento pubblico rapido: [[BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS]]
+- **dossier presenza online (iper-analisi 2026-07-23):** [[13_Content/DOSSIER_PRESENZA_ONLINE_TRAVELLINIWITHUS_2026-07-23]]
+- audit IG contenuti: [[13_Content/INSTAGRAM_CONTENT_AUDIT_2026-07-21]]
+- **sub-brand family (parte del progetto):** [[BRAND_TRAVELLINI_FAMILY]] · [@travellinifamily](https://www.instagram.com/travellinifamily/)
+- **MOC brand (mappa unica):** [[BRAND_KNOWLEDGE_MOC]]
+- **Decision Family boundary:** [[20_Decisions/DECISION_TRAVELLINI_FAMILY_BOUNDARY_2026-07-23]]
+- **Vault + Graphify ops:** [[VAULT_AND_GRAPHIFY_OPERATING_STATE]]
 
 ## Campaigns
 
@@ -99,7 +105,7 @@ operativi step-by-step.
 
 - [ ] **Affiliate signup completi**: Skyscanner BFCA + Booking BFCA + Airalo + Revolut (effort R+B ~90 min)
 - [ ] **PDF lead magnet compilato con 10 luoghi reali** + `RESEND_API_KEY` + `BREVO_API_KEY` attivi in `.env.production` + test end-to-end (welcome email arriva, PDF link 200) (effort R+B ~5h tra contenuti + setup)
-- [ ] **Bio IG + TikTok aggiornate** con link `travelliniwithus.it/vieni-con-noi?utm_source=ig_bio|tt_bio` (effort R+B 15 min)
+- [ ] **Bio IG + TikTok aggiornate** con link `travelliniwithus.it/guida-in-regalo?utm_source=ig_bio|tt_bio` (solo dopo go-live stabile; effort R+B 15 min)
 
 ## Public footprint sprint — 2026-06-07
 
@@ -122,13 +128,9 @@ Blocchi owner:
 
 Il brand ha già una community Telegram attiva (link in bio IG/TikTok, non
 ancora esposta sul sito). Decisione da [[50_Scratch/TOOLS_INTEGRATIONS_STRATEGY_2026-07-15]]:
-Telegram va esposto come CTA **secondaria** (footer, `/vieni-con-noi`,
-pagina preferiti) e mai messo in competizione testa-a-testa con la
-newsletter su una pagina-posto — la newsletter (canale owned, dati nostri)
-resta la conversione primaria di relazione; Telegram è un canale in
-affitto utile per pianificazione sociale ("dobbiamo andare"), non per lead
-capture. Owner action: fornire l'URL community per `src/config/site.ts`
-(~10 min).
+**Telegram: disabilitato per ora** (decisione owner 2026-07-23). Non esporre
+URL né CTA Telegram sul sito finché non riattivato esplicitamente.
+Newsletter resta l'unica conversione di relazione primaria.
 
 ## Quality bar partner outreach
 

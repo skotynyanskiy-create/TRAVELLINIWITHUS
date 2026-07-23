@@ -1,15 +1,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+// Stack minimo efficace (audit 2026-07-23): no Kanban/Excalidraw (zero uso;
+// pipeline = Bases, diagrammi = Canvas core). Local REST API si installa a mano
+// (secret locale) e resta in community-plugins.json se già presente.
 const plugins = [
   {
     id: 'dataview',
     repo: 'blacksmithgu/obsidian-dataview',
-    files: ['main.js', 'manifest.json', 'styles.css']
-  },
-  {
-    id: 'obsidian-kanban',
-    repo: 'mgmeyers/obsidian-kanban',
     files: ['main.js', 'manifest.json', 'styles.css']
   },
   {
@@ -26,13 +24,10 @@ const plugins = [
     id: 'omnisearch',
     repo: 'scambier/obsidian-omnisearch',
     files: ['main.js', 'manifest.json', 'styles.css']
-  },
-  {
-    id: 'obsidian-excalidraw-plugin',
-    repo: 'zsviczian/obsidian-excalidraw-plugin',
-    files: ['main.js', 'manifest.json', 'styles.css']
   }
 ];
+
+const REMOVED_PLUGIN_IDS = ['obsidian-kanban', 'obsidian-excalidraw-plugin'];
 
 const repoRoot = process.cwd();
 const pluginsDir = path.join(repoRoot, 'docs', '.obsidian', 'plugins');
@@ -83,29 +78,34 @@ async function setup() {
     }
   }
 
-  // Aggiorno community-plugins.json
-  if (fs.existsSync(configPath)) {
-    try {
-      const activePlugins = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-      let updated = false;
-      for (const id of installedIds) {
-        if (!activePlugins.includes(id)) {
-          activePlugins.push(id);
-          updated = true;
-        }
-      }
-      if (updated) {
-        fs.writeFileSync(configPath, JSON.stringify(activePlugins, null, 2), 'utf8');
-        console.log('\ncommunity-plugins.json aggiornato e plugin abilitati.');
-      } else {
-        console.log('\nTutti i plugin erano già abilitati in community-plugins.json.');
-      }
-    } catch (err) {
-      console.error('\nErrore nell\'aggiornamento di community-plugins.json:', err.message);
+  // Rimuovi cartelle plugin deprecati se presenti
+  for (const id of REMOVED_PLUGIN_IDS) {
+    const deadDir = path.join(pluginsDir, id);
+    if (fs.existsSync(deadDir)) {
+      fs.rmSync(deadDir, { recursive: true, force: true });
+      console.log(`\nRimosso plugin deprecato: ${id}`);
     }
-  } else {
-    fs.writeFileSync(configPath, JSON.stringify(['obsidian-local-rest-api', 'extended-graph', ...installedIds], null, 2), 'utf8');
-    console.log('\ncommunity-plugins.json creato e plugin abilitati.');
+  }
+
+  // Aggiorno community-plugins.json (preserva local-rest-api se già presente)
+  const baseActive = ['obsidian-local-rest-api', ...installedIds];
+  try {
+    let activePlugins = baseActive;
+    if (fs.existsSync(configPath)) {
+      const existing = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+      const keepRest = existing.includes('obsidian-local-rest-api');
+      activePlugins = [
+        ...(keepRest ? ['obsidian-local-rest-api'] : []),
+        ...installedIds.filter((id) => id !== 'obsidian-local-rest-api'),
+      ];
+      // dedupe
+      activePlugins = [...new Set(activePlugins)];
+      activePlugins = activePlugins.filter((id) => !REMOVED_PLUGIN_IDS.includes(id));
+    }
+    fs.writeFileSync(configPath, JSON.stringify(activePlugins, null, 2) + '\n', 'utf8');
+    console.log('\ncommunity-plugins.json aggiornato:', activePlugins.join(', '));
+  } catch (err) {
+    console.error('\nErrore nell\'aggiornamento di community-plugins.json:', err.message);
   }
 
   console.log('\nInstallazione completata!');

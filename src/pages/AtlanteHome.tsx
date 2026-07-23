@@ -3,9 +3,7 @@ import CinematicHomepage from '@/src/components/home/cinematic/CinematicHomepage
 import { CONTACTS, SITE_URL } from '@/src/config/site';
 
 /**
- * Home "Atlante Vivo" — la home ufficiale (/) dal cutover del 2026-07-04.
- * Navbar/Footer arrivano da Layout: qui solo il contenuto. Nessuno <style>
- * che nasconde il chrome: la hero convive con la navbar.
+ * Home "Atlante Vivo" — la home ufficiale (/) di Travelliniwithus.
  */
 export default function AtlanteHome() {
   return (

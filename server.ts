@@ -1051,7 +1051,7 @@ const STATIC_ROUTE_META: Record<string, { title: string; description: string; og
     '/chi-siamo': {
       title: 'Rodrigo e Betta: chi siamo',
       description:
-        'Otto anni di viaggi in coppia raccontati con criterio. Come scegliamo i posti, perché ne consigliamo pochi, cosa garantiamo a chi ci legge.',
+        'Dalla nascita del brand nel 2018: viaggi in coppia raccontati con criterio. Come scegliamo i posti, perché ne consigliamo pochi, cosa garantiamo a chi ci legge.',
     },
     '/esplora': {
       title: 'Esplora viaggi scelti a mano',

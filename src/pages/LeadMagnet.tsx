@@ -23,19 +23,19 @@ export default function LeadMagnet() {
       route: '/lead-magnet',
       source: 'lead_magnet_page',
       cta_id: 'lead_magnet_pdf_download',
-      content_id: 'lead_magnet_10_posti_italiani',
+      content_id: 'lead_magnet_guida',
     });
   };
 
   if (!isUnlocked) {
-    return <Navigate to="/vieni-con-noi?from=lead-magnet" replace />;
+    return <Navigate to="/guida-in-regalo?from=lead-magnet" replace />;
   }
 
   return (
     <PageLayout>
       <SEO
-        title="La tua mini-guida"
-        description="Scarica '10 posti italiani non ovvi', mini guida Travelliniwithus per chi viaggia in coppia. Pratica, scelta dopo 8 anni di viaggi reali."
+        title="La tua guida è pronta"
+        description="Alla scoperta dell’Italia nascosta: 10 posti provati e consigliati da noi, dal brand nato nel 2018. Posti veri, non liste su Pinterest."
         canonical={`${SITE_URL}/lead-magnet`}
         image={`${SITE_URL}/og/lead-magnet.jpg`}
         noindex
@@ -53,12 +53,12 @@ export default function LeadMagnet() {
             </span>
 
             <h1 className="mt-4 text-4xl font-serif leading-tight md:text-5xl">
-              La tua mini-guida ti aspetta.
+              La tua guida è pronta.
             </h1>
 
             <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-black/70">
-              <strong>10 posti italiani non ovvi</strong>: una lista corta, scelta dopo 8 anni di
-              viaggi reali. Per coppie che vogliono posti veri, non liste su Pinterest.
+              <strong>Alla scoperta dell’Italia nascosta</strong>: 10 posti provati e consigliati da
+              noi, dal brand nato nel 2018. Posti veri, non liste su Pinterest.
             </p>
 
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -81,8 +81,8 @@ export default function LeadMagnet() {
             </div>
 
             <p className="mt-6 text-xs leading-relaxed text-black/50">
-              La guida arriva anche via email entro qualche minuto. Se non la vedi, controlla spam o
-              scrivici a{' '}
+              Il download è sul sito (questo PDF). Se hai lasciato l’email, ti avvisiamo quando esce
+              un nuovo posto — non una sequenza di vendita. Per qualsiasi cosa:{' '}
               <a href={CONTACTS.mailto} className="underline underline-offset-2 hover:text-black">
                 {CONTACTS.email}
               </a>

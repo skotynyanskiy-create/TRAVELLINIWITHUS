@@ -231,6 +231,46 @@ export const PLACE_CATALOG: Record<string, PlaceEntity> = {
     placeType: 'City',
     geo: { latitude: 37.9838, longitude: 23.7275 },
   },
+
+  // ─── 6 schede prioritari Wave D (dossier 2026-07-23) ─────────
+  'burton-juice': {
+    name: 'The Burton Juice',
+    placeType: 'TouristAttraction',
+    geo: { latitude: 40.88, longitude: 14.38 },
+    address: 'Via Marigliano 168, Somma Vesuviana (NA), Campania',
+  },
+  'malesia-batu-caves': {
+    name: 'Batu Caves',
+    wikidataUrl: 'https://www.wikidata.org/wiki/Q810998',
+    placeType: 'TouristAttraction',
+    geo: { latitude: 3.237, longitude: 101.682 },
+    address: 'Batu Caves, Kuala Lumpur, Malesia',
+  },
+  'slovenia-bled': {
+    name: 'Bled (Garden Village Glamping)',
+    wikidataUrl: 'https://www.wikidata.org/wiki/Q15854',
+    placeType: 'TouristAttraction',
+    geo: { latitude: 46.366, longitude: 14.1 },
+    address: 'Bled, Slovenia',
+  },
+  'caraibi-italia': {
+    name: 'Caraibi in Italia (Jesolo area)',
+    placeType: 'TouristAttraction',
+    geo: { latitude: 45.53, longitude: 12.63 },
+    address: 'Litorale di Jesolo, Veneto',
+  },
+  'madrid-malocchio': {
+    name: 'Locale malocchio / ritual Madrid',
+    placeType: 'TouristAttraction',
+    geo: { latitude: 40.42, longitude: -3.7 },
+    address: 'Madrid, Spagna',
+  },
+  'sushi-kibo': {
+    name: 'Sushi Kibo',
+    placeType: 'TouristAttraction',
+    geo: { latitude: 44.5, longitude: 11.3 },
+    address: 'Romagna / area Bologna, Italia',
+  },
 };
 
 /**

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { Instagram, Play, X } from 'lucide-react';
-import { CONTACTS } from '../config/site';
+import { BRAND_CREDENTIALS, BRAND_STATS, CONTACTS } from '../config/site';
 import { getPublishedReels, type ReelEntry } from '../config/reels';
 import { trackEvent } from '../services/analytics';
 
@@ -144,8 +144,11 @@ export default function InstagramGrid() {
               Reel e foto di Rodrigo &amp; Betta
             </h2>
             <p className="mt-3 text-sm text-black/55 md:text-base">
-              <span className="font-semibold text-black/70">{CONTACTS.instagramHandle}</span> ·
-              Posti particolari, dietro le quinte e short-form video.
+              <span className="font-semibold text-black/70">{CONTACTS.instagramHandle}</span> ·{' '}
+              <span className="inline-flex items-center gap-1 font-medium text-[var(--color-accent-text)]">
+                {BRAND_STATS.instagramFollowers} community · {BRAND_CREDENTIALS.metaVerifiedLabel}
+              </span>
+              <br className="sm:hidden" /> Posti particolari, dietro le quinte e short-form video.
             </p>
           </div>
           <a

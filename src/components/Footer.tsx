@@ -1,32 +1,17 @@
 import { Instagram, Mail, ShieldCheck } from 'lucide-react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { Link } from '@/src/components/TransitionLink';
 import { useAuth } from '../context/AuthContext';
-import { CONTACTS } from '../config/site';
+import { BRAND_CREDENTIALS, BRAND_STATS, CONTACTS } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import SurfaceBadge from './SurfaceBadge';
-// InstagramGrid e ora renderizzata da Home (sezione #9). Rimossa qui per evitare
-// duplicato DOM. Per altre pagine puo essere reinserita on-demand.
 
 export default function Footer() {
   const { isAdmin } = useAuth();
-  const location = useLocation();
-  const navigate = useNavigate();
   const { data: footerContent } = useSiteContent('footer');
   const { data: navigationContent } = useSiteContent('navigation');
   const footer = footerContent ?? siteContentDefaults.footer;
   const navigation = navigationContent ?? siteContentDefaults.navigation;
-
-  const handleNewsletterClick = () => {
-    if (location.pathname === '/') {
-      document.getElementById('newsletter')?.scrollIntoView({ behavior: 'smooth' });
-      return;
-    }
-
-    sessionStorage.setItem('scrollToNewsletter', '1');
-    navigate('/');
-  };
 
   return (
     <>
@@ -127,7 +112,7 @@ export default function Footer() {
                   </li>
                   <li>
                     <Link
-                      to="/strumenti"
+                      to="/esplora"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
                       {navigation.resourcesLabel}
@@ -159,12 +144,12 @@ export default function Footer() {
                 </h3>
                 <ul className="space-y-5">
                   <li>
-                    <button
-                      onClick={handleNewsletterClick}
-                      className="inline-block text-left text-base transition-colors hover:text-[var(--color-accent)]"
+                    <Link
+                      to="/guida-in-regalo"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
                       {footer.newsletterButtonLabel}
-                    </button>
+                    </Link>
                   </li>
                   <li>
                     <Link
@@ -208,22 +193,6 @@ export default function Footer() {
                   </li>
                   <li>
                     <Link
-                      to="/media-kit"
-                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      {navigation.mediaKitLabel}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/press"
-                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      {navigation.pressLabel}
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
                       to="/contatti"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
@@ -241,18 +210,22 @@ export default function Footer() {
                     </li>
                   )}
                 </ul>
-                <button
-                  onClick={handleNewsletterClick}
-                  className="w-full rounded-[var(--radius-md)] border border-transparent bg-[var(--color-accent)] px-6 py-4 text-xs font-bold uppercase tracking-widest text-white shadow-sm transition-all hover:brightness-110"
+                <Link
+                  to="/guida-in-regalo"
+                  className="block w-full rounded-[var(--radius-md)] border border-transparent bg-[var(--color-accent)] px-6 py-4 text-center text-xs font-bold uppercase tracking-widest text-white shadow-sm transition-all hover:brightness-110"
                 >
                   {footer.newsletterButtonLabel}
-                </button>
+                </Link>
               </div>
             </div>
 
-            <div className="flex flex-col items-center justify-between gap-8 border-t border-white/10 pt-12 md:flex-row">
-              <div className="text-center text-xs font-medium uppercase tracking-[0.2em] text-white/55 md:text-left">
-                &copy; {new Date().getFullYear()} Travelliniwithus.
+            <div className="flex flex-col items-center justify-between gap-6 border-t border-white/10 pt-12 md:flex-row">
+              <div className="text-center text-xs font-medium uppercase tracking-[0.18em] text-white/55 md:text-left">
+                &copy; {new Date().getFullYear()} Travelliniwithus.{' '}
+                <span className="hidden sm:inline">
+                  · {BRAND_CREDENTIALS.metaVerifiedLabel} · {BRAND_CREDENTIALS.agcomLabel} ·{' '}
+                  {BRAND_STATS.totalFollowers} community
+                </span>
               </div>
 
               <div className="flex flex-wrap items-center justify-center gap-10">

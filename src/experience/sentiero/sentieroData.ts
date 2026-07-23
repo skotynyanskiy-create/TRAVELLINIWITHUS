@@ -120,7 +120,7 @@ const RAW_STAGES: Omit<SentieroStage, 'index' | 't' | 'position'>[] = [
       'Il nostro sentiero finisce qui, ma il tuo sta per iniziare. Scegli come portare il mondo di Rodrigo & Betta nel tuo prossimo viaggio.',
     fieldNote:
       'Lascia la tua email e ricevi la lettera delle tracce: dritte vere, prezzi reali, posti provati.',
-    route: '/vieni-con-noi',
+    route: '/guida-in-regalo',
     cta: 'Inizia ora',
     media: { type: 'image', src: '/images/reels/reel-5-cover.webp' },
     theme: { bg: '#0b0805', fog: '#120d0a', light: '#ffd9b0', sparkle: '#e8a866' },

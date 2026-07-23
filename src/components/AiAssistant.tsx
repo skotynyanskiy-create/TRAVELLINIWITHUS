@@ -59,14 +59,19 @@ const KEYWORD_RESPONSES: { match: string[]; reply: string }[] = [
       'Posti particolari e il nostro mestiere. Apri /esplora filtrato per "Posti particolari" oppure il blog: ogni articolo cita almeno un luogo non ovvio.',
   },
   {
-    match: ['guida', 'pdf', 'planner', 'shop'],
+    match: ['guida', 'pdf', 'lead magnet', 'newsletter', 'regalo'],
     reply:
-      'Le guide digitali stanno in /shop. Alcune sono ancora in preparazione: quando sono pronte trovi scheda, prezzo e stato di disponibilita. Se viaggi spesso, tieni d occhio anche il Travellini Club.',
+      'La guida in regalo e su /guida-in-regalo: lasci l email e scarichi il PDF sul sito. Lo shop (/shop) e in lista d attesa — niente carrello finche non c e un prodotto reale.',
+  },
+  {
+    match: ['planner', 'shop', 'acquist'],
+    reply:
+      'Lo shop e in pre-apertura (lista d attesa). Non c e checkout attivo. Per la guida gratuita vai su /guida-in-regalo.',
   },
 ];
 
 const FALLBACK_REPLY =
-  'Non ho ancora abbastanza contesto per rispondere bene. Intanto puoi aprire la mappa interattiva /mappa oppure esplorare gli articoli da /esplora.';
+  'Non ho ancora abbastanza contesto per rispondere bene. Intanto puoi aprire /mappa, /esplora oppure la guida in regalo su /guida-in-regalo.';
 
 function matchReply(message: string): string {
   const text = message.toLowerCase();

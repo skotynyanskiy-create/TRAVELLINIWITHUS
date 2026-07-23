@@ -23,9 +23,9 @@ export default function AuthorBio() {
             </span>
           </div>
           <p className="text-black/65 font-light text-sm mb-5 leading-relaxed">
-            Siamo una coppia che viaggia insieme da 8 anni. Raccontiamo posti particolari, food
-            experience e itinerari reali — con budget accessibile e senza filtri. Tutto quello che
-            trovate qui lo abbiamo vissuto davvero.
+            Siamo Rodrigo e Betta. Travelliniwithus nasce nel 2018: raccontiamo posti particolari,
+            food experience e itinerari reali — con budget accessibile e senza filtri. Tutto quello
+            che trovate qui lo abbiamo vissuto davvero.
           </p>
           <div className="flex flex-col md:flex-row md:flex-wrap gap-2 md:gap-3">
             <a

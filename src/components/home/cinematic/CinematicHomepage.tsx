@@ -1,49 +1,68 @@
-import HomeIndiceVivo from './HomeIndiceVivo';
+import { lazy, Suspense } from 'react';
 import CleanCuratedHero from '../curated/CleanCuratedHero';
 import CleanFeaturedPlaces from '../curated/CleanFeaturedPlaces';
 import CleanEditorialPromise from '../curated/CleanEditorialPromise';
-import WeekendGeneratorWidget from './WeekendGeneratorWidget';
-import HiggsfieldReelCarousel from './HiggsfieldReelCarousel';
+
+const HomeMapSection = lazy(() => import('../HomeMapSection'));
+const WeekendGeneratorWidget = lazy(() => import('./WeekendGeneratorWidget'));
+const HiggsfieldReelCarousel = lazy(() => import('./HiggsfieldReelCarousel'));
+const HomeIndiceVivo = lazy(() => import('./HomeIndiceVivo'));
+
+function SectionFallback({ minHeight = '24rem' }: { minHeight?: string }) {
+  return (
+    <div
+      className="w-full animate-pulse bg-[var(--color-sand,#faf7f2)]"
+      style={{ minHeight }}
+      aria-hidden="true"
+    />
+  );
+}
 
 export default function CinematicHomepage() {
   return (
     <div className="clean-homepage w-full bg-[var(--color-sand,#faf7f2)] text-[var(--color-ink,#1a2b3c)]">
-      <main>
-        {/* 1. Hero Editoriale Curato */}
+      <div>
         <section id="hero">
           <CleanCuratedHero />
         </section>
 
-        {/* 2. Selezione dei 3 Posti in Evidenza */}
         <section id="featured-places">
           <CleanFeaturedPlaces />
         </section>
 
-        {/* 3. Il Metodo e la Promessa di Trasparenza */}
+        <section id="mappa-interattiva-reale">
+          <Suspense fallback={<SectionFallback minHeight="32rem" />}>
+            <HomeMapSection />
+          </Suspense>
+        </section>
+
         <section id="editorial-promise">
           <CleanEditorialPromise />
         </section>
 
-        {/* 4. Generatore Interattivo di Weekend */}
         <section id="weekend-generator">
-          <WeekendGeneratorWidget />
+          <Suspense fallback={<SectionFallback minHeight="28rem" />}>
+            <WeekendGeneratorWidget />
+          </Suspense>
         </section>
 
-        {/* 5. Stream Video Reels 9:16 */}
         <section id="reels-stream">
-          <HiggsfieldReelCarousel />
+          <Suspense fallback={<SectionFallback minHeight="32rem" />}>
+            <HiggsfieldReelCarousel />
+          </Suspense>
         </section>
 
-        {/* 6. Indice dei Posti Provati */}
         <section
           id="indice-vivo"
-          className="py-16 md:py-24 bg-white border-t border-[var(--color-border)]"
+          className="border-t border-[var(--color-border)] bg-white py-16 md:py-24"
         >
           <div className="mx-auto max-w-7xl px-6 md:px-12">
-            <HomeIndiceVivo />
+            <Suspense fallback={<SectionFallback minHeight="20rem" />}>
+              <HomeIndiceVivo />
+            </Suspense>
           </div>
         </section>
-      </main>
+      </div>
     </div>
   );
 }

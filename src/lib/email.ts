@@ -169,8 +169,8 @@ export function renderWelcomeEmail(input: {
   const leadMagnetBlock = input.leadMagnetUrl
     ? `
       <p style="margin:24px 0;">
-        Come promesso, qui trovi <strong>10 posti italiani non ovvi</strong> da salvare
-        per il prossimo viaggio in coppia:
+        Come promesso, qui trovi <strong>Alla scoperta dell’Italia nascosta</strong>: 10 posti
+        provati e consigliati da noi, da salvare per il prossimo viaggio in coppia:
       </p>
       <p style="margin:0 0 32px;">
         <a href="${input.leadMagnetUrl}" style="display:inline-block;background:#ea580c;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;">
@@ -209,7 +209,7 @@ export function renderWelcomeEmail(input: {
 
 Sei nella lista di chi viaggia con criterio. Niente automazione cieca:
 ti scriviamo solo quando c'è qualcosa di davvero utile da salvare.
-${input.leadMagnetUrl ? `\nScarica la guida "10 posti italiani non ovvi": ${input.leadMagnetUrl}\n` : ''}
+${input.leadMagnetUrl ? `\nScarica la guida "Alla scoperta dell’Italia nascosta" (10 posti provati e consigliati da noi): ${input.leadMagnetUrl}\n` : ''}
 Intanto, se ti va, ci trovi qui:
 - Instagram: ${CONTACTS.instagramUrl}
 - TikTok: ${CONTACTS.tiktokUrl}

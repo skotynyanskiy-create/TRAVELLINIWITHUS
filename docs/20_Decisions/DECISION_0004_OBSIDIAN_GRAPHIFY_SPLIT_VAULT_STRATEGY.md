@@ -26,12 +26,12 @@ Obsidian.
 - Vault Obsidian operativo:
   `C:\Users\ccocu\Desktop\TRAVELLINIWITHUS\docs`.
 - Corpus Graphify: repository root, limitato al codice da `.graphifyignore`.
-- Obsidian e Extended Graph gestiscono note, wikilink, proprietà, Bases,
-  campagne e progetti.
+- Obsidian (core Graph + Bases + wikilink) gestisce note, proprietà, campagne e
+  progetti. **Extended Graph non è nel stack installato di default** (2026-07-23):
+  se serve, installarlo solo on-demand e non aprirlo all'avvio (carico CPU).
 - Graphify gestisce dipendenze, call path e blast radius del codice.
 - Nessun export Obsidian di Graphify nel vault live.
-- Extended Graph resta on-demand; il grafo globale non viene riaperto
-  automaticamente all'avvio.
+- Audit plugin aggiornato: [[OBSIDIAN_PLUGIN_CONFIG_AUDIT_2026-07-23]].
 
 ## Evidenza
 

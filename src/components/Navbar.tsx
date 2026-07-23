@@ -1,17 +1,23 @@
 import { lazy, Suspense, useEffect, useEffectEvent, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import {
+  type LucideIcon,
   ArrowRight,
+  BriefcaseBusiness,
+  Building2,
   ChevronDown,
   Compass,
   Heart,
   Instagram,
   LogOut,
   Mail,
+  MapPin,
   Menu,
   MessageCircle,
   Search,
+  Send,
   ShieldCheck,
+  Sparkles,
   User as UserIcon,
   X,
 } from 'lucide-react';
@@ -22,6 +28,7 @@ import { siteContentDefaults } from '../config/siteContent';
 import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
 import { useSiteContent } from '../hooks/useSiteContent';
+import { getLocale, setLocale } from '../i18n';
 import SurfaceBadge from './SurfaceBadge';
 
 const SearchModal = lazy(() => import('./SearchModal'));
@@ -42,6 +49,7 @@ interface NavFeature {
 interface NavItem {
   name: string;
   href?: string;
+  icon?: LucideIcon;
   subLinks?: NavSubLink[];
   /** Quando presente, il dropdown desktop renderizza in 2 colonne (link a sx, foto editoriale a dx). */
   feature?: NavFeature;
@@ -56,6 +64,12 @@ export default function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
+  // Rileva OS per mostrare shortcut corretto (⌘K su Mac, Ctrl+K su Windows/Linux)
+  const isMac = useMemo(
+    () => typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform),
+    []
+  );
+
   const location = useLocation();
   const { favorites } = useFavorites();
   const { user, isAdmin, signIn, signOut } = useAuth();
@@ -67,6 +81,14 @@ export default function Navbar() {
     setOpenMobileSection(null);
     setIsUserMenuOpen(false);
   });
+
+  const [locale, setLocaleState] = useState(getLocale());
+
+  const toggleLocale = () => {
+    const next = locale === 'it' ? 'en' : 'it';
+    setLocale(next);
+    setLocaleState(next);
+  };
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -106,8 +128,7 @@ export default function Navbar() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // IA definitiva (2026-07-04): due assi ortogonali — DOVE (Destinazioni) ×
-  // COSA (Racconti). Mega-menu "Destinazioni" = browse geografico + anchor foto.
+  // Due assi ortogonali: DOVE (Mete) × COSA (Guide e racconti).
   const destinazioniLinks = useMemo<NavSubLink[]>(
     () => [
       {
@@ -137,33 +158,34 @@ export default function Navbar() {
     []
   );
 
-  // Dropdown "Racconti" — l'asse editoriale (COSA leggere).
+  // Dropdown "Guide e racconti" — l'asse editoriale (COSA leggere).
   const raccontiLinks = useMemo<NavSubLink[]>(
     () => [
-      { name: 'Articoli', href: '/esplora?format=storia' },
       { name: 'Guide', href: '/esplora?format=guida' },
       { name: navigation.itinerariesLabel, href: '/itinerari' },
+      { name: 'Racconti', href: '/esplora?format=storia' },
+      { name: 'Tutti i contenuti', href: '/esplora' },
     ],
     [navigation]
   );
+
+  // B2B forzato su /collaborazioni; altrove resta la scelta utente del switcher
+  const isCollabRoute = location.pathname.startsWith('/collaborazioni');
+  const [userNavMode, setUserNavMode] = useState<'b2c' | 'b2b'>('b2c');
+  const navMode = isCollabRoute ? 'b2b' : userNavMode;
 
   const navItems = useMemo<NavItem[]>(
     () => [
       {
         name: navigation.destinationsLabel,
         href: '/destinazione',
+        icon: MapPin,
         primaryLinks: destinazioniLinks,
         feature: destinazioniFeature,
       },
-      { name: navigation.exploreLabel, href: '/esplora' },
-      { name: navigation.mapLabel, href: '/mappa' },
-      { name: navigation.storiesLabel, href: '/esplora?format=storia', subLinks: raccontiLinks },
-      {
-        name: navigation.aboutLabel,
-        href: '/chi-siamo',
-        subLinks: [{ name: navigation.contactsLabel, href: '/contatti' }],
-      },
-      { name: navigation.shopLabel, href: '/shop' },
+      { name: navigation.storiesLabel, href: '/esplora', icon: Sparkles, subLinks: raccontiLinks },
+      { name: navigation.mapLabel, href: '/mappa', icon: MapPin },
+      { name: navigation.aboutLabel, href: '/chi-siamo', icon: UserIcon },
     ],
     [destinazioniLinks, destinazioniFeature, raccontiLinks, navigation]
   );
@@ -219,274 +241,411 @@ export default function Navbar() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-0 right-0 left-0 z-50 w-full border-b px-6 py-3 text-[var(--color-ink)] transition-all duration-500 md:px-10 md:py-4 ${
-          isScrolled
-            ? 'border-[var(--color-ink)]/12 bg-[var(--color-sand)]/95 shadow-[0_1px_0_rgba(10,10,10,0.04)] backdrop-blur-md'
-            : 'border-[var(--color-ink)]/8 bg-[var(--color-sand)]/80 backdrop-blur-md'
-        }`}
+        className="fixed top-0 right-0 left-0 z-50 pointer-events-none px-3 pt-3 md:px-6 md:pt-4"
       >
-        <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4">
-          <div className="flex shrink-0 items-center">
+        <div
+          className={`pointer-events-auto mx-auto flex max-w-[1360px] items-center justify-between gap-3 rounded-full border px-4 py-2 text-[var(--color-ink)] transition-all duration-500 md:px-5 md:py-2.5 ${
+            isScrolled
+              ? 'border-[var(--color-ink)]/12 bg-[var(--color-sand)]/95 shadow-[0_16px_40px_rgba(10,10,10,0.08)] backdrop-blur-2xl'
+              : 'border-[var(--color-ink)]/8 bg-[var(--color-sand)]/85 shadow-[0_6px_28px_rgba(10,10,10,0.04)] backdrop-blur-xl'
+          }`}
+        >
+          {/* BRAND LOGO */}
+          <div className="flex shrink-0 items-center pl-1">
             <Link
               to="/"
-              className="whitespace-nowrap font-serif text-xl font-medium tracking-tight text-[var(--color-ink)] transition-all duration-500 md:text-2xl xl:text-[1.7rem]"
+              className="group whitespace-nowrap font-serif text-lg font-medium tracking-tight text-[var(--color-ink)] transition-all duration-300 md:text-xl xl:text-[1.35rem]"
             >
-              Travellini<span className="font-bold text-[var(--color-accent)]">with</span>us
+              Travellini
+              <span className="font-bold text-[var(--color-accent)] transition-colors group-hover:text-[var(--color-gold)]">
+                with
+              </span>
+              us
             </Link>
           </div>
 
-          <div className="hidden flex-1 items-center justify-center space-x-4 px-4 xl:flex xl:space-x-6 2xl:space-x-8">
-            {navItems.map((item) => (
-              <div key={item.name} className="group relative">
+          {/* DUAL SEGMENTED SWITCHER (VIAGGIATORI vs COLLABORAZIONI) */}
+          <div className="hidden lg:flex shrink-0 items-center rounded-full bg-[var(--color-ink)]/5 p-0.5 border border-[var(--color-ink)]/8">
+            <button
+              type="button"
+              onClick={() => setUserNavMode('b2c')}
+              className={`flex items-center gap-1.5 rounded-full px-3.5 py-1 text-[10.5px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                navMode === 'b2c'
+                  ? 'bg-white text-[var(--color-ink)] shadow-2xs font-semibold'
+                  : 'text-[var(--color-ink-2)] hover:text-[var(--color-ink)]'
+              }`}
+            >
+              <Compass
+                size={12}
+                className={navMode === 'b2c' ? 'text-[var(--color-accent)]' : 'opacity-60'}
+              />
+              <span>Viaggiatori</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setUserNavMode('b2b')}
+              className={`flex items-center gap-1.5 rounded-full px-3.5 py-1 text-[10.5px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
+                navMode === 'b2b'
+                  ? 'bg-[var(--color-ink-deep,#1a2b3c)] text-white shadow-2xs font-semibold'
+                  : 'text-[var(--color-ink-2)] hover:text-[var(--color-ink)]'
+              }`}
+            >
+              <BriefcaseBusiness
+                size={12}
+                className={navMode === 'b2b' ? 'text-[var(--color-gold,#d4af37)]' : 'opacity-60'}
+              />
+              <span>Collaborazioni</span>
+            </button>
+          </div>
+
+          {/* DYNAMIC NAV MENU */}
+          <AnimatePresence mode="wait">
+            {navMode === 'b2c' ? (
+              <motion.div
+                key="b2c-nav"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 10 }}
+                transition={{ duration: 0.2 }}
+                className="hidden flex-1 items-center justify-center space-x-1 px-2 xl:flex"
+              >
+                {navItems.map((item) => {
+                  const active = isItemActive(item);
+                  const hasDropdown = Boolean(item.subLinks || item.primaryLinks);
+                  return (
+                    <div key={item.name} className="group relative shrink-0">
+                      <Link
+                        to={item.href || '/'}
+                        aria-current={active ? 'page' : undefined}
+                        aria-haspopup={hasDropdown ? 'menu' : undefined}
+                        className={`relative flex items-center gap-1 whitespace-nowrap rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] transition-all duration-300 ${
+                          active
+                            ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)] font-semibold'
+                            : 'text-[var(--color-ink-2)] hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-accent)]'
+                        }`}
+                      >
+                        <span>{item.name}</span>
+                        <SurfaceBadge path={item.href?.split('?')[0] ?? ''} />
+                        {hasDropdown && (
+                          <ChevronDown
+                            size={11}
+                            className="opacity-50 transition-transform duration-300 group-hover:rotate-180"
+                          />
+                        )}
+                      </Link>
+
+                      {item.primaryLinks && item.feature && (
+                        <div className="invisible absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 transition-all duration-300 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 z-50">
+                          <div
+                            role="menu"
+                            className="relative overflow-hidden rounded-3xl border border-[var(--color-ink)]/10 bg-[var(--color-surface)]/98 shadow-2xl backdrop-blur-2xl w-[40rem]"
+                          >
+                            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+                              <div className="flex flex-col p-6">
+                                <span className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
+                                  {item.name}
+                                </span>
+                                <ul className="flex flex-1 flex-col gap-1">
+                                  {item.primaryLinks.map((link) => {
+                                    const [path] = link.href.split('?');
+                                    const subActive =
+                                      location.pathname === path ||
+                                      (path === '/itinerari' &&
+                                        location.pathname.startsWith('/itinerari/'));
+                                    return (
+                                      <li key={link.name}>
+                                        <Link
+                                          to={link.href}
+                                          role="menuitem"
+                                          className={`group/link block rounded-xl px-3.5 py-2.5 transition-colors hover:bg-[var(--color-sand)] ${
+                                            subActive ? 'bg-[var(--color-sand)]' : ''
+                                          }`}
+                                        >
+                                          <span
+                                            className={`block font-serif text-[15.5px] leading-tight transition-colors ${
+                                              subActive
+                                                ? 'text-[var(--color-accent)] font-medium'
+                                                : 'text-[var(--color-ink)] group-hover/link:text-[var(--color-accent)]'
+                                            }`}
+                                          >
+                                            {link.name}
+                                          </span>
+                                          {link.description && (
+                                            <span className="mt-0.5 block text-[11px] leading-snug text-black/55">
+                                              {link.description}
+                                            </span>
+                                          )}
+                                        </Link>
+                                      </li>
+                                    );
+                                  })}
+                                </ul>
+                              </div>
+                              <Link
+                                to={item.feature.href}
+                                role="menuitem"
+                                className="group/feat relative flex flex-col justify-end overflow-hidden bg-[var(--color-ink-deep)] p-6 text-white"
+                              >
+                                <Compass
+                                  aria-hidden="true"
+                                  strokeWidth={1}
+                                  className="pointer-events-none absolute -top-10 -right-10 h-44 w-44 text-[var(--color-border)] transition-transform duration-700 group-hover/feat:scale-105"
+                                />
+                                <div className="relative z-10">
+                                  <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-on-dark)]">
+                                    {item.feature.eyebrow}
+                                  </span>
+                                  <p className="mt-2 font-serif text-[19px] leading-tight">
+                                    {item.feature.title}
+                                  </p>
+                                  <p className="mt-1.5 text-[12px] leading-snug text-white/82">
+                                    {item.feature.description}
+                                  </p>
+                                  <span className="mt-3 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-on-dark)]">
+                                    Leggi
+                                    <ArrowRight
+                                      size={12}
+                                      className="transition-transform group-hover/feat:translate-x-1"
+                                    />
+                                  </span>
+                                </div>
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {item.subLinks && (
+                        <div className="invisible absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 transition-all duration-300 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 z-50">
+                          <div
+                            role="menu"
+                            className="relative overflow-hidden rounded-2xl border border-[var(--color-ink)]/10 bg-[var(--color-surface)]/98 shadow-2xl backdrop-blur-2xl py-3 w-64"
+                          >
+                            {item.subLinks.map((subLink) => (
+                              <Link
+                                key={subLink.name}
+                                to={subLink.href}
+                                role="menuitem"
+                                className={`block px-5 py-2.5 text-left transition-all duration-200 hover:bg-[var(--color-sand)] ${
+                                  isSubLinkActive(item, subLink.href)
+                                    ? 'bg-[var(--color-sand)]/60'
+                                    : ''
+                                }`}
+                              >
+                                <span
+                                  className={`block font-serif text-[15px] leading-tight ${
+                                    isSubLinkActive(item, subLink.href)
+                                      ? 'text-[var(--color-accent)] font-medium'
+                                      : 'text-[var(--color-ink)] hover:text-[var(--color-accent)]'
+                                  }`}
+                                >
+                                  {subLink.name}
+                                  <SurfaceBadge path={subLink.href.split('?')[0]} />
+                                </span>
+                                {subLink.description && (
+                                  <span className="mt-0.5 block text-[11px] leading-snug text-black/55">
+                                    {subLink.description}
+                                  </span>
+                                )}
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </motion.div>
+            ) : (
+              <motion.div
+                key="b2b-nav"
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -10 }}
+                transition={{ duration: 0.2 }}
+                className="hidden flex-1 items-center justify-center space-x-2 px-2 xl:flex"
+              >
                 <Link
-                  to={item.href || '/'}
-                  aria-current={isItemActive(item) ? 'page' : undefined}
-                  aria-haspopup={item.subLinks || item.primaryLinks ? 'menu' : undefined}
-                  className={`relative flex items-center gap-1 whitespace-nowrap text-[11px] font-bold uppercase tracking-[0.15em] transition-all duration-300 xl:text-[12px] xl:tracking-[0.2em] hover:text-[var(--color-accent)] after:absolute after:-bottom-1 after:left-0 after:h-[1.5px] after:w-full after:bg-[var(--color-accent)] after:origin-left after:transition-transform after:duration-300 ${
-                    isItemActive(item)
-                      ? 'text-[var(--color-accent)] after:scale-x-100'
-                      : 'text-[var(--color-ink-2)] after:scale-x-0 hover:after:scale-x-100'
+                  to="/collaborazioni"
+                  className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] transition-all hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-accent)] ${
+                    location.pathname === '/collaborazioni'
+                      ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
+                      : 'text-[var(--color-ink)]'
                   }`}
                 >
-                  {item.name}
-                  <SurfaceBadge path={item.href?.split('?')[0] ?? ''} />
-                  {(item.subLinks || item.primaryLinks) && (
-                    <ChevronDown size={12} className="opacity-50" />
-                  )}
+                  <Building2 size={13} className="text-[var(--color-accent)] shrink-0" />
+                  <span>Come Lavoriamo</span>
                 </Link>
-
-                {item.primaryLinks && item.feature && (
-                  // Mega menu editoriale 2 colonne (Esplora). Layout calmo,
-                  // foto-led, niente liste enciclopediche.
-                  <div className="invisible absolute top-full left-1/2 -translate-x-1/2 pt-6 opacity-0 transition-all duration-300 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-                    <div
-                      role="menu"
-                      className="relative overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-ink)]/5 bg-[var(--color-surface)] shadow-2xl w-[44rem]"
-                    >
-                      <div className="grid grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
-                        <div className="flex flex-col p-7">
-                          <span className="mb-4 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
-                            {item.name}
-                          </span>
-                          <ul className="flex flex-1 flex-col gap-1">
-                            {item.primaryLinks.map((link) => {
-                              const [path] = link.href.split('?');
-                              const active =
-                                location.pathname === path ||
-                                (path === '/itinerari' &&
-                                  location.pathname.startsWith('/itinerari/'));
-                              return (
-                                <li key={link.name}>
-                                  <Link
-                                    to={link.href}
-                                    role="menuitem"
-                                    className={`group/link block rounded-[var(--radius-md)] px-4 py-3 transition-colors hover:bg-[var(--color-sand)] ${
-                                      active ? 'bg-[var(--color-sand)]' : ''
-                                    }`}
-                                  >
-                                    <span
-                                      className={`block font-serif text-[17px] leading-tight transition-colors ${
-                                        active
-                                          ? 'text-[var(--color-accent)]'
-                                          : 'text-[var(--color-ink)] group-hover/link:text-[var(--color-accent)]'
-                                      }`}
-                                    >
-                                      {link.name}
-                                    </span>
-                                    {link.description && (
-                                      <span className="mt-1 block text-[12px] leading-snug text-black/55">
-                                        {link.description}
-                                      </span>
-                                    )}
-                                  </Link>
-                                </li>
-                              );
-                            })}
-                          </ul>
-                        </div>
-                        <Link
-                          to={item.feature.href}
-                          role="menuitem"
-                          className="group/feat relative flex flex-col justify-end overflow-hidden bg-[var(--color-ink-deep)] p-7 text-white"
-                        >
-                          <Compass
-                            aria-hidden="true"
-                            strokeWidth={1}
-                            className="pointer-events-none absolute -top-10 -right-10 h-44 w-44 text-[var(--color-border)] transition-transform duration-700 group-hover/feat:scale-105"
-                          />
-                          <div className="relative z-10">
-                            <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-on-dark)]">
-                              {item.feature.eyebrow}
-                            </span>
-                            <p className="mt-3 font-serif text-[22px] leading-tight">
-                              {item.feature.title}
-                            </p>
-                            <p className="mt-2 text-[13px] leading-snug text-white/82">
-                              {item.feature.description}
-                            </p>
-                            <span className="mt-4 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-on-dark)]">
-                              Leggi
-                              <ArrowRight
-                                size={12}
-                                className="transition-transform group-hover/feat:translate-x-1"
-                              />
-                            </span>
-                          </div>
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {item.subLinks && (
-                  // Dropdown semplice per gli altri voci (Collaborazioni, Chi siamo).
-                  <div className="invisible absolute top-full left-1/2 -translate-x-1/2 pt-6 opacity-0 transition-all duration-300 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-                    <div
-                      role="menu"
-                      className="relative overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-ink)]/5 bg-[var(--color-surface)] py-4 shadow-2xl w-60"
-                    >
-                      {item.subLinks.map((subLink) => (
-                        <Link
-                          key={subLink.name}
-                          to={subLink.href}
-                          role="menuitem"
-                          className={`block px-8 py-3 text-[10px] uppercase tracking-[0.2em] transition-all duration-200 hover:bg-[var(--color-sand)] hover:text-[var(--color-accent)] ${
-                            isSubLinkActive(item, subLink.href)
-                              ? 'text-[var(--color-accent)]'
-                              : 'text-[var(--color-muted-fg-2)]'
-                          }`}
-                        >
-                          {subLink.name}
-                          <SurfaceBadge path={subLink.href.split('?')[0]} />
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-
-          <div className="hidden shrink-0 items-center space-x-4 text-[var(--color-ink-2)] xl:flex xl:space-x-6">
-            {/* CTA primaria reader-first (il pubblico è ~99% lettori). "Collabora"
-                resta come link secondario discreto — B2B ha già Footer + card Esplora. */}
-            <Link
-              to="/collaborazioni"
-              className="text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink-2)] transition-colors hover:text-[var(--color-accent)]"
-            >
-              Collabora
-            </Link>
-            <Link
-              to="/vieni-con-noi"
-              className="inline-flex items-center gap-1 rounded-full border border-[var(--color-accent)]/30 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-colors hover:bg-[var(--color-accent-soft)]"
-            >
-              Vieni con noi
-            </Link>
-
-            <button
-              onClick={() => setIsSearchOpen(true)}
-              className="flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-muted-bg)] px-3 py-2 text-[11px] font-bold uppercase tracking-[0.2em] transition-all hover:border-[var(--color-muted-bg-2)] xl:px-4 whitespace-nowrap"
-              aria-label={navigation.searchLabel}
-            >
-              <Search size={12} />
-              <span className="hidden xl:inline">{navigation.searchLabel}</span>
-            </button>
-
-            <Link
-              to="/preferiti"
-              className="relative transition-colors hover:text-[var(--color-accent)]"
-              aria-label={navigation.favoritesLabel}
-            >
-              <Heart size={18} strokeWidth={1.5} />
-              {favorites.length > 0 && (
-                <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[10px] font-bold text-white">
-                  {favorites.length}
-                </span>
-              )}
-            </Link>
-
-            <div className="relative">
-              {user ? (
-                <button
-                  type="button"
-                  onClick={() => setIsUserMenuOpen((prev) => !prev)}
-                  aria-label="Menu utente"
-                  aria-expanded={isUserMenuOpen}
-                  className="h-7 w-7 overflow-hidden rounded-full border border-[var(--color-border)] transition-colors hover:border-[var(--color-accent)]"
+                <Link
+                  to="/chi-siamo"
+                  className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] transition-all hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-accent)] ${
+                    location.pathname === '/chi-siamo'
+                      ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
+                      : 'text-[var(--color-ink)]'
+                  }`}
                 >
-                  {user.photoURL ? (
-                    <img
-                      src={user.photoURL}
-                      alt={user.displayName || 'User'}
-                      className="h-full w-full object-cover"
-                      referrerPolicy="no-referrer"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-[var(--color-muted-bg)] text-[10px] font-bold">
-                      {user.email?.charAt(0).toUpperCase() || 'U'}
-                    </div>
-                  )}
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={signIn}
-                  aria-label="Accedi all'area personale"
-                  className="flex items-center gap-1 transition-colors hover:text-[var(--color-accent)]"
+                  <UserIcon size={13} className="text-[var(--color-accent)] shrink-0" />
+                  <span>Chi Siamo</span>
+                </Link>
+                <Link
+                  to="/contatti"
+                  className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] transition-all hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-accent)] ${
+                    location.pathname === '/contatti'
+                      ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
+                      : 'text-[var(--color-ink)]'
+                  }`}
                 >
-                  <UserIcon size={18} strokeWidth={1.5} />
-                </button>
-              )}
+                  <Send size={13} className="text-[var(--color-accent)] shrink-0" />
+                  <span>Contatti</span>
+                </Link>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
-              <AnimatePresence>
-                {isUserMenuOpen && user && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    className="absolute right-0 z-50 mt-3 w-52 overflow-hidden rounded-xl border border-[var(--color-border)] bg-white py-2 text-[var(--color-ink)] shadow-xl"
+          {/* RIGHT ACTION CLUSTER */}
+          <div className="hidden shrink-0 items-center space-x-1.5 text-[var(--color-ink-2)] lg:flex">
+            {navMode === 'b2c' ? (
+              <>
+                <button
+                  onClick={() => setIsSearchOpen(true)}
+                  className="flex items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-white/70 backdrop-blur-xs px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] shadow-2xs group whitespace-nowrap cursor-pointer"
+                  aria-label={navigation.searchLabel}
+                >
+                  <Search
+                    size={12}
+                    className="transition-transform group-hover:scale-110 text-[var(--color-accent)]"
+                  />
+                  <span className="hidden xl:inline">{navigation.searchLabel}</span>
+                  <kbd className="hidden lg:inline-flex items-center px-1.5 py-0.5 text-[9px] font-sans font-semibold text-[var(--color-ink-2)]/70 bg-[var(--color-sand)]/80 rounded border border-[var(--color-border)] shadow-2xs">
+                    {isMac ? '⌘K' : 'Ctrl+K'}
+                  </kbd>
+                </button>
+
+                <Link
+                  to="/guida-in-regalo"
+                  className="inline-flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white shadow-xs transition-all duration-300 hover:bg-[var(--color-accent-hover,#b34d28)] hover:shadow-md hover:scale-[1.02]"
+                >
+                  La guida in regalo
+                  <ArrowRight size={11} />
+                </Link>
+              </>
+            ) : (
+              <Link
+                to="/media-kit"
+                className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-ink-deep,#1a2b3c)] px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white shadow-xs transition-all duration-300 hover:bg-[var(--color-accent)] hover:shadow-md hover:scale-[1.02]"
+              >
+                <Send size={11} className="text-[var(--color-gold,#d4af37)]" />
+                Richiedi Media Kit
+              </Link>
+            )}
+
+            <div className="flex items-center space-x-1 pl-0.5">
+              <Link
+                to="/preferiti"
+                className="relative p-1 text-[var(--color-ink-2)] transition-colors hover:text-[var(--color-accent)]"
+                aria-label={navigation.favoritesLabel}
+              >
+                <Heart size={16} strokeWidth={1.5} />
+                {favorites.length > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[9px] font-bold text-white">
+                    {favorites.length}
+                  </span>
+                )}
+              </Link>
+
+              <button
+                type="button"
+                onClick={toggleLocale}
+                className="rounded-full border border-[var(--color-border)] bg-white/70 px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest text-[var(--color-ink)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] cursor-pointer"
+                title="Cambia lingua"
+                aria-label="Cambia lingua"
+              >
+                {locale.toUpperCase()}
+              </button>
+
+              <div className="relative">
+                {user ? (
+                  <button
+                    type="button"
+                    onClick={() => setIsUserMenuOpen((prev) => !prev)}
+                    aria-label="Menu utente"
+                    aria-expanded={isUserMenuOpen}
+                    className="h-7 w-7 overflow-hidden rounded-full border border-[var(--color-border)] transition-colors hover:border-[var(--color-accent)] cursor-pointer"
                   >
-                    <div className="mb-2 border-b border-[var(--color-border)] px-4 py-2">
-                      <p className="truncate text-[10px] font-semibold text-[var(--color-ink)]">
-                        {user.displayName}
-                      </p>
-                      <p className="truncate text-[11px] text-[var(--color-muted-fg)]">
-                        {user.email}
-                      </p>
-                    </div>
-                    {isAdmin && (
-                      <Link
-                        to="/admin"
-                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-[10px] uppercase tracking-wider text-[var(--color-accent)] transition-colors hover:bg-[var(--color-muted-bg)]"
-                      >
-                        <ShieldCheck size={12} /> Admin
-                      </Link>
+                    {user.photoURL ? (
+                      <img
+                        src={user.photoURL}
+                        alt={user.displayName || 'User'}
+                        className="h-full w-full object-cover"
+                        referrerPolicy="no-referrer"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center bg-[var(--color-muted-bg)] text-[10px] font-bold">
+                        {user.email?.charAt(0).toUpperCase() || 'U'}
+                      </div>
                     )}
-                    <button
-                      onClick={() => {
-                        signOut();
-                        setIsUserMenuOpen(false);
-                      }}
-                      className="flex w-full items-center gap-2 px-4 py-2 text-left text-[10px] uppercase tracking-wider text-[var(--color-error)] transition-colors hover:bg-[var(--color-error-soft)]"
-                    >
-                      <LogOut size={12} /> Esci
-                    </button>
-                  </motion.div>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={signIn}
+                    aria-label="Accedi all'area personale"
+                    className="flex items-center gap-1 p-1 transition-colors hover:text-[var(--color-accent)] cursor-pointer"
+                  >
+                    <UserIcon size={16} strokeWidth={1.5} />
+                  </button>
                 )}
-              </AnimatePresence>
+
+                <AnimatePresence>
+                  {isUserMenuOpen && user && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      className="absolute right-0 z-50 mt-3 w-52 overflow-hidden rounded-xl border border-[var(--color-border)] bg-white py-2 text-[var(--color-ink)] shadow-xl"
+                    >
+                      <div className="mb-2 border-b border-[var(--color-border)] px-4 py-2">
+                        <p className="truncate text-[10px] font-semibold text-[var(--color-ink)]">
+                          {user.displayName}
+                        </p>
+                        <p className="truncate text-[11px] text-[var(--color-muted-fg)]">
+                          {user.email}
+                        </p>
+                      </div>
+                      {isAdmin && (
+                        <Link
+                          to="/admin"
+                          className="flex w-full items-center gap-2 px-4 py-2 text-left text-[10px] uppercase tracking-wider text-[var(--color-accent)] transition-colors hover:bg-[var(--color-muted-bg)]"
+                        >
+                          <ShieldCheck size={12} /> Admin
+                        </Link>
+                      )}
+                      <button
+                        onClick={() => {
+                          signOut();
+                          setIsUserMenuOpen(false);
+                        }}
+                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-[10px] uppercase tracking-wider text-[var(--color-error)] transition-colors hover:bg-[var(--color-error-soft)] cursor-pointer"
+                      >
+                        <LogOut size={12} /> Esci
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
           </div>
 
           <div className="flex items-center gap-1 text-[var(--color-ink)] xl:hidden">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="flex min-h-[44px] min-w-[44px] items-center justify-center p-2 transition-colors hover:text-[var(--color-accent)]"
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center p-2 transition-colors hover:text-[var(--color-accent)] cursor-pointer"
               aria-label={navigation.searchLabel}
             >
               <Search size={20} />
             </button>
             <button
-              className="flex min-h-[44px] min-w-[44px] items-center justify-center p-2 transition-colors hover:text-[var(--color-accent)]"
+              className="flex min-h-[44px] min-w-[44px] items-center justify-center p-2 transition-colors hover:text-[var(--color-accent)] cursor-pointer"
               onClick={handleMobileMenuToggle}
               aria-label="Menu"
               aria-expanded={isMobileMenuOpen}
@@ -514,7 +673,7 @@ export default function Navbar() {
           isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        <div className="flex items-center justify-between border-b border-[var(--color-border)] px-6 py-6">
+        <div className="flex items-center justify-between border-b border-[var(--color-border)] px-6 py-5">
           <Link
             to="/"
             onClick={() => setIsMobileMenuOpen(false)}
@@ -523,123 +682,196 @@ export default function Navbar() {
             Travellini<span className="font-bold text-[var(--color-accent)]">with</span>us
           </Link>
           <button
-            className="rounded-full p-3 text-[var(--color-ink)] transition-colors hover:bg-[var(--color-muted-bg)] hover:text-[var(--color-accent)]"
+            className="rounded-full p-2.5 text-[var(--color-ink)] transition-colors hover:bg-[var(--color-muted-bg)] hover:text-[var(--color-accent)] cursor-pointer"
             onClick={() => setIsMobileMenuOpen(false)}
             aria-label="Chiudi Menu"
           >
-            <X size={24} />
+            <X size={22} />
           </button>
         </div>
 
-        <div className="flex flex-1 flex-col space-y-6 overflow-y-auto px-8 py-10">
-          {navItems.map((item) => (
-            <div key={item.name}>
-              {item.subLinks || item.primaryLinks ? (
-                <div className="space-y-4">
-                  <div className="flex items-start justify-between gap-4">
-                    <Link
-                      to={item.href || '/'}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={`block text-3xl font-serif transition-colors ${
-                        isItemActive(item)
-                          ? 'text-[var(--color-accent)]'
-                          : 'text-[var(--color-ink)]'
-                      }`}
-                    >
-                      {item.name}
-                      <SurfaceBadge path={item.href?.split('?')[0] ?? ''} />
-                    </Link>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setOpenMobileSection((prev) => (prev === item.name ? null : item.name))
-                      }
-                      aria-expanded={openMobileSection === item.name}
-                      aria-label={`Apri sottomenu ${item.name}`}
-                      className="-m-2 flex min-h-[44px] min-w-[44px] items-center justify-center text-[var(--color-ink-2)] transition-colors hover:text-[var(--color-accent)]"
-                    >
-                      <ChevronDown
-                        size={20}
-                        className={`transition-transform ${
-                          openMobileSection === item.name ? 'rotate-180' : ''
+        {/* Quick Search Trigger in Mobile Drawer */}
+        <div className="px-6 pt-5 pb-2">
+          <button
+            type="button"
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              setIsSearchOpen(true);
+            }}
+            className="flex w-full items-center justify-between gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-sand)]/60 px-4 py-3 text-xs text-[var(--color-muted-fg)] transition-all hover:border-[var(--color-accent)] cursor-pointer shadow-2xs"
+          >
+            <span className="flex items-center gap-2 font-medium">
+              <Search size={15} className="text-[var(--color-accent)]" />
+              Cerca destinazioni, storie, guide...
+            </span>
+            <kbd className="rounded bg-white px-1.5 py-0.5 text-[10px] font-semibold text-[var(--color-ink)] shadow-2xs">
+              {isMac ? '⌘K' : 'Ctrl+K'}
+            </kbd>
+          </button>
+        </div>
+
+        <div className="flex flex-1 flex-col space-y-6 overflow-y-auto px-6 py-6">
+          {navItems.map((item) => {
+            const ItemIcon = item.icon;
+            return (
+              <div key={item.name}>
+                {item.subLinks || item.primaryLinks ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between gap-4">
+                      <Link
+                        to={item.href || '/'}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className={`flex items-center gap-3 text-2xl font-serif transition-colors ${
+                          isItemActive(item)
+                            ? 'text-[var(--color-accent)] font-medium'
+                            : 'text-[var(--color-ink)]'
                         }`}
-                      />
-                    </button>
-                  </div>
-                  <AnimatePresence>
-                    {openMobileSection === item.name && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="space-y-4 border-l border-[var(--color-accent)]/20 pl-4"
                       >
-                        {item.primaryLinks
-                          ? item.primaryLinks.map((subLink) => (
-                              <Link
-                                key={subLink.name}
-                                to={subLink.href}
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className="block"
-                              >
-                                <span className="block font-serif text-xl text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]">
+                        {ItemIcon && (
+                          <ItemIcon size={20} className="text-[var(--color-accent)]/80 shrink-0" />
+                        )}
+                        <span>{item.name}</span>
+                        <SurfaceBadge path={item.href?.split('?')[0] ?? ''} />
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setOpenMobileSection((prev) => (prev === item.name ? null : item.name))
+                        }
+                        aria-expanded={openMobileSection === item.name}
+                        aria-label={`Apri sottomenu ${item.name}`}
+                        className="-m-2 flex min-h-[44px] min-w-[44px] items-center justify-center text-[var(--color-ink-2)] transition-colors hover:text-[var(--color-accent)] cursor-pointer"
+                      >
+                        <ChevronDown
+                          size={18}
+                          className={`transition-transform duration-300 ${
+                            openMobileSection === item.name ? 'rotate-180' : ''
+                          }`}
+                        />
+                      </button>
+                    </div>
+                    <AnimatePresence>
+                      {openMobileSection === item.name && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                          className="space-y-3 border-l-2 border-[var(--color-accent)]/20 ml-2 pl-4 py-1"
+                        >
+                          {item.primaryLinks
+                            ? item.primaryLinks.map((subLink) => (
+                                <Link
+                                  key={subLink.name}
+                                  to={subLink.href}
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                  className="block py-1"
+                                >
+                                  <span className="block font-serif text-lg text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]">
+                                    {subLink.name}
+                                    <SurfaceBadge path={subLink.href.split('?')[0]} />
+                                  </span>
+                                  {subLink.description && (
+                                    <span className="mt-0.5 block text-xs leading-snug text-black/55">
+                                      {subLink.description}
+                                    </span>
+                                  )}
+                                </Link>
+                              ))
+                            : item.subLinks?.map((subLink) => (
+                                <Link
+                                  key={subLink.name}
+                                  to={subLink.href}
+                                  onClick={() => setIsMobileMenuOpen(false)}
+                                  className="block py-1 text-lg text-[var(--color-ink)]/70 transition-colors hover:text-[var(--color-accent)]"
+                                >
                                   {subLink.name}
                                   <SurfaceBadge path={subLink.href.split('?')[0]} />
-                                </span>
-                                {subLink.description && (
-                                  <span className="mt-1 block text-sm text-black/55">
-                                    {subLink.description}
-                                  </span>
-                                )}
-                              </Link>
-                            ))
-                          : item.subLinks?.map((subLink) => (
-                              <Link
-                                key={subLink.name}
-                                to={subLink.href}
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className="block text-xl text-[var(--color-ink)]/60 transition-colors hover:text-[var(--color-accent)]"
-                              >
-                                {subLink.name}
-                                <SurfaceBadge path={subLink.href.split('?')[0]} />
-                              </Link>
-                            ))}
-                      </motion.div>
+                                </Link>
+                              ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ) : (
+                  <Link
+                    to={item.href || '/'}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`flex items-center gap-3 text-2xl font-serif transition-colors ${
+                      isItemActive(item)
+                        ? 'text-[var(--color-accent)] font-medium'
+                        : 'text-[var(--color-ink)]'
+                    }`}
+                  >
+                    {ItemIcon && (
+                      <ItemIcon size={20} className="text-[var(--color-accent)]/80 shrink-0" />
                     )}
-                  </AnimatePresence>
-                </div>
-              ) : (
-                <Link
-                  to={item.href || '/'}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block text-3xl font-serif transition-colors ${
-                    isItemActive(item) ? 'text-[var(--color-accent)]' : 'text-[var(--color-ink)]'
-                  }`}
-                >
-                  {item.name}
-                  <SurfaceBadge path={item.href?.split('?')[0] ?? ''} />
-                </Link>
-              )}
+                    <span>{item.name}</span>
+                    <SurfaceBadge path={item.href?.split('?')[0] ?? ''} />
+                  </Link>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Sezione Collaborazioni (B2B) nel drawer mobile */}
+        <div className="mx-6 my-2">
+          <div className="overflow-hidden rounded-2xl border border-[var(--color-ink)]/10 bg-[var(--color-ink-deep)] text-white shadow-lg">
+            <div className="flex items-center gap-2 px-5 pt-5 pb-3 text-[var(--color-gold,#d4af37)]">
+              <BriefcaseBusiness size={16} />
+              <span className="text-[10px] font-bold uppercase tracking-[0.24em]">
+                Collaborazioni
+              </span>
             </div>
-          ))}
+            <nav className="flex flex-col gap-0.5 px-3 pb-2">
+              <Link
+                to="/collaborazioni"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] font-serif text-white/90 transition-colors hover:bg-white/10"
+              >
+                <Building2 size={16} className="text-[var(--color-gold,#d4af37)] shrink-0" />
+                Come Lavoriamo
+              </Link>
+              <Link
+                to="/chi-siamo"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] font-serif text-white/90 transition-colors hover:bg-white/10"
+              >
+                <UserIcon size={16} className="text-[var(--color-gold,#d4af37)] shrink-0" />
+                Chi Siamo
+              </Link>
+              <Link
+                to="/contatti"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] font-serif text-white/90 transition-colors hover:bg-white/10"
+              >
+                <Send size={16} className="text-[var(--color-gold,#d4af37)] shrink-0" />
+                Contatti
+              </Link>
+            </nav>
+            <div className="px-5 pb-5 pt-1">
+              <Link
+                to="/media-kit"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-[var(--color-accent)] px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
+              >
+                Richiedi Media Kit
+                <ArrowRight size={12} />
+              </Link>
+            </div>
+          </div>
         </div>
 
         <div className="border-t border-[var(--color-ink)]/5 bg-[var(--color-sand)]/50 p-8">
           <div className="flex flex-col gap-6">
             <Link
-              to="/vieni-con-noi"
+              to="/guida-in-regalo"
               onClick={() => setIsMobileMenuOpen(false)}
               className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-6 py-4 text-xs font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
             >
-              Vieni con noi
+              La guida in regalo
               <ArrowRight size={14} />
-            </Link>
-            <Link
-              to="/collaborazioni"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="text-center text-[11px] font-bold uppercase tracking-widest text-[var(--color-ink-2)] transition-colors hover:text-[var(--color-accent)]"
-            >
-              Collabora con noi
             </Link>
             <div className="flex flex-wrap items-center gap-5">
               <Link

@@ -6,8 +6,10 @@ status: active
 
 # Travelliniwithus Brand Memory
 
-Last updated: 2026-03-18
+Last updated: 2026-03-18 (legacy long-form; for current public truth prefer [[BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS]] + [[BRAND_KNOWLEDGE_MOC]] + dossier presence 2026-07-23)
 Purpose: persistent operating profile for future design, copy, SEO, product, and technical decisions.
+
+> **2026-07-23:** Family is an official sub-brand — [[BRAND_TRAVELLINI_FAMILY]]. Do not treat “couple only / not family” as absolute site policy without reading the Family boundary decision.
 
 ## Identity
 

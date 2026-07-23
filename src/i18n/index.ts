@@ -1,13 +1,15 @@
 import itMessages from './locales/it.json';
+import enMessages from './locales/en.json';
 
 type Messages = Record<string, string>;
 
 const DEFAULT_LOCALE = 'it';
-const SUPPORTED_LOCALES = ['it'] as const;
+const SUPPORTED_LOCALES = ['it', 'en'] as const;
 export type Locale = (typeof SUPPORTED_LOCALES)[number];
 
 const catalogs: Record<Locale, Messages> = {
   it: itMessages as Messages,
+  en: enMessages as Messages,
 };
 
 let currentLocale: Locale = DEFAULT_LOCALE;

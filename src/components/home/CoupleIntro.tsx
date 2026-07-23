@@ -49,7 +49,7 @@ const METHOD_STANDARDS = [
   {
     icon: MapPinned,
     title: 'Provati sul posto',
-    text: '150+ destinazioni esplorate in 8 anni — niente recensione scritta da scrivania.',
+    text: '150+ destinazioni esplorate dal 2018 — niente recensione scritta da scrivania.',
   },
   {
     icon: Camera,
@@ -151,7 +151,7 @@ export default function CoupleIntro() {
                 Rodrigo &amp; Betta
               </div>
               <div className="text-[10px] uppercase tracking-widest text-[var(--color-muted-fg)]">
-                8 anni, 150+ destinazioni, niente scrivania
+                Dal 2018, 150+ destinazioni, niente scrivania
               </div>
             </div>
 
@@ -206,7 +206,7 @@ export default function CoupleIntro() {
               pratici di cui hai bisogno prima di partire in coppia.
             </p>
             <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--color-muted-fg)] md:text-lg">
-              Otto anni di viaggi insieme ci hanno insegnato a unire lo sguardo editoriale con foto
+              Dal 2018 i viaggi insieme ci hanno insegnato a unire lo sguardo editoriale con foto
               oneste e informazioni reali. Perché un viaggio riuscito non si misura in chilometri,
               ma nella scelta del posto giusto al momento giusto.
             </p>

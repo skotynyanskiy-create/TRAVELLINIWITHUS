@@ -94,26 +94,36 @@ const ARTICLES = [
     location: 'Trentino-Alto Adige',
   },
   {
-    slug: 'vieni-con-noi',
-    title: 'Pochi posti, raccontati bene. Solo se viaggi in coppia.',
-    category: 'Newsletter',
-    location: '10 posti italiani non ovvi',
+    slug: 'guida-in-regalo',
+    title: "Alla scoperta dell'Italia nascosta",
+    category: 'Guida gratuita',
+    location: '10 posti provati e consigliati da noi',
   },
   {
     slug: 'lead-magnet',
-    title: '10 posti italiani non ovvi — la mini-guida',
+    title: "Alla scoperta dell'Italia nascosta",
     category: 'Guida pratica',
-    location: 'Travelliniwithus',
+    location: '10 posti provati e consigliati da noi',
   },
 ];
 
+// WebP e' il formato principale (leggero, usato per default in SEO.tsx), ma
+// WhatsApp/LinkedIn renderizzano WebP in modo inaffidabile nelle preview card:
+// ogni entry produce anche un .jpg, cosi' i path .jpg gia' referenziati da
+// <SEO image=...> (default.jpg, lead-magnet.jpg, ...) restano generati dallo
+// stesso script invece di restare congelati a un pass manuale precedente.
+async function generateBoth(svg, slug) {
+  const buffer = Buffer.from(svg);
+  const webpDest = path.join(OUT_DIR, `${slug}.webp`);
+  const jpgDest = path.join(OUT_DIR, `${slug}.jpg`);
+  await sharp(buffer).webp({ quality: 90, effort: 4 }).toFile(webpDest);
+  await sharp(buffer).jpeg({ quality: 88 }).toFile(jpgDest);
+  return [webpDest, jpgDest];
+}
+
 async function generateOne(article) {
   const svg = buildSvg(article);
-  const dest = path.join(OUT_DIR, `${article.slug}.webp`);
-  await sharp(Buffer.from(svg))
-    .webp({ quality: 90, effort: 4 })
-    .toFile(dest);
-  return dest;
+  return generateBoth(svg, article.slug);
 }
 
 async function generateDefault() {
@@ -122,22 +132,20 @@ async function generateDefault() {
     category: 'Travelliniwithus',
     location: '',
   });
-  const dest = path.join(OUT_DIR, 'default.webp');
-  await sharp(Buffer.from(svg)).webp({ quality: 90, effort: 4 }).toFile(dest);
-  return dest;
+  return generateBoth(svg, 'default');
 }
 
 async function main() {
   await fs.mkdir(OUT_DIR, { recursive: true });
 
-  const def = await generateDefault();
-  console.log(`Generated ${def}`);
+  const defFiles = await generateDefault();
+  console.log(`Generated ${defFiles.join(', ')}`);
 
   for (const article of ARTICLES) {
-    const dest = await generateOne(article);
-    console.log(`Generated ${dest}`);
+    const files = await generateOne(article);
+    console.log(`Generated ${files.join(', ')}`);
   }
-  console.log(`Done: ${ARTICLES.length + 1} OG images`);
+  console.log(`Done: ${(ARTICLES.length + 1) * 2} OG images`);
 }
 
 main().catch((err) => {

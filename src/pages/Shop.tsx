@@ -13,7 +13,7 @@ import DemoContentNotice from '../components/DemoContentNotice';
 import FinalCtaSection from '../components/FinalCtaSection';
 import { fetchProducts } from '../services/firebaseService';
 import { trackEvent } from '../services/analytics';
-import { BRAND_STATS, SITE_URL } from '../config/site';
+import { SITE_URL } from '../config/site';
 import { DEMO_PRODUCTS } from '../config/demoContent';
 
 const Newsletter = lazy(() => import('../components/Newsletter'));
@@ -277,9 +277,9 @@ function Shop() {
                   Dal viaggio reale al formato utile.
                 </h2>
                 <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/68 md:text-lg">
-                  Dopo {BRAND_STATS.yearsOfTravel} anni di itinerari percorsi insieme, il nostro
-                  valore non è ammucchiare informazioni: è selezionare indirizzi, attrazioni e
-                  priorità e confezionarli in formati leggeri e operativi.
+                  Dal 2018, con itinerari percorsi insieme, il nostro valore non è ammucchiare
+                  informazioni: è selezionare indirizzi, attrazioni e priorità e confezionarli in
+                  formati leggeri e operativi.
                 </p>
               </div>
               <div className="border-t border-white/12 pt-7">

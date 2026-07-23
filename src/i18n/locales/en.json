@@ -1,0 +1,53 @@
+{
+  "hero.headline": "Unique places worth every moment",
+  "hero.sub": "Practical guides written by real travelers. No filters, no noise.",
+  "hero.cta.primary": "Explore destinations",
+  "hero.cta.secondary": "Latest stories",
+
+  "manifesto.verified": "Verified",
+  "manifesto.visited": "Visited in person",
+  "manifesto.authored": "Written by us",
+  "manifesto.noSponsor": "No hidden sponsors",
+  "manifesto.couple": "Travel couple",
+  "manifesto.years": "5 years of exploration",
+
+  "nav.discover": "Explore",
+  "nav.travel": "Travel",
+  "nav.shop": "Shop",
+  "nav.club": "Club",
+  "nav.contacts": "Contact",
+  "nav.search": "Search",
+
+  "footer.tagline": "Unique places, genuine experiences.",
+  "footer.rights": "© {year} Travelliniwithus — All rights reserved",
+
+  "newsletter.title": "Handpicked places delivered to your inbox",
+  "newsletter.copy": "Once a week. No spam, no noise. Just places that genuinely deserve your time.",
+  "newsletter.cta": "Subscribe for free",
+  "newsletter.placeholder": "Your email address",
+  "newsletter.success": "Please check your inbox to confirm subscription.",
+  "newsletter.error": "Something went wrong. Please try again in a moment.",
+
+  "collab.cta.headline": "We partner with brands that love extraordinary places",
+  "collab.cta.button": "Work with us",
+
+  "consent.title": "Cookies and privacy",
+  "consent.body": "We use necessary technical cookies and, with your consent, analytics and marketing cookies to enhance your browsing experience.",
+  "consent.acceptAll": "Accept all",
+  "consent.rejectAll": "Decline",
+  "consent.customize": "Customize",
+  "consent.save": "Save preferences",
+  "consent.category.necessary": "Necessary",
+  "consent.category.analytics": "Analytics",
+  "consent.category.marketing": "Marketing",
+
+  "article.relatedSemantic": "Find similar places",
+  "article.share": "Share",
+  "article.readingTime": "{minutes} min read",
+
+  "contact.success": "Message received. We will get back to you within 48 hours.",
+  "contact.error": "Failed to send. Please try again shortly.",
+
+  "media.success": "Request received. Check your inbox for the media kit.",
+  "media.error": "Failed to send. Please try again shortly."
+}

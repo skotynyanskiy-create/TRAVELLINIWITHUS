@@ -40,19 +40,18 @@ describe('Navbar Component', () => {
     expect(getAllByText(/Travellini/i).length).toBeGreaterThan(0);
   });
 
-  it('renders navigation links (IA definitiva 2026-07-04)', () => {
-    const { getAllByText } = renderNavbar();
-    // Due assi ortogonali: DOVE (Destinazioni) × COSA (Racconti), più Esplora,
-    // Chi siamo, Shop. Strumenti e Club sono ora nel footer, non in nav primaria.
-    expect(getAllByText(/Destinazioni/i).length).toBeGreaterThan(0);
-    expect(getAllByText(/Esplora/i).length).toBeGreaterThan(0);
+  it('renders navigation links (IA corrente)', () => {
+    const { getAllByText, getAllByRole } = renderNavbar();
+    expect(getAllByText(/Mete/i).length).toBeGreaterThan(0);
+    expect(getAllByText(/Guide e racconti/i).length).toBeGreaterThan(0);
     expect(getAllByText(/Mappa/i).length).toBeGreaterThan(0);
-    expect(getAllByText(/Racconti/i).length).toBeGreaterThan(0);
     expect(getAllByText(/Chi siamo/i).length).toBeGreaterThan(0);
-    expect(getAllByText(/Shop/i).length).toBeGreaterThan(0);
-    // CTA nav reader-first (B2, 2026-07-04): la pill primaria è "Vieni con noi"
-    // (/vieni-con-noi); "Collabora" resta come link secondario a /collaborazioni.
-    expect(getAllByText(/Vieni con noi/i).length).toBeGreaterThan(0);
-    expect(getAllByText(/Collabora/i).length).toBeGreaterThan(0);
+    // CTA primaria B2C → landing lead
+    expect(getAllByText(/La guida in regalo/i).length).toBeGreaterThan(0);
+    // Link verso funnel guida
+    const guideLinks = getAllByRole('link').filter((el) =>
+      (el.getAttribute('href') || '').includes('/guida-in-regalo')
+    );
+    expect(guideLinks.length).toBeGreaterThan(0);
   });
 });

@@ -130,7 +130,8 @@ const appConfigPath = fs.existsSync(path.join(docsRoot, ".obsidian", "app.json")
 if (fs.existsSync(appConfigPath)) {
   const appConfig = JSON.parse(fs.readFileSync(appConfigPath, "utf8"));
   const ignored = new Set(appConfig.userIgnoreFilters ?? []);
-  for (const required of ["backups/", "claude-plugins-official/", "docs/99_Archive/"]) {
+  // Vault operativo = docs/ (DECISION_0004). I filtri sono relativi alla root del vault.
+  for (const required of ["99_Archive/", "backups/"]) {
     if (!ignored.has(required)) errors.push(`.obsidian/app.json: filtro mancante ${required}`);
   }
 } else {

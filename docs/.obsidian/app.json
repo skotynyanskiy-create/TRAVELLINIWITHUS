@@ -10,8 +10,10 @@
   "spellcheck": true,
   "homePath": "OBSIDIAN_HOME",
   "userIgnoreFilters": [
+    "99_Archive/",
     "backups/",
-    "claude-plugins-official/",
-    "docs/99_Archive/"
-  ]
+    ".trash/"
+  ],
+  "strictLineBreaks": false,
+  "showUnsupportedFiles": false
 }

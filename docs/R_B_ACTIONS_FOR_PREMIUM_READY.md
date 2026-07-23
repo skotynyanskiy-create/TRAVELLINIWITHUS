@@ -31,8 +31,9 @@ Ordine per ROI/ora — partite dall'alto.
 
 **Aggiornare la bio di entrambi i profili con il link tracciato:**
 
-- Instagram: `https://travelliniwithus.it/vieni-con-noi?utm_source=instagram&utm_medium=bio&utm_campaign=lead_magnet`
-- TikTok: `https://travelliniwithus.it/vieni-con-noi?utm_source=tiktok&utm_medium=bio&utm_campaign=lead_magnet`
+- Instagram: `https://travelliniwithus.it/guida-in-regalo?utm_source=ig_bio&utm_medium=social&utm_campaign=lead_magnet` (solo dopo go-live stabile)
+- TikTok: `https://travelliniwithus.it/guida-in-regalo?utm_source=tt_bio&utm_medium=social&utm_campaign=lead_magnet` (solo dopo go-live stabile)
+- Telegram: **non esporre** (disabilitato owner 2026-07-23)
 
 **Perché:** la landing è pronta, il tracking GA4 cattura `landing_view` con UTM,
 ma oggi è invisibile perché non c'è traffico bio. KPI atteso: 0,8-1,5% bio CTR

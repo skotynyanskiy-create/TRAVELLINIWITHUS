@@ -21,13 +21,15 @@ tags:
 
 > _Cosa pubblichiamo questa settimana? Qual è la priorità sito? Chi contattare?_
 
-**Settimana del**: 2026-06-29
+**Settimana del**: 2026-07-23
 
-**Focus editoriale**: completare il lead magnet con 10 luoghi reali
+**Focus editoriale**: lead magnet 10 luoghi + proof library top Reel (Burton/KL/Bled)
 
-**Focus sito**: chiudere gli activation gate in [[10_Projects/PROJECT_RELEASE_READINESS]]
+**Focus sito**: release gate + holding live vs repo — [[10_Projects/PROJECT_RELEASE_READINESS]]
 
-**Follow-up commerciale**: completare affiliazioni e aggiornare bio Instagram/TikTok
+**Focus brand/vault**: coerenza presence + Family — [[BRAND_KNOWLEDGE_MOC]] · [[VAULT_AND_GRAPHIFY_OPERATING_STATE]]
+
+**Follow-up commerciale**: affiliazioni + bio IG/TT verso hub owned (non solo Linktree)
 
 ---
 
@@ -144,7 +146,9 @@ Apri il modello, duplicalo nella cartella indicata e rinomina la nuova nota.
 
 ### Hub principali
 
+- [[BRAND_KNOWLEDGE_MOC]] — brand, social, Family, presence
 - [[MARKETING_OPERATIONS_HUB]] — campagne, partner, contenuti
+- [[VAULT_AND_GRAPHIFY_OPERATING_STATE]] — Obsidian + Graphify
 - [[OBSIDIAN_INDEX]] — indice completo del vault
 - [[EDITORIAL_GUIDE]] — regole editoriali
 - [[OBSIDIAN_TAXONOMY]] — naming e properties

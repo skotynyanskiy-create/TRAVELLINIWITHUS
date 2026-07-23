@@ -12,7 +12,7 @@ import JsonLd from '../components/JsonLd';
 import StickyMobileCTA from '../components/StickyMobileCTA';
 import DemoContentNotice from '../components/DemoContentNotice';
 import { fetchProductBySlug } from '../services/firebaseService';
-import { useCart } from '../context/CartContext';
+// Cart disattivato per ora (shop 'soon' per decisione owner). Nessun add-to-cart pubblico.
 import ProductPageSkeleton from '../components/ProductPageSkeleton';
 import { Product } from '../types';
 import { SITE_URL } from '../config/site';
@@ -40,7 +40,7 @@ const trustPoints = [
 
 export default function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
-  const { addToCart, setIsCartOpen } = useCart();
+  // addToCart / setIsCartOpen rimossi: shop non attivo per ora
 
   const demoFallback = DEMO_PRODUCTS.find((item) => item.slug === slug) as Product | undefined;
 
@@ -70,29 +70,6 @@ export default function ProductPage() {
       demo: isDemoProduct,
     });
   }, [isDemoProduct, product]);
-
-  const handleAddToCart = () => {
-    if (!product || isDemoProduct) return;
-
-    trackEvent('checkout_intent', {
-      route: `/shop/${product.slug}`,
-      source: 'product_page',
-      cta_id: 'product_add_to_cart',
-      content_id: product.id,
-      product_slug: product.slug,
-      value: product.price,
-      currency: 'EUR',
-    });
-
-    addToCart({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      imageUrl: product.imageUrl,
-      isDigital: product.isDigital,
-    });
-    setIsCartOpen(true);
-  };
 
   if (isLoading) return <ProductPageSkeleton />;
 
@@ -266,36 +243,26 @@ export default function ProductPage() {
               ))}
             </div>
 
-            {isDemoProduct ? (
-              <div className="rounded-2xl border border-black/5 bg-white/80 backdrop-blur-md p-6 shadow-sm">
-                <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
-                  In uscita prossimamente
-                </div>
-                <p className="mb-5 text-sm leading-relaxed text-black/65">
-                  Quando la guida sarà pronta avviseremo via email chi è già in lista. Nessuno spam,
-                  solo la notifica del lancio.
-                </p>
-                <Button
-                  to={`/contatti?prodotto=${product.slug}`}
-                  variant="primary"
-                  size="md"
-                  className="w-full sm:w-auto"
-                  magnetic={true}
-                >
-                  Iscrivimi alla lista <ArrowRight size={14} />
-                </Button>
+            {/* Shop per ora no (decisione owner): nascondiamo add-to-cart e carrello.
+                Mostriamo sempre la lista d'attesa / anteprima. */}
+            <div className="rounded-2xl border border-black/5 bg-white/80 backdrop-blur-md p-6 shadow-sm">
+              <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
+                In uscita prossimamente
               </div>
-            ) : (
+              <p className="mb-5 text-sm leading-relaxed text-black/65">
+                Quando il prodotto sarà pronto avviseremo via email chi è già in lista. Nessuno
+                spam, solo la notifica del lancio.
+              </p>
               <Button
+                to={`/contatti?prodotto=${product.slug}`}
                 variant="primary"
-                size="lg"
-                className="h-16 w-full rounded-2xl shadow-xl hover:shadow-2xl shadow-[var(--color-accent)]/10 transition-all duration-300"
-                onClick={handleAddToCart}
+                size="md"
+                className="w-full sm:w-auto"
                 magnetic={true}
               >
-                Aggiungi al carrello
+                Iscrivimi alla lista <ArrowRight size={14} />
               </Button>
-            )}
+            </div>
           </motion.div>
         </div>
       </Section>
@@ -324,19 +291,12 @@ export default function ProductPage() {
         </Section>
       )}
 
-      {isDemoProduct ? (
-        <StickyMobileCTA
-          label="Iscrivimi alla lista"
-          to={`/contatti?prodotto=${product.slug}`}
-          trackingId={`shop_${product.slug}_sticky_waitlist`}
-        />
-      ) : (
-        <StickyMobileCTA
-          label="Aggiungi al carrello"
-          onClick={handleAddToCart}
-          trackingId={`shop_${product.slug}_sticky_cart`}
-        />
-      )}
+      {/* Shop per ora no: sticky sempre waitlist, nessun add-to-cart */}
+      <StickyMobileCTA
+        label="Iscrivimi alla lista"
+        to={`/contatti?prodotto=${product.slug}`}
+        trackingId={`shop_${product.slug}_sticky_waitlist`}
+      />
 
       <Section className="pt-12">
         <div className="relative mx-auto max-w-5xl overflow-hidden rounded-3xl bg-[var(--color-ink-deep)] p-8 text-white md:p-12 border border-white/5 shadow-[var(--shadow-premium)]">

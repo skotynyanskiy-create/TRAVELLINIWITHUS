@@ -18,8 +18,8 @@ export const CONTACTS = {
 } as const;
 
 export const BIO_LINKS = {
-  instagram: `${SITE_URL}/vieni-con-noi?utm_source=ig_bio&utm_medium=social&utm_campaign=bio_hub`,
-  tiktok: `${SITE_URL}/vieni-con-noi?utm_source=tt_bio&utm_medium=social&utm_campaign=bio_hub`,
+  instagram: `${SITE_URL}/guida-in-regalo?utm_source=ig_bio&utm_medium=social&utm_campaign=lead_magnet`,
+  tiktok: `${SITE_URL}/guida-in-regalo?utm_source=tt_bio&utm_medium=social&utm_campaign=lead_magnet`,
 } as const;
 
 // Numeri allineati al profilo IG live (snapshot 2026-05-29).
@@ -29,15 +29,15 @@ export const BRAND_STATS = {
   tiktokFollowers: '90K+',
   engagementRate: '6.5%',
   monthlyReach: '500K+',
-  postsPublished: '1.268',
+  postsPublished: '1.272',
   destinationsExplored: '150+',
   yearsOfTravel: '8',
   totalFollowers: '260K+',
 } as const;
 
 export const BRAND_STATS_SOURCE = {
-  label: 'Snapshot pubblico da confermare con Insights R&B',
-  observedAt: '2026-05-29',
+  label: 'Snapshot pubblico IG (nascita del brand 2018; Family sub-brand separato)',
+  observedAt: '2026-07-23',
   nextVerification: 'Aggiornare con export Meta Business Suite e TikTok Analytics',
 } as const;
 

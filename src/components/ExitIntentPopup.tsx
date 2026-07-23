@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { X, Gift, Download } from 'lucide-react';
+import { X } from 'lucide-react';
 import Newsletter from './Newsletter';
-import { trackEvent } from '../services/analytics';
+import LeadMagnetCover from './LeadMagnetCover';
 
 const STORAGE_KEY = 'twu_exit_popup_dismissed_at';
 const SUBSCRIBED_KEY = 'twu_newsletter_subscribed';
@@ -96,20 +96,11 @@ export default function ExitIntentPopup() {
     markDismissed('closed');
   };
 
-  const handleDownloadClick = () => {
-    trackEvent('lead_magnet_click', {
-      source: 'exit_intent_popup',
-      file: 'lead-magnet-posti-italiani.pdf',
-    });
-    markDismissed('subscribed');
-    setVisible(false);
-  };
-
   return (
     <AnimatePresence>
       {visible && (
         <>
-          {/* Overlay premium blur */}
+          {/* Scrim esterno: unico blur della card, la card resta opaca (no glassmorphism). */}
           <motion.div
             key="exit-overlay"
             initial={{ opacity: 0 }}
@@ -121,7 +112,6 @@ export default function ExitIntentPopup() {
             aria-hidden="true"
           />
 
-          {/* Card in stile warm sand glassmorphism */}
           <motion.div
             key="exit-card"
             initial={{ opacity: 0, scale: 0.94, y: 20 }}
@@ -130,74 +120,46 @@ export default function ExitIntentPopup() {
             transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
             role="dialog"
             aria-modal="true"
-            aria-label="Ricevi la nostra guida gratuita sui posti italiani insoliti"
-            className="fixed inset-x-4 top-1/2 z-[201] mx-auto flex max-w-lg -translate-y-1/2 flex-col overflow-hidden rounded-[var(--radius-lg)] border border-border bg-sand/98 p-6 shadow-[var(--shadow-premium)] backdrop-blur-md sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 sm:p-8"
+            aria-label="Ricevi la guida Alla scoperta dell’Italia nascosta"
+            className="fixed inset-x-4 top-1/2 z-[201] mx-auto flex max-w-lg -translate-y-1/2 flex-col overflow-hidden rounded-[var(--radius-lg)] border border-border bg-sand/98 p-6 shadow-[var(--shadow-premium)] sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 sm:p-8"
           >
-            {/* Pulsante chiusura morbido */}
             <button
               onClick={close}
               aria-label="Chiudi"
-              className="absolute right-5 top-5 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-ink/5 text-ink/40 transition-all duration-300 hover:bg-ink/10 hover:text-ink"
+              className="absolute top-5 right-5 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-ink/5 text-ink/40 transition-all duration-300 hover:bg-ink/10 hover:text-ink"
             >
               <X size={16} />
             </button>
 
-            {/* Header / Eyebrow */}
             <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-accent)]/10">
-                <Gift size={18} className="text-[var(--color-accent)]" />
+              <div className="aspect-[4/5] h-11 shrink-0 overflow-hidden rounded-[var(--radius-sm)] border border-black/10 shadow-xs">
+                <LeadMagnetCover variant="compact" />
               </div>
               <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--color-accent)] sm:text-xs">
-                Regalo di addio...
+                Prima di uscire
               </span>
             </div>
 
-            {/* Copy Principale */}
-            <h2 className="font-serif text-2xl font-medium leading-snug text-ink sm:text-3xl">
-              10 Posti Italiani <span className="italic text-[var(--color-accent)]">Insoliti</span>
+            <h2 className="font-serif text-2xl leading-snug font-medium text-ink sm:text-3xl">
+              Alla scoperta dell’Italia nascosta
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-ink/80">
-              Prima di andare, scarica la nostra guida gratuita. Una selezione curata di luoghi con
-              carattere reali, provati sul campo da noi, completi di dettagli pratici per
-              organizzare il tuo weekend.
+              10 posti provati e consigliati da noi. La mandiamo solo a chi entra nella lista:
+              lascia l’email e la apri subito.
             </p>
 
-            {/* Azione 1: Scarica PDF Diretto (Ungated / High trust) */}
             <div className="mt-6">
-              <a
-                href="/lead-magnet-posti-italiani.pdf"
-                download
-                onClick={handleDownloadClick}
-                className="group flex h-14 w-full items-center justify-center gap-3 rounded-lg bg-[var(--color-accent)] px-6 text-sm font-bold uppercase tracking-widest text-white shadow-[var(--shadow-lg)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[var(--color-accent-hover)] hover:shadow-[var(--shadow-xl)]"
-              >
-                <Download
-                  size={18}
-                  className="transition-transform duration-300 group-hover:translate-y-0.5"
-                />
-                Scarica la Guida Gratis (PDF)
-              </a>
-            </div>
-
-            {/* Divisore editoriale elegante */}
-            <div className="my-6 flex items-center gap-3">
-              <span className="h-px flex-1 bg-border" />
-              <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-ink/40">
-                oppure
-              </span>
-              <span className="h-px flex-1 bg-border" />
-            </div>
-
-            {/* Azione 2: Iscriviti alla newsletter (Gated / Nurturing) */}
-            <div>
-              <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.18em] text-ink/68">
-                Resta iscritto per i prossimi consigli
-              </p>
-              <Newsletter variant="white" source="exit_intent_popup" compact onSuccess={close} />
+              <Newsletter
+                variant="white"
+                source="lead_magnet_exit_popup"
+                compact
+                ctaLabel="Ricevi la guida"
+              />
             </div>
 
             <button
               onClick={close}
-              className="mt-6 text-center text-xs font-semibold uppercase tracking-widest text-ink/40 transition-colors duration-300 hover:text-ink/80"
+              className="mt-6 text-center text-xs font-semibold tracking-widest text-ink/40 uppercase transition-colors duration-300 hover:text-ink/80"
             >
               No grazie, continuo a leggere
             </button>

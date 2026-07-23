@@ -1,6 +1,14 @@
 import { useState, type FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { CheckCircle, Gift, Loader2, Mail, ShieldCheck, TrendingUp } from 'lucide-react';
+import {
+  ArrowRight,
+  CheckCircle,
+  Gift,
+  Loader2,
+  Mail,
+  ShieldCheck,
+  TrendingUp,
+} from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import { trackEvent } from '../services/analytics';
 import { appendLeadFallback } from '../lib/leadFallback';
@@ -365,43 +373,42 @@ export default function Newsletter({
           <div className="flex items-start gap-4">
             <CheckCircle className="mt-0.5 shrink-0 text-[var(--color-accent)]" size={24} />
             <div>
-              <p className="font-serif text-xl">Iscrizione confermata.</p>
-              <p
-                className={`mt-1 text-sm leading-relaxed ${isDark ? 'text-white/65' : 'text-black/60'}`}
-              >
-                Ti scriviamo solo quando c'è qualcosa di davvero utile da salvare. Intanto, se ti
-                va,{' '}
-                {unlocksLeadMagnet ? (
-                  <Link
-                    to="/lead-magnet"
+              <p className="font-serif text-xl">
+                {unlocksLeadMagnet ? 'Ci sei.' : 'Iscrizione confermata.'}
+              </p>
+              {unlocksLeadMagnet ? (
+                <Link
+                  to="/lead-magnet"
+                  className="mt-2 inline-flex items-center gap-1.5 text-sm font-bold tracking-wide text-[var(--color-accent)] underline underline-offset-4 hover:text-[var(--color-accent-hover)]"
+                >
+                  Apri la guida <ArrowRight size={13} />
+                </Link>
+              ) : (
+                <p
+                  className={`mt-1 text-sm leading-relaxed ${isDark ? 'text-white/65' : 'text-black/60'}`}
+                >
+                  Ti scriviamo solo quando c'è qualcosa di davvero utile da salvare. Intanto, se ti
+                  va, ci trovi su{' '}
+                  <a
+                    href={CONTACTS.instagramUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="underline underline-offset-2 hover:text-[var(--color-accent)]"
                   >
-                    scarica subito il PDF
-                  </Link>
-                ) : (
-                  <>
-                    ci trovi su{' '}
-                    <a
-                      href={CONTACTS.instagramUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="underline underline-offset-2 hover:text-[var(--color-accent)]"
-                    >
-                      Instagram
-                    </a>{' '}
-                    e{' '}
-                    <a
-                      href={CONTACTS.tiktokUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="underline underline-offset-2 hover:text-[var(--color-accent)]"
-                    >
-                      TikTok
-                    </a>
-                  </>
-                )}
-                .
-              </p>
+                    Instagram
+                  </a>{' '}
+                  e{' '}
+                  <a
+                    href={CONTACTS.tiktokUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-2 hover:text-[var(--color-accent)]"
+                  >
+                    TikTok
+                  </a>
+                  .
+                </p>
+              )}
             </div>
           </div>
         </motion.div>

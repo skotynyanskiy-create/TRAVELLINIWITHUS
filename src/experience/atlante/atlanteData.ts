@@ -49,7 +49,7 @@ const RAW_WAYPOINTS = [
     kicker: "L'Atlante",
     title: 'Parti con noi.',
     description:
-      'Otto anni di viaggi su tracciati reali, racchiusi in un atlante vivente. Scorri per iniziare il cammino.',
+      'Dal 2018 viaggi su tracciati reali, racchiusi in un atlante vivente. Scorri per iniziare il cammino.',
     fieldNote: 'Nota di viaggio: Ogni tappa è stata vissuta e verificata di persona.',
     route: '/mappa',
     ctaText: 'Apri la Mappa',

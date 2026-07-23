@@ -1,14 +1,17 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Heart, MapPin, Sparkles, Compass, ArrowRight } from 'lucide-react';
-import TiltCard from '@/src/components/TiltCard';
 import Button from '@/src/components/Button';
+import OptimizedImage from '@/src/components/OptimizedImage';
+import { useReducedMotion } from '@/src/hooks/useReducedMotion';
 
 export interface WeekendIdea {
+  id: string;
   title: string;
   location: string;
-  zone: string;
-  vibe: string;
+  vibe: 'romantico' | 'relax' | 'avventura';
+  zone: 'italia' | 'europa' | 'mondo';
+  vibeLabel: string;
   costEstimate: string;
   duration: string;
   description: string;
@@ -16,78 +19,129 @@ export interface WeekendIdea {
   link: string;
 }
 
-const IDEAS_DATABASE: Record<string, WeekendIdea> = {
-  romantico_toscana: {
-    title: 'La Taverna dei Draghi & Notti nel Borgo',
+/** Solo ispirazioni legate a schede seed reali — non è un algoritmo. */
+const IDEAS: WeekendIdea[] = [
+  {
+    id: 'volterra',
+    title: 'Aperitivo gotico a Volterra',
     location: 'Volterra, Toscana',
-    zone: 'Italia',
-    vibe: 'Romantico & Misterioso',
-    costEstimate: '€ 140–180 / notte',
-    duration: '48 Ore (Weekend)',
+    vibe: 'romantico',
+    zone: 'italia',
+    vibeLabel: 'Romantico & misterioso',
+    costEstimate: 'Aperitivo + borgo',
+    duration: 'Weekend',
     description:
-      'Cena a lume di candela in un sotterraneo in pietra del 1300, passeggiata al tramonto sulle balze e risveglio in dimora storica.',
+      'Drink scenografici e atmosfera da borgo medievale. Ideale per una sera diversa in Toscana.',
+    coverImage: '/images/reels/reel-5-cover.webp',
+    link: '/posto/toscana-aperitivo-volterra',
+  },
+  {
+    id: 'burton',
+    title: 'Cena al The Burton Juice',
+    location: 'Somma Vesuviana, Campania',
+    vibe: 'avventura',
+    zone: 'italia',
+    vibeLabel: 'Esperienza insolita',
+    costEstimate: 'Su prenotazione',
+    duration: 'Una serata',
+    description:
+      'Sale a tema Tim Burton, attori e cocktail. Una cena-spettacolo alle porte di Napoli.',
+    coverImage: '/images/home-journal/hero-impossible.webp',
+    link: '/posto/campania-burton-juice',
+  },
+  {
+    id: 'jesolo',
+    title: 'Caraibi in Italia a Jesolo',
+    location: 'Jesolo, Veneto',
+    vibe: 'relax',
+    zone: 'italia',
+    vibeLabel: 'Mare & relax',
+    costEstimate: 'Giornata / weekend',
+    duration: '1–2 giorni',
+    description: 'Acqua chiara e vibe estiva senza volo lungo. Per una fuga breve dal Nord Italia.',
+    coverImage: '/images/reels/reel-1-cover.webp',
+    link: '/posto/jesolo-caribe-bay',
+  },
+  {
+    id: 'madrid',
+    title: 'Storyland a Madrid',
+    location: 'Madrid, Spagna',
+    vibe: 'romantico',
+    zone: 'europa',
+    vibeLabel: 'City break',
+    costEstimate: 'Biglietto + città',
+    duration: 'Weekend',
+    description:
+      'Un locale immersivo a tema fiabe/Disney a Madrid: ideale per una serata speciale in città.',
     coverImage: '/images/reels/reel-3-cover.webp',
-    link: '/posto/taverna-volterra-toscana',
+    link: '/posto/madrid-storyland-disney',
   },
-  relax_puglia: {
-    title: 'Masseria di Luce con Trulli Privati',
-    location: "Val d'Itria, Puglia",
-    zone: 'Italia',
-    vibe: 'Natura & Relax',
-    costEstimate: '€ 160–220 / notte',
-    duration: '3 Giorni',
-    description:
-      'Piscina incastonata nella roccia bianca, colazione sotto gli ulivi secolari e silenzio totale a 15 minuti dal mare.',
-    coverImage: '/images/reels/reel-2-cover.webp',
-    link: '/esplora?zone=italia',
-  },
-  avventura_europa: {
-    title: "Fuga tra le Case sull'Acqua nei Fiordi",
-    location: 'Lofoten, Norvegia',
-    zone: 'Europa',
-    vibe: 'Grande Avventura',
-    costEstimate: '€ 190–250 / notte',
-    duration: '4 Giorni',
-    description:
-      'Antica rorbu di pescatori riconvertita, aurora boreale dal letto e zuppa di pesce fresca al porto.',
+  {
+    id: 'batu',
+    title: 'Batu Caves a Kuala Lumpur',
+    location: 'Kuala Lumpur, Malesia',
+    vibe: 'avventura',
+    zone: 'mondo',
+    vibeLabel: 'Posto particolare',
+    costEstimate: 'Ingresso gratis',
+    duration: 'Mezza giornata',
+    description: 'Scalinata arcobaleno, templi e scimmie. Low cost e fotogenico: vale la pena?',
     coverImage: '/images/reels/reel-4-cover.webp',
-    link: '/esplora?zone=europa',
+    link: '/posto/malesia-batu-caves',
   },
-};
+  {
+    id: 'egitto',
+    title: 'Mar Rosso a Marsa Alam',
+    location: 'Marsa Alam, Egitto',
+    vibe: 'relax',
+    zone: 'mondo',
+    vibeLabel: 'Mare & snorkel',
+    costEstimate: 'Resort low-mid',
+    duration: '4–7 giorni',
+    description:
+      'Acqua trasparente e reef vicini al pontile. Resort economico con mare da cartolina.',
+    coverImage: '/images/reels/reel-1-cover.webp',
+    link: '/posto/egitto-marsa-alam-dream-lagoon',
+  },
+];
 
 export default function WeekendGeneratorWidget() {
-  const [selectedVibe, setSelectedVibe] = useState<'romantico' | 'relax' | 'avventura'>(
-    'romantico'
-  );
-  const [selectedZone, setSelectedZone] = useState<'toscana' | 'puglia' | 'europa'>('toscana');
-  const [generated, setGenerated] = useState<WeekendIdea | null>(IDEAS_DATABASE.romantico_toscana);
+  const reducedMotion = useReducedMotion();
+  const [selectedVibe, setSelectedVibe] = useState<WeekendIdea['vibe']>('romantico');
+  const [selectedZone, setSelectedZone] = useState<WeekendIdea['zone']>('italia');
+  const [generated, setGenerated] = useState<WeekendIdea>(IDEAS[0]);
 
-  const generateIdea = () => {
-    const key = `${selectedVibe}_${selectedZone}`;
-    const fallback = IDEAS_DATABASE.romantico_toscana;
-    setGenerated(IDEAS_DATABASE[key] ?? fallback);
-  };
+  const match = useMemo(() => {
+    const exact = IDEAS.find((i) => i.vibe === selectedVibe && i.zone === selectedZone);
+    if (exact) return exact;
+    return (
+      IDEAS.find((i) => i.zone === selectedZone) ??
+      IDEAS.find((i) => i.vibe === selectedVibe) ??
+      IDEAS[0]
+    );
+  }, [selectedVibe, selectedZone]);
+
+  const generateIdea = () => setGenerated(match);
 
   return (
-    <section className="bg-[var(--color-sand,#faf7f2)] py-20 md:py-28 text-[var(--color-ink)]">
+    <section className="bg-[var(--color-sand,#faf7f2)] py-20 text-[var(--color-ink)] md:py-28">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="mb-12 text-center">
           <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent,#c85a32)]">
             <Sparkles size={14} />
-            Generatore di Fuga di Coppia
+            Ispirazione weekend
           </span>
           <h2 className="mt-3 font-serif text-3xl font-normal leading-tight md:text-5xl">
-            Trova il tuo weekend perfetto in 3 click.
+            Un posto vero, in pochi click.
           </h2>
           <p className="mt-3 text-base text-[var(--color-muted-fg)] md:text-lg">
-            Seleziona atmosfera e destinazione: ti mostriamo un posto speciale provato di persona
-            con costi reali.
+            Non è un algoritmo magico: scegli atmosfera e zona, ti mostriamo un posto che abbiamo
+            già mappato sul sito.
           </p>
         </div>
 
         <div className="grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:items-center">
-          {/* Form Controls */}
-          <div className="rounded-[var(--radius-lg,16px)] border border-[var(--color-border)] bg-[var(--color-surface,#ffffff)] p-6 md:p-8 shadow-sm">
+          <div className="rounded-[var(--radius-lg,16px)] border border-[var(--color-border)] bg-[var(--color-surface,#ffffff)] p-6 shadow-sm md:p-8">
             <div className="mb-6">
               <span
                 id="weekend-vibe-label"
@@ -102,9 +156,9 @@ export default function WeekendGeneratorWidget() {
               >
                 {(
                   [
-                    { id: 'romantico', label: 'Romantica', icon: Heart },
-                    { id: 'relax', label: 'Relax & Natura', icon: Compass },
-                    { id: 'avventura', label: 'Avventura', icon: Sparkles },
+                    { id: 'romantico' as const, label: 'Romantica', icon: Heart },
+                    { id: 'relax' as const, label: 'Relax', icon: Compass },
+                    { id: 'avventura' as const, label: 'Insolita', icon: Sparkles },
                   ] as const
                 ).map((vibe) => (
                   <button
@@ -141,9 +195,9 @@ export default function WeekendGeneratorWidget() {
               >
                 {(
                   [
-                    { id: 'toscana', label: 'Toscana' },
-                    { id: 'puglia', label: 'Puglia' },
-                    { id: 'europa', label: 'Europa' },
+                    { id: 'italia' as const, label: 'Italia' },
+                    { id: 'europa' as const, label: 'Europa' },
+                    { id: 'mondo' as const, label: 'Mondo' },
                   ] as const
                 ).map((zone) => (
                   <button
@@ -169,75 +223,74 @@ export default function WeekendGeneratorWidget() {
               className="w-full justify-center"
               trackingId="generate_weekend_click"
             >
-              Genera l'idea weekend
+              Mostra l&apos;idea
               <ArrowRight size={16} className="ml-2" />
             </Button>
           </div>
 
-          {/* Generated Result Card 3D Tilt */}
           <AnimatePresence mode="wait">
             {generated && (
               <motion.div
-                key={generated.title}
-                initial={{ opacity: 0, x: 20 }}
+                key={generated.id}
+                initial={reducedMotion ? false : { opacity: 0, x: 16 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.4 }}
+                exit={reducedMotion ? undefined : { opacity: 0, x: -16 }}
+                transition={{ duration: reducedMotion ? 0 : 0.3 }}
               >
-                <TiltCard maxTilt={6} className="w-full">
-                  <div className="relative overflow-hidden rounded-[var(--radius-lg,16px)] border border-[var(--color-border)] bg-white shadow-xl">
-                    <div className="relative h-64 w-full overflow-hidden">
-                      <img
-                        src={generated.coverImage}
-                        alt={generated.title}
-                        className="h-full w-full object-cover"
-                      />
-                      <span className="absolute left-4 top-4 inline-flex items-center gap-1 rounded-full bg-black/65 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white backdrop-blur-md">
-                        <MapPin size={12} className="text-[var(--color-accent)]" />
-                        {generated.location}
+                <div className="relative w-full overflow-hidden rounded-[var(--radius-lg,16px)] border border-[var(--color-border)] bg-white shadow-xl">
+                  <div className="relative h-64 w-full overflow-hidden">
+                    <OptimizedImage
+                      src={generated.coverImage}
+                      alt={generated.title}
+                      sizes="(max-width: 1024px) 92vw, 48vw"
+                      responsiveWidths={[320, 480, 768]}
+                      className="h-full w-full object-cover"
+                    />
+                    <span className="absolute left-4 top-4 inline-flex items-center gap-1 rounded-full bg-black/65 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white backdrop-blur-md">
+                      <MapPin size={12} className="text-[var(--color-accent)]" />
+                      {generated.location}
+                    </span>
+                  </div>
+
+                  <div className="p-6 md:p-8">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-accent)]">
+                        {generated.vibeLabel}
+                      </span>
+                      <span className="text-xs font-semibold text-[var(--color-muted-fg)]">
+                        {generated.duration}
                       </span>
                     </div>
 
-                    <div className="p-6 md:p-8">
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <span className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-accent)]">
-                          {generated.vibe}
+                    <h3 className="mt-2 font-serif text-2xl font-normal leading-snug">
+                      {generated.title}
+                    </h3>
+
+                    <p className="mt-3 text-sm leading-relaxed text-[var(--color-muted-fg)]">
+                      {generated.description}
+                    </p>
+
+                    <div className="mt-6 flex items-center justify-between border-t border-[var(--color-border)] pt-4">
+                      <div>
+                        <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--color-muted)]">
+                          Indicazione
                         </span>
-                        <span className="text-xs font-semibold text-[var(--color-muted-fg)]">
-                          {generated.duration}
+                        <span className="text-sm font-bold text-[var(--color-ink)]">
+                          {generated.costEstimate}
                         </span>
                       </div>
 
-                      <h3 className="mt-2 font-serif text-2xl font-normal leading-snug">
-                        {generated.title}
-                      </h3>
-
-                      <p className="mt-3 text-sm leading-relaxed text-[var(--color-muted-fg)]">
-                        {generated.description}
-                      </p>
-
-                      <div className="mt-6 flex items-center justify-between border-t border-[var(--color-border)] pt-4">
-                        <div>
-                          <span className="block text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--color-muted)]">
-                            Costo stimato
-                          </span>
-                          <span className="text-sm font-bold text-[var(--color-ink)]">
-                            {generated.costEstimate}
-                          </span>
-                        </div>
-
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          to={generated.link}
-                          trackingId="view_weekend_detail"
-                        >
-                          Vedi dettagli
-                        </Button>
-                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        to={generated.link}
+                        trackingId="view_weekend_detail"
+                      >
+                        Apri la scheda
+                      </Button>
                     </div>
                   </div>
-                </TiltCard>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>

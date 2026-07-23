@@ -95,7 +95,7 @@ export default function HeroSection() {
             initial={animate ? 'hidden' : false}
             animate={animate ? 'show' : false}
           >
-            Rodrigo & Betta · dal 2017
+            Rodrigo & Betta · dal 2018
           </motion.span>
 
           {/* D1: clip reveal per riga — il titolo è il momento d'ingresso.

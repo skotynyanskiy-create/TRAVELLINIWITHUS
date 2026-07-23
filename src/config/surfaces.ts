@@ -54,7 +54,7 @@ export const SURFACES: Surface[] = [
   { path: '/preferiti', state: 'live', private: true },
   { path: '/account/acquisti', state: 'live', private: true },
   { path: '/lead-magnet', state: 'live', private: true },
-  { path: '/vieni-con-noi', state: 'live', private: true },
+  { path: '/guida-in-regalo', state: 'live', private: true },
   { path: '/manifesto', state: 'live', private: true },
 ];
 

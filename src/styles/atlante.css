@@ -26,6 +26,22 @@
   color: var(--color-ink, #1a2b3c);
 }
 
+/* — Superficie carta riusabile fuori dalla flip-card (copertina lead magnet:
+   landing, teaser home, thumbnail popup — cfr.
+   HANDOFF_lead-magnet-rework_asset_to_frontend.md, Route B). Stessa ricetta
+   di .journal-hero/.journal-page e .atlante-stamp-card__face--retro, senza
+   gli stati di flip: qui serve solo la texture, non la card interattiva. — */
+.atlante-carta-surface {
+  background-color: var(--color-atlante-carta);
+  background-image:
+    linear-gradient(104deg, rgb(255 255 255 / 16%), transparent 42%, rgb(120 89 48 / 4%)),
+    var(--atlante-carta-texture);
+  background-size:
+    auto,
+    var(--atlante-carta-tile) var(--atlante-carta-tile);
+  background-blend-mode: normal, multiply;
+}
+
 /* — Kicker/eyebrow rosso timbro con filetto — */
 .atlante-kicker {
   display: inline-flex;
@@ -205,6 +221,22 @@
   background: var(--color-atlante-timbro);
   color: #fffaf0;
   transform: rotate(0deg);
+}
+
+/* — Timbro statico: stessa resa di .atlante-stamp-btn (bordo doppio, carta,
+   rotazione a mano) ma senza gli stati interattivi — qui e un badge sulla
+   copertina del lead magnet, non un bottone. Dimensione via utility Tailwind
+   sul chiamante (h- / w- / text-) — niente `font` shorthand qui: imposterebbe
+   anche font-size e, essendo questo file importato senza @layer dopo
+   Tailwind, vincerebbe sempre sulle utility text-[..] / text-xs del chiamante. */
+.atlante-stamp-mark {
+  border: 3px double var(--color-atlante-timbro);
+  background: color-mix(in srgb, var(--color-atlante-carta) 92%, transparent);
+  font-family: var(--font-serif);
+  font-weight: 750;
+  line-height: 1;
+  color: var(--color-atlante-timbro-text);
+  transform: rotate(4deg);
 }
 
 /* — Scheda di verifica: righe label/valore su carta — */

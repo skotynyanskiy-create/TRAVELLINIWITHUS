@@ -1,44 +1,77 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Play, Volume2, X, Instagram, Sparkles } from 'lucide-react';
+import { Play, X, Instagram, Sparkles, ExternalLink } from 'lucide-react';
+import { Link } from '@/src/components/TransitionLink';
+import OptimizedImage from '@/src/components/OptimizedImage';
 import { getPublishedReels, type ReelEntry } from '@/src/config/reels';
+import { useReducedMotion } from '@/src/hooks/useReducedMotion';
 
 export default function HiggsfieldReelCarousel() {
   const reels = getPublishedReels();
   const [selectedReel, setSelectedReel] = useState<ReelEntry | null>(null);
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const reducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    if (!selectedReel) return;
+
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedReel(null);
+    };
+    window.addEventListener('keydown', onKey);
+    closeBtnRef.current?.focus();
+
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [selectedReel]);
 
   return (
-    <section className="bg-[var(--color-ink,#1a2b3c)] py-20 md:py-28 text-white overflow-hidden">
+    <section className="overflow-hidden bg-[var(--color-ink,#1a2b3c)] py-20 text-white md:py-28">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="mb-12 flex flex-col justify-between md:flex-row md:items-end">
           <div>
             <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent,#c85a32)]">
               <Sparkles size={14} />
-              In Viaggio Con Noi · Reels &amp; Storie
+              In Viaggio Con Noi · Reels
             </span>
             <h2 className="mt-3 font-serif text-3xl font-normal leading-tight md:text-5xl">
               I nostri Reel sul posto in 9:16.
             </h2>
           </div>
           <p className="mt-4 max-w-md text-sm text-white/70 md:mt-0 md:text-right">
-            Clicca su una storia per ascoltare la dritta vocale di Rodrigo e Betta con atmosfera ed
-            i costi veri.
+            Apri un reel per il video locale. Se esiste la scheda sul sito, la trovi sotto al
+            player.
           </p>
         </div>
 
-        {/* Horizontal Reel Cards Stream */}
         <div className="flex items-center gap-6 overflow-x-auto pb-6 pt-2 scrollbar-none">
           {reels.map((reel) => (
             <motion.div
               key={reel.id}
-              whileHover={{ y: -6, scale: 1.02 }}
-              transition={{ duration: 0.3 }}
+              role="button"
+              tabIndex={0}
+              aria-label={`Apri reel: ${reel.hook}`}
+              whileHover={reducedMotion ? undefined : { y: -4 }}
+              transition={{ duration: 0.25 }}
               onClick={() => setSelectedReel(reel)}
-              className="group relative h-[420px] w-[260px] flex-shrink-0 cursor-pointer overflow-hidden rounded-[var(--radius-lg,16px)] bg-black/50 shadow-xl border border-white/15"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setSelectedReel(reel);
+                }
+              }}
+              className="group relative h-[420px] w-[260px] flex-shrink-0 cursor-pointer overflow-hidden rounded-[var(--radius-lg,16px)] border border-white/15 bg-black/50 shadow-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] focus:ring-offset-2 focus:ring-offset-[var(--color-ink)]"
             >
-              <img
+              <OptimizedImage
                 src={reel.cover}
                 alt={reel.alt}
+                sizes="260px"
+                responsiveWidths={[320, 480]}
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
@@ -48,80 +81,90 @@ export default function HiggsfieldReelCarousel() {
                 Reel 9:16
               </span>
 
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white text-[var(--color-ink)] shadow-2xl">
                   <Play size={22} className="ml-1 fill-current" />
                 </span>
               </div>
 
-              <div className="absolute bottom-0 inset-x-0 p-4">
+              <div className="absolute inset-x-0 bottom-0 p-4">
                 <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent,#c85a32)]">
                   {reel.type} · {reel.zone}
                 </span>
-                <h4 className="mt-1 font-serif text-base font-normal leading-snug text-white line-clamp-2">
+                <h3 className="mt-1 line-clamp-2 font-serif text-base font-normal leading-snug text-white">
                   {reel.hook}
-                </h4>
+                </h3>
               </div>
             </motion.div>
           ))}
         </div>
       </div>
 
-      {/* Reel Lightbox */}
       <AnimatePresence>
         {selectedReel && (
           <motion.div
-            initial={{ opacity: 0 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Reel: ${selectedReel.hook}`}
+            initial={reducedMotion ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            exit={reducedMotion ? undefined : { opacity: 0 }}
             className="fixed inset-0 z-[250] flex items-center justify-center bg-black/90 p-4 backdrop-blur-md"
             onClick={() => setSelectedReel(null)}
           >
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
+              initial={reducedMotion ? false : { scale: 0.96, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+              exit={reducedMotion ? undefined : { scale: 0.96, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative max-h-[90vh] w-full max-w-md overflow-hidden rounded-[var(--radius-lg,16px)] bg-black shadow-2xl border border-white/20"
+              className="relative max-h-[90vh] w-full max-w-md overflow-hidden rounded-[var(--radius-lg,16px)] border border-white/20 bg-black shadow-2xl"
             >
               <button
+                ref={closeBtnRef}
                 type="button"
+                aria-label="Chiudi reel"
                 onClick={() => setSelectedReel(null)}
                 className="absolute right-3 top-3 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-black hover:bg-white"
               >
                 <X size={18} />
               </button>
 
-              {/* I reel sono muti e senza parlato: una traccia vuota soddisfa
-                  l'a11y senza promettere sottotitoli che non esistono. */}
               <video
                 src={selectedReel.localPath}
                 poster={selectedReel.cover}
                 autoPlay
                 loop
                 muted
+                playsInline
                 controls
-                className="w-full max-h-[85vh] object-cover"
+                className="max-h-[70vh] w-full object-cover"
               >
                 <track kind="captions" />
               </video>
 
-              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/80 to-transparent p-5 text-white">
-                <div className="flex items-center gap-2 mb-2 text-xs font-semibold text-[var(--color-accent,#c85a32)]">
-                  <Volume2 size={14} />
-                  Consiglio Vocale · {selectedReel.location}
-                </div>
+              <div className="space-y-3 bg-[var(--color-ink)] p-5 text-white">
                 <p className="text-sm leading-relaxed text-white/90">{selectedReel.caption}</p>
-                {selectedReel.instagramUrl && (
-                  <a
-                    href={selectedReel.instagramUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mt-3 inline-flex items-center gap-2 text-xs font-semibold text-white/80 hover:text-white underline-offset-4 hover:underline"
-                  >
-                    <Instagram size={14} /> Guarda su Instagram
-                  </a>
-                )}
+                <div className="flex flex-wrap gap-3">
+                  {selectedReel.postoId && (
+                    <Link
+                      to={`/posto/${selectedReel.postoId}`}
+                      className="inline-flex items-center gap-2 text-xs font-semibold text-[var(--color-accent)] underline-offset-4 hover:underline"
+                      onClick={() => setSelectedReel(null)}
+                    >
+                      <ExternalLink size={14} /> Apri la scheda sul sito
+                    </Link>
+                  )}
+                  {selectedReel.instagramUrl && (
+                    <a
+                      href={selectedReel.instagramUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 text-xs font-semibold text-white/80 underline-offset-4 hover:text-white hover:underline"
+                    >
+                      <Instagram size={14} /> Instagram
+                    </a>
+                  )}
+                </div>
               </div>
             </motion.div>
           </motion.div>

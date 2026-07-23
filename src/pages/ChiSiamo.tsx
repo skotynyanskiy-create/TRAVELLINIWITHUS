@@ -118,7 +118,7 @@ export default function ChiSiamo() {
     <PageLayout>
       <SEO
         title="Rodrigo e Betta: chi siamo"
-        description="Otto anni di viaggi in coppia raccontati con criterio. Come scegliamo i posti, perché ne consigliamo pochi, cosa garantiamo a chi ci legge."
+        description="Dalla nascita del brand nel 2018: viaggi in coppia raccontati con criterio. Come scegliamo i posti, perché ne consigliamo pochi, cosa garantiamo a chi ci legge."
         breadcrumbs={[
           { name: 'Home', url: SITE_URL },
           { name: 'Chi siamo', url: `${SITE_URL}/chi-siamo` },
@@ -189,10 +189,10 @@ export default function ChiSiamo() {
             <div className="mb-8 grid grid-cols-3 gap-4 sm:max-w-xl">
               <div className="border-t border-black/10 pt-4 text-center">
                 <div className="text-3xl font-serif text-[var(--color-ink)] transition-colors duration-300 group-hover:text-[var(--color-accent)]">
-                  {BRAND_STATS.yearsOfTravel}
+                  2018
                 </div>
                 <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink-2)]">
-                  anni di viaggi
+                  nascita del brand
                 </div>
               </div>
               <div className="border-t border-black/10 pt-4 text-center">

@@ -5,7 +5,7 @@ status: done
 priority: p1
 owner: team
 repo_path: docs/
-related: '[[OBSIDIAN_HOME]]'
+related: '[[OBSIDIAN_HOME]] · [[VAULT_AND_GRAPHIFY_OPERATING_STATE]]'
 source: audit completo vault 2026-06-28
 tags:
   - obsidian
@@ -14,6 +14,8 @@ tags:
 ---
 
 # BUG — Vault Obsidian disallineato
+
+> **2026-07-23:** `npm run audit:obsidian` → **PASS** (0 errors). Residual WARN = ~19 link storici a file codice rimossi — vedi [[VAULT_AND_GRAPHIFY_OPERATING_STATE]].
 
 ## Sintomo
 

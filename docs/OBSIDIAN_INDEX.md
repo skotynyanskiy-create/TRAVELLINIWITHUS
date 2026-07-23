@@ -25,8 +25,10 @@ Indice generato automaticamente delle note operative versionate. Rigenerare con
 - [[AI_TOOLING_RADAR]]
 - [[ARCHITECTURE]]
 - [[ASSET_STRATEGY]]
+- [[BRAND_KNOWLEDGE_MOC]]
 - [[BRAND_MESSAGING_STRATEGY]]
 - [[BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS]]
+- [[BRAND_TRAVELLINI_FAMILY]]
 - [[CODEX_CONTEXT_FROM_CLAUDE]]
 - [[DEMO_PRODUCTS]]
 - [[DEPLOYMENT_RUNBOOK]]
@@ -35,6 +37,7 @@ Indice generato automaticamente delle note operative versionate. Rigenerare con
 - [[MARKETING_OPERATIONS_HUB]]
 - [[OBSIDIAN_DASHBOARD]]
 - [[OBSIDIAN_HOME]]
+- [[OBSIDIAN_PLUGIN_CONFIG_AUDIT_2026-07-23]]
 - [[OBSIDIAN_TAXONOMY]]
 - [[OBSIDIAN_WORKFLOW]]
 - [[OPERATIONAL_VERIFICATION_REPORT]]
@@ -48,6 +51,7 @@ Indice generato automaticamente delle note operative versionate. Rigenerare con
 - [[TRAVELLINIWITHUS_BRAND_MEMORY]]
 - [[TRAVELLINIWITHUS_EXECUTION_PLAN]]
 - [[TRAVELLINIWITHUS_MASTER_PLAN]]
+- [[VAULT_AND_GRAPHIFY_OPERATING_STATE]]
 
 ## Progetti
 
@@ -105,6 +109,7 @@ Indice generato automaticamente delle note operative versionate. Rigenerare con
 - [[13_Content/CONTENT_CALENDAR_H2_2026]]
 - [[13_Content/CONTENT_PILLARS_TRAVELLINIWITHUS]]
 - [[13_Content/CONTENT_PROOF_LIBRARY_TRAVELLINIWITHUS]]
+- [[13_Content/DOSSIER_PRESENZA_ONLINE_TRAVELLINIWITHUS_2026-07-23]]
 - [[13_Content/DRAFT_PILLAR_SALENTO_AGOSTO]]
 - [[13_Content/IG_CONTENT_ANALYSIS_2026-07-15]]
 - [[13_Content/INSTAGRAM_CONTENT_AUDIT_2026-07-21]]
@@ -147,6 +152,7 @@ Indice generato automaticamente delle note operative versionate. Rigenerare con
 - [[20_Decisions/DECISION_0004_OBSIDIAN_GRAPHIFY_SPLIT_VAULT_STRATEGY]]
 - [[20_Decisions/DECISION_IMAGERY_TRUTH_RULE_2026-07-22]]
 - [[20_Decisions/DECISION_PUBLIC_METRICS_SOURCE_TRAVELLINIWITHUS_2026-06-07]]
+- [[20_Decisions/DECISION_TRAVELLINI_FAMILY_BOUNDARY_2026-07-23]]
 - [[20_Decisions/ROUTING_LOG]]
 
 ## Meeting
