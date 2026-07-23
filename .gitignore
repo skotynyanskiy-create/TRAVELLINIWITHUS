@@ -8,6 +8,10 @@ coverage/
 !.env.example
 playwright-report/
 test-results/
+# Report HTML della suite forense (.audit-workbench/playwright.config.ts):
+# ~7 MB di trace, zip e bundle rigenerabili a ogni run. Lo spec e la config
+# restano versionati.
+.audit-workbench/playwright-report-audit/
 qa-final/
 qa-shots/
 output/

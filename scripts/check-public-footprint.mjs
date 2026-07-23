@@ -88,9 +88,18 @@ for (const routeFile of [
 
 expectContains(
   'src/pages/VieniConNoi.tsx',
+  'landing_view',
+  '/guida-in-regalo tracks landing views.',
+  '/guida-in-regalo does not track landing views.'
+);
+// Guardia distinta da landing_view: la vista pagina non dice nulla sui path
+// secondari del bio hub. Erano marcati solo con data-track, senza handler, e
+// quindi non emettevano nulla.
+expectContains(
+  'src/pages/VieniConNoi.tsx',
   'bio_hub_path_click',
-  '/vieni-con-noi tracks bio hub path clicks.',
-  '/vieni-con-noi does not track bio hub path clicks.'
+  '/guida-in-regalo tracks bio hub path clicks.',
+  '/guida-in-regalo does not track bio hub path clicks.'
 );
 expectContains(
   'src/pages/MediaKit.tsx',
@@ -187,10 +196,44 @@ if (process.env.PUBLIC_FOOTPRINT_REQUIRE_PROD === '1' && !process.env.VITE_FIREB
   add('PASS', 'VITE_FIREBASE_API_KEY is present in this shell.');
 }
 
-add(
-  'WARN',
-  'audit:secrets still scans git history. Rotate/restrict the historical Firebase Web API key before production deploy.'
-);
+// Stato della restrizione della chiave Firebase Web API.
+//
+// Prima questo era un WARN hardcoded: si accendeva sempre, non misurava nulla e
+// non poteva spegnersi nemmeno dopo l'intervento — quindi il criterio di
+// accettazione di TASK-002 era inverificabile. Ora legge l'attestazione
+// dell'owner da DECISION_FIREBASE_WEB_API_KEY_2026-07-23.md.
+//
+// Limite dichiarato: e un'attestazione, non un controllo tecnico. Lo stato reale
+// delle restrizioni vive in apikeys.googleapis.com e leggerlo richiederebbe
+// credenziali GCP che non vanno maneggiate da qui.
+const keyDecisionPath = 'docs/20_Decisions/DECISION_FIREBASE_WEB_API_KEY_2026-07-23.md';
+if (!exists(keyDecisionPath)) {
+  add('WARN', `${keyDecisionPath} is missing; Firebase Web API key restriction is untracked.`);
+} else {
+  const decision = read(keyDecisionPath);
+  const applied = /^restrizione_applicata:\s*true\s*$/m.test(decision);
+  const dated = /^restrizione_data:\s*'?\d{4}-\d{2}-\d{2}'?\s*$/m.test(decision);
+  // Accetta sia la forma inline (`domini_autorizzati: ['a', 'b']`) sia la lista
+  // YAML su piu righe, purche non vuota.
+  const inlineDomains = (decision.match(/^domini_autorizzati:(.*)$/m)?.[1] ?? '').trim();
+  const domains =
+    (inlineDomains !== '' && inlineDomains !== '[]') ||
+    /^domini_autorizzati:\s*\r?\n\s*-\s+\S/m.test(decision);
+
+  if (applied && dated && domains) {
+    add('PASS', 'Firebase Web API key restriction attested in the decision record.');
+  } else if (applied) {
+    add(
+      'WARN',
+      `${keyDecisionPath} claims the restriction is applied but is missing restrizione_data or domini_autorizzati.`
+    );
+  } else {
+    add(
+      'WARN',
+      `Firebase Web API key is not yet restricted on GCP Console. Runbook and status fields: ${keyDecisionPath}.`
+    );
+  }
+}
 
 const passCount = checks.filter((check) => check.level === 'PASS').length;
 const warnCount = checks.filter((check) => check.level === 'WARN').length;

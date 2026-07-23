@@ -132,6 +132,17 @@ export default function Contatti() {
         }),
       });
 
+      // 429 = rate limit: la richiesta non e stata presa in carico. Va tenuto
+      // fuori dal catch, altrimenti finisce nel fallback localStorage e
+      // l'utente vede la schermata di successo per un messaggio mai partito
+      // (con una conversione falsa registrata in analytics).
+      if (response.status === 429) {
+        const payload = (await response.json().catch(() => null)) as { error?: string } | null;
+        trackEvent('contact_submit_blocked', { reason: 'rate_limit' });
+        setSubmitError(payload?.error || 'Troppi invii ravvicinati. Riprova tra qualche minuto.');
+        return;
+      }
+
       if (!response.ok) {
         const payload = (await response.json().catch(() => null)) as { error?: string } | null;
         throw new Error(payload?.error || 'Invio non riuscito');

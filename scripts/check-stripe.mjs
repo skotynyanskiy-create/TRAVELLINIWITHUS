@@ -38,6 +38,16 @@ expectContains(
   'Checkout rate limiter not found on /api/create-checkout-session.'
 );
 
+// Limiter gemello, dichiarato nello stesso blocco di server.ts. Senza questa
+// guardia si potrebbe rimuovere il mount del contactLimiter senza che nessuno
+// script se ne accorga (regressione anti-spam silenziosa).
+expectContains(
+  serverContent,
+  "app.use('/api/contact-lead', contactLimiter);",
+  'Contact endpoint is rate-limited.',
+  'Contact rate limiter not found on /api/contact-lead.'
+);
+
 expectContains(
   serverContent,
   'stripe.webhooks.constructEvent',
@@ -45,11 +55,30 @@ expectContains(
   'Stripe webhook signature verification is missing.'
 );
 
+// Il raw body e' il presupposto della verifica di firma: se qualcuno montasse
+// express.json prima di questa route, constructEvent fallirebbe su OGNI evento
+// e gli ordini sparirebbero in silenzio.
+expectContains(
+  serverContent,
+  "app.post('/api/webhook', express.raw({ type: 'application/json' })",
+  'Webhook reads the raw body before signature verification.',
+  'Webhook does not use express.raw; signature verification would break.'
+);
+
 expectContains(
   serverContent,
   "event.type === 'checkout.session.completed'",
   'Webhook handles checkout.session.completed.',
   'checkout.session.completed handler not found.'
+);
+
+// Stripe ritenta lo stesso evento per 3 giorni: senza chiave idempotente si
+// creerebbero ordini duplicati a ogni retry.
+expectContains(
+  serverContent,
+  'saveStripeOrder(order, event.id)',
+  'Webhook persists orders idempotently using the Stripe event id.',
+  'Webhook does not pass the Stripe event id to saveStripeOrder; retries could duplicate orders.'
 );
 
 expectContains(
@@ -81,6 +110,13 @@ expectContains(
   'STRIPE_SECRET_KEY',
   '.env.example documents STRIPE_SECRET_KEY.',
   '.env.example does not document STRIPE_SECRET_KEY.'
+);
+
+expectContains(
+  envExampleContent,
+  'STRIPE_WEBHOOK_SECRET',
+  '.env.example documents STRIPE_WEBHOOK_SECRET.',
+  '.env.example does not document STRIPE_WEBHOOK_SECRET.'
 );
 
 expectContains(

@@ -27,7 +27,18 @@ const budgets = [
   { name: 'firebase-firestore-lazy', match: /^firebase-firestore-/, maxKb: 430, maxGzipKb: 105 },
   { name: 'mapbox-lazy-route', match: /^mapbox-/, maxKb: 1850 },
   { name: 'maplibre-gl-lazy-route', match: /^maplibre-gl-/, maxKb: 1100 },
-  { name: 'react-pdf-lazy-export', match: /^react-pdf\.browser-/, maxKb: 1650, maxGzipKb: 560 },
+  // optional: /strumenti e' un redirect a /esplora (src/App.tsx:146), quindi
+  // Strumenti.tsx -> ItineraryBuilder -> import('@react-pdf/renderer') non e'
+  // piu nel grafo dei moduli e il chunk non viene emesso. Il budget resta
+  // dichiarato: se l'export PDF torna lato client, il limite si riapplica da
+  // solo. Assente != regressione, ma solo per questa voce.
+  {
+    name: 'react-pdf-lazy-export',
+    match: /^react-pdf\.browser-/,
+    maxKb: 1650,
+    maxGzipKb: 560,
+    optional: true,
+  },
   { name: 'charts-lazy-route', match: /^charts-/, maxKb: 410 },
   { name: 'home-route', match: /^AtlanteHome-/, maxKb: 110 },
   { name: 'article-route', match: /^Articolo-/, maxKb: 90 },
@@ -83,6 +94,10 @@ if (initialFiles.length === 0) {
 for (const budget of budgets) {
   const matches = files.filter((file) => budget.match.test(file.file));
   if (matches.length === 0) {
+    if (budget.optional) {
+      console.log(`[audit:size] SKIP ${budget.name}: not emitted in this build (optional budget)`);
+      continue;
+    }
     failures.push(`${budget.name}: bundle not found`);
     continue;
   }

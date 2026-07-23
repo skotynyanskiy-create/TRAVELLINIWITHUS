@@ -50,3 +50,6 @@ rejected and redone). Rules live in `CLAUDE.md` > Model routing.
 | 2026-07-23 | travellini-frontend-builder          | Implementare rework lead magnet          | 7750 ch  |
 | 2026-07-23 | travellini-quality-auditor           | Gate qualitÃ  pre-deploy lead magnet     | 3295 ch  |
 | 2026-07-23 | travellini-security-auditor          | Security audit rework lead magnet        | 1984 ch  |
+| 2026-07-23 | Explore                              | Read audit findings                      | 21489 ch |
+| 2026-07-23 | Explore                              | Map contacts endpoint                    | 21454 ch |
+| 2026-07-23 | Explore                              | Map test + build tooling                 | 37233 ch |

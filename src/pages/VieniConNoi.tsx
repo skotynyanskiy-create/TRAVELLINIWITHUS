@@ -283,6 +283,15 @@ export default function VieniConNoi() {
                   key={item.to}
                   to={item.to}
                   data-track={item.id}
+                  onClick={() =>
+                    trackEvent('bio_hub_path_click', {
+                      route: '/guida-in-regalo',
+                      source,
+                      utm_source: utmSource,
+                      cta_id: item.id,
+                      destination: item.to,
+                    })
+                  }
                   className="group rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 transition-colors hover:border-[var(--color-accent)]/40"
                 >
                   <span className="font-serif text-xl text-[var(--color-ink)] group-hover:text-[var(--color-accent)]">

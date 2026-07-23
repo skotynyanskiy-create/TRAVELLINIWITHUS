@@ -1,0 +1,73 @@
+{
+  "auditDate": "2026-07-23T17:03:30Z",
+  "serverUrl": "http://localhost:3000",
+  "environment": "local_dev",
+  "routesTested": 38,
+  "results": [
+    { "route": "/", "statusCode": 200, "role": "public", "ssrSupported": true },
+    {
+      "route": "/guida-in-regalo",
+      "statusCode": 200,
+      "role": "public",
+      "ssrSupported": true,
+      "note": "private/noindex; unica landing lead; FIXED 2026-07-23"
+    },
+    {
+      "route": "/vieni-con-noi",
+      "statusCode": 404,
+      "role": "removed",
+      "ssrSupported": false,
+      "note": "route eliminata; no redirect; FIXED 2026-07-23"
+    },
+    { "route": "/esplora", "statusCode": 200, "role": "public", "ssrSupported": true },
+    { "route": "/destinazione", "statusCode": 200, "role": "public", "ssrSupported": true },
+    { "route": "/destinazione/toscana", "statusCode": 200, "role": "public", "ssrSupported": true },
+    {
+      "route": "/destinazione/toscana/chianti",
+      "statusCode": 404,
+      "role": "public",
+      "ssrSupported": false
+    },
+    {
+      "route": "/articolo/test-article",
+      "statusCode": 404,
+      "role": "public",
+      "ssrSupported": false
+    },
+    { "route": "/itinerari", "statusCode": 200, "role": "public", "ssrSupported": true },
+    { "route": "/itinerari/compare", "statusCode": 200, "role": "public", "ssrSupported": true },
+    {
+      "route": "/itinerari/test-itinerary",
+      "statusCode": 200,
+      "role": "public",
+      "ssrSupported": true
+    },
+    { "route": "/guide/test-guida", "statusCode": 200, "role": "public", "ssrSupported": true },
+    { "route": "/mappa", "statusCode": 200, "role": "public", "ssrSupported": true },
+    { "route": "/chi-siamo", "statusCode": 200, "role": "public", "ssrSupported": true },
+    { "route": "/collaborazioni", "statusCode": 200, "role": "public", "ssrSupported": true },
+    { "route": "/media-kit", "statusCode": 200, "role": "public", "ssrSupported": true },
+    { "route": "/contatti", "statusCode": 200, "role": "public", "ssrSupported": true },
+    { "route": "/risorse", "statusCode": 200, "role": "public", "ssrSupported": true },
+    { "route": "/shop", "statusCode": 200, "role": "public", "ssrSupported": true },
+    { "route": "/shop/test-product", "statusCode": 404, "role": "public", "ssrSupported": false },
+    { "route": "/club", "statusCode": 200, "role": "public", "ssrSupported": true },
+    { "route": "/posto/test-posto", "statusCode": 404, "role": "public", "ssrSupported": false },
+    { "route": "/preferiti", "statusCode": 200, "role": "public", "ssrSupported": true },
+    { "route": "/account/acquisti", "statusCode": 200, "role": "protected", "ssrSupported": true },
+    { "route": "/lead-magnet", "statusCode": 200, "role": "public", "ssrSupported": true },
+    { "route": "/admin", "statusCode": 200, "role": "protected", "ssrSupported": true },
+    { "route": "/admin/editor", "statusCode": 200, "role": "protected", "ssrSupported": true },
+    { "route": "/admin/users", "statusCode": 404, "role": "protected", "ssrSupported": false },
+    { "route": "/admin/orders", "statusCode": 404, "role": "protected", "ssrSupported": false },
+    { "route": "/manifesto", "statusCode": 404, "role": "lab", "ssrSupported": false },
+    { "route": "/privacy", "statusCode": 200, "role": "legal", "ssrSupported": true },
+    { "route": "/cookie", "statusCode": 200, "role": "legal", "ssrSupported": true },
+    { "route": "/termini", "statusCode": 200, "role": "legal", "ssrSupported": true },
+    { "route": "/disclaimer", "statusCode": 200, "role": "legal", "ssrSupported": true },
+    { "route": "/v2", "statusCode": 404, "role": "legacy", "ssrSupported": false },
+    { "route": "/atlante-lab", "statusCode": 404, "role": "legacy", "ssrSupported": false },
+    { "route": "/sentiero", "statusCode": 200, "role": "legacy", "ssrSupported": true },
+    { "route": "/non-existent-route-999", "statusCode": 404, "role": "404", "ssrSupported": false }
+  ]
+}

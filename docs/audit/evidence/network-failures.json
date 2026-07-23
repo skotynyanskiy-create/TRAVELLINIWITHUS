@@ -1,0 +1,32 @@
+[
+  {
+    "url": "http://localhost:3000/posto/emilia-granduca-di-campigna",
+    "status": 404,
+    "statusText": "Not Found"
+  },
+  {
+    "url": "http://localhost:3000/admin/users",
+    "status": 404,
+    "statusText": "Not Found"
+  },
+  {
+    "url": "http://localhost:3000/admin/orders",
+    "status": 404,
+    "statusText": "Not Found"
+  },
+  {
+    "url": "http://localhost:3000/manifesto",
+    "status": 404,
+    "statusText": "Not Found"
+  },
+  {
+    "url": "http://localhost:3000/vieni-con-noi",
+    "status": 404,
+    "statusText": "Not Found"
+  },
+  {
+    "url": "http://localhost:3000/non-existent-route-999",
+    "status": 404,
+    "statusText": "Not Found"
+  }
+]
