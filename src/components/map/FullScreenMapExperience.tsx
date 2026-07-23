@@ -64,8 +64,12 @@ const BUDGET_FILTERS = [
   { id: 'alto', label: '€€€ Alto' },
 ];
 
-// Soglia oltre la quale elenco e scheda ci stanno affiancati (= `lg` di Tailwind).
-const DESKTOP_QUERY = '(min-width: 1024px)';
+// Soglia oltre la quale elenco, pannello filtri e scheda ci stanno davvero tutti.
+// Guarda anche l'altezza, non solo la larghezza: sopra la mappa stanno navbar,
+// testata, barra controlli e pannello, e su uno schermo 1024x640 alla scheda
+// resterebbero 91px — una fessura. Sotto la soglia elenco e pannello cedono il
+// posto alla scheda, come gia' fanno sui telefoni.
+const DESKTOP_QUERY = '(min-width: 1024px) and (min-height: 800px)';
 
 const subscribeDesktop = (onChange: () => void) => {
   if (typeof window === 'undefined') return () => {};
@@ -273,449 +277,468 @@ export default function FullScreenMapExperience() {
   // La navbar e' fixed (z-50) e alta 67-77px a seconda del breakpoint: senza il margine
   // la barra dei filtri (z-40, top-6) finisce sepolta sotto di lei.
   return (
-    <div className="relative mt-20 h-[calc(100dvh-80px)] w-full overflow-hidden bg-[#0a0705]">
-      {/* 1. Colonna flottante: barra, pannello filtri ed elenco stanno nello stesso
-          flusso verticale, cosi' nessuno dei tre puo' coprire gli altri quando la
-          barra dei controlli va a capo. */}
-      <div className="pointer-events-none absolute inset-x-4 top-6 bottom-16 z-40 flex flex-col gap-3 sm:inset-x-8 sm:bottom-6">
-        <div className="flex shrink-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          {/* Search & Main Filters Group */}
-          <div className="flex flex-wrap items-center gap-2 rounded-full border border-stone-700 bg-stone-900/95 p-2.5 shadow-2xl backdrop-blur-2xl pointer-events-auto">
-            {/* Sidebar Toggle Button */}
-            <button
-              type="button"
-              onClick={toggleList}
-              className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold transition-all ${
-                listVisible
-                  ? 'bg-[var(--color-accent,#c85a32)] text-white shadow-md'
-                  : 'bg-stone-800 text-white/90 hover:bg-stone-700'
-              }`}
-              title={listVisible ? 'Chiudi elenco' : 'Apri elenco posti'}
-            >
-              {listVisible ? <PanelLeftClose size={15} /> : <PanelLeft size={15} />}
-              <span>{listVisible ? 'Chiudi Elenco' : 'Elenco Posti'}</span>
-            </button>
+    <div className="mt-20 flex h-[calc(100dvh-80px)] w-full flex-col overflow-hidden bg-[#0a0705]">
+      <header className="shrink-0 px-4 pb-3 pt-5 sm:px-8 sm:pb-4 sm:pt-6">
+        <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent,#c85a32)]">
+          Mappa delle tracce
+        </span>
+        <h1 className="mt-1.5 font-serif text-2xl font-medium leading-tight text-white sm:text-3xl">
+          Dove siamo stati davvero
+        </h1>
+        <p className="mt-1.5 hidden text-sm text-white/60 sm:block">
+          Ogni segno e un posto che abbiamo provato di persona. {allItems.length} in tutto.
+        </p>
+      </header>
 
-            <div className="h-4 w-px bg-white/20" />
-
-            {/* Live Search Input */}
-            <div className="relative flex items-center pl-2 pr-1">
-              <Search size={15} className="text-[var(--color-accent,#c85a32)]" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Cerca un posto o regione..."
-                className="w-36 bg-transparent px-2 py-1 text-xs font-semibold text-white placeholder-stone-400 focus:outline-none sm:w-52"
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery('')}
-                  className="text-white/60 hover:text-white"
-                >
-                  <X size={13} />
-                </button>
-              )}
-            </div>
-
-            <div className="h-4 w-px bg-white/20 hidden sm:block" />
-
-            {/* Zone Filter Pills */}
-            {[
-              { id: 'all', label: 'Tutte' },
-              { id: 'italia', label: 'Italia' },
-              { id: 'europa', label: 'Europa' },
-              { id: 'africa', label: 'Africa' },
-              { id: 'asia', label: 'Asia' },
-            ].map((zone) => (
+      <div className="relative min-h-0 flex-1">
+        {/* 1. Colonna flottante: barra, pannello filtri ed elenco stanno nello stesso
+            flusso verticale, cosi' nessuno dei tre puo' coprire gli altri quando la
+            barra dei controlli va a capo. */}
+        <div className="pointer-events-none absolute inset-x-4 top-6 bottom-16 z-40 flex flex-col gap-3 sm:inset-x-8 sm:bottom-6">
+          <div className="flex shrink-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            {/* Search & Main Filters Group */}
+            <div className="flex flex-wrap items-center gap-2 rounded-full border border-stone-700 bg-stone-900/95 p-2.5 shadow-2xl backdrop-blur-2xl pointer-events-auto">
+              {/* Sidebar Toggle Button */}
               <button
-                key={zone.id}
                 type="button"
-                onClick={() => setSelectedZone(zone.id)}
-                className={`rounded-full px-3.5 py-1 text-xs font-bold transition-all ${
-                  selectedZone === zone.id
+                onClick={toggleList}
+                className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold transition-all ${
+                  listVisible
                     ? 'bg-[var(--color-accent,#c85a32)] text-white shadow-md'
-                    : 'bg-stone-800 text-stone-300 hover:bg-stone-700 hover:text-white'
+                    : 'bg-stone-800 text-white/90 hover:bg-stone-700'
                 }`}
+                title={listVisible ? 'Chiudi elenco' : 'Apri elenco posti'}
               >
-                {zone.label}
+                {listVisible ? <PanelLeftClose size={15} /> : <PanelLeft size={15} />}
+                <span>{listVisible ? 'Chiudi Elenco' : 'Elenco Posti'}</span>
               </button>
-            ))}
 
-            <div className="h-4 w-px bg-white/20" />
+              <div className="h-4 w-px bg-white/20" />
 
-            {/* Type & Budget Filter Toggle */}
-            <button
-              type="button"
-              onClick={toggleFilters}
-              className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold transition-all ${
-                filtersVisible || selectedType !== 'all' || selectedBudget !== 'all'
-                  ? 'bg-[var(--color-accent,#c85a32)] text-white shadow-md'
-                  : 'bg-stone-800 text-stone-300 hover:bg-stone-700 hover:text-white'
-              }`}
-            >
-              <Filter size={13} />
-              <span>Filtri</span>
-              {activeFilterCount > 0 && (
-                <span className="ml-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-white text-[9px] font-black text-[var(--color-accent,#c85a32)]">
-                  {activeFilterCount}
-                </span>
-              )}
-              <ChevronDown
-                size={12}
-                className={`transition-transform ${filtersVisible ? 'rotate-180' : ''}`}
-              />
-            </button>
-          </div>
-
-          {/* Action Tools & Surprises Bar */}
-          <div className="flex flex-wrap items-center gap-2 pointer-events-auto">
-            {/* Quick Fly Presets — scrollable on mobile */}
-            <div className="flex items-center gap-1 overflow-x-auto rounded-full border border-stone-700 bg-stone-900/95 p-1.5 shadow-2xl backdrop-blur-2xl max-w-[calc(100vw-120px)] sm:max-w-none scrollbar-none">
-              {FLY_PRESETS.map((preset) => (
-                <button
-                  key={preset.id}
-                  type="button"
-                  onClick={() => handlePresetFly(preset)}
-                  className="shrink-0 rounded-full bg-stone-800 px-3 py-1 text-xs font-semibold text-stone-200 hover:bg-[var(--color-accent,#c85a32)] hover:text-white transition-colors"
-                >
-                  {preset.label}
-                </button>
-              ))}
-            </div>
-
-            {/* "Sorprendimi!" Surprise Button */}
-            <button
-              type="button"
-              onClick={handleSurprisePick}
-              className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/50 bg-[var(--color-accent,#c85a32)] px-4 py-2 text-xs font-bold text-white shadow-2xl transition-all hover:scale-105 hover:bg-white hover:text-stone-900"
-            >
-              <Shuffle size={14} />
-              <span className="hidden sm:inline">Sorprendimi!</span>
-            </button>
-
-            {/* Sound Toggle */}
-            <button
-              type="button"
-              onClick={() => setSoundEnabled((s) => !s)}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-stone-700 bg-stone-900/95 text-white shadow-2xl backdrop-blur-2xl transition-all hover:bg-stone-800"
-              title={soundEnabled ? 'Disattiva audio acustico' : 'Attiva audio acustico'}
-            >
-              {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
-            </button>
-
-            {/* Map Style Switcher */}
-            <button
-              type="button"
-              onClick={() =>
-                setMapStyleKey((s) =>
-                  s === 'dark' ? 'liberty' : s === 'liberty' ? 'bright' : 'dark'
-                )
-              }
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-stone-700 bg-stone-900/95 text-white shadow-2xl backdrop-blur-2xl transition-all hover:bg-stone-800"
-              title={`Stile: ${MAP_STYLES[mapStyleKey].label}`}
-            >
-              <Layers size={16} />
-            </button>
-
-            {/* Reset Camera Button */}
-            <button
-              type="button"
-              onClick={resetView}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-stone-700 bg-stone-900/95 text-white shadow-2xl backdrop-blur-2xl transition-all hover:bg-stone-800"
-              title="Reset vista"
-            >
-              <RotateCcw size={16} />
-            </button>
-          </div>
-        </div>
-
-        {/* 1b. Filters Panel (Type + Budget) */}
-        {filtersVisible && (
-          <div className="pointer-events-auto flex shrink-0 flex-col gap-3 rounded-2xl border border-stone-700 bg-stone-900/95 p-4 shadow-2xl backdrop-blur-2xl sm:flex-row sm:items-center">
-            {/* Type Filters */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-500 mr-1">
-                Tipo:
-              </span>
-              {TYPE_FILTERS.map((tf) => {
-                const Icon = tf.icon;
-                return (
+              {/* Live Search Input */}
+              <div className="relative flex items-center pl-2 pr-1">
+                <Search size={15} className="text-[var(--color-accent,#c85a32)]" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Cerca un posto o regione..."
+                  className="w-36 bg-transparent px-2 py-1 text-xs font-semibold text-white placeholder-stone-400 focus:outline-none sm:w-52"
+                />
+                {searchQuery && (
                   <button
-                    key={tf.id}
                     type="button"
-                    onClick={() => setSelectedType(tf.id)}
-                    className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition-all ${
-                      selectedType === tf.id
-                        ? 'bg-[var(--color-accent,#c85a32)] text-white shadow-md'
-                        : 'bg-stone-800 text-stone-300 hover:bg-stone-700 hover:text-white'
-                    }`}
+                    onClick={() => setSearchQuery('')}
+                    className="text-white/60 hover:text-white"
                   >
-                    <Icon size={12} />
-                    {tf.label}
+                    <X size={13} />
                   </button>
-                );
-              })}
-            </div>
+                )}
+              </div>
 
-            <div className="hidden sm:block h-6 w-px bg-white/15" />
+              <div className="h-4 w-px bg-white/20 hidden sm:block" />
 
-            {/* Budget Filters */}
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-500 mr-1">
-                Budget:
-              </span>
-              {BUDGET_FILTERS.map((bf) => (
+              {/* Zone Filter Pills */}
+              {[
+                { id: 'all', label: 'Tutte' },
+                { id: 'italia', label: 'Italia' },
+                { id: 'europa', label: 'Europa' },
+                { id: 'africa', label: 'Africa' },
+                { id: 'asia', label: 'Asia' },
+              ].map((zone) => (
                 <button
-                  key={bf.id}
+                  key={zone.id}
                   type="button"
-                  onClick={() => setSelectedBudget(bf.id)}
-                  className={`rounded-full px-3 py-1.5 text-xs font-bold transition-all ${
-                    selectedBudget === bf.id
+                  onClick={() => setSelectedZone(zone.id)}
+                  className={`rounded-full px-3.5 py-1 text-xs font-bold transition-all ${
+                    selectedZone === zone.id
                       ? 'bg-[var(--color-accent,#c85a32)] text-white shadow-md'
                       : 'bg-stone-800 text-stone-300 hover:bg-stone-700 hover:text-white'
                   }`}
                 >
-                  {bf.label}
+                  {zone.label}
                 </button>
               ))}
-            </div>
 
-            {/* Results count */}
-            <div className="ml-auto flex items-center gap-2">
-              <span className="inline-flex items-center gap-1 text-xs font-bold text-[var(--color-accent,#c85a32)]">
-                <MapPin size={13} />
-                {filteredItems.length} posti
-              </span>
-            </div>
-          </div>
-        )}
+              <div className="h-4 w-px bg-white/20" />
 
-        {/* 2. Collapsible Split View Sidebar — flex-1: si ferma al fondo della mappa
-            invece di partire da un top fisso che finiva sotto la barra. */}
-        {listVisible && (
-          <div className="pointer-events-auto w-84 min-h-0 flex-1 overflow-y-auto rounded-[var(--radius-lg,24px)] border border-stone-700 bg-stone-900/95 p-4 text-white shadow-2xl backdrop-blur-2xl max-sm:max-w-[calc(100%-3.5rem)] sm:w-96 sm:max-w-full">
-            <div className="mb-4 flex items-center justify-between border-b border-stone-800 pb-3">
-              <span className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-accent,#c85a32)]">
-                Destinazioni Provate ({filteredItems.length})
-              </span>
+              {/* Type & Budget Filter Toggle */}
               <button
                 type="button"
-                onClick={() => setSidebarOpen(false)}
-                className="text-stone-400 hover:text-white"
+                onClick={toggleFilters}
+                className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold transition-all ${
+                  filtersVisible || selectedType !== 'all' || selectedBudget !== 'all'
+                    ? 'bg-[var(--color-accent,#c85a32)] text-white shadow-md'
+                    : 'bg-stone-800 text-stone-300 hover:bg-stone-700 hover:text-white'
+                }`}
               >
-                <X size={18} />
+                <Filter size={13} />
+                <span>Filtri</span>
+                {activeFilterCount > 0 && (
+                  <span className="ml-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-white text-[9px] font-black text-[var(--color-accent,#c85a32)]">
+                    {activeFilterCount}
+                  </span>
+                )}
+                <ChevronDown
+                  size={12}
+                  className={`transition-transform ${filtersVisible ? 'rotate-180' : ''}`}
+                />
               </button>
             </div>
 
-            <div className="space-y-2.5">
-              {filteredItems.map((item) => (
+            {/* Action Tools & Surprises Bar */}
+            <div className="flex flex-wrap items-center gap-2 pointer-events-auto">
+              {/* Quick Fly Presets — scrollable on mobile */}
+              <div className="flex items-center gap-1 overflow-x-auto rounded-full border border-stone-700 bg-stone-900/95 p-1.5 shadow-2xl backdrop-blur-2xl max-w-[calc(100vw-120px)] sm:max-w-none scrollbar-none">
+                {FLY_PRESETS.map((preset) => (
+                  <button
+                    key={preset.id}
+                    type="button"
+                    onClick={() => handlePresetFly(preset)}
+                    className="shrink-0 rounded-full bg-stone-800 px-3 py-1 text-xs font-semibold text-stone-200 hover:bg-[var(--color-accent,#c85a32)] hover:text-white transition-colors"
+                  >
+                    {preset.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* "Sorprendimi!" Surprise Button */}
+              <button
+                type="button"
+                onClick={handleSurprisePick}
+                className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/50 bg-[var(--color-accent,#c85a32)] px-4 py-2 text-xs font-bold text-white shadow-2xl transition-all hover:scale-105 hover:bg-white hover:text-stone-900"
+              >
+                <Shuffle size={14} />
+                <span className="hidden sm:inline">Sorprendimi!</span>
+              </button>
+
+              {/* Sound Toggle */}
+              <button
+                type="button"
+                onClick={() => setSoundEnabled((s) => !s)}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-stone-700 bg-stone-900/95 text-white shadow-2xl backdrop-blur-2xl transition-all hover:bg-stone-800"
+                title={soundEnabled ? 'Disattiva audio acustico' : 'Attiva audio acustico'}
+              >
+                {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+              </button>
+
+              {/* Map Style Switcher */}
+              <button
+                type="button"
+                onClick={() =>
+                  setMapStyleKey((s) =>
+                    s === 'dark' ? 'liberty' : s === 'liberty' ? 'bright' : 'dark'
+                  )
+                }
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-stone-700 bg-stone-900/95 text-white shadow-2xl backdrop-blur-2xl transition-all hover:bg-stone-800"
+                title={`Stile: ${MAP_STYLES[mapStyleKey].label}`}
+              >
+                <Layers size={16} />
+              </button>
+
+              {/* Reset Camera Button */}
+              <button
+                type="button"
+                onClick={resetView}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-stone-700 bg-stone-900/95 text-white shadow-2xl backdrop-blur-2xl transition-all hover:bg-stone-800"
+                title="Reset vista"
+              >
+                <RotateCcw size={16} />
+              </button>
+            </div>
+          </div>
+
+          {/* 1b. Filters Panel (Type + Budget) */}
+          {filtersVisible && (
+            <div className="pointer-events-auto flex shrink-0 flex-col gap-3 rounded-2xl border border-stone-700 bg-stone-900/95 p-4 shadow-2xl backdrop-blur-2xl sm:flex-row sm:items-center">
+              {/* Type Filters */}
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-500 mr-1">
+                  Tipo:
+                </span>
+                {TYPE_FILTERS.map((tf) => {
+                  const Icon = tf.icon;
+                  return (
+                    <button
+                      key={tf.id}
+                      type="button"
+                      onClick={() => setSelectedType(tf.id)}
+                      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition-all ${
+                        selectedType === tf.id
+                          ? 'bg-[var(--color-accent,#c85a32)] text-white shadow-md'
+                          : 'bg-stone-800 text-stone-300 hover:bg-stone-700 hover:text-white'
+                      }`}
+                    >
+                      <Icon size={12} />
+                      {tf.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="hidden sm:block h-6 w-px bg-white/15" />
+
+              {/* Budget Filters */}
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-stone-500 mr-1">
+                  Budget:
+                </span>
+                {BUDGET_FILTERS.map((bf) => (
+                  <button
+                    key={bf.id}
+                    type="button"
+                    onClick={() => setSelectedBudget(bf.id)}
+                    className={`rounded-full px-3 py-1.5 text-xs font-bold transition-all ${
+                      selectedBudget === bf.id
+                        ? 'bg-[var(--color-accent,#c85a32)] text-white shadow-md'
+                        : 'bg-stone-800 text-stone-300 hover:bg-stone-700 hover:text-white'
+                    }`}
+                  >
+                    {bf.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Results count */}
+              <div className="ml-auto flex items-center gap-2">
+                <span className="inline-flex items-center gap-1 text-xs font-bold text-[var(--color-accent,#c85a32)]">
+                  <MapPin size={13} />
+                  {filteredItems.length} posti
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* 2. Collapsible Split View Sidebar — flex-1: si ferma al fondo della mappa
+            invece di partire da un top fisso che finiva sotto la barra. */}
+          {listVisible && (
+            <div className="pointer-events-auto w-84 min-h-0 flex-1 overflow-y-auto rounded-[var(--radius-lg,24px)] border border-stone-700 bg-stone-900/95 p-4 text-white shadow-2xl backdrop-blur-2xl max-sm:max-w-[calc(100%-3.5rem)] sm:w-96 sm:max-w-full">
+              <div className="mb-4 flex items-center justify-between border-b border-stone-800 pb-3">
+                <span className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-accent,#c85a32)]">
+                  Destinazioni Provate ({filteredItems.length})
+                </span>
                 <button
-                  key={item.id}
                   type="button"
-                  onClick={() => handlePinClick(item)}
-                  className={`w-full text-left rounded-xl p-3 border transition-all ${
-                    selectedItem?.id === item.id
-                      ? 'border-[var(--color-accent,#c85a32)] bg-[var(--color-accent,#c85a32)]/25 text-white shadow-lg'
-                      : 'border-stone-800 bg-stone-800/60 hover:border-stone-600 text-stone-200 hover:text-white'
-                  }`}
+                  onClick={() => setSidebarOpen(false)}
+                  className="text-stone-400 hover:text-white"
                 >
-                  <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--color-accent,#c85a32)]">
-                    {item.zone} · {item.place.region || item.place.country}
-                  </div>
-                  <h4 className="mt-1 font-serif text-sm font-normal text-white">{item.title}</h4>
-                  <span className="mt-2 block text-[10px] text-stone-400">
-                    {item.value?.price || 'Verificato sul posto'}
-                  </span>
+                  <X size={18} />
                 </button>
-              ))}
+              </div>
+
+              <div className="space-y-2.5">
+                {filteredItems.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => handlePinClick(item)}
+                    className={`w-full text-left rounded-xl p-3 border transition-all ${
+                      selectedItem?.id === item.id
+                        ? 'border-[var(--color-accent,#c85a32)] bg-[var(--color-accent,#c85a32)]/25 text-white shadow-lg'
+                        : 'border-stone-800 bg-stone-800/60 hover:border-stone-600 text-stone-200 hover:text-white'
+                    }`}
+                  >
+                    <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--color-accent,#c85a32)]">
+                      {item.zone} · {item.place.region || item.place.country}
+                    </div>
+                    <h4 className="mt-1 font-serif text-sm font-normal text-white">{item.title}</h4>
+                    <span className="mt-2 block text-[10px] text-stone-400">
+                      {item.value?.price || 'Verificato sul posto'}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* 3. Map Canvas */}
+        <Map
+          ref={mapRef}
+          style={{ width: '100%', height: '100%' }}
+          initialViewState={{ longitude: 12.5, latitude: 42.0, zoom: 5.2, pitch: 35 }}
+          mapStyle={MAP_STYLES[mapStyleKey].url}
+          projection="globe"
+        >
+          <NavigationControl position="bottom-right" />
+          <FullscreenControl position="bottom-right" />
+
+          {/* Map Pins with Pulsing Rings & Hover Tooltips */}
+          {filteredItems.map((item) => {
+            if (!item.place.coordinates) return null;
+            const isSelected = selectedItem?.id === item.id;
+            const IconComp = getItemIcon(item.types);
+
+            return (
+              <Marker
+                key={item.id}
+                longitude={item.place.coordinates.lng}
+                latitude={item.place.coordinates.lat}
+                anchor="bottom"
+                onClick={(e) => {
+                  e.originalEvent.stopPropagation();
+                  handlePinClick(item);
+                }}
+              >
+                <div className="group relative cursor-pointer">
+                  {/* Glowing Pulse Ring */}
+                  <div
+                    className={`absolute -inset-2 rounded-full opacity-75 blur-sm transition-all ${
+                      isSelected
+                        ? 'bg-[var(--color-accent,#c85a32)] animate-pulse'
+                        : 'bg-white/0 group-hover:bg-[var(--color-accent,#c85a32)]/50'
+                    }`}
+                  />
+
+                  {/* Marker Pill */}
+                  <div
+                    className={`relative flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold shadow-2xl transition-all ${
+                      isSelected
+                        ? 'scale-110 border-2 border-white bg-[var(--color-accent,#c85a32)] text-white z-30'
+                        : 'border border-white/30 bg-black/85 text-white hover:scale-105 hover:bg-[var(--color-accent)] z-10'
+                    }`}
+                  >
+                    <IconComp
+                      size={13}
+                      className={isSelected ? 'text-white' : 'text-[var(--color-accent)]'}
+                    />
+                    <span className="max-w-[120px] truncate">{item.title}</span>
+                  </div>
+
+                  {/* Hover Preview Tooltip */}
+                  <div className="absolute left-1/2 bottom-full mb-2 hidden -translate-x-1/2 rounded-xl border border-white/20 bg-black/90 p-2.5 shadow-2xl backdrop-blur-md group-hover:block z-40 w-48">
+                    {item.cover ? (
+                      <div className="aspect-[4/3] w-full overflow-hidden rounded-lg bg-black/20">
+                        <img
+                          src={item.cover}
+                          alt={item.title}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div className="aspect-[4/3] w-full overflow-hidden rounded-lg bg-gradient-to-br from-stone-800 to-stone-900 flex items-center justify-center">
+                        <MapPin
+                          size={24}
+                          className="text-[var(--color-accent,#c85a32)] opacity-60"
+                        />
+                      </div>
+                    )}
+                    <p className="mt-1.5 text-[10px] font-bold text-white truncate">{item.title}</p>
+                    <span className="text-[9px] text-[var(--color-accent,#c85a32)] font-semibold">
+                      {item.place.region || item.place.country} · {item.zone}
+                    </span>
+                    {item.value?.price && (
+                      <span className="ml-1.5 text-[9px] text-white/60">— {item.value.price}</span>
+                    )}
+                  </div>
+                </div>
+              </Marker>
+            );
+          })}
+        </Map>
+
+        {/* 4. Advanced Multi-Tab Glassmorphism Drawer — right-14/right-20 lasciano libera
+          la colonna dei controlli MapLibre (zoom, fullscreen, attribuzione OSM) che
+          altrimenti la scheda copriva. Il tetto d'altezza e' relativo al contenitore,
+          non al viewport: cosi' si adatta da solo all'altezza della testata. Sotto lg
+          serve meno spazio perche' elenco e pannello si fanno da parte. */}
+        {selectedItem && (
+          <div className="absolute bottom-16 left-4 right-14 z-30 mx-auto max-h-[calc(100%-15rem)] lg:max-h-[calc(100%-21rem)] max-w-lg overflow-y-auto rounded-[var(--radius-lg,24px)] border border-white/20 bg-black/90 p-6 text-white shadow-2xl backdrop-blur-2xl sm:bottom-10 sm:left-auto sm:right-20 sm:w-[420px]">
+            {/* Drawer Header */}
+            <div className="flex items-start justify-between">
+              <div>
+                <span className="inline-flex items-center gap-1 rounded-full bg-[var(--color-accent,#c85a32)]/20 border border-[var(--color-accent,#c85a32)]/40 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent,#c85a32)]">
+                  {selectedItem.zone} · {selectedItem.place.region || selectedItem.types[0]}
+                </span>
+                <h3 className="mt-2 font-serif text-2xl font-normal leading-tight">
+                  {selectedItem.title}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedItem(null)}
+                className="rounded-full bg-white/10 p-2 text-white/70 hover:bg-white/20 hover:text-white"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            {/* Drawer Tabs */}
+            <div className="mt-4 flex gap-2 border-b border-white/15 pb-3">
+              <button
+                type="button"
+                onClick={() => setActiveTab('verdetto')}
+                className={`rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-[0.14em] transition-all ${
+                  activeTab === 'verdetto'
+                    ? 'bg-white text-[var(--color-ink,#1a2b3c)]'
+                    : 'bg-white/10 text-white/70 hover:text-white'
+                }`}
+              >
+                01. Verdetto
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab('costi')}
+                className={`rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-[0.14em] transition-all ${
+                  activeTab === 'costi'
+                    ? 'bg-white text-[var(--color-ink,#1a2b3c)]'
+                    : 'bg-white/10 text-white/70 hover:text-white'
+                }`}
+              >
+                02. Costi &amp; Info
+              </button>
+            </div>
+
+            {/* Tab Content */}
+            {activeTab === 'verdetto' ? (
+              <div className="mt-4 space-y-3">
+                <p className="text-xs leading-relaxed text-white/80">{selectedItem.description}</p>
+                {selectedItem.review?.verdict && (
+                  <div className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs font-semibold text-[var(--color-accent,#c85a32)]">
+                    <Star size={13} className="fill-current" />
+                    <span>Verdetto: {selectedItem.review.verdict}</span>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="mt-4 space-y-3 text-xs text-white/80">
+                <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                  <span className="text-white/60">Costo stimato:</span>
+                  <span className="font-bold text-white">
+                    {selectedItem.value?.price || 'Verificato'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                  <span className="text-white/60">Posizione:</span>
+                  <span className="font-bold text-white">{selectedItem.place.country}</span>
+                </div>
+                {selectedItem.place.coordinates && (
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${selectedItem.place.coordinates.lat},${selectedItem.place.coordinates.lng}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-[var(--color-accent,#c85a32)] hover:underline"
+                  >
+                    <Navigation size={13} />
+                    Apri indicazioni su Google Maps
+                  </a>
+                )}
+              </div>
+            )}
+
+            {/* Drawer Actions */}
+            <div className="mt-6 flex items-center justify-between border-t border-white/15 pt-4 text-xs font-semibold">
+              <span className="text-white/60">Provato di persona</span>
+              <Link
+                to={`/posto/${selectedItem.id}`}
+                className="inline-flex items-center gap-1 rounded-full bg-[var(--color-accent,#c85a32)] px-4 py-2 text-xs font-bold text-white shadow-md transition-all hover:bg-white hover:text-[var(--color-ink)]"
+              >
+                Apri la scheda completa <ArrowRight size={14} />
+              </Link>
             </div>
           </div>
         )}
       </div>
-
-      {/* 3. Map Canvas */}
-      <Map
-        ref={mapRef}
-        style={{ width: '100%', height: '100%' }}
-        initialViewState={{ longitude: 12.5, latitude: 42.0, zoom: 5.2, pitch: 35 }}
-        mapStyle={MAP_STYLES[mapStyleKey].url}
-        projection="globe"
-      >
-        <NavigationControl position="bottom-right" />
-        <FullscreenControl position="bottom-right" />
-
-        {/* Map Pins with Pulsing Rings & Hover Tooltips */}
-        {filteredItems.map((item) => {
-          if (!item.place.coordinates) return null;
-          const isSelected = selectedItem?.id === item.id;
-          const IconComp = getItemIcon(item.types);
-
-          return (
-            <Marker
-              key={item.id}
-              longitude={item.place.coordinates.lng}
-              latitude={item.place.coordinates.lat}
-              anchor="bottom"
-              onClick={(e) => {
-                e.originalEvent.stopPropagation();
-                handlePinClick(item);
-              }}
-            >
-              <div className="group relative cursor-pointer">
-                {/* Glowing Pulse Ring */}
-                <div
-                  className={`absolute -inset-2 rounded-full opacity-75 blur-sm transition-all ${
-                    isSelected
-                      ? 'bg-[var(--color-accent,#c85a32)] animate-pulse'
-                      : 'bg-white/0 group-hover:bg-[var(--color-accent,#c85a32)]/50'
-                  }`}
-                />
-
-                {/* Marker Pill */}
-                <div
-                  className={`relative flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold shadow-2xl transition-all ${
-                    isSelected
-                      ? 'scale-110 border-2 border-white bg-[var(--color-accent,#c85a32)] text-white z-30'
-                      : 'border border-white/30 bg-black/85 text-white hover:scale-105 hover:bg-[var(--color-accent)] z-10'
-                  }`}
-                >
-                  <IconComp
-                    size={13}
-                    className={isSelected ? 'text-white' : 'text-[var(--color-accent)]'}
-                  />
-                  <span className="max-w-[120px] truncate">{item.title}</span>
-                </div>
-
-                {/* Hover Preview Tooltip */}
-                <div className="absolute left-1/2 bottom-full mb-2 hidden -translate-x-1/2 rounded-xl border border-white/20 bg-black/90 p-2.5 shadow-2xl backdrop-blur-md group-hover:block z-40 w-48">
-                  {item.cover ? (
-                    <div className="aspect-[4/3] w-full overflow-hidden rounded-lg bg-black/20">
-                      <img
-                        src={item.cover}
-                        alt={item.title}
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-                  ) : (
-                    <div className="aspect-[4/3] w-full overflow-hidden rounded-lg bg-gradient-to-br from-stone-800 to-stone-900 flex items-center justify-center">
-                      <MapPin size={24} className="text-[var(--color-accent,#c85a32)] opacity-60" />
-                    </div>
-                  )}
-                  <p className="mt-1.5 text-[10px] font-bold text-white truncate">{item.title}</p>
-                  <span className="text-[9px] text-[var(--color-accent,#c85a32)] font-semibold">
-                    {item.place.region || item.place.country} · {item.zone}
-                  </span>
-                  {item.value?.price && (
-                    <span className="ml-1.5 text-[9px] text-white/60">— {item.value.price}</span>
-                  )}
-                </div>
-              </div>
-            </Marker>
-          );
-        })}
-      </Map>
-
-      {/* 4. Advanced Multi-Tab Glassmorphism Drawer — right-14/right-20 lasciano libera
-          la colonna dei controlli MapLibre (zoom, fullscreen, attribuzione OSM) che
-          altrimenti la scheda copriva. */}
-      {selectedItem && (
-        <div className="absolute bottom-16 left-4 right-14 z-30 mx-auto max-h-[calc(100dvh-26rem)] max-w-lg overflow-y-auto rounded-[var(--radius-lg,24px)] border border-white/20 bg-black/90 p-6 text-white shadow-2xl backdrop-blur-2xl sm:bottom-10 sm:left-auto sm:right-20 sm:w-[420px]">
-          {/* Drawer Header */}
-          <div className="flex items-start justify-between">
-            <div>
-              <span className="inline-flex items-center gap-1 rounded-full bg-[var(--color-accent,#c85a32)]/20 border border-[var(--color-accent,#c85a32)]/40 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent,#c85a32)]">
-                {selectedItem.zone} · {selectedItem.place.region || selectedItem.types[0]}
-              </span>
-              <h3 className="mt-2 font-serif text-2xl font-normal leading-tight">
-                {selectedItem.title}
-              </h3>
-            </div>
-            <button
-              type="button"
-              onClick={() => setSelectedItem(null)}
-              className="rounded-full bg-white/10 p-2 text-white/70 hover:bg-white/20 hover:text-white"
-            >
-              <X size={16} />
-            </button>
-          </div>
-
-          {/* Drawer Tabs */}
-          <div className="mt-4 flex gap-2 border-b border-white/15 pb-3">
-            <button
-              type="button"
-              onClick={() => setActiveTab('verdetto')}
-              className={`rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-[0.14em] transition-all ${
-                activeTab === 'verdetto'
-                  ? 'bg-white text-[var(--color-ink,#1a2b3c)]'
-                  : 'bg-white/10 text-white/70 hover:text-white'
-              }`}
-            >
-              01. Verdetto
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab('costi')}
-              className={`rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-[0.14em] transition-all ${
-                activeTab === 'costi'
-                  ? 'bg-white text-[var(--color-ink,#1a2b3c)]'
-                  : 'bg-white/10 text-white/70 hover:text-white'
-              }`}
-            >
-              02. Costi &amp; Info
-            </button>
-          </div>
-
-          {/* Tab Content */}
-          {activeTab === 'verdetto' ? (
-            <div className="mt-4 space-y-3">
-              <p className="text-xs leading-relaxed text-white/80">{selectedItem.description}</p>
-              {selectedItem.review?.verdict && (
-                <div className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs font-semibold text-[var(--color-accent,#c85a32)]">
-                  <Star size={13} className="fill-current" />
-                  <span>Verdetto: {selectedItem.review.verdict}</span>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="mt-4 space-y-3 text-xs text-white/80">
-              <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                <span className="text-white/60">Costo stimato:</span>
-                <span className="font-bold text-white">
-                  {selectedItem.value?.price || 'Verificato'}
-                </span>
-              </div>
-              <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                <span className="text-white/60">Posizione:</span>
-                <span className="font-bold text-white">{selectedItem.place.country}</span>
-              </div>
-              {selectedItem.place.coordinates && (
-                <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${selectedItem.place.coordinates.lat},${selectedItem.place.coordinates.lng}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-[var(--color-accent,#c85a32)] hover:underline"
-                >
-                  <Navigation size={13} />
-                  Apri indicazioni su Google Maps
-                </a>
-              )}
-            </div>
-          )}
-
-          {/* Drawer Actions */}
-          <div className="mt-6 flex items-center justify-between border-t border-white/15 pt-4 text-xs font-semibold">
-            <span className="text-white/60">Provato di persona</span>
-            <Link
-              to={`/posto/${selectedItem.id}`}
-              className="inline-flex items-center gap-1 rounded-full bg-[var(--color-accent,#c85a32)] px-4 py-2 text-xs font-bold text-white shadow-md transition-all hover:bg-white hover:text-[var(--color-ink)]"
-            >
-              Apri la scheda completa <ArrowRight size={14} />
-            </Link>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
