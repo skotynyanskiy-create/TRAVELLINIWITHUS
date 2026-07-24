@@ -47,6 +47,7 @@ Indice generato automaticamente delle note operative versionate. Rigenerare con
 - [[RELEASE_2026-05-21_v2-verification]]
 - [[RELEASE_2026-06-03_full-mode-predeploy]]
 - [[RELEASE_2026-06-07_public-footprint-predeploy]]
+- [[RELEASE_2026-07-24_tre-audience-family]]
 - [[TRAVELLINI-HOMEPAGE]]
 - [[TRAVELLINIWITHUS_BRAND_MEMORY]]
 - [[TRAVELLINIWITHUS_EXECUTION_PLAN]]

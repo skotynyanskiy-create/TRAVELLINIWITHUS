@@ -1028,3 +1028,15 @@ offline page vera (catchHandler/injectManifest), registerSW defer + font
 preload + hero preload condizionale + indagine bundle (handoff perf-engineer),
 bug validator `firestore.rules:101` (MEDIUM, fail-closed), refactor
 seoRoutes→surfaces (fase 7b), gap metodologico LHCI `?twu_audit=1`.
+
+## PUBBLICAZIONE IN PRODUZIONE ESEGUITA — 2026-07-24
+
+Prima release in produzione dopo il 2026-05-14, lanciata dall'owner via
+`/deploy`. Hosting Firebase: 721 file caricati, release completata.
+URL: https://gen-lang-client-0138696306.web.app
+Smoke test live: home con AudienceGate e switcher a 3 visibili; `/family`,
+`/family/consigli`, `/esplora`, `/collaborazioni` → 200; zero errori console.
+Release note: [[RELEASE_2026-07-24_tre-audience-family]].
+Resta in capo all'owner l'azione GCP (restrizioni Firebase Web API key,
+[[10_Projects/PROJECT_FIREBASE_HARDENING]]), accettata come rischio noto al
+momento del lancio.
