@@ -83,8 +83,8 @@ export default function FamilyHome() {
           {family.adviceDescription}
         </p>
         <div className="space-y-8">
-          {entries.map((entry) => (
-            <FamilyEntryCard key={entry.id} entry={entry} />
+          {entries.map((entry, index) => (
+            <FamilyEntryCard key={entry.id} entry={entry} priority={index === 0} />
           ))}
         </div>
         <div className="mt-8">

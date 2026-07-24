@@ -42,7 +42,9 @@ export default function FamilyConsigli() {
 
         <div className="mt-12 space-y-8">
           {entries.length > 0 ? (
-            entries.map((entry) => <FamilyEntryCard key={entry.id} entry={entry} />)
+            entries.map((entry, index) => (
+              <FamilyEntryCard key={entry.id} entry={entry} priority={index === 0} />
+            ))
           ) : (
             <div className="rounded-[var(--radius-lg)] border border-dashed border-[var(--color-border)] bg-white p-10 text-center">
               <p className="font-serif text-2xl text-[var(--color-ink)]">

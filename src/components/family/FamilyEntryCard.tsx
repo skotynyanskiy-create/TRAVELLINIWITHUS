@@ -8,7 +8,14 @@ import { PARTNERSHIP_LABEL } from '../../types/content';
  * hook, punti del consiglio e link al post sorgente. Disclosure partnership
  * sempre visibile quando presente (AGCOM).
  */
-export default function FamilyEntryCard({ entry }: { entry: FamilyEntry }) {
+export default function FamilyEntryCard({
+  entry,
+  priority = false,
+}: {
+  entry: FamilyEntry;
+  /** Prima card sopra la piega: fetchpriority alta + niente lazy-load. */
+  priority?: boolean;
+}) {
   const disclosure = PARTNERSHIP_LABEL[entry.partnership.kind];
 
   return (
@@ -19,6 +26,7 @@ export default function FamilyEntryCard({ entry }: { entry: FamilyEntry }) {
           alt={entry.coverAlt}
           sizes="(max-width: 768px) 92vw, 280px"
           responsiveWidths={[320, 480, 768]}
+          priority={priority}
           style={{ objectPosition: `50% ${entry.coverFocusY ?? 50}%` }}
           className="h-full w-full object-cover"
         />
