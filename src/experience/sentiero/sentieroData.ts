@@ -60,7 +60,7 @@ const RAW_STAGES: Omit<SentieroStage, 'index' | 't' | 'position'>[] = [
     fieldNote: 'Se non ci torneremmo noi stessi, non entra nella mappa.',
     route: '/chi-siamo',
     cta: 'Scopri chi siamo',
-    media: { type: 'image', src: '/images/brand/couple-travel.webp' },
+    media: { type: 'image', src: '/images/brand/couple-real.webp' },
     theme: { bg: '#150d07', fog: '#23160c', light: '#ffdcb0', sparkle: '#e8a866' },
   },
   {

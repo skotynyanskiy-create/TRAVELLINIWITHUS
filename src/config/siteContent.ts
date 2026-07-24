@@ -257,6 +257,7 @@ export const siteContentDefaults: SiteContentMap = {
       'Siamo Rodrigo e Betta. Travelliniwithus nasce dal desiderio di consigliare meno posti, ma consigliarli meglio.',
       'Il progetto tiene insieme sguardo personale, immagini, ricerca e dettagli pratici: serve a chi vuole scoprire luoghi con più criterio, non a chi cerca la lista più lunga.',
       'Ogni destinazione, soggiorno o esperienza passa da una domanda semplice: aiuterebbe davvero qualcuno a scegliere meglio?',
+      'E ora la famiglia cresce: aspettiamo il nostro primo bimbo, e il lato genitori-in-viaggio del progetto vive su Travellini Family.',
     ],
     primaryCtaLabel: 'Scopri come collaborare',
     primaryCtaLink: '/collaborazioni',

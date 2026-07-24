@@ -53,7 +53,7 @@ const RAW_WAYPOINTS = [
     fieldNote: 'Nota di viaggio: Ogni tappa è stata vissuta e verificata di persona.',
     route: '/mappa',
     ctaText: 'Apri la Mappa',
-    media: { type: 'image' as const, src: '/images/brand/couple-travel.webp' },
+    media: { type: 'image' as const, src: '/images/brand/couple-real.webp' },
     theme: {
       bg: '#0b0805',
       fog: '#0b0805',
@@ -70,7 +70,7 @@ const RAW_WAYPOINTS = [
     fieldNote: 'Chi siamo: Coppia nella vita e compagni di deviazioni dal 2018.',
     route: '/chi-siamo',
     ctaText: 'Il nostro metodo',
-    media: { type: 'image' as const, src: '/images/brand/about-editorial.webp' },
+    media: { type: 'image' as const, src: '/images/brand/couple-real.webp' },
     theme: {
       bg: '#14110f',
       fog: '#14110f',
@@ -192,7 +192,7 @@ const RAW_WAYPOINTS = [
     fieldNote: 'Community: Unisciti ad oltre 1.200 viaggiatori curiosi.',
     route: '/mappa',
     ctaText: 'Esplora Mappa',
-    media: { type: 'image' as const, src: '/images/brand/couple-travel.webp' },
+    media: { type: 'image' as const, src: '/images/brand/couple-real.webp' },
     theme: {
       bg: '#0b0805',
       fog: '#0b0805',

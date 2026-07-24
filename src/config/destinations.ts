@@ -70,7 +70,7 @@ export const DESTINATIONS: DestinationNode[] = [
     matchRegion: 'Sicilia',
     intro: 'Luoghi di luce, borghi barocchi e tavole indimenticabili tra mare ed Etna.',
     coordinates: { lat: 37.5, lng: 15.08 },
-    cover: '/images/brand/about-editorial.webp',
+    cover: '/images/atlante/carta-tile.webp',
   },
   {
     slug: 'sardegna',
@@ -99,7 +99,7 @@ export const DESTINATIONS: DestinationNode[] = [
   {
     slug: 'campania',
     name: 'Campania',
-    cover: '/images/brand/couple-travel.webp',
+    cover: '/images/home-journal/hero-impossible.webp',
     level: 'region',
     parentSlug: 'italia',
     zone: 'Italia',
@@ -154,7 +154,7 @@ export const DESTINATIONS: DestinationNode[] = [
     matchRegion: 'Emilia Romagna',
     intro: 'La regione dove si mangia e basta: i posti particolari fra Appennino, città e costa.',
     coordinates: { lat: 44.5, lng: 11.3 },
-    cover: '/images/brand/about-editorial.webp',
+    cover: '/images/reels/ravenna-better-sushi-cover.webp',
   },
   {
     slug: 'piemonte',
@@ -202,7 +202,7 @@ export const DESTINATIONS: DestinationNode[] = [
     matchRegion: 'Marche',
     intro: 'Colline morbide, Conero ed entroterra ancora poco battuto dal grande turismo.',
     coordinates: { lat: 43.61, lng: 13.51 },
-    cover: '/images/brand/couple-travel.webp',
+    cover: '/images/atlante/carta-tile.webp',
   },
   {
     slug: 'abruzzo',
@@ -274,7 +274,7 @@ export const DESTINATIONS: DestinationNode[] = [
     matchRegion: 'Molise',
     intro: 'Tratturi, alloggi diffusi e l’Italia segreta che resiste con orgoglio.',
     coordinates: { lat: 41.56, lng: 14.66 },
-    cover: '/images/brand/about-editorial.webp',
+    cover: '/images/atlante/carta-tile.webp',
   },
 
   // ─── EUROPA ──────────────────────────────────────────────────────────────
@@ -307,7 +307,7 @@ export const DESTINATIONS: DestinationNode[] = [
     matchCountry: 'Francia',
     intro: 'Quello che abbiamo trovato in Francia, un posto particolare alla volta.',
     coordinates: { lat: 46.6, lng: 2.3 },
-    cover: '/images/brand/couple-travel.webp',
+    cover: '/images/atlante/carta-tile.webp',
   },
   {
     slug: 'germania',
@@ -362,7 +362,7 @@ export const DESTINATIONS: DestinationNode[] = [
     matchCountry: 'Regno Unito',
     intro: 'I posti del Regno Unito che abbiamo voluto raccontare.',
     coordinates: { lat: 54.0, lng: -2.0 },
-    cover: '/images/brand/about-editorial.webp',
+    cover: '/images/reels/londra-warner-bros-studio-harry-potter-cover.webp',
   },
   {
     slug: 'repubblica-ceca',
