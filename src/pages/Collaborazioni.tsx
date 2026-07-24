@@ -32,6 +32,8 @@ import { BRAND_STATS, BRAND_STATS_SOURCE, PUBLIC_PROOF_SIGNALS } from '../config
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { fetchStats, type SiteStats } from '../services/firebaseService';
+import CaseStudiesSection from '../components/collaborazioni/CaseStudiesSection';
+import PressProofSection from '../components/collaborazioni/PressProofSection';
 
 const PARTNER_AREAS = [
   {
@@ -632,6 +634,12 @@ export default function Collaborazioni() {
           ))}
         </div>
       </Section>
+
+      {/* B2B Case Studies Showcase */}
+      <CaseStudiesSection />
+
+      {/* Press & Social Proof Section */}
+      <PressProofSection />
 
       <Section title={pageContent.servicesTitle} subtitle={pageContent.servicesSubtitle}>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">

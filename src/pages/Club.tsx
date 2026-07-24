@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'motion/react';
-import { CheckCircle, LogIn, MapPin, Heart, ShoppingBag, LogOut, Download } from 'lucide-react';
+import { CheckCircle, LogIn, MapPin, Heart, ShoppingBag, LogOut } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
@@ -322,16 +322,6 @@ export default function Club() {
                             <p className="font-serif text-xl text-[var(--color-ink)] mt-2">
                               Totale: €{order.total.toFixed(2)}
                             </p>
-                          </div>
-                          <div>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              magnetic={true}
-                              className="rounded-full flex items-center gap-2"
-                            >
-                              <Download size={14} /> Ricevuta PDF
-                            </Button>
                           </div>
                         </div>
                       ))}

@@ -74,6 +74,7 @@ Indice generato automaticamente delle note operative versionate. Rigenerare con
 - [[10_Projects/PROJECT_DESTINATIONS_SECTION_REVIEW]]
 - [[10_Projects/PROJECT_EDITORIAL_SYSTEM_V1_1]]
 - [[10_Projects/PROJECT_ELEVATION_BRAINSTORM_2026-07-04]]
+- [[10_Projects/PROJECT_ELEVAZIONE_TOTALE_2026-07]]
 - [[10_Projects/PROJECT_ESPLORA_CONSOLIDATION]]
 - [[10_Projects/PROJECT_FAMILY_AREA_2026-07-24]]
 - [[10_Projects/PROJECT_FIREBASE_HARDENING]]

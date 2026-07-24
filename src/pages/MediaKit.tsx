@@ -295,8 +295,8 @@ export default function MediaKit() {
               <span className="text-[9px] font-semibold tracking-wider text-white/50 uppercase">
                 Reach
               </span>
-              <p className="text-lg md:text-xl font-serif font-bold">{BRAND_STATS.monthlyReach}</p>
-              <p className="text-[10px] text-white/60">Dato da aggiornare nel kit</p>
+              <p className="text-lg md:text-xl font-serif font-bold">In call</p>
+              <p className="text-[10px] text-white/60">Dai dati nativi Meta</p>
             </div>
             <div className="space-y-0.5">
               <span className="text-[9px] font-semibold tracking-wider text-white/50 uppercase">
@@ -308,7 +308,7 @@ export default function MediaKit() {
           </div>
           <div className="flex justify-between items-center border-t border-white/10 pt-3 text-[10px] font-mono opacity-50">
             <span>AUDIENCE SIGNALS</span>
-            <span>AGGIORNARE IN CALL</span>
+            <span>DATI NATIVI IN CALL</span>
           </div>
         </div>
       ),
@@ -384,6 +384,14 @@ export default function MediaKit() {
 
         <div className="mx-auto mt-8 max-w-5xl text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+            <div className="mb-4">
+              <Link
+                to="/collaborazioni"
+                className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-accent)]/30 bg-[var(--color-sand)] px-4 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-[var(--color-accent)] transition-all hover:bg-[var(--color-accent)] hover:text-white"
+              >
+                ← Hub Collaborazioni B2B (Case Study &amp; Calcolatore ROI)
+              </Link>
+            </div>
             <div className="mb-6 flex items-center justify-center gap-4">
               <div className="h-px w-12 bg-[var(--color-accent)]" />
               <span className="font-script text-xl text-[var(--color-accent)]">Media kit</span>

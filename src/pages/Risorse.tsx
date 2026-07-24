@@ -53,7 +53,7 @@ const resourceCategories: Array<{
       {
         name: 'GetYourGuide',
         description:
-          'Utile per ingressi, tour e attività quando vuoi capire disponibilita e orari prima di partire.',
+          'Utile per ingressi, tour e attività quando vuoi capire disponibilità e orari prima di partire.',
         link: 'https://getyourguide.com/-cs552',
         tags: ['Esperienze', 'Prenotazioni'],
         commercialLabel: 'Affiliato',
@@ -106,7 +106,7 @@ const resourceCategories: Array<{
         badge: 'Codice',
         commercialLabel: 'Codice sconto',
         fit: 'Per viaggi in cui non vuoi perdere tempo a cercare SIM locali.',
-        avoid: 'Verifica sempre copertura e compatibilita del telefono.',
+        avoid: 'Verifica sempre copertura e compatibilità del telefono.',
       },
       {
         name: 'Revolut',
@@ -170,7 +170,7 @@ const resourcePrinciples = [
   {
     icon: <Shield className="text-[var(--color-accent)]" size={20} />,
     title: 'Selezione dichiarata',
-    text: 'Ogni link deve avere un motivo pratico. Se e affiliato, lo diciamo.',
+    text: 'Ogni link deve avere un motivo pratico. Se è affiliato, lo diciamo.',
   },
   {
     icon: <Compass className="text-[var(--color-accent)]" size={20} />,
@@ -220,7 +220,7 @@ export default function Risorse() {
             tags: resource.tags ?? [],
             badge: resource.badge,
             commercialLabel: resource.badge ? 'Affiliato' : 'Non affiliato',
-            fit: 'Risorsa inserita dal CMS: verifica descrizione, natura del link e coerenza prima del deploy.',
+            fit: 'Aggiunta di recente: la stiamo ancora raccontando per bene.',
           })) ?? category.items,
       })),
     [firestoreByCategory]
@@ -430,7 +430,7 @@ export default function Risorse() {
                     <CheckCircle2 size={16} /> Codice copiato
                   </span>
                 ) : (
-                  'Copia Airalo'
+                  'Airalo: TRAVELLINI3 — copia'
                 )}
               </Button>
             </div>

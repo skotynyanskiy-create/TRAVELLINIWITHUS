@@ -131,6 +131,20 @@ export default function Contatti() {
     setSubmitError('');
     setIsSubmitting(true);
 
+    // Fix 2026-07-24 (bonifica 0.2): company/budget erano raccolti dalla UI B2B
+    // ma mai inviati — l'endpoint accetta solo 5 campi (server.ts:1597), quindi
+    // li incorporiamo in testa al messaggio in forma strutturata. Il campo
+    // dedicato lato server resta un'estensione futura (file high-risk).
+    const b2bContext = [
+      formData.company.trim() && `Azienda: ${formData.company.trim()}`,
+      formData.budget.trim() && `Budget indicativo: ${formData.budget.trim()}`,
+    ]
+      .filter(Boolean)
+      .join('\n');
+    const composedMessage = b2bContext
+      ? `${b2bContext}\n\n${formData.message.trim()}`
+      : formData.message.trim();
+
     try {
       const response = await fetch('/api/contact-lead', {
         method: 'POST',
@@ -141,7 +155,7 @@ export default function Contatti() {
           name: formData.name.trim(),
           email: formData.email.trim(),
           topic: formData.topic,
-          message: formData.message.trim(),
+          message: composedMessage,
           website: formData.website,
         }),
       });
@@ -169,7 +183,7 @@ export default function Contatti() {
         name: formData.name.trim(),
         email: formData.email.trim(),
         topic: formData.topic,
-        message: formData.message.trim(),
+        message: composedMessage,
         date: new Date().toISOString(),
       });
       if (saved) {
