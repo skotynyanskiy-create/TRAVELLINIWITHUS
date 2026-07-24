@@ -2,6 +2,7 @@ import React, { ReactElement } from 'react';
 import { render, RenderOptions } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { AudienceProvider } from '../context/AudienceContext';
 import { AuthProvider } from '../context/AuthContext';
 import { FavoritesProvider } from '../context/FavoritesContext';
 import { CartProvider } from '../context/CartContext';
@@ -19,13 +20,15 @@ const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <AuthProvider>
-          <CartProvider>
-            <FavoritesProvider>
-              <QuickViewProvider>{children}</QuickViewProvider>
-            </FavoritesProvider>
-          </CartProvider>
-        </AuthProvider>
+        <AudienceProvider>
+          <AuthProvider>
+            <CartProvider>
+              <FavoritesProvider>
+                <QuickViewProvider>{children}</QuickViewProvider>
+              </FavoritesProvider>
+            </CartProvider>
+          </AuthProvider>
+        </AudienceProvider>
       </BrowserRouter>
     </QueryClientProvider>
   );
