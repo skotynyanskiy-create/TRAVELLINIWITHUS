@@ -275,6 +275,10 @@ const ALL_STATIC_APP_ROUTES = [
   '/collaborazioni',
   '/media-kit',
   '/contatti',
+  '/family',
+  '/family/consigli',
+  '/family/shop',
+  '/famiglia',
   '/preferiti',
   '/risorse',
   '/shop',
@@ -288,6 +292,9 @@ const ALL_STATIC_APP_ROUTES = [
   '/admin',
   '/admin/editor',
   '/admin/product-editor',
+  '/admin/users',
+  '/admin/orders',
+  '/admin/site-content',
 ];
 
 const STATIC_APP_ROUTES = new Set(
@@ -627,7 +634,7 @@ async function resolveAppStatus(pathname: string) {
     return product ? 200 : 404;
   }
 
-  if (pathname.startsWith('/admin/editor/') || pathname.startsWith('/admin/product-editor/')) {
+  if (pathname.startsWith('/admin/')) {
     return 200;
   }
 
