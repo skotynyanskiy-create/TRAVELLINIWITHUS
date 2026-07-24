@@ -205,12 +205,12 @@
   {
     "id": "madrid-storyland-disney",
     "source": "instagram",
-    "permalink": "https://www.instagram.com/travelliniwithus/reel/DVlQVgpjFIC/",
+    "permalink": "https://www.instagram.com/reel/DZWo5OTM_Cw/",
     "mediaType": "reel",
-    "cover": "",
+    "cover": "/images/reels/madrid-storyland-disney-cover.webp",
     "hook": "Una cena nel mondo Disney?",
     "title": "Storyland a Madrid",
-    "description": "Un ristorante a tema dove sentirsi principessa per una sera: ispirato ai cartoni e alle principesse più amate, piatti scenografici argentini e spettacolo a metà cena. Perfetto per famiglie e per chi non ha mai smesso di sognare.",
+    "description": "Ristorante a tema principesse a Madrid: indossi un vestito ed entri nell'ambientazione ispirata ai cartoni, con piatti scenografici e specialità argentine. A metà cena inizia uno spettacolo con le principesse.",
     "place": {
       "name": "Storyland",
       "city": "Madrid",
@@ -226,7 +226,11 @@
       "kind": "invited",
       "partner": "@storylandmadrid"
     },
-    "isPlaceholder": true
+    "isPlaceholder": false,
+    "coverFocusY": 64,
+    "coverAlt": "Sala a tema principesse del ristorante Storyland a Madrid.",
+    "videoSrc": "/video/madrid-storyland-disney.mp4",
+    "publishedAt": "2026-06-09"
   },
   {
     "id": "lugano-parco-acquatico-spa",
@@ -555,12 +559,12 @@
   {
     "id": "verona-vigna-benini",
     "source": "instagram",
-    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "permalink": "https://www.instagram.com/reel/DZjvWDoslzS/",
     "mediaType": "reel",
-    "cover": "",
-    "hook": "Un aperitivo in vigna nel veronese?",
+    "cover": "/images/reels/verona-vigna-benini-cover.webp",
+    "hook": "Un aperitivo in vigna?",
     "title": "Alessandro Benini Wines",
-    "description": "Aperitivo tra i filari, con i vini della cantina e vista sulle colline veronesi. Per un pomeriggio lento, di coppia, lontano dalla città.",
+    "description": "Aperitivo tra i filari a Lavagno, vicino Verona: vino prodotto dalla cantina, musica e tramonto. Con una bottiglia è incluso un tagliere di salumi, formaggi e taralli, a 28€.",
     "place": {
       "name": "Alessandro Benini Wines",
       "city": "Lavagno",
@@ -576,20 +580,25 @@
     "partnership": {
       "kind": "invited"
     },
-    "isPlaceholder": true,
+    "isPlaceholder": false,
     "value": {
+      "price": "28€ (bottiglia + tagliere)",
       "budget": "Medio"
-    }
+    },
+    "coverFocusY": 64,
+    "coverAlt": "Tavoli tra i filari della vigna al tramonto, Alessandro Benini Wines a Lavagno.",
+    "videoSrc": "/video/verona-vigna-benini.mp4",
+    "publishedAt": "2026-06-14"
   },
   {
     "id": "jesolo-caribe-bay",
     "source": "instagram",
-    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "permalink": "https://www.instagram.com/reel/DZaO32kMg8R/",
     "mediaType": "reel",
-    "cover": "",
-    "hook": "Un parco acquatico caraibico in Veneto?",
+    "cover": "/images/reels/jesolo-caribe-bay-cover.webp",
+    "hook": "I Caraibi in Italia?",
     "title": "Caribe Bay a Jesolo",
-    "description": "Un parco acquatico a tema caraibico a Jesolo: scivoli, lagune e atmosfera tropicale a due passi da casa. Per una giornata di puro divertimento d'estate.",
+    "description": "Parco acquatico caraibico a Jesolo: 80.000 mq di sabbia bianca, palme e lagune, 25 attrazioni tra gli scivoli più adrenalinici d'Europa e il relax di Shark Bay, più 4 spettacoli giornalieri. Biglietto 39€, meno acquistando online.",
     "place": {
       "name": "Caribe Bay",
       "city": "Jesolo",
@@ -605,10 +614,15 @@
     "partnership": {
       "kind": "organic"
     },
-    "isPlaceholder": true,
+    "isPlaceholder": false,
     "value": {
+      "price": "Da 39€",
       "budget": "Medio"
-    }
+    },
+    "coverFocusY": 64,
+    "coverAlt": "Sabbia bianca, palme e lagune del parco acquatico Caribe Bay a Jesolo.",
+    "videoSrc": "/video/jesolo-caribe-bay.mp4",
+    "publishedAt": "2026-06-10"
   },
   {
     "id": "padova-cinema-a-letto",
@@ -643,12 +657,12 @@
   {
     "id": "chioggia-sand-beach",
     "source": "instagram",
-    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "permalink": "https://www.instagram.com/reel/DZhFdM_sQY9/",
     "mediaType": "reel",
-    "cover": "",
-    "hook": "Mare e ostriche a Chioggia?",
+    "cover": "/images/reels/chioggia-sand-beach-cover.webp",
+    "hook": "Una meta di mare sottovalutata?",
     "title": "Sand Beach Club a Chioggia",
-    "description": "Una Chioggia diversa dalla cartolina: spiaggia, ostriche e ritmo lento al beach club. Per chi cerca mare veneto autentico senza la calca di Jesolo.",
+    "description": "Giornata di mare a Chioggia: passeggiata nel centro storico, ostriche fresche al Do Ombre, e il Sand Beach Club — lido esclusivo fronte mare con pranzi, cene, eventi e gazebo vip.",
     "place": {
       "name": "Sand Beach Club",
       "city": "Chioggia",
@@ -664,10 +678,14 @@
     "partnership": {
       "kind": "adv"
     },
-    "isPlaceholder": true,
+    "isPlaceholder": false,
     "value": {
       "budget": "Medio"
-    }
+    },
+    "coverFocusY": 64,
+    "coverAlt": "Lido fronte mare con lettini del Sand Beach Club a Chioggia.",
+    "videoSrc": "/video/chioggia-sand-beach.mp4",
+    "publishedAt": "2026-06-13"
   },
   {
     "id": "lombardia-fiaba-naturooms",
@@ -701,12 +719,12 @@
   {
     "id": "lombardia-al-mago-medievale",
     "source": "instagram",
-    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "permalink": "https://www.instagram.com/reel/DZPFeJBMF9v/",
     "mediaType": "reel",
-    "cover": "",
-    "hook": "Una cena in una locanda medievale con falconeria?",
+    "cover": "/images/reels/lombardia-al-mago-medievale-cover.webp",
+    "hook": "Una locanda medievale con falconeria?",
     "title": "Al Mago ad Albairate",
-    "description": "Locanda a tema medievale dove si cena tra spettacoli e falconeria. Porzioni generose e ambientazione curata: per chi ama le cene-esperienza.",
+    "description": "Ristorante ad Albairate dove ceni assistendo a spettacoli di falconeria e arti medievali: esibizioni con falchi, gufi e rapaci, con momenti interattivi in cui provi a richiamarli in prima persona.",
     "place": {
       "name": "Al Mago",
       "city": "Albairate",
@@ -722,20 +740,24 @@
     "partnership": {
       "kind": "adv"
     },
-    "isPlaceholder": true,
+    "isPlaceholder": false,
     "value": {
       "budget": "Medio"
-    }
+    },
+    "coverFocusY": 64,
+    "coverAlt": "Spettacolo di falconeria durante la cena al Ristorante Al Mago ad Albairate.",
+    "videoSrc": "/video/lombardia-al-mago-medievale.mp4",
+    "publishedAt": "2026-06-06"
   },
   {
     "id": "lombardia-agriturismo-graffignana",
     "source": "instagram",
-    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "permalink": "https://www.instagram.com/reel/DZscTqAshTD/",
     "mediaType": "reel",
-    "cover": "",
-    "hook": "Un agriturismo dove dormi tra gli animali?",
+    "cover": "/images/reels/lombardia-agriturismo-graffignana-cover.webp",
+    "hook": "Un agriturismo con animali?",
     "title": "Contea del Vignolo Fiorito",
-    "description": "Un agriturismo dove gli animali fanno parte della giornata, tra natura e tavola contadina. Per chi viaggia in coppia o in famiglia e cerca un posto genuino.",
+    "description": "Agriturismo a Graffignana con tanti animali, molti salvati da situazioni difficili. Puoi passare la giornata in piscina (ingresso 40€, con lettino 50€, con pranzo a buffet o apericena) oppure fermarti a pranzo con prodotti genuini e stagionali.",
     "place": {
       "name": "Contea del Vignolo Fiorito",
       "city": "Graffignana",
@@ -751,10 +773,15 @@
     "partnership": {
       "kind": "adv"
     },
-    "isPlaceholder": true,
+    "isPlaceholder": false,
     "value": {
+      "price": "Piscina 40€ (50€ con lettino)",
       "budget": "Medio"
-    }
+    },
+    "coverFocusY": 64,
+    "coverAlt": "Piscina e area verde dell'agriturismo Contea del Vignolo Fiorito a Graffignana.",
+    "videoSrc": "/video/lombardia-agriturismo-graffignana.mp4",
+    "publishedAt": "2026-06-17"
   },
   {
     "id": "toscana-glamping-cupole-suvereto",
@@ -1675,6 +1702,217 @@
       "code": "TRAVELLINI",
       "label": "-10% prenotando dal sito",
       "provider": "Suite Spa Civico 4"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "capovaticano-tonicello-resort",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/reel/DZRwpH6MDM-/",
+    "mediaType": "reel",
+    "cover": "/images/reels/capovaticano-tonicello-resort-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Vista sul mare cristallino della Costa degli Dei dal Tonicello Resort a Capo Vaticano.",
+    "videoSrc": "/video/capovaticano-tonicello-resort.mp4",
+    "publishedAt": "2026-06-07",
+    "hook": "I Caraibi d'Italia?",
+    "title": "Tonicello Resort & Spa",
+    "description": "Resort affacciato sulla Costa degli Dei, a Capo Vaticano: acque cristalline, calette e tramonti, con terrazza panoramica del ristorante sul mare. A un'ora di volo, i 'Caraibi d'Italia'.",
+    "place": {
+      "name": "Tonicello Resort & Spa",
+      "city": "Capo Vaticano",
+      "region": "Calabria",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 38.6196976,
+        "lng": 15.830186
+      }
+    },
+    "zone": "Italia",
+    "types": ["Hotel con carattere", "Relax, terme e spa"],
+    "partnership": {
+      "kind": "invited"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "pessina-agriturismo-campagnino",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/reel/DY3sfZ3M8dm/",
+    "mediaType": "reel",
+    "cover": "/images/reels/pessina-agriturismo-campagnino-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Campagna e tavoli all'aperto dell'Agriturismo Il Campagnino a Pessina Cremonese.",
+    "videoSrc": "/video/pessina-agriturismo-campagnino.mp4",
+    "publishedAt": "2026-05-28",
+    "hook": "Un agriturismo dove fai la pasta fresca?",
+    "title": "Agriturismo Il Campagnino",
+    "description": "Agriturismo a Pessina Cremonese tra natura e animali: aperitivi freschi ed economici, pranzi con prodotti km0 ed esperienze didattiche — come preparare la pasta fresca e gustarla direttamente a pranzo.",
+    "place": {
+      "name": "Agriturismo Il Campagnino",
+      "city": "Pessina Cremonese",
+      "region": "Lombardia",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 45.185474,
+        "lng": 10.248676
+      }
+    },
+    "zone": "Italia",
+    "types": ["Hotel con carattere", "Food & Ristoranti"],
+    "partnership": {
+      "kind": "invited"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "grone-narciso-home-chalet",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/reel/DYub1jYsfA7/",
+    "mediaType": "reel",
+    "cover": "/images/reels/grone-narciso-home-chalet-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Jacuzzi riscaldata con vista sulla natura dello chalet Narciso Home a Grone.",
+    "videoSrc": "/video/grone-narciso-home-chalet.mp4",
+    "publishedAt": "2026-05-24",
+    "hook": "Lo chalet più romantico della Lombardia?",
+    "title": "Narciso Home",
+    "description": "Chalet immerso nella natura a Grone (BG): jacuzzi riscaldata con vista, sauna interna e doccia emozionale. Incluso un aperitivo con prodotti del territorio e il necessario per cena e colazione. Per un weekend di coppia.",
+    "place": {
+      "name": "Narciso Home",
+      "city": "Grone",
+      "region": "Lombardia",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 45.727504,
+        "lng": 9.9112023
+      }
+    },
+    "zone": "Italia",
+    "types": ["Hotel con carattere", "Weekend romantici", "Relax, terme e spa"],
+    "partnership": {
+      "kind": "adv"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "garfagnana-luccarfting-kayak",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/reel/DYrYyrctBoC/",
+    "mediaType": "reel",
+    "cover": "/images/reels/garfagnana-luccarfting-kayak-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Kayak tra i torrenti verdi della Garfagnana con Luccarfting.",
+    "videoSrc": "/video/garfagnana-luccarfting-kayak.mp4",
+    "publishedAt": "2026-05-23",
+    "hook": "L'attività estiva perfetta?",
+    "title": "Luccarfting",
+    "description": "Kayak, tuffi e nuotate nei torrenti della Garfagnana: tre ore di adrenalina in compagnia, con istruttori esperti che ti seguono in sicurezza. Una delle attività proposte da Luccarfting.",
+    "place": {
+      "name": "Luccarfting",
+      "region": "Toscana",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 43.4586541,
+        "lng": 11.1389204
+      }
+    },
+    "zone": "Italia",
+    "types": ["Insolito"],
+    "partnership": {
+      "kind": "invited"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "shanghai-capyland-capibara",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/reel/DYmhHheMI-c/",
+    "mediaType": "reel",
+    "cover": "/images/reels/shanghai-capyland-capibara-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Visitatori che coccolano un capibara al Capyland di Shanghai.",
+    "videoSrc": "/video/shanghai-capyland-capibara.mp4",
+    "publishedAt": "2026-05-21",
+    "hook": "Il locale più tenero al mondo?",
+    "title": "Capyland",
+    "description": "A Shanghai, un locale dove coccolare i capibara: uno dei posti più teneri e insoliti da provare in città, per chi ama gli animali.",
+    "place": {
+      "name": "Capyland",
+      "city": "Shanghai",
+      "country": "Cina",
+      "coordinates": {
+        "lat": 31.2312707,
+        "lng": 121.4700152
+      }
+    },
+    "zone": "Asia",
+    "types": ["Insolito", "Posti particolari"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "verona-little-italy-sushi-pizza",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/reel/DYjFh4lsq4m/",
+    "mediaType": "reel",
+    "cover": "/images/reels/verona-little-italy-sushi-pizza-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Sushi di pizza e spritz XL serviti da Little Italy a Verona.",
+    "videoSrc": "/video/verona-little-italy-sushi-pizza.mp4",
+    "publishedAt": "2026-05-20",
+    "hook": "Sushi di pizza e albero di spritz?",
+    "title": "Little Italy",
+    "description": "Nel cuore di Verona, un format unico da Little Italy: promo a 30€ con due spritz XL da mezzo litro e un 'sushi di pizza'. Per una serata diversa in città.",
+    "place": {
+      "name": "Little Italy",
+      "city": "Verona",
+      "region": "Veneto",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 45.4763948,
+        "lng": 10.724203
+      }
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "invited"
+    },
+    "value": {
+      "price": "Promo 30€ (2 spritz XL + sushi pizza)",
+      "budget": "Medio"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "garfagnana-agriturismo-cornali",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/reel/DYePI7Us3sk/",
+    "mediaType": "reel",
+    "cover": "/images/reels/garfagnana-agriturismo-cornali-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Piscina privata e verde dell'Agriturismo Cornali in Garfagnana.",
+    "videoSrc": "/video/garfagnana-agriturismo-cornali.mp4",
+    "publishedAt": "2026-05-18",
+    "hook": "Una zona sottovalutata della Toscana?",
+    "title": "Agriturismo Cornali",
+    "description": "In Garfagnana, agriturismo a conduzione familiare immerso nel verde: spa, piscina privata, colazioni fatte in casa e appartamenti spaziosi. Base ideale per borghi, eremi e grotte della zona.",
+    "place": {
+      "name": "Agriturismo Cornali",
+      "region": "Toscana",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 43.4586541,
+        "lng": 11.1389204
+      }
+    },
+    "zone": "Italia",
+    "types": ["Hotel con carattere", "Relax, terme e spa"],
+    "partnership": {
+      "kind": "invited"
     },
     "isPlaceholder": false
   }
