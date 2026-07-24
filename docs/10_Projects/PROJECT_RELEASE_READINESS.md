@@ -954,3 +954,52 @@ Verifiche:
 - `npm run build` PASS
 - Browser preview produzione `/media-kit` desktop/mobile: zero overflow
   orizzontale, form presente, tre pacchetti visibili, zero errori console.
+
+## Gate S6 — sito a 3 audience + Travellini Family — 2026-07-24
+
+Piano completo eseguito (vedi [[PROJECT_FAMILY_AREA_2026-07-24]]): `AudienceContext`,
+`AudienceGate`, navbar/footer a 3 vie, area `/family` con 8 consigli reali importati
+da `@travellinifamily` (live), 15 immagini AI della coppia sostituite con foto reali.
+9 commit su `wip/2026-07-19-diario-e-cinematic-home`.
+
+Gate S6 lanciato (quality + security + perf + browser in parallelo):
+
+- **security-auditor**: PASS — safe-to-deploy per la feature family/audience.
+  2 MEDIUM preesistenti non correlati (bug validator in `firestore.rules:101`,
+  diff WIP non committato su `server.ts` da sessione precedente).
+- **quality-auditor**: inizialmente 3 blocker + 3 serious. **2 blocker fixati in
+  sessione** (`src/test/test-utils.tsx` mancava `AudienceProvider`;
+  `Esplora.preview.test.ts` aveva un'assertion stale sul flip a contenuti reali
+  — 101/101 test verdi, commit `2103eb0`). Warning `audit:ui` saliti a 364
+  (0 errori) per drift preesistente sulle varianti hero cinematic-home, fuori
+  scope di questa sessione.
+- **perf-engineer**: fix applicato in sessione (priorità immagine mancante sulla
+  prima card `/family` e `/family/consigli`, commit `7fe953b`). **Scoperta
+  indipendente e severa, PRE-ESISTENTE (git blame: commit `ce5c6551`,
+  2026-05-13, non toccata in questa sessione)**: il service worker PWA ha
+  `navigateFallback: '/offline.html'` (`vite.config.ts:82`) che serve la
+  pagina offline su OGNI navigazione diretta non-home per un visitatore di
+  ritorno — mascherato da Lighthouse CI perché resetta lo storage prima di
+  ogni run. Handoff completo in
+  `docs/50_Scratch/HANDOFF_gate-s6-perf_perf-engineer_to_frontend-builder.md`.
+  Nota metodologica: i CWV misurati da LHCI (`?twu_audit=1`) sostituiscono
+  Firestore live con contenuto demo; senza il flag le rotte interne mostrano
+  LCP 7-8s per via delle letture live via `useSiteContent` — gap di gate
+  preesistente, non una regressione di questa sessione.
+- **browser-auditor**: conferma indipendente dello stesso blocker sotto.
+
+### BLOCKER aperto: `/family*` restituisce 404 dal server
+
+`server.ts:259-294` (`ALL_STATIC_APP_ROUTES`) non include ancora `/family`,
+`/family/consigli`, `/family/shop` — `resolveAppStatus()` (`server.ts:586`)
+le fa cadere nel 404 di default, nonostante siano `live` in `surfaces.ts`,
+linkate in navbar/footer e già nella sitemap. Root cause confermata via
+lettura (nessuna modifica: file high-risk, richiede `travellini-backend-engineer`
+
+- conferma owner). Fix minimo: 3 righe aggiunte all'allowlist.
+
+### Da decidere con l'owner
+
+1. Fix `/family*` 404 → `travellini-backend-engineer` + conferma owner (3 righe).
+2. Bug service worker preesistente (severo, sito intero) → fix separato o in
+   questa sessione? Vedi handoff perf-engineer.
