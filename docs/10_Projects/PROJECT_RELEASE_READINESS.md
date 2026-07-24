@@ -1013,8 +1013,18 @@ lettura (nessuna modifica: file high-risk, richiede `travellini-backend-engineer
    `'/family'`, `'/family/consigli'`, `'/family/shop'`, `'/famiglia'`
    (l'ultima segue il pattern dei redirect legacy già in lista: `/iscrivi`,
    `/destinazioni`, `/quiz`, `/strumenti` — 200 + Navigate client-side).
-   **Azione owner richiesta**: applicare le 4 righe a mano, oppure consentire
-   temporaneamente `Edit(server.ts)` in `.claude/settings.json` da editor
-   esterno e rilanciare il fix. Dopo l'applicazione: `npm run typecheck`,
-   riavvio dev server, verifica `curl -s -o /dev/null -w "%{http_code}"
-http://localhost:5173/family` → atteso 200.
+   **CHIUSO in sessione**: l'owner ha applicato a mano le 4 righe preparate dal
+   backend-engineer. Verificato: typecheck PASS, dev server riavviato, curl →
+   200 su `/family`, `/family/consigli`, `/family/shop`, `/famiglia`; controllo
+   negativo `/rotta-inesistente` → 404 intatto; `/family` nel browser senza
+   errori console.
+
+### Verdict finale gate S6 (2026-07-24): ✓ READY TO DEPLOY
+
+Tutti e 4 gli audit chiusi: quality (101/101 test, 0 errori statici), security
+(safe-to-deploy), perf (fix priority card family + fix SW navigateFallback),
+browser (blocker 404 risolto). Restano come lavoro FUTURO non bloccante:
+offline page vera (catchHandler/injectManifest), registerSW defer + font
+preload + hero preload condizionale + indagine bundle (handoff perf-engineer),
+bug validator `firestore.rules:101` (MEDIUM, fail-closed), refactor
+seoRoutes→surfaces (fase 7b), gap metodologico LHCI `?twu_audit=1`.
