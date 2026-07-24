@@ -13,6 +13,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { FavoritesProvider } from './context/FavoritesContext';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
+import { AudienceProvider } from './context/AudienceContext';
 // La shell editoriale della mappa e piccola e resta eager per rendere subito l'H1;
 // il motore MapLibre continua a essere lazy dentro Mappa.tsx.
 import Mappa from './pages/Mappa';
@@ -52,6 +53,10 @@ const MieiAcquisti = lazy(() => import('./pages/MieiAcquisti'));
 const LeadMagnet = lazy(() => import('./pages/LeadMagnet'));
 const Posto = lazy(() => import('./pages/Posto'));
 const VieniConNoi = lazy(() => import('./pages/VieniConNoi'));
+// Area Travellini Family (audience 'family', decision 2026-07-24)
+const FamilyHome = lazy(() => import('./pages/family/FamilyHome'));
+const FamilyConsigli = lazy(() => import('./pages/family/FamilyConsigli'));
+const FamilyShop = lazy(() => import('./pages/family/FamilyShop'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const ManifestoPage = lazy(() => import('./experience/controluce/ManifestoPage'));
 // Dev-only: variante "Diario" in isolamento su fixture Burton Juice — mai nel build di
@@ -93,153 +98,160 @@ export default function App() {
           <CartProvider>
             <FavoritesProvider>
               <BrowserRouter>
-                <ScrollToTop />
-                <Suspense fallback={<PageLoader />}>
-                  <Routes>
-                    <Route path="/iscrivi" element={<Navigate to="/guida-in-regalo" replace />} />
-                    <Route
-                      path="/italia-nascosta"
-                      element={<Navigate to="/guida-in-regalo" replace />}
-                    />
-                    {/* Cutover 2026-07-04: la home è "Atlante Vivo". Le home sperimentali
+                <AudienceProvider>
+                  <ScrollToTop />
+                  <Suspense fallback={<PageLoader />}>
+                    <Routes>
+                      <Route path="/iscrivi" element={<Navigate to="/guida-in-regalo" replace />} />
+                      <Route
+                        path="/italia-nascosta"
+                        element={<Navigate to="/guida-in-regalo" replace />}
+                      />
+                      {/* Cutover 2026-07-04: la home è "Atlante Vivo". Le home sperimentali
                         (Sentiero /, V2, AtlanteLab, anteprima /atlante) sono disattivate →
                         redirect sicuro, codice conservato in repo/git per recupero. */}
-                    <Route path="/v2" element={<Navigate to="/" replace />} />
-                    <Route path="/atlante-lab" element={<Navigate to="/" replace />} />
-                    <Route path="/sentiero" element={<Navigate to="/" replace />} />
-                    {/* Lab Controluce: manifesto WebGL, noindex, fuori da nav/sitemap */}
-                    <Route path="/manifesto" element={<ManifestoPage />} />
+                      <Route path="/v2" element={<Navigate to="/" replace />} />
+                      <Route path="/atlante-lab" element={<Navigate to="/" replace />} />
+                      <Route path="/sentiero" element={<Navigate to="/" replace />} />
+                      {/* Lab Controluce: manifesto WebGL, noindex, fuori da nav/sitemap */}
+                      <Route path="/manifesto" element={<ManifestoPage />} />
 
-                    <Route path="/" element={<Layout />}>
-                      <Route index element={<AtlanteHome />} />
-                      <Route path="guida-in-regalo" element={<VieniConNoi />} />
-                      <Route path="atlante" element={<Navigate to="/" replace />} />
-                      <Route path="esplora" element={<Esplora />} />
-                      {/* Spina gerarchica: /destinazione (hub tutte le zone),
+                      <Route path="/" element={<Layout />}>
+                        <Route index element={<AtlanteHome />} />
+                        <Route path="guida-in-regalo" element={<VieniConNoi />} />
+                        <Route path="atlante" element={<Navigate to="/" replace />} />
+                        <Route path="esplora" element={<Esplora />} />
+                        {/* Spina gerarchica: /destinazione (hub tutte le zone),
                           /destinazione/:zoneSlug, /destinazione/:zoneSlug/:subSlug.
                           Il singolo segmento resta back-compat per gli slug regione legacy. */}
-                      <Route path="destinazione" element={<Destinazione />} />
-                      <Route path="destinazione/:zoneSlug" element={<Destinazione />} />
-                      <Route path="destinazione/:zoneSlug/:subSlug" element={<Destinazione />} />
-                      {/* Legacy routes consolidate in /esplora (2026-05-15).
+                        <Route path="destinazione" element={<Destinazione />} />
+                        <Route path="destinazione/:zoneSlug" element={<Destinazione />} />
+                        <Route path="destinazione/:zoneSlug/:subSlug" element={<Destinazione />} />
+                        {/* Legacy routes consolidate in /esplora (2026-05-15).
                           I param sono compatibili: parseDiscoveryFilters
                           legge group/area/region, experience, cat, search
                           come alias dei canonical zone/type/format/q. */}
-                      <Route path="destinazioni" element={<Navigate to="/esplora" replace />} />
-                      <Route path="esperienze" element={<Navigate to="/esplora" replace />} />
-                      <Route path="blog" element={<Navigate to="/esplora" replace />} />
-                      <Route
-                        path="guide"
-                        element={<Navigate to="/esplora?format=guida" replace />}
-                      />
-                      <Route path="chi-siamo" element={<ChiSiamo />} />
-                      <Route path="collaborazioni" element={<Collaborazioni />} />
-                      <Route path="media-kit" element={<MediaKit />} />
-                      <Route path="press" element={<Navigate to="/collaborazioni" replace />} />
-                      <Route path="contatti" element={<Contatti />} />
-                      <Route path="articolo/:slug" element={<Articolo />} />
-                      <Route path="itinerari" element={<Itinerari />} />
-                      <Route path="itinerari/compare" element={<ItinerariCompare />} />
-                      <Route path="itinerari/:slug" element={<Itinerario />} />
-                      <Route path="guide/:slug" element={<Guida />} />
-                      <Route path="quiz" element={<Navigate to="/esplora" replace />} />
-                      {/* /strumenti: redirect permanente a /esplora (owner 2026-07-23,
+                        <Route path="destinazioni" element={<Navigate to="/esplora" replace />} />
+                        <Route path="esperienze" element={<Navigate to="/esplora" replace />} />
+                        <Route path="blog" element={<Navigate to="/esplora" replace />} />
+                        <Route
+                          path="guide"
+                          element={<Navigate to="/esplora?format=guida" replace />}
+                        />
+                        <Route path="chi-siamo" element={<ChiSiamo />} />
+                        <Route path="collaborazioni" element={<Collaborazioni />} />
+                        <Route path="media-kit" element={<MediaKit />} />
+                        <Route path="press" element={<Navigate to="/collaborazioni" replace />} />
+                        <Route path="contatti" element={<Contatti />} />
+                        <Route path="articolo/:slug" element={<Articolo />} />
+                        <Route path="itinerari" element={<Itinerari />} />
+                        <Route path="itinerari/compare" element={<ItinerariCompare />} />
+                        <Route path="itinerari/:slug" element={<Itinerario />} />
+                        <Route path="guide/:slug" element={<Guida />} />
+                        <Route path="quiz" element={<Navigate to="/esplora" replace />} />
+                        {/* /strumenti: redirect permanente a /esplora (owner 2026-07-23,
                           TASK-034). La pagina Strumenti e il cluster itinerario sono
                           stati rimossi come codice orfano; il redirect resta per non
                           rompere link esterni/bookmark, ma /strumenti esce dalla sitemap. */}
-                      <Route path="strumenti" element={<Navigate to="/esplora" replace />} />
-                      <Route path="preferiti" element={<Preferiti />} />
-                      <Route path="risorse" element={<Risorse />} />
-                      <Route path="shop" element={<Shop />} />
-                      <Route path="shop/:slug" element={<ProductPage />} />
-                      <Route path="club" element={<Club />} />
-                      <Route path="posto/:slug" element={<Posto />} />
-                      <Route path="mappa" element={<Mappa />} />
-                      {import.meta.env.DEV && (
-                        <>
-                          <Route path="diario-preview" element={<DiarioPreview />} />
-                          <Route path="_dev/diario-preview" element={<DiarioPreview />} />
-                        </>
-                      )}
-                      <Route path="account/acquisti" element={<MieiAcquisti />} />
-                      <Route path="lead-magnet" element={<LeadMagnet />} />
+                        <Route path="strumenti" element={<Navigate to="/esplora" replace />} />
+                        <Route path="preferiti" element={<Preferiti />} />
+                        <Route path="risorse" element={<Risorse />} />
+                        <Route path="shop" element={<Shop />} />
+                        <Route path="shop/:slug" element={<ProductPage />} />
+                        <Route path="club" element={<Club />} />
+                        {/* Area Travellini Family (audience 'family') */}
+                        <Route path="family" element={<FamilyHome />} />
+                        <Route path="family/consigli" element={<FamilyConsigli />} />
+                        <Route path="family/shop" element={<FamilyShop />} />
+                        <Route path="famiglia" element={<Navigate to="/family" replace />} />
+                        <Route path="posto/:slug" element={<Posto />} />
+                        <Route path="mappa" element={<Mappa />} />
+                        {import.meta.env.DEV && (
+                          <>
+                            <Route path="diario-preview" element={<DiarioPreview />} />
+                            <Route path="_dev/diario-preview" element={<DiarioPreview />} />
+                          </>
+                        )}
+                        <Route path="account/acquisti" element={<MieiAcquisti />} />
+                        <Route path="lead-magnet" element={<LeadMagnet />} />
 
-                      {/* Admin Routes */}
-                      <Route
-                        path="admin"
-                        element={
-                          <ProtectedRoute>
-                            <AdminDashboard />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="admin/site-content/:pageId"
-                        element={
-                          <ProtectedRoute>
-                            <SiteContentEditor />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="admin/editor"
-                        element={
-                          <ProtectedRoute>
-                            <ArticleEditor />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="admin/editor/:id"
-                        element={
-                          <ProtectedRoute>
-                            <ArticleEditor />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="admin/product-editor"
-                        element={
-                          <ProtectedRoute>
-                            <ProductEditor />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="admin/product-editor/:id"
-                        element={
-                          <ProtectedRoute>
-                            <ProductEditor />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="admin/users"
-                        element={
-                          <ProtectedRoute>
-                            <AdminUsers />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="admin/orders"
-                        element={
-                          <ProtectedRoute>
-                            <AdminOrders />
-                          </ProtectedRoute>
-                        }
-                      />
+                        {/* Admin Routes */}
+                        <Route
+                          path="admin"
+                          element={
+                            <ProtectedRoute>
+                              <AdminDashboard />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="admin/site-content/:pageId"
+                          element={
+                            <ProtectedRoute>
+                              <SiteContentEditor />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="admin/editor"
+                          element={
+                            <ProtectedRoute>
+                              <ArticleEditor />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="admin/editor/:id"
+                          element={
+                            <ProtectedRoute>
+                              <ArticleEditor />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="admin/product-editor"
+                          element={
+                            <ProtectedRoute>
+                              <ProductEditor />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="admin/product-editor/:id"
+                          element={
+                            <ProtectedRoute>
+                              <ProductEditor />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="admin/users"
+                          element={
+                            <ProtectedRoute>
+                              <AdminUsers />
+                            </ProtectedRoute>
+                          }
+                        />
+                        <Route
+                          path="admin/orders"
+                          element={
+                            <ProtectedRoute>
+                              <AdminOrders />
+                            </ProtectedRoute>
+                          }
+                        />
 
-                      {/* Legal Routes */}
-                      <Route path="privacy" element={<Privacy />} />
-                      <Route path="cookie" element={<Cookie />} />
-                      <Route path="termini" element={<Termini />} />
-                      <Route path="disclaimer" element={<Disclaimer />} />
+                        {/* Legal Routes */}
+                        <Route path="privacy" element={<Privacy />} />
+                        <Route path="cookie" element={<Cookie />} />
+                        <Route path="termini" element={<Termini />} />
+                        <Route path="disclaimer" element={<Disclaimer />} />
 
-                      <Route path="*" element={<NotFound />} />
-                    </Route>
-                  </Routes>
-                </Suspense>
+                        <Route path="*" element={<NotFound />} />
+                      </Route>
+                    </Routes>
+                  </Suspense>
+                </AudienceProvider>
               </BrowserRouter>
             </FavoritesProvider>
           </CartProvider>

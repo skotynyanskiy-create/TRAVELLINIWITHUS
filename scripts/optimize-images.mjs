@@ -19,11 +19,13 @@ const RESPONSIVE_DIRS = new Set([
   'experiences',
   // Cover reali dei posti + texture del layer atlante.
   'atlante',
+  // Cover reali dei contenuti Travellini Family (frame reel).
+  'family',
 ]);
 // Directories whose .webp files are ORIGINAL sources (not PNG-derived variants).
 // For them we generate the .avif + responsive derivatives; the base .webp IS the
 // source, so it is never re-written. Reel covers are extracted video frames (.webp).
-const WEBP_SOURCE_DIRS = new Set(['reels']);
+const WEBP_SOURCE_DIRS = new Set(['reels', 'family']);
 
 async function walk(dir) {
   const entries = await fs.readdir(dir, { withFileTypes: true });

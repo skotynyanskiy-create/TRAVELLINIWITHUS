@@ -1,0 +1,37 @@
+[
+  {
+    "id": "volare-in-gravidanza",
+    "title": "Volare in gravidanza",
+    "hook": "Si può prendere l'aereo col pancione?",
+    "excerpt": "Cosa sapere prima di volare in gravidanza: documenti, certificato dopo la 28ª settimana, priorità ai controlli e comfort a bordo. Provato da Betta al settimo mese.",
+    "body": [
+      "Porta sempre con te la documentazione della gravidanza e, dopo la 28ª settimana, chiedi al ginecologo il certificato per il volo. Alcune compagnie, come Ryanair, richiedono anche un modulo specifico dal loro sito, compilato dal ginecologo.",
+      "In aeroporto hai diritto alla priorità ai controlli.",
+      "Durante il volo resta ben idratata: bevi molta acqua e muovi ogni tanto gambe e piedi.",
+      "Scegli abiti comodi. Per voli sopra le 4 ore possono aiutare le calze a compressione graduata; per un volo breve Betta ha scelto leggings premaman pensati per favorire la circolazione (Solvea, gifted).",
+      "Posiziona sempre la cintura di sicurezza sotto il pancione, ben aderente al bacino."
+    ],
+    "cover": "/images/family/reels/volare-in-gravidanza-cover.webp",
+    "coverAlt": "Betta incinta in bikini sulla prua di una barca, mare turchese alle spalle.",
+    "coverFocusY": 64,
+    "category": "viaggiare-in-gravidanza",
+    "partnership": { "kind": "gifted", "partner": "@solvea.official" },
+    "sourceUrl": "https://www.instagram.com/reel/DZCgKqqAFnc/",
+    "publishedAt": "2026-06-01",
+    "isPlaceholder": false
+  },
+  {
+    "id": "primo-volo-settimo-mese",
+    "title": "Il primo volo di fagiolino",
+    "hook": "Volare al settimo mese?",
+    "excerpt": "Il primo volo con il pancione, al settimo mese: com'è andata e cosa stiamo imparando viaggiando in attesa. In arrivo un video con tutte le info e i consigli.",
+    "cover": "/images/family/reels/primo-volo-settimo-mese-cover.webp",
+    "coverAlt": "Betta incinta in aeroporto prima dell'imbarco del suo primo volo in gravidanza.",
+    "coverFocusY": 64,
+    "category": "gravidanza",
+    "partnership": { "kind": "organic" },
+    "sourceUrl": "https://www.instagram.com/reel/DY61NnyMi8e/",
+    "publishedAt": "2026-05-29",
+    "isPlaceholder": false
+  }
+]

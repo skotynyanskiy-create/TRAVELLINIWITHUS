@@ -42,6 +42,22 @@ export const SURFACES: Surface[] = [
   { path: '/termini', state: 'live' },
   { path: '/disclaimer', state: 'live' },
 
+  {
+    path: '/family',
+    state: 'preview',
+    missing: 'import completo dei contenuti reali da @travellinifamily (≥8 consigli)',
+  },
+  {
+    path: '/family/consigli',
+    state: 'preview',
+    missing: 'import completo dei contenuti reali da @travellinifamily (≥8 consigli)',
+  },
+  {
+    path: '/family/shop',
+    state: 'preview',
+    missing: 'codici sconto family reali e attivi (≥3 deal)',
+  },
+
   { path: '/itinerari', state: 'preview', missing: 'itinerari reali al posto dei due demo' },
   { path: '/itinerari/compare', state: 'preview', missing: 'itinerari reali da confrontare' },
   { path: '/itinerari/:slug', state: 'preview', missing: 'itinerari reali al posto dei due demo' },

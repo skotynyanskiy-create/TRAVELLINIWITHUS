@@ -42,4 +42,12 @@ describe('registro delle superfici', () => {
     const seen = SURFACES.map((s) => s.path);
     expect(new Set(seen).size).toBe(seen.length);
   });
+
+  it('le superfici family nascono preview: fuori da sitemap e non indicizzabili', () => {
+    for (const path of ['/family', '/family/consigli', '/family/shop']) {
+      expect(surfaceState(path), `${path} deve essere preview`).toBe('preview');
+      expect(isIndexable(path), `${path} non deve essere indicizzabile`).toBe(false);
+      expect(sitemapPaths()).not.toContain(path);
+    }
+  });
 });

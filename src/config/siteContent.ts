@@ -128,7 +128,25 @@ export interface FooterContent {
   newsletterButtonLabel: string;
 }
 
+export interface FamilyContent {
+  heroEyebrow: string;
+  heroTitleMain: string;
+  heroTitleAccent: string;
+  heroDescription: string;
+  adviceTitle: string;
+  adviceDescription: string;
+  shopTitle: string;
+  shopDescription: string;
+  collabTitle: string;
+  collabDescription: string;
+  collabCtaLabel: string;
+  instagramCtaLabel: string;
+}
+
 export interface NavigationContent {
+  familyLabel: string;
+  familyAdviceLabel: string;
+  familyShopLabel: string;
   destinationsLabel: string;
   destinationsAllLabel: string;
   guidesLabel: string;
@@ -162,6 +180,7 @@ export interface SiteContentMap {
   about: AboutContent;
   collaborations: CollaborationsContent;
   contact: ContactContent;
+  family: FamilyContent;
   footer: FooterContent;
   navigation: NavigationContent;
   demo: DemoContent;
@@ -435,7 +454,28 @@ export const siteContentDefaults: SiteContentMap = {
     projectTitle: 'Progetto',
     newsletterButtonLabel: 'Iscriviti alla newsletter',
   },
+  family: {
+    heroEyebrow: 'Travellini Family · Rodrigo & Betta',
+    heroTitleMain: 'Il viaggio più grande',
+    heroTitleAccent: 'inizia adesso.',
+    heroDescription:
+      'Betta aspetta il nostro primo bimbo. Qui raccontiamo la gravidanza, i viaggi che facciamo adesso e — presto — quelli col piccolo. Consigli veri, provati su di noi, senza filtri.',
+    adviceTitle: 'Consigli dal pancione',
+    adviceDescription:
+      'Quello che stiamo imparando davvero: volare in gravidanza, organizzarsi, scegliere cosa serve. Ogni consiglio nasce da un momento reale che trovi anche su Instagram.',
+    shopTitle: 'Codici sconto e cose che usiamo',
+    shopDescription:
+      'Le nostre collaborazioni family con i codici sconto attivi e i prodotti che usiamo davvero. Ogni link commerciale è dichiarato: qui non trovi nulla che non abbiamo provato.',
+    collabTitle: 'Collabora con Travellini Family',
+    collabDescription:
+      'Brand di maternità, infanzia e viaggio in famiglia: raccontiamo solo prodotti e strutture che proviamo con il pancione (e presto col piccolo).',
+    collabCtaLabel: 'Scrivici per una collaborazione',
+    instagramCtaLabel: 'Seguici su @travellinifamily',
+  },
   navigation: {
+    familyLabel: 'Family',
+    familyAdviceLabel: 'Consigli',
+    familyShopLabel: 'Codici e sconti',
     destinationsLabel: 'Mete',
     destinationsAllLabel: 'Tutte le mete',
     guidesLabel: 'Guide',
@@ -772,6 +812,27 @@ export const siteContentDefinitions: SiteContentDefinition[] = [
         description:
           'Aggiunge etichette Demo sulle anteprime per rendere chiaro che si tratta di contenuti provvisori.',
       },
+    ],
+  },
+  {
+    id: 'family',
+    title: 'Travellini Family',
+    description:
+      'Hub /family: hero, sezione consigli, vetrina codici sconto e blocco collaborazioni family.',
+    previewPath: '/family',
+    fields: [
+      textField('heroEyebrow', 'Eyebrow hero'),
+      textField('heroTitleMain', 'Titolo hero riga principale'),
+      textField('heroTitleAccent', 'Titolo hero parte evidenziata'),
+      textareaField('heroDescription', 'Descrizione hero'),
+      textField('adviceTitle', 'Titolo sezione consigli'),
+      textareaField('adviceDescription', 'Descrizione sezione consigli'),
+      textField('shopTitle', 'Titolo vetrina codici'),
+      textareaField('shopDescription', 'Descrizione vetrina codici'),
+      textField('collabTitle', 'Titolo blocco collaborazioni'),
+      textareaField('collabDescription', 'Descrizione blocco collaborazioni'),
+      textField('collabCtaLabel', 'CTA collaborazioni'),
+      textField('instagramCtaLabel', 'CTA Instagram'),
     ],
   },
 ];
