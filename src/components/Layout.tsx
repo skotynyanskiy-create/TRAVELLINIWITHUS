@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import AudienceGate, { AUDIENCE_GATE_ENABLED, wasGateDismissedThisSession } from './AudienceGate';
+import { useAudience } from '../context/AudienceContext';
 import ConsentBanner from './ConsentBanner';
 import ExitIntentPopup from './ExitIntentPopup';
 import AiAssistant from './AiAssistant';
@@ -13,6 +15,7 @@ import { initAnalytics, trackPageview } from '../services/analytics';
 
 export default function Layout() {
   const location = useLocation();
+  const { hasChosen } = useAudience();
 
   useEffect(() => {
     // Sentry e' inizializzato in main.tsx via initTelemetry() — qui solo analytics.
@@ -49,6 +52,11 @@ export default function Layout() {
           </main>
           {!isGuideLanding && <Footer />}
           <ConsentBanner />
+          {/* Porta d'ingresso a 3 vie: solo home, solo prima visita, deferita */}
+          {AUDIENCE_GATE_ENABLED &&
+            isCinematicHome &&
+            !hasChosen &&
+            !wasGateDismissedThisSession() && <AudienceGate />}
           {!suppressFloatingOverlays && <ExitIntentPopup />}
           {!suppressFloatingOverlays && <AiAssistant />}
           <QuickViewDrawer />
