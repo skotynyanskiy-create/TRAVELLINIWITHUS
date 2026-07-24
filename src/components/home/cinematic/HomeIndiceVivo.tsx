@@ -9,7 +9,7 @@ import { getRegistroItems } from '../../../config/contentLibrary';
  * dichiara lo stato della sua scheda — mai più di quello che è verificato.
  */
 export default function HomeIndiceVivo() {
-  const items = getRegistroItems(6);
+  const items = getRegistroItems(12);
 
   return (
     <>

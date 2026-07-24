@@ -1,6 +1,8 @@
 import { ArrowUpRight, MapPin, Sparkles, Star } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import OptimizedImage from '@/src/components/OptimizedImage';
+import { getContentById } from '@/src/config/contentLibrary';
+import { PARTNERSHIP_LABEL } from '@/src/types/content';
 
 interface PlaceItem {
   id: string;
@@ -10,49 +12,40 @@ interface PlaceItem {
   price: string;
   score: string;
   image: string;
+  focusY: number;
   link: string;
   description: string;
 }
 
-/** Solo posti con scheda seed reale (/posto/:id) + cover leggera. */
-const FEATURED_PLACES: PlaceItem[] = [
-  {
-    id: 'campania-burton-juice',
-    title: 'The Burton Juice',
-    location: 'Somma Vesuviana, Campania',
-    category: 'Cena particolare',
-    price: 'Su prenotazione',
-    score: 'Pinned IG',
-    image: '/images/home-journal/hero-impossible.webp',
-    link: '/posto/campania-burton-juice',
-    description:
-      'Il ristorante a tema Tim Burton: sale, attori e cocktail. Scheda dal viaggio vero.',
-  },
-  {
-    id: 'malesia-batu-caves',
-    title: 'Batu Caves a Kuala Lumpur',
-    location: 'Kuala Lumpur, Malesia',
-    category: 'Posto particolare',
-    price: 'Ingresso gratis',
-    score: 'Low cost',
-    image: '/images/reels/reel-4-cover.webp',
-    link: '/posto/malesia-batu-caves',
-    description:
-      'Scalinata arcobaleno, templi e scimmie: vale la pena? Dettagli pratici nella scheda.',
-  },
-  {
-    id: 'toscana-aperitivo-volterra',
-    title: 'Aperitivo a Volterra',
-    location: 'Volterra, Toscana',
-    category: 'Insolito',
-    price: 'Aperitivo',
-    score: 'Atmosfera',
-    image: '/images/reels/reel-5-cover.webp',
-    link: '/posto/toscana-aperitivo-volterra',
-    description:
-      'Atmosfera gotica e drink scenografici nel cuore del borgo. Per chi ama l’insolito.',
-  },
+/**
+ * Selezione curata di posti REALI dal content-seed (cover ufficiali, scheda
+ * /posto/:id). ID scelti a mano per varietà di categoria e forza visiva —
+ * volutamente diversi dall'hero e dai primi reel, per non ripetere gli stessi
+ * posti in più sezioni della home.
+ */
+const CURATED_IDS = [
+  'novara-emotional-grand-motel',
+  'ravenna-better-sushi',
+  'londra-warner-bros-studio-harry-potter',
 ];
+
+const FEATURED_PLACES: PlaceItem[] = CURATED_IDS.map((id) => getContentById(id))
+  .filter((item): item is NonNullable<typeof item> => Boolean(item))
+  .map((item) => {
+    const disclosure = PARTNERSHIP_LABEL[item.partnership.kind];
+    return {
+      id: item.id,
+      title: item.title,
+      location: item.place.city ?? item.place.region ?? item.place.country,
+      category: item.types[0],
+      price: item.value?.price ?? 'Scheda dal viaggio',
+      score: disclosure || 'Provato di persona',
+      image: item.cover,
+      focusY: item.coverFocusY ?? 50,
+      link: `/posto/${item.id}`,
+      description: item.description,
+    };
+  });
 
 export default function CleanFeaturedPlaces() {
   return (
@@ -92,6 +85,7 @@ export default function CleanFeaturedPlaces() {
                   alt={place.title}
                   sizes="(max-width: 768px) 92vw, 30vw"
                   responsiveWidths={[320, 480, 768]}
+                  style={{ objectPosition: `50% ${place.focusY}%` }}
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />

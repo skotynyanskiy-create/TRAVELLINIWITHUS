@@ -35,12 +35,14 @@ export function getContentById(id: string): ContentItem | undefined {
   return CONTENT_ITEMS.find((item) => item.id === id);
 }
 
-/** Item per il registro in home: prima i `featured`, poi ordine seed.
- *  (Il seed non ha date affidabili per un "più recenti"; l'ordine è curato.) */
+/** Item per il registro in home: prima i posti REALI (scheda completa), poi i
+ *  `featured` ancora placeholder, poi il resto. Così l'indice apre con ciò che
+ *  è davvero verificato e cliccabile, non con schede in lavorazione. */
 export function getRegistroItems(limit = 6): ContentItem[] {
-  const featured = CONTENT_ITEMS.filter((item) => item.featured);
-  const rest = CONTENT_ITEMS.filter((item) => !item.featured);
-  return [...featured, ...rest].slice(0, limit);
+  const real = CONTENT_ITEMS.filter((item) => !item.isPlaceholder);
+  const featuredPlaceholder = CONTENT_ITEMS.filter((item) => item.isPlaceholder && item.featured);
+  const rest = CONTENT_ITEMS.filter((item) => item.isPlaceholder && !item.featured);
+  return [...real, ...featuredPlaceholder, ...rest].slice(0, limit);
 }
 
 // ─── Intenzioni di viaggio (per le pagine destinazione) ──────────────────────
