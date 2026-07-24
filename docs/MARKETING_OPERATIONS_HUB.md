@@ -20,7 +20,8 @@ tags:
 - audit IG contenuti: [[13_Content/INSTAGRAM_CONTENT_AUDIT_2026-07-21]]
 - **sub-brand family (parte del progetto):** [[BRAND_TRAVELLINI_FAMILY]] · [@travellinifamily](https://www.instagram.com/travellinifamily/)
 - **MOC brand (mappa unica):** [[BRAND_KNOWLEDGE_MOC]]
-- **Decision Family boundary:** [[20_Decisions/DECISION_TRAVELLINI_FAMILY_BOUNDARY_2026-07-23]]
+- **Decision Family boundary (superseded):** [[20_Decisions/DECISION_TRAVELLINI_FAMILY_BOUNDARY_2026-07-23]]
+- **Area Family pubblica approvata (2026-07-24):** [[20_Decisions/DECISION_TRAVELLINI_FAMILY_PUBLIC_2026-07-24]] · piano [[10_Projects/PROJECT_FAMILY_AREA_2026-07-24]] · funnel bio @travellinifamily → `/family`
 - **Vault + Graphify ops:** [[VAULT_AND_GRAPHIFY_OPERATING_STATE]]
 
 ## Campaigns

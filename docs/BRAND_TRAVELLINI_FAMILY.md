@@ -21,15 +21,15 @@ tags:
 
 ## Identità
 
-| Campo             | Valore                                                           |
-| ----------------- | ---------------------------------------------------------------- |
-| Nome              | TravelliniFamily                                                 |
-| Handle IG         | [@travellinifamily](https://www.instagram.com/travellinifamily/) |
-| Nucleo            | Stessa coppia del brand travel (Rodrigo & Betta)                 |
-| Brand principale  | [[BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS]] · `@travelliniwithus` |
-| Ruolo             | Genitorialità, vita quotidiana, baby, viaggio in famiglia        |
-| Sito dedicato     | **No** (oggi)                                                    |
-| Nel codice `src/` | **Nessun wiring** ancora                                         |
+| Campo             | Valore                                                                                                                                    |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Nome              | TravelliniFamily                                                                                                                          |
+| Handle IG         | [@travellinifamily](https://www.instagram.com/travellinifamily/)                                                                          |
+| Nucleo            | Stessa coppia del brand travel (Rodrigo & Betta)                                                                                          |
+| Brand principale  | [[BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS]] · `@travelliniwithus`                                                                          |
+| Ruolo             | Genitorialità, vita quotidiana, baby, viaggio in famiglia                                                                                 |
+| Sito dedicato     | **Sì — sezione `/family` approvata 2026-07-24** ([[20_Decisions/DECISION_TRAVELLINI_FAMILY_PUBLIC_2026-07-24]])                           |
+| Nel codice `src/` | In costruzione: audience layer a 3 + `/family`, `/family/consigli`, `/family/shop` (piano [[10_Projects/PROJECT_FAMILY_AREA_2026-07-24]]) |
 
 ## Perché esiste
 
@@ -52,7 +52,10 @@ Highlights IG travel includono anche filoni **baby** (e altri non-travel): segna
 
 ## Regole operative (canoniche)
 
-Finché owner non approva diversamente:
+> **Aggiornamento 2026-07-24**: l'owner ha approvato la sezione pubblica `/family`
+> (regola 7 soddisfatta). La regola 4 evolve: i prodotti baby restano fuori da `/risorse`
+> e dalle superfici travel, ma hanno casa propria in `/family/shop` (vetrina affiliate +
+> codici, disclosure AGCOM). Il resto resta valido.
 
 1. **Travel first** — `@travelliniwithus` e `travelliniwithus.it` restano il brand pubblico principale.
 2. **Family = sub-brand** — handle e narrativa propri; non “secondo account generico”.
@@ -76,7 +79,7 @@ Finché owner non approva diversamente:
 
 ### Team sito
 
-- [ ] Non linkare Family in nav principale finché non c’è OK owner
+- [x] ~~Non linkare Family in nav principale finché non c'è OK owner~~ → OK owner 2026-07-24: switch a 3 audience in navbar
 - [ ] Opzionale: footer o Chi siamo “anche su @travellinifamily” (soft)
 - [ ] Taxonomy content: tag `family` riservato, non mescolato a `posti-particolari` senza filtro
 - [ ] Media kit travel: menzione Family solo come “progetto parallelo”, **senza** sommare audience
@@ -84,13 +87,13 @@ Finché owner non approva diversamente:
 
 ## Implicazioni prodotto
 
-| Superficie   | Oggi                                                       | Target quando maturo                             |
-| ------------ | ---------------------------------------------------------- | ------------------------------------------------ |
-| IG travel    | Collab occasionali Family                                  | Come ora + disclosure chiara                     |
-| IG Family    | Account attivo                                             | Hub genitorialità / family travel                |
-| Sito travel  | Assente                                                    | Eventuale hub `/family` o sottosezione Chi siamo |
-| Shop/risorse | No baby in path travel                                     | Cataloghi separati se servono                    |
-| Partner      | Parchi/family-friendly ok su travel se “posto particolare” | Deal baby → canale Family                        |
+| Superficie   | Oggi                                                       | Target quando maturo                         |
+| ------------ | ---------------------------------------------------------- | -------------------------------------------- |
+| IG travel    | Collab occasionali Family                                  | Come ora + disclosure chiara                 |
+| IG Family    | Account attivo                                             | Hub genitorialità / family travel            |
+| Sito travel  | Hub `/family` in costruzione (audience layer a 3)          | Hub live con consigli reali + vetrina codici |
+| Shop/risorse | No baby in path travel                                     | Cataloghi separati se servono                |
+| Partner      | Parchi/family-friendly ok su travel se “posto particolare” | Deal baby → canale Family                    |
 
 ## Claim sicuri oggi
 
@@ -133,7 +136,8 @@ Finché non si riscrive, i sistemi AI esterni **non** allineano Family come part
 
 ## Changelog
 
-| Data        | Cosa                                                               |
-| ----------- | ------------------------------------------------------------------ |
-| 2026-07-23  | Nota creata: Family riconosciuto come parte ufficiale del progetto |
-| 2026-07-23d | Cronologia pregnancy arc + conflitto llms + link Part III dossier  |
+| Data        | Cosa                                                                           |
+| ----------- | ------------------------------------------------------------------------------ |
+| 2026-07-23  | Nota creata: Family riconosciuto come parte ufficiale del progetto             |
+| 2026-07-23d | Cronologia pregnancy arc + conflitto llms + link Part III dossier              |
+| 2026-07-24  | Owner approva sezione pubblica `/family` — sito a 3 audience (decision PUBLIC) |

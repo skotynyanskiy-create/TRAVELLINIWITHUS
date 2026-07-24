@@ -1,7 +1,8 @@
 ---
 type: decision
 area: brand
-status: active
+status: superseded
+superseded_by: '[[DECISION_TRAVELLINI_FAMILY_PUBLIC_2026-07-24]]'
 priority: p1
 owner: team
 decided: 2026-07-23
@@ -14,6 +15,12 @@ tags:
 ---
 
 # DECISION — TravelliniFamily boundary (2026-07-23)
+
+> **SUPERSEDED 2026-07-24** — l'owner ha approvato in sessione la sezione pubblica Family
+> (rotta `/family`, hub «Travellini Family»). Il punto 3 («nessuna nav/hub finché owner non
+> approva») è quindi soddisfatto e superato. Regole aggiornate in
+> [[DECISION_TRAVELLINI_FAMILY_PUBLIC_2026-07-24]]. Restano validi i punti su metriche (6),
+> cross-post (4) e AI briefs (8).
 
 ## Contesto
 
