@@ -198,7 +198,10 @@ Il server legge inoltre `articles` e `products` via **REST pubblica Firestore**
   dal precache i video e i chunk pesanti (`mapbox-*`, `charts-*`, `editor-*`,
   `react-pdf*`, `three-*`, e le varianti responsive `-320/-480/-768/-1024`),
   serviti poi on-demand via `runtimeCaching` CacheFirst (`heavy-route-chunks`).
-  `navigateFallback: '/offline.html'`.
+  `navigateFallback: '/index.html'` (app shell — fix 2026-07-24: con
+  `/offline.html` il SW serviva la pagina offline a ogni hard-navigation
+  non-home dei visitatori di ritorno; una vera offline page richiede un
+  `catchHandler` via injectManifest, oggi non implementato).
 - **`modulePreload.resolveDependencies`**: filtra dal preload dell'HTML i chunk
   `mapbox-`, `charts-`, `editor-`, `maps-`, `markdown-`, `motion-`, `three-`.
 - **`manualChunks`** (solo `node_modules`): `react-core` (react, react-dom,

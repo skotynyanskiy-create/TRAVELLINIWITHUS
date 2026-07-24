@@ -79,8 +79,15 @@ export default defineConfig(({ mode }) => {
           ],
           clientsClaim: true,
           skipWaiting: true,
-          navigateFallback: '/offline.html',
-          // Don't redirect missing assets (with extension) to offline.html;
+          // Fix 2026-07-24 (gate S6): il fallback di navigazione DEVE essere
+          // l'app shell, non la pagina offline. Con '/offline.html' la
+          // NavigationRoute serviva "Sei offline" a OGNI hard-navigation
+          // non-home dei visitatori di ritorno (/, unica eccezione, risolveva
+          // via directoryIndex del precache). Una vera offline page richiede
+          // un catchHandler (strategia injectManifest) — vedi
+          // docs/50_Scratch/HANDOFF_gate-s6-perf_perf-engineer_to_frontend-builder.md.
+          navigateFallback: '/index.html',
+          // Don't redirect missing assets (with extension) to the app shell;
           // only redirect SPA navigations.
           navigateFallbackDenylist: [/^\/_/, /\/[^/?]+\.[^/]+$/],
         },
