@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import { AudienceProvider } from '../context/AudienceContext';
 import Navbar from './Navbar';
 
 vi.mock('../context/AuthContext', () => ({
@@ -30,7 +31,9 @@ vi.mock('../hooks/useSiteContent', async () => {
 const renderNavbar = () =>
   render(
     <BrowserRouter>
-      <Navbar />
+      <AudienceProvider>
+        <Navbar />
+      </AudienceProvider>
     </BrowserRouter>
   );
 

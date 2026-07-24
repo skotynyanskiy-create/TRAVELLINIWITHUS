@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import { AudienceProvider } from '../context/AudienceContext';
 import Footer from './Footer';
 
 vi.mock('../context/AuthContext', () => ({ useAuth: () => ({ isAdmin: false }) }));
@@ -14,7 +15,9 @@ vi.mock('../hooks/useSiteContent', async () => {
 const renderFooter = () =>
   render(
     <BrowserRouter>
-      <Footer />
+      <AudienceProvider>
+        <Footer />
+      </AudienceProvider>
     </BrowserRouter>
   );
 

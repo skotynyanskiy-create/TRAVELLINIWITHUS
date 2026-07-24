@@ -14,6 +14,7 @@ import SEO from '../components/SEO';
 import StickyMobileCTA from '../components/StickyMobileCTA';
 import Textarea from '../components/Textarea';
 import { CONTACTS } from '../config/site';
+import { useAudience } from '../context/AudienceContext';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { trackEvent } from '../services/analytics';
@@ -21,6 +22,7 @@ import { appendLeadFallback } from '../lib/leadFallback';
 
 export default function Contatti() {
   const [searchParams] = useSearchParams();
+  const { audience: siteAudience } = useAudience();
   const { data: content } = useSiteContent('contact');
   const pageContent = content ?? siteContentDefaults.contact;
   const [formData, setFormData] = useState(() => {
@@ -34,8 +36,20 @@ export default function Contatti() {
         : '';
 
     return {
+      // `?mode=` resta autoritativo; senza param, chi arriva in modalità brand
+      // trova il form già sul lato aziende.
+      audience:
+        searchParams.get('mode') === 'b2b' || requestedTopic === 'collab'
+          ? 'b2b'
+          : searchParams.get('mode') === 'b2c'
+            ? 'b2c'
+            : siteAudience === 'brand'
+              ? 'b2b'
+              : 'b2c',
       name: '',
       email: '',
+      company: '',
+      budget: '',
       topic,
       message: productSlug
         ? `Vorrei essere avvisato quando il prodotto "${productSlug}" sarà disponibile.`
@@ -327,10 +341,59 @@ export default function Contatti() {
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 0.4 }}
                 >
-                  <h3 className="mb-8 text-3xl font-serif">{pageContent.formTitle}</h3>
+                  {/* B2C vs B2B Audience Switcher Tab */}
+                  <div className="mb-8 flex items-center justify-between border-b border-[var(--color-border)] pb-6">
+                    <div>
+                      <h3 className="text-2xl md:text-3xl font-serif">{pageContent.formTitle}</h3>
+                      <p className="text-xs text-black/60 mt-1">
+                        Seleziona la tua tipologia per fornirti una risposta personalizzata.
+                      </p>
+                    </div>
+                    <div className="flex shrink-0 items-center rounded-full bg-[var(--color-ink)]/5 p-1 border border-[var(--color-border)]">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            audience: 'b2c',
+                            topic: prev.topic === 'collab' ? '' : prev.topic,
+                          }))
+                        }
+                        className={`rounded-full px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                          formData.audience === 'b2c'
+                            ? 'bg-white text-[var(--color-ink)] shadow-2xs font-semibold'
+                            : 'text-[var(--color-ink)]/65 hover:text-[var(--color-ink)]'
+                        }`}
+                      >
+                        Viaggiatore
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            audience: 'b2b',
+                            topic: 'collab',
+                          }))
+                        }
+                        className={`rounded-full px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                          formData.audience === 'b2b'
+                            ? 'bg-[var(--color-ink-deep,#1a2b3c)] text-white shadow-2xs font-semibold'
+                            : 'text-[var(--color-ink)]/65 hover:text-[var(--color-ink)]'
+                        }`}
+                      >
+                        Brand / Ente
+                      </button>
+                    </div>
+                  </div>
                   <form className="space-y-8" onSubmit={handleSubmit} noValidate>
                     <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-                      <FormField label="Nome / Azienda" htmlFor="name" required error={errors.name}>
+                      <FormField
+                        label={formData.audience === 'b2b' ? 'Nome del Referente' : 'Nome completo'}
+                        htmlFor="name"
+                        required
+                        error={errors.name}
+                      >
                         <Input
                           type="text"
                           id="name"
@@ -340,10 +403,17 @@ export default function Contatti() {
                           autoComplete="name"
                           error={Boolean(errors.name)}
                           aria-describedby={errors.name ? 'name-error' : undefined}
-                          placeholder="Il tuo nome"
+                          placeholder={
+                            formData.audience === 'b2b' ? 'Es. Marco Rossi' : 'Il tuo nome'
+                          }
                         />
                       </FormField>
-                      <FormField label="Email" htmlFor="email" required error={errors.email}>
+                      <FormField
+                        label="Email di contatto"
+                        htmlFor="email"
+                        required
+                        error={errors.email}
+                      >
                         <Input
                           type="email"
                           id="email"
@@ -357,6 +427,35 @@ export default function Contatti() {
                         />
                       </FormField>
                     </div>
+
+                    {formData.audience === 'b2b' && (
+                      <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+                        <FormField label="Nome Brand / Struttura / Ente" htmlFor="company">
+                          <Input
+                            type="text"
+                            id="company"
+                            variant="underline"
+                            value={formData.company}
+                            onChange={handleChange}
+                            placeholder="Es. Relais Villa San Marco / Ente Turismo"
+                          />
+                        </FormField>
+                        <FormField label="Budget Orientativo" htmlFor="budget">
+                          <Select
+                            id="budget"
+                            variant="underline"
+                            value={formData.budget}
+                            onChange={handleChange}
+                          >
+                            <option value="">Seleziona range budget</option>
+                            <option value="under-1k">&lt; 1.000 €</option>
+                            <option value="1k-3k">1.000 € - 3.000 €</option>
+                            <option value="3k-5k">3.000 € - 5.000 €</option>
+                            <option value="over-5k">&gt; 5.000 €</option>
+                          </Select>
+                        </FormField>
+                      </div>
+                    )}
 
                     <FormField
                       label="Motivo del contatto"
@@ -478,7 +577,16 @@ export default function Contatti() {
                   <button
                     onClick={() => {
                       setIsSubmitted(false);
-                      setFormData({ name: '', email: '', topic: '', message: '', website: '' });
+                      setFormData({
+                        audience: 'b2c',
+                        name: '',
+                        email: '',
+                        company: '',
+                        budget: '',
+                        topic: '',
+                        message: '',
+                        website: '',
+                      });
                     }}
                     className="border-b border-[var(--color-accent)] pb-1 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] transition-colors hover:border-black hover:text-black"
                   >

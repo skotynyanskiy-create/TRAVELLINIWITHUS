@@ -1,5 +1,6 @@
 import { Instagram, Mail, ShieldCheck } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
+import { useAudience } from '../context/AudienceContext';
 import { useAuth } from '../context/AuthContext';
 import { BRAND_CREDENTIALS, BRAND_STATS, CONTACTS } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
@@ -12,6 +13,9 @@ export default function Footer() {
   const { data: navigationContent } = useSiteContent('navigation');
   const footer = footerContent ?? siteContentDefaults.footer;
   const navigation = navigationContent ?? siteContentDefaults.navigation;
+
+  const { audience } = useAudience();
+  const isCollabMode = audience === 'brand';
 
   return (
     <>
@@ -112,10 +116,10 @@ export default function Footer() {
                   </li>
                   <li>
                     <Link
-                      to="/esplora"
+                      to="/destinazione"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
-                      {navigation.resourcesLabel}
+                      {navigation.destinationsLabel}
                     </Link>
                   </li>
                   <li>
@@ -185,6 +189,15 @@ export default function Footer() {
                   </li>
                   <li>
                     <Link
+                      to="/family"
+                      className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
+                    >
+                      Travellini Family
+                      <SurfaceBadge path="/family" />
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
                       to="/collaborazioni"
                       className="inline-block text-base transition-colors hover:text-[var(--color-accent)]"
                     >
@@ -210,12 +223,28 @@ export default function Footer() {
                     </li>
                   )}
                 </ul>
-                <Link
-                  to="/guida-in-regalo"
-                  className="block w-full rounded-[var(--radius-md)] border border-transparent bg-[var(--color-accent)] px-6 py-4 text-center text-xs font-bold uppercase tracking-widest text-white shadow-sm transition-all hover:brightness-110"
-                >
-                  {footer.newsletterButtonLabel}
-                </Link>
+                {isCollabMode ? (
+                  <Link
+                    to="/media-kit"
+                    className="block w-full rounded-[var(--radius-md)] border border-[var(--color-accent-on-dark)] bg-[var(--color-ink-deep)] px-6 py-4 text-center text-xs font-bold uppercase tracking-widest text-[var(--color-accent-on-dark)] shadow-sm transition-all hover:bg-[var(--color-accent)] hover:text-white"
+                  >
+                    Scarica Media Kit PDF →
+                  </Link>
+                ) : audience === 'family' ? (
+                  <Link
+                    to="/family/shop"
+                    className="block w-full rounded-[var(--radius-md)] border border-transparent bg-[var(--color-accent)] px-6 py-4 text-center text-xs font-bold uppercase tracking-widest text-white shadow-sm transition-all hover:brightness-110"
+                  >
+                    {navigation.familyShopLabel} →
+                  </Link>
+                ) : (
+                  <Link
+                    to="/guida-in-regalo"
+                    className="block w-full rounded-[var(--radius-md)] border border-transparent bg-[var(--color-accent)] px-6 py-4 text-center text-xs font-bold uppercase tracking-widest text-white shadow-sm transition-all hover:brightness-110"
+                  >
+                    {footer.newsletterButtonLabel}
+                  </Link>
+                )}
               </div>
             </div>
 

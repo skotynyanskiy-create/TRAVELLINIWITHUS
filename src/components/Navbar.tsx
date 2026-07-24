@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import {
   type LucideIcon,
   ArrowRight,
+  Baby,
   BriefcaseBusiness,
   Building2,
   ChevronDown,
@@ -18,13 +19,15 @@ import {
   Send,
   ShieldCheck,
   Sparkles,
+  Tag,
   User as UserIcon,
   X,
 } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Link } from '@/src/components/TransitionLink';
 import { CONTACTS } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
+import { useAudience } from '../context/AudienceContext';
 import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
 import { useSiteContent } from '../hooks/useSiteContent';
@@ -91,7 +94,7 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -121,6 +124,11 @@ export default function Navbar() {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         setIsSearchOpen(true);
+      }
+      if (e.key === 'Escape') {
+        setIsUserMenuOpen(false);
+        setIsMobileMenuOpen(false);
+        setOpenMobileSection(null);
       }
     };
 
@@ -169,10 +177,33 @@ export default function Navbar() {
     [navigation]
   );
 
-  // B2B forzato su /collaborazioni; altrove resta la scelta utente del switcher
-  const isCollabRoute = location.pathname.startsWith('/collaborazioni');
-  const [userNavMode, setUserNavMode] = useState<'b2c' | 'b2b'>('b2c');
-  const navMode = isCollabRoute ? 'b2b' : userNavMode;
+  const navigate = useNavigate();
+  const { audience, setAudience } = useAudience();
+
+  const [showB2bToast, setShowB2bToast] = useState(false);
+
+  const isFamilyRoute = location.pathname.startsWith('/family');
+  const isBrandRoute =
+    location.pathname.startsWith('/collaborazioni') || location.pathname.startsWith('/media-kit');
+
+  const handleModeSwitch = (next: 'viaggiatori' | 'family' | 'brand') => {
+    setAudience(next);
+    if (next === 'brand') {
+      setShowB2bToast(true);
+      setTimeout(() => setShowB2bToast(false), 4500);
+      if (!location.pathname.startsWith('/collaborazioni')) {
+        navigate('/collaborazioni');
+      }
+      return;
+    }
+    setShowB2bToast(false);
+    if (next === 'family') {
+      if (!isFamilyRoute) navigate('/family');
+      return;
+    }
+    // viaggiatori: se siamo su una rotta di un'altra audience, torna alla home
+    if (isBrandRoute || isFamilyRoute) navigate('/');
+  };
 
   const navItems = useMemo<NavItem[]>(
     () => [
@@ -237,6 +268,37 @@ export default function Navbar() {
         <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
       </Suspense>
 
+      {/* B2B WELCOME TOAST */}
+      <AnimatePresence>
+        {showB2bToast && (
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.9 }}
+            className="fixed top-20 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-3 rounded-full border border-[var(--color-accent-on-dark)]/40 bg-[var(--color-ink-deep)]/95 px-5 py-2.5 text-xs text-white shadow-2xl backdrop-blur-xl"
+          >
+            <BriefcaseBusiness size={14} className="text-[var(--color-accent-on-dark)] shrink-0" />
+            <span>
+              <strong>Modalità Partner Attiva</strong> — Hub B2B Travelliniwithus
+            </span>
+            <Link
+              to="/media-kit"
+              onClick={() => setShowB2bToast(false)}
+              className="ml-2 rounded-full bg-[var(--color-accent-on-dark)] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-black transition-transform hover:scale-105"
+            >
+              Media Kit
+            </Link>
+            <button
+              onClick={() => setShowB2bToast(false)}
+              className="ml-1 text-white/50 hover:text-white cursor-pointer"
+              aria-label="Chiudi"
+            >
+              <X size={14} />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -254,7 +316,7 @@ export default function Navbar() {
           <div className="flex shrink-0 items-center pl-1">
             <Link
               to="/"
-              className="group whitespace-nowrap font-serif text-lg font-medium tracking-tight text-[var(--color-ink)] transition-all duration-300 md:text-xl xl:text-[1.35rem]"
+              className="group whitespace-nowrap font-serif text-base font-medium tracking-tight text-[var(--color-ink)] transition-all duration-300 md:text-lg xl:text-[1.35rem]"
             >
               Travellini
               <span className="font-bold text-[var(--color-accent)] transition-colors group-hover:text-[var(--color-gold)]">
@@ -264,35 +326,55 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* DUAL SEGMENTED SWITCHER (VIAGGIATORI vs COLLABORAZIONI) */}
+          {/* TRIPLE AUDIENCE SEGMENTED SWITCHER (VIAGGIATORI · FAMILY · COLLABORAZIONI) */}
           <div className="hidden lg:flex shrink-0 items-center rounded-full bg-[var(--color-ink)]/5 p-0.5 border border-[var(--color-ink)]/8">
             <button
               type="button"
-              onClick={() => setUserNavMode('b2c')}
-              className={`flex items-center gap-1.5 rounded-full px-3.5 py-1 text-[10.5px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
-                navMode === 'b2c'
+              onClick={() => handleModeSwitch('viaggiatori')}
+              aria-label="Passa alla modalità Viaggiatori"
+              className={`flex items-center gap-1 rounded-full px-2 py-0.5 xl:px-2.5 xl:py-1 text-[9.5px] xl:text-[10.5px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
+                audience === 'viaggiatori'
                   ? 'bg-white text-[var(--color-ink)] shadow-2xs font-semibold'
-                  : 'text-[var(--color-ink-2)] hover:text-[var(--color-ink)]'
+                  : 'text-[var(--color-ink)]/75 hover:text-[var(--color-ink)]'
               }`}
             >
               <Compass
-                size={12}
-                className={navMode === 'b2c' ? 'text-[var(--color-accent)]' : 'opacity-60'}
+                size={11}
+                className={audience === 'viaggiatori' ? 'text-[var(--color-accent)]' : 'opacity-60'}
               />
               <span>Viaggiatori</span>
             </button>
             <button
               type="button"
-              onClick={() => setUserNavMode('b2b')}
-              className={`flex items-center gap-1.5 rounded-full px-3.5 py-1 text-[10.5px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer ${
-                navMode === 'b2b'
-                  ? 'bg-[var(--color-ink-deep,#1a2b3c)] text-white shadow-2xs font-semibold'
-                  : 'text-[var(--color-ink-2)] hover:text-[var(--color-ink)]'
+              onClick={() => handleModeSwitch('family')}
+              aria-label="Passa alla modalità Family"
+              className={`flex items-center gap-1 rounded-full px-2 py-0.5 xl:px-2.5 xl:py-1 text-[9.5px] xl:text-[10.5px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
+                audience === 'family'
+                  ? 'bg-white text-[var(--color-ink)] shadow-2xs font-semibold'
+                  : 'text-[var(--color-ink)]/75 hover:text-[var(--color-ink)]'
+              }`}
+            >
+              <Baby
+                size={11}
+                className={audience === 'family' ? 'text-[var(--color-accent)]' : 'opacity-60'}
+              />
+              <span>{navigation.familyLabel}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleModeSwitch('brand')}
+              aria-label="Passa alla modalità Collaborazioni"
+              className={`flex items-center gap-1 rounded-full px-2 py-0.5 xl:px-2.5 xl:py-1 text-[9.5px] xl:text-[10.5px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
+                audience === 'brand'
+                  ? 'bg-[var(--color-ink-deep)] text-white shadow-2xs font-semibold'
+                  : 'text-[var(--color-ink)]/75 hover:text-[var(--color-ink)]'
               }`}
             >
               <BriefcaseBusiness
-                size={12}
-                className={navMode === 'b2b' ? 'text-[var(--color-gold,#d4af37)]' : 'opacity-60'}
+                size={11}
+                className={
+                  audience === 'brand' ? 'text-[var(--color-accent-on-dark)]' : 'opacity-60'
+                }
               />
               <span>Collaborazioni</span>
             </button>
@@ -300,14 +382,14 @@ export default function Navbar() {
 
           {/* DYNAMIC NAV MENU */}
           <AnimatePresence mode="wait">
-            {navMode === 'b2c' ? (
+            {audience === 'viaggiatori' ? (
               <motion.div
                 key="b2c-nav"
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 10 }}
                 transition={{ duration: 0.2 }}
-                className="hidden flex-1 items-center justify-center space-x-1 px-2 xl:flex"
+                className="hidden lg:flex flex-1 items-center justify-center space-x-0.5 xl:space-x-2 px-0.5 xl:px-1"
               >
                 {navItems.map((item) => {
                   const active = isItemActive(item);
@@ -318,10 +400,10 @@ export default function Navbar() {
                         to={item.href || '/'}
                         aria-current={active ? 'page' : undefined}
                         aria-haspopup={hasDropdown ? 'menu' : undefined}
-                        className={`relative flex items-center gap-1 whitespace-nowrap rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] transition-all duration-300 ${
+                        className={`relative flex items-center gap-1 whitespace-nowrap rounded-full px-1.5 py-1 xl:px-3 xl:py-1.5 text-[9.5px] xl:text-[11.5px] font-bold uppercase tracking-[0.1em] xl:tracking-[0.14em] transition-all duration-300 ${
                           active
-                            ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)] font-semibold'
-                            : 'text-[var(--color-ink-2)] hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-accent)]'
+                            ? 'text-[var(--color-accent)] font-bold border-b-2 border-[var(--color-accent)]'
+                            : 'text-[var(--color-ink)] hover:text-[var(--color-accent)]'
                         }`}
                       >
                         <span>{item.name}</span>
@@ -329,7 +411,7 @@ export default function Navbar() {
                         {hasDropdown && (
                           <ChevronDown
                             size={11}
-                            className="opacity-50 transition-transform duration-300 group-hover:rotate-180"
+                            className="opacity-60 transition-transform duration-300 group-hover:rotate-180"
                           />
                         )}
                       </Link>
@@ -456,6 +538,60 @@ export default function Navbar() {
                   );
                 })}
               </motion.div>
+            ) : audience === 'family' ? (
+              <motion.div
+                key="family-nav"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 10 }}
+                transition={{ duration: 0.2 }}
+                className="hidden lg:flex flex-1 items-center justify-center space-x-1.5 xl:space-x-2 px-1 xl:px-2"
+              >
+                <Link
+                  to="/family"
+                  className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] xl:text-[11.5px] font-bold uppercase tracking-[0.14em] transition-all hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-accent)] ${
+                    location.pathname === '/family'
+                      ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
+                      : 'text-[var(--color-ink)]'
+                  }`}
+                >
+                  <Baby size={13} className="text-[var(--color-accent)] shrink-0" />
+                  <span>Travellini Family</span>
+                </Link>
+                <Link
+                  to="/family/consigli"
+                  className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] xl:text-[11.5px] font-bold uppercase tracking-[0.14em] transition-all hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-accent)] ${
+                    location.pathname === '/family/consigli'
+                      ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
+                      : 'text-[var(--color-ink)]'
+                  }`}
+                >
+                  <Sparkles size={13} className="text-[var(--color-accent)] shrink-0" />
+                  <span>{navigation.familyAdviceLabel}</span>
+                </Link>
+                <Link
+                  to="/family/shop"
+                  className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] xl:text-[11.5px] font-bold uppercase tracking-[0.14em] transition-all hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-accent)] ${
+                    location.pathname === '/family/shop'
+                      ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
+                      : 'text-[var(--color-ink)]'
+                  }`}
+                >
+                  <Tag size={13} className="text-[var(--color-accent)] shrink-0" />
+                  <span>{navigation.familyShopLabel}</span>
+                </Link>
+                <Link
+                  to="/chi-siamo"
+                  className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] xl:text-[11.5px] font-bold uppercase tracking-[0.14em] transition-all hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-accent)] ${
+                    location.pathname === '/chi-siamo'
+                      ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
+                      : 'text-[var(--color-ink)]'
+                  }`}
+                >
+                  <UserIcon size={13} className="text-[var(--color-accent)] shrink-0" />
+                  <span>Chi Siamo</span>
+                </Link>
+              </motion.div>
             ) : (
               <motion.div
                 key="b2b-nav"
@@ -463,11 +599,11 @@ export default function Navbar() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -10 }}
                 transition={{ duration: 0.2 }}
-                className="hidden flex-1 items-center justify-center space-x-2 px-2 xl:flex"
+                className="hidden lg:flex flex-1 items-center justify-center space-x-1.5 xl:space-x-2 px-1 xl:px-2"
               >
                 <Link
                   to="/collaborazioni"
-                  className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] transition-all hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-accent)] ${
+                  className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] xl:text-[11.5px] font-bold uppercase tracking-[0.14em] transition-all hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-accent)] ${
                     location.pathname === '/collaborazioni'
                       ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
                       : 'text-[var(--color-ink)]'
@@ -478,7 +614,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   to="/chi-siamo"
-                  className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] transition-all hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-accent)] ${
+                  className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] xl:text-[11.5px] font-bold uppercase tracking-[0.14em] transition-all hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-accent)] ${
                     location.pathname === '/chi-siamo'
                       ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
                       : 'text-[var(--color-ink)]'
@@ -489,7 +625,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   to="/contatti"
-                  className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] transition-all hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-accent)] ${
+                  className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] xl:text-[11.5px] font-bold uppercase tracking-[0.14em] transition-all hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-accent)] ${
                     location.pathname === '/contatti'
                       ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
                       : 'text-[var(--color-ink)]'
@@ -502,141 +638,174 @@ export default function Navbar() {
             )}
           </AnimatePresence>
 
-          {/* RIGHT ACTION CLUSTER */}
-          <div className="hidden shrink-0 items-center space-x-1.5 text-[var(--color-ink-2)] lg:flex">
-            {navMode === 'b2c' ? (
-              <>
-                <button
-                  onClick={() => setIsSearchOpen(true)}
-                  className="flex items-center gap-1.5 rounded-full border border-[var(--color-border)] bg-white/70 backdrop-blur-xs px-2.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.14em] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] shadow-2xs group whitespace-nowrap cursor-pointer"
-                  aria-label={navigation.searchLabel}
-                >
-                  <Search
-                    size={12}
-                    className="transition-transform group-hover:scale-110 text-[var(--color-accent)]"
-                  />
-                  <span className="hidden xl:inline">{navigation.searchLabel}</span>
-                  <kbd className="hidden lg:inline-flex items-center px-1.5 py-0.5 text-[9px] font-sans font-semibold text-[var(--color-ink-2)]/70 bg-[var(--color-sand)]/80 rounded border border-[var(--color-border)] shadow-2xs">
-                    {isMac ? '⌘K' : 'Ctrl+K'}
-                  </kbd>
-                </button>
+          {/* STREAMLINED RIGHT ACTION CLUSTER */}
+          <div className="hidden shrink-0 items-center space-x-1.5 xl:space-x-2 text-[var(--color-ink-2)] lg:flex">
+            {/* Search Trigger */}
+            <button
+              type="button"
+              onClick={() => setIsSearchOpen(true)}
+              className="flex items-center gap-1.5 rounded-full border border-[var(--color-ink)]/12 bg-white/70 backdrop-blur-xs px-2.5 py-1.2 xl:px-3 xl:py-1.5 text-[10px] xl:text-[10.5px] font-bold uppercase tracking-[0.12em] text-[var(--color-ink)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] shadow-2xs group cursor-pointer"
+              aria-label={navigation.searchLabel}
+            >
+              <Search
+                size={12}
+                className="transition-transform group-hover:scale-110 text-[var(--color-accent)]"
+              />
+              <span className="hidden xl:inline">{navigation.searchLabel}</span>
+              <kbd className="hidden lg:inline-flex items-center px-1.5 py-0.5 text-[9px] font-sans font-semibold text-[var(--color-ink-2)]/70 bg-[var(--color-sand)]/80 rounded border border-[var(--color-border)]">
+                {isMac ? '⌘K' : 'Ctrl+K'}
+              </kbd>
+            </button>
 
-                <Link
-                  to="/guida-in-regalo"
-                  className="inline-flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white shadow-xs transition-all duration-300 hover:bg-[var(--color-accent-hover,#b34d28)] hover:shadow-md hover:scale-[1.02]"
-                >
-                  La guida in regalo
-                  <ArrowRight size={11} />
-                </Link>
-              </>
-            ) : (
+            {/* Primary CTA */}
+            {audience === 'brand' ? (
               <Link
                 to="/media-kit"
-                className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-ink-deep,#1a2b3c)] px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white shadow-xs transition-all duration-300 hover:bg-[var(--color-accent)] hover:shadow-md hover:scale-[1.02]"
+                className="inline-flex items-center gap-1 rounded-full bg-[var(--color-ink-deep)] px-3 py-1.5 xl:px-4 xl:py-1.5 text-[9.5px] xl:text-[10.5px] font-bold uppercase tracking-widest text-white shadow-xs transition-all duration-300 hover:bg-[var(--color-accent)] hover:shadow-md hover:scale-[1.02]"
               >
-                <Send size={11} className="text-[var(--color-gold,#d4af37)]" />
+                <Send size={11} className="text-[var(--color-accent-on-dark)]" />
                 Richiedi Media Kit
+              </Link>
+            ) : audience === 'family' ? (
+              <Link
+                to="/family/shop"
+                className="inline-flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-3 py-1.5 xl:px-4 xl:py-1.5 text-[9.5px] xl:text-[10.5px] font-bold uppercase tracking-widest text-white shadow-xs transition-all duration-300 hover:bg-[var(--color-accent-hover,#b34d28)] hover:shadow-md hover:scale-[1.02]"
+              >
+                <Tag size={11} />
+                {navigation.familyShopLabel}
+              </Link>
+            ) : (
+              <Link
+                to="/guida-in-regalo"
+                className="inline-flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-3 py-1.5 xl:px-4 xl:py-1.5 text-[9.5px] xl:text-[10.5px] font-bold uppercase tracking-widest text-white shadow-xs transition-all duration-300 hover:bg-[var(--color-accent-hover,#b34d28)] hover:shadow-md hover:scale-[1.02]"
+              >
+                La guida in regalo
+                <ArrowRight size={11} />
               </Link>
             )}
 
-            <div className="flex items-center space-x-1 pl-0.5">
-              <Link
-                to="/preferiti"
-                className="relative p-1 text-[var(--color-ink-2)] transition-colors hover:text-[var(--color-accent)]"
-                aria-label={navigation.favoritesLabel}
+            {/* Compact Quick Utility Menu (Profile + Favorites + Language) */}
+            <div className="relative pl-1">
+              <button
+                type="button"
+                onClick={() => setIsUserMenuOpen((prev) => !prev)}
+                aria-label="Menu utente e impostazioni"
+                aria-expanded={isUserMenuOpen}
+                className="relative flex h-8 w-8 items-center justify-center rounded-full border border-[var(--color-ink)]/15 bg-white text-[var(--color-ink)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] shadow-2xs cursor-pointer"
               >
-                <Heart size={16} strokeWidth={1.5} />
+                {user?.photoURL ? (
+                  <img
+                    src={user.photoURL}
+                    alt={user.displayName || 'User'}
+                    className="h-full w-full rounded-full object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (
+                  <UserIcon size={16} strokeWidth={1.5} />
+                )}
+
+                {/* Saved favorites badge indicator */}
                 {favorites.length > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--color-accent)] text-[9px] font-bold text-white">
+                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-accent)] text-[9px] font-bold text-white shadow-xs">
                     {favorites.length}
                   </span>
                 )}
-              </Link>
-
-              <button
-                type="button"
-                onClick={toggleLocale}
-                className="rounded-full border border-[var(--color-border)] bg-white/70 px-2 py-0.5 text-[9px] font-bold uppercase tracking-widest text-[var(--color-ink)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] cursor-pointer"
-                title="Cambia lingua"
-                aria-label="Cambia lingua"
-              >
-                {locale.toUpperCase()}
               </button>
 
-              <div className="relative">
-                {user ? (
-                  <button
-                    type="button"
-                    onClick={() => setIsUserMenuOpen((prev) => !prev)}
-                    aria-label="Menu utente"
-                    aria-expanded={isUserMenuOpen}
-                    className="h-7 w-7 overflow-hidden rounded-full border border-[var(--color-border)] transition-colors hover:border-[var(--color-accent)] cursor-pointer"
+              <AnimatePresence>
+                {isUserMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute right-0 z-50 mt-3 w-56 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white py-2 text-[var(--color-ink)] shadow-2xl backdrop-blur-xl"
                   >
-                    {user.photoURL ? (
-                      <img
-                        src={user.photoURL}
-                        alt={user.displayName || 'User'}
-                        className="h-full w-full object-cover"
-                        referrerPolicy="no-referrer"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-[var(--color-muted-bg)] text-[10px] font-bold">
-                        {user.email?.charAt(0).toUpperCase() || 'U'}
-                      </div>
-                    )}
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={signIn}
-                    aria-label="Accedi all'area personale"
-                    className="flex items-center gap-1 p-1 transition-colors hover:text-[var(--color-accent)] cursor-pointer"
-                  >
-                    <UserIcon size={16} strokeWidth={1.5} />
-                  </button>
-                )}
-
-                <AnimatePresence>
-                  {isUserMenuOpen && user && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      className="absolute right-0 z-50 mt-3 w-52 overflow-hidden rounded-xl border border-[var(--color-border)] bg-white py-2 text-[var(--color-ink)] shadow-xl"
-                    >
+                    {user && (
                       <div className="mb-2 border-b border-[var(--color-border)] px-4 py-2">
-                        <p className="truncate text-[10px] font-semibold text-[var(--color-ink)]">
-                          {user.displayName}
+                        <p className="truncate text-[11px] font-bold text-[var(--color-ink)]">
+                          {user.displayName || 'Utente'}
                         </p>
                         <p className="truncate text-[11px] text-[var(--color-muted-fg)]">
                           {user.email}
                         </p>
                       </div>
-                      {isAdmin && (
-                        <Link
-                          to="/admin"
-                          className="flex w-full items-center gap-2 px-4 py-2 text-left text-[10px] uppercase tracking-wider text-[var(--color-accent)] transition-colors hover:bg-[var(--color-muted-bg)]"
-                        >
-                          <ShieldCheck size={12} /> Admin
-                        </Link>
+                    )}
+
+                    {/* Favorites link */}
+                    <Link
+                      to="/preferiti"
+                      onClick={() => setIsUserMenuOpen(false)}
+                      className="flex items-center justify-between px-4 py-2.5 text-xs font-medium text-[var(--color-ink)] transition-colors hover:bg-[var(--color-sand)]"
+                    >
+                      <span className="flex items-center gap-2">
+                        <Heart size={14} className="text-[var(--color-accent)]" />I miei preferiti
+                      </span>
+                      {favorites.length > 0 && (
+                        <span className="rounded-full bg-[var(--color-accent)]/10 px-2 py-0.5 text-[10px] font-bold text-[var(--color-accent)]">
+                          {favorites.length}
+                        </span>
                       )}
-                      <button
-                        onClick={() => {
-                          signOut();
-                          setIsUserMenuOpen(false);
-                        }}
-                        className="flex w-full items-center gap-2 px-4 py-2 text-left text-[10px] uppercase tracking-wider text-[var(--color-error)] transition-colors hover:bg-[var(--color-error-soft)] cursor-pointer"
+                    </Link>
+
+                    {/* Language toggle */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        toggleLocale();
+                        setIsUserMenuOpen(false);
+                      }}
+                      className="flex w-full items-center justify-between px-4 py-2.5 text-xs font-medium text-[var(--color-ink)] transition-colors hover:bg-[var(--color-sand)] cursor-pointer"
+                    >
+                      <span className="flex items-center gap-2">
+                        <Compass size={14} className="text-[var(--color-accent)]" />
+                        Lingua
+                      </span>
+                      <span className="rounded-md border border-[var(--color-border)] bg-[var(--color-sand)] px-2 py-0.5 text-[10px] font-bold uppercase">
+                        {locale.toUpperCase()}
+                      </span>
+                    </button>
+
+                    {isAdmin && (
+                      <Link
+                        to="/admin"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="flex w-full items-center gap-2 px-4 py-2.5 text-xs font-medium text-[var(--color-accent)] transition-colors hover:bg-[var(--color-muted-bg)]"
                       >
-                        <LogOut size={12} /> Esci
-                      </button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                        <ShieldCheck size={14} /> Pannello Admin
+                      </Link>
+                    )}
+
+                    <div className="mt-1 border-t border-[var(--color-border)] pt-1">
+                      {user ? (
+                        <button
+                          onClick={() => {
+                            signOut();
+                            setIsUserMenuOpen(false);
+                          }}
+                          className="flex w-full items-center gap-2 px-4 py-2.5 text-xs font-medium text-[var(--color-error)] transition-colors hover:bg-[var(--color-error-soft)] cursor-pointer"
+                        >
+                          <LogOut size={14} /> Disconnetti
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => {
+                            signIn();
+                            setIsUserMenuOpen(false);
+                          }}
+                          className="flex w-full items-center gap-2 px-4 py-2.5 text-xs font-medium text-[var(--color-accent)] transition-colors hover:bg-[var(--color-sand)] cursor-pointer"
+                        >
+                          <UserIcon size={14} /> Accedi
+                        </button>
+                      )}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
 
-          <div className="flex items-center gap-1 text-[var(--color-ink)] xl:hidden">
+          <div className="flex items-center gap-1 text-[var(--color-ink)] lg:hidden">
             <button
               onClick={() => setIsSearchOpen(true)}
               className="flex min-h-[44px] min-w-[44px] items-center justify-center p-2 transition-colors hover:text-[var(--color-accent)] cursor-pointer"
@@ -660,7 +829,7 @@ export default function Navbar() {
       <div
         aria-hidden="true"
         onClick={() => setIsMobileMenuOpen(false)}
-        className={`fixed inset-0 z-[110] bg-black/90 backdrop-blur-md transition-opacity duration-200 xl:hidden ${
+        className={`fixed inset-0 z-[110] bg-black/90 backdrop-blur-md transition-opacity duration-200 lg:hidden ${
           isMobileMenuOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}
       />
@@ -669,7 +838,7 @@ export default function Navbar() {
         id="mobile-navigation"
         inert={!isMobileMenuOpen}
         aria-hidden={!isMobileMenuOpen}
-        className={`fixed inset-y-0 right-0 z-[120] flex w-full transform-gpu flex-col bg-white shadow-2xl transition-transform duration-300 ease-out md:w-96 xl:hidden ${
+        className={`fixed inset-y-0 right-0 z-[120] flex w-full transform-gpu flex-col bg-white shadow-2xl transition-transform duration-300 ease-out md:w-96 lg:hidden ${
           isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
@@ -710,115 +879,192 @@ export default function Navbar() {
           </button>
         </div>
 
-        <div className="flex flex-1 flex-col space-y-6 overflow-y-auto px-6 py-6">
-          {navItems.map((item) => {
-            const ItemIcon = item.icon;
-            return (
-              <div key={item.name}>
-                {item.subLinks || item.primaryLinks ? (
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between gap-4">
-                      <Link
-                        to={item.href || '/'}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className={`flex items-center gap-3 text-2xl font-serif transition-colors ${
-                          isItemActive(item)
-                            ? 'text-[var(--color-accent)] font-medium'
-                            : 'text-[var(--color-ink)]'
-                        }`}
-                      >
-                        {ItemIcon && (
-                          <ItemIcon size={20} className="text-[var(--color-accent)]/80 shrink-0" />
-                        )}
-                        <span>{item.name}</span>
-                        <SurfaceBadge path={item.href?.split('?')[0] ?? ''} />
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setOpenMobileSection((prev) => (prev === item.name ? null : item.name))
-                        }
-                        aria-expanded={openMobileSection === item.name}
-                        aria-label={`Apri sottomenu ${item.name}`}
-                        className="-m-2 flex min-h-[44px] min-w-[44px] items-center justify-center text-[var(--color-ink-2)] transition-colors hover:text-[var(--color-accent)] cursor-pointer"
-                      >
-                        <ChevronDown
-                          size={18}
-                          className={`transition-transform duration-300 ${
-                            openMobileSection === item.name ? 'rotate-180' : ''
-                          }`}
-                        />
-                      </button>
-                    </div>
-                    <AnimatePresence>
-                      {openMobileSection === item.name && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                          className="space-y-3 border-l-2 border-[var(--color-accent)]/20 ml-2 pl-4 py-1"
-                        >
-                          {item.primaryLinks
-                            ? item.primaryLinks.map((subLink) => (
-                                <Link
-                                  key={subLink.name}
-                                  to={subLink.href}
-                                  onClick={() => setIsMobileMenuOpen(false)}
-                                  className="block py-1"
-                                >
-                                  <span className="block font-serif text-lg text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]">
-                                    {subLink.name}
-                                    <SurfaceBadge path={subLink.href.split('?')[0]} />
-                                  </span>
-                                  {subLink.description && (
-                                    <span className="mt-0.5 block text-xs leading-snug text-black/55">
-                                      {subLink.description}
-                                    </span>
-                                  )}
-                                </Link>
-                              ))
-                            : item.subLinks?.map((subLink) => (
-                                <Link
-                                  key={subLink.name}
-                                  to={subLink.href}
-                                  onClick={() => setIsMobileMenuOpen(false)}
-                                  className="block py-1 text-lg text-[var(--color-ink)]/70 transition-colors hover:text-[var(--color-accent)]"
-                                >
-                                  {subLink.name}
-                                  <SurfaceBadge path={subLink.href.split('?')[0]} />
-                                </Link>
-                              ))}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                ) : (
-                  <Link
-                    to={item.href || '/'}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`flex items-center gap-3 text-2xl font-serif transition-colors ${
-                      isItemActive(item)
-                        ? 'text-[var(--color-accent)] font-medium'
-                        : 'text-[var(--color-ink)]'
-                    }`}
-                  >
-                    {ItemIcon && (
-                      <ItemIcon size={20} className="text-[var(--color-accent)]/80 shrink-0" />
-                    )}
-                    <span>{item.name}</span>
-                    <SurfaceBadge path={item.href?.split('?')[0] ?? ''} />
-                  </Link>
-                )}
-              </div>
-            );
-          })}
+        {/* Audience switcher (mobile) — stessa scelta a 3 dello switcher desktop */}
+        <div className="px-6 pt-3 pb-1">
+          <div
+            className="flex items-center rounded-full border border-[var(--color-ink)]/8 bg-[var(--color-ink)]/5 p-0.5"
+            role="group"
+            aria-label="Scegli la tua modalità"
+          >
+            {(
+              [
+                { key: 'viaggiatori', label: 'Viaggiatori', icon: Compass },
+                { key: 'family', label: navigation.familyLabel, icon: Baby },
+                { key: 'brand', label: 'Collaborazioni', icon: BriefcaseBusiness },
+              ] as const
+            ).map(({ key, label, icon: SwitchIcon }) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => {
+                  handleModeSwitch(key);
+                  setIsMobileMenuOpen(false);
+                }}
+                aria-label={`Passa alla modalità ${label}`}
+                className={`flex flex-1 items-center justify-center gap-1 rounded-full px-2 py-2 text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                  audience === key
+                    ? key === 'brand'
+                      ? 'bg-[var(--color-ink-deep)] text-white shadow-2xs'
+                      : 'bg-white text-[var(--color-ink)] shadow-2xs'
+                    : 'text-[var(--color-ink)]/70'
+                }`}
+              >
+                <SwitchIcon
+                  size={12}
+                  className={
+                    audience === key
+                      ? key === 'brand'
+                        ? 'text-[var(--color-accent-on-dark)]'
+                        : 'text-[var(--color-accent)]'
+                      : 'opacity-60'
+                  }
+                />
+                <span>{label}</span>
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Sezione Collaborazioni (B2B) nel drawer mobile */}
-        <div className="mx-6 my-2">
+        <div className="flex flex-1 flex-col space-y-6 overflow-y-auto px-6 py-6">
+          {/* Voci Family (solo in modalità family) */}
+          {audience === 'family' &&
+            [
+              { name: 'Travellini Family', href: '/family', icon: Baby },
+              { name: navigation.familyAdviceLabel, href: '/family/consigli', icon: Sparkles },
+              { name: navigation.familyShopLabel, href: '/family/shop', icon: Tag },
+              { name: 'Chi siamo', href: '/chi-siamo', icon: UserIcon },
+            ].map((item) => {
+              const ItemIcon = item.icon;
+              return (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`flex items-center gap-3 text-2xl font-serif transition-colors ${
+                    location.pathname === item.href
+                      ? 'text-[var(--color-accent)] font-medium'
+                      : 'text-[var(--color-ink)]'
+                  }`}
+                >
+                  <ItemIcon size={20} className="text-[var(--color-accent)]/80 shrink-0" />
+                  <span>{item.name}</span>
+                  <SurfaceBadge path={item.href} />
+                </Link>
+              );
+            })}
+
+          {audience !== 'family' &&
+            navItems.map((item) => {
+              const ItemIcon = item.icon;
+              return (
+                <div key={item.name}>
+                  {item.subLinks || item.primaryLinks ? (
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between gap-4">
+                        <Link
+                          to={item.href || '/'}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className={`flex items-center gap-3 text-2xl font-serif transition-colors ${
+                            isItemActive(item)
+                              ? 'text-[var(--color-accent)] font-medium'
+                              : 'text-[var(--color-ink)]'
+                          }`}
+                        >
+                          {ItemIcon && (
+                            <ItemIcon
+                              size={20}
+                              className="text-[var(--color-accent)]/80 shrink-0"
+                            />
+                          )}
+                          <span>{item.name}</span>
+                          <SurfaceBadge path={item.href?.split('?')[0] ?? ''} />
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setOpenMobileSection((prev) => (prev === item.name ? null : item.name))
+                          }
+                          aria-expanded={openMobileSection === item.name}
+                          aria-label={`Apri sottomenu ${item.name}`}
+                          className="-m-2 flex min-h-[44px] min-w-[44px] items-center justify-center text-[var(--color-ink-2)] transition-colors hover:text-[var(--color-accent)] cursor-pointer"
+                        >
+                          <ChevronDown
+                            size={18}
+                            className={`transition-transform duration-300 ${
+                              openMobileSection === item.name ? 'rotate-180' : ''
+                            }`}
+                          />
+                        </button>
+                      </div>
+                      <AnimatePresence>
+                        {openMobileSection === item.name && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                            className="space-y-3 border-l-2 border-[var(--color-accent)]/20 ml-2 pl-4 py-1"
+                          >
+                            {item.primaryLinks
+                              ? item.primaryLinks.map((subLink) => (
+                                  <Link
+                                    key={subLink.name}
+                                    to={subLink.href}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className="block py-1"
+                                  >
+                                    <span className="block font-serif text-lg text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]">
+                                      {subLink.name}
+                                      <SurfaceBadge path={subLink.href.split('?')[0]} />
+                                    </span>
+                                    {subLink.description && (
+                                      <span className="mt-0.5 block text-xs leading-snug text-black/55">
+                                        {subLink.description}
+                                      </span>
+                                    )}
+                                  </Link>
+                                ))
+                              : item.subLinks?.map((subLink) => (
+                                  <Link
+                                    key={subLink.name}
+                                    to={subLink.href}
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className="block py-1 text-lg text-[var(--color-ink)]/70 transition-colors hover:text-[var(--color-accent)]"
+                                  >
+                                    {subLink.name}
+                                    <SurfaceBadge path={subLink.href.split('?')[0]} />
+                                  </Link>
+                                ))}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  ) : (
+                    <Link
+                      to={item.href || '/'}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`flex items-center gap-3 text-2xl font-serif transition-colors ${
+                        isItemActive(item)
+                          ? 'text-[var(--color-accent)] font-medium'
+                          : 'text-[var(--color-ink)]'
+                      }`}
+                    >
+                      {ItemIcon && (
+                        <ItemIcon size={20} className="text-[var(--color-accent)]/80 shrink-0" />
+                      )}
+                      <span>{item.name}</span>
+                      <SurfaceBadge path={item.href?.split('?')[0] ?? ''} />
+                    </Link>
+                  )}
+                </div>
+              );
+            })}
+        </div>
+
+        {/* Sezione Collaborazioni (B2B) nel drawer mobile — non in modalità family */}
+        <div className={`mx-6 my-2 ${audience === 'family' ? 'hidden' : ''}`}>
           <div className="overflow-hidden rounded-2xl border border-[var(--color-ink)]/10 bg-[var(--color-ink-deep)] text-white shadow-lg">
-            <div className="flex items-center gap-2 px-5 pt-5 pb-3 text-[var(--color-gold,#d4af37)]">
+            <div className="flex items-center gap-2 px-5 pt-5 pb-3 text-[var(--color-accent-on-dark)]">
               <BriefcaseBusiness size={16} />
               <span className="text-[10px] font-bold uppercase tracking-[0.24em]">
                 Collaborazioni
@@ -830,7 +1076,7 @@ export default function Navbar() {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] font-serif text-white/90 transition-colors hover:bg-white/10"
               >
-                <Building2 size={16} className="text-[var(--color-gold,#d4af37)] shrink-0" />
+                <Building2 size={16} className="text-[var(--color-accent-on-dark)] shrink-0" />
                 Come Lavoriamo
               </Link>
               <Link
@@ -838,7 +1084,7 @@ export default function Navbar() {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] font-serif text-white/90 transition-colors hover:bg-white/10"
               >
-                <UserIcon size={16} className="text-[var(--color-gold,#d4af37)] shrink-0" />
+                <UserIcon size={16} className="text-[var(--color-accent-on-dark)] shrink-0" />
                 Chi Siamo
               </Link>
               <Link
@@ -846,7 +1092,7 @@ export default function Navbar() {
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] font-serif text-white/90 transition-colors hover:bg-white/10"
               >
-                <Send size={16} className="text-[var(--color-gold,#d4af37)] shrink-0" />
+                <Send size={16} className="text-[var(--color-accent-on-dark)] shrink-0" />
                 Contatti
               </Link>
             </nav>
@@ -865,14 +1111,34 @@ export default function Navbar() {
 
         <div className="border-t border-[var(--color-ink)]/5 bg-[var(--color-sand)]/50 p-8">
           <div className="flex flex-col gap-6">
-            <Link
-              to="/guida-in-regalo"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-6 py-4 text-xs font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
-            >
-              La guida in regalo
-              <ArrowRight size={14} />
-            </Link>
+            {audience === 'family' ? (
+              <Link
+                to="/family/shop"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-6 py-4 text-xs font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
+              >
+                {navigation.familyShopLabel}
+                <ArrowRight size={14} />
+              </Link>
+            ) : audience === 'brand' ? (
+              <Link
+                to="/media-kit"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-ink-deep)] px-6 py-4 text-xs font-bold uppercase tracking-widest text-white transition-all hover:bg-[var(--color-accent)]"
+              >
+                Richiedi Media Kit
+                <ArrowRight size={14} />
+              </Link>
+            ) : (
+              <Link
+                to="/guida-in-regalo"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-6 py-4 text-xs font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
+              >
+                La guida in regalo
+                <ArrowRight size={14} />
+              </Link>
+            )}
             <div className="flex flex-wrap items-center gap-5">
               <Link
                 to="/preferiti"
