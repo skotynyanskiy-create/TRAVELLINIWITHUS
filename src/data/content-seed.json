@@ -814,35 +814,6 @@
     }
   },
   {
-    "id": "toscana-suite-spa-follonica",
-    "source": "instagram",
-    "permalink": "https://www.instagram.com/travelliniwithus/",
-    "mediaType": "reel",
-    "cover": "",
-    "hook": "Una suite romantica con spa privata e cinema?",
-    "title": "Suite Spa a Follonica",
-    "description": "Una suite pensata per due, con spa privata in camera e angolo cinema. Per un weekend romantico senza dover uscire dalla porta.",
-    "place": {
-      "name": "Suite Spa civico 4",
-      "city": "Follonica",
-      "region": "Toscana",
-      "country": "Italia",
-      "coordinates": {
-        "lat": 42.924512,
-        "lng": 10.757234
-      }
-    },
-    "zone": "Italia",
-    "types": ["Hotel con carattere", "Weekend romantici"],
-    "partnership": {
-      "kind": "invited"
-    },
-    "isPlaceholder": true,
-    "value": {
-      "budget": "Medio"
-    }
-  },
-  {
     "id": "toscana-aperitivo-volterra",
     "source": "instagram",
     "permalink": "https://www.instagram.com/travelliniwithus/",
@@ -1683,9 +1654,10 @@
       "country": "Italia",
       "website": "https://www.suitespacivico4.it",
       "coordinates": {
-        "lat": 43.4586541,
-        "lng": 11.1389204
-      }
+        "lat": 42.92887,
+        "lng": 10.77059
+      },
+      "city": "Follonica"
     },
     "zone": "Italia",
     "types": ["Hotel con carattere", "Weekend romantici", "Relax, terme e spa"],
