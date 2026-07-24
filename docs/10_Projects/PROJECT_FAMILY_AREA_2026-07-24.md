@@ -25,16 +25,20 @@ Piano esecutivo completo (fasi 0-7, verification, rischi): approvato in sessione
 
 ## Stato fasi
 
-| Fase | Cosa                                                                          | Stato         |
-| ---- | ----------------------------------------------------------------------------- | ------------- |
-| 0    | Docs + decision superseded/nuova                                              | ✅ 2026-07-24 |
-| 1    | `AudienceContext` (parità funzionale)                                         | ⏳            |
-| 2    | Rotte/pagine Family (`preview`)                                               | ⏳            |
-| 3    | Navbar/Footer a 3 (desktop+mobile)                                            | ⏳            |
-| 4    | AudienceGate primo accesso                                                    | ⏳            |
-| 5    | Import @travellinifamily + flip `live` (gate owner: diritti asset gravidanza) | ⏳            |
-| 6    | Coerenza veritiera (16 immagini AI → reali, ChiSiamo)                         | ⏳            |
-| 7    | llms.txt + sitemap script (+ step seoRoutes high-risk separato)               | ⏳            |
+| Fase | Cosa                                                                           | Stato         |
+| ---- | ------------------------------------------------------------------------------ | ------------- |
+| 0    | Docs + decision superseded/nuova                                               | ✅ 2026-07-24 |
+| 1    | `AudienceContext` (parità funzionale)                                          | ✅ 2026-07-24 |
+| 2    | Rotte/pagine Family (`preview`)                                                | ✅ 2026-07-24 |
+| 3    | Navbar/Footer a 3 (desktop+mobile)                                             | ✅ 2026-07-24 |
+| 4    | AudienceGate primo accesso                                                     | ✅ 2026-07-24 |
+| 5    | Import @travellinifamily → hub+consigli LIVE (8 entry reali); shop preview     | ✅ 2026-07-24 |
+| 6    | Coerenza veritiera (15 immagini AI → reali, ChiSiamo)                          | ✅ 2026-07-24 |
+| 7    | llms.txt + generate-sitemap (family incluse)                                   | ✅ 2026-07-24 |
+| 7b   | seoRoutes.ts runtime → surfaces (HIGH-RISK: backend-engineer + conferma owner) | ⏳ aperto     |
+
+Passi successivi consigliati: skill `cwv` sulla home mobile (validare il gate), `audit-ui`,
+`/predeploy` prima del deploy; shop family a `live` quando esistono ≥3 codici reali.
 
 ## Vincoli fissi
 

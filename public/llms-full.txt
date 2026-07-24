@@ -13,6 +13,8 @@ Rodrigo & Betta sono la coppia alla guida di `@travelliniwithus`. Attraverso rac
 - **Curatela esperienziale**: selezione di alloggi unici, boutique hotel, agriturismi e ristoranti locali.
 - **Pianificazione efficiente**: itinerari studiati nei minimi dettagli per ottimizzare tempi, distanze e costi.
 
+Il progetto include anche **Travellini Family** (`@travellinifamily`), sub-brand ufficiale dedicato a gravidanza, genitorialità e viaggio in famiglia: aspettano il loro primo bimbo e raccontano quel percorso su https://www.travelliniwithus.it/family. Travel resta il posizionamento primario del sito; Family è un'audience dedicata con sezione propria.
+
 ---
 
 ## 2. Destinazioni e Copertura Strategica

@@ -45,6 +45,8 @@ const ROLE_BY_PATH = new Map([
   ['/press', 'press'],
   ['/mappa', 'map'],
   ['/chi-siamo', 'brand'],
+  ['/family', 'brand'],
+  ['/family/consigli', 'discovery'],
   ['/collaborazioni', 'b2b-sales'],
   ['/media-kit', 'b2b-lead'],
   ['/contatti', 'contact'],
