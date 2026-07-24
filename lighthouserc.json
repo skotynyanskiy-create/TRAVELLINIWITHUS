@@ -10,7 +10,8 @@
         "http://localhost:4173/chi-siamo?twu_audit=1",
         "http://localhost:4173/collaborazioni?twu_audit=1",
         "http://localhost:4173/media-kit?twu_audit=1",
-        "http://localhost:4173/shop?twu_audit=1"
+        "http://localhost:4173/shop?twu_audit=1",
+        "http://localhost:4173/family?twu_audit=1"
       ],
       "numberOfRuns": 1,
       "settings": {
