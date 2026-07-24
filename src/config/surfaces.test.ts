@@ -43,11 +43,14 @@ describe('registro delle superfici', () => {
     expect(new Set(seen).size).toBe(seen.length);
   });
 
-  it('le superfici family nascono preview: fuori da sitemap e non indicizzabili', () => {
-    for (const path of ['/family', '/family/consigli', '/family/shop']) {
-      expect(surfaceState(path), `${path} deve essere preview`).toBe('preview');
-      expect(isIndexable(path), `${path} non deve essere indicizzabile`).toBe(false);
-      expect(sitemapPaths()).not.toContain(path);
+  it('family hub e consigli sono live (8 entry reali, flip 2026-07-24); lo shop resta preview', () => {
+    for (const path of ['/family', '/family/consigli']) {
+      expect(surfaceState(path), `${path} deve essere live`).toBe('live');
+      expect(isIndexable(path), `${path} deve essere indicizzabile`).toBe(true);
+      expect(sitemapPaths()).toContain(path);
     }
+    expect(surfaceState('/family/shop')).toBe('preview');
+    expect(isIndexable('/family/shop')).toBe(false);
+    expect(sitemapPaths()).not.toContain('/family/shop');
   });
 });

@@ -42,16 +42,9 @@ export const SURFACES: Surface[] = [
   { path: '/termini', state: 'live' },
   { path: '/disclaimer', state: 'live' },
 
-  {
-    path: '/family',
-    state: 'preview',
-    missing: 'import completo dei contenuti reali da @travellinifamily (≥8 consigli)',
-  },
-  {
-    path: '/family/consigli',
-    state: 'preview',
-    missing: 'import completo dei contenuti reali da @travellinifamily (≥8 consigli)',
-  },
+  // Flip a live 2026-07-24: 8 entry reali importate da @travellinifamily.
+  { path: '/family', state: 'live' },
+  { path: '/family/consigli', state: 'live' },
   {
     path: '/family/shop',
     state: 'preview',
