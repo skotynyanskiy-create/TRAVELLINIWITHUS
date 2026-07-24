@@ -998,8 +998,23 @@ lettura (nessuna modifica: file high-risk, richiede `travellini-backend-engineer
 
 - conferma owner). Fix minimo: 3 righe aggiunte all'allowlist.
 
-### Da decidere con l'owner
+### Esito decisioni owner (stessa sessione, 2026-07-24)
 
-1. Fix `/family*` 404 → `travellini-backend-engineer` + conferma owner (3 righe).
-2. Bug service worker preesistente (severo, sito intero) → fix separato o in
-   questa sessione? Vedi handoff perf-engineer.
+1. **Bug service worker: FIXATO** (commit `9cb94f9`) — `navigateFallback` ora
+   punta all'app shell `/index.html`; verificato su build reale (SW attivo →
+   hard-nav `/esplora` e `/family/consigli` → contenuto vero, zero "Sei
+   offline"). La vera offline page (catchHandler/injectManifest) resta nel
+   backlog dell'handoff perf.
+2. **Fix `/family*` 404: autorizzato dall'owner ma NON applicabile in sessione**
+   — l'hook `config_protection.py` hard-nega ogni write a `server.ts` a
+   prescindere dall'autorizzazione in chat (by design). Il backend-engineer ha
+   preparato e validato il diff esatto (4 righe nell'array
+   `ALL_STATIC_APP_ROUTES`, dopo `'/contatti'`):
+   `'/family'`, `'/family/consigli'`, `'/family/shop'`, `'/famiglia'`
+   (l'ultima segue il pattern dei redirect legacy già in lista: `/iscrivi`,
+   `/destinazioni`, `/quiz`, `/strumenti` — 200 + Navigate client-side).
+   **Azione owner richiesta**: applicare le 4 righe a mano, oppure consentire
+   temporaneamente `Edit(server.ts)` in `.claude/settings.json` da editor
+   esterno e rilanciare il fix. Dopo l'applicazione: `npm run typecheck`,
+   riavvio dev server, verifica `curl -s -o /dev/null -w "%{http_code}"
+http://localhost:5173/family` → atteso 200.
