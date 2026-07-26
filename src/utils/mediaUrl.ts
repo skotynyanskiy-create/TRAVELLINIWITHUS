@@ -12,7 +12,20 @@
  * serviti da Hosting. Impostarla è quindi l'unico passo per spostare l'egress,
  * senza toccare le 29 voci di `content-seed.json` né il manifest dei reel.
  */
-const VIDEO_BASE = (import.meta.env.VITE_VIDEO_BASE_URL ?? '').trim().replace(/\/+$/, '');
+/**
+ * Questo modulo viene caricato da due runtime diversi: il bundle browser
+ * (Vite, dove esiste `import.meta.env`) e il processo Node del dev server, che
+ * importa la stessa libreria contenuti e dove `import.meta.env` e' undefined.
+ * Leggere solo il primo faceva crashare `npm run dev` all'avvio.
+ */
+function readVideoBase(): string {
+  const fromVite = import.meta.env?.VITE_VIDEO_BASE_URL;
+  if (fromVite) return fromVite;
+  if (typeof process !== 'undefined') return process.env?.VITE_VIDEO_BASE_URL ?? '';
+  return '';
+}
+
+const VIDEO_BASE = readVideoBase().trim().replace(/\/+$/, '');
 
 /** Separata da `resolveVideoUrl` per poterla testare senza dipendere da `import.meta.env`. */
 export function joinVideoBase(base: string, path?: string): string | undefined {
