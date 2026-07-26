@@ -1,6 +1,7 @@
 import type { ContentItem } from '../types/content';
 import type { ContentType } from './contentTaxonomy';
 import seed from '../data/content-seed.json';
+import { resolveVideoUrl } from '../utils/mediaUrl';
 
 /**
  * Libreria contenuti "posti particolari" — fonte unica per mappa, destinazioni,
@@ -8,7 +9,9 @@ import seed from '../data/content-seed.json';
  * `npm run geocode:content`); domani dall'API Instagram via
  * `services/instagramContentAdapter.ts` → Firestore.
  */
-export const CONTENT_ITEMS: ContentItem[] = seed as unknown as ContentItem[];
+export const CONTENT_ITEMS: ContentItem[] = (seed as unknown as ContentItem[]).map((item) =>
+  item.videoSrc ? { ...item, videoSrc: resolveVideoUrl(item.videoSrc) } : item
+);
 
 /** Item con coordinate valide — pronti per i pin della mappa. */
 export function getGeocodedContentItems(): ContentItem[] {

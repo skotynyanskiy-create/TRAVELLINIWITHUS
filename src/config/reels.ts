@@ -18,6 +18,7 @@
  */
 
 import type { ContentType, Zone } from './contentTaxonomy';
+import { resolveVideoUrl } from '../utils/mediaUrl';
 
 export interface ReelEntry {
   /** ID stabile per analytics e routing (es. "salento-agosto-2025"). */
@@ -682,7 +683,9 @@ const VISIBLE_REEL_IDS = new Set<string>([
   'reel-toscana-suite-spa-civico-4',
 ]);
 
-export const REELS: ReelEntry[] = RAW_REELS.filter((reel) => VISIBLE_REEL_IDS.has(reel.id));
+export const REELS: ReelEntry[] = RAW_REELS.filter((reel) => VISIBLE_REEL_IDS.has(reel.id)).map(
+  (reel) => ({ ...reel, localPath: resolveVideoUrl(reel.localPath) })
+);
 
 /**
  * Helper: ritorna i reel pubblicabili (non placeholder), ordinati per views
