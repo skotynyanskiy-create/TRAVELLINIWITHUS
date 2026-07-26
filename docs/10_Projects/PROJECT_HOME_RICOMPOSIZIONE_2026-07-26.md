@@ -134,6 +134,20 @@ Due scelte editoriali dichiarate, entrambe reversibili:
   il metodo è la prova che serve _dopo_ aver desiderato qualcosa.
 - **entra `WowFeaturedGrid`**, che attacca direttamente il difetto densità.
 
+> **Correzione 2026-07-26 (dopo la stesura): `WowFeaturedGrid` non esiste più.**
+> Insieme a `WowHomeHero` e `WowTactileJournal` è stato rimosso da
+> `src/components/home/wow/` (cartella eliminata): nessuno dei tre era importato
+> da alcun file, in nessun commit, su nessun branch — erano prototipi del commit
+> `ca32a31 feat(experiments)`.
+>
+> La rimozione **non toglie nulla a questa spec**, perché il file non era
+> comunque riusabile: hardcodava 3 posti _inventati_ (prezzi e punteggi
+> compresi) e un link morto `/posto/taverna-volterra-toscana`, mentre il punto
+> 5.2 ne chiede 12–16 pescati dalle **29 entry reali** di `content-seed.json`.
+> Il componente della sezione 2 va scritto sull'inventario vero, non adattato.
+> Il markup delle card resta consultabile con
+> `git show ca32a31:src/components/home/wow/WowFeaturedGrid.tsx`.
+
 Family e Brand restano **schizzi non progettati**. La struttura regge tre
 sommari, ma i loro contenuti si definiscono quando toccherà a loro.
 
