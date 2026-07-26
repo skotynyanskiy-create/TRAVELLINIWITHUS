@@ -20,6 +20,19 @@ export interface FirestoreValue {
   };
 }
 
+export interface FirestoreDocument {
+  name?: string;
+  fields?: Record<string, FirestoreValue>;
+}
+
+export interface FirestoreListResponse {
+  documents?: FirestoreDocument[];
+}
+
+export interface FirestoreRunQueryResponse {
+  document?: FirestoreDocument;
+}
+
 /** Riga di carrello risolta lato server: prezzo e nome vengono dal database,
  *  mai dal client, altrimenti il totale sarebbe manipolabile. */
 export interface CheckoutItem {
