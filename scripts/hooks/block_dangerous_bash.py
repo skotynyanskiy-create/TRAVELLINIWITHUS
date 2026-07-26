@@ -33,7 +33,14 @@ RULES: list[tuple[str, str]] = [
     (r"\bgit\s+branch\s+-D\b", "force-deletes a branch that may not be merged"),
     (r"\bgit\s+add\s+(-A\b|--all\b|\.(\s|$))",
      "CLAUDE.md requires staging selectively by path on this tree"),
-    (r"\bgit\s+add\s+[^|;&]*\.(env|mcp\.json)\b", "would stage a secrets file"),
+    # I template non contengono valori e sono tracciati apposta: `.env.example`
+    # sta in git dal primo commit. Senza l'esclusione la regola bloccava ogni
+    # modifica alla documentazione delle variabili. `.env` e `.env.local`
+    # restano bloccati, e gitleaks resta la seconda rete sul contenuto staged.
+    (
+        r"\bgit\s+add\s+[^|;&]*\.(env|mcp\.json)\b(?!\.(?:example|sample|template)\b)",
+        "would stage a secrets file",
+    ),
     (r"\bgit\s+rebase\b", "rewrites local history mid-branch"),
     (r"\bgit\s+filter-branch\b", "rewrites entire history"),
     (r"\bgit\s+stash\s+(clear|drop)\b", "discards stashed work permanently"),
