@@ -1,0 +1,16 @@
+{
+  "name": "travelliniwithus-functions",
+  "private": true,
+  "type": "module",
+  "main": "index.js",
+  "description": "Layer /api/* di travelliniwithus.it. Firebase Hosting serve solo file statici: senza questa function ogni chiamata a /api/... riceve lo shell HTML della SPA. Vedi docs/14_Bugs/BUG_API_ENDPOINTS_SENZA_BACKEND_IN_PROD_2026-07-26.md",
+  "engines": {
+    "node": "22"
+  },
+  "scripts": {
+    "serve": "firebase emulators:start --only functions,hosting"
+  },
+  "dependencies": {
+    "firebase-functions": "^7.3.2-rc.0"
+  }
+}
