@@ -1,7 +1,7 @@
 ---
 type: bug
 area: engineering
-status: fixed
+status: done
 priority: p1
 owner: codex
 severity: high

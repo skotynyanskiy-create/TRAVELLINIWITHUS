@@ -80,29 +80,6 @@ export interface CollaborationFormat {
   highlight?: string;
 }
 
-export interface CollaborationTestimonial {
-  quote: string;
-  name: string;
-  role: string;
-  brand: string;
-  photo?: string;
-}
-
-export interface CollaborationCaseStudyMetric {
-  value: string;
-  label: string;
-}
-
-export interface CollaborationCaseStudy {
-  brand: string;
-  project: string;
-  objective: string;
-  approach: string;
-  metrics: CollaborationCaseStudyMetric[];
-  image?: string;
-  href?: string;
-}
-
 export interface CollaborationsContent {
   heroEyebrow: string;
   heroTitleMain: string;
@@ -113,8 +90,6 @@ export interface CollaborationsContent {
   primaryCtaLink: string;
   secondaryCtaLabel: string;
   secondaryCtaLink: string;
-  positioningTitle: string;
-  positioningDescription: string;
   statsTitle: string;
   statsDescription: string;
   servicesTitle: string;
@@ -125,15 +100,9 @@ export interface CollaborationsContent {
   partnerTitle: string;
   partnerDescription: string;
   partnerTypes: CollaborationPartnerType[];
-  fitTitle: string;
-  fitList: string[];
-  noFitTitle: string;
-  noFitList: string[];
   formatsTitle: string;
   formatsDescription: string;
   collaborationFormats: CollaborationFormat[];
-  testimonials?: CollaborationTestimonial[];
-  caseStudies?: CollaborationCaseStudy[];
 }
 
 export interface ContactContent {
@@ -154,24 +123,49 @@ export interface ContactContent {
 export interface FooterContent {
   description: string;
   discoverTitle: string;
-  planningTitle: string;
   resourcesTitle: string;
   projectTitle: string;
   newsletterButtonLabel: string;
 }
 
+export interface FamilyContent {
+  heroEyebrow: string;
+  heroTitleMain: string;
+  heroTitleAccent: string;
+  heroDescription: string;
+  adviceTitle: string;
+  adviceDescription: string;
+  shopTitle: string;
+  shopDescription: string;
+  collabTitle: string;
+  collabDescription: string;
+  collabCtaLabel: string;
+  instagramCtaLabel: string;
+}
+
 export interface NavigationContent {
+  familyLabel: string;
+  familyAdviceLabel: string;
+  familyShopLabel: string;
   destinationsLabel: string;
   destinationsAllLabel: string;
-  planningLabel: string;
   guidesLabel: string;
+  experiencesLabel: string;
   resourcesLabel: string;
   shopLabel: string;
   collaborationsLabel: string;
   mediaKitLabel: string;
   aboutLabel: string;
   contactsLabel: string;
+  favoritesLabel: string;
   searchLabel: string;
+  exploreLabel: string;
+  mapLabel: string;
+  storiesLabel: string;
+  itinerariesLabel: string;
+  clubLabel: string;
+  pressLabel: string;
+  whatWeUseLabel: string;
 }
 
 export interface DemoContent {
@@ -186,6 +180,7 @@ export interface SiteContentMap {
   about: AboutContent;
   collaborations: CollaborationsContent;
   contact: ContactContent;
+  family: FamilyContent;
   footer: FooterContent;
   navigation: NavigationContent;
   demo: DemoContent;
@@ -199,9 +194,9 @@ export const siteContentDefaults: SiteContentMap = {
     heroTitleMain: 'Posti particolari',
     heroTitleAccent: 'che valgono davvero',
     heroDescription:
-      'Itinerari scritti dopo il viaggio, hotel testati sul posto, costi e stagioni reali. Non la lista più lunga: quella che ti fa decidere meglio.',
+      'Guide pratiche scritte da chi ha vissuto il viaggio. Atmosfera, dettagli utili e consigli che aiutano a capire se un posto merita davvero.',
     primaryCtaLabel: 'Scopri destinazioni',
-    primaryCtaLink: '/destinazioni',
+    primaryCtaLink: '/esplora',
     secondaryCtaLabel: 'Ultime storie',
     secondaryCtaLink: '/#storie',
     quickPillars: [
@@ -215,7 +210,7 @@ export const siteContentDefaults: SiteContentMap = {
         title: 'Posti particolari',
         description:
           'Destinazioni, luoghi e soggiorni che meritano davvero di entrare nei tuoi piani.',
-        to: '/destinazioni',
+        to: '/esplora',
         cta: 'Esplora i luoghi',
       },
       {
@@ -262,6 +257,7 @@ export const siteContentDefaults: SiteContentMap = {
       'Siamo Rodrigo e Betta. Travelliniwithus nasce dal desiderio di consigliare meno posti, ma consigliarli meglio.',
       'Il progetto tiene insieme sguardo personale, immagini, ricerca e dettagli pratici: serve a chi vuole scoprire luoghi con più criterio, non a chi cerca la lista più lunga.',
       'Ogni destinazione, soggiorno o esperienza passa da una domanda semplice: aiuterebbe davvero qualcuno a scegliere meglio?',
+      'E ora la famiglia cresce: aspettiamo il nostro primo bimbo, e il lato genitori-in-viaggio del progetto vive su Travellini Family.',
     ],
     primaryCtaLabel: 'Scopri come collaborare',
     primaryCtaLink: '/collaborazioni',
@@ -324,9 +320,6 @@ export const siteContentDefaults: SiteContentMap = {
     primaryCtaLink: '/media-kit',
     secondaryCtaLabel: 'Scrivici per una proposta',
     secondaryCtaLink: '/contatti',
-    positioningTitle: 'Chi siamo per un partner',
-    positioningDescription:
-      'Siamo un progetto creator-led che unisce immagini, sito, guide e racconto. Funzioniamo meglio quando un partner cerca un contenuto con gusto, criterio e utilita reale per chi legge.',
     statsTitle: 'Numeri utili, non rumore',
     statsDescription:
       'Community reale, reach pubblica e presenza costruita in anni di contenuti salvabili. Usiamo solo segnali che possiamo sostenere, non metriche decorative.',
@@ -397,53 +390,39 @@ export const siteContentDefaults: SiteContentMap = {
         text: 'Prodotti, servizi e strumenti coerenti con il modo in cui viaggiamo, raccontiamo e consigliamo.',
       },
     ],
-    fitTitle: 'Lavoriamo bene con',
-    fitList: [
-      'Partner che cercano un racconto credibile, non solo visibilita rapida.',
-      'Brief chiari su obiettivo, timing e perimetro del progetto.',
-      'Spazio reale per immagini vive, dettagli utili e liberta editoriale.',
-      'Progetti travel, hospitality e lifestyle coerenti con il nostro pubblico.',
-    ],
-    noFitTitle: 'Non siamo la scelta giusta per',
-    noFitList: [
-      'Richieste di recensioni preconfezionate o approvazione totale del tono.',
-      'Campagne solo sconto, coupon o puro volume senza qualita narrativa.',
-      'Progetti fuori fuoco rispetto a viaggio, ospitalita, scoperta e utilita.',
-      'Partnership senza contesto, senza timing o senza aspettative realistiche.',
-    ],
-    formatsTitle: 'Tre modi per partire bene',
+    formatsTitle: 'Tre punti di partenza per capire subito il perimetro',
     formatsDescription:
-      'Partiamo da format chiari per orientare la conversazione, ma i progetti migliori restano calibrati sul contesto reale.',
+      'Sono tracce di lavoro, non listini rigidi. Servono a capire cosa può uscire da una collaborazione prima di costruire una proposta su misura.',
     collaborationFormats: [
       {
-        title: 'Presenza editoriale',
-        subtitle: 'Per racconti mirati e ben contestualizzati',
+        title: 'Stay editoriale',
+        subtitle: 'Per hotel, masserie, relais e soggiorni speciali',
         features: [
-          'Articolo, guida o inserimento editoriale sul sito',
-          'Menzione o supporto social coerente al formato',
-          'Tono pulito e integrato nel progetto',
-          'Pensato per partner che vogliono chiarezza e credibilità',
+          'Articolo o guida editoriale sul sito con disclosure chiara',
+          'Reel o short video pensato per salvabilità, non solo reach',
+          'Stories di contesto durante o dopo l’esperienza',
+          'Asset visuali selezionati per uso editoriale e report sintetico',
         ],
       },
       {
-        title: 'Attivazione destinazione',
-        subtitle: 'Per territori, soggiorni o storytelling più ampi',
+        title: 'Destinazione da costruire',
+        subtitle: 'Per territori, DMO e progetti travel più ampi',
         features: [
-          'Contenuto cross-canale con più profondità',
-          'Integrazione tra guida, visual e social',
-          'Ideale per hospitality e destinazioni',
-          'Pensato per valorizzare il contesto, non solo il lancio',
+          'Itinerario o pillar editoriale con tappe e motivazione',
+          'Più contenuti social distribuiti nel tempo',
+          'Possibile integrazione newsletter o mappa editoriale',
+          'Report finale con link, contenuti pubblicati e segnali utili',
         ],
         highlight: 'true',
       },
       {
-        title: 'Progetto su misura',
-        subtitle: 'Per format speciali o esigenze non standard',
+        title: 'Content kit per brand',
+        subtitle: 'Per travel gear, servizi e lifestyle compatibili',
         features: [
-          'Formato costruito sul progetto',
-          'Flessibilità tra contenuto, visual e contesto',
-          'Possibile uso UGC o contenuti dedicati',
-          'Adatto quando il progetto merita una struttura propria',
+          'Review o contenuto editoriale con pro e limiti dichiarabili',
+          'Video breve o serie visuale orientata all’uso reale',
+          'Possibile codice o link affiliato se coerente',
+          'Materiali riutilizzabili dal brand secondo accordo',
         ],
       },
     ],
@@ -471,30 +450,58 @@ export const siteContentDefaults: SiteContentMap = {
   footer: {
     description:
       'Posti particolari, esperienze vere e informazioni utili raccontate da Rodrigo e Betta con criterio, immagini e prova reale.',
-    discoverTitle: 'Scopri',
-    planningTitle: 'Pianifica',
+    discoverTitle: 'Naviga',
     resourcesTitle: 'Risorse',
     projectTitle: 'Progetto',
     newsletterButtonLabel: 'Iscriviti alla newsletter',
   },
+  family: {
+    heroEyebrow: 'Travellini Family · Rodrigo & Betta',
+    heroTitleMain: 'Il viaggio più grande',
+    heroTitleAccent: 'inizia adesso.',
+    heroDescription:
+      'Betta aspetta il nostro primo bimbo. Qui raccontiamo la gravidanza, i viaggi che facciamo adesso e — presto — quelli col piccolo. Consigli veri, provati su di noi, senza filtri.',
+    adviceTitle: 'Consigli dal pancione',
+    adviceDescription:
+      'Quello che stiamo imparando davvero: volare in gravidanza, organizzarsi, scegliere cosa serve. Ogni consiglio nasce da un momento reale che trovi anche su Instagram.',
+    shopTitle: 'Codici sconto e cose che usiamo',
+    shopDescription:
+      'Le nostre collaborazioni family con i codici sconto attivi e i prodotti che usiamo davvero. Ogni link commerciale è dichiarato: qui non trovi nulla che non abbiamo provato.',
+    collabTitle: 'Collabora con Travellini Family',
+    collabDescription:
+      'Brand di maternità, infanzia e viaggio in famiglia: raccontiamo solo prodotti e strutture che proviamo con il pancione (e presto col piccolo).',
+    collabCtaLabel: 'Scrivici per una collaborazione',
+    instagramCtaLabel: 'Seguici su @travellinifamily',
+  },
   navigation: {
-    destinationsLabel: 'Destinazioni',
-    destinationsAllLabel: 'Tutte le destinazioni',
-    planningLabel: 'Pianifica',
+    familyLabel: 'Family',
+    familyAdviceLabel: 'Consigli',
+    familyShopLabel: 'Codici e sconti',
+    destinationsLabel: 'Mete',
+    destinationsAllLabel: 'Tutte le mete',
     guidesLabel: 'Guide',
-    resourcesLabel: 'Risorse',
+    experiencesLabel: 'Esperienze',
+    resourcesLabel: 'Strumenti',
     shopLabel: 'Shop',
     collaborationsLabel: 'Collaborazioni',
     mediaKitLabel: 'Media kit',
     aboutLabel: 'Chi siamo',
     contactsLabel: 'Contatti',
+    favoritesLabel: 'Preferiti',
     searchLabel: 'Cerca',
+    exploreLabel: 'Esplora',
+    mapLabel: 'Mappa',
+    storiesLabel: 'Guide e racconti',
+    itinerariesLabel: 'Itinerari',
+    clubLabel: 'Club',
+    pressLabel: 'Press',
+    whatWeUseLabel: 'Cosa usiamo',
   },
   demo: {
-    showEditorialDemo: !(import.meta.env?.PROD ?? true),
-    showDestinationDemo: !(import.meta.env?.PROD ?? true),
-    showShopDemo: !(import.meta.env?.PROD ?? true),
-    showDemoBadges: !(import.meta.env?.PROD ?? true),
+    showEditorialDemo: false,
+    showDestinationDemo: true,
+    showShopDemo: false,
+    showDemoBadges: false,
   },
 };
 
@@ -660,8 +667,6 @@ export const siteContentDefinitions: SiteContentDefinition[] = [
       urlField('primaryCtaLink', 'CTA primaria link'),
       textField('secondaryCtaLabel', 'CTA secondaria label'),
       urlField('secondaryCtaLink', 'CTA secondaria link'),
-      textField('positioningTitle', 'Titolo posizionamento partner'),
-      textareaField('positioningDescription', 'Descrizione posizionamento partner'),
       textField('statsTitle', 'Titolo metriche'),
       textareaField('statsDescription', 'Descrizione metriche'),
       textField('servicesTitle', 'Titolo servizi'),
@@ -697,10 +702,6 @@ export const siteContentDefinitions: SiteContentDefinition[] = [
         itemLabel: 'Partner',
         fields: cardFields,
       },
-      textField('fitTitle', 'Titolo fit'),
-      stringListField('fitList', 'Lista fit', 'Punto fit'),
-      textField('noFitTitle', 'Titolo no-fit'),
-      stringListField('noFitList', 'Lista no-fit', 'Punto no-fit'),
       textField('formatsTitle', 'Titolo formati collaborazione'),
       textareaField('formatsDescription', 'Descrizione formati collaborazione'),
       {
@@ -745,7 +746,6 @@ export const siteContentDefinitions: SiteContentDefinition[] = [
     fields: [
       textareaField('description', 'Descrizione footer'),
       textField('discoverTitle', 'Titolo colonna scopri'),
-      textField('planningTitle', 'Titolo colonna pianifica'),
       textField('resourcesTitle', 'Titolo colonna risorse'),
       textField('projectTitle', 'Titolo colonna progetto'),
       textField('newsletterButtonLabel', 'Label bottone newsletter'),
@@ -759,14 +759,22 @@ export const siteContentDefinitions: SiteContentDefinition[] = [
     fields: [
       textField('destinationsLabel', 'Label destinazioni'),
       textField('destinationsAllLabel', 'Label tutte le destinazioni'),
-      textField('planningLabel', 'Label pianifica'),
+      textField('exploreLabel', 'Label esplora'),
+      textField('mapLabel', 'Label mappa'),
+      textField('storiesLabel', 'Label racconti'),
+      textField('itinerariesLabel', 'Label itinerari'),
       textField('guidesLabel', 'Label guide'),
+      textField('experiencesLabel', 'Label esperienze'),
       textField('resourcesLabel', 'Label risorse'),
       textField('shopLabel', 'Label shop'),
       textField('collaborationsLabel', 'Label collaborazioni'),
       textField('mediaKitLabel', 'Label media kit'),
+      textField('clubLabel', 'Label club'),
+      textField('pressLabel', 'Label press'),
+      textField('whatWeUseLabel', 'Label cosa usiamo'),
       textField('aboutLabel', 'Label chi siamo'),
       textField('contactsLabel', 'Label contatti'),
+      textField('favoritesLabel', 'Label preferiti'),
       textField('searchLabel', 'Label cerca'),
     ],
   },
@@ -805,6 +813,27 @@ export const siteContentDefinitions: SiteContentDefinition[] = [
         description:
           'Aggiunge etichette Demo sulle anteprime per rendere chiaro che si tratta di contenuti provvisori.',
       },
+    ],
+  },
+  {
+    id: 'family',
+    title: 'Travellini Family',
+    description:
+      'Hub /family: hero, sezione consigli, vetrina codici sconto e blocco collaborazioni family.',
+    previewPath: '/family',
+    fields: [
+      textField('heroEyebrow', 'Eyebrow hero'),
+      textField('heroTitleMain', 'Titolo hero riga principale'),
+      textField('heroTitleAccent', 'Titolo hero parte evidenziata'),
+      textareaField('heroDescription', 'Descrizione hero'),
+      textField('adviceTitle', 'Titolo sezione consigli'),
+      textareaField('adviceDescription', 'Descrizione sezione consigli'),
+      textField('shopTitle', 'Titolo vetrina codici'),
+      textareaField('shopDescription', 'Descrizione vetrina codici'),
+      textField('collabTitle', 'Titolo blocco collaborazioni'),
+      textareaField('collabDescription', 'Descrizione blocco collaborazioni'),
+      textField('collabCtaLabel', 'CTA collaborazioni'),
+      textField('instagramCtaLabel', 'CTA Instagram'),
     ],
   },
 ];

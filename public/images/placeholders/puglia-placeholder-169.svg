@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Foto in arrivo">
+  <rect width="1600" height="900" fill="#F2EDE6"/>
+  <g fill="none" stroke="#78716c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="710" y="340" width="180" height="135" rx="10"/>
+    <rect x="755" y="320" width="90" height="28" rx="6" fill="#F2EDE6"/>
+    <circle cx="800" cy="410" r="36"/>
+    <circle cx="860" cy="360" r="5" fill="#78716c"/>
+  </g>
+  <g fill="#78716c" text-anchor="middle">
+    <text x="800" y="560" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="48">Foto in arrivo</text>
+    <text x="800" y="604" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="22" letter-spacing="0.5">Slot dedicato a uno scatto Rodrigo &amp; Betta</text>
+  </g>
+</svg>

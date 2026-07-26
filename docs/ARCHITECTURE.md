@@ -1,260 +1,293 @@
 ---
 type: reference
-area: engineering
+area: delivery
 status: active
+created: 2026-07-22
 tags:
   - architecture
-  - engineering
-  - reference
+  - routing
+  - build
 ---
 
-# Architecture — TRAVELLINIWITHUS
+# Architettura del sito — stato reale
 
-Quick reference per orientarsi nel codice. Per convenzioni specifiche,
-`.github/copilot-instructions.md` è la versione lunga. Per schema
-dati, [`FIRESTORE_SCHEMA.md`](./FIRESTORE_SCHEMA.md). Per contratto
-API, [`API_CONTRACT.md`](./API_CONTRACT.md).
+Fotografia dell'architettura **come è oggi nel codice**, non come è stata
+pianificata. Ogni affermazione è derivata leggendo i file citati. Se una nota di
+progetto contraddice questo documento, vince il codice.
 
-## Stack
+Fonti lette: `src/App.tsx`, `server.ts`, `vite.config.ts`, `package.json`,
+`src/components/ProtectedRoute.tsx`, `scripts/public-route-manifest.js`,
+`scripts/generate-sitemap.js`, `src/context/`, `src/lib/`, `src/services/`.
 
-| Layer           | Tech                                                         |
-| --------------- | ------------------------------------------------------------ |
-| Runtime         | Node.js ≥22                                                  |
-| Package manager | npm ≥10.9                                                    |
-| Frontend        | React 19, TypeScript (non-strict), React Router 7            |
-| Styling         | Tailwind CSS 4 + CSS variables (vedi `DESIGN.md`)            |
-| State           | React Query 5 (server), Context (shallow UI state)           |
-| Data layer      | Firebase/Firestore (client + admin SDK)                      |
-| Payments        | Stripe Checkout Sessions + webhook                           |
-| Backend         | Express 4 (SSR + API), Vite middleware in dev                |
-| Build           | Vite 6 + `@tailwindcss/vite`                                 |
-| Tests           | Vitest 4 (unit), Playwright (e2e)                            |
-| CI              | GitHub Actions: quality, audit-agents, audit-visual          |
-| Hosting         | Vercel (frontend) + Firebase (Firestore/Auth/Storage/backup) |
+---
 
-## Top-level layout
+## 1. Modello di rendering
 
-```
-/
-├── server.ts               # Express SSR + API (1746 lines, HIGH-RISK)
-├── vite.config.ts          # Vite + Tailwind 4 plugin
-├── tsconfig.json           # non-strict; tsconfig.node.json for server
-├── firestore.rules         # custom-claim only (HIGH-RISK)
-├── src/                    # React app
-├── e2e/                    # Playwright specs (see e2e/README.md)
-├── scripts/                # Node utility scripts (audit, scaffold, admin)
-├── public/                 # static assets (sitemap, media-kit, robots)
-├── docs/                   # Obsidian operational vault
-├── .claude/                # Claude Code config (agents, skills, hooks)
-├── .agents/                # canonical cross-tool skills
-└── .github/                # workflows, CODEOWNERS, Dependabot, copilot
-```
+SPA React 19 servita da Express.
 
-## Entry points
+- **Client**: `src/App.tsx` monta `BrowserRouter` di `react-router-dom` dentro
+  una catena di provider: `HelmetProvider` → `QueryClientProvider`
+  (`@tanstack/react-query`) → `AuthProvider` → `CartProvider` →
+  `FavoritesProvider`. Tutte le pagine tranne `Mappa` sono in `React.lazy` dietro
+  un unico `<Suspense>` con fallback brandizzato (`PageLoader`).
+- **Server**: `server.ts` (avviato via `tsx` — `npm run dev` / `npm start`) NON
+  fa SSR di React. Legge `index.html` (da Vite in dev, da `dist/` in produzione)
+  e **inietta meta tag + JSON-LD nell'HTML** prima di restituirlo, poi lascia che
+  il bundle client idrati tutto.
 
-- **Client**: `src/main.tsx` → `StrictMode` → `ErrorBoundary` →
-  `QueryClientProvider` → `HelmetProvider` → `AuthProvider` → `App`.
-- **Server**: `server.ts`. Dev: Vite as middleware; prod: serve `dist/`
-  static + SSR fallback. Same process per entrambi (vedi
-  `createServer()`).
+### Cosa fa esattamente l'iniezione SSR (`server.ts`)
 
-## Source tree (`src/`)
+| Percorso          | Funzione                  | Dati                                                                                                                                                                                                                  |
+| ----------------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/articolo/:slug` | `injectMetaTags`          | Firestore REST (`articles`, filtro `published`), cache `NodeCache` TTL 300s. JSON-LD `Article`, più `HowTo` o `FAQPage` se `category === 'Guide'`, più `TouristDestination` se c'è `location`                         |
+| `/shop/:slug`     | `injectProductMetaTags`   | Firestore REST (`products`), JSON-LD `Product` + `Offer`                                                                                                                                                              |
+| rotte statiche    | `injectStaticMeta`        | Tabella hard-coded `STATIC_ROUTE_META` (12 percorsi: `/`, `/chi-siamo`, `/esplora`, `/mappa`, `/collaborazioni`, `/media-kit`, `/contatti`, `/risorse`, `/club`, `/shop`, `/press`, `/strumenti`) — JSON-LD `WebPage` |
+| `/`               | `injectSentieroPrerender` | Inietta dentro `<div id="root">` un blocco `.sr-only` generato da `SENTIERO_STAGES` (`src/experience/sentiero/sentieroData`)                                                                                          |
 
-```
-src/
-├── App.tsx                 # React Router layout + lazy-loaded routes
-├── main.tsx                # Provider stack + createRoot
-├── index.css               # Tailwind + CSS vars root
-├── firebase.ts             # firebaseApp init (re-exports from lib/)
-├── types.ts                # shared TypeScript types
-│
-├── components/             # 52 reusable UI pieces (PageLayout, Section,
-│                             Navbar, Hero, cards, consent, forms, …)
-├── pages/                  # 24 route components (Home, Shop, Articolo,
-│                             admin/*, legal/*, destinazioni/*, …)
-├── context/                # AuthContext, CartContext, FavoritesContext
-├── services/               # firebaseService (CRUD), analytics,
-│                             aiVerificationService
-├── lib/                    # affiliate, animations, consent, email,
-│                             errorTracking (client+server), firebaseApp,
-│                             firebaseAuth, firebaseDb, firebaseStorage
-├── hooks/                  # useContactForm, usePagination, useShopGate,
-│                             useSiteContent
-├── config/                 # admin whitelist, site meta, taxonomies,
-│                             siteContent defaults, demoContent
-├── data/                   # seed/static data (articles, destinations,
-│                             hotels, resources)
-├── utils/                  # pure helpers (slugify, validators,
-│                             formatters, articleValidator)
-├── i18n/                   # translation keys (Italian-primary)
-├── pdf/                    # React-PDF templates for media-kit
-└── test/                   # vitest setup + utilities
-```
+`resolveAppStatus(pathname)` decide lo **status HTTP** della navigazione (200 vs 404) per i crawler, senza renderizzare l'app: consulta `STATIC_APP_ROUTES`, i set
+di slug demo (`DEMO_PREVIEW_ARTICLE_SLUGS`, `DEMO_PRODUCT_SLUGS`),
+`VALID_DESTINATION_PATHS` e, in ultima istanza, Firestore.
 
-## Data flow
+> Nota: `injectSentieroPrerender` gira ancora sulla home anche se la home
+> renderizzata è `AtlanteHome` → `CinematicHomepage`, non l'esperienza Sentiero.
+> Il prerender testuale e la pagina reale non descrivono più la stessa cosa.
+> [VERIFY: decidere se il blocco va aggiornato al nuovo montaggio o rimosso.]
 
-```
-UI component
-   ↓ useQuery(['articles'], fetchArticles)      (React Query)
-   ↓ fetchArticles()                            (src/services/firebaseService.ts)
-   ↓ getDocs(query(collection, where('published','==',true)))
-   ↓ Firestore
-```
+### Altri endpoint serviti da `server.ts`
 
-**Regole inderogabili**:
+`GET /api/health` · `POST /api/webhook` (Stripe, `express.raw`) ·
+`POST /api/newsletter-subscribe` · `POST /api/contact-lead` ·
+`POST /api/media-kit-lead` · `POST /api/create-checkout-session` ·
+`POST /api/admin/ai-verify` · `POST /api/validate-coupon` ·
+`POST /api/ai-companion` (stub: risponde 503 finché mancano le chiavi) ·
+`GET /sitemap.xml` (dinamico) · `GET /rss.xml` ·
+redirect 301 `/articoli/*` → `/guide/*`, `/destinazioni/*` e `/esperienze/*` → `/esplora`.
 
-- Tutti i query pubblici filtrano per `published: true`.
-- `createdAt` / `updatedAt` sempre con `serverTimestamp()`.
-- Accesso Firestore passa **solo** da `src/services/firebaseService.ts`.
-- Mai importare Firebase config client-side.
+Rate limit differenziati (`express-rate-limit`), CORS su allowlist esplicita,
+header di sicurezza + CSP in produzione, fail-fast all'avvio se `APP_URL` manca
+in produzione.
 
-## Routing
+---
 
-React Router 7 in `src/App.tsx`:
+## 2. Mappa delle rotte (`src/App.tsx`)
 
-- Tutte le pages sono `lazy()` con `<Suspense>` fallback `PageLoader`.
-- Admin gated da `<ProtectedRoute>` (Auth + claim `admin == true`).
-- Order: specific routes prima, `*` catch-all per NotFound.
-- Query params per filtri (`?group=Europa`), route params per IDs
-  (`/shop/:slug`, `/articolo/:slug`).
+Dal commit 29a2fb0 il client non ha più gate di rotta: ogni rotta elencata qui è
+registrata incondizionatamente.
 
-## Server API
+### Fuori dal `Layout` (nessuna navbar/footer)
 
-Tutti gli endpoint sono in `server.ts`. Rate-limit via
-`express-rate-limit` (gruppi: `newsletter`, `checkout`, `contact`,
-`ai`, `general`).
+| Rotta                              | Componente                                     | Note                          |
+| ---------------------------------- | ---------------------------------------------- | ----------------------------- |
+| `/v2`, `/atlante-lab`, `/sentiero` | → redirect `/`                                 | home sperimentali disattivate |
+| `/manifesto`                       | `ManifestoPage` (`src/experience/controluce/`) | lazy — lab WebGL, noindex     |
 
-| Endpoint                       | Method | Auth                   | Scope                             |
-| ------------------------------ | ------ | ---------------------- | --------------------------------- |
-| `/api/health`                  | GET    | no                     | healthcheck                       |
-| `/api/webhook`                 | POST   | Stripe signature       | eventi Stripe (ordine completato) |
-| `/api/newsletter-subscribe`    | POST   | no                     | Brevo DOI + Firestore `leads`     |
-| `/api/contact-lead`            | POST   | no                     | Firestore `leads` + Resend email  |
-| `/api/media-kit-lead`          | POST   | no                     | Firestore `leads` + PDF link      |
-| `/api/create-checkout-session` | POST   | no                     | Stripe Checkout Session           |
-| `/api/validate-coupon`         | POST   | no                     | Stripe coupon check               |
-| `/api/ai/verify-search`        | POST   | admin (firebase claim) | Gemini verification               |
-| `/api/ai/verify-maps`          | POST   | admin                  | Gemini verification               |
-| `/sitemap.xml`                 | GET    | no                     | server-generated sitemap          |
-| `/rss.xml`                     | GET    | no                     | server-generated feed             |
+### Dentro `<Layout />` (eager)
 
-CORS in prod è ristretto a `APP_URL`, `FRONTEND_URL`, `STAGING_URL` + dominio pubblico.
+| Rotta                                                                            | Componente                         | Caricamento | Condizione                                                                             |
+| -------------------------------------------------------------------------------- | ---------------------------------- | ----------- | -------------------------------------------------------------------------------------- |
+| `/`                                                                              | `AtlanteHome`                      | lazy        | —                                                                                      |
+| `/atlante`                                                                       | → redirect `/`                     | —           | —                                                                                      |
+| `/guida-in-regalo`                                                               | `VieniConNoi`                      | lazy        | unica landing lead; private/noindex                                                    |
+| `/iscrivi` · `/italia-nascosta`                                                  | → redirect `/guida-in-regalo`      | —           | alias storici                                                                          |
+| `/esplora`                                                                       | `Esplora`                          | lazy        | —                                                                                      |
+| `/destinazione` · `/destinazione/:zoneSlug` · `/destinazione/:zoneSlug/:subSlug` | `Destinazione`                     | lazy        | —                                                                                      |
+| `/destinazioni` · `/esperienze` · `/blog`                                        | → redirect `/esplora`              | —           | —                                                                                      |
+| `/guide`                                                                         | → redirect `/esplora?format=guida` | —           | —                                                                                      |
+| `/chi-siamo`                                                                     | `ChiSiamo`                         | lazy        | —                                                                                      |
+| `/collaborazioni`                                                                | `Collaborazioni`                   | lazy        | —                                                                                      |
+| `/media-kit`                                                                     | `MediaKit`                         | lazy        | —                                                                                      |
+| `/press`                                                                         | `Press`                            | lazy        | —                                                                                      |
+| `/contatti`                                                                      | `Contatti`                         | lazy        | —                                                                                      |
+| `/articolo/:slug`                                                                | `Articolo`                         | lazy        | —                                                                                      |
+| `/itinerari`                                                                     | `Itinerari`                        | lazy        | —                                                                                      |
+| `/itinerari/compare`                                                             | `ItinerariCompare`                 | lazy        | —                                                                                      |
+| `/itinerari/:slug`                                                               | `Itinerario`                       | lazy        | —                                                                                      |
+| `/guide/:slug`                                                                   | `Guida`                            | lazy        | —                                                                                      |
+| `/quiz`                                                                          | → redirect `/esplora`              | —           | —                                                                                      |
+| `/strumenti`                                                                     | `Strumenti`                        | lazy        | —                                                                                      |
+| `/preferiti`                                                                     | `Preferiti`                        | lazy        | —                                                                                      |
+| `/risorse`                                                                       | `Risorse`                          | lazy        | —                                                                                      |
+| `/shop`                                                                          | `Shop`                             | lazy        | —                                                                                      |
+| `/shop/:slug`                                                                    | `ProductPage`                      | lazy        | —                                                                                      |
+| `/club`                                                                          | `Club`                             | lazy        | —                                                                                      |
+| `/posto/:slug`                                                                   | `Posto`                            | lazy        | —                                                                                      |
+| `/mappa`                                                                         | `Mappa`                            | **eager**   | shell editoriale eager per rendere subito l'H1; MapLibre resta lazy dentro `Mappa.tsx` |
+| `/_dev/diario-preview`                                                           | `DiarioPreview`                    | lazy        | **solo `import.meta.env.DEV`** — mai registrata in produzione                          |
+| `/account/acquisti`                                                              | `MieiAcquisti`                     | lazy        | —                                                                                      |
+| `/lead-magnet`                                                                   | `LeadMagnet`                       | lazy        | —                                                                                      |
+| `/privacy` · `/cookie` · `/termini` · `/disclaimer`                              | `legal/*`                          | lazy        | —                                                                                      |
+| `*`                                                                              | `NotFound`                         | lazy        | —                                                                                      |
 
-Contratti completi request/response in [`API_CONTRACT.md`](./API_CONTRACT.md).
+### Rotte admin (tutte dentro `<ProtectedRoute>`, tutte lazy)
 
-## State management
+`/admin` → `AdminDashboard` · `/admin/site-content/:pageId` → `SiteContentEditor` ·
+`/admin/editor` e `/admin/editor/:id` → `ArticleEditor` ·
+`/admin/product-editor` e `/admin/product-editor/:id` → `ProductEditor` ·
+`/admin/users` → `Users` · `/admin/orders` → `Orders`.
 
-- **Server state** (Firestore data, API responses): React Query.
-  `staleTime: 5min`, `gcTime: 30min`, `refetchOnWindowFocus: false`.
-- **Shallow global UI state**: Context (cart, auth, favorites). ≤3
-  provider totali.
-- **Form state**: controlled inputs + hook dedicati (`useContactForm`).
-- **Server-side config**: `src/config/siteContent.ts` + Firestore doc
-  `siteContent/*` (admin-editabili).
+`ProtectedRoute` (`src/components/ProtectedRoute.tsx`) è un **gate client-side**:
+richiede `user` + `isAdmin` da `AuthContext`. Esiste una scorciatoia di anteprima
+`?previewAdmin=1`, attiva solo se `import.meta.env.DEV` **e** hostname
+`localhost`/`127.0.0.1`, persistita in `sessionStorage`. La protezione reale dei
+dati resta su `firestore.rules`, non qui.
 
-Non mescolare: React Query per server state, Context per UI state
-derivato.
+---
 
-## Build pipeline
+## 3. Stato e livello dati
 
-`npm run build` esegue in ordine:
+### Context (`src/context/`)
 
-1. `scripts/generate-media-kit.tsx` → `public/media-kit.pdf`
-2. `scripts/generate-sitemap.js` → `public/sitemap.xml`
-3. `vite build` → `dist/`
+| File                   | Ruolo                                                                 |
+| ---------------------- | --------------------------------------------------------------------- |
+| `AuthContext.tsx`      | Firebase Auth (Google sign-in), flag `isAdmin`, `authError`           |
+| `CartContext.tsx`      | Carrello shop                                                         |
+| `FavoritesContext.tsx` | Preferiti utente                                                      |
+| `QuickViewContext.tsx` | Quick view — **non montato in `App.tsx`**, provider locale dove serve |
 
-Output `dist/` servito poi da `server.ts` in prod (o da Vercel
-direttamente per il frontend).
+Cache server-state: `QueryClient` in `App.tsx` con `staleTime` 5 min, `gcTime`
+30 min, `refetchOnWindowFocus: false`, `retry: 1`.
 
-## Auth & admin model
+### Servizi (`src/services/`)
 
-- Login via Firebase Auth (Google provider).
-- Admin gating: `request.auth.token.admin == true` primario (Firebase
-  custom claim), fallback legacy `users/{uid}.role == 'admin'` +
-  email whitelist `src/config/admin.ts`.
-- Assegnazione claim: `npm run admin:grant <email>`. Revoke:
-  `npm run admin:revoke`. List: `npm run admin:list`.
-- Vedi [`20_Decisions/DECISION_ADMIN_CUSTOM_CLAIMS.md`](./20_Decisions/DECISION_ADMIN_CUSTOM_CLAIMS.md).
+`firebaseService.ts` (accesso Firestore client, la parte più larga),
+`analytics.ts` (`initAnalytics`, `trackEvent`, `trackPageview`),
+`aiVerificationService.ts` (chiama `/api/admin/ai-verify`; la chiave Gemini non è
+mai nel bundle — vedi commento in `vite.config.ts`),
+`instagramContentAdapter.ts` e `instagramCaptionEnrichment.ts`.
 
-## Security boundaries
+### Librerie interne (`src/lib/`)
 
-| Boundary           | Where                                | Mechanism                                   |
-| ------------------ | ------------------------------------ | ------------------------------------------- |
-| Client input → API | `server.ts` rate-limits + validation | express-rate-limit, server-side price check |
-| API → Firestore    | `firestore.rules`                    | custom-claim, `published` filter            |
-| Webhook ingress    | `/api/webhook`                       | Stripe signature verification               |
-| Secrets            | `.env.local` (gitignored)            | `.claude/settings.json` hook block          |
-| CORS               | `server.ts` production branch        | whitelist APP_URL/FRONTEND_URL/STAGING_URL  |
+`firebaseApp.ts`, `firebaseAuth.ts`, `firebaseDb.ts`, `firebaseStorage.ts`
+(inizializzazione SDK) · `seo.ts` · `regions.ts` · `consent.ts` · `telemetry.ts` ·
+`affiliateLink.ts` · `email.ts` (usato **anche da `server.ts`**) ·
+`leadFallback.ts` · `animations.ts` · `errorTracking.ts` (attualmente non
+importato da nessuna parte, vedi §5).
 
-## Testing architecture
+### Collezioni Firestore referenziate
 
-- **Unit (Vitest)**: `src/**/*.test.tsx` — 8 file oggi (Button,
-  ErrorBoundary, Layout, Navbar, contentTaxonomy, articleData,
-  articleRoutes, articleValidator).
-- **E2E (Playwright)**: `e2e/*.spec.ts` — 6 file. Vedi
-  [`../e2e/README.md`](../e2e/README.md).
-- **Script audit**: `scripts/check-*.mjs` + `audit:ui`, `audit:firebase`,
-  `audit:stripe`, `audit:agents`, `audit:visual`, `audit:a11y`,
-  `audit:forms`, `audit:lighthouse`. Aggregati in `audit:quality` per
-  full sweep.
+Dal client (`collection(db, …)` / `doc(db, …)`): `articles`, `products`,
+`orders`, `users`, `leads`, `coupons`, `logs`, `resources`, `settings`,
+`siteContent`.
 
-## CI/CD
+Dal server (Firebase Admin SDK, `server.ts`): `orders`, `coupons`,
+`productAssets`. `coupons` e `productAssets` sono **volutamente non leggibili
+pubblicamente** in `firestore.rules` e passano solo dall'Admin SDK.
 
-- **CI**: `.github/workflows/ci.yml` — 3 job (quality, audit-agents,
-  audit-visual). Run su push `main`/`codex/**`/`feat/**`/`fix/**` + PR
-  to main.
-- **Firestore backup**: `.github/workflows/firestore-backup.yml` —
-  cron `0 3 * * 0`, OIDC Workload Identity Federation, export su GCS
-  con lifecycle 30 giorni.
-- **Lighthouse**: `.github/workflows/lighthouse.yml` — performance budget
-  su 4 URL chiave.
-- **Dependabot**: `.github/dependabot.yml` — weekly npm + github-actions.
+Il server legge inoltre `articles` e `products` via **REST pubblica Firestore**
+(`firestore.googleapis.com/v1/...`) per l'iniezione meta, filtrando su
+`published`.
 
-## High-risk files
+---
 
-Modifiche richiedono conferma esplicita owner. Hook
-`.claude/settings.json` avvisa su `Edit|Write`:
+## 4. Build pipeline
 
-- `server.ts`
-- `firestore.rules`
-- `src/config/admin.ts`
-- `firebase-applet-config.json`, `.firebaserc`, `vercel.json`, `firebase.json`
+`npm run build` (`package.json`) è una catena sequenziale:
 
-## AI-assisted workflow
+1. `generate:media-kit` — `tsx scripts/generate-media-kit.tsx` (PDF via `@react-pdf/renderer`)
+2. `generate:lead-magnet` — `tsx scripts/generate-lead-magnet.tsx`
+3. `generate:og` — `node scripts/generate-og-images.mjs`
+4. `optimize:images` — `node scripts/optimize-images.mjs` (sharp)
+5. `node scripts/generate-sitemap.js` — scrive la sitemap statica
+6. `vite build`
 
-- `CLAUDE.md` → Claude Code routing (BARC)
-- `AGENTS.md` → cross-tool rules (letto nativamente da OpenAI Codex CLI)
-- `.claude/agents/` → 7 agent
-- `.claude/skills/` → 22 skill
-- `.agents/skills/` → 5 canonical (mirrored cross-tool)
-- `.mcp.json` → MCP servers condivisi: `playwright` (browser test runner), `codex` (OpenAI Codex CLI come agent delegabile), `sequential-thinking` (extended reasoning multi-step). Prerequisiti e troubleshooting in [`TROUBLESHOOTING.md`](./TROUBLESHOOTING.md)
-- `docs/AI_AGENT_STACK.md` → stack spec completo
-- `docs/DEV_TOOLING.md` → catalogo CLI/MCP/plugin installati + criteri di selezione
+### `vite.config.ts`
 
-**Coesistenza Claude Code ↔ Codex CLI**: entrambi leggono `AGENTS.md` come system prompt condiviso. In più Claude Code può invocare Codex in-session tramite il MCP server dichiarato in `.mcp.json`. Branch prefix `codex/**` nella CI è riservato a lavori prodotti da Codex.
+- Plugin: `@vitejs/plugin-react`, `@tailwindcss/vite`, `vite-plugin-pwa`.
+- **Service worker**: `VitePWA` con `registerType: 'autoUpdate'`, **disabilitato
+  fuori da `mode === 'production'`** per non far ombra all'HMR. Workbox esclude
+  dal precache i video e i chunk pesanti (`mapbox-*`, `charts-*`, `editor-*`,
+  `react-pdf*`, `three-*`, e le varianti responsive `-320/-480/-768/-1024`),
+  serviti poi on-demand via `runtimeCaching` CacheFirst (`heavy-route-chunks`).
+  `navigateFallback: '/index.html'` (app shell — fix 2026-07-24: con
+  `/offline.html` il SW serviva la pagina offline a ogni hard-navigation
+  non-home dei visitatori di ritorno; una vera offline page richiede un
+  `catchHandler` via injectManifest, oggi non implementato).
+- **`modulePreload.resolveDependencies`**: filtra dal preload dell'HTML i chunk
+  `mapbox-`, `charts-`, `editor-`, `maps-`, `markdown-`, `motion-`, `three-`.
+- **`manualChunks`** (solo `node_modules`): `react-core` (react, react-dom,
+  scheduler, react-is, react-router(-dom), react-query, react-helmet-async) ·
+  `three` (three + `@react-three/*` + postprocessing + maath, valutato **prima**
+  delle euristiche loose) · `firebase-firestore` / `firebase-auth` /
+  `firebase-storage` / `firebase-core` · `motion` · `gsap` · `lenis` · `embla` ·
+  `icons` (lucide) · `charts` (recharts) · `maps` (react-simple-maps) · `mapbox`
+  (react-map-gl / mapbox-gl) · `markdown` · `editor` (react-quill-new) ·
+  `search-utils` (fuse.js, react-error-boundary) · `integrations`
+  (`@google/genai`, `@stripe/stripe-js`) · `vite-preload-helper`.
+- `chunkSizeWarningLimit: 1800`.
+- `resolve.dedupe: ['react','react-dom','three']` e `optimizeDeps.include` sullo
+  stack 3D + `react-map-gl/maplibre` + gsap: entrambi sono fix per "Invalid hook
+  call" da doppia copia di React nei chunk lazy.
 
-## Gotchas
+---
 
-- **Dev server port 3000** (Vite/Express unified), **ma VS Code task**
-  avvia con `PORT=3001` (vedi `.vscode/tasks.json`). Playwright usa 3000.
-- Service worker PWA: hard refresh necessario dopo deploy su Chrome se
-  cache old html.
-- `npm run test:watch` / `npm run test:coverage` non sono definiti nel
-  `package.json`. Usa `npx vitest --watch` / `npx vitest run --coverage`.
-- `dotenv.config()` in `server.ts` legge `.env` + `.env.local`. Non
-  committare né `.env` né `.env.local` (gitignored).
-- `firebase-admin@13` porta 10 vulns `uuid <14` transitive — deferred.
-  Vedi [`20_Decisions/DECISION_UUID_FIREBASE_ADMIN_VULNERABILITY.md`](./20_Decisions/DECISION_UUID_FIREBASE_ADMIN_VULNERABILITY.md).
+## 5. Debito architetturale (con evidenze)
 
-## Related docs
+### 5.1 Quattro registri di rotte concorrenti
 
-- Setup / onboarding: [`QUICK_START.md`](./QUICK_START.md)
-- Contributing: [`../CONTRIBUTING.md`](../CONTRIBUTING.md)
-- Security: [`../SECURITY.md`](../SECURITY.md)
-- Troubleshooting: [`TROUBLESHOOTING.md`](./TROUBLESHOOTING.md)
-- Deploy: [`DEPLOYMENT_RUNBOOK.md`](./DEPLOYMENT_RUNBOOK.md)
-- Disaster recovery: [`DISASTER_RECOVERY_RUNBOOK.md`](./DISASTER_RECOVERY_RUNBOOK.md)
-- Stripe webhook: [`STRIPE_WEBHOOK_RUNBOOK.md`](./STRIPE_WEBHOOK_RUNBOOK.md)
-- Schema Firestore: [`FIRESTORE_SCHEMA.md`](./FIRESTORE_SCHEMA.md)
-- API contract: [`API_CONTRACT.md`](./API_CONTRACT.md)
-- Design system: [`../DESIGN.md`](../DESIGN.md) + [`DESIGN_SYSTEM_CHEATSHEET.md`](./DESIGN_SYSTEM_CHEATSHEET.md)
+Non esiste una sola fonte di verità su "quali rotte esistono". Ce ne sono quattro,
+mantenute a mano e già divergenti:
+
+1. `src/App.tsx` — le rotte che il client registra davvero.
+2. `server.ts` → `ALL_STATIC_APP_ROUTES` (31 voci) — decide il 200/404 per i bot.
+3. `scripts/public-route-manifest.js` → `PUBLIC_ROUTE_MANIFEST` (21 voci con
+   `role` e flag `sitemap`).
+4. Due generatori di sitemap indipendenti:
+   - `scripts/generate-sitemap.js` (build-time, legge il manifest + `content-seed.json`);
+   - `server.ts` → `GET /sitemap.xml` (runtime, lista `staticRoutes` **hard-coded
+     inline**, diversa dal manifest, più gli articoli da Firestore).
+
+Divergenze già presenti oggi:
+
+- `/posto/:slug`, `/manifesto`, `/blog`, `/atlante`, `/admin/site-content/:pageId`,
+  `/admin/users`, `/admin/orders` esistono in `App.tsx` e **non compaiono** in
+  `ALL_STATIC_APP_ROUTES`.
+- `/sentiero` è in `ALL_STATIC_APP_ROUTES` (200 ai bot) ma in `App.tsx` è un
+  redirect a `/`.
+- La sitemap runtime (`src/server/seoRoutes.ts`) e quella build-time
+  (`generate-sitemap.js` via `surfaces.sitemapPaths()`) escludono entrambe
+  `/guida-in-regalo` (private/noindex). Restano divergenze su `/itinerari` e
+  landing `/destinazione/<regione>` (`REGION_LANDINGS_PUBLISHED = false`).
+- `server.ts` è l'ultimo residuo di `liteMode`: legge ancora `VITE_LITE_MODE` e
+  con `true` risponde 404 su 14 prefissi (`LITE_DISABLED_PREFIXES`), mentre il
+  client — dopo 29a2fb0, che ha cancellato `src/config/liteMode.ts` — registra e
+  linka quelle stesse rotte incondizionatamente. Oggi il flag è `false`, quindi
+  la divergenza resta latente; la rimozione da `server.ts` è approvata e in
+  attesa di sblocco.
+
+Costo: ogni nuova pagina va aggiunta in quattro posti diversi, e nulla lo verifica.
+
+### 5.2 53 file sorgente morti sotto `src/`
+
+`npm run audit:deps` (knip) riporta **59 file inutilizzati**, di cui 53 dentro
+`src/` (gli altri 4 sono schemi Sanity in `docs/99_Archive/`, più
+`scripts/generate-assets.mjs` e `scripts/lhci-preview.mjs`).
+
+Sono quasi tutti raggiungibili solo da **quattro pagine non più instradate**:
+`src/pages/Home.tsx`, `src/pages/HomeLegacy.tsx`, `src/pages/AtlanteLab.tsx`,
+`src/pages/V2/HomeV2.tsx` — le tre rotte che le servivano (`/sentiero`, `/v2`,
+`/atlante-lab`) sono oggi `<Navigate to="/" replace />`.
+
+Il grosso dell'albero morto: `src/components/home/` (20 file: `HeroSection`,
+`Diary3DScroll`, `SplashIntro`, `CustomCursor`, `LatestArticles`,
+`NewsletterFeature`, …), `src/components/home/atlante/` (6 file),
+`src/experience/atlante/` (6 file), `src/experience/sentiero/` (7 componenti —
+resta vivo solo `sentieroData`, importato da `server.ts` per il prerender),
+più `src/components/CartDrawer.tsx`, `src/components/InstagramGrid.tsx`,
+`src/i18n/index.ts`, `src/lib/errorTracking.ts`, `src/config/aiCompanion.ts`,
+`src/config/atlantePreview.ts`, `src/config/discoveryPicks.ts`,
+`src/config/guideContent.ts`, `src/config/reels.ts`.
+
+Non pesa sul bundle (Rollup fa tree-shaking di ciò che nessuna rotta importa), ma
+pesa su typecheck, lint, ricerca e orientamento: chi apre `src/components/home/`
+trova 18 componenti che non finiscono in nessuna pagina.
+
+[VERIFY: prima di cancellare, decidere se `src/experience/sentiero/*` e
+`src/pages/Home.tsx` vanno tenuti come archivio recuperabile — il commento in
+`src/App.tsx:33-34` dice esplicitamente "conservate in repo/git per eventuale
+recupero". Git è già l'archivio; la decisione è del proprietario.]
+
+### 5.3 Naming che non descrive più il contenuto
+
+La home è `src/pages/AtlanteHome.tsx`, ma il suo unico contenuto è
+`<CinematicHomepage />` (`src/components/home/cinematic/CinematicHomepage.tsx`).
+"Atlante" era la home precedente al cutover; il nome del file è rimasto.

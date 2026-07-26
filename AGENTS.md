@@ -6,9 +6,11 @@ This repository is the website and marketing operating system for the travel cre
 
 - Code truth: repo root
 - Documentation and operational truth: `docs/`
-- Obsidian vault: `docs/`
+- Obsidian vault: `docs/` (`C:\Users\ccocu\Desktop\TRAVELLINIWITHUS\docs`)
+- Operational Obsidian notes: `docs/`
 - Design-system truth for agents and design tools: `DESIGN.md`
 - Agent stack truth: `docs/AI_AGENT_STACK.md`
+- AI operations dashboard: `docs/AI_OPERATIONS_DASHBOARD.md`
 - Marketing operating hub: `docs/MARKETING_OPERATIONS_HUB.md`
 - Project hub: `docs/10_Projects/PROJECT_TRAVELLINIWITHUS_SITE.md`
 - Editorial rules: `docs/EDITORIAL_GUIDE.md`
@@ -38,28 +40,16 @@ This repository is the website and marketing operating system for the travel cre
 ## Working rules for any AI agent
 
 - Do not treat Obsidian notes as optional side material. `docs/` is part of the working system.
-- Use `.agents/skills` as the **canonical** local skill source for cross-tool skills (currently: all five `travellini-*` skills). `.github/skills/`, `.cursor/skills/`, `.gemini/skills/`, and the `travellini-*` copies in `.claude/skills/` are generated mirrors — never edit them directly. After editing `.agents/skills/**`, always run `npm run sync:agents` (and `npm run audit:agents` in CI validates the sync).
-- `.claude/skills/` also hosts **Claude-only skills** that do not live in `.agents/skills/` by design (e.g. `bug-triage`, `small-fix`, `quick-review`, `deep-refactor`, `explain-module`, `audit-ui`, `audit-browser`, `smoke-test`, `commit`, `deploy`, `predeploy`, `firebase-check`, `stripe-flow`, `new-page`, `new-article`, `seo-check`, `route`). These are runtime workflow helpers specific to Claude Code; other AI tools (Cursor/Gemini/Copilot) do not consume them. They can be edited directly in `.claude/skills/`. `audit:agents` ignores them by design: it only validates the mirror of the canonical `travellini-*` skills.
+- Use `.agents/skills` as the canonical local skill source. Run `npm run sync:agents` after editing skills.
 - Use `DESIGN.md` for UI direction, Stitch/Figma prompts and design-system interpretation.
 - Do not import external skill behavior directly into the repo without adapting it locally and documenting the source in `docs/AI_AGENT_STACK.md`.
+- New AI/dev tooling is allowed in scouting. Follow `docs/AI_AGENT_STACK.md` and `docs/AI_TOOLING_RADAR.md`: research freely, test only in lab after confirmation, adopt only with a tooling evaluation card.
+- Use `docs/AI_OPERATIONS_DASHBOARD.md` to choose SAFE / BUILD / OWNER ONLY before AI/dev workflow changes.
+- Improve the AI operating system over time: when a task reveals a reusable lesson, tool candidate, guardrail, skill, workflow or simplification, capture it in the relevant AI operations note instead of leaving it only in chat.
 - When changing important UI, flows, positioning or operations, update the relevant note in `docs/`.
 - If a change affects homepage, navbar, collaborations, content architecture or release readiness, update or create a project note.
 - If a change introduces or resolves a bug, create or update a bug note.
 - If a new campaign, partner lead or content plan appears, use the marketing templates in `docs/90_Templates/`.
-
-## Cross-tool runtime alignment
-
-These rules are the portable equivalent of the Claude Code runtime hooks. Every AI assistant should follow them even if the local tool does not enforce them automatically.
-
-- Before any non-trivial tool call, do a lightweight routing check: search/orientation first, minimal edit path second, heavy multi-file work only when the task truly requires it.
-- Prefer read-only exploration for "where is X", "how does Y work", grep, inventory, and unknown-module orientation.
-- Prefer the smallest direct implementation path for routine single-file fixes and contained UI/content edits.
-- Treat multi-file refactors, cross-layer debugging, and architecture work as heavier operations that require explicit justification.
-- Explicit owner override beats the routing heuristic. If the owner says "do it directly", proceed directly.
-- Do not run destructive commands, production deploy commands, or irreversible clean/reset flows without explicit owner confirmation.
-- Treat `server.ts`, `firestore.rules`, and `src/config/admin.ts` as high-risk in every tool, not only in Claude Code.
-- Local runtime config files such as `.claude/settings.local.json` are not shared policy. Shared policy must live in `AGENTS.md`, `CLAUDE.md`, `.agents/skills/`, or `docs/AI_AGENT_STACK.md`.
-- `AGENTS.md` is the shared system prompt read natively by OpenAI Codex CLI. When Claude Code runs, the Codex MCP server declared in `.mcp.json` is also available: Claude can delegate isolated second-opinion tasks to Codex in-session via the `codex()` tool (see `CLAUDE.md` → "Claude ↔ Codex delegation"). Default remains Claude; Codex is the independent reviewer.
 
 ## Default operational notes
 
@@ -89,6 +79,7 @@ npm run audit:ui
 npm run audit:firebase
 npm run audit:stripe
 npm run audit:agents
+npm run audit:obsidian
 npm run predeploy
 ```
 

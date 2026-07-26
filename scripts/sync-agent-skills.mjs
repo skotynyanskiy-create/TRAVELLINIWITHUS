@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { CANONICAL_SKILLS } from './lib/canonical-skills.mjs';
 
 const rootDir = process.cwd();
 const sourceDir = path.join(rootDir, '.agents', 'skills');
@@ -22,7 +23,16 @@ function getSkillDirs(baseDir) {
     .filter((skillDir) => fs.existsSync(path.join(skillDir, 'SKILL.md')));
 }
 
-const skillDirs = getSkillDirs(sourceDir);
+const allSkillDirs = getSkillDirs(sourceDir);
+const skillDirs = allSkillDirs.filter((dir) => CANONICAL_SKILLS.has(path.basename(dir)));
+const skipped = allSkillDirs.filter((dir) => !CANONICAL_SKILLS.has(path.basename(dir)));
+
+for (const dir of skipped) {
+  console.warn(
+    `SKIP ${path.relative(rootDir, dir)} — not in the canonical whitelist. ` +
+      `If this is a new Travellini skill, add it to CANONICAL_SKILLS in scripts/sync-agent-skills.mjs.`
+  );
+}
 
 if (skillDirs.length === 0) {
   throw new Error('No canonical skills found in .agents/skills.');
@@ -40,4 +50,7 @@ for (const targetDir of targetDirs) {
   }
 }
 
-console.log(`PASS synced ${skillDirs.length} skills to ${targetDirs.length} agent directories.`);
+console.log(
+  `PASS synced ${skillDirs.length} skills to ${targetDirs.length} agent directories` +
+    (skipped.length ? ` (${skipped.length} non-canonical skipped).` : '.')
+);

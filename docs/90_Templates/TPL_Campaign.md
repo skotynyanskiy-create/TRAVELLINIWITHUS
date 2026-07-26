@@ -1,7 +1,7 @@
 ---
 type: campaign
 area: marketing
-status: open
+status: planned
 priority: p1
 owner:
 channel:
@@ -15,7 +15,7 @@ tags:
   - marketing
 ---
 
-# CAMPAIGN_<topic>
+# CAMPAIGN\_<topic>
 
 ## Objective
 

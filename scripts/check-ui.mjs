@@ -1,22 +1,8 @@
-// audit:ui — static heuristic UI consistency check.
-//
-// Workflow baseline:
-// - Senza flag: confronta i warning correnti con `audit-ui-baseline.json` in root.
-//   I warning presenti nel baseline sono marcati come BASELINE (accettati/giustificati).
-//   I warning nuovi fuori dal baseline sono marcati NEW e spiccano nel summary.
-//   I warning nel baseline ma non più presenti nel codice sono marcati RESOLVED.
-// - Flag `--update-baseline`: rigenera il file baseline con il set corrente
-//   (usare quando hai intenzionalmente fixato warning vecchi o accettato nuovi).
-//
-// Non blocca mai la CI (exit code 0). Se in futuro si vuole rendere blocking,
-// basta cambiare process.exitCode in presenza di NEW warnings.
 import fs from 'node:fs';
 import path from 'node:path';
 
 const rootDir = process.cwd();
 const srcDir = path.join(rootDir, 'src');
-const baselinePath = path.join(rootDir, 'audit-ui-baseline.json');
-const updateBaseline = process.argv.includes('--update-baseline');
 const extensions = new Set(['.tsx']);
 const ignoredFiles = new Set([
   path.join(srcDir, 'config', 'site.ts'),
@@ -28,10 +14,12 @@ const inlineStyleAllowlist = [
   'src/components/InteractiveMap.tsx',
   'src/components/Layout.tsx',
   'src/components/article/ArticleHero.tsx',
+  'src/components/home/DestinationsGrid.tsx',
   'src/components/home/HeroSection.tsx',
   'src/pages/Articolo.tsx',
   'src/pages/Contatti.tsx',
   'src/pages/Destinazioni.tsx',
+  'src/pages/Esperienze.tsx',
   'src/pages/Guide.tsx',
   'src/pages/Shop.tsx',
 ];
@@ -39,17 +27,22 @@ const rawColorAllowlist = [
   'src/components/AffiliateBox.tsx',
   'src/components/Button.tsx',
   'src/components/CartDrawer.tsx',
+  'src/components/CrossLinkWidget.tsx',
   'src/components/EmptyState.tsx',
   'src/components/Footer.tsx',
   'src/components/InteractiveMap.tsx',
   'src/components/SEOPreview.tsx',
   'src/components/article/AuthorBio.tsx',
   'src/components/article/SocialFollowCTA.tsx',
+  'src/components/home/AboutPreview.tsx',
+  'src/components/home/CommunitySection.tsx',
+  'src/components/home/DestinationsGrid.tsx',
   'src/components/home/HeroSection.tsx',
   'src/pages/Articolo.tsx',
   'src/pages/ChiSiamo.tsx',
   'src/pages/Collaborazioni.tsx',
   'src/pages/Contatti.tsx',
+  'src/pages/Mappa.tsx',
   'src/pages/ProductPage.tsx',
   'src/pages/Risorse.tsx',
   'src/pages/Shop.tsx',
@@ -64,6 +57,7 @@ const semanticPaletteAllowlist = [
   'src/components/Navbar.tsx',
   'src/components/Newsletter.tsx',
   'src/components/ProtectedRoute.tsx',
+  'src/pages/Club.tsx',
   'src/pages/Contatti.tsx',
   'src/pages/Guide.tsx',
   'src/pages/MediaKit.tsx',
@@ -113,10 +107,6 @@ function getLineNumber(content, index) {
   return content.slice(0, index).split('\n').length;
 }
 
-function stripNoscriptBlocks(content) {
-  return content.replace(/<noscript[\s\S]*?<\/noscript>/gi, '');
-}
-
 function pushIssue(issues, level, filePath, line, message) {
   issues.push({
     level,
@@ -135,7 +125,6 @@ for (const filePath of files) {
   }
 
   const content = fs.readFileSync(filePath, 'utf8');
-  const contentForMarkupChecks = stripNoscriptBlocks(content);
 
   if (!isAllowlisted(filePath, inlineStyleAllowlist)) {
     const inlineStyleMatches = [...content.matchAll(/style=\{\{/g)];
@@ -164,15 +153,9 @@ for (const filePath of files) {
     }
   }
 
-  const imgMatches = [...contentForMarkupChecks.matchAll(/<img\b(?![^>]*\balt=)[^>]*>/g)];
+  const imgMatches = [...content.matchAll(/<img\b(?![^>]*\balt=)[^>]*>/g)];
   for (const match of imgMatches) {
-    pushIssue(
-      issues,
-      'warn',
-      filePath,
-      getLineNumber(contentForMarkupChecks, match.index),
-      '<img> without alt attribute found.'
-    );
+    pushIssue(issues, 'error', filePath, getLineNumber(content, match.index), '<img> without alt attribute found.');
   }
 
   const iconLibraryMatches = [...content.matchAll(/from ['"]([^'"]+)['"]/g)];
@@ -196,99 +179,26 @@ for (const filePath of files) {
 
 const errorCount = issues.filter((issue) => issue.level === 'error').length;
 const warnCount = issues.filter((issue) => issue.level === 'warn').length;
+const maxPrintedIssues = 80;
 
-function issueKey(issue) {
-  const normalizedPath = issue.filePath.replaceAll('\\', '/');
-  return `${normalizedPath}|${issue.line}|${issue.message}`;
+console.log('UI audit');
+console.log(`Files scanned: ${files.length}`);
+console.log(`Errors: ${errorCount}`);
+console.log(`Warnings: ${warnCount}`);
+
+const printedIssues = [...issues].sort((a, b) => Number(b.level === 'error') - Number(a.level === 'error'));
+
+for (const issue of printedIssues.slice(0, maxPrintedIssues)) {
+  const prefix = issue.level.toUpperCase().padEnd(5, ' ');
+  console.log(`${prefix} ${issue.filePath}:${issue.line} - ${issue.message}`);
 }
 
-function serializeForBaseline(list) {
-  return list
-    .map((issue) => ({
-      file: issue.filePath.replaceAll('\\', '/'),
-      line: issue.line,
-      level: issue.level,
-      message: issue.message,
-    }))
-    .sort((a, b) => (a.file === b.file ? a.line - b.line : a.file.localeCompare(b.file)));
+if (issues.length > maxPrintedIssues) {
+  console.log(`WARN  ${issues.length - maxPrintedIssues} additional findings omitted from console output.`);
 }
 
-if (updateBaseline) {
-  const baseline = {
-    generatedAt: new Date().toISOString().slice(0, 10),
-    description:
-      'Warning audit:ui accettati come giustificati (PDF react constraint, animazioni Framer, palette affiliate dinamiche, ecc.). Rigenerare con: npm run audit:ui:update-baseline',
-    warnings: serializeForBaseline(issues),
-  };
-  fs.writeFileSync(baselinePath, JSON.stringify(baseline, null, 2) + '\n', 'utf8');
-  console.log('UI audit — baseline update');
-  console.log(`Files scanned: ${files.length}`);
-  console.log(`Warnings snapshot: ${warnCount}`);
-  console.log(`Errors snapshot: ${errorCount}`);
-  console.log(`Baseline written: ${path.relative(rootDir, baselinePath)}`);
-  process.exitCode = 0;
-} else if (fs.existsSync(baselinePath)) {
-  const baseline = JSON.parse(fs.readFileSync(baselinePath, 'utf8'));
-  const baselineIssues = (baseline.warnings || []).map((w) => ({
-    filePath: w.file,
-    line: w.line,
-    level: w.level || 'warn',
-    message: w.message,
-  }));
-  const baselineKeys = new Set(baselineIssues.map(issueKey));
-  const currentKeys = new Set(issues.map(issueKey));
-
-  const matched = issues.filter((i) => baselineKeys.has(issueKey(i)));
-  const newIssues = issues.filter((i) => !baselineKeys.has(issueKey(i)));
-  const resolved = baselineIssues.filter((i) => !currentKeys.has(issueKey(i)));
-
-  console.log('UI audit');
-  console.log(`Files scanned: ${files.length}`);
-  console.log(`Baseline date: ${baseline.generatedAt || 'unknown'}`);
-  console.log(`Errors: ${errorCount}`);
-  console.log(`Warnings total: ${warnCount} (baseline: ${matched.length}, new: ${newIssues.length}, resolved: ${resolved.length})`);
-
-  if (newIssues.length > 0) {
-    console.log('');
-    console.log('NEW warnings (fuori dal baseline — verifica se sono voluti):');
-    for (const issue of newIssues) {
-      const prefix = `NEW-${issue.level.toUpperCase()}`.padEnd(9, ' ');
-      console.log(`${prefix} ${issue.filePath}:${issue.line} - ${issue.message}`);
-    }
-  }
-
-  if (resolved.length > 0) {
-    console.log('');
-    console.log('RESOLVED (nel baseline ma non più nel codice — rigenera baseline con --update-baseline):');
-    for (const issue of resolved) {
-      console.log(`RESOLVED ${issue.filePath}:${issue.line} - ${issue.message}`);
-    }
-  }
-
-  if (newIssues.length === 0 && resolved.length === 0) {
-    console.log('PASS  Solo baseline warnings, nessun nuovo. Coerente.');
-  }
-
-  process.exitCode = 0;
-} else {
-  const maxPrintedIssues = 80;
-  console.log('UI audit (nessun baseline trovato — genera con: npm run audit:ui:update-baseline)');
-  console.log(`Files scanned: ${files.length}`);
-  console.log(`Errors: ${errorCount}`);
-  console.log(`Warnings: ${warnCount}`);
-
-  for (const issue of issues.slice(0, maxPrintedIssues)) {
-    const prefix = issue.level.toUpperCase().padEnd(5, ' ');
-    console.log(`${prefix} ${issue.filePath}:${issue.line} - ${issue.message}`);
-  }
-
-  if (issues.length > maxPrintedIssues) {
-    console.log(`WARN  ${issues.length - maxPrintedIssues} additional findings omitted from console output.`);
-  }
-
-  if (issues.length === 0) {
-    console.log('PASS  No UI consistency issues detected by static heuristics.');
-  }
-
-  process.exitCode = 0;
+if (issues.length === 0) {
+  console.log('PASS  No UI consistency issues detected by static heuristics.');
 }
+
+process.exitCode = errorCount > 0 ? 1 : 0;

@@ -1,5 +1,5 @@
 ---
-type: guide
+type: workflow
 area: workspace
 status: active
 tags:
@@ -17,37 +17,13 @@ docs/
 ├── 10_Projects/     note di lavoro, feature, sprint
 ├── 11_Campaigns/    campagne marketing
 ├── 12_Partnerships/ collaborazioni brand e lead commerciali
-├── 13_Content/      pillar strategici, content calendar
+├── 13_Content/      pillar strategici, articoli, content calendar, lead magnet
 ├── 14_Bugs/         bug e issue tracking
 ├── 20_Decisions/    decision log (ADR)
 ├── 30_Meetings/     meeting notes e handoff
 ├── 40_Daily/        daily notes
 ├── 50_Scratch/      inbox e note transitorie
-├── 60_Editorial/    archivio contenuti pubblicati e in corso
-│   ├── Articoli/
-│   ├── Guide/
-│   ├── Itinerari/
-│   └── Destinazioni/
-├── 70_Brand/        knowledge base brand
-│   ├── Voce_e_Tono/
-│   ├── Personas/
-│   └── Visual/
-├── 80_SEO/          sistema SEO per pagine
-│   ├── Keywords/
-│   └── Pagine/
-├── 85_Shop/         prodotti e affiliati
-│   ├── Prodotti/
-│   └── Affiliati/
-├── 86_Social/       content planning social
-│   ├── Instagram/
-│   └── TikTok/
-├── 87_References/   web clips e reference visive
-│   ├── Competitor/
-│   ├── Design/
-│   ├── Luoghi/
-│   ├── Trend/
-│   ├── Articoli/
-│   └── Idee/
+├── 70_Assets/       asset, immagini, materiali di supporto
 ├── 90_Canvas/       mappe visive
 ├── 90_Templates/    tutti i template
 └── 95_Bases/        database Obsidian
@@ -58,12 +34,12 @@ docs/
 ## Workflow editoriale — Nuovo articolo
 
 1. **Idea** → cattura in [[50_Scratch/INBOX]]: titolo + angolo editoriale + keyword
-2. **Brief** → crea `60_Editorial/Articoli/ART_<slug>.md` da [[90_Templates/TPL_Article]]
+2. **Brief** → crea `13_Content/ART_<slug>.md` da [[90_Templates/TPL_Article]]
    - imposta `pillar`, `keyword_primaria`, `route`, `author`
 3. **Sviluppo** → scrivi draft nella nota
    - collega `[[DEST_]]` se c'è destinazione
    - collega `[[PLACE_]]` per luoghi specifici
-4. **SEO** → crea `80_SEO/Pagine/SEO_<slug>.md` da [[90_Templates/TPL_SEO_Page]]
+4. **SEO** → crea `13_Content/SEO_<slug>.md` da [[90_Templates/TPL_SEO_Page]]
 5. **Review** → `status: review`, aggiorna link interni e CTA
 6. **Pubblicazione** → imposta `status: published`, `published_at`, `route` finale
 7. **Post-publish** → aggiungi link dall'articolo in note destinazione/guide correlate
@@ -72,17 +48,17 @@ docs/
 
 ## Workflow editoriale — Nuova destinazione
 
-1. Crea `60_Editorial/Destinazioni/DEST_<nome>.md` da [[90_Templates/TPL_Destination_Guide]]
-2. Crea luoghi collegati in `87_References/Luoghi/` da [[90_Templates/TPL_Place]]
-3. Crea itinerario in `60_Editorial/Itinerari/ITIN_<dest>_<durata>.md` da [[90_Templates/TPL_Itinerary]]
-4. Crea SEO page in `80_SEO/Pagine/SEO_<slug>.md`
+1. Crea `13_Content/DEST_<nome>.md` da [[90_Templates/TPL_Destination_Guide]]
+2. Crea luoghi collegati in `13_Content/PLACE_<nome>.md` da [[90_Templates/TPL_Place]]
+3. Crea itinerario in `13_Content/ITIN_<dest>_<durata>.md` da [[90_Templates/TPL_Itinerary]]
+4. Crea SEO page in `13_Content/SEO_<slug>.md`
 5. Collega tutti gli articoli correlati con wikilink bidirezionali
 
 ---
 
 ## Workflow editoriale — Prodotto shop
 
-1. Crea `85_Shop/Prodotti/PROD_<nome>.md` da [[90_Templates/TPL_Product]]
+1. Crea `13_Content/PROD_<nome>.md` da [[90_Templates/TPL_Product]]
 2. Collega contenuti correlati: guide, articoli, destinazioni
 3. Scrivi copy vendita nella nota
 4. Collega a campagna lancio se pianificata
@@ -102,7 +78,7 @@ docs/
 
 ## Workflow SEO — Audit pagina
 
-1. Crea `80_SEO/Pagine/SEO_<route>.md` da [[90_Templates/TPL_SEO_Page]]
+1. Crea `13_Content/SEO_<route>.md` da [[90_Templates/TPL_SEO_Page]]
 2. Compila analisi attuale (title, h1, meta, score)
 3. Identifica ottimizzazioni e link interni mancanti
 4. Imposta `priority` e `status: in-corso`
@@ -113,7 +89,7 @@ docs/
 ## Workflow web clipper
 
 1. Salva URL in Omnivore/Readwise con tag di categoria
-2. Sync in Obsidian → atterrano in `50_Scratch/INBOX` o direttamente in `87_References/`
+2. Sync in Obsidian → atterrano in `50_Scratch/INBOX` o direttamente in `13_Content/` / `70_Assets/` secondo il tipo
 3. Una volta a settimana: processa inbox, sposta in sottocartella giusta
 4. Aggiungi `action` e collega a note rilevanti
 5. **Regola**: clip senza `action` entro 7 giorni → cancella o archivia
@@ -151,7 +127,7 @@ docs/
 
 ## Routine settimanale (20 min)
 
-- Processa tutto l'inbox di `87_References/`
+- Processa tutto l'inbox di `50_Scratch/INBOX`
 - Aggiorna [[MARKETING_OPERATIONS_HUB]]: campagne, partner, contenuti
 - Pianifica i contenuti social della settimana successiva
 - Controlla se ci sono SEO page con `priority: p1` da ottimizzare
@@ -163,7 +139,7 @@ docs/
 - Archivia note `status: done/archived` vecchie di 3+ mesi
 - Aggiorna i Canvas rilevanti (`90_Canvas/`)
 - Review pipeline collaborazioni e follow-up
-- Verifica keyword in `80_SEO/Keywords/`
+- Verifica keyword nelle note `SEO_*` e in [[95_Bases/SEO_Pages.base]]
 - Monthly report da [[90_Templates/TPL_Monthly_Marketing_Report]]
 
 ---
@@ -179,7 +155,28 @@ docs/
 
 ## Config condivisa
 
-- `docs/.obsidian/` contiene solo config team-safe
-- `workspace*.json`, `hotkeys.json`, cache → restano locali (gitignore)
-- I plugin del setup sono core features: vault portabile senza plugin obbligatori
-- Plugin community consigliati: Templater, Omnivore/Readwise (opzionale: Dataview)
+- `docs/.obsidian/` versiona solo una selezione minima e portabile di config
+  (`app.json`, `appearance.json`, `core-plugins.json`, `daily-notes.json`,
+  `graph.json`, `snippets/travellini-vault.css`, `templates.json` — vedi
+  [[DECISION_0001_OBSIDIAN_VAULT_STRATEGY]] e
+  [[DECISION_0004_OBSIDIAN_GRAPHIFY_SPLIT_VAULT_STRATEGY]]). Stato macchina
+  (`workspace.json`, `community-plugins.json`, `plugins/`) resta locale e
+  gitignorato.
+- `.obsidian/` nella root resta solo come rollback/configurazione legacy; non
+  aprire la root come vault operativo.
+- La configurazione Local REST API è riutilizzata localmente senza duplicare o
+  versionare credenziali.
+- `docs/` contiene le note operative portabili e versionate; Graphify indicizza
+  separatamente il codice dalla root.
+- Il vault usa **Dataview, Templater, Omnisearch, Linter** oltre alle
+  funzionalità core (Bases, Canvas, Graph, Daily notes). Kanban ed Excalidraw
+  sono stati **rimossi** (2026-07-23): zero board/file; pipeline = Bases,
+  diagrammi = Canvas. `npm run setup:obsidian-plugins` reinstalla lo stack
+  minimo da GitHub latest (`docs/.obsidian/plugins/` è gitignored).
+- `Local REST API` è l’unico plugin community richiesto per l’automazione MCP
+  (installazione manuale: ha secret locale).
+  Dopo una rotazione della chiave, aggiorna `.mcp.json` e
+  `~/.codex/config.toml`, quindi riavvia i client MCP.
+- `npm run generate:obsidian-index` rigenera [[OBSIDIAN_INDEX]].
+- `npm run audit:obsidian` verifica frontmatter, tassonomia, Bases, dashboard e
+  configurazione locale senza leggere credenziali.

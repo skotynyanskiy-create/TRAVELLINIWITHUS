@@ -1,12 +1,20 @@
 import { motion } from 'motion/react';
 import { Compass, MapPin, Search, RotateCcw } from 'lucide-react';
+import { Link } from '@/src/components/TransitionLink';
 
 interface EmptyStateProps {
   variant: 'no-content' | 'no-results';
   onReset?: () => void;
+  secondaryHref?: string;
+  secondaryLabel?: string;
 }
 
-export default function EmptyState({ variant, onReset }: EmptyStateProps) {
+export default function EmptyState({
+  variant,
+  onReset,
+  secondaryHref,
+  secondaryLabel,
+}: EmptyStateProps) {
   if (variant === 'no-content') {
     return (
       <motion.div
@@ -57,15 +65,25 @@ export default function EmptyState({ variant, onReset }: EmptyStateProps) {
       <p className="mb-8 font-normal leading-relaxed text-black/65">
         Prova a modificare i filtri o a resettarli per vedere tutti i contenuti disponibili.
       </p>
-      {onReset && (
-        <button
-          onClick={onReset}
-          className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-all hover:bg-[var(--color-ink)]/85"
-        >
-          <RotateCcw size={14} />
-          Resetta filtri
-        </button>
-      )}
+      <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+        {onReset && (
+          <button
+            onClick={onReset}
+            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-all hover:bg-[var(--color-ink)]/85"
+          >
+            <RotateCcw size={14} />
+            Resetta filtri
+          </button>
+        )}
+        {secondaryHref && secondaryLabel && (
+          <Link
+            to={secondaryHref}
+            className="inline-flex min-h-11 items-center rounded-full border border-black/10 px-6 py-3 text-xs font-bold uppercase tracking-widest text-black/62 transition-colors hover:border-black/25 hover:text-black"
+          >
+            {secondaryLabel}
+          </Link>
+        )}
+      </div>
     </motion.div>
   );
 }

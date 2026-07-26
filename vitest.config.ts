@@ -1,18 +1,56 @@
 import { configDefaults, defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
+import path from 'path';
+import { fileURLToPath } from 'node:url';
+import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
+import { playwright } from '@vitest/browser-playwright';
+const dirname =
+  typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url));
 
+// More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, '.'),
+    },
+  },
   test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: './src/test/setup.ts',
-    include: ['src/**/*.{test,spec}.{ts,tsx}'],
-    exclude: [...configDefaults.exclude, 'e2e/**'],
-    // Workaround Vitest 4.1.0 su Windows: file-level parallelism causa
-    // race condition sui worker globals ("Cannot read properties of
-    // undefined (reading 'config')"). Test sequenziali ~35s vs ~20s
-    // teorici — trade-off accettabile per stabilità.
-    fileParallelism: false,
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: 'unit',
+          globals: true,
+          environment: 'jsdom',
+          setupFiles: './src/test/setup.ts',
+          include: ['src/**/*.{test,spec}.{ts,tsx}'],
+          exclude: [...configDefaults.exclude, 'e2e/**'],
+        },
+      },
+      {
+        extends: true,
+        plugins: [
+          // The plugin will run tests for the stories defined in your Storybook config
+          // See options at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon#storybooktest
+          storybookTest({
+            configDir: path.join(dirname, '.storybook'),
+          }),
+        ],
+        test: {
+          name: 'storybook',
+          browser: {
+            enabled: true,
+            headless: true,
+            provider: playwright({}),
+            instances: [
+              {
+                browser: 'chromium',
+              },
+            ],
+          },
+        },
+      },
+    ],
   },
 });

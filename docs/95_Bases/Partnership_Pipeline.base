@@ -1,12 +1,18 @@
 filters:
   and:
     - 'file.ext == "md"'
-    - 'type == "partner"'
+    - or:
+      - 'type == "partner"'
+      - 'type == "collaboration"'
 properties:
   file.name:
     displayName: Partner
+  type:
+    displayName: Type
   company:
     displayName: Company
+  status:
+    displayName: Status
   stage:
     displayName: Stage
   offer_type:
@@ -20,7 +26,13 @@ properties:
 views:
   - type: table
     name: Partner Pipeline
+    filters:
+      and:
+        - 'status != "done"'
+        - 'status != "conclusa"'
+        - 'status != "rifiutata"'
     order:
+      - status
       - stage
       - priority
       - file.mtime

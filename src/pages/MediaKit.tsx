@@ -1,49 +1,33 @@
 import { useState, type FormEvent } from 'react';
-import { motion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import {
   ArrowRight,
-  BarChart3,
-  BriefcaseBusiness,
   CheckCircle,
-  Clapperboard,
   Download,
   Globe,
   Loader2,
   Mail,
   ShieldCheck,
   Target,
+  Wallet,
+  CalendarRange,
+  ChevronLeft,
+  ChevronRight,
+  ExternalLink,
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import Breadcrumbs from '../components/Breadcrumbs';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import Section from '../components/Section';
-import { CONTACTS, SITE_URL } from '../config/site';
-import { useContactForm, isValidEmail } from '../hooks/useContactForm';
-
-const MEDIA_KIT_PREVIEW = [
-  {
-    step: '01',
-    title: 'Profilo del progetto',
-    description:
-      'Chi sono Rodrigo e Betta, come nasce Travelliniwithus e quale tono rende il progetto riconoscibile.',
-    icon: BriefcaseBusiness,
-  },
-  {
-    step: '02',
-    title: 'Audience e segnali utili',
-    description:
-      'Numeri, reach, contesto editoriale e lettura corretta del pubblico, senza cosmetica da brochure.',
-    icon: BarChart3,
-  },
-  {
-    step: '03',
-    title: 'Format e contesto operativo',
-    description:
-      'Come lavoriamo, che tipo di attivazioni hanno senso e quali collaborazioni non prendiamo in considerazione.',
-    icon: Clapperboard,
-  },
-];
+import StickyMobileCTA from '../components/StickyMobileCTA';
+import FormField from '../components/FormField';
+import Input from '../components/Input';
+import Select from '../components/Select';
+import Textarea from '../components/Textarea';
+import { BRAND_STATS, BRAND_STATS_SOURCE, CONTACTS, PUBLIC_PROOF_SIGNALS } from '../config/site';
+import { appendLeadFallback } from '../lib/leadFallback';
+import { trackEvent } from '../services/analytics';
 
 const QUALIFYING_POINTS = [
   'Hotel, hospitality e soggiorni con una forte identità.',
@@ -66,6 +50,27 @@ const NEXT_STEPS = [
   },
 ];
 
+const PACKAGE_PREVIEWS = [
+  {
+    title: 'Stay editoriale',
+    eyebrow: 'Hotel e soggiorni',
+    output: '1 contenuto long-form + copertura social coerente',
+    text: 'Per strutture con identità, atmosfera e un motivo reale per essere scelte.',
+  },
+  {
+    title: 'Destinazione da costruire',
+    eyebrow: 'Territori e DMO',
+    output: 'Itinerario narrativo + contenuti cross-canale',
+    text: 'Per posizionare una zona con più profondità di una singola pubblicazione.',
+  },
+  {
+    title: 'Content kit per brand',
+    eyebrow: 'Prodotti e servizi',
+    output: 'UGC/editorial asset + racconto integrato',
+    text: 'Per prodotti davvero usati in viaggio e raccontabili senza forzature.',
+  },
+];
+
 const projectFocusOptions = [
   'Hotel / hospitality',
   'Destinazione / ente turismo',
@@ -75,21 +80,38 @@ const projectFocusOptions = [
   'Altro',
 ];
 
+const budgetOptions = [
+  '< €2.000',
+  '€2.000 - €5.000',
+  '€5.000 - €10.000',
+  '> €10.000',
+  'Preferisco discutere',
+];
+
+const campaignPeriodOptions = [
+  'Prossimi 30 giorni',
+  'Nei prossimi 3 mesi',
+  'Nei prossimi 6 mesi',
+  'Oltre 6 mesi / Lungo termine',
+  'Flessibile / Da concordare',
+];
+
 export default function MediaKit() {
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
   const [website, setWebsite] = useState('');
   const [projectFocus, setProjectFocus] = useState('');
+  const [budget, setBudget] = useState('');
+  const [campaignPeriod, setCampaignPeriod] = useState('');
   const [brief, setBrief] = useState('');
-  const {
-    isSubmitting,
-    submitError,
-    isSubmitted: isSuccess,
-    submit,
-    setSubmitError,
-  } = useContactForm({ kind: 'media-kit' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [activeSlide, setActiveSlide] = useState(0);
 
   const breadcrumbItems = [{ label: 'Media Kit' }];
+
+  const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -99,9 +121,25 @@ export default function MediaKit() {
     const normalizedWebsite = website.trim();
     const normalizedBrief = brief.trim();
 
-    if (!normalizedEmail || !normalizedCompany || !projectFocus || !normalizedBrief) {
+    trackEvent('media_kit_request_attempt', {
+      route: '/media-kit',
+      source: 'media_kit_form',
+      cta_id: 'media_kit_submit',
+      topic: projectFocus || 'unset',
+      budget_range: budget || 'unset',
+      campaign_period: campaignPeriod || 'unset',
+    });
+
+    if (
+      !normalizedEmail ||
+      !normalizedCompany ||
+      !projectFocus ||
+      !budget ||
+      !campaignPeriod ||
+      !normalizedBrief
+    ) {
       setSubmitError(
-        'Inserisci azienda, email lavorativa, focus del progetto e un contesto breve ma utile.'
+        'Inserisci azienda, email lavorativa, focus del progetto, budget indicativo, periodo stimato e un contesto breve ma utile.'
       );
       return;
     }
@@ -111,21 +149,234 @@ export default function MediaKit() {
       return;
     }
 
-    await submit({
-      email: normalizedEmail,
-      company: normalizedCompany,
-      website: normalizedWebsite || undefined,
-      topic: projectFocus,
-      message: normalizedBrief || undefined,
-    });
+    setSubmitError('');
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('/api/media-kit-lead', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: normalizedEmail,
+          company: normalizedCompany,
+          website: normalizedWebsite || undefined,
+          topic: projectFocus,
+          budget,
+          period: campaignPeriod,
+          message: normalizedBrief || undefined,
+        }),
+      });
+
+      if (!response.ok) {
+        const payload = (await response.json().catch(() => null)) as { error?: string } | null;
+        throw new Error(payload?.error || 'Invio non riuscito');
+      }
+
+      const submitParams = {
+        route: '/media-kit',
+        source: 'media_kit_form',
+        cta_id: 'media_kit_submit',
+        content_id: 'media_kit_partner_lead',
+        topic: projectFocus,
+        budget_range: budget,
+        campaign_period: campaignPeriod,
+      };
+      trackEvent('media_kit_request_success', submitParams);
+      trackEvent('media_kit_submit', submitParams);
+      setIsSuccess(true);
+    } catch (error) {
+      console.error('Error saving media kit lead:', error);
+      const saved = appendLeadFallback('twu_media_kit_leads', {
+        email: normalizedEmail,
+        company: normalizedCompany,
+        website: normalizedWebsite,
+        topic: projectFocus,
+        budget,
+        period: campaignPeriod,
+        message: normalizedBrief,
+        date: new Date().toISOString(),
+      });
+      if (saved) {
+        const submitParams = {
+          route: '/media-kit',
+          source: 'media_kit_form',
+          cta_id: 'media_kit_submit',
+          content_id: 'media_kit_partner_lead',
+          topic: projectFocus,
+          budget_range: budget,
+          campaign_period: campaignPeriod,
+          fallback: 'localStorage',
+        };
+        trackEvent('media_kit_request_success', submitParams);
+        trackEvent('media_kit_submit', submitParams);
+        setIsSuccess(true);
+      } else {
+        setSubmitError(
+          `Non siamo riusciti a registrare la richiesta. Puoi scriverci direttamente a ${CONTACTS.email}.`
+        );
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  const pdfSlides = [
+    {
+      page: '01',
+      title: 'Profilo editoriale di Rodrigo & Betta',
+      description:
+        'Chi siamo, come scegliamo cosa raccontare e quali confini proteggono il rapporto con la community.',
+      content: (
+        <div className="flex h-full flex-col justify-between p-6 md:p-8 bg-[var(--color-sand)] text-[var(--color-ink)] rounded-xl border border-black/5 select-none">
+          <div className="flex justify-between items-start">
+            <span className="text-[10px] font-bold tracking-widest opacity-60">
+              TRAVELLINIWITHUS
+            </span>
+            <span className="font-mono text-xs px-2 py-0.5 bg-[var(--color-ink)] text-white rounded-full">
+              PAG 01
+            </span>
+          </div>
+          <div className="my-auto space-y-3">
+            <p className="font-serif italic text-2xl text-[var(--color-accent)] leading-none">
+              Rodrigo &amp; Betta
+            </p>
+            <h4 className="font-serif text-3xl leading-tight font-bold tracking-tight">
+              Raccontare con <span className="italic">criterio</span>.
+            </h4>
+            <p className="text-xs max-w-md leading-relaxed text-black/60">
+              Selezioniamo luoghi, soggiorni e strumenti che hanno un motivo reale per essere
+              raccontati. Il contenuto resta utile prima di essere promozionale.
+            </p>
+          </div>
+          <div className="flex justify-between items-center border-t border-black/10 pt-3 text-[10px] font-mono opacity-50">
+            <span>PROFILO BRAND</span>
+            <span>EDIZIONE 2026</span>
+          </div>
+        </div>
+      ),
+    },
+    {
+      page: '02',
+      title: 'Audience & segnali da verificare',
+      description:
+        'Canali principali, reach pubblica e segnali utili per capire il fit prima di parlare di proposta.',
+      content: (
+        <div className="flex h-full flex-col justify-between p-6 md:p-8 bg-[var(--color-ink-deep)] text-white rounded-xl border border-white/10 select-none">
+          <div className="flex justify-between items-start">
+            <span className="text-[10px] font-bold tracking-widest text-[var(--color-accent)]">
+              INSIGHTS & COMMUNITY
+            </span>
+            <span className="font-mono text-xs px-2 py-0.5 bg-white/15 text-white rounded-full">
+              PAG 02
+            </span>
+          </div>
+          <div className="my-auto grid grid-cols-2 gap-4 md:gap-6">
+            <div className="space-y-0.5">
+              <span className="text-[9px] font-semibold tracking-wider text-white/50 uppercase">
+                Instagram
+              </span>
+              <p className="text-2xl md:text-3xl font-serif font-bold text-[var(--color-accent)]">
+                {BRAND_STATS.instagramFollowers}
+              </p>
+              <p className="text-[10px] text-white/60">Community pubblica</p>
+            </div>
+            <div className="space-y-0.5">
+              <span className="text-[9px] font-semibold tracking-wider text-white/50 uppercase">
+                TikTok
+              </span>
+              <p className="text-2xl md:text-3xl font-serif font-bold text-[var(--color-accent)]">
+                {BRAND_STATS.tiktokFollowers}
+              </p>
+              <p className="text-[10px] text-white/60">Canale short-form</p>
+            </div>
+            <div className="space-y-0.5">
+              <span className="text-[9px] font-semibold tracking-wider text-white/50 uppercase">
+                Reach
+              </span>
+              <p className="text-lg md:text-xl font-serif font-bold">In call</p>
+              <p className="text-[10px] text-white/60">Dai dati nativi Meta</p>
+            </div>
+            <div className="space-y-0.5">
+              <span className="text-[9px] font-semibold tracking-wider text-white/50 uppercase">
+                Sito
+              </span>
+              <p className="text-lg md:text-xl font-serif font-bold">Owned media</p>
+              <p className="text-[10px] text-white/60">Archivio e lead capture</p>
+            </div>
+          </div>
+          <div className="flex justify-between items-center border-t border-white/10 pt-3 text-[10px] font-mono opacity-50">
+            <span>AUDIENCE SIGNALS</span>
+            <span>DATI NATIVI IN CALL</span>
+          </div>
+        </div>
+      ),
+    },
+    {
+      page: '03',
+      title: 'Format e perimetro',
+      description:
+        'Tre punti di partenza per capire output, fit e livello di lavoro prima della proposta su misura.',
+      content: (
+        <div className="flex h-full flex-col justify-between p-6 md:p-8 bg-white text-[var(--color-ink)] rounded-xl border border-black/5 select-none">
+          <div className="flex justify-between items-start">
+            <span className="text-[10px] font-bold tracking-widest opacity-60">
+              FORMAT DI PARTENZA
+            </span>
+            <span className="font-mono text-xs px-2 py-0.5 bg-[var(--color-sand)] text-[var(--color-ink)] rounded-full">
+              PAG 03
+            </span>
+          </div>
+          <div className="my-auto space-y-2 md:space-y-3">
+            <div className="flex items-start gap-2">
+              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[10px] font-bold text-[var(--color-accent)] mt-0.5">
+                1
+              </span>
+              <div>
+                <h5 className="font-serif font-bold text-xs">Stay editoriale</h5>
+                <p className="text-[10px] text-black/55">
+                  Soggiorni con identità, articolo/guida e copertura social coerente.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[10px] font-bold text-[var(--color-accent)] mt-0.5">
+                2
+              </span>
+              <div>
+                <h5 className="font-serif font-bold text-xs">Destinazione da costruire</h5>
+                <p className="text-[10px] text-black/55">
+                  Itinerario narrativo e contenuti distribuiti per DMO e territori.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[10px] font-bold text-[var(--color-accent)] mt-0.5">
+                3
+              </span>
+              <div>
+                <h5 className="font-serif font-bold text-xs">Content kit per brand</h5>
+                <p className="text-[10px] text-black/55">
+                  Asset editoriali e UGC quando il prodotto entra davvero nel viaggio.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-between items-center border-t border-black/10 pt-3 text-[10px] font-mono opacity-50">
+            <span>PERIMETRO DI PARTENZA</span>
+            <span>INTEGRITÀ EDITORIALE</span>
+          </div>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <PageLayout>
       <SEO
-        title="Media Kit"
+        title="Media kit Travelliniwithus: audience, format e condizioni"
         description="Richiedi il media kit Travelliniwithus per capire audience, format, tono editoriale e condizioni giuste per una collaborazione coerente."
-        canonical={`${SITE_URL}/media-kit`}
       />
 
       <Section className="pt-8">
@@ -133,67 +384,215 @@ export default function MediaKit() {
 
         <div className="mx-auto mt-8 max-w-5xl text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+            <div className="mb-4">
+              <Link
+                to="/collaborazioni"
+                className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-accent)]/30 bg-[var(--color-sand)] px-4 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-[var(--color-accent)] transition-all hover:bg-[var(--color-accent)] hover:text-white"
+              >
+                ← Hub Collaborazioni B2B (Case Study &amp; Calcolatore ROI)
+              </Link>
+            </div>
             <div className="mb-6 flex items-center justify-center gap-4">
               <div className="h-px w-12 bg-[var(--color-accent)]" />
               <span className="font-script text-xl text-[var(--color-accent)]">Media kit</span>
               <div className="h-px w-12 bg-[var(--color-accent)]" />
             </div>
             <h1 className="mb-8 text-5xl font-serif md:text-7xl">
-              Non un PDF qualsiasi.
+              Prima capiamo il fit.
               <br />
-              <span className="italic text-black/60">Una porta di accesso qualificata.</span>
+              <span className="italic text-black/60"> Poi costruiamo la proposta.</span>
             </h1>
             <p className="mx-auto max-w-3xl text-xl leading-relaxed text-black/70">
-              Il media kit serve a capire se il progetto ha senso per entrambe le parti. Pubblico,
-              posizionamento, format e modo di lavorare: tutto il necessario per parlare con basi
-              più serie.
+              Il media kit raccoglie pubblico, posizionamento, format e criteri editoriali. Serve a
+              capire se una collaborazione ha basi reali prima di parlare di deliverable e budget.
             </p>
             <div className="mt-8 inline-flex flex-wrap items-center justify-center gap-4 rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent-soft)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] md:gap-6 md:px-8">
-              <span>Audience e dati aggiornati condivisi su richiesta</span>
-              <span className="hidden h-4 w-px bg-[var(--color-accent)]/20 sm:block" />
-              <span>Format, criteri e fit editoriale nel PDF</span>
+              <span>{BRAND_STATS.instagramFollowers} Instagram</span>
+              <span className="h-4 w-px bg-[var(--color-accent)]/20" />
+              <span>{BRAND_STATS.tiktokFollowers} TikTok</span>
+              <span className="h-4 w-px bg-[var(--color-accent)]/20" />
+              <span>{BRAND_STATS.monthlyReach} reach</span>
+            </div>
+            <p className="mx-auto mt-3 max-w-2xl text-xs leading-relaxed text-black/45">
+              {BRAND_STATS_SOURCE.label}. Snapshot pubblico osservato il{' '}
+              {BRAND_STATS_SOURCE.observedAt}; i dati completi vengono aggiornati con Insights prima
+              di ogni proposta.
+            </p>
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <a
+                href="#media-kit-form"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] px-6 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
+              >
+                Richiedi il media kit <ArrowRight size={14} />
+              </a>
+              <a
+                href="#media-kit-preview"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-black/10 px-6 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+              >
+                Sfoglia l'anteprima
+              </a>
             </div>
           </motion.div>
         </div>
       </Section>
 
+      <Section className="py-10">
+        <div className="mx-auto max-w-5xl">
+          <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+            <div>
+              <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.26em] text-[var(--color-accent-text)]">
+                Proof pubbliche
+              </span>
+              <h2 className="text-3xl font-serif md:text-4xl">
+                Segnali verificabili prima dei dati privati.
+              </h2>
+            </div>
+            <p className="max-w-xl text-sm leading-relaxed text-black/58">
+              Usiamo solo riferimenti dichiarabili: progetti territoriali, menzioni partner e earned
+              media. Le metriche di campagna restano nel report riservato al partner.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+            {PUBLIC_PROOF_SIGNALS.map((item) => (
+              <a
+                key={item.title}
+                href={item.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() =>
+                  trackEvent('public_proof_click', {
+                    route: '/media-kit',
+                    source: 'media_kit',
+                    proof: item.title,
+                  })
+                }
+                className="group flex min-h-[220px] flex-col rounded-[var(--radius-lg)] border border-black/5 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:border-[var(--color-accent)]/35 hover:shadow-md"
+              >
+                <div className="mb-5 flex items-center justify-between gap-4">
+                  <span className="rounded-full bg-[var(--color-accent-soft)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent-text)]">
+                    {item.label}
+                  </span>
+                  <ExternalLink
+                    size={15}
+                    className="text-black/25 transition-colors group-hover:text-[var(--color-accent)]"
+                  />
+                </div>
+                <h3 className="text-xl font-serif leading-tight text-[var(--color-ink)]">
+                  {item.title}
+                </h3>
+                <p className="mt-4 text-sm leading-relaxed text-black/60">{item.description}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      </Section>
+
       <Section>
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-[1.1fr_0.9fr]">
-          <div>
-            <div className="mb-10 rounded-[2rem] border border-black/5 bg-[var(--color-sand)] p-8 md:p-10">
+          <div className="order-2 lg:order-1">
+            <div className="mb-10 rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-sand)] p-8 md:p-10">
               <h2 className="mb-4 text-3xl font-serif">Cosa troverai nel media kit</h2>
               <p className="leading-relaxed text-black/70">
                 Non una presentazione gonfiata. Una sintesi ordinata di chi siamo, a chi parliamo,
-                che cosa sappiamo fare bene e quando una collaborazione conviene davvero.
+                che cosa sappiamo fare bene e quali format possono diventare una proposta concreta.
               </p>
             </div>
 
-            <div className="space-y-4">
-              {MEDIA_KIT_PREVIEW.map((item, index) => (
-                <motion.div
-                  key={item.title}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.08 }}
-                  className="rounded-[2rem] border border-black/5 bg-white p-7 shadow-sm"
-                >
-                  <div className="flex items-start gap-5">
-                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
-                      <item.icon size={24} />
-                    </div>
-                    <div className="flex-1">
-                      <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.24em] text-black/40">
-                        Pagina {item.step}
-                      </p>
-                      <h3 className="mb-3 text-2xl font-serif">{item.title}</h3>
-                      <p className="leading-relaxed text-black/68">{item.description}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+            {/* Visual Book Slider preview */}
+            <div
+              id="media-kit-preview"
+              className="mb-8 scroll-mt-28 overflow-hidden rounded-2xl border border-black/5 bg-[var(--color-surface-2)] p-4 shadow-sm md:p-6"
+            >
+              <div className="mb-4 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="flex h-2 w-2 rounded-full bg-[var(--color-accent)] animate-pulse" />
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-black/50">
+                    Sfoglia Anteprima del PDF
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setActiveSlide((prev) => (prev > 0 ? prev - 1 : pdfSlides.length - 1))
+                    }
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-black/10 bg-white transition-all hover:bg-[var(--color-sand)] hover:scale-105 active:scale-95 cursor-pointer text-black/60"
+                    aria-label="Pagina precedente"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  <span className="text-xs font-mono font-medium text-black/50 px-1 select-none">
+                    {activeSlide + 1} / {pdfSlides.length}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setActiveSlide((prev) => (prev < pdfSlides.length - 1 ? prev + 1 : 0))
+                    }
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-black/10 bg-white transition-all hover:bg-[var(--color-sand)] hover:scale-105 active:scale-95 cursor-pointer text-black/60"
+                    aria-label="Pagina successiva"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Slider frame */}
+              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-white shadow-inner">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeSlide}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    className="h-full w-full"
+                  >
+                    {pdfSlides[activeSlide].content}
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              {/* Slide text description */}
+              <div className="mt-4 border-t border-black/5 pt-4">
+                <h4 className="font-serif text-lg font-bold text-[var(--color-ink)]">
+                  {pdfSlides[activeSlide].title}
+                </h4>
+                <p className="mt-1.5 text-xs leading-relaxed text-black/60">
+                  {pdfSlides[activeSlide].description}
+                </p>
+              </div>
             </div>
 
-            <div className="mt-10 rounded-[2rem] border border-black/5 bg-white p-8 shadow-sm">
+            <div className="mt-10 rounded-[var(--radius-lg)] border border-black/5 bg-white p-6 shadow-sm md:p-8">
+              <div className="mb-6">
+                <h3 className="text-2xl font-serif">I 3 punti di partenza</h3>
+                <p className="mt-2 text-sm leading-relaxed text-black/62">
+                  Sono punti di partenza, non listini rigidi. Aiutano a capire il perimetro prima di
+                  costruire una proposta su misura.
+                </p>
+              </div>
+              <div className="grid grid-cols-1 gap-4">
+                {PACKAGE_PREVIEWS.map((item) => (
+                  <div
+                    key={item.title}
+                    className="rounded-2xl border border-black/6 bg-[var(--color-sand)]/45 p-5"
+                  >
+                    <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent)]">
+                      {item.eyebrow}
+                    </div>
+                    <h4 className="font-serif text-xl text-[var(--color-ink)]">{item.title}</h4>
+                    <p className="mt-3 rounded-xl border border-black/5 bg-white/70 px-4 py-3 text-sm font-medium leading-relaxed text-black/72">
+                      {item.output}
+                    </p>
+                    <p className="mt-3 text-sm leading-relaxed text-black/62">{item.text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-10 rounded-[var(--radius-lg)] border border-black/5 bg-white p-8 shadow-sm">
               <div className="mb-4 flex items-center gap-3">
                 <ShieldCheck size={18} className="text-[var(--color-accent)]" />
                 <h3 className="text-2xl font-serif">Quando conviene scriverci</h3>
@@ -214,85 +613,68 @@ export default function MediaKit() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="relative h-fit overflow-hidden rounded-[2rem] border border-zinc-100 bg-white p-8 shadow-xl md:p-10"
+              className="order-1 relative h-fit overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-8 shadow-xl md:p-10 lg:order-2"
             >
               <div className="absolute left-0 top-0 h-2 w-full bg-[var(--color-accent)]" />
               <div className="mb-8">
                 <h2 className="mb-2 text-2xl font-serif">Richiedi il media kit</h2>
-                <p className="text-sm leading-relaxed text-zinc-500">
-                  Ti chiediamo poche informazioni, ma utili. Servono a capire se il progetto e
+                <p className="text-sm leading-relaxed text-[var(--color-muted-fg)]">
+                  Ti chiediamo poche informazioni, ma utili. Servono a capire se il progetto è
                   allineato e a risponderti con materiale davvero rilevante.
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6" noValidate>
-                <div>
-                  <label htmlFor="company" className="mb-2 block text-sm font-medium text-zinc-700">
-                    Nome azienda / agenzia
-                  </label>
-                  <input
+              <form id="media-kit-form" onSubmit={handleSubmit} className="space-y-6" noValidate>
+                <FormField label="Nome azienda / agenzia" htmlFor="company" required>
+                  <Input
                     type="text"
                     id="company"
                     required
                     value={company}
                     onChange={(e) => setCompany(e.target.value)}
-                    className="w-full rounded-xl border border-zinc-200 px-4 py-3 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-[var(--color-accent)]"
                     placeholder="Es. boutique hotel, agenzia travel, destination office"
                   />
-                </div>
+                </FormField>
 
-                <div>
-                  <label htmlFor="website" className="mb-2 block text-sm font-medium text-zinc-700">
-                    Sito o profilo brand
-                  </label>
+                <FormField label="Sito o profilo brand" htmlFor="website">
                   <div className="relative">
                     <Globe
-                      className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"
+                      className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-muted-fg)]"
                       size={18}
                     />
-                    <input
+                    <Input
                       type="url"
                       id="website"
                       value={website}
                       onChange={(e) => setWebsite(e.target.value)}
-                      className="w-full rounded-xl border border-zinc-200 py-3 pl-11 pr-4 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-[var(--color-accent)]"
+                      className="pl-11"
                       placeholder="https://..."
                     />
                   </div>
-                </div>
+                </FormField>
 
-                <div>
-                  <label htmlFor="email" className="mb-2 block text-sm font-medium text-zinc-700">
-                    Email lavorativa
-                  </label>
-                  <input
+                <FormField label="Email lavorativa" htmlFor="email" required>
+                  <Input
                     type="email"
                     id="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full rounded-xl border border-zinc-200 px-4 py-3 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-[var(--color-accent)]"
                     placeholder="nome@azienda.com"
                   />
-                </div>
+                </FormField>
 
-                <div>
-                  <label
-                    htmlFor="project-focus"
-                    className="mb-2 block text-sm font-medium text-zinc-700"
-                  >
-                    Focus della richiesta
-                  </label>
+                <FormField label="Focus della richiesta" htmlFor="project-focus" required>
                   <div className="relative">
                     <Target
-                      className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400"
+                      className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-muted-fg)]"
                       size={18}
                     />
-                    <select
+                    <Select
                       id="project-focus"
                       value={projectFocus}
                       onChange={(e) => setProjectFocus(e.target.value)}
-                      className="w-full appearance-none rounded-xl border border-zinc-200 bg-white py-3 pl-11 pr-4 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-[var(--color-accent)]"
+                      className="pl-11"
                     >
                       <option value="">Seleziona il tipo di progetto</option>
                       {projectFocusOptions.map((option) => (
@@ -300,23 +682,67 @@ export default function MediaKit() {
                           {option}
                         </option>
                       ))}
-                    </select>
+                    </Select>
                   </div>
-                </div>
+                </FormField>
 
-                <div>
-                  <label htmlFor="brief" className="mb-2 block text-sm font-medium text-zinc-700">
-                    Contesto breve ma utile
-                  </label>
-                  <textarea
+                <FormField label="Budget indicativo per il progetto" htmlFor="budget" required>
+                  <div className="relative">
+                    <Wallet
+                      className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-muted-fg)]"
+                      size={18}
+                    />
+                    <Select
+                      id="budget"
+                      value={budget}
+                      onChange={(e) => setBudget(e.target.value)}
+                      className="pl-11"
+                    >
+                      <option value="">Seleziona una fascia di budget</option>
+                      {budgetOptions.map((option) => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </Select>
+                  </div>
+                </FormField>
+
+                <FormField
+                  label="Periodo stimato per la campagna"
+                  htmlFor="campaignPeriod"
+                  required
+                >
+                  <div className="relative">
+                    <CalendarRange
+                      className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-muted-fg)]"
+                      size={18}
+                    />
+                    <Select
+                      id="campaignPeriod"
+                      value={campaignPeriod}
+                      onChange={(e) => setCampaignPeriod(e.target.value)}
+                      className="pl-11"
+                    >
+                      <option value="">Seleziona un periodo temporale</option>
+                      {campaignPeriodOptions.map((option) => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </Select>
+                  </div>
+                </FormField>
+
+                <FormField label="Contesto breve ma utile" htmlFor="brief" required>
+                  <Textarea
                     id="brief"
                     rows={5}
                     value={brief}
                     onChange={(e) => setBrief(e.target.value)}
-                    className="w-full rounded-xl border border-zinc-200 px-4 py-3 outline-none transition-all focus:border-transparent focus:ring-2 focus:ring-[var(--color-accent)]"
-                    placeholder="Obiettivo, periodo, tipo di attivazione o perché pensi che ci sia un fit reale."
+                    placeholder="Obiettivo, periodo, pacchetto di partenza se lo hai già in mente e perché pensi che ci sia un fit reale."
                   />
-                </div>
+                </FormField>
 
                 <button
                   type="submit"
@@ -334,17 +760,24 @@ export default function MediaKit() {
                   )}
                 </button>
 
-                {submitError && <p className="text-sm text-red-600">{submitError}</p>}
+                {submitError && (
+                  <p role="alert" className="text-sm text-[var(--color-error)]">
+                    {submitError}
+                  </p>
+                )}
 
                 <p className="text-center text-xs font-medium text-[var(--color-accent)]">
                   Se il contatto è coerente, ricevi il link al media kit e un riscontro entro 48 ore
                   lavorative.
                 </p>
 
-                <p className="text-center text-xs leading-relaxed text-zinc-400">
+                <p className="text-center text-xs leading-relaxed text-[var(--color-muted-fg)]">
                   Inviando la richiesta accetti di essere ricontattato in merito a possibili
                   collaborazioni e al trattamento dei dati secondo la nostra{' '}
-                  <Link to="/privacy" className="underline underline-offset-2 hover:text-zinc-600">
+                  <Link
+                    to="/privacy"
+                    className="underline underline-offset-2 hover:text-[var(--color-ink-2)]"
+                  >
                     privacy policy
                   </Link>
                   .
@@ -355,7 +788,7 @@ export default function MediaKit() {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="h-fit rounded-[2rem] border border-[var(--color-accent)]/15 bg-[var(--color-accent-soft)] p-8 shadow-sm md:p-10"
+              className="order-1 h-fit rounded-[var(--radius-lg)] border border-[var(--color-accent)]/15 bg-[var(--color-accent-soft)] p-8 shadow-sm md:p-10 lg:order-2"
             >
               <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-accent)]/15 text-[var(--color-accent)]">
                 <CheckCircle size={32} />
@@ -408,7 +841,7 @@ export default function MediaKit() {
         </div>
       </Section>
 
-      <Section className="rounded-[3rem] bg-[var(--color-sand)] p-12 md:p-20">
+      <Section className="rounded-[var(--radius-xl)] bg-[var(--color-sand)] px-0 py-14 md:p-20">
         <div className="mb-12 text-center">
           <h2 className="mb-4 text-4xl font-serif">Come funziona dopo il primo contatto</h2>
           <p className="mx-auto max-w-2xl leading-relaxed text-black/70">
@@ -420,7 +853,7 @@ export default function MediaKit() {
           {NEXT_STEPS.map((item) => (
             <div
               key={item.title}
-              className="rounded-[2rem] border border-black/5 bg-white p-8 shadow-sm"
+              className="rounded-[var(--radius-lg)] border border-black/5 bg-white p-8 shadow-sm"
             >
               <h3 className="mb-3 text-2xl font-serif">{item.title}</h3>
               <p className="leading-relaxed text-black/70">{item.text}</p>
@@ -429,9 +862,9 @@ export default function MediaKit() {
         </div>
       </Section>
 
-      <Section className="rounded-[3rem] bg-[var(--color-ink)] p-12 text-white md:p-20">
+      <Section className="rounded-[var(--radius-xl)] bg-[var(--color-ink)] px-0 py-14 text-white md:p-20">
         <div className="mx-auto max-w-3xl text-center">
-          <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-[var(--color-accent)]">
+          <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-[var(--radius-md)] bg-white/10 text-[var(--color-accent)]">
             <Mail size={24} />
           </div>
           <h2 className="mb-4 text-3xl font-serif md:text-4xl">
@@ -459,6 +892,22 @@ export default function MediaKit() {
           </div>
         </div>
       </Section>
+
+      {!isSuccess && (
+        <StickyMobileCTA
+          label="Richiedi il media kit"
+          onClick={() => {
+            const form = document.getElementById('media-kit-form');
+            if (form) {
+              form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              const firstInput = form.querySelector<HTMLInputElement>('input, select, textarea');
+              firstInput?.focus({ preventScroll: true });
+            }
+          }}
+          trackingId="media_kit_form"
+          revealAfter={-1}
+        />
+      )}
     </PageLayout>
   );
 }

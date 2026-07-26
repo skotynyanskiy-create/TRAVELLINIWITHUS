@@ -1,31 +1,27 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
+import { trackEvent } from '../services/analytics';
+import MagneticWrapper from './MagneticWrapper';
 
-/**
- * Props for the Button component.
- */
 interface ButtonProps {
-  /** The content to be displayed inside the button. */
   children: React.ReactNode;
-  /** The visual style variant of the button. Defaults to 'primary'. */
   variant?: 'primary' | 'secondary' | 'outline' | 'outline-light' | 'cta';
-  /** The size of the button. Defaults to 'md'. */
   size?: 'sm' | 'md' | 'lg';
-  /** Additional CSS classes to apply to the button. */
   className?: string;
-  /** Callback eseguita al click. Supportata sia in modalita button che in modalita anchor (href). */
-  onClick?: React.MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>;
-  /** The path to navigate to if the button is a link. */
+  onClick?: React.MouseEventHandler<HTMLElement>;
   to?: string;
-  /** The URL to open if the button is an external link. */
   href?: string;
-  /** Rel attribute for external links. */
   rel?: string;
-  /** Target attribute for external links. */
   target?: React.HTMLAttributeAnchorTarget;
-  /** The HTML type attribute of the button. Defaults to 'button'. */
   type?: 'button' | 'submit' | 'reset';
+  /** Granular CTA tracking id. When set, fires `cta_click` event with id + location. */
+  trackingId?: string;
+  /** Apply subtle magnetic pointer attraction (premium CTAs only). */
+  magnetic?: boolean;
+  /** Disable the button interaction and visual state. */
+  disabled?: boolean;
 }
 
 /**
@@ -42,34 +38,64 @@ export default function Button({
   rel,
   target,
   type = 'button',
+  trackingId,
+  magnetic = false,
+  disabled = false,
 }: ButtonProps) {
+  const location = useLocation();
+  const fireTracking = () => {
+    if (trackingId) {
+      trackEvent('cta_click', { id: trackingId, location: location.pathname });
+    }
+  };
+
+  const handleAnchorClick: React.MouseEventHandler<HTMLElement> = (event) => {
+    if (disabled) {
+      event.preventDefault();
+      return;
+    }
+    fireTracking();
+    onClick?.(event);
+  };
+
+  const handleButtonClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    if (disabled) {
+      event.preventDefault();
+      return;
+    }
+    fireTracking();
+    onClick?.(event);
+  };
   const baseStyles =
-    'inline-flex items-center justify-center gap-3 rounded-[var(--radius-xl)] uppercase tracking-widest font-semibold transition-all duration-500 ease-out';
+    'inline-flex items-center justify-center gap-2 rounded-[var(--radius-md)] text-center font-semibold tracking-normal transition-all ease-out duration-200 whitespace-normal sm:whitespace-nowrap';
 
   const variants = {
     primary:
-      'bg-[var(--color-ink)] text-white shadow-md hover:bg-[var(--color-ink)]/85 hover:shadow-premium hover:-translate-y-0.5',
+      'bg-[var(--color-ink)] text-white shadow-[var(--shadow-sm)] hover:bg-[var(--color-ink-2)] hover:shadow-[var(--shadow-md)]',
     secondary:
-      'bg-[var(--color-surface)] text-[var(--color-ink)] shadow-sm hover:text-[var(--color-accent)] hover:shadow-premium border border-[var(--color-ink)]/10 hover:-translate-y-0.5',
+      'bg-[var(--color-surface)] text-[var(--color-ink)] border border-[var(--color-border)] hover:bg-[var(--color-surface-2)] hover:border-[var(--color-ink-2)]',
     outline:
-      'bg-transparent border border-[var(--color-ink)]/20 text-[var(--color-ink)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] hover:bg-[var(--color-accent-soft)]',
+      'bg-transparent border border-[var(--color-border)] text-[var(--color-ink)] hover:border-[var(--color-ink)] hover:bg-[var(--color-surface-2)]',
     'outline-light':
-      'bg-white/10 border border-white/40 text-white backdrop-blur-sm hover:bg-white hover:text-[var(--color-ink)] hover:border-white shadow-glass hover:-translate-y-0.5',
-    cta: 'bg-[var(--color-accent)] text-white shadow-[0_0_20px_rgba(155,127,166,0.25)] hover:shadow-[0_0_30px_rgba(155,127,166,0.4)] hover:brightness-110 hover:-translate-y-0.5',
+      'bg-white/5 border border-white/30 text-white backdrop-blur-sm hover:bg-white hover:text-[var(--color-ink)] hover:border-white',
+    cta: 'bg-[var(--color-accent)] text-white shadow-[var(--shadow-sm)] hover:bg-[var(--color-accent-hover)] hover:shadow-[var(--shadow-md)]',
   };
 
   const sizes = {
-    sm: 'px-5 py-2 text-xs',
-    md: 'px-8 py-4 text-sm rounded-full',
-    lg: 'px-10 py-4 text-sm md:text-base rounded-full',
+    sm: 'px-4 py-2 text-xs',
+    md: 'px-5 py-2.5 text-sm',
+    lg: 'px-7 py-3.5 text-sm md:text-base',
   };
 
-  const combinedStyles = `${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`;
+  const combinedStyles = `${baseStyles} ${variants[variant]} ${sizes[size]} ${disabled ? 'opacity-50 pointer-events-none' : ''} ${className}`;
+
+  const wrap = (node: React.ReactNode) =>
+    magnetic && !disabled ? <MagneticWrapper>{node}</MagneticWrapper> : node;
 
   if (to) {
-    return (
-      <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="inline-block">
-        <Link to={to} className={combinedStyles}>
+    return wrap(
+      <motion.div whileTap={disabled ? undefined : { scale: 0.98 }} className="inline-block">
+        <Link to={disabled ? '#' : to} onClick={handleAnchorClick} className={combinedStyles}>
           {children}
         </Link>
       </motion.div>
@@ -77,14 +103,13 @@ export default function Button({
   }
 
   if (href) {
-    return (
+    return wrap(
       <motion.a
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        href={href}
+        whileTap={disabled ? undefined : { scale: 0.98 }}
+        href={disabled ? undefined : href}
+        onClick={handleAnchorClick}
         target={target || '_blank'}
         rel={rel || 'noopener noreferrer'}
-        onClick={onClick as React.MouseEventHandler<HTMLAnchorElement> | undefined}
         className={combinedStyles}
       >
         {children}
@@ -92,12 +117,12 @@ export default function Button({
     );
   }
 
-  return (
+  return wrap(
     <motion.button
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      onClick={onClick as React.MouseEventHandler<HTMLButtonElement> | undefined}
+      whileTap={disabled ? undefined : { scale: 0.98 }}
+      onClick={handleButtonClick}
       type={type}
+      disabled={disabled}
       className={combinedStyles}
     >
       {children}

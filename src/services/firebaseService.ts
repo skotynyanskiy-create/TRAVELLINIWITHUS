@@ -14,20 +14,16 @@ import {
 import { db } from '../lib/firebaseDb';
 import { normalizeFirestoreArticle, type NormalizedArticle } from '../utils/articleData';
 import type { SiteContentKey, SiteContentMap } from '../config/siteContent';
-import { DEMO_PRODUCT, DEMO_ARTICLE_PREVIEW } from '../config/demoContent';
-import {
-  getHotelBySlug as getFallbackHotelBySlug,
-  getPublishedHotels,
-} from '../config/hotelDirectory';
+import { siteContentDefaults } from '../config/siteContent';
+import { DEMO_PRODUCT, DEMO_ARTICLE_PREVIEW, DEMO_PRODUCTS } from '../config/demoContent';
 import type { Product } from '../types';
-import type { HotelEntry } from '../types';
 import { isTimestamp } from '../utils/dateValue';
+import { isAuditMode } from '../config/auditMode';
 
 type FirestoreProductData = Partial<Omit<Product, 'id'>> & Record<string, unknown>;
 
 const PRODUCT_COLLECTION_READ_LIMIT = 100;
 const ARTICLE_COLLECTION_READ_LIMIT = 250;
-const HOTEL_COLLECTION_READ_LIMIT = 100;
 
 const asString = (value: unknown) =>
   typeof value === 'string' && value.trim() ? value.trim() : undefined;
@@ -80,7 +76,11 @@ function normalizeFirestoreProduct(id: string, data: FirestoreProductData): Prod
     published: data.published === true,
     imageUrl: asString(data.imageUrl),
     isDigital: data.isDigital === true,
-    downloadUrl: asString(data.downloadUrl),
+    // downloadUrl NON viene piu' letto dal client: la collezione productAssets
+    // e' admin-only via firestore rules (read/write: false). L'URL reale del
+    // file viene iniettato dal webhook Stripe nel doc orders/{sessionId}.items[]
+    // dopo il pagamento. Vedi src/pages/MieiAcquisti.tsx per la lettura corretta.
+    downloadUrl: '',
     isBestseller: data.isBestseller === true,
     description: asString(data.description),
     features: asStringArray(data.features),
@@ -107,91 +107,11 @@ function normalizeFirestoreProduct(id: string, data: FirestoreProductData): Prod
   };
 }
 
-function normalizeFirestoreHotel(id: string, data: Record<string, unknown>): HotelEntry | null {
-  const name = asString(data.name) || asString(data.title);
-  const slug = asString(data.slug);
-  const destination = asString(data.destination);
-  const destinationSlug = asString(data.destinationSlug);
-  const destinationHref = asString(data.destinationHref);
-  const country = asString(data.country);
-  const category = asString(data.category);
-  const image = asString(data.image) || asString(data.heroImage);
-  const bookingUrl = asString(data.bookingUrl);
-  const summary = asString(data.summary) || asString(data.description);
-  const fit = asString(data.fit);
-  const editorialNote = asString(data.editorialNote);
-  const pros = asStringArray(data.pros);
-  const cons = asStringArray(data.cons);
-  const idealFor = asStringArray(data.idealFor);
-
-  if (
-    !name ||
-    !slug ||
-    !destination ||
-    !destinationSlug ||
-    !destinationHref ||
-    !country ||
-    !category ||
-    !image ||
-    !bookingUrl ||
-    !summary ||
-    !fit ||
-    !editorialNote ||
-    !pros?.length ||
-    !cons?.length ||
-    !idealFor?.length
-  ) {
-    return null;
+export async function fetchProducts(): Promise<Product[]> {
+  if (isAuditMode()) {
+    return DEMO_PRODUCTS as Product[];
   }
 
-  return {
-    id,
-    slug,
-    title: name,
-    name,
-    description: summary,
-    destination,
-    destinationSlug,
-    destinationHref,
-    country,
-    region: asString(data.region),
-    area: asString(data.area),
-    category,
-    heroImage: image,
-    image,
-    gallery: asStringArray(data.gallery),
-    bookingUrl,
-    priceHint: asString(data.priceHint),
-    budgetBand: asString(data.budgetBand) as HotelEntry['budgetBand'],
-    rating: asNumber(data.rating) ?? undefined,
-    badge: asString(data.badge),
-    summary,
-    fit,
-    idealFor,
-    pros,
-    cons,
-    affiliateDisclosure: asString(data.affiliateDisclosure) as HotelEntry['affiliateDisclosure'],
-    verifiedAt: data.verifiedAt,
-    editorialNote,
-    relatedGuideHref: asString(data.relatedGuideHref),
-    relatedArticles: asStringArray(data.relatedArticles),
-    mapLabel: asString(data.mapLabel),
-    published: data.published === true,
-  };
-}
-
-function markFallbackHotel(hotel: HotelEntry): HotelEntry {
-  return {
-    ...hotel,
-    title: hotel.title ?? hotel.name,
-    description: hotel.description ?? hotel.summary,
-    heroImage: hotel.heroImage ?? hotel.image,
-    affiliateDisclosure: hotel.affiliateDisclosure ?? 'affiliate',
-    isFallback: true,
-  };
-}
-
-export async function fetchProducts(): Promise<Product[]> {
   const productsQuery = query(
     collection(db, 'products'),
     where('published', '==', true),
@@ -203,49 +123,11 @@ export async function fetchProducts(): Promise<Product[]> {
     .filter((product): product is Product => product !== null);
 }
 
-export async function fetchHotels(): Promise<HotelEntry[]> {
-  try {
-    const hotelsQuery = query(
-      collection(db, 'hotels'),
-      where('published', '==', true),
-      limit(HOTEL_COLLECTION_READ_LIMIT)
-    );
-    const querySnapshot = await getDocs(hotelsQuery);
-    const hotels = querySnapshot.docs
-      .map((docSnap) =>
-        normalizeFirestoreHotel(docSnap.id, docSnap.data() as Record<string, unknown>)
-      )
-      .filter((hotel): hotel is HotelEntry => hotel !== null);
-
-    return hotels.length > 0 ? hotels : getPublishedHotels().map(markFallbackHotel);
-  } catch (error) {
-    console.error('Error fetching hotels, using local fallback:', error);
-    return getPublishedHotels().map(markFallbackHotel);
-  }
-}
-
-export async function fetchHotelBySlug(slug: string): Promise<HotelEntry | null> {
-  try {
-    const slugQuery = query(
-      collection(db, 'hotels'),
-      where('slug', '==', slug),
-      where('published', '==', true),
-      limit(1)
-    );
-    const querySnapshot = await getDocs(slugQuery);
-    if (!querySnapshot.empty) {
-      const hotelDoc = querySnapshot.docs[0];
-      return normalizeFirestoreHotel(hotelDoc.id, hotelDoc.data() as Record<string, unknown>);
-    }
-  } catch (error) {
-    console.error(`Error fetching hotel by slug "${slug}", using fallback:`, error);
-  }
-
-  const fallbackHotel = getFallbackHotelBySlug(slug);
-  return fallbackHotel ? markFallbackHotel(fallbackHotel) : null;
-}
-
 export async function fetchProductBySlug(slug: string): Promise<Product | null> {
+  if (isAuditMode()) {
+    return (DEMO_PRODUCTS as Product[]).find((product) => product.slug === slug) ?? null;
+  }
+
   const q = query(
     collection(db, 'products'),
     where('slug', '==', slug),
@@ -259,6 +141,10 @@ export async function fetchProductBySlug(slug: string): Promise<Product | null> 
 }
 
 export async function fetchArticles() {
+  if (isAuditMode()) {
+    return [];
+  }
+
   const publicArticlesQuery = query(
     collection(db, 'articles'),
     where('published', '==', true),
@@ -269,6 +155,11 @@ export async function fetchArticles() {
 }
 
 export async function fetchArticleBySlug(slug: string): Promise<NormalizedArticle | null> {
+  if (isAuditMode()) {
+    void slug;
+    return null;
+  }
+
   const slugQuery = query(
     collection(db, 'articles'),
     where('slug', '==', slug),
@@ -282,6 +173,11 @@ export async function fetchArticleBySlug(slug: string): Promise<NormalizedArticl
     return normalizeFirestoreArticle(articleDoc.id, articleDoc.data());
   }
 
+  // Fallback: slug === document ID. Le firestore rules deny `read` se
+  // `published != true`; questo si traduce in `FirebaseError permission-denied`
+  // che è il comportamento atteso (non un vero errore applicativo). Trattiamo
+  // il deny come "non trovato" silenzioso. Loggiamo solo errori non-permesso
+  // in DEV per facilitare debug futuro.
   try {
     const docRef = doc(db, 'articles', slug);
     const docSnap = await getDoc(docRef);
@@ -298,11 +194,15 @@ export async function fetchArticleBySlug(slug: string): Promise<NormalizedArticl
 
     return normalizeFirestoreArticle(docSnap.id, data);
   } catch (error) {
-    const code = (error as { code?: string }).code;
-    if (code === 'permission-denied' || code === 'not-found') {
-      return null;
+    const code =
+      typeof error === 'object' && error !== null && 'code' in error
+        ? String((error as { code: unknown }).code)
+        : '';
+    const isExpectedDeny = code === 'permission-denied';
+
+    if (!isExpectedDeny && import.meta.env.DEV) {
+      console.warn(`articleFetch.fallback.unexpected for "${slug}":`, error);
     }
-    console.warn(`Article fallback fetch failed for "${slug}":`, error);
     return null;
   }
 }
@@ -325,11 +225,13 @@ export interface SiteStats {
   monthlyReach: string;
   uniqueUsers: string;
   engagementRate: string;
-  updatedAt?: unknown;
-  sourceLabel?: string;
 }
 
 export async function fetchStats(): Promise<SiteStats | null> {
+  if (isAuditMode()) {
+    return null;
+  }
+
   const docRef = doc(db, 'settings', 'stats');
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
@@ -349,6 +251,10 @@ export async function updateStats(stats: SiteStats) {
 export async function fetchSiteContent<K extends SiteContentKey>(
   key: K
 ): Promise<Partial<SiteContentMap[K]> | null> {
+  if (isAuditMode()) {
+    return siteContentDefaults[key];
+  }
+
   const docRef = doc(db, 'siteContent', key);
   const docSnap = await getDoc(docRef);
 
@@ -693,8 +599,6 @@ export interface Resource {
   category: string; // 'booking' | 'digital' | 'gear'
   tags?: string[];
   badge?: string;
-  /** Nome del programma affiliate/partner per tracking UTM e analytics (default: 'generic'). */
-  partner?: string;
   isPartner?: boolean;
   order?: number;
   published?: boolean;

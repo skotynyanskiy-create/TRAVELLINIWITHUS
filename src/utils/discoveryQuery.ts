@@ -1,54 +1,122 @@
+/**
+ * Singolo parser/builder canonical per i filtri Esplora.
+ *
+ * Param URL canonical:
+ *   ?zone=Italia
+ *   ?type=posti-particolari
+ *   ?format=guida
+ *   ?period=estate
+ *   ?budget=medio
+ *   ?duration=weekend
+ *   ?q=puglia
+ *
+ * Legge anche i param legacy (group/area/region, experience, cat, search)
+ * per supportare i redirect lato client dai vecchi URL.
+ */
+
 import type { ArchiveItem } from './contentArchive';
 import {
-  EXPERIENCE_TYPES,
-  GUIDE_CATEGORIES,
-  getExperienceTypeFromQuery,
-  slugifyExperienceType,
+  FORMATS,
+  TYPES,
+  ZONES,
+  getBudgetFromQuery,
+  getDurationFromQuery,
+  getFormatFromQuery,
+  getPeriodFromQuery,
+  getTypeFromQuery,
+  getZoneFromQuery,
+  mapLegacyFormat,
+  mapLegacyType,
+  slugifyFormat,
+  slugifyType,
+  type Budget,
+  type ContentFormat,
+  type ContentType,
+  type Duration,
+  type Period,
+  type Zone,
 } from '../config/contentTaxonomy';
 
 export interface DiscoveryFilters {
-  group?: string | null;
-  country?: string | null;
-  region?: string | null;
-  city?: string | null;
-  experience?: string | null;
+  zone?: Zone | null;
+  type?: ContentType | null;
+  format?: ContentFormat | null;
+  period?: Period | null;
+  budget?: Budget | null;
+  duration?: Duration | null;
   search?: string | null;
 }
 
+export interface DiscoveryUrlTargets {
+  explore: string;
+  map: string;
+}
+
 export function parseDiscoveryFilters(params: URLSearchParams): DiscoveryFilters {
-  const typeParam = params.get('type');
-  const experienceParam = params.get('experience');
+  // Legge canonical + legacy. I redirect /destinazioni → /esplora useranno
+  // questo per tradurre i vecchi link.
+  const zoneRaw = params.get('zone') || params.get('group') || params.get('region');
+  const typeRaw = params.get('type') || params.get('experience');
+  const formatRaw = params.get('format') || params.get('cat');
+  const searchRaw = params.get('q') || params.get('search') || params.get('searchQuery');
+
   return {
-    group: params.get('group') || null,
-    country: params.get('country') || null,
-    region: params.get('region') || params.get('area') || null,
-    city: params.get('city') || null,
-    experience: getExperienceTypeFromQuery(typeParam) || resolveExperience(experienceParam),
-    search: params.get('search') || null,
+    zone: getZoneFromQuery(zoneRaw),
+    type: getTypeFromQuery(typeRaw) ?? mapLegacyType(typeRaw),
+    format: getFormatFromQuery(formatRaw) ?? mapLegacyFormat(formatRaw),
+    period: getPeriodFromQuery(params.get('period')),
+    budget: getBudgetFromQuery(params.get('budget')),
+    duration: getDurationFromQuery(params.get('duration')),
+    search: searchRaw?.trim() || null,
   };
 }
 
-function resolveExperience(raw: string | null): string | null {
-  if (!raw) return null;
-  const match = EXPERIENCE_TYPES.find(
-    (item) => item === raw || slugifyExperienceType(item) === raw.toLowerCase()
+export function sanitizeDiscoveryFilters(filters: DiscoveryFilters): DiscoveryFilters {
+  return {
+    zone: filters.zone ?? null,
+    type: filters.type ?? null,
+    format: filters.format ?? null,
+    period: filters.period ?? null,
+    budget: filters.budget ?? null,
+    duration: filters.duration ?? null,
+    search: filters.search?.trim() || null,
+  };
+}
+
+export function hasAnyFilter(filters: DiscoveryFilters): boolean {
+  return Boolean(
+    filters.zone ||
+    filters.type ||
+    filters.format ||
+    filters.period ||
+    filters.budget ||
+    filters.duration ||
+    (filters.search && filters.search.trim())
   );
-  return match || raw;
 }
 
 export function filterByScope(items: ArchiveItem[], filters: DiscoveryFilters): ArchiveItem[] {
   const search = filters.search?.trim().toLowerCase();
   return items.filter((item) => {
-    if (filters.group && item.destinationGroup !== filters.group) return false;
-    if (filters.country && item.country !== filters.country) return false;
-    if (filters.region && item.region !== filters.region) return false;
-    if (filters.city && item.city !== filters.city) return false;
-    if (filters.experience && !item.experienceTypes.includes(filters.experience)) return false;
+    if (filters.zone && item.destinationGroup !== filters.zone) return false;
+    if (filters.type && !item.experienceTypes.includes(filters.type)) return false;
+    if (filters.format) {
+      // ArchiveItem ha `category` come stringa libera (es. "Guide", "Posti
+      // particolari", "Itinerari completi"). Mappiamo al format canonical
+      // per filtrare in modo coerente.
+      const itemFormat = mapLegacyFormat(item.category) ?? getFormatFromQuery(item.category);
+      if (itemFormat !== filters.format) return false;
+    }
+    if (filters.period && item.period !== filters.period) return false;
+    if (filters.budget && item.budget !== filters.budget) return false;
+    if (filters.duration && item.duration !== filters.duration) return false;
     if (
       search &&
       !item.title.toLowerCase().includes(search) &&
       !item.location.toLowerCase().includes(search) &&
-      !item.category.toLowerCase().includes(search)
+      !item.category.toLowerCase().includes(search) &&
+      !item.experienceTypes.some((experience) => experience.toLowerCase().includes(search)) &&
+      !(item.excerpt ?? '').toLowerCase().includes(search)
     ) {
       return false;
     }
@@ -62,34 +130,50 @@ export function countByScope(items: ArchiveItem[], filters: DiscoveryFilters): n
 
 export function buildFilterQuery(filters: DiscoveryFilters): string {
   const params = new URLSearchParams();
-  if (filters.group) params.set('group', filters.group);
-  if (filters.country) params.set('country', filters.country);
-  if (filters.region) params.set('region', filters.region);
-  if (filters.city) params.set('city', filters.city);
-  if (filters.experience) params.set('type', slugifyExperienceType(filters.experience));
-  if (filters.search) params.set('search', filters.search);
+  if (filters.zone) params.set('zone', filters.zone);
+  if (filters.type) params.set('type', slugifyType(filters.type));
+  if (filters.format) params.set('format', slugifyFormat(filters.format));
+  if (filters.period) params.set('period', filters.period.toLowerCase());
+  if (filters.budget) params.set('budget', filters.budget.toLowerCase());
+  if (filters.duration) params.set('duration', filters.duration.toLowerCase());
+  if (filters.search) params.set('q', filters.search);
   return params.toString();
+}
+
+export function buildPathWithFilters(pathname: string, filters: DiscoveryFilters): string {
+  const query = buildFilterQuery(filters);
+  return query ? `${pathname}?${query}` : pathname;
+}
+
+export function buildExploreUrl(filters: DiscoveryFilters = {}): string {
+  return buildPathWithFilters('/esplora', filters);
+}
+
+export function buildMapUrl(
+  filters: Partial<Pick<DiscoveryFilters, 'zone' | 'type'>> = {}
+): string {
+  const params = new URLSearchParams();
+  if (filters.zone) params.set('zone', filters.zone);
+  if (filters.type) params.set('type', slugifyType(filters.type));
+  const qs = params.toString();
+  return qs ? `/mappa?${qs}` : '/mappa';
+}
+
+export function buildDiscoveryTargets(filters: DiscoveryFilters): DiscoveryUrlTargets {
+  const shared = sanitizeDiscoveryFilters(filters);
+  return {
+    explore: buildExploreUrl(shared),
+    map: buildMapUrl({ zone: shared.zone ?? undefined, type: shared.type ?? undefined }),
+  };
 }
 
 export function isGuideItem(item: ArchiveItem): boolean {
   const cat = (item.category || '').toLowerCase();
-  if (cat === 'guide' || cat === 'guida' || cat.startsWith('guide')) return true;
-
-  const inTaxonomy = GUIDE_CATEGORIES.some((c) => {
-    const cLower = c.toLowerCase();
-    return cLower === cat || item.experienceTypes.some((e) => e.toLowerCase() === cLower);
-  });
-
-  return inTaxonomy;
+  if (cat.startsWith('guid')) return true;
+  const mapped = mapLegacyFormat(item.category);
+  return mapped === 'Guida' || mapped === 'Lista pratica';
 }
 
-export function hasAnyFilter(filters: DiscoveryFilters): boolean {
-  return Boolean(
-    filters.group ||
-    filters.country ||
-    filters.region ||
-    filters.city ||
-    filters.experience ||
-    (filters.search && filters.search.trim())
-  );
-}
+// ─── Re-export delle costanti canonical per i consumer ─────────────────────
+
+export { ZONES, TYPES, FORMATS };

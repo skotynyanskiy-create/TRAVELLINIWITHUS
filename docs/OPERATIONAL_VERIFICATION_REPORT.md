@@ -1,7 +1,10 @@
-# TRAVELLINIWITHUS — Operational Verification Report
+---
+type: report
+area: delivery
+status: active
+---
 
-> [!warning] Stale — ultimo aggiornamento 2026-03-20 (35 giorni fa)
-> Report storico. Lo stato operativo corrente è in [[10_Projects/PROJECT_RELEASE_READINESS_2026_04_24_PRODUCTION_PASS]] e [[10_Projects/PROJECT_RELEASE_READINESS]]. I bug e caveats citati qui potrebbero essere già chiusi: verifica prima di agire.
+# TRAVELLINIWITHUS — Operational Verification Report
 
 **Date**: 2026-03-20  
 **Reviewed By**: Senior AI Expert  

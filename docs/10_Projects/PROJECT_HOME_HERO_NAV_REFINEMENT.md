@@ -17,6 +17,16 @@ tags:
 
 # PROJECT_HOME_HERO_NAV_REFINEMENT
 
+## Superseded by cinematic rebuild — 2026-06-26
+
+Decisione owner: la homepage editoriale precedente viene messa in archivio e il
+Sentiero diventa la nuova home esperienziale del sito. Il lavoro futuro e
+tracciato in [[PROJECT_CINEMATIC_REBUILD_HOME_2026]].
+
+La vecchia home e conservata in `src/pages/HomeLegacy.tsx` come riferimento da
+cui recuperare componenti, contenuti e logiche utili senza tenere quella
+struttura come esperienza pubblica principale.
+
 ## Obiettivo
 
 Rendere la homepage piu chiara, editoriale e orientata alla conversione, portando in primo piano la coppia Rodrigo & Betta e semplificando la navigazione dell'archivio.
@@ -36,6 +46,8 @@ La homepage precedente aveva troppe sezioni, statistiche duplicate e tre voci di
 - repo_path secondario: `src/components/Navbar.tsx`
 - repo_path secondario: `src/components/home/CoupleIntro.tsx`
 - repo_path secondario: `src/components/home/HomeDiscoveryCards.tsx`
+- repo_path secondario: `src/components/home/HomeLeadMagnet.tsx`
+- repo_path secondario: `src/components/home/MonetizationTeaser.tsx`
 
 ## Focus attuale
 
@@ -52,9 +64,21 @@ La homepage precedente aveva troppe sezioni, statistiche duplicate e tre voci di
 - [x] nascondere il carrello quando non ci sono item
 - [x] pass grafico senior: radius piu controllati, meno ombre, gerarchia editoriale piu netta
 - [x] pass clean/modern: rimossi controlli finti, CTA duplicate e testo non necessario
-- [x] verificare composizione finale hero su desktop
-- [x] verificare navbar desktop su viewport laptop e wide
-- [x] verificare scroll orizzontale chip su mobile
+- [x] pass mobile 2026-05-24: nascosta la card reel e il micro-link B2B nella hero mobile per far arrivare prima la discovery
+- [x] copy discovery reso piu concreto: scelta per luogo o ritmo invece di metafora "libreria"
+- [x] layout articoli stabilizzato quando esiste un solo contenuto pubblicabile
+- [x] immagini home principali convertite da PNG a WebP dove gia disponibile
+- [x] pass grafico conversione 2026-05-24: aggiunto lead magnet editoriale con mockup PDF e form newsletter compatto
+- [x] pass grafico mappa 2026-05-24: sostituito teaser generico con blocco visuale "Mappa editoriale"
+- [x] riallineato `Newsletter` con opzione `stacked` per form compatti dentro card strette
+- [x] asset demo AI per lead magnet salvato in `public/images/lead-magnets/` e usato come copertina preview
+- [x] contenuti demo aggiunti alla mappa editoriale per simulare percorsi e filtri futuri
+- [x] controlli floating secondari nascosti su mobile per non coprire contenuti e CTA durante la lettura
+- [x] rimossi quiz viaggio e budget viaggio dalla homepage e dal percorso pubblico
+- [x] hero 10/10 pass 2026-05-24: rimossa card reel dalla prima piega, copy accorciato, CTA sopra overlay cookie, proof line piu editoriale
+- [ ] verificare composizione finale hero su desktop
+- [ ] verificare navbar desktop su viewport laptop e wide
+- [ ] verificare scroll orizzontale chip su mobile
 
 ## QA
 
@@ -80,13 +104,106 @@ La homepage precedente aveva troppe sezioni, statistiche duplicate e tre voci di
 Ordine sezioni:
 
 1. `HeroSection`
-2. `HomeDiscoveryCards`
+2. `HomeDiscoveryFinder`
 3. `CoupleIntro`
-4. `LatestArticles`
-5. `Newsletter` dentro wrapper dark
-6. `CommunitySection` come social strip compatta
+4. `HomeLeadMagnet`
+5. `HomeTrustStrip`
+6. `HomePartnerSignal`
+7. `LatestArticles`
+8. `InstagramGrid`
+9. `NewsletterFeature`
+10. `MonetizationTeaser`
+11. `HomeCollaborationCta`
 
-Ritmo visuale: dark, white, sand, white, dark/sand, dark.
+Ritmo visuale: hero immersiva, finder utile, metodo umano, conversione soft, proof,
+partner, magazine, community, newsletter, mappa, B2B.
+
+## Rimozione quiz/budget - 2026-05-24
+
+Decisione: quiz viaggio e budget viaggio non sono piu parte del percorso pubblico. La
+homepage deve portare verso archivio, mappa, lead magnet, newsletter e collaborazioni,
+senza strumenti che distraggono dal posizionamento editoriale.
+
+- rimosso `HomeQuizBudgetTeaser` dalla homepage
+- `/strumenti` resta una pagina di supporto con calendario, builder itinerario e mappa
+- `/quiz` viene reindirizzato a `/esplora`
+- tolti riferimenti a quiz/calcolatore da assistente demo, Club, PDF lead magnet,
+  sitemap e file `llms-full.txt`
+
+## Hero 10/10 pass - 2026-05-24
+
+Decisione: la hero deve far vincere H1, immagine e CTA primaria. La card
+"Ultimo reel Instagram" era coerente col brand, ma in prima piega competeva
+troppo con la promessa principale.
+
+- rimossa la colonna reel dalla hero: Instagram resta nelle sezioni successive
+- copy hero ridotto a una promessa piu concreta e leggibile
+- proof point trasformati in riga editoriale sobria, non pill/card
+- CTA secondaria "Ultime guide" nascosta su mobile per non comprimere il primo fold
+- micro CTA B2B rimossa dalla hero: il percorso resta nella navbar e nelle sezioni dedicate
+- mobile riallineato al centro per mantenere "Apri Esplora" visibile anche con banner cookie
+
+## Pass grafico conversione e mappa - 2026-05-24
+
+Decisione: migliorare la percezione premium senza inventare prove finte. Niente volti AI
+di Rodrigo & Betta e niente loghi partner inventati; le parti generate sono trattate come
+mockup/editorial UI.
+
+- aggiunto `HomeLeadMagnet` dopo `CoupleIntro`: promessa concreta, mockup PDF, chip di contenuto e form newsletter dedicato
+- il form newsletter supporta `stacked` per non comprimere input e CTA nelle card strette
+- generato asset demo AI per la copertina del lead magnet, senza persone, loghi o prove finte
+- sostituito `MonetizationTeaser` con una scena "Mappa editoriale": immagine locale, route overlay, marker e card di orientamento
+- arricchita la mappa con percorsi demo plausibili, da sostituire poi con contenuti reali
+- nascosti trigger assistente AI e back-to-top sotto `md` per evitare sovrapposizioni su mobile
+- verificato desktop e mobile: lead magnet leggibile, mappa senza overflow, CTA primaria visibile
+- prossimo miglioramento grafico utile: asset dedicato reale/AI controllato per il PDF lead magnet e contenuti reali dentro la mappa
+
+## Audit marketing homepage - 2026-05-28
+
+Decisione: la home deve evitare qualsiasi linguaggio pubblico da staging. Le sezioni di
+conversione devono sembrare parte del prodotto editoriale, non una demo interna.
+
+- aggiornato `HomeLeadMagnet`: promessa piu concreta, niente "demo/prodotto finale", bullet di valore e CTA piu chiara
+- aggiornata `/vieni-con-noi`: rimossi riferimenti a demo, preview e contenuti provvisori nel copy pubblico
+- aggiornata la mappa editoriale: niente "percorsi demo", CTA piu specifica e heading meno hero-scale
+- aggiornata la trust strip: `500K` diventa `reach mensile`, non "lettori al mese"
+- aggiornato `HomePartnerSignal`: posizionamento B2B piu selettivo e orientato al fit
+- nota QA: restano da verificare mobile 320/375 e gerarchia completa homepage con audit visuale
+
+## Audit full-site marketing/SEO - 2026-05-29
+
+Decisione: separare con piu rigore pagine indicizzabili, superfici in lavorazione e funnel privati.
+La sitemap non deve promuovere URL `noindex` o aree revenue non ancora consegnabili.
+
+- rimossi dalla sitemap statica `/itinerari`, `/itinerari/compare`, `/shop` e `/lead-magnet`
+- `/itinerari` ora e `noindex` finche resta basata su itinerari in lavorazione
+- `/lead-magnet` richiede sblocco post-submit in sessione e rimanda a `/vieni-con-noi` se aperta direttamente
+- newsletter con source `lead_magnet` sblocca il download e mostra link "scarica subito il PDF" nel success state
+- `/contatti` legge `topic` e `prodotto` dai query param per non perdere l'intento dai funnel
+- `Club` ha ancora waitlist, ma ora ancora corretta `#club-pricing`, piano selezionato e copy "accesso al lancio"
+- `MediaKit` ha CTA hero verso il form e form prima della preview su mobile
+- corretti title SEO troppo lunghi e rimosso il suffisso parziale `Travellini` da `/esplora`
+- rimosso `tracking-tight` dai display title globali e reso `Button` piu tollerante ai CTA lunghi su mobile
+
+### Closeout full-site funnel - 2026-06-03
+
+- `/shop` passa da catalogo fallback multiprodotto a lista d'attesa con un solo SKU prioritario, filtri nascosti quando il catalogo e in lavorazione e newsletter `shop_waitlist_first_product`
+- `/risorse` mostra una label commerciale vicino a ogni risorsa: `Affiliato`, `Non affiliato` o `Codice sconto`
+- `/collaborazioni` non spinge piu il PDF diretto in hero: manda alla preview del media kit e traccia `media_kit_preview_click`
+- `/press` non presenta piu bundle come download immediati: anteprima consultabile e materiali completi su richiesta
+- navbar desktop posticipata a `xl` per evitare affollamento tra 1024 e 1180px; tablet usa menu compatto
+- `npm run typecheck` PASS dopo il blocco
+
+### Decisione full-mode - 2026-06-03
+
+Decisione owner: il sito deve lavorare in full-mode, non in lite mode.
+
+- `.env` e `.env.example` portati a `VITE_LITE_MODE=false`
+- `Esplora`, `Shop`, `Club`, `Preferiti` e itinerari restano navigabili nel percorso pubblico
+- `Club` riallineato a pre-lancio credibile: non promette checkout live, ma mostra valore, waitlist e stato reale del catalogo
+- area autenticata del Club non chiama piu ogni login "membro": diventa area personale con preferiti, acquisti e futuri accessi Club
+- FAQ Club riscritta per waitlist/pre-lancio: nessun pagamento, nessun rinnovo, nessun regalo promesso prima del checkout
+- `npm run typecheck` PASS
 
 ## Decisione homepage V3
 
@@ -124,6 +241,16 @@ Decisione: mantenere il carattere visuale, ma togliere ogni elemento che sembra 
 - i numeri nel metodo diventano una riga di prova sobria, non un secondo blocco statistiche
 - l'editoriale riduce padding e testo nelle card, puntando su gerarchia e immagine
 
+## Sessione Esplora P0 - 2026-05-15
+
+Intervento eseguito su navigazione e discovery:
+
+- `Esplora` ora include anche la mappa visuale e resta attivo su `/mappa`
+- la CTA home discovery verso l'archivio non usa piu `?search=` perche la pagina destinazioni non implementa una ricerca inline
+- la ricerca globale traccia apertura e no-results e non promette piu navigazione con frecce non implementata
+- rimossi preload globali delle immagini home da `index.html`; i preload restano route-specifici in `Home`
+- rimosso il caricamento esterno del font script Kalam per evitare 404 in console
+
 ## Decisione homepage V2
 
 Direzione: editoriale pulita, utile all'utente finale e coerente con un brand creator people-led.
@@ -139,10 +266,39 @@ Direzione: editoriale pulita, utile all'utente finale e coerente con un brand cr
 
 La voce `Destinazioni` diventa `Esplora` e raggruppa:
 
+- `Inizia da qui`: `/esplora` come finder editoriale centrale
 - `Per luogo`: `/destinazioni` e filtri da `DESTINATION_GROUPS`
 - `Per esperienza`: `/esperienze` e filtri da `EXPERIENCE_TYPES`
+- `Guide` e `Mappa visuale`: percorsi specializzati collegati al finder
 
 Le voci `Guide`, `Esperienze` e `Shop` non compaiono piu nel menu principale. Le route restano disponibili per accesso diretto o collegamenti contestuali.
+
+## Sessione Esplora 10/10 - 2026-05-15
+
+- aggiunta route `/esplora` come porta centrale tra destinazioni, esperienze, guide e mappa
+- la navbar principale punta a `/esplora` e resta attiva anche su `/destinazioni`, `/esperienze`, `/guide`, `/mappa`
+- home discovery traccia `home_discovery_click` su card luogo, esperienza e guide
+- search globale include risultati diretti verso finder, gruppi destinazione e tipi esperienza
+- conversione soft: lead magnet, newsletter, risorse e collaborazioni restano contestuali, non invasive
+
+## Sessione Esplora 10/10 — closeout 2 (2026-05-15)
+
+Closeout dei P1/P2 lasciati aperti dalla sessione precedente:
+
+- **Mega menu Esplora** ricomposto come decisione editoriale invece di lista
+  enciclopedica. Le voci "Per luogo" e "Per esperienza" ora mostrano solo
+  3-4 picks editoriali (Italia/Europa/Asia · Posti particolari/Food/Hotel/Weekend)
+  con un "Tutte" finale per scendere nell'archivio completo. Aggiunta colonna
+  "Strumenti" che raggruppa Guide/Itinerari/Risorse — toglie l'iperestensione
+  dei link enciclopedici e accelera la scelta in 1 click.
+- **SearchModal raggruppata**: i risultati appaiono ora in sezioni separate
+  (Luoghi, Esperienze, Percorsi consigliati, Articoli e guide, Pagine) con
+  ordine editoriale e fallback "Altri risultati" per categorie non mappate.
+- **Mappa con filtri Esperienza** in aggiunta al continente: l'utente può
+  isolare Posti particolari / Food / Hotel / Guide / Weekend e poi salire
+  verso `/destinazioni` con i filtri già passati nell'URL.
+- **Newsletter contestuale /guide**: `source` dinamico per categoria e
+  `ctaLabel` adattivo ("Ricevi le prossime guide su {Categoria}").
 
 ## Asset e configurazione
 
@@ -167,218 +323,171 @@ Lavoro eseguito con Antigravity su Sprint Visual Identity:
 
 Prossimi step: pagine interne (ChiSiamo, Collaborazioni, MediaKit, Contatti), fix form, Shop, SEO.
 
+## Hero 10/10 pass — 2026-05-24
+
+Rifinitura hero richiesta dall'owner ("voglio una hero da 10/10"), su direzione
+`travellini-ui-designer`. Immagine coppia mantenuta (scelta owner: brand
+people-led), resa più leggibile invece di sostituirla con foto-luogo.
+
+Cambi in `HeroSection.tsx`:
+
+- H1: scala fluida `clamp(2.75rem, 6vw + 0.5rem, 7.5rem)` (no più step
+  `text-5xl→8xl`), `leading-[1.02]` mobile → `lg:leading-[0.95]`,
+  `tracking-[-0.01em]`, `[text-wrap:balance]`, `max-w-[15ch]` (2 righe
+  bilanciate), drop-shadow alleggerito 0.45 → 0.35.
+- Eyebrow: da 10px/bold/0.24em a `text-xs sm:text-sm`/`font-semibold`/0.18em
+  - micro drop-shadow (era il testo più debole della prima piega).
+- Scrim desktop ammorbidito: picco sinistro 0.82 → 0.74 così la coppia a
+  destra non finisce nel nero. Fondo mobile 0.84 → 0.88. Aggiunto micro-scrim
+  dal basso (h-1/3) per proteggere la proof line senza scurire il centro.
+- CTA: secondaria "Ultime guide" da bottone bordato pari-grado a link ghost
+  (no min-w, no border) → la primaria accent domina. Aggiunto micro-link di
+  fuga mobile "Oppure leggi le ultime guide" (sotto la primaria, sm:hidden).
+- Proof strip: ora visibile anche su mobile (riga inline ·-separata short),
+  griglia desktop invertita value-first (dato grande sopra, label occhiello
+  sotto).
+- Motion: wipe clip-path 1.4s → 1.0s, delay stagger compressi
+  (0.35→0.2 … 0.62→0.56), atterraggio intro ~1.1s.
+- `HeroBackdrop.tsx`: rimosso
+  `saturate-[1.04]` (look "stock vivido"), tenuto `brightness-[0.96]`.
+
+Verifiche:
+
+- `npm run typecheck` PASS.
+- Verifica browser reale via Chrome DevTools MCP (Playwright era lockato):
+  - Desktop 1280: H1 2 righe bilanciate, coppia leggibile, scrim morbido,
+    CTA primaria dominante, proof value-first. PASS.
+  - Mobile 375: zero overflow, H1 2 righe senza taglio, "Apri Esplora" in
+    prima piega, micro-link fuga presente, proof inline ·-separata,
+    secondario nascosto. PASS.
+  - Tablet 768: layout sm+ corretto, nessun overflow. PASS.
+  - Console: zero errori/warning, nessun 404 immagini hero. PASS.
+
+Pass rifinitura "best of best" (stessa sessione, verificato a schermo):
+
+- H1 clamp ridotto da `6vw+0.5rem,7.5rem` (120px a 1280, 3 righe che invadevano
+  la coppia) a `5vw+1rem,6rem` (~80px a 1280, 2 righe calme) — più on-brand
+  (calm editorial, non magazine-cover aggressivo).
+- Spazio insecabile (U+00A0) tra "che" e "valgono" in `HERO_TITLE`: il wrap
+  ora cade dopo "particolari" su tutti i breakpoint ("Posti particolari / che
+  valgono davvero."), niente pronome "che" orfano a fine riga.
+- Label proof METODO/FOCUS/FILTRO da `white/45` a `white/55` (più leggibili).
+- Link ghost "Ultime guide": underline animato (scale-x 0→1) su hover.
+- Ricontrollato 1280/375 a schermo + console pulita.
+
+## Nav IA cleanup — 2026-05-24
+
+Audit navbar vs rotte reali (decisioni owner):
+
+- Rimosso il duplicato top bar: la voce centrale "Collaborazioni" puntava a
+  `/collaborazioni` come la pill "Collabora con noi". Tenuta solo la pill;
+  voce centrale rimossa. Media Kit ora raggiungibile via footer + pagina
+  `/collaborazioni`.
+- Footer: aggiunti **Club** (colonna Scopri) e **Press** (colonna Progetto).
+  `/press` era orfana (nessun link interno) — ora raggiungibile.
+- Rinominato footer "Risorse di viaggio" → **"Cosa usiamo"** (toglie la
+  collisione di nome con "Strumenti": tool interattivi vs affiliate).
+
+### Verifica Shop/Club a schermo → decisione nav (2026-05-24)
+
+Verificate `/shop` e `/club` nel browser: **entrambe pre-lancio con un buco
+di contenuto vuoto.**
+
+- `/shop`: griglia prodotti totalmente vuota, carrello disabilitato, banner
+  "boutique in apertura". Header + sezioni editoriali presenti, ma 0 prodotti.
+- `/club`: prezzi (€5,90/mese · €49/anno) + FAQ + login presenti, MA checkout
+  in waitlist ("avvisami al lancio") e anteprima guida ("prime 200 parole")
+  non renderizzata → grande vuoto bianco.
+
+Principio: una voce di nav è una promessa; una pagina vuota dietro rompe la
+fiducia. Decisione iniziale era toglierle dalla top nav — **rovesciata
+dall'owner: Shop + Club restano in top nav.** Di conseguenza i due empty-state
+sotto diventano prioritari (la promessa di nav DEVE essere mantenuta).
+
+Top nav finale: **Esplora · Strumenti · Shop · Club · Chi siamo** + pill
+"Collabora con noi".
+
+### Bug aperti (pre-lancio, da fixare prima di ri-promuovere)
+
+- [x] `/shop`: griglia prodotti vuota mitigata — pagina convertita in waitlist
+      con un solo SKU prioritario e carrello disabilitato finche il file non e pronto.
+- [ ] `/club`: anteprima guida ("prime 200 parole") non renderizzata sotto
+      "Le guide del Club sono lunghe, lente, dettagliate" — buco bianco.
+
+- `npm run typecheck` PASS, navbar verificata a schermo a 1280 (3 voci + pill).
+
+## Audit visivo/copy/contenuti — 2026-06-07
+
+Audit full-site (grafica/estetica/copy/contenuti/immagini/conversione) con 4
+specialisti in parallelo + verifica browser. Report completo:
+[[PROJECT_VISUAL_COPY_CONTENT_AUDIT]].
+
+Fix sicuri implementati che toccano la home (typecheck/build/audit:ui/browser PASS):
+
+- `HomeEditorialPromise`: rimosso `twu-dot-grid` decorativo, corretta animazione
+  "morta" (`initial opacity:1` → vero fade), eyebrow tracking `0.36em → 0.3em`.
+- `HomeLeadMagnet`: rimosso blob `blur-2xl` arancione (anti-DESIGN.md).
+- `HomeFeaturedDestinations`: eyebrow `0.32em → 0.3em`, alt descrittivi per regione
+  (campo `alt` dedicato).
+- `LatestArticles` + `InstagramGrid`: H2 sezione `md:text-4xl → md:text-5xl`
+  (coerenza scala); InstagramGrid alt fedeli all'immagine (la caption descriveva
+  luoghi non mostrati dai placeholder brand).
+- `NewsletterFeature`: rimossi hover-color/border su `<li>` non interattivi.
+- `CoupleIntro` + `MonetizationTeaser`: refusi di encoding (accenti) + "150+".
+
+Aperti per la home (DA-APPROVARE, vedi report): consolidare i 3 discovery ridondanti,
+fondere le due sezioni partner, sostituire mappa finta del MonetizationTeaser e mockup
+costruito a mano del lead magnet con asset reali, conteggi "N racconti" non verificabili,
+trust badge accanto ai form. Blocco #1 invariato: foto reali R+B (hero people-led ancora
+su asset AI riciclati).
+
 ## Link
 
+- [[PROJECT_VISUAL_COPY_CONTENT_AUDIT]]
 - [[OBSIDIAN_DASHBOARD]]
 - [[TRAVELLINIWITHUS_EXECUTION_PLAN]]
 - [[AGENT_WORKFLOWS]]
 
-## Build pass 2026-04-22 - discovery + trust layer
-
-Implementazione riallineata al repo senza cambiare la nav V3:
-
-- `LatestArticles` ora privilegia `featuredPlacement = home-flagship` e mostra anche metadata decisionali (`tripIntents`, `budgetBand`, `verifiedAt`) quando disponibili.
-- Le foto brand reali di `ChiSiamo` e `Collaborazioni` passano dal registry `MEDIA`, cosi gli asset editoriali restano centralizzati.
-- `ChiSiamo` aggiunge due blocchi espliciti: `Come decidiamo dove andare` e `Cosa verifichiamo`, per spostare la fiducia dal tono al metodo.
-- `Risorse` rafforza la semantica "plan a trip" con card `Parti da qui` che collegano il toolkit a `Destinazioni`, `Esperienze` e `Guide`.
-- Home e discovery restano dentro la struttura V3 gia approvata; il nuovo layer premium arriva da metadati, selezione flagship e copy piu decisionale, non da nuove route.
-
-## Build pass 2026-04-23 - Salt-style premium layer
-
-Home ri-orchestrata da flusso lineare a portale di esplorazione, seguendo il reference saltinourhair.com adattato al tono italiano del brand.
-
-Ordine sezioni attuale:
-
-1. `HeroSection`
-2. `DestinationScroller` (montato — era untracked)
-3. `HomeDiscoveryCards`
-4. `CoupleIntro`
-5. `HomeMapTeaser`
-6. `LatestArticles`
-7. `HomeToolsTeaser`
-8. `InstagramFeed` (nuovo — fixture in dev, Graph API in W8)
-9. `PartnerLogos` (nuovo — prop-driven, default fallback credibile)
-10. Newsletter inline dark
-11. `HomeCollaborationCta`
-
-Componenti nuovi creati in `src/components/home/`:
-
-- `InstagramFeed.tsx` — grid 2×3 / 3×2 con `role="list"`, OptimizedImage, CTA Follow
-- `PartnerLogos.tsx` — wordmark o logo img, riusato anche in `Collaborazioni.tsx` con lista B2B dedicata
-
-Navbar: aggiunto sub-link `Dove dormire` dentro gruppo `Guide` del mega-menu `Esplora`. Footer: stesso link nel blocco `Scopri`.
-
-Nessun restyle di token in questa pass. Restyle visivo rimandato a milestone design-review dedicata (non avviata).
-
-## Build pass 2026-04-24 - nav split Guide / Pianifica
-
-Decisione: la nav smette di comprimere tutto dentro `Esplora` + `Risorse`.
-
-- `Esplora` resta per destinazioni ed esperienze
-- `Guide` ora dichiara il layer editoriale pratico: guide, itinerari, dove dormire, cosa mangiare
-- `Pianifica` diventa il funnel operativo: `Inizia da qui`, `Risorse`, `Dove dormire`
-- il cambio serve a rendere leggibile la differenza tra ispirazione, contenuto pratico e workflow di organizzazione
-
-## Build pass 2026-04-27 - V1 rebuild forte
-
-Decisione: per il lancio V1 la navigazione diventa piu diretta e meno astratta.
-
-- nav primaria a 4 voci: `Destinazioni`, `Guide`, `Risorse`, `Collaborazioni`. `Itinerari` e `Dove dormire` sono stati rimossi dalla nav perché non più pagine standalone — il contenuto rilevante vive dentro `Destinazioni` (hub regionali) e `Guide` (sezione editoriale).
-- rimossa la voce `Travel tips`
-- `Shop` resta fuori dalla nav finche non esistono prodotti reali acquistabili e consegnabili
-- home orientata al cluster Puglia/Italia con CTA `Inizia dalla Puglia`
-- B2B separato in CTA dedicata e fascia finale, senza loghi partner non verificati
-- `PartnerLogos` non mostra piu fallback demo: renderizza solo liste partner reali passate come prop
-
-## Build pass 2026-04-24 - senior UI polish (homepage + footer)
-
-Revisione editoriale premium (no redesign) focalizzata su contrast, gerarchia e dedupe navigazionale. Tutti i gate verdi (`typecheck`, `audit:ui` 11/0 new, `build` OK in 20s).
-
-Modifiche:
-
-- **Footer** (`src/components/Footer.tsx`) — dedupe dei link: ogni voce appare una sola volta. Rimossi `Dove dormire` duplicato in Scopri, `Risorse` duplicato in Scopri e Pianifica, `Preferiti` duplicato in Pianifica. Aggiunto `Cosa mangiare` in colonna Pianifica. Ridotta densità senza perdere funzionalità.
-- **HeroSection** (`src/components/home/HeroSection.tsx`) — rimosso paragrafo uppercase ridondante sotto i CTA (ripeteva il messaggio dei TRUST_PILLS). Bump opacity: description `text-white/86 → /90`, pill text `/78 → /85`, secondary CTA text `/82 → /88`.
-- **Home newsletter section** (`src/pages/Home.tsx`) — italic `text-black/55 → /70`, body `/62 → /72` per soddisfare WCAG AA con margine.
-- **HomeDiscoveryCards** (`src/components/home/HomeDiscoveryCards.tsx`) — description principali `text-black/62 → /72`, guide-tile desc `/55 → /65`. Typo `gia → già` corretto nel CTA Pianifica.
-- **CoupleIntro** (`src/components/home/CoupleIntro.tsx`) — quote manifesto `text-black/45 → text-accent-text` (dal bronzo WCAG AA compliant). Card standard desc `/55 → /68`. Badge meta `/50 → /62` con bold.
-- **LatestArticles** (`src/components/home/LatestArticles.tsx`) — heading ristretta da "Contenuti editoriali da leggere prima di partire" a "Guide e itinerari da leggere prima di partire" (più diretto), eyebrow `Editoriale → Dalla redazione`, body `/60 → /70`, link secondari `/50 → /62`.
-
-Proposte rimandate (medio rischio, richiedono approval):
-
-- **B1**. Home consolidation: valutare fusione `InstagramFeed + PartnerLogos` in strip social proof unica, e riordino `HomeMapTeaser` dopo `DestinationScroller`.
-- **B2**. Design token: introdurre `.text-muted` (/70) e `.text-meta` (/55) in `@theme` per eliminare i `/55 /62 /65 /68` dispersi nei componenti.
-
-Fuori scope (pre-esistente, non toccato):
-
-- Warning IDE `suggestCanonicalClasses` (`text-[var(--color-accent)] → text-accent`) — presenti in tutto il codebase, non introdotti dalle modifiche.
-- Navbar refactor (stabile, 713 righe).
-- Sostituzione immagini AI con foto reali Rodrigo & Betta (owner task).
-
-## Build pass 2026-04-24 - wave 2 + 3 (home residui + pagine conversione)
-
-Seconda e terza ondata della senior UI review, sullo stesso gate giornaliero. Tutti i gate verdi (`typecheck`, `audit:ui` 11/0 new, `build` OK in 25s).
-
-Wave 2 — home components residui:
-
-- **HomeToolsTeaser** (`src/components/home/HomeToolsTeaser.tsx`) — main description `text-black/62 → /72`, card descriptions `/56 → /68`, CTA meta `/42 → /60` per migliore affordance dei link "Vai alle risorse".
-- **HomeMapTeaser** (`src/components/home/HomeMapTeaser.tsx`) — italic `text-black/55 → /70`, description `/62 → /72`. SVG world shapes `strokeOpacity 0.18 → 0.22`, marker-pulse `fillOpacity 0.18 → 0.24` per migliore riconoscibilità geografica.
-- **HomeCollaborationCta** (`src/components/home/HomeCollaborationCta.tsx`) — secondary button "Richiedi il media kit" rinforzato: `border-white/18 → /24`, `text-white/76 → /92`. Parity visuale con il primary CTA senza perdere la gerarchia.
-
-Wave 3 — pagine di conversione:
-
-- **InstagramFeed** (`src/components/home/InstagramFeed.tsx`) — stesso pattern italic+body `/55 → /70`, `/62 → /72`.
-- **Collaborazioni** (`src/pages/Collaborazioni.tsx`) — badge "Con priorità alla qualità del racconto" `text-black/45 → /60` per leggibilità mobile sulla floating card B2B.
-
-Pagine auditate ma non modificate (copy e gerarchia già molto forti, nessun quick win giustificato):
-
-- `src/pages/ChiSiamo.tsx` — `/70` su cards principi è borderline ma accettabile. Rinvio a pass design token (B2).
-- `src/pages/MediaKit.tsx` — success message usa `text-accent-text` (bronzo WCAG AA), già al limite corretto.
-- `src/pages/IniziaDaQui.tsx` — card body `/65` adeguato, gerarchia forte, no interventi.
-
-Totale ondate 1+2+3: **11 file src toccati** (Footer, HeroSection, Home, HomeDiscoveryCards, HomeToolsTeaser, HomeMapTeaser, HomeCollaborationCta, CoupleIntro, LatestArticles, InstagramFeed, Collaborazioni), 0 regression, 0 new audit warning, build stabile.
-
-### Wave 4 — smoke test reale (Playwright MCP) e fix follow-up
-
-Eseguito smoke test via `browser-auditor` su `http://localhost:3000` — homepage desktop 1280×800, homepage mobile 390×844, `/collaborazioni` desktop. Verdict: nessun blocker, nessun errore console, nessuna regressione strutturale. 5 screenshot salvati.
-
-Issue trovati dallo smoke test:
-
-1. **Footer grid desktop wrap** (pre-esistente, scoperto durante il test) — a 1280px la colonna `Progetto` andava a capo su una seconda riga. Calcolo grid: logo `lg:col-span-2` + 4 colonne link × 1 = 6 colonne necessarie, ma grid era `lg:grid-cols-5`. Fix: `lg:grid-cols-5 → lg:grid-cols-6` in `src/components/Footer.tsx`. Ora le 5 colonne desktop si distribuiscono pulite: Logo (2) + Scopri + Pianifica + Risorse + Progetto.
-
-2. **Navbar sticky copre prima voce footer su mobile** (pre-esistente, WARN minore) — il z-index della navbar sticky sovrappone visivamente la prima voce di `Scopri` (Destinazioni) quando lo scroll raggiunge il footer. Il link è presente e funzionale, solo oscurato visivamente. **Non fixato in questa pass**: richiede intervento sulla Navbar, fuori scope. Aggiunto qui come tech debt noto.
-
-Totale post wave 4: **11 file src** (ri-toccato Footer per il grid fix), 0 regression, 0 nuovi audit warning.
-
-## Build pass 2026-04-24 - wave 5 (editorial polish: magazine feel)
-
-Passaggio da "buon sito creator" a "rivista travel digitale": infrastruttura editoriale + copy più specifica. Tutti i gate verdi (`typecheck` clean, `audit:ui` 119 file / 11-0 new, `build` 22.26s).
-
-### Nuovi componenti editoriali riusabili
-
-- **`src/components/article/PullQuote.tsx`** — blockquote visivo con accent-line a sinistra, icona Quote floating, font serif italic 2xl/3xl, attribuzione opzionale in accent-text small-caps. Sostituisce la trasformazione inline "Consiglio Travellini" in markdown con un blocco visivo che spezza il ritmo del corpo articolo.
-- **`src/components/article/FactBox.tsx`** — fast-facts card con `<dl>` semantica, grid 1/2/4 colonne responsive (sm/lg), label uppercase sottile e valore in serif prominente. Progettato per "destinazione in breve" (es. "Ring Road: 1.332 km · 10 giorni · €3.500–5.000").
-
-Entrambi esportati da `src/components/article/index.ts` e accessibili da qualunque pagina articolo.
-
-### Estensione tipo `ArticleData` (`src/components/article/types.ts`)
-
-Aggiunti 3 campi opzionali:
-
-- `verifiedContext?: string` — etichetta rich del badge "Verificato" (es. `"10 giorni lungo la Ring Road"`), rimpiazza il generico "Verificato" quando popolato.
-- `pullQuote?: { text: string; attribution?: string }` — contenuto PullQuote strutturato.
-- `factBox?: { title?: string; items: { label: string; value: string }[] }` — fast-facts strutturati.
-
-Nessuno è required: articoli esistenti continuano a renderizzare senza variazioni.
-
-### Wiring render (`src/pages/Articolo.tsx`)
-
-- FactBox renderizzato subito dopo la sezione "Perché salvarlo" (highlights), prima del body. Target: lettori scanner che vogliono i numeri prima della prosa.
-- PullQuote renderizzato dopo `ArticleBody`, prima dell'itinerario. Target: punto di respiro visivo tra il racconto discorsivo e le sezioni pratiche.
-- `ArticleHero` ora mostra `verifiedContext` con bordo/bg accent anziché bianco neutro, quando presente. Badge cresce da puro statement a micro-credibility statement.
-
-### 3 pillar popolati (`src/config/previewContent.ts`)
-
-Tutti i campi usano **solo dati già presenti nel body** (duration, period, costs, content) — zero numeri inventati, zero claim verificabili non supportati.
-
-- **Puglia roadtrip**: verifiedContext `"5 giorni in Valle d'Itria"`, factBox (durata/periodo/budget/distanze), pullQuote estratto da "Consiglio Travellini" del body.
-- **Islanda Ring Road estate**: verifiedContext `"10 giorni lungo la Ring Road"`, factBox con km reali (1.332), pullQuote "Non inseguire ogni cascata...".
-- **Islanda Ring Road inverno**: verifiedContext `"Ring Road in pieno inverno, 10 giorni"`, factBox con budget esplicito (€3.500–5.000 esclusi voli, come dichiarato nel body), pullQuote "Metà febbraio è la nostra sweet spot...".
-
-### Home copy: da astratta a specifica (con pillar names reali)
-
-- **`HeroSection.tsx`**: description da `"Guide pratiche scritte da chi ha vissuto..."` a `"Itinerari scritti dopo il viaggio, hotel testati sul posto, costi e stagioni reali. Non la lista più lunga: quella che ti fa decidere meglio."`.
-- **`siteContent.ts`** → `home.heroDescription` default CMS allineato alla nuova copy (admin editor mostra la stessa voce).
-- **`LatestArticles.tsx`**: heading da `"Guide e itinerari da leggere prima di partire."` a `"Le guide che stiamo finendo di scrivere."` + body che nomina i 3 pillar reali (Puglia slow, Islanda estate, Islanda inverno).
-- **`HomeMapTeaser.tsx`**: heading da `"Un mondo di posti vissuti davvero"` a `"I posti che stiamo raccontando"` (onesto sullo stato draft) + body che cita Valle d'Itria e Ring Road.
-
-### Vincoli rispettati
-
-- Zero numeri inventati (seguita la regola CLAUDE.md "non inventare promesse commerciali non supportate").
-- Zero claim su follower/metriche social.
-- `const` field `verifiedContext` è opzionale: articoli senza il campo mantengono il badge "Verificato sul posto" di default.
-- Pull-quote estratti dal body esistente — non scritti ex novo.
-
-### Follow-up editoriale consigliati (owner action)
-
-- Espandere i 3 pillar: ogni body è ~300-400 parole. Per "feature magazine" servono 1.500-2.500 (già indicato in EDITORIAL_GUIDE: pillar 1800-3000 parole).
-- Sostituire immagini pillar Unsplash con foto reali Rodrigo & Betta sul posto.
-- Aggiungere gallery reale e hotel testati nei 3 pillar.
-- Valutare aggiunta `updatedAt` timestamp ad ogni revisione per trigger di "maintenance" in bullet footer articolo.
-
-Totale wave 5: **9 file modificati** (types, index, ArticleHero, Articolo, HeroSection, LatestArticles, HomeMapTeaser, siteContent, previewContent) + **2 file creati** (PullQuote, FactBox). 0 regression, 0 nuovi audit warning.
-
-## Build pass 2026-04-24 - wave 6 (allineamento copy↔contenuto + Instagram dedup)
-
-Re-check browser post wave 5 ha trovato 3 problemi concreti da sistemare — tutti chiusi in questa wave.
-
-Fix eseguiti:
-
-1. **LatestArticles mostrava solo "Guida a Bali" invece dei 3 pillar promessi dalla copy.** Root cause: quando Firestore restituiva anche 1 articolo, il fallback logic di `LatestArticles.tsx` soppiantava completamente i demo previews, senza merge. Fix: in modalità demo (`showEditorialDemo=true`), se Firestore ha < 3 flagship, si fa merge di Firestore + `EDITORIAL_PREVIEWS` (dedup per id) per garantire i flagship editoriali. Firestore mantiene priorità sui dati reali.
-
-2. **Mismatch copy↔contenuto demo flagship.** La nuova copy della wave 5 nominava "Puglia slow, Islanda Ring Road d'estate e d'inverno", ma i demo `featuredPlacement: 'home-flagship'` erano su Dolomiti + Puglia + Sicilia, e Islanda inverno non era neanche in `demoContent.ts`. Fix in `src/config/demoContent.ts`:
-   - Rimosso `featuredPlacement` da Dolomiti (DEMO_ARTICLE_PREVIEW) e da Sicilia.
-   - Aggiunto `featuredPlacement: 'home-flagship'` a Islanda estate.
-   - Aggiunta nuova entry Islanda inverno con `featuredPlacement: 'home-flagship'`, createdAt `2026-04-24` (il più recente → diventa flagship visuale).
-     Top 3 flagship ora per createdAt desc: Islanda inverno, Puglia, Islanda estate. Coincide con la copy.
-
-3. **Instagram duplicato pre-footer.** La home mostrava `InstagramFeed` (sezione editoriale dedicata) + subito sotto `InstagramGrid` renderizzato dal `Footer.tsx` (band generica pre-footer presente su ogni pagina). Fix: in `Footer.tsx` aggiunto guard `showInstagramGrid = location.pathname !== '/'`. Le altre pagine mantengono il grid generico; la home ha solo la sua versione editoriale.
-
-Bug minore fix:
-
-- **Encoding UTF-8 "cittÃ d'arte"** in `demoContent.ts` L52 — double-encoded mojibake (bytes `0xC3 0x83 0xC2 0xA0` invece di `0xC3 0xA0` per `à`). Corretto a byte-level a `città d'arte`. Impatto: accessibility tree, tag card, rich snippet Google.
-
-### Verdict browser post-wave 6
-
-Home auditor confermato:
-
-- LatestArticles mostra ora i 3 pillar corretti (Islanda inverno flagship + Puglia + Islanda estate). Copy=contenuto.
-- Instagram appare esattamente 1 volta sulla home; resta visibile su `/collaborazioni` come prima.
-- 0 console errors.
-- Encoding pulito.
-
-### Tech debt residuo (fuori scope wave 6)
-
-- `/collaborazioni` ha alcune "sezioni con molto spazio vuoto" rilevate nel browser audit — probabilmente immagini Firestore non disponibili in locale. Da investigare in una pass dedicata alla pagina Collaborazioni.
-- HomeDiscoveryCards mantiene la densità di 3 blocchi di navigazione consecutivi — pattern editoriale da rivedere (B1 rimandata).
-
-Totale wave 6: **3 file src toccati** (`demoContent.ts`, `LatestArticles.tsx`, `Footer.tsx`). 0 regression, 0 nuovi audit warning, build OK.
+## Semplificazione navbar editoriale — 2026-07-23
+
+- Ridotte le voci B2C a due assi distinti: `Mete` per la navigazione geografica e `Guide e racconti` per la navigazione editoriale.
+- Rimossa la voce autonoma `Esplora`, perché duplicava l'accesso agli stessi contenuti di `Guide e racconti`.
+- Il menu editoriale ora raccoglie `Guide`, `Itinerari`, `Racconti` e `Tutti i contenuti`.
+- La sequenza principale diventa `Mete · Guide e racconti · Mappa · Chi siamo`.
+- La CTA reader passa da `Vieni con noi` a `La guida in regalo`: la landing esplicita il funnel newsletter e usa `Ricevi la prima guida` come azione finale.
+- La landing reader viene riposizionata su `/italia-nascosta` (slug poi sostituito da `/guida-in-regalo` nel rework sotto — vedi sezione successiva); `/vieni-con-noi` e `/iscrivi` restano redirect compatibili. La pagina è breve e focalizzata sulla prima guida: 10 destinazioni particolari, nessun nome anticipato e un solo funnel newsletter.
+
+## Rework funnel lead magnet — slug + naming + imagery — 2026-07-23
+
+Rework completo su handoff `seo → ui → asset → frontend` (vedi
+`docs/50_Scratch/HANDOFF_lead-magnet-rework_*.md`). Slug definitivo
+`/guida-in-regalo` (la CTA navbar "La guida in regalo" ora coincide
+verbatim con lo slug — label invariata, solo il target cambia).
+`/italia-nascosta`, `/vieni-con-noi`, `/iscrivi` diventano tutti e tre
+redirect diretti a `/guida-in-regalo` (nessuna catena doppia).
+
+- Naming disaccoppiato: TITOLO invariato ("Alla scoperta dell'Italia
+  nascosta"), nuovo DESCRITTORE unico ("10 posti provati e consigliati da
+  noi") sostituisce le 5 varianti frammentate su landing, teaser home,
+  popup, download page e welcome email.
+- Cover del lead magnet: niente più placeholder demo. Route B (craft
+  tipografica) — riusa la texture carta dell'Atlante (`atlante-carta-tile`)
+  invece di una foto, perché nessuno dei 10 posti reali della guida ha uno
+  scatto certificato in libreria. Un solo componente (`LeadMagnetCover`,
+  `src/components/LeadMagnetCover.tsx`) su landing, teaser home e thumbnail
+  popup.
+- Hero `hero-amalfi.webp` rimosso dalla landing `/guida-in-regalo`:
+  contraddiceva la promessa "non ovvio" (la guida esclude esplicitamente
+  Amalfi standard) e creava un doppio candidato LCP con la cover.
+- `HomeLeadMagnet` consolidato: via il form `<Newsletter>` embedded, via i
+  chip con nomi di luogo reali (non presenti nei 10 posti veri — errore
+  fattuale, non solo di posizionamento), un solo CTA verso la landing.
+- `ExitIntentPopup` ora è gated al 100%: rimosso il download PDF diretto
+  ungated. Bug corretto: `source` passava `"exit_intent_popup"` (non
+  sbloccava nulla in `Newsletter.tsx`, che richiede la sottostringa
+  `lead_magnet`) → ora `"lead_magnet_exit_popup"`.
+- Token analytics (`source`/`content_id`/`cta_id`) resi evergreen
+  (`lead_magnet_landing_*`, `lead_magnet_guida`), disaccoppiati da slug e
+  titolo così un futuro rename non forka la metrica di conversione.
+- Dettaglio completo, deviazioni e stato check:
+  `docs/50_Scratch/HANDOFF_lead-magnet-rework_frontend_to_gate.md`.

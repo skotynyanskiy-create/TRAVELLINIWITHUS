@@ -1,50 +1,49 @@
-{
-  "filters": {
-    "filterOperator": "and",
-    "conditions": [
-      {
-        "field": "type",
-        "operator": "is",
-        "value": ["product"]
-      }
-    ]
-  },
-  "order": [
-    {
-      "field": "status",
-      "direction": "asc"
-    }
-  ],
-  "views": [
-    {
-      "id": "all-products",
-      "name": "Tutti i prodotti",
-      "type": "table",
-      "columns": ["file.name", "status", "category", "price", "route", "affiliate"]
-    },
-    {
-      "id": "live",
-      "name": "Live",
-      "type": "table",
-      "filters": {
-        "filterOperator": "and",
-        "conditions": [
-          {"field": "status", "operator": "is", "value": ["live"]}
-        ]
-      },
-      "columns": ["file.name", "category", "price", "route", "affiliate"]
-    },
-    {
-      "id": "pipeline",
-      "name": "In sviluppo",
-      "type": "table",
-      "filters": {
-        "filterOperator": "and",
-        "conditions": [
-          {"field": "status", "operator": "is", "value": ["idea", "in-sviluppo"]}
-        ]
-      },
-      "columns": ["file.name", "status", "category", "price"]
-    }
-  ]
-}
+filters:
+  and:
+    - 'file.ext == "md"'
+    - 'type == "product"'
+properties:
+  file.name:
+    displayName: Prodotto
+  status:
+    displayName: Stato
+  category:
+    displayName: Categoria
+  price:
+    displayName: Prezzo
+  route:
+    displayName: Route
+  affiliate:
+    displayName: Affiliate
+views:
+  - type: table
+    name: Tutti i prodotti
+    order:
+      - file.name
+      - status
+      - category
+      - price
+      - route
+      - affiliate
+  - type: table
+    name: Live
+    filters:
+      and:
+        - 'status == "live"'
+    order:
+      - file.name
+      - category
+      - price
+      - route
+      - affiliate
+  - type: table
+    name: In sviluppo
+    filters:
+      or:
+        - 'status == "idea"'
+        - 'status == "in-sviluppo"'
+    order:
+      - file.name
+      - status
+      - category
+      - price

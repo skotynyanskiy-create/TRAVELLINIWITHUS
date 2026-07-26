@@ -5,28 +5,183 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Travelliniwithus racconta posti particolari, esperienze memorabili e consigli utili da salvare e vivere davvero."
+      content="Guide e itinerari di coppia nel Sud Italia, scritti dopo averli vissuti: Salento, Puglia, Sicilia. Posti veri, prezzi reali, niente marketing."
     />
-    <meta name="theme-color" content="#f7f0e5" />
+    <meta name="theme-color" content="#fafafa" />
     <title>Travelliniwithus</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://images.unsplash.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Kalam:wght@300;400;700&display=swap" rel="stylesheet" />
-    <!-- LCP hero preload — immagine above-the-fold della Home.
-         Se cambi MEDIA.hero.primary in src/config/mediaAssets.ts, aggiorna anche questo href. -->
+
+    <!-- Fonts are self-hosted via @fontsource (see src/index.css). Vite bundles
+         and hashes the woff2 files; browser discovers them when CSS is parsed.
+         A manual preload would need the hashed final path (post-build) and is
+         skipped here to avoid 404s. The browser starts the font fetch on first
+         CSS parse, which is fast enough on HTTP/2 multiplexed connections. -->
+
+    <!-- Route-specific LCP image preloads are managed from React pages with Helmet.
+         Exception: the home poster is preloaded statically because Helmet preloads
+         only fire after the lazy route chunk loads — too late for the LCP.
+         Deve restare allineato all'immagine `eager` di CinematicHomepage: preloadare
+         un file che la home non renderizza costa banda E ritarda l'LCP vero.
+         `imagesizes` qui e `sizes` su <OptimizedImage> in BrandCoherentHero devono
+         restare IDENTICI: se divergono il browser preloada una variante e poi ne
+         scarica una seconda per l'elemento. -->
     <link
       rel="preload"
       as="image"
-      href="https://images.unsplash.com/photo-1549144511-f099e773c147?q=80&w=2000&auto=format&fit=crop"
+      type="image/avif"
+      imagesrcset="
+        /images/home-journal/hero-impossible-320.avif  320w,
+        /images/home-journal/hero-impossible-480.avif  480w,
+        /images/home-journal/hero-impossible-768.avif  768w,
+        /images/home-journal/hero-impossible.avif     1080w"
+      imagesizes="(max-width: 1023px) 80vw, 37vw"
       fetchpriority="high"
-      referrerpolicy="no-referrer"
     />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://travelliniwithus.it/#organization",
+            "name": "Travelliniwithus",
+            "url": "https://travelliniwithus.it",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://travelliniwithus.it/pwa-512x512.png",
+              "width": 512,
+              "height": 512
+            },
+            "description": "Sito editoriale travel italiano di Rodrigo e Betta. Guide pratiche per coppie con dettagli verificabili e nessun marketing.",
+            "founder": [
+              { "@id": "https://travelliniwithus.it/#rodrigo" },
+              { "@id": "https://travelliniwithus.it/#betta" }
+            ],
+            "knowsAbout": [
+              "viaggi in Italia",
+              "destinazioni Sud Italia",
+              "borghi italiani",
+              "itinerari di coppia",
+              "hotel boutique",
+              "guide pratiche viaggio",
+              "travel editorial"
+            ],
+            "areaServed": {
+              "@type": "Country",
+              "name": "Italia",
+              "sameAs": "https://www.wikidata.org/wiki/Q38"
+            },
+            "sameAs": [
+              "https://www.instagram.com/travelliniwithus/",
+              "https://www.tiktok.com/@travellini.withus",
+              "https://www.facebook.com/travelwithuss/"
+            ]
+          },
+          {
+            "@type": "Person",
+            "@id": "https://travelliniwithus.it/#rodrigo",
+            "name": "Rodrigo",
+            "url": "https://travelliniwithus.it/chi-siamo",
+            "jobTitle": "Travel creator, fotografo e autore editoriale",
+            "nationality": "IT",
+            "knowsLanguage": ["it", "en"],
+            "knowsAbout": [
+              "viaggi in coppia",
+              "Sud Italia",
+              "isole minori italiane",
+              "hotel boutique",
+              "fotografia di viaggio"
+            ],
+            "worksFor": { "@id": "https://travelliniwithus.it/#organization" },
+            "sameAs": [
+              "https://www.instagram.com/travelliniwithus/",
+              "https://www.tiktok.com/@travellini.withus",
+              "https://www.facebook.com/travelwithuss/"
+            ]
+          },
+          {
+            "@type": "Person",
+            "@id": "https://travelliniwithus.it/#betta",
+            "name": "Betta",
+            "url": "https://travelliniwithus.it/chi-siamo",
+            "jobTitle": "Travel creator, scrittrice e autrice editoriale",
+            "nationality": "IT",
+            "knowsLanguage": ["it", "en"],
+            "knowsAbout": [
+              "viaggi narrativi",
+              "borghi italiani",
+              "food editorial",
+              "Estero raccontato da italiani",
+              "destinazioni culturali"
+            ],
+            "worksFor": { "@id": "https://travelliniwithus.it/#organization" },
+            "sameAs": [
+              "https://www.instagram.com/travelliniwithus/",
+              "https://www.tiktok.com/@travellini.withus",
+              "https://www.facebook.com/travelwithuss/"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://travelliniwithus.it/#website",
+            "url": "https://travelliniwithus.it",
+            "name": "Travelliniwithus",
+            "inLanguage": "it-IT",
+            "description": "Travelliniwithus racconta posti particolari, esperienze memorabili e consigli utili da salvare e vivere davvero.",
+            "publisher": { "@id": "https://travelliniwithus.it/#organization" },
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://travelliniwithus.it/esplora?q={search_term_string}"
+              },
+              "query-input": "required name=search_term_string"
+            }
+          }
+        ]
+      }
+    </script>
+
+    <style>
+      @keyframes twuLoaderPulse {
+        0%, 100% { opacity: 0.4; transform: scale(0.98); }
+        50% { opacity: 1; transform: scale(1.02); }
+      }
+      @keyframes twuLineGlow {
+        0% { width: 0%; opacity: 0.2; }
+        50% { width: 80px; opacity: 1; }
+        100% { width: 0%; opacity: 0.2; }
+      }
+      .twu-preloader-text {
+        font-family: 'Fraunces', Georgia, serif;
+        font-size: 1.85rem;
+        font-weight: 500;
+        letter-spacing: -0.02em;
+        color: #1a2b3c;
+        animation: twuLoaderPulse 2s ease-in-out infinite;
+      }
+      .twu-preloader-line {
+        height: 2px;
+        background: linear-gradient(90deg, #c85a32, #d4af37, #c85a32);
+        border-radius: 2px;
+        animation: twuLineGlow 1.8s ease-in-out infinite;
+      }
+    </style>
   </head>
-  <body>
-    <div id="root"></div>
+  <body style="background-color: #faf7f2; margin: 0; padding: 0;">
+    <div id="root">
+      <div style="min-height: 100vh; background-color: #faf7f2; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;">
+        <div className="twu-preloader-text" style="font-family: 'Fraunces', serif; font-size: 1.85rem; color: #1a2b3c;">
+          Travellini<span style="font-weight: 700; color: #c85a32;">with</span>us
+        </div>
+        <div style="font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.26em; color: #6b7280;">
+          Rodrigo &amp; Betta
+        </div>
+        <div style="height: 2px; width: 60px; background: linear-gradient(90deg, #c85a32, #d4af37); border-radius: 2px; margin-top: 4px;"></div>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

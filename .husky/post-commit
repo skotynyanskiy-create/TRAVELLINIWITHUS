@@ -1,0 +1,15 @@
+node -e "
+const fs = require('fs');
+const { execSync, execFileSync } = require('child_process');
+try {
+  const graphPath = 'graphify-out/graph.json';
+  if (!fs.existsSync(graphPath)) process.exit(0);
+  const builtAt = JSON.parse(fs.readFileSync(graphPath, 'utf8')).built_at_commit;
+  if (!/^[0-9a-f]{40}$/i.test(builtAt || '')) process.exit(0);
+  const head = execSync('git rev-parse HEAD').toString().trim();
+  if (builtAt !== head) {
+    const behind = execFileSync('git', ['rev-list', '--count', builtAt + '..HEAD']).toString().trim();
+    console.log(\`[graphify] index is \${behind} commit(s) behind HEAD -- run npm run graphify:index when convenient\`);
+  }
+} catch { /* never block a commit over this */ }
+"

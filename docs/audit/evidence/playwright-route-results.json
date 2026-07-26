@@ -1,0 +1,200 @@
+[
+  {
+    "route": "/",
+    "status": 200,
+    "title": "Viaggi reali e posti particolari | Travelliniwithus",
+    "finalUrl": "http://localhost:3000/"
+  },
+  {
+    "route": "/guida-in-regalo",
+    "status": 200,
+    "title": "Travelliniwithus",
+    "finalUrl": "http://localhost:3000/guida-in-regalo"
+  },
+  {
+    "route": "/esplora",
+    "status": 200,
+    "title": "Esplora viaggi scelti a mano | Travelliniwithus",
+    "finalUrl": "http://localhost:3000/esplora"
+  },
+  {
+    "route": "/destinazione",
+    "status": 200,
+    "title": "Travelliniwithus",
+    "finalUrl": "http://localhost:3000/destinazione"
+  },
+  {
+    "route": "/destinazione/toscana",
+    "status": 200,
+    "title": "Travelliniwithus",
+    "finalUrl": "http://localhost:3000/destinazione/toscana"
+  },
+  {
+    "route": "/articolo/dolomiti-rifugi-design",
+    "status": 200,
+    "title": "Travelliniwithus",
+    "finalUrl": "http://localhost:3000/articolo/dolomiti-rifugi-design"
+  },
+  {
+    "route": "/itinerari",
+    "status": 200,
+    "title": "Travelliniwithus",
+    "finalUrl": "http://localhost:3000/itinerari"
+  },
+  {
+    "route": "/itinerari/compare",
+    "status": 200,
+    "title": "Travelliniwithus",
+    "finalUrl": "http://localhost:3000/itinerari/compare"
+  },
+  {
+    "route": "/itinerari/sicilia-orientale-5gg",
+    "status": 200,
+    "title": "Travelliniwithus",
+    "finalUrl": "http://localhost:3000/itinerari/sicilia-orientale-5gg"
+  },
+  {
+    "route": "/guide/guida-alla-toscana",
+    "status": 200,
+    "title": "Travelliniwithus",
+    "finalUrl": "http://localhost:3000/guide/guida-alla-toscana"
+  },
+  {
+    "route": "/mappa",
+    "status": 200,
+    "title": "Mappa Interattiva delle Destinazioni | Travelliniwithus",
+    "finalUrl": "http://localhost:3000/mappa"
+  },
+  {
+    "route": "/chi-siamo",
+    "status": 200,
+    "title": "Rodrigo e Betta: chi siamo | Travelliniwithus",
+    "finalUrl": "http://localhost:3000/chi-siamo"
+  },
+  {
+    "route": "/collaborazioni",
+    "status": 200,
+    "title": "Collaborazioni travel con hotel e brand | Travelliniwithus",
+    "finalUrl": "http://localhost:3000/collaborazioni"
+  },
+  {
+    "route": "/media-kit",
+    "status": 200,
+    "title": "Media kit Travelliniwithus: audience, format e condizioni",
+    "finalUrl": "http://localhost:3000/media-kit"
+  },
+  {
+    "route": "/contatti",
+    "status": 200,
+    "title": "Contatti Travelliniwithus",
+    "finalUrl": "http://localhost:3000/contatti"
+  },
+  {
+    "route": "/risorse",
+    "status": 200,
+    "title": "Risorse di viaggio selezionate | Travelliniwithus",
+    "finalUrl": "http://localhost:3000/risorse"
+  },
+  {
+    "route": "/shop",
+    "status": 200,
+    "title": "Shop editoriale — guide premium e planner | Travelliniwithus",
+    "finalUrl": "http://localhost:3000/shop"
+  },
+  {
+    "route": "/shop/guida-premium-dolomiti",
+    "status": 200,
+    "title": "Travelliniwithus",
+    "finalUrl": "http://localhost:3000/shop/guida-premium-dolomiti"
+  },
+  {
+    "route": "/club",
+    "status": 200,
+    "title": "Travellini Club — il club di chi viaggia in Italia con noi | Travelliniwithus",
+    "finalUrl": "http://localhost:3000/club"
+  },
+  {
+    "route": "/posto/emilia-granduca-di-campigna",
+    "status": 404,
+    "title": "Travelliniwithus",
+    "finalUrl": "http://localhost:3000/posto/emilia-granduca-di-campigna"
+  },
+  {
+    "route": "/preferiti",
+    "status": 200,
+    "title": "Travelliniwithus",
+    "finalUrl": "http://localhost:3000/preferiti"
+  },
+  {
+    "route": "/account/acquisti",
+    "status": 200,
+    "title": "Travelliniwithus",
+    "finalUrl": "http://localhost:3000/account/acquisti"
+  },
+  {
+    "route": "/lead-magnet",
+    "status": 200,
+    "title": "Travelliniwithus",
+    "finalUrl": "http://localhost:3000/lead-magnet"
+  },
+  {
+    "route": "/admin",
+    "status": 200,
+    "title": "Travelliniwithus",
+    "finalUrl": "http://localhost:3000/admin"
+  },
+  {
+    "route": "/admin/users",
+    "status": 200,
+    "title": "Travelliniwithus",
+    "finalUrl": "http://localhost:3000/admin/users"
+  },
+  {
+    "route": "/admin/orders",
+    "status": 200,
+    "title": "Travelliniwithus",
+    "finalUrl": "http://localhost:3000/admin/orders"
+  },
+  {
+    "route": "/manifesto",
+    "status": 404,
+    "title": "Travelliniwithus",
+    "finalUrl": "http://localhost:3000/manifesto"
+  },
+  {
+    "route": "/privacy",
+    "status": 200,
+    "title": "Travelliniwithus",
+    "finalUrl": "http://localhost:3000/privacy"
+  },
+  {
+    "route": "/cookie",
+    "status": 200,
+    "title": "Travelliniwithus",
+    "finalUrl": "http://localhost:3000/cookie"
+  },
+  {
+    "route": "/termini",
+    "status": 200,
+    "title": "Travelliniwithus",
+    "finalUrl": "http://localhost:3000/termini"
+  },
+  {
+    "route": "/disclaimer",
+    "status": 200,
+    "title": "Travelliniwithus",
+    "finalUrl": "http://localhost:3000/disclaimer"
+  },
+  {
+    "route": "/vieni-con-noi",
+    "status": 404,
+    "title": "Travelliniwithus",
+    "finalUrl": "http://localhost:3000/vieni-con-noi"
+  },
+  {
+    "route": "/non-existent-route-999",
+    "status": 404,
+    "title": "Travelliniwithus",
+    "finalUrl": "http://localhost:3000/non-existent-route-999"
+  }
+]

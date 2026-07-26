@@ -1,78 +1,29 @@
 import React from 'react';
-
-export const ARTICLE_BUDGET_BANDS = ['Economico', 'Medio', 'Alto'] as const;
-export const ARTICLE_DISCLOSURE_TYPES = [
-  'none',
-  'affiliate',
-  'sponsored',
-  'gifted',
-  'partner',
-] as const;
-export const ARTICLE_FEATURED_PLACEMENTS = [
-  'home-flagship',
-  'hub-destination',
-  'hub-experience',
-] as const;
-export const ARTICLE_TYPES = ['pillar', 'guide', 'itinerary'] as const;
-export const ARTICLE_EDITORIAL_FORMATS = ['guide', 'itinerary'] as const;
-
-export type ArticleBudgetBand = (typeof ARTICLE_BUDGET_BANDS)[number];
-export type ArticleDisclosureType = (typeof ARTICLE_DISCLOSURE_TYPES)[number];
-export type ArticleFeaturedPlacement = (typeof ARTICLE_FEATURED_PLACEMENTS)[number];
-export type ArticleType = (typeof ARTICLE_TYPES)[number];
-export type ArticleEditorialFormat = (typeof ARTICLE_EDITORIAL_FORMATS)[number];
-
-export const ARTICLE_DISCLOSURE_LABELS: Record<ArticleDisclosureType, string> = {
-  none: 'Viaggio personale',
-  affiliate: 'Link affiliati',
-  sponsored: 'Sponsorizzato',
-  gifted: 'Ospitato / gifted',
-  partner: 'Partner editoriale',
-};
-
-export interface ArticlePullQuote {
-  text: string;
-  attribution?: string;
-}
-
-export interface ArticleFactBoxItem {
-  label: string;
-  value: string;
-}
-
-export interface ArticleFactBox {
-  title?: string;
-  items: ArticleFactBoxItem[];
-}
+import type { ContentReview, PartnershipKind } from '@/src/types/content';
 
 export interface ArticleData {
   title: string;
   description: string;
   image: string;
+  review?: ContentReview;
+  /** Trasparenza partnership (AGCOM/IAP) — assente = organico, nessun badge mostrato. */
+  partnership?: { kind: PartnershipKind; partner?: string };
+  /** Alt descrittivo dell'immagine di copertina. Se assente, fallback su luogo + categoria
+      (evita di duplicare l'H1 per gli screen reader). */
+  imageAlt?: string;
   category: string;
-  /** 'pillar' flagship, 'guide' pratica standard, 'itinerary' itinerario. Default 'guide'. */
-  type?: ArticleType;
   date: string;
   updatedAt?: unknown;
-  verifiedAt?: unknown;
-  /** Optional richer label for verified badge, e.g. "Febbraio 2026, dopo 10 giorni sul posto". */
-  verifiedContext?: string;
-  /** Editorial pullquote rendered after the body, before practical sections. */
-  pullQuote?: ArticlePullQuote;
-  /** Fast-facts card rendered at the top of the article, after the meta row. */
-  factBox?: ArticleFactBox;
   author?: string;
   readTime?: string;
   location: string;
   period: string;
   budget: string;
-  budgetBand?: ArticleBudgetBand;
   continent?: string;
-  tripIntents?: string[];
-  disclosureType?: ArticleDisclosureType;
-  featuredPlacement?: ArticleFeaturedPlacement | null;
   content: React.ReactNode | string;
   isMarkdown?: boolean;
+  /** Flag di contenuto: presenza di beat = variante Diario attiva. Assente/vuoto = degrado pulito. */
+  diary?: DiaryBeat[];
   tips?: string[];
   packingList?: string[];
   gallery?: string[];
@@ -95,19 +46,25 @@ export interface ArticleData {
   mapZoom?: number;
   duration?: string;
   videoUrl?: string;
-  hotels?: HotelRecommendation[];
-  shopCta?: { productType: 'maps' | 'presets' | 'ebook'; productUrl: string; count?: number };
 }
 
-export interface HotelRecommendation {
-  name: string;
-  image: string;
-  bookingUrl: string;
-  slug?: string;
-  category?: string;
-  rating?: number;
-  priceHint?: string;
-  badge?: string;
+/**
+ * Un "beat" del Diario: registro emotivo/narrativo del viaggio, distinto
+ * dall'Itinerario leggibile (che resta la logistica). Titolo concreto del
+ * viaggio reale, mai etichette generiche ("Partenza/Tramonto/Sosta").
+ */
+export interface DiaryBeat {
+  id: string;
+  title: string;
+  text: string;
+  image: {
+    src: string;
+    alt: string;
+    caption?: string;
+    credit?: string;
+  };
+  /** Marca i beat con Rodrigo & Betta reali nel frame (requisito people-led). */
+  peopleInFrame?: boolean;
 }
 
 export interface RelatedArticleSummary {

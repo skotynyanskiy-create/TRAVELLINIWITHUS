@@ -1,0 +1,609 @@
+import type { Itinerary } from '../types';
+
+/**
+ * Demo itinerari preview-only. Mostrano la struttura del tipo `Itinerary`
+ * prima del seeding reale. Renderizzati con flag `isDemo: true` e DemoContentNotice.
+ */
+const RAW_DEMO_ITINERARIES: Itinerary[] = [
+  {
+    id: 'sicilia-orientale-5gg',
+    slug: 'sicilia-orientale-5gg',
+    title: 'Sicilia orientale in 5 giorni',
+    destination: 'Sicilia',
+    region: 'Sicilia',
+    continent: 'Europa',
+    duration: 'Settimana (4-7 giorni)',
+    durationDays: 5,
+    period: 'Primavera',
+    budget: '600 - 1500 a testa',
+    budgetTier: 'medium',
+    style: 'Slow & culturale',
+    // TODO[R+B]: cover reale per itinerario Sicilia orientale
+    image: '/images/destinations/sardegna.webp',
+    excerpt:
+      'Da Catania a Taormina passando per Siracusa: cinque giorni costruiti per leggere la Sicilia orientale senza farsi prendere dalla checklist.',
+    highlights: [
+      'Catania popolare, mercato della Pescheria al mattino',
+      'Siracusa e Ortigia in un pomeriggio lento',
+      'Etna al tramonto con guida locale',
+      'Taormina vista dal Castelmola, fuori orario picco',
+      'Cena di pesce a Brucoli, fuori rotta',
+    ],
+    stages: [
+      {
+        day: 1,
+        title: 'Catania popolare',
+        description:
+          'Arrivo al mattino, base nel centro storico, mercato della Pescheria, granita e brioche col tuppo. Cena bassa in via Plebiscito.',
+        sleep: 'Catania - palazzo storico ristrutturato',
+      },
+      {
+        day: 2,
+        title: 'Etna al tramonto',
+        description:
+          'Mattina tranquilla, partenza alle 14 con guida verso quota 1900. Discesa tra colate del 2002 e cena in cantina.',
+        sleep: 'Catania',
+      },
+      {
+        day: 3,
+        title: 'Siracusa lenta',
+        description:
+          'Ortigia al mattino, pausa al porto piccolo, fonte Aretusa. Pomeriggio al Parco archeologico senza fretta.',
+        sleep: 'Ortigia - relais sul lungomare',
+      },
+      {
+        day: 4,
+        title: 'Da Noto a Brucoli',
+        description:
+          'Mattina barocca a Noto, deviazione per Marzamemi (no folla aperitivo), sera a Brucoli per cena di pesce.',
+        sleep: 'Brucoli',
+      },
+      {
+        day: 5,
+        title: 'Taormina senza tour bus',
+        description:
+          'Salita a Castelmola in tarda mattinata, Taormina nel pomeriggio basso (16-19) per la luce migliore.',
+        sleep: 'Rientro o pernotto Taormina',
+      },
+    ],
+    costs: [
+      { label: 'Alloggi (4 notti, coppia)', range: '480 - 720' },
+      { label: 'Cibo e ristoranti', range: '180 - 280 a testa' },
+      { label: 'Etna con guida', range: '80 - 110 a testa' },
+      { label: 'Spostamenti (noleggio + benzina)', range: '220 - 280' },
+    ],
+    bestFor: ['Coppie', 'Viaggiatori lenti', 'Chi vuole capire la Sicilia oltre la cartolina'],
+    notFor: ['Chi cerca tour organizzati', 'Chi vuole solo mare a luglio-agosto'],
+    relatedArticleSlug: 'cosa-vedere-catania',
+    relatedGuideSlug: 'weekend-catania',
+    isDemo: true,
+  },
+  {
+    id: 'andalusia-weekend',
+    slug: 'andalusia-weekend',
+    title: 'Andalusia in un weekend lungo',
+    destination: 'Andalusia',
+    region: 'Andalusia',
+    continent: 'Europa',
+    duration: 'Weekend (2-3 giorni)',
+    durationDays: 4,
+    period: 'Autunno',
+    budget: '600 - 1500 a testa',
+    budgetTier: 'medium',
+    style: 'Romantico in coppia',
+    // TODO[R+B]: cover reale per itinerario Andalusia
+    image: '/images/destinations/toscana.webp',
+    excerpt:
+      "Quattro giorni tra Siviglia e Cordoba pensati per chi non ha tempo ma vuole entrare nel ritmo dell'Andalusia senza tirare diritto.",
+    highlights: [
+      'Siviglia di notte, tapas in Triana',
+      'Alcazar la mattina presto, evita la fila',
+      'Mezquita di Cordoba in luce bassa',
+      'Bagno arabo al rientro',
+    ],
+    stages: [
+      {
+        day: 1,
+        title: 'Arrivo Siviglia',
+        description:
+          'Arrivo nel tardo pomeriggio, base a Santa Cruz. Aperitivo con vermouth e cena di tapas a Triana.',
+        sleep: 'Siviglia - boutique in Santa Cruz',
+      },
+      {
+        day: 2,
+        title: 'Siviglia',
+        description:
+          'Alcazar all apertura, cattedrale e Giralda, pausa pranzo a Las Setas. Tramonto in barca sul Guadalquivir.',
+        sleep: 'Siviglia',
+      },
+      {
+        day: 3,
+        title: 'Cordoba e Mezquita',
+        description:
+          'Treno di prima mattina, Mezquita all apertura, vagare tra patii e juderia. Rientro a Siviglia per cena.',
+        sleep: 'Siviglia',
+      },
+      {
+        day: 4,
+        title: 'Bagno arabo e ritorno',
+        description: 'Bagno arabo nel pomeriggio prima del volo, cena leggera a Triana.',
+        sleep: 'Rientro',
+      },
+    ],
+    costs: [
+      { label: 'Voli a/r', range: '160 - 240 a testa' },
+      { label: 'Alloggi (3 notti, coppia)', range: '320 - 480' },
+      { label: 'Treni Siviglia - Cordoba', range: '40 - 60 a testa' },
+      { label: 'Cibo e ristoranti', range: '120 - 180 a testa' },
+    ],
+    bestFor: ['Coppie short break', 'Primo viaggio in Andalusia'],
+    relatedArticleSlug: 'andalusia-weekend',
+    relatedGuideSlug: 'siviglia-cordoba',
+    isDemo: true,
+  },
+  {
+    id: 'dolomiti-3gg',
+    slug: 'dolomiti-3gg',
+    title: 'Dolomiti slow in 3 giorni',
+    destination: 'Trentino-Alto Adige',
+    region: 'Trentino-Alto Adige',
+    continent: 'Europa',
+    duration: 'Weekend (2-3 giorni)',
+    durationDays: 3,
+    period: 'Estate',
+    budget: 'Sopra i 1500 a testa',
+    budgetTier: 'premium',
+    style: 'Boutique & design',
+    // TODO[R+B]: cover reale per itinerario Dolomiti slow
+    image: '/images/destinations/dolomiti.webp',
+    excerpt:
+      'Tre giorni costruiti per leggere le Dolomiti senza affannarsi: una valle, due punti forti, un rifugio scelto bene.',
+    highlights: [
+      'Rifugio con architettura contemporanea',
+      'Sentiero panoramico evitando le ore centrali',
+      'Cena di malga firmata',
+      'Bagno freddo in lago alpino',
+    ],
+    stages: [
+      {
+        day: 1,
+        title: 'Arrivo e prima luce',
+        description: 'Base in valle, passeggiata breve, cena semplice per entrare nel ritmo.',
+        sleep: 'Rifugio di design',
+      },
+      {
+        day: 2,
+        title: 'Camminata e malga',
+        description:
+          'Sentiero panoramico al mattino, pausa lunga in malga, ritorno con luce bassa.',
+        sleep: 'Rifugio',
+      },
+      {
+        day: 3,
+        title: 'Lago alpino e ritorno',
+        description: 'Mattina al lago, bagno breve, rientro nel pomeriggio.',
+      },
+    ],
+    costs: [
+      { label: 'Rifugio (2 notti, coppia)', range: '420 - 680' },
+      { label: 'Cibo e malghe', range: '90 - 140 a testa' },
+      { label: 'Carburante', range: '60 - 100' },
+    ],
+    bestFor: ['Coppie', 'Primo viaggio Dolomiti', 'Lettori con poco tempo'],
+    notFor: ['Trekker hardcore', 'Chi cerca grandi distanze'],
+    relatedArticleSlug: 'demo-articolo-dolomiti',
+    isDemo: true,
+  },
+  // ====== Itinerari aggiuntivi (preview brevi, struttura minima) ======
+  // Stessa struttura ma stages compatte (4 voci) per riempire l'archivio
+  // /itinerari con coperture ITINERARY_STYLES e ITINERARY_BUDGETS variate.
+  // R+B sostituisce con i dati reali quando l'articolo viene pubblicato.
+  {
+    id: 'salento-agosto-coppia',
+    slug: 'salento-agosto-coppia',
+    title: 'Salento ad agosto in coppia: 3 giorni reali',
+    destination: 'Salento, Puglia',
+    region: 'Puglia',
+    continent: 'Europa',
+    duration: 'Weekend (2-3 giorni)',
+    durationDays: 3,
+    period: 'Estate',
+    budget: '600 - 1500 a testa',
+    budgetTier: 'medium',
+    style: 'Romantico in coppia',
+    image: '/images/destinations/puglia.webp',
+    excerpt:
+      'Tre giorni tra masserie, calette e cucina di mare a misura di coppia, evitando le ore di folla.',
+    highlights: [
+      'Otranto al tramonto, lontano dal porto',
+      'Caletta della Faraglia prima delle 10',
+      'Cena a Castro in famiglia',
+      'Masseria con piscina condivisa',
+    ],
+    stages: [
+      {
+        day: 1,
+        title: 'Arrivo e Otranto',
+        description: 'Check-in masseria entroterra, passeggiata al tramonto in Otranto.',
+        sleep: 'Masseria con piscina',
+      },
+      {
+        day: 2,
+        title: 'Caletta e Castro',
+        description: 'Mattina presto in caletta, pranzo leggero, pomeriggio lento, cena a Castro.',
+        sleep: 'Masseria',
+      },
+      {
+        day: 3,
+        title: 'Gallipoli e ritorno',
+        description: 'Centro storico Gallipoli al mattino, pranzo, rientro pomeriggio.',
+      },
+    ],
+    costs: [
+      { label: 'Masseria (2 notti, coppia)', range: '420 - 680' },
+      { label: 'Cibo e ristoranti', range: '120 - 180 a testa' },
+      { label: 'Carburante', range: '50 - 90' },
+    ],
+    bestFor: ['Coppie short break', 'Primo viaggio in Puglia', 'Estate alta'],
+    relatedArticleSlug: 'salento-agosto-coppia',
+    isDemo: true,
+  },
+  {
+    id: 'cilento-mare-italiano',
+    slug: 'cilento-mare-italiano',
+    title: 'Cilento: il mare italiano fuori dal radar',
+    destination: 'Cilento, Campania',
+    region: 'Campania',
+    continent: 'Europa',
+    duration: 'Settimana (4-7 giorni)',
+    durationDays: 6,
+    period: 'Estate',
+    budget: '600 - 1500 a testa',
+    budgetTier: 'medium',
+    style: 'Slow & culturale',
+    image: '/images/hero-amalfi.webp',
+    excerpt: 'Una settimana tra borghi di pietra, spiagge piccole e una cucina che non recita.',
+    highlights: [
+      'Palinuro: spiagge meno fotografate',
+      'Marina di Camerota al tramonto',
+      'Paestum senza folla la mattina',
+      'Pisciotta: alici e olio',
+    ],
+    stages: [
+      {
+        day: 1,
+        title: 'Arrivo Palinuro',
+        description: 'Base a Palinuro o Marina di Camerota.',
+        sleep: 'Casa vista mare',
+      },
+      {
+        day: 2,
+        title: 'Costa Cilentana',
+        description: 'Capo Palinuro, calette in barca, pranzo a bordo.',
+        sleep: 'Palinuro',
+      },
+      {
+        day: 3,
+        title: 'Paestum',
+        description: 'Templi e museo al mattino, mozzarella nel pomeriggio.',
+        sleep: 'Palinuro',
+      },
+      {
+        day: 4,
+        title: 'Pisciotta',
+        description: 'Borgo storico e cena di alici e olio locale.',
+      },
+    ],
+    costs: [
+      { label: 'Alloggio (5 notti, coppia)', range: '450 - 850' },
+      { label: 'Cibo e ristoranti', range: '150 - 230 a testa' },
+      { label: 'Carburante e barche', range: '120 - 200' },
+    ],
+    bestFor: ['Coppie', 'Famiglie', 'Cilento prima volta'],
+    relatedArticleSlug: 'cilento-mare-italiano',
+    isDemo: true,
+  },
+  {
+    id: 'islanda-ring-road',
+    slug: 'islanda-ring-road',
+    title: 'Islanda: Ring Road in autonomia, 10 giorni',
+    destination: 'Islanda',
+    region: 'Tutta l isola',
+    continent: 'Europa',
+    duration: 'Slow trip (8-14 giorni)',
+    durationDays: 10,
+    period: 'Estate',
+    budget: 'Sopra i 1500 a testa',
+    budgetTier: 'premium',
+    style: 'Roadtrip',
+    image: '/images/destinations/islanda.webp',
+    excerpt: 'Dieci giorni in auto sul Ring Road senza tour guidati: tappe, alloggi, meteo.',
+    highlights: [
+      'Cascate del Sud (Seljalandsfoss, Skogafoss)',
+      'Diamond Beach e Jökulsárlón',
+      'Penisola di Snaefellsnes',
+      'Geysir e Þingvellir',
+    ],
+    stages: [
+      {
+        day: 1,
+        title: 'Arrivo Reykjavik',
+        description: 'Recupero auto, centro Reykjavik.',
+        sleep: 'Reykjavik centro',
+      },
+      {
+        day: 2,
+        title: 'Sud-Ovest',
+        description: 'Golden Circle: Þingvellir, Geysir, Gullfoss.',
+        sleep: 'Selfoss',
+      },
+      {
+        day: 3,
+        title: 'Sud',
+        description: 'Seljalandsfoss, Skogafoss, Reynisfjara.',
+        sleep: 'Vik',
+      },
+      {
+        day: 4,
+        title: 'Est',
+        description: 'Diamond Beach, Jökulsárlón, fiordi orientali.',
+      },
+    ],
+    costs: [
+      { label: 'Auto noleggio (10 giorni)', range: '850 - 1300' },
+      { label: 'Alloggi (9 notti, coppia)', range: '1400 - 2200' },
+      { label: 'Cibo e ristoranti', range: '500 - 800 a testa' },
+      { label: 'Voli a/r', range: '350 - 550 a testa' },
+    ],
+    bestFor: ['Coppie esperte', 'Roadtrip lovers', 'Solo trip avanzato'],
+    relatedArticleSlug: 'islanda-ring-road',
+    isDemo: true,
+  },
+  {
+    id: 'giappone-14-giorni-itinerario',
+    slug: 'giappone-14-giorni-itinerario',
+    title: "Giappone in 14 giorni: l'itinerario che usiamo davvero",
+    destination: 'Giappone',
+    region: 'Honshu, Shikoku',
+    continent: 'Asia',
+    duration: 'Slow trip (8-14 giorni)',
+    durationDays: 14,
+    period: 'Primavera',
+    budget: 'Sopra i 1500 a testa',
+    budgetTier: 'premium',
+    style: 'Slow & culturale',
+    image: '/images/destinations/giappone.webp',
+    excerpt:
+      'Tokyo, Hakone, Kyoto, Naoshima: due settimane reali con tempi e indirizzi food testati.',
+    highlights: [
+      'Tokyo: Shimokitazawa, Yanaka',
+      'Hakone: ryokan e onsen',
+      'Kyoto: Higashiyama lento',
+      'Naoshima: arte e Benesse House',
+    ],
+    stages: [
+      {
+        day: 1,
+        title: 'Arrivo Tokyo',
+        description: 'Atterraggio, JR Pass, base Shibuya.',
+        sleep: 'Tokyo',
+      },
+      {
+        day: 4,
+        title: 'Hakone ryokan',
+        description: 'Cambio base, onsen tradizionale.',
+        sleep: 'Ryokan Hakone',
+      },
+      {
+        day: 7,
+        title: 'Kyoto',
+        description: 'Shinkansen Tokyo-Kyoto, base Gion.',
+        sleep: 'Kyoto',
+      },
+      {
+        day: 12,
+        title: 'Naoshima',
+        description: 'Da Okayama al traghetto, isola dell arte.',
+      },
+    ],
+    costs: [
+      { label: 'JR Pass (14 giorni)', range: '650 a testa' },
+      { label: 'Alloggi (13 notti, coppia)', range: '2100 - 3800' },
+      { label: 'Cibo e ristoranti', range: '700 - 1100 a testa' },
+      { label: 'Voli a/r', range: '900 - 1400 a testa' },
+    ],
+    bestFor: ['Coppie', 'Prima volta Giappone', 'Slow travel'],
+    relatedArticleSlug: 'giappone-14-giorni-itinerario',
+    isDemo: true,
+  },
+  {
+    id: 'slovenia-8-giorni-slow',
+    slug: 'slovenia-8-giorni-slow',
+    title: 'Slovenia slow in 8 giorni: Bled, Lubiana, Soča',
+    destination: 'Slovenia',
+    region: 'Carniola, Valle dell Isonzo',
+    continent: 'Europa',
+    duration: 'Settimana (4-7 giorni)',
+    durationDays: 8,
+    period: 'Estate',
+    budget: '600 - 1500 a testa',
+    budgetTier: 'medium',
+    style: 'Slow & culturale',
+    image: '/images/destinations/dolomiti.webp',
+    excerpt: 'Lago, capitale piccola, valle alpina, vini orange e prezzi sensati.',
+    highlights: [
+      'Lago di Bled al mattino',
+      'Lubiana lenta sul fiume',
+      'Valle dell Isonzo: Kobarid',
+      'Vini orange Brda',
+    ],
+    stages: [
+      {
+        day: 1,
+        title: 'Arrivo Lubiana',
+        description: 'Centro storico a piedi, cena lungo Ljubljanica.',
+        sleep: 'Lubiana',
+      },
+      {
+        day: 3,
+        title: 'Bled',
+        description: 'Lago, castello, traversata Pletna.',
+        sleep: 'Bled',
+      },
+      {
+        day: 5,
+        title: 'Valle Soča',
+        description: 'Kobarid, ponti pedonali, acqua turchese.',
+        sleep: 'Kobarid',
+      },
+      {
+        day: 7,
+        title: 'Brda vini',
+        description: 'Cantine orange-wine e cena tra le vigne.',
+      },
+    ],
+    costs: [
+      { label: 'Alloggi (7 notti, coppia)', range: '420 - 720' },
+      { label: 'Cibo e ristoranti', range: '200 - 320 a testa' },
+      { label: 'Auto noleggio', range: '280 - 420' },
+    ],
+    bestFor: ['Coppie', 'Slow trip europeo', 'Budget medio'],
+    relatedArticleSlug: 'slovenia-8-giorni-slow',
+    isDemo: true,
+  },
+  {
+    id: 'patagonia-trek-torres',
+    slug: 'patagonia-trek-torres',
+    title: 'Patagonia: trek alle Torres del Paine in autonomia',
+    destination: 'Patagonia cilena',
+    region: 'Magallanes',
+    continent: 'Americhe',
+    duration: 'Settimana (4-7 giorni)',
+    durationDays: 7,
+    period: 'Estate',
+    budget: 'Sopra i 1500 a testa',
+    budgetTier: 'premium',
+    style: 'Avventura outdoor',
+    image: '/images/destinations/americhe.webp',
+    excerpt: 'W trek o O trek: quando andare, cosa portare, come prenotare rifugi.',
+    highlights: [
+      'Torres alla luce dell alba',
+      'Lago Pehoé in barca',
+      'Glaciar Grey trek',
+      'Valle del Francés',
+    ],
+    stages: [
+      {
+        day: 1,
+        title: 'Arrivo Puerto Natales',
+        description: 'Recupero attrezzatura, bus al parco.',
+        sleep: 'Puerto Natales',
+      },
+      {
+        day: 2,
+        title: 'Torres base',
+        description: 'Refugio Las Torres, alba alle Torres giorno seguente.',
+        sleep: 'Refugio',
+      },
+      {
+        day: 4,
+        title: 'Valle Francés',
+        description: 'Trek alla forcella panoramica.',
+        sleep: 'Refugio',
+      },
+      {
+        day: 6,
+        title: 'Glaciar Grey',
+        description: 'Trek finale e rientro.',
+      },
+    ],
+    costs: [
+      { label: 'Rifugi (5 notti)', range: '900 - 1400 a testa' },
+      { label: 'Cibo e bevande', range: '350 - 500 a testa' },
+      { label: 'Voli a/r dall Italia', range: '1100 - 1700 a testa' },
+      { label: 'Attrezzatura noleggio', range: '120 - 200 a testa' },
+    ],
+    bestFor: ['Trekker esperti', 'Coppia avventura', 'Outdoor lovers'],
+    relatedArticleSlug: 'patagonia-trek-torres',
+    isDemo: true,
+  },
+  {
+    id: 'nuova-zelanda-south-island',
+    slug: 'nuova-zelanda-south-island',
+    title: 'Nuova Zelanda: South Island in 12 giorni',
+    destination: 'Nuova Zelanda',
+    region: 'South Island',
+    continent: 'Oceania',
+    duration: 'Slow trip (8-14 giorni)',
+    durationDays: 12,
+    period: 'Estate',
+    budget: 'Sopra i 1500 a testa',
+    budgetTier: 'premium',
+    style: 'Roadtrip',
+    image: '/images/destinations/oceania.webp',
+    excerpt: 'Fiordland, Wanaka, Aoraki: dodici giorni tra ghiacciai e laghi turchesi.',
+    highlights: [
+      'Milford Sound in barca',
+      'Mount Cook al tramonto',
+      'Wanaka lago e lone tree',
+      'Queenstown e Glenorchy',
+    ],
+    stages: [
+      {
+        day: 1,
+        title: 'Arrivo Christchurch',
+        description: 'Recupero campervan, prima notte vicino mare.',
+        sleep: 'Campervan',
+      },
+      {
+        day: 4,
+        title: 'Mount Cook',
+        description: 'Hooker Valley trek e tramonto al lago Pukaki.',
+        sleep: 'Campervan',
+      },
+      {
+        day: 7,
+        title: 'Queenstown',
+        description: 'Base 2 notti, Glenorchy in giornata.',
+        sleep: 'Queenstown',
+      },
+      {
+        day: 10,
+        title: 'Milford Sound',
+        description: 'Crociera nel fiordo, rientro via Te Anau.',
+      },
+    ],
+    costs: [
+      { label: 'Campervan (12 giorni)', range: '1400 - 2000' },
+      { label: 'Cibo e supermercati', range: '550 - 800 a testa' },
+      { label: 'Voli a/r Italia', range: '1500 - 2200 a testa' },
+      { label: 'Attivita (cruise, parchi)', range: '300 - 500 a testa' },
+    ],
+    bestFor: ['Coppie roadtrip', 'Outdoor', 'Slow trip'],
+    relatedArticleSlug: 'nuova-zelanda-south-island',
+    isDemo: true,
+  },
+];
+
+/**
+ * Sfoltimento "1 per durata" — 2026-05-19.
+ *
+ * RAW_DEMO_ITINERARIES contiene 10 itinerari completi (archivio dormiente).
+ * DEMO_ITINERARIES esporta solo 3 (1 per durata):
+ * - weekend (2-3gg): salento-agosto-coppia
+ * - settimana (4-7gg): sicilia-orientale-5gg
+ * - slow trip (8-14gg): islanda-ring-road
+ *
+ * Per ri-attivare un itinerario nascosto: aggiungere lo slug a VISIBLE_ITINERARY_SLUGS.
+ */
+const VISIBLE_ITINERARY_SLUGS = new Set<string>([
+  'salento-agosto-coppia',
+  'sicilia-orientale-5gg',
+  'islanda-ring-road',
+]);
+
+export const DEMO_ITINERARIES: Itinerary[] = RAW_DEMO_ITINERARIES.filter((item) =>
+  VISIBLE_ITINERARY_SLUGS.has(item.slug)
+);
+
+export const DEMO_ITINERARY_SLUGS = DEMO_ITINERARIES.map((item) => item.slug);

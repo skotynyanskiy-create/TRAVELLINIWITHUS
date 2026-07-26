@@ -1,112 +1,120 @@
+---
+type: checklist
+area: delivery
+status: active
+---
+
 # TRAVELLINIWITHUS — Checklist Finale di Lancio
 
-Aggiornamento: 2026-04-20 (post Sprint 1 infrastruttura).
+Questo documento riassume i passi necessari per portare il sito dallo stato attuale (sviluppo/predisposizione) al lancio ufficiale in produzione. La struttura tecnica, il design e la logica di navigazione sono completati e verificati.
 
-Questo documento riassume ciò che manca tra lo stato corrente e il lancio pubblico reale. La base tecnica, il design, la sicurezza di base, il tracciamento, il consenso GDPR e la disaster recovery sono **predisposti** e documentati. Ciò che determina il passaggio da "demo" a "business operativo" sono ormai **contenuti reali + attivazione chiavi API in sessione finale pre-deploy**.
+**Aggiornato 2026-05-17** dopo consolidamento Esplora (rimozione `/destinazioni`, `/esperienze`, `/guide` separate → un unico hub `/esplora`) e Full Site Audit con 6 specialisti paralleli. Riferimento: [AUDIT_FULL_SITE_2026-05-17.md](50_Scratch/AUDIT_FULL_SITE_2026-05-17.md).
 
-## Stato a colpo d'occhio
+## 1. Contenuti e CMS (Azione richiesta: Rodrigo & Betta)
 
-| Area | Stato | Riferimento |
-|------|-------|-------------|
-| Architettura + build + CI | ✅ Production-ready | `docs/10_Projects/PROJECT_RELEASE_READINESS.md` |
-| Admin auth multi-utente | ✅ Custom Claims documentati | [20_Decisions/DECISION_ADMIN_CUSTOM_CLAIMS.md](20_Decisions/DECISION_ADMIN_CUSTOM_CLAIMS.md) |
-| Affiliate tracking | ✅ v1 attivo con consenso | `src/lib/affiliate.ts` + `src/pages/Risorse.tsx` |
-| Cookie consent GDPR | ✅ Banner + pagina + riapertura | `src/components/ConsentBanner.tsx`, `src/pages/legal/Cookie.tsx` |
-| Error tracking | ⚠️ Predisposto, SDK da installare pre-deploy | [20_Decisions/DECISION_ERROR_TRACKING_STRATEGY.md](20_Decisions/DECISION_ERROR_TRACKING_STRATEGY.md) |
-| Disaster recovery Firestore | ⚠️ Workflow pronto, WIF da configurare pre-deploy | [DISASTER_RECOVERY_RUNBOOK.md](DISASTER_RECOVERY_RUNBOOK.md) |
-| Stripe webhook prod | ⚠️ Runbook pronto, endpoint da configurare pre-deploy | [STRIPE_WEBHOOK_RUNBOOK.md](STRIPE_WEBHOOK_RUNBOOK.md) |
-| Validator editoriale | ✅ Gate errori/warning in admin | `src/utils/articleValidator.ts` |
-| Contenuti reali (articoli + prodotti) | ❌ Da caricare | Sezione 1 di questo documento |
+Il sito e' attualmente in "Demo Mode": l'archivio mostra contenuti seed (`src/config/demoArchive.ts` + `demoItineraries.ts`) finche Firestore non e' popolato. Per renderlo reale:
 
-## 1. Contenuti e CMS (owner)
+- [ ] **Accesso Admin**: Accedi a `/admin` con un account Google autorizzato (email in `src/config/admin.ts`).
+- [ ] **Articoli Reali**: Carica almeno 3-5 articoli reali. Ogni articolo ha categoria (es. "Destinazione", "Esperienza", "Guida pratica", "Itinerario") ma vive nello stesso archivio unificato `/esplora`. La taxonomy e' in [src/config/contentTaxonomy.ts](../src/config/contentTaxonomy.ts).
+- [ ] **Prima pillar pipeline**: il primo pillar in coda e' [PILLAR_ARTICLE_SALENTO_AGOSTO](13_Content/PILLAR_ARTICLE_SALENTO_AGOSTO.md). Il brief e' pronto; necessari dati R+B per popolare i placeholder (4 localita mare, 4 strutture, 5 indirizzi cibo). Vedi fact-checklist a-priori in [VERIFY_FACTS_salento-agosto_2026-05-17](50_Scratch/VERIFY_FACTS_salento-agosto_2026-05-17.md).
+- [ ] **Sequenza canonica per pillar**: `/new-article` → `editorial-writer` → `/anti-ai-slop` → `/verify-facts` → `/ai-seo` → `/seo-check` → `quality-auditor` → publish → `/repurpose`. Skill editorial leverage aggiunte 2026-05-17.
+- [ ] **Prodotti Shop**: Carica i prodotti digitali (o fisici) reali nella collezione `products`.
+- [ ] **Disattivazione Demo**: Una volta caricati i contenuti, dalle impostazioni admin disattiva `showEditorialDemo` e `showShopDemo`.
 
-Il sito resta in Demo Mode finché il catalogo editoriale e shop non vengono popolati.
+## 2. Analisi e Tracciamento
 
-- [ ] **Accesso admin**: login con account Google autorizzato su `/admin`.
-- [ ] **Articoli reali**: pubblicare 5 articoli tra Destinazioni e Guide usando i template in `docs/90_Templates/`. Il validator blocca titoli <20 char, descrizioni fuori intervallo, contenuto <600 parole o senza heading.
-- [ ] **Prodotti reali**: caricare almeno 3 prodotti (guide PDF/toolkit) in `products/` con `published: true`, `price > 0`, `downloadUrl` valido se digitale.
-- [ ] **Disattivazione flag demo**: da Admin → Impostazioni, disattivare `showEditorialDemo` e `showShopDemo` quando il catalogo è pronto.
-- [ ] **Checklist editoriale**: per ogni articolo seguire [13_Content/EDITORIAL_PUBLISH_CHECKLIST.md](13_Content/EDITORIAL_PUBLISH_CHECKLIST.md).
+Predisposizione gia' completata, solo da popolare con ID reali.
 
-## 2. Analisi, tracking e integrazioni (pre-deploy)
+- [ ] **ID Integrazioni**: gli ID sono letti da env var in [src/services/analytics.ts](../src/services/analytics.ts) — popolali nell'env di produzione:
+  - Google Analytics 4 (`VITE_GA_ID`)
+  - Meta Pixel (`VITE_META_PIXEL_ID`)
+  - TikTok Pixel (`VITE_TIKTOK_PIXEL_ID`, se attivo)
+- [ ] **Newsletter**: il form invia a `/api/newsletter-subscribe` gestito in `server.ts`; l'eventuale ESP esterno (Brevo/Mailerlite) si collega lato server. Counter pubblico ha guard `NEWSLETTER_COUNTER_MIN_VISIBLE = 50` in [src/config/site.ts](../src/config/site.ts) per evitare anti-conversion da numeri bassi.
+- [ ] **Sentry**: `SENTRY_DSN` in env e source maps upload via `npm run release:sentry`.
 
-Stack GA4 / Meta / TikTok già gated sul consenso. Da completare con ID reali.
+## 3. Sicurezza e Hardening (Azione richiesta: owner)
 
-- [ ] In `.env` inserire `VITE_GA_ID`, `VITE_META_PIXEL_ID`, `VITE_TIKTOK_PIXEL_ID`. Il loader `src/services/analytics.ts` li legge consent-gated (nessuna chiamata finché `ConsentBanner` accept).
-- [ ] Verifica che i pixel carichino solo dopo consenso (test: rifiuta nel banner → nessuna chiamata di rete a `googletagmanager.com`).
-- [ ] UTM affiliate: controllare dashboard GA4/Plausible → evento `affiliate_click` presente con `partner`, `campaign`, `placement`.
-- [ ] Newsletter: se Brevo attivo verificare `BREVO_API_KEY` + `BREVO_LIST_ID` in env, altrimenti fallback save-lead-only rimane attivo.
+Esiti del security-auditor 2026-05-17:
 
-## 3. Shop e pagamenti (pre-deploy)
+- [ ] **Firebase Web API Key restrictions (BLOCKER)**: confermare su [GCP Console](https://console.cloud.google.com/) che la chiave `AIzaSyD_HR...AMtDU` in [firebase-applet-config.json](../firebase-applet-config.json) ha:
+  - Application restrictions = HTTP referrers (`travelliniwithus.it/*`, `*.travelliniwithus.it/*`, `localhost/*` solo per dev)
+  - API restrictions = solo Identity Toolkit, Firestore, FCM
+  - Vedi [PROJECT_FIREBASE_HARDENING.md Fase 1](10_Projects/PROJECT_FIREBASE_HARDENING.md).
+- [ ] **API Key duplicate da rimuovere**: dopo conferma restrizioni attive, rimuovere la chiave in chiaro da [PROJECT_FIREBASE_HARDENING.md:48](10_Projects/PROJECT_FIREBASE_HARDENING.md).
+- [ ] **Stripe webhook signing**: verificare che `STRIPE_WEBHOOK_SECRET` sia popolato in env prod e che server.ts lo enforce. Audit conferma OK al 2026-05-17.
+- [ ] **Admin gate**: centralizzare `ADMIN_EMAIL` (oggi in 3 file: server.ts, firestore.rules, src/config/admin.ts) — backlog medio.
 
-Runbook completo: [STRIPE_WEBHOOK_RUNBOOK.md](STRIPE_WEBHOOK_RUNBOOK.md).
+## 4. Shop e Pagamenti
 
-- [ ] Stripe account live verificato (Identity/Business).
-- [ ] Endpoint webhook `https://travelliniwithus.it/api/webhook` registrato su Stripe con eventi `checkout.session.completed`, `checkout.session.expired`, `payment_intent.payment_failed`.
-- [ ] Env vars `STRIPE_SECRET_KEY` (`sk_live_...`), `STRIPE_WEBHOOK_SECRET` (`whsec_...`), `VITE_STRIPE_PUBLISHABLE_KEY` (`pk_live_...`) impostate in Vercel.
-- [ ] Smoke test A (test mode con card `4242 4242 4242 4242`) + smoke test B (acquisto reale minimo) + smoke test C (errore firma) eseguiti e registrati.
+- [ ] **Account Stripe**: Crea o configura il tuo account Stripe.
+- [ ] **Firebase Extension**: Configura l'estensione "Run Payments with Stripe" su Firebase.
+- [ ] **Webhook**: webhook di Stripe puntano al backend per sbloccare i contenuti digitali acquistati. Test end-to-end con `npm run webhook:listen` (Stripe CLI).
 
-## 4. Legal e GDPR
+## 5. Aspetti Legali e GDPR
 
-- [ ] Verifica che `src/pages/legal/Privacy.tsx`, `Termini.tsx`, `Disclaimer.tsx` riportino dati corretti (email contatto, riferimenti fiscali se applicabili).
-- [ ] Cookie policy (`src/pages/legal/Cookie.tsx`) già ampliata con vendor (GA4, Meta Pixel, TikTok Pixel) e disclosure affiliate. Verifica finale su nomi reali + eventuali aggiunte.
-- [ ] Banner cookie: test su mobile (layout side-by-side, 158px height circa), test desktop. Riapertura da footer + pagina `/cookie` funzionante.
-- [ ] Affiliate disclosure: blocco "Trasparenza affiliazioni" in `/risorse` visibile; eventuale revisione copy con consulente legale se necessario.
+- [ ] **Privacy & Cookie**: I testi in [src/pages/legal/](../src/pages/legal/) sono bozze strutturate. Verifica che i dati (email, riferimenti fiscali) siano corretti.
+- [ ] **Banner Cookie**: Se usi Iubenda, inserisci lo script fornito in [index.html](../index.html).
 
-## 5. Sicurezza e auth
+## 6. SEO + AI SEO (parzialmente fatto 2026-05-17)
 
-Decisione di riferimento: [20_Decisions/DECISION_ADMIN_CUSTOM_CLAIMS.md](20_Decisions/DECISION_ADMIN_CUSTOM_CLAIMS.md).
+Eseguiti in audit:
 
-**Stato attuale (Fase A pre-go-live):**
-- Il codice supporta ENTRAMBI i meccanismi: claim custom `admin=true` (target) + email fallback transitorio (`skotynyanskiy@gmail.com`).
-- Applicato: `src/config/admin.ts` `isAdminUser()`, `src/context/AuthContext.tsx` `isAdmin` derivato, `firestore.rules` `isAdmin()` claim-first, `server.ts` middleware `requireAdmin` su `/api/ai/*`.
-- Auto-upgrade role → admin da email matcher **rimosso** (era bypass claims).
-- Nessun impatto oggi: il fallback email mantiene admin accessibile in dev.
+- [x] `public/llms.txt` creato con identita brand, contenuti autoritativi, regole citation, privacy AI
+- [x] BreadcrumbList schema aggiunto a Esplora, Shop, ChiSiamo, Mappa, Itinerari
+- [x] Title Home + ChiSiamo con keyword e claim citabile
+- [x] Sitemap mismatch (`/lead-magnet` hardcoded noindex era in sitemap) risolto
 
-**Fase B (pre-go-live, esegui in quest'ordine):**
+Da fare prima del lancio organico:
 
-- [ ] **Scegliere email admin ufficiale Travellini finale** (sostituire `skotynyanskiy@gmail.com` che è personale).
-- [ ] Configurare Firebase Admin credentials localmente: scaricare service account JSON dalla Console, set `GOOGLE_APPLICATION_CREDENTIALS` env.
-- [ ] Eseguire `node scripts/set-admin-claim.mjs grant <email-ufficiale>`.
-- [ ] L'admin fa logout + login (o `user.getIdToken(true)` force refresh) per ricevere il claim.
-- [ ] Verificare via Simple Browser: login con email con claim → dashboard accessibile; login con email NON in fallback e SENZA claim → accesso negato.
-- [ ] Rimuovere il fallback email:
-  - In `src/config/admin.ts`: `ADMIN_EMAILS_FALLBACK = []` (array vuoto) + deprecated notice aggiornata.
-  - In `firestore.rules` `isAdmin()`: rimuovere il branch `request.auth.token.email == "skotynyanskiy@gmail.com" ...`.
-- [ ] Redeploy rules: `firebase deploy --only firestore:rules`.
-- [ ] Redeploy frontend: `vercel --prod` (o Firebase Hosting).
-- [ ] Smoke test finale: login con email ufficiale claim → OK; login senza claim → denied.
-- [ ] Abilitare MFA su tutti gli account admin (Firebase Auth → Sign-in method → Multi-factor).
-- [ ] Verificare `firebase auth:export` colonna `customClaims` contiene `{ "admin": true }` per gli admin.
+- [ ] **Sitemap dinamica**: serve script `npm run sitemap:build` che fetcha articoli published da Firestore e popola `public/sitemap.xml` (oggi statica). Critico per indexing articoli pillar.
+- [ ] **Article schema arricchito**: aggiungere `wordCount`, `about`/`mentions` con `Place` schema (geo + sameAs Wikidata) sui pillar — entity-level citation.
+- [ ] **Pagina lead-magnet indicizzabile**: il `/lead-magnet` corrente e' post-conversion (noindex OK). Creare versione SEO `/risorse/10-posti-italiani-non-ovvi` indicizzabile per acquisition organico.
 
-## 6. Error tracking e disaster recovery
+## 7. Performance (parzialmente fatto 2026-05-17)
 
-- [ ] Eseguire attivazione Sentry seguendo [20_Decisions/DECISION_ERROR_TRACKING_STRATEGY.md](20_Decisions/DECISION_ERROR_TRACKING_STRATEGY.md) (install pacchetti + DSN env + sostituire body `initErrorTracking`/`initServerErrorTracking`).
-- [ ] Configurare Workload Identity Federation per GitHub Actions (guida in [DISASTER_RECOVERY_RUNBOOK.md](DISASTER_RECOVERY_RUNBOOK.md)).
-- [ ] Creare bucket GCS `travelliniwithus-firestore-backups` + service account + vars repo.
-- [ ] Lanciare manualmente il workflow `Firestore weekly backup` → verificare export presente in GCS.
+Eseguiti:
 
-## 7. Deploy finale
+- [x] Preload hero image corretto da AVIF spurio a PNG (path effettivamente renderizzato)
+- [x] Build prod misurata: ~34s, no error
 
-- [ ] `npm run audit:quality` verde.
-- [ ] `npm run build` locale verde.
-- [ ] Deploy su Vercel (o provider scelto) con tutte le env vars popolate.
-- [ ] Smoke test produzione: home, articolo reale, checkout test, form newsletter, admin login, banner cookie.
-- [ ] Aggiornare [10_Projects/PROJECT_RELEASE_READINESS.md](10_Projects/PROJECT_RELEASE_READINESS.md) marcando "revisione umana finale" completata.
+Da rimisurare in prod:
+
+- [ ] **CWV su build prod**: dev mode mostra LCP 3.20s (font render-blocking apparente), ma `font-display: swap` e' attivo su @fontsource. Build prod con minify + compression scende molto. Lanciare `npm run audit:cwv` su prod o staging URL.
+- [ ] **Mapbox lazy verify**: 1.68 MB raw / 464 KB gz nel chunk `mapbox-*.js`. Verificare che sia caricato solo da `/mappa` e non eager da Home.
+- [ ] **puglia.webp eager above-fold**: passare da `loading="lazy"` a `eager` per le card finder visibili a primo paint.
+
+## 8. Deployment Finale
+
+- [ ] **Build Check**: `npm run build` PASS in locale (verificato 2026-05-17).
+- [ ] **Pre-deploy gate**: `npm run predeploy` deve PASS. Eventualmente lanciare manualmente `/predeploy` skill per gate consolidato.
+- [ ] **Firebase Hosting**: deploy via `firebase deploy --only hosting`. Dominio `travelliniwithus.it` mappato.
+- [ ] **HTTPS**: certificato SSL automatico via Firebase Hosting.
+- [ ] **Real-browser smoke post-deploy**: lanciare `/audit-browser` skill sul dominio prod per regression check.
 
 ---
 
-## Verifiche di qualità (già completate)
+### Verifiche di Qualita (Audit 2026-05-17)
 
-- [x] SEO: meta dinamici, OpenGraph, JSON-LD `TravelAgency`, `Article`, `BreadcrumbList`, `FAQPage`, `TouristDestination`, `TouristTrip`, `Review`.
-- [x] Performance: lazy loading, OptimizedImage con srcSet, manual chunks Vite.
-- [x] Navigazione: link luoghi/esperienze/guide verificati in audit 2026-04-17.
-- [x] Mobile: audit Playwright 375px senza overflow orizzontale.
-- [x] Consent: banner GDPR con categorie granulari + riapertura da pagina Cookie e footer.
-- [x] Affiliate: UTM idempotenti + evento `affiliate_click` gated su consenso analytics.
-- [x] Validator: gate qualità pre-publish in admin.
+- [x] **SEO base**: Meta tag, OpenGraph, sitemap (statica), robots.txt, JSON-LD Organization + WebSite + Article + BreadcrumbList configurati
+- [x] **AI SEO**: `llms.txt` creato; entity layer base; freshness signals via `dateModified`
+- [x] **Performance**: build prod < 35s, preload immagini corretti, font-display swap attivo
+- [x] **Navigazione**: rotte legacy `/destinazioni`, `/esperienze`, `/guide` redirected a `/esplora` (lato client + email + SearchAction)
+- [x] **Mobile**: responsive ok su tutte le rotte testate da browser-auditor (1280 + 768 + 375)
+- [x] **Lint**: 4 errori bloccanti del 2026-05-15 risolti (Navbar.test, EsploraQuiz set-state, InstagramGrid track, EditorialCollections keyboard)
+- [x] **Test**: `npm run test` PASS dopo aggiornamento Navbar.test
+- [x] **Typecheck**: `npm run typecheck` PASS
 
-**Creato il**: 15 aprile 2026  
-**Ultimo aggiornamento**: 20 aprile 2026  
-**Stato**: INFRASTRUCTURE PRONTA · CONTENUTI + ATTIVAZIONE CHIAVI IN SESSIONE FINALE  
-**Prossimo passo owner**: caricare il primo articolo reale usando [13_Content/EDITORIAL_PUBLISH_CHECKLIST.md](13_Content/EDITORIAL_PUBLISH_CHECKLIST.md).
+### Audit residuo (cose da NON dimenticare)
+
+- Conferma GCP restrictions su Firebase API key (BLOCKER, owner-only)
+- Sitemap dinamica articoli (build script da scrivere)
+- Direzione ui-designer per HomeTrustStrip + HomeDiscoveryFinder de-saas-ify
+- CWV misurato in prod (dev mode non rappresentativo)
+- Refactor `text-black/XX` → token (130 occorrenze, debito CSS)
+- Refusi accenti ChiSiamo
+
+---
+
+**Aggiornato**: 17 Maggio 2026
+**Stato**: PRONTO PER CARICAMENTO CONTENUTI + 2 BLOCKER OWNER (GCP restrictions + primi articoli reali)
+**Prossimo Passo**: confermare GCP restrictions su Firebase API key + popolare brief Salento Agosto con dati R+B per partire la pipeline editoriale.

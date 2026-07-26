@@ -1,7 +1,7 @@
 ---
 type: project
 area: product
-status: active
+status: in-progress
 priority: p1
 owner: team
 repo: TRAVELLINIWITHUS
@@ -17,6 +17,13 @@ tags:
 ## Missione
 
 Portare il sito Travelliniwithus verso una V1 pubblicabile con funnel reali, brand coerente e operativita stabile.
+
+## Direzione V2
+
+La roadmap avanzata V2 vive in [[10_Projects/PROJECT_SITE_V2_ADVANCED_IMPROVEMENT_PLAN]].
+
+Obiettivo V2: trasformare il sito da V1 editoriale/commerciale a piattaforma travel piu utile,
+interattiva, misurabile e monetizzabile, senza perdere il carattere people-led di Rodrigo e Betta.
 
 ## Repository canonico
 
@@ -58,33 +65,6 @@ docs/
 - stabilita tecnica
 - funnel e monetizzazione
 - QA e rilascio
-- rebuild authority-premium
-
-## Checklist V1 rebuild forte
-
-- [ ] Contenuti reali minimi: almeno 1 pillar Puglia pubblicabile, 2 supporting article validati, 1 hotel reale con asset e disclosure.
-- [ ] Asset reali minimi: hero home approvata, foto coppia approvata, cover Puglia e cover prodotto non stock o dichiarate come provvisorie.
-- [ ] Shop state: `Guida Premium Puglia Slow` resta bozza finche non esistono prezzo finale, PDF, downloadUrl, termini vendita e checkout testato.
-- [ ] B2B proof verificata: loghi, metriche, testimonianze e case study restano nascosti finche non hanno fonte e data.
-- [ ] SEO/indexability: sitemap senza filtri query; solo contenuti pubblicati e acquistabili entrano in sitemap/schema.
-- [ ] Lead form testati: newsletter, contatti e media kit con salvataggio Firestore verificato.
-- [ ] Demo guardrail: demo attivi solo in dev/admin preview o noindex dichiarato, mai come proof reale.
-
-## Snapshot 2026-04-27 - V1 rebuild forte
-
-- Cluster di lancio scelto: Puglia / Italia.
-- Primo prodotto pianificato: `Guida Premium Puglia Slow`, PDF digitale, bozza non acquistabile.
-- Navigazione pubblica semplificata in italiano e senza `Shop` prematuro.
-- Home orientata a scoperta B2C, metodo Travellini e conversione B2B separata.
-- Collaborazioni e media kit declassano i dati non verificati: meglio meno proof, ma credibile.
-
-## Snapshot 2026-04-27 - predisposizioni senza contenuti reali
-
-- Nessun nuovo contenuto reale viene pubblicato in questa fase.
-- I draft Puglia/prodotto restano infrastruttura e traccia interna finche owner non valida dati, foto, prezzo, PDF e claim.
-- Admin prodotti ora impedisce il publish se mancano slug valido, prezzo maggiore di zero o download digitale per prodotti digitali.
-- `npm run check:v1` controlla regressioni su sitemap con query param, shop indicizzabile, loghi partner fallback, recensioni demo e media kit con numeri non verificati.
-- `npm run predeploy` include `check:v1`, quindi il gate V1 diventa parte della procedura standard prima del deploy.
 
 ## Snapshot 2026-04-14
 
@@ -101,19 +81,23 @@ docs/
 - `Risorse` e `Shop` sono stati riposizionati verso monetizzazione sobria: toolkit editoriale e boutique di prodotti digitali, non pagina coupon/catalogo demo
 - priorita successiva: QA visiva umana, roundtrip lead Firestore, sostituzione/approvazione contenuti preview e contenuti reali minimi prima del deploy pubblico
 
-## Snapshot 2026-04-23 - master rebuild formalizzato
+## Snapshot 2026-07-21 — Diario e Mappa delle tracce
 
-- creati i documenti madre [[TRAVELLINIWITHUS_MASTER_PLAN]] e [[TRAVELLINIWITHUS_EXECUTION_PLAN]]
-- aperto il progetto dedicato [[10_Projects/PROJECT_SITE_REBUILD_AUTHORITY_PREMIUM]]
-- direzione ufficiale: Salt in Our Hair + Along Dusty Roads, authority editoriale prima di tutto
-- decisione tecnica provvisoria: nessun replatform come prima mossa; prima si correggono IA, page system, content model e design discipline
+- homepage `/` consolidata come `Diario delle meraviglie vere`, taccuino editoriale a cinque capitoli;
+- `/mappa` riallineata allo stesso oggetto narrativo con filtri, percorsi suggeriti e schede in-flow;
+- stack cartografico confermato su MapLibre + OpenFreeMap, senza chiave pubblica aggiuntiva;
+- contenuti demo dichiarati come anteprime e immagini subordinate a verifica esplicita;
+- prossima route del rebuild: `/esplora`, da portare allo stesso livello prima della riattivazione editoriale completa;
+- nessun deploy incluso in questo incremento locale.
 
 ## Registro collegato
 
 - [[20_Decisions/DECISION_0001_OBSIDIAN_VAULT_STRATEGY]]
 - [[30_Meetings/MEETING_2026-04-12_obsidian_vault_upgrade]]
 - [[10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT]]
-- [[10_Projects/PROJECT_SITE_REBUILD_AUTHORITY_PREMIUM]]
+- [[10_Projects/PROJECT_PUBLIC_FOOTPRINT_ULTRA_IMPROVEMENT_PLAN_2026-06-07]]
+- [[10_Projects/PROJECT_SITE_V2_ADVANCED_IMPROVEMENT_PLAN]]
+- [[10_Projects/PROJECT_SITE_V2_SPRINT_0_BASELINE]]
 - [[10_Projects/PROJECT_DESTINATIONS_SECTION_REVIEW]]
 - [[10_Projects/PROJECT_EDITORIAL_SYSTEM_V1_1]]
 - [[10_Projects/PROJECT_RELEASE_READINESS]]
@@ -121,14 +105,3 @@ docs/
 - [[12_Partnerships/PARTNER_PIPELINE_TRAVELLINIWITHUS]]
 - [[13_Content/CONTENT_PILLARS_TRAVELLINIWITHUS]]
 - [[50_Scratch/INBOX]]
-
-## Snapshot 2026-04-24 - first implementation pass del piano completo
-
-- chiuso il bug tecnico che bloccava `typecheck` nell'admin editoriale
-- nav pubblica riallineata al modello target: `Esplora`, `Guide`, `Pianifica`, `Collaborazioni`, `Chi siamo`
-- introdotto il layer `planning` in `siteContent` per governare copy e CTA del funnel pratico
-- `Inizia da qui` diventa il punto di ingresso esplicito del funnel `Pianifica`
-- `Dove dormire` evolve da archivio statico a sistema con dettaglio dedicato via `/dove-dormire/:slug`
-- introdotto il modello dati hotel (`HotelEntry`) con fallback locale e supporto Firestore `hotels`
-- gates verificati in questo pass: `typecheck`, `lint`, `build`
-- stato qualitativo: `audit:ui` migliorato ma non ancora chiuso del tutto; restano 5 warning inline-style da decidere nel prossimo pass

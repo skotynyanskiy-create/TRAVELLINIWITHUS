@@ -1,9 +1,6 @@
 import type { NormalizedArticle } from './articleData';
 import { DESTINATION_GROUPS } from '../config/contentTaxonomy';
-import type { ArticleData } from '../components/article';
-import { getPublicArticlePath } from './articleRoutes';
-
-type PreviewLike = ArticleData & { id: string; slug: string; excerpt?: string };
+import type { ContentReview } from '@/src/types/content';
 
 export interface ArchiveItem {
   id: string;
@@ -23,6 +20,7 @@ export interface ArchiveItem {
   period?: string;
   budget?: string;
   duration?: string;
+  review?: ContentReview;
 }
 
 export function getDestinationGroup(article: Pick<NormalizedArticle, 'country' | 'continent'>) {
@@ -48,7 +46,7 @@ export function mapArticleToArchiveItem(article: NormalizedArticle): ArchiveItem
     title: article.title,
     excerpt: article.excerpt || article.description,
     image: article.image,
-    link: getPublicArticlePath(article),
+    link: `/articolo/${article.slug || article.id}`,
     category: article.category,
     country: article.country,
     region: article.region,
@@ -61,40 +59,7 @@ export function mapArticleToArchiveItem(article: NormalizedArticle): ArchiveItem
     period: article.period,
     budget: article.budget,
     duration: article.duration,
-  };
-}
-
-export function mapPreviewToArchiveItem(
-  preview: PreviewLike,
-  experienceTypes: string[] = []
-): ArchiveItem {
-  const locationStr = preview.location || '';
-  const isItaly = /italia/i.test(locationStr);
-  const isGreece = /grecia/i.test(locationStr);
-  const isPortugal = /portogallo/i.test(locationStr);
-  const continent = preview.continent;
-  const country = isItaly ? 'Italia' : isGreece ? 'Grecia' : isPortugal ? 'Portogallo' : undefined;
-  const destinationGroup =
-    country && DESTINATION_GROUPS.includes(country as (typeof DESTINATION_GROUPS)[number])
-      ? country
-      : 'Altro';
-
-  return {
-    id: preview.id,
-    title: preview.title,
-    excerpt: preview.excerpt || preview.description,
-    image: preview.image,
-    link: getPublicArticlePath(preview),
-    category: preview.category,
-    country,
-    continent,
-    location: locationStr,
-    destinationGroup,
-    experienceTypes,
-    primaryExperience: experienceTypes[0],
-    period: preview.period,
-    budget: preview.budget,
-    duration: preview.duration,
+    review: article.review,
   };
 }
 

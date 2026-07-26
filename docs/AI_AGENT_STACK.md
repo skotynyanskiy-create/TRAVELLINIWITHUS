@@ -1,5 +1,5 @@
 ---
-type: guide
+type: reference
 area: workspace
 status: active
 tags:
@@ -19,48 +19,83 @@ Keep every AI assistant aligned on the same local operating system for TRAVELLIN
 
 - Canonical project skills live in `.agents/skills`.
 - Synced copies live in `.claude/skills`, `.github/skills`, `.cursor/skills`, and `.gemini/skills`.
+- Codex uses the repo `AGENTS.md` plus the canonical `.agents/skills` skill source exposed in this workspace; its local runtime MCP parity is configured in `~/.codex/config.toml`.
 - Claude project agents live in `.claude/agents`.
 - External skills are reference material only until reviewed and adapted locally.
 - `DESIGN.md` is the design-system prompt source for Stitch, Figma, agents, and code reviews.
 
-## Alignment model
+## Innovation Policy
 
-The stack has two layers and they are not equivalent:
+Travellini does not block new AI/dev tooling by default. New skills, agents,
+subagents, MCP servers, CLI tools, Codex plugins, GitHub agent workflows and
+external references are welcome in research, but they move through three gates:
 
-- Shared layer: `AGENTS.md`, `CLAUDE.md`, `DESIGN.md`, `docs/`, canonical `travellini-*` skills in `.agents/skills`, repo commands, and project notes.
-- Claude-only runtime layer: `.claude/settings.json`, `.claude/settings.local.json`, `.claude/skills/` helper workflows, and `.claude/agents`.
+1. **Scouting** — free research and comparison. No installs, no config changes,
+   no secrets, no stable adoption.
+2. **Lab** — controlled trial after manual confirmation. Use sandboxed or
+   temporary access, no production credentials, no deploy, no database writes.
+3. **Adoption** — stable configuration only after an evaluation card documents
+   source, purpose, benefit, risk, permissions, duplication, tests and rollback.
 
-Rule: if a behavior must apply across Codex, Claude Code, Cursor, Gemini, GitHub, or future assistants, it must be expressed in the shared layer. If it exists only in `.claude/settings*.json`, it is a Claude convenience, not shared truth.
+This keeps the system creative and current without turning every interesting
+tool into permanent operational surface area. The working radar is
+`docs/AI_TOOLING_RADAR.md`; use `docs/90_Templates/TPL_Tooling_Evaluation.md`
+for every candidate before adoption.
 
-## Shared vs Claude-only
+Always require explicit owner confirmation for deploy, push, force push,
+destructive filesystem operations, `.env` changes, secret access or printing,
+database migrations, Stripe/Firebase write operations, and changes to
+`server.ts`, `firestore.rules`, or `src/config/admin.ts`.
+Hook behavior is documented in `docs/AI_HOOKS_GUARDRAILS.md`; keep destructive
+actions blocking and creative/research actions advisory.
 
-Shared across tools:
+## Operating Modes
 
-- `travellini-*` skills in `.agents/skills`
-- brand, docs, design system, release and marketing notes
-- quality gates and repo commands
-- high-risk file list
-- update-the-docs discipline for homepage, nav, collaborations, release, campaigns, and bugs
+Use these modes to keep daily work fast without making irreversible actions too
+easy.
 
-Claude-only by design:
+| Mode       | Purpose                                        | Allowed                                                                         | Requires confirmation                                                                     |
+| ---------- | ---------------------------------------------- | ------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| SAFE       | Research, audit, planning, read-only debugging | Read files, search, inspect logs, run non-mutating audits, browser smoke checks | Any write, install, auth flow, deploy, push                                               |
+| BUILD      | Normal repo work                               | Edit tracked project files, create local skills/docs, run tests and builds      | High-risk files, new stable tools, external writes                                        |
+| OWNER ONLY | Sensitive operations                           | Only after explicit owner approval                                              | Deploy, push, DB migrations, Stripe/Firebase writes, `.env`, secrets, destructive cleanup |
 
-- slash-style workflow helpers in `.claude/skills/` such as `small-fix`, `audit-browser`, `predeploy`, `seo-check`, `commit`, `deploy`
-- Claude project agents under `.claude/agents`
-- hook-based runtime warnings and command blocks in `.claude/settings.json`
-- local permission allowances in `.claude/settings.local.json`
-
-Do not try to mirror `.claude/settings.local.json` into shared repo policy. It is workstation-specific and may contain personal or temporary allowances.
+Default to SAFE for unknown tasks, BUILD for normal implementation after the
+scope is clear, and OWNER ONLY for anything that can change production,
+credentials, payments, hosting or repository history.
 
 ## Commands
 
 ```bash
 npm run sync:agents
 npm run audit:agents
+npm run audit:obsidian
 npm run audit:visual
 npm run audit:quality
 ```
 
 Use `npm run sync:agents` after editing `.agents/skills`. Use `npm run audit:agents` before committing agent, skill, or workflow changes.
+Use `npm run audit:obsidian` after vault structure, metadata, template, Base or
+dashboard changes.
+
+## Current Integrations
+
+- Codex plugin: GitHub is enabled in the local Codex config for repository, issue, pull request and CI workflows.
+- Codex MCP: `~/.codex/config.toml` is aligned with `.mcp.json` for Playwright, Obsidian, Context7, Chrome DevTools, Sentry, GitHub, Firebase and Stripe.
+- Claude Code project MCP: `.mcp.json` enables Playwright, Obsidian, Context7, Chrome DevTools, Sentry, GitHub, Firebase and Stripe.
+- Obsidian credential rotation: after regenerating the Local REST API key,
+  update the ignored `.mcp.json` entry for Claude Code and the matching
+  `~/.codex/config.toml` entry for Codex, then restart both MCP clients. Never
+  paste the key into chat, tracked files, docs or logs.
+- Claude Code project hooks: `.claude/settings.json` uses PowerShell-based safety hooks for this Windows workspace.
+- Obsidian memory: `docs/` is the active vault for Local REST API / MCP
+  automation and operational note storage. The repository root remains code
+  truth and the Graphify corpus. Do not duplicate stable project facts into a
+  separate AI memory unless they are cross-project user preferences.
+- Graphify Labs: `graphifyy==0.9.6` is installed in the ignored local
+  `.tools/graphify` environment. It indexes code only; Obsidian ignores
+  `.tools/` and `graphify-out/`. `graphify:watch` is an explicit session mode,
+  not a startup service or git hook.
 
 ## Curated External References
 
@@ -72,16 +107,124 @@ These sources informed the local stack and should be reviewed before importing f
 - Google Labs Stitch Loop: `https://github.com/google-labs-code/stitch-loop`
 - Figma Skills directory: `https://officialskills.sh/figma/skills`
 - VoltAgent Claude Subagents: `https://github.com/VoltAgent/awesome-claude-code-subagents`
+- Agency Agents: `https://github.com/msitarzewski/agency-agents` reviewed at `783f6a72bfd7f3135700ac273c619d92821b419a`; only locally adapted slices should be imported.
 
 Do not install a whole upstream catalog into this repo. Copy, reduce, attribute, and adapt only the pieces that match the brand and workflow.
 
+## CLI Tooling (2026-05-14)
+
+Catalogo CLI integrate o documentate per il progetto, valutate il 2026-05-14. Vedi [docs/10_Projects/PROJECT_CLI_TOOLING_INTEGRATION.md](10_Projects/PROJECT_CLI_TOOLING_INTEGRATION.md) per la matrice completa, gli script package.json aggiunti e le decisioni aperte.
+
+Riepilogo:
+
+| Status          | CLI                      | Script npm                 | Quando                                            |
+| --------------- | ------------------------ | -------------------------- | ------------------------------------------------- |
+| installato      | `firebase-tools` 15.17   | `npm run emulators`        | Firestore/Auth locali per dev + bug investigation |
+| installato      | `gh` 2.89                | (non in scripts)           | PR / issue / API operations                       |
+| installato      | `docker` 29.3            | (non in scripts)           | container locale (non obbligatorio)               |
+| locale isolato  | `graphifyy` 0.9.6        | `npm run graphify:*`       | grafo code-only per architettura e blast radius   |
+| opt-in (npx)    | `@lhci/cli`              | `npm run audit:cwv`        | Core Web Vitals + budget pre-deploy               |
+| opt-in (npx)    | `unlighthouse`           | `npm run audit:bulk`       | Lighthouse bulk su tutte le pagine                |
+| opt-in (npx)    | `@axe-core/cli`          | `npm run audit:a11y`       | WCAG 2.2 AA automated                             |
+| opt-in (system) | `gitleaks`               | `npm run audit:secrets`    | Secret scanning pre-commit + scheduled            |
+| opt-in (npx)    | `size-limit`             | `npm run audit:size`       | Bundle budget enforcement                         |
+| opt-in (npx)    | `vite-bundle-visualizer` | `npm run audit:bundle:viz` | Exploration bundle                                |
+| opt-in (npx)    | `knip`                   | `npm run audit:deps`       | Unused deps + exports                             |
+| opt-in (npx)    | `markdownlint-cli2`      | `npm run lint:md`          | Lint docs/ markdown                               |
+| opt-in (system) | `stripe` CLI             | `npm run webhook:listen`   | Webhook live + replay events                      |
+| opt-in (npx)    | `@sentry/cli`            | `npm run release:sentry`   | Source maps + release tracking                    |
+
+Tutti gli script sono **opt-in** — NON inclusi in `audit:quality` per non rompere CI esistente. Vengono lanciati on-demand. Le CLI con `(npx)` non richiedono install esplicito (npx scarica al volo). Le CLI con `(system)` richiedono install OS-level documentato nel doc dedicato.
+
+## MCP Policy
+
+Keep MCP servers minimal. Every added server must have a concrete use case, a trusted source, auth handled through environment variables, and documentation in this file or a linked project note.
+
+Current shared MCP set:
+
+- `playwright`: browser QA, visual review, responsive checks and smoke tests.
+- `obsidian`: optional vault automation against the local Obsidian REST API. Normal Travellini work should still read and edit `docs/` directly.
+- `context7`: official/library documentation lookup when implementation details may have changed.
+- `chrome-devtools`: Core Web Vitals, performance traces and real-browser diagnostics.
+- `sentry`: production error investigation when `SENTRY_ACCESS_TOKEN` is available.
+- `github`: pull requests, issues, review comments, CI and repository operations. Prefer the existing Codex GitHub plugin where available.
+- `firebase`: Firebase/Firestore inspection and debugging with task-scoped auth.
+- `stripe`: Stripe docs, checkout, webhook and sandbox work with `STRIPE_SECRET_KEY`.
+
+Approved candidates when the task requires them:
+
+- Figma MCP: design-to-code context from real Figma files. Enable only when there is a concrete Figma file or Dev Mode workflow.
+
+Do not add broad MCP registries, random community servers or full external agent catalogs as default project tools.
+
 ## Local Skills
 
-- `travellini-design-director`: brand, visual direction, Italian copy, premium editorial UX.
-- `travellini-web-quality-auditor`: accessibility, performance, SEO, Core Web Vitals, responsive QA.
+### Strategic & operator skills
+
 - `travellini-stitch-figma-bridge`: controlled Stitch/Figma usage and design-to-code handoff.
-- `travellini-page-builder`: route-aware React page creation with SEO and docs.
-- `travellini-release-quality`: release gates, visual QA, docs, and deployment readiness.
+
+> Retired 2026-05-21: the legacy `travellini-design-director`, `travellini-web-quality-auditor`, `travellini-page-builder`, `travellini-release-quality`, `travellini-social-content-operator`, and `travellini-growth-revenue-operator` wrapper skills were removed. Their scope is owned by the specialist agents (see "Claude Project Agents") plus narrow operational skills (`new-page`, `predeploy`, `audit-ui`, etc.).
+
+### Operational skills (canonicalized 2026-05-14)
+
+These short, action-scoped skills were originally Claude-local. They have been promoted to `.agents/skills` so Codex, Cursor and Gemini share the same operating manual. They are intentionally narrow: each one wraps a single task with concrete checks or scaffolding.
+
+- `audit-ui`: CSS vars, inline styles, Tailwind patterns, responsive, a11y, icons, layout wrappers.
+- `audit-browser`: real-browser UX audit via Playwright MCP (responsive, console, forms, regressions).
+- `cwv`: Core Web Vitals capture (LCP, CLS, INP, TBT) via Chrome DevTools MCP.
+- `a11y-check`: WCAG 2.2 AA pass via Playwright accessibility tree (contrast, alt, focus, aria, keyboard).
+- `responsive-check`: viewport sweep 320/375/768/1024/1440 with overflow and CTA visibility checks.
+- `smoke-test`: post-change browser smoke test (home loads, nav works, CTA visible, no console errors).
+- `seo-check`: meta tags, OG/Twitter, structured data, alt text, sitemap, robots, headings, CWV basics.
+- `firebase-check`: Firestore filters, indexes, error handling, client safety, security rules signals.
+- `stripe-flow`: cart, server-side price integrity, webhook signing, env vars, sandbox flows.
+- `predeploy`: full pre-deploy validation suite (typecheck/lint/test/build/audit:\* aggregator).
+- `deploy`: deploy procedure with preflight, Firebase Hosting, release docs (no auto-execution).
+- `copywriting-italian`: hero, sections, CTA, meta description, articles in Rodrigo & Betta voice.
+- `new-article`: scaffold editorial article + Obsidian content note with Italian metadata.
+- `new-page`: scaffold a new React page (PageLayout, SEO, Section, route wiring, sitemap).
+- `social-card`: 1200x630 OG / Instagram preview cards per page or article.
+- `design-research`: fetch and digest references from awwwards, siteinspire, godly.website, editorial travel sites.
+- `animate`: apply motion patterns (GSAP, motion, lenis, TiltCard, MagneticWrapper, AnimatedCounter).
+- `innovation-radar`: scout and score emerging AI/dev tools before they enter the project.
+- `mcp-evaluator`: evaluate MCP servers before enabling or adopting them.
+- `cli-evaluator`: evaluate CLI tools before install, scripting or stable workflow use.
+- `plugin-evaluator`: evaluate Codex, GitHub, Figma, Canva, Drive and related plugins/connectors.
+- `github-agent-workflow`: design safe GitHub Copilot/agent workflows, custom instructions and PR automation.
+- `graphify`: query and refresh the local code-only knowledge graph for architecture, dependency and blast-radius work.
+- `backup-rollback`: define backup, restore and rollback checks before sensitive work.
+- `secret-protection`: audit secret-handling behavior without reading or printing secret values.
+- `hooks-audit`: review Claude hooks, Husky hooks, GitHub Actions and local automation guardrails.
+
+### Claude-only support skills (not canonicalized)
+
+These remain in `.claude/skills` because they encode Claude Code workflow ergonomics (TodoWrite, plan mode, conversational triage) rather than tool-agnostic procedures:
+
+- `bug-triage`, `small-fix`, `deep-refactor`, `quick-review`, `commit`, `explain-module`.
+
+Promoting them would require translating their conversational steps into tool-neutral instructions; until then, they stay scoped to Claude Code.
+
+### Editorial leverage skills (added 2026-05-17, Claude-local)
+
+Aggiunte dopo audit confronto vs catalogo skills esterno @avatarist.ai. Reimplementate Travellini-style anziché importate, per evitare conflitti con routing CLAUDE.md, anti-brand patterns e rischi prompt injection da skill di terzi. Tutte vivono in `.claude/skills/` e attendono promozione a `.agents/skills` dopo prima validazione operativa.
+
+- `anti-ai-slop`: rifinitura italiano long-form post-editorial-writer per togliere pattern AI (ritmo monotono, cliché, transizioni "inoltre/tuttavia", superlativi vuoti, generalita). Preserva fatti; segnala `[VERIFY]` per dati incerti.
+- `hook`: generatore 5 hook scroll-stopper italiani su 7 framework testati (curiosity gap onesto, specificita numerica, contrarian autentico, scena, stake personale, contraddizione, domanda specifica). Per Reel/TikTok opener, lead pillar, hero subtitle, oggetto newsletter, headline lead magnet. Mai clickbait.
+- `repurpose`: trasforma pillar article in pacchetto multi-canale (carosello IG 8 slide + Reel 30s + quiz 5 domande + bullet newsletter + OG brief). Orchestra `social-content-operator` + `seo-strategist` + `asset-curator`. Scrive `docs/13_Content/REPURPOSE_*.md` + handoff brief.
+- `ai-seo`: audit Generative Engine Optimization su 7 assi (entity clarity, claim citabili, structured authorship, llms.txt, snippet density, headline onesti, freshness signals). Complementa `/seo-check` (SERP classica) con AI search (Perplexity, ChatGPT search, Google AI Overviews, Claude).
+- `verify-facts`: fact-check sistematico pre-pubblicazione. Estrae ogni claim verificabile (prezzi, orari, distanze, indirizzi, eventi, codici) e classifica `verified` / `dated` / `stale` / `unverified` / `risk` / `missing-attr`. Aggiorna `fact_check_status` nel frontmatter dell'articolo. Blocca pubblicazione se >30% claim problematici.
+
+Sequenza canonica suggerita per nuovo pillar article:
+
+```
+/new-article → editorial-writer → /anti-ai-slop → /verify-facts → /ai-seo → /seo-check → quality-auditor → publish → /repurpose
+```
+
+Sequenza canonica per Reel/IG opener nuovo:
+
+```
+/hook (genera 5 varianti) → social-content-operator (finalizza caption + scheduling) → /social-card (OG opzionale)
+```
 
 ## Claude Project Agents
 
@@ -89,20 +232,16 @@ Do not install a whole upstream catalog into this repo. Copy, reduce, attribute,
 - `travellini-frontend-builder`: implementation agent for React/Tailwind work.
 - `travellini-quality-auditor`: read-only quality and release review.
 - `travellini-seo-conversion-strategist`: SEO, content architecture, conversion and marketing alignment.
-
-## Portable runtime rules
-
-The following Claude runtime behaviors are important enough that they should be treated as shared policy:
-
-- Before-action routing check: search/orientation first, smallest edit path second, heavier multi-file work only when justified.
-- Dangerous command guardrails: no destructive cleanup, force-push, hard reset, or production deploy behavior without explicit owner confirmation.
-- High-risk file warnings: `server.ts`, `firestore.rules`, and `src/config/admin.ts`.
-
-These are mirrored into `AGENTS.md` so non-Claude assistants can follow the same intent even without Claude hook support.
+- `travellini-social-content-operator`: social calendars, Reels/TikTok concepts, campaign briefs, creator partnerships, newsletters, and content-to-conversion planning.
+- `travellini-growth-revenue-operator`: growth strategy, partner pipeline, media kit conversion, affiliate/shop planning, campaign prioritization, offer design, and analytics events.
 
 ## Operating Rules
 
 - Every agent must treat `docs/` as operational truth.
+- Graphify is a local supplementary index: use scoped queries for static
+  dependency work from the repository root, verify source before decisions,
+  and keep the `docs/` vault, media, secrets and Obsidian configuration outside
+  its corpus.
 - UI, positioning, collaboration, homepage, navbar, release, bug, campaign, partner, and content changes must update the relevant note.
 - Stitch/Figma outputs must pass through repo adaptation and QA before becoming code.
 - `npm run predeploy` excludes visual QA by design; use `npm run audit:quality` for the full pass.

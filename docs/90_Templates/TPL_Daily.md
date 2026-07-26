@@ -1,7 +1,7 @@
 ---
 type: daily
 area: workspace
-status: open
+status: active
 owner:
 related:
 tags:
@@ -12,20 +12,20 @@ tags:
 
 ## Focus
 
-- 
+-
 
 ## Log
 
-- 
+-
 
 ## Decisions
 
-- 
+-
 
 ## Tomorrow
 
-- 
+-
 
 ## Notes linked
 
-- 
+-

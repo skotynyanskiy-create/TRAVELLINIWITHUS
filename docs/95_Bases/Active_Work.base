@@ -2,11 +2,14 @@ filters:
   and:
     - 'file.ext == "md"'
     - or:
-      - 'file.inFolder("10_Projects")'
-      - 'file.inFolder("20_Decisions")'
-      - 'file.inFolder("30_Meetings")'
-      - 'file.inFolder("40_Daily")'
-      - 'file.inFolder("50_Scratch")'
+      - 'type == "project"'
+      - 'type == "task"'
+      - 'type == "bug"'
+      - 'type == "ui-change"'
+      - 'type == "content-brief"'
+      - 'type == "campaign"'
+      - 'type == "partner"'
+      - 'type == "collaboration"'
 properties:
   file.name:
     displayName: Note
@@ -37,6 +40,10 @@ views:
         - 'status == "in-progress"'
         - 'status == "blocked"'
         - 'status == "active"'
+        - 'status == "planned"'
+        - 'status == "lead"'
+        - 'status == "proposta"'
+        - 'status == "negoziazione"'
     order:
       - status
       - priority

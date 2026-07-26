@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Direzione C — «Album Cinematico di Coppia» · design-lab Travelliniwithus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Token REALI da src/index.css @theme */
+  :root{
+    --sand:#faf8f4; --ink:#0a0a0a; --ink-deep:#111111; --ink-2:#44403c;
+    --accent:#c2410c; --accent-on-dark:#e8834e; --carta:#f2ecdf; --carta-deep:#e6ddcd;
+    --inchiostro:#1e1c18; --linea:rgb(30 28 24 / 24%); --border:#e7e5e4; --muted:#78716c;
+    --serif:'Fraunces',serif; --sans:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0}
+  body{background:var(--ink-deep);color:var(--sand);font-family:var(--sans);font-size:1.0625rem;line-height:1.7;-webkit-font-smoothing:antialiased}
+  img{max-width:100%;display:block}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 clamp(1.25rem,5vw,4rem)}
+  .lab{background:var(--inchiostro);color:var(--carta);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;text-align:center;padding:.55rem 1rem;position:relative;z-index:20}
+  .lab strong{color:var(--accent-on-dark);font-weight:600}
+  h1,h2,h3{font-family:var(--serif);font-weight:400}
+
+  /* ── SCENA full-bleed ── */
+  .scena{position:relative;min-height:100svh;display:grid;align-items:end;overflow:clip}
+  .scena>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .scena .shade{position:absolute;inset:0;background:linear-gradient(to top, rgb(17 17 17 / 72%) 0%, rgb(17 17 17 / 18%) 45%, rgb(17 17 17 / 8%) 100%)}
+
+  /* pannello-claim flottante (Lithuania) — gesto-firma: la scena che si posa */
+  .pannello{position:relative;margin:clamp(2rem,6vw,6rem);max-width:34rem;background:color-mix(in srgb,var(--sand) 96%,transparent);color:var(--ink);padding:clamp(1.8rem,4vw,3rem);opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s cubic-bezier(.22,.9,.3,1)}
+  .in-view .pannello{opacity:1;transform:none}
+  .pannello .kicker{font-size:.66rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom: .9rem}
+  .pannello h2{font-size:clamp(2rem,4vw,3.4rem);line-height:1.05;letter-spacing:-.045em}
+  .pannello p{margin-top:1rem;color:var(--ink-2);font-size:1rem}
+
+  /* didascalia d'autore numerata (Hedwig) */
+  .didascalia{position:absolute;right:clamp(1.2rem,4vw,3.5rem);bottom:clamp(1.2rem,4vw,3rem);max-width:26rem;text-align:right;font-family:var(--serif);font-weight:420;font-size:clamp(1.15rem,1.6vw,1.6rem);line-height:1.35;color:var(--sand);text-shadow:0 1px 18px rgb(17 17 17 / 55%);opacity:0;transform:translateY(14px);transition:opacity .7s ease .25s,transform .7s ease .25s}
+  .in-view .didascalia{opacity:1;transform:none}
+  .didascalia i{font-style:normal;color:var(--accent-on-dark);margin-right:.5em}
+
+  /* claim hero */
+  .claim{position:absolute;inset:0;display:grid;place-content:center;text-align:center;padding:2rem}
+  .claim h1{font-size:clamp(3.6rem,7vw,7.2rem);line-height:.9;letter-spacing:-.055em;max-width:9.5em}
+  .claim .kicker{font-size:.66rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-on-dark);margin-bottom:1.2rem}
+
+  /* sezioni chiare di supporto */
+  section.doc{background:var(--sand);color:var(--ink);padding:clamp(3.5rem,8vw,7rem) 0}
+  section.doc+section.doc{border-top:1px solid var(--border)}
+  .codice{font-size:.66rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+  .deck{font-family:var(--serif);font-weight:420;font-size:clamp(1.1rem,1.4vw,1.3rem);line-height:1.55;color:var(--ink-2);max-width:36em}
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-top:2rem}
+  .sw{border:1px solid var(--border);background:#fff}
+  .sw i{display:block;height:74px}
+  .sw figcaption{padding:.6rem .7rem;font-size:.68rem;letter-spacing:.06em;color:var(--ink-2)}
+  .sw code{display:block;color:var(--muted);font-size:.64rem}
+  .specimen>div{padding:1.4rem 0;border-bottom:1px dashed var(--border)}
+  .spec-label{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+  .gate{background:#fff7ed;border:1px solid var(--border);padding:1.2rem 1.4rem;font-size:.85rem;margin-top:2rem;color:var(--ink)}
+  .gate b{color:#9a3412}
+  a.back{color:#9a3412;font-size:.85rem}
+  @media (max-width:640px){.didascalia{position:static;text-align:left;margin:1rem clamp(1.2rem,4vw,3.5rem) 2rem;padding-bottom:1rem}}
+  @media (prefers-reduced-motion:reduce){
+    .pannello,.didascalia{opacity:1;transform:none;transition:none}
+  }
+</style>
+</head>
+<body>
+<div class="lab">design-lab · fuori dal build · <strong>Direzione C</strong> — materiale di decisione, non produzione</div>
+
+<main>
+  <!-- SCENA 1: copertina del viaggio -->
+  <section class="scena observe">
+    <img src="../public/images/reels/capovaticano-tonicello-resort-cover.webp" alt="Costa di Capo Vaticano dal Tonicello Resort, mare turchese e scogliere" fetchpriority="high">
+    <div class="shade"></div>
+    <div class="claim">
+      <div><p class="kicker">Travelliniwithus · L'album del viaggio</p>
+      <h1>Posti che sembrano inventati.</h1></div>
+    </div>
+    <p class="didascalia"><i>I.</i>Il mare di Capo Vaticano, visto dal Tonicello. Calabria, non Caraibi.</p>
+  </section>
+
+  <!-- SCENA 2: pannello-claim che si posa -->
+  <section class="scena observe">
+    <img src="../public/images/reels/sarteano-chiostro-cennini-cover.webp" alt="Chiostro Cennini a Sarteano, colonne in pietra e luce calda" loading="lazy">
+    <div class="shade"></div>
+    <div class="pannello">
+      <p class="kicker">Dormire dentro una storia</p>
+      <h2>Ma ci siamo stati davvero.</h2>
+      <p>Ogni scena di questo album è un frame reale dei nostri viaggi. Nessuna immagine generata: se la vedi, ci siamo stati.</p>
+    </div>
+    <p class="didascalia"><i>II.</i>Un chiostro del Quattrocento diventato casa per una notte. Sarteano.</p>
+  </section>
+
+  <!-- DOC: palette -->
+  <section class="doc"><div class="wrap">
+    <p class="codice">Palette · token reali</p>
+    <p class="deck" style="margin-top:1rem">Le scene vivono su ink-deep (già usato per Mappa e hero scuri); i pannelli
+    riportano la sand di brand sopra la foto. Nessun colore nuovo.</p>
+    <div class="swatches">
+      <figure class="sw"><i style="background:#111111"></i><figcaption>Ink deep — scena<code>--color-ink-deep #111111</code></figcaption></figure>
+      <figure class="sw"><i style="background:#faf8f4;border-bottom:1px solid var(--border)"></i><figcaption>Sand — pannello<code>--color-sand #faf8f4</code></figcaption></figure>
+      <figure class="sw"><i style="background:#c2410c"></i><figcaption>Terracotta — kicker<code>--color-accent #c2410c</code></figcaption></figure>
+      <figure class="sw"><i style="background:#e8834e"></i><figcaption>Accento su scuro (AA)<code>--color-accent-on-dark #e8834e</code></figcaption></figure>
+      <figure class="sw"><i style="background:#f2ecdf;border-bottom:1px solid var(--border)"></i><figcaption>Carta — inserti album<code>--color-atlante-carta #f2ecdf</code></figcaption></figure>
+    </div>
+  </div></section>
+
+  <!-- DOC: specimen -->
+  <section class="doc"><div class="wrap">
+    <p class="codice">Specimen Fraunces · scala della direzione (la più display delle tre)</p>
+    <div class="specimen" style="margin-top:1.5rem">
+      <div><p class="spec-label">Claim/h1 — clamp(3.6rem, 7vw, 7.2rem) / 0.9 · Fraunces 400 · tracking −0.055em</p>
+        <p style="font-family:var(--serif);font-size:clamp(3.6rem,7vw,7.2rem);line-height:.9;letter-spacing:-.055em">Vale davvero?</p></div>
+      <div><p class="spec-label">Didascalia d'autore numerata (Hedwig) — Fraunces clamp(1.15rem, 1.6vw, 1.6rem) / 1.35</p>
+        <p style="font-family:var(--serif);font-size:clamp(1.15rem,1.6vw,1.6rem);line-height:1.35;max-width:30em"><i style="font-style:normal;color:var(--accent)">III.</i> Drink che sembrano sangue, atmosfera gotica e un po' di scena. Volterra.</p></div>
+      <div><p class="spec-label">Claim del pannello — Fraunces clamp(2rem, 4vw, 3.4rem) / 1.05</p>
+        <p style="font-family:var(--serif);font-size:clamp(2rem,4vw,3.4rem);line-height:1.05;letter-spacing:-.045em">Una scena, un'idea.</p></div>
+      <div><p class="spec-label">Kicker/meta — Inter 0.66rem · tracking 0.18em · uppercase</p>
+        <p class="codice">Hotel con carattere · Novara</p></div>
+    </div>
+  </div></section>
+
+  <!-- DOC: note di direzione -->
+  <section class="doc"><div class="wrap">
+    <p class="codice">Il gesto-firma · «la scena che si posa»</p>
+    <p class="deck" style="margin-top:1rem">Ogni frame entra a piena pagina e il pannello-claim scivola e si assesta
+    (motion 12: translateY 24px→0 + opacity, spring morbido) mentre la didascalia numerata si rivela (GSAP SplitText).
+    Niente ken-burns, niente scroll-jack: lenis dà solo lo smorzamento. Qui nel lab il gesto è simulato con
+    IntersectionObserver + transizioni CSS.</p>
+    <div class="gate"><b>Dipendenza bloccante:</b> questa direzione NON è eseguibile senza un passaggio
+    <code>asset-curator</code> a monte che estragga e selezioni i frame reali dei reel (imagery-truth).
+    Le foto di questa demo sono le cover reali già in repo; i frame di coppia NON sono inclusi perché
+    le attuali foto "coppia" in repo sono generate e non utilizzabili come referenziali.
+    <br><br><b>Perf:</b> è la direzione a rischio LCP più alto (full-bleed). Mitigazione obbligatoria:
+    primo frame priority + responsiveWidths + AVIF/WebP; validazione perf-engineer su rete reale.</div>
+    <p style="margin-top:2rem"><a class="back" href="index.html">← Torna al confronto</a></p>
+  </div></section>
+</main>
+
+<script>
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); }
+  }), {threshold:.35});
+  document.querySelectorAll('.observe').forEach(s => io.observe(s));
+</script>
+</body>
+</html>

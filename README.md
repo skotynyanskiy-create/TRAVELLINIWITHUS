@@ -43,31 +43,41 @@ npm install
 npm run dev
 ```
 
+## Local environment setup
+
+Copy `.env.example` to `.env`. The site runs with zero keys configured (every integration self-disables silently), but the following keys unlock real behavior in dev:
+
+| Key                                                        | Purpose                                           | Without it                                                                                                              |
+| ---------------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `VITE_MAPBOX_TOKEN`                                        | Renders `/mappa` tiles                            | Map appears black, console errors. Get one at https://account.mapbox.com/access-tokens                                  |
+| `BREVO_API_KEY` + `BREVO_LIST_ID`                          | Forwards newsletter signups to Brevo              | Form still collects, falls back to localStorage `twu_newsletter_leads`. Keys at https://app.brevo.com/settings/keys/api |
+| `RESEND_API_KEY`                                           | Sends transactional email for `/api/contact-lead` | Lead saved server-side and to localStorage `twu_contact_leads`, no email sent. Keys at https://resend.com/api-keys      |
+| `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET`              | Real Stripe checkout & webhooks                   | Set `ALLOW_MOCK_CHECKOUT=true` to bypass with mock checkout in dev                                                      |
+| `VITE_GA_ID`, `VITE_META_PIXEL_ID`, `VITE_TIKTOK_PIXEL_ID` | Analytics & ad pixels (consent-gated)             | No tracking, banner still appears                                                                                       |
+
+Never commit `.env`. `.env.example` is the only env file checked in.
+
 ## Setup on a second PC
 
-Guida operativa completa (Claude Code plugin, MCP auth, `.env`, Obsidian, Codex CLI):
-
-→ [`docs/SECOND_PC_SETUP.md`](docs/SECOND_PC_SETUP.md)
-
-Quick start:
+Clone only the canonical repository:
 
 ```bash
 git clone https://github.com/skotynyanskiy-create/TRAVELLINIWITHUS.git
 cd TRAVELLINIWITHUS
 npm install
-cp .env.example .env   # compila con le chiavi reali
 npm run dev
 ```
 
-Then open Obsidian with this folder as the vault:
+Then open the dedicated operational notes folder as the Obsidian vault:
 
 ```txt
-docs/
+C:\Users\ccocu\Desktop\TRAVELLINIWITHUS\docs
 ```
 
-The `docs/` folder is part of the repository on purpose. It contains the operational vault, project notes, marketing hub and release tracking. Obsidian settings that are useful for keeping the working environment consistent across computers are also versioned.
-
-Per replicare completamente l'ambiente Claude Code (plugin user-level, MCP auth, memoria di sessione), segui [`docs/SECOND_PC_SETUP.md`](docs/SECOND_PC_SETUP.md) e [`docs/CLAUDE_CODE_PLUGINS_MANIFEST.md`](docs/CLAUDE_CODE_PLUGINS_MANIFEST.md).
+The `docs/` folder contains the operational notes, project records, marketing
+hub and release tracking. Its local `docs/.obsidian/` configuration keeps
+Obsidian fast by excluding the application code and `node_modules`; Graphify
+indexes the codebase separately from the repository root.
 
 ## Git workflow
 
@@ -97,14 +107,6 @@ npm run audit:all
 npm run predeploy
 ```
 
-## Architecture
-
-Mappa dello stack, data flow, API endpoints, CI/CD e security boundaries: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
-
-## Troubleshooting
-
-Problemi comuni (dev server, Firebase, Stripe, build, test, lint, Claude Code hook, `npm audit`): [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md).
-
 ## AI collaboration
 
 This repo is configured to work cleanly across multiple AI tools.
@@ -121,18 +123,17 @@ For Claude Code session startup:
 
 - `.claude/CLAUDE_CODE_START_PROMPT.md`
 
-## Deploy
+For Codex sessions:
 
-- Frontend hosting: **Vercel** (raccomandato, linkato in `.vercel/`). Config in `vercel.json`.
-- Firestore rules / Auth / Storage / backup: **Firebase** (`firebase.json`, `firestore.rules`, `.firebaserc`). Firebase Hosting è alternativa per il frontend.
-- Runbook completo: [`docs/DEPLOYMENT_RUNBOOK.md`](docs/DEPLOYMENT_RUNBOOK.md).
-- Stripe webhook setup: [`docs/STRIPE_WEBHOOK_RUNBOOK.md`](docs/STRIPE_WEBHOOK_RUNBOOK.md).
+- repo instructions come from `AGENTS.md`
+- local project skills come from `.agents/skills`
+- MCP runtime parity with Claude Code is configured in `~/.codex/config.toml`, aligned to `.mcp.json`
 
 ## Obsidian
 
 Open this folder as vault:
 
-`docs/`
+`C:\Users\ccocu\Desktop\TRAVELLINIWITHUS\docs`
 
 Main notes:
 

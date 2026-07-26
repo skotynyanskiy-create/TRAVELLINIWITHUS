@@ -4,7 +4,7 @@ export default function ArticlePageSkeleton() {
   return (
     <div aria-busy="true">
       {/* Hero skeleton */}
-      <div className="relative h-[70vh] md:h-[85vh] w-full bg-zinc-200 overflow-hidden">
+      <div className="relative h-[70vh] md:h-[85vh] w-full bg-[var(--color-muted-bg-2)] overflow-hidden">
         <Skeleton className="w-full h-full rounded-none" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
         <div className="absolute bottom-20 left-0 right-0 px-6 max-w-5xl mx-auto">
@@ -38,8 +38,8 @@ export default function ArticlePageSkeleton() {
         </div>
 
         <aside className="hidden lg:flex flex-col gap-6">
-          <Skeleton className="w-full h-48 rounded-2xl" />
-          <Skeleton className="w-full h-32 rounded-2xl" />
+          <Skeleton className="w-full h-48 rounded-[var(--radius-md)]" />
+          <Skeleton className="w-full h-32 rounded-[var(--radius-md)]" />
         </aside>
       </div>
     </div>

@@ -1,40 +1,48 @@
 /**
- * AI verification service — chiama endpoint server-side proxy per Gemini.
- * Gli endpoint sono admin-only (middleware requireAdmin in server.ts):
- * richiedono Authorization: Bearer <firebaseIdToken> + custom claim admin=true.
- * Se auth backend non configurato lato server → risposta 503 graceful (gestita dal chiamante).
+ * AI verification client.
+ *
+ * La chiave Gemini NON sta nel bundle frontend: la chiamata passa attraverso
+ * l'endpoint server admin-only `/api/admin/ai-verify` che verifica id-token
+ * Firebase + whitelist admin email prima di invocare Gemini server-side
+ * (vedi server.ts `verifyOptionalIdToken` + `isAdminEmail`).
+ *
+ * Questo evita due leak path che il vecchio codice aveva:
+ *   1. `VITE_GEMINI_API_KEY` finiva nel bundle pubblico al build
+ *   2. `define: { 'process.env.GEMINI_API_KEY' }` in vite.config.ts sostituiva
+ *      la stringa con la chiave reale nel bundle
  */
-import { auth } from '../firebase';
+import { auth } from '../lib/firebaseAuth';
 
-async function callAiEndpoint(path: string, content: string, title: string): Promise<string> {
-  const user = auth.currentUser;
-  if (!user) {
-    throw new Error("Sessione scaduta. Effettua di nuovo l'accesso.");
+type VerifyMode = 'search' | 'maps';
+
+async function callAiVerify(mode: VerifyMode, content: string, title: string): Promise<string> {
+  const idToken = await auth.currentUser?.getIdToken();
+  if (!idToken) {
+    throw new Error('Non autenticato. Effettua login admin per usare la verifica AI.');
   }
-  const token = await user.getIdToken();
 
-  const response = await fetch(path, {
+  const response = await fetch('/api/admin/ai-verify', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${idToken}`,
     },
-    body: JSON.stringify({ content, title }),
+    body: JSON.stringify({ mode, content, title }),
   });
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ error: 'Errore durante la verifica.' }));
-    throw new Error(error.error || `Verifica fallita: ${response.status}`);
+    const err = (await response.json().catch(() => ({}))) as { error?: string };
+    throw new Error(err.error || `AI verify failed (${response.status})`);
   }
 
-  const data = (await response.json()) as { result: string };
-  return data.result;
+  const data = (await response.json()) as { content?: string };
+  return data.content || content;
 }
 
 export function verifyWithSearch(content: string, title: string): Promise<string> {
-  return callAiEndpoint('/api/ai/verify-search', content, title);
+  return callAiVerify('search', content, title);
 }
 
 export function verifyWithMaps(content: string, title: string): Promise<string> {
-  return callAiEndpoint('/api/ai/verify-maps', content, title);
+  return callAiVerify('maps', content, title);
 }

@@ -13,15 +13,6 @@ Read these before changing important UI:
 5. `docs/10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT.md`
 6. relevant notes under `docs/`
 
-## Quick Reference
-
-- **Token tecnici** (CSS vars, componenti riusabili, motion presets, utility classes): vedi [`docs/DESIGN_SYSTEM_CHEATSHEET.md`](docs/DESIGN_SYSTEM_CHEATSHEET.md) — aggiornarlo dopo PR che modificano `@theme` o aggiungono atoms.
-- **Baseline UI consistency**: `npm run audit:ui` confronta col file `audit-ui-baseline.json` committato. Nuovi warning fuori dal baseline spiccano come `NEW`. Per accettare un nuovo set: `npm run audit:ui:update-baseline`.
-- **Pagine mature di riferimento** (composizione pulita da cui copiare pattern):
-  - Home → [`src/pages/Home.tsx`](src/pages/Home.tsx)
-  - Articolo → [`src/pages/Articolo.tsx`](src/pages/Articolo.tsx) (pagina editoriale complex)
-  - Destinazioni → [`src/pages/Destinazioni.tsx`](src/pages/Destinazioni.tsx) (filtri + grid + pagination)
-
 ## Brand
 
 Travelliniwithus is the travel creator brand of Rodrigo & Betta. The site must feel people-led, editorial, useful, and commercially credible.
@@ -78,9 +69,40 @@ Avoid:
 - Use `lucide-react` for icons, except documented local exceptions.
 - Keep props typed with explicit interfaces.
 
+## Design Tokens
+
+All colors must come from CSS variables declared in `src/index.css` `@theme` block. Tailwind v4 generates utilities from these (`bg-sand`, `text-ink`, etc.) but the `var(--color-*)` form is also valid and preferred in places where Tailwind utility resolution is brittle (arbitrary values, dynamic classes).
+
+Public-facing code MUST NOT use raw Tailwind palette utilities like `text-zinc-*`, `bg-red-*`, `text-amber-*`, `bg-emerald-*`, `text-rose-*`, etc. Use these tokens instead:
+
+- Surfaces: `--color-sand`, `--color-surface`, `--color-surface-2`, `--color-muted-bg`, `--color-muted-bg-2`
+- Borders: `--color-border`
+- Text: `--color-ink`, `--color-ink-2`, `--color-muted`, `--color-muted-fg`, `--color-muted-fg-2`
+- Dark surfaces (Mappa, hero scuri, social CTA): `--color-ink-deep`
+- Accent: `--color-accent`, `--color-accent-hover`, `--color-accent-text`, `--color-accent-soft`
+- Error states: `--color-error`, `--color-error-soft`, `--color-error-text`
+- Success: `--color-success`, `--color-success-soft`, `--color-success-text`
+- Warning: `--color-warning`, `--color-warning-soft`, `--color-warning-text`
+- Info: `--color-info`, `--color-info-soft`, `--color-info-text`
+
+Admin-only files under `src/pages/admin/**` and `src/components/admin/**` may still use Tailwind neutrals (`zinc-*`, etc.) — they are out of the brand surface. Third-party brand colors (Instagram gradient, WhatsApp green, etc.) live in `src/index.css` as `--color-social-*` and `--color-affiliate-*`.
+
+## Form Components
+
+Use the shared form components rather than reinventing inputs:
+
+- `FormField` — label + hint + error wrapper. Always wrap inputs with this.
+- `Input` — text/email/number inputs, supports `variant="boxed"` (default) and `variant="underline"` (editorial pages like Contatti). Forwards `ref`.
+- `Textarea` — same API as `Input` for multi-line.
+- `Select` — same API for dropdowns.
+
+Pass `error={Boolean(error)}` to apply the error border. The wrapping `FormField` renders the error message under the input with `role="alert"`. Newsletter keeps its pill-shape custom input by design (distinctive brand styling).
+
 ## Stitch And Figma Usage
 
 Stitch and Figma are for concepting, design-system extraction, mockups, and critique. They are not code truth.
+
+The brand design system lives in Figma at `https://www.figma.com/design/mDzCLduBV0uDAOH1XGUbHH` (file "TRAVELLINIWITHUS — Design System"). It is generated from these tokens (`Brand Colors` + `Radius` variable collections, type styles for Fraunces/Inter, and a primitives specimen). `src/index.css` remains the source of truth; if a token changes there, re-sync the Figma variables.
 
 Prompts must include:
 
@@ -101,3 +123,45 @@ Before marking UI work as ready:
 - `npm run audit:ui`
 - `npm run audit:visual` for UI-heavy changes
 - update the relevant `docs/` note when positioning, routes, UI flows, collaborations, or release readiness change
+
+## Decision Log
+
+### Typography delivery — Fraunces weight axis
+
+Fraunces resta il serif di brand. Il sito carica le varianti variable `wght`
+normale e corsiva; i file multi-asse `full` non sono ammessi nel percorso
+pubblico perche aggiungono oltre 80 KB per stile senza un beneficio sufficiente
+sulla UI corrente. I display type usano pesi variabili espliciti, non gli assi
+`opsz`, `SOFT` o `WONK`.
+
+### Map provider — MapLibre + OpenFreeMap
+
+The `/mappa` page uses MapLibre GL through `react-map-gl/maplibre`
+(`src/components/map/MapboxWorldMap.tsx`) with the OpenFreeMap dark style. The
+public map does not require a Mapbox token.
+
+Google Maps and a return to Mapbox are intentionally not adopted:
+
+- MapLibre preserves the existing markers, clusters, popups, filters and deep links;
+- OpenFreeMap keeps the dark editorial canvas without adding a public API key;
+- changing provider would add cost and migration risk without improving the current discovery flow;
+- the filename `MapboxWorldMap.tsx` is retained only to avoid a broad rename during the route redesign.
+
+### Page layout pattern — `<PageLayout>` is the public default
+
+All public routes wrap their content in `<PageLayout>` (`src/components/PageLayout.tsx`). PageLayout applies the page-level padding (`pt-32 md:pt-24 pb-32`), the sand background, and `overflow-x-clip`. Navbar and Footer are mounted globally by `<Layout>` in `src/App.tsx`; pages must not remount them.
+
+Canonical example: `src/pages/Shop.tsx`.
+
+Custom-flat pages (no PageLayout) are reserved for full-bleed experiences only: `Home`, `Mappa`, and admin pages under their own admin shell. Adding a new public page without `<PageLayout>` requires a written reason in this section.
+
+### Allowed inline SVG icons
+
+`lucide-react` is the default icon library. The following inline SVG paths are intentional exceptions because no equivalent lucide icon exists or the brand mark must be preserved verbatim:
+
+- TikTok logo — `src/components/Navbar.tsx`, `src/components/Footer.tsx`, `src/components/article/SocialFollowCTA.tsx`
+- Pinterest logo — `src/components/article/PinterestIcon.tsx`
+- Custom map pin — `src/components/map/MapboxWorldMap.tsx`
+- Brand mark variants — `src/pages/Collaborazioni.tsx`
+
+`/audit-ui` and `audit-ui` skill should treat these as documented exceptions, not regressions.

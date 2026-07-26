@@ -11,7 +11,6 @@ export interface ConsentState {
 const STORAGE_KEY = 'tw:consent';
 const CONSENT_VERSION = 1;
 const EVENT_NAME = 'tw:consent-changed';
-const REOPEN_EVENT_NAME = 'tw:consent-reopen';
 
 const DEFAULT_STATE: ConsentState = {
   necessary: true,
@@ -78,20 +77,4 @@ export function rejectAll() {
 export function canLoad(category: ConsentCategory): boolean {
   if (category === 'necessary') return true;
   return getConsent()[category];
-}
-
-/**
- * Richiede di riaprire il banner preferenze dopo che l'utente ha gia risposto.
- * Usato dal link "Gestisci preferenze cookie" su `/cookie` e nel footer.
- */
-export function openConsentPreferences() {
-  if (typeof window === 'undefined') return;
-  window.dispatchEvent(new CustomEvent(REOPEN_EVENT_NAME));
-}
-
-export function onConsentReopenRequest(handler: () => void): () => void {
-  if (typeof window === 'undefined') return () => {};
-  const listener = () => handler();
-  window.addEventListener(REOPEN_EVENT_NAME, listener);
-  return () => window.removeEventListener(REOPEN_EVENT_NAME, listener);
 }

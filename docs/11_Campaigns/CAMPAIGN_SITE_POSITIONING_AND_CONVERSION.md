@@ -1,13 +1,13 @@
 ---
 type: campaign
 area: marketing
-status: in-progress
+status: active
 priority: p1
 owner: marketing
 channel: website
 goal: brand clarity + conversion
 start: 2026-04-12
-related: "[[10_Projects/PROJECT_TRAVELLINIWITHUS_SITE]]"
+related: '[[10_Projects/PROJECT_TRAVELLINIWITHUS_SITE]]'
 source: website build
 tags:
   - campaign

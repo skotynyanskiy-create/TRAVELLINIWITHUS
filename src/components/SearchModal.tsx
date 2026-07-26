@@ -1,14 +1,22 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, X, MapPin, BookOpen, Compass, Mail } from 'lucide-react';
+import { Search, X, MapPin, BookOpen, Compass, Mail, Clock, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { LucideIcon } from 'lucide-react';
+import Fuse from 'fuse.js';
 import Skeleton from './Skeleton';
 import { fetchArticles } from '../services/firebaseService';
 import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_ARTICLE_PREVIEW, DEMO_ARTICLE_PATH } from '../config/demoContent';
+import { PREVIEW_ARTICLES } from '../config/previewContent';
 import { useSiteContent } from '../hooks/useSiteContent';
-import { getPublicArticlePath } from '../utils/articleRoutes';
+import { trackEvent } from '../services/analytics';
+import { TYPES, ZONES, slugifyType } from '../config/contentTaxonomy';
+import { buildExploreUrl } from '../utils/discoveryQuery';
+
+const RECENT_SEARCHES_KEY = 'twu_recent_searches';
+const POPULAR_TAGS = ['Sicilia', 'Andalusia', 'Dolomiti', 'Weekend', 'Boutique hotel', 'Food'];
+const MAX_RECENT = 5;
 
 interface SearchResult {
   id: string;
@@ -16,6 +24,7 @@ interface SearchResult {
   category: string;
   link: string;
   icon: LucideIcon;
+  keywords?: string;
 }
 
 interface SearchModalProps {
@@ -25,18 +34,28 @@ interface SearchModalProps {
 
 const STATIC_PAGE_RESULTS: SearchResult[] = [
   {
-    id: 'page-destinazioni',
-    title: 'Destinazioni',
+    id: 'page-esplora',
+    title: 'Esplora',
     category: 'Pagina',
-    link: '/destinazioni',
-    icon: MapPin,
+    link: '/esplora',
+    icon: Compass,
+    keywords: 'finder ricerca destinazioni esperienze mappa guide archivio',
   },
   {
-    id: 'page-guide',
-    title: 'Guide pratiche',
+    id: 'page-mappa',
+    title: 'Mappa',
     category: 'Pagina',
-    link: '/guide',
+    link: '/mappa',
+    icon: MapPin,
+    keywords: 'mappa visuale geo destinazioni continente',
+  },
+  {
+    id: 'page-itinerari',
+    title: 'Itinerari',
+    category: 'Pagina',
+    link: '/itinerari',
     icon: BookOpen,
+    keywords: 'itinerari giorno per giorno tappe roadtrip',
   },
   {
     id: 'page-risorse',
@@ -44,6 +63,7 @@ const STATIC_PAGE_RESULTS: SearchResult[] = [
     category: 'Pagina',
     link: '/risorse',
     icon: BookOpen,
+    keywords: 'assicurazione esim hotel attivita strumenti viaggio',
   },
   {
     id: 'page-collaborazioni',
@@ -51,6 +71,7 @@ const STATIC_PAGE_RESULTS: SearchResult[] = [
     category: 'Pagina',
     link: '/collaborazioni',
     icon: Compass,
+    keywords: 'partner brand destinazioni hotel B2B',
   },
   {
     id: 'page-chi-siamo',
@@ -58,6 +79,7 @@ const STATIC_PAGE_RESULTS: SearchResult[] = [
     category: 'Pagina',
     link: '/chi-siamo',
     icon: Compass,
+    keywords: 'rodrigo betta storia metodo coppia',
   },
   {
     id: 'page-media-kit',
@@ -65,6 +87,7 @@ const STATIC_PAGE_RESULTS: SearchResult[] = [
     category: 'Pagina',
     link: '/media-kit',
     icon: BookOpen,
+    keywords: 'media kit numeri partner',
   },
   {
     id: 'page-contatti',
@@ -72,6 +95,58 @@ const STATIC_PAGE_RESULTS: SearchResult[] = [
     category: 'Pagina',
     link: '/contatti',
     icon: Mail,
+    keywords: 'contatti email whatsapp instagram',
+  },
+];
+
+const DISCOVERY_RESULTS: SearchResult[] = [
+  ...ZONES.map((zone) => ({
+    id: `explore-zone-${zone}`,
+    title: zone,
+    category: 'Luogo',
+    link: buildExploreUrl({ zone }),
+    icon: MapPin,
+    keywords: `destinazioni ${zone} mappa viaggio zona`,
+  })),
+  ...TYPES.map((type) => ({
+    id: `explore-type-${slugifyType(type)}`,
+    title: type,
+    category: 'Esperienza',
+    link: buildExploreUrl({ type }),
+    icon: Compass,
+    keywords: `${type} ${slugifyType(type).replace(/-/g, ' ')}`,
+  })),
+  {
+    id: 'explore-weekend',
+    title: 'Weekend e viaggi brevi',
+    category: 'Percorso',
+    link: buildExploreUrl({ duration: 'Weekend' }),
+    icon: Clock,
+    keywords: 'weekend breve 2 giorni 3 giorni coppia',
+  },
+  {
+    id: 'explore-hotel',
+    title: 'Hotel con carattere',
+    category: 'Percorso',
+    link: buildExploreUrl({ type: 'Hotel con carattere' }),
+    icon: MapPin,
+    keywords: 'hotel dormire boutique soggiorno',
+  },
+  {
+    id: 'explore-food',
+    title: 'Food e ristoranti',
+    category: 'Percorso',
+    link: buildExploreUrl({ type: 'Food & Ristoranti' }),
+    icon: BookOpen,
+    keywords: 'food cibo ristoranti trattorie mercati',
+  },
+  {
+    id: 'explore-guide',
+    title: 'Guide pratiche',
+    category: 'Percorso',
+    link: buildExploreUrl({ format: 'Guida' }),
+    icon: BookOpen,
+    keywords: 'guide pratiche tips consigli pianificazione',
   },
 ];
 
@@ -79,10 +154,33 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [query, setQuery] = useState('');
   const [allData, setAllData] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
+  const [recentSearches, setRecentSearches] = useState<string[]>(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      return JSON.parse(localStorage.getItem(RECENT_SEARCHES_KEY) || '[]');
+    } catch {
+      return [];
+    }
+  });
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const { data: demoContent } = useSiteContent('demo');
   const demoSettings = demoContent ?? siteContentDefaults.demo;
+
+  const fuse = useMemo(
+    () =>
+      new Fuse(allData, {
+        keys: [
+          { name: 'title', weight: 0.7 },
+          { name: 'category', weight: 0.3 },
+          { name: 'keywords', weight: 0.6 },
+        ],
+        threshold: 0.3,
+        ignoreLocation: true,
+        minMatchCharLength: 2,
+      }),
+    [allData]
+  );
 
   useEffect(() => {
     setAllData([]);
@@ -94,14 +192,17 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
       try {
         const articles = await fetchArticles();
 
-        const fetchedData: SearchResult[] = [...STATIC_PAGE_RESULTS];
+        const fetchedData: SearchResult[] = [...STATIC_PAGE_RESULTS, ...DISCOVERY_RESULTS];
+        const seenSlugs = new Set<string>();
 
         articles.forEach((data) => {
+          const slug = data.slug || data.id;
+          seenSlugs.add(slug);
           fetchedData.push({
             id: data.id,
             title: data.title,
             category: data.category || 'Articolo',
-            link: getPublicArticlePath(data),
+            link: `/articolo/${slug}`,
             icon:
               data.category === 'Destinazioni'
                 ? MapPin
@@ -111,14 +212,51 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
           });
         });
 
-        if (articles.length === 0 && demoSettings.showEditorialDemo) {
-          fetchedData.push({
-            id: DEMO_ARTICLE_PREVIEW.id,
-            title: DEMO_ARTICLE_PREVIEW.title,
-            category: DEMO_ARTICLE_PREVIEW.category,
-            link: DEMO_ARTICLE_PATH,
-            icon: BookOpen,
+        // Include preview articles (demo seeds + manual previews) cosi' la
+        // ricerca trova "puglia", "sicilia", "dolomiti" ecc. anche quando
+        // Firestore e' vuoto o non contiene ancora quegli articoli. Articolo.tsx
+        // gia' risolve gli stessi slug via PREVIEW_ARTICLES — search resta allineato.
+        if (demoSettings.showEditorialDemo) {
+          Object.values(PREVIEW_ARTICLES).forEach((preview) => {
+            if (seenSlugs.has(preview.slug)) return;
+            const keywords = [
+              preview.location,
+              preview.continent,
+              preview.category,
+              preview.excerpt,
+            ]
+              .filter((value): value is string => typeof value === 'string' && value.length > 0)
+              .join(' ');
+            fetchedData.push({
+              id: `preview-${preview.slug}`,
+              title: preview.title,
+              category: preview.category || 'Articolo',
+              link: `/articolo/${preview.slug}`,
+              icon:
+                preview.category === 'Destinazioni'
+                  ? MapPin
+                  : preview.category === 'Esperienze'
+                    ? Compass
+                    : BookOpen,
+              keywords,
+            });
           });
+        }
+
+        if (articles.length === 0 && demoSettings.showEditorialDemo) {
+          const demoSlug = DEMO_ARTICLE_PREVIEW.slug;
+          const alreadyIndexed = fetchedData.some(
+            (entry) => entry.link === DEMO_ARTICLE_PATH || entry.id === `preview-${demoSlug}`
+          );
+          if (!alreadyIndexed) {
+            fetchedData.push({
+              id: DEMO_ARTICLE_PREVIEW.id,
+              title: DEMO_ARTICLE_PREVIEW.title,
+              category: DEMO_ARTICLE_PREVIEW.category,
+              link: DEMO_ARTICLE_PATH,
+              icon: BookOpen,
+            });
+          }
         }
 
         setAllData(fetchedData);
@@ -136,6 +274,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
   useEffect(() => {
     if (isOpen) {
+      trackEvent('search_open', { source_page: window.location.pathname });
       setTimeout(() => inputRef.current?.focus(), 100);
       document.body.style.overflow = 'hidden';
     } else {
@@ -165,18 +304,106 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  const filteredResults =
-    query.trim() === ''
-      ? []
-      : allData
-          .filter(
-            (item) =>
-              item.title.toLowerCase().includes(query.toLowerCase()) ||
-              item.category.toLowerCase().includes(query.toLowerCase())
-          )
-          .slice(0, 8); // Limit to 8 results
+  const filteredResults = useMemo(() => {
+    const trimmed = query.trim();
+    if (trimmed === '') return [];
+    return fuse
+      .search(trimmed)
+      .slice(0, 12)
+      .map((result) => result.item);
+  }, [fuse, query]);
 
-  const handleSelect = (link: string) => {
+  // Raggruppa risultati per categoria con ordine editoriale: prima i luoghi
+  // e le esperienze (decisioni di viaggio), poi articoli/guide, poi pagine
+  // di servizio. Mantiene il rank Fuse all'interno di ogni gruppo.
+  const groupedResults = useMemo(() => {
+    if (filteredResults.length === 0) return [];
+
+    const GROUP_ORDER: Array<{ label: string; matches: (cat: string) => boolean }> = [
+      { label: 'Luoghi', matches: (cat) => cat === 'Luogo' || cat === 'Destinazioni' },
+      { label: 'Esperienze', matches: (cat) => cat === 'Esperienza' || cat === 'Esperienze' },
+      { label: 'Percorsi consigliati', matches: (cat) => cat === 'Percorso' || cat === 'Finder' },
+      {
+        label: 'Articoli e guide',
+        matches: (cat) =>
+          cat === 'Articolo' ||
+          cat === 'Guide' ||
+          cat === 'Itinerari completi' ||
+          cat === 'Weekend & Day trips' ||
+          cat === 'Food & Ristoranti' ||
+          cat === 'Hotel con carattere' ||
+          cat === 'Posti particolari',
+      },
+      { label: 'Pagine', matches: (cat) => cat === 'Pagina' },
+    ];
+
+    const assigned = new Set<string>();
+    const groups = GROUP_ORDER.map(({ label, matches }) => {
+      const items = filteredResults.filter((item) => {
+        if (assigned.has(item.id)) return false;
+        if (matches(item.category)) {
+          assigned.add(item.id);
+          return true;
+        }
+        return false;
+      });
+      return { label, items };
+    }).filter((group) => group.items.length > 0);
+
+    const remaining = filteredResults.filter((item) => !assigned.has(item.id));
+    if (remaining.length > 0) {
+      groups.push({ label: 'Altri risultati', items: remaining });
+    }
+
+    return groups;
+  }, [filteredResults]);
+
+  useEffect(() => {
+    const trimmed = query.trim();
+    if (trimmed.length < 3) return;
+    const timer = setTimeout(() => {
+      trackEvent('search_query_submit', {
+        query: trimmed.toLowerCase(),
+        results_count: filteredResults.length,
+      });
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [query, filteredResults.length]);
+
+  useEffect(() => {
+    const trimmed = query.trim();
+    if (trimmed.length < 3 || loading || filteredResults.length > 0) return;
+    const timer = setTimeout(() => {
+      trackEvent('search_no_results', {
+        query: trimmed.toLowerCase(),
+        source_page: window.location.pathname,
+      });
+    }, 700);
+    return () => clearTimeout(timer);
+  }, [filteredResults.length, loading, query]);
+
+  const persistRecent = (term: string) => {
+    if (!term.trim() || typeof window === 'undefined') return;
+    const next = [term.trim(), ...recentSearches.filter((r) => r !== term.trim())].slice(
+      0,
+      MAX_RECENT
+    );
+    setRecentSearches(next);
+    try {
+      localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(next));
+    } catch {
+      // localStorage full o blocked
+    }
+  };
+
+  const handleSelect = (link: string, item: SearchResult, position: number) => {
+    persistRecent(query);
+    trackEvent('search_result_click', {
+      query: query.trim().toLowerCase(),
+      result_id: item.id,
+      result_category: item.category,
+      position,
+    });
     navigate(link);
     onClose();
   };
@@ -200,16 +427,17 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             role="dialog"
             aria-modal="true"
             aria-label="Ricerca nel sito"
-            className="fixed top-[10%] left-1/2 -translate-x-1/2 w-full max-w-2xl bg-white rounded-2xl shadow-2xl z-[120] overflow-hidden flex flex-col max-h-[80vh]"
+            className="fixed top-[10%] left-1/2 -translate-x-1/2 w-full max-w-2xl bg-white rounded-[var(--radius-md)] shadow-2xl z-[120] overflow-hidden flex flex-col max-h-[80vh]"
           >
             <div className="flex items-center px-6 py-4 border-b border-black/10">
               <Search className="text-black/40 mr-4" size={24} />
               <input
                 ref={inputRef}
+                aria-label="Cerca nel sito"
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Cerca pagine, destinazioni, esperienze, guide e itinerari..."
+                placeholder="Cerca pagine, destinazioni, esperienze e sezioni utili..."
                 className="flex-grow text-xl bg-transparent border-none focus:outline-none placeholder:text-black/30 text-black"
               />
               <button
@@ -235,82 +463,119 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   ))}
                 </div>
               ) : query.trim() === '' ? (
-                <div className="text-center py-12 text-black/40">
-                  <Search className="mx-auto mb-4 opacity-20" size={48} />
-                  <p>Inizia a digitare per cercare nel sito...</p>
-                  <div className="mt-6 flex flex-wrap justify-center gap-2">
-                    <button
-                      type="button"
-                      className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10"
-                      onClick={() => setQuery('Destinazioni')}
-                    >
-                      Destinazioni
-                    </button>
-                    <button
-                      type="button"
-                      className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10"
-                      onClick={() => setQuery('Guide')}
-                    >
-                      Guide
-                    </button>
-                    <button
-                      type="button"
-                      className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10"
-                      onClick={() => setQuery('Risorse')}
-                    >
-                      Risorse
-                    </button>
-                    <button
-                      type="button"
-                      className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10"
-                      onClick={() => setQuery('Contatti')}
-                    >
-                      Contatti
-                    </button>
-                    <button
-                      type="button"
-                      className="text-xs font-semibold uppercase tracking-widest bg-black/5 px-3 py-1 rounded-full cursor-pointer hover:bg-black/10"
-                      onClick={() => setQuery('Collaborazioni')}
-                    >
-                      Collaborazioni
-                    </button>
+                <div className="space-y-6 px-2 py-4">
+                  {recentSearches.length > 0 && (
+                    <div>
+                      <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/45">
+                        <Clock size={11} /> Ricerche recenti
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {recentSearches.map((term) => (
+                          <button
+                            key={term}
+                            type="button"
+                            onClick={() => setQuery(term)}
+                            className="rounded-full border border-black/10 bg-white px-3 py-1.5 text-xs font-medium text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:bg-[var(--color-accent-soft)]"
+                          >
+                            {term}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div>
+                    <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/45">
+                      <TrendingUp size={11} /> Ricerche popolari
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {POPULAR_TAGS.map((tag) => (
+                        <button
+                          key={tag}
+                          type="button"
+                          onClick={() => setQuery(tag)}
+                          className="rounded-full border border-black/10 bg-[var(--color-sand)] px-3 py-1.5 text-xs font-medium text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:bg-[var(--color-accent-soft)] hover:text-[var(--color-accent-text)]"
+                        >
+                          {tag}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="border-t border-black/5 pt-5">
+                    <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/45">
+                      <Compass size={11} /> Sezioni
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        'Posti particolari',
+                        'Food & ristoranti',
+                        'Hotel con carattere',
+                        'Weekend romantici',
+                        'Itinerari',
+                      ].map((label) => (
+                        <button
+                          key={label}
+                          type="button"
+                          onClick={() => setQuery(label)}
+                          className="rounded-full bg-black/5 px-3 py-1.5 text-xs font-medium text-black/70 transition-colors hover:bg-black/10"
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              ) : filteredResults.length > 0 ? (
-                <ul className="space-y-2">
-                  {filteredResults.map((item) => {
-                    const Icon = item.icon;
-                    return (
-                      <li key={item.id}>
-                        <button
-                          onClick={() => handleSelect(item.link)}
-                          className="w-full flex items-center text-left px-4 py-3 hover:bg-[var(--color-sand)] rounded-xl transition-colors group"
-                        >
-                          <div className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center mr-4 group-hover:bg-white group-hover:shadow-sm transition-all text-black/60 group-hover:text-[var(--color-accent)]">
-                            <Icon size={18} />
-                          </div>
-                          <div>
-                            <h4 className="font-medium text-black group-hover:text-[var(--color-accent)] transition-colors">
-                              {item.title}
-                            </h4>
-                            <span className="text-xs uppercase tracking-widest text-black/50 font-semibold">
-                              {item.category}
-                            </span>
-                          </div>
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
+              ) : groupedResults.length > 0 ? (
+                <div className="space-y-5">
+                  {groupedResults.map((group) => (
+                    <section key={group.label} aria-label={`Risultati ${group.label}`}>
+                      <h3 className="mb-2 px-4 text-[10px] font-bold uppercase tracking-[0.22em] text-black/45">
+                        {group.label}
+                      </h3>
+                      <ul className="space-y-1">
+                        {group.items.map((item) => {
+                          const Icon = item.icon;
+                          const positionInAll = filteredResults.findIndex(
+                            (candidate) => candidate.id === item.id
+                          );
+                          return (
+                            <li key={item.id}>
+                              <button
+                                onClick={() => handleSelect(item.link, item, positionInAll)}
+                                className="w-full flex items-center text-left px-4 py-3 hover:bg-[var(--color-sand)] rounded-xl transition-colors group"
+                              >
+                                <div className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center mr-4 group-hover:bg-white group-hover:shadow-sm transition-all text-black/60 group-hover:text-[var(--color-accent)]">
+                                  <Icon size={18} />
+                                </div>
+                                <div>
+                                  <h4 className="font-medium text-black group-hover:text-[var(--color-accent)] transition-colors">
+                                    {item.title}
+                                  </h4>
+                                  <span className="text-xs uppercase tracking-widest text-black/50 font-semibold">
+                                    {item.category}
+                                  </span>
+                                </div>
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </section>
+                  ))}
+                </div>
               ) : (
-                <div className="text-center py-12 text-black/40">
-                  <p>Nessun risultato trovato per "{query}"</p>
+                <div className="text-center py-12 text-black/50">
+                  <p className="text-sm">Nessun risultato per "{query}".</p>
+                  <p className="mt-3 text-xs text-black/45">
+                    Prova con: Sicilia, Andalusia, Dolomiti, Bali, Marocco.
+                  </p>
                 </div>
               )}
             </div>
 
             <div className="bg-[var(--color-sand)] px-6 py-3 text-xs text-black/40 flex justify-between items-center border-t border-black/5">
-              <span>Usa le frecce per navigare</span>
+              <span>Scrivi e seleziona un risultato</span>
               <span className="flex items-center gap-1">
                 Premi{' '}
                 <kbd className="bg-white px-2 py-1 rounded border border-black/10 shadow-sm font-sans">

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../../lib/firebaseDb';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import {
   Users as UsersIcon,
   Plus,
@@ -53,13 +53,9 @@ import Orders from './Orders';
 import Users from './Users';
 import CouponManager from '../../components/CouponManager';
 import AuditLog from '../../components/AuditLog';
+import LocalLeadsPanel from '../../components/admin/LocalLeadsPanel';
+import AdminMetricsOverview from '../../components/admin/AdminMetricsOverview';
 import { siteContentDefinitions } from '../../config/siteContent';
-import {
-  getPublicArticlePath,
-  getPublicArticleSection,
-  getPublicSectionLabel,
-} from '../../utils/articleRoutes';
-import type { ArticleType } from '../../components/article';
 
 // Mock data for analytics
 const data = [
@@ -80,7 +76,6 @@ interface Article {
   title: string;
   slug: string;
   published: boolean;
-  type?: ArticleType;
   createdAt?: unknown;
 }
 
@@ -286,7 +281,7 @@ export default function AdminDashboard() {
     <PageLayout>
       <Section className="pt-32 pb-24 min-h-screen">
         {isPreviewMode && (
-          <div className="mb-8 rounded-2xl border border-amber-200 bg-amber-50 px-6 py-4 text-sm text-amber-800">
+          <div className="mb-8 rounded-[var(--radius-md)] border border-amber-200 bg-amber-50 px-6 py-4 text-sm text-amber-800">
             Modalita anteprima admin locale attiva. Puoi esplorare struttura e editor, ma le azioni
             che scrivono dati reali restano disattivate finche non completi il login Firebase.
           </div>
@@ -314,7 +309,7 @@ export default function AdminDashboard() {
                     : 'bg-[var(--color-ink)] text-white hover:bg-[var(--color-accent)]'
                 }`}
               >
-                <Plus size={20} /> Nuovo {activeTab === 'articles' ? 'contenuto' : 'prodotto'}
+                <Plus size={20} /> Nuovo {activeTab === 'articles' ? 'Articolo' : 'Prodotto'}
               </Link>
             )}
           </div>
@@ -349,7 +344,7 @@ export default function AdminDashboard() {
                 : 'bg-white text-zinc-600 hover:bg-zinc-100'
             }`}
           >
-            <FileText size={18} /> Editoriale
+            <FileText size={18} /> Articoli
           </button>
           <button
             onClick={() => setActiveTab('products')}
@@ -433,9 +428,11 @@ export default function AdminDashboard() {
           </button>
         </div>
 
+        {activeTab === 'overview' && !loading && <AdminMetricsOverview />}
+
         {activeTab === 'overview' && !loading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            <div className="bg-white p-6 rounded-2xl border border-zinc-100 shadow-sm">
+            <div className="bg-white p-6 rounded-[var(--radius-md)] border border-zinc-100 shadow-sm">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 bg-[var(--color-accent-soft)] text-[var(--color-accent)] rounded-xl">
                   <ShoppingBag size={24} />
@@ -449,16 +446,16 @@ export default function AdminDashboard() {
               <h3 className="text-zinc-500 text-sm font-medium">Fatturato Totale</h3>
               <p className="text-3xl font-bold mt-1">€{totalRevenue.toFixed(2)}</p>
             </div>
-            <div className="bg-white p-6 rounded-2xl border border-zinc-100 shadow-sm">
+            <div className="bg-white p-6 rounded-[var(--radius-md)] border border-zinc-100 shadow-sm">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 bg-blue-50 text-blue-600 rounded-xl">
                   <FileText size={24} />
                 </div>
               </div>
-              <h3 className="text-zinc-500 text-sm font-medium">Contenuti editoriali</h3>
+              <h3 className="text-zinc-500 text-sm font-medium">Articoli Pubblicati</h3>
               <p className="text-3xl font-bold mt-1">{articles.length}</p>
             </div>
-            <div className="bg-white p-6 rounded-2xl border border-zinc-100 shadow-sm">
+            <div className="bg-white p-6 rounded-[var(--radius-md)] border border-zinc-100 shadow-sm">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 bg-purple-50 text-purple-600 rounded-xl">
                   <UsersIcon size={24} />
@@ -467,7 +464,7 @@ export default function AdminDashboard() {
               <h3 className="text-zinc-500 text-sm font-medium">Utenti Registrati</h3>
               <p className="text-3xl font-bold mt-1">{users.length}</p>
             </div>
-            <div className="bg-white p-6 rounded-2xl border border-zinc-100 shadow-sm">
+            <div className="bg-white p-6 rounded-[var(--radius-md)] border border-zinc-100 shadow-sm">
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 bg-orange-50 text-orange-600 rounded-xl">
                   <Mail size={24} />
@@ -479,7 +476,7 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        <div className="bg-white rounded-2xl shadow-sm border border-zinc-100 overflow-hidden">
+        <div className="bg-white rounded-[var(--radius-md)] shadow-sm border border-zinc-100 overflow-hidden">
           <div className="p-6 border-b border-zinc-100 bg-zinc-50 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <h2 className="text-lg font-semibold">
               {activeTab === 'overview'
@@ -619,6 +616,8 @@ export default function AdminDashboard() {
                   </div>
                 </div>
               </div>
+
+              <LocalLeadsPanel />
             </div>
           ) : activeTab === 'media' ? (
             <MediaManager />
@@ -626,9 +625,9 @@ export default function AdminDashboard() {
             <div className="p-8">
               <div className="mb-8 max-w-3xl">
                 <p className="text-zinc-600">
-                  Qui trovi gli editor guidati per le pagine istituzionali del sito.
-                  L&rsquo;obiettivo è permetterti di aggiornare contenuti chiave senza toccare il
-                  codice, mantenendo però struttura, stile e logica del progetto.
+                  Qui trovi gli editor guidati per le pagine istituzionali del sito. L'obiettivo è
+                  permetterti di aggiornare contenuti chiave senza toccare il codice, mantenendo
+                  però struttura, stile e logica del progetto.
                 </p>
               </div>
 
@@ -636,7 +635,7 @@ export default function AdminDashboard() {
                 {siteContentDefinitions.map((page) => (
                   <div
                     key={page.id}
-                    className="rounded-2xl border border-zinc-100 bg-zinc-50 p-6 shadow-sm"
+                    className="rounded-[var(--radius-md)] border border-zinc-100 bg-zinc-50 p-6 shadow-sm"
                   >
                     <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-white text-[var(--color-accent)] shadow-sm">
                       <Edit size={20} />
@@ -763,7 +762,7 @@ export default function AdminDashboard() {
           ) : activeTab === 'articles' ? (
             filteredArticles.length === 0 ? (
               <div className="p-12 text-center text-zinc-500">
-                Nessun contenuto editoriale trovato. Inizia a scrivere!
+                Nessun articolo trovato. Inizia a scrivere!
               </div>
             ) : (
               <div className="divide-y divide-zinc-100">
@@ -774,17 +773,9 @@ export default function AdminDashboard() {
                   >
                     <div>
                       <h3 className="font-medium text-lg">{article.title}</h3>
-                      <p className="text-sm text-zinc-500">{getPublicArticlePath(article)}</p>
+                      <p className="text-sm text-zinc-500">/{article.slug}</p>
                     </div>
                     <div className="flex items-center gap-4">
-                      <span className="px-3 py-1 rounded-full text-xs font-medium bg-zinc-100 text-zinc-700">
-                        {getPublicSectionLabel(getPublicArticleSection(article))}
-                      </span>
-                      {article.type === 'pillar' && (
-                        <span className="px-3 py-1 rounded-full text-xs font-medium bg-ink text-white">
-                          Pillar
-                        </span>
-                      )}
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-medium ${article.published ? 'bg-[var(--color-accent-soft)] text-[var(--color-accent-text)]' : 'bg-yellow-100 text-yellow-700'}`}
                       >

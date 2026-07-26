@@ -1,11 +1,8 @@
 User-agent: *
 Allow: /
 Disallow: /admin
-Disallow: /admin/*
-Disallow: /account
-Disallow: /account/*
-Disallow: /articolo
-Disallow: /articolo/*
-Disallow: /shop
-
+Disallow: /account/acquisti
+Disallow: /iscrivi
+Disallow: /*?zone=
+Disallow: /*?type=
 Sitemap: https://travelliniwithus.it/sitemap.xml

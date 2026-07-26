@@ -113,7 +113,7 @@ export default function CouponManager() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Form */}
         <div className="lg:col-span-1">
-          <div className="bg-zinc-50 p-6 rounded-2xl border border-zinc-100">
+          <div className="bg-[var(--color-muted-bg)] p-6 rounded-[var(--radius-md)] border border-[var(--color-border)]">
             <h3 className="text-lg font-semibold mb-6 flex items-center gap-2">
               <Plus size={20} className="text-[var(--color-accent)]" /> Nuovo Coupon
             </h3>
@@ -129,7 +129,7 @@ export default function CouponManager() {
                   value={newCode}
                   onChange={(e) => setNewCode(e.target.value)}
                   placeholder="ES: ESTATE20"
-                  className="w-full p-3 border border-zinc-200 rounded-xl focus:outline-none focus:border-[var(--color-accent)] uppercase"
+                  className="w-full p-3 border border-[var(--color-border)] rounded-xl focus:outline-none focus:border-[var(--color-accent)] uppercase"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -141,7 +141,7 @@ export default function CouponManager() {
                     id="coupon-type"
                     value={newType}
                     onChange={(e) => setNewType(e.target.value as 'percent' | 'fixed')}
-                    className="w-full p-3 border border-zinc-200 rounded-xl focus:outline-none focus:border-[var(--color-accent)] bg-white"
+                    className="w-full p-3 border border-[var(--color-border)] rounded-xl focus:outline-none focus:border-[var(--color-accent)] bg-white"
                   >
                     <option value="percent">% Percentuale</option>
                     <option value="fixed">€ Fisso</option>
@@ -157,7 +157,7 @@ export default function CouponManager() {
                     required
                     value={newValue}
                     onChange={(e) => setNewValue(Number(e.target.value))}
-                    className="w-full p-3 border border-zinc-200 rounded-xl focus:outline-none focus:border-[var(--color-accent)]"
+                    className="w-full p-3 border border-[var(--color-border)] rounded-xl focus:outline-none focus:border-[var(--color-accent)]"
                   />
                 </div>
               </div>
@@ -170,7 +170,7 @@ export default function CouponManager() {
                   type="date"
                   value={newExpiry}
                   onChange={(e) => setNewExpiry(e.target.value)}
-                  className="w-full p-3 border border-zinc-200 rounded-xl focus:outline-none focus:border-[var(--color-accent)]"
+                  className="w-full p-3 border border-[var(--color-border)] rounded-xl focus:outline-none focus:border-[var(--color-accent)]"
                 />
               </div>
               <button
@@ -189,18 +189,20 @@ export default function CouponManager() {
           <div className="space-y-4">
             {loading ? (
               <div className="flex justify-center py-12">
-                <Loader2 className="animate-spin text-zinc-300" size={32} />
+                <Loader2 className="animate-spin text-[var(--color-muted-fg)]" size={32} />
               </div>
             ) : coupons.length === 0 ? (
-              <p className="text-zinc-500 text-center py-12">Nessun coupon attivo.</p>
+              <p className="text-[var(--color-muted-fg)] text-center py-12">
+                Nessun coupon attivo.
+              </p>
             ) : (
               coupons.map((coupon) => (
                 <div
                   key={coupon.id}
-                  className="bg-white p-5 rounded-2xl border border-zinc-100 flex items-center justify-between shadow-sm"
+                  className="bg-white p-5 rounded-[var(--radius-md)] border border-[var(--color-border)] flex items-center justify-between shadow-sm"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="p-3 bg-zinc-50 text-zinc-400 rounded-xl">
+                    <div className="p-3 bg-[var(--color-muted-bg)] text-[var(--color-muted-fg)] rounded-xl">
                       <Ticket size={24} />
                     </div>
                     <div>
@@ -209,10 +211,10 @@ export default function CouponManager() {
                         {coupon.active ? (
                           <CheckCircle2 size={16} className="text-[var(--color-accent)]" />
                         ) : (
-                          <XCircle size={16} className="text-red-500" />
+                          <XCircle size={16} className="text-[var(--color-error)]" />
                         )}
                       </div>
-                      <p className="text-sm text-zinc-500">
+                      <p className="text-sm text-[var(--color-muted-fg)]">
                         Sconto:{' '}
                         {coupon.type === 'percent'
                           ? `${coupon.value}%`
@@ -224,7 +226,7 @@ export default function CouponManager() {
                   </div>
                   <button
                     onClick={() => handleDelete(coupon.id, coupon.code)}
-                    className="p-2 text-zinc-400 hover:text-red-500 transition-colors"
+                    className="p-2 text-[var(--color-muted-fg)] hover:text-[var(--color-error)] transition-colors"
                   >
                     <Trash2 size={20} />
                   </button>

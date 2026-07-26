@@ -1,7 +1,7 @@
 ---
 type: meeting
 area: workspace
-status: done
+status: archived
 priority: p2
 owner: codex
 tags:

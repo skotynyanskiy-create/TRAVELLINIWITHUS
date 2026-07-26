@@ -24,7 +24,7 @@ export default function MediaManager() {
       const fetchedFiles = await Promise.all(filePromises);
       setFiles(fetchedFiles);
     } catch (error) {
-      console.error("Error fetching files:", error);
+      console.error('Error fetching files:', error);
     } finally {
       setLoading(false);
     }
@@ -32,27 +32,34 @@ export default function MediaManager() {
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
-    setUploading(true);
     const file = e.target.files[0];
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      alert(
+        'Formato file non supportato. Seleziona una prima immagine validata (JPEG, PNG, WebP, AVIF, GIF).'
+      );
+      return;
+    }
+    setUploading(true);
     const storageRef = ref(storage, `uploads/${file.name}`);
     try {
       await uploadBytes(storageRef, file);
       await fetchFiles();
     } catch (error) {
-      console.error("Error uploading file:", error);
+      console.error('Error uploading file:', error);
     } finally {
       setUploading(false);
     }
   };
 
   const handleDelete = async (name: string) => {
-    if (!window.confirm("Sei sicuro di voler eliminare questo file?")) return;
+    if (!window.confirm('Sei sicuro di voler eliminare questo file?')) return;
     const fileRef = ref(storage, `uploads/${name}`);
     try {
       await deleteObject(fileRef);
       await fetchFiles();
     } catch (error) {
-      console.error("Error deleting file:", error);
+      console.error('Error deleting file:', error);
     }
   };
 
@@ -63,7 +70,12 @@ export default function MediaManager() {
         <label className="bg-[var(--color-ink)] text-white px-6 py-3 rounded-full flex items-center gap-2 hover:bg-[var(--color-accent)] transition-colors cursor-pointer">
           {uploading ? <Loader2 size={20} className="animate-spin" /> : <Upload size={20} />}
           {uploading ? 'Caricamento...' : 'Carica File'}
-          <input type="file" className="hidden" onChange={handleUpload} />
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/avif,image/gif"
+            className="hidden"
+            onChange={handleUpload}
+          />
         </label>
       </div>
 
@@ -71,11 +83,18 @@ export default function MediaManager() {
         <div className="text-center py-12">Caricamento...</div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-          {files.map(file => (
-            <div key={file.name} className="group relative rounded-2xl overflow-hidden border border-zinc-200">
+          {files.map((file) => (
+            <div
+              key={file.name}
+              className="group relative rounded-[var(--radius-md)] overflow-hidden border border-zinc-200"
+            >
               <img src={file.url} alt={file.name} className="w-full h-32 object-cover" />
               <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                <button onClick={() => handleDelete(file.name)} className="p-2 bg-white rounded-full text-red-500 hover:bg-red-50">
+                <button
+                  onClick={() => handleDelete(file.name)}
+                  aria-label={`Elimina ${file.name}`}
+                  className="p-2 bg-white rounded-full text-red-500 hover:bg-red-50"
+                >
                   <Trash2 size={18} />
                 </button>
               </div>

@@ -14,7 +14,7 @@ export default function ProductPageSkeleton() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
           {/* Image */}
           <div className="lg:col-span-7">
-            <Skeleton className="w-full aspect-[4/5] md:aspect-[3/2] lg:aspect-[4/5] rounded-3xl" />
+            <Skeleton className="w-full aspect-[4/5] md:aspect-[3/2] lg:aspect-[4/5] rounded-[var(--radius-lg)]" />
           </div>
 
           {/* Details */}

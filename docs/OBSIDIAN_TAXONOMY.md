@@ -18,7 +18,7 @@ Usa queste properties nelle note operative:
 - `status`: vedi per tipo sotto
 - `priority`: `p0`, `p1`, `p2`, `p3`
 - `area`: `engineering`, `brand`, `operations`, `delivery`, `workspace`, `content`, `product`, `marketing`, `commercial`, `social`
-- `owner`: persona responsabile (rodrigo | betta)
+- `owner`: responsabile (`rodrigo` | `betta` | `team`)
 - `due`: data target
 - `repo`: nome repo
 - `repo_path`: file o cartella rilevante nel repo
@@ -32,47 +32,72 @@ Usa queste properties nelle note operative:
 ## Tipi e status per tipo
 
 ### Engineering / Operations
-| type | status possibili |
-|------|-----------------|
-| `project` | open \| in-progress \| blocked \| done \| archived |
-| `task` | open \| in-progress \| blocked \| done |
-| `bug` | open \| in-progress \| blocked \| done |
-| `decision` | active \| superseded \| archived |
-| `meeting` | active \| archived |
-| `daily` | active \| archived |
-| `release` | draft \| published \| archived |
-| `ui-change` | open \| in-progress \| done |
-| `sop` | active \| archived |
-| `hub` | active |
-| `dashboard` | active |
-| `reference` | active \| archived |
-| `workflow` | active \| archived |
+
+| type        | status possibili                                   |
+| ----------- | -------------------------------------------------- |
+| `project`   | open \| in-progress \| blocked \| done \| archived |
+| `task`      | open \| in-progress \| blocked \| done             |
+| `bug`       | open \| in-progress \| blocked \| done             |
+| `decision`  | active \| superseded \| archived                   |
+| `meeting`   | active \| archived                                 |
+| `daily`     | active \| archived                                 |
+| `release`   | draft \| blocked \| published \| archived          |
+| `ui-change` | open \| in-progress \| done                        |
+| `sop`       | active \| archived                                 |
+| `hub`       | active                                             |
+| `dashboard` | active                                             |
+| `reference` | active \| archived                                 |
+| `workflow`  | active \| archived                                 |
+
+### Documentazione / Workspace
+
+| type         | status possibili                                |
+| ------------ | ----------------------------------------------- |
+| `plan`       | active \| done \| archived                      |
+| `strategy`   | active \| archived                              |
+| `runbook`    | active \| archived                              |
+| `report`     | active \| archived                              |
+| `audit`      | draft \| active \| archived                     |
+| `evaluation` | scout \| lab \| adopted \| rejected \| archived |
+| `checklist`  | active \| archived                              |
+| `context`    | active \| archived                              |
+| `handoff`    | open \| consumed \| obsolete                    |
+| `inbox`      | open \| archived                                |
+| `scratch`    | active \| archived                              |
+| `template`   | active \| archived                              |
 
 ### Editoriale / Brand
-| type | status possibili |
-|------|-----------------|
-| `article` | idea \| draft \| review \| published \| archived |
-| `guide` | draft \| review \| published \| archived |
-| `itinerary` | draft \| review \| published \| archived |
-| `place` | visitato \| da-visitare \| archiviato |
-| `seo-page` | da-ottimizzare \| in-corso \| ottimizzato |
-| `keyword` | tracking \| opportunità \| archiviata |
+
+| type                | status possibili                                 |
+| ------------------- | ------------------------------------------------ |
+| `article`           | idea \| draft \| review \| published \| archived |
+| `guide`             | draft \| review \| published \| archived         |
+| `itinerary`         | draft \| review \| published \| archived         |
+| `place`             | visitato \| da-visitare \| archiviato            |
+| `case-study`        | draft \| review \| published \| archived         |
+| `content-asset`     | draft \| review \| published \| archived         |
+| `fact-check-report` | draft \| active \| archived                      |
+| `seo-page`          | da-ottimizzare \| in-corso \| ottimizzato        |
+| `keyword`           | tracking \| opportunità \| archiviata            |
 
 ### Commerciale / Marketing
-| type | status possibili |
-|------|-----------------|
-| `campaign` | planned \| active \| paused \| done \| archived |
+
+| type            | status possibili                                                    |
+| --------------- | ------------------------------------------------------------------- |
+| `campaign`      | planned \| active \| paused \| done \| archived                     |
 | `collaboration` | lead \| proposta \| negoziazione \| attiva \| conclusa \| rifiutata |
-| `partner` | lead \| active \| paused \| done |
-| `product` | idea \| in-sviluppo \| live \| archiviato |
-| `content-brief` | open \| in-progress \| done |
+| `partner`       | lead \| active \| paused \| done                                    |
+| `product`       | idea \| in-sviluppo \| live \| archiviato                           |
+| `content-brief` | open \| in-progress \| done                                         |
+| `content-draft` | draft-needs-rb-inputs \| draft \| review \| published \| archived   |
 
 ### Social / References
-| type | status possibili |
-|------|-----------------|
-| `social-post` | idea \| in-produzione \| review \| schedulato \| pubblicato |
-| `design-reference` | active \| archived |
-| `web-clip` | da-processare \| processato \| archiviato |
+
+| type               | status possibili                                            |
+| ------------------ | ----------------------------------------------------------- |
+| `social-post`      | idea \| in-produzione \| review \| schedulato \| pubblicato |
+| `design-reference` | active \| archived                                          |
+| `web-clip`         | da-processare \| processato \| archiviato                   |
 
 ## Properties editoriali specifiche
 
@@ -116,36 +141,46 @@ Usa solo nelle note editoriali:
 ## Naming
 
 ### Engineering / Ops
+
 - `PROJECT_<TOPIC>` — note progetto
 - `TASK_<TOPIC>` — task atomici
 - `BUG_<TOPIC>` — bug
 - `UI_<TOPIC>` — modifiche visive
-- `DECISION_<nnnn>_<TOPIC>` — decisioni (es. `DECISION_0001_VAULT_STRATEGY`)
+- `DECISION_<nnnn>_<TOPIC>` — decisioni (es. `DECISION_0001_VAULT_STRATEGY`). `nnnn` è un contatore sequenziale univoco: prima di crearne una nuova, controlla `ls docs/20_Decisions/` per il numero libero più alto — non esiste un check automatico contro le collisioni.
 - `MEETING_<yyyy-mm-dd>_<topic>` — meeting / handoff
 - `RELEASE_<yyyy-mm-dd>_<topic>` — release note
 
 ### Editoriale
+
 - `DEST_<NomeLuogo>` — destinazione (es. `DEST_Lisbona`)
 - `ART_<slug-breve>` — articolo (es. `ART_weekend-barcellona`)
 - `PLACE_<nome>` — luogo (es. `PLACE_Hotel_Neri_Barcelona`)
 - `ITIN_<dest>_<durata>` — itinerario (es. `ITIN_Lisbona_3gg`)
 
 ### Commerciale
+
 - `COLLAB_<brand>` — collaborazione
 - `PROD_<nome>` — prodotto shop
 
 ### SEO e Social
+
 - `SEO_<route-slug>` — pagina SEO (es. `SEO_guida-lisbona`)
 - `KW_<cluster>` — keyword cluster
 - `POST_<yyyymmdd>_<canale>` — social post
 
 ### References e clips
+
 - `CLIP_<yyyy-mm-dd>_<titolo-breve>` — web clip
 - `REF_<titolo-breve>` — design reference
 
 ### Regola generale
+
 - MAIUSCOLO: hub, workflow, taxonomy, progetti, decisioni
 - lowercase-trattini: contenuti editoriali, luoghi, itinerari, SEO
+
+## Eccezioni cartella
+
+- `docs/superpowers/` (`plans/`, `specs/`) — scritta dalla skill Claude Code `superpowers:writing-plans`/`superpowers:writing-skills`, con proprio schema di frontmatter indipendente da questa tassonomia. Esclusa deliberatamente dal walk YAML di `scripts/audit-obsidian.mjs` (stesso trattamento di `99_Archive`) invece di forzare le proprietà standard su file che un'altra skill possiede e riscrive.
 
 ## Link policy
 
@@ -170,6 +205,7 @@ Tag stabili e pochi:
 ## Schemi rapidi
 
 ### Articolo blog
+
 ```yaml
 type: article
 status: draft
@@ -183,6 +219,7 @@ author: betta
 ```
 
 ### Guida destinazione
+
 ```yaml
 type: guide
 status: draft
@@ -194,6 +231,7 @@ route: /destinazioni/lisbona
 ```
 
 ### SEO page
+
 ```yaml
 type: seo-page
 status: da-ottimizzare
@@ -204,6 +242,7 @@ score: 4
 ```
 
 ### Collaborazione
+
 ```yaml
 type: collaboration
 status: lead
@@ -214,6 +253,7 @@ owner: rodrigo
 ```
 
 ### Bug
+
 ```yaml
 type: bug
 status: open

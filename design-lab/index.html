@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Design Lab — 3 direzioni creative · Travelliniwithus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sand:#faf8f4; --surface:#fff; --border:#e7e5e4; --ink:#0a0a0a; --ink-2:#44403c;
+    --muted:#78716c; --accent:#c2410c; --accent-hover:#9a3412; --accent-soft:#fff7ed;
+    --carta:#f2ecdf; --inchiostro:#1e1c18; --linea:rgb(30 28 24 / 24%);
+    --serif:'Fraunces',serif; --sans:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0}
+  body{background:var(--sand);color:var(--ink);font-family:var(--sans);font-size:1.0625rem;line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 clamp(1.25rem,5vw,4rem)}
+  header{padding:clamp(3rem,7vw,5.5rem) 0 clamp(2rem,4vw,3rem);border-bottom:1px solid var(--linea)}
+  h1,h2,h3{font-family:var(--serif);font-weight:430;letter-spacing:-0.04em}
+  h1{font-size:clamp(2.6rem,5vw,4.4rem);line-height:1}
+  .kicker{font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+  .deck{font-family:var(--serif);font-weight:420;font-size:clamp(1.1rem,1.4vw,1.3rem);line-height:1.55;color:var(--ink-2);max-width:38em;margin-top:1.4rem}
+  section{padding:clamp(2.5rem,6vw,4.5rem) 0}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.4rem}
+  a.card{display:block;text-decoration:none;color:inherit;border:1px solid var(--border);background:var(--surface);transition:transform .25s ease, box-shadow .25s ease}
+  a.card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgb(10 10 10 / 8%)}
+  .card .strip{height:96px;display:flex}
+  .card .strip i{flex:1}
+  .card .body{padding:1.3rem 1.4rem 1.5rem}
+  .card .lettera{font-family:var(--serif);font-size:2.4rem;line-height:1;color:var(--accent)}
+  .card h2{font-size:1.55rem;margin:.5rem 0 .4rem}
+  .card p{font-size:.92rem;color:var(--ink-2)}
+  .card .cta{display:inline-block;margin-top:1rem;font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-hover)}
+
+  table{width:100%;border-collapse:collapse;font-size:.9rem;margin-top:1.5rem}
+  th,td{text-align:left;padding:.8rem .9rem;border-bottom:1px solid var(--border);vertical-align:top}
+  th{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  td b{font-family:var(--serif);font-weight:500;letter-spacing:-.01em}
+  .table-scroll{overflow-x:auto}
+
+  .gate{background:var(--accent-soft);border:1px solid var(--border);padding:1.4rem 1.6rem;font-size:.9rem}
+  .gate b{color:var(--accent-hover)}
+  .gate ol{padding-left:1.2rem;margin-top:.6rem}
+  .gate li{margin:.35rem 0}
+  .note{font-size:.85rem;color:var(--muted);margin-top:2rem}
+  footer{padding:2rem 0 4rem;font-size:.8rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <p class="kicker">Design Lab · FASE R · Elevazione totale</p>
+    <h1>Tre direzioni. Una scelta.</h1>
+    <p class="deck">Tre modi diversi di essere Travelliniwithus, tutti dentro il DNA (Fraunces + Inter, sand,
+    inchiostro, terracotta, foto reali): <b>impaginato</b>, <b>mappa</b> o <b>scena</b>. Naviga le tre pagine,
+    guarda il gesto-firma di ciascuna, poi scegli — o chiedi un merge («A col motion di B»).</p>
+  </header>
+
+  <section>
+    <div class="cards">
+      <a class="card" href="direzione-a-rivista-viva.html">
+        <div class="strip"><i style="background:#faf8f4"></i><i style="background:#1e1c18"></i><i style="background:#c2410c"></i><i style="background:#f2ecdf"></i></div>
+        <div class="body">
+          <span class="lettera">A</span>
+          <h2>«Rivista Viva»</h2>
+          <p>Il sito come numero di rivista: masthead, sommario, folio, filetti Monocle, cover-block Yolo,
+          serif anche nel deck. Attiva l'arsenale <code>journal-*</code> dormiente (~1.400 righe già scritte).</p>
+          <p style="margin-top:.6rem"><b>Gesto-firma:</b> il filetto che traccia il sommario.</p>
+          <span class="cta">Apri la direzione →</span>
+        </div>
+      </a>
+      <a class="card" href="direzione-b-atlante-di-coppia.html">
+        <div class="strip"><i style="background:#f2ecdf"></i><i style="background:#1e1c18"></i><i style="background:#c2410c"></i><i style="background:#17375a"></i></div>
+        <div class="body">
+          <span class="lettera">B</span>
+          <h2>«Atlante di Coppia»</h2>
+          <p>L'atlante personale dei 29 posti reali: codici d'archivio alla Cereal, contatori onesti alla
+          Atlas Obscura, rotta con tappe numerate alla Polarsteps — in inchiostro su carta, non satellite.</p>
+          <p style="margin-top:.6rem"><b>Gesto-firma:</b> la rotta che si disegna scrollando.</p>
+          <span class="cta">Apri la direzione →</span>
+        </div>
+      </a>
+      <a class="card" href="direzione-c-album-cinematico.html">
+        <div class="strip"><i style="background:#111111"></i><i style="background:#faf8f4"></i><i style="background:#c2410c"></i><i style="background:#e8834e"></i></div>
+        <div class="body">
+          <span class="lettera">C</span>
+          <h2>«Album Cinematico»</h2>
+          <p>L'album di coppia in movimento: frame reali full-bleed, una scena alla volta, didascalie
+          d'autore numerate alla Hedwig, pannello-claim che si posa alla Lithuania.</p>
+          <p style="margin-top:.6rem"><b>Gesto-firma:</b> la scena che si posa.</p>
+          <span class="cta">Apri la direzione →</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <p class="kicker">Confronto</p>
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>Direzione</th><th>Struttura portante</th><th>Rischio</th><th>Sforzo</th><th>Resa su /posto (62 URL)</th><th>Asset dormienti riusati</th><th>Nuove librerie</th></tr></thead>
+      <tbody>
+        <tr><td><b>A · Rivista Viva</b></td><td>Impaginato — folio e filetti</td><td>Basso</td><td>Medio</td><td>Alta — folio + rubrica + cover-block</td><td><code>journal-*</code> quasi intero + <code>.trace-frame</code></td><td>Nessuna</td></tr>
+        <tr><td><b>B · Atlante di Coppia</b></td><td>Mappa — rotta e codici</td><td>Basso</td><td>Medio</td><td>Molto alta — codice, «tappa N di 29», timbro</td><td><code>.trace-rail</code>, <code>.trace-section</code>, PostoStamp</td><td>Nessuna</td></tr>
+        <tr><td><b>C · Album Cinematico</b></td><td>Scena — full-bleed e didascalie</td><td>Medio (LCP + frame reali)</td><td>Medio-alto</td><td>Alta — cover full-bleed + pannello-verdetto</td><td><code>.trace-hero*</code>, <code>CinematicHomepage</code></td><td>Nessuna</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="gate">
+      <b>Gate owner aperti (dettaglio in docs/30_Design/DIREZIONI_CREATIVE_ELEVAZIONE_2026-07.md):</b>
+      <ol>
+        <li>Dir. A — base scura journal <code>#d1c6b7</code> come superficie principale: deviazione palette (alternativa senza gate disponibile).</li>
+        <li>Dir. A/B — <code>--trace-red #bd3f23</code> vs terracotta di brand <code>#c2410c</code>: riallineare o approvare.</li>
+        <li>Dir. A — eventuale famiglia manoscritta per la nota a mano (DESIGN.md fissa Fraunces+Inter).</li>
+        <li>Dir. B — <code>rough-notation</code> solo se il tratto SVG puro non basta (default zero-install).</li>
+        <li>Dir. C — dipendenza bloccante: passaggio <code>asset-curator</code> per estrarre frame reali dei reel prima dell'implementazione.</li>
+      </ol>
+    </div>
+    <p class="note">Fondazione comune a tutte e tre: zero nuove librerie (R2), token esistenti di <code>src/index.css</code>,
+    imagery-truth (le foto in queste demo sono le cover reali dei reel già in repo; nessuna immagine di coppia perché le attuali
+    in repo sono generate). Dopo la scelta: R5 — DECISION_DIREZIONE_CREATIVA + FOUNDATIONS_SPEC.md, poi FASE F.</p>
+  </section>
+
+  <footer>design-lab/ · fuori da src/ e dal build · ricerca: docs/30_Design/RESEARCH_DOSSIER_ELEVAZIONE_2026-07.md</footer>
+</main>
+</body>
+</html>

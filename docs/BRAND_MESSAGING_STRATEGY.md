@@ -1,7 +1,10 @@
-# TRAVELLINIWITHUS — Brand & Messaging Strategy (Phase 3)
+---
+type: strategy
+area: brand
+status: active
+---
 
-> [!warning] Stale — ultimo aggiornamento 2026-03-20 (35 giorni fa)
-> Phase 3 è stata prodotta a marzo. Prima di eseguire va verificata rispetto a [[TRAVELLINIWITHUS_MASTER_PLAN]] e [[TRAVELLINIWITHUS_EXECUTION_PLAN]] (entrambi 2026-04-24) per evitare messaggi superati. In caso di conflitto, Master + Execution vincono.
+# TRAVELLINIWITHUS — Brand & Messaging Strategy (Phase 3)
 
 **Status**: Implementation in progress  
 **Owner**: Rodrigo & Betta  

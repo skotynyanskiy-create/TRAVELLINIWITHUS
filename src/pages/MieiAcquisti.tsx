@@ -9,12 +9,13 @@ import {
   Package,
   ExternalLink,
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { useQuery } from '@tanstack/react-query';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import { useAuth } from '../context/AuthContext';
 import { fetchUserOrders, type Order } from '../services/firebaseService';
+import { formatPrice } from '../utils/format';
 
 const statusConfig = {
   completed: {
@@ -27,16 +28,16 @@ const statusConfig = {
   pending: {
     label: 'In attesa',
     icon: Clock,
-    color: 'text-amber-600',
-    bg: 'bg-amber-50',
-    border: 'border-amber-200',
+    color: 'text-[var(--color-warning-text)]',
+    bg: 'bg-[var(--color-warning-soft)]',
+    border: 'border-[var(--color-warning)]/30',
   },
   cancelled: {
     label: 'Annullato',
     icon: AlertCircle,
-    color: 'text-red-500',
-    bg: 'bg-red-50',
-    border: 'border-red-200',
+    color: 'text-[var(--color-error)]',
+    bg: 'bg-[var(--color-error-soft)]',
+    border: 'border-[var(--color-error)]/30',
   },
 };
 
@@ -63,7 +64,7 @@ function OrderCard({ order }: { order: Order }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-[2rem] border border-black/5 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
+      className="bg-white rounded-[var(--radius-lg)] border border-black/5 shadow-sm overflow-hidden hover:shadow-md transition-shadow"
     >
       <div className="p-8">
         <div className="flex items-start justify-between gap-4 flex-wrap mb-6">
@@ -91,7 +92,7 @@ function OrderCard({ order }: { order: Order }) {
             <span className="text-[10px] uppercase tracking-widest font-bold text-black/30 block mb-1">
               Totale
             </span>
-            <span className="text-xl font-serif">EUR {order.total.toFixed(2)}</span>
+            <span className="text-xl font-serif">{formatPrice(order.total)}</span>
           </div>
 
           {order.status === 'completed' && (
@@ -133,7 +134,7 @@ function OrderCard({ order }: { order: Order }) {
 }
 
 export default function MieiAcquisti() {
-  const { user, loading: authLoading, signIn } = useAuth();
+  const { user, loading: authLoading } = useAuth();
 
   const { data: orders = [], isLoading } = useQuery<Order[]>({
     queryKey: ['userOrders', user?.uid, user?.email],
@@ -175,27 +176,26 @@ export default function MieiAcquisti() {
             {[1, 2].map((i) => (
               <div
                 key={i}
-                className="bg-white rounded-[2rem] border border-black/5 h-36 animate-pulse"
+                className="bg-white rounded-[var(--radius-lg)] border border-black/5 h-36 animate-pulse"
               />
             ))}
           </div>
         ) : !user ? (
-          <div className="bg-white rounded-[2rem] border border-black/5 p-12 text-center">
+          <div className="bg-white rounded-[var(--radius-lg)] border border-black/5 p-12 text-center">
             <Package size={48} className="mx-auto mb-6 text-black/20" />
             <h2 className="font-serif text-2xl mb-4">Accedi per vedere i tuoi acquisti</h2>
             <p className="text-black/60 font-light mb-8">
               Effettua l'accesso con lo stesso account usato al momento dell'acquisto.
             </p>
-            <button
-              type="button"
-              onClick={() => { void signIn(); }}
+            <Link
+              to="/club"
               className="inline-flex items-center gap-2 bg-[var(--color-ink)] text-white hover:bg-[var(--color-accent)] transition-colors px-8 py-3.5 rounded-full font-bold text-xs uppercase tracking-widest"
             >
-              Accedi con Google
-            </button>
+              Accedi
+            </Link>
           </div>
         ) : orders.length === 0 ? (
-          <div className="bg-white rounded-[2rem] border border-black/5 p-12 text-center">
+          <div className="bg-white rounded-[var(--radius-lg)] border border-black/5 p-12 text-center">
             <ShoppingBag size={48} className="mx-auto mb-6 text-black/20" />
             <h2 className="font-serif text-2xl mb-4">Nessun acquisto ancora</h2>
             <p className="text-black/60 font-light mb-8">

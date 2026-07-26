@@ -2,14 +2,14 @@
 type: guide
 status: draft
 area: content
-destination: ""
-country: ""
-region: ""
-season: ""
-budget: ""
-duration: ""
-route: ""
-keyword_primaria: ""
+destination: ''
+country: ''
+region: ''
+season: ''
+budget: ''
+duration: ''
+route: ''
+keyword_primaria: ''
 keyword_secondarie: []
 related: []
 tags: []
@@ -19,52 +19,54 @@ tags: []
 
 ## Perché andare
 
-*Il selling point editoriale. Cosa rende questa destinazione unica per il pubblico Travellini?*
+_Il selling point editoriale. Cosa rende questa destinazione unica per il pubblico Travellini?_
 
 ## Info pratiche
 
-| Info | Dettaglio |
-|------|-----------|
-| Stagione migliore | |
-| Durata consigliata | |
-| Budget medio/giorno | |
-| Lingua | |
-| Valuta | |
-| Fuso orario | |
+| Info                | Dettaglio |
+| ------------------- | --------- |
+| Stagione migliore   |           |
+| Durata consigliata  |           |
+| Budget medio/giorno |           |
+| Lingua              |           |
+| Valuta              |           |
+| Fuso orario         |           |
 
 ## Come arrivare
 
-*Volo, treno, auto. Consigli pratici su booking e trasporti.*
+_Volo, treno, auto. Consigli pratici su booking e trasporti._
 
 ## Dove dormire
 
-*Selezione curata — hotel, B&B, airbnb. Collegare note `PLACE_` dedicate.*
+_Selezione curata — hotel, B&B, airbnb. Collegare note `PLACE_` dedicate._
 
-- [[PLACE_]] — 
-- [[PLACE_]] — 
-- [[PLACE_]] — 
+- [[PLACE_]] —
+- [[PLACE_]] —
+- [[PLACE_]] —
 
 ## Cosa fare
 
-*Attività, esperienze, must-see. Collegare alle experience types del sito.*
+_Attività, esperienze, must-see. Collegare alle experience types del sito._
 
 ### Da non perdere
-- 
-- 
-- 
+
+-
+-
+-
 
 ### Esperienze particolari
-- 
-- 
+
+-
+-
 
 ## Dove mangiare e bere
 
-- [[PLACE_]] — 
-- [[PLACE_]] — 
+- [[PLACE_]] —
+- [[PLACE_]] —
 
 ## Consigli pratici
 
-*Trasporti locali, SIM, prenotazioni anticipate, sicurezza, ecc.*
+_Trasporti locali, SIM, prenotazioni anticipate, sicurezza, ecc._
 
 ## Mappa e itinerari
 
@@ -73,18 +75,18 @@ tags: []
 
 ## Articoli correlati
 
-- [[ART_]] — 
-- [[ART_]] — 
+- [[ART_]] —
+- [[ART_]] —
 
 ## Note SEO
 
-- SEO page: [[80_SEO/Pagine/SEO_]]
-- Link interni aggiunti: 
-- Keyword coperta: 
+- SEO page: [[13_Content/SEO_]]
+- Link interni aggiunti:
+- Keyword coperta:
 
 ## Checklist pubblicazione
 
-- [ ] Tutti i PLACE_ collegati e creati
+- [ ] Tutti i PLACE\_ collegati e creati
 - [ ] Itinerario dedicato creato
 - [ ] SEO page creata
 - [ ] Link interni da altri articoli aggiunti

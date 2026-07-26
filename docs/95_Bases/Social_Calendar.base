@@ -1,45 +1,61 @@
-{
-  "filters": {
-    "filterOperator": "and",
-    "conditions": [
-      {
-        "field": "type",
-        "operator": "is",
-        "value": ["social-post"]
-      }
-    ]
-  },
-  "order": [
-    {
-      "field": "publish_date",
-      "direction": "asc"
-    }
-  ],
-  "views": [
-    {
-      "id": "prossima-settimana",
-      "name": "Prossima settimana",
-      "type": "table",
-      "columns": ["file.name", "status", "channel", "format", "destination", "pillar", "publish_date", "caption_ready"]
-    },
-    {
-      "id": "in-produzione",
-      "name": "In produzione",
-      "type": "table",
-      "filters": {
-        "filterOperator": "and",
-        "conditions": [
-          {"field": "status", "operator": "is", "value": ["idea", "in-produzione", "review"]}
-        ]
-      },
-      "columns": ["file.name", "status", "channel", "format", "destination", "pillar", "publish_date"]
-    },
-    {
-      "id": "per-canale",
-      "name": "Per canale",
-      "type": "table",
-      "order": [{"field": "channel", "direction": "asc"}],
-      "columns": ["file.name", "channel", "format", "status", "publish_date", "destination"]
-    }
-  ]
-}
+filters:
+  and:
+    - 'file.ext == "md"'
+    - 'type == "social-post"'
+properties:
+  file.name:
+    displayName: Contenuto
+  status:
+    displayName: Stato
+  channel:
+    displayName: Canale
+  format:
+    displayName: Formato
+  destination:
+    displayName: Destinazione
+  pillar:
+    displayName: Pilastro
+  publish_date:
+    displayName: Pubblicazione
+  caption_ready:
+    displayName: Caption pronta
+views:
+  - type: table
+    name: Prossima settimana
+    filters:
+      and:
+        - 'publish_date && date(publish_date) >= today()'
+        - 'publish_date && date(publish_date) < today() + "7d"'
+    order:
+      - publish_date
+      - file.name
+      - status
+      - channel
+      - format
+      - destination
+      - pillar
+      - caption_ready
+  - type: table
+    name: In produzione
+    filters:
+      or:
+        - 'status == "idea"'
+        - 'status == "in-produzione"'
+        - 'status == "review"'
+    order:
+      - file.name
+      - status
+      - channel
+      - format
+      - destination
+      - pillar
+      - publish_date
+  - type: table
+    name: Per canale
+    order:
+      - channel
+      - file.name
+      - format
+      - status
+      - publish_date
+      - destination

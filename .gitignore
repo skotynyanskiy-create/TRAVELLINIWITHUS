@@ -6,27 +6,99 @@ coverage/
 *.log
 .env*
 !.env.example
-
-# Secret credentials — defense in depth alongside .claude/settings.json secret-block hook
-service-account*.json
-serviceAccount*.json
-firebase-adminsdk*.json
-*.pem
-*.p12
-*.pfx
-*.key
 playwright-report/
 test-results/
+# Report HTML della suite forense (.audit-workbench/playwright.config.ts):
+# ~7 MB di trace, zip e bundle rigenerabili a ogni run. Lo spec e la config
+# restano versionati.
+.audit-workbench/playwright-report-audit/
 qa-final/
 qa-shots/
 output/
-.playwright-cli/
+
+# Graphify local CLI/runtime and generated knowledge graph
+.tools/
+graphify-out/
+
+# Superpowers visual brainstorming companion (temp mockups)
+.superpowers/
+.superdesign/
 
 # Playwright MCP session cache (auto-generated per session)
 .playwright-mcp/
+.playwright/
 
-# Lighthouse CI reports (auto-generated)
-.lighthouseci/
+# Python bytecode from the scripts/hooks/ hooks (regenerated on every run)
+__pycache__/
+*.pyc
+
+# AI-session local caches and hook state (never commit)
+.mypy_cache/
+.logs/
+.impeccable/
+.remember/
+
+# Claude Code local per-device settings (personal whitelist, not shared)
+.claude/settings.local.json
+.claude/worktrees/
+.mcp.json
+
+# Local config backups (audit snapshots) + stray dev-server logs
+backups/
+.audit/
+.codex-*.log
+.dev-server*.log
+.vite-dev.log
+
+# Nested third-party git clones (scouting artifacts, never commit)
+lighthouse/
+claude-plugins-official/
+
+# Foreign project clones parked in the repo root (owner to relocate; never commit)
+Finance/
+RustQuant/
+abideify/
+agents/
+aws-generativeai-partner-samples/
+backhacker/
+backtesting.py/
+calendlex/
+cap_comp_openbb_example/
+commands/
+cookbook/
+eiten/
+financial-chat/
+financial-machine-learning/
+flowgre/
+ftcourse/
+get_all_tickers/
+ip_sniffer/
+maverick-mcp/
+mcp-trader/
+minimax-dgx-spark/
+nomad_nibbles/
+notebooks/
+pivot-peak/
+programming-collective-intelligence-code/
+python-cheatsheet/
+report-mAIstro/
+simple_chat/
+volatility-trading/
+wshobson/
+zipline_bundles/
+
+# Stray root-level component drop (correct home is src/components/)
+/components/
+
+# Global design skills leaked into the sync source by skills.sh installer
+.agents/skills/impeccable/
+.agents/skills/emil-design-eng/
+.agents/skills/redesign-existing-projects/
+.agents/skills/animation-vocabulary/
+.agents/skills/review-animations/
+
+# Sentiero audit screenshots
+sentiero-*.jpeg
 
 # Obsidian local user config + untitled canvas drafts
 .obsidian/
@@ -35,32 +107,121 @@ docs/Senza nome*
 # Local audit screenshots (regenerated on demand)
 audit-*.jpeg
 audit-*.png
-.vercel
+audit-reports/
+homepage-check.png
+smoke-*.png
+sticky-*.png
+refactor-*.png
+redesign-*.png
+polished-*.png
+final-*.png
+home-*.png
+home-*.jpeg
+itinerari*.png
+itinerario*.png
+club-*.png
+cta-*.png
+mappa-*.png
+map-*.png
+mappa.png
+.audit-screenshots/
 
-# Browser-auditor leftover screenshots and snapshots in repo root
-/iceland-*.png
-/sicily-*.png
-/sicilia-*.png
-/sicilia-*.md
-/islanda-*.png
-/islanda-*.md
-/mobile-*.png
-/mobile-*.md
-/search-modal.png
-/trova-*.png
-/guide-page-snapshot.md
-/home-*.png
-/collaborazioni-*.png
-/destinazioni-*.png
-/guide-*.png
-/article-*.png
-/puglia-*.png
+# Browser-auditor + responsive-check ad-hoc screenshots (png + jpeg)
+*-desktop-*.png
+*-desktop-*.jpeg
+*-mobile-*.png
+*-mobile-*.jpeg
+*-laptop-*.png
+*-laptop-*.jpeg
+*-tablet-*.png
+*-tablet-*.jpeg
+*-1280.png
+*-1280.jpeg
+*-1440.png
+*-1440.jpeg
+*-768.png
+*-768.jpeg
+*-375.png
+*-375.jpeg
+*-320.png
+*-320.jpeg
+Senza nome*
+articolo-*.png
+chi-siamo-*.png
+collaborazioni-*.png
+contatti-*.png
+destinazioni-*.png
+esperienze-*.png
+guide-*.png
+lead-magnet-*.png
+media-kit-*.png
+quiz-*.png
+shop-*.png
+guida-in-regalo-*.png
+vienicons-*.png
 
-# AI tool memory/session cache
-.remember/
+# WhatsApp / personal media not part of project
+video/
+video esempio/
 
-# Claude Code per-machine local overrides (never commit)
-.claude/settings.local.json
+# Firebase admin service-account (NEVER commit)
+firebase-adminsdk-*.json
+service-account*.json
+serviceAccount*.json
+*.key
+*.pem
+.firebase/
+.firebaserc.local
 
-# Build artifacts and temp
-metadata.json
+# Browser-auditor ad-hoc snapshots and screenshots (root-level temp)
+*-snapshot.md
+snapshot-*.md
+reaudit_*.png
+reaudit_*.md
+art-*.png
+puglia-*.png
+salento-*.png
+salento-*.md
+esplora-*.png
+esplora-*.md
+giappone-*.png
+destinazione-*.png
+chisiamo-*.png
+risorse-*.png
+strumenti-*.png
+mobile-menu-*.png
+esperienze-food.yml
+mappa-asia.yml
+home.yml
+shop.yml
+esplora-itinerario.yml
+home.png
+
+# Perf/quality audit artifacts (Lighthouse + ad-hoc full-page jpeg)
+.lighthouseci/
+.lh-*.json
+*-full.jpeg
+esplora-*.jpeg
+contatti-*.jpeg
+
+*storybook.log
+storybook-static
+
+.codex-remote-attachments/
+
+# Skill Higgsfield del fornitore: installate localmente e aggiornate da loro,
+# quindi restano fuori da git e dai mirror (stessa regola di canonical-skills.mjs
+# per le skill esterne). higgsfield-hub e' nostra, resta tracciata.
+.agents/skills/higgsfield-*/
+.claude/skills/higgsfield-*/
+.cursor/skills/higgsfield-*/
+.gemini/skills/higgsfield-*/
+.github/skills/higgsfield-*/
+!.agents/skills/higgsfield-hub/
+!.claude/skills/higgsfield-hub/
+!.cursor/skills/higgsfield-hub/
+!.gemini/skills/higgsfield-hub/
+!.github/skills/higgsfield-hub/
+
+# Higgsfield — staging asset generati (ASSET_STRATEGY §4).
+generated/

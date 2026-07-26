@@ -1,8 +1,22 @@
 import { useState, type FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { CheckCircle, Gift, Loader2, Mail, ShieldCheck } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import {
+  ArrowRight,
+  CheckCircle,
+  Gift,
+  Loader2,
+  Mail,
+  ShieldCheck,
+  TrendingUp,
+} from 'lucide-react';
+import { Link } from '@/src/components/TransitionLink';
 import { trackEvent } from '../services/analytics';
+import { appendLeadFallback } from '../lib/leadFallback';
+import {
+  CONTACTS,
+  NEWSLETTER_RECENT_SIGNUPS,
+  NEWSLETTER_COUNTER_MIN_VISIBLE,
+} from '../config/site';
 import Button from './Button';
 
 type NewsletterVariant = 'sand' | 'white' | 'editorial' | 'compact' | 'article' | 'business';
@@ -17,6 +31,7 @@ interface NewsletterProps {
   bullets?: string[];
   ctaLabel?: string;
   onSuccess?: () => void;
+  stacked?: boolean;
 }
 
 const variantCopy: Record<
@@ -33,7 +48,7 @@ const variantCopy: Record<
     eyebrow: 'Newsletter Travellini',
     title: 'Posti particolari, senza rumore.',
     description:
-      'Una selezione lenta e utile: idee viaggio, guide pratiche, itinerari e risorse quando hanno davvero senso.',
+      'Una selezione lenta e utile: idee viaggio, guide pratiche e risorse quando hanno davvero senso.',
     bullets: [
       'Luoghi e itinerari da salvare prima che diventino ovvi.',
       'Consigli pratici scritti per decidere meglio, non per riempire la inbox.',
@@ -43,7 +58,7 @@ const variantCopy: Record<
   },
   white: {
     eyebrow: 'Archivio utile',
-    title: 'Una mail quando c\u2019è qualcosa da salvare.',
+    title: 'Una mail quando c’è qualcosa da salvare.',
     description:
       'Niente invii automatici senza valore: solo contenuti Travelliniwithus utili per scegliere, organizzare e partire meglio.',
     bullets: [
@@ -57,11 +72,11 @@ const variantCopy: Record<
     eyebrow: 'Continua la scoperta',
     title: 'Tieni da parte i prossimi posti giusti.',
     description:
-      'La newsletter e il filo tra articoli, guide pratiche, itinerari e risorse: pochi contenuti, scelti con lo stesso metodo editoriale del sito.',
+      'La newsletter e il filo tra articoli, guide e risorse: pochi contenuti, scelti con lo stesso metodo editoriale del sito.',
     bullets: [
       'Posti particolari e informazioni concrete.',
       'Percorsi utili per coppie, weekend e viaggi lenti.',
-      'Anteprime di guide e itinerari quando sono davvero pronti.',
+      'Anteprime delle guide quando sono davvero pronte.',
     ],
     ctaLabel: 'Entra nella lista',
   },
@@ -70,19 +85,19 @@ const variantCopy: Record<
     title: 'Ricevi i prossimi contenuti utili.',
     description: 'Un aggiornamento sobrio quando pubblichiamo qualcosa che vale la pena salvare.',
     bullets: [],
-    ctaLabel: 'Iscriviti',
+    ctaLabel: 'Iscrivimi alla newsletter',
   },
   article: {
     eyebrow: 'Dopo questa lettura',
     title: 'Ricevi il prossimo posto da salvare.',
     description:
-      'Se questo contenuto ti e stato utile, la newsletter e il modo più semplice per non perdere i prossimi contenuti utili.',
+      'Se questo contenuto ti e stato utile, la newsletter e il modo più semplice per non perdere le prossime guide.',
     bullets: [
-      'Guide pratiche e itinerari, non solo ispirazione.',
+      'Guide pratiche, non solo ispirazione.',
       'Luoghi selezionati con criterio.',
       'Nessuna sequenza aggressiva di vendita.',
     ],
-    ctaLabel: 'Ricevi i prossimi contenuti',
+    ctaLabel: 'Ricevi le prossime guide',
   },
   business: {
     eyebrow: 'Per partner e lettori',
@@ -90,7 +105,7 @@ const variantCopy: Record<
     description:
       'Aggiornamenti essenziali su nuovi contenuti, risorse e sviluppi editoriali Travelliniwithus.',
     bullets: [
-      'Nuovi racconti, guide e itinerari dal sito.',
+      'Nuovi racconti e guide dal sito.',
       'Risorse utili e progetti in lavorazione.',
       'Una comunicazione curata, mai invasiva.',
     ],
@@ -130,18 +145,30 @@ export default function Newsletter({
   bullets,
   ctaLabel,
   onSuccess,
+  stacked = false,
 }: NewsletterProps) {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [email, setEmail] = useState('');
+  const [website, setWebsite] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const copy = resolveCopy({ variant, title, eyebrow, description, bullets, ctaLabel });
   const isCompact = compact || variant === 'compact';
   const isDark = variant === 'article' || variant === 'business';
+  const errorId = `newsletter-error-${source}`;
+  const unlocksLeadMagnet = source.includes('lead_magnet');
 
   const handleSubscribe = async (e: FormEvent) => {
     e.preventDefault();
     const normalizedEmail = email.trim();
+
+    trackEvent('newsletter_submit_attempt', { source });
+
+    if (website.trim()) {
+      trackEvent('newsletter_submit_blocked', { source, reason: 'honeypot' });
+      setIsSubscribed(true);
+      return;
+    }
 
     if (!normalizedEmail) {
       setError('Inserisci un indirizzo email.');
@@ -160,7 +187,7 @@ export default function Newsletter({
       const response = await fetch('/api/newsletter-subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: normalizedEmail, source }),
+        body: JSON.stringify({ email: normalizedEmail, source, website }),
       });
 
       if (!response.ok) {
@@ -168,22 +195,29 @@ export default function Newsletter({
       }
 
       trackEvent('newsletter_signup', { source });
+      if (unlocksLeadMagnet) {
+        sessionStorage.setItem('twu_lead_magnet_unlocked', '1');
+      }
       setIsSubscribed(true);
       if (onSuccess) {
         setTimeout(onSuccess, 1200);
       }
     } catch {
-      // Fallback: salva in localStorage quando l'API non è configurata
-      try {
-        const stored = JSON.parse(localStorage.getItem('twu_newsletter_leads') || '[]');
-        stored.push({ email: normalizedEmail, source, date: new Date().toISOString() });
-        localStorage.setItem('twu_newsletter_leads', JSON.stringify(stored));
+      const saved = appendLeadFallback('twu_newsletter_leads', {
+        email: normalizedEmail,
+        source,
+        date: new Date().toISOString(),
+      });
+      if (saved) {
         trackEvent('newsletter_signup', { source, fallback: 'localStorage' });
+        if (unlocksLeadMagnet) {
+          sessionStorage.setItem('twu_lead_magnet_unlocked', '1');
+        }
         setIsSubscribed(true);
         if (onSuccess) {
           setTimeout(onSuccess, 2000);
         }
-      } catch {
+      } else {
         setError(
           'Iscrizione non riuscita. Riprova tra poco oppure scrivici direttamente via email.'
         );
@@ -204,12 +238,12 @@ export default function Newsletter({
           onSubmit={handleSubscribe}
           className={isCompact ? 'space-y-3' : 'space-y-5'}
         >
-          <div className={isCompact ? 'flex flex-col gap-2 sm:flex-row' : 'space-y-2'}>
+          <div className={isCompact && !stacked ? 'flex flex-col gap-2 sm:flex-row' : 'space-y-2'}>
             {!isCompact && (
               <label
                 htmlFor={`newsletter-email-${source}`}
                 className={`block text-xs font-bold uppercase tracking-[0.22em] ${
-                  isDark ? 'text-white/50' : 'text-black/45'
+                  isDark ? 'text-white/50' : 'text-black/65'
                 }`}
               >
                 La tua email
@@ -222,11 +256,27 @@ export default function Newsletter({
               onChange={(e) => setEmail(e.target.value)}
               placeholder="nome@esempio.com"
               required
+              autoComplete="email"
+              aria-invalid={Boolean(error)}
+              aria-describedby={error ? errorId : undefined}
               className={`w-full rounded-full border px-5 py-3 text-sm transition-all focus:border-[var(--color-accent)] focus:outline-none ${
                 isDark
                   ? 'border-white/15 bg-white/10 text-white placeholder:text-white/35'
                   : 'border-black/10 bg-white text-[var(--color-ink)] placeholder:text-black/30'
               } ${isCompact ? 'sm:flex-1' : 'md:px-6 md:py-4'}`}
+            />
+            <label className="sr-only" htmlFor={`newsletter-website-${source}`}>
+              Lascia vuoto questo campo
+            </label>
+            <input
+              id={`newsletter-website-${source}`}
+              type="text"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              className="absolute -left-[10000px] h-0 w-0 overflow-hidden border-0 p-0 opacity-0"
             />
             {isCompact ? (
               <button
@@ -236,13 +286,13 @@ export default function Newsletter({
                   isDark
                     ? 'bg-[var(--color-accent)] text-[var(--color-ink)]'
                     : 'bg-[var(--color-ink)] text-white'
-                }`}
+                } ${stacked ? 'w-full' : ''}`}
               >
                 {isSubmitting ? <Loader2 size={14} className="animate-spin" /> : <Mail size={14} />}
                 {copy.ctaLabel}
               </button>
             ) : (
-              <Button type="submit" className="w-full">
+              <Button type="submit" disabled={isSubmitting} className="w-full">
                 {isSubmitting ? (
                   <>
                     Iscrizione in corso <Loader2 size={16} className="animate-spin" />
@@ -257,7 +307,47 @@ export default function Newsletter({
           </div>
 
           {error && (
-            <p className={`text-sm ${isDark ? 'text-red-200' : 'text-red-600'}`}>{error}</p>
+            <p
+              id={errorId}
+              role="alert"
+              className={`text-sm ${isDark ? 'text-[var(--color-error-soft)]' : 'text-[var(--color-error)]'}`}
+            >
+              {error}
+            </p>
+          )}
+
+          {isCompact && (
+            <>
+              <p
+                className={`flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-medium leading-relaxed ${
+                  isDark ? 'text-white/75' : 'text-black/70'
+                }`}
+              >
+                <span className="inline-flex items-center gap-1.5">
+                  <ShieldCheck size={12} className="text-[var(--color-accent)]" /> Una email al mese
+                </span>
+                <span aria-hidden="true">·</span>
+                <span>Zero spam</span>
+                <span aria-hidden="true">·</span>
+                <span>Disiscrizione con un click</span>
+              </p>
+              {NEWSLETTER_RECENT_SIGNUPS > 0 &&
+                NEWSLETTER_RECENT_SIGNUPS >= NEWSLETTER_COUNTER_MIN_VISIBLE && (
+                  <p
+                    className={`inline-flex items-center gap-2 text-[11px] font-semibold ${
+                      isDark
+                        ? 'text-[var(--color-accent-on-dark)]'
+                        : 'text-[var(--color-accent-text)]'
+                    }`}
+                  >
+                    <TrendingUp size={12} />
+                    <span className="font-semibold">{NEWSLETTER_RECENT_SIGNUPS}</span>
+                    <span className={isDark ? 'text-white/65' : 'text-black/60'}>
+                      lettori iscritti negli ultimi 30 giorni
+                    </span>
+                  </p>
+                )}
+            </>
           )}
 
           {!isCompact && (
@@ -280,18 +370,47 @@ export default function Newsletter({
           key="success"
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`rounded-3xl p-5 ${isDark ? 'bg-white/10 text-white' : 'bg-[var(--color-accent-soft)] text-[var(--color-ink)]'}`}
+          className={`rounded-[var(--radius-lg)] p-5 ${isDark ? 'bg-white/10 text-white' : 'bg-[var(--color-accent-soft)] text-[var(--color-ink)]'}`}
         >
           <div className="flex items-start gap-4">
             <CheckCircle className="mt-0.5 shrink-0 text-[var(--color-accent)]" size={24} />
             <div>
-              <p className="font-serif text-xl">Iscrizione confermata.</p>
-              <p
-                className={`mt-1 text-sm leading-relaxed ${isDark ? 'text-white/65' : 'text-black/60'}`}
-              >
-                Richiesta ricevuta. Se la piattaforma email non è ancora attiva, il lead resta
-                comunque salvato.
+              <p className="font-serif text-xl">
+                {unlocksLeadMagnet ? 'Ci sei.' : 'Iscrizione confermata.'}
               </p>
+              {unlocksLeadMagnet ? (
+                <Link
+                  to="/lead-magnet"
+                  className="mt-2 inline-flex items-center gap-1.5 text-sm font-bold tracking-wide text-[var(--color-accent)] underline underline-offset-4 hover:text-[var(--color-accent-hover)]"
+                >
+                  Apri la guida <ArrowRight size={13} />
+                </Link>
+              ) : (
+                <p
+                  className={`mt-1 text-sm leading-relaxed ${isDark ? 'text-white/65' : 'text-black/60'}`}
+                >
+                  Ti scriviamo solo quando c'è qualcosa di davvero utile da salvare. Intanto, se ti
+                  va, ci trovi su{' '}
+                  <a
+                    href={CONTACTS.instagramUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-2 hover:text-[var(--color-accent)]"
+                  >
+                    Instagram
+                  </a>{' '}
+                  e{' '}
+                  <a
+                    href={CONTACTS.tiktokUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-2 hover:text-[var(--color-accent)]"
+                  >
+                    TikTok
+                  </a>
+                  .
+                </p>
+              )}
             </div>
           </div>
         </motion.div>
@@ -306,7 +425,7 @@ export default function Newsletter({
   return (
     <section
       id="newsletter"
-      className={`overflow-hidden rounded-[2.5rem] px-6 py-12 md:px-12 md:py-16 ${
+      className={`overflow-hidden rounded-[var(--radius-lg)] px-6 py-12 md:px-12 md:py-16 ${
         isDark
           ? 'bg-[var(--color-ink)] text-white'
           : variant === 'white'
@@ -318,7 +437,7 @@ export default function Newsletter({
         <div>
           <span
             className={`mb-5 block text-[10px] font-bold uppercase tracking-[0.28em] ${
-              isDark ? 'text-[var(--color-accent)]' : 'text-[var(--color-accent-text)]'
+              isDark ? 'text-[var(--color-accent-on-dark)]' : 'text-[var(--color-accent-text)]'
             }`}
           >
             {copy.eyebrow}
@@ -349,11 +468,11 @@ export default function Newsletter({
         </div>
 
         <div
-          className={`rounded-[2rem] border p-6 md:p-8 ${isDark ? 'border-white/10 bg-white/5' : 'border-black/5 bg-white/80'}`}
+          className={`rounded-[var(--radius-lg)] border p-6 md:p-8 ${isDark ? 'border-white/10 bg-white/5' : 'border-black/5 bg-white/80'}`}
         >
           <div className="mb-6 flex items-start gap-4">
             <div
-              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${isDark ? 'bg-white/10' : 'bg-[var(--color-accent-soft)]'}`}
+              className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-md)] ${isDark ? 'bg-white/10' : 'bg-[var(--color-accent-soft)]'}`}
             >
               <Gift className="text-[var(--color-accent)]" size={22} />
             </div>

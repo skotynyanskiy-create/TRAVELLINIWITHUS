@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { motion } from 'motion/react';
-import { Link } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import {
   ArrowRight,
   BadgePercent,
@@ -21,24 +21,18 @@ import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import JsonLd from '../components/JsonLd';
 import FinalCtaSection from '../components/FinalCtaSection';
+import StickyMobileCTA from '../components/StickyMobileCTA';
 import { SITE_URL } from '../config/site';
-import { slugifyExperienceType } from '../config/contentTaxonomy';
 import { fetchResources } from '../services/firebaseService';
-import {
-  AFFILIATE_PARTNERS,
-  prepareAffiliateLink,
-  trackAffiliateClick,
-  type AffiliatePartner,
-} from '../lib/affiliate';
-import { useShopGate } from '../hooks/useShopGate';
+import { trackEvent } from '../services/analytics';
 
 interface ResourceItem {
   name: string;
-  partner: AffiliatePartner;
   description: string;
   link: string;
   tags: string[];
   badge?: string;
+  commercialLabel: 'Affiliato' | 'Non affiliato' | 'Codice sconto';
   fit: string;
   avoid?: string;
 }
@@ -58,43 +52,42 @@ const resourceCategories: Array<{
     items: [
       {
         name: 'GetYourGuide',
-        partner: 'getyourguide',
         description:
-          'Utile per ingressi, tour e attività quando vuoi capire disponibilita e orari prima di partire.',
+          'Utile per ingressi, tour e attività quando vuoi capire disponibilità e orari prima di partire.',
         link: 'https://getyourguide.com/-cs552',
         tags: ['Esperienze', 'Prenotazioni'],
-        badge: 'Affiliato',
+        commercialLabel: 'Affiliato',
         fit: 'Per chi preferisce bloccare attività chiave prima del viaggio.',
         avoid: 'Da evitare se vuoi massima spontaneità o se il meteo e molto incerto.',
       },
       {
         name: 'Heymondo',
-        partner: 'heymondo',
         description:
           'Una soluzione assicurativa che valutiamo quando il viaggio ha costi, distanze o imprevisti potenziali più alti.',
         link: 'https://heymondo.it/?utm_medium=Afiliado&utm_source=TRAVELLINIWITHUS&utm_campaign=PRINCIPAL&cod_descuento=TRAVELLINIWITHUS&ag_campaign=TRAVELLINI&agencia=JG4Tepc5b47oLeK3xGDmbAX9I25ExoDeoc8cbPFt',
         tags: ['Assicurazione', 'Sconto'],
         badge: '-10%',
+        commercialLabel: 'Codice sconto',
         fit: 'Per viaggi extra UE, itinerari lunghi o prenotazioni non banali.',
         avoid:
           'Non sostituisce la lettura delle condizioni: controlla sempre massimali e coperture.',
       },
       {
         name: 'Skyscanner',
-        partner: 'skyscanner',
         description:
           'Buono per confrontare tratte e capire il range prezzo prima di scegliere davvero una destinazione.',
         link: 'https://skyscanner.it',
         tags: ['Voli', 'Ricerca'],
+        commercialLabel: 'Non affiliato',
         fit: 'Per esplorare opzioni quando date o aeroporti sono flessibili.',
       },
       {
         name: 'Booking.com',
-        partner: 'booking',
         description:
           'Comodo per confrontare posizione, recensioni e condizioni di cancellazione in modo rapido.',
         link: 'https://booking.com',
         tags: ['Alloggi', 'Confronto'],
+        commercialLabel: 'Non affiliato',
         fit: 'Per scremare strutture e zone prima di decidere dove dormire.',
       },
     ],
@@ -107,30 +100,30 @@ const resourceCategories: Array<{
     items: [
       {
         name: 'Airalo',
-        partner: 'airalo',
         description: `Una eSIM è utile quando vuoi arrivare con connessione già pronta, soprattutto fuori dall'Unione Europea.`,
         link: 'https://airalo.com',
         tags: ['eSIM', 'Internet'],
         badge: 'Codice',
+        commercialLabel: 'Codice sconto',
         fit: 'Per viaggi in cui non vuoi perdere tempo a cercare SIM locali.',
-        avoid: 'Verifica sempre copertura e compatibilita del telefono.',
+        avoid: 'Verifica sempre copertura e compatibilità del telefono.',
       },
       {
         name: 'Revolut',
-        partner: 'revolut',
         description:
           'Comoda per pagamenti, cambio valuta e controllo delle spese quando ti muovi tra paesi diversi.',
         link: 'https://revolut.com',
         tags: ['Pagamenti', 'Valuta'],
+        commercialLabel: 'Non affiliato',
         fit: 'Per tenere separate e leggibili le spese di viaggio.',
       },
       {
         name: 'Splitwise',
-        partner: 'splitwise',
         description:
           'Semplice per dividere costi tra coppia, amici o gruppo senza ricostruire tutto a fine viaggio.',
         link: 'https://splitwise.com',
         tags: ['Spese', 'Gratis'],
+        commercialLabel: 'Non affiliato',
         fit: 'Per viaggi in compagnia con spese condivise.',
       },
     ],
@@ -143,29 +136,29 @@ const resourceCategories: Array<{
     items: [
       {
         name: 'Peak Design Tech Pouch',
-        partner: 'amazon',
         description:
           'Una soluzione pratica per tenere ordinati cavi, batterie e piccoli accessori senza perdere tempo nello zaino.',
         link: 'https://amazon.it',
         tags: ['Organizzazione', 'Gear'],
+        commercialLabel: 'Non affiliato',
         fit: 'Per chi porta camera, power bank, microfoni o più caricatori.',
       },
       {
         name: 'Sony A7IV',
-        partner: 'amazon',
         description:
           'Camera full-frame per contenuti foto/video di livello alto quando il viaggio ha anche un obiettivo creator.',
         link: 'https://amzn.to/49Q6d10',
         tags: ['Camera', 'Creator'],
+        commercialLabel: 'Affiliato',
         fit: 'Per produzione visual seria, non per chi cerca solo ricordi rapidi.',
       },
       {
         name: 'DJI Mini 3 Pro',
-        partner: 'amazon',
         description:
           'Drone leggero per punti di vista ampi, da usare solo dove regole, condizioni e sicurezza lo permettono.',
         link: 'https://amzn.to/3P39XfN',
         tags: ['Drone', 'Visual'],
+        commercialLabel: 'Affiliato',
         fit: 'Per contenuti paesaggistici e destinazioni con spazi aperti.',
         avoid: 'Da evitare dove normative, vento o affollamento non lo consentono.',
       },
@@ -173,16 +166,11 @@ const resourceCategories: Array<{
   },
 ];
 
-const HEYMONDO_AFFILIATE_URL =
-  'https://heymondo.it/?utm_medium=Afiliado&utm_source=TRAVELLINIWITHUS&utm_campaign=PRINCIPAL&cod_descuento=TRAVELLINIWITHUS&ag_campaign=TRAVELLINI&agencia=JG4Tepc5b47oLeK3xGDmbAX9I25ExoDeoc8cbPFt';
-
-const AIRALO_PROMO_CODE = 'TRAVELLINI3';
-
 const resourcePrinciples = [
   {
     icon: <Shield className="text-[var(--color-accent)]" size={20} />,
     title: 'Selezione dichiarata',
-    text: 'Ogni link deve avere un motivo pratico. Se e affiliato, lo diciamo.',
+    text: 'Ogni link deve avere un motivo pratico. Se è affiliato, lo diciamo.',
   },
   {
     icon: <Compass className="text-[var(--color-accent)]" size={20} />,
@@ -196,31 +184,12 @@ const resourcePrinciples = [
   },
 ];
 
-const EXPLORE_PATHS = [
-  {
-    title: 'Per luogo',
-    description: 'Vai prima nelle destinazioni se stai decidendo dove andare.',
-    to: '/destinazioni',
-    cta: 'Apri destinazioni',
-  },
-  {
-    title: 'Per esperienza',
-    description: 'Weekend romantici, posti particolari, hotel con carattere e idee piu mirate.',
-    to: `/destinazioni?view=esperienza&type=${slugifyExperienceType('Esperienze insolite')}`,
-    cta: 'Apri esperienze',
-  },
-  {
-    title: 'Guide pratiche',
-    description:
-      'Se ti servono contesto, budget, logistica o food guide, entra prima nel layer guide.',
-    to: '/guide',
-    cta: 'Apri guide pratiche',
-  },
-];
+function isCommercialResource(item: ResourceItem) {
+  return item.commercialLabel !== 'Non affiliato';
+}
 
 export default function Risorse() {
   const [copied, setCopied] = useState(false);
-  const { isShopDiscoverable } = useShopGate();
 
   const { data: firestoreResources } = useQuery({
     queryKey: ['resources'],
@@ -244,50 +213,30 @@ export default function Risorse() {
       resourceCategories.map((category) => ({
         ...category,
         items:
-          firestoreByCategory?.[category.id]?.map<ResourceItem>((resource) => ({
+          firestoreByCategory?.[category.id]?.map((resource) => ({
             name: resource.name,
-            partner:
-              resource.partner && resource.partner in AFFILIATE_PARTNERS
-                ? (resource.partner as AffiliatePartner)
-                : 'generic',
             description: resource.description,
             link: resource.link,
             tags: resource.tags ?? [],
             badge: resource.badge,
-            fit: 'Risorsa inserita dal CMS: verifica descrizione, natura del link e coerenza prima del deploy.',
+            commercialLabel: resource.badge ? 'Affiliato' : 'Non affiliato',
+            fit: 'Aggiunta di recente: la stiamo ancora raccontando per bene.',
           })) ?? category.items,
       })),
     [firestoreByCategory]
   );
 
-  const heymondoCta = useMemo(
-    () =>
-      prepareAffiliateLink('heymondo', HEYMONDO_AFFILIATE_URL, {
-        campaign: 'risorse_benefit',
-        placement: 'risorse_benefit_banner',
-        label: 'Heymondo -10%',
-      }),
-    []
-  );
-
   const handleCopy = () => {
-    navigator.clipboard.writeText(AIRALO_PROMO_CODE);
+    navigator.clipboard.writeText('TRAVELLINI3');
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-    trackAffiliateClick({
-      partner: 'airalo',
-      url: `promo_code:${AIRALO_PROMO_CODE}`,
-      campaign: 'risorse_benefit',
-      placement: 'risorse_benefit_banner_copy',
-      label: 'Copia Airalo',
-    });
   };
 
   return (
     <PageLayout>
       <SEO
-        title="Risorse di viaggio selezionate"
-        description="Strumenti, app, servizi e gear che Travelliniwithus usa o valuta con criterio per organizzare, vivere e raccontare meglio i viaggi."
+        title="App e attrezzatura che usiamo in viaggio"
+        description="Le app, i servizi e l'attrezzatura che usiamo o valutiamo in viaggio: a cosa serve ognuno, quando non serve e quali link sono in affiliazione."
         canonical={`${SITE_URL}/risorse`}
       />
       <JsonLd
@@ -307,10 +256,10 @@ export default function Risorse() {
         <div className="mt-8 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
           <div>
             <span className="mb-6 block text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
-              Pianifica meglio
+              Prenotare, app, attrezzatura
             </span>
             <h1 className="text-display-1">
-              Strumenti e risorse <span className="italic text-black/55">per viaggiare bene</span>
+              Cosa usiamo <span className="italic text-black/55">e quando serve</span>
             </h1>
             <p className="mt-8 max-w-2xl text-lg leading-relaxed text-black/68">
               Questa non è una pagina di link a caso. È una selezione editoriale di strumenti che
@@ -319,7 +268,7 @@ export default function Risorse() {
             </p>
           </div>
 
-          <div className="rounded-[2rem] border border-black/5 bg-white p-7 shadow-sm">
+          <div className="rounded-[var(--radius-lg)] border border-black/5 bg-white p-7 shadow-sm">
             <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
               Regola Travellini
             </p>
@@ -338,7 +287,7 @@ export default function Risorse() {
           {resourcePrinciples.map((item) => (
             <div
               key={item.title}
-              className="rounded-[2rem] border border-black/5 bg-white p-7 shadow-sm"
+              className="rounded-[var(--radius-lg)] border border-black/5 bg-white p-7 shadow-sm"
             >
               <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-sand)]">
                 {item.icon}
@@ -349,37 +298,18 @@ export default function Risorse() {
           ))}
         </div>
 
-        <div className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-3">
-          {EXPLORE_PATHS.map((item) => (
-            <Link
-              key={item.title}
-              to={item.to}
-              className="group rounded-[2rem] border border-black/5 bg-white p-7 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-accent)]/25"
-            >
-              <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
-                Parti da qui
-              </p>
-              <h2 className="mt-4 text-2xl font-serif">{item.title}</h2>
-              <p className="mt-3 text-sm leading-relaxed text-black/62">{item.description}</p>
-              <span className="mt-6 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent-text)]">
-                {item.cta} <ArrowRight size={12} />
-              </span>
-            </Link>
-          ))}
-        </div>
-
-        <div className="mt-16 grid grid-cols-1 gap-8">
+        <div id="risorse-list" className="mt-16 grid scroll-mt-28 grid-cols-1 gap-8">
           {displayCategories.map((category) => (
             <motion.section
               key={category.id}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-50px' }}
-              className="rounded-[2.5rem] border border-black/5 bg-white p-7 shadow-sm md:p-10"
+              className="rounded-[var(--radius-lg)] border border-black/5 bg-white p-7 shadow-sm md:p-10"
             >
               <div className="mb-8 flex flex-col gap-5 border-b border-black/5 pb-8 md:flex-row md:items-end md:justify-between">
                 <div className="flex items-start gap-5">
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[var(--color-sand)]">
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-sand)]">
                     {category.icon}
                   </div>
                   <div>
@@ -392,73 +322,82 @@ export default function Risorse() {
               </div>
 
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-                {category.items.map((item) => {
-                  const { href: affiliateHref, onClick: handleAffiliateClick } =
-                    prepareAffiliateLink(item.partner, item.link, {
-                      campaign: `risorse_${category.id}`,
-                      placement: 'risorse_grid',
-                      label: item.name,
-                    });
-                  return (
-                    <motion.a
-                      key={item.name}
-                      href={affiliateHref}
-                      target="_blank"
-                      rel="nofollow sponsored noopener noreferrer"
-                      onClick={handleAffiliateClick}
-                      className="group flex min-h-[290px] flex-col rounded-[2rem] border border-black/5 bg-[var(--color-sand)] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-accent)]/35 hover:bg-white hover:shadow-xl"
-                    >
-                      <div className="mb-5 flex items-start justify-between gap-4">
-                        <div>
-                          <div className="mb-3 flex flex-wrap gap-2">
-                            {item.badge && (
-                              <span className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-white">
-                                {item.badge}
-                              </span>
-                            )}
-                            {item.tags.map((tag) => (
-                              <span
-                                key={tag}
-                                className="rounded-full bg-white px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-black/42"
-                              >
-                                {tag}
-                              </span>
-                            ))}
-                          </div>
-                          <h3 className="text-2xl font-serif leading-tight transition-colors group-hover:text-[var(--color-accent-text)]">
-                            {item.name}
-                          </h3>
+                {category.items.map((item) => (
+                  <motion.a
+                    key={item.name}
+                    href={item.link}
+                    target="_blank"
+                    rel={
+                      isCommercialResource(item)
+                        ? 'nofollow sponsored noopener noreferrer'
+                        : 'noopener noreferrer'
+                    }
+                    onClick={() =>
+                      trackEvent(
+                        isCommercialResource(item) ? 'affiliate_click' : 'resource_click',
+                        {
+                          name: item.name,
+                          category: category.id,
+                          url: item.link,
+                          commercial_label: item.commercialLabel,
+                        }
+                      )
+                    }
+                    className="group flex min-h-[290px] flex-col rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-sand)] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-accent)]/35 hover:bg-white hover:shadow-xl"
+                  >
+                    <div className="mb-5 flex items-start justify-between gap-4">
+                      <div>
+                        <div className="mb-3 flex flex-wrap gap-2">
+                          <span className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-white">
+                            {item.commercialLabel}
+                          </span>
+                          {item.badge && item.badge !== item.commercialLabel && (
+                            <span className="rounded-full bg-[var(--color-ink)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
+                              {item.badge}
+                            </span>
+                          )}
+                          {item.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="rounded-full bg-white px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-black/42"
+                            >
+                              {tag}
+                            </span>
+                          ))}
                         </div>
-                        <ArrowRight
-                          size={18}
-                          className="mt-1 shrink-0 text-black/25 transition-all group-hover:translate-x-1 group-hover:text-[var(--color-accent)]"
-                        />
+                        <h3 className="text-2xl font-serif leading-tight transition-colors group-hover:text-[var(--color-accent-text)]">
+                          {item.name}
+                        </h3>
                       </div>
+                      <ArrowRight
+                        size={18}
+                        className="mt-1 shrink-0 text-black/25 transition-all group-hover:translate-x-1 group-hover:text-[var(--color-accent)]"
+                      />
+                    </div>
 
-                      <p className="text-sm leading-relaxed text-black/62">{item.description}</p>
+                    <p className="text-sm leading-relaxed text-black/62">{item.description}</p>
 
-                      <div className="mt-auto space-y-3 pt-7">
-                        <div className="rounded-2xl bg-white p-4">
-                          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/35">
-                            Per chi ha senso
-                          </p>
-                          <p className="mt-2 text-sm leading-relaxed text-black/62">{item.fit}</p>
-                        </div>
-                        {item.avoid && (
-                          <p className="text-xs leading-relaxed text-black/45">
-                            <strong className="text-black/62">Quando evitarlo:</strong> {item.avoid}
-                          </p>
-                        )}
+                    <div className="mt-auto space-y-3 pt-7">
+                      <div className="rounded-[var(--radius-md)] bg-white p-4">
+                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/35">
+                          Per chi ha senso
+                        </p>
+                        <p className="mt-2 text-sm leading-relaxed text-black/62">{item.fit}</p>
                       </div>
-                    </motion.a>
-                  );
-                })}
+                      {item.avoid && (
+                        <p className="text-xs leading-relaxed text-black/65">
+                          <strong className="text-black/62">Quando evitarlo:</strong> {item.avoid}
+                        </p>
+                      )}
+                    </div>
+                  </motion.a>
+                ))}
               </div>
             </motion.section>
           ))}
         </div>
 
-        <div className="mt-20 rounded-[2.5rem] bg-[var(--color-ink)] p-8 text-white md:p-12">
+        <div className="mt-20 rounded-[var(--radius-lg)] bg-[var(--color-ink)] p-8 text-white md:p-12">
           <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>
               <span className="mb-4 block text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
@@ -474,8 +413,7 @@ export default function Risorse() {
             </div>
             <div className="grid gap-4 sm:grid-cols-2 lg:min-w-[420px]">
               <Button
-                href={heymondoCta.href}
-                onClick={heymondoCta.onClick}
+                href="https://heymondo.it/?utm_medium=Afiliado&utm_source=TRAVELLINIWITHUS&utm_campaign=PRINCIPAL&cod_descuento=TRAVELLINIWITHUS&ag_campaign=TRAVELLINI&agencia=JG4Tepc5b47oLeK3xGDmbAX9I25ExoDeoc8cbPFt"
                 variant="outline-light"
                 rel="nofollow sponsored noopener noreferrer"
                 className="w-full"
@@ -492,30 +430,12 @@ export default function Risorse() {
                     <CheckCircle2 size={16} /> Codice copiato
                   </span>
                 ) : (
-                  'Copia Airalo'
+                  'Airalo: TRAVELLINI3 — copia'
                 )}
               </Button>
             </div>
           </div>
         </div>
-
-        {isShopDiscoverable && (
-          <div className="mt-10 rounded-[2rem] border border-black/5 bg-white p-7 shadow-sm">
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
-                  Boutique editoriale
-                </p>
-                <h2 className="mt-3 text-2xl font-serif">
-                  Quando una risorsa diventa un prodotto, la trovi nello shop.
-                </h2>
-              </div>
-              <Button to="/shop" variant="outline">
-                Apri lo shop
-              </Button>
-            </div>
-          </div>
-        )}
 
         <div className="mt-20">
           <Newsletter variant="editorial" source="resources_newsletter" />
@@ -525,7 +445,7 @@ export default function Risorse() {
           <FinalCtaSection intent="discovery" />
         </div>
 
-        <div className="mt-12 rounded-[2rem] border border-black/5 bg-white p-7 text-sm leading-relaxed text-black/55">
+        <div className="mt-12 rounded-[var(--radius-lg)] border border-black/5 bg-white p-7 text-sm leading-relaxed text-black/55">
           Per dettagli completi sulla natura dei link affiliati, consulta la{' '}
           <Link
             to="/disclaimer"
@@ -536,6 +456,13 @@ export default function Risorse() {
           .
         </div>
       </Section>
+
+      <StickyMobileCTA
+        label="Vedi risorse"
+        href="#risorse-list"
+        trackingId="risorse_sticky_mobile"
+        revealAfter={-1}
+      />
     </PageLayout>
   );
 }

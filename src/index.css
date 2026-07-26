@@ -1,21 +1,70 @@
-/* Fonts loaded via <link> in index.html for optimal preconnect */
-@import 'tailwindcss';
-@import 'react-quill-new/dist/quill.snow.css';
+/* Self-hosted fonts via @fontsource (Vite bundles + hashes them).
+ * Critical weights only — Fraunces 400/500/600 + Inter 400/500/600.
+ * font-script uses local system cursive fallbacks to avoid external font
+ * requests on public routes. */
+/* Fraunces VARIABLE — la personalità tipografica del brand con il solo asse
+   realmente usato (weight). Evita oltre 80 KB per stile rispetto al file full. */
+@import '@fontsource-variable/fraunces/wght.css';
+@import '@fontsource-variable/fraunces/wght-italic.css';
+@import '@fontsource/inter/latin-400.css';
+@import '@fontsource/inter/latin-500.css';
+@import '@fontsource/inter/latin-600.css';
+@import 'tailwindcss' source(none);
+@import './styles/atlante.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@source '.';
+@source '../index.html';
 
 @theme {
-  --font-serif: 'Cormorant Garamond', Georgia, serif;
-  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
-  --font-script: 'Kalam', cursive;
+  --font-serif: 'Fraunces Variable', 'Fraunces', 'Times New Roman', serif;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-script: 'Fraunces Variable', 'Fraunces', 'Times New Roman', serif;
 
-  /* Nero & Sabbia — Minimal Premium */
-  --color-sand: #faf8f5; /* Sfondo pagina — bianco avorio caldo (editorial paper) */
+  /* Product Premium 2026 — neutrali sistematici + accent terracotta */
+  --color-sand: #faf8f4; /* Sfondo pagina — off-white caldo */
   --color-surface: #ffffff; /* Card, form — bianco puro */
-  --color-ink: #111111; /* Testo, bottoni primary — nero */
-  --color-accent: #a8865a; /* Accento unico — sabbia profonda/cuoio */
-  --color-accent-hover: #96734a; /* Accento hover — sabbia scura */
-  --color-accent-text: #7a5c35; /* Accento testo — WCAG AA su bianco */
-  --color-accent-soft: #f3efe9; /* Sezioni soft — sabbia calda */
-  --color-footer: #141414; /* Footer — nero profondo */
+  --color-surface-2: #f5f5f4; /* Tier 2 surface (alternate cards) */
+  --color-border: #e7e5e4; /* Divider sistematico */
+  --color-ink: #0a0a0a; /* Testo, bottoni primary — nero puro */
+  --color-ink-2: #44403c; /* Testo secondario */
+  --color-ink-deep: #111111; /* Dark surfaces (Mappa, hero scuri, social CTA) */
+  --color-muted: #78716c; /* Testo terziario / placeholder */
+  --color-muted-bg: #f5f5f4; /* Background neutro (rimpiazza bg-zinc-50/100) */
+  --color-muted-bg-2: #e7e5e4; /* Background neutro tier 2 (rimpiazza bg-zinc-200) */
+  --color-muted-fg: #78716c; /* Foreground muted (rimpiazza text-zinc-500) */
+  --color-muted-fg-2: #57534e; /* Foreground muted forte (rimpiazza text-zinc-600/700) */
+  --color-accent: #c2410c; /* Accento — terracotta (WCAG AA su bianco) */
+  --color-accent-hover: #9a3412; /* Accento hover — terracotta scura */
+  --color-accent-text: #9a3412; /* Accento testo readable (WCAG AA su bianco) */
+  --color-accent-on-dark: #e8834e; /* Accento testo AA (~6:1) su ink/ink-deep — eyebrow/testo su scuro */
+  --color-accent-soft: #fff7ed; /* Sezioni soft — orange-50 */
+  --color-footer: #0a0a0a; /* Footer — allineato a ink */
+
+  /* Category colors — vivono SOLO nel contenuto (tag, bordi, hover tint).
+     Introdotti con la home "Atlante Vivo" (2026-07-04). La cornice resta
+     sand/ink; il colore entra per tipo di contenuto. Mai testo load-bearing
+     su sand (contrasto): usali su bordi/icone/chip, il testo resta --color-ink. */
+  --color-cat-food: #fe6d73; /* Food & Ristoranti */
+  --color-cat-insolito: #c0afff; /* Insolito */
+  --color-cat-relax: #4cb2be; /* Relax, terme e spa */
+  --color-cat-borghi: #fdaf40; /* Borghi e città d'arte */
+  --color-cat-panoramiche: #11884f; /* Passeggiate panoramiche */
+
+  /* Semantic state tokens (error/success/warning/info) */
+  --color-error: #dc2626; /* Errori form, alerts critici */
+  --color-error-soft: #fee2e2; /* Background errore tenue */
+  --color-error-text: #991b1b; /* Errore testo readable (WCAG AA su bianco) */
+  --color-success: #16a34a; /* Successi, conferme */
+  --color-success-soft: #dcfce7; /* Background successo tenue */
+  --color-success-text: #15803d; /* Successo testo readable */
+  --color-warning: #ca8a04; /* Warning, alerts non critici */
+  --color-warning-soft: #fef9c3; /* Background warning tenue */
+  --color-warning-text: #854d0e; /* Warning testo readable */
+  --color-info: #0284c7; /* Info, suggerimenti */
+  --color-info-soft: #e0f2fe; /* Background info tenue */
+  --color-info-text: #075985; /* Info testo readable */
 
   /* Social Brand Colors */
   --color-social-instagram-start: #f09433;
@@ -36,177 +85,476 @@
   --color-affiliate-amazon: #ff9900;
   --color-affiliate-amazon-soft: #fff7ed;
 
+  /* Atlante — linguaggio taccuino promosso a sistema (2026-07-22).
+     Nati come var locali della home journal (.journal-home), ora globali
+     perché posto/registro/scheda li condividono (src/styles/atlante.css).
+     --color-atlante-timbro coincide deliberatamente con --color-accent;
+     -timbro-text è la variante AA per testo su carta calda. */
+  --color-atlante-carta: #f2ecdf; /* carta calda del taccuino */
+  --color-atlante-carta-deep: #e6ddcd; /* carta in ombra / retro pagina */
+  --color-atlante-inchiostro: #1e1c18; /* inchiostro caldo (più caldo di --color-ink) */
+  --color-atlante-notte: #17375a; /* blu notte — pagine verdetto */
+  --color-atlante-timbro: #c2410c; /* rosso timbro = --color-accent */
+  --color-atlante-timbro-text: #9a3412; /* rosso timbro leggibile su carta (AA) */
+  --color-atlante-linea: rgb(30 28 24 / 24%); /* filetti del registro */
+
   --tracking-tight: -0.025em;
   --tracking-wide: 0.05em;
+  --tracking-eyebrow: 0.18em;
 
-  /* Fluid Typography Scale */
-  --text-h1: clamp(2.75rem, 6vw + 1rem, 5.5rem);
-  --text-h2: clamp(2.25rem, 4vw + 1rem, 4rem);
-  --text-h3: clamp(1.5rem, 2vw + 1rem, 2.5rem);
-  --text-body: clamp(1rem, 0.5vw + 0.875rem, 1.125rem);
+  /* Fluid Typography Scale — Editorial Slow (Marathon FASE 1.A 2026-05-17).
+     Direzione: serif statica e contenuta 56-88px desktop, body 17/28,
+     eyebrow tracking 0.18em. */
+  --text-h1: clamp(2.25rem, 4.5vw + 0.5rem, 4rem); /* 36-64px */
+  --text-h2: clamp(1.75rem, 3vw + 0.5rem, 2.75rem); /* 28-44px */
+  --text-h3: clamp(1.375rem, 1.75vw + 0.5rem, 1.875rem); /* 22-30px */
+  --text-body: clamp(
+    1.0625rem,
+    0.15vw + 1.0625rem,
+    1.125rem
+  ); /* 17-18px (Editorial Slow body 17/28) */
+  --text-body-leading: 1.65; /* 28px / 17px = ~1.65 — leading editorial */
+  --text-eyebrow: 0.6875rem; /* 11px — eyebrow contenuto */
 
-  /* Premium Design System */
-  --radius-xl: 1.5rem;
-  --radius-2xl: 2.5rem;
-  --radius-3xl: 3rem;
-  --shadow-premium:
-    0 20px 40px -10px rgba(17, 17, 17, 0.08), 0 10px 20px -5px rgba(17, 17, 17, 0.04);
-  --shadow-glass: 0 8px 32px 0 rgba(17, 17, 17, 0.06);
-  --shadow-card-soft: 0 1px 2px rgba(17, 17, 17, 0.04), 0 8px 24px -12px rgba(17, 17, 17, 0.08);
+  /* Editorial display scale (Fraunces variable) — meno aggressivo, piu' contenuto */
+  --text-display-1: clamp(2.5rem, 5vw + 0.5rem, 5.5rem); /* 40-88px */
+  --text-display-2: clamp(2rem, 3.5vw + 0.5rem, 3.5rem); /* 32-56px */
+
+  /* Section padding — Editorial Slow respira di piu' */
+  --space-section-y: clamp(4rem, 6vw + 1rem, 7rem); /* 64-112px padding verticale */
+  --space-section-x: clamp(1.25rem, 3vw + 0.5rem, 2rem); /* 20-32px padding orizzontale */
+
+  /* Radius — product premium contenuto (10-20px) */
+  --radius-sm: 0.375rem; /* 6 */
+  --radius-md: 0.625rem; /* 10 */
+  --radius-lg: 0.875rem; /* 14 */
+  --radius-xl: 1.25rem; /* 20 */
+  --radius-2xl: 1.5rem; /* 24 — solo hero card */
+  --radius-3xl: 1.75rem; /* 28 — only feature hero */
+
+  /* Shadow — sistematici, definiti (no soft warm) */
+  --shadow-xs: 0 1px 2px rgba(10, 10, 10, 0.04);
+  --shadow-sm: 0 1px 3px rgba(10, 10, 10, 0.06), 0 1px 2px rgba(10, 10, 10, 0.04);
+  --shadow-md: 0 4px 12px rgba(10, 10, 10, 0.06), 0 2px 4px rgba(10, 10, 10, 0.04);
+  --shadow-lg: 0 12px 24px rgba(10, 10, 10, 0.08), 0 4px 8px rgba(10, 10, 10, 0.04);
+  --shadow-xl: 0 24px 48px rgba(10, 10, 10, 0.1), 0 8px 16px rgba(10, 10, 10, 0.06);
+  --shadow-premium: var(--shadow-lg); /* alias retrocompat */
+  --shadow-glass: var(--shadow-md); /* alias retrocompat */
+
+  /* Motion — snappy product premium */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration: 220ms;
+  --duration-slow: 320ms;
 }
 
 @layer utilities {
-  .text-display-1 {
-    @apply text-5xl md:text-7xl font-serif font-medium leading-tight;
-  }
-  .text-display-2 {
-    @apply text-4xl md:text-5xl font-serif leading-tight;
-  }
-  .text-eyebrow {
-    @apply text-[10px] font-bold uppercase tracking-[0.25em];
-  }
-  .text-body-lg {
-    @apply text-lg font-light leading-relaxed;
-    color: color-mix(in srgb, var(--color-ink) 60%, transparent);
-  }
-
-  /* Card tiers */
-  .card-editorial {
-    @apply rounded-2xl bg-[var(--color-surface)] shadow-sm transition-all duration-500 hover:shadow-xl hover:-translate-y-1;
-    border: 1px solid color-mix(in srgb, var(--color-ink) 5%, transparent);
-  }
-  .card-info {
-    @apply rounded-[var(--radius-xl)] bg-[var(--color-sand)] p-8 md:p-10;
-    border: 1px solid color-mix(in srgb, var(--color-ink) 5%, transparent);
-  }
-  .card-dark {
-    @apply rounded-xl border border-white/8 bg-[#1C1C1C] p-5 transition-colors hover:bg-[#242424];
-  }
-
-  /* Editorial divider */
-  .editorial-divider::before {
-    content: '';
-    display: block;
-    width: 3rem;
-    height: 1px;
-    background: var(--color-accent);
-    margin: 0 auto 2rem;
-  }
-
-  /* Gold editorial ornament — thin lines with diamond center */
-  .ornament-gold {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    margin: 0 auto;
-    width: fit-content;
-  }
-  .ornament-gold::before,
-  .ornament-gold::after {
-    content: '';
-    width: 3rem;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
-  }
-
-  /* Subtle topographic contour pattern for dark sections */
-  .bg-topo {
-    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 10c22 0 40 18 40 40s-18 40-40 40S10 72 10 50 28 10 50 10z' fill='none' stroke='%23906842' stroke-width='0.3' opacity='0.08'/%3E%3Cpath d='M50 25c14 0 25 11 25 25s-11 25-25 25-25-11-25-25 11-25 25-25z' fill='none' stroke='%23906842' stroke-width='0.3' opacity='0.06'/%3E%3C/svg%3E");
-  }
-
-  .scrollbar-hidden {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .scrollbar-hidden::-webkit-scrollbar {
-    display: none;
-  }
-
-  .overlay-editorial-strong {
+  .twu-card-scrim {
     background: linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0.06) 0%,
-      rgba(0, 0, 0, 0.2) 40%,
-      rgba(0, 0, 0, 0.76) 100%
+      to top,
+      rgb(0 0 0 / 80%) 0%,
+      rgb(0 0 0 / 25%) 45%,
+      transparent 100%
     );
   }
 
-  .guide-visual-itinerari-completi {
-    --guide-color: #6366f1;
-    --guide-soft: #eef2ff;
+  .twu-card-scrim-balanced {
+    background: linear-gradient(
+      to top,
+      rgb(0 0 0 / 80%) 0%,
+      rgb(0 0 0 / 25%) 40%,
+      transparent 100%
+    );
   }
 
-  .guide-visual-consigli-pratici {
-    --guide-color: #a8865a;
-    --guide-soft: #f3efe9;
+  .twu-card-scrim-strong {
+    background: linear-gradient(
+      to top,
+      rgb(0 0 0 / 85%) 0%,
+      rgb(0 0 0 / 25%) 40%,
+      transparent 100%
+    );
   }
 
-  .guide-visual-cosa-portare {
-    --guide-color: #059669;
-    --guide-soft: #ecfdf5;
+  .twu-cover-scrim {
+    background: linear-gradient(
+      90deg,
+      rgb(17 17 17 / 78%) 0%,
+      rgb(17 17 17 / 48%) 42%,
+      rgb(17 17 17 / 12%) 100%
+    );
   }
 
-  .guide-visual-food-guide {
-    --guide-color: #dc2626;
-    --guide-soft: #fef2f2;
+  .twu-map-scrim {
+    background: linear-gradient(
+      90deg,
+      var(--color-ink-deep) 0%,
+      rgb(17 17 17 / 72%) 22%,
+      rgb(17 17 17 / 18%) 100%
+    );
   }
 
-  .guide-visual-dove-dormire {
-    --guide-color: #7c3aed;
-    --guide-soft: #f5f3ff;
+  .twu-hero-scrim {
+    background: linear-gradient(
+      180deg,
+      rgb(17 17 17 / 18%) 0%,
+      rgb(17 17 17 / 54%) 44%,
+      rgb(17 17 17 / 88%) 100%
+    );
   }
 
-  .guide-visual-budget-costi {
-    --guide-color: #b45309;
-    --guide-soft: #fffbeb;
+  @media (width >= 48rem) {
+    .twu-hero-scrim {
+      background: linear-gradient(
+        90deg,
+        rgb(17 17 17 / 74%) 0%,
+        rgb(17 17 17 / 40%) 48%,
+        rgb(17 17 17 / 4%) 100%
+      );
+    }
   }
 
-  .guide-visual-pianificazione {
-    --guide-color: #0891b2;
-    --guide-soft: #ecfeff;
+  .twu-bottom-scrim {
+    background: linear-gradient(0deg, rgb(17 17 17 / 45%) 0%, transparent 100%);
   }
 
-  .guide-visual-weekend-day-trip {
-    --guide-color: #be185d;
-    --guide-soft: #fdf2f8;
+  .twu-dot-grid {
+    background-image: radial-gradient(
+      circle at 25% 25%,
+      rgb(255 255 255 / 18%) 1px,
+      transparent 1px
+    );
+    background-size: 22px 22px;
   }
 
-  .guide-card-dynamic {
-    border-left-color: var(--guide-color);
+  .twu-marquee-mask {
+    mask-image: linear-gradient(to right, transparent 0, black 8%, black 92%, transparent 100%);
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      black 8%,
+      black 92%,
+      transparent 100%
+    );
   }
 
-  .guide-card-dynamic.is-active {
-    background-color: var(--guide-soft);
-    border-color: var(--guide-color);
+  .text-display-1 {
+    @apply font-serif font-medium leading-[1.05] tracking-normal;
+    font-size: var(--text-display-1);
+    font-variation-settings: 'wght' 500;
+  }
+  .text-display-2 {
+    @apply font-serif leading-[1.08] tracking-normal;
+    font-size: var(--text-display-2);
+    font-variation-settings: 'wght' 420;
+  }
+  .text-eyebrow {
+    /* Editorial Slow eyebrow: 11px sans semibold, tracking 0.18em, color muted */
+    font-size: var(--text-eyebrow);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-eyebrow);
+    /* muted-fg-2 (#57534e ~7:1) invece di muted (#78716c, fallisce su surface-2):
+       l'eyebrow e' testo normale 11px e deve passare AA anche sulle card alternate. */
+    color: var(--color-muted-fg-2);
+  }
+  .text-body-lg {
+    @apply text-lg leading-relaxed text-[var(--color-ink-2)];
   }
 
-  .guide-icon-dynamic {
-    background-color: var(--guide-soft);
-    color: var(--guide-color);
+  /* Editorial Slow body — 17/28 leading editoriale per long-form articolo */
+  .text-body-editorial {
+    font-size: var(--text-body);
+    line-height: var(--text-body-leading);
+    color: var(--color-ink-2);
   }
 
-  .guide-icon-dynamic.is-active {
-    background-color: color-mix(in srgb, var(--guide-color) 13%, transparent);
+  /* Drop cap utility for editorial primitive P1 (DropCap component).
+     Applied via <span class="drop-cap"> inside the first <p> of the body
+     when the paragraph is >= 280 chars. */
+  .drop-cap {
+    float: left;
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 3.5em;
+    line-height: 0.85;
+    margin: 0.1em 0.75rem 0 0;
+    color: var(--color-ink);
+  }
+  @media (min-width: 768px) {
+    .drop-cap {
+      font-size: 4.5em;
+      margin-right: 1rem;
+    }
   }
 
-  .guide-badge-dynamic {
-    background-color: var(--guide-color);
+  .editorial-dropcap {
+    float: left;
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 3.5em;
+    line-height: 0.85;
+    margin: 0.1em 0.75rem 0 0;
+    color: var(--color-accent);
+  }
+  @media (min-width: 768px) {
+    .editorial-dropcap {
+      font-size: 4.5em;
+      margin-right: 1rem;
+    }
+  }
+
+  /* Sezione editoriale con respiro generoso */
+  .section-editorial {
+    padding-top: var(--space-section-y);
+    padding-bottom: var(--space-section-y);
+    padding-left: var(--space-section-x);
+    padding-right: var(--space-section-x);
+  }
+
+  /* Dispatch index — lista numerata 01-12 tipografica pura per homepage
+     (Editorial Slow signature, ispirato a Off Guide / Cereal index) */
+  .dispatch-index-number {
+    font-family: var(--font-sans);
+    font-size: 0.75rem; /* 12px */
+    font-weight: 600;
+    color: var(--color-muted-fg-2);
+    letter-spacing: var(--tracking-eyebrow);
+    font-variant-numeric: tabular-nums;
+    display: inline-block;
+    min-width: 2.5rem;
+  }
+
+  /* Modificatore per fondo scuro (ReelStrip su --color-ink): sabbia invece di muted-fg-2. */
+  .dispatch-index-number--invert {
+    color: color-mix(in srgb, var(--color-sand) 88%, transparent);
+  }
+
+  /* Card tiers — product premium */
+  .card-editorial {
+    @apply rounded-[var(--radius-lg)] bg-[var(--color-surface)] transition-all;
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-xs);
+    transition-duration: var(--duration);
+  }
+  .card-editorial:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+  .card-info {
+    @apply rounded-[var(--radius-lg)] bg-[var(--color-surface-2)] p-6 md:p-8;
+    border: 1px solid var(--color-border);
+  }
+  .card-dark {
+    @apply rounded-[var(--radius-md)] bg-[#171717] p-5 transition-colors;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition-duration: var(--duration);
+  }
+  .card-dark:hover {
+    background-color: #1f1f1f;
+  }
+
+  /* Subtle divider (sostituisce editorial-divider drammatico) */
+  .subtle-divider::before {
+    content: '';
+    display: block;
+    width: 2rem;
+    height: 1px;
+    background: var(--color-border);
+    margin: 0 auto 1.5rem;
   }
 }
 
-/* Image blur-up loading effect */
+/* View Transitions API — smooth crossfade between routes (Chrome 124+) */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation: 220ms cubic-bezier(0.4, 0, 0.2, 1) both twu-fade-out;
+}
+::view-transition-new(root) {
+  animation: 280ms cubic-bezier(0.4, 0, 0.2, 1) both twu-fade-in;
+}
+
+@keyframes twu-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes twu-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+/* Mapbox popup overrides: il Popup di react-map-gl crea uno stacking
+   context isolato via `transform: translate(...)`, quindi className z-[100]
+   non basta a superare la Navbar fissa (z-50) del sito. Forziamo con
+   selettore globale: il popup va SOPRA navbar, sticky CTA, cart drawer. */
+.mapboxgl-popup {
+  z-index: 110;
+}
+/* Rimuove padding/background di default del content perche la nostra
+   card Link interna ha gia il suo styling (rounded, shadow, bg-white). */
+.mapboxgl-popup-content {
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+/* Tip (arrow) coerente col bg-ink-deep della card popup. */
+.mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
+  border-top-color: var(--color-ink-deep);
+}
+.mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
+  border-bottom-color: var(--color-ink-deep);
+}
+.mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
+  border-right-color: var(--color-ink-deep);
+}
+.mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+  border-left-color: var(--color-ink-deep);
+}
+.mapboxgl-popup-anchor-top-left .mapboxgl-popup-tip {
+  border-bottom-color: var(--color-ink-deep);
+}
+.mapboxgl-popup-anchor-top-right .mapboxgl-popup-tip {
+  border-bottom-color: var(--color-ink-deep);
+}
+.mapboxgl-popup-anchor-bottom-left .mapboxgl-popup-tip {
+  border-top-color: var(--color-ink-deep);
+}
+.mapboxgl-popup-anchor-bottom-right .mapboxgl-popup-tip {
+  border-top-color: var(--color-ink-deep);
+}
+/* Close button di default: alto-destra del popup, ben sopra la nav,
+   styled con palette brand (sand + ink). */
+.mapboxgl-popup-close-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 9999px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 1;
+  z-index: 5;
+  backdrop-filter: blur(8px);
+  transition: background-color 0.2s;
+  /* Forza pointer-events sopra ogni wrapper di layout che potrebbe
+     intercettare il click in modo errato (es. <main> di Layout). */
+  pointer-events: auto !important;
+}
+.mapboxgl-popup-close-button:hover {
+  background-color: var(--color-ink);
+  color: #ffffff;
+}
+
+/* Popup mappa: deve vincere sugli overlay persistenti (chips z-10, card z-10)
+   mentre e' aperto — e' transiente e invocato dall'utente. */
+.twu-map-popup {
+  z-index: 20;
+}
+
+/* Map marker pulse — anello che cresce e dissolve, pattern Mapbox luxury */
+.twu-pulse-ring {
+  width: 14px;
+  height: 14px;
+  animation: twu-pulse 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes twu-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.6);
+    opacity: 0.7;
+  }
+  70% {
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(3.6);
+    opacity: 0;
+  }
+}
+
+@keyframes twu-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes twu-kenburns {
+  from {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.08) translate3d(0, -1.6%, 0);
+  }
+}
+
+/* Ken-Burns lento per l'hero mobile (branch statico): l'immagine "vive" senza
+   il costo WebGL, che resta desktop-only. Gated in JS a isSmall && !reduced;
+   qui il doppio guard reduced-motion sotto. */
+.twu-kenburns {
+  animation: twu-kenburns 20s var(--ease-out, ease-out) both;
+  transform-origin: center;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .twu-pulse-ring {
+    animation: none;
+    opacity: 0.4;
+  }
+
+  .twu-kenburns {
+    animation: none;
+  }
+}
+
+/* Image LQIP / blur-up loading effect */
+.img-lqip,
 .img-blur-up {
-  filter: blur(20px);
-  transform: scale(1.1);
+  background-color: var(--color-muted-bg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='30' fill='none'%3E%3Crect width='40' height='30' rx='2' fill='%23f5f0eb'/%3E%3Cpath d='M17.5 17 20 13l2.5 4z M21 17l2-2.8 2 2.8z' fill='%23e0d5c8'/%3E%3Ccircle cx='17.5' cy='12.5' r='1.2' fill='%23e0d5c8'/%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: blur(12px);
+  opacity: 0.86;
   transition:
-    filter 0.6s ease-out,
-    transform 0.6s ease-out;
+    filter 0.52s var(--ease-out),
+    opacity 0.52s var(--ease-out);
 }
+
+.img-lqip.is-loaded,
 .img-blur-up.loaded {
   filter: blur(0);
-  transform: scale(1);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .img-lqip,
+  .img-blur-up {
+    filter: none;
+    opacity: 1;
+    transition: none;
+  }
 }
 
 @layer base {
@@ -239,6 +587,1551 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Homepage editoriale — ricostruzione fedele del concept "Il montaggio delle tracce". */
+.trace-home {
+  --trace-paper: #f1eadc;
+  --trace-ink: #111311;
+  --trace-red: #bd3f23;
+  position: relative;
+  overflow: clip;
+  background: var(--trace-paper);
+  color: var(--trace-ink);
+}
+.trace-header {
+  position: absolute;
+  z-index: 20;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 108px;
+  padding: 0 clamp(2rem, 5vw, 5.5rem);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  color: #f8f1e5;
+  text-transform: uppercase;
+}
+.trace-wordmark {
+  justify-self: start;
+  font: 700 clamp(0.9rem, 1.35vw, 1.2rem)/1 var(--font-sans);
+  letter-spacing: 0.12em;
+}
+.trace-header__nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.6rem, 3.4vw, 3.6rem);
+  font-size: 0.63rem;
+  letter-spacing: 0.14em;
+}
+.trace-header a {
+  transition: opacity 180ms ease;
+}
+.trace-header a:hover {
+  opacity: 0.7;
+}
+.trace-header__cta {
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 38px;
+  padding: 0.65rem 1.2rem;
+  border: 1px solid rgb(255 255 255 / 64%);
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+}
+.trace-rail {
+  position: absolute;
+  z-index: 18;
+  top: 112px;
+  bottom: 325px;
+  left: clamp(1.9rem, 4vw, 4.1rem);
+  width: 26px;
+  pointer-events: none;
+}
+.trace-rail__start {
+  position: absolute;
+  top: 0;
+  left: 1px;
+  width: 21px;
+  height: 21px;
+  border: 2px solid white;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 5px var(--trace-red);
+}
+.trace-rail__line {
+  position: absolute;
+  top: 21px;
+  bottom: 0;
+  left: 11px;
+  width: 1px;
+  background: rgb(255 255 255 / 88%);
+}
+.trace-rail a {
+  position: absolute;
+  left: 7px;
+  width: 9px;
+  height: 9px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: var(--trace-paper);
+  color: var(--trace-ink);
+  pointer-events: auto;
+}
+.trace-rail a:nth-of-type(1) {
+  top: 40.2%;
+}
+.trace-rail a:nth-of-type(2) {
+  top: 61%;
+  background: var(--trace-ink);
+  color: var(--trace-paper);
+}
+.trace-rail a:nth-of-type(3) {
+  top: 81%;
+}
+.trace-hero {
+  position: relative;
+  min-height: clamp(660px, 52vw, 720px);
+  background: var(--trace-ink);
+  color: #f8f1e5;
+  overflow: hidden;
+}
+.trace-hero__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 42%;
+}
+.trace-hero__shade {
+  position: absolute;
+  inset: 0;
+  background: rgb(4 7 5 / 49%);
+}
+.trace-hero__content {
+  position: relative;
+  z-index: 2;
+  min-height: inherit;
+  width: min(1180px, 100%);
+  padding: 8.5rem clamp(2rem, 8.2vw, 8.5rem) 3.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+.trace-eyebrow {
+  font: 650 0.63rem/1.2 var(--font-sans);
+  letter-spacing: 0.23em;
+  text-transform: uppercase;
+}
+.trace-eyebrow--light {
+  color: #f6eee2;
+}
+.trace-hero h1 {
+  margin-top: 2.6rem;
+  font: 400 clamp(5rem, 9.1vw, 9.2rem)/0.82 var(--font-serif);
+  letter-spacing: -0.055em;
+}
+.trace-hero__content > p:not(.trace-eyebrow) {
+  margin-top: 2.4rem;
+  font: 400 clamp(1rem, 1.4vw, 1.3rem)/1.5 var(--font-serif);
+}
+.trace-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 58px;
+  margin-top: 2.4rem;
+  padding: 0.9rem 2rem;
+  font: 650 0.68rem/1 var(--font-sans);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.trace-button--accent {
+  background: var(--trace-red);
+  color: white;
+}
+.trace-button--outline {
+  border: 1px solid rgb(255 255 255 / 75%);
+  color: white;
+}
+.trace-proof {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 2.6rem;
+  font: 400 0.72rem/1.45 var(--font-serif);
+  color: rgb(255 255 255 / 86%);
+}
+.trace-proof img {
+  width: 42px;
+  height: 42px;
+  border: 2px solid rgb(255 255 255 / 75%);
+  border-radius: 50%;
+  object-fit: cover;
+}
+.trace-section {
+  min-height: 380px;
+  padding: 1rem clamp(2rem, 5vw, 5.5rem) 1rem clamp(5.5rem, 9vw, 9.5rem);
+  display: grid;
+  align-items: center;
+  gap: clamp(2rem, 4vw, 4.5rem);
+}
+.trace-section--paper {
+  grid-template-columns: minmax(80px, 0.24fr) minmax(270px, 0.72fr) minmax(420px, 1.35fr);
+  background: var(--trace-paper);
+}
+.trace-section--ink {
+  grid-template-columns: minmax(80px, 0.22fr) minmax(430px, 1.28fr) minmax(300px, 0.8fr);
+  background: var(--trace-ink);
+  color: #f5eee2;
+}
+.trace-number {
+  align-self: start;
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-transform: uppercase;
+}
+.trace-number strong {
+  font: 400 clamp(2.7rem, 4.5vw, 4.5rem)/1 var(--font-serif);
+  color: var(--trace-red);
+}
+.trace-number span {
+  font: 650 0.62rem/1 var(--font-sans);
+  letter-spacing: 0.24em;
+}
+.trace-number--light {
+  color: white;
+}
+.trace-section__copy h2 {
+  font: 400 clamp(3rem, 4.7vw, 5rem)/0.96 var(--font-serif);
+  letter-spacing: -0.04em;
+}
+.trace-section__copy p {
+  margin-top: 2rem;
+  font-size: 0.83rem;
+  line-height: 1.65;
+  color: rgb(17 19 17 / 72%);
+}
+.trace-section__copy--light p {
+  color: rgb(255 255 255 / 68%);
+}
+.trace-frame {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+}
+.trace-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.trace-frame--departure {
+  height: clamp(330px, 29vw, 390px);
+}
+.trace-frame--departure img {
+  object-position: center 36%;
+}
+.trace-frame--tavernal-small {
+  height: clamp(315px, 27vw, 370px);
+}
+.trace-frame--tavernal-wide {
+  height: clamp(315px, 27vw, 370px);
+}
+.trace-frame figcaption {
+  position: absolute;
+  right: 0.7rem;
+  bottom: 0.55rem;
+  padding: 0.25rem 0.45rem;
+  background: rgb(16 17 15 / 72%);
+  color: white;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.trace-inline-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: 1.7rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid rgb(255 255 255 / 45%);
+  font-size: 0.66rem;
+  font-weight: 650;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.trace-inline-link--dark {
+  border-color: rgb(17 19 17 / 45%);
+}
+.trace-final {
+  min-height: 220px;
+  padding: 1.6rem clamp(2rem, 5vw, 5.5rem);
+  display: grid;
+  grid-template-columns: auto 1.1fr 0.85fr 0.9fr;
+  align-items: center;
+  gap: clamp(2rem, 4vw, 4.5rem);
+  background: var(--trace-red);
+  color: white;
+}
+.trace-final h2 {
+  margin-top: 0.8rem;
+  font: 400 clamp(2.3rem, 3.5vw, 3.8rem)/1 var(--font-serif);
+}
+.trace-final .trace-button {
+  min-height: 48px;
+  margin-top: 1.5rem;
+}
+.trace-final ul {
+  display: grid;
+  gap: 0.9rem;
+  font: 400 0.76rem/1.2 var(--font-serif);
+}
+.trace-final li {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+.trace-final > img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+.trace-footer {
+  min-height: 54px;
+  padding: 0 clamp(2rem, 5vw, 5.5rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--trace-ink);
+  color: white;
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.trace-footer nav {
+  display: flex;
+  gap: 2rem;
+}
+
+@media (max-width: 900px) {
+  .trace-header {
+    height: 80px;
+    grid-template-columns: 1fr auto;
+  }
+  .trace-header__nav,
+  .trace-rail {
+    display: none;
+  }
+  .trace-header__cta {
+    min-height: 34px;
+    padding: 0.5rem 0.8rem;
+  }
+  .trace-hero {
+    min-height: 740px;
+  }
+  .trace-hero__image {
+    object-position: 64% center;
+  }
+  .trace-hero__shade {
+    background: rgb(4 7 5 / 56%);
+  }
+  .trace-hero__content {
+    padding: 9rem 1.5rem 4rem;
+    justify-content: flex-end;
+  }
+  .trace-hero h1 {
+    margin-top: 1.5rem;
+    font-size: clamp(4.4rem, 20vw, 6.7rem);
+  }
+  .trace-section,
+  .trace-section--paper,
+  .trace-section--ink {
+    min-height: 0;
+    padding: 4.5rem 1.5rem;
+    grid-template-columns: 1fr;
+    gap: 2.2rem;
+  }
+  .trace-number {
+    padding: 0;
+  }
+  .trace-section__copy h2 {
+    font-size: clamp(3rem, 14vw, 4.6rem);
+  }
+  .trace-frame {
+    height: min(110vw, 520px);
+  }
+  .trace-section--ink .trace-frame {
+    order: 3;
+  }
+  .trace-final {
+    padding: 4rem 1.5rem;
+    grid-template-columns: 1fr;
+  }
+  .trace-final > svg {
+    display: none;
+  }
+  .trace-final > img {
+    height: 240px;
+  }
+  .trace-footer {
+    min-height: 90px;
+    padding-block: 1.4rem;
+    align-items: flex-start;
+  }
+  .trace-footer nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem 1.4rem;
+  }
+}
+
+/* Homepage — Diario delle meraviglie vere. */
+.journal-home {
+  /* Alias locali → tokens atlante globali (stessi valori di sempre). */
+  --journal-paper: var(--color-atlante-carta);
+  --journal-paper-deep: var(--color-atlante-carta-deep);
+  --journal-ink: var(--color-atlante-inchiostro);
+  --journal-blue: var(--color-atlante-notte);
+  --journal-red: var(--color-atlante-timbro);
+  --journal-line: var(--color-atlante-linea);
+  position: relative;
+  min-height: 100vh;
+  overflow: clip;
+  background: #d1c6b7;
+  color: var(--journal-ink);
+}
+
+.journal-home ::selection {
+  background: var(--journal-red);
+  color: #fffaf0;
+}
+
+.journal-skip {
+  position: fixed;
+  z-index: 100;
+  top: 0.75rem;
+  left: 5.5rem;
+  transform: translateY(-180%);
+  padding: 0.7rem 1rem;
+  background: var(--journal-blue);
+  color: white;
+  font-size: 0.75rem;
+}
+
+.journal-skip:focus {
+  transform: translateY(0);
+}
+
+.journal-binding {
+  position: fixed;
+  z-index: 70;
+  inset: 0 auto 0 0;
+  width: clamp(38px, 4.6vw, 72px);
+  overflow: hidden;
+  box-shadow: 8px 0 18px rgb(33 28 20 / 22%);
+  pointer-events: none;
+}
+
+.journal-binding img {
+  width: auto;
+  max-width: none;
+  height: 100%;
+  object-fit: cover;
+  object-position: left top;
+}
+
+.journal-header {
+  position: fixed;
+  z-index: 60;
+  top: 0;
+  right: 0;
+  left: clamp(38px, 4.6vw, 72px);
+  height: 96px;
+  padding: 0 clamp(1.4rem, 5.2vw, 5.3rem);
+  display: grid;
+  grid-template-columns: minmax(210px, 1fr) auto minmax(150px, 1fr);
+  align-items: center;
+  gap: 2rem;
+  background: color-mix(in srgb, var(--journal-paper) 89%, transparent);
+  border-bottom: 1px solid rgb(30 28 24 / 22%);
+  box-shadow: 0 10px 30px rgb(52 43 31 / 5%);
+  backdrop-filter: blur(12px);
+}
+
+.journal-wordmark {
+  justify-self: start;
+  font: 600 clamp(1.55rem, 2.3vw, 2.35rem)/1 var(--font-serif);
+  letter-spacing: -0.045em;
+}
+
+.journal-nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 3.4vw, 3.5rem);
+  font: 520 0.79rem/1 var(--font-sans);
+}
+
+.journal-nav a,
+.journal-wordmark,
+.journal-progress {
+  color: var(--journal-ink);
+}
+
+.journal-nav a {
+  position: relative;
+  padding-block: 0.55rem;
+}
+
+.journal-nav a::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  content: '';
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 220ms ease;
+}
+
+.journal-nav a:hover::after,
+.journal-nav a:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.journal-progress {
+  justify-self: end;
+  font: 650 0.65rem/1 var(--font-sans);
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.journal-progress span {
+  color: rgb(30 28 24 / 48%);
+}
+
+.journal-menu {
+  display: none;
+}
+
+.journal-home > main {
+  margin-left: clamp(38px, 4.6vw, 72px);
+}
+
+.journal-hero,
+.journal-page {
+  background-color: var(--journal-paper);
+  background-image:
+    linear-gradient(104deg, rgb(255 255 255 / 16%), transparent 42%, rgb(120 89 48 / 4%)),
+    var(--atlante-carta-texture);
+  background-size:
+    auto,
+    var(--atlante-carta-tile) var(--atlante-carta-tile);
+  background-blend-mode: normal, multiply;
+}
+
+.journal-hero {
+  position: relative;
+  min-height: 100svh;
+  padding: clamp(9.8rem, 16vh, 12.3rem) clamp(2rem, 5vw, 5.25rem) 4.3rem;
+  overflow: hidden;
+}
+
+.journal-hero__copy {
+  position: relative;
+  z-index: 5;
+  width: min(49%, 740px);
+}
+
+.journal-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  font: 650 0.66rem/1.2 var(--font-sans);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--journal-red);
+}
+
+.journal-kicker::after {
+  width: 54px;
+  height: 1px;
+  content: '';
+  background: currentColor;
+}
+
+.journal-hero h1 {
+  max-width: 760px;
+  margin-top: clamp(2.5rem, 5.4vh, 4.3rem);
+  font: 430 clamp(3.6rem, 6.5vw, 7.1rem)/0.92 var(--font-serif);
+  letter-spacing: -0.06em;
+  text-wrap: balance;
+}
+
+.journal-deck {
+  max-width: 680px;
+  margin-top: clamp(1.7rem, 3.4vh, 2.5rem);
+  font: 430 clamp(1rem, 1.45vw, 1.35rem)/1.5 var(--font-sans);
+}
+
+.journal-actions {
+  margin-top: clamp(1.8rem, 3.5vh, 2.6rem);
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+}
+
+.journal-button {
+  display: inline-flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.35rem;
+  font: 650 0.74rem/1 var(--font-sans);
+  letter-spacing: 0.04em;
+  transition:
+    transform 180ms ease,
+    background-color 180ms ease,
+    color 180ms ease;
+}
+
+.journal-button:hover {
+  transform: translateY(-2px);
+}
+
+.journal-button--primary {
+  min-height: 60px;
+  padding-inline: 1.8rem;
+  background: var(--journal-red);
+  box-shadow: 0 12px 24px rgb(90 42 27 / 18%);
+  color: white;
+}
+
+.journal-button--primary:hover {
+  background: #9e3d23;
+}
+
+.journal-button--text {
+  min-height: 44px;
+  padding-inline: 0.2rem;
+  border-bottom: 1px solid var(--journal-blue);
+  color: var(--journal-blue);
+}
+
+.journal-button--ink {
+  margin-top: 2rem;
+  border: 1px solid var(--journal-ink);
+  color: var(--journal-ink);
+}
+
+.journal-button--ink:hover {
+  background: var(--journal-ink);
+  color: var(--journal-paper);
+}
+
+.journal-proof {
+  margin-top: 1.55rem;
+  font: 600 0.64rem/1.2 var(--font-sans);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(30 28 24 / 58%);
+}
+
+.journal-hero__visual {
+  position: absolute;
+  z-index: 2;
+  top: 8.2rem;
+  right: 3.4%;
+  width: 57%;
+  height: min(74vh, 760px);
+  margin: 0;
+  mask-image: radial-gradient(ellipse 80% 84% at 58% 49%, #000 70%, transparent 100%);
+}
+
+.journal-hero__visual picture,
+.journal-hero__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.journal-hero__image {
+  object-fit: cover;
+  object-position: 62% center;
+  filter: saturate(0.82) sepia(0.08) contrast(0.96);
+}
+
+.journal-hero__visual figcaption {
+  position: absolute;
+  right: 8%;
+  bottom: 3.5%;
+  padding: 0.38rem 0.52rem;
+  background: rgb(242 236 223 / 78%);
+  font-size: 0.53rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.journal-handnote {
+  position: absolute;
+  z-index: 6;
+  font: 500 clamp(1rem, 1.45vw, 1.45rem)/1.3 var(--font-script);
+  letter-spacing: 0.03em;
+  color: #334433;
+  transform: rotate(-5deg);
+}
+
+.journal-handnote--hero {
+  top: 22%;
+  right: 1.2%;
+}
+
+.journal-date {
+  position: absolute;
+  z-index: 8;
+  top: 7.2rem;
+  right: 3.8%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--journal-red);
+  border-radius: 4px;
+  font: 650 0.75rem/1 var(--font-sans);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--journal-red);
+  transform: rotate(-3deg);
+}
+
+.journal-next-peek {
+  position: absolute;
+  z-index: 4;
+  right: 0;
+  bottom: 0;
+  width: min(39vw, 610px);
+  height: 24vh;
+  min-height: 168px;
+  overflow: hidden;
+  border-top: 1px solid rgb(30 28 24 / 24%);
+  border-left: 1px solid rgb(30 28 24 / 24%);
+  border-radius: 72% 0 0 0 / 72% 0 0 0;
+  background: var(--journal-paper-deep);
+  box-shadow: -16px -14px 25px rgb(41 34 25 / 15%);
+}
+
+.journal-next-peek picture,
+.journal-next-peek img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.journal-next-peek img {
+  object-fit: cover;
+  object-position: center 54%;
+  filter: saturate(0.72) brightness(0.74);
+  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.journal-next-peek:hover img {
+  transform: scale(1.035);
+}
+
+.journal-next-peek > span {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 38%;
+  display: grid;
+  gap: 0.55rem;
+  color: white;
+  font-size: 0.58rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transform: translateY(-50%);
+}
+
+.journal-next-peek strong {
+  font: 450 clamp(1.65rem, 2.5vw, 2.7rem)/1 var(--font-serif);
+  letter-spacing: -0.04em;
+  text-transform: none;
+}
+
+.journal-scroll-cue {
+  position: absolute;
+  z-index: 8;
+  bottom: 1.75rem;
+  left: clamp(2rem, 5vw, 5.25rem);
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgb(30 28 24 / 62%);
+}
+
+.journal-step {
+  position: relative;
+  min-height: 132svh;
+  scroll-margin-top: 96px;
+  background: #d1c6b7;
+  perspective: 1500px;
+}
+
+.journal-page {
+  position: sticky;
+  top: 0;
+  min-height: 100svh;
+  overflow: hidden;
+  padding: clamp(8rem, 14vh, 10rem) clamp(2rem, 6vw, 6.5rem) 4.5rem;
+  box-shadow: 0 -18px 42px rgb(38 29 20 / 14%);
+  transform-origin: center top;
+  will-change: transform;
+}
+
+.journal-page::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  content: '';
+  background: rgb(30 28 24 / 16%);
+}
+
+.journal-folio {
+  position: absolute;
+  top: 7rem;
+  right: clamp(2rem, 5vw, 5.25rem);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: rgb(30 28 24 / 46%);
+}
+
+.journal-page--coast {
+  display: grid;
+  grid-template-columns: minmax(480px, 1.22fr) minmax(330px, 0.78fr);
+  align-items: center;
+  gap: clamp(3rem, 7vw, 8rem);
+}
+
+.journal-photo {
+  position: relative;
+  margin: 0;
+}
+
+.journal-photo picture,
+.journal-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.journal-photo img {
+  object-fit: cover;
+  filter: saturate(0.76) sepia(0.04) contrast(0.96);
+}
+
+.journal-photo figcaption {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  max-width: 230px;
+  padding: 0.55rem 0.7rem;
+  background: rgb(242 236 223 / 88%);
+  font: 600 0.58rem/1.35 var(--font-sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.journal-photo--coast {
+  height: min(69vh, 700px);
+  padding: clamp(0.65rem, 1.1vw, 1rem);
+  background: #fffaf0;
+  box-shadow: 0 18px 38px rgb(56 43 27 / 18%);
+  transform: rotate(-1.2deg);
+}
+
+.journal-chapter-copy h2,
+.journal-verdict-intro h2,
+.journal-closing-copy h2 {
+  max-width: 720px;
+  margin-top: 2.25rem;
+  font: 430 clamp(3.1rem, 5.4vw, 6rem)/0.94 var(--font-serif);
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+
+.journal-chapter-copy > p:not(.journal-kicker),
+.journal-verdict-intro > p:not(.journal-kicker),
+.journal-closing-copy > p:not(.journal-kicker) {
+  max-width: 580px;
+  margin-top: 1.75rem;
+  font-size: clamp(0.96rem, 1.2vw, 1.12rem);
+  line-height: 1.7;
+  color: rgb(30 28 24 / 72%);
+}
+
+.journal-handnote--coast {
+  right: 4.5%;
+  bottom: 8%;
+  max-width: 190px;
+}
+
+.journal-ticket {
+  position: absolute;
+  top: 18%;
+  left: 4.3%;
+  padding: 0.7rem 0.9rem;
+  border: 1px dashed var(--journal-blue);
+  background: var(--journal-paper);
+  font-size: 0.58rem;
+  font-weight: 650;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--journal-blue);
+  transform: rotate(-4deg);
+}
+
+.journal-page--story {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.82fr) minmax(500px, 1.18fr);
+  align-items: center;
+  gap: clamp(3rem, 7vw, 8rem);
+}
+
+.journal-chapter-copy--story {
+  align-self: center;
+}
+
+.journal-photo--story {
+  height: min(72vh, 720px);
+  padding: 0.75rem 0.75rem 2.6rem;
+  background: #fffaf0;
+  box-shadow: 0 18px 38px rgb(56 43 27 / 18%);
+  transform: rotate(1.1deg);
+}
+
+.journal-quote {
+  position: absolute;
+  right: 7%;
+  bottom: 3.8%;
+  padding: 1.1rem 1.25rem;
+  background: #ded1b9;
+  box-shadow: 0 7px 18px rgb(46 35 24 / 12%);
+  font: 500 clamp(1rem, 1.35vw, 1.35rem)/1.35 var(--font-script);
+  transform: rotate(-2deg);
+}
+
+.journal-page--verdict {
+  display: grid;
+  grid-template-columns: minmax(340px, 0.86fr) minmax(450px, 1.14fr);
+  grid-template-rows: 1fr auto;
+  align-items: center;
+  gap: 2rem clamp(4rem, 8vw, 9rem);
+  background: var(--journal-blue);
+  color: #f5eee2;
+}
+
+.journal-page--verdict .journal-folio {
+  color: rgb(255 255 255 / 52%);
+}
+
+.journal-kicker--light {
+  color: #e99572;
+}
+
+.journal-verdict-intro h2 {
+  max-width: 650px;
+}
+
+.journal-verdict-intro > p:not(.journal-kicker) {
+  color: rgb(255 255 255 / 68%);
+}
+
+.journal-ledger {
+  display: grid;
+  border-top: 1px solid rgb(255 255 255 / 28%);
+}
+
+.journal-ledger li {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 1.2rem;
+  padding: 1.45rem 0;
+  border-bottom: 1px solid rgb(255 255 255 / 28%);
+}
+
+.journal-ledger li > span {
+  font: 430 1.65rem/1 var(--font-serif);
+  color: #e99572;
+}
+
+.journal-ledger strong {
+  font: 480 clamp(1.5rem, 2vw, 2.1rem)/1 var(--font-serif);
+}
+
+.journal-ledger p {
+  margin-top: 0.4rem;
+  font-size: 0.81rem;
+  color: rgb(255 255 255 / 62%);
+}
+
+.journal-map-card {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1.3rem;
+  min-height: 96px;
+  padding: 1.2rem 1.5rem;
+  border: 1px solid rgb(255 255 255 / 34%);
+  background: rgb(255 255 255 / 5%);
+  transition:
+    background-color 180ms ease,
+    transform 180ms ease;
+}
+
+.journal-map-card:hover {
+  background: rgb(255 255 255 / 10%);
+  transform: translateY(-2px);
+}
+
+.journal-map-card span {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.journal-map-card small {
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgb(255 255 255 / 60%);
+}
+
+.journal-map-card strong {
+  font: 470 clamp(1.35rem, 2vw, 2rem)/1.1 var(--font-serif);
+}
+
+.journal-page--closing {
+  display: grid;
+  grid-template-columns: minmax(360px, 0.9fr) minmax(430px, 1.1fr);
+  grid-template-rows: 1fr auto;
+  align-items: center;
+  gap: 3rem clamp(4rem, 9vw, 10rem);
+  background: #d9cdbb;
+}
+
+.journal-closing-copy > svg {
+  margin-bottom: 1.6rem;
+  color: var(--journal-red);
+}
+
+.journal-closing-copy h2 {
+  max-width: 700px;
+}
+
+.journal-closing-actions {
+  display: grid;
+  border-top: 1px solid var(--journal-line);
+}
+
+.journal-closing-link {
+  display: grid;
+  grid-template-columns: 42px 1fr auto;
+  align-items: center;
+  gap: 1.2rem;
+  min-height: 92px;
+  border-bottom: 1px solid var(--journal-line);
+  transition:
+    padding-inline 220ms ease,
+    color 220ms ease;
+}
+
+.journal-closing-link:hover {
+  padding-inline: 0.75rem;
+  color: var(--journal-red);
+}
+
+.journal-closing-link span {
+  font-size: 0.61rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  color: var(--journal-red);
+}
+
+.journal-closing-link strong {
+  font: 470 clamp(1.35rem, 2vw, 2rem)/1.1 var(--font-serif);
+}
+
+.journal-footer {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--journal-line);
+  font-size: 0.59rem;
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.journal-footer span:first-child {
+  font: 560 1.25rem/1 var(--font-serif);
+  letter-spacing: -0.03em;
+  text-transform: none;
+}
+
+.journal-page-dots {
+  position: fixed;
+  z-index: 55;
+  top: 50%;
+  right: 1.05rem;
+  display: grid;
+  gap: 0.7rem;
+  transform: translateY(-50%);
+}
+
+.journal-page-dots a {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+}
+
+.journal-page-dots span {
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgb(30 28 24 / 32%);
+  transition:
+    width 180ms ease,
+    height 180ms ease,
+    background-color 180ms ease;
+}
+
+.journal-page-dots a[aria-current='step'] span {
+  width: 9px;
+  height: 9px;
+  background: var(--journal-red);
+}
+
+/* Copertina — scheda di verifica del posto in evidenza (disclosure) */
+.journal-scheda-block {
+  max-width: 560px;
+  margin-top: 1.6rem;
+}
+
+.journal-scheda-panel {
+  margin-top: 1rem;
+  padding: 1.15rem 1.3rem;
+  border: 1px solid var(--journal-line);
+  background: rgb(255 250 240 / 74%);
+  box-shadow: 0 10px 24px rgb(52 43 31 / 8%);
+}
+
+.journal-scheda-panel .journal-button--text {
+  margin-top: 0.9rem;
+}
+
+/* Pagina 02 — Il registro (indice vivo dei posti provati).
+   Statica, non sticky: un registro lungo dentro lo stack sticky del
+   page-turn verrebbe coperto dalla pagina successiva sui viewport bassi.
+   Coerente con la copertina, anch'essa statica. */
+.journal-page--registry {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 2.1rem;
+  min-height: 100svh;
+  scroll-margin-top: 96px;
+}
+
+.journal-page--registry .atlante-ledger {
+  max-width: 1180px;
+}
+
+@media (width >= 68rem) {
+  .journal-page--registry .atlante-ledger {
+    grid-template-columns: 1fr 1fr;
+    column-gap: clamp(2.5rem, 5vw, 5rem);
+  }
+}
+
+.journal-registry-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.2rem 1.6rem;
+}
+
+/* .journal-button--ink porta un margin-top pensato per i capitoli editoriali;
+   dentro la riga azioni del registro non serve. */
+.journal-registry-actions .journal-button {
+  margin-top: 0;
+}
+
+/* Pagina 04 — Noi */
+.journal-page--noi {
+  display: grid;
+  align-content: center;
+  justify-items: start;
+}
+
+.journal-handnote--noi {
+  position: static;
+  margin-top: 1.6rem;
+  transform: rotate(-3deg);
+}
+
+/* Peek tipografico verso la pagina successiva (nessuna immagine) */
+.journal-next-peek--text {
+  display: grid;
+  align-content: center;
+  padding-left: 32%;
+}
+
+.journal-next-peek--text > span {
+  position: static;
+  transform: none;
+  color: var(--journal-ink);
+}
+
+@media (max-width: 1100px) {
+  .journal-header {
+    grid-template-columns: 1fr auto auto;
+  }
+
+  .journal-nav {
+    gap: 1.5rem;
+  }
+
+  .journal-hero__copy {
+    width: 53%;
+  }
+
+  .journal-hero h1 {
+    font-size: clamp(3.5rem, 6.7vw, 5.6rem);
+  }
+
+  .journal-page--coast,
+  .journal-page--story,
+  .journal-page--verdict,
+  .journal-page--closing {
+    gap: 3rem;
+  }
+
+  .journal-page--coast,
+  .journal-page--story {
+    grid-template-columns: minmax(400px, 1.05fr) minmax(300px, 0.95fr);
+  }
+}
+
+@media (max-width: 820px) {
+  .journal-binding {
+    width: 16px;
+  }
+
+  .journal-home > main {
+    margin-left: 16px;
+  }
+
+  .journal-header {
+    left: 16px;
+    height: 74px;
+    padding-inline: 1.1rem;
+    grid-template-columns: 1fr auto auto;
+    gap: 0.85rem;
+  }
+
+  .journal-wordmark {
+    font-size: clamp(1.28rem, 5.2vw, 1.6rem);
+  }
+
+  .journal-nav {
+    display: none;
+  }
+
+  .journal-progress {
+    font-size: 0.54rem;
+  }
+
+  .journal-menu {
+    position: relative;
+    display: block;
+  }
+
+  .journal-menu summary {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    place-items: center;
+    border: 1px solid rgb(30 28 24 / 28%);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .journal-menu summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .journal-menu nav {
+    position: absolute;
+    top: calc(100% + 0.7rem);
+    right: 0;
+    width: min(70vw, 250px);
+    padding: 0.55rem 1rem;
+    display: grid;
+    background: #f8f1e5;
+    border: 1px solid var(--journal-line);
+    box-shadow: 0 18px 36px rgb(43 34 24 / 16%);
+  }
+
+  .journal-menu nav a {
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--journal-line);
+    font-size: 0.78rem;
+  }
+
+  .journal-menu nav a:last-child {
+    border-bottom: 0;
+  }
+
+  .journal-hero {
+    min-height: 900px;
+    padding: 7.2rem 1.2rem 3.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .journal-hero__copy {
+    width: 100%;
+  }
+
+  .journal-kicker {
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+  }
+
+  .journal-kicker::after {
+    width: 30px;
+  }
+
+  .journal-hero h1 {
+    max-width: 620px;
+    margin-top: 2rem;
+    font-size: clamp(3rem, 13.6vw, 5.25rem);
+    line-height: 0.93;
+  }
+
+  .journal-deck {
+    margin-top: 1.35rem;
+    font-size: 0.96rem;
+  }
+
+  .journal-actions {
+    margin-top: 1.45rem;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .journal-button--primary {
+    min-height: 54px;
+  }
+
+  .journal-proof {
+    margin-top: 1.1rem;
+    font-size: 0.54rem;
+  }
+
+  .journal-hero__visual {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: calc(100% + 2.4rem);
+    height: 330px;
+    margin: 2.3rem -1.2rem -3.5rem;
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 12%, #000 100%);
+  }
+
+  .journal-hero__visual figcaption {
+    right: 1rem;
+    bottom: 1rem;
+  }
+
+  .journal-date {
+    top: 5.25rem;
+    right: 1.3rem;
+    padding: 0.5rem 0.65rem;
+    font-size: 0.56rem;
+  }
+
+  .journal-handnote--hero,
+  .journal-next-peek,
+  .journal-scroll-cue,
+  .journal-page-dots {
+    display: none;
+  }
+
+  .journal-step {
+    min-height: 0;
+  }
+
+  .journal-page {
+    position: relative;
+    min-height: auto;
+    padding: 6.5rem 1.2rem 4.5rem;
+    transform: none !important;
+    will-change: auto;
+  }
+
+  .journal-folio {
+    top: 5.2rem;
+    right: 1.25rem;
+  }
+
+  .journal-page--coast,
+  .journal-page--story,
+  .journal-page--verdict,
+  .journal-page--closing {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 2.4rem;
+  }
+
+  .journal-photo--coast,
+  .journal-photo--story {
+    height: min(112vw, 560px);
+  }
+
+  .journal-chapter-copy h2,
+  .journal-verdict-intro h2,
+  .journal-closing-copy h2 {
+    margin-top: 1.7rem;
+    font-size: clamp(3rem, 13.5vw, 5rem);
+  }
+
+  .journal-chapter-copy > p:not(.journal-kicker),
+  .journal-verdict-intro > p:not(.journal-kicker),
+  .journal-closing-copy > p:not(.journal-kicker) {
+    margin-top: 1.35rem;
+    font-size: 0.94rem;
+  }
+
+  .journal-page--coast .journal-chapter-copy {
+    order: -1;
+  }
+
+  .journal-handnote--coast {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    max-width: none;
+    margin-top: -1rem;
+    justify-self: end;
+  }
+
+  .journal-ticket {
+    top: auto;
+    bottom: 3.1rem;
+    left: 1.25rem;
+  }
+
+  .journal-page--story .journal-photo {
+    order: -1;
+  }
+
+  .journal-quote {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    max-width: 90%;
+    margin-top: -1rem;
+    justify-self: end;
+  }
+
+  .journal-page--verdict {
+    padding-bottom: 4rem;
+  }
+
+  .journal-ledger li {
+    grid-template-columns: 38px 1fr;
+    padding-block: 1.2rem;
+  }
+
+  .journal-map-card {
+    grid-column: 1;
+  }
+
+  .journal-footer {
+    grid-column: 1;
+    flex-wrap: wrap;
+    gap: 0.8rem 1.5rem;
+  }
+
+  .journal-scheda-block {
+    max-width: none;
+  }
+}
+
+@media (max-width: 410px) {
+  .journal-progress span {
+    display: none;
+  }
+
+  .journal-hero {
+    min-height: 860px;
+  }
+
+  .journal-hero h1 {
+    font-size: clamp(2.85rem, 13vw, 3.5rem);
+  }
+
+  .journal-hero__visual {
+    height: 300px;
+  }
+
+  .journal-chapter-copy h2,
+  .journal-verdict-intro h2,
+  .journal-closing-copy h2 {
+    font-size: clamp(2.8rem, 13vw, 3.7rem);
+  }
+
+  .journal-map-card {
+    grid-template-columns: 1fr auto;
+  }
+
+  .journal-map-card > svg:first-child {
+    display: none;
+  }
+
+  .journal-closing-link {
+    grid-template-columns: 32px 1fr auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .journal-page,
+  .journal-button,
+  .journal-closing-link,
+  .journal-next-peek img {
+    transform: none !important;
+    transition: none !important;
+  }
 }
 
 h1,
@@ -284,19 +2177,23 @@ html {
   }
 }
 
-/* Editorial drop-cap — first paragraph of an article body. */
-.prose-reset > p:first-of-type::first-letter {
-  font-family: var(--font-serif);
-  font-weight: 600;
-  font-size: 3.4em;
-  line-height: 0.86;
-  float: left;
-  margin: 0.14em 0.1em 0 0;
-  color: var(--color-ink);
-}
-@media (min-width: 768px) {
-  .prose-reset > p:first-of-type::first-letter {
-    font-size: 4.2em;
-    margin: 0.12em 0.12em 0 0;
+@theme inline {
+  --animate-marquee: marquee var(--duration) infinite linear;
+  --animate-marquee-vertical: marquee-vertical var(--duration) linear infinite;
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
+  @keyframes marquee-vertical {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc(-100% - var(--gap)));
+    }
   }
 }

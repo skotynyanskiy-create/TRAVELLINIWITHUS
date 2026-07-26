@@ -1,17 +1,22 @@
+---
+type: reference
+area: workspace
+status: active
+---
+
 # TRAVELLINIWITHUS — Quick Start Guide for Developers
 
-**Last Updated**: 2026-04-24
+**Last Updated**: 2026-03-20  
 **Status**: 🟢 Ready to Develop
-**Scope**: onboarding developer. Per AI-assisted workflow vedi `CLAUDE.md` + `AGENTS.md`. Per security/contributing vedi `SECURITY.md` + `CONTRIBUTING.md`.
 
 ---
 
 ## Prerequisites
 
-- **Node.js**: >= 22 (LTS). Il progetto usa syntax/feature Node 22; 18/20 non supportati.
-- **npm**: >= 10.9 (bundled con Node 22)
-- **Git**: any recent version
-- **IDE**: VS Code. All'apertura del repo, VS Code proporrà le estensioni raccomandate in `.vscode/extensions.json` (ESLint, Prettier, Tailwind, Playwright, Vitest, GitLens).
+- **Node.js**: >= 18.x
+- **npm**: >= 9.x
+- **Git**: Latest version
+- **IDE**: VS Code recommended
 
 ---
 
@@ -20,25 +25,21 @@
 ### Clone & Install
 
 ```bash
-git clone https://github.com/skotynyanskiy-create/TRAVELLINIWITHUS.git
-cd TRAVELLINIWITHUS
+git clone https://github.com/yourusername/travelliniwithus.git
+cd travelliniwithus
 npm install
 ```
 
 ### Create Environment File
 
 ```bash
-# Copy template (committed) to local file (gitignored)
-cp .env.example .env.local
+# Copy template
+cp .env.local.template .env.local
 
-# Edit .env.local only when needed. The site runs with ZERO keys set —
-# every integration is guard-clause gated (see .env.example header).
-# For pure frontend dev you don't need to fill anything.
-# For checkout testing: set ALLOW_MOCK_CHECKOUT=true.
+# Edit .env.local with your Firebase & Stripe keys
+# Get Firebase config from: Firebase Console → Project Settings
+# Get Stripe keys from: Stripe Dashboard → API Keys
 ```
-
-Do not commit `.env.local` — it's in `.gitignore` and the Claude Code
-PreToolUse hook blocks reading/writing it.
 
 ### Start Development Server
 
@@ -46,8 +47,7 @@ PreToolUse hook blocks reading/writing it.
 npm run dev
 ```
 
-Server runs on `http://localhost:3000` (the `.vscode/tasks.json` task
-overrides PORT to 3001 for VS Code's launch target).
+Server runs on `http://localhost:3001` (see `package.json` PORT env var)
 
 ---
 
@@ -240,7 +240,7 @@ const STATIC_APP_ROUTES = new Set([
 ### 4.5 Test Newsletter Submission
 
 ```bash
-# 1. Open http://localhost:3000
+# 1. Open http://localhost:3001
 # 2. Scroll to newsletter section
 # 3. Enter email
 # 4. Check Firebase Console → Firestore → leads collection
@@ -304,8 +304,8 @@ Firebase Console → Your Project
 
 ```bash
 # Solution: Make sure .env.local has Firebase keys
-cp .env.example .env.local
-# Fill in your Firebase config (or leave blank — app degrades gracefully)
+cp .env.local.template .env.local
+# Fill in your Firebase config
 ```
 
 **Error: "Admin access denied"**
@@ -337,32 +337,31 @@ const ADMIN_EMAILS = ['your-email@example.com', 'other@example.com'];
 
 ## 6. Testing Locally
 
-Full E2E suite docs live in [`../e2e/README.md`](../e2e/README.md). Short version:
-
-### Run Unit Tests (Vitest)
+### Run Unit Tests
 
 ```bash
-npm run test            # 8 test files under src/
+npm run test
+
+# Watch mode
+npm run test:watch
+
+# Coverage
+npm run test:coverage
 ```
 
-Scripts `test:watch` and `test:coverage` aren't defined in `package.json` —
-use `npx vitest --watch` or `npx vitest run --coverage` directly if needed.
-
-### Run E2E Tests (Playwright)
+### Run E2E Tests
 
 ```bash
-# Full suite — Playwright auto-starts the dev server
+# Start dev server first
+npm run dev
+
+# In another terminal:
 npm run e2e
 
-# Targeted audits (already in package.json)
-npm run audit:visual    # visual regression
-npm run audit:a11y      # axe-core smoke
-npm run audit:forms     # newsletter / contact / media-kit
+# Or run specific test
+npm run e2e -- shop-and-checkout.spec.ts
 
-# Single spec
-npx playwright test e2e/home.spec.ts
-
-# UI mode
+# Visual mode (interactive)
 npx playwright test --ui
 ```
 
@@ -408,28 +407,24 @@ Admin
 
 ## 7. Git Workflow
 
-See [`../CONTRIBUTING.md`](../CONTRIBUTING.md) for the full branching,
-commit, and Definition-of-Done policy. Short version:
-
 ```bash
-# Branch prefix: codex/ feat/ fix/ chore/ docs/ refactor/
-git checkout -b feat/my-feature
+# Create feature branch
+git checkout -b feature/my-feature
 
-# Stage specific files (avoid `git add .`)
-git add src/components/MyFeature.tsx
+# Make changes, commit
+git add .
+git commit -m "feat: add my feature"
 
-# Conventional commit style
-git commit -m "feat(scope): add my feature"
+# Push to GitHub
+git push origin feature/my-feature
 
-# Push
-git push -u origin feat/my-feature
+# Create Pull Request on GitHub
+# Peer review, then merge to main
 
-# Open PR via gh
-gh pr create --fill
+# Back local
+git checkout main
+git pull origin main
 ```
-
-Husky pre-commit runs `lint-staged` (ESLint max-warnings=0 + Prettier)
-automatically.
 
 ---
 
@@ -473,12 +468,15 @@ Happy coding! 🚀
 
 ---
 
-## Recent changes
+## Recent Fixes Applied
 
-Release history is tracked in [`../CHANGELOG.md`](../CHANGELOG.md). Project
-state and release gates are in
-[`10_Projects/PROJECT_RELEASE_READINESS.md`](./10_Projects/PROJECT_RELEASE_READINESS.md)
-and its latest snapshot
-[`PROJECT_RELEASE_READINESS_2026_04_24_PRODUCTION_PASS.md`](./10_Projects/PROJECT_RELEASE_READINESS_2026_04_24_PRODUCTION_PASS.md).
+- ✅ **FIX #1**: `/shop/:slug` routing restored (was redirecting to `/risorse`)
+- ✅ **FIX #2**: Firestore security rules verified (solid)
+- ✅ **FIX #3**: Stripe checkout verified (needs STRIPE_SECRET_KEY env var)
+- ✅ **FIX #4**: Error tracking module added (`lib/errorTracking.ts`)
+- ✅ **FIX #5**: Deployment runbook created
+- ✅ **FIX #6**: .env.local.template created
+- ✅ **FIX #7**: Checkout E2E tests added
+- ✅ **FIX #8**: This Quick Start guide created
 
 **Status**: 🟢 Ready for development & testing

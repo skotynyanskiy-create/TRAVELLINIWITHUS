@@ -1,28 +1,10 @@
 import type { Timestamp } from 'firebase/firestore';
-import type {
-  ArticleBudgetBand,
-  ArticleDisclosureType,
-  ArticleFeaturedPlacement,
-  ArticleType,
-  HotelRecommendation,
-} from '../components/article';
-import { ARTICLE_TYPES } from '../components/article';
+import type { ContentReview, PartnershipKind } from '@/src/types/content';
 
-type ArticleShopCta = {
-  productType: 'maps' | 'presets' | 'ebook';
-  productUrl: string;
-  count?: number;
-};
-
-export type { ArticleShopCta };
-
-const SHOP_CTA_PRODUCT_TYPES: readonly ArticleShopCta['productType'][] = [
-  'maps',
-  'presets',
-  'ebook',
-];
-
-const DEFAULT_ARTICLE_IMAGE = '/images/hero-amalfi.png';
+// .webp e non .png: 253 KB invece di 1,19 MB per lo stesso pixel. Non .avif
+// perche questo valore finisce anche in og:image, e i crawler social non lo
+// leggono tutti.
+const DEFAULT_ARTICLE_IMAGE = '/images/hero-amalfi.webp';
 
 const asString = (value: unknown) => (typeof value === 'string' ? value.trim() : '');
 
@@ -33,59 +15,6 @@ const asStringArray = (value: unknown) =>
 
 const asTimestamp = (value: unknown) =>
   value && typeof value === 'object' && 'toDate' in value ? (value as Timestamp) : undefined;
-
-const asEnum = <T extends string>(value: unknown, allowed: readonly T[]): T | undefined => {
-  if (typeof value !== 'string') {
-    return undefined;
-  }
-
-  return allowed.includes(value as T) ? (value as T) : undefined;
-};
-
-const normalizeArticleType = (value: unknown, category: string): ArticleType => {
-  const explicit = asEnum(value, ARTICLE_TYPES);
-  if (explicit) return explicit;
-  if (value === 'article') return 'guide';
-  if (category === 'Itinerari completi' || category === 'Weekend & Day trip') return 'itinerary';
-  return 'guide';
-};
-
-const normalizeDisclosureType = (value: unknown): ArticleDisclosureType | undefined => {
-  const explicit = asEnum(value, ['none', 'affiliate', 'sponsored', 'gifted', 'partner']);
-  if (explicit) return explicit;
-
-  if (value === 'Affiliazioni') return 'affiliate';
-  if (value === 'Ospitati') return 'gifted';
-  if (value === 'Pagato') return 'sponsored';
-  if (value === 'Viaggio personale') return 'none';
-  return undefined;
-};
-
-const inferBudgetBand = (value: string): ArticleBudgetBand | undefined => {
-  const normalized = value.trim().toLowerCase();
-
-  if (!normalized) {
-    return undefined;
-  }
-
-  if (normalized.includes('econom') || normalized.includes('basso') || normalized.includes('low')) {
-    return 'Economico';
-  }
-
-  if (
-    normalized.includes('alto') ||
-    normalized.includes('lusso') ||
-    normalized.includes('premium')
-  ) {
-    return 'Alto';
-  }
-
-  if (normalized.includes('medio') || normalized.includes('standard')) {
-    return 'Medio';
-  }
-
-  return undefined;
-};
 
 type NumberTuple = [number, number];
 type ArticleMapMarker = {
@@ -171,11 +100,15 @@ export interface NormalizedArticle {
   slug: string;
   excerpt: string;
   description: string;
+  review?: ContentReview;
+  /** Trasparenza partnership (AGCOM/IAP) — assente/'organic' = nessun badge mostrato. */
+  partnership?: { kind: PartnershipKind; partner?: string };
   content: string;
   image: string;
   coverImage: string;
+  /** La cover può essere resa come asset editoriale solo dopo verifica esplicita. */
+  imageVerified?: boolean;
   category: string;
-  type: ArticleType;
   published: boolean;
   author?: string;
   authorId?: string;
@@ -185,17 +118,12 @@ export interface NormalizedArticle {
   location: string;
   period: string;
   budget: string;
-  budgetBand?: ArticleBudgetBand;
   country?: string;
   region?: string;
   city?: string;
   continent?: string;
   experienceTypes?: string[];
-  tripIntents?: string[];
   readTime?: string;
-  verifiedAt?: Timestamp;
-  disclosureType?: ArticleDisclosureType;
-  featuredPlacement?: ArticleFeaturedPlacement | null;
   isMarkdown: boolean;
   tips?: string[];
   packingList?: string[];
@@ -212,62 +140,7 @@ export interface NormalizedArticle {
   mapZoom?: number;
   duration?: string;
   videoUrl?: string;
-  hotels?: HotelRecommendation[];
-  shopCta?: ArticleShopCta;
 }
-
-const asHotelArray = (value: unknown): HotelRecommendation[] | undefined => {
-  if (!Array.isArray(value)) return undefined;
-
-  const hotels: HotelRecommendation[] = [];
-
-  for (const item of value) {
-    if (!item || typeof item !== 'object') continue;
-    const record = item as Record<string, unknown>;
-    const name = asString(record.name);
-    const image = asString(record.image);
-    const bookingUrl = asString(record.bookingUrl);
-
-    if (!name || !image || !bookingUrl) continue;
-
-    const hotel: HotelRecommendation = { name, image, bookingUrl };
-    const category = asString(record.category);
-    const priceHint = asString(record.priceHint);
-    const badge = asString(record.badge);
-
-    if (category) hotel.category = category;
-    if (priceHint) hotel.priceHint = priceHint;
-    if (badge) hotel.badge = badge;
-    if (typeof record.rating === 'number') hotel.rating = record.rating;
-
-    hotels.push(hotel);
-  }
-
-  return hotels.length > 0 ? hotels : undefined;
-};
-
-const asShopCta = (value: unknown): ArticleShopCta | undefined => {
-  if (!value || typeof value !== 'object') return undefined;
-  const record = value as Record<string, unknown>;
-  const productType = record.productType;
-  const productUrl = asString(record.productUrl);
-
-  if (
-    typeof productType !== 'string' ||
-    !SHOP_CTA_PRODUCT_TYPES.includes(productType as ArticleShopCta['productType'])
-  ) {
-    return undefined;
-  }
-  if (!productUrl) return undefined;
-
-  const cta: ArticleShopCta = {
-    productType: productType as ArticleShopCta['productType'],
-    productUrl,
-  };
-
-  if (typeof record.count === 'number') cta.count = record.count;
-  return cta;
-};
 
 export function normalizeFirestoreArticle(
   id: string,
@@ -287,7 +160,6 @@ export function normalizeFirestoreArticle(
   const region = asString(data.region) || undefined;
   const city = asString(data.city) || undefined;
   const continent = asString(data.continent) || undefined;
-  const budget = asString(data.budget) || 'Da definire';
   const location =
     asString(data.location) ||
     [country, region, city].filter(Boolean).join(', ') ||
@@ -296,7 +168,6 @@ export function normalizeFirestoreArticle(
     'Destinazione';
   const createdAt = asTimestamp(data.createdAt);
   const updatedAt = asTimestamp(data.updatedAt);
-  const verifiedAt = asTimestamp(data.verifiedAt);
   const date =
     createdAt?.toDate?.()?.toLocaleDateString('it-IT', {
       day: 'numeric',
@@ -313,30 +184,28 @@ export function normalizeFirestoreArticle(
     content: asString(data.content),
     image,
     coverImage,
+    imageVerified: data.imageVerified === true ? true : undefined,
     category,
-    type: normalizeArticleType(data.type, category),
     published: data.published === true,
+    review: data.review ? (data.review as ContentReview) : undefined,
+    partnership:
+      data.partnership && typeof data.partnership === 'object'
+        ? (data.partnership as { kind: PartnershipKind; partner?: string })
+        : undefined,
     author: asString(data.author) || undefined,
     authorId: asString(data.authorId) || undefined,
     date,
     createdAt,
     updatedAt,
-    verifiedAt,
     location,
     period: asString(data.period) || 'Tutto l anno',
-    budget,
-    budgetBand: asEnum(data.budgetBand, ['Economico', 'Medio', 'Alto']) ?? inferBudgetBand(budget),
+    budget: asString(data.budget) || 'Da definire',
     country,
     region,
     city,
     continent,
     experienceTypes: asStringArray(data.experienceTypes),
-    tripIntents: asStringArray(data.tripIntents) ?? asStringArray(data.experienceTypes),
     readTime: asString(data.readTime) || undefined,
-    disclosureType: normalizeDisclosureType(data.disclosureType),
-    featuredPlacement:
-      asEnum(data.featuredPlacement, ['home-flagship', 'hub-destination', 'hub-experience']) ??
-      null,
     isMarkdown: true,
     tips: asStringArray(data.tips),
     packingList: asStringArray(data.packingList),
@@ -409,7 +278,5 @@ export function normalizeFirestoreArticle(
     mapZoom: typeof data.mapZoom === 'number' ? data.mapZoom : undefined,
     duration: asString(data.duration) || undefined,
     videoUrl: asString(data.videoUrl) || undefined,
-    hotels: asHotelArray(data.hotels),
-    shopCta: asShopCta(data.shopCta),
   };
 }

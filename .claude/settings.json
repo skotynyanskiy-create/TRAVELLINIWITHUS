@@ -1,56 +1,139 @@
 {
-  "enableAllProjectMcpServers": true,
-  "hooks": {
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash -c 'echo \"[BARC] Prima di agire: ricerca/read-only -> code-explorer (haiku). Single-file edit -> subagent sonnet o edit diretto. Refactor multi-file / debug ostico -> opus con giustificazione. Second-opinion indipendente o fresh-eyes review -> codex() via MCP. Regole in CLAUDE.md #Smart-Routing-Protocol e #Claude-Codex-delegation.\"'"
-          }
-        ]
-      }
+  "effortLevel": "medium",
+  "enableAllProjectMcpServers": false,
+  "enabledMcpjsonServers": [
+    "firebase",
+    "stripe",
+    "sentry",
+    "playwright",
+    "chrome-devtools",
+    "context7",
+    "github",
+    "obsidian",
+    "codex",
+    "higgsfield"
+  ],
+  "permissions": {
+    "allow": [
+      "Bash(npm run typecheck)",
+      "Bash(npm run lint)",
+      "Bash(npm run lint:md)",
+      "Bash(npm run format:check)",
+      "Bash(npm run test:*)",
+      "Bash(npm run build)",
+      "Bash(npm run audit:*)",
+      "Bash(npm run graphify:query:*)",
+      "Bash(npm run graphify:affected:*)",
+      "Bash(npm run graphify:explain:*)",
+      "Bash(npm run graphify:check)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git ls-files:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(git branch --show-current)",
+      "Bash(git check-ignore:*)",
+      "Bash(ls:*)",
+      "Bash(node --version)",
+      "Bash(npm --version)",
+      "mcp__obsidian__obsidian_list_files_in_vault",
+      "mcp__obsidian__obsidian_list_files_in_dir",
+      "mcp__obsidian__obsidian_get_file_contents",
+      "mcp__obsidian__obsidian_batch_get_file_contents",
+      "mcp__obsidian__obsidian_simple_search",
+      "mcp__obsidian__obsidian_complex_search",
+      "mcp__obsidian__obsidian_get_recent_changes",
+      "mcp__obsidian__obsidian_get_recent_periodic_notes",
+      "mcp__obsidian__obsidian_get_periodic_note",
+      "mcp__firebase__firestore_list_collections",
+      "mcp__firebase__firestore_list_databases",
+      "mcp__firebase__firestore_list_documents",
+      "mcp__firebase__firestore_get_document",
+      "mcp__firebase__firestore_query_collection",
+      "mcp__firebase__firebase_get_project",
+      "mcp__firebase__firebase_list_projects",
+      "mcp__firebase__firebase_list_apps",
+      "mcp__firebase__firebase_get_security_rules",
+      "mcp__firebase__firebase_get_environment",
+      "mcp__firebase__firebase_get_sdk_config",
+      "mcp__firebase__firebase_validate_security_rules"
     ],
+    "deny": [
+      "Bash(rm -rf:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git clean -fd:*)",
+      "Bash(git clean -f:*)",
+      "Bash(npm publish:*)",
+      "Bash(git filter-branch:*)",
+      "Bash(git stash clear:*)",
+      "Bash(git stash drop:*)",
+      "Edit(firestore.rules)",
+      "Write(firestore.rules)",
+      "Edit(src/config/admin.ts)",
+      "Write(src/config/admin.ts)",
+      "mcp__firebase__firestore_delete_database",
+      "mcp__firebase__firestore_delete_document",
+      "mcp__firebase__firestore_delete_index",
+      "mcp__firebase__firebase_deploy",
+      "mcp__firebase__auth_update_user",
+      "mcp__stripe__stripe_api_write",
+      "mcp__stripe__create_refund",
+      "mcp__obsidian__obsidian_delete_file",
+      "mcp__github__merge_pull_request",
+      "mcp__github__push_files"
+    ]
+  },
+  "hooks": {
     "PreToolUse": [
       {
         "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'CMD=\"$CLAUDE_TOOL_INPUT\"; if echo \"$CMD\" | grep -qE \"rm\\s+-rf|git\\s+push\\s+--force|git\\s+reset\\s+--hard|git\\s+clean\\s+-f|DROP\\s+TABLE|firebase\\s+deploy\\s+--project\\s+prod\"; then echo \"BLOCKED / BLOCCATO: Risky command detected. Ask owner before proceeding. — Comando pericoloso rilevato. Chiedi conferma al proprietario prima di procedere.\" >&2; exit 2; fi'"
+            "command": "py \"$CLAUDE_PROJECT_DIR/scripts/hooks/block_dangerous_bash.py\""
           }
         ]
       },
       {
-        "matcher": "Edit|Write",
+        "matcher": "Edit|Write|MultiEdit",
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'FILE=\"$CLAUDE_FILE_PATH\"; if echo \"$FILE\" | grep -qE \"server\\.ts$|firestore\\.rules$|src/config/admin\\.ts$\"; then echo \"⚠ HIGH-RISK FILE / FILE AD ALTO RISCHIO: $FILE. Double-check the change before continuing. — Verifica attentamente le modifiche prima di procedere.\" >&2; fi'"
-          },
-          {
-            "type": "command",
-            "command": "bash -c 'FILE=\"$CLAUDE_FILE_PATH\"; if echo \"$FILE\" | grep -qE \"package-lock\\.json$|firebase-applet-config\\.json$|\\.firebaserc$|vercel\\.json$|firebase\\.json$\"; then echo \"⚠ DEPLOY / LOCKFILE: $FILE. Modifica intenzionale? Se no, rigenera invece di editare a mano.\" >&2; fi'"
+            "command": "py \"$CLAUDE_PROJECT_DIR/scripts/hooks/config_protection.py\""
           }
         ]
-      },
+      }
+    ],
+    "SessionStart": [
       {
-        "matcher": "Edit|Write|Read",
+        "matcher": "*",
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'FILE=\"$CLAUDE_FILE_PATH\"; if echo \"$FILE\" | grep -qE \"\\.env\\.local$|\\.env\\.production$|\\.env\\.development\\.local$|service-account.*\\.json$|serviceAccount.*\\.json$|.*\\.pem$|.*private.*key.*\"; then echo \"BLOCKED / BLOCCATO: secret file $FILE. Non leggere/scrivere direttamente. Usa .env.example come riferimento o chiedi al proprietario.\" >&2; exit 2; fi'"
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$root=$PWD.Path; Write-Host '--- TRAVELLINIWITHUS session health check ---'; try { $port = (Invoke-WebRequest -Uri 'http://localhost:3000' -UseBasicParsing -TimeoutSec 1 -ErrorAction Stop).StatusCode; Write-Host \"dev server: localhost:3000 reachable ($port)\" } catch { Write-Host 'dev server: not running (run: npm run dev)' }; if (Test-Path \"$root/.git\") { $branch = git -C $root rev-parse --abbrev-ref HEAD; $dirty = (git -C $root status --porcelain | Measure-Object -Line).Lines; Write-Host \"branch: $branch | dirty files: $dirty\" }; if (Test-Path \"$root/.env\") { Write-Host '.env: present' } else { Write-Host '.env: MISSING' }; Write-Host '---'\""
           }
         ]
       }
     ],
     "PostToolUse": [
       {
-        "matcher": "Edit|Write",
+        "matcher": "Task|Agent",
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'FILE=\"$CLAUDE_FILE_PATH\"; if echo \"$FILE\" | grep -qE \"\\.(ts|tsx)$\" && ! echo \"$FILE\" | grep -qE \"\\.test\\.|\\.spec\\.|^e2e/|/e2e/\"; then echo \"💡 TS edited: $FILE — ricordati npm run typecheck prima del commit.\" >&2; fi'"
+            "command": "py \"$CLAUDE_PROJECT_DIR/scripts/hooks/routing_log.py\""
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "py \"$CLAUDE_PROJECT_DIR/scripts/hooks/loop_detector.py\""
           }
         ]
       }

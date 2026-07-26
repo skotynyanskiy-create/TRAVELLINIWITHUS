@@ -13,44 +13,53 @@ tags:
 # Obsidian Home — Travellini
 
 Questo vault è il sistema operativo editoriale e strategico di Travellini.
-Apri `docs/` con **Open folder as vault** e imposta questa nota come home.
+Apri `C:\Users\ccocu\Desktop\TRAVELLINIWITHUS\docs` con **Open folder as
+vault**. La home è `OBSIDIAN_HOME`; codice e dipendenze restano nella root del
+repository e sono indicizzati separatamente da Graphify.
 
 ---
 
 ## Cabina di regia
 
 - [[OBSIDIAN_DASHBOARD]] — priorità, contenuti in corso, SEO, pipeline
+- [[OBSIDIAN_INDEX]] — indice completo delle note operative
 - [[MARKETING_OPERATIONS_HUB]] — campagne, partner, content
+- [[BRAND_KNOWLEDGE_MOC]] — **mappa brand / social / Family / presence**
+- [[VAULT_AND_GRAPHIFY_OPERATING_STATE]] — Obsidian + Graphify dual-graph
+- [[OBSIDIAN_PLUGIN_CONFIG_AUDIT_2026-07-23]] — plugin, settings, sicurezza, pulizia
 
 ---
 
 ## Fast paths
 
+I link seguenti aprono i modelli canonici. Duplicali nella cartella indicata
+prima di compilare la nuova nota.
+
 ### Editoriale
 
-- nuovo articolo: [[90_Templates/TPL_Article]]
-- nuova guida destinazione: [[90_Templates/TPL_Destination_Guide]]
-- nuovo itinerario: [[90_Templates/TPL_Itinerary]]
-- nuovo luogo/hotel: [[90_Templates/TPL_Place]]
+- modello articolo: [[90_Templates/TPL_Article]]
+- modello guida destinazione: [[90_Templates/TPL_Destination_Guide]]
+- modello itinerario: [[90_Templates/TPL_Itinerary]]
+- modello luogo/hotel: [[90_Templates/TPL_Place]]
 
 ### Commerciale
 
-- nuovo prodotto shop: [[90_Templates/TPL_Product]]
-- nuova collaborazione: [[90_Templates/TPL_Collaboration]]
-- nuova campagna: [[90_Templates/TPL_Campaign]]
+- modello prodotto shop: [[90_Templates/TPL_Product]]
+- modello collaborazione: [[90_Templates/TPL_Collaboration]]
+- modello campagna: [[90_Templates/TPL_Campaign]]
 
 ### SEO e social
 
-- nuova SEO page: [[90_Templates/TPL_SEO_Page]]
+- modello SEO page: [[90_Templates/TPL_SEO_Page]]
 - web clip rapida: [[90_Templates/TPL_Web_Clip]]
 - design reference: [[90_Templates/TPL_Design_Reference]]
 
 ### Sito e operazioni
 
-- nuova feature sito: [[90_Templates/TPL_Project]]
-- tweak UI: [[90_Templates/TPL_UI_Change]]
-- nuovo bug: [[90_Templates/TPL_Bug]]
-- nuova decisione: [[90_Templates/TPL_Decision]]
+- modello feature sito: [[90_Templates/TPL_Project]]
+- modello tweak UI: [[90_Templates/TPL_UI_Change]]
+- modello bug: [[90_Templates/TPL_Bug]]
+- modello decisione: [[90_Templates/TPL_Decision]]
 - cattura rapida: [[50_Scratch/INBOX]]
 
 ---
@@ -59,19 +68,26 @@ Apri `docs/` con **Open folder as vault** e imposta questa nota come home.
 
 ### Editoriale
 
-- [[60_Editorial/]] — articoli, guide, itinerari, destinazioni
-- [[80_SEO/]] — keyword e audit pagine sito
-- [[86_Social/]] — content calendar Instagram/TikTok
+- [[13_Content/]] — pillar, calendari, lead magnet, brief contenuti
+- [[95_Bases/Editorial_Archive.base|Archivio editoriale]] — articoli, guide, itinerari
+- [[95_Bases/SEO_Pages.base|SEO pagine]] — keyword e audit pagine sito
+- [[95_Bases/Social_Calendar.base|Social calendar]] — Instagram, TikTok, newsletter
 
 ### Brand e visual
 
-- [[70_Brand/]] — voce, personas, visual reference
-- [[87_References/]] — competitor, design, luoghi, trend
+- [[BRAND_KNOWLEDGE_MOC]] — hub canonico (parti da qui)
+- [[BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS]] — handle e metriche pubbliche
+- [[BRAND_TRAVELLINI_FAMILY]] — sub-brand Family (parte del progetto)
+- [[13_Content/DOSSIER_PRESENZA_ONLINE_TRAVELLINIWITHUS_2026-07-23]] — ricerca presence
+- [[BRAND_MESSAGING_STRATEGY]] — voce, personas, messaging
+- [[TRAVELLINIWITHUS_BRAND_MEMORY]] — memoria brand estesa (verificare date)
+- [[70_Assets/]] — asset, immagini, materiali di supporto
 
 ### Commerciale
 
-- [[85_Shop/]] — prodotti e affiliati
+- [[11_Campaigns/]] — campagne marketing
 - [[12_Partnerships/]] — collaborazioni brand
+- [[95_Bases/Shop_Products.base|Prodotti shop]] — prodotti e affiliati
 
 ### Sito e operazioni
 
@@ -106,21 +122,6 @@ Apri `docs/` con **Open folder as vault** e imposta questa nota come home.
 - [[OBSIDIAN_TAXONOMY]] — naming e properties standard
 - [[OBSIDIAN_WORKFLOW]] — tutti i flussi operativi
 - [[AGENT_WORKFLOWS]] — workflow con Claude/AI
-- [[AI_AGENT_STACK]] — stack AI: shared skills, Claude-only, routing rules
-- [[DESIGN_SYSTEM_CHEATSHEET]] — token CSS, componenti, motion presets (ready reference UI)
-- [[ARCHITECTURE]] — mappa stack, struttura src/, data flow, API, CI/CD, security boundaries
-- [[DEV_TOOLING]] — CLI + MCP server + plugin: cosa è installato, cosa no, perché
-- [[TROUBLESHOOTING]] — diagnosi rapida problemi comuni (dev server, Firebase, Stripe, build, test, Claude Code hooks)
-
-## Repo governance (fuori vault)
-
-- [../README.md](../README.md) — overview repo
-- [../CLAUDE.md](../CLAUDE.md) — Claude Code operating rules + BARC routing
-- [../AGENTS.md](../AGENTS.md) — shared rules cross-tool
-- [../DESIGN.md](../DESIGN.md) — design-system source
-- [../CONTRIBUTING.md](../CONTRIBUTING.md) — setup, branching, Definition of Done
-- [../SECURITY.md](../SECURITY.md) — secret policy + responsible disclosure
-- [../CHANGELOG.md](../CHANGELOG.md) — release log
 
 ---
 

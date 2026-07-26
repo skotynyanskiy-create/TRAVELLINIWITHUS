@@ -1,12 +1,10 @@
 {
   "compilerOptions": {
     "target": "ES2022",
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
     "module": "ESNext",
-    "lib": [
-      "ES2022",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
     "moduleResolution": "bundler",
     "isolatedModules": true,
@@ -14,12 +12,26 @@
     "allowJs": true,
     "jsx": "react-jsx",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./*"]
     },
     "allowImportingTsExtensions": true,
-    "noEmit": true
+    "resolveJsonModule": true,
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
   },
-  "include": ["src"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "docs",
+    "backups",
+    "claude-plugins-official",
+    ".claude",
+    "lighthouse",
+    "components",
+    "src/components/animate-ui",
+    "src/components/kokonutui",
+    "src/components/ui/3d-marquee.tsx",
+    "src/components/ui/bento-grid.tsx"
+  ]
 }

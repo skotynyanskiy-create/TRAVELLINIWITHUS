@@ -1,4 +1,3 @@
-import React from 'react';
 import { Document, Link, Page, StyleSheet, Text, View } from '@react-pdf/renderer';
 
 export interface MediaKitStat {
@@ -230,22 +229,14 @@ export function MediaKitDocument({
       <Page size="A4" style={styles.page}>
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Audience snapshot</Text>
-          {audienceStats.length > 0 ? (
-            <View style={styles.grid}>
-              {audienceStats.map((stat) => (
-                <View key={stat.label} style={styles.statCard}>
-                  <Text style={styles.statValue}>{stat.value}</Text>
-                  <Text style={styles.statLabel}>{stat.label}</Text>
-                </View>
-              ))}
-            </View>
-          ) : (
-            <Text>
-              I dati audience aggiornati vengono condivisi su richiesta quando sono disponibili con
-              data di aggiornamento e contesto corretto. Preferiamo non inserire metriche non
-              verificate nel PDF generato automaticamente.
-            </Text>
-          )}
+          <View style={styles.grid}>
+            {audienceStats.map((stat) => (
+              <View key={stat.label} style={styles.statCard}>
+                <Text style={styles.statValue}>{stat.value}</Text>
+                <Text style={styles.statLabel}>{stat.label}</Text>
+              </View>
+            ))}
+          </View>
         </View>
 
         <View style={styles.section}>

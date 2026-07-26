@@ -1,4 +1,5 @@
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { Link } from '@/src/components/TransitionLink';
 import { ChevronRight, Home } from 'lucide-react';
 import JsonLd from './JsonLd';
 
@@ -41,10 +42,10 @@ export default function Breadcrumbs({ items, className }: BreadcrumbsProps) {
       <JsonLd data={breadcrumbSchema} />
       <nav
         aria-label="Breadcrumb"
-        className={`flex items-center text-xs uppercase tracking-widest font-semibold text-black/50 mb-8 overflow-x-auto whitespace-nowrap pb-2 ${className ?? ''}`}
+        className={`flex items-center text-[11px] uppercase tracking-[0.18em] font-semibold text-black/65 mb-8 whitespace-nowrap overflow-hidden pb-2 ${className ?? ''}`}
       >
-        <ol className="flex items-center space-x-2">
-          <li>
+        <ol className="flex items-center space-x-2 min-w-0">
+          <li className="shrink-0">
             <Link
               to="/"
               className="hover:text-[var(--color-accent)] transition-colors flex items-center gap-1"
@@ -56,10 +57,16 @@ export default function Breadcrumbs({ items, className }: BreadcrumbsProps) {
           {items.map((item, index) => {
             const isLast = index === items.length - 1;
             return (
-              <li key={item.label} className="flex items-center space-x-2">
-                <ChevronRight size={14} className="text-black/30" />
+              <li
+                key={item.label}
+                className={`flex items-center space-x-2 ${isLast ? 'min-w-0' : 'shrink-0'}`}
+              >
+                <ChevronRight size={14} className="text-black/30 shrink-0" />
                 {isLast || !item.href ? (
-                  <span className="text-black/80" aria-current="page">
+                  <span
+                    className={`text-black/80 ${isLast ? 'overflow-hidden text-ellipsis whitespace-nowrap' : ''}`}
+                    aria-current="page"
+                  >
                     {item.label}
                   </span>
                 ) : (

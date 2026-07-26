@@ -1,18 +1,24 @@
+import { useState } from 'react';
 import { motion, MotionValue } from 'motion/react';
-import { Clock, Share2, CheckCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Clock, Heart, Share2, CheckCircle } from 'lucide-react';
+import { Link } from '@/src/components/TransitionLink';
 import OptimizedImage from '../OptimizedImage';
+import { heartPulse } from '../../lib/animations';
 import type { ArticleData } from './types';
-import { ARTICLE_DISCLOSURE_LABELS } from './types';
+import RatingPill from '../RatingPill';
+import { PARTNERSHIP_LABEL } from '@/src/types/content';
 
 interface ArticleHeroProps {
   article: ArticleData;
   authorName: string;
   readingTime: string;
   categoryPath: string;
+  isSaved: boolean;
   copied: boolean;
+  onToggleFavorite: () => void;
   onShare: () => void;
   yHero: MotionValue<number>;
+  slug?: string;
 }
 
 export default function ArticleHero({
@@ -20,23 +26,41 @@ export default function ArticleHero({
   authorName,
   readingTime,
   categoryPath,
+  isSaved,
   copied,
+  onToggleFavorite,
   onShare,
   yHero,
+  slug,
 }: ArticleHeroProps) {
+  const [pulseKey, setPulseKey] = useState(0);
+
+  const handleFavorite = () => {
+    setPulseKey((k) => k + 1);
+    onToggleFavorite();
+  };
+
   return (
     <header className="relative h-[70vh] md:h-[85vh] w-full flex items-end pb-20 overflow-hidden">
       <div className="absolute inset-0 z-0 bg-black">
-        <motion.div style={{ y: yHero, scale: 1.1 }} className="w-full h-full origin-top">
+        <motion.div
+          style={{
+            y: yHero,
+            scale: 1.1,
+            ...(slug ? { viewTransitionName: `article-${slug}` } : {}),
+          }}
+          className="w-full h-full origin-top"
+        >
           <OptimizedImage
             src={article.image}
-            alt={article.title}
-            className="w-full h-full object-cover saturate-[0.85] brightness-[0.8]"
+            alt={article.imageAlt ?? `${article.location} — ${article.category}`}
+            className="w-full h-full object-cover saturate-[0.9] brightness-[0.88]"
+            priority
             fetchPriority="high"
             decoding="async"
           />
         </motion.div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 w-full text-white">
@@ -44,34 +68,59 @@ export default function ArticleHero({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="max-w-3xl"
+          className="max-w-4xl"
         >
-          <div className="flex flex-wrap items-center gap-4 mb-8 text-[10px] uppercase tracking-[0.2em] font-bold">
-            <Link
-              to={categoryPath}
-              className="bg-accent text-white px-4 py-1.5 rounded-full shadow-lg shadow-accent/20"
-            >
-              {article.category}
-            </Link>
-            {article.type === 'pillar' && (
-              <span className="rounded-full border border-white/40 bg-white/10 px-4 py-1.5 text-white backdrop-blur-sm">
-                Guida completa
+          {article.partnership && article.partnership.kind !== 'organic' && (
+            <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/15 backdrop-blur-md px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-white">
+              {PARTNERSHIP_LABEL[article.partnership.kind]}
+              {article.partnership.partner && (
+                <span className="font-normal normal-case tracking-normal text-white/80">
+                  · in collaborazione con {article.partnership.partner}
+                </span>
+              )}
+            </p>
+          )}
+
+          <div className="flex flex-wrap items-center gap-4 mb-8">
+            {categoryPath ? (
+              <Link
+                to={categoryPath}
+                className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/80 transition-colors hover:text-white"
+              >
+                {article.category}
+              </Link>
+            ) : (
+              <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/80">
+                {article.category}
               </span>
             )}
             <span className="w-8 h-px bg-white/30"></span>
-            <span className="flex items-center gap-2 text-white/80">
+            <span className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/80">
               <Clock size={14} /> {readingTime} di lettura
             </span>
+            {article.review?.overall != null && (
+              <>
+                <span className="w-8 h-px bg-white/30"></span>
+                <RatingPill overall={article.review.overall} tone="dark" />
+              </>
+            )}
           </div>
 
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif leading-[1.1] mb-8 tracking-tight">
+          <h1 className="text-[clamp(2.25rem,6vw,3rem)] md:text-7xl lg:text-8xl font-serif leading-[1.1] mb-8 tracking-tight">
             {article.title}
           </h1>
 
           <div className="flex flex-wrap items-center gap-8 text-sm text-white/70 font-light">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-xs font-semibold uppercase tracking-widest">
-                TWU
+              {/* Monogramma al posto della foto: nessun ritratto della coppia
+                  finché non esiste uno scatto reale certificato (truth rule). */}
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 bg-[var(--color-atlante-carta)]">
+                <span
+                  aria-hidden="true"
+                  className="font-serif text-[13px] font-semibold tracking-tight text-[var(--color-atlante-inchiostro)]"
+                >
+                  R&amp;B
+                </span>
               </div>
               <span>
                 Di <strong className="font-medium text-white">{authorName}</strong>
@@ -80,28 +129,25 @@ export default function ArticleHero({
             <div className="w-[1px] h-4 bg-white/20 hidden sm:block"></div>
             <span>{article.date}</span>
           </div>
-
-          {(article.disclosureType || article.verifiedAt || article.verifiedContext) && (
-            <div className="mt-5 flex flex-wrap items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-white/85">
-              {article.disclosureType && (
-                <span className="rounded-full border border-white/18 bg-white/10 px-3 py-1.5">
-                  {ARTICLE_DISCLOSURE_LABELS[article.disclosureType] ?? article.disclosureType}
-                </span>
-              )}
-              {(article.verifiedContext || article.verifiedAt) && (
-                <span className="rounded-full border border-[var(--color-accent)]/50 bg-[var(--color-accent)]/14 px-3 py-1.5">
-                  {article.verifiedContext
-                    ? `Verificato · ${article.verifiedContext}`
-                    : 'Verificato sul posto'}
-                </span>
-              )}
-            </div>
-          )}
         </motion.div>
       </div>
 
       {/* Floating Action Buttons */}
-      <div className="absolute bottom-10 right-10 z-20 flex gap-3">
+      <div className="absolute bottom-10 right-10 z-20 hidden md:flex gap-3">
+        <button
+          onClick={handleFavorite}
+          aria-label={isSaved ? 'Rimuovi dai preferiti' : 'Salva nei preferiti'}
+          className={`w-14 h-14 rounded-full backdrop-blur-xl border flex items-center justify-center transition-all duration-500 ${isSaved ? 'bg-accent text-white border-[var(--color-accent)]' : 'bg-white/10 text-white border-white/20 hover:bg-white/20'}`}
+        >
+          <motion.span
+            key={pulseKey}
+            variants={heartPulse}
+            animate="beat"
+            className="flex items-center justify-center"
+          >
+            <Heart size={24} className={isSaved ? 'fill-current' : ''} />
+          </motion.span>
+        </button>
         <button
           onClick={onShare}
           aria-label="Condividi articolo"

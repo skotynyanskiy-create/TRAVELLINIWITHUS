@@ -6,7 +6,30 @@ import tseslint from 'typescript-eslint';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 
 export default tseslint.config(
-  { ignores: ['dist', 'playwright-report', 'test-results'] },
+  {
+    // Junk/quarantine dirs (mirror of tsconfig "exclude"): third-party clones,
+    // stray project drops, and dead V2 scaffolding awaiting owner triage.
+    ignores: [
+      '.claude',
+      '.obsidian',
+      'docs/.obsidian',
+      'dist',
+      'playwright-report',
+      'test-results',
+      'storybook-static',
+      'coverage',
+      'lighthouse',
+      'claude-plugins-official',
+      'calendlex',
+      'components',
+      'backups',
+      '.remember',
+      'src/components/animate-ui',
+      'src/components/kokonutui',
+      'src/components/ui/3d-marquee.tsx',
+      'src/components/ui/bento-grid.tsx',
+    ],
+  },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended, jsxA11y.flatConfigs.recommended],
     files: ['**/*.{ts,tsx}'],
@@ -22,20 +45,17 @@ export default tseslint.config(
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': 'off',
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-
-      // A11y — regole critiche WCAG AA come errore
-      'jsx-a11y/alt-text': 'error',
-      'jsx-a11y/anchor-is-valid': 'error',
-      'jsx-a11y/aria-props': 'error',
-      'jsx-a11y/aria-role': 'error',
-      'jsx-a11y/aria-unsupported-elements': 'error',
-      'jsx-a11y/click-events-have-key-events': 'error',
-      'jsx-a11y/img-redundant-alt': 'error',
-      'jsx-a11y/no-autofocus': 'error',
-      'jsx-a11y/no-noninteractive-element-interactions': 'warn',
-      'jsx-a11y/no-redundant-roles': 'error',
-      'jsx-a11y/role-has-required-aria-props': 'error',
-      'jsx-a11y/role-supports-aria-props': 'error',
+    },
+  },
+  {
+    // React Three Fiber (src/experience): useFrame e' un render loop imperativo,
+    // fuori dalla reconciliation di React. Mutare ogni frame oggetti persistenti
+    // (Vector3 creati con useMemo) e' il pattern ufficiale R3F per evitare
+    // allocazioni nel loop. La regola react-compiler `immutability` non modella
+    // questo escape hatch e produrrebbe falsi positivi.
+    files: ['src/experience/**/*.{ts,tsx}'],
+    rules: {
+      'react-hooks/immutability': 'off',
     },
   }
 );

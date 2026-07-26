@@ -1,5 +1,5 @@
 ---
-type: monthly-report
+type: report
 area: marketing
 status: active
 priority: p2
@@ -12,7 +12,7 @@ tags:
   - marketing
 ---
 
-# REPORT_<yyyy-mm>_marketing
+# REPORT\_<yyyy-mm>\_marketing
 
 ## Summary
 
@@ -26,15 +26,15 @@ tags:
 
 ## Wins
 
-- 
+-
 
 ## Issues
 
-- 
+-
 
 ## Actions for next month
 
-- [ ] 
+- [ ]
 
 ## Links
 

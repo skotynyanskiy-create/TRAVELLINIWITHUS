@@ -2,13 +2,13 @@ name: CI
 
 on:
   push:
-    branches: [ main, 'codex/**', 'feat/**', 'fix/**' ]
+    branches: [ main, 'codex/**', 'feat/**', 'fix/**', 'audit/**', 'chore/**', 'wip/**' ]
   pull_request:
     branches: [ main ]
 
 jobs:
   quality:
-    name: Typecheck · Lint · Test · Build
+    name: Typecheck · Lint · Test · Build · Static audits
     runs-on: ubuntu-latest
 
     steps:
@@ -30,12 +30,18 @@ jobs:
         run: npm run lint
 
       - name: Unit tests
-        run: npm run test
+        run: npm run test:unit
 
       - name: Production build
         run: npm run build
         env:
           VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
+
+      - name: Audit agent stack
+        run: npm run audit:agents
+
+      - name: Audit Obsidian vault
+        run: npm run audit:obsidian
 
       - name: Audit UI
         run: npm run audit:ui
@@ -46,8 +52,20 @@ jobs:
       - name: Audit Stripe
         run: npm run audit:stripe
 
-  audit-agents:
-    name: Audit Agent Stack
+      - name: Audit env safety
+        run: npm run audit:env
+
+      - name: Audit public footprint
+        run: npm run audit:public-footprint
+
+      - name: Audit revenue security
+        run: npm run audit:revenue
+
+      - name: Audit bundle size
+        run: npm run audit:size
+
+  lighthouse:
+    name: Core Web Vitals · Lighthouse budgets
     runs-on: ubuntu-latest
 
     steps:
@@ -62,13 +80,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Audit agent stack sync
-        run: npm run audit:agents
+      - name: Lighthouse CI (perf · a11y · CLS budgets)
+        run: npm run audit:cwv
+        env:
+          VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
 
-  audit-visual:
-    name: Audit Visual (Playwright)
+  e2e:
+    name: Playwright e2e + visual quality
     runs-on: ubuntu-latest
-    needs: quality
 
     steps:
       - uses: actions/checkout@v4
@@ -82,33 +101,39 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Cache Playwright browsers
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            playwright-${{ runner.os }}-
-
-      - name: Install Playwright browsers (Chromium)
+      - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Build
-        run: npm run build
+      - name: Run e2e + visual quality
+        run: npm run e2e
         env:
           VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
 
-      - name: Run visual audit
-        run: npm run audit:visual
-        env:
-          VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
-
-      - name: Upload visual audit artifacts
-        if: always()
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
-          name: visual-audit-report
-          path: |
-            playwright-report/
-            test-results/
-          retention-days: 14
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  secrets:
+    name: Secret scan (working tree)
+    runs-on: ubuntu-latest
+
+    steps:
+      # Shallow checkout + no npm ci: scans only the committed source tree,
+      # never node_modules. --no-git skips history, so the redacted legacy
+      # GCP-key findings tracked in docs/AI_OPERATIONS_DASHBOARD.md (Open Risks)
+      # don't fail every run — this gate catches NEW leaks in shipping code.
+      - uses: actions/checkout@v4
+
+      - name: Install gitleaks
+        run: |
+          VERSION=8.30.1
+          curl -sSL -o /tmp/gitleaks.tar.gz "https://github.com/gitleaks/gitleaks/releases/download/v${VERSION}/gitleaks_${VERSION}_linux_x64.tar.gz"
+          tar -xzf /tmp/gitleaks.tar.gz -C /usr/local/bin gitleaks
+          gitleaks version
+
+      - name: Scan working tree
+        run: gitleaks detect --no-git --redact --source . --exit-code 1

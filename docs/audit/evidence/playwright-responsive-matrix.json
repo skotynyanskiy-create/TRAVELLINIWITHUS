@@ -1,0 +1,65 @@
+[
+  {
+    "viewport": "320x568",
+    "width": 320,
+    "height": 568,
+    "hasHorizontalOverflow": false,
+    "status": "PASS"
+  },
+  {
+    "viewport": "375x812",
+    "width": 375,
+    "height": 812,
+    "hasHorizontalOverflow": false,
+    "status": "PASS"
+  },
+  {
+    "viewport": "390x844",
+    "width": 390,
+    "height": 844,
+    "hasHorizontalOverflow": false,
+    "status": "PASS"
+  },
+  {
+    "viewport": "768x1024",
+    "width": 768,
+    "height": 1024,
+    "hasHorizontalOverflow": false,
+    "status": "PASS"
+  },
+  {
+    "viewport": "1024x768",
+    "width": 1024,
+    "height": 768,
+    "hasHorizontalOverflow": false,
+    "status": "PASS"
+  },
+  {
+    "viewport": "1366x768",
+    "width": 1366,
+    "height": 768,
+    "hasHorizontalOverflow": false,
+    "status": "PASS"
+  },
+  {
+    "viewport": "1440x900",
+    "width": 1440,
+    "height": 900,
+    "hasHorizontalOverflow": false,
+    "status": "PASS"
+  },
+  {
+    "viewport": "1920x1080",
+    "width": 1920,
+    "height": 1080,
+    "hasHorizontalOverflow": false,
+    "status": "PASS"
+  },
+  {
+    "viewport": "2560x1440",
+    "width": 2560,
+    "height": 1440,
+    "hasHorizontalOverflow": false,
+    "status": "PASS"
+  }
+]

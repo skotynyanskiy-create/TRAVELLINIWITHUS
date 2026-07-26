@@ -1,7 +1,7 @@
 ---
 type: release
 area: delivery
-status: active
+status: draft
 priority: p2
 owner:
 due:
@@ -12,17 +12,17 @@ tags:
   - delivery
 ---
 
-# RELEASE_<yyyy-mm-dd>_<topic>
+# RELEASE*<yyyy-mm-dd>*<topic>
 
 ## Scope
 
 ## Included changes
 
-- 
+-
 
 ## Risks
 
-- 
+-
 
 ## Checks
 
@@ -32,7 +32,7 @@ tags:
 
 ## Follow-up
 
-- 
+-
 
 ## Links
 

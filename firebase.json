@@ -2,6 +2,16 @@
   "hosting": {
     "public": "dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "redirects": [
+      { "source": "/vieni-con-noi", "destination": "/guida-in-regalo", "type": 301 },
+      { "source": "/italia-nascosta", "destination": "/guida-in-regalo", "type": 301 },
+      { "source": "/iscrivi", "destination": "/guida-in-regalo", "type": 301 },
+      { "source": "/blog", "destination": "/esplora", "type": 301 },
+      { "source": "/atlante", "destination": "/", "type": 301 },
+      { "source": "/v2", "destination": "/", "type": 301 },
+      { "source": "/atlante-lab", "destination": "/", "type": 301 },
+      { "source": "/sentiero", "destination": "/", "type": 301 }
+    ],
     "rewrites": [
       {
         "source": "**",
@@ -18,17 +28,48 @@
         "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
       },
       {
+        "source": "**/*.@(webp|avif|png|jpg|jpeg|svg|gif|ico)",
+        "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+      },
+      {
+        "source": "**/og/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=2592000, stale-while-revalidate=86400"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(pdf|webm|mp4)",
+        "headers": [{ "key": "Cache-Control", "value": "public, max-age=2592000" }]
+      },
+      {
         "source": "**",
         "headers": [
           { "key": "X-Content-Type-Options", "value": "nosniff" },
           { "key": "X-Frame-Options", "value": "DENY" },
-          { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+          { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+          {
+            "key": "Strict-Transport-Security",
+            "value": "max-age=63072000; includeSubDomains; preload"
+          },
+          {
+            "key": "Permissions-Policy",
+            "value": "camera=(), microphone=(), geolocation=(self), payment=(self \"https://js.stripe.com\"), interest-cohort=()"
+          },
+          { "key": "Cross-Origin-Opener-Policy", "value": "same-origin-allow-popups" },
+          {
+            "key": "Content-Security-Policy",
+            "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://js.stripe.com https://m.stripe.network https://connect.facebook.net https://www.facebook.com https://apis.google.com https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://api.mapbox.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' https: blob:; connect-src 'self' https://*.googleapis.com wss://*.firebaseio.com https://*.firebaseio.com https://*.firebasestorage.app https://identitytoolkit.googleapis.com https://api.stripe.com https://m.stripe.network https://api.mapbox.com https://events.mapbox.com https://www.facebook.com https://www.google-analytics.com; frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.facebook.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+          }
         ]
       }
     ]
   },
   "firestore": {
+    "database": "ai-studio-541b3c8a-a8b9-4ff7-9ced-35c593bd5e5b",
     "rules": "firestore.rules",
-    "database": "ai-studio-541b3c8a-a8b9-4ff7-9ced-35c593bd5e5b"
+    "indexes": "firestore.indexes.json"
   }
 }

@@ -12,68 +12,112 @@ tags:
 
 # Travellini — Dashboard
 
+> [!tip] Inizia da qui
+> [[50_Scratch/INBOX|Cattura un’idea o un follow-up]] ·
+> [[OBSIDIAN_WORKFLOW|Apri le routine operative]] ·
+> [[MARKETING_OPERATIONS_HUB|Vai al marketing hub]]
+
 ## Focus settimanale
 
-> *Cosa pubblichiamo questa settimana? Qual è la priorità sito? Chi contattare?*
+> _Cosa pubblichiamo questa settimana? Qual è la priorità sito? Chi contattare?_
 
-**Settimana del**: 
-**Focus editoriale**: 
-**Focus sito**: 
-**Follow-up commerciale**: 
+**Settimana del**: 2026-07-23
+
+**Focus editoriale**: lead magnet 10 luoghi + proof library top Reel (Burton/KL/Bled)
+
+**Focus sito**: release gate + holding live vs repo — [[10_Projects/PROJECT_RELEASE_READINESS]]
+
+**Focus brand/vault**: coerenza presence + Family — [[BRAND_KNOWLEDGE_MOC]] · [[VAULT_AND_GRAPHIFY_OPERATING_STATE]]
+
+**Follow-up commerciale**: affiliazioni + bio IG/TT verso hub owned (non solo Linktree)
 
 ---
 
 ## Contenuti in corso
 
-![[95_Bases/Editorial_Archive.base#In Progress]]
+```dataview
+TABLE status, priority, pillar
+FROM "13_Content"
+WHERE type = "content-brief" AND (status = "in-progress" OR status = "draft")
+SORT priority ASC
+```
 
 ---
 
-## Priorità sito
+## Priorità sito (Progetti)
 
-![[95_Bases/Project_Log.base#Active Projects]]
+```dataview
+TABLE status, priority, owner
+FROM "10_Projects"
+WHERE type = "project" AND (status = "in-progress" OR status = "active")
+SORT priority ASC
+```
 
 ---
 
 ## Task aperti
 
-![[95_Bases/Task_Log.base#Open Tasks]]
+```dataview
+TASK
+WHERE !completed AND (file.folder = "10_Projects" OR file.folder = "11_Campaigns" OR file.folder = "12_Partnerships" OR file.folder = "13_Content")
+LIMIT 15
+```
 
 ---
 
 ## SEO — Da ottimizzare
 
-![[95_Bases/SEO_Pages.base#Da ottimizzare]]
+```dataview
+TABLE target_keywords, priority
+FROM "13_Content" OR "10_Projects"
+WHERE type = "seo-page" OR contains(tags, "seo")
+SORT priority ASC
+```
 
 ---
 
 ## Partner pipeline
 
-![[95_Bases/Partnership_Pipeline.base#Partner Pipeline]]
+```dataview
+TABLE stage, priority, owner
+FROM "12_Partnerships"
+WHERE type = "partner" AND status != "closed"
+SORT priority ASC
+```
 
 ---
 
 ## Campagne attive
 
-![[95_Bases/Campaign_Pipeline.base#Active Campaigns]]
-
----
-
-## Social — Prossima settimana
-
-![[95_Bases/Social_Calendar.base#Prossima settimana]]
+```dataview
+TABLE status, priority, owner
+FROM "11_Campaigns"
+WHERE type = "campaign" AND status = "active"
+SORT priority ASC
+```
 
 ---
 
 ## Bug aperti
 
-![[95_Bases/Bug_Log.base#Open Bugs]]
+```dataview
+TABLE severity, priority, owner
+FROM "14_Bugs"
+WHERE type = "bug" AND status != "resolved" AND status != "closed"
+SORT priority ASC
+```
 
 ---
 
 ## Decisioni recenti
 
-![[95_Bases/Decision_Log.base#Recent Decisions]]
+```dataview
+TABLE owner, status, priority
+FROM "20_Decisions"
+WHERE type = "decision"
+SORT file.mtime DESC
+LIMIT 5
+```
 
 ---
 
@@ -85,25 +129,33 @@ tags:
 
 ## Link rapidi
 
-### Crea nuovo
-- [[90_Templates/TPL_Article|+ Articolo]]
-- [[90_Templates/TPL_Destination_Guide|+ Guida destinazione]]
-- [[90_Templates/TPL_Place|+ Luogo/Hotel]]
-- [[90_Templates/TPL_Itinerary|+ Itinerario]]
-- [[90_Templates/TPL_SEO_Page|+ SEO page]]
-- [[90_Templates/TPL_Collaboration|+ Collaborazione]]
-- [[90_Templates/TPL_Product|+ Prodotto]]
-- [[90_Templates/TPL_Web_Clip|+ Web clip]]
-- [[90_Templates/TPL_Project|+ Progetto sito]]
-- [[90_Templates/TPL_Bug|+ Bug]]
+### Modelli
+
+Apri il modello, duplicalo nella cartella indicata e rinomina la nuova nota.
+
+- [[90_Templates/TPL_Article|Articolo]]
+- [[90_Templates/TPL_Destination_Guide|Guida destinazione]]
+- [[90_Templates/TPL_Place|Luogo/Hotel]]
+- [[90_Templates/TPL_Itinerary|Itinerario]]
+- [[90_Templates/TPL_SEO_Page|SEO page]]
+- [[90_Templates/TPL_Collaboration|Collaborazione]]
+- [[90_Templates/TPL_Product|Prodotto]]
+- [[90_Templates/TPL_Web_Clip|Web clip]]
+- [[90_Templates/TPL_Project|Progetto sito]]
+- [[90_Templates/TPL_Bug|Bug]]
 
 ### Hub principali
+
+- [[BRAND_KNOWLEDGE_MOC]] — brand, social, Family, presence
 - [[MARKETING_OPERATIONS_HUB]] — campagne, partner, contenuti
+- [[VAULT_AND_GRAPHIFY_OPERATING_STATE]] — Obsidian + Graphify
+- [[OBSIDIAN_INDEX]] — indice completo del vault
 - [[EDITORIAL_GUIDE]] — regole editoriali
 - [[OBSIDIAN_TAXONOMY]] — naming e properties
 - [[OBSIDIAN_WORKFLOW]] — tutti i flussi
 
 ### Pipeline
+
 - [[95_Bases/Content_Pipeline.base|Content pipeline]]
 - [[95_Bases/Editorial_Archive.base|Archivio editoriale]]
 - [[95_Bases/Place_Library.base|Library luoghi]]

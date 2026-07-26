@@ -1,10 +1,15 @@
+---
+type: reference
+area: brand
+status: active
+---
+
 # Travelliniwithus Brand Memory
 
-> [!warning] Stale — ultimo aggiornamento 2026-03-18 (37 giorni fa)
-> Rivista non più da 37 giorni. Prima di usarla come fonte, confronta con le note brand fresche: [[BRAND_MESSAGING_STRATEGY]], [[BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS]], [[TRAVELLINIWITHUS_MASTER_PLAN]] (aggiornato 2026-04-24). In caso di conflitto, le note recenti vincono.
-
-Last updated: 2026-03-18
+Last updated: 2026-03-18 (legacy long-form; for current public truth prefer [[BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS]] + [[BRAND_KNOWLEDGE_MOC]] + dossier presence 2026-07-23)
 Purpose: persistent operating profile for future design, copy, SEO, product, and technical decisions.
+
+> **2026-07-23:** Family is an official sub-brand — [[BRAND_TRAVELLINI_FAMILY]]. Do not treat “couple only / not family” as absolute site policy without reading the Family boundary decision.
 
 ## Identity
 

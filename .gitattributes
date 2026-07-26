@@ -1,41 +1,27 @@
-# Normalizzazione cross-platform.
-# LF ovunque, Git gestisce la conversione in checkout.
+# Normalize line endings in the repo to LF; check out native on each OS.
+# Stops the CRLF/LF churn that inflates diffs on this Windows checkout.
+# NOTE: existing files are only renormalized on a clean tree via
+#   git add --renormalize .
+# Do NOT run that until the in-progress audit branch is committed.
 * text=auto eol=lf
 
-# Script shell e config sempre LF
-*.sh           text eol=lf
-*.mjs          text eol=lf
-*.cjs          text eol=lf
-*.js           text eol=lf
-*.ts           text eol=lf
-*.tsx          text eol=lf
-*.json         text eol=lf
-*.md           text eol=lf
-*.yml          text eol=lf
-*.yaml         text eol=lf
-*.css          text eol=lf
-*.html         text eol=lf
-.gitattributes text eol=lf
-.gitignore     text eol=lf
+# Windows-native scripts must keep CRLF to run correctly.
+*.bat   text eol=crlf
+*.cmd   text eol=crlf
+*.ps1   text eol=crlf
 
-# File Windows-only (se presenti) forzano CRLF
-*.bat          text eol=crlf
-*.ps1          text eol=crlf
-
-# Binari — nessuna normalizzazione, nessun diff rumoroso
-*.png          binary
-*.jpg          binary
-*.jpeg         binary
-*.gif          binary
-*.webp         binary
-*.avif         binary
-*.ico          binary
-*.svg          text eol=lf
-*.pdf          binary
-*.woff         binary
-*.woff2        binary
-*.ttf          binary
-*.otf          binary
-*.mp4          binary
-*.webm         binary
-*.zip          binary
+# Binary assets: never normalize, never diff as text.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.avif  binary
+*.ico   binary
+*.pdf   binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.eot   binary
+*.mp4   binary
+*.webm  binary

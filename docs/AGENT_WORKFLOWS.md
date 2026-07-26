@@ -1,8 +1,16 @@
+---
+type: workflow
+area: workspace
+status: active
+---
+
 # Agent Workflows
 
 This repository now keeps the Claude-oriented setup and a Codex-usable equivalent side by side.
 
 See also `docs/AI_AGENT_STACK.md` for the current multi-agent skill stack and `DESIGN.md` for design-system rules.
+
+Current Travellini canonical skills: 26. Run `npm run sync:agents` after every change to `.agents/skills`.
 
 ## Mapping
 
@@ -15,14 +23,23 @@ See also `docs/AI_AGENT_STACK.md` for the current multi-agent skill stack and `D
 | `.claude/skills/predeploy/SKILL.md`      | Release readiness check                   | `npm run predeploy`                                               |
 | `.agents/skills/*/SKILL.md`              | Canonical multi-agent skill source        | `npm run sync:agents`                                             |
 | `.claude/agents/*.md`                    | Claude project-specific specialist agents | Use from Claude Code when specialized review/build work is needed |
+| `.mcp.json`                              | Project MCP servers for Claude Code       | Keep minimal; Playwright is the default project MCP               |
+| Codex GitHub plugin                      | GitHub PR, issue, CI and repository work  | Use GitHub plugin skills when the task is explicitly GitHub-based |
 
 ## Important Caveats
 
 - `.claude/settings.json` remains Claude-specific. Codex does not execute those hooks.
+- The project Claude hooks are Windows-oriented and use PowerShell. Do not switch them to `bash` unless WSL or Git Bash is confirmed working.
 - The npm scripts added for Codex are static audits. They are intentionally lightweight and conservative.
 - `npm run predeploy` now acts as the shared preflight entry point across agents.
 - `npm run audit:quality` is the full confidence pass and includes visual QA.
 - `npm run predeploy` includes agent stack validation but intentionally excludes visual QA to keep deployment preflight lighter.
+- MCP servers are tools with real permissions. Add them only when the task needs them and document the reason in `docs/AI_AGENT_STACK.md`.
+- New MCP, CLI, plugin, skill, agent or GitHub workflow candidates follow the
+  Scouting -> Lab -> Adoption policy in `docs/AI_AGENT_STACK.md` and are tracked
+  in `docs/AI_TOOLING_RADAR.md`.
+- `docs/AI_OPERATIONS_DASHBOARD.md` is the current AI/dev control room for
+  SAFE / BUILD / OWNER ONLY mode, open risks and next tooling decisions.
 
 ## When To Use What
 

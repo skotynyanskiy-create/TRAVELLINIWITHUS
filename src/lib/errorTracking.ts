@@ -14,6 +14,7 @@ interface SentryLike {
 const isDevelopment = import.meta.env.DEV;
 const errorLog: ErrorEvent[] = [];
 const MAX_LOG = 100;
+let initialized = false;
 
 function getSentry(): SentryLike | null {
   if (typeof window === 'undefined') return null;
@@ -22,10 +23,17 @@ function getSentry(): SentryLike | null {
 }
 
 export function initErrorTracking() {
+  // Idempotent: StrictMode double-mount in dev, oppure consumer multi-import,
+  // non deve causare doppio log o doppio side-effect.
+  if (initialized) return;
+  initialized = true;
+
   const dsn = import.meta.env.VITE_SENTRY_DSN;
   if (!dsn) {
     if (isDevelopment) {
-      console.info('[errorTracking] VITE_SENTRY_DSN mancante — Sentry init skipped (predisposizione mode)');
+      console.info(
+        '[errorTracking] VITE_SENTRY_DSN mancante — Sentry init skipped (predisposizione mode)'
+      );
     }
     return;
   }
@@ -34,8 +42,10 @@ export function initErrorTracking() {
   const existing = (window as unknown as { Sentry?: SentryLike }).Sentry;
   if (existing) return;
 
-  console.info('[errorTracking] Sentry DSN presente ma @sentry/react non ancora installato. ' +
-    'Installa la dipendenza e completa l\'init in fase finale pre-deploy.');
+  console.info(
+    '[errorTracking] Sentry DSN presente ma @sentry/react non ancora installato. ' +
+      "Installa la dipendenza e completa l'init in fase finale pre-deploy."
+  );
 }
 
 export function captureException(error: unknown, context?: Record<string, unknown>) {
@@ -68,7 +78,7 @@ export function captureException(error: unknown, context?: Record<string, unknow
 export function captureMessage(
   message: string,
   level: 'error' | 'warning' | 'info' = 'info',
-  context?: Record<string, unknown>,
+  context?: Record<string, unknown>
 ) {
   const event: ErrorEvent = {
     message,

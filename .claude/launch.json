@@ -1,0 +1,16 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Travellini Vite dev (questo repo)",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["tsx", "server.ts"],
+      "port": 5173,
+      "autoPort": false
+    },
+    {
+      "name": "Travellini dev già attivo (attach 3000)",
+      "url": "http://localhost:3000"
+    }
+  ]
+}

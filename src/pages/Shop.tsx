@@ -1,34 +1,22 @@
-import { useEffect, useMemo, useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import {
-  ArrowRight,
-  CheckCircle,
-  FileText,
-  Map,
-  Shield,
-  Sparkles,
-  Smartphone,
-  XCircle,
-} from 'lucide-react';
-import { useSearchParams } from 'react-router-dom';
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+import { ArrowRight, FileText, Map, Shield, Smartphone } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
+import { ErrorBoundary } from 'react-error-boundary';
 import Breadcrumbs from '../components/Breadcrumbs';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import Button from '../components/Button';
 import Section from '../components/Section';
 import ProductSkeleton from '../components/ProductSkeleton';
-import Newsletter from '../components/Newsletter';
 import ProductCard from '../components/ProductCard';
 import DemoContentNotice from '../components/DemoContentNotice';
 import FinalCtaSection from '../components/FinalCtaSection';
-import { useCart } from '../context/CartContext';
 import { fetchProducts } from '../services/firebaseService';
+import { trackEvent } from '../services/analytics';
 import { SITE_URL } from '../config/site';
-import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_PRODUCTS } from '../config/demoContent';
-import { SHOP_NAV_THRESHOLD, useShopGate } from '../hooks/useShopGate';
-import { useSiteContent } from '../hooks/useSiteContent';
+
+const Newsletter = lazy(() => import('../components/Newsletter'));
 
 interface Product {
   id: string;
@@ -36,11 +24,9 @@ interface Product {
   slug: string;
   description?: string;
   price: number;
-  published?: boolean;
   imageUrl?: string;
   category: string;
   isDigital?: boolean;
-  downloadUrl?: string;
   features?: string[];
   isBestseller?: boolean;
 }
@@ -63,49 +49,40 @@ const shopPrinciples = [
   },
 ];
 
-export default function Shop() {
-  const { addToCart, setIsCartOpen, clearCart } = useCart();
-  const { data: demoContent } = useSiteContent('demo');
-  const { isShopDiscoverable, realPublishedCount } = useShopGate();
-  const demoSettings = demoContent ?? siteContentDefaults.demo;
-  const [searchParams, setSearchParams] = useSearchParams();
+export default function ShopWrapper() {
+  return (
+    <ErrorBoundary
+      fallback={
+        <div className="py-20 text-center text-[var(--color-error)]">
+          Impossibile caricare i prodotti
+        </div>
+      }
+    >
+      <Shop />
+    </ErrorBoundary>
+  );
+}
+
+function Shop() {
   const [selectedCategory, setSelectedCategory] = useState('Tutti');
   const [sortBy, setSortBy] = useState('featured');
 
-  const paymentStatus: 'success' | 'canceled' | null = searchParams.get('success')
-    ? 'success'
-    : searchParams.get('canceled')
-      ? 'canceled'
-      : null;
-
   useEffect(() => {
-    if (paymentStatus === 'success') {
-      clearCart();
-    }
-  }, [paymentStatus, clearCart]);
+    trackEvent('view_shop', { source: 'navigation' });
+  }, []);
 
   const {
     data: products = [],
     error,
     isLoading,
   } = useQuery<Product[]>({
-    queryKey: ['products', demoSettings.showShopDemo],
+    queryKey: ['products', 'waitlist_mode'],
     queryFn: async () => {
       const fetchedProducts = await fetchProducts();
-
-      if (demoSettings.showShopDemo) {
-        const existingSlugs = new Set(fetchedProducts.map((p) => p.slug));
-        const demoOnly = (DEMO_PRODUCTS as Product[]).filter(
-          (demo) => !existingSlugs.has(demo.slug)
-        );
-        return [...(fetchedProducts as Product[]), ...demoOnly];
-      }
-
       if (fetchedProducts.length > 0) {
         return fetchedProducts as Product[];
       }
-
-      return [];
+      return DEMO_PRODUCTS as Product[];
     },
   });
 
@@ -113,9 +90,9 @@ export default function Shop() {
     throw new Error('Impossibile caricare i prodotti');
   }
 
-  const demoSlugs = new Set(DEMO_PRODUCTS.map((item) => item.slug));
-  const usingShopDemo =
-    products.length > 0 && products.every((product) => demoSlugs.has(product.slug));
+  // Forza sempre la modalità waitlist (disableCart = true) per escludere Stripe checkout
+  const alwaysDisableCart = true;
+
   const categories = useMemo(() => {
     const cats = new Set(products.map((product) => product.category).filter(Boolean));
     return ['Tutti', ...Array.from(cats)];
@@ -138,185 +115,100 @@ export default function Shop() {
     return result;
   }, [products, selectedCategory, sortBy]);
 
-  const handleAddToCart = (product: Product) => {
-    if (!isProductPurchasable(product)) return;
-
-    addToCart({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      imageUrl: product.imageUrl,
-      isDigital: product.isDigital,
-    });
-    setIsCartOpen(true);
-  };
-
-  const isProductPurchasable = (product: Product) =>
-    !demoSlugs.has(product.slug) &&
-    product.published === true &&
-    product.price > 0 &&
-    Boolean(product.downloadUrl);
-
   return (
     <PageLayout>
       <>
         <SEO
-          title="Shop editoriale"
-          description="Guide premium, planner e toolkit Travelliniwithus pensati per organizzare viaggi con più criterio. Catalogo reale in preparazione."
+          title="Shop — guide e planner di viaggio"
+          description="Lo Shop non è ancora aperto: stiamo scrivendo il primo planner di viaggio. Qui trovi le anteprime e la lista d'attesa per sapere quando esce."
           canonical={`${SITE_URL}/shop`}
-          noindex={!isShopDiscoverable || usingShopDemo || products.length === 0}
+          breadcrumbs={[
+            { name: 'Home', url: SITE_URL },
+            { name: 'Shop', url: `${SITE_URL}/shop` },
+          ]}
         />
-
-        <AnimatePresence>
-          {paymentStatus && (
-            <div className="fixed inset-0 z-[150] flex items-center justify-center p-4">
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="absolute inset-0 bg-black/80 backdrop-blur-md"
-                onClick={() => setSearchParams({})}
-              />
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                role="dialog"
-                aria-modal="true"
-                aria-label="Stato del pagamento"
-                className="relative z-[160] w-full max-w-sm rounded-3xl bg-white p-8 text-center shadow-2xl"
-              >
-                {paymentStatus === 'success' ? (
-                  <>
-                    <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-accent)]/15">
-                      <CheckCircle className="text-[var(--color-accent)]" size={32} />
-                    </div>
-                    <h3 className="mb-2 text-2xl font-serif text-zinc-900">Pagamento completato</h3>
-                    <p className="mb-8 text-zinc-600">
-                      Ordine ricevuto. Riceverai i dettagli e le istruzioni di accesso secondo il
-                      flusso configurato.
-                    </p>
-                  </>
-                ) : (
-                  <>
-                    <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-red-100">
-                      <XCircle className="text-red-600" size={32} />
-                    </div>
-                    <h3 className="mb-2 text-2xl font-serif text-zinc-900">Pagamento annullato</h3>
-                    <p className="mb-8 text-zinc-600">
-                      Il processo è stato interrotto. Nessun addebito è stato effettuato.
-                    </p>
-                  </>
-                )}
-                <button
-                  onClick={() => setSearchParams({})}
-                  className="w-full rounded-xl bg-[var(--color-ink)] py-3 font-semibold text-white transition-colors hover:bg-[var(--color-ink)]/85"
-                >
-                  Chiudi
-                </button>
-              </motion.div>
-            </div>
-          )}
-        </AnimatePresence>
 
         <Section className="pt-8" spacing="tight">
           <Breadcrumbs items={[{ label: 'Shop' }]} />
 
           <div className="mt-8 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
             <div>
-              <div className="mb-6 flex flex-wrap items-center gap-3">
-                <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
-                  Boutique editoriale
-                </span>
-                <span className="rounded-full bg-[var(--color-accent)] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-white">
-                  {isShopDiscoverable ? 'Aperto' : 'In apertura'}
-                </span>
-              </div>
+              <span className="mb-3 block text-eyebrow !text-[var(--color-accent-text)]">Shop</span>
               <h1 className="text-display-1">
-                Guide e toolkit <span className="italic text-black/55">per partire meglio</span>
+                Gli strumenti di viaggio{' '}
+                <span className="italic text-black/55">stanno prendendo forma</span>
               </h1>
               <p className="mt-8 max-w-2xl text-lg leading-relaxed text-black/68">
-                Lo shop deve essere una continuazione del progetto editoriale: pochi prodotti,
-                utili, leggibili da telefono e costruiti per ridurre incertezza prima del viaggio.
-              </p>
-              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-black/55">
-                {isShopDiscoverable
-                  ? 'Catalogo piccolo, selezionato e coerente con il progetto editoriale.'
-                  : `Lo renderemo visibile nella navigazione quando ci saranno almeno ${SHOP_NAV_THRESHOLD} prodotti reali pronti. Intanto questa pagina mostra tono, struttura e primi formati in costruzione.`}
+                Prima di aprire la monetizzazione o vendite dirette preferiamo fare una cosa
+                semplice: completare la stesura del nostro primo Planner cartaceo/digitale e
+                renderlo eccezionale. Raccogliamo qui le manifestazioni di interesse per informarti
+                al rilascio.
               </p>
             </div>
 
-            <div className="rounded-[2rem] border border-black/5 bg-white p-7 shadow-sm">
+            <div className="border-t border-black/10 pt-7">
               <div className="mb-5 flex items-center gap-3">
-                <Sparkles className="text-[var(--color-accent)]" size={22} />
-                <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-black/42">
-                  Standard minimo
-                </p>
+                <span aria-hidden="true" className="h-px w-8 bg-[var(--color-accent)]" />
+                <p className="text-eyebrow">Lancio in preparazione</p>
               </div>
               <p className="text-2xl font-serif leading-relaxed">
-                Ogni prodotto deve risolvere una scelta reale: dove andare, come organizzare o cosa
-                portare.
+                Nessun carrello o pagamento Stripe attivo finché il Planner e le Guide non saranno
+                pronti e testati per te.
               </p>
             </div>
           </div>
 
           <div className="mt-14 grid grid-cols-1 gap-6 md:grid-cols-3">
             {shopPrinciples.map((item) => (
-              <div
-                key={item.title}
-                className="rounded-[2rem] border border-black/5 bg-white p-7 shadow-sm"
-              >
+              <div key={item.title} className="border-t border-black/10 pt-7">
                 <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-sand)]">
                   {item.icon}
                 </div>
-                <h2 className="font-serif text-xl">{item.title}</h2>
+                <h2 className="font-serif text-xl text-[var(--color-ink)]">{item.title}</h2>
                 <p className="mt-3 text-sm leading-relaxed text-black/60">{item.text}</p>
               </div>
             ))}
           </div>
 
-          {usingShopDemo && (
-            <DemoContentNotice
-              className="mt-12"
-              title="Boutique in apertura"
-              message="Questi sono i prodotti in lavorazione: formato, copertine e sommari definiti, file e checkout in finalizzazione. Il carrello resta disabilitato finché ogni prodotto non è consegnabile."
-            />
-          )}
+          <DemoContentNotice
+            className="mt-12"
+            title="Shop in anteprima"
+            message="Le schede qui sotto rappresentano i prodotti e planner in lista d'attesa. Iscriviti alla lista d'attesa per ricevere un avviso al lancio e le anteprime."
+          />
 
-          {!isShopDiscoverable && (
-            <div className="mt-8 rounded-[2rem] border border-black/5 bg-[var(--color-sand)] p-6 text-sm leading-relaxed text-black/62 shadow-sm">
-              Oggi il catalogo reale conta{' '}
-              <strong className="text-[var(--color-ink)]">{realPublishedCount}</strong> prodotti
-              pubblicati. `Shop` resta fuori da navbar e footer finché la boutique non è abbastanza
-              solida da non sembrare una promessa vuota.
-            </div>
-          )}
-
-          <div className="mt-12 flex flex-col gap-4 rounded-[2rem] border border-black/5 bg-white/75 p-4 shadow-sm backdrop-blur-md md:flex-row md:items-center md:justify-between md:p-6">
+          <div className="mt-12 flex flex-col gap-4 rounded-2xl border border-black/5 bg-white/60 p-4 shadow-xs backdrop-blur-md transition-all duration-300 hover:bg-white/80 md:flex-row md:items-center md:justify-between md:p-6">
             <div className="flex min-w-0 items-center gap-3 overflow-x-auto pb-1 hide-scrollbar">
-              <span className="shrink-0 text-[10px] font-bold uppercase tracking-[0.22em] text-black/35">
+              <span className="shrink-0 text-[10px] font-bold uppercase tracking-[0.22em] text-black/60">
                 Filtra
               </span>
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`whitespace-nowrap rounded-full px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] transition-all ${
-                    selectedCategory === category
-                      ? 'bg-[var(--color-ink)] text-white'
-                      : 'bg-white text-black/50 hover:bg-[var(--color-sand)] hover:text-black/75'
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
+              {categories.map((category) => {
+                const isActive = selectedCategory === category;
+                return (
+                  <button
+                    key={category}
+                    onClick={() => setSelectedCategory(category)}
+                    className="relative whitespace-nowrap rounded-2xl px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] focus:outline-none transition-transform duration-200 active:scale-95 cursor-pointer"
+                  >
+                    {isActive && (
+                      <span className="absolute inset-0 rounded-2xl bg-[var(--color-ink)] shadow-md" />
+                    )}
+                    <span
+                      className={`relative z-10 transition-colors duration-300 ${
+                        isActive ? 'text-white font-bold' : 'text-black/65 hover:text-black/85'
+                      }`}
+                    >
+                      {category}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
 
             <select
               value={sortBy}
               onChange={(event) => setSortBy(event.target.value)}
-              aria-label="Ordina prodotti"
-              className="rounded-full border border-black/5 bg-white px-5 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-black/55 focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]"
+              aria-label="Ordina i prodotti"
+              className="rounded-2xl border border-black/5 bg-white/80 backdrop-blur-md px-5 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-black/65 focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] cursor-pointer hover:border-[var(--color-accent)]/30 transition-all"
             >
               <option value="featured">In evidenza</option>
               <option value="name">Nome</option>
@@ -325,9 +217,11 @@ export default function Shop() {
             </select>
           </div>
 
+          <div id="shop-products" className="scroll-mt-28" />
+
           {isLoading ? (
             <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
-              {[1, 2, 3, 4, 5, 6].map((item) => (
+              {[1, 2, 3].map((item) => (
                 <ProductSkeleton key={item} />
               ))}
             </div>
@@ -348,64 +242,85 @@ export default function Shop() {
                       price={product.price}
                       imageUrl={product.imageUrl}
                       category={product.category}
-                      onAddToCart={() => handleAddToCart(product)}
-                      disableCart={!isProductPurchasable(product)}
-                      isBestseller={
-                        product.isBestseller || (isProductPurchasable(product) && isLarge)
-                      }
-                      badgeLabel={!isProductPurchasable(product) ? 'In arrivo' : undefined}
+                      onAddToCart={() => {}}
+                      disableCart={alwaysDisableCart}
+                      isBestseller={false}
+                      badgeLabel="Lista d'Attesa"
                     />
                   </div>
                 );
               })}
             </div>
           ) : (
-            <div className="mt-12 rounded-[2rem] border border-black/5 bg-white p-10 text-center shadow-sm">
+            <div className="mt-12 rounded-[var(--radius-lg)] border border-black/5 bg-white p-10 text-center shadow-sm">
               <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
-                Catalogo reale da inserire
+                Anteprime in preparazione
               </p>
               <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-black/65">
-                Lo shop e pronto come struttura, ma non mostra prodotti acquistabili finche guide,
-                file, prezzi e flusso Stripe non sono verificati.
+                Stiamo ultimando i file e le impaginazioni per i primi planner di viaggio. Iscriviti
+                per ricevere un avviso non appena saranno pronti.
               </p>
               <Button to="/contatti" variant="outline" className="mt-8">
-                Scrivici per interesse
+                Invia una richiesta
                 <ArrowRight size={16} />
               </Button>
             </div>
           )}
 
-          <div className="mt-20 overflow-hidden rounded-[3rem] bg-[var(--color-ink)] p-8 text-white md:p-14">
-            <div className="grid gap-10 lg:grid-cols-[1fr_0.8fr] lg:items-center">
+          <div className="mt-20 bg-[var(--color-ink-deep)] p-8 text-white md:p-14">
+            <div className="grid gap-10 lg:grid-cols-[1fr_0.8fr] lg:items-center relative z-10">
               <div>
-                <span className="mb-5 block text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">
-                  Come nasceranno i prodotti
+                <span className="mb-5 block text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-on-dark)]">
+                  L'Approccio al Viaggio
                 </span>
                 <h2 className="text-4xl font-serif md:text-6xl">
                   Dal viaggio reale al formato utile.
                 </h2>
                 <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/68 md:text-lg">
-                  Il valore non è aggiungere file: è distillare decisioni, mappe, priorità e
-                  indirizzi in qualcosa che puoi usare in fretta.
+                  Dal 2018, con itinerari percorsi insieme, il nostro valore non è ammucchiare
+                  informazioni: è selezionare indirizzi, attrazioni e priorità e confezionarli in
+                  formati leggeri e operativi.
                 </p>
               </div>
-              <div className="rounded-[2rem] border border-white/10 bg-white/5 p-7">
-                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-accent)]/15">
+              <div className="border-t border-white/12 pt-7">
+                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-accent)]/15">
                   <Smartphone className="text-[var(--color-accent)]" size={24} />
                 </div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-white/45">
-                  Regola prodotto
+                <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-white/70">
+                  Regola del Diario
                 </p>
                 <p className="mt-4 text-2xl font-serif leading-relaxed">
-                  Se non è utile da consultare mentre stai decidendo o viaggiando, non entra nello
-                  shop.
+                  Se un'attrazione, alloggio o locale non è stato provato e amato da noi in prima
+                  persona, non lo consiglieremo mai.
                 </p>
               </div>
             </div>
           </div>
 
           <div className="mt-20">
-            <Newsletter variant="business" source="shop_newsletter" />
+            <Suspense
+              fallback={
+                <div className="min-h-[360px] rounded-[var(--radius-lg)] bg-[var(--color-ink)]" />
+              }
+            >
+              {/* La copy e' esplicita qui invece che nella variante `business`
+                  condivisa: il form diceva "Rimani vicino al progetto" mentre la
+                  sua source e' shop_waitlist_first_product, e chi arrivava per una
+                  lista d'attesa trovava una newsletter generica. */}
+              <Newsletter
+                variant="business"
+                source="shop_waitlist_first_product"
+                eyebrow="Lista d'attesa"
+                title="La lista d'attesa del primo planner."
+                description="Lasci la mail, ti scriviamo quando il planner è pronto e come averlo. Nient'altro."
+                bullets={[
+                  'Un avviso al rilascio, non prima.',
+                  'Anteprime delle pagine mentre le finiamo.',
+                  'Nessuna sequenza di vendita.',
+                ]}
+                ctaLabel="Entra nella lista d'attesa"
+              />
+            </Suspense>
           </div>
 
           <div className="mt-16">

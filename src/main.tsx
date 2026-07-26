@@ -1,16 +1,16 @@
-import {StrictMode} from 'react';
-import {createRoot} from 'react-dom/client';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import ErrorBoundary from './components/ErrorBoundary.tsx';
-import { initErrorTracking } from './lib/errorTracking';
+import { initTelemetry } from './lib/telemetry';
 
-initErrorTracking();
+initTelemetry();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ErrorBoundary>
       <App />
     </ErrorBoundary>
-  </StrictMode>,
+  </StrictMode>
 );

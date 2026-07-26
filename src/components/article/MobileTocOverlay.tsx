@@ -4,16 +4,29 @@ import TableOfContents from './TableOfContents';
 import type { TocItem } from './types';
 
 interface MobileTocOverlayProps {
+  activeTocId?: string | null;
   isOpen: boolean;
   onClose: () => void;
+  readingProgress?: number;
   tocItems: TocItem[];
 }
 
-export default function MobileTocOverlay({ isOpen, onClose, tocItems }: MobileTocOverlayProps) {
+export default function MobileTocOverlay({
+  activeTocId,
+  isOpen,
+  onClose,
+  readingProgress,
+  tocItems,
+}: MobileTocOverlayProps) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-100 lg:hidden" role="dialog" aria-modal="true" aria-label="Indice dei contenuti">
+        <div
+          className="fixed inset-0 z-100 lg:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Indice dei contenuti"
+        >
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -39,7 +52,13 @@ export default function MobileTocOverlay({ isOpen, onClose, tocItems }: MobileTo
               </button>
             </div>
 
-            <TableOfContents items={tocItems} onItemClick={onClose} variant="mobile-overlay" />
+            <TableOfContents
+              activeId={activeTocId}
+              items={tocItems}
+              onItemClick={onClose}
+              readingProgress={readingProgress}
+              variant="mobile-overlay"
+            />
           </motion.div>
         </div>
       )}

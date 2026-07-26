@@ -24,6 +24,12 @@ properties:
 views:
   - type: table
     name: Active Campaigns
+    filters:
+      or:
+        - 'status == "open"'
+        - 'status == "planned"'
+        - 'status == "active"'
+        - 'status == "paused"'
     order:
       - status
       - priority

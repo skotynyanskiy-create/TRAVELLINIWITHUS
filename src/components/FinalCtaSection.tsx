@@ -35,21 +35,21 @@ const defaults: Record<
     eyebrow: 'Continua a esplorare',
     title: 'Trova il prossimo posto da salvare.',
     description:
-      'Destinazioni e guide pratiche collegate tra loro per aiutarti a scegliere meglio dove andare dopo.',
-    primaryLabel: 'Esplora destinazioni',
-    primaryTo: '/destinazioni',
-    secondaryLabel: 'Sfoglia le guide',
-    secondaryTo: '/guide',
+      'Destinazioni, esperienze e guide sono raccolte in un unico archivio filtrabile per zona, tipo e periodo.',
+    primaryLabel: 'Apri Esplora',
+    primaryTo: '/esplora',
+    secondaryLabel: 'Vedi sulla mappa',
+    secondaryTo: '/mappa',
   },
   newsletter: {
     eyebrow: 'Resta nel filo giusto',
     title: 'Ricevi contenuti utili quando sono pronti.',
     description:
-      'La newsletter raccoglie solo aggiornamenti selezionati: nuovi posti, guide pratiche, itinerari e risorse davvero utili.',
-    primaryLabel: 'Vai alla newsletter',
-    primaryTo: '#newsletter',
-    secondaryLabel: 'Apri le guide',
-    secondaryTo: '/guide',
+      'La newsletter raccoglie solo aggiornamenti selezionati: nuovi posti, guide pratiche e risorse davvero utili.',
+    primaryLabel: 'Ricevi la guida',
+    primaryTo: '/guida-in-regalo',
+    secondaryLabel: 'Esplora i contenuti',
+    secondaryTo: '/esplora',
   },
   business: {
     eyebrow: 'Per brand e territori',
@@ -94,9 +94,9 @@ export default function FinalCtaSection({
 
   return (
     <section
-      className={`relative overflow-hidden rounded-[3rem] bg-[var(--color-ink)] px-8 py-12 text-white shadow-2xl md:px-14 md:py-16 ${className}`}
+      className={`relative overflow-hidden rounded-[var(--radius-xl)] bg-[var(--color-ink)] px-8 py-12 text-white shadow-2xl md:px-14 md:py-16 ${className}`}
     >
-      <div className="absolute inset-0 bg-topo opacity-20" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[var(--color-accent)]/8 via-transparent to-transparent" />
       <div className="relative z-10 grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
         <div className="max-w-3xl">
           <span className="mb-5 block text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">

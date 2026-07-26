@@ -1,21 +1,24 @@
+import { useEffect } from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, CheckCircle, FileText, Map, Shield, Smartphone } from 'lucide-react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import Button from '../components/Button';
+import PageLayout from '../components/PageLayout';
 import Section from '../components/Section';
 import Breadcrumbs from '../components/Breadcrumbs';
 import SEO from '../components/SEO';
+import JsonLd from '../components/JsonLd';
+import StickyMobileCTA from '../components/StickyMobileCTA';
 import DemoContentNotice from '../components/DemoContentNotice';
 import { fetchProductBySlug } from '../services/firebaseService';
-import { useCart } from '../context/CartContext';
+// Cart disattivato per ora (shop 'soon' per decisione owner). Nessun add-to-cart pubblico.
 import ProductPageSkeleton from '../components/ProductPageSkeleton';
 import { Product } from '../types';
 import { SITE_URL } from '../config/site';
 import { DEMO_PRODUCTS } from '../config/demoContent';
-import { siteContentDefaults } from '../config/siteContent';
-import { useSiteContent } from '../hooks/useSiteContent';
 import { formatPrice } from '../utils/format';
+import { trackEvent } from '../services/analytics';
 
 const trustPoints = [
   {
@@ -35,51 +38,11 @@ const trustPoints = [
   },
 ];
 
-const productDetailSections = [
-  {
-    title: 'Per chi è',
-    items: [
-      'Viaggiatori che vogliono un itinerario già ragionato, ma adattabile.',
-      'Chi cerca hotel, tappe e indirizzi selezionati invece di liste infinite.',
-      'Chi preferisce un PDF consultabile prima di partire e durante il viaggio.',
-    ],
-  },
-  {
-    title: 'Per chi non è',
-    items: [
-      'Chi vuole una raccolta completa di ogni cosa da vedere.',
-      'Chi cerca offerte last minute, coupon o promesse di risparmio garantito.',
-      'Chi preferisce improvvisare tutto senza una traccia editoriale.',
-    ],
-  },
-  {
-    title: 'Indice previsto',
-    items: [
-      'Itinerario giorno per giorno, con tempi e priorità.',
-      'Dove dormire, cosa mangiare, budget, periodo migliore e alternative.',
-      'Checklist finale, link utili e aggiornamenti dichiarati.',
-    ],
-  },
-  {
-    title: 'Consegna e aggiornamenti',
-    items: [
-      'Download digitale dopo checkout solo quando il file è validato.',
-      'Eventuali aggiornamenti vengono indicati nella scheda prodotto.',
-      'Termini, privacy e condizioni di rimborso restano sempre linkati prima dell acquisto.',
-    ],
-  },
-];
-
 export default function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
-  const { addToCart, setIsCartOpen } = useCart();
+  // addToCart / setIsCartOpen rimossi: shop non attivo per ora
 
-  const { data: demoContent } = useSiteContent('demo');
-  const demoSettings = demoContent ?? siteContentDefaults.demo;
-
-  const demoFallback = demoSettings.showShopDemo
-    ? (DEMO_PRODUCTS.find((item) => item.slug === slug) as Product | undefined)
-    : undefined;
+  const demoFallback = DEMO_PRODUCTS.find((item) => item.slug === slug) as Product | undefined;
 
   const {
     data: fetchedProduct,
@@ -91,36 +54,28 @@ export default function ProductPage() {
       const product = await fetchProductBySlug(slug!);
       return product || null;
     },
-    enabled: !!slug,
+    enabled: !!slug && !demoFallback,
   });
 
   const product = fetchedProduct || demoFallback || null;
   const isDemoProduct = !fetchedProduct && Boolean(demoFallback);
-  const isPurchasableProduct =
-    Boolean(product?.published) &&
-    !isDemoProduct &&
-    Number.isFinite(product?.price) &&
-    (product?.price ?? 0) > 0 &&
-    Boolean(product?.downloadUrl);
 
-  const handleAddToCart = () => {
-    if (!product || !isPurchasableProduct) return;
-
-    addToCart({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      imageUrl: product.imageUrl,
-      isDigital: product.isDigital,
+  useEffect(() => {
+    if (!product) return;
+    trackEvent('product_view', {
+      route: `/shop/${product.slug}`,
+      source: 'product_page',
+      content_id: product.id,
+      product_slug: product.slug,
+      demo: isDemoProduct,
     });
-    setIsCartOpen(true);
-  };
+  }, [isDemoProduct, product]);
 
   if (isLoading) return <ProductPageSkeleton />;
 
   if (error || !product) {
     return (
-      <div className="min-h-screen bg-[var(--color-sand)] pt-32">
+      <PageLayout>
         <SEO
           title="Prodotto non disponibile"
           description="Questa scheda prodotto non è disponibile in questo momento."
@@ -128,7 +83,7 @@ export default function ProductPage() {
           noindex
         />
         <Section>
-          <div className="mx-auto max-w-3xl rounded-[2rem] border border-black/5 bg-white p-10 text-center shadow-sm">
+          <div className="mx-auto max-w-3xl rounded-[var(--radius-lg)] border border-black/5 bg-white p-10 text-center shadow-sm">
             <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
               Prodotto non disponibile
             </p>
@@ -144,41 +99,46 @@ export default function ProductPage() {
             </div>
           </div>
         </Section>
-      </div>
+      </PageLayout>
     );
   }
 
+  const productUrl = `${SITE_URL}/shop/${product.slug}`;
+  const productJsonLd = isDemoProduct
+    ? null
+    : {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: product.name,
+        description:
+          product.description ||
+          'Un contenuto premium Travelliniwithus pensato per aiutarti a organizzare meglio il viaggio.',
+        image: product.imageUrl ? [product.imageUrl] : undefined,
+        category: product.category,
+        sku: product.id,
+        brand: { '@type': 'Brand', name: 'Travelliniwithus' },
+        offers: {
+          '@type': 'Offer',
+          url: productUrl,
+          priceCurrency: 'EUR',
+          price: product.price,
+          availability: 'https://schema.org/InStock',
+        },
+      };
+
   return (
-    <div className="min-h-screen bg-[var(--color-sand)] pt-32">
+    <PageLayout>
       <SEO
         title={product.name}
         description={
           product.description ||
           'Un contenuto premium Travelliniwithus pensato per aiutarti a organizzare meglio il viaggio.'
         }
-        canonical={`${SITE_URL}/shop/${product.slug}`}
+        canonical={productUrl}
         image={product.imageUrl}
-        noindex={!isPurchasableProduct}
-        product={
-          isPurchasableProduct
-            ? {
-                name: product.name,
-                description: product.description,
-                image: product.imageUrl,
-                url: `${SITE_URL}/shop/${product.slug}`,
-                price: product.price,
-                availability: 'InStock',
-                category: product.category,
-                sku: product.id,
-              }
-            : undefined
-        }
-        breadcrumbs={[
-          { name: 'Home', url: SITE_URL },
-          { name: 'Shop', url: `${SITE_URL}/shop` },
-          { name: product.name, url: `${SITE_URL}/shop/${product.slug}` },
-        ]}
+        noindex={isDemoProduct}
       />
+      {productJsonLd && <JsonLd data={productJsonLd} />}
 
       <Section className="pt-0 pb-0">
         <Breadcrumbs items={[{ label: 'Shop', href: '/shop' }, { label: product.name }]} />
@@ -188,19 +148,19 @@ export default function ProductPage() {
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8 }}
-            className="lg:col-span-7"
+            className="group lg:col-span-7"
           >
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[2.5rem] bg-white shadow-2xl md:aspect-[3/2] lg:aspect-[4/5]">
+            <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-black/5 bg-white shadow-2xl md:aspect-[3/2] lg:aspect-[4/5]">
               {product.imageUrl ? (
                 <img
                   src={product.imageUrl}
                   alt={product.name}
-                  className="h-full w-full object-cover transition-transform duration-1000 hover:scale-105"
+                  className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-103"
                   referrerPolicy="no-referrer"
                 />
               ) : (
                 <div className="flex h-full w-full items-end bg-[var(--color-accent-soft)] p-8">
-                  <div className="w-full rounded-[2rem] border border-black/5 bg-white/80 p-6 backdrop-blur-md">
+                  <div className="w-full rounded-2xl border border-black/5 bg-white/70 p-6 backdrop-blur-md">
                     <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
                       Travelliniwithus
                     </span>
@@ -223,8 +183,8 @@ export default function ProductPage() {
                     Digitale
                   </span>
                 )}
-                {!isPurchasableProduct && (
-                  <span className="rounded-full bg-[var(--color-accent)] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white shadow-lg">
+                {isDemoProduct && (
+                  <span className="rounded-full bg-[var(--color-accent)] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white shadow-lg animate-pulse">
                     In arrivo
                   </span>
                 )}
@@ -238,16 +198,16 @@ export default function ProductPage() {
             transition={{ duration: 0.8, delay: 0.15 }}
             className="flex flex-col justify-center lg:col-span-5"
           >
-            {!isPurchasableProduct && (
+            {isDemoProduct && (
               <DemoContentNotice
                 className="mb-8"
-                title={isDemoProduct ? 'Prodotto preview' : 'Prodotto non acquistabile'}
-                message="Questa scheda mostra la struttura futura dello shop. Il prodotto non è acquistabile finché file, prezzo, consegna e checkout non sono verificati."
+                title="Prodotto in preparazione"
+                message="Questa scheda presenta formato, promessa e contenuto previsto. Il prodotto non è acquistabile finché file, prezzo, consegna e checkout non sono verificati."
               />
             )}
 
             <span className="mb-5 block text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
-              Boutique editoriale
+              Shop
             </span>
             <h1 className="mb-8 text-5xl font-serif font-light leading-[1.05] tracking-tighter md:text-7xl">
               {product.name}
@@ -267,53 +227,48 @@ export default function ProductPage() {
                 'Il compagno digitale per organizzare, pianificare e rendere più chiaro ogni viaggio.'}
             </p>
 
-            <div className="mb-12 space-y-4">
+            <div className="mb-12 rounded-2xl border border-black/5 bg-white/70 backdrop-blur-md p-6 space-y-5">
               {trustPoints.map((item) => (
-                <div key={item.title} className="flex items-start gap-4">
-                  <div className="mt-1">{item.icon}</div>
+                <div key={item.title} className="group/trust flex items-start gap-4">
+                  <div className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--color-accent-soft)] transition-transform duration-500 group-hover/trust:scale-110 group-hover/trust:rotate-6">
+                    {item.icon}
+                  </div>
                   <div>
-                    <h4 className="mb-1 text-xs font-bold uppercase tracking-widest">
+                    <h4 className="mb-1 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors duration-300 group-hover/trust:text-[var(--color-accent)]">
                       {item.title}
                     </h4>
-                    <p className="text-sm font-light text-black/48">{item.text}</p>
+                    <p className="text-sm font-light leading-relaxed text-black/60">{item.text}</p>
                   </div>
                 </div>
               ))}
             </div>
 
-            {!isPurchasableProduct ? (
-              <div className="rounded-2xl border border-[var(--color-accent)]/25 bg-white p-6">
-                <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
-                  In uscita prossimamente
-                </div>
-                <p className="mb-5 text-sm leading-relaxed text-black/65">
-                  Quando la guida sarà pronta avviseremo via email chi è già in lista. Nessuno spam,
-                  solo la notifica del lancio.
-                </p>
-                <Link
-                  to={`/contatti?prodotto=${product.slug}`}
-                  className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
-                >
-                  Iscrivimi alla lista
-                  <ArrowRight size={14} />
-                </Link>
+            {/* Shop per ora no (decisione owner): nascondiamo add-to-cart e carrello.
+                Mostriamo sempre la lista d'attesa / anteprima. */}
+            <div className="rounded-2xl border border-black/5 bg-white/80 backdrop-blur-md p-6 shadow-sm">
+              <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
+                In uscita prossimamente
               </div>
-            ) : (
+              <p className="mb-5 text-sm leading-relaxed text-black/65">
+                Quando il prodotto sarà pronto avviseremo via email chi è già in lista. Nessuno
+                spam, solo la notifica del lancio.
+              </p>
               <Button
+                to={`/contatti?prodotto=${product.slug}`}
                 variant="primary"
-                size="lg"
-                className="h-16 w-full rounded-full shadow-2xl"
-                onClick={handleAddToCart}
+                size="md"
+                className="w-full sm:w-auto"
+                magnetic={true}
               >
-                Aggiungi al carrello
+                Iscrivimi alla lista <ArrowRight size={14} />
               </Button>
-            )}
+            </div>
           </motion.div>
         </div>
       </Section>
 
       {product.features && product.features.length > 0 && (
-        <Section className="mt-28 rounded-[3rem] bg-white shadow-sm">
+        <Section className="mt-28 rounded-3xl bg-[var(--color-sand)]/30 border border-black/5 p-12 shadow-xs">
           <div className="mx-auto max-w-4xl">
             <div className="mb-12 text-center">
               <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
@@ -325,9 +280,9 @@ export default function ProductPage() {
               {product.features.map((feature) => (
                 <div
                   key={feature}
-                  className="flex items-start gap-4 rounded-2xl border border-black/5 bg-[var(--color-sand)] p-6"
+                  className="group/feature flex items-start gap-4 rounded-2xl border border-black/5 bg-white/70 backdrop-blur-md p-6 shadow-sm hover:shadow-[var(--shadow-premium)] hover:bg-white/95 hover:-translate-y-1 transition-all duration-300"
                 >
-                  <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-[var(--color-accent)]" />
+                  <CheckCircle className="mt-0.5 h-5 w-5 shrink-0 text-[var(--color-accent)] transition-transform duration-500 group-hover/feature:rotate-12 group-hover/feature:scale-110" />
                   <p className="text-sm font-light leading-relaxed text-black/70">{feature}</p>
                 </div>
               ))}
@@ -336,72 +291,41 @@ export default function ProductPage() {
         </Section>
       )}
 
-      <Section className="pt-12">
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-10 max-w-3xl">
-            <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
-              Prima dell'acquisto
-            </span>
-            <h2 className="mt-4 text-4xl font-serif">Cosa devi sapere sulla guida</h2>
-            <p className="mt-4 text-base leading-relaxed text-black/65">
-              La scheda prodotto deve chiarire contenuto, limiti, consegna e condizioni prima del
-              checkout. Se questi elementi non sono verificati, il prodotto resta in preview.
-            </p>
-          </div>
-
-          <div className="grid gap-5 md:grid-cols-2">
-            {productDetailSections.map((section) => (
-              <div key={section.title} className="rounded-2xl border border-black/5 bg-white p-7">
-                <h3 className="text-2xl font-serif">{section.title}</h3>
-                <ul className="mt-5 space-y-3">
-                  {section.items.map((item) => (
-                    <li key={item} className="flex gap-3 text-sm leading-relaxed text-black/65">
-                      <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-accent)]" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-6 flex flex-wrap gap-4 text-xs font-bold uppercase tracking-[0.2em] text-black/50">
-            <Link to="/termini" className="transition-colors hover:text-[var(--color-accent)]">
-              Termini vendita
-            </Link>
-            <Link to="/privacy" className="transition-colors hover:text-[var(--color-accent)]">
-              Privacy
-            </Link>
-            <Link to="/contatti" className="transition-colors hover:text-[var(--color-accent)]">
-              Domande sul prodotto
-            </Link>
-          </div>
-        </div>
-      </Section>
+      {/* Shop per ora no: sticky sempre waitlist, nessun add-to-cart */}
+      <StickyMobileCTA
+        label="Iscrivimi alla lista"
+        to={`/contatti?prodotto=${product.slug}`}
+        trackingId={`shop_${product.slug}_sticky_waitlist`}
+      />
 
       <Section className="pt-12">
-        <div className="mx-auto max-w-5xl rounded-[2.5rem] bg-[var(--color-ink)] p-8 text-white md:p-12">
-          <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
+        <div className="relative mx-auto max-w-5xl overflow-hidden rounded-3xl bg-[var(--color-ink-deep)] p-8 text-white md:p-12 border border-white/5 shadow-[var(--shadow-premium)]">
+          <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 rounded-full bg-[var(--color-accent)]/5 blur-3xl pointer-events-none" />
+          <div className="relative z-10 grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
             <div>
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-accent)]/15">
-                <FileText className="text-[var(--color-accent)]" size={24} />
+              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--color-accent)]/10 text-[var(--color-accent)] shadow-sm">
+                <FileText size={24} />
               </div>
-              <h2 className="text-3xl font-serif md:text-5xl">Lo shop deve restare editoriale.</h2>
-              <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/65">
+              <h2 className="text-3xl font-serif md:text-5xl leading-tight">
+                Lo shop deve restare editoriale.
+              </h2>
+              <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/70">
                 Ogni prodotto deve essere utile, verificato e consegnabile. Se non è pronto, resta
-                in preview.
+                in lista d'attesa.
               </p>
             </div>
-            <Link
+            <Button
               to="/shop"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-7 py-4 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:bg-white"
+              variant="primary"
+              size="lg"
+              className="bg-[var(--color-accent)] hover:brightness-110"
+              magnetic={true}
             >
-              Torna allo shop
-              <ArrowRight size={16} />
-            </Link>
+              Torna allo shop <ArrowRight size={16} />
+            </Button>
           </div>
         </div>
       </Section>
-    </div>
+    </PageLayout>
   );
 }

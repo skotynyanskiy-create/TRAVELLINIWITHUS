@@ -1,23 +1,22 @@
 import { motion } from 'motion/react';
 import {
+  BadgeCheck,
   Camera,
   Compass,
   Instagram,
+  Landmark,
   Mail,
   MessageCircle,
   NotebookPen,
   ShieldCheck,
 } from 'lucide-react';
-import Breadcrumbs from '../components/Breadcrumbs';
 import Button from '../components/Button';
 import JsonLd from '../components/JsonLd';
 import Newsletter from '../components/Newsletter';
-import OptimizedImage from '../components/OptimizedImage';
 import PageLayout from '../components/PageLayout';
 import Section from '../components/Section';
 import SEO from '../components/SEO';
-import { MEDIA } from '../config/mediaAssets';
-import { BRAND_STATS, CONTACTS, SITE_URL } from '../config/site';
+import { BRAND_CREDENTIALS, BRAND_STATS, CONTACTS, SITE_URL } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 
@@ -25,27 +24,6 @@ const EDITORIAL_GUARDRAILS = [
   'Se un posto funziona solo in foto e non nella vita reale, non ci interessa spingerlo.',
   'Se una collaborazione ci chiede di sembrare entusiasti a prescindere, non è il progetto giusto per noi.',
   'Se un consiglio non aiuta davvero chi legge a decidere meglio, preferiamo non pubblicarlo.',
-];
-
-const DECISION_CRITERIA = [
-  {
-    title: 'Prima il potenziale, poi l estetica',
-    text: 'Un luogo entra davvero nel progetto solo se promette atmosfera, logistica leggibile e un esperienza che resta anche fuori dalla foto.',
-  },
-  {
-    title: 'Preferiamo luoghi con un carattere chiaro',
-    text: 'Soggiorni con identita, territori con ritmo, esperienze locali riconoscibili: se sembra intercambiabile, di solito non entra.',
-  },
-  {
-    title: 'Valutiamo sempre il contesto reale',
-    text: 'Stagione, folla, zona, prezzo, accessibilita e coerenza con il viaggio contano quanto il colpo d occhio.',
-  },
-];
-
-const VERIFICATION_AREAS = [
-  'Negli hotel guardiamo atmosfera, posizione, qualita del sonno, luce, spazi comuni e quanto l esperienza corrisponde davvero alle immagini.',
-  'Nelle esperienze guardiamo ritmo, autenticita, livello di affollamento, chiarezza dell organizzazione e se il prezzo ha senso.',
-  'Nel food guardiamo gusto, contesto, servizio e se il posto funziona anche per chi ci arriva senza hype social.',
 ];
 
 const TIMELINE = [
@@ -139,9 +117,12 @@ export default function ChiSiamo() {
   return (
     <PageLayout>
       <SEO
-        title="Chi Siamo"
-        description="Chi sono Rodrigo e Betta, come decidono cosa raccontare e quale metodo usano per consigliare solo luoghi che meritano davvero."
-        canonical={`${SITE_URL}/chi-siamo`}
+        title="Rodrigo e Betta: chi siamo"
+        description="Dalla nascita del brand nel 2018: viaggi in coppia raccontati con criterio. Come scegliamo i posti, perché ne consigliamo pochi, cosa garantiamo a chi ci legge."
+        breadcrumbs={[
+          { name: 'Home', url: SITE_URL },
+          { name: 'Chi siamo', url: `${SITE_URL}/chi-siamo` },
+        ]}
       />
       <JsonLd
         data={{
@@ -150,7 +131,7 @@ export default function ChiSiamo() {
           name: 'Travelliniwithus',
           url: SITE_URL,
           description:
-            'Posti particolari, esperienze memorabili e consigli utili per chi vuole scoprire, salvare e vivere meglio ogni viaggio.',
+            'Posti particolari, esperienze vere e consigli pratici da chi li ha vissuti. Travelliniwithus.',
           founders: [
             { '@type': 'Person', name: 'Gaetano Rodrigo' },
             { '@type': 'Person', name: 'Betta' },
@@ -158,9 +139,31 @@ export default function ChiSiamo() {
           sameAs: [CONTACTS.instagramUrl, CONTACTS.tiktokUrl, CONTACTS.facebookUrl],
         }}
       />
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'Person',
+          name: 'Gaetano Rodrigo',
+          givenName: 'Gaetano',
+          jobTitle: 'Travel creator',
+          url: `${SITE_URL}/chi-siamo`,
+          worksFor: { '@type': 'Organization', name: 'Travelliniwithus', url: SITE_URL },
+          sameAs: [CONTACTS.instagramUrl, CONTACTS.tiktokUrl, CONTACTS.facebookUrl],
+        }}
+      />
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'Person',
+          name: 'Betta',
+          jobTitle: 'Travel creator',
+          url: `${SITE_URL}/chi-siamo`,
+          worksFor: { '@type': 'Organization', name: 'Travelliniwithus', url: SITE_URL },
+          sameAs: [CONTACTS.instagramUrl, CONTACTS.tiktokUrl, CONTACTS.facebookUrl],
+        }}
+      />
 
       <Section className="pt-8">
-        <Breadcrumbs items={[{ label: 'Chi siamo' }]} />
         <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
           <div className="order-1 flex flex-col justify-center lg:order-1">
             <div className="mb-6 flex items-center gap-4">
@@ -173,48 +176,41 @@ export default function ChiSiamo() {
             <div className="relative mb-8 inline-block">
               <h1 className="text-display-1">
                 {pageContent.heroTitleMain}
-                <br />
-                <span className="italic text-black/60">{pageContent.heroTitleAccent}</span>
+                <br />{' '}
+                <span className="italic text-[var(--color-ink-2)]">
+                  {pageContent.heroTitleAccent}
+                </span>
               </h1>
-              <motion.span
-                initial={{ opacity: 0, rotate: -10, scale: 0.8 }}
-                animate={{ opacity: 1, rotate: -4, scale: 1 }}
-                transition={{ delay: 0.9, duration: 0.7 }}
-                aria-hidden="true"
-                className="absolute -bottom-4 right-6 hidden font-script text-2xl text-[var(--color-accent)] opacity-80 md:block"
-              >
-                metodo prima del rumore
-              </motion.span>
             </div>
 
-            <div className="mb-10 space-y-5 text-lg leading-relaxed text-black/70">
+            <div className="mb-10 space-y-5 text-lg leading-relaxed text-[var(--color-ink-2)]">
               {pageContent.introParagraphs.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
             </div>
 
             <div className="mb-8 grid grid-cols-3 gap-4 sm:max-w-xl">
-              <div className="rounded-2xl border border-black/5 bg-white p-5 text-center shadow-sm">
-                <div className="text-3xl font-serif text-[var(--color-ink)]">
-                  {BRAND_STATS.yearsOfTravel}
+              <div className="border-t border-[var(--color-border)] pt-4 text-center">
+                <div className="text-3xl font-serif text-[var(--color-ink)] transition-colors duration-300 group-hover:text-[var(--color-accent)]">
+                  2018
                 </div>
-                <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-black/42">
-                  anni di viaggi
+                <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink-2)]">
+                  nascita del brand
                 </div>
               </div>
-              <div className="rounded-2xl border border-black/5 bg-white p-5 text-center shadow-sm">
-                <div className="text-3xl font-serif text-[var(--color-ink)]">
+              <div className="border-t border-[var(--color-border)] pt-4 text-center">
+                <div className="text-3xl font-serif text-[var(--color-ink)] transition-colors duration-300 group-hover:text-[var(--color-accent)]">
                   {BRAND_STATS.instagramFollowers}
                 </div>
-                <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-black/42">
+                <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink-2)]">
                   community IG
                 </div>
               </div>
-              <div className="rounded-2xl border border-black/5 bg-white p-5 text-center shadow-sm">
-                <div className="text-3xl font-serif text-[var(--color-ink)]">
+              <div className="border-t border-[var(--color-border)] pt-4 text-center">
+                <div className="text-3xl font-serif text-[var(--color-ink)] transition-colors duration-300 group-hover:text-[var(--color-accent)]">
                   {BRAND_STATS.tiktokFollowers}
                 </div>
-                <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-black/42">
+                <div className="mt-2 text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink-2)]">
                   community TikTok
                 </div>
               </div>
@@ -226,47 +222,78 @@ export default function ChiSiamo() {
                   href={CONTACTS.instagramUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex h-12 w-12 items-center justify-center rounded-full border border-black/10 transition-all hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white"
+                  className="group flex h-12 w-12 items-center justify-center rounded-full border border-[var(--color-border)] bg-white transition-colors duration-300 hover:border-[var(--color-accent)]/35 hover:text-[var(--color-accent)]"
                   aria-label="Instagram Travelliniwithus"
                 >
-                  <Instagram size={20} />
+                  <Instagram
+                    size={20}
+                    className="transition-transform duration-500 group-hover:rotate-[360deg] group-hover:scale-110"
+                  />
                 </a>
                 <a
                   href={CONTACTS.mailto}
-                  className="flex h-12 w-12 items-center justify-center rounded-full border border-black/10 transition-all hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white"
+                  className="group flex h-12 w-12 items-center justify-center rounded-full border border-[var(--color-border)] bg-white transition-colors duration-300 hover:border-[var(--color-accent)]/35 hover:text-[var(--color-accent)]"
                   aria-label="Email Travelliniwithus"
                 >
-                  <Mail size={20} />
+                  <Mail
+                    size={20}
+                    className="transition-transform duration-500 group-hover:rotate-[360deg] group-hover:scale-110"
+                  />
                 </a>
                 <a
                   href={CONTACTS.whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex h-12 w-12 items-center justify-center rounded-full border border-black/10 transition-all hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white"
+                  className="group flex h-12 w-12 items-center justify-center rounded-full border border-[var(--color-border)] bg-white transition-colors duration-300 hover:border-[var(--color-accent)]/35 hover:text-[var(--color-accent)]"
                   aria-label="WhatsApp Travelliniwithus"
                 >
-                  <MessageCircle size={20} />
+                  <MessageCircle
+                    size={20}
+                    className="transition-transform duration-500 group-hover:rotate-[360deg] group-hover:scale-110"
+                  />
                 </a>
               </div>
-              <Button to={pageContent.primaryCtaLink} variant="primary" size="lg">
+              <Button to={pageContent.primaryCtaLink} variant="primary" size="lg" magnetic={true}>
                 {pageContent.primaryCtaLabel}
               </Button>
             </div>
           </div>
 
           <div className="relative order-2 lg:order-2">
-            <div className="aspect-[4/5] overflow-hidden rounded-[var(--radius-2xl)] shadow-[var(--shadow-premium)] transition-transform duration-700 lg:rotate-2 lg:hover:rotate-0">
-              <OptimizedImage
-                src={MEDIA.about.editorial}
-                alt="Rodrigo e Betta, ritratto editoriale del progetto Travelliniwithus"
-                className="block h-full w-full object-cover"
-              />
+            {/* Pagina di taccuino al posto del ritratto: nessuna foto della
+                coppia finché non esiste uno scatto reale certificato
+                (imagery truth rule 2026-07-22). */}
+            <div className="flex aspect-[4/5] flex-col justify-between rounded-[var(--radius-2xl,24px)] border border-[var(--color-border)] bg-white p-8 shadow-lg md:p-10">
+              <span className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent,#c85a32)]">
+                Rodrigo &amp; Betta
+              </span>
+              <div>
+                <p className="font-serif text-5xl leading-[1.04] text-[var(--color-ink,#1a2b3c)] md:text-6xl">
+                  Rodrigo
+                  <br />
+                  &amp; Betta
+                </p>
+                <p className="mt-4 font-serif italic text-xl text-[var(--color-muted-fg)]">
+                  Meno posti, ma consigliati meglio.
+                </p>
+              </div>
+              <div className="flex items-center justify-between gap-4 border-t border-[var(--color-border)] pt-6">
+                <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-ink)]">
+                  {CONTACTS.instagramHandle}
+                </span>
+                <span
+                  aria-hidden="true"
+                  className="rounded-full bg-[var(--color-sand,#faf7f2)] border border-[var(--color-accent,#c85a32)]/30 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.15em] text-[var(--color-accent,#c85a32)]"
+                >
+                  8 Anni di Viaggi
+                </span>
+              </div>
             </div>
             <div className="z-10 hidden max-w-xs rounded-[var(--radius-xl)] border border-[var(--color-ink)]/5 bg-[var(--color-surface)] p-8 shadow-[var(--shadow-premium)] md:absolute md:-bottom-8 md:-left-8 md:block">
               <p className="mb-2 text-xl font-serif italic text-[var(--color-accent)]">
                 "{pageContent.quoteText}"
               </p>
-              <p className="text-xs font-bold uppercase tracking-widest text-black/40">
+              <p className="text-xs font-bold uppercase tracking-widest text-[var(--color-ink-2)]">
                 {pageContent.quoteAuthor}
               </p>
             </div>
@@ -275,92 +302,50 @@ export default function ChiSiamo() {
       </Section>
 
       <Section title={pageContent.focusTitle} subtitle={pageContent.focusSubtitle}>
-        <div className="space-y-6">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {pageContent.focusAreas.map((item, index) => {
             const Icon = focusIcons[index] ?? Compass;
             return (
-              <div
-                key={item.title}
-                className="card-info flex flex-col gap-6 md:flex-row md:items-start"
-              >
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[var(--radius-xl)] bg-white text-[var(--color-accent)] shadow-sm">
-                  <Icon size={28} />
+              <div key={item.title} className="relative border-t border-[var(--color-border)] pt-8">
+                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
+                  <Icon size={24} />
                 </div>
-                <div>
-                  <h3 className="mb-3 text-2xl font-serif">{item.title}</h3>
-                  <p className="leading-relaxed text-black/70">{item.text}</p>
-                </div>
+                <h3 className="mb-3 text-2xl font-serif text-[var(--color-ink)]">{item.title}</h3>
+                <p className="leading-relaxed text-[var(--color-ink-2)] text-sm md:text-base">
+                  {item.text}
+                </p>
               </div>
             );
           })}
         </div>
       </Section>
 
-      <Section title="Come decidiamo dove andare" subtitle="Selezione prima della lista">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {DECISION_CRITERIA.map((item) => (
-            <div
-              key={item.title}
-              className="rounded-[var(--radius-xl)] border border-black/5 bg-white p-8 shadow-sm"
-            >
-              <h3 className="text-2xl font-serif">{item.title}</h3>
-              <p className="mt-4 leading-relaxed text-black/68">{item.text}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      <Section className="rounded-[3rem] bg-[var(--color-sand)] p-12 md:p-20">
-        <div className="mx-auto max-w-5xl">
-          <div className="mb-10 max-w-3xl">
-            <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
-              Cosa verifichiamo
-            </span>
-            <h2 className="mt-4 text-4xl font-serif">
-              La fiducia nasce dal controllo, non dal tono.
-            </h2>
-            <p className="mt-4 text-lg leading-relaxed text-black/68">
-              Quando consigliamo un luogo, proviamo a capire se regge davvero nel tempo, nel prezzo
-              e nell esperienza concreta di chi ci andra dopo di noi.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {VERIFICATION_AREAS.map((item) => (
-              <div key={item} className="rounded-3xl border border-black/5 bg-white p-8 shadow-sm">
-                <p className="leading-relaxed text-black/68">{item}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Section>
-
       <Section title={pageContent.principlesTitle} subtitle={pageContent.principlesSubtitle}>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {pageContent.principles.map((item, index) => (
-            <div
-              key={item.title}
-              className="group relative rounded-[var(--radius-xl)] border border-black/5 bg-[var(--color-sand)] p-10 transition-all duration-500 hover:shadow-[var(--shadow-premium)]"
-            >
-              <span className="absolute right-6 top-4 font-serif text-6xl text-[var(--color-accent)]/10">
+            <div key={item.title} className="relative border-l border-[var(--color-border)] pl-8">
+              <span className="absolute right-6 top-4 font-serif text-6xl text-[var(--color-accent)]/10 transition-transform duration-500 group-hover:scale-110">
                 {String(index + 1).padStart(2, '0')}
               </span>
-              <h3 className="relative z-10 mb-4 text-2xl font-serif">{item.title}</h3>
-              <p className="relative z-10 leading-relaxed text-black/70">{item.text}</p>
+              <h3 className="relative z-10 mb-4 text-2xl font-serif text-[var(--color-ink)] transition-colors duration-300 group-hover:text-[var(--color-accent)]">
+                {item.title}
+              </h3>
+              <p className="relative z-10 leading-relaxed text-[var(--color-ink-2)]">{item.text}</p>
             </div>
           ))}
         </div>
       </Section>
 
-      <Section className="rounded-[3rem] bg-[var(--color-sand)] p-12 md:p-20">
+      <Section className="border-y border-[var(--color-border)] bg-[var(--color-surface-2)]">
         <div className="mx-auto max-w-4xl">
           <div className="mb-10 text-center">
-            <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-[var(--color-accent)] shadow-sm">
+            <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-[var(--radius-md)] bg-white text-[var(--color-accent)] shadow-xs">
               <ShieldCheck size={24} />
             </div>
             <h2 className="mb-4 text-4xl font-serif">
               Quello che difendiamo ogni volta che pubblichiamo
             </h2>
-            <p className="mx-auto max-w-2xl text-lg leading-relaxed text-black/70">
+            <p className="mx-auto max-w-2xl text-lg leading-relaxed text-[var(--color-ink-2)]">
               Non ci interessa sembrare premium per lessico. Ci interessa essere utili,
               riconoscibili e credibili.
             </p>
@@ -368,15 +353,80 @@ export default function ChiSiamo() {
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             {EDITORIAL_GUARDRAILS.map((item) => (
-              <div key={item} className="rounded-3xl border border-black/5 bg-white p-8 shadow-sm">
-                <p className="leading-relaxed text-black/70">{item}</p>
+              <div key={item} className="border-l border-[var(--color-accent)]/30 bg-white p-6">
+                <p className="leading-relaxed text-[var(--color-ink-2)]">{item}</p>
               </div>
             ))}
           </div>
         </div>
       </Section>
 
-      <Section className="rounded-[3rem] bg-[var(--color-ink)] p-12 text-white md:p-20">
+      <Section>
+        <div className="mx-auto max-w-5xl">
+          <div className="mb-10 text-center">
+            <span className="text-[10px] font-bold uppercase tracking-[0.36em] text-[var(--color-accent-text)]">
+              Trasparenza
+            </span>
+            <h2 className="mt-2 text-4xl font-serif leading-tight md:text-5xl">
+              Credenziali pubbliche, non slide di un media kit.
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[var(--color-ink-2)]">
+              Tre segnali verificabili — il profilo Instagram &egrave; certificato Meta, siamo
+              registrati ufficialmente nell&apos;elenco influencer AGCOM, e ogni contenuto
+              sponsorizzato &egrave; sempre etichettato come ADV, INVITED o AFFILIAZIONE.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+            <div className="border-t border-[var(--color-accent)]/25 bg-white p-7 shadow-xs transition-colors duration-300 hover:border-[var(--color-accent)]/45">
+              <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
+                <BadgeCheck size={22} />
+              </div>
+              <h3 className="mb-2 font-serif text-2xl text-[var(--color-ink)]">Meta verified</h3>
+              <p className="text-sm leading-relaxed text-[var(--color-ink-2)]">
+                Profilo Instagram con badge ufficiale Meta. L&apos;account
+                <span className="font-semibold"> @travelliniwithus </span>
+                &egrave; verificato e protetto da impersonificazione.
+              </p>
+            </div>
+
+            <div className="border-t border-[var(--color-accent)]/25 bg-white p-7 shadow-xs transition-colors duration-300 hover:border-[var(--color-accent)]/45">
+              <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
+                <Landmark size={22} />
+              </div>
+              <h3 className="mb-2 font-serif text-2xl text-[var(--color-ink)]">AGCOM registered</h3>
+              <p className="text-sm leading-relaxed text-[var(--color-ink-2)]">
+                Iscritti nell&apos;elenco degli influencer dell&apos;Autorit&agrave; per le Garanzie
+                nelle Comunicazioni. Significa rispetto delle linee guida italiane su trasparenza
+                pubblicitaria, disclosure e dati personali.
+              </p>
+            </div>
+
+            <div className="border-t border-[var(--color-accent)]/25 bg-white p-7 shadow-xs transition-colors duration-300 hover:border-[var(--color-accent)]/45">
+              <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
+                <ShieldCheck size={22} />
+              </div>
+              <h3 className="mb-2 font-serif text-2xl text-[var(--color-ink)]">
+                Disclosure sempre
+              </h3>
+              <p className="text-sm leading-relaxed text-[var(--color-ink-2)]">
+                Ogni contenuto pagato, ospitato o affiliato &egrave; etichettato
+                <span className="font-semibold"> ADV</span>,
+                <span className="font-semibold"> INVITED</span> o
+                <span className="font-semibold"> AFFILIAZIONE</span>. Chi legge sa sempre qual
+                &egrave; la natura del consiglio.
+              </p>
+            </div>
+          </div>
+
+          <p className="mt-8 text-center text-xs uppercase tracking-[0.28em] text-[var(--color-muted)]">
+            Stato: {BRAND_CREDENTIALS.metaVerified ? 'verificato' : '—'} ·{' '}
+            {BRAND_CREDENTIALS.agcomRegistered ? 'in elenco AGCOM' : '—'}
+          </p>
+        </div>
+      </Section>
+
+      <Section className="bg-[var(--color-ink-deep)] text-white">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="mb-6 text-4xl font-serif md:text-5xl">{pageContent.audienceTitle}</h2>
           <p className="mx-auto mb-12 max-w-2xl leading-relaxed text-white/85">
@@ -386,18 +436,18 @@ export default function ChiSiamo() {
             {pageContent.audienceItems.map((item) => (
               <div
                 key={item}
-                className="rounded-3xl border border-white/8 bg-[#1C1C1C] p-8 text-left"
+                className="border-l border-white/15 bg-white/[0.04] p-8 text-left transition-colors duration-300 hover:border-[var(--color-accent)]/60"
               >
-                <p className="leading-relaxed text-white/80">{item}</p>
+                <p className="leading-relaxed text-white/82">{item}</p>
               </div>
             ))}
           </div>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button to="/destinazioni" variant="cta" size="lg">
-              Esplora i posti
+            <Button to="/esplora" variant="cta" size="lg" magnetic={true}>
+              Esplora l&apos;Atlante
             </Button>
-            <Button to="/collaborazioni" variant="outline-light" size="lg">
-              Scopri le collaborazioni
+            <Button to="/collaborazioni" variant="outline-light" size="lg" magnetic={true}>
+              Sei un Brand / Hotel? Scopri i Format B2B →
             </Button>
           </div>
         </div>
@@ -408,24 +458,33 @@ export default function ChiSiamo() {
           {TIMELINE.map((milestone, index) => (
             <motion.div
               key={milestone.year}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.08 }}
-              className="flex gap-8 pb-12 last:pb-0"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-50px' }}
+              transition={{ duration: 0.7, delay: index * 0.08, ease: 'easeOut' }}
+              className="group flex gap-6 md:gap-8 pb-12 last:pb-0"
             >
-              <div className="flex flex-col items-center">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)] text-sm font-bold text-white">
-                  {milestone.year}
+              <div className="flex flex-col items-center shrink-0">
+                <div className="relative flex h-14 w-14 items-center justify-center rounded-full border border-[var(--color-accent)]/20 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.03)] transition-all duration-500 group-hover:border-[var(--color-accent)] group-hover:shadow-[0_10px_25px_rgba(219,104,74,0.15)]">
+                  <div className="absolute inset-1.5 rounded-full bg-[var(--color-accent)]/5 transition-colors duration-500 group-hover:bg-[var(--color-accent)]/10" />
+                  <span className="relative z-10 font-serif text-sm font-bold text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors duration-300">
+                    {milestone.year}
+                  </span>
                 </div>
                 {index < TIMELINE.length - 1 && (
-                  <div className="mt-2 h-full w-px bg-gradient-to-b from-[var(--color-accent)] to-[var(--color-accent)]" />
+                  <div className="mt-3 w-0.5 grow bg-gradient-to-b from-[var(--color-accent)]/40 via-[var(--color-accent)]/15 to-transparent" />
                 )}
               </div>
-              <div className="pt-3">
-                <h3 className="mb-2 text-2xl font-serif">{milestone.title}</h3>
-                <p className="leading-relaxed text-black/70">{milestone.text}</p>
-              </div>
+              <motion.div
+                whileHover={{ y: -4, scale: 1.01 }}
+                transition={{ duration: 0.4, ease: 'easeOut' }}
+                className="flex-1 border-l border-[var(--color-border)] bg-white p-6 shadow-xs transition-colors duration-300 hover:border-[var(--color-accent)]/35 md:p-8"
+              >
+                <h3 className="mb-3 text-2xl font-serif text-[var(--color-ink)] transition-colors duration-300 group-hover:text-[var(--color-accent)]">
+                  {milestone.title}
+                </h3>
+                <p className="leading-relaxed text-[var(--color-ink-2)]">{milestone.text}</p>
+              </motion.div>
             </motion.div>
           ))}
         </div>
