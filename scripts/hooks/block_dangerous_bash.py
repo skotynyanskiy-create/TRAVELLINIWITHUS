@@ -89,7 +89,7 @@ def main() -> int:
 
     sys.stderr.write(
         f"BLOCKED: {reason}. Per CLAUDE.md this command is not yours to run "
-        f"unilaterally — explain what you want to do and why, and let the owner "
+        f"unilaterally - explain what you want to do and why, and let the owner "
         f"decide. Do not rephrase the command, switch shells, or route around "
         f"this check.\n"
     )

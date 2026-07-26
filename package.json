@@ -34,6 +34,7 @@
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css,md}\"",
     "test": "vitest run",
     "test:unit": "vitest run --project unit",
+    "test:hooks": "py scripts/hooks/test_hooks.py",
     "e2e": "playwright test",
     "test:e2e": "npm run e2e",
     "audit:ui": "node scripts/check-ui.mjs",
