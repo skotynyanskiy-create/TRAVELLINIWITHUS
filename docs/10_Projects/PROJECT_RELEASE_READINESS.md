@@ -1040,3 +1040,27 @@ Release note: [[RELEASE_2026-07-24_tre-audience-family]].
 Resta in capo all'owner l'azione GCP (restrizioni Firebase Web API key,
 [[10_Projects/PROJECT_FIREBASE_HARDENING]]), accettata come rischio noto al
 momento del lancio.
+
+## CONSOLIDAMENTO MAINLINE — 2026-07-26
+
+`main` era fermo a `62eeed0` (4 maggio), 273 commit indietro rispetto al lavoro
+reale su `wip/2026-07-19-diario-e-cinematic-home`. Su richiesta owner lo stato
+attuale del sito diventa la mainline.
+
+- `49adde8` — consolidamento del working tree (198 file: routeMeta + utils
+  geo/share/affiliate con test, 92 card OG, master audit, design-lab, scratch
+  del run agent incluso su scelta owner).
+- `5c43ade` — merge commit su `main` che assume l'albero esatto di `49adde8`.
+  Nessun rewrite, nessun force push, push in fast-forward su `origin/main`.
+- I 155 file rimasti solo sul vecchio `main` (63 in `src/`, linea aprile-maggio
+  superata) escono dall'albero e restano recuperabili da `62eeed0`.
+- Backup: `wip/2026-07-19-diario-e-cinematic-home` resta su origin a `49adde8`.
+
+Attenzione aperta: `.claude/settings.json` è stato committato **senza**
+`Edit(server.ts)` / `Write(server.ts)` nella deny list — guardrail CLAUDE.md
+allentato per scelta esplicita dell'owner. Da rimettere quando il lavoro su
+`server.ts` è concluso.
+
+Nessun deploy innescato: `.github/workflows/ci.yml` sul push a `main` esegue
+solo quality / lighthouse / e2e / secrets. La produzione resta alla release
+del 2026-07-24.
