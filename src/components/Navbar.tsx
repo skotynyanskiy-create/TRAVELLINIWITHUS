@@ -551,7 +551,7 @@ export default function Navbar() {
                   to="/family"
                   className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] xl:text-[11.5px] font-bold uppercase tracking-[0.14em] transition-all hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-accent)] ${
                     location.pathname === '/family'
-                      ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
+                      ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent-text)]'
                       : 'text-[var(--color-ink)]'
                   }`}
                 >
@@ -562,7 +562,7 @@ export default function Navbar() {
                   to="/family/consigli"
                   className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] xl:text-[11.5px] font-bold uppercase tracking-[0.14em] transition-all hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-accent)] ${
                     location.pathname === '/family/consigli'
-                      ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
+                      ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent-text)]'
                       : 'text-[var(--color-ink)]'
                   }`}
                 >
@@ -573,7 +573,7 @@ export default function Navbar() {
                   to="/family/shop"
                   className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] xl:text-[11.5px] font-bold uppercase tracking-[0.14em] transition-all hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-accent)] ${
                     location.pathname === '/family/shop'
-                      ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
+                      ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent-text)]'
                       : 'text-[var(--color-ink)]'
                   }`}
                 >
@@ -584,7 +584,7 @@ export default function Navbar() {
                   to="/chi-siamo"
                   className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] xl:text-[11.5px] font-bold uppercase tracking-[0.14em] transition-all hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-accent)] ${
                     location.pathname === '/chi-siamo'
-                      ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
+                      ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent-text)]'
                       : 'text-[var(--color-ink)]'
                   }`}
                 >
@@ -605,7 +605,7 @@ export default function Navbar() {
                   to="/collaborazioni"
                   className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] xl:text-[11.5px] font-bold uppercase tracking-[0.14em] transition-all hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-accent)] ${
                     location.pathname === '/collaborazioni'
-                      ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
+                      ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent-text)]'
                       : 'text-[var(--color-ink)]'
                   }`}
                 >
@@ -616,7 +616,7 @@ export default function Navbar() {
                   to="/chi-siamo"
                   className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] xl:text-[11.5px] font-bold uppercase tracking-[0.14em] transition-all hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-accent)] ${
                     location.pathname === '/chi-siamo'
-                      ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
+                      ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent-text)]'
                       : 'text-[var(--color-ink)]'
                   }`}
                 >
@@ -627,7 +627,7 @@ export default function Navbar() {
                   to="/contatti"
                   className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[10px] xl:text-[11.5px] font-bold uppercase tracking-[0.14em] transition-all hover:bg-[var(--color-ink)]/5 hover:text-[var(--color-accent)] ${
                     location.pathname === '/contatti'
-                      ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
+                      ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent-text)]'
                       : 'text-[var(--color-ink)]'
                   }`}
                 >
@@ -652,7 +652,7 @@ export default function Navbar() {
                 className="transition-transform group-hover:scale-110 text-[var(--color-accent)]"
               />
               <span className="hidden xl:inline">{navigation.searchLabel}</span>
-              <kbd className="hidden lg:inline-flex items-center px-1.5 py-0.5 text-[9px] font-sans font-semibold text-[var(--color-ink-2)]/70 bg-[var(--color-sand)]/80 rounded border border-[var(--color-border)]">
+              <kbd className="hidden lg:inline-flex items-center px-1.5 py-0.5 text-[9px] font-sans font-semibold text-[var(--color-muted-fg-2)] bg-[var(--color-sand)]/80 rounded border border-[var(--color-border)]">
                 {isMac ? '⌘K' : 'Ctrl+K'}
               </kbd>
             </button>
@@ -742,7 +742,7 @@ export default function Navbar() {
                         <Heart size={14} className="text-[var(--color-accent)]" />I miei preferiti
                       </span>
                       {favorites.length > 0 && (
-                        <span className="rounded-full bg-[var(--color-accent)]/10 px-2 py-0.5 text-[10px] font-bold text-[var(--color-accent)]">
+                        <span className="rounded-full bg-[var(--color-accent)]/10 px-2 py-0.5 text-[10px] font-bold text-[var(--color-accent-text)]">
                           {favorites.length}
                         </span>
                       )}

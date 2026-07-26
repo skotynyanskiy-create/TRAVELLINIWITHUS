@@ -335,7 +335,9 @@ export default function Newsletter({
                 NEWSLETTER_RECENT_SIGNUPS >= NEWSLETTER_COUNTER_MIN_VISIBLE && (
                   <p
                     className={`inline-flex items-center gap-2 text-[11px] font-semibold ${
-                      isDark ? 'text-[var(--color-accent)]' : 'text-[var(--color-accent-text)]'
+                      isDark
+                        ? 'text-[var(--color-accent-on-dark)]'
+                        : 'text-[var(--color-accent-text)]'
                     }`}
                   >
                     <TrendingUp size={12} />
@@ -435,7 +437,7 @@ export default function Newsletter({
         <div>
           <span
             className={`mb-5 block text-[10px] font-bold uppercase tracking-[0.28em] ${
-              isDark ? 'text-[var(--color-accent)]' : 'text-[var(--color-accent-text)]'
+              isDark ? 'text-[var(--color-accent-on-dark)]' : 'text-[var(--color-accent-text)]'
             }`}
           >
             {copy.eyebrow}

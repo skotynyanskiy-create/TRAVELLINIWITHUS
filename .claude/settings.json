@@ -70,8 +70,6 @@
       "Bash(git filter-branch:*)",
       "Bash(git stash clear:*)",
       "Bash(git stash drop:*)",
-      "Edit(server.ts)",
-      "Write(server.ts)",
       "Edit(firestore.rules)",
       "Write(firestore.rules)",
       "Edit(src/config/admin.ts)",

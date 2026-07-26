@@ -1,7 +1,7 @@
 import { ArrowRight, CheckCircle, Compass, ShieldCheck, Sparkles, Star } from 'lucide-react';
 import Button from '@/src/components/Button';
 import OptimizedImage from '@/src/components/OptimizedImage';
-import { BRAND_CREDENTIALS, BRAND_STATS } from '@/src/config/site';
+import { BRAND_CREDENTIALS, BRAND_PROMISE, BRAND_STATS } from '@/src/config/site';
 
 export default function CleanCuratedHero() {
   return (
@@ -19,16 +19,14 @@ export default function CleanCuratedHero() {
             </div>
 
             <h1 className="font-serif text-4xl font-normal leading-[1.06] text-[var(--color-ink)] sm:text-5xl lg:text-6xl">
-              Posti che sembrano inventati.{' '}
+              {BRAND_PROMISE.heroTagline}{' '}
               <span className="block font-serif italic text-[var(--color-accent,#c85a32)]">
-                Ma ci siamo stati davvero.
+                {BRAND_PROMISE.heroHighlight}
               </span>
             </h1>
 
             <p className="mt-6 max-w-xl text-base leading-relaxed text-[var(--color-muted-fg,#546274)] sm:text-lg">
-              Siamo Rodrigo e Betta. Proviamo di persona hotel di charme, trattorie segrete e borghi
-              fuori rotta in tutto il mondo. Vi diciamo quanto costa, per chi è e se vale la pena
-              partire.
+              {BRAND_PROMISE.heroSubhead}
             </p>
 
             {/* CTA Actions — no magnetic wrappers above the fold (INP/TBT) */}
@@ -63,7 +61,7 @@ export default function CleanCuratedHero() {
               </div>
               <span className="text-black/20">·</span>
               <span className="inline-flex items-center gap-1 font-bold text-[var(--color-ink)]">
-                <CheckCircle size={13} className="text-blue-500" />{' '}
+                <CheckCircle size={13} className="text-[var(--color-info,#2563eb)]" />{' '}
                 {BRAND_CREDENTIALS.metaVerifiedLabel}
               </span>
               <span className="text-black/20">·</span>

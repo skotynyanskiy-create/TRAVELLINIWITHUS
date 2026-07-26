@@ -1,10 +1,10 @@
 import { lazy, Suspense } from 'react';
-import CleanCuratedHero from '../curated/CleanCuratedHero';
+import BrandCoherentHero from './BrandCoherentHero';
 import CleanFeaturedPlaces from '../curated/CleanFeaturedPlaces';
 import CleanEditorialPromise from '../curated/CleanEditorialPromise';
+import { MotionReveal } from '@/src/components/ui/MotionSignature';
 
 const HomeMapSection = lazy(() => import('../HomeMapSection'));
-const WeekendGeneratorWidget = lazy(() => import('./WeekendGeneratorWidget'));
 const HiggsfieldReelCarousel = lazy(() => import('./HiggsfieldReelCarousel'));
 const HomeIndiceVivo = lazy(() => import('./HomeIndiceVivo'));
 
@@ -23,7 +23,9 @@ export default function CinematicHomepage() {
     <div className="clean-homepage w-full bg-[var(--color-sand,#faf7f2)] text-[var(--color-ink,#1a2b3c)]">
       <div>
         <section id="hero">
-          <CleanCuratedHero />
+          <MotionReveal direction="up" duration={0.7}>
+            <BrandCoherentHero />
+          </MotionReveal>
         </section>
 
         <section id="featured-places">
@@ -38,12 +40,6 @@ export default function CinematicHomepage() {
 
         <section id="editorial-promise">
           <CleanEditorialPromise />
-        </section>
-
-        <section id="weekend-generator">
-          <Suspense fallback={<SectionFallback minHeight="28rem" />}>
-            <WeekendGeneratorWidget />
-          </Suspense>
         </section>
 
         <section id="reels-stream">

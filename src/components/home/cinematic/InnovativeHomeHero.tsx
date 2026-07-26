@@ -37,7 +37,7 @@ const MOOD_PRESETS: MoodPreset[] = [
     label: 'Notte Stellata',
     icon: Moon,
     bgImage: '/images/reels/reel-4-cover.webp',
-    tagline: 'Hotel da sogno, cieli aperti e totale tranquillità',
+    tagline: "Soggiorni d'eccezione, cieli aperti e totale tranquillità",
     accentColor: '#3b82f6',
   },
   {

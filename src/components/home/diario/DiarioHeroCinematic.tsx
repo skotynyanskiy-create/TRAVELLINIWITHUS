@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { ArrowRight, CheckCircle, Compass, ShieldCheck, Sparkles, Star } from 'lucide-react';
 import Button from '@/src/components/Button';
 import MagneticWrapper from '@/src/components/MagneticWrapper';
+import OptimizedImage from '@/src/components/OptimizedImage';
 import { BRAND_CREDENTIALS, BRAND_STATS } from '@/src/config/site';
 
 export default function DiarioHeroCinematic() {
@@ -76,9 +77,13 @@ export default function DiarioHeroCinematic() {
           className="mt-16 relative overflow-hidden rounded-3xl border border-neutral-200 bg-white p-3 shadow-2xl"
         >
           <div className="relative aspect-[21/9] w-full overflow-hidden rounded-2xl bg-neutral-900 min-h-[320px]">
-            <img
+            <OptimizedImage
               src="/images/home-journal/hero-impossible.png"
               alt="Rodrigo e Betta sul campo"
+              priority
+              responsiveWidths={[320, 480, 768]}
+              baseWidth={1080}
+              sizes="(max-width: 1023px) 100vw, 90vw"
               className="h-full w-full object-cover transition-transform duration-700 hover:scale-[1.02]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />

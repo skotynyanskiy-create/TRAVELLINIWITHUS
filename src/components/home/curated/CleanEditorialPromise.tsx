@@ -1,4 +1,5 @@
 import { CheckCircle2, DollarSign, HeartHandshake, Sparkles } from 'lucide-react';
+import { BRAND_PROMISE } from '@/src/config/site';
 
 export default function CleanEditorialPromise() {
   return (
@@ -7,14 +8,13 @@ export default function CleanEditorialPromise() {
         <div className="mb-14 text-center max-w-2xl mx-auto">
           <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent,#c85a32)]">
             <Sparkles size={14} />
-            Il Nostro Metodo
+            Il Nostro Manifesto
           </span>
           <h2 className="mt-3 font-serif text-3xl font-normal leading-tight md:text-5xl">
-            Trasparenza prima del rumore.
+            {BRAND_PROMISE.editorialManifestoTitle}
           </h2>
           <p className="mt-4 text-base text-[var(--color-muted-fg)] md:text-lg">
-            Siamo una coppia con una regola semplice: consigliare meno posti, ma consigliarli
-            meglio.
+            {BRAND_PROMISE.editorialManifestoSubhead}
           </p>
         </div>
 
@@ -24,11 +24,11 @@ export default function CleanEditorialPromise() {
               <CheckCircle2 size={24} />
             </div>
             <h3 className="font-serif text-xl font-normal text-[var(--color-ink)]">
-              01. Ci andiamo di persona
+              01. Zero desk, zero foto da catalogo
             </h3>
             <p className="mt-3 text-xs leading-relaxed text-[var(--color-muted-fg)]">
-              Prima l'esperienza reale, poi il consiglio. Non pubblichiamo mai foto d'archivio o
-              posti consigliati a raggio senza esserci stati.
+              Paghiamo il conto, scattiamo sul posto e testiamo l'accoglienza. Se un posto non ci
+              convince, semplicemente non entra nell'Atlante.
             </p>
           </div>
 
@@ -37,11 +37,11 @@ export default function CleanEditorialPromise() {
               <DollarSign size={24} />
             </div>
             <h3 className="font-serif text-xl font-normal text-[var(--color-ink)]">
-              02. Segniamo ogni dettaglio
+              02. Scontrini in chiaro e tempi reali
             </h3>
             <p className="mt-3 text-xs leading-relaxed text-[var(--color-muted-fg)]">
-              Costi reali in euro, scontrini, tempi di percorrenza e periodo ideale dell'anno. Tutto
-              quello che serve per organizzare senza sorprese.
+              Ti diciamo quanto si spende in due, quando conviene andare e cosa evitare.
+              Informazioni pratiche, non aggettivi entusiasti a vuoto.
             </p>
           </div>
 
@@ -50,11 +50,11 @@ export default function CleanEditorialPromise() {
               <HeartHandshake size={24} />
             </div>
             <h3 className="font-serif text-xl font-normal text-[var(--color-ink)]">
-              03. Per chi è davvero
+              03. Nessun compromesso sulla verità
             </h3>
             <p className="mt-3 text-xs leading-relaxed text-[var(--color-muted-fg)]">
-              Vi diciamo onestamente per chi è adatto un posto e quali sono i suoi limiti. Se una
-              destinazione non vale la pena, vi diciamo no.
+              Se una strada è stretta, il parcheggio è difficile o il posto ha dei limiti, lo
+              scriviamo chiaro. La fiducia della community viene prima di tutto.
             </p>
           </div>
         </div>

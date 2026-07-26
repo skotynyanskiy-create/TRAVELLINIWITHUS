@@ -20,7 +20,7 @@ export default function FamilyConsigli() {
   return (
     <PageLayout>
       <SEO
-        title="Consigli family — gravidanza e viaggio | Travellini Family"
+        title="Consigli family — gravidanza e viaggio"
         description="Consigli veri su gravidanza e viaggio in famiglia, provati da Rodrigo & Betta: volare col pancione, organizzarsi, cosa serve davvero."
       />
       <div className="mx-auto max-w-7xl px-6 md:px-12">

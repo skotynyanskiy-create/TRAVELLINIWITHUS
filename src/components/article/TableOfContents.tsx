@@ -32,8 +32,8 @@ export default function TableOfContents({
         </div>
         <div className="mb-6 h-1 overflow-hidden rounded-full bg-black/8">
           <div
-            className="h-full rounded-full bg-[var(--color-accent)] transition-transform duration-200 ease-out"
-            style={{ transform: `scaleX(${readingProgress})`, transformOrigin: 'left' }}
+            className="h-full rounded-full bg-[var(--color-accent)] origin-left transition-transform duration-200 ease-out"
+            style={{ transform: `scaleX(${readingProgress})` }}
           />
         </div>
         <ul className="m-0 grid list-none gap-3 pl-0 text-sm font-medium text-black/60">
@@ -69,8 +69,8 @@ export default function TableOfContents({
       <div>
         <div className="mb-8 h-1 overflow-hidden rounded-full bg-black/8">
           <div
-            className="h-full rounded-full bg-[var(--color-accent)] transition-transform duration-200 ease-out"
-            style={{ transform: `scaleX(${readingProgress})`, transformOrigin: 'left' }}
+            className="h-full rounded-full bg-[var(--color-accent)] origin-left transition-transform duration-200 ease-out"
+            style={{ transform: `scaleX(${readingProgress})` }}
           />
         </div>
         <ul className="m-0 list-none space-y-5 pl-0">

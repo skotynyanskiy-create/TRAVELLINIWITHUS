@@ -145,13 +145,13 @@
   },
   {
     "route": "/admin/users",
-    "status": 404,
+    "status": 200,
     "title": "Travelliniwithus",
     "finalUrl": "http://localhost:3000/admin/users"
   },
   {
     "route": "/admin/orders",
-    "status": 404,
+    "status": 200,
     "title": "Travelliniwithus",
     "finalUrl": "http://localhost:3000/admin/orders"
   },

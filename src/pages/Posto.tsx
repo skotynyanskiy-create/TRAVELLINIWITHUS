@@ -1,17 +1,6 @@
 import { useState } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
-import {
-  ExternalLink,
-  MapPin,
-  Play,
-  Navigation,
-  Clock,
-  Phone,
-  CalendarCheck,
-  Heart,
-  Share2,
-  CheckCircle,
-} from 'lucide-react';
+import { MapPin, Play, Navigation, Clock, Phone, Heart, Share2, CheckCircle } from 'lucide-react';
 import PostoStamp from '../components/atlante/PostoStamp';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
@@ -27,11 +16,9 @@ import { findDestinationByRegionName, getDestinationUrl } from '../config/destin
 import { SITE_URL } from '../config/site';
 import { useFavorites } from '../context/FavoritesContext';
 import { trackEvent } from '../services/analytics';
-import {
-  buildGoogleMapsDirectionsUrl,
-  buildGoogleMapsListingUrl,
-  getBookingProviderFromUrl,
-} from '../utils/placeLinks';
+import { getUserLocation, getGoogleMapsDirectionsUrl, type UserLocation } from '../utils/geo';
+import { shareContent } from '../utils/share';
+import PlaceBusinessActions from '../components/PlaceBusinessActions';
 import type { ContentType } from '../config/contentTaxonomy';
 
 /** Mappa types[0] → @type Schema.org per il JSON-LD della pagina-posto. */
@@ -52,6 +39,10 @@ export default function Posto() {
   const item = slug ? getContentById(slug) : undefined;
   const { isFavorite, toggleFavorite } = useFavorites();
   const [copied, setCopied] = useState(false);
+  // Sopra il return anticipato: con `item` mancante si renderizzava un hook in
+  // meno, e navigando da un posto reale a uno slug inesistente React riusa la
+  // stessa fiber → "Rendered fewer hooks than expected".
+  const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
 
   if (!item) {
     return <Navigate to="/esplora" replace />;
@@ -68,37 +59,19 @@ export default function Posto() {
 
   const saved = isFavorite(item.id);
   const coordinates = item.place.coordinates;
-  const directionsUrl = buildGoogleMapsDirectionsUrl({
-    name: item.place.name,
-    city: item.place.city,
-    coordinates,
-    googlePlaceQuery: item.place.googlePlaceQuery,
-  });
-  const listingUrl = buildGoogleMapsListingUrl({
-    name: item.place.name,
-    city: item.place.city,
-    googlePlaceQuery: item.place.googlePlaceQuery,
-  });
+  const directionsUrl = coordinates
+    ? getGoogleMapsDirectionsUrl({
+        lat: coordinates.lat,
+        lng: coordinates.lng,
+        address: item.place.googlePlaceQuery || `${item.place.name}, ${item.place.city ?? ''}`,
+      })
+    : '#';
   const mapPinUrl = coordinates ? `/mappa?place=${encodeURIComponent(item.id)}` : undefined;
-  const bookingLabel = item.types[0] === 'Food & Ristoranti' ? 'Prenota un tavolo' : 'Prenota';
 
   const handleDirectionsClick = () => {
     trackEvent('place_directions_click', {
       place_id: item.id,
       has_coordinates: Boolean(coordinates),
-    });
-  };
-
-  const handleGoogleListingClick = () => {
-    trackEvent('place_google_listing_click', { place_id: item.id });
-  };
-
-  const handleBookingClick = () => {
-    trackEvent('place_booking_click', {
-      place_id: item.id,
-      provider: item.place.bookingUrl
-        ? getBookingProviderFromUrl(item.place.bookingUrl)
-        : 'unknown',
     });
   };
 
@@ -113,18 +86,28 @@ export default function Posto() {
     }
   };
 
-  const handleShare = async () => {
-    const method = navigator.share ? 'native' : 'copy';
-    trackEvent('place_share_click', { place_id: item.id, method });
+  const handleDetectLocation = async () => {
+    try {
+      const loc = await getUserLocation();
+      setUserLocation(loc);
+    } catch {
+      // Ignorato se l'utente rifiuta i permessi
+    }
+  };
 
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: item.title, url: canonical });
-      } catch {
-        // condivisione annullata dall'utente — nessuna azione
-      }
-    } else {
-      await navigator.clipboard.writeText(canonical);
+  const handleShare = async () => {
+    trackEvent('place_share_click', {
+      place_id: item.id,
+      method: typeof navigator !== 'undefined' && navigator.share ? 'native' : 'copy',
+    });
+
+    const success = await shareContent({
+      title: item.title,
+      text: item.description || item.hook,
+      url: canonical,
+    });
+
+    if (success) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
@@ -354,28 +337,19 @@ export default function Posto() {
                     </div>
                   )}
 
-                  <div className="mt-4 flex flex-wrap gap-3">
-                    {item.place.bookingUrl && (
-                      <a
-                        href={item.place.bookingUrl}
-                        target="_blank"
-                        rel="sponsored noopener"
-                        onClick={handleBookingClick}
-                        className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[var(--color-border)] px-5 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
-                      >
-                        <CalendarCheck size={14} aria-hidden /> {bookingLabel}
-                      </a>
-                    )}
-                    <a
-                      href={listingUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      onClick={handleGoogleListingClick}
-                      className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[var(--color-border)] px-5 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
-                    >
-                      <ExternalLink size={14} aria-hidden /> Vedi su Google
-                    </a>
+                  <div className="mt-4">
+                    <PlaceBusinessActions item={item} userLocation={userLocation} />
                   </div>
+
+                  {!userLocation && (
+                    <button
+                      type="button"
+                      onClick={handleDetectLocation}
+                      className="mt-3 inline-flex items-center gap-1.5 text-xs text-[var(--color-ink-2)] underline-offset-4 transition-colors hover:text-[var(--color-accent)] hover:underline"
+                    >
+                      <Navigation size={13} aria-hidden /> Calcola quanto dista da me
+                    </button>
+                  )}
 
                   <p className="mt-4 text-[11px] text-[var(--color-muted-fg)]">
                     Orari, telefono e prenotazione sono aggiornati direttamente da Google.

@@ -176,7 +176,10 @@ export default function ChiSiamo() {
             <div className="relative mb-8 inline-block">
               <h1 className="text-display-1">
                 {pageContent.heroTitleMain}
-                <br /> <span className="italic text-black/75">{pageContent.heroTitleAccent}</span>
+                <br />{' '}
+                <span className="italic text-[var(--color-ink-2)]">
+                  {pageContent.heroTitleAccent}
+                </span>
               </h1>
             </div>
 
@@ -187,7 +190,7 @@ export default function ChiSiamo() {
             </div>
 
             <div className="mb-8 grid grid-cols-3 gap-4 sm:max-w-xl">
-              <div className="border-t border-black/10 pt-4 text-center">
+              <div className="border-t border-[var(--color-border)] pt-4 text-center">
                 <div className="text-3xl font-serif text-[var(--color-ink)] transition-colors duration-300 group-hover:text-[var(--color-accent)]">
                   2018
                 </div>
@@ -195,7 +198,7 @@ export default function ChiSiamo() {
                   nascita del brand
                 </div>
               </div>
-              <div className="border-t border-black/10 pt-4 text-center">
+              <div className="border-t border-[var(--color-border)] pt-4 text-center">
                 <div className="text-3xl font-serif text-[var(--color-ink)] transition-colors duration-300 group-hover:text-[var(--color-accent)]">
                   {BRAND_STATS.instagramFollowers}
                 </div>
@@ -203,7 +206,7 @@ export default function ChiSiamo() {
                   community IG
                 </div>
               </div>
-              <div className="border-t border-black/10 pt-4 text-center">
+              <div className="border-t border-[var(--color-border)] pt-4 text-center">
                 <div className="text-3xl font-serif text-[var(--color-ink)] transition-colors duration-300 group-hover:text-[var(--color-accent)]">
                   {BRAND_STATS.tiktokFollowers}
                 </div>
@@ -219,7 +222,7 @@ export default function ChiSiamo() {
                   href={CONTACTS.instagramUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex h-12 w-12 items-center justify-center rounded-full border border-black/10 bg-white transition-colors duration-300 hover:border-[var(--color-accent)]/35 hover:text-[var(--color-accent)]"
+                  className="group flex h-12 w-12 items-center justify-center rounded-full border border-[var(--color-border)] bg-white transition-colors duration-300 hover:border-[var(--color-accent)]/35 hover:text-[var(--color-accent)]"
                   aria-label="Instagram Travelliniwithus"
                 >
                   <Instagram
@@ -229,7 +232,7 @@ export default function ChiSiamo() {
                 </a>
                 <a
                   href={CONTACTS.mailto}
-                  className="group flex h-12 w-12 items-center justify-center rounded-full border border-black/10 bg-white transition-colors duration-300 hover:border-[var(--color-accent)]/35 hover:text-[var(--color-accent)]"
+                  className="group flex h-12 w-12 items-center justify-center rounded-full border border-[var(--color-border)] bg-white transition-colors duration-300 hover:border-[var(--color-accent)]/35 hover:text-[var(--color-accent)]"
                   aria-label="Email Travelliniwithus"
                 >
                   <Mail
@@ -241,7 +244,7 @@ export default function ChiSiamo() {
                   href={CONTACTS.whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex h-12 w-12 items-center justify-center rounded-full border border-black/10 bg-white transition-colors duration-300 hover:border-[var(--color-accent)]/35 hover:text-[var(--color-accent)]"
+                  className="group flex h-12 w-12 items-center justify-center rounded-full border border-[var(--color-border)] bg-white transition-colors duration-300 hover:border-[var(--color-accent)]/35 hover:text-[var(--color-accent)]"
                   aria-label="WhatsApp Travelliniwithus"
                 >
                   <MessageCircle
@@ -303,7 +306,7 @@ export default function ChiSiamo() {
           {pageContent.focusAreas.map((item, index) => {
             const Icon = focusIcons[index] ?? Compass;
             return (
-              <div key={item.title} className="relative border-t border-black/10 pt-8">
+              <div key={item.title} className="relative border-t border-[var(--color-border)] pt-8">
                 <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[var(--color-accent)]">
                   <Icon size={24} />
                 </div>
@@ -320,7 +323,7 @@ export default function ChiSiamo() {
       <Section title={pageContent.principlesTitle} subtitle={pageContent.principlesSubtitle}>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {pageContent.principles.map((item, index) => (
-            <div key={item.title} className="relative border-l border-black/10 pl-8">
+            <div key={item.title} className="relative border-l border-[var(--color-border)] pl-8">
               <span className="absolute right-6 top-4 font-serif text-6xl text-[var(--color-accent)]/10 transition-transform duration-500 group-hover:scale-110">
                 {String(index + 1).padStart(2, '0')}
               </span>
@@ -441,10 +444,10 @@ export default function ChiSiamo() {
           </div>
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button to="/esplora" variant="cta" size="lg" magnetic={true}>
-              Esplora i posti
+              Esplora l&apos;Atlante
             </Button>
             <Button to="/collaborazioni" variant="outline-light" size="lg" magnetic={true}>
-              Lavora con noi
+              Sei un Brand / Hotel? Scopri i Format B2B →
             </Button>
           </div>
         </div>
@@ -475,7 +478,7 @@ export default function ChiSiamo() {
               <motion.div
                 whileHover={{ y: -4, scale: 1.01 }}
                 transition={{ duration: 0.4, ease: 'easeOut' }}
-                className="flex-1 border-l border-black/10 bg-white p-6 shadow-xs transition-colors duration-300 hover:border-[var(--color-accent)]/35 md:p-8"
+                className="flex-1 border-l border-[var(--color-border)] bg-white p-6 shadow-xs transition-colors duration-300 hover:border-[var(--color-accent)]/35 md:p-8"
               >
                 <h3 className="mb-3 text-2xl font-serif text-[var(--color-ink)] transition-colors duration-300 group-hover:text-[var(--color-accent)]">
                   {milestone.title}

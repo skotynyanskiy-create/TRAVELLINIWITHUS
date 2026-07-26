@@ -42,7 +42,7 @@ const FEATURED_STORIES: FeaturedStory[] = [
     id: '3',
     title: 'Rorbu di Pescatori sui Fiordi',
     location: 'Lofoten, Norvegia',
-    category: 'Esperienza Unica',
+    category: "Esperienza d'Eccezione",
     price: '€ 210 / notte',
     score: '10/10 Panoramica',
     image: '/images/reels/reel-4-cover.webp',

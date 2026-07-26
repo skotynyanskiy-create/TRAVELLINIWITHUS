@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Direzione A — «Rivista Viva» · design-lab Travelliniwithus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Token REALI da src/index.css @theme — non inventati */
+  :root{
+    --sand:#faf8f4; --surface:#fff; --border:#e7e5e4;
+    --ink:#0a0a0a; --ink-2:#44403c; --muted:#78716c;
+    --accent:#c2410c; --accent-hover:#9a3412; --accent-soft:#fff7ed;
+    --carta:#f2ecdf; --carta-deep:#e6ddcd; --inchiostro:#1e1c18;
+    --linea:rgb(30 28 24 / 24%);
+    --serif:'Fraunces',serif; --sans:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0}
+  body{background:var(--sand);color:var(--ink);font-family:var(--sans);font-size:1.0625rem;line-height:1.7;-webkit-font-smoothing:antialiased}
+  img{max-width:100%;display:block}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 clamp(1.25rem,5vw,4rem)}
+
+  /* ── Masthead (journal-header riusato) ─────────────────── */
+  header.masthead{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--sand) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--linea)}
+  .masthead .wrap{display:flex;align-items:baseline;justify-content:space-between;padding-top:.9rem;padding-bottom:.9rem}
+  .wordmark{font-family:var(--serif);font-weight:600;font-size:1.15rem;letter-spacing:.02em}
+  .folio{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+
+  /* ── Lab banner ────────────────────────────────────────── */
+  .lab{background:var(--inchiostro);color:var(--carta);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;text-align:center;padding:.55rem 1rem}
+  .lab strong{color:#e8834e;font-weight:600}
+
+  /* ── Etichetta di sezione con filetto che si traccia ───── */
+  .rubrica{display:flex;align-items:center;gap:1rem;margin-bottom:clamp(1.6rem,3vw,2.6rem)}
+  .rubrica span{font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap}
+  .rubrica .filetto{height:1px;background:var(--ink);flex:1;transform-origin:left;transform:scaleX(0);transition:transform .6s cubic-bezier(.22,.8,.32,1)}
+  .in-view .rubrica .filetto{transform:scaleX(1)}
+
+  /* ── Titoli serif rivelati riga per riga ───────────────── */
+  h1,h2,h3{font-family:var(--serif);font-weight:430;letter-spacing:-0.05em}
+  .display{font-size:clamp(3.4rem,6vw,6.4rem);line-height:.94}
+  .reveal .line{display:block;overflow:hidden}
+  .reveal .line>i{display:block;font-style:normal;transform:translateY(110%);transition:transform .6s cubic-bezier(.22,.8,.32,1)}
+  .in-view .reveal .line:nth-child(2)>i{transition-delay:.08s}
+  .in-view .reveal .line:nth-child(3)>i{transition-delay:.16s}
+  .in-view .reveal .line>i{transform:translateY(0)}
+  .deck{font-family:var(--serif);font-weight:420;font-size:clamp(1.15rem,1.5vw,1.35rem);line-height:1.55;color:var(--ink-2);max-width:34em}
+
+  section{padding:clamp(3.5rem,8vw,7rem) 0}
+  section+section{border-top:1px solid var(--linea)}
+
+  /* ── Palette ───────────────────────────────────────────── */
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-top:2rem}
+  .sw{border:1px solid var(--border);background:var(--surface)}
+  .sw i{display:block;height:74px}
+  .sw figcaption{padding:.6rem .7rem;font-size:.68rem;letter-spacing:.06em;color:var(--ink-2)}
+  .sw code{display:block;color:var(--muted);font-size:.64rem}
+
+  /* ── Specimen ──────────────────────────────────────────── */
+  .specimen>div{padding:1.4rem 0;border-bottom:1px dashed var(--linea)}
+  .spec-label{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+
+  /* ── Sommario (Monocle) ────────────────────────────────── */
+  .sommario{list-style:none;padding:0}
+  .sommario li{display:flex;align-items:baseline;gap:1rem;padding:1.05rem 0;border-bottom:1px solid var(--linea)}
+  .sommario .rub{font-family:var(--serif);font-size:clamp(1.4rem,2.4vw,2.1rem);font-weight:430;letter-spacing:-0.03em}
+  .sommario .dots{flex:1;border-bottom:1px dotted var(--linea);transform:translateY(-6px)}
+  .sommario .meta{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+  .sommario .num{font-family:var(--serif);color:var(--accent);font-size:1rem;min-width:2ch}
+
+  /* ── Cover-block (Yolo) — sezione campione ─────────────── */
+  .cover-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .cover-grid img{aspect-ratio:4/5;object-fit:cover;width:100%}
+  .cover-block{grid-column:1/-1;background:var(--inchiostro);color:var(--carta);padding:clamp(2rem,5vw,4rem)}
+  .cover-block .kicker{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:#e8834e;margin-bottom:1rem}
+  .cover-block h3{font-size:clamp(2rem,4vw,3.4rem);font-weight:430;line-height:1.05;letter-spacing:-0.04em;max-width:18em}
+  .cover-block p{font-family:var(--serif);font-weight:420;font-size:1.1rem;margin-top:1.2rem;color:var(--carta-deep, #e6ddcd);max-width:38em}
+  figure{position:relative}
+  figure figcaption{position:absolute;right:.6rem;bottom:.6rem;background:color-mix(in srgb,var(--inchiostro) 78%,transparent);color:var(--carta);font-size:.68rem;letter-spacing:.04em;padding:.25rem .55rem}
+  .nota{margin-top:2.5rem;font-family:var(--serif);font-style:italic;font-weight:420;font-size:1.05rem;color:var(--ink-2)}
+  .nota strong{color:var(--accent);font-style:normal;font-weight:500}
+
+  .gate{background:var(--accent-soft);border:1px solid var(--border);padding:1.2rem 1.4rem;font-size:.85rem;margin-top:2rem}
+  .gate b{color:var(--accent-hover)}
+  a.back{color:var(--accent-hover);font-size:.85rem}
+  @media (max-width:640px){.cover-grid{grid-template-columns:1fr}}
+  @media (prefers-reduced-motion:reduce){
+    .rubrica .filetto{transform:scaleX(1);transition:none}
+    .reveal .line>i{transform:none;transition:none}
+  }
+</style>
+</head>
+<body>
+<div class="lab">design-lab · fuori dal build · <strong>Direzione A</strong> — materiale di decisione, non produzione</div>
+
+<header class="masthead"><div class="wrap">
+  <span class="wordmark">Travellini<span style="color:var(--accent)">.</span></span>
+  <span class="folio">Estate 2026 · Numero 01</span>
+</div></header>
+
+<main>
+  <!-- HERO: il numero della rivista -->
+  <section class="observe"><div class="wrap">
+    <div class="rubrica"><span>La rivista dei posti veri</span><i class="filetto"></i></div>
+    <h1 class="display reveal">
+      <span class="line"><i>Posti che sembrano</i></span>
+      <span class="line"><i>inventati. Ma ci</i></span>
+      <span class="line"><i>siamo stati davvero.</i></span>
+    </h1>
+    <p class="deck" style="margin-top:1.8rem">Il sito diventa un numero di rivista che si sfoglia: masthead, sommario,
+    folio e filetti. Il serif osa anche fuori dai titoli — come in questa frase — nei momenti d'autore.</p>
+  </div></section>
+
+  <!-- CONCEPT + PALETTE -->
+  <section class="observe"><div class="wrap">
+    <div class="rubrica"><span>Palette · token reali</span><i class="filetto"></i></div>
+    <p class="deck">Nessun colore nuovo. La direzione usa i token esistenti di <code>src/index.css</code>:
+    la sand resta la pagina, l'inchiostro fa i cover-block, la terracotta resta l'unico accento.</p>
+    <div class="swatches">
+      <figure class="sw"><i style="background:#faf8f4;border-bottom:1px solid var(--border)"></i><figcaption>Sand — pagina<code>--color-sand #faf8f4</code></figcaption></figure>
+      <figure class="sw"><i style="background:#0a0a0a"></i><figcaption>Ink — testo<code>--color-ink #0a0a0a</code></figcaption></figure>
+      <figure class="sw"><i style="background:#1e1c18"></i><figcaption>Inchiostro caldo — cover-block<code>--color-atlante-inchiostro #1e1c18</code></figcaption></figure>
+      <figure class="sw"><i style="background:#c2410c"></i><figcaption>Terracotta — accento<code>--color-accent #c2410c</code></figcaption></figure>
+      <figure class="sw"><i style="background:#f2ecdf;border-bottom:1px solid var(--border)"></i><figcaption>Carta — inserti<code>--color-atlante-carta #f2ecdf</code></figcaption></figure>
+    </div>
+  </div></section>
+
+  <!-- SPECIMEN -->
+  <section class="observe"><div class="wrap">
+    <div class="rubrica"><span>Specimen Fraunces · scala della direzione</span><i class="filetto"></i></div>
+    <div class="specimen">
+      <div><p class="spec-label">Display h1 — clamp(3.4rem, 6vw, 6.4rem) / 0.94 · Fraunces 430 · tracking −0.05em</p>
+        <p style="font-family:var(--serif);font-weight:430;font-size:clamp(3.4rem,6vw,6.4rem);line-height:.94;letter-spacing:-.05em">Vale davvero?</p></div>
+      <div><p class="spec-label">Deck editoriale in serif (il coraggio Kinfolk) — clamp(1.15rem, 1.5vw, 1.35rem) / 1.55 · Fraunces 420</p>
+        <p class="deck">Un aperitivo dai Volturi a Volterra: drink che sembrano sangue, atmosfera gotica e un po' di scena.</p></div>
+      <div><p class="spec-label">Etichetta di sezione (Monocle) — Inter 0.68rem · tracking 0.2em · uppercase + filetto</p>
+        <div class="rubrica" style="margin:0"><span>Sembra impossibile</span><i class="filetto" style="transform:scaleX(1)"></i></div></div>
+      <div><p class="spec-label">Folio/meta — Inter 0.62rem · tracking 0.16em</p>
+        <p class="folio">Estate 2026 · Numero 01 · 29 posti</p></div>
+      <div><p class="spec-label">Body — Inter 1.0625rem / 1.7 (invariato: la leggibilità non si tocca)</p>
+        <p style="max-width:38em">Il body resta Inter. Il serif compare solo nei momenti editoriali: aperture, citazioni, verdetti. È la differenza tra una rivista e un sito che finge di esserlo.</p></div>
+    </div>
+  </div></section>
+
+  <!-- SEZIONE CAMPIONE 1: IL SOMMARIO -->
+  <section class="observe"><div class="wrap">
+    <div class="rubrica"><span>Sezione nuova · «Il Sommario»</span><i class="filetto"></i></div>
+    <h2 class="reveal" style="font-size:clamp(2rem,3.5vw,3.5rem);margin-bottom:2rem"><span class="line"><i>In questo numero</i></span></h2>
+    <ul class="sommario">
+      <li><span class="num">01</span><span class="rub">Sembra impossibile</span><i class="dots"></i><span class="meta">Posti particolari</span></li>
+      <li><span class="num">02</span><span class="rub">Altrove, vicino</span><i class="dots"></i><span class="meta">Insolito in Italia</span></li>
+      <li><span class="num">03</span><span class="rub">Dormire dentro una storia</span><i class="dots"></i><span class="meta">Hotel con carattere</span></li>
+      <li><span class="num">04</span><span class="rub">Vale davvero?</span><i class="dots"></i><span class="meta">Verdetti col prezzo</span></li>
+    </ul>
+    <p class="nota">La nota a mano dell'occhio-editor userebbe <strong>--font-script</strong> → oggi è mappata su Fraunces italic;
+    una vera manoscritta è <strong>gate owner</strong> (punto 3).</p>
+  </div></section>
+
+  <!-- SEZIONE CAMPIONE 2: COVER-BLOCK con asset reali -->
+  <section class="observe"><div class="wrap">
+    <div class="rubrica"><span>Sezione nuova · «Copertina del numero» — foto e copy reali</span><i class="filetto"></i></div>
+    <div class="cover-grid">
+      <figure><img src="../public/images/reels/reel-5-cover.webp" alt="Portone medievale a Volterra con persone in abiti gotici sui gradini in pietra" loading="lazy"><figcaption>Toscana · Volterra</figcaption></figure>
+      <figure><img src="../public/images/reels/montepulciano-altro-cantuccio-cover.webp" alt="Tavola apparecchiata del menù degustazione a Montepulciano" loading="lazy"><figcaption>Montepulciano · L'Altro Cantuccio</figcaption></figure>
+      <div class="cover-block">
+        <p class="kicker">Rubrica 02 · Altrove, vicino</p>
+        <h3>Aperitivo coi vampiri a Volterra.</h3>
+        <p>Drink che sembrano sangue, atmosfera gotica e un po' di scena. Per chi ama l'insolito — a un'ora da casa, non dall'altra parte del mondo.</p>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- GATE + NAV -->
+  <section><div class="wrap">
+    <div class="gate"><b>Punti gate owner di questa direzione:</b> ① base scura journal <code>#d1c6b7</code> come superficie principale (alternativa senza gate: resta la sand, il fondo scuro solo tra le pagine) · ② riallineare <code>--trace-red #bd3f23</code> alla terracotta di brand · ③ eventuale famiglia manoscritta per la nota a mano.</div>
+    <p style="margin-top:2rem"><a class="back" href="index.html">← Torna al confronto</a></p>
+  </div></section>
+</main>
+
+<script>
+  // Demo del gesto-firma: in produzione = GSAP SplitText + ScrollTrigger (once:true).
+  // Qui: IntersectionObserver + transizioni CSS, per non dipendere da librerie nel lab.
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); }
+  }), {threshold:.25});
+  document.querySelectorAll('section.observe').forEach(s => io.observe(s));
+</script>
+</body>
+</html>

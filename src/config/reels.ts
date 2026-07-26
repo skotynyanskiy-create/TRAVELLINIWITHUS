@@ -358,7 +358,7 @@ const RAW_REELS: ReelEntry[] = [
     zone: 'Italia',
     type: 'Food & Ristoranti',
     caption:
-      'Nel cuore di Verona, una location elegante e fuori dal comune: pizze farcite, piatti della tradizione veronese, un menù estivo con abbinamenti creativi e portate ricoperte da una vera cascata di tartufo. Da mettere in lista per un weekend in città.',
+      'A Verona, una location elegante e fuori dal comune: pizze farcite, piatti della tradizione veronese, un menù estivo con abbinamenti creativi e portate ricoperte da una vera cascata di tartufo. Da mettere in lista per un weekend in città.',
     hook: 'Una pioggia di tartufo?',
     hashtags: ['verona', 'tartufo', 'ristoranti', 'travelliniwithus'],
     instagramUrl: 'https://www.instagram.com/reel/DaMuAWCso-V/',
@@ -613,7 +613,7 @@ const RAW_REELS: ReelEntry[] = [
     zone: 'Italia',
     type: 'Food & Ristoranti',
     caption:
-      "Nel cuore di Verona, un format unico da Little Italy: promo a 30€ con due spritz XL da mezzo litro e un 'sushi di pizza'. Per una serata diversa in città.",
+      "A Verona, un format unico da Little Italy: promo a 30€ con due spritz XL da mezzo litro e un 'sushi di pizza'. Per una serata diversa in città.",
     hook: 'Sushi di pizza e albero di spritz?',
     hashtags: ['verona', 'sushipizza', 'venetofood', 'travelliniwithus'],
     instagramUrl: 'https://www.instagram.com/reel/DYjFh4lsq4m/',

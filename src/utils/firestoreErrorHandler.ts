@@ -69,5 +69,24 @@ export function handleFirestoreError(
     path,
   };
   console.error('Firestore Error: ', JSON.stringify(errInfo));
+
+  if (typeof window !== 'undefined' && typeof errInfo.error === 'string') {
+    const errLower = errInfo.error.toLowerCase();
+    if (
+      errLower.includes('unavailable') ||
+      errLower.includes('offline') ||
+      errLower.includes('network')
+    ) {
+      window.dispatchEvent(
+        new CustomEvent('twu:firestore-error', {
+          detail: {
+            message: 'Connessione al database non disponibile. Verifica la tua connessione.',
+            errInfo,
+          },
+        })
+      );
+    }
+  }
+
   throw new Error(JSON.stringify(errInfo));
 }

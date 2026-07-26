@@ -22,7 +22,10 @@
          Exception: the home poster is preloaded statically because Helmet preloads
          only fire after the lazy route chunk loads — too late for the LCP.
          Deve restare allineato all'immagine `eager` di CinematicHomepage: preloadare
-         un file che la home non renderizza costa banda E ritarda l'LCP vero. -->
+         un file che la home non renderizza costa banda E ritarda l'LCP vero.
+         `imagesizes` qui e `sizes` su <OptimizedImage> in BrandCoherentHero devono
+         restare IDENTICI: se divergono il browser preloada una variante e poi ne
+         scarica una seconda per l'elemento. -->
     <link
       rel="preload"
       as="image"
@@ -32,7 +35,7 @@
         /images/home-journal/hero-impossible-480.avif  480w,
         /images/home-journal/hero-impossible-768.avif  768w,
         /images/home-journal/hero-impossible.avif     1080w"
-      imagesizes="(max-width: 768px) 100vw, 1080px"
+      imagesizes="(max-width: 1023px) 80vw, 37vw"
       fetchpriority="high"
     />
 

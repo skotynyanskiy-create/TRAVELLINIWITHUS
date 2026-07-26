@@ -30,7 +30,7 @@ const TICKETS_DATA = [
     id: 'ticket-3',
     title: 'Rorbu sui Fiordi & Aurora Boreale',
     location: 'Lofoten, Norvegia',
-    type: 'Esperienza Unica',
+    type: "Esperienza d'Eccezione",
     score: '10/10',
     price: '€ 210 / notte',
     cover: '/images/reels/reel-4-cover.webp',
@@ -45,7 +45,7 @@ export default function ImmersiveTicketShowcase() {
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="mb-14 flex flex-col justify-between md:flex-row md:items-end">
           <div>
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent,#c85a32)]">
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent-on-dark)]">
               <Sparkles size={14} />
               Card 3D Olografiche · Passaporto
             </span>

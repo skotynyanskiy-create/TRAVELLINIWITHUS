@@ -209,7 +209,7 @@ export default function InteractiveMap({
             <button
               onClick={closeCards}
               aria-label="Chiudi scheda mappa"
-              className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/20 text-white backdrop-blur-md transition-colors hover:bg-black/40"
+              className="absolute right-3 top-3 z-10 flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-full bg-black/40 text-white shadow-md backdrop-blur-md transition-colors hover:bg-black/60 md:h-8 md:w-8"
             >
               <X size={16} />
             </button>
@@ -266,7 +266,7 @@ export default function InteractiveMap({
             <button
               onClick={closeCards}
               aria-label="Chiudi scheda mappa"
-              className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/5 text-black/50 transition-colors hover:bg-black/10"
+              className="absolute right-3 top-3 z-10 flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-full bg-black/10 text-black/70 backdrop-blur-sm transition-colors hover:bg-black/20 md:h-8 md:w-8"
             >
               <X size={16} />
             </button>

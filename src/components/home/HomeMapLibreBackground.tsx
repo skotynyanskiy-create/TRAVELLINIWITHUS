@@ -1,6 +1,6 @@
 import { useRef, useEffect, useMemo, useSyncExternalStore } from 'react';
 import Map, { Marker, type MapRef } from 'react-map-gl/maplibre';
-import { CONTENT_ITEMS } from '@/src/config/contentLibrary';
+import { getMapPinItems } from '@/src/config/contentLibrary';
 import { useReducedMotion } from '@/src/hooks/useReducedMotion';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -22,13 +22,7 @@ export default function HomeMapLibreBackground() {
   const reduceMotion = useReducedMotion();
   const tabVisible = useSyncExternalStore(subscribeVisibility, getVisibilitySnapshot, () => true);
 
-  const geocodedItems = useMemo(
-    () =>
-      CONTENT_ITEMS.filter(
-        (item) => item.place?.coordinates?.lat && item.place?.coordinates?.lng
-      ).slice(0, HOME_MAP_PIN_LIMIT),
-    []
-  );
+  const geocodedItems = useMemo(() => getMapPinItems(HOME_MAP_PIN_LIMIT), []);
 
   // Slow bearing spin only when motion allowed and tab visible
   useEffect(() => {

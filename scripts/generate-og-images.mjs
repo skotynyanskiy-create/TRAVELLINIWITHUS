@@ -8,7 +8,12 @@
  */
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { createRequire } from 'node:module';
 import sharp from 'sharp';
+import { STATIC_ROUTE_META, ogSlugForPath } from '../src/config/routeMeta.ts';
+
+const require = createRequire(import.meta.url);
+const contentSeed = require('../src/data/content-seed.json');
 
 const OUT_DIR = path.resolve(process.cwd(), 'public/og');
 
@@ -107,6 +112,35 @@ const ARTICLES = [
   },
 ];
 
+/**
+ * Card per le rotte statiche. Prima di questo pass ogni pagina condivideva
+ * `default.jpg`, quindi ogni link condiviso mostrava la stessa immagine.
+ */
+const STATIC_ROUTES = STATIC_ROUTE_META.map((entry) => ({
+  slug: ogSlugForPath(entry.path),
+  title: entry.title,
+  category: entry.ogCategory,
+  location: entry.ogLocation || '',
+}));
+
+/**
+ * Card per le pagine-posto. Selezione identica a generate-sitemap.js e a
+ * generate-route-html.mjs: SOLO `isPlaceholder:false`. I placeholder non hanno
+ * pagina emessa ne voce sitemap, quindi non hanno OG — 32 su 33 non hanno
+ * nemmeno una cover.
+ *
+ * Non si usa `item.cover` come og:image: le cover sono frame di reel 9:16 e
+ * verrebbero ritagliate male dagli scraper, che si aspettano 1200x630.
+ */
+const POSTI = contentSeed
+  .filter((item) => !item.isPlaceholder)
+  .map((item) => ({
+    slug: `posto-${item.id}`,
+    title: item.title || item.place?.name || item.id,
+    category: 'Posto provato',
+    location: [item.place?.city, item.place?.country].filter(Boolean).join(', '),
+  }));
+
 // WebP e' il formato principale (leggero, usato per default in SEO.tsx), ma
 // WhatsApp/LinkedIn renderizzano WebP in modo inaffidabile nelle preview card:
 // ogni entry produce anche un .jpg, cosi' i path .jpg gia' referenziati da
@@ -145,7 +179,21 @@ async function main() {
     const files = await generateOne(article);
     console.log(`Generated ${files.join(', ')}`);
   }
-  console.log(`Done: ${(ARTICLES.length + 1) * 2} OG images`);
+
+  for (const route of STATIC_ROUTES) {
+    await generateOne(route);
+  }
+  console.log(`Generated ${STATIC_ROUTES.length} card rotte statiche`);
+
+  for (const posto of POSTI) {
+    await generateOne(posto);
+  }
+  console.log(`Generated ${POSTI.length} card posto (posto-<id>.webp/.jpg)`);
+
+  const total = (ARTICLES.length + STATIC_ROUTES.length + POSTI.length + 1) * 2;
+  console.log(
+    `Done: ${total} OG images (${ARTICLES.length} articoli, ${STATIC_ROUTES.length} rotte statiche, ${POSTI.length}/${contentSeed.length} posti reali, 1 default).`
+  );
 }
 
 main().catch((err) => {

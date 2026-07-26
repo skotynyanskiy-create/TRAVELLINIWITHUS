@@ -52,6 +52,16 @@ export const BRAND_CREDENTIALS = {
   disclosurePolicyLabel: 'Disclosure pubblicitaria sempre dichiarata',
 } as const;
 
+export const BRAND_PROMISE = {
+  heroTagline: 'Nessun posto consigliato da desk.',
+  heroHighlight: 'Solo viaggi provati di persona.',
+  heroSubhead:
+    'Siamo Rodrigo e Betta. Viaggiamo in coppia per scovare borghi conservati, dimore di charme e trattorie locali. Ti diciamo quanto si spende davvero, quali sono i limiti e se vale la pena partire.',
+  editorialManifestoTitle: 'Raccomandarne meno. Ma raccomandarli davvero.',
+  editorialManifestoSubhead:
+    'Non siamo un aggregatore e non prendiamo compensi per cambiare giudizio. Ogni scheda nasce da un viaggio fatto insieme.',
+} as const;
+
 export const PUBLIC_PROOF_SIGNALS = [
   {
     title: 'Emilia-Fantastica / Castelli del Ducato',

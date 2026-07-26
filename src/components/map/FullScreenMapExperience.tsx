@@ -26,10 +26,13 @@ import {
   ChevronDown,
   MapPin,
   Filter,
+  Loader2,
 } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import { CONTENT_ITEMS } from '@/src/config/contentLibrary';
 import type { ContentItem } from '@/src/types/content';
+import { getUserLocation, sortPlacesByDistance, type UserLocation } from '@/src/utils/geo';
+import PlaceBusinessActions from '../PlaceBusinessActions';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 const MAP_STYLES = {
@@ -123,9 +126,36 @@ export default function FullScreenMapExperience() {
     });
   }, []);
 
+  const [userLoc, setUserLoc] = useState<UserLocation | null>(null);
+  const [locLoading, setLocLoading] = useState<boolean>(false);
+
+  const handleUserLocation = useCallback(async () => {
+    if (userLoc) {
+      setUserLoc(null);
+      return;
+    }
+    setLocLoading(true);
+    try {
+      const loc = await getUserLocation();
+      setUserLoc(loc);
+      if (mapRef.current) {
+        mapRef.current.flyTo({
+          center: [loc.longitude, loc.latitude],
+          zoom: 10.5,
+          pitch: 45,
+          duration: 2000,
+        });
+      }
+    } catch {
+      // Geolocalizzazione fallita o permessi negati
+    } finally {
+      setLocLoading(false);
+    }
+  }, [userLoc]);
+
   // Filtered List
   const filteredItems = useMemo(() => {
-    return allItems.filter((item) => {
+    const items = allItems.filter((item) => {
       const matchZone =
         selectedZone === 'all' || item.zone.toLowerCase() === selectedZone.toLowerCase();
       const matchType =
@@ -141,7 +171,12 @@ export default function FullScreenMapExperience() {
         (item.place.region && item.place.region.toLowerCase().includes(searchQuery.toLowerCase()));
       return matchZone && matchType && matchBudget && matchQuery;
     });
-  }, [allItems, selectedZone, selectedType, selectedBudget, searchQuery]);
+
+    if (userLoc) {
+      return sortPlacesByDistance(items, userLoc);
+    }
+    return items;
+  }, [allItems, selectedZone, selectedType, selectedBudget, searchQuery, userLoc]);
 
   // Web Audio API Synthetic Chime Feedback
   const playChime = useCallback(() => {
@@ -405,6 +440,26 @@ export default function FullScreenMapExperience() {
                   </button>
                 ))}
               </div>
+
+              {/* User Location / Vicino a me Button */}
+              <button
+                type="button"
+                onClick={handleUserLocation}
+                disabled={locLoading}
+                className={`inline-flex items-center gap-1.5 rounded-full border px-3.5 py-2 text-xs font-bold shadow-2xl transition-all ${
+                  userLoc
+                    ? 'border-amber-500 bg-amber-600 text-white'
+                    : 'border-stone-700 bg-stone-900/95 text-stone-200 hover:bg-stone-800 hover:text-white'
+                }`}
+                title={userLoc ? 'Disattiva Vicino a me' : 'Trova posti vicini a te'}
+              >
+                {locLoading ? (
+                  <Loader2 size={14} className="animate-spin text-amber-400" />
+                ) : (
+                  <Navigation size={14} className={userLoc ? 'fill-current' : ''} />
+                )}
+                <span>{userLoc ? 'Vicino a me' : 'Vicino a me'}</span>
+              </button>
 
               {/* "Sorprendimi!" Surprise Button */}
               <button
@@ -716,17 +771,13 @@ export default function FullScreenMapExperience() {
                   <span className="text-white/60">Posizione:</span>
                   <span className="font-bold text-white">{selectedItem.place.country}</span>
                 </div>
-                {selectedItem.place.coordinates && (
-                  <a
-                    href={`https://www.google.com/maps/search/?api=1&query=${selectedItem.place.coordinates.lat},${selectedItem.place.coordinates.lng}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-[var(--color-accent,#c85a32)] hover:underline"
-                  >
-                    <Navigation size={13} />
-                    Apri indicazioni su Google Maps
-                  </a>
-                )}
+                <div className="pt-2">
+                  <PlaceBusinessActions
+                    item={selectedItem}
+                    userLocation={userLoc}
+                    variant="compact"
+                  />
+                </div>
               </div>
             )}
 

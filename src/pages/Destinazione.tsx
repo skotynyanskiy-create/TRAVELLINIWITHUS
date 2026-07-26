@@ -113,6 +113,16 @@ function DestinationsHub() {
             Dai borghi d'Italia ai viaggi fuori dai confini. Cerca la tua regione o filtra per zona
             per scoprire tutte le nostre guide ed i posti provati.
           </p>
+          <div className="mt-6">
+            <Link
+              to="/mappa"
+              className="inline-flex items-center gap-2.5 rounded-full bg-[var(--color-accent)] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-sm transition-all duration-300 hover:scale-105 hover:bg-[var(--color-accent-hover)]"
+            >
+              <MapPin size={16} />
+              Vedi sulla Mappa Interattiva
+              <ArrowRight size={14} />
+            </Link>
+          </div>
         </header>
 
         {/* Control Bar: Search Input & Zone Filters */}
@@ -317,6 +327,16 @@ function DestinationWorld({ node }: { node: DestinationNode }) {
                 </p>
               )}
               <DestinationMeta count={count} />
+              <div className="mt-4">
+                <Link
+                  to="/mappa"
+                  className="inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)] px-4 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-sm transition-all duration-300 hover:scale-105 hover:bg-[var(--color-accent-hover)]"
+                >
+                  <MapPin size={14} />
+                  Vedi sulla Mappa Interattiva
+                  <ArrowRight size={13} />
+                </Link>
+              </div>
             </div>
           </div>
         </section>
@@ -340,6 +360,16 @@ function DestinationWorld({ node }: { node: DestinationNode }) {
                 ·
               </span>
               <span>Rodrigo & Betta</span>
+            </div>
+            <div className="mt-4">
+              <Link
+                to="/mappa"
+                className="inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)] px-4 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-sm transition-all duration-300 hover:scale-105 hover:bg-[var(--color-accent-hover)]"
+              >
+                <MapPin size={14} />
+                Vedi sulla Mappa Interattiva
+                <ArrowRight size={13} />
+              </Link>
             </div>
           </div>
         </section>

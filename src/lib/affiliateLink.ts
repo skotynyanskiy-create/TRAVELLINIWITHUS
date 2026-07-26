@@ -16,7 +16,13 @@
  * the builder returns the bare base URL with no UTM noise — safe to ship.
  */
 
-export type AffiliatePartner = 'skyscanner' | 'booking' | 'airalo' | 'revolut';
+export type AffiliatePartner =
+  | 'skyscanner'
+  | 'booking'
+  | 'airalo'
+  | 'revolut'
+  | 'heymondo'
+  | 'getyourguide';
 
 interface PartnerConfig {
   readonly baseUrl: string;
@@ -56,6 +62,20 @@ const PARTNERS: Record<AffiliatePartner, PartnerConfig> = {
     partnerId: env.VITE_AFFILIATE_REVOLUT_ID ?? '',
     enabled: Boolean(env.VITE_AFFILIATE_REVOLUT_ID),
     displayName: 'Revolut',
+  },
+  heymondo: {
+    baseUrl: 'https://heymondo.it',
+    partnerParam: 'promocode',
+    partnerId: env.VITE_AFFILIATE_HEYMONDO_ID ?? 'TRAVELLINI',
+    enabled: true,
+    displayName: 'Heymondo Assicurazioni',
+  },
+  getyourguide: {
+    baseUrl: 'https://www.getyourguide.it',
+    partnerParam: 'partner_id',
+    partnerId: env.VITE_AFFILIATE_GETYOURGUIDE_ID ?? '',
+    enabled: Boolean(env.VITE_AFFILIATE_GETYOURGUIDE_ID),
+    displayName: 'GetYourGuide Esperienze',
   },
 };
 

@@ -70,7 +70,7 @@ export default function AdminMetricsOverview() {
             Vista demo · sostituibile con dati reali GA4 + RUM Firestore quando connessi.
           </p>
         </div>
-        <span className="rounded-full bg-amber-50 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-amber-700">
+        <span className="rounded-full bg-[var(--color-warning-soft)] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-warning-text)]">
           Demo data
         </span>
       </div>
@@ -88,21 +88,21 @@ export default function AdminMetricsOverview() {
           label="Articoli letti"
           value="4.120"
           deltaPct={9}
-          color="bg-blue-50 text-blue-600"
+          color="bg-[var(--color-info-soft)] text-[var(--color-info-text)]"
         />
         <KpiCard
           icon={Mail}
           label="Lead 7gg"
           value="292"
           deltaPct={22}
-          color="bg-emerald-50 text-emerald-700"
+          color="bg-[var(--color-success-soft)] text-[var(--color-success-text)]"
         />
         <KpiCard
           icon={Users}
           label="Club waitlist"
           value="184"
           deltaPct={31}
-          color="bg-purple-50 text-purple-700"
+          color="bg-[var(--color-accent-soft)] text-[var(--color-accent-text)]"
         />
       </div>
 
@@ -213,7 +213,9 @@ export default function AdminMetricsOverview() {
                   </span>
                   <span
                     className={`inline-flex items-center gap-0.5 text-[10px] font-bold ${
-                      article.growth >= 0 ? 'text-emerald-600' : 'text-rose-500'
+                      article.growth >= 0
+                        ? 'text-[var(--color-success-text)]'
+                        : 'text-[var(--color-error-text)]'
                     }`}
                   >
                     {article.growth >= 0 ? (
@@ -264,13 +266,13 @@ export default function AdminMetricsOverview() {
               {WEB_VITALS.map((vital) => (
                 <div
                   key={vital.metric}
-                  className="rounded-xl border border-emerald-100 bg-emerald-50 p-3 text-center"
+                  className="rounded-xl border border-[var(--color-success-soft)] bg-[var(--color-success-soft)] p-3 text-center"
                 >
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-success-text)]">
                     {vital.metric}
                   </p>
-                  <p className="mt-1 font-serif text-xl text-emerald-900">{vital.value}</p>
-                  <p className="text-[10px] text-emerald-600">{vital.target}</p>
+                  <p className="mt-1 font-serif text-xl text-[var(--color-ink)]">{vital.value}</p>
+                  <p className="text-[10px] text-[var(--color-success-text)]">{vital.target}</p>
                 </div>
               ))}
             </div>
@@ -303,7 +305,7 @@ function KpiCard({ icon: Icon, label, value, deltaPct, color }: KpiCardProps) {
         </div>
         <span
           className={`inline-flex items-center gap-0.5 text-[10px] font-bold ${
-            deltaPct >= 0 ? 'text-emerald-600' : 'text-rose-500'
+            deltaPct >= 0 ? 'text-[var(--color-success-text)]' : 'text-[var(--color-error-text)]'
           }`}
         >
           {deltaPct >= 0 ? <ArrowUpRight size={11} /> : <ArrowDownRight size={11} />}

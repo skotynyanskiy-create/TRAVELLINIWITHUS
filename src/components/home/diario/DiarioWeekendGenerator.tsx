@@ -19,7 +19,7 @@ const DISTANCE_OPTIONS = [
 const BUDGET_OPTIONS = [
   { id: 'smart', label: 'Smart (< 150€/coppia)' },
   { id: 'medio', label: 'Medio (150€ - 300€)' },
-  { id: 'luxury', label: 'Esperienza Unica (> 300€)' },
+  { id: 'luxury', label: "Esperienza d'Eccezione (> 300€)" },
 ];
 
 const RECOMMENDATIONS: Record<

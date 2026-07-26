@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link } from '@/src/components/TransitionLink';
 import { motion } from 'motion/react';
-import { Heart, ArrowRight, BookOpen } from 'lucide-react';
+import { Heart, ArrowRight, BookOpen, MapPin } from 'lucide-react';
 import { heartPulse } from '../lib/animations';
 import { useQuery } from '@tanstack/react-query';
 import { useFavorites } from '../context/FavoritesContext';
@@ -17,6 +17,7 @@ import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_ARTICLE_PREVIEW } from '../config/demoContent';
 import { PREVIEW_ARTICLES } from '../config/previewContent';
 import { useSiteContent } from '../hooks/useSiteContent';
+import { getContentById } from '../config/contentLibrary';
 
 interface FavoriteArticle {
   id: string;
@@ -71,10 +72,23 @@ export default function Preferiti() {
     [availableArticles, favorites]
   );
 
+  // I posti si salvano dalla pagina /posto (toggleFavorite(item.id)) nello stesso
+  // FavoritesContext degli articoli: senza questa risoluzione venivano contati come
+  // "rimossi/non disponibili" qui sotto, mentre in realtà erano solo un tipo di
+  // contenuto che questa pagina non sapeva ancora mostrare.
+  const savedPlaces = useMemo(
+    () =>
+      favorites
+        .map((id) => getContentById(id))
+        .filter((item): item is NonNullable<typeof item> => Boolean(item)),
+    [favorites]
+  );
+
   const missingFavoritesCount = useMemo(() => {
     const availableSlugs = new Set(availableArticles.map((article) => article.slug));
-    return favorites.filter((slug) => !availableSlugs.has(slug)).length;
-  }, [availableArticles, favorites]);
+    const savedPlaceIds = new Set(savedPlaces.map((place) => place.id));
+    return favorites.filter((slug) => !availableSlugs.has(slug) && !savedPlaceIds.has(slug)).length;
+  }, [availableArticles, favorites, savedPlaces]);
 
   return (
     <PageLayout>
@@ -103,13 +117,87 @@ export default function Preferiti() {
           </p>
         </div>
 
+        {!isLoading && missingFavoritesCount > 0 && (
+          <div className="mb-8 rounded-[1.5rem] border border-black/5 bg-[var(--color-sand)] px-6 py-5 text-sm font-normal leading-relaxed text-black/70">
+            {missingFavoritesCount === 1
+              ? 'Un contenuto che avevi salvato non è disponibile nel catalogo pubblico attuale.'
+              : `${missingFavoritesCount} contenuti che avevi salvato non sono disponibili nel catalogo pubblico attuale.`}
+          </div>
+        )}
+
+        {savedPlaces.length > 0 && (
+          <div className="mb-12">
+            <h2 className="mb-6 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)]">
+              Posti salvati
+            </h2>
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+              {savedPlaces.map((place, index) => (
+                <motion.div
+                  key={place.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.08 }}
+                  className="group relative overflow-hidden rounded-[var(--radius-xl)] border border-black/5 bg-white shadow-sm transition-all hover:shadow-[var(--shadow-premium)]"
+                >
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setPulseKeys((prev) => ({
+                        ...prev,
+                        [place.id]: (prev[place.id] || 0) + 1,
+                      }));
+                      toggleFavorite(place.id);
+                    }}
+                    className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-[var(--color-accent)] shadow-sm transition-colors hover:bg-[var(--color-accent)] hover:text-white"
+                    aria-label={`Rimuovi ${place.title} dai preferiti`}
+                  >
+                    <motion.span
+                      key={pulseKeys[place.id] || 0}
+                      variants={heartPulse}
+                      animate="beat"
+                      className="flex items-center justify-center"
+                    >
+                      <Heart size={18} className="fill-current" />
+                    </motion.span>
+                  </button>
+
+                  <Link to={`/posto/${place.id}`} className="block">
+                    <div className="aspect-[4/3] overflow-hidden">
+                      <OptimizedImage
+                        src={place.cover}
+                        alt={place.coverAlt || place.title}
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                    </div>
+                    <div className="p-6">
+                      <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[var(--color-accent)]">
+                        <MapPin size={14} />
+                        {place.types[0] ?? 'Posto particolare'}
+                      </div>
+                      <h3 className="mb-4 line-clamp-2 text-xl font-serif transition-colors group-hover:text-[var(--color-accent)]">
+                        {place.hook || place.title}
+                      </h3>
+                      <p className="mb-5 line-clamp-2 text-sm font-normal leading-relaxed text-black/70">
+                        {place.description}
+                      </p>
+                      <span className="flex items-center gap-2 text-sm font-medium uppercase tracking-widest text-black/60 transition-colors group-hover:text-black">
+                        Apri la scheda <ArrowRight size={14} />
+                      </span>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {isLoading ? (
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3].map((item) => (
               <ArticleSkeleton key={item} />
             ))}
           </div>
-        ) : savedArticles.length === 0 ? (
+        ) : savedArticles.length === 0 && savedPlaces.length === 0 ? (
           <div className="rounded-[var(--radius-xl)] border border-black/5 bg-[var(--color-sand)] py-20 text-center shadow-sm">
             <Heart size={48} className="mx-auto mb-4 text-[var(--color-ink)]/20" />
             <span className="font-serif italic text-xl text-[var(--color-accent)]/80 mb-2 block">
@@ -148,14 +236,12 @@ export default function Preferiti() {
               </Link>
             </div>
           </div>
-        ) : (
+        ) : savedArticles.length > 0 ? (
           <>
-            {missingFavoritesCount > 0 && (
-              <div className="mb-8 rounded-[1.5rem] border border-black/5 bg-[var(--color-sand)] px-6 py-5 text-sm font-normal leading-relaxed text-black/70">
-                {missingFavoritesCount === 1
-                  ? 'Un contenuto che avevi salvato non è disponibile nel catalogo pubblico attuale.'
-                  : `${missingFavoritesCount} contenuti che avevi salvato non sono disponibili nel catalogo pubblico attuale.`}
-              </div>
+            {savedPlaces.length > 0 && (
+              <h2 className="mb-6 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)]">
+                Guide e contenuti salvati
+              </h2>
             )}
 
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -218,7 +304,7 @@ export default function Preferiti() {
               ))}
             </div>
           </>
-        )}
+        ) : null}
       </Section>
     </PageLayout>
   );

@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Direzione B — «Atlante di Coppia» · design-lab Travelliniwithus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Token REALI da src/index.css @theme */
+  :root{
+    --carta:#f2ecdf; --carta-deep:#e6ddcd; --inchiostro:#1e1c18; --notte:#17375a;
+    --timbro:#c2410c; --timbro-text:#9a3412; --linea:rgb(30 28 24 / 24%);
+    --sand:#faf8f4; --border:#e7e5e4; --muted:#78716c;
+    --serif:'Fraunces',serif; --sans:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0}
+  body{background:var(--carta);color:var(--inchiostro);font-family:var(--sans);font-size:1.0625rem;line-height:1.7;-webkit-font-smoothing:antialiased}
+  img{max-width:100%;display:block}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 clamp(1.25rem,5vw,4rem)}
+  .lab{background:var(--inchiostro);color:var(--carta);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;text-align:center;padding:.55rem 1rem}
+  .lab strong{color:#e8834e;font-weight:600}
+
+  h1,h2,h3{font-family:var(--serif);font-weight:400;letter-spacing:-0.03em}
+  .display{font-size:clamp(2.8rem,5vw,4.6rem);line-height:1.0}
+  .codice{font-size:.66rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--timbro-text)}
+  .meta{font-size:.8125rem;color:var(--muted)} /* pavimento a11y, non i 12px di Cereal */
+  section{padding:clamp(3.5rem,8vw,7rem) 0}
+  section+section{border-top:1px solid var(--linea)}
+
+  /* ── LA ROTTA: route-line che si disegna con lo scroll ── */
+  .rotta{position:relative;display:grid;grid-template-columns:72px 1fr;gap:0 clamp(1.2rem,3vw,2.5rem)}
+  .rotta svg{position:absolute;left:26px;top:0;height:100%;width:20px;pointer-events:none;overflow:visible}
+  .rotta svg circle.start{fill:none;stroke:var(--inchiostro);stroke-width:2}
+  .rotta svg line.rail{stroke:var(--timbro);stroke-width:2;stroke-dasharray:1;stroke-dashoffset:1}
+  .tappa{grid-column:2;padding:1.6rem 0;border-bottom:1px solid var(--linea);display:grid;grid-template-columns:minmax(0,1fr) 180px;gap:1.4rem;align-items:center;opacity:.35;transform:translateX(8px);transition:opacity .5s ease,transform .5s ease}
+  .tappa.acceso{opacity:1;transform:none}
+  .tappa .num{font-family:var(--serif);font-size:clamp(2.7rem,4.5vw,4.5rem);line-height:1;color:var(--timbro)}
+  .tappa h3{font-size:clamp(1.5rem,2.4vw,2.2rem);margin:.3rem 0 .4rem}
+  .tappa img{aspect-ratio:4/3;object-fit:cover;border:1px solid var(--linea)}
+  .tappa .head{display:flex;align-items:baseline;gap:1.2rem}
+
+  /* ── L'ATLANTE: griglia-archivio ── */
+  .archivio{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.4rem}
+  .scheda{background:var(--sand);border:1px solid var(--linea)}
+  .scheda img{aspect-ratio:4/5;object-fit:cover;width:100%;filter:saturate(.82) sepia(.08)} /* virata calda journal */
+  .scheda .body{padding: .9rem 1rem 1.1rem;position:relative}
+  .scheda h3{font-size:1.25rem;letter-spacing:-.02em;margin:.25rem 0 .2rem}
+  .timbro{position:absolute;top:-1.15rem;right:.8rem;border:2px solid var(--timbro);color:var(--timbro);font-size:.6rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;padding:.28rem .5rem;transform:rotate(-6deg);background:color-mix(in srgb,var(--sand) 88%,transparent)}
+
+  /* ── Contatori onesti ── */
+  .contatori{display:flex;gap:clamp(2rem,7vw,5rem);flex-wrap:wrap}
+  .contatori .c{border-top:2px solid var(--inchiostro);padding-top: .9rem;min-width:150px}
+  .contatori b{font-family:var(--serif);font-weight:400;font-size:clamp(2.4rem,4vw,3.6rem);line-height:1;display:block}
+  .contatori span{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-top:2rem}
+  .sw{border:1px solid var(--linea);background:var(--sand)}
+  .sw i{display:block;height:74px}
+  .sw figcaption{padding:.6rem .7rem;font-size:.68rem;letter-spacing:.06em}
+  .sw code{display:block;color:var(--muted);font-size:.64rem}
+  .specimen>div{padding:1.4rem 0;border-bottom:1px dashed var(--linea)}
+  .spec-label{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+  .deck{font-family:var(--serif);font-size:clamp(1.1rem,1.4vw,1.3rem);line-height:1.55;color:var(--inchiostro);max-width:36em}
+  .gate{background:#fff7ed;border:1px solid var(--border);padding:1.2rem 1.4rem;font-size:.85rem;margin-top:2rem}
+  .gate b{color:var(--timbro-text)}
+  a.back{color:var(--timbro-text);font-size:.85rem}
+  @media (max-width:700px){.tappa{grid-template-columns:1fr}.rotta{grid-template-columns:44px 1fr}.rotta svg{left:12px}}
+  @media (prefers-reduced-motion:reduce){
+    .rotta svg line.rail{stroke-dashoffset:0 !important}
+    .tappa{opacity:1;transform:none;transition:none}
+  }
+</style>
+</head>
+<body>
+<div class="lab">design-lab · fuori dal build · <strong>Direzione B</strong> — materiale di decisione, non produzione</div>
+
+<main>
+  <!-- HERO -->
+  <section><div class="wrap">
+    <p class="codice">Atlante Travellini · Registro dei posti veri</p>
+    <h1 class="display" style="margin-top:1rem;max-width:14em">L'atlante personale di Rodrigo&nbsp;&amp;&nbsp;Betta.</h1>
+    <p class="deck" style="margin-top:1.6rem">Ogni posto è schedato come in un archivio: codice, timbro, verdetto.
+    Una rotta d'inchiostro unisce le tappe — perché queste non sono liste, sono viaggi fatti davvero.</p>
+    <div class="contatori" style="margin-top:3rem">
+      <div class="c"><b>29</b><span>posti schedati</span></div>
+      <div class="c"><b>62</b><span>pagine d'atlante</span></div>
+      <div class="c"><b>0</b><span>numeri inventati</span></div>
+    </div>
+  </div></section>
+
+  <!-- PALETTE -->
+  <section><div class="wrap">
+    <p class="codice">Palette · token reali</p>
+    <p class="deck" style="margin-top:1rem">La direzione vive sui token atlante già promossi a sistema nel 2026-07:
+    carta calda come superficie, inchiostro caldo come testo, il timbro coincide con l'accento di brand.</p>
+    <div class="swatches">
+      <figure class="sw"><i style="background:#f2ecdf;border-bottom:1px solid var(--linea)"></i><figcaption>Carta — superficie<code>--color-atlante-carta #f2ecdf</code></figcaption></figure>
+      <figure class="sw"><i style="background:#e6ddcd"></i><figcaption>Carta in ombra<code>--color-atlante-carta-deep #e6ddcd</code></figcaption></figure>
+      <figure class="sw"><i style="background:#1e1c18"></i><figcaption>Inchiostro caldo<code>--color-atlante-inchiostro #1e1c18</code></figcaption></figure>
+      <figure class="sw"><i style="background:#c2410c"></i><figcaption>Timbro = accento<code>--color-atlante-timbro #c2410c</code></figcaption></figure>
+      <figure class="sw"><i style="background:#17375a"></i><figcaption>Blu notte — verdetti<code>--color-atlante-notte #17375a</code></figcaption></figure>
+    </div>
+  </div></section>
+
+  <!-- SPECIMEN -->
+  <section><div class="wrap">
+    <p class="codice">Specimen Fraunces · scala della direzione</p>
+    <div class="specimen" style="margin-top:1.5rem">
+      <div><p class="spec-label">h1 — clamp(2.8rem, 5vw, 4.6rem) / 1.0 · Fraunces 400 (qui comanda la mappa, non il titolo)</p>
+        <p style="font-family:var(--serif);font-size:clamp(2.8rem,5vw,4.6rem);line-height:1;letter-spacing:-.03em">Dove siamo stati, in ordine.</p></div>
+      <div><p class="spec-label">Codice d'archivio — Inter 0.66rem · tracking 0.24em · il «(218-09)» di Cereal reso onesto</p>
+        <p class="codice">IT-05 · 2026 · Toscana</p></div>
+      <div><p class="spec-label">Numero-tappa — Fraunces clamp(2.7rem, 4.5vw, 4.5rem) in terracotta (già .trace-number strong)</p>
+        <p style="font-family:var(--serif);font-size:clamp(2.7rem,4.5vw,4.5rem);line-height:1;color:var(--timbro)">③</p></div>
+      <div><p class="spec-label">Meta/didascalia — 0.8125rem minimo (pavimento a11y, NON i 12px di Cereal)</p>
+        <p class="meta">Sessione 40 min · circa 20 di volo effettivo · 130€</p></div>
+    </div>
+  </div></section>
+
+  <!-- SEZIONE CAMPIONE 1: LA ROTTA (gesto-firma) -->
+  <section><div class="wrap">
+    <p class="codice">Sezione nuova · «La rotta» — gesto-firma: la rotta che unisce le tappe</p>
+    <h2 style="font-size:clamp(2rem,3.5vw,3.2rem);margin:1rem 0 2.5rem">Dove siamo stati, in ordine.</h2>
+    <div class="rotta" id="rotta">
+      <svg aria-hidden="true" preserveAspectRatio="none">
+        <circle class="start" cx="10" cy="14" r="7"/>
+        <line class="rail" x1="10" y1="26" x2="10" y2="100%" pathLength="1"/>
+      </svg>
+      <div class="tappa">
+        <div><div class="head"><span class="num">①</span><span class="codice">IT-05 · Toscana</span></div>
+          <h3>Aperitivo coi vampiri a Volterra.</h3>
+          <p class="meta">Drink che sembrano sangue, atmosfera gotica e un po' di scena. Per chi ama l'insolito.</p></div>
+        <img src="../public/images/reels/reel-5-cover.webp" alt="Portone medievale a Volterra con persone in abiti gotici sui gradini in pietra" loading="lazy">
+      </div>
+      <div class="tappa">
+        <div><div class="head"><span class="num">②</span><span class="codice">IT-12 · Lago d'Iseo</span></div>
+          <h3>Voleresti sull'acqua?</h3>
+          <p class="meta">Flyboard alla X Beach di Pisogne: 40 minuti di sessione, circa 20 di volo. 130€, tuffi assicurati.</p></div>
+        <img src="../public/images/reels/iseo-flyboard-pisogne-cover.webp" alt="Flyboard sul Lago d'Iseo alla X Beach di Pisogne" loading="lazy">
+      </div>
+      <div class="tappa">
+        <div><div class="head"><span class="num">③</span><span class="codice">IT-19 · Toscana</span></div>
+          <h3>Viaggiare nella storia mangiando?</h3>
+          <p class="meta">A Montepulciano, 8 portate che ripercorrono la storia della città. Fine dining a 70€ a persona.</p></div>
+        <img src="../public/images/reels/montepulciano-altro-cantuccio-cover.webp" alt="Tavola del menù degustazione all'Altro Cantuccio di Montepulciano" loading="lazy">
+      </div>
+    </div>
+    <p class="meta" style="margin-top:1.5rem">In produzione: <code>.trace-rail</code> esistente + GSAP ScrollTrigger scrub su <code>stroke-dashoffset</code>. Con <code>prefers-reduced-motion</code>: linea già disegnata.</p>
+  </div></section>
+
+  <!-- SEZIONE CAMPIONE 2: L'ATLANTE -->
+  <section><div class="wrap">
+    <p class="codice">Sezione nuova · «L'atlante» — schede d'archivio con timbro</p>
+    <h2 style="font-size:clamp(2rem,3.5vw,3.2rem);margin:1rem 0 2.5rem">29 posti, zero invenzioni.</h2>
+    <div class="archivio">
+      <figure class="scheda"><img src="../public/images/reels/sarteano-chiostro-cennini-cover.webp" alt="Chiostro Cennini a Sarteano" loading="lazy">
+        <div class="body"><span class="timbro">Visitato</span><p class="codice">IT-21 · 2026</p><h3>Sarteano · Chiostro Cennini</h3><p class="meta">Dormire dentro una storia</p></div></figure>
+      <figure class="scheda"><img src="../public/images/reels/asciano-casa-lavanda-podere-fossaccio-cover.webp" alt="Casa Lavanda al Podere Fossaccio, Asciano" loading="lazy">
+        <div class="body"><span class="timbro">Visitato</span><p class="codice">IT-23 · 2026</p><h3>Asciano · Casa Lavanda</h3><p class="meta">Dormire dentro una storia</p></div></figure>
+      <figure class="scheda"><img src="../public/images/reels/novara-emotional-grand-motel-cover.webp" alt="Camera a tema con letto rotondo dentro una gabbia dorata" loading="lazy">
+        <div class="body"><span class="timbro">Visitato</span><p class="codice">IT-08 · 2026</p><h3>Novara · Emotional Grand Motel</h3><p class="meta">Dormiresti in una gabbia?</p></div></figure>
+      <figure class="scheda"><img src="../public/images/reels/como-haru-sushi-cover.webp" alt="Interno del ristorante Haru Sushi a Como" loading="lazy">
+        <div class="body"><span class="timbro">Visitato</span><p class="codice">IT-15 · 2026</p><h3>Como · Haru Sushi</h3><p class="meta">Un sushi a forma di alveare?</p></div></figure>
+    </div>
+    <p class="meta" style="margin-top:1.5rem">La scheda È il PostoStamp esistente + codice d'archivio. I codici qui sono dimostrativi: in produzione derivano dal contentLibrary <code>[VERIFY: schema codici da definire in FASE F]</code>.</p>
+  </div></section>
+
+  <!-- GATE + NAV -->
+  <section><div class="wrap">
+    <div class="gate"><b>Punti gate owner di questa direzione:</b> ① riallineare <code>--trace-red #bd3f23</code> al timbro di brand <code>#c2410c</code> (oppure approvare il rosso più caldo) · ② <code>rough-notation</code> SOLO se il tratto SVG puro non bastasse — default zero-install · ③ contatori solo su dati veri dal contentLibrary.</div>
+    <p style="margin-top:2rem"><a class="back" href="index.html">← Torna al confronto</a></p>
+  </div></section>
+</main>
+
+<script>
+  // Demo gesto-firma: rotta che si disegna con lo scroll.
+  // In produzione: GSAP ScrollTrigger scrub su .trace-rail. Qui: scroll listener puro.
+  const rotta = document.getElementById('rotta');
+  const rail = rotta.querySelector('line.rail');
+  const tappe = [...rotta.querySelectorAll('.tappa')];
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function draw(){
+    const r = rotta.getBoundingClientRect();
+    const vh = innerHeight;
+    const p = Math.min(1, Math.max(0, (vh*0.75 - r.top) / r.height));
+    if (!reduced) rail.style.strokeDashoffset = String(1 - p);
+    tappe.forEach(t => {
+      const tr = t.getBoundingClientRect();
+      const reached = (tr.top + tr.height*0.3 - r.top) / r.height <= p;
+      t.classList.toggle('acceso', reached || reduced);
+    });
+  }
+  addEventListener('scroll', draw, {passive:true}); addEventListener('resize', draw); draw();
+</script>
+</body>
+</html>

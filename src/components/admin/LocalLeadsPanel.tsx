@@ -145,7 +145,7 @@ export default function LocalLeadsPanel() {
                   type="button"
                   onClick={clearContact}
                   disabled={leads.contact.length === 0}
-                  className="inline-flex items-center gap-1 rounded-full border border-zinc-200 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-zinc-600 transition-colors hover:border-red-400 hover:text-red-500 disabled:opacity-40"
+                  className="inline-flex items-center gap-1 rounded-full border border-zinc-200 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-zinc-600 transition-colors hover:border-[var(--color-error)] hover:text-[var(--color-error-text)] disabled:opacity-40"
                 >
                   <Trash2 size={12} />
                 </button>
@@ -198,7 +198,7 @@ export default function LocalLeadsPanel() {
                   type="button"
                   onClick={clearNewsletter}
                   disabled={leads.newsletter.length === 0}
-                  className="inline-flex items-center gap-1 rounded-full border border-zinc-200 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-zinc-600 transition-colors hover:border-red-400 hover:text-red-500 disabled:opacity-40"
+                  className="inline-flex items-center gap-1 rounded-full border border-zinc-200 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-zinc-600 transition-colors hover:border-[var(--color-error)] hover:text-[var(--color-error-text)] disabled:opacity-40"
                 >
                   <Trash2 size={12} />
                 </button>

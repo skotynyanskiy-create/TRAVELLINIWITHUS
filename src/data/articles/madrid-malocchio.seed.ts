@@ -4,7 +4,7 @@ export const articleSeed = {
   title: 'Il locale del malocchio a Madrid: esperienza rituale',
   slug: 'madrid-malocchio',
   excerpt:
-    'Un posto a Madrid dove si "cura" il malocchio tra rituali, atmosfera e cena. Esperienza unica o trappola turistica? La nostra prova sul campo.',
+    'Un posto a Madrid dove si "cura" il malocchio tra rituali, atmosfera e cena. Esperienza insolita o trappola per turisti? La nostra prova sul campo.',
   content: `
 A Madrid esiste un locale che mescola cena e performance di "cura del malocchio". Tra luci basse, simboli e un'atmosfera da set cinematografico.
 

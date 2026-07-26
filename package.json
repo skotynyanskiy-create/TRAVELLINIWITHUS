@@ -8,7 +8,7 @@
     "start": "node server.ts",
     "generate:media-kit": "tsx scripts/generate-media-kit.tsx",
     "generate:lead-magnet": "tsx scripts/generate-lead-magnet.tsx",
-    "generate:og": "node scripts/generate-og-images.mjs",
+    "generate:og": "tsx scripts/generate-og-images.mjs",
     "generate:obsidian-index": "node scripts/generate-obsidian-index.mjs",
     "graphify:setup": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/setup-graphify.ps1",
     "graphify:index": ".tools\\graphify\\Scripts\\graphify.exe update . --force",
@@ -23,7 +23,7 @@
     "optimize:images": "node scripts/optimize-images.mjs",
     "prepare:reels": "node scripts/convert-reels.js",
     "ingest:doc": "py -3 scripts/ingest-doc.py",
-    "build": "npm run generate:media-kit && npm run generate:lead-magnet && npm run generate:og && npm run optimize:images && tsx scripts/generate-sitemap.js && vite build",
+    "build": "npm run generate:media-kit && npm run generate:lead-magnet && npm run generate:og && npm run optimize:images && tsx scripts/generate-sitemap.js && vite build && tsx scripts/generate-route-html.js",
     "preview": "vite preview",
     "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\"",
     "typecheck": "tsc --noEmit",
@@ -75,7 +75,8 @@
     "predeploy": "node scripts/predeploy.mjs",
     "prepare": "husky",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "generate:route-html": "tsx scripts/generate-route-html.js"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",

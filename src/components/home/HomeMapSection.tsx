@@ -42,12 +42,12 @@ export default function HomeMapSection() {
                 </span>
               </h2>
 
-              <p className="mt-4 max-w-xl text-base font-light leading-relaxed text-stone-300 md:text-lg">
+              <p className="mt-4 max-w-xl text-base font-light leading-relaxed text-[var(--color-sand)]/90 md:text-lg">
                 Niente consigli presi online o per sentito dire. Su questa mappa trovi solo i posti
                 in cui siamo stati davvero, con le nostre foto e la nostra opinione sincera.
               </p>
 
-              <div className="mt-8 flex flex-wrap items-center gap-6 border-t border-white/10 pt-6 text-xs font-medium text-stone-300">
+              <div className="mt-8 flex flex-wrap items-center gap-6 border-t border-white/10 pt-6 text-xs font-medium text-[var(--color-sand)]/90">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 size={16} className="text-[var(--color-accent-on-dark,#e8834e)]" />
                   <span>Coordinate GPS Esatte</span>
@@ -68,7 +68,7 @@ export default function HomeMapSection() {
             <div className="flex items-center md:justify-end">
               <Link
                 to="/mappa"
-                className="inline-flex items-center gap-3.5 whitespace-nowrap rounded-full bg-[var(--color-accent,#c2410c)] px-9 py-5 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-[0_0_35px_rgba(194,65,12,0.4)] transition-all duration-300 hover:scale-105 hover:bg-[var(--color-accent-hover,#9a3412)]"
+                className="inline-flex items-center gap-3.5 whitespace-nowrap rounded-full bg-[var(--color-accent,#c2410c)] px-6 py-4 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-[0_0_35px_rgba(194,65,12,0.4)] transition-all duration-300 hover:scale-105 hover:bg-[var(--color-accent-hover,#9a3412)] md:px-9 md:py-5"
               >
                 <Compass size={20} />
                 Apri la Mappa Interattiva

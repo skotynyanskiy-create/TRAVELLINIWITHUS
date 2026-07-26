@@ -132,7 +132,7 @@ function FaqSection() {
           {FAQ_ITEMS.map((item, idx) => (
             <div
               key={item.q}
-              className="overflow-hidden rounded-2xl border border-black/5 bg-white/70 backdrop-blur-md hover:bg-white/95 hover:border-[var(--color-accent)]/20 transition-all duration-500 shadow-xs"
+              className="overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white/70 backdrop-blur-md hover:bg-white/95 hover:border-[var(--color-accent)]/20 transition-all duration-500 shadow-xs"
             >
               <button
                 type="button"
@@ -156,7 +156,7 @@ function FaqSection() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    <div className="px-6 pb-6 text-base leading-relaxed text-[var(--color-ink-2)] border-t border-black/5 pt-4">
+                    <div className="px-6 pb-6 text-base leading-relaxed text-[var(--color-ink-2)] border-t border-[var(--color-border)] pt-4">
                       {item.a}
                     </div>
                   </motion.div>
@@ -681,7 +681,7 @@ export default function Collaborazioni() {
             {ANTI_TARGETS.map((item) => (
               <div
                 key={item}
-                className="group flex gap-3 rounded-[var(--radius-lg)] border border-black/5 bg-white px-5 py-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:border-black/10 hover:bg-[var(--color-muted-bg)]"
+                className="group flex gap-3 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white px-5 py-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:border-[var(--color-border)] hover:bg-[var(--color-muted-bg)]"
               >
                 <CheckCircle
                   size={18}

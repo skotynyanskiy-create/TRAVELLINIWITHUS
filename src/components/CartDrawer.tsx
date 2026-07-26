@@ -118,10 +118,10 @@ export default function CartDrawer() {
 
       if (data.url) {
         if (data.mock) {
-          // In preview without Stripe keys, simulate success
           setShowCheckoutModal(true);
+          setIsLoading(false);
         } else {
-          // Redirect to Stripe Checkout
+          // Redirect to Stripe Checkout — keep isLoading true so spinner stays visible during navigation
           window.location.href = data.url;
         }
       } else {
@@ -130,7 +130,6 @@ export default function CartDrawer() {
     } catch (error) {
       console.error('Checkout error:', error);
       alert('Si è verificato un errore durante il checkout. Riprova.');
-    } finally {
       setIsLoading(false);
     }
   };

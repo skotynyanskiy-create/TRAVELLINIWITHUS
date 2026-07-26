@@ -2,6 +2,16 @@
   "hosting": {
     "public": "dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "redirects": [
+      { "source": "/vieni-con-noi", "destination": "/guida-in-regalo", "type": 301 },
+      { "source": "/italia-nascosta", "destination": "/guida-in-regalo", "type": 301 },
+      { "source": "/iscrivi", "destination": "/guida-in-regalo", "type": 301 },
+      { "source": "/blog", "destination": "/esplora", "type": 301 },
+      { "source": "/atlante", "destination": "/", "type": 301 },
+      { "source": "/v2", "destination": "/", "type": 301 },
+      { "source": "/atlante-lab", "destination": "/", "type": 301 },
+      { "source": "/sentiero", "destination": "/", "type": 301 }
+    ],
     "rewrites": [
       {
         "source": "**",

@@ -30,6 +30,8 @@ import PageLayout from '../components/PageLayout';
 import Pagination from '../components/Pagination';
 import Section from '../components/Section';
 import SEO from '../components/SEO';
+import { NearMeFilterButton } from '../components/discovery/NearMeFilterButton';
+import { sortPlacesByDistance } from '../utils/geo';
 import StickyMobileCTA from '../components/StickyMobileCTA';
 import {
   BUDGETS,
@@ -179,14 +181,24 @@ export default function Esplora() {
     [searchParams]
   );
 
-  // Posti particolari reali — filtrati per zona e tipo attivi.
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+
+  // Posti particolari reali — filtrati per zona e tipo attivi, ordinati per distanza se Vicino a me è attivo.
   const filteredContentItems = useMemo(() => {
-    return CONTENT_ITEMS.filter((item) => {
+    const items = CONTENT_ITEMS.filter((item) => {
       if (filters.zone && item.zone !== filters.zone) return false;
       if (filters.type && !item.types.includes(filters.type)) return false;
       return true;
     });
-  }, [filters.zone, filters.type]);
+
+    if (userLocation) {
+      return sortPlacesByDistance(items, {
+        latitude: userLocation.lat,
+        longitude: userLocation.lng,
+      });
+    }
+    return items;
+  }, [filters.zone, filters.type, userLocation]);
 
   useEffect(() => {
     setSearchInput(filters.search ?? '');
@@ -562,7 +574,8 @@ export default function Esplora() {
               {filteredItems.length} {filteredItems.length === 1 ? 'risultato' : 'risultati'} per la
               tua ricerca
             </p>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
+              <NearMeFilterButton activeCoords={userLocation} onLocationFound={setUserLocation} />
               {active && (
                 <button
                   type="button"

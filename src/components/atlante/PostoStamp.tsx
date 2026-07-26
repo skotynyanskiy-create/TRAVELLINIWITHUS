@@ -9,15 +9,22 @@ import type { ContentType } from '../../config/contentTaxonomy';
 /** Gradiente saturo per tipo canonical — stesso set di ContentCard, usato come
  *  fronte quando il posto non ha ancora una cover reale certificata. */
 const TYPE_GRADIENT: Record<ContentType | '_default', string> = {
-  'Food & Ristoranti': 'linear-gradient(145deg, #b45309 0%, #dc2626 100%)',
-  'Hotel con carattere': 'linear-gradient(145deg, #0f4c81 0%, #1e3a5f 100%)',
-  Insolito: 'linear-gradient(145deg, #6d28d9 0%, #be185d 100%)',
-  'Passeggiate panoramiche': 'linear-gradient(145deg, #065f46 0%, #0f766e 100%)',
-  'Relax, terme e spa': 'linear-gradient(145deg, #0e7490 0%, #0c4a6e 100%)',
-  'Posti particolari': 'linear-gradient(145deg, #92400e 0%, #b45309 100%)',
-  "Borghi e città d'arte": 'linear-gradient(145deg, #7c3aed 0%, #4338ca 100%)',
-  'Weekend romantici': 'linear-gradient(145deg, #9d174d 0%, #c2410c 100%)',
-  _default: 'linear-gradient(145deg, #1c1917 0%, #292524 100%)',
+  'Food & Ristoranti':
+    'linear-gradient(145deg, var(--color-accent) 0%, var(--color-cat-food) 100%)',
+  'Hotel con carattere':
+    'linear-gradient(145deg, var(--color-atlante-notte) 0%, var(--color-ink-deep) 100%)',
+  Insolito: 'linear-gradient(145deg, var(--color-cat-insolito) 0%, var(--color-accent) 100%)',
+  'Passeggiate panoramiche':
+    'linear-gradient(145deg, var(--color-cat-panoramiche) 0%, var(--color-ink-deep) 100%)',
+  'Relax, terme e spa':
+    'linear-gradient(145deg, var(--color-cat-relax) 0%, var(--color-atlante-notte) 100%)',
+  'Posti particolari':
+    'linear-gradient(145deg, var(--color-accent) 0%, var(--color-cat-borghi) 100%)',
+  "Borghi e città d'arte":
+    'linear-gradient(145deg, var(--color-cat-borghi) 0%, var(--color-accent) 100%)',
+  'Weekend romantici':
+    'linear-gradient(145deg, var(--color-cat-food) 0%, var(--color-accent) 100%)',
+  _default: 'linear-gradient(145deg, var(--color-ink-deep) 0%, var(--color-ink) 100%)',
 };
 
 /**

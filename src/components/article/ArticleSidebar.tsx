@@ -42,8 +42,8 @@ export default function ArticleSidebar({
           </div>
           <div className="h-1 overflow-hidden rounded-full bg-black/8">
             <div
-              className="h-full rounded-full bg-[var(--color-accent)] transition-transform duration-200 ease-out"
-              style={{ transform: `scaleX(${readingProgress})`, transformOrigin: 'left' }}
+              className="h-full rounded-full bg-[var(--color-accent)] origin-left transition-transform duration-200 ease-out"
+              style={{ transform: `scaleX(${readingProgress})` }}
             />
           </div>
           {activeItem && (

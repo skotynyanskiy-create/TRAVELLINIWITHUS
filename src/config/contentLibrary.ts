@@ -15,6 +15,21 @@ export function getGeocodedContentItems(): ContentItem[] {
   return CONTENT_ITEMS.filter((item) => Boolean(item.place.coordinates));
 }
 
+/** Pin per la mappa: prima i posti REALI, poi i placeholder. Stessa regola di
+ *  `getRegistroItems` — il seed non è ordinato, quindi tagliare senza ordinare
+ *  riempiva la mappa di schede in lavorazione e lasciava fuori i posti
+ *  verificati. */
+export function getMapPinItems(limit?: number): ContentItem[] {
+  const geocoded = CONTENT_ITEMS.filter(
+    (item) => item.place?.coordinates?.lat && item.place?.coordinates?.lng
+  );
+  const ordered = [
+    ...geocoded.filter((item) => !item.isPlaceholder),
+    ...geocoded.filter((item) => item.isPlaceholder),
+  ];
+  return limit ? ordered.slice(0, limit) : ordered;
+}
+
 /** Item di una zona (Italia/Europa/Asia/...). */
 export function getContentByZone(zone: ContentItem['zone']): ContentItem[] {
   return CONTENT_ITEMS.filter((item) => item.zone === zone);

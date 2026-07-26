@@ -246,14 +246,8 @@ export default function AiAssistant() {
                   <div className="rounded-[var(--radius-md)] bg-white px-4 py-3 shadow-sm">
                     <span className="inline-flex items-center gap-1.5">
                       <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--color-accent)]" />
-                      <span
-                        className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--color-accent)]"
-                        style={{ animationDelay: '120ms' }}
-                      />
-                      <span
-                        className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--color-accent)]"
-                        style={{ animationDelay: '240ms' }}
-                      />
+                      <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--color-accent)] [animation-delay:120ms]" />
+                      <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--color-accent)] [animation-delay:240ms]" />
                     </span>
                   </div>
                 </div>

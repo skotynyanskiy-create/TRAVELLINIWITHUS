@@ -45,8 +45,8 @@ export default function MobileBottomBar({
         </div>
         <div className="h-0.5 overflow-hidden rounded-full bg-white/14">
           <div
-            className="h-full rounded-full bg-[var(--color-accent)] transition-transform duration-200 ease-out"
-            style={{ transform: `scaleX(${readingProgress})`, transformOrigin: 'left' }}
+            className="h-full rounded-full bg-[var(--color-accent)] origin-left transition-transform duration-200 ease-out"
+            style={{ transform: `scaleX(${readingProgress})` }}
           />
         </div>
       </div>
@@ -54,7 +54,7 @@ export default function MobileBottomBar({
         <button
           onClick={handleFavorite}
           aria-label={isSaved ? 'Rimuovi dai preferiti' : 'Salva nei preferiti'}
-          className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-full transition-all ${isSaved ? 'text-accent' : 'text-white'}`}
+          className={`flex-1 flex items-center justify-center gap-2 min-h-[48px] py-3 rounded-full transition-all ${isSaved ? 'text-accent' : 'text-white'}`}
         >
           <motion.span
             key={pulseKey}
@@ -70,7 +70,7 @@ export default function MobileBottomBar({
         <button
           onClick={onOpenToc}
           aria-label="Apri indice dei contenuti"
-          className="flex-1 flex items-center justify-center gap-2 py-3 text-white rounded-full"
+          className="flex-1 flex items-center justify-center gap-2 min-h-[48px] py-3 text-white rounded-full"
         >
           <List size={20} />
           <span className="text-xs uppercase tracking-widest font-bold">Indice</span>
@@ -79,7 +79,7 @@ export default function MobileBottomBar({
         <button
           onClick={onShare}
           aria-label="Condividi articolo"
-          className="flex-1 flex items-center justify-center gap-2 py-3 text-white rounded-full"
+          className="flex-1 flex items-center justify-center gap-2 min-h-[48px] py-3 text-white rounded-full"
         >
           {copied ? (
             <CheckCircle size={20} className="text-[var(--color-accent)]" />

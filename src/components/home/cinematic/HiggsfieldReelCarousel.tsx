@@ -35,7 +35,7 @@ export default function HiggsfieldReelCarousel() {
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="mb-12 flex flex-col justify-between md:flex-row md:items-end">
           <div>
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent,#c85a32)]">
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent-on-dark)]">
               <Sparkles size={14} />
               In Viaggio Con Noi · Reels
             </span>
