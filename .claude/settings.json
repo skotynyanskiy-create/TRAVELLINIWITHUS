@@ -160,7 +160,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "py \"$CLAUDE_PROJECT_DIR/scripts/hooks/block_dangerous_bash.py\""
+            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/hooks/run-hook.mjs\" block_dangerous_bash.py"
           }
         ]
       },
@@ -169,7 +169,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "py \"$CLAUDE_PROJECT_DIR/scripts/hooks/config_protection.py\""
+            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/hooks/run-hook.mjs\" config_protection.py"
           }
         ]
       }
@@ -180,7 +180,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$root=$PWD.Path; Write-Host '--- TRAVELLINIWITHUS session health check ---'; try { $port = (Invoke-WebRequest -Uri 'http://localhost:3000' -UseBasicParsing -TimeoutSec 1 -ErrorAction Stop).StatusCode; Write-Host \"dev server: localhost:3000 reachable ($port)\" } catch { Write-Host 'dev server: not running (run: npm run dev)' }; if (Test-Path \"$root/.git\") { $branch = git -C $root rev-parse --abbrev-ref HEAD; $dirty = (git -C $root status --porcelain | Measure-Object -Line).Lines; Write-Host \"branch: $branch | dirty files: $dirty\" }; if (Test-Path \"$root/.env\") { Write-Host '.env: present' } else { Write-Host '.env: MISSING' }; Write-Host '---'\""
+            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/hooks/session_health.mjs\""
           }
         ]
       }
@@ -191,7 +191,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "py \"$CLAUDE_PROJECT_DIR/scripts/hooks/routing_log.py\""
+            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/hooks/run-hook.mjs\" routing_log.py"
           }
         ]
       },
@@ -200,7 +200,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "py \"$CLAUDE_PROJECT_DIR/scripts/hooks/loop_detector.py\""
+            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/hooks/run-hook.mjs\" loop_detector.py"
           }
         ]
       }
