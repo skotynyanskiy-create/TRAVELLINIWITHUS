@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Link } from '@/src/components/TransitionLink';
 import { useQuery } from '@tanstack/react-query';
@@ -149,6 +149,17 @@ function AdvancedFilterRow({
   );
 }
 
+/** Reali prima, poi placeholder — stessa regola di getMapPinItems/getRegistroItems
+ *  in contentLibrary.ts. Esportata per essere testata senza montare la pagina. */
+export function partitionRealFirst<T extends { isPlaceholder: boolean }>(
+  items: T[]
+): { real: T[]; placeholder: T[] } {
+  return {
+    real: items.filter((item) => !item.isPlaceholder),
+    placeholder: items.filter((item) => item.isPlaceholder),
+  };
+}
+
 export default function Esplora() {
   const { data: demoContent } = useSiteContent('demo');
   const demoSettings = demoContent ?? siteContentDefaults.demo;
@@ -183,22 +194,29 @@ export default function Esplora() {
 
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
 
-  // Posti particolari reali — filtrati per zona e tipo attivi, ordinati per distanza se Vicino a me è attivo.
+  // Posti particolari reali — filtrati per zona e tipo attivi, ordinati per
+  // distanza se Vicino a me è attivo. Reali prima, poi placeholder: stessa
+  // regola di getMapPinItems/getRegistroItems in contentLibrary.ts — altrimenti
+  // l'ordine del seed mescola schede verificate e in lavorazione senza criterio.
   const filteredContentItems = useMemo(() => {
     const items = CONTENT_ITEMS.filter((item) => {
       if (filters.zone && item.zone !== filters.zone) return false;
       if (filters.type && !item.types.includes(filters.type)) return false;
       return true;
     });
+    const { real, placeholder } = partitionRealFirst(items);
 
     if (userLocation) {
-      return sortPlacesByDistance(items, {
-        latitude: userLocation.lat,
-        longitude: userLocation.lng,
-      });
+      const nearby = { latitude: userLocation.lat, longitude: userLocation.lng };
+      return [...sortPlacesByDistance(real, nearby), ...sortPlacesByDistance(placeholder, nearby)];
     }
-    return items;
+    return [...real, ...placeholder];
   }, [filters.zone, filters.type, userLocation]);
+
+  const realContentItemsCount = useMemo(
+    () => filteredContentItems.filter((item) => !item.isPlaceholder).length,
+    [filteredContentItems]
+  );
 
   useEffect(() => {
     setSearchInput(filters.search ?? '');
@@ -715,8 +733,21 @@ export default function Esplora() {
             )}
           </div>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {filteredContentItems.map((item) => (
-              <ContentCard key={item.id} item={item} />
+            {filteredContentItems.map((item, index) => (
+              <Fragment key={item.id}>
+                {index === realContentItemsCount && realContentItemsCount > 0 && (
+                  <div
+                    className="col-span-full mt-2 flex items-center gap-3 pt-2"
+                    aria-hidden="true"
+                  >
+                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-black/40">
+                      In lavorazione
+                    </span>
+                    <span className="h-px flex-1 bg-black/10" />
+                  </div>
+                )}
+                <ContentCard item={item} />
+              </Fragment>
             ))}
           </div>
         </Section>
