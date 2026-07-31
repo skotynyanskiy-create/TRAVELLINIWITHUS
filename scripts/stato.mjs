@@ -16,6 +16,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
+import prettier from 'prettier';
 
 const root = process.cwd();
 const output = path.join(root, 'docs', 'STATO_DEL_SITO.md');
@@ -287,9 +288,24 @@ const stato = [
 
 const doc = read('docs/STATO_DEL_SITO.md');
 
+/**
+ * lint-staged passa il documento sotto `prettier --write` a ogni commit. Senza
+ * formattare anche qui, il confronto di --check fallirebbe per sempre su una
+ * differenza di spaziatura nelle tabelle. Prettier e' idempotente: formattare
+ * entrambi i lati rende il confronto stabile.
+ */
+const prettify = async (markdown) => {
+  const options = await prettier.resolveConfig(output);
+  return prettier.format(markdown, { ...options, parser: 'markdown' });
+};
+
+let next = replaceRegion(doc, MARKERS.stato, stato, 'STATO');
+next = replaceRegion(next, MARKERS.consegna, blockDelivery(), 'CONSEGNA');
+next = await prettify(next);
+
 if (process.argv.includes('--check')) {
-  const current = extractRegion(doc, MARKERS.stato);
-  if (current !== stato) {
+  const current = extractRegion(await prettify(doc), MARKERS.stato);
+  if (current !== extractRegion(next, MARKERS.stato)) {
     console.error(
       'DRIFT docs/STATO_DEL_SITO.md non riflette il codice corrente - eseguire npm run stato'
     );
@@ -297,8 +313,6 @@ if (process.argv.includes('--check')) {
   }
   console.log('docs/STATO_DEL_SITO.md is up to date');
 } else {
-  let next = replaceRegion(doc, MARKERS.stato, stato, 'STATO');
-  next = replaceRegion(next, MARKERS.consegna, blockDelivery(), 'CONSEGNA');
   fs.writeFileSync(output, next, 'utf8');
   console.log('Generated docs/STATO_DEL_SITO.md');
 }
