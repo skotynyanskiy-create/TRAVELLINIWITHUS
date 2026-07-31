@@ -2,7 +2,7 @@
 type: bug
 area: performance
 severity: high
-status: in-progress
+status: done
 priority: p0
 owner: travellini-frontend-builder
 opened: 2026-05-15
@@ -57,3 +57,9 @@ LCP threshold in lighthouserc.json: `[warn, { maxNumericValue: 2500 }]`.
 ## Link
 
 - audit avanzato sezione §11 + §13
+
+## Chiusura — 2026-07-31
+
+Verificato sul codice durante il consolidamento del backlog: nessun riferimento `googleapis`/`gstatic` in `index.html` né in `src/index.css`: la catena Google Fonts è stata rimossa, Fraunces è self-hosted variable. Confermato dal gate in PROJECT_RELEASE_READINESS (36,9 KB, LCP 1,72 s).
+
+Nessun lavoro residuo. Vedi [[10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31]] §4.

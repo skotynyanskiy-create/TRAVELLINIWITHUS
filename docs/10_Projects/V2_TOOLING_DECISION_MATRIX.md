@@ -1,14 +1,19 @@
 ---
 type: project
 area: architecture
-status: open
+status: archived
 priority: p1
 owner: team
 repo: TRAVELLINIWITHUS
 source: Principal-Architect tooling research
 related: ['[[AUDIT_V1_VS_V2_2026-06-27]]']
 tags: [project, architecture, v2, tooling, stack, webgl, map, cms, seo]
+superseded_by: V2_TOOLING_DECISION_MATRIX_2026-06-28
 ---
+
+> **Superato il 2026-07-31.** Questo piano non è più "cosa fare".
+> Il lavoro ancora vivo è confluito in [[10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31]]; la direzione è in `V2_TOOLING_DECISION_MATRIX_2026-06-28`.
+> Resta leggibile come storico — non aggiungerci voci nuove.
 
 # V2 Tooling Decision Matrix — Travelliniwithus
 

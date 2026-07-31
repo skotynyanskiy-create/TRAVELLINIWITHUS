@@ -103,7 +103,18 @@ preservano i query string così i bookmark legacy continuano a funzionare.
 
 ### Picks curated (single source of truth)
 
-File: [src/config/discoveryPicks.ts](../../src/config/discoveryPicks.ts)
+File: `src/config/discoveryPicks.ts`
+
+> **Deriva rilevata il 2026-07-31 — questa sezione descrive un'architettura che
+> non esiste più.** `discoveryPicks.ts` non era importato da nessun file di
+> `src/`: né dalla Navbar, né da `HomeDiscoveryFinder`, né da `SearchModal`. Il
+> "single source of truth" era diventato un file morto, ed è stato rimosso nella
+> pulizia del 2026-07-31 (recuperabile da git). Stessa sorte per
+> `InstagramGrid.tsx` più sotto: la home usa `HiggsfieldReelCarousel`.
+>
+> La casella `[x]` nella Definition of Done qui sotto era vera quando è stata
+> spuntata e non lo è più. Prima di riaprire questo spec, decidere se i picks
+> curated servono ancora: se sì vanno ricostruiti, se no va riscritta la sezione.
 
 | Constant                     | Valori                                                                          |
 | ---------------------------- | ------------------------------------------------------------------------------- |
@@ -263,7 +274,7 @@ Kinfolk). 9 step eseguiti.
    - [src/config/reels.ts](../../src/config/reels.ts) popolato con metadata
      editoriali coerenti (location, zone, type, caption, hook, hashtag),
      `isPlaceholder: false` su tutti.
-   - [src/components/InstagramGrid.tsx](../../src/components/InstagramGrid.tsx)
+   - `src/components/InstagramGrid.tsx`
      riscritto: consume `getPublishedReels()`, modal video player inline
      (autoplay muted loop, ESC chiude), play badge centrale on hover,
      fallback ai placeholder editoriali se manifest vuoto. Eventi nuovi:
@@ -339,7 +350,7 @@ Kinfolk). 9 step eseguiti.
   Helmet preload, scroll hint mobile.
 - [src/components/Navbar.tsx](../../src/components/Navbar.tsx) — eyebrow,
   hover motion feature foto, active state.
-- [src/components/InstagramGrid.tsx](../../src/components/InstagramGrid.tsx)
+- `src/components/InstagramGrid.tsx`
   — consume reels live, modal video player.
 - [src/components/discovery/ArchiveCard.tsx](../../src/components/discovery/ArchiveCard.tsx)
   — prop `linkState`.

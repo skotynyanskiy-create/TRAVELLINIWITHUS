@@ -1,7 +1,7 @@
 ---
 type: bug
 area: security
-status: in-progress
+status: done
 priority: p1
 owner: team
 severity: high
@@ -74,3 +74,9 @@ Le rules proteggono la forma del documento ma non abbastanza la proprieta dei ca
 - `npm run audit:revenue` PASS il 2026-05-15.
 - Eseguire test webhook con Stripe CLI e credenziali admin reali.
 - Verificare che una create anonima su `orders` fallisca in emulator suite.
+
+## Chiusura — 2026-07-31
+
+Verificato sul codice durante il consolidamento del backlog: `firestore.rules:270` → `allow create: if false`; gli ordini si creano solo server-side.
+
+Nessun lavoro residuo. Vedi [[10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31]] §4.

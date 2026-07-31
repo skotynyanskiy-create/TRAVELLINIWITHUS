@@ -1,14 +1,19 @@
 ---
 type: project
 area: site-evolution
-status: in-progress
+status: archived
 started: 2026-05-17
 target_completion: 2026-08-17
 owner: Rodrigo & Betta + Claude main thread + travellini-* agents
 scope: full-site upgrade to "best-in-class 2026" editorial travel premium
 tags: [marathon, premium, ui, content, ai, funnel]
 priority: p2
+icebox_reason: in attesa di funnel con traffico reale
 ---
+
+> **Icebox dal 2026-07-31.** Non superato: contiene feature reali mai decise.
+> Va ripescato _dopo_ che il funnel ha un ingresso — vedi [[10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31]] §1.
+> Non è il backlog corrente.
 
 # PROJECT — Marathon Full 90 giorni
 

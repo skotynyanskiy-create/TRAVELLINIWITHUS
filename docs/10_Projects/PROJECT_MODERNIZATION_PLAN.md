@@ -1,7 +1,7 @@
 ---
 type: project
 area: product
-status: in-progress
+status: archived
 priority: p2
 owner: team
 repo: TRAVELLINIWITHUS
@@ -13,7 +13,12 @@ tags:
   - motion
   - modernization
   - roadmap
+icebox_reason: in attesa di funnel con traffico reale
 ---
+
+> **Icebox dal 2026-07-31.** Non superato: contiene feature reali mai decise.
+> Va ripescato _dopo_ che il funnel ha un ingresso — vedi [[10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31]] §1.
+> Non è il backlog corrente.
 
 # PROJECT_MODERNIZATION_PLAN
 

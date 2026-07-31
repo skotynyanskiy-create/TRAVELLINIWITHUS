@@ -1,7 +1,7 @@
 ---
 type: project
 area: growth
-status: open
+status: archived
 priority: p0
 owner: Skott
 repo: TRAVELLINIWITHUS
@@ -12,7 +12,12 @@ tags:
   - growth
   - revenue
   - backlog
+superseded_by: PROJECT_BACKLOG_UNICO_2026-07-31
 ---
+
+> **Superato il 2026-07-31.** Questo piano non è più "cosa fare".
+> Il lavoro ancora vivo è confluito in [[10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31]]; la direzione è in `PROJECT_BACKLOG_UNICO_2026-07-31`.
+> Resta leggibile come storico — non aggiungerci voci nuove.
 
 # PROJECT_30DAY_BACKLOG
 

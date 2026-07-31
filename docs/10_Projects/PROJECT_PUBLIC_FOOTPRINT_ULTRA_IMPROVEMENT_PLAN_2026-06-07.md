@@ -1,7 +1,7 @@
 ---
 type: project
 area: marketing
-status: in-progress
+status: archived
 priority: p0
 owner: marketing
 date: 2026-06-07
@@ -16,7 +16,12 @@ tags:
   - influencer
   - public-footprint
   - growth
+superseded_by: PROJECT_BACKLOG_UNICO_2026-07-31
 ---
+
+> **Superato il 2026-07-31.** Questo piano non è più "cosa fare".
+> Il lavoro ancora vivo è confluito in [[10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31]]; la direzione è in `PROJECT_BACKLOG_UNICO_2026-07-31`.
+> Resta leggibile come storico — non aggiungerci voci nuove.
 
 # Ultra Piano Miglioramento — Public Footprint Travelliniwithus
 

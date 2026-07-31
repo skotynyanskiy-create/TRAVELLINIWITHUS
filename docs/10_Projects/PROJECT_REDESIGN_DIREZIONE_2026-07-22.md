@@ -1,7 +1,7 @@
 ---
 type: project
 area: product
-status: open
+status: archived
 priority: p0
 owner: team
 repo: TRAVELLINIWITHUS
@@ -18,7 +18,12 @@ tags:
   - redesign
   - brand
   - proposal
+superseded_by: PROJECT_HOME_RICOMPOSIZIONE_2026-07-26
 ---
+
+> **Superato il 2026-07-31.** Questo piano non è più "cosa fare".
+> Il lavoro ancora vivo è confluito in [[10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31]]; la direzione è in `PROJECT_HOME_RICOMPOSIZIONE_2026-07-26`.
+> Resta leggibile come storico — non aggiungerci voci nuove.
 
 # PROJECT — Redesign radicale: tre direzioni, una scelta (2026-07-22)
 

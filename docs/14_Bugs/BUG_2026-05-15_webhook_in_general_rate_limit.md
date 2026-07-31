@@ -2,7 +2,7 @@
 type: bug
 area: backend
 severity: high
-status: in-progress
+status: done
 priority: p0
 owner: travellini-backend-engineer
 opened: 2026-05-15
@@ -50,3 +50,9 @@ app.use(/^\/api\/(?!webhook)/, generalApiLimiter);
 
 - audit avanzato sezione §13 H3
 - [[BUG_2026-05-15_products_downloadurl_public_read]]
+
+## Chiusura — 2026-07-31
+
+Verificato sul codice durante il consolidamento del backlog: `src/server/apiRoutes.ts:128` → il webhook è esplicitamente escluso dal rate limit generale.
+
+Nessun lavoro residuo. Vedi [[10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31]] §4.

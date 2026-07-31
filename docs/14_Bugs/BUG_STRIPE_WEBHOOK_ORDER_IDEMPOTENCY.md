@@ -1,7 +1,7 @@
 ---
 type: bug
 area: backend
-status: in-progress
+status: done
 priority: p1
 owner: team
 severity: high
@@ -76,3 +76,9 @@ Il webhook tratta l'evento come one-shot invece di usare una write idempotente.
 - `npm run audit:revenue` PASS il 2026-05-15.
 - Stripe CLI replay: stesso evento due volte deve produrre un solo ordine.
 - Simulazione errore Firestore/admin credentials: webhook deve tornare non-2xx.
+
+## Chiusura — 2026-07-31
+
+Verificato sul codice durante il consolidamento del backlog: `src/server/apiRoutes.ts:228` → `saveStripeOrder(order, event.id)`, idempotente sull'id evento Stripe.
+
+Nessun lavoro residuo. Vedi [[10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31]] §4.

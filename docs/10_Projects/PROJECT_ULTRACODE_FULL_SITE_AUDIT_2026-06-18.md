@@ -1,7 +1,7 @@
 ---
 type: project
 area: audit
-status: open
+status: archived
 priority: p1
 owner: team
 repo: TRAVELLINIWITHUS
@@ -12,7 +12,12 @@ tags:
   - audit
   - ultracode
 date: 2026-06-18
+superseded_by: PROJECT_BACKLOG_UNICO_2026-07-31
 ---
+
+> **Superato il 2026-07-31.** Questo piano non è più "cosa fare".
+> Il lavoro ancora vivo è confluito in [[10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31]]; la direzione è in `PROJECT_BACKLOG_UNICO_2026-07-31`.
+> Resta leggibile come storico — non aggiungerci voci nuove.
 
 # ULTRACODE — Full-site audit verso il "definitivo"
 
