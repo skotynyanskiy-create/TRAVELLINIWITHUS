@@ -24,7 +24,14 @@
       { "source": "/atlante", "destination": "/", "type": 301 },
       { "source": "/v2", "destination": "/", "type": 301 },
       { "source": "/atlante-lab", "destination": "/", "type": 301 },
-      { "source": "/sentiero", "destination": "/", "type": 301 }
+      { "source": "/sentiero", "destination": "/", "type": 301 },
+      { "source": "/destinazioni", "destination": "/esplora", "type": 301 },
+      { "source": "/esperienze", "destination": "/esplora", "type": 301 },
+      { "source": "/guide", "destination": "/esplora?format=guida", "type": 301 },
+      { "source": "/press", "destination": "/collaborazioni", "type": 301 },
+      { "source": "/quiz", "destination": "/esplora", "type": 301 },
+      { "source": "/strumenti", "destination": "/esplora", "type": 301 },
+      { "source": "/famiglia", "destination": "/family", "type": 301 }
     ],
     "rewrites": [
       {

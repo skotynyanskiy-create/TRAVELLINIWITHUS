@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import { sitemapPaths } from '../src/config/surfaces.ts';
+import { isIndexable, sitemapPaths } from '../src/config/surfaces.ts';
+import { DESTINATIONS, getDestinationUrl } from '../src/config/destinations.ts';
+import { DEMO_GUIDES } from '../src/config/demoGuides.ts';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const contentSeed = require('../src/data/content-seed.json');
@@ -176,6 +178,40 @@ async function buildSitemap() {
     .map((route) => urlEntry(route, { changefreq: 'weekly', priority: '0.6', lastmod: now }))
     .join('');
 
+  // Destinazioni (zone + regioni/paesi dall'albero DESTINATIONS): niente flag
+  // isPlaceholder qui (non esiste sul DestinationNode) e Destinazione.tsx non le
+  // mette mai in noindex — ma passano comunque da isIndexable() sulla stessa
+  // fonte unica (surfaces.ts) usata dal componente, cosi la sitemap resta
+  // corretta anche se lo stato di superficie cambia in futuro. getDestinationUrl
+  // e' la stessa funzione che il componente usa per il proprio canonical: niente
+  // URL alternativi (es. /destinazione/toscana a un segmento) fuori sync col
+  // canonical dichiarato dalla pagina.
+  const indexableDestinations = DESTINATIONS.filter((node) =>
+    isIndexable(getDestinationUrl(node))
+  );
+  const destinationEntries = indexableDestinations
+    .map((node) =>
+      urlEntry(getDestinationUrl(node), {
+        changefreq: 'weekly',
+        priority: node.parentSlug ? '0.7' : '0.8',
+        lastmod: now,
+      })
+    )
+    .join('');
+
+  // Guide: SOLO quelle non demo. Doppio controllo, in OR come fa isIndexable()
+  // stesso — la superficie /guide/:slug e' 'preview' finche' non c'e' almeno una
+  // guida vera (vedi surfaces.ts), e il singolo item ha il suo isDemo (vedi
+  // Guida.tsx: noindex={guide.isDemo}). Oggi entrambi escludono tutte e 3 le
+  // guide demo: la sitemap risulta vuota qui finche' non lo sono davvero, non
+  // per omissione.
+  const indexableGuides = DEMO_GUIDES.filter(
+    (guide) => !guide.isDemo && isIndexable(`/guide/${guide.slug}`)
+  );
+  const guideEntries = indexableGuides
+    .map((guide) => urlEntry(`/guide/${guide.slug}`, { changefreq: 'monthly', priority: '0.6', lastmod: now }))
+    .join('');
+
   const articleEntries = (dynamic?.articleRoutes || [])
     .map(({ route, lastmod }) =>
       urlEntry(route, { changefreq: 'monthly', priority: '0.7', lastmod })
@@ -201,9 +237,37 @@ async function buildSitemap() {
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  ${staticEntries}${regionEntries}${filterEntries}${articleEntries}${productEntries}${postoEntries}
+  ${staticEntries}${regionEntries}${filterEntries}${destinationEntries}${guideEntries}${articleEntries}${productEntries}${postoEntries}
 </urlset>
 `;
+
+  // Guardia di validità: niente <loc> duplicati (Google tratta i duplicati come
+  // segnale di sitemap non curata) e ogni <loc> deve essere un URL assoluto
+  // valido sotto BASE_URL. Blocca la build invece di scrivere un file rotto.
+  const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+  const seen = new Set();
+  const duplicates = new Set();
+  for (const loc of locs) {
+    if (seen.has(loc)) duplicates.add(loc);
+    seen.add(loc);
+  }
+  if (duplicates.size > 0) {
+    throw new Error(
+      `[sitemap] URL duplicati in sitemap.xml:\n  ${[...duplicates].join('\n  ')}`
+    );
+  }
+  const malformed = locs.filter((loc) => {
+    if (!loc.startsWith(BASE_URL)) return true;
+    try {
+      new URL(loc);
+      return false;
+    } catch {
+      return true;
+    }
+  });
+  if (malformed.length > 0) {
+    throw new Error(`[sitemap] URL non validi in sitemap.xml:\n  ${malformed.join('\n  ')}`);
+  }
 
   const publicDir = path.join(process.cwd(), 'public');
   if (!fs.existsSync(publicDir)) {
@@ -213,7 +277,7 @@ async function buildSitemap() {
   fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), sitemap);
   const dynamicCount = (dynamic?.articleRoutes.length || 0) + (dynamic?.productRoutes.length || 0);
   console.log(
-    `Sitemap generated. Static: ${staticRoutes.length + discoveryRoutes.length}, regions: ${regionLandingSlugs.length}, filters: ${filterRoutes.length}, posto: ${indexablePosti.length}/${contentSeed.length} reali, dynamic: ${dynamicCount}.`
+    `Sitemap generated. Static: ${staticRoutes.length + discoveryRoutes.length}, regions: ${regionLandingSlugs.length}, filters: ${filterRoutes.length}, destinazioni: ${indexableDestinations.length}/${DESTINATIONS.length}, guide: ${indexableGuides.length}/${DEMO_GUIDES.length} reali, posto: ${indexablePosti.length}/${contentSeed.length} reali, dynamic: ${dynamicCount}, url totali: ${locs.length}.`
   );
 
   // robots.txt: keep public routes crawlable (incl. /shop, /lead-magnet,

@@ -23,6 +23,7 @@
 import fs from 'fs';
 import path from 'path';
 import { STATIC_ROUTE_META, ogSlugForPath, findRouteMeta } from '../src/config/routeMeta.ts';
+import { getDestination } from '../src/config/destinations.ts';
 import { createRequire } from 'module';
 
 const require = createRequire(import.meta.url);
@@ -139,8 +140,49 @@ function staticMeta(route) {
   };
 }
 
+/**
+ * Meta per zone/regioni/paesi dell'albero DESTINATIONS (dato locale, non
+ * Firestore — stessa categoria di `/posto/*`, quindi copertura obbligatoria
+ * qui, non un warning). Titolo/description replicano <SEO> di
+ * DestinationWorld in Destinazione.tsx: stessa regola di postoMeta, la card
+ * condivisa e la pagina aperta devono dire la stessa cosa. Il nodo si
+ * risolve sempre dall'ULTIMO segmento della rotta — stessa logica del router
+ * in Destinazione.tsx (subSlug se presente, altrimenti zoneSlug).
+ *
+ * ogSlug fisso a 'default': generate-og-images.mjs non genera una card per
+ * ogni destinazione (solo statiche/articoli/posti), quindi puntare a uno slug
+ * dedicato produrrebbe un'immagine OG rotta (404) sulle unfurl social.
+ */
+function destinazioneMeta(route) {
+  const slug = route.split('/').filter(Boolean).pop();
+  const node = getDestination(slug);
+  if (!node) return null;
+
+  const title = `${node.name} — Le nostre destinazioni`;
+  const description = clamp(
+    node.intro || `I posti particolari di ${node.name} visti da Rodrigo & Betta.`
+  );
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Place',
+    name: node.name,
+    url: `${BASE_URL}${route}`,
+  };
+  if (node.coordinates) {
+    jsonLd.geo = {
+      '@type': 'GeoCoordinates',
+      latitude: node.coordinates.lat,
+      longitude: node.coordinates.lng,
+    };
+  }
+
+  return { title, description, ogSlug: 'default', ogType: 'website', jsonLd };
+}
+
 function metaForRoute(route) {
   if (route.startsWith('/posto/')) return postoMeta(route);
+  if (route.startsWith('/destinazione/')) return destinazioneMeta(route);
   return staticMeta(route);
 }
 
@@ -187,8 +229,13 @@ const BLOCK_END = '<!-- route-meta:end -->';
  * base un file gia iniettato e produrrebbe tag Open Graph DOPPIE su ogni
  * pagina (la home piu la rotta). Verificato: succedeva.
  *
- * Toglie anche la `<meta name="description">` del template, che e stale (parla
- * di "Sud Italia, Salento"): due description sono ambigue, non additive.
+ * Toglie anche `<meta name="description">` e i tag `og:`/`twitter:` statici
+ * del template (index.html, 2026-07-30: fallback per crawler/unfurl su rotte
+ * MAI prerenderizzate da questo script — vedi commento in cima a index.html):
+ * per le rotte che QUESTO script copre, i tag route-specific sostituiscono
+ * quelli statici, non si sommano. Due title/description/og:image sono
+ * ambigui, non additivi — e la guardia sotto in main() blocca la build se
+ * questo strip non li ha tolti tutti.
  */
 function sanitizeTemplate(html) {
   // Ricerca per stringa, non per RegExp: i sentinel contengono `(`, `)` e `.`,
@@ -210,7 +257,12 @@ function sanitizeTemplate(html) {
   }
   // Va rimossa DOPO il blocco: se il blocco c'e', la sua description e' la prima
   // del documento e verrebbe rimossa al posto di quella del template.
-  return out.replace(/[ \t]*<meta\s+name="description"[\s\S]*?\/>\s*\n?/i, '');
+  out = out.replace(/[ \t]*<meta\s+name="description"[\s\S]*?\/>\s*\n?/i, '');
+  // Tag og:*/twitter:* statici di index.html: stessa logica, tolti prima
+  // dell'iniezione route-specific. `[\s\S]*?` regge sia la forma su una riga
+  // sia quella multi-riga con attributi impaginati.
+  out = out.replace(/[ \t]*<meta\s+(?:property="og:[^"]*"|name="twitter:[^"]*")[\s\S]*?\/>\s*\n?/gi, '');
+  return out;
 }
 
 function renderHtml(template, route, meta) {

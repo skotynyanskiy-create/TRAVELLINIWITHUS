@@ -3,12 +3,52 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Fallback statico per crawler/unfurl che non eseguono JS (Bing, DuckDuckGo,
+         WhatsApp/LinkedIn/Slack, bot AI leggeri) — su rotte non pre-renderizzate
+         React Helmet (src/components/SEO.tsx) sovrascrive questi tag dopo
+         l'hydration, quindi qui va tenuta la stessa copy della home
+         (src/pages/AtlanteHome.tsx) per non avere due fonti di verità. Niente
+         canonical/og:url qui: questa stessa shell serve da fallback SPA anche
+         per rotte diverse dalla home, e un canonical fisso sulla home sarebbe
+         sbagliato per quelle. -->
     <meta
       name="description"
-      content="Guide e itinerari di coppia nel Sud Italia, scritti dopo averli vissuti: Salento, Puglia, Sicilia. Posti veri, prezzi reali, niente marketing."
+      content="La casa di Rodrigo e Betta: posti particolari provati sul campo, con atmosfera, costi reali e il consiglio onesto se un posto merita il viaggio."
     />
-    <meta name="theme-color" content="#fafafa" />
-    <title>Travelliniwithus</title>
+    <meta name="theme-color" content="#f7f0e5" />
+    <title>Viaggi reali e posti particolari in Italia e nel mondo | Travelliniwithus</title>
+    <meta name="author" content="Travelliniwithus" />
+    <meta property="og:site_name" content="Travelliniwithus" />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="Viaggi reali e posti particolari in Italia e nel mondo | Travelliniwithus"
+    />
+    <meta
+      property="og:description"
+      content="La casa di Rodrigo e Betta: posti particolari provati sul campo, con atmosfera, costi reali e il consiglio onesto se un posto merita il viaggio."
+    />
+    <meta property="og:image" content="https://travelliniwithus.it/og/default.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Travelliniwithus - posti particolari, esperienze reali e consigli di viaggio"
+    />
+    <meta property="og:locale" content="it_IT" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Viaggi reali e posti particolari in Italia e nel mondo | Travelliniwithus"
+    />
+    <meta
+      name="twitter:description"
+      content="La casa di Rodrigo e Betta: posti particolari provati sul campo, con atmosfera, costi reali e il consiglio onesto se un posto merita il viaggio."
+    />
+    <meta name="twitter:image" content="https://travelliniwithus.it/og/default.jpg" />
+    <meta name="twitter:site" content="@travelliniwithus" />
+    <meta name="twitter:creator" content="@travelliniwithus" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
 
@@ -61,7 +101,6 @@
             ],
             "knowsAbout": [
               "viaggi in Italia",
-              "destinazioni Sud Italia",
               "borghi italiani",
               "itinerari di coppia",
               "hotel boutique",
@@ -89,7 +128,6 @@
             "knowsLanguage": ["it", "en"],
             "knowsAbout": [
               "viaggi in coppia",
-              "Sud Italia",
               "isole minori italiane",
               "hotel boutique",
               "fotografia di viaggio"
