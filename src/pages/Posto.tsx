@@ -17,6 +17,7 @@ import { SITE_URL } from '../config/site';
 import { useFavorites } from '../context/FavoritesContext';
 import { trackEvent } from '../services/analytics';
 import { getUserLocation, getGoogleMapsDirectionsUrl, type UserLocation } from '../utils/geo';
+import { hasSpecificReelLink } from '../utils/mediaUrl';
 import { shareContent } from '../utils/share';
 import PlaceBusinessActions from '../components/PlaceBusinessActions';
 import type { ContentType } from '../config/contentTaxonomy';
@@ -368,7 +369,10 @@ export default function Posto() {
             {/* Scheda redazionale — solo se ci sono dati reali */}
             <ReviewBlock review={item.review} placeName={item.place?.name} />
 
-            {/* CTA reel */}
+            {/* CTA reel — "Guarda il reel" solo se il permalink punta a un reel
+                specifico. Alcuni placeholder hanno il permalink ridotto al solo
+                profilo: promettere un video che non c'è è peggio che non avere
+                la CTA, quindi lì il link resta onesto (segui il profilo). */}
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a
                 href={item.permalink}
@@ -376,7 +380,8 @@ export default function Posto() {
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
               >
-                <Play size={14} fill="currentColor" /> Guarda il reel
+                <Play size={14} fill="currentColor" />
+                {hasSpecificReelLink(item.permalink) ? 'Guarda il reel' : 'Segui su Instagram'}
               </a>
             </div>
           </div>

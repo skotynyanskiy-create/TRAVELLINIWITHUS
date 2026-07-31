@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { joinVideoBase } from './mediaUrl';
+import { hasSpecificReelLink, joinVideoBase } from './mediaUrl';
 
 const R2 = 'https://media.travelliniwithus.it';
 
@@ -28,5 +28,29 @@ describe('joinVideoBase', () => {
 
   it('propaga undefined invece di produrre la stringa "undefined"', () => {
     expect(joinVideoBase(R2, undefined)).toBeUndefined();
+  });
+});
+
+describe('hasSpecificReelLink', () => {
+  it('riconosce un reel specifico', () => {
+    expect(hasSpecificReelLink('https://www.instagram.com/reel/DZWo5OTM_Cw/')).toBe(true);
+  });
+
+  it('riconosce un post specifico', () => {
+    expect(hasSpecificReelLink('https://www.instagram.com/p/DZWo5OTM_Cw/')).toBe(true);
+  });
+
+  it('riconosce un reel specifico anche col path esteso /handle/reel/...', () => {
+    expect(
+      hasSpecificReelLink('https://www.instagram.com/travelliniwithus/reel/DTw_JBJjBBd/')
+    ).toBe(true);
+  });
+
+  it('rifiuta il solo profilo, senza reel/post — è il caso placeholder che promette un contenuto inesistente', () => {
+    expect(hasSpecificReelLink('https://www.instagram.com/travelliniwithus/')).toBe(false);
+  });
+
+  it('rifiuta undefined', () => {
+    expect(hasSpecificReelLink(undefined)).toBe(false);
   });
 });

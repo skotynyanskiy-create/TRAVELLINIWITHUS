@@ -3,6 +3,7 @@ import { Link } from '@/src/components/TransitionLink';
 import RatingPill from '../RatingPill';
 import { useQuickView } from '../../context/QuickViewContext';
 import { catColor } from '../../config/categoryColors';
+import { hasSpecificReelLink } from '../../utils/mediaUrl';
 import type { ContentItem, PartnershipKind } from '../../types/content';
 
 /**
@@ -28,6 +29,9 @@ export default function ContentCard({ item }: { item: ContentItem }) {
   const { open } = useQuickView();
   const partnerLabel = PARTNERSHIP_LABEL[item.partnership.kind];
   const place = item.place.city ?? item.place.region ?? item.place.country;
+  // Alcuni placeholder (manca solo la cover) hanno già un reel reale
+  // collegato — per quelli la CTA resta corretta. Non basta isPlaceholder.
+  const canWatchReel = hasSpecificReelLink(item.permalink);
 
   return (
     <div className="group/card relative">
@@ -50,7 +54,7 @@ export default function ContentCard({ item }: { item: ContentItem }) {
         className="group flex flex-col overflow-hidden rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-surface)] transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-accent)]/20 hover:shadow-[var(--shadow-premium)]"
       >
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-[var(--color-ink-deep)]">
-          {item.cover ? (
+          {!item.isPlaceholder && item.cover ? (
             <img
               src={item.cover}
               alt={item.title}
@@ -64,6 +68,14 @@ export default function ContentCard({ item }: { item: ContentItem }) {
                 className="mb-3 h-px w-8"
                 style={{ backgroundColor: catColor(item.types[0]) }}
               />
+              {/* Segnale onesto di roadmap: distingue dalle schede verificate senza
+                  nasconderle (decisione editoriale, non tecnica — vedi ContentCard
+                  CTA sotto per la stessa logica). */}
+              {item.isPlaceholder && (
+                <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.22em] text-white/50">
+                  In arrivo
+                </p>
+              )}
               {/* Hook grande in primo piano — scelta editoriale, non placeholder */}
               <p className="font-serif text-xl leading-snug text-white drop-shadow-sm">
                 {item.hook}
@@ -104,9 +116,18 @@ export default function ContentCard({ item }: { item: ContentItem }) {
               <span className="text-xs font-bold text-[var(--color-ink)]">{item.value.price}</span>
             )}
             <RatingPill overall={item.review?.overall} />
-            <span className="ml-auto inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-transform group-hover:translate-x-0.5">
-              Guarda il reel <ArrowUpRight size={12} />
-            </span>
+            {canWatchReel ? (
+              <span className="ml-auto inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-transform group-hover:translate-x-0.5">
+                Guarda il reel <ArrowUpRight size={12} />
+              </span>
+            ) : (
+              // Niente CTA "guarda il reel" quando il permalink e' solo il
+              // profilo: promettere un contenuto specifico che non c'e' ancora
+              // e' il difetto peggiore da evitare su una scheda in lavorazione.
+              <span className="ml-auto text-[10px] font-bold uppercase tracking-widest text-black/35">
+                Scheda in arrivo
+              </span>
+            )}
           </div>
         </div>
       </Link>

@@ -38,3 +38,13 @@ export function joinVideoBase(base: string, path?: string): string | undefined {
 export function resolveVideoUrl(path?: string): string | undefined {
   return joinVideoBase(VIDEO_BASE, path);
 }
+
+/** True se il permalink punta a un reel/post Instagram specifico, non solo al
+ *  profilo. Alcuni ContentItem `isPlaceholder` (manca solo la cover) hanno già
+ *  un reel reale collegato: in quel caso una CTA "guarda il reel" resta
+ *  corretta. Quando il permalink è il profilo nudo non lo è — promette un
+ *  contenuto specifico che non esiste ancora. */
+export function hasSpecificReelLink(permalink?: string): boolean {
+  if (!permalink) return false;
+  return /\/(reel|p)\/[^/]+/i.test(permalink);
+}
