@@ -43,8 +43,8 @@ lookup / "dove sta X" / read a file        → code-explorer. DONE.
 single trivial edit (rename, one-liner)    → default thread. No agent. DONE.
 one domain only                            → that specialist agent. DONE.
 2+ domains, or open-ended ("voglio X")     → travellini-orchestrator first, then execute its plan.
-"come va il progetto" / stato              → read docs/MARKETING_OPERATIONS_HUB.md +
-                                             docs/10_Projects/PROJECT_RELEASE_READINESS.md. No agent.
+"come va il progetto" / "cosa faccio"      → read docs/10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31.md.
+                                             È l'unica lista viva. No agent.
 "cosa dicono i dati"                       → travellini-data-analyst. DONE.
 pre-deploy gate                            → /predeploy (quality + security + perf + browser).
 ```
@@ -155,9 +155,16 @@ no longer occupy the model-facing listing. Type `/higgsfield-hub` to route media
 
 ## When to update `docs/`
 
-- Homepage, navbar, hero, nav → `docs/10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT.md`
+- Homepage, navbar, hero, nav → `docs/10_Projects/PROJECT_HOME_RICOMPOSIZIONE_2026-07-26.md`
 - Destinations → `docs/10_Projects/PROJECT_DESTINATIONS_SECTION_REVIEW.md`
 - Release state → `docs/10_Projects/PROJECT_RELEASE_READINESS.md`
+- Cosa fare / priorità → `docs/10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31.md`.
+  Una voce si chiude quando il codice lo dimostra, non quando un doc lo dice.
+- Stato del sito → `docs/STATO_DEL_SITO.md`. **Non si scrive, si rigenera**:
+  `npm run stato`. Le sezioni fra i marcatori sono generate; `npm run stato:check`
+  gira dentro `audit:quality` e fallisce se il documento è indietro sul codice.
+  Il target di una superficie si dichiara in `missing:` dentro
+  `src/config/surfaces.ts`, non in prosa.
 - Campaigns / partners / content → `docs/90_Templates/` + `docs/MARKETING_OPERATIONS_HUB.md`
 - New bug → `docs/14_Bugs/`
 
