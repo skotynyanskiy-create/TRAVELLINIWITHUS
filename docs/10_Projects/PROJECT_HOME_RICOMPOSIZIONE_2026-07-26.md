@@ -108,18 +108,22 @@ vede il proprio sommario senza salti visibili.
 > elegante, ma tocca `server.ts` (file ad alto rischio → `backend-engineer` +
 > conferma owner). **Fuori perimetro per questa v1.**
 >
-> **Correzione 2026-07-26:** è fuori perimetro per un secondo motivo, più
-> definitivo. `firebase.json` ha `"public": "dist"` e un unico rewrite
-> `**` → `/index.html`, senza rewrite verso Cloud Run o Functions: **`server.ts`
-> non viene mai eseguito in produzione.** Qualunque strategia server-side per la
-> ricomposizione è irrealizzabile finché l'hosting resta statico.
+> **Correzione 2026-07-26 (verificata):** è fuori perimetro per un secondo
+> motivo, più definitivo. `firebase.json` ha `"public": "dist"` e due rewrite:
+> `/api/**` → Cloud Function `api` (europe-west1) e `**` → `/index.html`.
+> Esiste quindi un backend, **ma solo per `/api/**`**: ogni richiesta di pagina
+> è servita staticamente e **non c'è SSR\*\*. Nessuna strategia server-side di
+> ricomposizione è realizzabile finché l'hosting resta così.
+>
+> (Una versione precedente di questa nota diceva «senza rewrite verso Cloud Run
+> o Functions»: impreciso — il rewrite a Functions esiste, è limitato a `/api`.)
 
 ### Composizione viaggiatori
 
 ```
 hero (costante)
  1 featured    CleanFeaturedPlaces        riuso
- 2 grid        WowFeaturedGrid            già scritto, mai montato
+ 2 grid        (componente NUOVO)         da scrivere sull'inventario reale
  3 map         HomeMapSection             riuso (lazy)
  4 atlante3d   AtlanteExperience          già scritto, mai montato
  5 reels       HiggsfieldReelCarousel     riuso (lazy)
@@ -132,20 +136,18 @@ Due scelte editoriali dichiarate, entrambe reversibili:
 
 - **il metodo scende dal 3° al 6° posto.** Chi cerca dove andare vuole i posti;
   il metodo è la prova che serve _dopo_ aver desiderato qualcosa.
-- **entra `WowFeaturedGrid`**, che attacca direttamente il difetto densità.
+- **entra una griglia densa nuova**, che attacca direttamente il difetto densità.
 
-> **Correzione 2026-07-26 (dopo la stesura): `WowFeaturedGrid` non esiste più.**
+> **Correzione 2026-07-26 (verificata): `WowFeaturedGrid` non esiste più.**
 > Insieme a `WowHomeHero` e `WowTactileJournal` è stato rimosso da
-> `src/components/home/wow/` (cartella eliminata): nessuno dei tre era importato
-> da alcun file, in nessun commit, su nessun branch — erano prototipi del commit
-> `ca32a31 feat(experiments)`.
+> `src/components/home/wow/` da una sessione parallela sullo stesso working
+> tree, e la rimozione è **committata** (`64b0406`). Erano prototipi mai
+> importati.
 >
-> La rimozione **non toglie nulla a questa spec**, perché il file non era
-> comunque riusabile: hardcodava 3 posti _inventati_ (prezzi e punteggi
-> compresi) e un link morto `/posto/taverna-volterra-toscana`, mentre il punto
-> 5.2 ne chiede 12–16 pescati dalle **29 entry reali** di `content-seed.json`.
-> Il componente della sezione 2 va scritto sull'inventario vero, non adattato.
-> Il markup delle card resta consultabile con
+> **Impatto sulla spec: la sezione 2 passa da «riuso» a «componente nuovo».**
+> Non è una perdita — il file hardcodava posti inventati con prezzi e punteggi
+> finti, quindi violava comunque la regola di integrità del progetto e non era
+> riusabile. Il markup delle card resta consultabile con
 > `git show ca32a31:src/components/home/wow/WowFeaturedGrid.tsx`.
 
 Family e Brand restano **schizzi non progettati**. La struttura regge tre
@@ -203,7 +205,8 @@ Nel repo esistono già **62 schede contenuto** (`content-seed.json` — campi
 | entry reali (`isPlaceholder: false`) |    **29** | tutte valide        |
 | placeholder (`isPlaceholder: true`)  |    **33** | **32 vuote** (`""`) |
 
-- `WowFeaturedGrid` porta 12–16 posti al posto di 3 — **pescando dalle 29 reali**;
+- la **griglia nuova** (sezione 2) porta 12–16 posti al posto di 3 — **pescando
+  dalle 29 reali**;
 - `HomeIndiceVivo` diventa l'indice dei **29 verificati**, non dei 62;
 - il carosello pesca più dei 34 reel disponibili.
 
@@ -217,6 +220,14 @@ verificati`. Inoltre [SEO.tsx:42](../../src/components/SEO.tsx) contiene un
 
 Obiettivo: **~13.000px**, tra Monocle e Lando Norris. Tutto sotto la piega e in
 `lazy`: l'elemento LCP non cambia.
+
+> **Tetto onesto.** Con 29 posti verificati e 34 reel, ~13.000px è raggiungibile
+> ma è **il massimo dignitoso**: è il limite dell'inventario vero, non un
+> obiettivo prudente. Superarlo richiede una delle due, entrambe fuori da questa
+> spec: verificare parte dei 33 placeholder, o dichiararli «in verifica» come
+> stato editoriale esplicito. **Non si allunga la pagina ripetendo le stesse 29
+> schede in sezioni diverse** — sarebbe densità finta, l'esatto difetto che i
+> riferimenti misurati non hanno.
 
 ### 5.3 Movimento — `atlante`
 
@@ -285,7 +296,7 @@ type="image/avif" imagesrcset="…">` per quella scala: l'AVIF **viene scaricato
 > 26 file — con un test, `OptimizedImage.baseWidth.test.tsx`, che asserisce lo
 > srcset giusto **proprio per questa immagine**. I soli due componenti che lo
 > bypassano sono `BrandCoherentHero` e `DiarioHeroCinematic`.
-> | 2 | **Accento + densità** — due token, `WowFeaturedGrid`, indice 62 | contrasto AA su tutte le rotte; ~13.000px; LCP invariato |
+> | 2 | **Accento + densità** — due token, griglia nuova, indice dei 29 verificati, filtro `!isPlaceholder` | contrasto AA su tutte le rotte; ~13.000px; LCP invariato; zero placeholder pubblicati |
 > | 3 | **`homeComposition.ts`** — renderer + composizione viaggiatori | `/` invariata a prima pittura; nessun CLS sopra la piega |
 > | 4 | **`atlante` WebGL** — cuore interattivo sotto la piega | CLS ≤ 0.1; fallback mobile e reduced-motion verificati |
 
@@ -316,3 +327,45 @@ sezione `atlante3d` nella lista.
 - [ ] ok a far scendere «il metodo» al 6° posto nella home viaggiatori;
 - [ ] conferma che la fase 1 (perf) precede tutto, come conseguenza della
       scelta «Three.js subito».
+
+## 11. Stato implementazione — sezione 2 (griglia), 2026-07-29
+
+**Fatto.** `src/components/home/curated/CleanFeaturedGrid.tsx` è montato in
+`CinematicHomepage.tsx` (`#griglia-posti`, tra `featured-places` e
+`mappa-interattiva-reale`), con selezione in `src/lib/homeGridSelection.ts`:
+
+- 9 slot, 3×3 desktop → 2 colonne tablet → 1 colonna mobile;
+- selezione per **regola**, non ID hardcodati: filtra `!isPlaceholder` +
+  `cover` presente, un vincitore per ciascuna categoria di `TYPES` con
+  candidati (oggi 6 delle 8), poi riempimento con i più recenti — così la
+  griglia si auto-aggiorna quando i 33 placeholder diventano reali, senza
+  toccare codice;
+- esclude i 3 `CURATED_IDS` già mostrati sopra da `CleanFeaturedPlaces`, per
+  non ripetere lo stesso posto due volte in home;
+- tile "in evidenza" (badge + bordo accento + titolo maggiore) compare **solo**
+  se un item ha `featured: true` esplicito nel seed — oggi nessuna delle 29
+  entry verificate lo è, quindi tutte e 9 le card sono equivalenti. Il campo
+  esisteva già nel tipo `ContentItem` (usato anche da `getRegistroItems`); non
+  è stato impostato su nessuna entry — resta scelta editoriale di Rodrigo &
+  Betta;
+- copertura test in `src/lib/homeGridSelection.test.ts`: determinismo, zero
+  duplicati, esclusione, tiebreak `featured`, `featuredId` nullo in assenza di
+  featured, comportamento sul pool reale.
+- Verificato in browser reale (Playwright) a 375/768/1440: colonne corrette,
+  9/9 cover caricate, card uniformi, nessuno stacco con le sezioni sopra/sotto.
+
+> **Debito architetturale emerso, non chiuso in questa sessione.** In home
+> convivono due sistemi di selezione contenuti che si ignorano a vicenda:
+> `CleanFeaturedPlaces` sceglie 3 posti per `CURATED_IDS` hardcodati
+> (editoriale, manuale), `homeGridSelection` ne sceglie 9 per regola
+> (categoria + recency, automatico). Oggi il secondo esclude esplicitamente
+> gli ID del primo per evitare doppioni, ma è un cerotto: se in futuro
+> `CleanFeaturedPlaces` cambia i suoi ID, o se una terza sezione home avrà
+> bisogno di una propria selezione, la stessa toppa va ripetuta altrove e il
+> rischio di doppioni torna. La soluzione pulita a tendere è **un'unica fonte
+> di selezione condivisa** (una funzione/hook che tutte le sezioni home
+> consultano, con un pool di "già usati" passato esplicitamente, non
+> ricostruito sezione per sezione) — non implementata qui perché fuori dal
+> perimetro concordato per questa sessione. Vedi anche il punto 3,
+> `homeComposition.ts`, non ancora scritto: è probabilmente il posto giusto
+> dove far vivere questa fonte unica quando si arriverà a quella fase.

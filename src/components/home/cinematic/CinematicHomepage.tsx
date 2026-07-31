@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import BrandCoherentHero from './BrandCoherentHero';
 import CleanFeaturedPlaces from '../curated/CleanFeaturedPlaces';
+import CleanFeaturedGrid from '../curated/CleanFeaturedGrid';
 import CleanEditorialPromise from '../curated/CleanEditorialPromise';
 import { MotionReveal } from '@/src/components/ui/MotionSignature';
 
@@ -30,6 +31,10 @@ export default function CinematicHomepage() {
 
         <section id="featured-places">
           <CleanFeaturedPlaces />
+        </section>
+
+        <section id="griglia-posti">
+          <CleanFeaturedGrid />
         </section>
 
         <section id="mappa-interattiva-reale">
