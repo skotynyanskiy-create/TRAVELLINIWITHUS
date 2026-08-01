@@ -30,7 +30,6 @@ import {
 } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import { CONTENT_ITEMS } from '@/src/config/contentLibrary';
-import { placeLabels } from './labelPlacement';
 import type { ContentItem } from '@/src/types/content';
 import { getUserLocation, sortPlacesByDistance, type UserLocation } from '@/src/utils/geo';
 import PlaceBusinessActions from '../PlaceBusinessActions';
@@ -180,47 +179,6 @@ export default function FullScreenMapExperience() {
   }, [allItems, selectedZone, selectedType, selectedBudget, searchQuery, userLoc]);
 
   // Web Audio API Synthetic Chime Feedback
-  /** Altezza della pillola e stima della sua larghezza dal numero di caratteri:
-   *  serve a sapere quanto spazio occupa un nome prima di disegnarlo. */
-  const LABEL_HEIGHT_PX = 30;
-  const LABEL_BASE_PX = 34;
-  const LABEL_CHAR_PX = 6.4;
-  const LABEL_MAX_CHARS = 18;
-
-  // Quali nomi ci stanno dipende da zoom e posizione, non solo dai dati: questo
-  // contatore fa ricalcolare a ogni movimento della mappa.
-  const [viewTick, setViewTick] = useState(0);
-  const bumpView = useCallback(() => setViewTick((n) => n + 1), []);
-
-  const { labelled, dots } = useMemo(() => {
-    const map = mapRef.current;
-    const withCoords = filteredItems.filter((item) => item.place.coordinates);
-    // Prima che la mappa esista non si puo' proiettare: si mostra tutto, il
-    // calcolo vero riparte al primo `onLoad`.
-    if (!map) return { labelled: withCoords, dots: [] as ContentItem[] };
-
-    return placeLabels(
-      withCoords.map((item) => {
-        const { x, y } = map.project([item.place.coordinates!.lng, item.place.coordinates!.lat]);
-        return {
-          item,
-          x,
-          y,
-          // Chi e' selezionato tiene sempre il nome; poi i featured, poi le
-          // schede verificate: la mappa da' il nome prima a cio' che e' vero.
-          priority:
-            (selectedItem?.id === item.id ? 100 : 0) +
-            (item.featured ? 10 : 0) +
-            (item.isPlaceholder ? 0 : 5),
-          width: LABEL_BASE_PX + Math.min(item.title.length, LABEL_MAX_CHARS) * LABEL_CHAR_PX,
-        };
-      }),
-      LABEL_HEIGHT_PX
-    );
-    // viewTick rappresenta lo stato della mappa.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filteredItems, viewTick, selectedItem]);
-
   const playChime = useCallback(() => {
     if (!soundEnabled) return;
     try {
@@ -660,57 +618,12 @@ export default function FullScreenMapExperience() {
           initialViewState={{ longitude: 12.5, latitude: 42.0, zoom: 5.2, pitch: 35 }}
           mapStyle={MAP_STYLES[mapStyleKey].url}
           projection="globe"
-          onLoad={bumpView}
-          onMove={bumpView}
         >
           <NavigationControl position="bottom-right" />
           <FullscreenControl position="bottom-right" />
 
-          {/* Posti la cui etichetta non entrerebbe senza coprire quella accanto:
-              tengono la stessa pillola nera dei nomi, con la sola icona della
-              categoria. Non un punto anonimo — resta leggibile che tipo di posto
-              e', e la mappa parla una lingua sola invece di due. Zoomando
-              riprendono il proprio nome. */}
-          {dots.map((item) => {
-            if (!item.place.coordinates) return null;
-            const isSelected = selectedItem?.id === item.id;
-            const IconComp = getItemIcon(item.types);
-
-            return (
-              <Marker
-                key={`icona-${item.id}`}
-                longitude={item.place.coordinates.lng}
-                latitude={item.place.coordinates.lat}
-                anchor="center"
-                // MapLibre lascia tutti i marker a `z-index: auto`, quindi
-                // dipinge in ordine di DOM e le icone finivano sopra i nomi.
-                style={{ zIndex: 1 }}
-                onClick={(e) => {
-                  e.originalEvent.stopPropagation();
-                  handlePinClick(item);
-                }}
-              >
-                <button
-                  type="button"
-                  title={item.title}
-                  aria-label={item.title}
-                  className={`flex cursor-pointer items-center justify-center rounded-full shadow-xl transition-transform hover:scale-125 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${
-                    isSelected
-                      ? 'h-8 w-8 border-2 border-white bg-[var(--color-accent)]'
-                      : 'h-7 w-7 border border-white/30 bg-black/85 hover:bg-[var(--color-accent)]'
-                  }`}
-                >
-                  <IconComp
-                    size={13}
-                    className={isSelected ? 'text-white' : 'text-[var(--color-accent)]'}
-                  />
-                </button>
-              </Marker>
-            );
-          })}
-
-          {/* Nomi: solo dove c'e' spazio per leggerli. */}
-          {labelled.map((item) => {
+          {/* Map Pins with Pulsing Rings & Hover Tooltips */}
+          {filteredItems.map((item) => {
             if (!item.place.coordinates) return null;
             const isSelected = selectedItem?.id === item.id;
             const IconComp = getItemIcon(item.types);
@@ -721,9 +634,6 @@ export default function FullScreenMapExperience() {
                 longitude={item.place.coordinates.lng}
                 latitude={item.place.coordinates.lat}
                 anchor="bottom"
-                // Sopra le icone: un nome coperto e' informazione persa, una
-                // icona coperta no. Il selezionato sale ancora sopra a tutto.
-                style={{ zIndex: isSelected ? 3 : 2 }}
                 onClick={(e) => {
                   e.originalEvent.stopPropagation();
                   handlePinClick(item);
