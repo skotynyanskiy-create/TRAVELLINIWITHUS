@@ -630,3 +630,12 @@ export function getReelForZone(zone: Zone): ReelEntry | null {
 export function getReelForType(type: ContentType): ReelEntry | null {
   return getPublishedReels().find((reel) => reel.type === type) ?? null;
 }
+
+/**
+ * Helper: il reel girato in un posto preciso (se esiste).
+ * Usato dalla scheda `/posto/<id>`, dove finora il video del posto esisteva ma
+ * si poteva vedere solo altrove: da qui si usciva su Instagram.
+ */
+export function getReelForPosto(postoId: string): ReelEntry | null {
+  return getPublishedReels().find((reel) => reel.postoId === postoId) ?? null;
+}

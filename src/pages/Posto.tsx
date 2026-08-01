@@ -10,6 +10,8 @@ import ReviewBlock from '../components/ReviewBlock';
 import VerdictSeal from '../components/VerdictSeal';
 import DealCard from '../components/DealCard';
 import PostNavigation from '../components/PostNavigation';
+import PostiVicini from '../components/posto/PostiVicini';
+import ReelDelPosto from '../components/posto/ReelDelPosto';
 import { Link } from '@/src/components/TransitionLink';
 import { getContentById } from '../config/contentLibrary';
 import { findDestinationByRegionName, getDestinationUrl } from '../config/destinations';
@@ -366,13 +368,20 @@ export default function Posto() {
               </p>
             )}
 
+            {/* Il reel girato qui — la prova in movimento, prima solo su IG */}
+            <ReelDelPosto
+              postoId={item.id}
+              luogo={item.place.city ?? item.place.region ?? item.place.country}
+            />
+
             {/* Scheda redazionale — solo se ci sono dati reali */}
             <ReviewBlock review={item.review} placeName={item.place?.name} />
 
-            {/* CTA reel — "Guarda il reel" solo se il permalink punta a un reel
-                specifico. Alcuni placeholder hanno il permalink ridotto al solo
-                profilo: promettere un video che non c'è è peggio che non avere
-                la CTA, quindi lì il link resta onesto (segui il profilo). */}
+            {/* CTA Instagram. Diceva "Guarda il reel", ma da quando il reel si
+                riproduce qui sopra sarebbe una promessa gia' mantenuta: ora
+                dichiara dove porta. Sui permalink ridotti al solo profilo
+                (alcuni placeholder) resta l'invito a seguire, perche' promettere
+                un video che non c'è è peggio che non avere la CTA. */}
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a
                 href={item.permalink}
@@ -381,40 +390,31 @@ export default function Posto() {
                 className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)]"
               >
                 <Play size={14} fill="currentColor" />
-                {hasSpecificReelLink(item.permalink) ? 'Guarda il reel' : 'Segui su Instagram'}
+                {hasSpecificReelLink(item.permalink) ? 'Apri su Instagram' : 'Segui su Instagram'}
               </a>
             </div>
           </div>
 
-          {/* Colonna destra — valore + offerta, solo se c'è almeno un dato reale */}
-          {(item.value?.price || item.description || item.deal) && (
+          {/* Colonna destra — valore + offerta, solo se c'è almeno un dato reale.
+              Qui sotto «Vale la pena?» c'era di nuovo `item.description`, la
+              stessa identica riga gia' stampata come paragrafo poco sopra: su
+              tutte e 29 le schede il visitatore leggeva due volte lo stesso
+              testo, la seconda sotto un titolo che promette un verdetto e
+              consegna una descrizione. */}
+          {(item.value?.price || item.deal) && (
             <div className="w-full shrink-0 space-y-6 md:w-64">
-              {(item.value?.price || item.description) && (
+              {item.value?.price && (
                 <aside className="w-full rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-surface)] p-6">
-                  {item.value?.price && (
-                    <div className="mb-4 border-b border-black/5 pb-4">
-                      <p className="mb-1 text-[9px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
-                        Prezzo indicativo
-                      </p>
-                      <p className="font-serif text-2xl font-medium text-[var(--color-ink)]">
-                        {item.value.price}
-                      </p>
-                      {item.value.budget && (
-                        <p className="mt-1 text-[11px] text-[var(--color-muted-fg)]">
-                          Budget: {item.value.budget}
-                        </p>
-                      )}
-                    </div>
-                  )}
-                  {item.description && (
-                    <>
-                      <p className="mb-2 text-[9px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
-                        Vale la pena?
-                      </p>
-                      <p className="text-sm leading-relaxed text-[var(--color-ink-2)]">
-                        {item.description}
-                      </p>
-                    </>
+                  <p className="mb-1 text-[9px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
+                    Prezzo indicativo
+                  </p>
+                  <p className="font-serif text-2xl font-medium text-[var(--color-ink)]">
+                    {item.value.price}
+                  </p>
+                  {item.value.budget && (
+                    <p className="mt-1 text-[11px] text-[var(--color-muted-fg)]">
+                      Budget: {item.value.budget}
+                    </p>
                   )}
                 </aside>
               )}
@@ -422,6 +422,9 @@ export default function Posto() {
             </div>
           )}
         </div>
+
+        {/* Cosa c'è a poca strada — la domanda che ci si fa arrivando qui */}
+        <PostiVicini posto={item} />
 
         {/* Navigazione prev/next tra posti */}
         <PostNavigation currentId={item.id} />
