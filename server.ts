@@ -8,6 +8,7 @@ import cors from 'cors';
 import type { FirestoreDocument, FirestoreValue, ProductRecord } from './src/server/types';
 import { SENTIERO_STAGES } from './src/experience/sentiero/sentieroData';
 import { DESTINATIONS, getDestinationUrl } from './src/config/destinations';
+import contentSeed from './src/data/content-seed.json';
 import { createSeoRouter } from './src/server/seoRoutes';
 import { createApiRouter } from './src/server/apiRoutes';
 import {
@@ -143,6 +144,16 @@ const VALID_DESTINATION_PATHS = new Set([
   ...DESTINATIONS.map((node) => getDestinationUrl(node)),
   ...[...REGION_LANDING_SLUGS].map((slug) => `/destinazione/${slug}`),
 ]);
+
+// Gli id dei posti REALI. Stessa regola di `scripts/generate-route-html.js`
+// (`!isPlaceholder`), che genera `dist/posto/<id>/index.html` esattamente per
+// questi: se le due liste divergono, il bot riceve uno stato che contraddice
+// il file servito.
+const REAL_POSTO_IDS = new Set(
+  (contentSeed as Array<{ id: string; isPlaceholder?: boolean }>)
+    .filter((entry) => !entry.isPlaceholder)
+    .map((entry) => entry.id)
+);
 
 const LITE_MODE = process.env.VITE_LITE_MODE === 'true';
 const LITE_DISABLED_PREFIXES = [
@@ -392,6 +403,14 @@ async function resolveAppStatus(pathname: string) {
 
   if (pathname.startsWith('/destinazione/')) {
     return VALID_DESTINATION_PATHS.has(pathname) ? 200 : 404;
+  }
+
+  // `/posto/<id>` mancava del tutto e cadeva sul 404 finale: la pagina si
+  // vedeva benissimo per una persona e rispondeva 404 al crawler. E' la
+  // destinazione di ogni reel, di ogni pin della mappa e di 40 link in home,
+  // quindi era l'intero catalogo dei posti a essere un soft-404.
+  if (pathname.startsWith('/posto/')) {
+    return REAL_POSTO_IDS.has(pathname.slice('/posto/'.length)) ? 200 : 404;
   }
 
   return 404;
