@@ -103,6 +103,14 @@ export function AudienceProvider({ children }: { children: React.ReactNode }) {
     };
   }, [location.pathname, userAudience]);
 
+  // Il tema per audience vive nei token CSS: `index.css` ridefinisce i colori
+  // sotto :root[data-audience=...]. Qui l'audience risolta (route override
+  // incluso) viene scritta sul <html>; uno script inline in index.html fa lo
+  // stesso PRIMA del CSS per evitare il flash del tema sbagliato.
+  useEffect(() => {
+    document.documentElement.dataset.audience = value.audience;
+  }, [value.audience]);
+
   return <AudienceContext.Provider value={value}>{children}</AudienceContext.Provider>;
 }
 

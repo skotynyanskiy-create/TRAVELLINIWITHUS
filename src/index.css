@@ -152,6 +152,69 @@
   --duration-slow: 320ms;
 }
 
+/* ==========================================================================
+   Temi per audience — il sito cambia pelle a seconda di chi guarda.
+
+   L'attributo `data-audience` su <html> è scritto da AudienceProvider (e da
+   uno script inline in index.html prima del CSS, per evitare il flash).
+   Nessun attributo, o `viaggiatori` = token di default qui sopra: il tema
+   base non è mai un override.
+
+   Regola: un tema nuovo si aggiunge SOLO come blocco di override dei token —
+   mai fork di componenti, mai colori inline per-audience nei tsx.
+
+   Ogni valore qui sotto ha passato la verifica WCAG a tavolino
+   (ink/sand ≥4,5 · accent/sand ≥3 · ink/accent ≥4,5 · accent-text ≥4,5 su
+   sand e bianco · bianco/accent-hover ≥4,5 · accent-on-dark/ink ≥4,5).
+   La legge dell'accento resta: sui riempimenti accent il testo è scuro.
+   ========================================================================== */
+
+/* Family — azzurro e rosa: fondo cielo, superfici confetto, accento rosa
+   vivo. Le forme si ammorbidiscono (+~30% sui radius): è il tema dei bambini,
+   senza rinunciare all'esclusività — stessi contrasti, stessa tipografia. */
+:root[data-audience='family'] {
+  --color-sand: #eef6fb;
+  --color-surface-2: #fdf1f6;
+  --color-border: #d8e5ee;
+  --color-muted-bg: #e7f1f8;
+
+  --color-accent: #f43f77; /* 3,30:1 su sand — riempimenti col testo scuro (5,49:1) */
+  --color-accent-hover: #a92355; /* bianco sopra 6,87:1 */
+  --color-accent-text: #c2205a; /* 5,27:1 su sand, 5,76:1 su bianco */
+  --color-accent-on-dark: #ff9fbe; /* 10,33:1 su ink */
+  --color-accent-soft: #fdf1f6;
+
+  --radius-sm: 0.5rem; /* 8 */
+  --radius-md: 0.8125rem; /* 13 */
+  --radius-lg: 1.125rem; /* 18 */
+  --radius-xl: 1.625rem; /* 26 */
+  --radius-2xl: 1.9375rem; /* 31 */
+  --radius-3xl: 2.25rem; /* 36 */
+}
+
+/* Brand — oro antico su avorio: fondo più freddo e calmo, accento bronzo,
+   angoli asciutti (−~30%). Il registro è quello di chi valuta un contratto,
+   non di chi sogna un viaggio. */
+:root[data-audience='brand'] {
+  --color-sand: #f6f4ef;
+  --color-surface-2: #f1ede4;
+  --color-border: #e3ddcf;
+  --color-muted-bg: #efece4;
+
+  --color-accent: #a8842f; /* 3,18:1 su sand — riempimenti col testo scuro (5,66:1) */
+  --color-accent-hover: #6e5a24; /* bianco sopra 6,66:1 */
+  --color-accent-text: #7d6426; /* 5,13:1 su sand, 5,64:1 su bianco */
+  --color-accent-on-dark: #d8b96a; /* 10,43:1 su ink */
+  --color-accent-soft: #f1ede4;
+
+  --radius-sm: 0.25rem; /* 4 */
+  --radius-md: 0.4375rem; /* 7 */
+  --radius-lg: 0.625rem; /* 10 */
+  --radius-xl: 0.875rem; /* 14 */
+  --radius-2xl: 1.0625rem; /* 17 */
+  --radius-3xl: 1.25rem; /* 20 */
+}
+
 @layer utilities {
   .twu-card-scrim {
     background: linear-gradient(

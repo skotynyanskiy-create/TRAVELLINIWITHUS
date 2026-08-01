@@ -87,6 +87,34 @@ Public-facing code MUST NOT use raw Tailwind palette utilities like `text-zinc-*
 
 Admin-only files under `src/pages/admin/**` and `src/components/admin/**` may still use Tailwind neutrals (`zinc-*`, etc.) — they are out of the brand surface. Third-party brand colors (Instagram gradient, WhatsApp green, etc.) live in `src/index.css` as `--color-social-*` and `--color-affiliate-*`.
 
+### Temi per audience (2026-08-01)
+
+Il sito cambia pelle in base all'audience. Il meccanismo è **solo** un override
+di token: `src/index.css` ridefinisce colori e radius sotto
+`:root[data-audience='family']` e `:root[data-audience='brand']`. L'attributo è
+scritto da `AudienceProvider` (e da uno script inline in `index.html` prima del
+CSS, per evitare il flash — le due mappe rotte→audience vanno tenute in sync).
+
+|             | viaggiatori (default) | family            | brand                |
+| ----------- | --------------------- | ----------------- | -------------------- |
+| Fondo       | sabbia `#faf8f4`      | azzurro `#eef6fb` | avorio `#f6f4ef`     |
+| Accento     | elettrico `#ff4d1a`   | rosa `#f43f77`    | oro antico `#a8842f` |
+| Accent-text | terracotta `#c2410c`  | `#c2205a`         | `#7d6426`            |
+| Radius      | base                  | +~30% (morbido)   | −~30% (asciutto)     |
+
+Regole non negoziabili:
+
+- **Un tema nuovo è un blocco di override, mai un fork di componenti** e mai
+  colori per-audience inline nei `.tsx`.
+- **La legge dell'accento vale per ogni tema**: sui riempimenti accent il testo
+  è scuro, mai bianco; il testo piccolo usa `--color-accent-text`.
+- Ogni valore entra solo dopo la verifica WCAG (accent/sand ≥3 ·
+  accent-text ≥4,5 su sand e bianco · bianco/accent-hover ≥4,5 ·
+  accent-on-dark/ink ≥4,5). Le rotte del gate Lighthouse coprono i tre temi via
+  `audienceFromPath` (`/family` → family, `/collaborazioni` e `/media-kit` → brand).
+- Limite noto e accettato: `bg-white`, `text-black` e i `rounded-*` nativi non
+  seguono il tema. I fondi restano chiari in tutti e tre proprio per questo.
+
 ## Form Components
 
 Use the shared form components rather than reinventing inputs:
