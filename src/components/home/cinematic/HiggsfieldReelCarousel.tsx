@@ -253,9 +253,10 @@ export default function HiggsfieldReelCarousel() {
                 <X size={18} />
               </button>
 
-              {/* Cinque reel su 34 dichiarano un localPath il cui file non esiste
-                  (verificato: video.error === 4). Invece di lasciare un player
-                  morto a 0:00, la copertina resta e la mancanza si dichiara. */}
+              {/* Rete di sicurezza, non un caso noto: oggi tutti e 29 i reel
+                  hanno il loro file (i 5 che non ce l'avevano sono stati tolti).
+                  Se un video sparisse, meglio la copertina con la mancanza
+                  dichiarata che un player morto a 0:00. */}
               {videoFailed ? (
                 <div className="relative shrink-0">
                   <OptimizedImage

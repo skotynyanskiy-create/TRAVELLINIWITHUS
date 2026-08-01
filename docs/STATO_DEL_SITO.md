@@ -49,8 +49,8 @@ Due rischi noti, aperti, non risolti:
 
 <!-- CONSEGNA:START — generato da `npm run stato`, non modificare a mano -->
 
-- Branch corrente: `chore/config-hardening-2026-07-26` — 16 commit avanti su `main`, 0 dietro.
-- File non committati: **23**.
+- Branch corrente: `chore/config-hardening-2026-07-26` — 35 commit avanti su `main`, 0 dietro.
+- File non committati: **2**.
 - `functions/` su `origin/main`: **assente**.
 - Rewrite `/api/**` in `firebase.json`: presente.
 
@@ -124,7 +124,7 @@ Ogni superficie non-live dichiara cosa le manca.
 - **Registro** (`src/data/content-seed.json`): 62 item — **29 reali**, 33 placeholder, 2 featured.
 - **Family** (`src/data/family-content-seed.json`): 8 item — 8 reali, 0 placeholder. Deal attivi: **0**.
 - **Articoli** (`src/data/articles/*.seed.ts`): 6 seed — **0 con `published: true`**, 1 con excerpt ancora `PLACEHOLDER`.
-- **Reel** (`src/config/reels.ts`): 34 visibili — 34 compilati, 0 placeholder.
+- **Reel** (`src/config/reels.ts`): 29 visibili — 29 compilati, 0 placeholder.
 
 ### Integrazioni
 
