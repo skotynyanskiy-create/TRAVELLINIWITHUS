@@ -666,19 +666,25 @@ export default function FullScreenMapExperience() {
           <NavigationControl position="bottom-right" />
           <FullscreenControl position="bottom-right" />
 
-          {/* Punti senza nome: sono i posti la cui etichetta non entrerebbe
-              senza coprire quella accanto. Nessuno sparisce — restano visibili
-              e cliccabili, e zoomando riprendono il proprio nome. */}
+          {/* Posti la cui etichetta non entrerebbe senza coprire quella accanto:
+              tengono la stessa pillola nera dei nomi, con la sola icona della
+              categoria. Non un punto anonimo — resta leggibile che tipo di posto
+              e', e la mappa parla una lingua sola invece di due. Zoomando
+              riprendono il proprio nome. */}
           {dots.map((item) => {
             if (!item.place.coordinates) return null;
             const isSelected = selectedItem?.id === item.id;
+            const IconComp = getItemIcon(item.types);
 
             return (
               <Marker
-                key={`dot-${item.id}`}
+                key={`icona-${item.id}`}
                 longitude={item.place.coordinates.lng}
                 latitude={item.place.coordinates.lat}
                 anchor="center"
+                // MapLibre lascia tutti i marker a `z-index: auto`, quindi
+                // dipinge in ordine di DOM e le icone finivano sopra i nomi.
+                style={{ zIndex: 1 }}
                 onClick={(e) => {
                   e.originalEvent.stopPropagation();
                   handlePinClick(item);
@@ -688,12 +694,17 @@ export default function FullScreenMapExperience() {
                   type="button"
                   title={item.title}
                   aria-label={item.title}
-                  className={`block cursor-pointer rounded-full border-2 shadow-lg transition-transform hover:scale-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${
+                  className={`flex cursor-pointer items-center justify-center rounded-full shadow-xl transition-transform hover:scale-125 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${
                     isSelected
-                      ? 'h-4 w-4 border-white bg-[var(--color-accent)]'
-                      : 'h-2.5 w-2.5 border-white/80 bg-[var(--color-accent)]/90 hover:bg-[var(--color-accent)]'
+                      ? 'h-8 w-8 border-2 border-white bg-[var(--color-accent)]'
+                      : 'h-7 w-7 border border-white/30 bg-black/85 hover:bg-[var(--color-accent)]'
                   }`}
-                />
+                >
+                  <IconComp
+                    size={13}
+                    className={isSelected ? 'text-white' : 'text-[var(--color-accent)]'}
+                  />
+                </button>
               </Marker>
             );
           })}
@@ -710,6 +721,9 @@ export default function FullScreenMapExperience() {
                 longitude={item.place.coordinates.lng}
                 latitude={item.place.coordinates.lat}
                 anchor="bottom"
+                // Sopra le icone: un nome coperto e' informazione persa, una
+                // icona coperta no. Il selezionato sale ancora sopra a tutto.
+                style={{ zIndex: isSelected ? 3 : 2 }}
                 onClick={(e) => {
                   e.originalEvent.stopPropagation();
                   handlePinClick(item);

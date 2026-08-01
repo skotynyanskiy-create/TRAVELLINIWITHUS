@@ -53,6 +53,14 @@ function overlaps(a: Box, b: Box): boolean {
 }
 
 /**
+ * Prenota lo spazio solo fra etichette. Che un segnaposto finisca sotto una
+ * pillola vicina non e' un problema di geometria ma di ordine di disegno: si
+ * risolve dipingendo i nomi sopra le icone, non togliendo nomi.
+ *
+ * La versione che prenotava anche i segnaposti e' stata provata e scartata: in
+ * zona densa non sopravviveva **nessun** nome, che e' peggio del difetto che
+ * voleva togliere.
+ *
  * @param candidates punti gia' proiettati in pixel
  * @param labelHeight altezza della pillola in pixel, uguale per tutte
  * @param padding respiro minimo fra due etichette
