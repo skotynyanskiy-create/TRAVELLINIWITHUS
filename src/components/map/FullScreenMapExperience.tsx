@@ -1,4 +1,5 @@
-import { useState, useMemo, useRef, useCallback, useSyncExternalStore } from 'react';
+import { useState, useMemo, useRef, useEffect, useCallback, useSyncExternalStore } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Map, {
   Marker,
   NavigationControl,
@@ -102,6 +103,8 @@ const FALLBACK_COORDINATES: Record<string, { lat: number; lng: number }> = {
 
 export default function FullScreenMapExperience() {
   const mapRef = useRef<MapRef>(null);
+  const [mapReady, setMapReady] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedZone, setSelectedZone] = useState<string>('all');
   const [selectedType, setSelectedType] = useState<string>('all');
   const [selectedBudget, setSelectedBudget] = useState<string>('all');
@@ -210,6 +213,10 @@ export default function FullScreenMapExperience() {
       setSelectedItem(item);
       setActiveTab('verdetto');
       playChime();
+      // Il posto selezionato finisce nell'URL: qualunque scheda aperta diventa
+      // condivisibile. `replace` perche' sfogliare la mappa non deve riempire
+      // la cronologia — il tasto indietro riporta da dove si e' arrivati.
+      setSearchParams({ posto: item.id }, { replace: true });
       if (mapRef.current && item.place.coordinates) {
         mapRef.current.flyTo({
           center: [item.place.coordinates.lng, item.place.coordinates.lat],
@@ -219,8 +226,29 @@ export default function FullScreenMapExperience() {
         });
       }
     },
-    [playChime]
+    [playChime, setSearchParams]
   );
+
+  /**
+   * Deep-link `/mappa?posto=<id>`: il globo atterra sul posto invece di
+   * comparirci sopra. Serve al «Sorprendimi» della home, e di suo rende
+   * condivisibile un singolo posto — utile per mandare a un partner il link
+   * diretto alla sua scheda sul globo.
+   *
+   * Si aspetta il `load` della mappa: `flyTo` prima che il globo esista non
+   * fa nulla e il deep-link si perderebbe in silenzio. Gira una volta sola —
+   * dopo, la selezione è dell'utente e non va scavalcata a ogni render.
+   */
+  const postoParam = searchParams.get('posto');
+  const deepLinkFatto = useRef(false);
+
+  useEffect(() => {
+    if (!mapReady || deepLinkFatto.current || !postoParam) return;
+    const item = allItems.find((candidate) => candidate.id === postoParam);
+    if (!item) return;
+    deepLinkFatto.current = true;
+    handlePinClick(item);
+  }, [mapReady, postoParam, allItems, handlePinClick]);
 
   // Preset Fly-To
   const handlePresetFly = useCallback(
@@ -618,6 +646,7 @@ export default function FullScreenMapExperience() {
           initialViewState={{ longitude: 12.5, latitude: 42.0, zoom: 5.2, pitch: 35 }}
           mapStyle={MAP_STYLES[mapStyleKey].url}
           projection="globe"
+          onLoad={() => setMapReady(true)}
         >
           <NavigationControl position="bottom-right" />
           <FullscreenControl position="bottom-right" />
