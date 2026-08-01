@@ -79,3 +79,5 @@ rejected and redone). Rules live in `CLAUDE.md` > Model routing.
 | 2026-07-30 | general-purpose                      | Benchmark puntuale siti travel premium            | 9465 ch  |
 | 2026-07-31 | Explore                              | Inventory routes and pages                        | 20653 ch |
 | 2026-07-31 | Explore                              | Inventory integrations and deploy state           | 17996 ch |
+| 2026-08-01 | Explore                              | Audit discovery surfaces and libraries            | 16209 ch |
+| 2026-08-01 | Explore                              | Assess theming feasibility per audience           | 13603 ch |
