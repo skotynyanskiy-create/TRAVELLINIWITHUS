@@ -1,5 +1,7 @@
 import { CONTENT_ITEMS } from './contentLibrary';
 import { getFamilyEntries } from './familyLibrary';
+import { FAMILY_CATEGORY_LABEL } from '../types/family';
+import { PARTNERSHIP_LABEL } from '../types/content';
 import { REELS } from './reels';
 import type { Audience } from '../context/AudienceContext';
 
@@ -29,6 +31,24 @@ export interface AudienceProof {
   label: string;
 }
 
+/** Una prova visiva: foto reale, cosa mostra, dove porta. Mai un'immagine
+ *  decorativa — sono gli stessi scatti delle schede, presi dall'inventario. */
+export interface AudienceShowcase {
+  id: string;
+  cover: string;
+  alt: string;
+  title: string;
+  /** Riga sotto il titolo: luogo per i posti, categoria per i family,
+   *  rapporto dichiarato per il brand. Cambia significato per audience,
+   *  ed e' il punto: ognuno legge la stessa foto per il motivo suo. */
+  meta: string;
+  to: string;
+  /** Focale verticale del crop (0-100). Sopra 50 taglia via la title-card
+   *  impressa in cima ai frame TikTok: senza, la vetrina mostra pezzi di
+   *  didascalia tagliati a meta. */
+  focusY: number;
+}
+
 export interface AudienceVoice {
   /** Sopratitolo: a chi sta parlando la pagina adesso. */
   eyebrow: string;
@@ -38,6 +58,8 @@ export interface AudienceVoice {
   support: string;
   /** Tre prove contate dai dati, mai dichiarate a mano. */
   proof: AudienceProof[];
+  /** Tre scatti veri, diversi per audience. */
+  showcase: AudienceShowcase[];
   cta: { label: string; to: string };
 }
 
@@ -56,7 +78,54 @@ const DISCLOSED = REAL_ITEMS.filter((item) =>
   ['invited', 'adv', 'collaboration', 'gifted'].includes(item.partnership.kind)
 );
 
-const FAMILY_COUNT = getFamilyEntries().length;
+const FAMILY_ENTRIES = getFamilyEntries();
+const FAMILY_COUNT = FAMILY_ENTRIES.length;
+
+const luogoDi = (item: (typeof CONTENT_ITEMS)[number]) =>
+  [item.place.city, item.place.region ?? item.place.country].filter(Boolean).join(', ');
+
+/** Solo scatti veri: senza cover non entra in vetrina, invece di mostrare un
+ *  riquadro vuoto su una sezione che parla di prove. */
+const conCover = <T extends { cover?: string }>(items: T[]) =>
+  items.filter((item) => item.cover?.trim());
+
+const showcaseViaggiatori: AudienceShowcase[] = conCover(REAL_ITEMS)
+  .slice(0, 3)
+  .map((item) => ({
+    id: item.id,
+    cover: item.cover,
+    alt: item.coverAlt ?? item.title,
+    title: item.title,
+    meta: luogoDi(item),
+    to: `/posto/${item.id}`,
+    focusY: item.coverFocusY ?? 50,
+  }));
+
+const showcaseFamily: AudienceShowcase[] = conCover(FAMILY_ENTRIES)
+  .slice(0, 3)
+  .map((entry) => ({
+    id: entry.id,
+    cover: entry.cover,
+    alt: entry.coverAlt,
+    title: entry.title,
+    meta: FAMILY_CATEGORY_LABEL[entry.category] ?? 'Consiglio',
+    to: '/family/consigli',
+    focusY: entry.coverFocusY ?? 50,
+  }));
+
+/** Per il brand la stessa foto significa un'altra cosa: non "che bel posto" ma
+ *  "questo lavoro l'abbiamo consegnato, e il rapporto e' dichiarato". */
+const showcaseBrand: AudienceShowcase[] = conCover(DISCLOSED)
+  .slice(0, 3)
+  .map((item) => ({
+    id: item.id,
+    cover: item.cover,
+    alt: item.coverAlt ?? item.title,
+    title: item.title,
+    meta: PARTNERSHIP_LABEL[item.partnership.kind] || 'Collaborazione',
+    to: `/posto/${item.id}`,
+    focusY: item.coverFocusY ?? 50,
+  }));
 
 // --- Le tre composizioni -----------------------------------------------------
 
@@ -76,6 +145,7 @@ export const HOME_COMPOSITIONS: Record<Audience, HomeComposition> = {
         { value: String(REELS.length), label: 'reel girati sul posto' },
         { value: '0', label: 'posti che non abbiamo visto' },
       ],
+      showcase: showcaseViaggiatori,
       cta: { label: 'Apri il registro', to: '/esplora' },
     },
     sections: ['featured', 'grid', 'map', 'reels', 'method', 'index'],
@@ -97,6 +167,7 @@ export const HOME_COMPOSITIONS: Record<Audience, HomeComposition> = {
         { value: '0', label: 'consigli presi da altri' },
         { value: 'Sempre', label: 'diciamo per che età va bene' },
       ],
+      showcase: showcaseFamily,
       cta: { label: 'I consigli family', to: '/family/consigli' },
     },
     sections: ['family', 'map', 'featured', 'method', 'index'],
@@ -121,6 +192,7 @@ export const HOME_COMPOSITIONS: Record<Audience, HomeComposition> = {
         },
         { value: String(REELS.length), label: 'reel consegnati' },
       ],
+      showcase: showcaseBrand,
       cta: { label: 'Scarica il media kit', to: '/media-kit' },
     },
     sections: ['reels', 'method', 'featured', 'grid', 'index'],
