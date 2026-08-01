@@ -1,10 +1,12 @@
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Shuffle } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import OptimizedImage from '@/src/components/OptimizedImage';
 import { useAudience } from '@/src/context/AudienceContext';
 import { compositionFor } from '@/src/config/homeComposition';
 import { useReducedMotion } from '@/src/hooks/useReducedMotion';
+import SorprendimiOverlay from './SorprendimiOverlay';
 
 /**
  * Il momento in cui il sito si gira verso chi sta guardando.
@@ -27,6 +29,7 @@ export default function HomeAudienceVoice() {
   const { audience } = useAudience();
   const reducedMotion = useReducedMotion();
   const { voice } = compositionFor(audience);
+  const [sorpresaAperta, setSorpresaAperta] = useState(false);
 
   const rivela = (delay: number) =>
     reducedMotion
@@ -62,16 +65,32 @@ export default function HomeAudienceVoice() {
                   {voice.support}
                 </p>
 
-                <Link
-                  to={voice.cta.to}
-                  className="group mt-9 inline-flex w-fit items-center gap-2 rounded-full bg-[var(--color-ink)] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-white transition-colors hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
-                >
-                  {voice.cta.label}
-                  <ArrowRight
-                    size={14}
-                    className="transition-transform group-hover:translate-x-1"
-                  />
-                </Link>
+                <div className="mt-9 flex flex-wrap items-center gap-3">
+                  <Link
+                    to={voice.cta.to}
+                    className="group inline-flex w-fit items-center gap-2 rounded-full bg-[var(--color-ink)] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-white transition-colors hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+                  >
+                    {voice.cta.label}
+                    <ArrowRight
+                      size={14}
+                      className="transition-transform group-hover:translate-x-1"
+                    />
+                  </Link>
+
+                  {/* Il gesto di svago accanto alla CTA seria: chi non sa da
+                      dove cominciare non deve leggere, deve premere. */}
+                  <button
+                    type="button"
+                    onClick={() => setSorpresaAperta(true)}
+                    className="group inline-flex w-fit items-center gap-2 rounded-full border border-[var(--color-border)] px-6 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+                  >
+                    <Shuffle
+                      size={14}
+                      className="text-[var(--color-accent-text)] transition-transform group-hover:rotate-180"
+                    />
+                    Portami in un posto a caso
+                  </button>
+                </div>
               </motion.div>
 
               {/* Le prove visive. Sfalsate come scatti appoggiati sul tavolo:
@@ -146,6 +165,8 @@ export default function HomeAudienceVoice() {
           </motion.div>
         </AnimatePresence>
       </div>
+
+      <SorprendimiOverlay aperto={sorpresaAperta} onChiudi={() => setSorpresaAperta(false)} />
     </section>
   );
 }
