@@ -241,7 +241,7 @@ export default function HiggsfieldReelCarousel() {
               animate={{ scale: 1, opacity: 1 }}
               exit={reducedMotion ? undefined : { scale: 0.96, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative max-h-[90vh] w-full max-w-md overflow-hidden rounded-[var(--radius-lg)] border border-white/20 bg-black shadow-2xl"
+              className="relative flex max-h-[90vh] w-full max-w-[19rem] flex-col overflow-hidden rounded-[var(--radius-lg)] border border-white/20 bg-black shadow-2xl"
             >
               <button
                 ref={closeBtnRef}
@@ -257,13 +257,13 @@ export default function HiggsfieldReelCarousel() {
                   (verificato: video.error === 4). Invece di lasciare un player
                   morto a 0:00, la copertina resta e la mancanza si dichiara. */}
               {videoFailed ? (
-                <div className="relative">
+                <div className="relative shrink-0">
                   <OptimizedImage
                     src={selectedReel.cover}
                     alt={selectedReel.alt}
-                    sizes="448px"
+                    sizes="304px"
                     responsiveWidths={[320, 480]}
-                    className="max-h-[70vh] w-full object-cover"
+                    className="aspect-[9/16] w-full object-cover"
                   />
                   <p className="absolute inset-x-0 bottom-0 bg-black/75 px-5 py-3 text-xs leading-relaxed text-white/80 backdrop-blur-sm">
                     Il video di questo reel non è ancora caricato sul sito.
@@ -282,13 +282,19 @@ export default function HiggsfieldReelCarousel() {
                   controls
                   preload="none"
                   onError={() => setVideoFailed(true)}
-                  className="max-h-[70vh] w-full object-cover"
+                  className="aspect-[9/16] w-full shrink-0 object-cover"
                 >
                   <track kind="captions" />
                 </video>
               )}
 
-              <ReelDetails reel={selectedReel} onNavigate={() => setSelectedReel(null)} />
+              {/* Il 9:16 lo detta la larghezza della scheda, e basta. Prima qui
+                  c'era `max-h-[70vh] w-full`: l'altezza si accorciava, la
+                  larghezza no, e `object-cover` tagliava testa e piedi
+                  dell'inquadratura. */}
+              <div className="min-h-0 flex-1 overflow-y-auto">
+                <ReelDetails reel={selectedReel} onNavigate={() => setSelectedReel(null)} />
+              </div>
             </motion.div>
           </motion.div>
         )}
