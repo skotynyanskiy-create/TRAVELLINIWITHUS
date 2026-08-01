@@ -60,7 +60,7 @@ export default function HomeMapSection() {
                 <span className="text-white/20">·</span>
                 <div className="flex items-center gap-2">
                   <MapPin size={16} className="text-[var(--color-accent-on-dark,#e8834e)]" />
-                  <span>Dettagli e verdetto onesti</span>
+                  <span>Costi e collaborazioni dichiarate</span>
                 </div>
               </div>
             </div>

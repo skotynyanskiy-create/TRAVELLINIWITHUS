@@ -13,7 +13,6 @@ import {
   RotateCcw,
   Search,
   Navigation,
-  Star,
   Hotel,
   UtensilsCrossed,
   Trees,
@@ -31,6 +30,7 @@ import {
 } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import { CONTENT_ITEMS } from '@/src/config/contentLibrary';
+import { PARTNERSHIP_LABEL } from '@/src/types/content';
 import type { ContentItem } from '@/src/types/content';
 import { getUserLocation, sortPlacesByDistance, type UserLocation } from '@/src/utils/geo';
 import PlaceBusinessActions from '../PlaceBusinessActions';
@@ -110,7 +110,7 @@ export default function FullScreenMapExperience() {
   const [selectedBudget, setSelectedBudget] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedItem, setSelectedItem] = useState<ContentItem | null>(null);
-  const [activeTab, setActiveTab] = useState<'verdetto' | 'costi'>('verdetto');
+  const [activeTab, setActiveTab] = useState<'cose' | 'costi'>('cose');
   const [mapStyleKey, setMapStyleKey] = useState<'dark' | 'liberty' | 'bright'>('dark');
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
@@ -211,7 +211,7 @@ export default function FullScreenMapExperience() {
   const handlePinClick = useCallback(
     (item: ContentItem) => {
       setSelectedItem(item);
-      setActiveTab('verdetto');
+      setActiveTab('cose');
       playChime();
       // Il posto selezionato finisce nell'URL: qualunque scheda aperta diventa
       // condivisibile. `replace` perche' sfogliare la mappa non deve riempire
@@ -755,14 +755,14 @@ export default function FullScreenMapExperience() {
             <div className="mt-4 flex gap-2 border-b border-white/15 pb-3">
               <button
                 type="button"
-                onClick={() => setActiveTab('verdetto')}
+                onClick={() => setActiveTab('cose')}
                 className={`rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-[0.14em] transition-all ${
-                  activeTab === 'verdetto'
+                  activeTab === 'cose'
                     ? 'bg-white text-[var(--color-ink,#1a2b3c)]'
                     : 'bg-white/10 text-white/70 hover:text-white'
                 }`}
               >
-                01. Verdetto
+                01. Cos&apos;è
               </button>
               <button
                 type="button"
@@ -778,28 +778,62 @@ export default function FullScreenMapExperience() {
             </div>
 
             {/* Tab Content */}
-            {activeTab === 'verdetto' ? (
+            {activeTab === 'cose' ? (
               <div className="mt-4 space-y-3">
                 <p className="text-xs leading-relaxed text-white/80">{selectedItem.description}</p>
-                {selectedItem.review?.verdict && (
-                  <div className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs font-semibold text-[var(--color-accent-text)]">
-                    <Star size={13} className="fill-current" />
-                    <span>Verdetto: {selectedItem.review.verdict}</span>
-                  </div>
+                {/* Che tipo di posto e': il dato c'e' su tutte le schede reali
+                    e dice a colpo d'occhio se e' cena, hotel o giornata fuori.
+                    Qui prima c'era un riquadro «Verdetto: ...» che non compariva
+                    mai, perche' il voto e' vuoto su 29 schede su 29. */}
+                {selectedItem.types?.length > 0 && (
+                  <p className="flex flex-wrap gap-1.5">
+                    {selectedItem.types.map((tipo) => (
+                      <span
+                        key={tipo}
+                        className="rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white/75"
+                      >
+                        {tipo}
+                      </span>
+                    ))}
+                  </p>
                 )}
               </div>
             ) : (
               <div className="mt-4 space-y-3 text-xs text-white/80">
-                <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                  <span className="text-white/60">Costo stimato:</span>
-                  <span className="font-bold text-white">
-                    {selectedItem.value?.price || 'Verificato'}
-                  </span>
-                </div>
+                {/* La riga del costo appariva sempre, e senza prezzo diceva
+                    «Verificato»: una parola che non e' un costo. Ora la riga
+                    c'e' solo quando un numero c'e' davvero. */}
+                {(selectedItem.value?.price || selectedItem.value?.budget) && (
+                  <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                    <span className="text-white/60">
+                      {selectedItem.value?.price ? 'Costo stimato:' : 'Fascia di prezzo:'}
+                    </span>
+                    <span className="font-bold text-white">
+                      {selectedItem.value?.price ?? selectedItem.value?.budget}
+                    </span>
+                  </div>
+                )}
                 <div className="flex items-center justify-between border-b border-white/10 pb-2">
                   <span className="text-white/60">Posizione:</span>
-                  <span className="font-bold text-white">{selectedItem.place.country}</span>
+                  <span className="font-bold text-white">
+                    {[
+                      selectedItem.place.city,
+                      selectedItem.place.region ?? selectedItem.place.country,
+                    ]
+                      .filter(Boolean)
+                      .join(', ')}
+                  </span>
                 </div>
+                {/* A che titolo ci siamo andati: e' la firma del progetto e
+                    stava solo sulla pagina-posto, non qui dove si decide. */}
+                {PARTNERSHIP_LABEL[selectedItem.partnership.kind] && (
+                  <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                    <span className="text-white/60">Trasparenza:</span>
+                    <span className="font-bold text-[var(--color-accent-on-dark)]">
+                      {PARTNERSHIP_LABEL[selectedItem.partnership.kind]}
+                    </span>
+                  </div>
+                )}
                 <div className="pt-2">
                   <PlaceBusinessActions
                     item={selectedItem}

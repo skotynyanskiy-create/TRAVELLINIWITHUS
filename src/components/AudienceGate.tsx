@@ -37,7 +37,7 @@ const CHOICES: Array<{
     key: 'viaggiatori',
     icon: Compass,
     title: 'Viaggiatori',
-    description: 'Posti particolari provati di persona: atlante, mappa e verdetti onesti.',
+    description: 'Posti particolari provati di persona: atlante, mappa e come ci siamo andati.',
     to: null, // resta sulla home
   },
   {

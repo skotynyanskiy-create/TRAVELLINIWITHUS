@@ -24,8 +24,8 @@ export default function HomeIndiceVivo() {
           Posti provati, uno per uno.
         </h2>
         <p className="mt-3 text-sm leading-relaxed text-[var(--color-muted-fg)]">
-          Ogni voce nasce da un viaggio vero. Quando la scheda è completa trovi prezzo, posizione e
-          verdetto — pubblicati solo dopo averli verificati.
+          Ogni voce nasce da un viaggio vero. Su ognuna trovi cos&apos;è quel posto, dov&apos;è,
+          quando ci siamo stati e a che titolo — il prezzo quando l&apos;abbiamo verificato.
         </p>
       </div>
 

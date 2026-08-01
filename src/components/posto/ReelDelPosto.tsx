@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Play } from 'lucide-react';
 import OptimizedImage from '@/src/components/OptimizedImage';
 import { getReelForPosto } from '@/src/config/reels';
+import { meseAnno } from '@/src/utils/format';
 
 /**
  * Il reel girato in questo posto, dentro la scheda.
@@ -25,29 +26,6 @@ import { getReelForPosto } from '@/src/config/reels';
  *   cosa che il reel aggiunge e' **quando** e' stato girato.
  */
 
-const MESI = [
-  'gennaio',
-  'febbraio',
-  'marzo',
-  'aprile',
-  'maggio',
-  'giugno',
-  'luglio',
-  'agosto',
-  'settembre',
-  'ottobre',
-  'novembre',
-  'dicembre',
-];
-
-/** `2026-05-14` → `maggio 2026`. Il giorno non serve e invecchia peggio. */
-function meseAnno(iso?: string): string | null {
-  if (!iso) return null;
-  const [anno, mese] = iso.split('-');
-  const indice = Number(mese) - 1;
-  if (!anno || !MESI[indice]) return null;
-  return `${MESI[indice]} ${anno}`;
-}
 export default function ReelDelPosto({ postoId, luogo }: { postoId: string; luogo?: string }) {
   const reel = getReelForPosto(postoId);
   const [inRiproduzione, setInRiproduzione] = useState(false);
