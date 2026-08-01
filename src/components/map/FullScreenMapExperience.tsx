@@ -762,7 +762,7 @@ export default function FullScreenMapExperience() {
                     : 'bg-white/10 text-white/70 hover:text-white'
                 }`}
               >
-                01. Cos&apos;è
+                Cos&apos;è
               </button>
               <button
                 type="button"
@@ -773,7 +773,7 @@ export default function FullScreenMapExperience() {
                     : 'bg-white/10 text-white/70 hover:text-white'
                 }`}
               >
-                02. Costi &amp; Info
+                Costi &amp; info
               </button>
             </div>
 
