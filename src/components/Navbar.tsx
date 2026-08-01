@@ -644,7 +644,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setIsSearchOpen(true)}
-              className="flex items-center gap-1.5 rounded-full border border-[var(--color-ink)]/12 bg-white/70 backdrop-blur-xs px-2.5 py-1.2 xl:px-3 xl:py-1.5 text-[10px] xl:text-[10.5px] font-bold uppercase tracking-[0.12em] text-[var(--color-ink)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] shadow-2xs group cursor-pointer"
+              className="flex items-center gap-1.5 rounded-full border border-[var(--color-ink)]/12 bg-white/70 backdrop-blur-xs px-2.5 py-1.2 xl:px-3 xl:py-1.5 text-[10px] xl:text-[10.5px] font-bold uppercase tracking-[0.12em] text-[var(--color-ink)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)] shadow-2xs group cursor-pointer"
               aria-label={navigation.searchLabel}
             >
               <Search
@@ -661,7 +661,7 @@ export default function Navbar() {
             {audience === 'brand' ? (
               <Link
                 to="/media-kit"
-                className="inline-flex items-center gap-1 rounded-full bg-[var(--color-ink-deep)] px-3 py-1.5 xl:px-4 xl:py-1.5 text-[9.5px] xl:text-[10.5px] font-bold uppercase tracking-widest text-white shadow-xs transition-all duration-300 hover:bg-[var(--color-accent)] hover:shadow-md hover:scale-[1.02]"
+                className="inline-flex items-center gap-1 rounded-full bg-[var(--color-ink-deep)] px-3 py-1.5 xl:px-4 xl:py-1.5 text-[9.5px] xl:text-[10.5px] font-bold uppercase tracking-widest text-white shadow-xs transition-all duration-300 hover:bg-[var(--color-accent-hover)] hover:shadow-md hover:scale-[1.02]"
               >
                 <Send size={11} className="text-[var(--color-accent-on-dark)]" />
                 Richiedi Media Kit
@@ -669,7 +669,7 @@ export default function Navbar() {
             ) : audience === 'family' ? (
               <Link
                 to="/family/shop"
-                className="inline-flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-3 py-1.5 xl:px-4 xl:py-1.5 text-[9.5px] xl:text-[10.5px] font-bold uppercase tracking-widest text-white shadow-xs transition-all duration-300 hover:bg-[var(--color-accent-hover,#b34d28)] hover:shadow-md hover:scale-[1.02]"
+                className="inline-flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-3 py-1.5 xl:px-4 xl:py-1.5 text-[9.5px] xl:text-[10.5px] font-bold uppercase tracking-widest text-[var(--color-ink)] shadow-xs transition-all duration-300 hover:bg-[var(--color-accent-hover,#b34d28)] hover:shadow-md hover:scale-[1.02]"
               >
                 <Tag size={11} />
                 {navigation.familyShopLabel}
@@ -677,7 +677,7 @@ export default function Navbar() {
             ) : (
               <Link
                 to="/guida-in-regalo"
-                className="inline-flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-3 py-1.5 xl:px-4 xl:py-1.5 text-[9.5px] xl:text-[10.5px] font-bold uppercase tracking-widest text-white shadow-xs transition-all duration-300 hover:bg-[var(--color-accent-hover,#b34d28)] hover:shadow-md hover:scale-[1.02]"
+                className="inline-flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-3 py-1.5 xl:px-4 xl:py-1.5 text-[9.5px] xl:text-[10.5px] font-bold uppercase tracking-widest text-[var(--color-ink)] shadow-xs transition-all duration-300 hover:bg-[var(--color-accent-hover,#b34d28)] hover:shadow-md hover:scale-[1.02]"
               >
                 La guida in regalo
                 <ArrowRight size={11} />
@@ -706,7 +706,7 @@ export default function Navbar() {
 
                 {/* Saved favorites badge indicator */}
                 {favorites.length > 0 && (
-                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-accent)] text-[9px] font-bold text-white shadow-xs">
+                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-accent)] text-[9px] font-bold text-[var(--color-ink)] shadow-xs">
                     {favorites.length}
                   </span>
                 )}
@@ -770,7 +770,7 @@ export default function Navbar() {
                       <Link
                         to="/admin"
                         onClick={() => setIsUserMenuOpen(false)}
-                        className="flex w-full items-center gap-2 px-4 py-2.5 text-xs font-medium text-[var(--color-accent)] transition-colors hover:bg-[var(--color-muted-bg)]"
+                        className="flex w-full items-center gap-2 px-4 py-2.5 text-xs font-medium text-[var(--color-accent-text)] transition-colors hover:bg-[var(--color-muted-bg)]"
                       >
                         <ShieldCheck size={14} /> Pannello Admin
                       </Link>
@@ -793,7 +793,7 @@ export default function Navbar() {
                             signIn();
                             setIsUserMenuOpen(false);
                           }}
-                          className="flex w-full items-center gap-2 px-4 py-2.5 text-xs font-medium text-[var(--color-accent)] transition-colors hover:bg-[var(--color-sand)] cursor-pointer"
+                          className="flex w-full items-center gap-2 px-4 py-2.5 text-xs font-medium text-[var(--color-accent-text)] transition-colors hover:bg-[var(--color-sand)] cursor-pointer"
                         >
                           <UserIcon size={14} /> Accedi
                         </button>
@@ -1100,7 +1100,7 @@ export default function Navbar() {
               <Link
                 to="/media-kit"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-[var(--color-accent)] px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
+                className="inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-[var(--color-accent)] px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink)] transition-all hover:brightness-110"
               >
                 Richiedi Media Kit
                 <ArrowRight size={12} />
@@ -1115,7 +1115,7 @@ export default function Navbar() {
               <Link
                 to="/family/shop"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-6 py-4 text-xs font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
+                className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-6 py-4 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-all hover:brightness-110"
               >
                 {navigation.familyShopLabel}
                 <ArrowRight size={14} />
@@ -1124,7 +1124,7 @@ export default function Navbar() {
               <Link
                 to="/media-kit"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-ink-deep)] px-6 py-4 text-xs font-bold uppercase tracking-widest text-white transition-all hover:bg-[var(--color-accent)]"
+                className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-ink-deep)] px-6 py-4 text-xs font-bold uppercase tracking-widest text-white transition-all hover:bg-[var(--color-accent-hover)]"
               >
                 Richiedi Media Kit
                 <ArrowRight size={14} />
@@ -1133,7 +1133,7 @@ export default function Navbar() {
               <Link
                 to="/guida-in-regalo"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-6 py-4 text-xs font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
+                className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-6 py-4 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-all hover:brightness-110"
               >
                 La guida in regalo
                 <ArrowRight size={14} />
@@ -1148,7 +1148,7 @@ export default function Navbar() {
               >
                 <Heart size={24} />
                 {favorites.length > 0 && (
-                  <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-accent)] text-[10px] font-bold text-white">
+                  <span className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-accent)] text-[10px] font-bold text-[var(--color-ink)]">
                     {favorites.length}
                   </span>
                 )}

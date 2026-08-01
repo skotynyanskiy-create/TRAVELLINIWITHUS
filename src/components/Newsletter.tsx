@@ -352,7 +352,7 @@ export default function Newsletter({
 
           {!isCompact && (
             <p
-              className={`text-center text-xs leading-relaxed ${isDark ? 'text-white/45' : 'text-black/40'}`}
+              className={`text-center text-xs leading-relaxed ${isDark ? 'text-white/45' : 'text-black/60'}`}
             >
               Iscrivendoti accetti il trattamento dei dati secondo la nostra{' '}
               <Link
@@ -381,7 +381,7 @@ export default function Newsletter({
               {unlocksLeadMagnet ? (
                 <Link
                   to="/lead-magnet"
-                  className="mt-2 inline-flex items-center gap-1.5 text-sm font-bold tracking-wide text-[var(--color-accent)] underline underline-offset-4 hover:text-[var(--color-accent-hover)]"
+                  className="mt-2 inline-flex items-center gap-1.5 text-sm font-bold tracking-wide text-[var(--color-accent-text)] underline underline-offset-4 hover:text-[var(--color-accent-hover)]"
                 >
                   Apri la guida <ArrowRight size={13} />
                 </Link>
@@ -479,7 +479,7 @@ export default function Newsletter({
             <div>
               <p className="font-serif text-xl">Invii curati, non automatici.</p>
               <p
-                className={`mt-1 text-sm leading-relaxed ${isDark ? 'text-white/55' : 'text-black/50'}`}
+                className={`mt-1 text-sm leading-relaxed ${isDark ? 'text-white/55' : 'text-black/60'}`}
               >
                 Il punto non è scrivere spesso: è mandare qualcosa che valga davvero un salvataggio.
               </p>

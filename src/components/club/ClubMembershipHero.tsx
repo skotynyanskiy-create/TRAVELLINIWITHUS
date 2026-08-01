@@ -111,7 +111,7 @@ export default function ClubMembershipHero() {
     <section id="club-pricing" className="bg-[var(--color-ink)] py-20 text-white md:py-28">
       <div className="mx-auto max-w-6xl px-6 md:px-12">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)]/15 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">
+          <span className="inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)]/15 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
             <Star size={12} /> Travellini Club
           </span>
           <h1 className="mt-6 text-5xl font-serif leading-[1.05] tracking-tight md:text-6xl">
@@ -129,7 +129,7 @@ export default function ClubMembershipHero() {
         <div className="mt-12 grid gap-4 md:grid-cols-3">
           {CLUB_DELIVERABLES.map((item) => (
             <div key={item.label} className="border-t border-white/12 pt-5">
-              <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+              <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
                 {item.label}
               </p>
               <p className="mt-3 text-sm leading-relaxed text-white/68">{item.text}</p>
@@ -170,7 +170,7 @@ export default function ClubMembershipHero() {
             <div className="absolute right-8 top-8 inline-flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.24em] text-[var(--color-ink)]">
               <Sparkles size={11} /> Consigliato
             </div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
               Travellini Club — Premium
             </p>
             <p className="mt-4 font-serif text-4xl">Da €5,90 al mese</p>
@@ -221,7 +221,7 @@ export default function ClubMembershipHero() {
             </p>
 
             {isSubscribed ? (
-              <div className="mt-4 flex items-center gap-3 rounded-[var(--radius-md)] border border-[var(--color-accent)]/40 bg-[var(--color-accent)]/12 p-4 text-sm text-white">
+              <div className="mt-4 flex items-center gap-3 rounded-[var(--radius-md)] border border-[var(--color-accent)]/40 bg-[var(--color-accent)]/12 p-4 text-sm text-[var(--color-ink)]">
                 <CheckCircle2 size={18} className="shrink-0 text-[var(--color-accent)]" />
                 <span>
                   Sei in waitlist. Ti scriviamo appena il Club apre alle prime iscrizioni.
@@ -261,7 +261,7 @@ export default function ClubMembershipHero() {
               </form>
             )}
             {error && !isSubscribed && (
-              <p className="mt-2 text-xs text-[var(--color-accent)]" role="alert">
+              <p className="mt-2 text-xs text-[var(--color-accent-text)]" role="alert">
                 {error}
               </p>
             )}

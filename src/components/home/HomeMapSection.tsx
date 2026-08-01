@@ -68,7 +68,7 @@ export default function HomeMapSection() {
             <div className="flex items-center md:justify-end">
               <Link
                 to="/mappa"
-                className="inline-flex items-center gap-3.5 whitespace-nowrap rounded-full bg-[var(--color-accent,#c2410c)] px-6 py-4 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-[0_0_35px_rgba(194,65,12,0.4)] transition-all duration-300 hover:scale-105 hover:bg-[var(--color-accent-hover,#9a3412)] md:px-9 md:py-5"
+                className="inline-flex items-center gap-3.5 whitespace-nowrap rounded-full bg-[var(--color-accent,#c2410c)] px-6 py-4 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] shadow-[0_0_35px_rgba(194,65,12,0.4)] transition-all duration-300 hover:scale-105 hover:brightness-95 md:px-9 md:py-5"
               >
                 <Compass size={20} />
                 Apri la Mappa Interattiva

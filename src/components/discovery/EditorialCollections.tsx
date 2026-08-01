@@ -77,7 +77,7 @@ export default function EditorialCollections({
           <article key={collection.id}>
             <header className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div className="max-w-2xl">
-                <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-black/45">
+                <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-black/60">
                   {collection.eyebrow}
                 </span>
                 <h3 className="mt-2 font-serif text-2xl leading-tight text-[var(--color-ink)] md:text-3xl">
@@ -97,7 +97,7 @@ export default function EditorialCollections({
                       destination_url: collection.ctaHref,
                     })
                   }
-                  className="inline-flex shrink-0 items-center gap-1.5 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+                  className="inline-flex shrink-0 items-center gap-1.5 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent-text)]"
                 >
                   {collection.ctaLabel} <ArrowRight size={13} />
                 </Link>

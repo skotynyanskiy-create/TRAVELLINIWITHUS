@@ -108,7 +108,7 @@ function OrderCard({ order }: { order: Order }) {
                       href={downloadItem.downloadUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 bg-[var(--color-ink)] text-white hover:bg-[var(--color-accent)] transition-colors px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest"
+                      className="inline-flex items-center gap-2 bg-[var(--color-ink)] text-white hover:bg-[var(--color-accent-hover)] transition-colors px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest"
                     >
                       <Download size={14} />
                       Scarica
@@ -119,7 +119,7 @@ function OrderCard({ order }: { order: Order }) {
                 order.items.every((i) => !(i as { downloadUrl?: string }).downloadUrl)) && (
                 <Link
                   to="/contatti"
-                  className="inline-flex items-center gap-2 border border-black/10 hover:border-[var(--color-accent)] text-black/60 hover:text-[var(--color-accent)] transition-all px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest"
+                  className="inline-flex items-center gap-2 border border-black/10 hover:border-[var(--color-accent)] text-black/60 hover:text-[var(--color-accent-text)] transition-all px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest"
                 >
                   <ExternalLink size={14} />
                   Richiedi accesso
@@ -161,7 +161,7 @@ export default function MieiAcquisti() {
         >
           <div className="flex items-center gap-4 mb-6">
             <div className="w-8 h-[1px] bg-[var(--color-accent)]" />
-            <span className="text-[10px] uppercase tracking-widest font-bold text-[var(--color-accent)]">
+            <span className="text-[10px] uppercase tracking-widest font-bold text-[var(--color-accent-text)]">
               Account
             </span>
           </div>
@@ -189,7 +189,7 @@ export default function MieiAcquisti() {
             </p>
             <Link
               to="/club"
-              className="inline-flex items-center gap-2 bg-[var(--color-ink)] text-white hover:bg-[var(--color-accent)] transition-colors px-8 py-3.5 rounded-full font-bold text-xs uppercase tracking-widest"
+              className="inline-flex items-center gap-2 bg-[var(--color-ink)] text-white hover:bg-[var(--color-accent-hover)] transition-colors px-8 py-3.5 rounded-full font-bold text-xs uppercase tracking-widest"
             >
               Accedi
             </Link>
@@ -211,7 +211,7 @@ export default function MieiAcquisti() {
           </div>
         ) : (
           <div className="space-y-6">
-            <p className="text-sm text-black/40 font-medium mb-2">
+            <p className="text-sm text-black/60 font-medium mb-2">
               {orders.length} {orders.length === 1 ? 'ordine' : 'ordini'}
             </p>
             {orders.map((order) => (

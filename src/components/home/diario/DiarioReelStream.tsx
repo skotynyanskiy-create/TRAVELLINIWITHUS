@@ -39,7 +39,7 @@ export default function DiarioReelStream() {
         {/* Header */}
         <div className="mb-12 flex flex-col justify-between md:flex-row md:items-end">
           <div>
-            <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-[var(--color-accent,#c85a32)]">
+            <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
               <Sparkles size={14} />
               Dai Reel alle Schede
             </span>
@@ -56,7 +56,7 @@ export default function DiarioReelStream() {
             href={CONTACTS.instagramUrl}
             target="_blank"
             rel="noreferrer"
-            className="mt-6 inline-flex items-center gap-2 rounded-full border border-black/10 px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] md:mt-0"
+            className="mt-6 inline-flex items-center gap-2 rounded-full border border-black/10 px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)] md:mt-0"
           >
             <Instagram size={14} /> Guarda su Instagram
           </a>
@@ -113,7 +113,7 @@ export default function DiarioReelStream() {
                   {posto ? (
                     <Link
                       to={`/posto/${posto.id}`}
-                      className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-[var(--color-accent)] hover:underline"
+                      className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-[var(--color-accent-text)] hover:underline"
                     >
                       Apri la Scheda <ArrowRight size={11} />
                     </Link>
@@ -121,7 +121,7 @@ export default function DiarioReelStream() {
                     <button
                       type="button"
                       onClick={() => handleReelClick(reel, idx)}
-                      className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-[var(--color-ink)] hover:text-[var(--color-accent)]"
+                      className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-[var(--color-ink)] hover:text-[var(--color-accent-text)]"
                     >
                       Riproduci Video <Play size={10} />
                     </button>
@@ -181,7 +181,7 @@ export default function DiarioReelStream() {
                       <Link
                         to={`/posto/${openReel.postoId}`}
                         onClick={() => setOpenReel(null)}
-                        className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] hover:underline"
+                        className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[var(--color-accent-text)] hover:underline"
                       >
                         Vai alla Scheda del Posto <ArrowRight size={13} />
                       </Link>

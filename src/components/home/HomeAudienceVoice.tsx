@@ -64,7 +64,7 @@ export default function HomeAudienceVoice() {
 
                 <Link
                   to={voice.cta.to}
-                  className="group mt-9 inline-flex w-fit items-center gap-2 rounded-full bg-[var(--color-ink)] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-white transition-colors hover:bg-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+                  className="group mt-9 inline-flex w-fit items-center gap-2 rounded-full bg-[var(--color-ink)] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-white transition-colors hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
                 >
                   {voice.cta.label}
                   <ArrowRight

@@ -462,7 +462,7 @@ export default function ArticleEditor() {
                   type="button"
                   onClick={handleVerifyMaps}
                   disabled={isVerifyingSearch || isVerifyingMaps || !content}
-                  className="flex items-center gap-2 px-3 py-1.5 bg-[var(--color-accent-soft)] text-[var(--color-accent)] rounded-lg text-xs font-medium hover:bg-[var(--color-accent)]/15 transition-colors disabled:opacity-50"
+                  className="flex items-center gap-2 px-3 py-1.5 bg-[var(--color-accent-soft)] text-[var(--color-accent-text)] rounded-lg text-xs font-medium hover:bg-[var(--color-accent-hover)]/15 transition-colors disabled:opacity-50"
                   title="Verifica luoghi, indirizzi e logistica con Google Maps"
                 >
                   {isVerifyingMaps ? (

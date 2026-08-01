@@ -118,7 +118,7 @@ export const PlaceBusinessActions: React.FC<PlaceBusinessActionsProps> = ({
     return (
       <div className={`flex flex-wrap items-center gap-2 ${className}`}>
         {distanceKm !== null && (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/10 px-3 py-1 text-xs font-semibold text-[var(--color-accent)] dark:bg-amber-500/20">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/10 px-3 py-1 text-xs font-semibold text-[var(--color-accent-text)] dark:bg-amber-500/20">
             <MapPin size={13} aria-hidden />
             {formatGeoDistance(distanceKm)}
           </span>
@@ -128,14 +128,14 @@ export const PlaceBusinessActions: React.FC<PlaceBusinessActionsProps> = ({
           target="_blank"
           rel="noreferrer"
           onClick={handleDirectionsClick}
-          className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-ink)] px-3 py-1 text-xs font-bold text-white transition-colors hover:bg-[var(--color-accent)]"
+          className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-ink)] px-3 py-1 text-xs font-bold text-white transition-colors hover:bg-[var(--color-accent-hover)]"
         >
           <Navigation size={12} aria-hidden /> Indicazioni
         </a>
         <button
           type="button"
           onClick={handleShareClick}
-          className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] px-3 py-1 text-xs font-semibold text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+          className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] px-3 py-1 text-xs font-semibold text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)]"
         >
           {copied ? <CheckCircle size={12} /> : <Share2 size={12} />}
           {copied ? 'Copiato' : 'Condividi'}
@@ -159,7 +159,7 @@ export const PlaceBusinessActions: React.FC<PlaceBusinessActionsProps> = ({
           target="_blank"
           rel="noreferrer"
           onClick={handleDirectionsClick}
-          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] px-6 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] px-6 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
         >
           <Navigation size={14} aria-hidden /> Indicazioni Maps
         </a>
@@ -170,7 +170,7 @@ export const PlaceBusinessActions: React.FC<PlaceBusinessActionsProps> = ({
             target="_blank"
             rel="sponsored noopener noreferrer"
             onClick={handleBookingClick}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-6 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-6 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
           >
             <CalendarCheck size={14} aria-hidden /> Prenota
           </a>
@@ -181,7 +181,7 @@ export const PlaceBusinessActions: React.FC<PlaceBusinessActionsProps> = ({
           target="_blank"
           rel="noreferrer"
           onClick={handleListingClick}
-          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-5 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-5 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
         >
           <ExternalLink size={14} aria-hidden /> Scheda Google Business
         </a>
@@ -190,7 +190,7 @@ export const PlaceBusinessActions: React.FC<PlaceBusinessActionsProps> = ({
           <a
             href={`tel:${item.place.phone.replace(/\s+/g, '')}`}
             onClick={handlePhoneClick}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-5 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-5 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
           >
             <Phone size={14} aria-hidden /> {item.place.phone}
           </a>
@@ -200,7 +200,7 @@ export const PlaceBusinessActions: React.FC<PlaceBusinessActionsProps> = ({
           type="button"
           onClick={handleShareClick}
           aria-label="Condividi questo posto"
-          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-5 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-5 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
         >
           {copied ? <CheckCircle size={14} aria-hidden /> : <Share2 size={14} aria-hidden />}
           {copied ? 'Link copiato' : 'Condividi'}

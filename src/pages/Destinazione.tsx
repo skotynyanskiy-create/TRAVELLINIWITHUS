@@ -116,7 +116,7 @@ function DestinationsHub() {
           <div className="mt-6">
             <Link
               to="/mappa"
-              className="inline-flex items-center gap-2.5 rounded-full bg-[var(--color-accent)] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white shadow-sm transition-all duration-300 hover:scale-105 hover:bg-[var(--color-accent-hover)]"
+              className="inline-flex items-center gap-2.5 rounded-full bg-[var(--color-accent)] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[var(--color-ink)] shadow-sm transition-all duration-300 hover:scale-105 hover:brightness-95"
             >
               <MapPin size={16} />
               Vedi sulla Mappa Interattiva
@@ -196,7 +196,7 @@ function DestinationsHub() {
                     />
                     <div aria-hidden="true" className="twu-cover-scrim absolute inset-0" />
                     <div className="relative z-10 p-6">
-                      <span className="mb-1 block text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
+                      <span className="mb-1 block text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent-text)]">
                         {dest.zone}
                       </span>
                       <h2 className="font-serif text-3xl leading-none text-white drop-shadow-md">
@@ -222,7 +222,7 @@ function DestinationsHub() {
                     <div className="relative z-10 p-6">
                       <span
                         aria-hidden="true"
-                        className="mb-3 block text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]"
+                        className="mb-3 block text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent-text)]"
                       >
                         {dest.zone}
                       </span>
@@ -330,7 +330,7 @@ function DestinationWorld({ node }: { node: DestinationNode }) {
               <div className="mt-4">
                 <Link
                   to="/mappa"
-                  className="inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)] px-4 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-sm transition-all duration-300 hover:scale-105 hover:bg-[var(--color-accent-hover)]"
+                  className="inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)] px-4 py-2 text-xs font-bold uppercase tracking-wider text-[var(--color-ink)] shadow-sm transition-all duration-300 hover:scale-105 hover:brightness-95"
                 >
                   <MapPin size={14} />
                   Vedi sulla Mappa Interattiva
@@ -364,7 +364,7 @@ function DestinationWorld({ node }: { node: DestinationNode }) {
             <div className="mt-4">
               <Link
                 to="/mappa"
-                className="inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)] px-4 py-2 text-xs font-bold uppercase tracking-wider text-white shadow-sm transition-all duration-300 hover:scale-105 hover:bg-[var(--color-accent-hover)]"
+                className="inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)] px-4 py-2 text-xs font-bold uppercase tracking-wider text-[var(--color-ink)] shadow-sm transition-all duration-300 hover:scale-105 hover:brightness-95"
               >
                 <MapPin size={14} />
                 Vedi sulla Mappa Interattiva
@@ -449,7 +449,7 @@ function DestinationWorld({ node }: { node: DestinationNode }) {
             </p>
             <Link
               to="/lead-magnet"
-              className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
+              className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)]"
             >
               Iscriviti alla newsletter
               <ArrowRight size={15} />
@@ -664,7 +664,7 @@ function LegacyRegionLanding({ region }: { region: RegionMeta }) {
           </p>
           <Link
             to={topArticleUrl}
-            className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)]"
           >
             Leggi la guida {region.name}
             <ArrowRight size={15} />
@@ -774,7 +774,7 @@ function LegacyRegionLanding({ region }: { region: RegionMeta }) {
             </p>
             <Link
               to="/lead-magnet"
-              className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
+              className="mt-6 inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)]"
             >
               Iscriviti alla newsletter
               <ArrowRight size={15} />
@@ -786,7 +786,7 @@ function LegacyRegionLanding({ region }: { region: RegionMeta }) {
           <section className="mt-12">
             <Link
               to={`/esplora?q=${encodeURIComponent(region.name)}`}
-              className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-colors hover:text-[var(--color-accent)]"
+              className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-colors hover:text-[var(--color-accent-text)]"
             >
               Vedi tutti gli articoli su {region.name}
               <ArrowRight size={15} />

@@ -184,7 +184,7 @@ export default function ProductPage() {
                   </span>
                 )}
                 {isDemoProduct && (
-                  <span className="rounded-full bg-[var(--color-accent)] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white shadow-lg animate-pulse">
+                  <span className="rounded-full bg-[var(--color-accent)] px-4 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] shadow-lg animate-pulse">
                     In arrivo
                   </span>
                 )}
@@ -234,7 +234,7 @@ export default function ProductPage() {
                     {item.icon}
                   </div>
                   <div>
-                    <h4 className="mb-1 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors duration-300 group-hover/trust:text-[var(--color-accent)]">
+                    <h4 className="mb-1 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors duration-300 group-hover/trust:text-[var(--color-accent-text)]">
                       {item.title}
                     </h4>
                     <p className="text-sm font-light leading-relaxed text-black/60">{item.text}</p>

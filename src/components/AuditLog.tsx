@@ -43,7 +43,7 @@ export default function AuditLog() {
         </h3>
         <button
           onClick={fetchLogs}
-          className="text-sm text-[var(--color-muted-fg)] hover:text-[var(--color-accent)] transition-colors"
+          className="text-sm text-[var(--color-muted-fg)] hover:text-[var(--color-accent-text)] transition-colors"
         >
           Aggiorna
         </button>

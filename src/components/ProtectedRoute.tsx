@@ -62,14 +62,14 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
         )}
         <button
           onClick={signIn}
-          className="rounded-full bg-[var(--color-ink)] px-8 py-3 text-white transition-colors hover:bg-[var(--color-accent)]"
+          className="rounded-full bg-[var(--color-ink)] px-8 py-3 text-white transition-colors hover:bg-[var(--color-accent-hover)]"
         >
           Accedi con Google
         </button>
         {canUsePreview && (
           <Link
             to={`${location.pathname}?previewAdmin=1`}
-            className="mt-4 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] transition-colors hover:text-[var(--color-ink)]"
+            className="mt-4 text-xs font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-colors hover:text-[var(--color-ink)]"
           >
             Apri anteprima admin locale
           </Link>
@@ -89,7 +89,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
         <div className="flex flex-col gap-4 sm:flex-row">
           <Link
             to="/"
-            className="rounded-full bg-[var(--color-ink)] px-8 py-3 text-white transition-colors hover:bg-[var(--color-accent)]"
+            className="rounded-full bg-[var(--color-ink)] px-8 py-3 text-white transition-colors hover:bg-[var(--color-accent-hover)]"
           >
             Torna alla home
           </Link>

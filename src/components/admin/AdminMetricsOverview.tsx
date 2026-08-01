@@ -157,7 +157,7 @@ export default function AdminMetricsOverview() {
         >
           <div className="mb-4 flex items-center justify-between">
             <h3 className="font-serif text-lg">Funnel conversione</h3>
-            <span className="text-xs text-black/45">7gg</span>
+            <span className="text-xs text-black/60">7gg</span>
           </div>
           <div className="space-y-3">
             {FUNNEL.map((step, idx) => {
@@ -167,7 +167,7 @@ export default function AdminMetricsOverview() {
                 <div key={step.step}>
                   <div className="mb-1 flex items-center justify-between text-xs">
                     <span className="font-medium text-black/70">{step.step}</span>
-                    <span className="text-black/45">
+                    <span className="text-black/60">
                       {step.value.toLocaleString('it-IT')} ({idx === 0 ? '100' : conversion}%)
                     </span>
                   </div>
@@ -208,7 +208,7 @@ export default function AdminMetricsOverview() {
                   <span className="truncate font-medium text-black/70">{article.title}</span>
                 </div>
                 <div className="flex shrink-0 items-center gap-2">
-                  <span className="text-xs text-black/45">
+                  <span className="text-xs text-black/60">
                     {article.views.toLocaleString('it-IT')}
                   </span>
                   <span

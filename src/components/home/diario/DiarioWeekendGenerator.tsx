@@ -65,7 +65,7 @@ export default function DiarioWeekendGenerator() {
         <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-16">
           {/* Left Text */}
           <div>
-            <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-[var(--color-accent,#c85a32)]">
+            <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
               <Sparkles size={14} />
               Generatore Interattivo
             </span>
@@ -157,7 +157,7 @@ export default function DiarioWeekendGenerator() {
                     onClick={() => setSelectedBudget(b.id)}
                     className={`rounded-full border px-3.5 py-1.5 text-xs font-medium transition-all ${
                       selectedBudget === b.id
-                        ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white'
+                        ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-[var(--color-ink)]'
                         : 'border-black/10 bg-white text-black/70 hover:border-black/20'
                     }`}
                   >
@@ -176,10 +176,10 @@ export default function DiarioWeekendGenerator() {
               className="rounded-2xl border border-[var(--color-accent,#c85a32)]/30 bg-[var(--color-accent-soft,#fdf0ec)] p-5 text-[var(--color-ink)]"
             >
               <div className="flex items-center justify-between">
-                <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)]">
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)]">
                   <Flame size={12} /> Posto Consigliato
                 </span>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-black/50">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-black/60">
                   {currentRecommendation.location}
                 </span>
               </div>
@@ -191,7 +191,7 @@ export default function DiarioWeekendGenerator() {
               </p>
               <Link
                 to={currentRecommendation.link}
-                className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] hover:underline"
+                className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[var(--color-accent-text)] hover:underline"
               >
                 Vedi Scheda Completa <ArrowRight size={13} />
               </Link>

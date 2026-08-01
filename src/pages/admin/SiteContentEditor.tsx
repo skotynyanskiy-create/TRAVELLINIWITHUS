@@ -186,7 +186,7 @@ export default function SiteContentEditor() {
             </p>
             <Link
               to="/admin"
-              className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-accent)]"
+              className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-accent-hover)]"
             >
               <ArrowLeft size={16} /> Torna alla dashboard
             </Link>
@@ -206,7 +206,7 @@ export default function SiteContentEditor() {
             <div>
               <Link
                 to="/admin"
-                className="mb-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-black/40 transition-colors hover:text-[var(--color-accent)]"
+                className="mb-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-black/60 transition-colors hover:text-[var(--color-accent-text)]"
               >
                 <ArrowLeft size={14} /> Torna alla dashboard
               </Link>
@@ -273,7 +273,7 @@ export default function SiteContentEditor() {
                         {field.label}
                       </label>
                       {field.description && (
-                        <p className="mb-4 text-sm text-black/50">{field.description}</p>
+                        <p className="mb-4 text-sm text-black/60">{field.description}</p>
                       )}
                       <input
                         type="text"
@@ -299,7 +299,7 @@ export default function SiteContentEditor() {
                             {field.label}
                           </label>
                           {field.description && (
-                            <p className="text-sm text-black/50">{field.description}</p>
+                            <p className="text-sm text-black/60">{field.description}</p>
                           )}
                         </div>
                         <button
@@ -309,7 +309,7 @@ export default function SiteContentEditor() {
                           onClick={() => updateField(field.key, !isEnabled)}
                           className={`inline-flex min-w-[130px] items-center justify-center rounded-full px-5 py-3 text-xs font-bold uppercase tracking-widest transition-colors ${
                             isEnabled
-                              ? 'bg-[var(--color-ink)] text-white hover:bg-[var(--color-accent)]'
+                              ? 'bg-[var(--color-ink)] text-white hover:bg-[var(--color-accent-hover)]'
                               : 'border border-black/10 bg-white text-black hover:border-black/30'
                           }`}
                         >
@@ -330,7 +330,7 @@ export default function SiteContentEditor() {
                         {field.label}
                       </label>
                       {field.description && (
-                        <p className="mb-4 text-sm text-black/50">{field.description}</p>
+                        <p className="mb-4 text-sm text-black/60">{field.description}</p>
                       )}
                       <textarea
                         rows={field.rows ?? 4}
@@ -354,7 +354,7 @@ export default function SiteContentEditor() {
                         <div>
                           <h2 className="text-lg font-semibold text-black">{field.label}</h2>
                           {field.description && (
-                            <p className="mt-1 text-sm text-black/50">{field.description}</p>
+                            <p className="mt-1 text-sm text-black/60">{field.description}</p>
                           )}
                         </div>
                         <button
@@ -403,7 +403,7 @@ export default function SiteContentEditor() {
                       <div>
                         <h2 className="text-lg font-semibold text-black">{field.label}</h2>
                         {field.description && (
-                          <p className="mt-1 text-sm text-black/50">{field.description}</p>
+                          <p className="mt-1 text-sm text-black/60">{field.description}</p>
                         )}
                       </div>
                       <button
@@ -422,7 +422,7 @@ export default function SiteContentEditor() {
                           className="rounded-[var(--radius-md)] border border-black/5 bg-[var(--color-sand)] p-6"
                         >
                           <div className="mb-4 flex items-center justify-between gap-4">
-                            <h3 className="text-sm font-bold uppercase tracking-widest text-black/50">
+                            <h3 className="text-sm font-bold uppercase tracking-widest text-black/60">
                               {field.itemLabel || 'Elemento'} {index + 1}
                             </h3>
                             <button
@@ -440,7 +440,7 @@ export default function SiteContentEditor() {
                                 key={`${field.key}-${index}-${nestedField.key}`}
                                 className={nestedField.type === 'textarea' ? 'md:col-span-2' : ''}
                               >
-                                <label className="mb-2 block text-xs font-semibold uppercase tracking-widest text-black/50">
+                                <label className="mb-2 block text-xs font-semibold uppercase tracking-widest text-black/60">
                                   {nestedField.label}
                                 </label>
                                 {nestedField.type === 'textarea' ? (

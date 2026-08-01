@@ -123,7 +123,7 @@ function FaqSection() {
     <Section>
       <div className="mx-auto max-w-3xl">
         <div className="mb-12 text-center">
-          <span className="mb-2 block font-script text-xl text-[var(--color-accent)]">
+          <span className="mb-2 block font-script text-xl text-[var(--color-accent-text)]">
             FAQ per partner
           </span>
           <h2 className="text-4xl font-serif">Le domande che aiutano davvero a capire il fit</h2>
@@ -364,7 +364,7 @@ export default function Collaborazioni() {
           >
             <div className="mb-6 flex items-center gap-4">
               <div className="h-px w-12 bg-[var(--color-accent)]" />
-              <span className="text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)]">
+              <span className="text-sm font-semibold uppercase tracking-widest text-[var(--color-accent-text)]">
                 {pageContent.heroEyebrow}
               </span>
             </div>
@@ -513,7 +513,7 @@ export default function Collaborazioni() {
       <Section>
         <div className="mx-auto max-w-4xl">
           <div className="mb-10 text-center">
-            <span className="mb-2 block font-script text-xl text-[var(--color-accent)]">
+            <span className="mb-2 block font-script text-xl text-[var(--color-accent-text)]">
               Partner ideali
             </span>
             <h2 className="mb-4 text-4xl font-serif">Con chi lavoriamo meglio</h2>
@@ -554,7 +554,9 @@ export default function Collaborazioni() {
           <div>
             <div className="mb-4 flex items-center gap-2">
               <ShieldCheck size={14} className="text-[var(--color-accent)]" />
-              <span className="font-script text-xl text-[var(--color-accent)]">Proof sobria</span>
+              <span className="font-script text-xl text-[var(--color-accent-text)]">
+                Proof sobria
+              </span>
             </div>
             <h2 className="mb-6 text-4xl font-serif leading-tight">
               Segnali che contano più di un case study inventato.
@@ -586,7 +588,7 @@ export default function Collaborazioni() {
 
       <Section>
         <div className="mb-10 max-w-3xl">
-          <span className="mb-3 block font-script text-xl text-[var(--color-accent)]">
+          <span className="mb-3 block font-script text-xl text-[var(--color-accent-text)]">
             Proof pubbliche
           </span>
           <h2 className="text-4xl font-serif">Cosa si può già verificare online</h2>
@@ -668,7 +670,7 @@ export default function Collaborazioni() {
       <Section className="rounded-[var(--radius-xl)] bg-[var(--color-sand)] p-12 md:p-20">
         <div className="mx-auto max-w-4xl">
           <div className="mb-10 text-center">
-            <span className="mb-2 block font-script text-xl text-[var(--color-accent)]">
+            <span className="mb-2 block font-script text-xl text-[var(--color-accent-text)]">
               Limiti chiari
             </span>
             <h2 className="mb-4 text-4xl font-serif">Quello che non facciamo</h2>
@@ -741,7 +743,7 @@ export default function Collaborazioni() {
                   }`}
                 >
                   {isHighlighted && (
-                    <div className="mb-4 font-script text-lg text-[var(--color-accent)]">
+                    <div className="mb-4 font-script text-lg text-[var(--color-accent-text)]">
                       Il formato più completo
                     </div>
                   )}
@@ -751,7 +753,7 @@ export default function Collaborazioni() {
                   </div>
                   {'output' in format && (
                     <div className="mb-4 rounded-2xl border border-white/10 bg-white/6 px-4 py-3">
-                      <div className="mb-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
+                      <div className="mb-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent-text)]">
                         Output indicativo
                       </div>
                       <p className="text-sm leading-relaxed text-white/78">{format.output}</p>

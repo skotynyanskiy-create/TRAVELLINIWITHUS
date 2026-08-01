@@ -50,7 +50,9 @@ export default function BrandCoherentHero() {
           >
             <motion.div
               variants={itemVariants}
-              className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--color-accent,#c85a32)]/30 bg-[var(--color-accent,#c85a32)]/10 px-3.5 py-1 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]"
+              // Tinta al 5%, non al 10: con l'accento elettrico il fondo del
+              // chip si scalda quel tanto che porta il terracotta sotto 4,5.
+              className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--color-accent,#c85a32)]/30 bg-[var(--color-accent,#c85a32)]/5 px-3.5 py-1 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]"
             >
               <Sparkles size={13} />
               Rodrigo &amp; Betta · Travelliniwithus
@@ -79,7 +81,7 @@ export default function BrandCoherentHero() {
               <MagneticWrapper strength={6}>
                 <a
                   href="#pagina-02"
-                  className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-md transition-all hover:bg-[var(--color-accent,#c85a32)] cursor-pointer"
+                  className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-md transition-all hover:bg-[var(--color-accent-hover)] cursor-pointer"
                 >
                   Apri il registro <ArrowDown size={16} />
                 </a>
@@ -88,7 +90,7 @@ export default function BrandCoherentHero() {
               <MagneticWrapper strength={4}>
                 <Link
                   to="/mappa"
-                  className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-ink)] hover:text-[var(--color-accent)]"
+                  className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-ink)] hover:text-[var(--color-accent-text)]"
                 >
                   Vai alla mappa <Map size={16} />
                 </Link>
@@ -117,7 +119,7 @@ export default function BrandCoherentHero() {
                   type="button"
                   aria-expanded={schedaOpen}
                   onClick={() => setSchedaOpen((open) => !open)}
-                  className="inline-flex items-center gap-2 rounded-full border border-[var(--color-accent,#c85a32)] bg-[var(--color-sand)] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-accent,#c85a32)] shadow-sm transition-all hover:bg-[var(--color-accent)] hover:text-white cursor-pointer"
+                  className="inline-flex items-center gap-2 rounded-full border border-[var(--color-accent,#c85a32)] bg-[var(--color-sand)] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)] shadow-sm transition-all hover:bg-[var(--color-accent)] hover:text-[var(--color-ink)] cursor-pointer"
                 >
                   <Stamp size={14} />
                   {schedaOpen ? 'Chiudi la scheda' : 'Provato — apri la scheda'}
@@ -133,7 +135,7 @@ export default function BrandCoherentHero() {
                     <SchedaVerifica item={featured} />
                     <Link
                       to={`/posto/${featured.id}`}
-                      className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-accent)] hover:underline"
+                      className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-accent-text)] hover:underline"
                     >
                       Apri la scheda completa <ArrowRight size={15} />
                     </Link>
@@ -185,7 +187,7 @@ export default function BrandCoherentHero() {
               <p className="font-serif text-sm italic leading-snug text-[var(--color-ink)]">
                 "La strada giusta non è quella più breve."
               </p>
-              <span className="mt-1 block text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent,#c85a32)]">
+              <span className="mt-1 block text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)]">
                 — Rodrigo &amp; Betta
               </span>
             </motion.div>

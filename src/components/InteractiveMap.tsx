@@ -221,14 +221,14 @@ export default function InteractiveMap({
                   className="h-full w-full object-cover"
                 />
                 {activeMarker.category && (
-                  <div className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)] backdrop-blur-sm">
+                  <div className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] backdrop-blur-sm">
                     {activeMarker.category}
                   </div>
                 )}
               </div>
             )}
             <div className="p-5">
-              <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-black/50">
+              <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-black/60">
                 <MapPin size={12} className="text-[var(--color-accent)]" />
                 {activeMarker.name}
               </div>
@@ -245,7 +245,7 @@ export default function InteractiveMap({
                       marker_name: activeMarker.name,
                     })
                   }
-                  className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)] transition-colors hover:text-black"
+                  className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent-text)] transition-colors hover:text-black"
                 >
                   Leggi articolo <ArrowRight size={14} />
                 </Link>
@@ -274,7 +274,7 @@ export default function InteractiveMap({
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-sand)] text-[var(--color-accent)]">
                 <Globe size={24} />
               </div>
-              <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-black/50">
+              <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-black/60">
                 Destinazione
               </div>
               <h4 className="mb-2 text-2xl font-serif leading-tight">{activeCountry.name}</h4>
@@ -284,7 +284,7 @@ export default function InteractiveMap({
               </p>
               <Link
                 to="/esplora"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-black py-3 text-sm font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-black py-3 text-sm font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)]"
               >
                 Parti da Esplora <ArrowRight size={16} />
               </Link>

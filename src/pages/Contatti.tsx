@@ -234,7 +234,7 @@ export default function Contatti() {
           >
             <div className="mb-6 flex items-center justify-center gap-4">
               <div className="h-[1px] w-12 bg-[var(--color-accent)]"></div>
-              <span className="text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)]">
+              <span className="text-sm font-semibold uppercase tracking-widest text-[var(--color-accent-text)]">
                 {pageContent.heroEyebrow}
               </span>
               <div className="h-[1px] w-12 bg-[var(--color-accent)]"></div>
@@ -266,13 +266,13 @@ export default function Contatti() {
                 </p>
                 <a
                   href={CONTACTS.mailto}
-                  className="block text-sm font-medium transition-colors group-hover:text-[var(--color-accent)]"
+                  className="block text-sm font-medium transition-colors group-hover:text-[var(--color-accent-text)]"
                 >
                   {CONTACTS.email}
                 </a>
                 <Link
                   to="/media-kit"
-                  className="mt-4 block text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] transition-colors hover:text-black"
+                  className="mt-4 block text-xs font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-colors hover:text-black"
                 >
                   {pageContent.emailCardLinkLabel}
                 </Link>
@@ -533,7 +533,7 @@ export default function Contatti() {
                     </FormField>
 
                     <div className="pt-6">
-                      <p className="mb-8 text-xs font-light leading-relaxed text-black/40">
+                      <p className="mb-8 text-xs font-light leading-relaxed text-black/60">
                         Inviando questo modulo accetti la nostra{' '}
                         <Link
                           to="/privacy"
@@ -602,7 +602,7 @@ export default function Contatti() {
                         website: '',
                       });
                     }}
-                    className="border-b border-[var(--color-accent)] pb-1 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] transition-colors hover:border-black hover:text-black"
+                    className="border-b border-[var(--color-accent)] pb-1 text-xs font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-colors hover:border-black hover:text-black"
                   >
                     Invia un altro messaggio
                   </button>

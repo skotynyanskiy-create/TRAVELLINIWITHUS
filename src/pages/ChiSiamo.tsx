@@ -168,7 +168,7 @@ export default function ChiSiamo() {
           <div className="order-1 flex flex-col justify-center lg:order-1">
             <div className="mb-6 flex items-center gap-4">
               <div className="h-px w-12 bg-[var(--color-accent)]" />
-              <span className="text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)]">
+              <span className="text-sm font-semibold uppercase tracking-widest text-[var(--color-accent-text)]">
                 {pageContent.eyebrow}
               </span>
             </div>
@@ -264,7 +264,7 @@ export default function ChiSiamo() {
                 coppia finché non esiste uno scatto reale certificato
                 (imagery truth rule 2026-07-22). */}
             <div className="flex aspect-[4/5] flex-col justify-between rounded-[var(--radius-2xl,24px)] border border-[var(--color-border)] bg-white p-8 shadow-lg md:p-10">
-              <span className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent,#c85a32)]">
+              <span className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
                 Rodrigo &amp; Betta
               </span>
               <div>
@@ -283,7 +283,7 @@ export default function ChiSiamo() {
                 </span>
                 <span
                   aria-hidden="true"
-                  className="rounded-full bg-[var(--color-sand,#faf7f2)] border border-[var(--color-accent,#c85a32)]/30 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.15em] text-[var(--color-accent,#c85a32)]"
+                  className="rounded-full bg-[var(--color-sand,#faf7f2)] border border-[var(--color-accent,#c85a32)]/30 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.15em] text-[var(--color-accent-text)]"
                 >
                   8 Anni di Viaggi
                 </span>
@@ -466,8 +466,8 @@ export default function ChiSiamo() {
             >
               <div className="flex flex-col items-center shrink-0">
                 <div className="relative flex h-14 w-14 items-center justify-center rounded-full border border-[var(--color-accent)]/20 bg-white shadow-[0_4px_12px_rgba(0,0,0,0.03)] transition-all duration-500 group-hover:border-[var(--color-accent)] group-hover:shadow-[0_10px_25px_rgba(219,104,74,0.15)]">
-                  <div className="absolute inset-1.5 rounded-full bg-[var(--color-accent)]/5 transition-colors duration-500 group-hover:bg-[var(--color-accent)]/10" />
-                  <span className="relative z-10 font-serif text-sm font-bold text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors duration-300">
+                  <div className="absolute inset-1.5 rounded-full bg-[var(--color-accent)]/5 transition-colors duration-500 group-hover:brightness-95/10" />
+                  <span className="relative z-10 font-serif text-sm font-bold text-[var(--color-ink)] group-hover:text-[var(--color-accent-text)] transition-colors duration-300">
                     {milestone.year}
                   </span>
                 </div>

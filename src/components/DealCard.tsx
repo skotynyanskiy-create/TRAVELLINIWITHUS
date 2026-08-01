@@ -96,7 +96,7 @@ export default function DealCard({ deal }: { deal?: ContentItem['deal'] }) {
         href={deal.url}
         target="_blank"
         rel="nofollow sponsored noopener"
-        className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
+        className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)]"
       >
         Vai all'offerta
         <ArrowUpRight size={14} aria-hidden />

@@ -306,7 +306,7 @@ export default function AdminDashboard() {
                 className={`px-6 py-3 rounded-full flex items-center gap-2 transition-colors ${
                   isPreviewMode
                     ? 'pointer-events-none bg-zinc-300 text-white'
-                    : 'bg-[var(--color-ink)] text-white hover:bg-[var(--color-accent)]'
+                    : 'bg-[var(--color-ink)] text-white hover:bg-[var(--color-accent-hover)]'
                 }`}
               >
                 <Plus size={20} /> Nuovo {activeTab === 'articles' ? 'Articolo' : 'Prodotto'}
@@ -590,7 +590,7 @@ export default function AdminDashboard() {
                           <p className="font-medium">{lead.email}</p>
                           <div className="flex flex-wrap items-center gap-2 mt-1">
                             {lead.type && (
-                              <span className="rounded-full bg-white px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--color-accent)]">
+                              <span className="rounded-full bg-white px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-[var(--color-accent-text)]">
                                 {lead.type}
                               </span>
                             )}
@@ -647,7 +647,7 @@ export default function AdminDashboard() {
                     <div className="flex flex-wrap gap-3">
                       <Link
                         to={`/admin/site-content/${page.id}`}
-                        className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-4 py-2 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
+                        className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-4 py-2 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)]"
                       >
                         <Edit size={14} /> Modifica
                       </Link>

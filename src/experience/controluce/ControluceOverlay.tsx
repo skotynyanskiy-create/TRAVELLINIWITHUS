@@ -115,7 +115,7 @@ export default function ControluceOverlay({ tRef }: { tRef: MutableRefObject<num
         <p className="font-serif italic text-[var(--color-ink)]/70">Rodrigo &amp; Betta</p>
         <a
           href="/esplora"
-          className="mt-4 inline-block font-sans text-[11px] font-bold uppercase tracking-[0.25em] text-[var(--color-accent)] underline-offset-4 hover:underline"
+          className="mt-4 inline-block font-sans text-[11px] font-bold uppercase tracking-[0.25em] text-[var(--color-accent-text)] underline-offset-4 hover:underline"
         >
           Esplora l&apos;atlante →
         </a>

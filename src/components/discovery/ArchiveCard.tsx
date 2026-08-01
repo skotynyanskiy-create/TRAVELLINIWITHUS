@@ -69,7 +69,7 @@ export default function ArchiveCard({
       aria-pressed={saved}
       className={`absolute top-4 right-4 z-10 flex h-9 w-9 items-center justify-center rounded-full transition-all duration-300 ${
         saved
-          ? 'bg-[var(--color-accent)] text-white shadow-md'
+          ? 'bg-[var(--color-accent)] text-[var(--color-ink)] shadow-md'
           : 'bg-white text-[var(--color-ink)] shadow-sm hover:text-[var(--color-accent)]'
       }`}
     >
@@ -207,7 +207,7 @@ export default function ArchiveCard({
           <Link
             to={item.link}
             state={linkState}
-            className="group/btn relative inline-flex w-full items-center justify-between text-[10px] font-bold uppercase tracking-[0.22em] text-black/40 transition-colors hover:text-[var(--color-accent)]"
+            className="group/btn relative inline-flex w-full items-center justify-between text-[10px] font-bold uppercase tracking-[0.22em] text-black/60 transition-colors hover:text-[var(--color-accent-text)]"
           >
             <span>Leggi</span>
             <ArrowRight

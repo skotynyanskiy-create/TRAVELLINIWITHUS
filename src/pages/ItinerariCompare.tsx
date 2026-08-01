@@ -54,7 +54,7 @@ export default function ItinerariCompare() {
           </div>
           <Link
             to="/itinerari"
-            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent-text)]"
           >
             <ArrowLeft size={14} /> Torna alla lista
           </Link>
@@ -96,7 +96,7 @@ export default function ItinerariCompare() {
                 </p>
                 <Link
                   to={`/itinerari/${it.slug}`}
-                  className="mt-4 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+                  className="mt-4 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent-text)]"
                 >
                   Apri itinerario <ArrowRight size={12} />
                 </Link>

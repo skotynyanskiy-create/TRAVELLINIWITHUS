@@ -14,7 +14,7 @@ export default function HomeIndiceVivo() {
   return (
     <>
       <div className="mb-10 text-left max-w-2xl">
-        <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent,#c85a32)]">
+        <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
           Indice Vivo dei Posti Provati
         </span>
         <h2

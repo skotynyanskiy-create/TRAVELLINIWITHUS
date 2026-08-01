@@ -74,7 +74,7 @@ export default function DiarioConversionSection() {
           {/* Box 1: B2C Lead Magnet Download */}
           <div className="flex flex-col justify-between rounded-[var(--radius-xl,24px)] border border-[var(--color-border,#e5dcd0)] bg-[var(--color-sand,#faf7f2)] p-8 shadow-md md:p-12">
             <div>
-              <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-[var(--color-accent,#c85a32)]">
+              <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
                 <Sparkles size={14} /> Per la Community
               </span>
               <h3 className="mt-4 font-serif text-3xl font-normal leading-tight md:text-4xl">
@@ -95,7 +95,7 @@ export default function DiarioConversionSection() {
                   <div className="relative">
                     <Mail
                       size={18}
-                      className="absolute left-4 top-1/2 -translate-y-1/2 text-black/40"
+                      className="absolute left-4 top-1/2 -translate-y-1/2 text-black/60"
                     />
                     <input
                       type="email"
@@ -103,14 +103,14 @@ export default function DiarioConversionSection() {
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="La tua email lavorativa o personale"
                       required
-                      className="w-full rounded-full border border-black/15 bg-white py-3.5 pl-11 pr-5 text-sm text-[var(--color-ink)] placeholder:text-black/40 focus:border-[var(--color-accent)] focus:outline-none"
+                      className="w-full rounded-full border border-black/15 bg-white py-3.5 pl-11 pr-5 text-sm text-[var(--color-ink)] placeholder:text-black/60 focus:border-[var(--color-accent)] focus:outline-none"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] px-6 text-xs font-bold uppercase tracking-widest text-white transition-all hover:bg-[var(--color-accent)] disabled:opacity-70"
+                    className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] px-6 text-xs font-bold uppercase tracking-widest text-white transition-all hover:bg-[var(--color-accent-hover)] disabled:opacity-70"
                   >
                     {isSubmitting ? (
                       <>
@@ -133,14 +133,14 @@ export default function DiarioConversionSection() {
                   </p>
                   <Link
                     to="/lead-magnet"
-                    className="mt-4 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] hover:underline"
+                    className="mt-4 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[var(--color-accent-text)] hover:underline"
                   >
                     Vai alla pagina di download <ArrowRight size={13} />
                   </Link>
                 </div>
               )}
 
-              <div className="mt-4 flex items-center gap-2 text-[11px] font-medium text-black/50">
+              <div className="mt-4 flex items-center gap-2 text-[11px] font-medium text-black/60">
                 <Shield size={13} className="text-[var(--color-accent)]" />
                 <span>Zero spam. Ti scriviamo solo quando c’è qualcosa che merita davvero.</span>
               </div>
@@ -150,7 +150,7 @@ export default function DiarioConversionSection() {
           {/* Box 2: B2B Commercial Partnerships / Media Kit */}
           <div className="flex flex-col justify-between rounded-[var(--radius-xl,24px)] border border-white/10 bg-[var(--color-ink-deep,#0b0805)] p-8 text-white shadow-xl md:p-12">
             <div>
-              <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+              <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
                 <Sparkles size={14} /> Per Aziende ed Enti Turismo
               </span>
               <h3 className="mt-4 font-serif text-3xl font-normal leading-tight text-white md:text-4xl">
@@ -180,7 +180,7 @@ export default function DiarioConversionSection() {
 
               <Link
                 to="/media-kit"
-                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 text-xs font-bold uppercase tracking-widest text-white transition-all hover:border-[var(--color-accent)] hover:bg-[var(--color-accent)]"
+                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 text-xs font-bold uppercase tracking-widest text-white transition-all hover:border-[var(--color-accent)] hover:bg-[var(--color-accent-hover)]"
               >
                 <FileText size={15} /> Richiedi il Media Kit B2B <ArrowRight size={15} />
               </Link>

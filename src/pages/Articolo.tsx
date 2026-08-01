@@ -1171,7 +1171,7 @@ export default function Articolo() {
                   <div className="mt-8 flex flex-col md:flex-row md:flex-wrap gap-3">
                     <Link
                       to="/risorse"
-                      className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
+                      className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)]"
                     >
                       Vedi risorse selezionate
                       <ArrowRight size={15} />

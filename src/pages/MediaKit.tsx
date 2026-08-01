@@ -265,7 +265,7 @@ export default function MediaKit() {
       content: (
         <div className="flex h-full flex-col justify-between p-6 md:p-8 bg-[var(--color-ink-deep)] text-white rounded-xl border border-white/10 select-none">
           <div className="flex justify-between items-start">
-            <span className="text-[10px] font-bold tracking-widest text-[var(--color-accent)]">
+            <span className="text-[10px] font-bold tracking-widest text-[var(--color-accent-text)]">
               INSIGHTS & COMMUNITY
             </span>
             <span className="font-mono text-xs px-2 py-0.5 bg-white/15 text-white rounded-full">
@@ -330,7 +330,7 @@ export default function MediaKit() {
           </div>
           <div className="my-auto space-y-2 md:space-y-3">
             <div className="flex items-start gap-2">
-              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[10px] font-bold text-[var(--color-accent)] mt-0.5">
+              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[10px] font-bold text-[var(--color-accent-text)] mt-0.5">
                 1
               </span>
               <div>
@@ -341,7 +341,7 @@ export default function MediaKit() {
               </div>
             </div>
             <div className="flex items-start gap-2">
-              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[10px] font-bold text-[var(--color-accent)] mt-0.5">
+              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[10px] font-bold text-[var(--color-accent-text)] mt-0.5">
                 2
               </span>
               <div>
@@ -352,7 +352,7 @@ export default function MediaKit() {
               </div>
             </div>
             <div className="flex items-start gap-2">
-              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[10px] font-bold text-[var(--color-accent)] mt-0.5">
+              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[10px] font-bold text-[var(--color-accent-text)] mt-0.5">
                 3
               </span>
               <div>
@@ -387,14 +387,14 @@ export default function MediaKit() {
             <div className="mb-4">
               <Link
                 to="/collaborazioni"
-                className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-accent)]/30 bg-[var(--color-sand)] px-4 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-[var(--color-accent)] transition-all hover:bg-[var(--color-accent)] hover:text-white"
+                className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-accent)]/30 bg-[var(--color-sand)] px-4 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-[var(--color-accent-text)] transition-all hover:bg-[var(--color-accent-hover)] hover:text-white"
               >
                 ← Hub Collaborazioni B2B (Case Study &amp; Calcolatore ROI)
               </Link>
             </div>
             <div className="mb-6 flex items-center justify-center gap-4">
               <div className="h-px w-12 bg-[var(--color-accent)]" />
-              <span className="font-script text-xl text-[var(--color-accent)]">Media kit</span>
+              <span className="font-script text-xl text-[var(--color-accent-text)]">Media kit</span>
               <div className="h-px w-12 bg-[var(--color-accent)]" />
             </div>
             <h1 className="mb-8 text-5xl font-serif md:text-7xl">
@@ -406,14 +406,14 @@ export default function MediaKit() {
               Il media kit raccoglie pubblico, posizionamento, format e criteri editoriali. Serve a
               capire se una collaborazione ha basi reali prima di parlare di deliverable e budget.
             </p>
-            <div className="mt-8 inline-flex flex-wrap items-center justify-center gap-4 rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent-soft)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] md:gap-6 md:px-8">
+            <div className="mt-8 inline-flex flex-wrap items-center justify-center gap-4 rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent-soft)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-accent-text)] md:gap-6 md:px-8">
               <span>{BRAND_STATS.instagramFollowers} Instagram</span>
               <span className="h-4 w-px bg-[var(--color-accent)]/20" />
               <span>{BRAND_STATS.tiktokFollowers} TikTok</span>
               <span className="h-4 w-px bg-[var(--color-accent)]/20" />
               <span>{BRAND_STATS.monthlyReach} reach</span>
             </div>
-            <p className="mx-auto mt-3 max-w-2xl text-xs leading-relaxed text-black/45">
+            <p className="mx-auto mt-3 max-w-2xl text-xs leading-relaxed text-black/60">
               {BRAND_STATS_SOURCE.label}. Snapshot pubblico osservato il{' '}
               {BRAND_STATS_SOURCE.observedAt}; i dati completi vengono aggiornati con Insights prima
               di ogni proposta.
@@ -421,13 +421,13 @@ export default function MediaKit() {
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <a
                 href="#media-kit-form"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] px-6 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] px-6 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)]"
               >
                 Richiedi il media kit <ArrowRight size={14} />
               </a>
               <a
                 href="#media-kit-preview"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-black/10 px-6 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-black/10 px-6 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)]"
               >
                 Sfoglia l'anteprima
               </a>
@@ -507,7 +507,7 @@ export default function MediaKit() {
               <div className="mb-4 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="flex h-2 w-2 rounded-full bg-[var(--color-accent)] animate-pulse" />
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-black/50">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-black/60">
                     Sfoglia Anteprima del PDF
                   </span>
                 </div>
@@ -522,7 +522,7 @@ export default function MediaKit() {
                   >
                     <ChevronLeft size={16} />
                   </button>
-                  <span className="text-xs font-mono font-medium text-black/50 px-1 select-none">
+                  <span className="text-xs font-mono font-medium text-black/60 px-1 select-none">
                     {activeSlide + 1} / {pdfSlides.length}
                   </span>
                   <button
@@ -579,7 +579,7 @@ export default function MediaKit() {
                     key={item.title}
                     className="rounded-2xl border border-black/6 bg-[var(--color-sand)]/45 p-5"
                   >
-                    <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent)]">
+                    <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)]">
                       {item.eyebrow}
                     </div>
                     <h4 className="font-serif text-xl text-[var(--color-ink)]">{item.title}</h4>
@@ -766,7 +766,7 @@ export default function MediaKit() {
                   </p>
                 )}
 
-                <p className="text-center text-xs font-medium text-[var(--color-accent)]">
+                <p className="text-center text-xs font-medium text-[var(--color-accent-text)]">
                   Se il contatto è coerente, ricevi il link al media kit e un riscontro entro 48 ore
                   lavorative.
                 </p>
@@ -831,7 +831,7 @@ export default function MediaKit() {
                 </Link>
                 <a
                   href={CONTACTS.mailto}
-                  className="inline-flex h-12 items-center justify-center rounded-xl border border-black/10 px-6 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+                  className="inline-flex h-12 items-center justify-center rounded-xl border border-black/10 px-6 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)]"
                 >
                   Scrivi a {CONTACTS.email}
                 </a>
@@ -877,7 +877,7 @@ export default function MediaKit() {
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a
               href={CONTACTS.mailto}
-              className="inline-flex h-12 items-center justify-center rounded-xl bg-[var(--color-accent)] px-8 text-xs font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
+              className="inline-flex h-12 items-center justify-center rounded-xl bg-[var(--color-accent)] px-8 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-all hover:brightness-110"
             >
               Scrivi a {CONTACTS.email}
             </a>

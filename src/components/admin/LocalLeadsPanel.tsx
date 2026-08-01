@@ -115,7 +115,7 @@ export default function LocalLeadsPanel() {
         <button
           type="button"
           onClick={refresh}
-          className="rounded-full border border-zinc-200 px-4 py-2 text-xs font-bold uppercase tracking-widest text-zinc-600 transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+          className="rounded-full border border-zinc-200 px-4 py-2 text-xs font-bold uppercase tracking-widest text-zinc-600 transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)]"
         >
           Ricarica
         </button>
@@ -137,7 +137,7 @@ export default function LocalLeadsPanel() {
                   type="button"
                   onClick={exportContact}
                   disabled={leads.contact.length === 0}
-                  className="inline-flex items-center gap-1 rounded-full bg-[var(--color-ink)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)] disabled:opacity-40"
+                  className="inline-flex items-center gap-1 rounded-full bg-[var(--color-ink)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)] disabled:opacity-40"
                 >
                   <Download size={12} /> CSV
                 </button>
@@ -164,7 +164,7 @@ export default function LocalLeadsPanel() {
                 >
                   <div className="flex items-start justify-between gap-2">
                     <p className="text-sm font-medium text-zinc-800">{lead.email}</p>
-                    <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)]">
+                    <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)]">
                       {lead.topic || '—'}
                     </span>
                   </div>
@@ -190,7 +190,7 @@ export default function LocalLeadsPanel() {
                   type="button"
                   onClick={exportNewsletter}
                   disabled={leads.newsletter.length === 0}
-                  className="inline-flex items-center gap-1 rounded-full bg-[var(--color-ink)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)] disabled:opacity-40"
+                  className="inline-flex items-center gap-1 rounded-full bg-[var(--color-ink)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)] disabled:opacity-40"
                 >
                   <Download size={12} /> CSV
                 </button>
@@ -217,7 +217,7 @@ export default function LocalLeadsPanel() {
                 >
                   <div className="flex items-start justify-between gap-2">
                     <p className="text-sm font-medium text-zinc-800">{lead.email}</p>
-                    <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)]">
+                    <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)]">
                       {lead.source || 'web'}
                     </span>
                   </div>

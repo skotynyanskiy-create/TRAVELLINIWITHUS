@@ -430,7 +430,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             className="fixed top-[10%] left-1/2 -translate-x-1/2 w-full max-w-2xl bg-white rounded-[var(--radius-md)] shadow-2xl z-[120] overflow-hidden flex flex-col max-h-[80vh]"
           >
             <div className="flex items-center px-6 py-4 border-b border-black/10">
-              <Search className="text-black/40 mr-4" size={24} />
+              <Search className="text-black/60 mr-4" size={24} />
               <input
                 ref={inputRef}
                 aria-label="Cerca nel sito"
@@ -443,7 +443,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
               <button
                 onClick={onClose}
                 aria-label="Chiudi ricerca"
-                className="p-2 hover:bg-black/5 rounded-full transition-colors text-black/50 hover:text-black"
+                className="p-2 hover:bg-black/5 rounded-full transition-colors text-black/60 hover:text-black"
               >
                 <X size={20} />
               </button>
@@ -466,7 +466,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 <div className="space-y-6 px-2 py-4">
                   {recentSearches.length > 0 && (
                     <div>
-                      <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/45">
+                      <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/60">
                         <Clock size={11} /> Ricerche recenti
                       </div>
                       <div className="flex flex-wrap gap-2">
@@ -485,7 +485,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   )}
 
                   <div>
-                    <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/45">
+                    <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/60">
                       <TrendingUp size={11} /> Ricerche popolari
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -503,7 +503,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   </div>
 
                   <div className="border-t border-black/5 pt-5">
-                    <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/45">
+                    <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/60">
                       <Compass size={11} /> Sezioni
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -530,7 +530,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 <div className="space-y-5">
                   {groupedResults.map((group) => (
                     <section key={group.label} aria-label={`Risultati ${group.label}`}>
-                      <h3 className="mb-2 px-4 text-[10px] font-bold uppercase tracking-[0.22em] text-black/45">
+                      <h3 className="mb-2 px-4 text-[10px] font-bold uppercase tracking-[0.22em] text-black/60">
                         {group.label}
                       </h3>
                       <ul className="space-y-1">
@@ -552,7 +552,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                   <h4 className="font-medium text-black group-hover:text-[var(--color-accent)] transition-colors">
                                     {item.title}
                                   </h4>
-                                  <span className="text-xs uppercase tracking-widest text-black/50 font-semibold">
+                                  <span className="text-xs uppercase tracking-widest text-black/60 font-semibold">
                                     {item.category}
                                   </span>
                                 </div>
@@ -565,16 +565,16 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-12 text-black/50">
+                <div className="text-center py-12 text-black/60">
                   <p className="text-sm">Nessun risultato per "{query}".</p>
-                  <p className="mt-3 text-xs text-black/45">
+                  <p className="mt-3 text-xs text-black/60">
                     Prova con: Sicilia, Andalusia, Dolomiti, Bali, Marocco.
                   </p>
                 </div>
               )}
             </div>
 
-            <div className="bg-[var(--color-sand)] px-6 py-3 text-xs text-black/40 flex justify-between items-center border-t border-black/5">
+            <div className="bg-[var(--color-sand)] px-6 py-3 text-xs text-black/60 flex justify-between items-center border-t border-black/5">
               <span>Scrivi e seleziona un risultato</span>
               <span className="flex items-center gap-1">
                 Premi{' '}

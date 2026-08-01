@@ -124,7 +124,7 @@ export default function ContentCard({ item }: { item: ContentItem }) {
               // Niente CTA "guarda il reel" quando il permalink e' solo il
               // profilo: promettere un contenuto specifico che non c'e' ancora
               // e' il difetto peggiore da evitare su una scheda in lavorazione.
-              <span className="ml-auto text-[10px] font-bold uppercase tracking-widest text-black/35">
+              <span className="ml-auto text-[10px] font-bold uppercase tracking-widest text-black/60">
                 Scheda in arrivo
               </span>
             )}

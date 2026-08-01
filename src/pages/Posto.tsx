@@ -252,7 +252,7 @@ export default function Posto() {
                   aria-label={saved ? 'Rimuovi dai preferiti' : 'Salva nei preferiti'}
                   className={`inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-full px-5 text-xs font-bold uppercase tracking-widest transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 sm:flex-none ${
                     saved
-                      ? 'bg-[var(--color-accent)] text-white'
+                      ? 'bg-[var(--color-accent)] text-[var(--color-ink)]'
                       : 'border border-[var(--color-border)] text-[var(--color-ink)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]'
                   }`}
                 >
@@ -263,7 +263,7 @@ export default function Posto() {
                   type="button"
                   onClick={handleShare}
                   aria-label="Condividi questo posto"
-                  className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-full border border-[var(--color-border)] px-5 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 sm:flex-none"
+                  className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-full border border-[var(--color-border)] px-5 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 sm:flex-none"
                 >
                   {copied ? (
                     <CheckCircle size={14} aria-hidden />
@@ -298,14 +298,14 @@ export default function Posto() {
                     target="_blank"
                     rel="noreferrer"
                     onClick={handleDirectionsClick}
-                    className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] px-6 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 md:w-auto"
+                    className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] px-6 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 md:w-auto"
                   >
                     <Navigation size={14} aria-hidden /> Indicazioni
                   </a>
                   {mapPinUrl && (
                     <Link
                       to={mapPinUrl}
-                      className="mt-3 inline-flex items-center gap-1.5 text-sm text-[var(--color-ink-2)] underline-offset-4 transition-colors hover:text-[var(--color-accent)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+                      className="mt-3 inline-flex items-center gap-1.5 text-sm text-[var(--color-ink-2)] underline-offset-4 transition-colors hover:text-[var(--color-accent-text)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
                     >
                       <MapPin size={14} aria-hidden /> Apri sulla mappa
                     </Link>
@@ -329,7 +329,7 @@ export default function Posto() {
                         <a
                           href={`tel:${item.place.phone.replace(/\s+/g, '')}`}
                           onClick={handlePhoneClick}
-                          className="flex items-center gap-2 text-sm text-[var(--color-ink-2)] underline-offset-4 transition-colors hover:text-[var(--color-accent)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+                          className="flex items-center gap-2 text-sm text-[var(--color-ink-2)] underline-offset-4 transition-colors hover:text-[var(--color-accent-text)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
                         >
                           <Phone size={14} className="shrink-0" aria-hidden /> Chiama ·{' '}
                           {item.place.phone}
@@ -346,7 +346,7 @@ export default function Posto() {
                     <button
                       type="button"
                       onClick={handleDetectLocation}
-                      className="mt-3 inline-flex items-center gap-1.5 text-xs text-[var(--color-ink-2)] underline-offset-4 transition-colors hover:text-[var(--color-accent)] hover:underline"
+                      className="mt-3 inline-flex items-center gap-1.5 text-xs text-[var(--color-ink-2)] underline-offset-4 transition-colors hover:text-[var(--color-accent-text)] hover:underline"
                     >
                       <Navigation size={13} aria-hidden /> Calcola quanto dista da me
                     </button>
@@ -378,7 +378,7 @@ export default function Posto() {
                 href={item.permalink}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
+                className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)]"
               >
                 <Play size={14} fill="currentColor" />
                 {hasSpecificReelLink(item.permalink) ? 'Guarda il reel' : 'Segui su Instagram'}

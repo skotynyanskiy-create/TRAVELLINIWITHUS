@@ -53,7 +53,7 @@ export default function StickyMobileCTA({
   };
 
   const baseClass =
-    'inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-6 text-sm font-bold uppercase tracking-widest text-white shadow-[var(--shadow-lg)]';
+    'inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-6 text-sm font-bold uppercase tracking-widest text-[var(--color-ink)] shadow-[var(--shadow-lg)]';
 
   const content = (
     <>

@@ -16,7 +16,7 @@ export default function NotFound() {
         <div className="w-full max-w-4xl mx-auto text-center">
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="w-12 h-[1px] bg-[var(--color-accent)]" />
-            <span className="uppercase tracking-widest text-sm font-semibold text-[var(--color-accent)]">
+            <span className="uppercase tracking-widest text-sm font-semibold text-[var(--color-accent-text)]">
               Errore 404
             </span>
             <div className="w-12 h-[1px] bg-[var(--color-accent)]" />
@@ -40,19 +40,19 @@ export default function NotFound() {
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-8 py-4 text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
+              className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-8 py-4 text-xs font-semibold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)]"
             >
               Torna alla home <ArrowRight size={14} />
             </Link>
             <Link
               to="/esplora"
-              className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-8 py-4 text-xs font-semibold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+              className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-8 py-4 text-xs font-semibold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)]"
             >
               Apri Esplora
             </Link>
             <Link
               to="/mappa"
-              className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-8 py-4 text-xs font-semibold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+              className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-8 py-4 text-xs font-semibold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)]"
             >
               Apri la mappa
             </Link>

@@ -134,7 +134,7 @@ export default function CaseStudiesSection() {
     <Section className="my-20">
       <div className="mx-auto max-w-5xl">
         <div className="mb-12 text-center">
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent-soft)] px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[var(--color-accent)]">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent-soft)] px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[var(--color-accent-text)]">
             <Sparkles size={14} />
             <span>Format di collaborazione</span>
           </div>
@@ -197,7 +197,7 @@ export default function CaseStudiesSection() {
             {/* Header info */}
             <div className="mb-8 flex flex-wrap items-start justify-between gap-4 border-b border-black/8 pb-6">
               <div>
-                <span className="mb-2 block text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">
+                <span className="mb-2 block text-xs font-bold uppercase tracking-widest text-[var(--color-accent-text)]">
                   {currentStudy.partnerType}
                 </span>
                 <h3 className="text-3xl font-serif text-[var(--color-ink)] md:text-4xl">
@@ -222,7 +222,7 @@ export default function CaseStudiesSection() {
                 </p>
               </div>
               <div className="rounded-2xl border border-[var(--color-accent)]/20 bg-[var(--color-accent-soft)]/60 p-5">
-                <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[var(--color-accent)]">
+                <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[var(--color-accent-text)]">
                   <MapPin size={14} />
                   <span>Insight di Progetto</span>
                 </div>
@@ -249,7 +249,7 @@ export default function CaseStudiesSection() {
                         <span className="text-xs font-medium uppercase tracking-wider text-[var(--color-muted-fg)]">
                           {m.label}
                         </span>
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-[var(--color-accent)] shadow-xs group-hover:bg-[var(--color-accent)] group-hover:text-white transition-colors">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-[var(--color-accent)] shadow-xs group-hover:bg-[var(--color-accent)] group-hover:text-[var(--color-ink)] transition-colors">
                           <Icon size={16} />
                         </div>
                       </div>
@@ -293,7 +293,7 @@ export default function CaseStudiesSection() {
           </p>
           <a
             href="/media-kit"
-            className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[var(--color-accent)] hover:underline"
+            className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[var(--color-accent-text)] hover:underline"
             onClick={() => trackEvent('case_study_mediakit_link', { route: '/collaborazioni' })}
           >
             Sfoglia il Media Kit <ArrowUpRight size={14} />

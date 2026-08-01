@@ -70,7 +70,7 @@ export default function FamilyShop() {
                 href="https://www.instagram.com/travellinifamily/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
+                className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)]"
               >
                 <Instagram size={14} aria-hidden />
                 @travellinifamily

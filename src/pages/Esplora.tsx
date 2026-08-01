@@ -466,7 +466,7 @@ export default function Esplora() {
       <section className="bg-[var(--color-sand,#faf7f2)] border-b border-[var(--color-border)] pt-28 pb-10 md:pt-32 md:pb-12 text-[var(--color-ink,#1a2b3c)]">
         <div className="mx-auto max-w-5xl px-6 md:px-12">
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent,#c85a32)]">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
               Esplora &amp; Archivio
             </p>
             <AtlanteViews current="archivio" />
@@ -491,7 +491,7 @@ export default function Esplora() {
             >
               <Search
                 size={18}
-                className="ml-3 shrink-0 text-black/40 md:ml-4"
+                className="ml-3 shrink-0 text-black/60 md:ml-4"
                 aria-hidden="true"
               />
               <input
@@ -507,11 +507,11 @@ export default function Esplora() {
                   if (searchInput.trim().length >= 2) setShowAutocomplete(true);
                 }}
                 placeholder="es. Puglia, hotel con vista, weekend in Toscana…"
-                className="min-w-0 flex-1 bg-transparent py-3 text-base text-[var(--color-ink)] placeholder:text-black/35 focus:outline-none"
+                className="min-w-0 flex-1 bg-transparent py-3 text-base text-[var(--color-ink)] placeholder:text-black/60 focus:outline-none"
               />
               <button
                 type="submit"
-                className="min-h-11 rounded-full bg-[var(--color-ink)] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[var(--color-accent)] sm:px-6"
+                className="min-h-11 rounded-full bg-[var(--color-ink)] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[var(--color-accent-hover)] sm:px-6"
               >
                 Cerca
               </button>
@@ -607,11 +607,11 @@ export default function Esplora() {
                 type="button"
                 onClick={() => setShowAdvanced((prev) => !prev)}
                 aria-expanded={showAdvanced}
-                className="inline-flex min-h-10 items-center gap-2 rounded-full px-3 py-2 text-sm text-black/50 transition-colors hover:text-[var(--color-ink)]"
+                className="inline-flex min-h-10 items-center gap-2 rounded-full px-3 py-2 text-sm text-black/60 transition-colors hover:text-[var(--color-ink)]"
               >
                 <SlidersHorizontal size={14} /> Filtri avanzati
                 {advancedActiveCount > 0 && (
-                  <span className="text-black/45">({advancedActiveCount} attivi)</span>
+                  <span className="text-black/60">({advancedActiveCount} attivi)</span>
                 )}
                 <ChevronDown
                   size={14}
@@ -633,7 +633,7 @@ export default function Esplora() {
                   onClick={() => updateFilter({ type: filters.type === type ? null : type })}
                 >
                   {type}{' '}
-                  <span className={filters.type === type ? 'text-white/65' : 'text-black/35'}>
+                  <span className={filters.type === type ? 'text-white/65' : 'text-black/60'}>
                     ({count})
                   </span>
                 </TypeChip>
@@ -726,7 +726,7 @@ export default function Esplora() {
               </h2>
             </div>
             {(filters.zone || filters.type) && (
-              <p className="shrink-0 text-xs text-black/45">
+              <p className="shrink-0 text-xs text-black/60">
                 {filteredContentItems.length}{' '}
                 {filteredContentItems.length === 1 ? 'posto' : 'posti'}
               </p>
@@ -740,7 +740,7 @@ export default function Esplora() {
                     className="col-span-full mt-2 flex items-center gap-3 pt-2"
                     aria-hidden="true"
                   >
-                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-black/40">
+                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-black/60">
                       In lavorazione
                     </span>
                     <span className="h-px flex-1 bg-black/10" />
@@ -782,7 +782,7 @@ export default function Esplora() {
         )}
         {!active && !isLoading && filteredItems.length > 0 && (
           <div className="mb-8">
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-black/45">
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-black/60">
               Archivio completo
             </span>
             <h2 className="mt-2 font-serif text-3xl leading-tight text-[var(--color-ink)] md:text-4xl">
@@ -819,7 +819,7 @@ export default function Esplora() {
           ) : (
             <>
               <EmptyState variant="no-results" onReset={resetFilters} />
-              <p className="mt-12 text-sm text-black/50">
+              <p className="mt-12 text-sm text-black/60">
                 Intanto, parti da quello che abbiamo scelto noi:
               </p>
             </>
@@ -899,7 +899,7 @@ export default function Esplora() {
       <Section className="!py-16">
         <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="rounded-[var(--radius-xl)] border border-black/5 bg-white p-6 shadow-sm md:p-8">
-            <p className="text-xs font-medium uppercase tracking-[0.28em] text-black/45">
+            <p className="text-xs font-medium uppercase tracking-[0.28em] text-black/60">
               <Mail size={14} className="-mt-1 mr-1.5 inline" /> Newsletter
             </p>
             <h2 className="mt-3 font-serif text-3xl leading-tight text-[var(--color-ink)]">
@@ -932,7 +932,7 @@ export default function Esplora() {
             className="flex flex-col justify-between gap-6 rounded-[var(--radius-xl)] border border-black/5 bg-[var(--color-ink)] p-6 text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md md:p-8"
           >
             <div>
-              <p className="text-xs font-medium uppercase tracking-[0.28em] text-[var(--color-accent)]">
+              <p className="text-xs font-medium uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
                 Per destinazioni e strutture
               </p>
               <h3 className="mt-3 font-serif text-2xl leading-tight">
@@ -943,7 +943,7 @@ export default function Esplora() {
                 il nostro modo di viaggiare.
               </p>
             </div>
-            <span className="inline-flex items-center gap-1.5 text-sm text-[var(--color-accent)]">
+            <span className="inline-flex items-center gap-1.5 text-sm text-[var(--color-accent-text)]">
               Come lavoriamo <ArrowRight size={14} />
             </span>
           </Link>

@@ -300,7 +300,7 @@ export default function VieniConNoi() {
                   <p className="mt-2 text-sm leading-relaxed text-[var(--color-muted-fg)]">
                     {item.text}
                   </p>
-                  <span className="mt-4 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">
+                  <span className="mt-4 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[var(--color-accent-text)]">
                     Vai <ArrowRight size={14} />
                   </span>
                 </Link>
@@ -374,7 +374,7 @@ function LeadForm({
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="inline-flex h-14 min-h-11 items-center justify-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] px-6 text-[11px] font-bold tracking-[0.14em] text-white uppercase shadow-xs transition-all hover:bg-[var(--color-accent-hover)] disabled:cursor-not-allowed disabled:opacity-70"
+                className="inline-flex h-14 min-h-11 items-center justify-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] px-6 text-[11px] font-bold tracking-[0.14em] text-[var(--color-ink)] uppercase shadow-xs transition-all hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {isSubmitting ? (
                   <>
@@ -447,7 +447,7 @@ function LeadForm({
                 <div className="mt-4 flex flex-wrap gap-3">
                   <Link
                     to="/lead-magnet"
-                    className="inline-flex h-11 items-center justify-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] px-6 text-xs font-bold tracking-widest text-white uppercase shadow-xs transition-all hover:bg-[var(--color-accent-hover)]"
+                    className="inline-flex h-11 items-center justify-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] px-6 text-xs font-bold tracking-widest text-[var(--color-ink)] uppercase shadow-xs transition-all hover:brightness-95"
                   >
                     Apri e scarica <ArrowRight size={14} />
                   </Link>

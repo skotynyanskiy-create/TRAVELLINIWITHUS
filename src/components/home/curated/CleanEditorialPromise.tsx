@@ -6,7 +6,7 @@ export default function CleanEditorialPromise() {
     <section className="bg-[var(--color-sand,#faf7f2)] py-20 md:py-28 text-[var(--color-ink,#1a2b3c)] border-b border-[var(--color-border)]">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="mb-14 text-center max-w-2xl mx-auto">
-          <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent,#c85a32)]">
+          <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
             <Sparkles size={14} />
             Il Nostro Manifesto
           </span>

@@ -134,7 +134,7 @@ export default function QuickViewDrawer() {
                   )}
                   <RatingPill overall={item.review?.overall} />
                   {item.deal && (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink)]">
                       <Tag size={11} /> Offerta
                     </span>
                   )}
@@ -146,7 +146,7 @@ export default function QuickViewDrawer() {
               <Link
                 to={`/posto/${item.id}`}
                 onClick={close}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-[11px] font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-[11px] font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
               >
                 Apri la scheda <ArrowUpRight size={14} />
               </Link>
@@ -154,7 +154,7 @@ export default function QuickViewDrawer() {
                 href={item.permalink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-black/10 px-6 py-3 text-[11px] font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-black/10 px-6 py-3 text-[11px] font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
               >
                 Guarda il reel <ArrowUpRight size={14} />
               </a>

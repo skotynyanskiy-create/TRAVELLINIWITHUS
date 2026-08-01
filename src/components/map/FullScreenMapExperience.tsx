@@ -314,7 +314,7 @@ export default function FullScreenMapExperience() {
   return (
     <div className="mt-20 flex h-[calc(100dvh-80px)] w-full flex-col overflow-hidden bg-[#0a0705]">
       <header className="shrink-0 px-4 pb-3 pt-5 sm:px-8 sm:pb-4 sm:pt-6">
-        <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent,#c85a32)]">
+        <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
           Mappa dei posti particolari
         </span>
         <h1 className="mt-1.5 font-serif text-2xl font-medium leading-tight text-white sm:text-3xl">
@@ -343,7 +343,7 @@ export default function FullScreenMapExperience() {
                 onClick={toggleList}
                 className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold transition-all ${
                   listVisible
-                    ? 'bg-[var(--color-accent,#c85a32)] text-white shadow-md'
+                    ? 'bg-[var(--color-accent,#c85a32)] text-[var(--color-ink)] shadow-md'
                     : 'bg-stone-800 text-white/90 hover:bg-stone-700'
                 }`}
                 title={listVisible ? 'Chiudi elenco' : 'Apri elenco posti'}
@@ -391,7 +391,7 @@ export default function FullScreenMapExperience() {
                   onClick={() => setSelectedZone(zone.id)}
                   className={`rounded-full px-3.5 py-1 text-xs font-bold transition-all ${
                     selectedZone === zone.id
-                      ? 'bg-[var(--color-accent,#c85a32)] text-white shadow-md'
+                      ? 'bg-[var(--color-accent,#c85a32)] text-[var(--color-ink)] shadow-md'
                       : 'bg-stone-800 text-stone-300 hover:bg-stone-700 hover:text-white'
                   }`}
                 >
@@ -407,14 +407,14 @@ export default function FullScreenMapExperience() {
                 onClick={toggleFilters}
                 className={`flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold transition-all ${
                   filtersVisible || selectedType !== 'all' || selectedBudget !== 'all'
-                    ? 'bg-[var(--color-accent,#c85a32)] text-white shadow-md'
+                    ? 'bg-[var(--color-accent,#c85a32)] text-[var(--color-ink)] shadow-md'
                     : 'bg-stone-800 text-stone-300 hover:bg-stone-700 hover:text-white'
                 }`}
               >
                 <Filter size={13} />
                 <span>Filtri</span>
                 {activeFilterCount > 0 && (
-                  <span className="ml-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-white text-[9px] font-black text-[var(--color-accent,#c85a32)]">
+                  <span className="ml-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-white text-[9px] font-black text-[var(--color-accent-text)]">
                     {activeFilterCount}
                   </span>
                 )}
@@ -434,7 +434,7 @@ export default function FullScreenMapExperience() {
                     key={preset.id}
                     type="button"
                     onClick={() => handlePresetFly(preset)}
-                    className="shrink-0 rounded-full bg-stone-800 px-3 py-1 text-xs font-semibold text-stone-200 hover:bg-[var(--color-accent,#c85a32)] hover:text-white transition-colors"
+                    className="shrink-0 rounded-full bg-stone-800 px-3 py-1 text-xs font-semibold text-stone-200 hover:bg-[var(--color-accent,#c85a32)] hover:text-[var(--color-ink)] transition-colors"
                   >
                     {preset.label}
                   </button>
@@ -465,7 +465,7 @@ export default function FullScreenMapExperience() {
               <button
                 type="button"
                 onClick={handleSurprisePick}
-                className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/50 bg-[var(--color-accent,#c85a32)] px-4 py-2 text-xs font-bold text-white shadow-2xl transition-all hover:scale-105 hover:bg-white hover:text-stone-900"
+                className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/50 bg-[var(--color-accent,#c85a32)] px-4 py-2 text-xs font-bold text-[var(--color-ink)] shadow-2xl transition-all hover:scale-105 hover:bg-white hover:text-stone-900"
               >
                 <Shuffle size={14} />
                 <span className="hidden sm:inline">Sorprendimi!</span>
@@ -524,7 +524,7 @@ export default function FullScreenMapExperience() {
                       onClick={() => setSelectedType(tf.id)}
                       className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition-all ${
                         selectedType === tf.id
-                          ? 'bg-[var(--color-accent,#c85a32)] text-white shadow-md'
+                          ? 'bg-[var(--color-accent,#c85a32)] text-[var(--color-ink)] shadow-md'
                           : 'bg-stone-800 text-stone-300 hover:bg-stone-700 hover:text-white'
                       }`}
                     >
@@ -549,7 +549,7 @@ export default function FullScreenMapExperience() {
                     onClick={() => setSelectedBudget(bf.id)}
                     className={`rounded-full px-3 py-1.5 text-xs font-bold transition-all ${
                       selectedBudget === bf.id
-                        ? 'bg-[var(--color-accent,#c85a32)] text-white shadow-md'
+                        ? 'bg-[var(--color-accent,#c85a32)] text-[var(--color-ink)] shadow-md'
                         : 'bg-stone-800 text-stone-300 hover:bg-stone-700 hover:text-white'
                     }`}
                   >
@@ -560,7 +560,7 @@ export default function FullScreenMapExperience() {
 
               {/* Results count */}
               <div className="ml-auto flex items-center gap-2">
-                <span className="inline-flex items-center gap-1 text-xs font-bold text-[var(--color-accent,#c85a32)]">
+                <span className="inline-flex items-center gap-1 text-xs font-bold text-[var(--color-accent-text)]">
                   <MapPin size={13} />
                   {filteredItems.length} posti
                 </span>
@@ -573,7 +573,7 @@ export default function FullScreenMapExperience() {
           {listVisible && (
             <div className="pointer-events-auto w-84 min-h-0 flex-1 overflow-y-auto rounded-[var(--radius-lg,24px)] border border-stone-700 bg-stone-900/95 p-4 text-white shadow-2xl backdrop-blur-2xl max-sm:max-w-[calc(100%-3.5rem)] sm:w-96 sm:max-w-full">
               <div className="mb-4 flex items-center justify-between border-b border-stone-800 pb-3">
-                <span className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-accent,#c85a32)]">
+                <span className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)]">
                   Destinazioni Provate ({filteredItems.length})
                 </span>
                 <button
@@ -593,11 +593,11 @@ export default function FullScreenMapExperience() {
                     onClick={() => handlePinClick(item)}
                     className={`w-full text-left rounded-xl p-3 border transition-all ${
                       selectedItem?.id === item.id
-                        ? 'border-[var(--color-accent,#c85a32)] bg-[var(--color-accent,#c85a32)]/25 text-white shadow-lg'
+                        ? 'border-[var(--color-accent,#c85a32)] bg-[var(--color-accent,#c85a32)]/25 text-[var(--color-ink)] shadow-lg'
                         : 'border-stone-800 bg-stone-800/60 hover:border-stone-600 text-stone-200 hover:text-white'
                     }`}
                   >
-                    <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--color-accent,#c85a32)]">
+                    <div className="text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--color-accent-text)]">
                       {item.zone} · {item.place.region || item.place.country}
                     </div>
                     <h4 className="mt-1 font-serif text-sm font-normal text-white">{item.title}</h4>
@@ -653,8 +653,8 @@ export default function FullScreenMapExperience() {
                   <div
                     className={`relative flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold shadow-2xl transition-all ${
                       isSelected
-                        ? 'scale-110 border-2 border-white bg-[var(--color-accent,#c85a32)] text-white z-30'
-                        : 'border border-white/30 bg-black/85 text-white hover:scale-105 hover:bg-[var(--color-accent)] z-10'
+                        ? 'scale-110 border-2 border-white bg-[var(--color-accent,#c85a32)] text-[var(--color-ink)] z-30'
+                        : 'border border-white/30 bg-black/85 text-white hover:scale-105 hover:bg-[var(--color-accent-hover)] z-10'
                     }`}
                   >
                     <IconComp
@@ -683,7 +683,7 @@ export default function FullScreenMapExperience() {
                       </div>
                     )}
                     <p className="mt-1.5 text-[10px] font-bold text-white truncate">{item.title}</p>
-                    <span className="text-[9px] text-[var(--color-accent,#c85a32)] font-semibold">
+                    <span className="text-[9px] text-[var(--color-accent-text)] font-semibold">
                       {item.place.region || item.place.country} · {item.zone}
                     </span>
                     {item.value?.price && (
@@ -706,7 +706,7 @@ export default function FullScreenMapExperience() {
             {/* Drawer Header */}
             <div className="flex items-start justify-between">
               <div>
-                <span className="inline-flex items-center gap-1 rounded-full bg-[var(--color-accent,#c85a32)]/20 border border-[var(--color-accent,#c85a32)]/40 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent,#c85a32)]">
+                <span className="inline-flex items-center gap-1 rounded-full bg-[var(--color-accent,#c85a32)]/20 border border-[var(--color-accent,#c85a32)]/40 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)]">
                   {selectedItem.zone} · {selectedItem.place.region || selectedItem.types[0]}
                 </span>
                 <h3 className="mt-2 font-serif text-2xl font-normal leading-tight">
@@ -753,7 +753,7 @@ export default function FullScreenMapExperience() {
               <div className="mt-4 space-y-3">
                 <p className="text-xs leading-relaxed text-white/80">{selectedItem.description}</p>
                 {selectedItem.review?.verdict && (
-                  <div className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs font-semibold text-[var(--color-accent,#c85a32)]">
+                  <div className="inline-flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 text-xs font-semibold text-[var(--color-accent-text)]">
                     <Star size={13} className="fill-current" />
                     <span>Verdetto: {selectedItem.review.verdict}</span>
                   </div>
@@ -786,7 +786,7 @@ export default function FullScreenMapExperience() {
               <span className="text-white/60">Provato di persona</span>
               <Link
                 to={`/posto/${selectedItem.id}`}
-                className="inline-flex items-center gap-1 rounded-full bg-[var(--color-accent,#c85a32)] px-4 py-2 text-xs font-bold text-white shadow-md transition-all hover:bg-white hover:text-[var(--color-ink)]"
+                className="inline-flex items-center gap-1 rounded-full bg-[var(--color-accent,#c85a32)] px-4 py-2 text-xs font-bold text-[var(--color-ink)] shadow-md transition-all hover:bg-white hover:text-[var(--color-ink)]"
               >
                 Apri la scheda completa <ArrowRight size={14} />
               </Link>

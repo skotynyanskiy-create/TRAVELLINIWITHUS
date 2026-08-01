@@ -47,7 +47,7 @@ export default function CleanFeaturedGrid() {
         {/* Section Header */}
         <div className="mb-14 flex flex-col justify-between md:flex-row md:items-end">
           <div>
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent,#c85a32)]">
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
               <Sparkles size={14} />
               Il registro dei posti
             </span>
@@ -57,7 +57,7 @@ export default function CleanFeaturedGrid() {
           </div>
           <Link
             to="/esplora"
-            className="mt-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-ink)] hover:text-[var(--color-accent)] md:mt-0"
+            className="mt-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-ink)] hover:text-[var(--color-accent-text)] md:mt-0"
           >
             Vedi tutte le destinazioni
             <ArrowUpRight size={16} />
@@ -108,7 +108,7 @@ export default function CleanFeaturedGrid() {
                 )}
 
                 <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent,#c85a32)]">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)]">
                     {tile.category}
                   </span>
                   <h3
@@ -127,7 +127,7 @@ export default function CleanFeaturedGrid() {
                 </p>
                 <div className="mt-4 flex items-center justify-between border-t border-[var(--color-border)] pt-3 text-xs font-semibold">
                   <span className="text-[var(--color-ink)]">{tile.price}</span>
-                  <span className="text-[var(--color-accent)] group-hover:translate-x-1 transition-transform">
+                  <span className="text-[var(--color-accent-text)] group-hover:translate-x-1 transition-transform">
                     Scopri di più &rarr;
                   </span>
                 </div>

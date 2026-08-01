@@ -243,7 +243,7 @@ export default function Itinerario() {
                     </div>
                     <ArrowRight
                       size={18}
-                      className="text-black/40 transition-transform duration-500 group-hover:translate-x-1 group-hover:text-[var(--color-accent)]"
+                      className="text-black/60 transition-transform duration-500 group-hover:translate-x-1 group-hover:text-[var(--color-accent)]"
                     />
                   </Link>
                 )}
@@ -262,7 +262,7 @@ export default function Itinerario() {
                     </div>
                     <ArrowRight
                       size={18}
-                      className="text-black/40 transition-transform duration-500 group-hover:translate-x-1 group-hover:text-[var(--color-accent)]"
+                      className="text-black/60 transition-transform duration-500 group-hover:translate-x-1 group-hover:text-[var(--color-accent)]"
                     />
                   </Link>
                 )}
@@ -286,7 +286,7 @@ function FactCell({ icon, label, value }: { icon: React.ReactNode; label: string
         <span className="text-[var(--color-accent)] transition-transform duration-500 group-hover/fact:scale-110 group-hover/fact:rotate-12">
           {icon}
         </span>
-        <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-black/45">
+        <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-black/60">
           {label}
         </span>
       </div>

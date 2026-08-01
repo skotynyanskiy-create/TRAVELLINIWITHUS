@@ -348,7 +348,7 @@ export default function Risorse() {
                     <div className="mb-5 flex items-start justify-between gap-4">
                       <div>
                         <div className="mb-3 flex flex-wrap gap-2">
-                          <span className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-white">
+                          <span className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)]">
                             {item.commercialLabel}
                           </span>
                           {item.badge && item.badge !== item.commercialLabel && (
@@ -379,7 +379,7 @@ export default function Risorse() {
 
                     <div className="mt-auto space-y-3 pt-7">
                       <div className="rounded-[var(--radius-md)] bg-white p-4">
-                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/35">
+                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/60">
                           Per chi ha senso
                         </p>
                         <p className="mt-2 text-sm leading-relaxed text-black/62">{item.fit}</p>
@@ -400,7 +400,7 @@ export default function Risorse() {
         <div className="mt-20 rounded-[var(--radius-lg)] bg-[var(--color-ink)] p-8 text-white md:p-12">
           <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>
-              <span className="mb-4 block text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+              <span className="mb-4 block text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
                 Vantaggi dichiarati
               </span>
               <h2 className="text-3xl font-serif md:text-5xl">

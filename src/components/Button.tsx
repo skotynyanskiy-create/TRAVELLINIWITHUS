@@ -78,7 +78,7 @@ export default function Button({
       'bg-transparent border border-[var(--color-border)] text-[var(--color-ink)] hover:border-[var(--color-ink)] hover:bg-[var(--color-surface-2)]',
     'outline-light':
       'bg-white/5 border border-white/30 text-white backdrop-blur-sm hover:bg-white hover:text-[var(--color-ink)] hover:border-white',
-    cta: 'bg-[var(--color-accent)] text-white shadow-[var(--shadow-sm)] hover:bg-[var(--color-accent-hover)] hover:shadow-[var(--shadow-md)]',
+    cta: 'bg-[var(--color-accent)] text-[var(--color-ink)] shadow-[var(--shadow-sm)] hover:brightness-95 hover:shadow-[var(--shadow-md)]',
   };
 
   const sizes = {

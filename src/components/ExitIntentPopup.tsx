@@ -135,7 +135,7 @@ export default function ExitIntentPopup() {
               <div className="aspect-[4/5] h-11 shrink-0 overflow-hidden rounded-[var(--radius-sm)] border border-black/10 shadow-xs">
                 <LeadMagnetCover variant="compact" />
               </div>
-              <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--color-accent)] sm:text-xs">
+              <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--color-accent-text)] sm:text-xs">
                 Prima di uscire
               </span>
             </div>

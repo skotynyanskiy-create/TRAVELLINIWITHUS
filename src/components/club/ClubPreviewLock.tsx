@@ -94,7 +94,7 @@ export default function ClubPreviewLock() {
                 e.preventDefault();
                 document.getElementById('club-pricing')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="inline-flex shrink-0 items-center gap-2 rounded-full bg-[var(--color-ink)] px-7 py-4 text-eyebrow text-white transition-colors hover:bg-[var(--color-accent)]"
+              className="inline-flex shrink-0 items-center gap-2 rounded-full bg-[var(--color-ink)] px-7 py-4 text-eyebrow text-white transition-colors hover:bg-[var(--color-accent-hover)]"
             >
               Mettimi in lista <ArrowRight size={14} />
             </Link>

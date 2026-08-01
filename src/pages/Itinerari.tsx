@@ -102,7 +102,7 @@ export default function Itinerari() {
               ]}
             />
           </div>
-          <p className="mt-5 text-xs text-black/45">
+          <p className="mt-5 text-xs text-black/60">
             {filteredItineraries.length}{' '}
             {filteredItineraries.length === 1
               ? 'itinerario corrispondente'
@@ -147,7 +147,7 @@ export default function Itinerari() {
                       {item.style}
                     </span>
                     {item.isDemo && (
-                      <span className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-white shadow-sm animate-pulse">
+                      <span className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] shadow-sm animate-pulse">
                         Anteprima
                       </span>
                     )}
@@ -204,7 +204,7 @@ export default function Itinerari() {
           </div>
           <Link
             to="/itinerari/compare"
-            className="mt-5 inline-flex items-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-ink)] px-5 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)] md:mt-0"
+            className="mt-5 inline-flex items-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-ink)] px-5 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)] md:mt-0"
           >
             Apri il confronto <ArrowRight size={14} />
           </Link>
@@ -227,7 +227,7 @@ function FilterSelect({
 }) {
   return (
     <label className="block text-left">
-      <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.24em] text-black/45">
+      <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.24em] text-black/60">
         {label}
       </span>
       <div className="relative">
@@ -243,7 +243,7 @@ function FilterSelect({
           ))}
         </select>
         {/* Freccia custom */}
-        <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-black/45">
+        <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-black/60">
           <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
