@@ -30,6 +30,7 @@ import {
 } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import { CONTENT_ITEMS } from '@/src/config/contentLibrary';
+import { placeLabels } from './labelPlacement';
 import type { ContentItem } from '@/src/types/content';
 import { getUserLocation, sortPlacesByDistance, type UserLocation } from '@/src/utils/geo';
 import PlaceBusinessActions from '../PlaceBusinessActions';
@@ -179,6 +180,47 @@ export default function FullScreenMapExperience() {
   }, [allItems, selectedZone, selectedType, selectedBudget, searchQuery, userLoc]);
 
   // Web Audio API Synthetic Chime Feedback
+  /** Altezza della pillola e stima della sua larghezza dal numero di caratteri:
+   *  serve a sapere quanto spazio occupa un nome prima di disegnarlo. */
+  const LABEL_HEIGHT_PX = 30;
+  const LABEL_BASE_PX = 34;
+  const LABEL_CHAR_PX = 6.4;
+  const LABEL_MAX_CHARS = 18;
+
+  // Quali nomi ci stanno dipende da zoom e posizione, non solo dai dati: questo
+  // contatore fa ricalcolare a ogni movimento della mappa.
+  const [viewTick, setViewTick] = useState(0);
+  const bumpView = useCallback(() => setViewTick((n) => n + 1), []);
+
+  const { labelled, dots } = useMemo(() => {
+    const map = mapRef.current;
+    const withCoords = filteredItems.filter((item) => item.place.coordinates);
+    // Prima che la mappa esista non si puo' proiettare: si mostra tutto, il
+    // calcolo vero riparte al primo `onLoad`.
+    if (!map) return { labelled: withCoords, dots: [] as ContentItem[] };
+
+    return placeLabels(
+      withCoords.map((item) => {
+        const { x, y } = map.project([item.place.coordinates!.lng, item.place.coordinates!.lat]);
+        return {
+          item,
+          x,
+          y,
+          // Chi e' selezionato tiene sempre il nome; poi i featured, poi le
+          // schede verificate: la mappa da' il nome prima a cio' che e' vero.
+          priority:
+            (selectedItem?.id === item.id ? 100 : 0) +
+            (item.featured ? 10 : 0) +
+            (item.isPlaceholder ? 0 : 5),
+          width: LABEL_BASE_PX + Math.min(item.title.length, LABEL_MAX_CHARS) * LABEL_CHAR_PX,
+        };
+      }),
+      LABEL_HEIGHT_PX
+    );
+    // viewTick rappresenta lo stato della mappa.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filteredItems, viewTick, selectedItem]);
+
   const playChime = useCallback(() => {
     if (!soundEnabled) return;
     try {
@@ -618,12 +660,46 @@ export default function FullScreenMapExperience() {
           initialViewState={{ longitude: 12.5, latitude: 42.0, zoom: 5.2, pitch: 35 }}
           mapStyle={MAP_STYLES[mapStyleKey].url}
           projection="globe"
+          onLoad={bumpView}
+          onMove={bumpView}
         >
           <NavigationControl position="bottom-right" />
           <FullscreenControl position="bottom-right" />
 
-          {/* Map Pins with Pulsing Rings & Hover Tooltips */}
-          {filteredItems.map((item) => {
+          {/* Punti senza nome: sono i posti la cui etichetta non entrerebbe
+              senza coprire quella accanto. Nessuno sparisce — restano visibili
+              e cliccabili, e zoomando riprendono il proprio nome. */}
+          {dots.map((item) => {
+            if (!item.place.coordinates) return null;
+            const isSelected = selectedItem?.id === item.id;
+
+            return (
+              <Marker
+                key={`dot-${item.id}`}
+                longitude={item.place.coordinates.lng}
+                latitude={item.place.coordinates.lat}
+                anchor="center"
+                onClick={(e) => {
+                  e.originalEvent.stopPropagation();
+                  handlePinClick(item);
+                }}
+              >
+                <button
+                  type="button"
+                  title={item.title}
+                  aria-label={item.title}
+                  className={`block cursor-pointer rounded-full border-2 shadow-lg transition-transform hover:scale-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${
+                    isSelected
+                      ? 'h-4 w-4 border-white bg-[var(--color-accent)]'
+                      : 'h-2.5 w-2.5 border-white/80 bg-[var(--color-accent)]/90 hover:bg-[var(--color-accent)]'
+                  }`}
+                />
+              </Marker>
+            );
+          })}
+
+          {/* Nomi: solo dove c'e' spazio per leggerli. */}
+          {labelled.map((item) => {
             if (!item.place.coordinates) return null;
             const isSelected = selectedItem?.id === item.id;
             const IconComp = getItemIcon(item.types);
