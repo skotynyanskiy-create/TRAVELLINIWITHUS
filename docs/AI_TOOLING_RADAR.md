@@ -261,3 +261,30 @@ this stack.
 | **Stripe MCP — Treasury tools** (already-adopted server)        | MCP (existing)              | docs.stripe.com (official)                                         | The already-enabled `stripe` MCP can now be extended with Treasury tools that move money, pay bills, and manage cards                         | N/A — this is a risk flag, not a benefit for this project                                                                 | High — money-movement actions on a server already in `.mcp.json`; must never be reachable without explicit owner approval per turn                           | Stripe account/API key already configured  | N/A                                                        | **flag — do not enable** | Verify Treasury tools are not part of the current Stripe MCP tool allowlist in `.mcp.json`/`settings.json`; if they are, restrict immediately — OWNER ONLY, matches existing Stripe write-op policy in `CLAUDE.md`/`AI_AGENT_STACK.md` |
 
 No new stable adoption from this expanded pass. The two "already-adopted server gained new scope" rows are the highest-value finding: they're not new integrations to evaluate, they're **known servers whose blast radius changed underneath the existing config** and should be spot-checked, especially the Stripe Treasury addition.
+
+## Evaluation — Motion (`motion.so`) — 2026-08-02
+
+Owner asked whether `motion.so` is useful and whether a **hybrid** use exists
+(real R&B footage + AI craft) that respects the imagery-truth rule. Full card:
+[docs/50_Scratch/TOOLING_EVAL_motion-so_2026-08-02.md](50_Scratch/TOOLING_EVAL_motion-so_2026-08-02.md).
+
+**Name collision — three products, one name.** `motion.so` = AI video generator
+(this row). `usemotion.com` = AI calendar app, which owns almost every "Motion
+pricing 2026" article. `motion.dev` / npm `motion` = the animation library
+**already in `package.json:117`**. Do not let a search result cross these.
+
+| Candidate                | Type                              | Source               | Travellini use case                            | Benefit                                                                                              | Risk                                                                                                                                                                                                                                                                                                                                                                                               | Permissions                                                                             | Duplication                                                                                                                                        | Stage                                                           | Next action                                                                                                                               |
+| ------------------------ | --------------------------------- | -------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| **Motion (`motion.so`)** | SaaS AI video generator + MCP/API | motion.so (official) | Nominally `/repurpose`: article → social video | Prompt → finished MP4; callable over MCP from Claude Code; accepts brand assets and style references | **Generates scenes.** Vendor's own Learn page states it is "not a traditional timeline editor or manual compositor" and does not composite over real footage — so for a travel brand its output is exactly what `DECISION_IMAGERY_TRUTH_RULE` regola 1 forbids. No alpha/overlay export documented. Pricing absent from the official site; all figures found are from a competitor page `[VERIFY]` | Paid account + API key; MCP enablement; brand assets and site content leave the machine | **High** — Higgsfield already holds this slot and additionally covers the transform-real-material half (`ASSET_STRATEGY §7`) that Motion cannot do | **reject** (referential video) · **defer** (craft-only overlay) | Do not trial before Higgsfield is authenticated. If ever trialled: one non-referential craft asset, and **no alpha export → full reject** |
+
+**The hybrid the owner asked about already exists as policy** — real base layer
+(`real-photo`/`real-frame`) + non-referential `craft` over it + HTML text — set
+by `DECISION_IMAGERY_TRUTH_RULE_2026-07-22` and `ASSET_STRATEGY §7`. It does not
+need a new tool; it needs the tool already chosen for it to be switched on.
+**Higgsfield is decided, documented, and currently not authenticated**, so none
+of it runs today — the same dormant-capability finding as the 2026-07-06 pass.
+
+Surfaced independently of Motion: `ASSET_STRATEGY §6` bans text inside images
+and video **without qualifying the surface**, so read literally it also bans
+burned-in captions on a Reel. That is very likely not the intent, but until the
+owner rules on it, any kinetic-typography work is blocked by our own rule.

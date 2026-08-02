@@ -81,3 +81,6 @@ rejected and redone). Rules live in `CLAUDE.md` > Model routing.
 | 2026-07-31 | Explore                              | Inventory integrations and deploy state           | 17996 ch |
 | 2026-08-01 | Explore                              | Audit discovery surfaces and libraries            | 16209 ch |
 | 2026-08-01 | Explore                              | Assess theming feasibility per audience           | 13603 ch |
+| 2026-08-02 | Explore                              | Explore home hero and reel cards                  | 16378 ch |
+| 2026-08-02 | Explore                              | Explore esplora and mappa layout                  | 16902 ch |
+| 2026-08-02 | Explore                              | Explore SEO meta and OG image                     | 16038 ch |
