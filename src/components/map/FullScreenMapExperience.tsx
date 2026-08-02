@@ -114,6 +114,12 @@ export default function FullScreenMapExperience() {
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
 
+  // La sfumatura in fondo alla descrizione va mostrata SOLO se sotto il taglio
+  // c'e' davvero altro testo: se la descrizione entra tutta, smorzare l'ultima
+  // riga non dice «continua», sembra un difetto di resa.
+  const descrizioneRef = useRef<HTMLDivElement>(null);
+  const [descrizioneScorre, setDescrizioneScorre] = useState(false);
+
   // 100% Full Content Coverage: tutti i 40 item, ognuno con coordinate reali.
   // Se per qualsiasi motivo un item non avesse coordinate, usiamo fallback.
   const allItems = useMemo(() => {
@@ -247,6 +253,22 @@ export default function FullScreenMapExperience() {
     deepLinkFatto.current = true;
     handlePinClick(item);
   }, [mapReady, postoParam, allItems, handlePinClick]);
+
+  // `ResizeObserver` e non una misura secca: l'area cambia altezza sia quando
+  // si apre un altro posto (descrizioni da 130 a 305 caratteri) sia quando si
+  // ridimensiona la finestra, e la sfumatura deve seguire entrambi.
+  useEffect(() => {
+    const area = descrizioneRef.current;
+    if (!area) {
+      setDescrizioneScorre(false);
+      return;
+    }
+    const misura = () => setDescrizioneScorre(area.scrollHeight > area.clientHeight + 1);
+    misura();
+    const osservatore = new ResizeObserver(misura);
+    osservatore.observe(area);
+    return () => osservatore.disconnect();
+  }, [selectedItem]);
 
   // Preset Fly-To
   const handlePresetFly = useCallback(
@@ -739,17 +761,28 @@ export default function FullScreenMapExperience() {
             `elementFromPoint`). Sopra un cassetto aperto i filtri possono
             sparire: si chiude e tornano.
 
-            Il tetto sotto lg e' in `svh`, non una percentuale del contenitore
-            meno una riserva a occhio: i filtri vanno a capo in modo diverso a
-            ogni larghezza, e a 320px la riserva fissa lasciava al cassetto
-            175px, col bottone fuori schermo. */}
+            Il tetto e' `min(68svh, contenitore − 4rem)`, non una riserva a
+            occhio: i filtri vanno a capo in modo diverso a ogni larghezza, e a
+            320px la riserva fissa lasciava al cassetto 175px, col bottone fuori
+            schermo. Il `min` serve per le finestre basse, dove 68svh sfonderebbe
+            il contenitore.
+
+            Il tetto piu' generoso guarda **larghezza E altezza** (stessa query
+            di `DESKTOP_QUERY`): con il solo `lg:` una finestra 1440x620 prendeva
+            la misura da desktop e il bottone finiva fuori schermo. */}
         {selectedItem && (
-          <div className="absolute bottom-16 left-4 right-14 z-50 mx-auto flex max-h-[60svh] max-w-lg flex-col overflow-hidden rounded-[var(--radius-lg,24px)] border border-white/20 bg-black/90 p-6 text-white shadow-2xl backdrop-blur-2xl sm:bottom-10 sm:left-auto sm:right-20 sm:w-[420px] lg:max-h-[calc(100%-21rem)]">
+          <div className="absolute bottom-16 left-4 right-14 z-50 mx-auto flex max-h-[min(68svh,calc(100%-4rem))] max-w-lg flex-col overflow-hidden rounded-[var(--radius-lg,24px)] border border-white/20 bg-black/90 p-6 text-white shadow-2xl backdrop-blur-2xl sm:bottom-10 sm:left-auto sm:right-20 sm:w-[460px] [@media(min-width:1024px)and(min-height:800px)]:max-h-[calc(100%-11rem)]">
             {/* Drawer Header */}
             <div className="flex shrink-0 items-start justify-between">
               <div>
                 <span className="inline-flex items-center gap-1 rounded-full bg-[var(--color-accent,#c85a32)]/20 border border-[var(--color-accent,#c85a32)]/40 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)]">
-                  {selectedItem.zone} · {selectedItem.place.region || selectedItem.types[0]}
+                  {/* Solo la zona. Prima era `zone · region || types[0]`: senza
+                      regione ripeteva il tipo, che ora ha la sua pillola qui
+                      sotto — «Americhe · Relax, terme e spa» e poi di nuovo
+                      «Relax, terme e spa», su due righe. Cosi' invece la
+                      gerarchia e' pulita: zona qui, citta' e regione nella riga
+                      di sintesi, tipo nelle pillole. */}
+                  {selectedItem.zone}
                 </span>
                 <h3 className="mt-2 font-serif text-2xl font-normal leading-tight">
                   {selectedItem.title}
@@ -771,7 +804,7 @@ export default function FullScreenMapExperience() {
                 luogo e la trasparenza, nella seconda restavano due bottoni.
                 Il luogo non e' un doppione del chip qui sopra: quello dice zona
                 e regione, questo dice il comune. */}
-            <p className="mt-3 flex shrink-0 flex-wrap items-center gap-x-2 gap-y-1 border-b border-white/15 pb-3 text-xs">
+            <p className="mt-3 flex shrink-0 flex-wrap items-center gap-x-2 gap-y-1 border-b border-white/15 pb-3 text-[13px]">
               {(selectedItem.value?.price || selectedItem.value?.budget) && (
                 <>
                   <span className="font-bold text-white">
@@ -810,7 +843,7 @@ export default function FullScreenMapExperience() {
                 {selectedItem.types.map((tipo) => (
                   <span
                     key={tipo}
-                    className="rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white/75"
+                    className="rounded-full bg-white/10 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-white/80"
                   >
                     {tipo}
                   </span>
@@ -818,8 +851,10 @@ export default function FullScreenMapExperience() {
               </p>
             )}
 
-            <div className="relative mt-3 min-h-0 flex-1 overflow-y-auto">
-              <p className="text-xs leading-relaxed text-white/80">{selectedItem.description}</p>
+            <div ref={descrizioneRef} className="relative mt-3 min-h-0 flex-1 overflow-y-auto">
+              <p className="text-[13px] leading-relaxed text-white/85">
+                {selectedItem.description}
+              </p>
             </div>
 
             {/* Le azioni stanno fuori dalla parte che scorre: erano l'ultimo
@@ -827,10 +862,12 @@ export default function FullScreenMapExperience() {
                 meta'. Un bottone mozzato non sembra scorrevole, sembra rotto.
                 La sfumatura sopra dice che il testo continua sotto il taglio. */}
             <div className="relative shrink-0 pt-3">
-              <span
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-x-0 -top-6 h-6 bg-gradient-to-t from-black/90 to-transparent"
-              />
+              {descrizioneScorre && (
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-x-0 -top-6 h-6 bg-gradient-to-t from-black/90 to-transparent"
+                />
+              )}
               <PlaceBusinessActions
                 item={selectedItem}
                 userLocation={userLoc}
