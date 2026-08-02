@@ -27,6 +27,7 @@ import InteractiveMap from '../components/InteractiveMap';
 import JsonLd from '../components/JsonLd';
 import Newsletter from '../components/Newsletter';
 import PageLayout from '../components/PageLayout';
+import PostiInVetrina from '../components/discovery/PostiInVetrina';
 import Pagination from '../components/Pagination';
 import Section from '../components/Section';
 import SEO from '../components/SEO';
@@ -464,101 +465,114 @@ export default function Esplora() {
 
       {/* HEADER COMPATTO — banda carta atlante, ricerca inline. */}
       <section className="bg-[var(--color-sand,#faf7f2)] border-b border-[var(--color-border)] pt-28 pb-10 md:pt-32 md:pb-12 text-[var(--color-ink,#1a2b3c)]">
-        <div className="mx-auto max-w-5xl px-6 md:px-12">
+        {/* Il contenitore passa da 5xl a 7xl: a 1440px l'apertura stava in
+            1024px e il fianco destro restava vuoto. Lo spazio ora lo occupa la
+            vetrina dei posti veri, perche' la pagina della scoperta apriva
+            senza niente da scoprire — la prima scheda arrivava a 2481px. */}
+        <div className="mx-auto max-w-7xl px-6 md:px-12">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <p className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
               Esplora &amp; Archivio
             </p>
             <AtlanteViews current="archivio" />
           </div>
-          <h1 className="mt-4 font-serif text-[clamp(2.25rem,4vw+1rem,3.75rem)] leading-[1.02] text-[var(--color-ink)]">
-            Il prossimo posto, prima ancora di sapere dove.
-          </h1>
-          <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/62 md:text-lg">
-            Inizia dalle collezioni che scegliamo a mano, poi stringi per zona, tipo di posto e
-            periodo.
-          </p>
 
-          <div className="relative mt-8 max-w-2xl">
-            <form
-              ref={searchFormRef}
-              role="search"
-              onSubmit={(event) => {
-                event.preventDefault();
-                submitSearch(searchInput);
-              }}
-              className="relative flex items-center gap-2 rounded-full border border-black/10 bg-white px-2 py-1.5 shadow-sm"
-            >
-              <Search
-                size={18}
-                className="ml-3 shrink-0 text-black/60 md:ml-4"
-                aria-hidden="true"
-              />
-              <input
-                aria-label="Cerca nei posti, nelle esperienze e nelle guide"
-                aria-autocomplete="list"
-                type="search"
-                value={searchInput}
-                onChange={(event) => {
-                  setSearchInput(event.target.value);
-                  setShowAutocomplete(event.target.value.trim().length >= 2);
-                }}
-                onFocus={() => {
-                  if (searchInput.trim().length >= 2) setShowAutocomplete(true);
-                }}
-                placeholder="es. Puglia, hotel con vista, weekend in Toscana…"
-                className="min-w-0 flex-1 bg-transparent py-3 text-base text-[var(--color-ink)] placeholder:text-black/60 focus:outline-none"
-              />
-              <button
-                type="submit"
-                className="min-h-11 rounded-full bg-[var(--color-ink)] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[var(--color-accent-hover)] sm:px-6"
-              >
-                Cerca
-              </button>
-              {showAutocomplete && (
-                <AutocompleteResults
-                  query={searchInput}
-                  archiveItems={archiveItems}
-                  onSelect={handleAutocompleteSelect}
-                />
-              )}
-            </form>
-            <button
-              type="button"
-              onClick={() => setShowMap((prev) => !prev)}
-              aria-expanded={showMap}
-              className="mt-3 inline-flex items-center gap-2 text-sm text-black/55 transition-colors hover:text-[var(--color-ink)]"
-            >
-              <MapIcon size={14} /> {showMap ? 'Nascondi anteprima mappa' : 'Anteprima mappa'}
-            </button>
-          </div>
+          <div className="mt-4 grid gap-10 lg:grid-cols-[minmax(0,1fr)_23rem] lg:items-start lg:gap-14">
+            <div className="min-w-0">
+              <h1 className="font-serif text-[clamp(2.25rem,4vw+1rem,3.75rem)] leading-[1.02] text-[var(--color-ink)]">
+                Il prossimo posto, prima ancora di sapere dove.
+              </h1>
+              <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/62 md:text-lg">
+                Inizia dalle collezioni che scegliamo a mano, poi stringi per zona, tipo di posto e
+                periodo.
+              </p>
 
-          {/* DOMANDA-GUIDA INLINE — 4 scelte, risultato immediato. */}
-          <div className="mt-8 border-t border-black/10 pt-6">
-            <p className="text-sm font-medium text-[var(--color-ink)]">Cosa cerchi adesso?</p>
-            <div className="-mx-6 mt-3 flex gap-2 overflow-x-auto px-6 pb-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:px-0 [&::-webkit-scrollbar]:hidden">
-              {GUIDE_INTENTS.map((intent) => {
-                const isActive =
-                  intent.apply !== 'reset' &&
-                  ((intent.apply.zone && filters.zone === intent.apply.zone) ||
-                    (intent.apply.type && filters.type === intent.apply.type));
-                return (
+              <div className="relative mt-8 max-w-2xl">
+                <form
+                  ref={searchFormRef}
+                  role="search"
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    submitSearch(searchInput);
+                  }}
+                  className="relative flex items-center gap-2 rounded-full border border-black/10 bg-white px-2 py-1.5 shadow-sm"
+                >
+                  <Search
+                    size={18}
+                    className="ml-3 shrink-0 text-black/60 md:ml-4"
+                    aria-hidden="true"
+                  />
+                  <input
+                    aria-label="Cerca nei posti, nelle esperienze e nelle guide"
+                    aria-autocomplete="list"
+                    type="search"
+                    value={searchInput}
+                    onChange={(event) => {
+                      setSearchInput(event.target.value);
+                      setShowAutocomplete(event.target.value.trim().length >= 2);
+                    }}
+                    onFocus={() => {
+                      if (searchInput.trim().length >= 2) setShowAutocomplete(true);
+                    }}
+                    placeholder="es. Puglia, hotel con vista, weekend in Toscana…"
+                    className="min-w-0 flex-1 bg-transparent py-3 text-base text-[var(--color-ink)] placeholder:text-black/60 focus:outline-none"
+                  />
                   <button
-                    key={intent.label}
-                    type="button"
-                    aria-pressed={Boolean(isActive)}
-                    onClick={() => handleGuideIntent(intent)}
-                    className={`min-h-11 shrink-0 whitespace-nowrap rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-300 ease-out hover:scale-[1.03] active:scale-[0.98] cursor-pointer ${
-                      isActive
-                        ? 'border-[var(--color-ink)] bg-[var(--color-ink)] text-white shadow-[var(--shadow-premium)]'
-                        : 'border-black/10 bg-white text-black/65 hover:border-[var(--color-ink)]/40 hover:text-[var(--color-ink)]'
-                    }`}
+                    type="submit"
+                    className="min-h-11 rounded-full bg-[var(--color-ink)] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[var(--color-accent-hover)] sm:px-6"
                   >
-                    {intent.label}
+                    Cerca
                   </button>
-                );
-              })}
+                  {showAutocomplete && (
+                    <AutocompleteResults
+                      query={searchInput}
+                      archiveItems={archiveItems}
+                      onSelect={handleAutocompleteSelect}
+                    />
+                  )}
+                </form>
+                <button
+                  type="button"
+                  onClick={() => setShowMap((prev) => !prev)}
+                  aria-expanded={showMap}
+                  className="mt-3 inline-flex items-center gap-2 text-sm text-black/55 transition-colors hover:text-[var(--color-ink)]"
+                >
+                  <MapIcon size={14} /> {showMap ? 'Nascondi anteprima mappa' : 'Anteprima mappa'}
+                </button>
+              </div>
+
+              {/* DOMANDA-GUIDA INLINE — 4 scelte, risultato immediato. */}
+              <div className="mt-8 border-t border-black/10 pt-6">
+                <p className="text-sm font-medium text-[var(--color-ink)]">Cosa cerchi adesso?</p>
+                <div className="-mx-6 mt-3 flex gap-2 overflow-x-auto px-6 pb-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:px-0 [&::-webkit-scrollbar]:hidden">
+                  {GUIDE_INTENTS.map((intent) => {
+                    const isActive =
+                      intent.apply !== 'reset' &&
+                      ((intent.apply.zone && filters.zone === intent.apply.zone) ||
+                        (intent.apply.type && filters.type === intent.apply.type));
+                    return (
+                      <button
+                        key={intent.label}
+                        type="button"
+                        aria-pressed={Boolean(isActive)}
+                        onClick={() => handleGuideIntent(intent)}
+                        className={`min-h-11 shrink-0 whitespace-nowrap rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-300 ease-out hover:scale-[1.03] active:scale-[0.98] cursor-pointer ${
+                          isActive
+                            ? 'border-[var(--color-ink)] bg-[var(--color-ink)] text-white shadow-[var(--shadow-premium)]'
+                            : 'border-black/10 bg-white text-black/65 hover:border-[var(--color-ink)]/40 hover:text-[var(--color-ink)]'
+                        }`}
+                      >
+                        {intent.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
+
+            {/* Riceve la stessa lista filtrata della griglia sotto: stringendo
+                per zona o tipo cambia anche la vetrina. */}
+            <PostiInVetrina items={filteredContentItems} />
           </div>
         </div>
       </section>
