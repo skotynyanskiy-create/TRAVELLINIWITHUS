@@ -210,10 +210,15 @@ This file previously described a setup that no longer existed. What is true now:
 
 - **`.claude/settings.json` is the effective project config.** It lists all 12
   `.mcp.json` servers, 97 allow rules, 24 deny rules, 5 hook commands across 3
-  events, `effortLevel: high`, and `permissions.defaultMode: auto`. The harness
-  wins over this file for both effort and permission mode — a CLI flag such as
+  events, and `permissions.defaultMode: auto`. The harness wins over this file for
+  both effort and permission mode — a CLI flag such as
   `--dangerously-skip-permissions` overrides `defaultMode`, so never quote either
   as fact without checking the running session.
+- **`effortLevel` non sta più qui (rimosso 2026-08-02).** Le settings caricano
+  utente → progetto → local, quindi un `effortLevel` di progetto sovrascriveva in
+  silenzio la scelta dell'owner nel picker: `xhigh` in `~/.claude/settings.json`
+  veniva declassato a `high` dentro questo repo. Il livello lo decide l'owner,
+  non il repo — non rimettere questa chiave nel file di progetto.
 - **Bash rule syntax**: `Bash(cmd:*)` and `Bash(cmd *)` are equivalent trailing
   wildcards (confirmed in the permissions docs). Rules must match each subcommand
   of a compound command independently, and `npx`/`docker exec`-style runners are

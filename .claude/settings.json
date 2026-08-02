@@ -1,5 +1,4 @@
 {
-  "effortLevel": "high",
   "enableAllProjectMcpServers": false,
   "enabledMcpjsonServers": [
     "firebase",
