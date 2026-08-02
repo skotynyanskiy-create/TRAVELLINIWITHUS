@@ -2,7 +2,8 @@
 title: Assetto ambiente di lavoro AI — ricerca e decisioni
 date: 2026-07-26
 type: decision
-status: proposto
+status: proposed
+area: workspace
 ---
 
 # Assetto ambiente di lavoro AI (2026-07-26)

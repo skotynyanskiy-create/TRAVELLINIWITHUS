@@ -2,7 +2,7 @@
 title: Egress dei video — misure e destinazione
 date: 2026-07-26
 type: decision
-status: proposto
+status: proposed
 area: delivery
 ---
 
