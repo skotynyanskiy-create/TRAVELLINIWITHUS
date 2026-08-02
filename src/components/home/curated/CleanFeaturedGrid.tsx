@@ -38,6 +38,23 @@ const GRID_TILES: GridTile[] = items.map((item) => {
   };
 });
 
+/** In lettere, perché la voce della home è editoriale e non un contatore.
+ *  Oltre il nove non si va: GRID_SIZE è il tetto della selezione. */
+const NUMERALE: Record<number, string> = {
+  1: 'Un',
+  2: 'Due',
+  3: 'Tre',
+  4: 'Quattro',
+  5: 'Cinque',
+  6: 'Sei',
+  7: 'Sette',
+  8: 'Otto',
+  9: 'Nove',
+};
+
+const NUMERO_POSTI = NUMERALE[GRID_TILES.length] ?? String(GRID_TILES.length);
+const POSTI_PRESI = GRID_TILES.length === 1 ? 'posto, preso' : 'posti, presi';
+
 export default function CleanFeaturedGrid() {
   if (GRID_TILES.length === 0) return null;
 
@@ -51,8 +68,12 @@ export default function CleanFeaturedGrid() {
               <Sparkles size={14} />
               Il registro dei posti
             </span>
+            {/* selectHomeGridItems ne restituisce "fino a" 9: se un posto perde
+                la cover o esce dalla selezione, la griglia ne mostra 8 e un
+                titolo scritto a mano direbbe il falso. Il numero si conta dalle
+                tile vere, come impone homeComposition.ts. */}
             <h2 className="mt-3 font-serif text-3xl font-normal leading-tight md:text-5xl">
-              Nove posti, presi uno per uno.
+              {NUMERO_POSTI} {POSTI_PRESI} uno per uno.
             </h2>
           </div>
           <Link

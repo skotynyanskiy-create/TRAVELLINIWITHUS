@@ -110,8 +110,15 @@ Regole non negoziabili:
   è scuro, mai bianco; il testo piccolo usa `--color-accent-text`.
 - Ogni valore entra solo dopo la verifica WCAG (accent/sand ≥3 ·
   accent-text ≥4,5 su sand e bianco · bianco/accent-hover ≥4,5 ·
-  accent-on-dark/ink ≥4,5). Le rotte del gate Lighthouse coprono i tre temi via
-  `audienceFromPath` (`/family` → family, `/collaborazioni` e `/media-kit` → brand).
+  accent-on-dark/ink ≥4,5 · **muted e muted-fg ≥4,5 su sand**). Le rotte del gate
+  Lighthouse coprono i tre temi via `audienceFromPath` (`/family` → family,
+  `/collaborazioni` e `/media-kit` → brand).
+- **Se un tema ridefinisce `--color-sand`, deve rivedere anche i token di testo,
+  non solo gli accenti.** Family e brand erano nati senza override di
+  `--color-muted`/`--color-muted-fg`: il `#78716c` di default regge 4,52:1 sulla
+  sabbia ma scende a 4,36 su avorio e 4,39 su azzurro, cioè sotto AA su ogni
+  didascalia muted delle rotte a tema (audit 2026-08-02). Il token mancava dalla
+  checklist qui sopra, e per questo nessuno se ne era accorto.
 - Limite noto e accettato: `bg-white`, `text-black` e i `rounded-*` nativi non
   seguono il tema. I fondi restano chiari in tutti e tre proprio per questo.
 

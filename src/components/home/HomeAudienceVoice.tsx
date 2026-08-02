@@ -148,16 +148,18 @@ export default function HomeAudienceVoice() {
               {...rivela(0.32)}
               className="mt-12 grid grid-cols-3 gap-6 border-t border-[var(--color-border)] pt-8"
             >
+              {/* L'etichetta è il <dt>, una volta sola. Prima stava in un <dt>
+                  sr-only e si ripeteva visibile dentro il <dd>: lo screen reader
+                  la leggeva due volte ("posti provati di persona, 29, posti
+                  provati di persona"). col-reverse tiene il numero sopra senza
+                  invertire l'ordine richiesto dal markup di una <dl>. */}
               {voice.proof.map((prova) => (
-                <div key={prova.label}>
-                  <dt className="sr-only">{prova.label}</dt>
-                  <dd>
-                    <span className="block font-serif text-3xl leading-none tabular-nums md:text-[2.75rem]">
-                      {prova.value}
-                    </span>
-                    <span className="mt-2.5 block max-w-[22ch] text-[11px] uppercase leading-snug tracking-[0.12em] text-[var(--color-muted-fg)]">
-                      {prova.label}
-                    </span>
+                <div key={prova.label} className="flex flex-col-reverse gap-2.5">
+                  <dt className="block max-w-[22ch] text-[11px] uppercase leading-snug tracking-[0.12em] text-[var(--color-muted-fg)]">
+                    {prova.label}
+                  </dt>
+                  <dd className="block font-serif text-3xl leading-none tabular-nums md:text-[2.75rem]">
+                    {prova.value}
                   </dd>
                 </div>
               ))}

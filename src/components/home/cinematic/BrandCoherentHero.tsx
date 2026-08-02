@@ -80,7 +80,7 @@ export default function BrandCoherentHero() {
             <motion.div variants={itemVariants} className="mt-8 flex flex-wrap items-center gap-4">
               <MagneticWrapper strength={6}>
                 <a
-                  href="#pagina-02"
+                  href="#indice-vivo"
                   className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-md transition-all hover:bg-[var(--color-accent-hover)] cursor-pointer"
                 >
                   Apri il registro <ArrowDown size={16} />
@@ -182,7 +182,7 @@ export default function BrandCoherentHero() {
               }
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ delay: 0.55, duration: 0.6, ease: 'easeOut' }}
-              className="absolute -bottom-6 -left-6 max-w-xs rotate-[-3deg] rounded-2xl border border-[var(--color-border)] bg-[var(--color-sand,#faf7f2)] p-4 shadow-lg"
+              className="absolute bottom-12 -left-6 max-w-xs rotate-[-3deg] rounded-2xl border border-[var(--color-border)] bg-[var(--color-sand,#faf7f2)] p-4 shadow-lg"
             >
               <p className="font-serif text-sm italic leading-snug text-[var(--color-ink)]">
                 "La strada giusta non è quella più breve."

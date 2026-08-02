@@ -5,7 +5,6 @@ import { Link } from '@/src/components/TransitionLink';
 import OptimizedImage from '../OptimizedImage';
 import { heartPulse } from '../../lib/animations';
 import type { ArticleData } from './types';
-import RatingPill from '../RatingPill';
 import { PARTNERSHIP_LABEL } from '@/src/types/content';
 
 interface ArticleHeroProps {
@@ -98,12 +97,6 @@ export default function ArticleHero({
             <span className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-white/80">
               <Clock size={14} /> {readingTime} di lettura
             </span>
-            {article.review?.overall != null && (
-              <>
-                <span className="w-8 h-px bg-white/30"></span>
-                <RatingPill overall={article.review.overall} tone="dark" />
-              </>
-            )}
           </div>
 
           <h1 className="text-[clamp(2.25rem,6vw,3rem)] md:text-7xl lg:text-8xl font-serif leading-[1.1] mb-8 tracking-tight">

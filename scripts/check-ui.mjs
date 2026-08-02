@@ -116,6 +116,64 @@ function pushIssue(issues, level, filePath, line, message) {
   });
 }
 
+/**
+ * Token CSS dichiarati: `--x:` in un qualsiasi CSS del progetto, piu' quelli
+ * impostati inline da JSX (`style={{ '--x': ... }}`), che sono definizioni a
+ * tutti gli effetti.
+ */
+function collectDefinedTokens() {
+  const defined = new Set();
+  const cssFiles = [path.join(rootDir, 'index.html')];
+  const stack = [srcDir];
+  while (stack.length) {
+    const dir = stack.pop();
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) stack.push(full);
+      else if (entry.name.endsWith('.css')) cssFiles.push(full);
+    }
+  }
+  for (const file of cssFiles) {
+    if (!fs.existsSync(file)) continue;
+    for (const m of fs.readFileSync(file, 'utf8').matchAll(/(--[a-zA-Z0-9_-]+)\s*:/g)) {
+      defined.add(m[1]);
+    }
+  }
+  for (const file of walk(srcDir)) {
+    for (const m of fs.readFileSync(file, 'utf8').matchAll(/['"`](--[a-zA-Z0-9_-]+)['"`]\s*:/g)) {
+      defined.add(m[1]);
+    }
+  }
+  return defined;
+}
+
+const definedTokens = collectDefinedTokens();
+
+/**
+ * Una `var(--x)` che punta a un token inesistente non fa rumore: la CSS resta
+ * valida, typecheck non entra nelle stringhe di classe e axe non se ne accorge.
+ * Ma dentro un valore arbitrario Tailwind (`shadow-[var(--x)]`) invalida
+ * l'INTERA proprieta' — ed e' cosi' che `--shadow-soft` ha spento per mesi il
+ * focus ring di ContentCard (audit 2026-08-02). Senza fallback e' un errore;
+ * con fallback degrada e resta solo codice morto da togliere.
+ */
+function checkTokenReferences(issues, filePath, content) {
+  for (const match of content.matchAll(/var\(\s*(--[a-zA-Z0-9_-]+)\s*(,?)/g)) {
+    const [, token, comma] = match;
+    if (token.startsWith('--tw-') || definedTokens.has(token)) continue;
+    const hasFallback = comma === ',';
+    pushIssue(
+      issues,
+      hasFallback ? 'warn' : 'error',
+      filePath,
+      getLineNumber(content, match.index),
+      hasFallback
+        ? `CSS variable "${token}" is never defined; only the fallback ever applies. Remove the dead token reference.`
+        : `CSS variable "${token}" is never defined and has no fallback. Inside an arbitrary value this invalidates the whole declaration.`
+    );
+  }
+}
+
 const files = walk(srcDir);
 const issues = [];
 
@@ -152,6 +210,8 @@ for (const filePath of files) {
       );
     }
   }
+
+  checkTokenReferences(issues, filePath, content);
 
   const imgMatches = [...content.matchAll(/<img\b(?![^>]*\balt=)[^>]*>/g)];
   for (const match of imgMatches) {

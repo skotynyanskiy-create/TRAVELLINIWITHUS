@@ -1,13 +1,12 @@
 import { Check, Minus } from 'lucide-react';
 import type { ContentReview } from '../types/content';
-import { formatScore } from '../utils/formatScore';
-import VerdictSeal from './VerdictSeal';
 
 /**
- * Scheda redazionale R+B di un posto — voto, verdetto, criteri, pro e contro.
- * Non è una striscia di stelle da content-farm: è un giudizio editoriale calmo.
+ * Scheda redazionale R+B di un posto — verdetto, giudizio, pro e contro.
+ * Non è una striscia di stelle da content-farm e non è un voto: è un giudizio
+ * editoriale calmo, scritto a parole.
  *
- * Renderizzata SOLO quando ci sono dati reali. Nessun voto è mai inventato:
+ * Renderizzata SOLO quando ci sono dati reali. Nessun giudizio è mai inventato:
  * se `review` è vuota o assente, il componente non produce nulla.
  */
 export default function ReviewBlock({
@@ -19,12 +18,11 @@ export default function ReviewBlock({
 }) {
   if (!review) return null;
 
-  const { overall, verdict, summary, criteria, pros, cons } = review;
-  const hasCriteria = criteria != null && criteria.length > 0;
+  const { verdict, summary, pros, cons } = review;
   const hasPros = pros != null && pros.length > 0;
   const hasCons = cons != null && cons.length > 0;
 
-  if (overall == null && !hasCriteria && !hasPros && !hasCons) return null;
+  if (!verdict && !summary && !hasPros && !hasCons) return null;
 
   return (
     <section
@@ -35,50 +33,14 @@ export default function ReviewBlock({
         La nostra scheda
       </p>
 
-      {overall != null && (
-        <div className="mt-4 flex items-center gap-4">
-          <VerdictSeal overall={overall} size="lg" />
-          {verdict && (
-            <span className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-text)]">
-              {verdict}
-            </span>
-          )}
-        </div>
+      {verdict && (
+        <p className="mt-4 font-serif text-2xl leading-tight text-[var(--color-ink)] md:text-3xl">
+          {verdict}
+        </p>
       )}
 
       {summary && (
         <p className="mt-4 text-base leading-relaxed text-[var(--color-ink-2)]">{summary}</p>
-      )}
-
-      {hasCriteria && (
-        <dl className="mt-6 space-y-3">
-          {criteria.map((criterion) => {
-            const pct = Math.max(0, Math.min(100, (criterion.score / 10) * 100));
-            return (
-              <div key={criterion.name} className="flex items-center gap-4">
-                <dt className="w-28 shrink-0 text-sm text-[var(--color-ink-2)]">
-                  {criterion.name}
-                </dt>
-                <div
-                  className="h-1.5 flex-1 overflow-hidden rounded-full bg-[var(--color-muted-bg)]"
-                  role="meter"
-                  aria-valuenow={criterion.score}
-                  aria-valuemin={0}
-                  aria-valuemax={10}
-                  aria-label={`${criterion.name}: ${formatScore(criterion.score)} su 10`}
-                >
-                  <div
-                    className="h-full rounded-full bg-[var(--color-accent)]"
-                    style={{ width: `${pct}%` }}
-                  />
-                </div>
-                <dd className="w-9 shrink-0 text-right font-serif text-sm text-[var(--color-ink)]">
-                  {formatScore(criterion.score)}
-                </dd>
-              </div>
-            );
-          })}
-        </dl>
       )}
 
       {(hasPros || hasCons) && (

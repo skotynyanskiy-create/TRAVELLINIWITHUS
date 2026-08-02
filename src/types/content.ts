@@ -30,26 +30,19 @@ export const PARTNERSHIP_LABEL: Record<PartnershipKind, string> = {
   affiliate: 'Affiliato',
 };
 
-/** Un criterio valutato della scheda redazionale (es. "Cucina", score 8.4). */
-export interface ReviewCriterion {
-  name: string;
-  /** Punteggio 0-10 (mezza cifra ok). */
-  score: number;
-}
-
 /**
  * Scheda redazionale R+B di un posto. Renderizzata SOLO se presente — mai
  * inventata: nessun ContentItem reale va popolato con dati fittizi.
+ *
+ * Il giudizio non ha voti. Nessun punteggio, nessuna media, nessun criterio
+ * numerico: un numero comprime in una cifra la sola cosa che qui conta davvero,
+ * cioè *per chi* un posto vale e *quando*. Il verdetto si scrive a parole.
  */
 export interface ContentReview {
-  /** Voto complessivo 0-10, mezza cifra ok (es. 8.6). Opzionale. */
-  overall?: number;
   /** Etichetta breve del verdetto (es. "Ci torneremmo"). */
   verdict?: string;
   /** Una riga di giudizio. */
   summary?: string;
-  /** 2-5 criteri valutati. */
-  criteria?: ReviewCriterion[];
   pros?: string[];
   cons?: string[];
   /** Una riga "per chi è" — solo dal materiale editoriale reale. */

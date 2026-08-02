@@ -89,7 +89,7 @@ export default function CinematicHomepage() {
         <HomeAudienceVoice />
 
         {sections.map((key) => (
-          <section key={key} id={SECTION_ID[key]}>
+          <section key={key} id={SECTION_ID[key]} className="scroll-mt-28">
             {SECTIONS[key]}
           </section>
         ))}

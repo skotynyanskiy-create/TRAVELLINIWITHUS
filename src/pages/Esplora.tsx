@@ -495,7 +495,12 @@ export default function Esplora() {
                     event.preventDefault();
                     submitSearch(searchInput);
                   }}
-                  className="relative flex items-center gap-2 rounded-full border border-black/10 bg-white px-2 py-1.5 shadow-sm"
+                  /* L'indicatore di focus sta qui e non sull'<input>: dentro un
+                     pill composito (icona + campo + bottone) un outline sul solo
+                     campo disegna un rettangolo in mezzo alla pillola. Col ring
+                     sul contenitore segue il rounded-full. L'input tiene il suo
+                     `focus:outline-none` proprio per questo. */
+                  className="relative flex items-center gap-2 rounded-full border border-black/10 bg-white px-2 py-1.5 shadow-sm focus-within:ring-2 focus-within:ring-[var(--color-accent)]"
                 >
                   <Search
                     size={18}
@@ -593,7 +598,7 @@ export default function Esplora() {
       </AnimatePresence>
 
       {/* CHIP TYPE + filtri avanzati progressivi */}
-      <Section id="esplora-archivio" spacing="tight" className="!pt-4">
+      <Section id="esplora-archivio" spacing="tight" className="scroll-mt-28 !pt-4">
         {usingPreview && (
           <div className="mb-6 rounded-[var(--radius-md)] border border-[var(--color-accent)]/25 bg-[var(--color-accent-soft)] px-5 py-4 text-sm leading-relaxed text-[var(--color-accent-text)]">
             Stai vedendo l'archivio in anteprima editoriale. I contenuti vengono aggiornati man mano

@@ -7,7 +7,7 @@ interface PageLayoutProps {
 export default function PageLayout({ children }: PageLayoutProps) {
   return (
     <div className="min-h-screen overflow-x-clip bg-[var(--color-sand)]">
-      <div className="pt-32 md:pt-24 pb-32">{children}</div>
+      <div className="pt-24 pb-32">{children}</div>
     </div>
   );
 }

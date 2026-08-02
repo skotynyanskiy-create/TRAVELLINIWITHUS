@@ -7,7 +7,6 @@ import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Newsletter from '../components/Newsletter';
 import ReviewBlock from '../components/ReviewBlock';
-import VerdictSeal from '../components/VerdictSeal';
 import DealCard from '../components/DealCard';
 import PostNavigation from '../components/PostNavigation';
 import PostiVicini from '../components/posto/PostiVicini';
@@ -147,21 +146,16 @@ export default function Posto() {
         }
       : {}),
     // Recensione EDITORIALE di prima parte (Travelliniwithus recensisce il
-    // posto). NON usiamo aggregateRating: sarebbe un rating self-authored su
-    // un'attività terza — vietato dalle policy Google structured-data e segnale
-    // da content-farm. Un Review con author=Organization è corretto e onesto.
-    ...(item.review?.overall != null
+    // posto). Nessun rating: né aggregateRating (self-authored su un'attività
+    // terza — vietato dalle policy Google structured-data), né reviewRating,
+    // perché il giudizio qui non è un numero. Un Review con
+    // author=Organization e il solo reviewBody è valido e onesto.
+    ...(item.review?.summary
       ? {
           review: {
             '@type': 'Review',
-            reviewRating: {
-              '@type': 'Rating',
-              ratingValue: item.review.overall,
-              bestRating: 10,
-              worstRating: 0,
-            },
             author: { '@type': 'Organization', name: 'Travelliniwithus' },
-            ...(item.review.summary ? { reviewBody: item.review.summary } : {}),
+            reviewBody: item.review.summary,
           },
         }
       : {}),
@@ -183,7 +177,10 @@ export default function Posto() {
         title={`${item.hook} — ${item.title}`}
         description={item.description}
         canonical={canonical}
-        image={item.cover || undefined}
+        // Card 1200x630 di generate-og-images.mjs, non `item.cover` (frame reel
+        // 9:16 e path relativo: gli unfurl vogliono un URL assoluto). I
+        // placeholder non hanno card generata e ricadono sul default.
+        image={item.isPlaceholder ? undefined : `${SITE_URL}/og/posto-${item.id}.jpg`}
         // Pass di onestà: i posti placeholder restano visibili ma NON indicizzati
         // (evita thin-content su ~40 pagine finte). Reversibile: quando l'import
         // Instagram porta il dato reale (isPlaceholder:false) tornano indicizzabili.
@@ -217,9 +214,8 @@ export default function Posto() {
               {item.hook}
             </h1>
 
-            {/* Cluster verdetto — il Timbro accanto a verdetto editoriale + luogo */}
+            {/* Cluster verdetto — verdetto editoriale + luogo */}
             <div className="mt-4 flex items-center gap-4">
-              <VerdictSeal overall={item.review?.overall} size="md" />
               <div className="min-w-0">
                 {item.review?.verdict && (
                   <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-text)]">

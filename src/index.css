@@ -184,6 +184,11 @@
   --color-accent-on-dark: #ff9fbe; /* 10,33:1 su ink */
   --color-accent-soft: #fdf1f6;
 
+  /* Il tema sposta il fondo, quindi deve rispostare anche il testo terziario:
+     il #78716c di default vale 4,39:1 su questo azzurro — sotto AA. */
+  --color-muted: #6f6862; /* 5,01:1 su sand */
+  --color-muted-fg: #6f6862; /* 5,01:1 su sand */
+
   --radius-sm: 0.5rem; /* 8 */
   --radius-md: 0.8125rem; /* 13 */
   --radius-lg: 1.125rem; /* 18 */
@@ -206,6 +211,10 @@
   --color-accent-text: #7d6426; /* 5,13:1 su sand, 5,64:1 su bianco */
   --color-accent-on-dark: #d8b96a; /* 10,43:1 su ink */
   --color-accent-soft: #f1ede4;
+
+  /* Come per family: su avorio il #78716c di default scende a 4,36:1. */
+  --color-muted: #6f6862; /* 4,99:1 su sand */
+  --color-muted-fg: #6f6862; /* 4,99:1 su sand */
 
   --radius-sm: 0.25rem; /* 4 */
   --radius-md: 0.4375rem; /* 7 */

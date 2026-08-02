@@ -319,7 +319,11 @@ export default function Navbar() {
               className="group whitespace-nowrap font-serif text-base font-medium tracking-tight text-[var(--color-ink)] transition-all duration-300 md:text-lg xl:text-[1.35rem]"
             >
               Travellini
-              <span className="font-bold text-[var(--color-accent)] transition-colors group-hover:text-[var(--color-gold)]">
+              {/* Testo su chiaro: --color-accent è il riempimento (3,13:1), non
+                  il testo. Il marchio passa AA solo con --color-accent-text.
+                  L'hover puntava a --color-gold, un token che non esiste: senza
+                  fallback la classe non cambiava nulla. */}
+              <span className="font-bold text-[var(--color-accent-text)] transition-colors group-hover:text-[var(--color-accent-hover)]">
                 with
               </span>
               us
@@ -402,8 +406,8 @@ export default function Navbar() {
                         aria-haspopup={hasDropdown ? 'menu' : undefined}
                         className={`relative flex items-center gap-1 whitespace-nowrap rounded-full px-1.5 py-1 xl:px-3 xl:py-1.5 text-[9.5px] xl:text-[11.5px] font-bold uppercase tracking-[0.1em] xl:tracking-[0.14em] transition-all duration-300 ${
                           active
-                            ? 'text-[var(--color-accent)] font-bold border-b-2 border-[var(--color-accent)]'
-                            : 'text-[var(--color-ink)] hover:text-[var(--color-accent)]'
+                            ? 'text-[var(--color-accent-text)] font-bold border-b-2 border-[var(--color-accent)]'
+                            : 'text-[var(--color-ink)] hover:text-[var(--color-accent-text)]'
                         }`}
                       >
                         <span>{item.name}</span>

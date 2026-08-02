@@ -1,6 +1,5 @@
 import { ArrowUpRight, Eye, MapPin } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
-import RatingPill from '../RatingPill';
 import { useQuickView } from '../../context/QuickViewContext';
 import { catColor } from '../../config/categoryColors';
 import { hasSpecificReelLink } from '../../utils/mediaUrl';
@@ -35,6 +34,12 @@ export default function ContentCard({ item }: { item: ContentItem }) {
 
   return (
     <div className="group/card relative">
+      {/* L'ombra usa --shadow-sm, non --shadow-soft: quel token non esiste, e
+          una var non definita dentro shadow-[] rende invalida l'INTERA catena
+          box-shadow di Tailwind — che è la stessa che disegna il focus ring.
+          Risultato: `focus-visible:ring-2` si calcolava giusto
+          (0 0 0 4px #ff4d1a) ma `box-shadow` restava `none`, e il bottone era
+          l'unico controllo del sito senza indicatore di focus. */}
       <button
         type="button"
         aria-label={`Anteprima rapida di ${item.title}`}
@@ -43,7 +48,7 @@ export default function ContentCard({ item }: { item: ContentItem }) {
           e.stopPropagation();
           open(item);
         }}
-        className={`absolute top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-[var(--color-ink)] shadow-[var(--shadow-soft)] backdrop-blur-md transition-all duration-200 hover:bg-white hover:text-[var(--color-accent)] focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 max-md:opacity-100 md:opacity-0 md:group-hover/card:opacity-100 ${
+        className={`absolute top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-[var(--color-ink)] shadow-[var(--shadow-sm)] backdrop-blur-md transition-all duration-200 hover:bg-white hover:text-[var(--color-accent)] focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 max-md:opacity-100 md:opacity-0 md:group-hover/card:opacity-100 ${
           partnerLabel ? 'right-14' : 'right-3'
         }`}
       >
@@ -115,7 +120,6 @@ export default function ContentCard({ item }: { item: ContentItem }) {
             {item.value?.price && (
               <span className="text-xs font-bold text-[var(--color-ink)]">{item.value.price}</span>
             )}
-            <RatingPill overall={item.review?.overall} />
             {canWatchReel ? (
               <span className="ml-auto inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-transform group-hover:translate-x-0.5">
                 Guarda il reel <ArrowUpRight size={12} />

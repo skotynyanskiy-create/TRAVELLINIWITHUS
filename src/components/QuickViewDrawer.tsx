@@ -3,7 +3,6 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { ArrowUpRight, MapPin, Tag, X } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import OptimizedImage from './OptimizedImage';
-import RatingPill from './RatingPill';
 import { useQuickView } from '../context/QuickViewContext';
 import type { PartnershipKind } from '../types/content';
 
@@ -132,7 +131,6 @@ export default function QuickViewDrawer() {
                       {item.value.price}
                     </span>
                   )}
-                  <RatingPill overall={item.review?.overall} />
                   {item.deal && (
                     <span className="inline-flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink)]">
                       <Tag size={11} /> Offerta

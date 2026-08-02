@@ -142,10 +142,13 @@ export default function HiggsfieldReelCarousel() {
 
                 {/* Dove siamo — il dato che il frame non dice mai. Il timbro gli
                     sta accanto, non sotto: in basso rubava la riga alla scheda e
-                    andava a capo su due righe a 264px. */}
+                    andava a capo su due righe a 264px. Qui va solo il luogo: col
+                    timbro accanto restano ~104px, e "Novara · Emotional Grand
+                    Motel" ci andava su tre righe sopra la foto. Il nome del posto
+                    è nel modale, a un tap. */}
                 <span className="absolute inset-x-3 top-3 flex items-start justify-between gap-2">
-                  <span className="truncate text-[11px] font-bold uppercase tracking-[0.16em] text-white/90 drop-shadow">
-                    {reel.location}
+                  <span className="min-w-0 truncate text-[11px] font-bold uppercase tracking-[0.16em] text-white/90 drop-shadow">
+                    {reel.location.split('·')[0].trim()}
                   </span>
                   {disclosure && (
                     <span className="-rotate-3 shrink-0 whitespace-nowrap rounded-sm border border-[var(--color-accent-on-dark)]/80 bg-black/45 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--color-accent-on-dark)] backdrop-blur-sm">
