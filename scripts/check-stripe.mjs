@@ -2,12 +2,38 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const rootDir = process.cwd();
-const serverPath = path.join(rootDir, 'server.ts');
-const cartDrawerPath = path.join(rootDir, 'src', 'components', 'CartDrawer.tsx');
 const envExamplePath = path.join(rootDir, '.env.example');
 
-const serverContent = fs.readFileSync(serverPath, 'utf8');
-const cartDrawerContent = fs.readFileSync(cartDrawerPath, 'utf8');
+/**
+ * Il percorso dei pagamenti lato server e' cambiato due volte: prima tutto in
+ * `server.ts`, oggi nel router condiviso (`src/server/apiRoutes.ts`) che monta
+ * sia il dev server sia la Cloud Function. Si legge l'insieme, cosi' il
+ * controllo segue il codice invece di inseguirlo.
+ */
+const serverContent = ['server.ts', 'src/server/apiRoutes.ts', 'src/server/data.ts']
+  .map((file) => fs.readFileSync(path.join(rootDir, file), 'utf8'))
+  .join('\n');
+
+/**
+ * Il client del checkout **puo' non esistere**: da quando lo shop e' in lista
+ * d'attesa (`Shop.tsx`, `disableCart`) non c'e' piu' `CartDrawer.tsx`, e questo
+ * script moriva con ENOENT invece di fallire — cioe' i controlli Stripe non
+ * giravano piu' affatto, e `audit:all` cadeva con lui.
+ *
+ * Si prende il primo file presente fra i candidati; il contratto vero («al
+ * server vanno id e quantita', mai i prezzi») vive comunque in `CartContext`.
+ */
+const CANDIDATI_CLIENT = [
+  'src/components/CartDrawer.tsx',
+  'src/context/CartContext.tsx',
+  'src/pages/Shop.tsx',
+];
+const clientPath = CANDIDATI_CLIENT.map((file) => path.join(rootDir, file)).find((file) =>
+  fs.existsSync(file)
+);
+const cartDrawerContent = clientPath ? fs.readFileSync(clientPath, 'utf8') : '';
+const checkoutLatoClient = /\/api\/create-checkout-session/.test(cartDrawerContent);
+
 const envExampleContent = fs.readFileSync(envExamplePath, 'utf8');
 
 const results = [];
@@ -24,6 +50,24 @@ function expectContains(content, needle, passMessage, failMessage) {
   }
 }
 
+/**
+ * Come `expectContains` ma su espressione regolare.
+ *
+ * Serve perche' i controlli erano scritti sulle stringhe esatte `app.use(...)`
+ * e `app.post(...)`: da quando le rotte stanno su un `express.Router()`
+ * condiviso si chiamano `router.use` / `router.post`, e tre controlli davano
+ * FAIL su codice corretto — rate limiter applicati e `express.raw` al posto
+ * giusto. Un audit che fallisce per il nome della variabile insegna a
+ * ignorarlo.
+ */
+function expectMatches(content, regex, passMessage, failMessage) {
+  if (regex.test(content)) {
+    addResult('PASS', passMessage);
+  } else {
+    addResult('FAIL', failMessage);
+  }
+}
+
 expectContains(
   serverContent,
   'process.env.STRIPE_SECRET_KEY',
@@ -31,9 +75,9 @@ expectContains(
   'Server does not appear to load STRIPE_SECRET_KEY from env.'
 );
 
-expectContains(
+expectMatches(
   serverContent,
-  "app.use('/api/create-checkout-session', checkoutLimiter);",
+  /(?:app|router)\.use\('\/api\/create-checkout-session',\s*checkoutLimiter\)/,
   'Checkout endpoint is rate-limited.',
   'Checkout rate limiter not found on /api/create-checkout-session.'
 );
@@ -41,9 +85,9 @@ expectContains(
 // Limiter gemello, dichiarato nello stesso blocco di server.ts. Senza questa
 // guardia si potrebbe rimuovere il mount del contactLimiter senza che nessuno
 // script se ne accorga (regressione anti-spam silenziosa).
-expectContains(
+expectMatches(
   serverContent,
-  "app.use('/api/contact-lead', contactLimiter);",
+  /(?:app|router)\.use\('\/api\/contact-lead',\s*contactLimiter\)/,
   'Contact endpoint is rate-limited.',
   'Contact rate limiter not found on /api/contact-lead.'
 );
@@ -69,9 +113,9 @@ expectContains(
 // Il raw body e' il presupposto della verifica di firma: se qualcuno montasse
 // express.json prima di questa route, constructEvent fallirebbe su OGNI evento
 // e gli ordini sparirebbero in silenzio.
-expectContains(
+expectMatches(
   serverContent,
-  "app.post('/api/webhook', express.raw({ type: 'application/json' })",
+  /(?:app|router)\.post\('\/api\/webhook',\s*express\.raw\(/,
   'Webhook reads the raw body before signature verification.',
   'Webhook does not use express.raw; signature verification would break.'
 );
@@ -99,12 +143,16 @@ expectContains(
   'ALLOW_MOCK_CHECKOUT fallback not found.'
 );
 
-expectContains(
-  cartDrawerContent,
-  "/api/create-checkout-session",
-  'Client checkout uses the create-checkout-session endpoint.',
-  'Client checkout endpoint call not found.'
-);
+// Nessun checkout lato client non e' un errore: e' lo stato dichiarato dello
+// shop (lista d'attesa). Va detto, non fatto fallire.
+if (checkoutLatoClient) {
+  addResult('PASS', 'Client checkout uses the create-checkout-session endpoint.');
+} else {
+  addResult(
+    'INFO',
+    'Nessuna chiamata di checkout lato client: shop in lista d’attesa, Stripe non è raggiungibile dal browser.'
+  );
+}
 
 const checkoutPayloadMatch = cartDrawerContent.match(
   /body:\s*JSON\.stringify\(\s*\{(?<payload>[\s\S]*?)\}\s*\)\s*,?\s*\n\s*\}\s*\)/

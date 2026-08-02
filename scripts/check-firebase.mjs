@@ -100,7 +100,16 @@ function walk(dir) {
 
 for (const filePath of walk(srcDir)) {
   const content = fs.readFileSync(filePath, 'utf8');
-  const secretMatch = content.match(/sk_(live|test)_[A-Za-z0-9]+|-----BEGIN [A-Z ]+PRIVATE KEY-----|serviceAccount/);
+  // Cerca il MATERIALE, non il nome della variabile. Prima bastava la parola
+  // `serviceAccount` per far fallire l'audit: in `src/server/data.ts` c'e'
+  // `const serviceAccountRaw = process.env.FIREBASE_SERVICE_ACCOUNT_JSON`,
+  // cioe' esattamente il modo giusto di prenderlo, e l'audit lo segnalava come
+  // segreto. Un controllo che punisce il codice corretto insegna a ignorarlo.
+  // Quello che va intercettato e' un JSON di service account incollato dentro:
+  // lo si riconosce da `"type": "service_account"` e da `private_key`.
+  const secretMatch = content.match(
+    /sk_(live|test)_[A-Za-z0-9]+|-----BEGIN [A-Z ]+PRIVATE KEY-----|"type"\s*:\s*"service_account"|"private_key(_id)?"\s*:/
+  );
   if (!secretMatch) {
     continue;
   }
