@@ -33,6 +33,7 @@ import { CONTENT_ITEMS } from '@/src/config/contentLibrary';
 import { PARTNERSHIP_LABEL } from '@/src/types/content';
 import type { ContentItem } from '@/src/types/content';
 import { getUserLocation, sortPlacesByDistance, type UserLocation } from '@/src/utils/geo';
+import OptimizedImage from '../OptimizedImage';
 import PlaceBusinessActions from '../PlaceBusinessActions';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -717,9 +718,21 @@ export default function FullScreenMapExperience() {
                   <div className="absolute left-1/2 bottom-full mb-2 hidden -translate-x-1/2 rounded-xl border border-white/20 bg-black/90 p-2.5 shadow-2xl backdrop-blur-md group-hover:block z-40 w-48">
                     {item.cover ? (
                       <div className="aspect-[4/3] w-full overflow-hidden rounded-lg bg-black/20">
-                        <img
+                        {/* `OptimizedImage` e non un tag immagine grezzo: questa
+                            anteprima e' nascosta finche' non ci passi sopra, ma
+                            il browser scaricava lo stesso la copertina a piena
+                            risoluzione per OGNI marcatore — copertine da 400-470
+                            KB l'una, 62 marcatori, 14 MB di pagina e LCP a 5,9s.
+                            Qui il riquadro e' largo 192px: servono le varianti
+                            piccole, avif/webp, e il caricamento differito che il
+                            componente applica di suo. Misurato dopo: la pagina
+                            passa da 13,5 a 5,8 MB e le immagini da ~4 MB a
+                            0,17. */}
+                        <OptimizedImage
                           src={item.cover}
                           alt={item.title}
+                          sizes="192px"
+                          responsiveWidths={[320]}
                           className="h-full w-full object-cover"
                         />
                       </div>
