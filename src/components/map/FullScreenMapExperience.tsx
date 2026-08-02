@@ -110,7 +110,6 @@ export default function FullScreenMapExperience() {
   const [selectedBudget, setSelectedBudget] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedItem, setSelectedItem] = useState<ContentItem | null>(null);
-  const [activeTab, setActiveTab] = useState<'cose' | 'costi'>('cose');
   const [mapStyleKey, setMapStyleKey] = useState<'dark' | 'liberty' | 'bright'>('dark');
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
@@ -211,7 +210,6 @@ export default function FullScreenMapExperience() {
   const handlePinClick = useCallback(
     (item: ContentItem) => {
       setSelectedItem(item);
-      setActiveTab('cose');
       playChime();
       // Il posto selezionato finisce nell'URL: qualunque scheda aperta diventa
       // condivisibile. `replace` perche' sfogliare la mappa non deve riempire
@@ -730,10 +728,25 @@ export default function FullScreenMapExperience() {
           altrimenti la scheda copriva. Il tetto d'altezza e' relativo al contenitore,
           non al viewport: cosi' si adatta da solo all'altezza della testata. Sotto lg
           serve meno spazio perche' elenco e pannello si fanno da parte. */}
+        {/* Il cassetto e' tappato in altezza e il contenuto puo' superarlo (su
+            375x812 sono 493px in 400). Prima scorreva tutto insieme e il bottone
+            finiva sotto il bordo: ora scorre solo la parte centrale, mentre
+            titolo, riga di sintesi e bottone restano sempre a vista.
+
+            **z-50, non z-30**: la barra dei controlli e' z-40, quindi stava
+            SOPRA il cassetto e su telefono la X di chiusura non era cliccabile
+            — al suo posto rispondeva un bottone della mappa (verificato con
+            `elementFromPoint`). Sopra un cassetto aperto i filtri possono
+            sparire: si chiude e tornano.
+
+            Il tetto sotto lg e' in `svh`, non una percentuale del contenitore
+            meno una riserva a occhio: i filtri vanno a capo in modo diverso a
+            ogni larghezza, e a 320px la riserva fissa lasciava al cassetto
+            175px, col bottone fuori schermo. */}
         {selectedItem && (
-          <div className="absolute bottom-16 left-4 right-14 z-30 mx-auto max-h-[calc(100%-15rem)] lg:max-h-[calc(100%-21rem)] max-w-lg overflow-y-auto rounded-[var(--radius-lg,24px)] border border-white/20 bg-black/90 p-6 text-white shadow-2xl backdrop-blur-2xl sm:bottom-10 sm:left-auto sm:right-20 sm:w-[420px]">
+          <div className="absolute bottom-16 left-4 right-14 z-50 mx-auto flex max-h-[60svh] max-w-lg flex-col overflow-hidden rounded-[var(--radius-lg,24px)] border border-white/20 bg-black/90 p-6 text-white shadow-2xl backdrop-blur-2xl sm:bottom-10 sm:left-auto sm:right-20 sm:w-[420px] lg:max-h-[calc(100%-21rem)]">
             {/* Drawer Header */}
-            <div className="flex items-start justify-between">
+            <div className="flex shrink-0 items-start justify-between">
               <div>
                 <span className="inline-flex items-center gap-1 rounded-full bg-[var(--color-accent,#c85a32)]/20 border border-[var(--color-accent,#c85a32)]/40 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)]">
                   {selectedItem.zone} · {selectedItem.place.region || selectedItem.types[0]}
@@ -751,101 +764,83 @@ export default function FullScreenMapExperience() {
               </button>
             </div>
 
-            {/* Drawer Tabs */}
-            <div className="mt-4 flex gap-2 border-b border-white/15 pb-3">
-              <button
-                type="button"
-                onClick={() => setActiveTab('cose')}
-                className={`rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-[0.14em] transition-all ${
-                  activeTab === 'cose'
-                    ? 'bg-white text-[var(--color-ink,#1a2b3c)]'
-                    : 'bg-white/10 text-white/70 hover:text-white'
-                }`}
-              >
-                Cos&apos;è
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab('costi')}
-                className={`rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-[0.14em] transition-all ${
-                  activeTab === 'costi'
-                    ? 'bg-white text-[var(--color-ink,#1a2b3c)]'
-                    : 'bg-white/10 text-white/70 hover:text-white'
-                }`}
-              >
-                Costi &amp; info
-              </button>
-            </div>
-
-            {/* Tab Content */}
-            {activeTab === 'cose' ? (
-              <div className="mt-4 space-y-3">
-                <p className="text-xs leading-relaxed text-white/80">{selectedItem.description}</p>
-                {/* Che tipo di posto e': il dato c'e' su tutte le schede reali
-                    e dice a colpo d'occhio se e' cena, hotel o giornata fuori.
-                    Qui prima c'era un riquadro «Verdetto: ...» che non compariva
-                    mai, perche' il voto e' vuoto su 29 schede su 29. */}
-                {selectedItem.types?.length > 0 && (
-                  <p className="flex flex-wrap gap-1.5">
-                    {selectedItem.types.map((tipo) => (
-                      <span
-                        key={tipo}
-                        className="rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white/75"
-                      >
-                        {tipo}
-                      </span>
-                    ))}
-                  </p>
-                )}
-              </div>
-            ) : (
-              <div className="mt-4 space-y-3 text-xs text-white/80">
-                {/* La riga del costo appariva sempre, e senza prezzo diceva
-                    «Verificato»: una parola che non e' un costo. Ora la riga
-                    c'e' solo quando un numero c'e' davvero. */}
-                {(selectedItem.value?.price || selectedItem.value?.budget) && (
-                  <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                    <span className="text-white/60">
-                      {selectedItem.value?.price ? 'Costo stimato:' : 'Fascia di prezzo:'}
-                    </span>
-                    <span className="font-bold text-white">
-                      {selectedItem.value?.price ?? selectedItem.value?.budget}
-                    </span>
-                  </div>
-                )}
-                <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                  <span className="text-white/60">Posizione:</span>
+            {/* La riga che decide. Prima queste tre cose stavano dietro la
+                linguetta «Costi & info»: chi guarda un pin si chiede cos'e',
+                dov'e' e quanto costa, e all'apertura ne vedeva una sola.
+                Le linguette sono sparite del tutto — spostati qui il prezzo, il
+                luogo e la trasparenza, nella seconda restavano due bottoni.
+                Il luogo non e' un doppione del chip qui sopra: quello dice zona
+                e regione, questo dice il comune. */}
+            <p className="mt-3 flex shrink-0 flex-wrap items-center gap-x-2 gap-y-1 border-b border-white/15 pb-3 text-xs">
+              {(selectedItem.value?.price || selectedItem.value?.budget) && (
+                <>
                   <span className="font-bold text-white">
-                    {[
-                      selectedItem.place.city,
-                      selectedItem.place.region ?? selectedItem.place.country,
-                    ]
-                      .filter(Boolean)
-                      .join(', ')}
+                    {selectedItem.value?.price ?? `Budget ${selectedItem.value?.budget}`}
                   </span>
-                </div>
-                {/* A che titolo ci siamo andati: e' la firma del progetto e
-                    stava solo sulla pagina-posto, non qui dove si decide. */}
-                {PARTNERSHIP_LABEL[selectedItem.partnership.kind] && (
-                  <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                    <span className="text-white/60">Trasparenza:</span>
-                    <span className="font-bold text-[var(--color-accent-on-dark)]">
-                      {PARTNERSHIP_LABEL[selectedItem.partnership.kind]}
-                    </span>
-                  </div>
-                )}
-                <div className="pt-2">
-                  <PlaceBusinessActions
-                    item={selectedItem}
-                    userLocation={userLoc}
-                    variant="compact"
-                  />
-                </div>
-              </div>
+                  <span aria-hidden="true" className="text-white/25">
+                    ·
+                  </span>
+                </>
+              )}
+              <span className="text-white/70">
+                {[selectedItem.place.city, selectedItem.place.region ?? selectedItem.place.country]
+                  .filter(Boolean)
+                  .join(', ')}
+              </span>
+              {PARTNERSHIP_LABEL[selectedItem.partnership.kind] && (
+                <>
+                  <span aria-hidden="true" className="text-white/25">
+                    ·
+                  </span>
+                  <span className="font-bold text-[var(--color-accent-on-dark)]">
+                    {PARTNERSHIP_LABEL[selectedItem.partnership.kind]}
+                  </span>
+                </>
+              )}
+            </p>
+
+            {/* Che tipo di posto e': dice a colpo d'occhio se e' cena, hotel o
+                giornata fuori. Qui prima c'era un riquadro «Verdetto: ...» che
+                non compariva mai, perche' il voto e' vuoto su 29 schede su 29.
+                Sta fuori dalla parte che scorre — e' metadato corto e sempre
+                uguale, e dentro veniva tagliato a meta' dal bordo. A scorrere
+                resta solo la descrizione, che e' l'unica cosa lunga. */}
+            {selectedItem.types?.length > 0 && (
+              <p className="mt-3 flex shrink-0 flex-wrap gap-1.5">
+                {selectedItem.types.map((tipo) => (
+                  <span
+                    key={tipo}
+                    className="rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white/75"
+                  >
+                    {tipo}
+                  </span>
+                ))}
+              </p>
             )}
 
+            <div className="relative mt-3 min-h-0 flex-1 overflow-y-auto">
+              <p className="text-xs leading-relaxed text-white/80">{selectedItem.description}</p>
+            </div>
+
+            {/* Le azioni stanno fuori dalla parte che scorre: erano l'ultimo
+                elemento dentro, e il bordo dello scorrimento le tagliava a
+                meta'. Un bottone mozzato non sembra scorrevole, sembra rotto.
+                La sfumatura sopra dice che il testo continua sotto il taglio. */}
+            <div className="relative shrink-0 pt-3">
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-x-0 -top-6 h-6 bg-gradient-to-t from-black/90 to-transparent"
+              />
+              <PlaceBusinessActions
+                item={selectedItem}
+                userLocation={userLoc}
+                variant="compact"
+                suFondoScuro
+              />
+            </div>
+
             {/* Drawer Actions */}
-            <div className="mt-6 flex items-center justify-between border-t border-white/15 pt-4 text-xs font-semibold">
+            <div className="mt-4 flex shrink-0 items-center justify-between border-t border-white/15 pt-4 text-xs font-semibold">
               <span className="text-white/60">Provato di persona</span>
               <Link
                 to={`/posto/${selectedItem.id}`}

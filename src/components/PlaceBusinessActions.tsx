@@ -26,6 +26,12 @@ export interface PlaceBusinessActionsProps {
   userLocation?: UserLocation | null;
   className?: string;
   variant?: 'card' | 'full' | 'compact';
+  /**
+   * Il componente nasce per fondi chiari e usa `--color-ink` per il testo.
+   * Nel cassetto della mappa il fondo e' nero: senza questo flag «Condividi»
+   * era testo `rgb(10,10,10)` su nero, cioe' invisibile (rapporto ~1:1).
+   */
+  suFondoScuro?: boolean;
 }
 
 export const PlaceBusinessActions: React.FC<PlaceBusinessActionsProps> = ({
@@ -33,6 +39,7 @@ export const PlaceBusinessActions: React.FC<PlaceBusinessActionsProps> = ({
   userLocation,
   className = '',
   variant = 'full',
+  suFondoScuro = false,
 }) => {
   const [copied, setCopied] = useState(false);
 
@@ -128,14 +135,22 @@ export const PlaceBusinessActions: React.FC<PlaceBusinessActionsProps> = ({
           target="_blank"
           rel="noreferrer"
           onClick={handleDirectionsClick}
-          className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-ink)] px-3 py-1 text-xs font-bold text-white transition-colors hover:bg-[var(--color-accent-hover)]"
+          className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold transition-colors ${
+            suFondoScuro
+              ? 'bg-white text-[var(--color-ink)] hover:bg-white/85'
+              : 'bg-[var(--color-ink)] text-white hover:bg-[var(--color-accent-hover)]'
+          }`}
         >
           <Navigation size={12} aria-hidden /> Indicazioni
         </a>
         <button
           type="button"
           onClick={handleShareClick}
-          className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-border)] px-3 py-1 text-xs font-semibold text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)]"
+          className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
+            suFondoScuro
+              ? 'border-white/30 text-white hover:border-white/60'
+              : 'border-[var(--color-border)] text-[var(--color-ink)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)]'
+          }`}
         >
           {copied ? <CheckCircle size={12} /> : <Share2 size={12} />}
           {copied ? 'Copiato' : 'Condividi'}
