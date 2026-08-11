@@ -6,6 +6,13 @@ import { pullquoteDirective } from './pullquote';
 import { fullbleedDirective } from './fullbleed';
 import { sourceDirective } from './source';
 import { verifiedDirective } from './verified';
+import { postoDirective } from './posto';
+import { reelDirective } from './reel';
+import { verdettoDirective } from './verdetto';
+import { mappaDirective } from './mappa';
+import { datiDirective } from './dati';
+import { domandeDirective } from './domande';
+import { affiliatoDirective } from './affiliato';
 
 export type { DirectiveConfig, DirectiveNode } from './types';
 export { parseImageTitle } from './utils';
@@ -26,6 +33,13 @@ export const directiveRegistry: DirectiveConfig[] = [
   fullbleedDirective,
   sourceDirective,
   verifiedDirective,
+  postoDirective,
+  reelDirective,
+  verdettoDirective,
+  mappaDirective,
+  datiDirective,
+  domandeDirective,
+  affiliatoDirective,
 ];
 
 const directiveByName = new Map(directiveRegistry.map((directive) => [directive.name, directive]));
@@ -39,14 +53,27 @@ const directiveByName = new Map(directiveRegistry.map((directive) => [directive.
  */
 export function remarkEditorialDirectives() {
   return (tree: Root) => {
+    /* Occorrenze per nome, azzerate a ogni albero cioe' a ogni articolo. Serve
+       a `:affiliato`, che deve distinguere il primo link dal terzo per l'UTM:
+       senza, ogni occorrenza collasserebbe su `articolo-inline-1`. */
+    const seen = new Map<string, number>();
+
     visit(tree, (node) => {
       const directive = node as DirectiveNode;
-      if (directive.type !== 'containerDirective') return;
       const config = directiveByName.get(directive.name || '');
       if (!config) return;
 
+      /* Una direttiva vale solo nella forma dichiarata: `:::posto` come blocco,
+         `:affiliato[...]` in linea. Cosi' `:posto[...]` scritto per sbaglio non
+         renderizza mezzo componente, resta testo e si vede che e' sbagliato. */
+      const expected = config.nodeType === 'text' ? 'textDirective' : 'containerDirective';
+      if (directive.type !== expected) return;
+
+      const index = seen.get(config.name) ?? 0;
+      seen.set(config.name, index + 1);
+
       const data = directive.data || (directive.data = {});
-      data.hProperties = config.toProps(directive);
+      data.hProperties = config.toProps(directive, index);
       data.hName = config.hName;
     });
   };

@@ -352,19 +352,32 @@ export function ArticleBody({ article }: { article: ArticleData }) {
     ...directiveComponents,
   } as unknown as Components;
 
+  /* La dichiarazione affiliati non la scrive l'autore: compare da sola appena
+     l'articolo contiene un `:affiliato`. Lasciarla a mano significa che prima o
+     poi manca, e manca proprio sull'articolo che rende di piu'. */
+  const hasAffiliateLinks = article.content.includes(':affiliato[');
+
   return (
-    <ReactMarkdown
-      remarkPlugins={[
-        remarkGfm,
-        remarkDirective,
-        remarkEditorialDirectives,
-        markFirstBodyParagraph,
-        remarkUnwrapImages,
-      ]}
-      components={components}
-    >
-      {article.content}
-    </ReactMarkdown>
+    <>
+      {hasAffiliateLinks && (
+        <p className="mb-8 border-l-2 border-[var(--color-border)] pl-4 text-sm italic leading-relaxed text-[var(--color-muted-fg)]">
+          Alcuni link qui sotto sono affiliati: se prenoti, a noi arriva una piccola commissione. Il
+          prezzo per te non cambia, e non cambia cosa scriviamo.
+        </p>
+      )}
+      <ReactMarkdown
+        remarkPlugins={[
+          remarkGfm,
+          remarkDirective,
+          remarkEditorialDirectives,
+          markFirstBodyParagraph,
+          remarkUnwrapImages,
+        ]}
+        components={components}
+      >
+        {article.content}
+      </ReactMarkdown>
+    </>
   );
 }
 

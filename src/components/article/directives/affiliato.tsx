@@ -147,6 +147,7 @@ function AffiliatoDirective({
 export const affiliatoDirective: DirectiveConfig = {
   name: 'affiliato',
   hName: 'affiliato-directive',
+  nodeType: 'text',
   toProps,
   component: AffiliatoDirective,
 };
