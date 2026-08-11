@@ -24,6 +24,7 @@ import fs from 'fs';
 import path from 'path';
 import { STATIC_ROUTE_META, ogSlugForPath, findRouteMeta } from '../src/config/routeMeta.ts';
 import { getDestination } from '../src/config/destinations.ts';
+import { buildReviewJsonLd } from '../src/lib/placeReviewSchema.ts';
 import { createRequire } from 'module';
 
 const require = createRequire(import.meta.url);
@@ -83,6 +84,14 @@ function clamp(text) {
  * L'og:image NON è `item.cover`, che Posto.tsx usa a runtime: le cover sono
  * frame di reel 9:16 e gli scraper si aspettano 1200x630. Per gli scraper vale
  * la card generata; per gli utenti l'immagine non cambia nulla.
+ *
+ * Il JSON-LD e' lo stesso `Review` di Posto.tsx (stessa funzione,
+ * `buildReviewJsonLd`), non una versione ridotta: gli scraper che NON
+ * eseguono JS — la ragione d'essere di questo script — vedevano solo un
+ * `Place` generico, mentre chi esegue JS vedeva il verdetto onesto. Due
+ * fonti diverse per lo stesso fatto sono un rischio quanto un fatto sbagliato
+ * solo. `SEO.tsx` deduplica lato client leggendo `data-prerender-jsonld`, cosi'
+ * l'utente/crawler che ESEGUE JS non vede la Review due volte.
  */
 function postoMeta(route) {
   const id = route.replace(/^\/posto\//, '');
@@ -96,28 +105,8 @@ function postoMeta(route) {
     item.description || `${item.title || place.name}${where ? ` — ${where}` : ''}.`
   );
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Place',
-    name: place.name || title,
-    url: `${BASE_URL}${route}`,
-  };
-  if (where) {
-    jsonLd.address = {
-      '@type': 'PostalAddress',
-      addressLocality: place.city || undefined,
-      addressRegion: place.region || undefined,
-      addressCountry: place.country || undefined,
-    };
-  }
-  if (place.coordinates?.lat && place.coordinates?.lng) {
-    jsonLd.geo = {
-      '@type': 'GeoCoordinates',
-      latitude: place.coordinates.lat,
-      longitude: place.coordinates.lng,
-    };
-  }
-  if (item.cover) jsonLd.image = `${BASE_URL}${item.cover}`;
+  const reviewBody = item.review?.summary || item.description;
+  const jsonLd = reviewBody ? buildReviewJsonLd(item, reviewBody) : null;
 
   return {
     title,

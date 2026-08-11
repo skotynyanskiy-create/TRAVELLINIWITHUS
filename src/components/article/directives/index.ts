@@ -1,6 +1,6 @@
 import { visit } from 'unist-util-visit';
 import type { Root } from 'mdast';
-import type { DirectiveConfig, DirectiveNode } from './types';
+import type { DirectiveConfig, DirectiveContext, DirectiveNode } from './types';
 import DirectiveParagraph from './DirectiveParagraph';
 import { pullquoteDirective } from './pullquote';
 import { fullbleedDirective } from './fullbleed';
@@ -53,6 +53,26 @@ const directiveByName = new Map(directiveRegistry.map((directive) => [directive.
  */
 export function remarkEditorialDirectives() {
   return (tree: Root) => {
+    /* Pre-visita: conta i `:::posto{id="..."}` del documento. Con esattamente
+       uno solo, quel posto e' identificabile senza ambiguita' e puo' fare da
+       `itemReviewed` per il JSON-LD di `:::verdetto` piu' sotto nello stesso
+       articolo; con zero o piu' di uno (listicle, "dintorni") non si indovina
+       quale dei posti il verdetto giudica — vedi verdetto.tsx. */
+    const postoIds: string[] = [];
+    visit(tree, (node) => {
+      const directive = node as DirectiveNode;
+      if (
+        directive.type === 'containerDirective' &&
+        directive.name === 'posto' &&
+        directive.attributes?.id
+      ) {
+        postoIds.push(directive.attributes.id);
+      }
+    });
+    const context: DirectiveContext = {
+      singlePostoId: postoIds.length === 1 ? postoIds[0] : undefined,
+    };
+
     /* Occorrenze per nome, azzerate a ogni albero cioe' a ogni articolo. Serve
        a `:affiliato`, che deve distinguere il primo link dal terzo per l'UTM:
        senza, ogni occorrenza collasserebbe su `articolo-inline-1`. */
@@ -76,7 +96,7 @@ export function remarkEditorialDirectives() {
       seen.set(config.name, index + 1);
 
       const data = directive.data || (directive.data = {});
-      data.hProperties = config.toProps(directive, index);
+      data.hProperties = config.toProps(directive, index, context);
       data.hName = config.hName;
     });
   };

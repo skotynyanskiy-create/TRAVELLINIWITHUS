@@ -1,16 +1,20 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, render } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import ReactMarkdown, { type Components } from 'react-markdown';
 import remarkDirective from 'remark-directive';
 import { visit } from 'unist-util-visit';
 import type { Root } from 'mdast';
 import { verdettoDirective } from './verdetto';
+import { remarkEditorialDirectives, directiveComponents } from './index';
 import type { DirectiveNode } from './types';
 
 /**
  * Pipeline isolata (remark-directive reale + solo `verdettoDirective`), senza
- * passare dal registro condiviso in `./index.ts` — non ancora registrato in
- * questa slice (la registrazione la fa l'orchestratore a fine lavoro).
+ * passare dal registro condiviso in `./index.ts` — usata per i test di resa
+ * visiva (sì/no, "Il momento giusto", colori) che non dipendono dal contesto
+ * documento. Senza contesto, `toProps` non riceve mai `singlePostoId`: e'
+ * esattamente lo stato "posto non identificabile", verificato piu' sotto.
  */
 function remarkVerdettoOnly() {
   return (tree: Root) => {
@@ -28,6 +32,26 @@ const components = {
   [verdettoDirective.hName]: verdettoDirective.component,
 } as unknown as Components;
 
+/**
+ * Pipeline reale (`remarkEditorialDirectives`, lo stesso plugin che gira sugli
+ * articoli pubblicati): serve ad agganciare `:::verdetto` al `:::posto{id}`
+ * che lo precede nello stesso documento — collegamento che vive nel contesto
+ * a livello di documento, non nel singolo nodo, quindi non e' osservabile
+ * dalla pipeline isolata sopra.
+ */
+function renderWithRegistry(content: string) {
+  return render(
+    <MemoryRouter>
+      <ReactMarkdown
+        remarkPlugins={[remarkDirective, remarkEditorialDirectives]}
+        components={directiveComponents as unknown as Components}
+      >
+        {content}
+      </ReactMarkdown>
+    </MemoryRouter>
+  );
+}
+
 function renderVerdetto(content: string) {
   return render(
     <ReactMarkdown remarkPlugins={[remarkDirective, remarkVerdettoOnly]} components={components}>
@@ -44,6 +68,12 @@ const VALID_VERDETTO = `:::verdetto{quando="da metà settembre a ottobre"}
 - no · Vai ad agosto senza prenotare: paghi il doppio per il peggio
 :::
 `;
+
+/** "emilia-granduca-di-campigna" è reale, non placeholder (content-seed.json). */
+const POSTO_E_VERDETTO = `:::posto{id="emilia-granduca-di-campigna"}
+:::
+
+${VALID_VERDETTO}`;
 
 describe(':::verdetto::: — direttiva editoriale', () => {
   afterEach(() => {
@@ -82,17 +112,60 @@ describe(':::verdetto::: — direttiva editoriale', () => {
     expect(aside?.textContent).not.toMatch(/★|voto|punteggio|\/5|\/10/i);
   });
 
-  it('emette Review con author Organization e solo reviewBody, senza reviewRating', () => {
+  /* Senza un :::posto nello stesso documento non c'è modo di sapere QUALE
+     posto il verdetto giudica: un Review senza itemReviewed è un frammento,
+     non uno schema valido, quindi qui non si emette nulla — vedi il
+     commento su buildVerdettoReviewJsonLd in verdetto.tsx. */
+  it('senza un :::posto identificabile nello stesso documento, NON emette JSON-LD', () => {
     const { container } = renderVerdetto(VALID_VERDETTO);
-    const script = container.querySelector('script[type="application/ld+json"]');
-    expect(script).not.toBeNull();
-    const jsonLd = JSON.parse(script?.textContent || '{}');
-    expect(jsonLd['@type']).toBe('Review');
-    expect(jsonLd.author).toEqual({ '@type': 'Organization', name: 'Travelliniwithus' });
-    expect(jsonLd.reviewBody).toContain('Vale il viaggio se');
-    expect(jsonLd.reviewBody).toContain('Lascia perdere se');
-    expect(jsonLd.reviewRating).toBeUndefined();
-    expect(jsonLd.aggregateRating).toBeUndefined();
+    expect(container.querySelector('script[type="application/ld+json"]')).toBeNull();
+  });
+
+  describe('agganciato a un posto reale del documento (pipeline registrata)', () => {
+    it('emette Review con itemReviewed, author Organization, mai reviewRating', () => {
+      const { container } = renderWithRegistry(POSTO_E_VERDETTO);
+      const script = container.querySelector('script[type="application/ld+json"]');
+      expect(script).not.toBeNull();
+      const jsonLd = JSON.parse(script?.textContent || '{}');
+
+      expect(jsonLd['@type']).toBe('Review');
+      expect(jsonLd.author).toEqual({ '@type': 'Organization', name: 'Travelliniwithus' });
+      expect(jsonLd.reviewBody).toContain('Vale il viaggio se');
+      expect(jsonLd.reviewBody).toContain('Lascia perdere se');
+      expect(jsonLd.reviewRating).toBeUndefined();
+      expect(jsonLd.aggregateRating).toBeUndefined();
+    });
+
+    it('itemReviewed usa l’insegna reale del registro (place.name), non un titolo inventato', () => {
+      const { container } = renderWithRegistry(POSTO_E_VERDETTO);
+      const script = container.querySelector('script[type="application/ld+json"]');
+      const jsonLd = JSON.parse(script?.textContent || '{}');
+
+      expect(jsonLd.itemReviewed).toBeDefined();
+      expect(jsonLd.itemReviewed.name).toBe('Granduca di Campigna');
+      expect(jsonLd.itemReviewed['@type']).toBe('HealthAndBeautyBusiness');
+    });
+
+    it('con più di un :::posto nello stesso documento, resta ambiguo: NON emette JSON-LD', () => {
+      const twoPosti = `:::posto{id="emilia-granduca-di-campigna"}
+:::
+
+:::posto{id="verona-bbq-magi"}
+:::
+
+${VALID_VERDETTO}`;
+      const { container } = renderWithRegistry(twoPosti);
+      expect(container.querySelector('script[type="application/ld+json"]')).toBeNull();
+    });
+
+    it('se il :::posto referenziato è ancora isPlaceholder, NON emette JSON-LD', () => {
+      const placeholderPosto = `:::posto{id="toscana-mirror-house-spinofiorito"}
+:::
+
+${VALID_VERDETTO}`;
+      const { container } = renderWithRegistry(placeholderPosto);
+      expect(container.querySelector('script[type="application/ld+json"]')).toBeNull();
+    });
   });
 
   it('avvisa in sviluppo se trova un secondo blocco verdetto nello stesso articolo', () => {
@@ -147,6 +220,14 @@ describe(':::verdetto::: — direttiva editoriale', () => {
       expect(verdettoDirective.toProps(directive(), 1)['data-skip-schema']).toBe('true');
     });
 
+    it('la prima occorrenza porta l’id del posto quando il contesto lo fornisce', () => {
+      expect(
+        verdettoDirective.toProps(directive(), 0, { singlePostoId: 'emilia-granduca-di-campigna' })[
+          'data-posto-id'
+        ]
+      ).toBe('emilia-granduca-di-campigna');
+    });
+
     it('col flag il blocco si vede ma non emette JSON-LD', () => {
       const Component = verdettoDirective.component;
       const { container } = render(
@@ -155,6 +236,7 @@ describe(':::verdetto::: — direttiva editoriale', () => {
             'data-si': JSON.stringify(['Un motivo vero']),
             'data-no': JSON.stringify(['Un motivo vero']),
             'data-skip-schema': 'true',
+            'data-posto-id': 'emilia-granduca-di-campigna',
           }}
         />
       );

@@ -1,7 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { ThumbsDown, ThumbsUp } from 'lucide-react';
-import type { DirectiveConfig, DirectiveNode } from './types';
+import type { DirectiveConfig, DirectiveContext, DirectiveNode } from './types';
 import { getNodeText } from './utils';
+import { getContentById } from '../../../config/contentLibrary';
+import { buildReviewJsonLd } from '../../../lib/placeReviewSchema';
 
 /**
  * `:::verdetto{quando="..."}` — il differenziale del brand: non "dove
@@ -39,12 +41,21 @@ function splitVerdictLines(directive: DirectiveNode): { si: string[]; no: string
    JSON-LD. Un secondo blocco incollato per sbaglio (sono direttive markdown,
    si copiano) dichiarerebbe a Google due Review per la stessa pagina — uno
    schema duplicato vale meno di nessuno schema. Il blocco visivo resta, e
-   l'avviso dev sul doppio verdetto continua a segnalarlo a chi scrive. */
-function toProps(directive: DirectiveNode, index?: number): Record<string, unknown> {
+   l'avviso dev sul doppio verdetto continua a segnalarlo a chi scrive.
+   `context.singlePostoId` e' l'id del posto recensito, calcolato una volta
+   per documento da `index.ts`: solo con questo il blocco puo' costruire un
+   `itemReviewed` — senza, meglio nessuno schema che uno monco (vedi
+   `buildVerdettoReviewJsonLd`). */
+function toProps(
+  directive: DirectiveNode,
+  index?: number,
+  context?: DirectiveContext
+): Record<string, unknown> {
   const props: Record<string, unknown> = {};
   const attrs = directive.attributes || {};
   if (attrs.quando) props['data-quando'] = attrs.quando;
   if ((index ?? 0) > 0) props['data-skip-schema'] = 'true';
+  if (context?.singlePostoId) props['data-posto-id'] = context.singlePostoId;
 
   const { si, no } = splitVerdictLines(directive);
   if (import.meta.env?.DEV && (si.length < 2 || si.length > 4 || no.length < 2 || no.length > 4)) {
@@ -73,11 +84,26 @@ function parseList(json?: string): string[] {
 
 /**
  * Review editoriale di prima parte, stessa forma di `src/pages/Posto.tsx`
- * (righe 156-169): solo `author` Organization + `reviewBody`, mai un voto —
- * un numero comprimerebbe l'unica cosa che questo blocco vende.
+ * (via `buildReviewJsonLd`): `itemReviewed` obbligatorio, mai un voto — un
+ * numero comprimerebbe l'unica cosa che questo blocco vende.
+ *
+ * Un `Review` senza `itemReviewed` è un frammento, non uno schema: Google non
+ * lo considera valido per i rich result e un oggetto recensito indeterminato
+ * è esattamente il difetto che questo modulo esiste per chiudere. Quindi qui
+ * si sceglie di NON emettere nulla — non un `itemReviewed` indovinato —
+ * quando il posto non è identificabile con certezza (`postoId` assente,
+ * niente registro, o ancora `isPlaceholder`) nello stesso articolo.
  */
-function buildVerdettoReviewJsonLd(si: string[], no: string[]): object | null {
+function buildVerdettoReviewJsonLd(
+  si: string[],
+  no: string[],
+  postoId?: string
+): Record<string, unknown> | null {
   if (si.length === 0 && no.length === 0) return null;
+  if (!postoId) return null;
+
+  const item = getContentById(postoId);
+  if (!item || item.isPlaceholder) return null;
 
   const reviewBody = [
     si.length > 0 ? `Vale il viaggio se: ${si.join('; ')}.` : '',
@@ -86,12 +112,7 @@ function buildVerdettoReviewJsonLd(si: string[], no: string[]): object | null {
     .filter(Boolean)
     .join(' ');
 
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Review',
-    author: { '@type': 'Organization', name: 'Travelliniwithus' },
-    reviewBody,
-  };
+  return buildReviewJsonLd(item, reviewBody);
 }
 
 function VerdettoDirective({
@@ -99,16 +120,18 @@ function VerdettoDirective({
   'data-si': siJson,
   'data-no': noJson,
   'data-skip-schema': skipSchema,
+  'data-posto-id': postoId,
 }: {
   'data-quando'?: string;
   'data-si'?: string;
   'data-no'?: string;
   'data-skip-schema'?: string;
+  'data-posto-id'?: string;
 }) {
   const asideRef = useRef<HTMLElement | null>(null);
   const si = parseList(siJson);
   const no = parseList(noJson);
-  const reviewJsonLd = skipSchema === 'true' ? null : buildVerdettoReviewJsonLd(si, no);
+  const reviewJsonLd = skipSchema === 'true' ? null : buildVerdettoReviewJsonLd(si, no, postoId);
 
   // È l'unico blocco scuro dell'articolo, uno solo per pagina: se il markup
   // ne trova un secondo nello stesso DOM, avvisa (dev-only, mai a runtime prod).

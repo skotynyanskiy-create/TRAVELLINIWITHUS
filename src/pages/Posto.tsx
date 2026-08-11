@@ -22,20 +22,7 @@ import { getUserLocation, getGoogleMapsDirectionsUrl, type UserLocation } from '
 import { hasSpecificReelLink } from '../utils/mediaUrl';
 import { shareContent } from '../utils/share';
 import PlaceBusinessActions from '../components/PlaceBusinessActions';
-import type { ContentType } from '../config/contentTaxonomy';
-
-/** Mappa types[0] → @type Schema.org per il JSON-LD della pagina-posto. */
-const TYPE_SCHEMA: Record<ContentType | '_default', string> = {
-  'Food & Ristoranti': 'Restaurant',
-  'Hotel con carattere': 'LodgingBusiness',
-  'Relax, terme e spa': 'HealthAndBeautyBusiness',
-  Insolito: 'TouristAttraction',
-  'Passeggiate panoramiche': 'TouristAttraction',
-  'Posti particolari': 'TouristAttraction',
-  "Borghi e città d'arte": 'TouristAttraction',
-  'Weekend romantici': 'TouristAttraction',
-  _default: 'TouristAttraction',
-};
+import { buildReviewJsonLd } from '../lib/placeReviewSchema';
 
 export default function Posto() {
   const { slug } = useParams<{ slug: string }>();
@@ -64,8 +51,6 @@ export default function Posto() {
   ]
     .filter(Boolean)
     .join(' — ');
-
-  const schemaType = TYPE_SCHEMA[item.types[0]] ?? TYPE_SCHEMA._default;
 
   const saved = isFavorite(item.id);
   const coordinates = item.place.coordinates;
@@ -130,54 +115,14 @@ export default function Posto() {
     findDestinationByRegionName(item.place.country ?? '');
   const destUrl = destNode ? getDestinationUrl(destNode) : undefined;
 
-  const placeJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': schemaType,
-    name: item.title,
-    description: item.description,
-    url: canonical,
-    inLanguage: 'it-IT',
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: item.place.city ?? item.place.region ?? '',
-      addressRegion: item.place.region ?? '',
-      addressCountry: item.place.country,
-    },
-    ...(item.cover ? { image: item.cover } : {}),
-    ...(item.place.coordinates
-      ? {
-          geo: {
-            '@type': 'GeoCoordinates',
-            latitude: item.place.coordinates.lat,
-            longitude: item.place.coordinates.lng,
-          },
-        }
-      : {}),
-    // Recensione EDITORIALE di prima parte (Travelliniwithus recensisce il
-    // posto). Nessun rating: né aggregateRating (self-authored su un'attività
-    // terza — vietato dalle policy Google structured-data), né reviewRating,
-    // perché il giudizio qui non è un numero. Un Review con
-    // author=Organization e il solo reviewBody è valido e onesto.
-    ...(item.review?.summary
-      ? {
-          review: {
-            '@type': 'Review',
-            author: { '@type': 'Organization', name: 'Travelliniwithus' },
-            reviewBody: item.review.summary,
-          },
-        }
-      : {}),
-    ...(item.deal
-      ? {
-          offers: {
-            '@type': 'Offer',
-            url: item.deal.url,
-            availability: 'https://schema.org/InStock',
-            ...(item.deal.validUntil ? { priceValidUntil: item.deal.validUntil } : {}),
-          },
-        }
-      : {}),
-  };
+  // `Review`, non `Restaurant`: questa pagina recensisce l'attività, non è
+  // l'attività. `item.review.summary` è quasi sempre assente sui dati reali
+  // di oggi (un solo posto lo ha popolato): `item.description` è comunque
+  // testo editoriale vero di Rodrigo & Betta — "cos'è + vale la pena? per
+  // chi" per definizione del campo (src/types/content.ts) — non un
+  // ripiego generico, quindi resta un reviewBody onesto.
+  const reviewBody = item.review?.summary || item.description;
+  const placeJsonLd = reviewBody ? buildReviewJsonLd(item, reviewBody) : undefined;
 
   return (
     <PageLayout>

@@ -67,15 +67,36 @@ export default function SEO({
     typeof document !== 'undefined' &&
     document.querySelector('script[data-ssr-jsonld="article"]') !== null;
 
+  // In produzione l'hosting e' statico (vedi generate-route-html.js):
+  // `dist/posto/<id>/index.html` porta gia' un `<script data-prerender-jsonld>`
+  // per gli scraper che non eseguono JS. Quel nodo vive fuori dall'albero
+  // gestito da react-helmet-async, quindi l'idratazione non lo rimuove da
+  // sola: senza questo controllo un utente/crawler che ESEGUE JS vedrebbe due
+  // Review identiche per la stessa pagina — non due bugie, ma comunque un
+  // duplicato che i motori possono leggere come recensione gonfiata.
+  const prerenderedType = (() => {
+    if (typeof document === 'undefined') return undefined;
+    const node = document.querySelector('script[data-prerender-jsonld]');
+    if (!node?.textContent) return undefined;
+    try {
+      return (JSON.parse(node.textContent) as { '@type'?: string })['@type'];
+    } catch {
+      return undefined;
+    }
+  })();
+
   const schemas: object[] = [];
   if (breadcrumbs && breadcrumbs.length > 0) {
     schemas.push(buildBreadcrumbListJsonLd(breadcrumbs));
   }
   if (jsonLd) {
     const incoming = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
-    const filtered = ssrArticlePresent
-      ? incoming.filter((schema) => (schema as { '@type'?: string })['@type'] !== 'Article')
-      : incoming;
+    const filtered = incoming.filter((schema) => {
+      const type = (schema as { '@type'?: string })['@type'];
+      if (ssrArticlePresent && type === 'Article') return false;
+      if (prerenderedType && type === prerenderedType) return false;
+      return true;
+    });
     schemas.push(...filtered);
   }
 
