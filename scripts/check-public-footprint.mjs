@@ -81,10 +81,23 @@ for (const routeFile of [
   'src/pages/VieniConNoi.tsx',
   'src/pages/MediaKit.tsx',
   'src/pages/Collaborazioni.tsx',
-  'src/pages/Press.tsx',
 ]) {
   expectFile(routeFile);
 }
+
+/* `src/pages/Press.tsx` non esiste piu' dal commit 645954c: la pagina e' stata
+   rimossa e `/press` e' diventato un redirect a /collaborazioni (App.tsx), che
+   resta `state: 'live'` in surfaces.ts. Il controllo continuava a cercare il
+   file e falliva da giugno, tenendo rosso l'intero job in CI — un guardrail
+   sempre rosso e' un guardrail che si smette di leggere.
+   La garanzia non e' andata persa, si e' spostata: qui sotto si verifica che il
+   redirect esista e che la destinazione emetta davvero l'evento. */
+expectContains(
+  'src/App.tsx',
+  'path="press"',
+  '/press redirects instead of 404ing.',
+  '/press has no redirect.'
+);
 
 expectContains(
   'src/pages/VieniConNoi.tsx',
@@ -114,10 +127,10 @@ expectContains(
   '/collaborazioni does not declare metric source.'
 );
 expectContains(
-  'src/pages/Press.tsx',
+  'src/pages/Collaborazioni.tsx',
   'public_proof_click',
-  '/press tracks public proof links.',
-  '/press does not track public proof links.'
+  'The /press redirect target tracks public proof links.',
+  'The /press redirect target does not track public proof links.'
 );
 expectContains(
   'src/pages/Risorse.tsx',

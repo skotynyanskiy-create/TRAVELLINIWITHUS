@@ -23,7 +23,13 @@ function MapLoaderFallback() {
 function MapConsentPlaceholder({ onActivate }: { onActivate: () => void }) {
   return (
     <div className="mt-20 flex h-[calc(100dvh-80px)] w-full flex-col items-center justify-center gap-4 bg-[#0a0705] px-6 text-center text-white">
-      <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
+      {/* `--color-accent-on-dark`, non `--color-accent-text`: quest'ultimo e'
+          l'accento leggibile su fondo CHIARO e qui dava 3,56:1 su #0a0705,
+          sotto la soglia AA di 4,5 per testo piccolo — ha fatto scendere
+          /mappa sotto lo 0,95 di accessibilita' che blocca la CI. Il token
+          giusto e' documentato in index.css:44 proprio come «eyebrow/testo su
+          scuro». */}
+      <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-on-dark)]">
         Mappa dei posti particolari
       </span>
       <h1 className="font-serif text-2xl font-medium leading-tight sm:text-3xl">
