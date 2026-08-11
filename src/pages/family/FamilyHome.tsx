@@ -2,12 +2,15 @@ import { ArrowRight, Baby, Instagram, Tag } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import Breadcrumbs from '../../components/Breadcrumbs';
 import FamilyEntryCard from '../../components/family/FamilyEntryCard';
+import InterestPicker from '../../components/InterestPicker';
 import PageLayout from '../../components/PageLayout';
 import Section from '../../components/Section';
 import SEO from '../../components/SEO';
 import { getFamilyDeals, getFamilyEntries } from '../../config/familyLibrary';
 import { siteContentDefaults } from '../../config/siteContent';
 import { useSiteContent } from '../../hooks/useSiteContent';
+import { usePersonalizedInterest } from '../../hooks/usePersonalizedInterest';
+import { rankFamilyByInterest } from '../../config/audienceInterests';
 
 /**
  * Hub Travellini Family — la porta dell'audience family (decision 2026-07-24).
@@ -15,9 +18,10 @@ import { useSiteContent } from '../../hooks/useSiteContent';
  * conferma owner sui diritti asset). Contenuti SOLO da momenti reali.
  */
 export default function FamilyHome() {
+  const { interest } = usePersonalizedInterest();
   const { data: content } = useSiteContent('family');
   const family = content ?? siteContentDefaults.family;
-  const entries = getFamilyEntries().slice(0, 2);
+  const entries = rankFamilyByInterest(getFamilyEntries(), interest).slice(0, 2);
   const dealsCount = getFamilyDeals().length;
 
   return (
@@ -71,6 +75,8 @@ export default function FamilyHome() {
           </div>
         </div>
       </Section>
+
+      <InterestPicker />
 
       {/* Ultimi consigli reali */}
       <Section

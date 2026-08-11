@@ -21,6 +21,7 @@ import { trackEvent } from '../services/analytics';
 import { AnimatePresence, motion } from 'motion/react';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Button from '../components/Button';
+import InterestPicker from '../components/InterestPicker';
 import JsonLd from '../components/JsonLd';
 import OptimizedImage from '../components/OptimizedImage';
 import PageLayout from '../components/PageLayout';
@@ -28,9 +29,11 @@ import SEO from '../components/SEO';
 import Section from '../components/Section';
 import StickyMobileCTA from '../components/StickyMobileCTA';
 import { getPublishedReels } from '../config/reels';
+import { getAudienceInterest } from '../config/audienceInterests';
 import { BRAND_STATS, BRAND_STATS_SOURCE, PUBLIC_PROOF_SIGNALS } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
+import { usePersonalizedInterest } from '../hooks/usePersonalizedInterest';
 import { fetchStats, type SiteStats } from '../services/firebaseService';
 import CaseStudiesSection from '../components/collaborazioni/CaseStudiesSection';
 import PressProofSection from '../components/collaborazioni/PressProofSection';
@@ -182,6 +185,7 @@ function TikTokIcon({ size = 20 }: { size?: number }) {
 const COLLAB_REELS = getPublishedReels().slice(0, 4);
 
 export default function Collaborazioni() {
+  const { interest } = usePersonalizedInterest();
   const collabReels = COLLAB_REELS;
   const breadcrumbItems = [{ label: 'Collaborazioni' }];
   const [stats, setStats] = useState<SiteStats | null>(null);
@@ -302,6 +306,11 @@ export default function Collaborazioni() {
       },
     ],
   };
+  const brandInterest = getAudienceInterest(interest);
+  const primaryCta = brandInterest?.cta ?? {
+    label: pageContent.primaryCtaLabel,
+    to: pageContent.primaryCtaLink,
+  };
   const serviceIcons = [PenTool, Globe, Clapperboard, Camera];
 
   useEffect(() => {
@@ -396,7 +405,7 @@ export default function Collaborazioni() {
 
             <div className="flex flex-col gap-4 sm:flex-row">
               <Button
-                to={pageContent.primaryCtaLink}
+                to={primaryCta.to}
                 variant="primary"
                 size="lg"
                 className="px-8 py-4"
@@ -404,7 +413,7 @@ export default function Collaborazioni() {
                 onClick={() => trackPartnerCta('collaborazioni_hero_primary')}
                 magnetic={true}
               >
-                {pageContent.primaryCtaLabel} <ArrowRight size={18} />
+                {primaryCta.label} <ArrowRight size={18} />
               </Button>
               <Button
                 to={pageContent.secondaryCtaLink}
@@ -475,6 +484,8 @@ export default function Collaborazioni() {
         </div>
       </Section>
 
+      <InterestPicker />
+
       <Section className="my-20 border-y border-black/10 bg-[var(--color-accent-soft)]/45 py-16 md:py-20">
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <h2 className="mb-6 text-4xl font-serif">{pageContent.statsTitle}</h2>
@@ -510,7 +521,7 @@ export default function Collaborazioni() {
         </p>
       </Section>
 
-      <Section>
+      <Section id="partner-fit">
         <div className="mx-auto max-w-4xl">
           <div className="mb-10 text-center">
             <span className="mb-2 block font-script text-xl text-[var(--color-accent-text)]">
@@ -712,7 +723,7 @@ export default function Collaborazioni() {
         </div>
       </Section>
 
-      <Section className="relative scroll-mt-28 overflow-hidden rounded-[var(--radius-xl)] bg-[var(--color-ink)] px-0 py-16 text-white md:p-20">
+      <Section id="collaboration-formats" className="relative scroll-mt-28 overflow-hidden rounded-[var(--radius-xl)] bg-[var(--color-ink)] px-0 py-16 text-white md:p-20">
         <div className="relative z-20">
           <div className="mx-auto mb-16 max-w-3xl text-center">
             <h2 className="mb-6 text-4xl font-serif md:text-5xl">{pageContent.formatsTitle}</h2>

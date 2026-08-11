@@ -1,9 +1,14 @@
 import { ArrowUpRight, MapPin, Sparkles, Star } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import OptimizedImage from '@/src/components/OptimizedImage';
+import { useMemo } from 'react';
 import { selectHomeGridItems } from '@/src/lib/homeGridSelection';
-import { CURATED_IDS } from '../curated/CleanFeaturedPlaces';
+import { selectHomeFeaturedItems } from '@/src/lib/homeContentSelection';
+import { rankByInterest } from '@/src/config/audienceInterests';
+import { usePersonalizedInterest } from '@/src/hooks/usePersonalizedInterest';
 import { PARTNERSHIP_LABEL } from '@/src/types/content';
+import { useAudience } from '@/src/context/AudienceContext';
+import { compositionFor } from '@/src/config/homeComposition';
 
 interface GridTile {
   id: string;
@@ -19,9 +24,10 @@ interface GridTile {
   isFeatured: boolean;
 }
 
-const { items, featuredId } = selectHomeGridItems(undefined, undefined, CURATED_IDS);
-
-const GRID_TILES: GridTile[] = items.map((item) => {
+function toGridTile(
+  item: ReturnType<typeof selectHomeGridItems>['items'][number],
+  featuredId: string | null
+): GridTile {
   const disclosure = PARTNERSHIP_LABEL[item.partnership.kind];
   return {
     id: item.id,
@@ -36,7 +42,7 @@ const GRID_TILES: GridTile[] = items.map((item) => {
     description: item.description,
     isFeatured: item.id === featuredId,
   };
-});
+}
 
 /** In lettere, perché la voce della home è editoriale e non un contatore.
  *  Oltre il nove non si va: GRID_SIZE è il tetto della selezione. */
@@ -52,11 +58,28 @@ const NUMERALE: Record<number, string> = {
   9: 'Nove',
 };
 
-const NUMERO_POSTI = NUMERALE[GRID_TILES.length] ?? String(GRID_TILES.length);
-const POSTI_PRESI = GRID_TILES.length === 1 ? 'posto, preso' : 'posti, presi';
-
 export default function CleanFeaturedGrid() {
-  if (GRID_TILES.length === 0) return null;
+  const { audience } = useAudience();
+  const { interest } = usePersonalizedInterest();
+  const gridTiles = useMemo(() => {
+    const featuredIds = selectHomeFeaturedItems(interest).map((item) => item.id);
+    const includesFeaturedSection = compositionFor(audience, interest).sections.includes(
+      'featured'
+    );
+    const { items, featuredId } = selectHomeGridItems(
+      undefined,
+      undefined,
+      includesFeaturedSection ? featuredIds : [],
+      includesFeaturedSection ? [] : featuredIds
+    );
+    return rankByInterest(items, interest, (item) => item.types).map((item) =>
+      toGridTile(item, featuredId)
+    );
+  }, [audience, interest]);
+  const numeroPosti = NUMERALE[gridTiles.length] ?? String(gridTiles.length);
+  const postiPresi = gridTiles.length === 1 ? 'posto, preso' : 'posti, presi';
+
+  if (gridTiles.length === 0) return null;
 
   return (
     <section className="bg-white py-20 md:py-28 text-[var(--color-ink,#1a2b3c)] border-b border-[var(--color-border)]">
@@ -66,14 +89,14 @@ export default function CleanFeaturedGrid() {
           <div>
             <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
               <Sparkles size={14} />
-              Il registro dei posti
+              Una prima selezione
             </span>
             {/* selectHomeGridItems ne restituisce "fino a" 9: se un posto perde
                 la cover o esce dalla selezione, la griglia ne mostra 8 e un
                 titolo scritto a mano direbbe il falso. Il numero si conta dalle
                 tile vere, come impone homeComposition.ts. */}
             <h2 className="mt-3 font-serif text-3xl font-normal leading-tight md:text-5xl">
-              {NUMERO_POSTI} {POSTI_PRESI} uno per uno.
+              {numeroPosti} {postiPresi} uno per uno.
             </h2>
           </div>
           <Link
@@ -87,7 +110,7 @@ export default function CleanFeaturedGrid() {
 
         {/* 3x3 uniform grid */}
         <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {GRID_TILES.map((tile) => (
+          {gridTiles.map((tile) => (
             <Link
               key={tile.id}
               to={tile.link}

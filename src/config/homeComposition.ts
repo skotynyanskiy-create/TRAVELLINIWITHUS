@@ -1,9 +1,11 @@
 import { CONTENT_ITEMS } from './contentLibrary';
 import { getFamilyEntries } from './familyLibrary';
+import { getAudienceInterest } from './audienceInterests';
 import { FAMILY_CATEGORY_LABEL } from '../types/family';
 import { PARTNERSHIP_LABEL } from '../types/content';
 import { REELS } from './reels';
 import type { Audience } from '../context/AudienceContext';
+import type { InterestId } from './audienceInterests';
 
 /**
  * Chi guarda decide cosa vede — architettura di
@@ -148,7 +150,7 @@ export const HOME_COMPOSITIONS: Record<Audience, HomeComposition> = {
       showcase: showcaseViaggiatori,
       cta: { label: 'Apri il registro', to: '/esplora' },
     },
-    sections: ['featured', 'grid', 'map', 'reels', 'method', 'index'],
+    sections: ['grid', 'map', 'reels', 'method', 'index'],
   },
 
   /**
@@ -199,6 +201,26 @@ export const HOME_COMPOSITIONS: Record<Audience, HomeComposition> = {
   },
 };
 
-export function compositionFor(audience: Audience): HomeComposition {
-  return HOME_COMPOSITIONS[audience] ?? HOME_COMPOSITIONS.viaggiatori;
+const INTEREST_SECTION_ORDER: Partial<Record<InterestId, SectionKey[]>> = {
+  'weekend-romantici': ['grid', 'map', 'reels', 'method', 'index'],
+  'fuori-rotta': ['map', 'grid', 'reels', 'method', 'index'],
+  'mangiare-e-dormire': ['grid', 'reels', 'map', 'method', 'index'],
+  gravidanza: ['family', 'method', 'featured', 'map', 'index'],
+  'viaggiare-in-gravidanza': ['family', 'map', 'featured', 'method', 'index'],
+  'essenziali-family': ['family', 'method', 'index', 'map', 'featured'],
+  'capire-il-fit': ['method', 'reels', 'featured', 'grid', 'index'],
+  'vedere-i-format': ['reels', 'featured', 'method', 'grid', 'index'],
+  'richiedere-il-media-kit': ['method', 'reels', 'featured', 'grid', 'index'],
+};
+
+export function compositionFor(audience: Audience, interest?: InterestId | null): HomeComposition {
+  const composition = HOME_COMPOSITIONS[audience] ?? HOME_COMPOSITIONS.viaggiatori;
+  const selectedInterest = getAudienceInterest(interest);
+  const matchingInterest = selectedInterest?.audience === audience ? selectedInterest : null;
+  const sections = matchingInterest
+    ? (INTEREST_SECTION_ORDER[matchingInterest.id] ?? composition.sections)
+    : composition.sections;
+  const voice = matchingInterest ? { ...composition.voice, cta: matchingInterest.cta } : composition.voice;
+
+  return { voice, sections };
 }

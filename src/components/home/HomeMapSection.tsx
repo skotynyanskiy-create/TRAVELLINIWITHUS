@@ -32,13 +32,13 @@ export default function HomeMapSection() {
             <div className="max-w-2xl">
               <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-accent-on-dark,#e8834e)]/30 bg-[var(--color-accent)]/15 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.26em] text-[var(--color-accent-on-dark,#e8834e)] backdrop-blur-md">
                 <Sparkles size={14} className="text-[var(--color-accent-on-dark,#e8834e)]" />
-                Atlante di Rodrigo &amp; Betta
+                Dove cercare
               </span>
 
               <h2 className="mt-5 font-serif text-3xl font-normal leading-tight text-white md:text-5xl lg:text-6xl">
-                Tutti i posti in cui <br />
+                Trovali sulla mappa, <br />
                 <span className="font-serif italic text-[var(--color-accent-on-dark,#e8834e)]">
-                  siamo stati davvero.
+                  prima di partire.
                 </span>
               </h2>
 

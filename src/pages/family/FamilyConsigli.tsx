@@ -1,21 +1,25 @@
 import { Instagram } from 'lucide-react';
 import Breadcrumbs from '../../components/Breadcrumbs';
 import FamilyEntryCard from '../../components/family/FamilyEntryCard';
+import InterestPicker from '../../components/InterestPicker';
 import PageLayout from '../../components/PageLayout';
 import Section from '../../components/Section';
 import SEO from '../../components/SEO';
 import { getFamilyEntries } from '../../config/familyLibrary';
 import { siteContentDefaults } from '../../config/siteContent';
 import { useSiteContent } from '../../hooks/useSiteContent';
+import { usePersonalizedInterest } from '../../hooks/usePersonalizedInterest';
+import { rankFamilyByInterest } from '../../config/audienceInterests';
 
 /**
  * Consigli Travellini Family — ogni voce nasce da un post/reel reale.
  * Niente listicle inventate: se un consiglio non è stato vissuto, non c'è.
  */
 export default function FamilyConsigli() {
+  const { interest } = usePersonalizedInterest();
   const { data: content } = useSiteContent('family');
   const family = content ?? siteContentDefaults.family;
-  const entries = getFamilyEntries();
+  const entries = rankFamilyByInterest(getFamilyEntries(), interest);
 
   return (
     <PageLayout>
@@ -67,6 +71,8 @@ export default function FamilyConsigli() {
           )}
         </div>
       </Section>
+
+      <InterestPicker />
     </PageLayout>
   );
 }

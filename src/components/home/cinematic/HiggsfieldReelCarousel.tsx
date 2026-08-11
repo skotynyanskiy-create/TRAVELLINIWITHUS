@@ -98,10 +98,10 @@ export default function HiggsfieldReelCarousel() {
         <div className="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>
             <span className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent-on-dark)]">
-              Ripreso sul posto
+              Come li abbiamo vissuti
             </span>
             <h2 className="mt-3 max-w-xl font-serif text-3xl font-normal leading-tight md:text-5xl">
-              {reels.length} posti, filmati mentre ci eravamo.
+              Luoghi veri, ripresi sul posto.
             </h2>
           </div>
           <p className="max-w-xs text-sm leading-relaxed text-white/65">

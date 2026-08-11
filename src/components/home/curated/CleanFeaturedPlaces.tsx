@@ -1,7 +1,9 @@
 import { ArrowUpRight, MapPin, Sparkles, Star } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import OptimizedImage from '@/src/components/OptimizedImage';
-import { getContentById } from '@/src/config/contentLibrary';
+import { useMemo } from 'react';
+import { usePersonalizedInterest } from '@/src/hooks/usePersonalizedInterest';
+import { CURATED_IDS, selectHomeFeaturedItems } from '@/src/lib/homeContentSelection';
 import { PARTNERSHIP_LABEL } from '@/src/types/content';
 
 interface PlaceItem {
@@ -23,15 +25,9 @@ interface PlaceItem {
  * volutamente diversi dall'hero e dai primi reel, per non ripetere gli stessi
  * posti in più sezioni della home.
  */
-export const CURATED_IDS = [
-  'novara-emotional-grand-motel',
-  'ravenna-better-sushi',
-  'londra-warner-bros-studio-harry-potter',
-];
+export { CURATED_IDS };
 
-const FEATURED_PLACES: PlaceItem[] = CURATED_IDS.map((id) => getContentById(id))
-  .filter((item): item is NonNullable<typeof item> => Boolean(item))
-  .map((item) => {
+function toPlaceItem(item: NonNullable<ReturnType<typeof selectHomeFeaturedItems>[number]>): PlaceItem {
     const disclosure = PARTNERSHIP_LABEL[item.partnership.kind];
     return {
       id: item.id,
@@ -45,9 +41,17 @@ const FEATURED_PLACES: PlaceItem[] = CURATED_IDS.map((id) => getContentById(id))
       link: `/posto/${item.id}`,
       description: item.description,
     };
-  });
+}
 
 export default function CleanFeaturedPlaces() {
+  const { interest } = usePersonalizedInterest();
+  const featuredPlaces = useMemo(
+    () => selectHomeFeaturedItems(interest).map(toPlaceItem),
+    [interest]
+  );
+
+  if (featuredPlaces.length === 0) return null;
+
   return (
     <section className="bg-white py-20 md:py-28 text-[var(--color-ink,#1a2b3c)] border-b border-[var(--color-border)]">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
@@ -73,7 +77,7 @@ export default function CleanFeaturedPlaces() {
 
         {/* 3 Clean Cards */}
         <div className="grid gap-8 md:grid-cols-3">
-          {FEATURED_PLACES.map((place) => (
+          {featuredPlaces.map((place) => (
             <Link
               key={place.id}
               to={place.link}

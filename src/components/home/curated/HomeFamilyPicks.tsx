@@ -1,8 +1,11 @@
 import { ArrowRight } from 'lucide-react';
+import { useMemo } from 'react';
 import { Link } from '@/src/components/TransitionLink';
 import Section from '@/src/components/Section';
 import FamilyEntryCard from '@/src/components/family/FamilyEntryCard';
+import { rankFamilyByInterest } from '@/src/config/audienceInterests';
 import { getFamilyEntries } from '@/src/config/familyLibrary';
+import { usePersonalizedInterest } from '@/src/hooks/usePersonalizedInterest';
 
 /**
  * I consigli family in home, quando l'audience e' family.
@@ -18,10 +21,15 @@ import { getFamilyEntries } from '@/src/config/familyLibrary';
 const HOME_LIMIT = 3;
 
 export default function HomeFamilyPicks() {
-  const entries = getFamilyEntries().slice(0, HOME_LIMIT);
+  const { interest } = usePersonalizedInterest();
+  const allEntries = useMemo(
+    () => rankFamilyByInterest(getFamilyEntries(), interest),
+    [interest]
+  );
+  const entries = allEntries.slice(0, HOME_LIMIT);
   if (entries.length === 0) return null;
 
-  const total = getFamilyEntries().length;
+  const total = allEntries.length;
 
   return (
     <Section

@@ -15,13 +15,13 @@ export default function HomeIndiceVivo() {
     <>
       <div className="mb-10 text-left max-w-2xl">
         <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
-          Indice Vivo dei Posti Provati
+          Tutto l&apos;archivio
         </span>
         <h2
           id="page-02-title"
           className="mt-2 font-serif text-3xl font-normal leading-tight text-[var(--color-ink)] md:text-4xl"
         >
-          Posti provati, uno per uno.
+          Tutti i posti, pronti da esplorare.
         </h2>
         <p className="mt-3 text-sm leading-relaxed text-[var(--color-muted-fg)]">
           Ogni voce nasce da un viaggio vero. Su ognuna trovi cos&apos;è quel posto, dov&apos;è,

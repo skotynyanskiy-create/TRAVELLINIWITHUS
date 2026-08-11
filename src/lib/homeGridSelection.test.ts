@@ -81,6 +81,18 @@ describe('selectHomeGridItems — fixture sintetica', () => {
     expect(ids).toContain('b');
   });
 
+  it('mantiene nella griglia gli id prioritari quando non hanno una sezione dedicata', () => {
+    const pool = [
+      makeItem({ id: 'a', types: ['Food & Ristoranti'], publishedAt: '2026-03-01' }),
+      makeItem({ id: 'b', types: ['Hotel con carattere'], publishedAt: '2026-02-01' }),
+      makeItem({ id: 'c', types: ['Insolito'], publishedAt: '2026-01-01' }),
+    ];
+
+    const { items } = selectHomeGridItems(pool, 2, [], ['c']);
+
+    expect(items.map((item) => item.id)).toContain('c');
+  });
+
   it('senza item featured, featuredId è null', () => {
     const pool = [
       makeItem({ id: 'a', types: ['Food & Ristoranti'], publishedAt: '2026-01-01' }),

@@ -6,6 +6,7 @@ import OptimizedImage from '@/src/components/OptimizedImage';
 import { useAudience } from '@/src/context/AudienceContext';
 import { compositionFor } from '@/src/config/homeComposition';
 import { useReducedMotion } from '@/src/hooks/useReducedMotion';
+import { usePersonalizedInterest } from '@/src/hooks/usePersonalizedInterest';
 import SorprendimiOverlay from './SorprendimiOverlay';
 
 /**
@@ -27,8 +28,9 @@ import SorprendimiOverlay from './SorprendimiOverlay';
  */
 export default function HomeAudienceVoice() {
   const { audience } = useAudience();
+  const { interest } = usePersonalizedInterest();
   const reducedMotion = useReducedMotion();
-  const { voice } = compositionFor(audience);
+  const { voice } = compositionFor(audience, interest);
   const [sorpresaAperta, setSorpresaAperta] = useState(false);
 
   const rivela = (delay: number) =>

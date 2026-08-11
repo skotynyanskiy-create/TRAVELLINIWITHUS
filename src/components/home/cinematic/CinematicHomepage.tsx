@@ -5,9 +5,10 @@ import CleanFeaturedGrid from '../curated/CleanFeaturedGrid';
 import CleanEditorialPromise from '../curated/CleanEditorialPromise';
 import HomeFamilyPicks from '../curated/HomeFamilyPicks';
 import HomeAudienceVoice from '../HomeAudienceVoice';
+import InterestPicker from '@/src/components/InterestPicker';
 import { useAudience } from '@/src/context/AudienceContext';
 import { compositionFor, type SectionKey } from '@/src/config/homeComposition';
-import { MotionReveal } from '@/src/components/ui/MotionSignature';
+import { usePersonalizedInterest } from '@/src/hooks/usePersonalizedInterest';
 
 const HomeMapSection = lazy(() => import('../HomeMapSection'));
 const HiggsfieldReelCarousel = lazy(() => import('./HiggsfieldReelCarousel'));
@@ -75,18 +76,18 @@ const SECTION_ID: Record<SectionKey, string> = {
 
 export default function CinematicHomepage() {
   const { audience } = useAudience();
-  const { sections } = compositionFor(audience);
+  const { interest } = usePersonalizedInterest();
+  const { sections } = compositionFor(audience, interest);
 
   return (
     <div className="clean-homepage w-full bg-[var(--color-sand,#faf7f2)] text-[var(--color-ink,#1a2b3c)]">
       <div>
         <section id="hero">
-          <MotionReveal direction="up" duration={0.7}>
-            <BrandCoherentHero />
-          </MotionReveal>
+          <BrandCoherentHero />
         </section>
 
         <HomeAudienceVoice />
+        <InterestPicker />
 
         {sections.map((key) => (
           <section key={key} id={SECTION_ID[key]} className="scroll-mt-28">

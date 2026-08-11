@@ -32,12 +32,24 @@ export interface HomeGridSelection {
 export function selectHomeGridItems(
   pool: ContentItem[] = CONTENT_ITEMS,
   size = GRID_SIZE,
-  excludeIds: readonly string[] = []
+  excludeIds: readonly string[] = [],
+  priorityIds: readonly string[] = []
 ): HomeGridSelection {
   const excluded = new Set(excludeIds);
   const eligible = pool.filter((item) => isEligible(item, excluded));
   const used = new Set<string>();
   const winners: ContentItem[] = [];
+
+  // Quando la selezione editoriale non ha un blocco dedicato, i suoi posti
+  // restano visibili nella griglia prima di completare le categorie.
+  for (const id of priorityIds) {
+    if (winners.length >= size || used.has(id)) continue;
+    const priorityItem = eligible.find((item) => item.id === id);
+    if (priorityItem) {
+      winners.push(priorityItem);
+      used.add(priorityItem.id);
+    }
+  }
 
   for (const type of TYPES) {
     if (winners.length >= size) break;
