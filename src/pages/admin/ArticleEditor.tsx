@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../lib/firebaseDb';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -6,11 +6,16 @@ import { useAuth } from '../../context/AuthContext';
 import { handleFirestoreError, OperationType } from '../../utils/firestoreErrorHandler';
 import FormSkeleton from '../../components/FormSkeleton';
 import { verifyWithSearch, verifyWithMaps } from '../../services/aiVerificationService';
-import { Search, MapPin, Loader2 } from 'lucide-react';
+import { Search, MapPin, Loader2, AlertTriangle, RotateCcw } from 'lucide-react';
 import PageLayout from '../../components/PageLayout';
 import Section from '../../components/Section';
 import SEOPreview from '../../components/SEOPreview';
 import MarkdownArticleEditor from '../../components/admin/MarkdownArticleEditor';
+
+/** Esito del caricamento di un articolo esistente: i due casi hanno un
+ * rimedio diverso (id sbagliato nell'indirizzo vs. rete/permessi), quindi
+ * il messaggio in pagina li distingue invece di limitarsi a un errore generico. */
+type LoadError = 'not-found' | 'network' | null;
 
 const splitLines = (value: string) =>
   value
@@ -47,55 +52,67 @@ export default function ArticleEditor() {
   const [videoUrl, setVideoUrl] = useState('');
   const [published, setPublished] = useState(false);
   const [loading, setLoading] = useState(id ? true : false);
+  const [loadError, setLoadError] = useState<LoadError>(null);
   const [saving, setSaving] = useState(false);
 
   const [isVerifyingSearch, setIsVerifyingSearch] = useState(false);
   const [isVerifyingMaps, setIsVerifyingMaps] = useState(false);
 
-  useEffect(() => {
-    const fetchArticle = async () => {
-      try {
-        const docRef = doc(db, 'articles', id!);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          setTitle(data.title || '');
-          setSlug(data.slug || '');
-          setExcerpt(data.excerpt || '');
-          setContent(data.content || '');
-          setCoverImage(data.coverImage || '');
-          setCategory(data.category || '');
-          setAuthor(data.author || '');
-          setLocation(data.location || '');
-          setCountry(data.country || '');
-          setRegion(data.region || '');
-          setCity(data.city || '');
-          setContinent(data.continent || '');
-          setExperienceTypes(
-            Array.isArray(data.experienceTypes) ? data.experienceTypes.join('\n') : ''
-          );
-          setPeriod(data.period || '');
-          setBudget(data.budget || '');
-          setReadTime(data.readTime || '');
-          setTips(Array.isArray(data.tips) ? data.tips.join('\n') : '');
-          setPackingList(Array.isArray(data.packingList) ? data.packingList.join('\n') : '');
-          setHighlights(Array.isArray(data.highlights) ? data.highlights.join('\n') : '');
-          setMapUrl(data.mapUrl || '');
-          setDuration(data.duration || '');
-          setVideoUrl(data.videoUrl || '');
-          setPublished(data.published || false);
-        }
-      } catch (error) {
-        handleFirestoreError(error, OperationType.GET, `articles/${id}`);
-      } finally {
-        setLoading(false);
+  const fetchArticle = useCallback(async () => {
+    if (!id) return;
+    setLoading(true);
+    setLoadError(null);
+    try {
+      const docRef = doc(db, 'articles', id);
+      const docSnap = await getDoc(docRef);
+      if (!docSnap.exists()) {
+        setLoadError('not-found');
+        return;
       }
-    };
+      const data = docSnap.data();
+      setTitle(data.title || '');
+      setSlug(data.slug || '');
+      setExcerpt(data.excerpt || '');
+      setContent(data.content || '');
+      setCoverImage(data.coverImage || '');
+      setCategory(data.category || '');
+      setAuthor(data.author || '');
+      setLocation(data.location || '');
+      setCountry(data.country || '');
+      setRegion(data.region || '');
+      setCity(data.city || '');
+      setContinent(data.continent || '');
+      setExperienceTypes(
+        Array.isArray(data.experienceTypes) ? data.experienceTypes.join('\n') : ''
+      );
+      setPeriod(data.period || '');
+      setBudget(data.budget || '');
+      setReadTime(data.readTime || '');
+      setTips(Array.isArray(data.tips) ? data.tips.join('\n') : '');
+      setPackingList(Array.isArray(data.packingList) ? data.packingList.join('\n') : '');
+      setHighlights(Array.isArray(data.highlights) ? data.highlights.join('\n') : '');
+      setMapUrl(data.mapUrl || '');
+      setDuration(data.duration || '');
+      setVideoUrl(data.videoUrl || '');
+      setPublished(data.published || false);
+    } catch (error) {
+      try {
+        handleFirestoreError(error, OperationType.GET, `articles/${id}`);
+      } catch {
+        // handleFirestoreError rilancia sempre per contratto: qui interessa solo
+        // il logging/telemetria che fa prima di rilanciare, non la propagazione.
+      }
+      setLoadError('network');
+    } finally {
+      setLoading(false);
+    }
+  }, [id]);
 
+  useEffect(() => {
     if (id) {
       fetchArticle();
     }
-  }, [id]);
+  }, [id, fetchArticle]);
 
   const handleVerifySearch = async () => {
     if (!content) return;
@@ -175,6 +192,43 @@ export default function ArticleEditor() {
   };
 
   if (loading) return <FormSkeleton />;
+
+  if (loadError) {
+    return (
+      <PageLayout>
+        <Section className="pt-32 pb-24 max-w-2xl mx-auto min-h-screen flex flex-col items-center justify-center gap-4 text-center">
+          <AlertTriangle size={32} className="text-[var(--color-error-text)]" />
+          <h1 className="text-3xl font-serif">
+            {loadError === 'not-found' ? 'Articolo non trovato' : "Impossibile caricare l'articolo"}
+          </h1>
+          <p className="text-[var(--color-muted-fg)] max-w-md">
+            {loadError === 'not-found'
+              ? "Non esiste nessun articolo con questo indirizzo. Controlla il link, oppure torna all'elenco: qui non c'è nulla da salvare."
+              : "C'è stato un errore di connessione al database. Riprova, oppure torna all'elenco senza salvare nulla."}
+          </p>
+          <div className="flex items-center gap-3 pt-2">
+            {loadError === 'network' && (
+              <button
+                type="button"
+                onClick={fetchArticle}
+                className="flex items-center gap-2 bg-[var(--color-ink)] text-white px-6 py-3 rounded-full hover:bg-[var(--color-ink)]/85 transition-colors"
+              >
+                <RotateCcw size={16} />
+                Riprova
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => navigate('/admin')}
+              className="px-6 py-3 text-zinc-600 hover:text-zinc-900"
+            >
+              Torna all'elenco
+            </button>
+          </div>
+        </Section>
+      </PageLayout>
+    );
+  }
 
   return (
     <PageLayout>
