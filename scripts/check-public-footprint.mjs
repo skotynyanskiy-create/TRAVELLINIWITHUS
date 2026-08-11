@@ -125,12 +125,28 @@ expectContains(
   '/risorse separates affiliate and editorial outbound events.',
   '/risorse does not separate affiliate and editorial outbound events.'
 );
+/* Cercava la stringa 'nofollow sponsored noopener noreferrer' scritta a mano.
+   Dal commit 3220c73 quella stringa vive in un posto solo — AFFILIATE_ANCHOR_ATTRS
+   in src/lib/affiliateLink.ts — e le pagine la referenziano. Continuare a cercare
+   il letterale rendeva il controllo un falso negativo proprio sulla proprieta'
+   che era appena stata centralizzata.
+   Il controllo ora e' piu' forte, non piu' debole: verifica che la pagina passi
+   dalla costante condivisa, e che la costante contenga tutti e quattro i token.
+   Una pagina che riscrivesse il rel a mano fallirebbe qui. */
 expectContains(
   'src/pages/Risorse.tsx',
-  "'nofollow sponsored noopener noreferrer'",
-  '/risorse applies sponsored rel to commercial links.',
+  'AFFILIATE_ANCHOR_ATTRS',
+  '/risorse applies sponsored rel to commercial links via the shared constant.',
   '/risorse does not apply sponsored rel to commercial links.'
 );
+for (const token of ['nofollow', 'sponsored', 'noopener', 'noreferrer']) {
+  expectContains(
+    'src/lib/affiliateLink.ts',
+    token,
+    `AFFILIATE_ANCHOR_ATTRS declares rel token "${token}".`,
+    `AFFILIATE_ANCHOR_ATTRS is missing rel token "${token}".`
+  );
+}
 
 for (const docPath of [
   'docs/50_Scratch/AUDIT_PUBLIC_FOOTPRINT_TRAVELLINIWITHUS_2026-06-07.md',

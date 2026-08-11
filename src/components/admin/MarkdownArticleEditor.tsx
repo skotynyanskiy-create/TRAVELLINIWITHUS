@@ -83,12 +83,25 @@ export default function MarkdownArticleEditor({
     onChange(nextValue);
   };
 
+  /* Tab indenta, ma non puo' essere l'unica uscita dal campo: una textarea che
+     trattiene il focus in entrambe le direzioni e' una trappola da tastiera
+     (WCAG 2.1.2) e il gate a11y della CI e' bloccante a 0,95.
+     Quindi: Shift+Tab ed Escape escono sempre, e Tab indenta solo quando non
+     c'e' nulla di selezionato — altrimenti cancellerebbe il testo scelto senza
+     che l'annulla nativo possa riportarlo indietro (il campo e' controllato). */
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key !== 'Tab') return;
-    e.preventDefault();
+    if (e.key === 'Escape') {
+      e.currentTarget.blur();
+      return;
+    }
+    if (e.key !== 'Tab' || e.shiftKey) return;
+
     const textarea = e.currentTarget;
     const start = textarea.selectionStart;
     const end = textarea.selectionEnd;
+    if (start !== end) return;
+
+    e.preventDefault();
     const nextValue = `${value.slice(0, start)}  ${value.slice(end)}`;
     const cursor = start + 2;
     pendingSelectionRef.current = { start: cursor, end: cursor };

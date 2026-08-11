@@ -64,8 +64,11 @@ export function remarkEditorialDirectives() {
       if (!config) return;
 
       /* Una direttiva vale solo nella forma dichiarata: `:::posto` come blocco,
-         `:affiliato[...]` in linea. Cosi' `:posto[...]` scritto per sbaglio non
-         renderizza mezzo componente, resta testo e si vede che e' sbagliato. */
+         `:affiliato[...]` in linea. Una forma sbagliata non renderizza mezzo
+         componente — ma non e' nemmeno visibile come errore: senza `hName`,
+         `mdast-util-to-hast` avvolge il nodo in un `<div>` anonimo e ne mostra
+         i figli senza stile. L'errore va quindi intercettato prima, dal linter
+         dell'editor (`markdownEditorTools.ts`), non da qui. */
       const expected = config.nodeType === 'text' ? 'textDirective' : 'containerDirective';
       if (directive.type !== expected) return;
 

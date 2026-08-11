@@ -13,10 +13,10 @@ import { getNodeText } from './utils';
  *
  * A differenza delle altre direttive registrate qui, questa e' una
  * **textDirective** (`:nome[...]`), non una containerDirective (`::: nome`).
- * Il motore in `index.ts` oggi visita solo `containerDirective`: per attivare
- * questa direttiva serve un secondo visitor (o un ramo nello stesso) che
- * intercetti `node.type === 'textDirective'` e applichi lo stesso schema
- * `data.hName` / `data.hProperties` gia' usato per le altre.
+ * Il motore in `index.ts` la gestisce gia': sceglie il tipo di nodo atteso da
+ * `nodeType: 'text'` dichiarato qui sotto, dentro lo stesso `visit()` delle
+ * altre. NON aggiungere un secondo visitor "per attivarla": processerebbe il
+ * nodo due volte e raddoppierebbe il contatore che numera gli UTM.
  *
  * Contratto atteso dal motore:
  *  - chiama `affiliatoDirective.toProps(directive, index)` dove `index` e' il

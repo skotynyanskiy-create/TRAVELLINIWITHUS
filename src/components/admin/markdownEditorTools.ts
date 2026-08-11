@@ -170,6 +170,25 @@ export function lintEditorialMarkdown(markdown: string): string[] {
     const line = rawLine.trim();
     if (!line.startsWith(':::')) return;
 
+    /* `remark-directive` non ammette spazi dopo i due punti ne' prima delle
+       graffe: `::: posto` e `:::posto {id="x"}` non sono direttive, sono
+       paragrafi di testo. Senza questo controllo il linter li dava per validi
+       — proprio la forma che deve intercettare — e il blocco spariva dalla
+       pagina in silenzio. */
+    const rawRemainder = line.slice(3);
+    if (rawRemainder !== '' && /^\s/.test(rawRemainder)) {
+      issues.push(
+        `Riga ${idx + 1}: "${line}" ha uno spazio dopo i ":::". Scrivi il nome attaccato, altrimenti non è un blocco e resta testo.`
+      );
+      return;
+    }
+    if (/^[a-zA-Z][\w-]*\s+\{/.test(rawRemainder)) {
+      issues.push(
+        `Riga ${idx + 1}: "${line}" ha uno spazio prima della graffa. Attacca gli attributi al nome, altrimenti non è un blocco.`
+      );
+      return;
+    }
+
     const remainder = line.slice(3).trim();
     if (remainder === '') {
       if (openStack.length === 0) {
