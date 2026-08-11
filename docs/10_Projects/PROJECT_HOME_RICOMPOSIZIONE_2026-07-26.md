@@ -23,7 +23,16 @@ tags:
 
 # PROJECT — La home che si ricompone (2026-07-26)
 
-**Stato: SPEC — in attesa di rilettura owner. Nessun codice modificato.**
+**Stato: ATTERRATA (verificato sul codice il 2026-08-11).** Le cinque decisioni
+di §3 non aspettano più nessun ok: sono nel codice.
+
+| Decisione        | Dove sta nel codice                                                 |
+| ---------------- | ------------------------------------------------------------------- |
+| Modello dinamico | `src/config/homeComposition.ts` — mappa audience → sezioni ordinate |
+| Prima audience   | `src/context/AudienceContext.tsx:12` — `viaggiatori` è il default   |
+| Accento          | `src/index.css:41` — `--color-accent: #ff4d1a` con la legge 3:1     |
+| Movimento        | `three` fra le dipendenze di `package.json`                         |
+| Identità         | Logo e nome invariati                                               |
 
 ## 1. Il difetto vero
 

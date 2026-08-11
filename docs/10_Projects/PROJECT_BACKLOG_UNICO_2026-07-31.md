@@ -70,12 +70,12 @@ Effort: **S** < 2h · **M** 2-6h · **L** > 6h. `[OWNER]` = non lo posso fare io
 
 ### P1 — direzione e fiducia
 
-| #   | Voce                                                                                                                                                              | Effort    | Impatto                                 | Chi                   |
-| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | --------------------------------------- | --------------------- |
-| 5   | **[OWNER] 4 decisioni sulla spec home**: la spec `PROJECT_HOME_RICOMPOSIZIONE` è ferma dal 26/07 in attesa di 4 ok. Senza, la home resta muta per 3 pubblici      | S         | Sblocca la quinta home — e la ferma qui | Skott                 |
-| 6   | **Foto reali R+B**: le foto "coppia" nel repo sono generate, in violazione della regola imagery-truth. Nel codice i `TODO R+B` non ci sono più: mancano gli asset | S + asset | Trust del posizionamento people-led     | Skott + R+B           |
-| 7   | **Test end-to-end pipeline email**: `RESEND_API_KEY`, `BREVO_API_KEY`, `BREVO_LIST_ID` sono in `.env` locale. Da verificare nell'env delle functions in prod      | S         | Oggi ogni lead catturato è silenzioso   | backend-engineer      |
-| 8   | **Reel reale in `FEATURED_REEL`** + cover dal brand al posto dello stock                                                                                          | S         | Trust in home, bounce rate              | Skott + asset-curator |
+| #   | Voce                                                                                                                                                               | Effort    | Impatto                               | Chi                   |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ------------------------------------- | --------------------- |
+| 5   | ~~[OWNER] 4 decisioni sulla spec home~~ — **chiusa il 2026-08-11**: erano già nel codice (`homeComposition.ts`, `AudienceContext.tsx:12`, `index.css:41`, `three`) | —         | —                                     | —                     |
+| 6   | **Foto reali R+B**: le foto "coppia" nel repo sono generate, in violazione della regola imagery-truth. Nel codice i `TODO R+B` non ci sono più: mancano gli asset  | S + asset | Trust del posizionamento people-led   | Skott + R+B           |
+| 7   | **Test end-to-end pipeline email**: `RESEND_API_KEY`, `BREVO_API_KEY`, `BREVO_LIST_ID` sono in `.env` locale. Da verificare nell'env delle functions in prod       | S         | Oggi ogni lead catturato è silenzioso | backend-engineer      |
+| 8   | **Reel reale in `FEATURED_REEL`** + cover dal brand al posto dello stock                                                                                           | S         | Trust in home, bounce rate            | Skott + asset-curator |
 
 ### P2 — conversione
 
@@ -104,7 +104,7 @@ Quello che resta in P0 è **quasi tutto tuo**, non mio.
    non produce niente di osservabile. Sono il vero primo passo.
 2. **#2** — Blaze + 5 segreti + 3 parametri, poi `firebase deploy --only functions:api,hosting`.
 3. **#1** — cover reale e verdetto R+B. Lo script si rifiuta di pubblicare finché mancano.
-4. **#5** in parallelo: tiene ferma la home.
+4. ~~#5~~ — chiusa: le decisioni sulla home erano già applicate.
 5. Poi #1b, poi P1 residuo, poi P2.
 
 Non toccare P2/P3 prima che #1 e #2 siano in produzione: sono ottimizzazioni di
