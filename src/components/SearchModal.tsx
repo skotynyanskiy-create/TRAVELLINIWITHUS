@@ -8,7 +8,7 @@ import Skeleton from './Skeleton';
 import { fetchArticles } from '../services/firebaseService';
 import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_ARTICLE_PREVIEW, DEMO_ARTICLE_PATH } from '../config/demoContent';
-import { PREVIEW_ARTICLES } from '../config/previewContent';
+import { INTERNAL_PREVIEW_SLUGS, PREVIEW_ARTICLES } from '../config/previewContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { trackEvent } from '../services/analytics';
 import { TYPES, ZONES, slugifyType } from '../config/contentTaxonomy';
@@ -228,6 +228,10 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
         if (demoSettings.showEditorialDemo) {
           Object.values(PREVIEW_ARTICLES).forEach((preview) => {
             if (seenSlugs.has(preview.slug)) return;
+            // La guida ai blocchi editoriali e' documentazione per chi scrive:
+            // resta raggiungibile per URL, ma fra i risultati di ricerca del
+            // sito non ci va.
+            if (INTERNAL_PREVIEW_SLUGS.has(preview.slug)) return;
             const keywords = [
               preview.location,
               preview.continent,

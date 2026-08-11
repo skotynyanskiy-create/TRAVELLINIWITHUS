@@ -919,6 +919,13 @@ Prenotare solo per una foto, sottovalutare distanze, ignorare stagionalità e ac
 // per ri-attivazione futura.
 const HIDDEN_OVERRIDE_SLUGS = new Set<string>(['weekend-borgo-lento', 'guida-prima-di-prenotare']);
 
+/**
+ * Pagine raggiungibili per URL ma fuori da ogni elenco pubblico: documentazione
+ * interna, non contenuto editoriale. Diverso da HIDDEN_OVERRIDE_SLUGS, che le
+ * toglie del tutto da PREVIEW_ARTICLES e quindi ne rompe anche la rotta.
+ */
+export const INTERNAL_PREVIEW_SLUGS = new Set<string>(['guida-blocchi-editoriali']);
+
 export const PREVIEW_ARTICLES: Record<string, PreviewArticle> = SHOW_HIDDEN_PREVIEW_OVERRIDES
   ? RAW_PREVIEW_ARTICLES
   : Object.fromEntries(
