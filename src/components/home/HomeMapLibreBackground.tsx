@@ -1,7 +1,8 @@
-import { useRef, useEffect, useMemo, useSyncExternalStore } from 'react';
+import { useRef, useEffect, useMemo, useCallback, useSyncExternalStore } from 'react';
 import Map, { Marker, type MapRef } from 'react-map-gl/maplibre';
 import { getMapPinItems } from '@/src/config/contentLibrary';
 import { useReducedMotion } from '@/src/hooks/useReducedMotion';
+import { installOpenFreeMapStyleFallback } from '@/src/lib/openFreeMap';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 /** Cap pin count on home teaser — full set lives on /mappa. */
@@ -23,6 +24,10 @@ export default function HomeMapLibreBackground() {
   const tabVisible = useSyncExternalStore(subscribeVisibility, getVisibilitySnapshot, () => true);
 
   const geocodedItems = useMemo(() => getMapPinItems(HOME_MAP_PIN_LIMIT), []);
+  const setMapRef = useCallback((instance: MapRef | null) => {
+    mapRef.current = instance;
+    if (instance) installOpenFreeMapStyleFallback(instance.getMap());
+  }, []);
 
   // Slow bearing spin only when motion allowed and tab visible
   useEffect(() => {
@@ -49,7 +54,7 @@ export default function HomeMapLibreBackground() {
   return (
     <div className="pointer-events-none relative h-full w-full overflow-hidden opacity-70">
       <Map
-        ref={mapRef}
+        ref={setMapRef}
         initialViewState={{
           longitude: 12.0,
           latitude: 48.0,
