@@ -195,7 +195,7 @@ export const HOME_COMPOSITIONS: Record<Audience, HomeComposition> = {
         { value: String(REELS.length), label: 'reel consegnati' },
       ],
       showcase: showcaseBrand,
-      cta: { label: 'Scarica il media kit', to: '/media-kit' },
+      cta: { label: 'Richiedi il media kit', to: '/media-kit' },
     },
     sections: ['reels', 'method', 'featured', 'grid', 'index'],
   },
@@ -220,7 +220,9 @@ export function compositionFor(audience: Audience, interest?: InterestId | null)
   const sections = matchingInterest
     ? (INTEREST_SECTION_ORDER[matchingInterest.id] ?? composition.sections)
     : composition.sections;
-  const voice = matchingInterest ? { ...composition.voice, cta: matchingInterest.cta } : composition.voice;
+  const voice = matchingInterest
+    ? { ...composition.voice, cta: matchingInterest.cta }
+    : composition.voice;
 
   return { voice, sections };
 }

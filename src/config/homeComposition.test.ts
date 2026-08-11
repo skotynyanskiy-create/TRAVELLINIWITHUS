@@ -33,3 +33,9 @@ describe('home composition for Viaggiatori', () => {
     expect(compositionFor('brand', 'fuori-rotta')).toEqual(compositionFor('brand'));
   });
 });
+
+describe('home composition for Brand', () => {
+  it("la CTA parla della lingua della pagina d'arrivo, non promette un download", () => {
+    expect(compositionFor('brand').voice.cta.label).toBe('Richiedi il media kit');
+  });
+});
