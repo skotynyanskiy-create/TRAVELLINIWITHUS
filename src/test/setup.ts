@@ -19,6 +19,11 @@ Object.defineProperty(window, 'scrollTo', {
   value: () => undefined,
 });
 
+Object.defineProperty(window.Element.prototype, 'scrollIntoView', {
+  writable: true,
+  value: () => undefined,
+});
+
 class MockIntersectionObserver implements IntersectionObserver {
   readonly root = null;
   readonly rootMargin = '';

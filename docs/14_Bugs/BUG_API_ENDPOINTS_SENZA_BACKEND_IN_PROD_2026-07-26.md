@@ -33,7 +33,31 @@ eseguito alcun deploy né impostato un segreto reale: il bug resta aperto finch�
 un owner non valida sulla revisione Firebase effettivamente pubblicata
 Hosting → Function, Firestore e le integrazioni abilitate.
 
-## Sintesi
+## Aggiunta 2026-08-12 — il frontend non finge più un successo che non c'è
+
+Finché questo bug resta aperto, i 6 form di lead (`media-kit-lead`,
+`contact-lead`, 4x `newsletter-subscribe`) cadono nel fallback
+`appendLeadFallback`, che scrive solo in `localStorage` **del browser di chi
+scrive**. Prima di questa modifica, tutti e sei dichiaravano comunque
+"successo" (schermata verde, evento analytics `*_success`): l'owner non vede
+mai quei contatti, ma chi li ha lasciati crede di aver ricevuto risposta.
+
+Corretto in `src/pages/MediaKit.tsx`, `src/pages/Contatti.tsx`,
+`src/components/Newsletter.tsx`, `src/components/club/ClubMembershipHero.tsx`,
+`src/components/home/diario/DiarioConversionSection.tsx`,
+`src/pages/VieniConNoi.tsx`: quando scatta il fallback, l'interfaccia dice che
+l'invio non è riuscito e offre un canale diretto cliccabile (mailto/WhatsApp,
+`src/config/site.ts` → `CONTACTS`) precompilato con i dati già scritti, tramite
+il componente condiviso `src/components/LeadFallbackNotice.tsx` e gli helper
+puri `buildLeadFallbackMailto`/`buildLeadFallbackWhatsAppUrl` in
+`src/lib/leadFallback.ts`. Gli eventi analytics del ramo di fallback sono stati
+rinominati (`*_fallback` invece di `*_success`): un pixel ads che ottimizza sul
+nome vecchio contava come conversione un lead mai arrivato al team.
+
+Questo **non chiude** il bug: il backend resta da deployare e validare in
+produzione. Riduce solo il danno nel frattempo — chi scrive ora sa che deve
+usare il canale diretto, invece di credere (a torto) di essere stato
+contattato.
 
 > Nota storica: questa sintesi era corretta al 2026-07-26; non descrive più
 > l'albero locale corrente.

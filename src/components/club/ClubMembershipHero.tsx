@@ -2,7 +2,14 @@ import { useState, type FormEvent } from 'react';
 import { motion } from 'motion/react';
 import { CheckCircle2, Loader2, Lock, Mail, Sparkles, Star } from 'lucide-react';
 import { trackEvent } from '../../services/analytics';
-import { appendLeadFallback } from '../../lib/leadFallback';
+import {
+  appendLeadFallback,
+  buildLeadFallbackMailto,
+  buildLeadFallbackWhatsAppText,
+  buildLeadFallbackWhatsAppUrl,
+} from '../../lib/leadFallback';
+import { CONTACTS } from '../../config/site';
+import LeadFallbackNotice from '../LeadFallbackNotice';
 
 const FREE_BENEFITS = [
   'Articoli editoriali pubblici',
@@ -56,6 +63,7 @@ export default function ClubMembershipHero() {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [fallbackNotice, setFallbackNotice] = useState<{ saved: boolean } | null>(null);
 
   const handlePlanSelect = (planId: string) => {
     setSelectedPlan(planId);
@@ -96,16 +104,31 @@ export default function ClubMembershipHero() {
         plan: selectedPlan,
         date: new Date().toISOString(),
       });
-      if (saved) {
-        trackEvent('club_waitlist_success', { fallback: true, plan: selectedPlan });
-        setIsSubscribed(true);
-      } else {
-        setError('Iscrizione non riuscita. Riprova tra poco oppure scrivici via email.');
-      }
+      // Distinto da 'club_waitlist_success': nessuna iscrizione e' arrivata
+      // davvero alla waitlist, quindi non e' una conversione da contare come tale.
+      trackEvent('club_waitlist_fallback', { plan: selectedPlan, saved_locally: saved });
+      setFallbackNotice({ saved });
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  const clubFallbackMailto = buildLeadFallbackMailto(
+    CONTACTS.email,
+    `Waitlist Travellini Club — piano ${selectedPlan === 'annual' ? 'annuale' : 'mensile'}`,
+    'Il modulo di iscrizione alla waitlist del Club non è riuscito a registrarmi. La mia email è qui sotto:',
+    [
+      { label: 'Email', value: email },
+      { label: 'Piano', value: selectedPlan === 'annual' ? 'Annuale' : 'Mensile' },
+    ]
+  );
+  const clubFallbackWhatsAppUrl = buildLeadFallbackWhatsAppUrl(
+    CONTACTS.whatsappUrl,
+    buildLeadFallbackWhatsAppText(
+      'Vorrei entrare nella waitlist del Travellini Club, il modulo del sito non ha funzionato:',
+      [{ label: 'Email', value: email }]
+    )
+  );
 
   return (
     <section id="club-pricing" className="bg-[var(--color-ink)] py-20 text-white md:py-28">
@@ -227,6 +250,18 @@ export default function ClubMembershipHero() {
                   Sei in waitlist. Ti scriviamo appena il Club apre alle prime iscrizioni.
                 </span>
               </div>
+            ) : fallbackNotice ? (
+              <div className="mt-4 rounded-[var(--radius-md)] border border-[var(--color-warning)]/35 bg-white/5 p-4">
+                <LeadFallbackNotice
+                  savedLocally={fallbackNotice.saved}
+                  title="Iscrizione alla waitlist non registrata"
+                  description="Il nostro sistema non era raggiungibile in questo momento. Scrivici direttamente e ti mettiamo in lista a mano."
+                  mailtoHref={clubFallbackMailto}
+                  whatsappHref={clubFallbackWhatsAppUrl}
+                  onRetry={() => setFallbackNotice(null)}
+                  tone="dark"
+                />
+              </div>
             ) : (
               <form
                 id="club-waitlist"
@@ -260,7 +295,7 @@ export default function ClubMembershipHero() {
                 </button>
               </form>
             )}
-            {error && !isSubscribed && (
+            {error && !isSubscribed && !fallbackNotice && (
               <p className="mt-2 text-xs text-[var(--color-accent-text)]" role="alert">
                 {error}
               </p>

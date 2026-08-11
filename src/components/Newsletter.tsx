@@ -11,13 +11,19 @@ import {
 } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import { trackEvent } from '../services/analytics';
-import { appendLeadFallback } from '../lib/leadFallback';
+import {
+  appendLeadFallback,
+  buildLeadFallbackMailto,
+  buildLeadFallbackWhatsAppText,
+  buildLeadFallbackWhatsAppUrl,
+} from '../lib/leadFallback';
 import {
   CONTACTS,
   NEWSLETTER_RECENT_SIGNUPS,
   NEWSLETTER_COUNTER_MIN_VISIBLE,
 } from '../config/site';
 import Button from './Button';
+import LeadFallbackNotice from './LeadFallbackNotice';
 
 type NewsletterVariant = 'sand' | 'white' | 'editorial' | 'compact' | 'article' | 'business';
 
@@ -152,6 +158,7 @@ export default function Newsletter({
   const [website, setWebsite] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [fallbackNotice, setFallbackNotice] = useState<{ saved: boolean } | null>(null);
   const copy = resolveCopy({ variant, title, eyebrow, description, bullets, ctaLabel });
   const isCompact = compact || variant === 'compact';
   const isDark = variant === 'article' || variant === 'business';
@@ -208,28 +215,36 @@ export default function Newsletter({
         source,
         date: new Date().toISOString(),
       });
-      if (saved) {
-        trackEvent('newsletter_signup', { source, fallback: 'localStorage' });
-        if (unlocksLeadMagnet) {
-          sessionStorage.setItem('twu_lead_magnet_unlocked', '1');
-        }
-        setIsSubscribed(true);
-        if (onSuccess) {
-          setTimeout(onSuccess, 2000);
-        }
-      } else {
-        setError(
-          'Iscrizione non riuscita. Riprova tra poco oppure scrivici direttamente via email.'
-        );
+      // Evento distinto da 'newsletter_signup': quel nome alimenta anche i
+      // pixel di conversione, che non devono contare un'iscrizione mai
+      // arrivata alla lista come se fosse arrivata.
+      trackEvent('newsletter_signup_fallback', { source, saved_locally: saved });
+      if (unlocksLeadMagnet && saved) {
+        sessionStorage.setItem('twu_lead_magnet_unlocked', '1');
       }
+      setFallbackNotice({ saved });
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const newsletterFallbackMailto = buildLeadFallbackMailto(
+    CONTACTS.email,
+    'Iscrizione newsletter dal sito',
+    'Il modulo di iscrizione newsletter non è riuscito a registrarmi. La mia email è qui sotto:',
+    [{ label: 'Email', value: email }]
+  );
+  const newsletterFallbackWhatsAppUrl = buildLeadFallbackWhatsAppUrl(
+    CONTACTS.whatsappUrl,
+    buildLeadFallbackWhatsAppText(
+      'Vorrei iscrivermi alla newsletter, il modulo del sito non ha funzionato:',
+      [{ label: 'Email', value: email }]
+    )
+  );
+
   const form = (
     <AnimatePresence mode="wait">
-      {!isSubscribed ? (
+      {!isSubscribed && !fallbackNotice ? (
         <motion.form
           key="form"
           initial={{ opacity: 0 }}
@@ -365,7 +380,7 @@ export default function Newsletter({
             </p>
           )}
         </motion.form>
-      ) : (
+      ) : isSubscribed ? (
         <motion.div
           key="success"
           initial={{ opacity: 0, y: 8 }}
@@ -413,6 +428,37 @@ export default function Newsletter({
               )}
             </div>
           </div>
+        </motion.div>
+      ) : (
+        <motion.div
+          key="fallback"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={`rounded-[var(--radius-lg)] p-5 ${isDark ? 'bg-white/10 text-white' : 'bg-[var(--color-warning-soft)] text-[var(--color-ink)]'}`}
+        >
+          {unlocksLeadMagnet && fallbackNotice?.saved && (
+            <p className="mb-3">
+              <Link
+                to="/lead-magnet"
+                className="inline-flex items-center gap-1.5 text-sm font-bold tracking-wide text-[var(--color-accent-text)] underline underline-offset-4 hover:text-[var(--color-accent-hover)]"
+              >
+                La guida resta disponibile, aprila qui <ArrowRight size={13} />
+              </Link>
+            </p>
+          )}
+          <LeadFallbackNotice
+            savedLocally={Boolean(fallbackNotice?.saved)}
+            title="Iscrizione non registrata"
+            description={
+              unlocksLeadMagnet && fallbackNotice?.saved
+                ? 'Il sistema non ci ha confermato la ricezione: scrivici direttamente e ti aggiungiamo a mano alla lista.'
+                : 'Il nostro sistema di invio non era raggiungibile in questo momento. Scrivici direttamente e ti aggiungiamo a mano.'
+            }
+            mailtoHref={newsletterFallbackMailto}
+            whatsappHref={newsletterFallbackWhatsAppUrl}
+            onRetry={() => setFallbackNotice(null)}
+            tone={isDark ? 'dark' : 'light'}
+          />
         </motion.div>
       )}
     </AnimatePresence>

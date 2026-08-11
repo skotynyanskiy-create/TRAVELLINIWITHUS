@@ -7,6 +7,7 @@ import {
   Globe,
   Loader2,
   Mail,
+  MailWarning,
   ShieldCheck,
   Target,
   Wallet,
@@ -17,6 +18,7 @@ import {
 } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import Breadcrumbs from '../components/Breadcrumbs';
+import LeadFallbackNotice from '../components/LeadFallbackNotice';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import Section from '../components/Section';
@@ -26,7 +28,12 @@ import Input from '../components/Input';
 import Select from '../components/Select';
 import Textarea from '../components/Textarea';
 import { BRAND_STATS, BRAND_STATS_SOURCE, CONTACTS, PUBLIC_PROOF_SIGNALS } from '../config/site';
-import { appendLeadFallback } from '../lib/leadFallback';
+import {
+  appendLeadFallback,
+  buildLeadFallbackMailto,
+  buildLeadFallbackWhatsAppText,
+  buildLeadFallbackWhatsAppUrl,
+} from '../lib/leadFallback';
 import { trackEvent } from '../services/analytics';
 
 const QUALIFYING_POINTS = [
@@ -107,6 +114,7 @@ export default function MediaKit() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
+  const [fallbackNotice, setFallbackNotice] = useState<{ saved: boolean } | null>(null);
   const [activeSlide, setActiveSlide] = useState(0);
 
   const breadcrumbItems = [{ label: 'Media Kit' }];
@@ -198,29 +206,51 @@ export default function MediaKit() {
         message: normalizedBrief,
         date: new Date().toISOString(),
       });
-      if (saved) {
-        const submitParams = {
-          route: '/media-kit',
-          source: 'media_kit_form',
-          cta_id: 'media_kit_submit',
-          content_id: 'media_kit_partner_lead',
-          topic: projectFocus,
-          budget_range: budget,
-          campaign_period: campaignPeriod,
-          fallback: 'localStorage',
-        };
-        trackEvent('media_kit_request_success', submitParams);
-        trackEvent('media_kit_submit', submitParams);
-        setIsSuccess(true);
-      } else {
-        setSubmitError(
-          `Non siamo riusciti a registrare la richiesta. Puoi scriverci direttamente a ${CONTACTS.email}.`
-        );
-      }
+      // Evento distinto da 'media_kit_request_success': se lo lasciassimo uguale,
+      // un pixel ads che ottimizza su quel nome conterebbe come lead un contatto
+      // che non e' mai arrivato al team. Non fermo qui anche media_kit_submit:
+      // era il duplicato pensato per l'attribuzione conversion, stessa ragione.
+      trackEvent('media_kit_request_fallback', {
+        route: '/media-kit',
+        source: 'media_kit_form',
+        cta_id: 'media_kit_submit',
+        topic: projectFocus,
+        budget_range: budget,
+        campaign_period: campaignPeriod,
+        saved_locally: saved,
+      });
+      setFallbackNotice({ saved });
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  const mediaKitFallbackMailto = buildLeadFallbackMailto(
+    CONTACTS.email,
+    `Richiesta media kit — ${company.trim() || 'nuova richiesta'}`,
+    'Il modulo del sito non è riuscito a inviare questa richiesta di media kit. La incollo qui sotto:',
+    [
+      { label: 'Azienda', value: company },
+      { label: 'Email', value: email },
+      { label: 'Sito', value: website },
+      { label: 'Focus', value: projectFocus },
+      { label: 'Budget', value: budget },
+      { label: 'Periodo', value: campaignPeriod },
+      { label: 'Contesto', value: brief },
+    ]
+  );
+  const mediaKitFallbackWhatsAppUrl = buildLeadFallbackWhatsAppUrl(
+    CONTACTS.whatsappUrl,
+    buildLeadFallbackWhatsAppText(
+      'Vorrei richiedere il media kit, il modulo del sito non è riuscito a inviarlo:',
+      [
+        { label: 'Azienda', value: company },
+        { label: 'Email', value: email },
+        { label: 'Focus', value: projectFocus },
+        { label: 'Budget', value: budget },
+      ]
+    )
+  );
 
   const pdfSlides = [
     {
@@ -608,7 +638,7 @@ export default function MediaKit() {
             </div>
           </div>
 
-          {!isSuccess ? (
+          {!isSuccess && !fallbackNotice ? (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -784,7 +814,7 @@ export default function MediaKit() {
                 </p>
               </form>
             </motion.div>
-          ) : (
+          ) : isSuccess ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -835,6 +865,31 @@ export default function MediaKit() {
                 >
                   Scrivi a {CONTACTS.email}
                 </a>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="order-1 h-fit rounded-[var(--radius-lg)] border border-[var(--color-warning)]/25 bg-[var(--color-warning-soft)] p-8 shadow-sm md:p-10 lg:order-2"
+            >
+              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-warning)]/15 text-[var(--color-warning-text)]">
+                <MailWarning size={32} />
+              </div>
+              <h2 className="mb-4 text-center text-2xl font-serif text-[var(--color-ink)]">
+                Il modulo non è riuscito a inviare la richiesta
+              </h2>
+              <p className="text-center leading-relaxed text-[var(--color-warning-text)]">
+                Non è colpa tua: il nostro sistema di invio non era raggiungibile in questo momento.
+                Per essere sicuro/a che la vediamo, scrivici direttamente.
+              </p>
+              <div className="mt-8 rounded-[1.5rem] border border-[var(--color-warning)]/20 bg-white/70 p-6">
+                <LeadFallbackNotice
+                  savedLocally={Boolean(fallbackNotice?.saved)}
+                  mailtoHref={mediaKitFallbackMailto}
+                  whatsappHref={mediaKitFallbackWhatsAppUrl}
+                  onRetry={() => setFallbackNotice(null)}
+                />
               </div>
             </motion.div>
           )}
@@ -893,7 +948,7 @@ export default function MediaKit() {
         </div>
       </Section>
 
-      {!isSuccess && (
+      {!isSuccess && !fallbackNotice && (
         <StickyMobileCTA
           label="Richiedi il media kit"
           onClick={() => {

@@ -11,13 +11,21 @@ import {
 } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import { trackEvent } from '@/src/services/analytics';
-import { appendLeadFallback } from '@/src/lib/leadFallback';
+import {
+  appendLeadFallback,
+  buildLeadFallbackMailto,
+  buildLeadFallbackWhatsAppText,
+  buildLeadFallbackWhatsAppUrl,
+} from '@/src/lib/leadFallback';
+import { CONTACTS } from '@/src/config/site';
+import LeadFallbackNotice from '@/src/components/LeadFallbackNotice';
 
 export default function DiarioConversionSection() {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [fallbackNotice, setFallbackNotice] = useState<{ saved: boolean } | null>(null);
 
   const isValidEmail = (val: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
 
@@ -52,20 +60,34 @@ export default function DiarioConversionSection() {
         source: 'diario_conversion_section',
         date: new Date().toISOString(),
       });
+      // Distinto da 'newsletter_signup': l'iscrizione non e' arrivata alla
+      // lista, quindi non va contata come la stessa conversione.
+      trackEvent('newsletter_signup_fallback', {
+        route: '/_dev/diario-preview',
+        saved_locally: saved,
+      });
       if (saved) {
-        trackEvent('newsletter_signup', {
-          route: '/_dev/diario-preview',
-          fallback: 'localStorage',
-        });
         sessionStorage.setItem('twu_lead_magnet_unlocked', '1');
-        setIsSuccess(true);
-      } else {
-        setError('Si è verificato un errore. Riprova tra poco.');
       }
+      setFallbackNotice({ saved });
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  const diarioFallbackMailto = buildLeadFallbackMailto(
+    CONTACTS.email,
+    'Guida "10 posti italiani da salvare" — richiesta',
+    'Il modulo del sito non è riuscito a registrare la mia iscrizione per ricevere la guida. La mia email è qui sotto:',
+    [{ label: 'Email', value: email }]
+  );
+  const diarioFallbackWhatsAppUrl = buildLeadFallbackWhatsAppUrl(
+    CONTACTS.whatsappUrl,
+    buildLeadFallbackWhatsAppText(
+      'Vorrei ricevere la guida "10 posti italiani da salvare", il modulo del sito non ha funzionato:',
+      [{ label: 'Email', value: email }]
+    )
+  );
 
   return (
     <section className="bg-white py-20 text-[var(--color-ink,#1a2b3c)] md:py-28">
@@ -90,7 +112,7 @@ export default function DiarioConversionSection() {
             </div>
 
             <div className="mt-8">
-              {!isSuccess ? (
+              {!isSuccess && !fallbackNotice ? (
                 <form onSubmit={handleSubmit} className="space-y-3" noValidate>
                   <div className="relative">
                     <Mail
@@ -124,7 +146,7 @@ export default function DiarioConversionSection() {
                   </button>
                   {error && <p className="text-xs text-red-600">{error}</p>}
                 </form>
-              ) : (
+              ) : isSuccess ? (
                 <div className="rounded-2xl border border-[var(--color-accent)]/30 bg-white p-6 text-center">
                   <CheckCircle size={28} className="mx-auto mb-3 text-[var(--color-accent)]" />
                   <h4 className="font-serif text-xl">Guida Sbloccata!</h4>
@@ -137,6 +159,31 @@ export default function DiarioConversionSection() {
                   >
                     Vai alla pagina di download <ArrowRight size={13} />
                   </Link>
+                </div>
+              ) : (
+                <div className="rounded-2xl border border-[var(--color-warning)]/30 bg-[var(--color-warning-soft)] p-6">
+                  {fallbackNotice?.saved && (
+                    <p className="mb-3 text-center">
+                      <Link
+                        to="/lead-magnet"
+                        className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[var(--color-accent-text)] hover:underline"
+                      >
+                        La guida resta disponibile, aprila qui <ArrowRight size={13} />
+                      </Link>
+                    </p>
+                  )}
+                  <LeadFallbackNotice
+                    savedLocally={Boolean(fallbackNotice?.saved)}
+                    title="Iscrizione non registrata"
+                    description={
+                      fallbackNotice?.saved
+                        ? 'Il sistema non ci ha confermato la ricezione. Scrivici e ti aggiungiamo a mano alla lista.'
+                        : 'Il nostro sistema di invio non era raggiungibile. Scrivici direttamente per essere aggiunto/a alla lista.'
+                    }
+                    mailtoHref={diarioFallbackMailto}
+                    whatsappHref={diarioFallbackWhatsAppUrl}
+                    onRetry={() => setFallbackNotice(null)}
+                  />
                 </div>
               )}
 

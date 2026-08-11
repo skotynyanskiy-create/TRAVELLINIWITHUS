@@ -77,3 +77,46 @@ export function clearLeadFallback(key: string): void {
     // ignore
   }
 }
+
+/**
+ * Quando l'API e' irraggiungibile e il lead finisce solo in localStorage, chi
+ * ha compilato il modulo deve poter avvisarci davvero — non leggere un falso
+ * "successo". Queste funzioni compongono un messaggio precompilato (email o
+ * WhatsApp) con i dati gia' scritti, cosi' la persona non li riscrive.
+ *
+ * Restano pure (nessun JSX): usate sia dai form che dai loro test.
+ */
+export interface LeadFallbackField {
+  label: string;
+  value: string;
+}
+
+function joinLeadFallbackLines(intro: string, fields: LeadFallbackField[]): string {
+  const detailLines = fields
+    .filter((field) => field.value.trim().length > 0)
+    .map((field) => `${field.label}: ${field.value.trim()}`);
+  return [intro, ...(detailLines.length > 0 ? ['', ...detailLines] : [])].join('\n');
+}
+
+/** `email` e' l'indirizzo nudo (es. CONTACTS.email), non un `mailto:` gia' pronto. */
+export function buildLeadFallbackMailto(
+  email: string,
+  subject: string,
+  intro: string,
+  fields: LeadFallbackField[] = []
+): string {
+  const body = joinLeadFallbackLines(intro, fields);
+  return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}
+
+export function buildLeadFallbackWhatsAppText(
+  intro: string,
+  fields: LeadFallbackField[] = []
+): string {
+  return joinLeadFallbackLines(intro, fields);
+}
+
+/** `whatsappUrl` e' il link wa.me base (es. CONTACTS.whatsappUrl), senza query string. */
+export function buildLeadFallbackWhatsAppUrl(whatsappUrl: string, text: string): string {
+  return `${whatsappUrl}?text=${encodeURIComponent(text)}`;
+}
