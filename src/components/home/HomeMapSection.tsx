@@ -28,8 +28,14 @@ export default function HomeMapSection() {
             )}
           </div>
 
-          <div className="relative z-10 grid w-full items-center justify-between gap-10 md:grid-cols-[1fr_auto]">
-            <div className="max-w-2xl">
+          {/* `justify-between` valeva a ogni larghezza, ma sotto md la griglia
+              ha una sola colonna implicita: con `justify-content: space-between`
+              quella traccia resta larga quanto il contenuto invece di seguire il
+              contenitore. Su 375px il titolo diventava 348px dentro 263 e
+              l'`overflow-hidden` della card ne tagliava via 54 — «Trovali sulla
+              mapp». Il vincolo serve solo dove esistono due colonne. */}
+          <div className="relative z-10 grid w-full items-center gap-10 md:grid-cols-[1fr_auto] md:justify-between">
+            <div className="min-w-0 max-w-2xl">
               <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-accent-on-dark,#e8834e)]/30 bg-[var(--color-accent)]/15 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.26em] text-[var(--color-accent-on-dark,#e8834e)] backdrop-blur-md">
                 <Sparkles size={14} className="text-[var(--color-accent-on-dark,#e8834e)]" />
                 Dove cercare
@@ -43,14 +49,14 @@ export default function HomeMapSection() {
               </h2>
 
               <p className="mt-4 max-w-xl text-base font-light leading-relaxed text-[var(--color-sand)]/90 md:text-lg">
-                Niente consigli presi online o per sentito dire. Su questa mappa trovi solo i posti
-                in cui siamo stati davvero, con le nostre foto e la nostra opinione sincera.
+                Sulla mappa ci sono solo posti in cui siamo stati: dove sono esattamente, quanto
+                costano quando lo sappiamo, e a che titolo ci siamo andati.
               </p>
 
               <div className="mt-8 flex flex-wrap items-center gap-6 border-t border-white/10 pt-6 text-xs font-medium text-[var(--color-sand)]/90">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 size={16} className="text-[var(--color-accent-on-dark,#e8834e)]" />
-                  <span>Coordinate GPS Esatte</span>
+                  <span>Coordinate GPS esatte</span>
                 </div>
                 <span className="text-white/20">·</span>
                 <div className="flex items-center gap-2">
@@ -65,13 +71,18 @@ export default function HomeMapSection() {
               </div>
             </div>
 
+            {/* Anche la CTA sforava: `whitespace-nowrap` su «Apri la Mappa
+                Interattiva» piu' due icone chiedeva piu' larghezza di quanta la
+                card ne avesse su telefono, e la freccia finiva oltre il taglio.
+                Su mobile ora occupa tutta la riga — come le CTA del menu — e
+                l'etichetta dice il verbo e basta. */}
             <div className="flex items-center md:justify-end">
               <Link
                 to="/mappa"
-                className="inline-flex items-center gap-3.5 whitespace-nowrap rounded-full bg-[var(--color-accent,#c2410c)] px-6 py-4 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] shadow-[0_0_35px_rgba(194,65,12,0.4)] transition-all duration-300 hover:scale-105 hover:brightness-95 md:px-9 md:py-5"
+                className="inline-flex w-full items-center justify-center gap-3 whitespace-nowrap rounded-full bg-[var(--color-accent,#c2410c)] px-6 py-4 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] shadow-[0_0_35px_rgba(194,65,12,0.4)] transition-all duration-300 hover:scale-105 hover:brightness-95 md:w-auto md:gap-3.5 md:px-9 md:py-5"
               >
                 <Compass size={20} />
-                Apri la Mappa Interattiva
+                Apri la mappa
                 <ArrowRight size={18} />
               </Link>
             </div>

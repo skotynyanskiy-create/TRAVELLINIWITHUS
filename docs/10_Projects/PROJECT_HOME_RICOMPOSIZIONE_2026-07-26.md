@@ -443,3 +443,59 @@ schermo come stato di caricamento.
 Verifica locale: focus desktop e mobile, chiusure concorrenti, blocco exit
 intent, test unitari di stack e ricerca (32 file, 162 test), typecheck e lint
 mirato: PASS. Nessun commit, push o deploy eseguito.
+
+## 14. La copertina smette di essere un catalogo — 2026-08-11
+
+Quattro difetti misurati nel browser, non dedotti. Tutti sulla stessa pagina.
+
+**La barra non ci stava.** La pillola della navbar chiedeva 1.476px di contenuto
+in 1.182 disponibili a 1280px: il CTA «La guida in regalo» e il bottone
+dell'account finivano **fuori dallo schermo** — a ogni larghezza desktop, non a
+una in particolare, perché il tetto `max-w-[1360px]` è sempre più stretto della
+somma dei cinque gruppi. Il gruppo più largo era lo switcher a tre audience
+(327px): un controllo di _modalità_, non di navigazione, che duplica il gate
+d'ingresso e il drawer. È sceso nel menu utente, accanto a preferiti e lingua,
+insieme al link «Personalizza» che ripeteva un'ancora già in pagina. Overflow a
+1152 / 1280 / 1440: 0.
+
+**La prova più visibile era la meno verificata.** Vedi
+[[20_Decisions/DECISION_IMAGERY_TRUTH_RULE_2026-07-22]] §Applicazione.
+
+**La griglia era l'archivio con la foto più grande.** Nove card (2.358px su
+desktop, 5.991px su telefono) e sotto un registro di dodici righe di cui cinque
+ripetevano posti già stampati come fotografia nella stessa schermata: ventuno
+link a schede su una pagina sola. Ora la griglia ne seleziona sei — una 3×2
+piena, il criterio «il migliore di ogni categoria» resta — e il registro mostra
+**ciò che la copertina non ha mostrato**, tramite `useHomeGridSelection`, l'unica
+fonte per entrambe le sezioni. Sovrapposizione: 0. Home da 15.614 a 12.897px su
+375, da 8.528 a 7.944 su desktop.
+
+**Il titolo della mappa era tagliato a metà su telefono.** `justify-between`
+valeva a ogni larghezza, ma sotto `md` la griglia ha una sola colonna implicita:
+con `space-between` la traccia resta larga quanto il contenuto invece di seguire
+il contenitore. Il titolo diventava 348px dentro 263 e l'`overflow-hidden` della
+card ne tagliava 54 — si leggeva «Trovali sulla mapp». Stessa sorte per la CTA,
+`whitespace-nowrap` più larga della card. Il vincolo ora vale solo da `md`, la
+CTA su mobile occupa la riga intera.
+
+### Copy: due claim che il modello dati non regge
+
+- «Periodo consigliato» e «periodo giusto», nella barra prove e nel sommario
+  dell'hero: **nessuna scheda porta un periodo**. Il campo non esiste. Sostituiti
+  da numeri contati sul registro a ogni render (posti provati, collaborazioni
+  dichiarate) e da una riga che spiega perché il prezzo a volte manca.
+- La stella accent accanto a «ADV» / «Su invito» nelle card della home: una
+  pubblicità vestita da voto, su un sito che i voti li rifiuta per scelta
+  editoriale dichiarata (`types/content.ts`). Tolta. La disclosure ora è una
+  disclosure; la prova è il mese della visita, in chiaro sotto la foto. Sparito
+  anche «Scheda dal viaggio», che riempiva lo slot del prezzo quando il prezzo
+  non c'era.
+
+Lessico delle azioni allineato al percorso: «Apri la scheda» (era «Guarda il
+reel», ma il link apre la scheda — dove il reel poi si riproduce), «Vedi sulla
+mappa», «Salva per il viaggio».
+
+Verifiche: browser a 375 / 768 / 1152 / 1280 / 1440 (overflow, clipping, console,
+menu da tastiera), typecheck, lint, 193 test su 41 file, build, `audit:ui`
+(0 errori, 210 warning contro i 231 di baseline), `audit:size` (237,6 KB gzip su
+250), `audit:provenance`. Nessun commit, push o deploy.

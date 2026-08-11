@@ -1,22 +1,26 @@
-import { ArrowUpRight, MapPin, Sparkles, Star } from 'lucide-react';
+import { ArrowUpRight, MapPin, Sparkles } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import OptimizedImage from '@/src/components/OptimizedImage';
 import { useMemo } from 'react';
 import { selectHomeGridItems } from '@/src/lib/homeGridSelection';
-import { selectHomeFeaturedItems } from '@/src/lib/homeContentSelection';
 import { rankByInterest } from '@/src/config/audienceInterests';
 import { usePersonalizedInterest } from '@/src/hooks/usePersonalizedInterest';
+import { useHomeGridSelection } from '@/src/hooks/useHomeGridSelection';
+import { getReelForPosto } from '@/src/config/reels';
 import { PARTNERSHIP_LABEL } from '@/src/types/content';
-import { useAudience } from '@/src/context/AudienceContext';
-import { compositionFor } from '@/src/config/homeComposition';
+import { aMeseAnno } from '@/src/utils/format';
 
 interface GridTile {
   id: string;
   title: string;
   location: string;
   category: string;
-  price: string;
-  score: string;
+  /** Prezzo reale, o la sola fascia quando è tutto ciò che sappiamo. Mai un riempitivo. */
+  price: string | null;
+  /** Mese della visita — l'unica prova che tutte e 29 le schede reali portano. */
+  visited: string | null;
+  /** Disclosure AGCOM: ADV / Su invito / … — vuota se il posto è organico. */
+  disclosure: string;
   image: string;
   focusY: number;
   link: string;
@@ -28,14 +32,21 @@ function toGridTile(
   item: ReturnType<typeof selectHomeGridItems>['items'][number],
   featuredId: string | null
 ): GridTile {
-  const disclosure = PARTNERSHIP_LABEL[item.partnership.kind];
   return {
     id: item.id,
     title: item.title,
     location: item.place.city ?? item.place.region ?? item.place.country,
     category: item.types[0],
-    price: item.value?.price ?? 'Scheda dal viaggio',
-    score: disclosure || 'Provato di persona',
+    // Era `item.value?.price ?? 'Scheda dal viaggio'`: dove il prezzo mancava,
+    // lo slot del prezzo si riempiva di una frase che non è un prezzo. La
+    // fascia è un dato vero; il vuoto è meglio di un riempitivo.
+    price:
+      item.value?.price ??
+      (item.value?.budget ? `Budget ${item.value.budget.toLowerCase()}` : null),
+    // Stesso ripiego di SchedaVerifica: il manifest dei reel prima, la data
+    // dell'item quando il video non è in locale.
+    visited: aMeseAnno(getReelForPosto(item.id)?.publishedAt ?? item.publishedAt),
+    disclosure: PARTNERSHIP_LABEL[item.partnership.kind],
     image: item.cover,
     focusY: item.coverFocusY ?? 50,
     link: `/posto/${item.id}`,
@@ -45,7 +56,8 @@ function toGridTile(
 }
 
 /** In lettere, perché la voce della home è editoriale e non un contatore.
- *  Oltre il nove non si va: GRID_SIZE è il tetto della selezione. */
+ *  Il tetto della selezione è GRID_SIZE; la tabella tiene qualche numero in
+ *  più perché il tetto è una scelta editoriale e può cambiare. */
 const NUMERALE: Record<number, string> = {
   1: 'Un',
   2: 'Due',
@@ -59,23 +71,15 @@ const NUMERALE: Record<number, string> = {
 };
 
 export default function CleanFeaturedGrid() {
-  const { audience } = useAudience();
   const { interest } = usePersonalizedInterest();
-  const gridTiles = useMemo(() => {
-    const featuredIds = selectHomeFeaturedItems(interest).map((item) => item.id);
-    const includesFeaturedSection = compositionFor(audience, interest).sections.includes(
-      'featured'
-    );
-    const { items, featuredId } = selectHomeGridItems(
-      undefined,
-      undefined,
-      includesFeaturedSection ? featuredIds : [],
-      includesFeaturedSection ? [] : featuredIds
-    );
-    return rankByInterest(items, interest, (item) => item.types).map((item) =>
-      toGridTile(item, featuredId)
-    );
-  }, [audience, interest]);
+  const { items, featuredId } = useHomeGridSelection();
+  const gridTiles = useMemo(
+    () =>
+      rankByInterest(items, interest, (item) => item.types).map((item) =>
+        toGridTile(item, featuredId)
+      ),
+    [items, featuredId, interest]
+  );
   const numeroPosti = NUMERALE[gridTiles.length] ?? String(gridTiles.length);
   const postiPresi = gridTiles.length === 1 ? 'posto, preso' : 'posti, presi';
 
@@ -91,10 +95,10 @@ export default function CleanFeaturedGrid() {
               <Sparkles size={14} />
               Una prima selezione
             </span>
-            {/* selectHomeGridItems ne restituisce "fino a" 9: se un posto perde
-                la cover o esce dalla selezione, la griglia ne mostra 8 e un
-                titolo scritto a mano direbbe il falso. Il numero si conta dalle
-                tile vere, come impone homeComposition.ts. */}
+            {/* selectHomeGridItems ne restituisce "fino a" GRID_SIZE: se un
+                posto perde la cover o esce dalla selezione la griglia ne mostra
+                uno in meno, e un titolo scritto a mano direbbe il falso. Il
+                numero si conta dalle tile vere, come impone homeComposition.ts. */}
             <h2 className="mt-3 font-serif text-3xl font-normal leading-tight md:text-5xl">
               {numeroPosti} {postiPresi} uno per uno.
             </h2>
@@ -131,18 +135,23 @@ export default function CleanFeaturedGrid() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
 
-                <div className="absolute left-3 top-3 right-3 flex items-center justify-between">
+                {/* Qui c'era una stella accent piena accanto a un testo che
+                    era o la disclosure («ADV», «Su invito») o «Provato di
+                    persona»: una pubblicità vestita da voto, su un sito che i
+                    voti li rifiuta per scelta editoriale dichiarata
+                    (`types/content.ts`, ContentReview). La disclosure ora è una
+                    disclosure — stessa targa scura di ContentCard — e la prova
+                    è il mese della visita, scritto in chiaro sotto la foto. */}
+                <div className="absolute left-3 top-3 right-3 flex items-start justify-between gap-2">
                   <span className="inline-flex items-center gap-1 rounded-full bg-black/60 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white backdrop-blur-md">
                     <MapPin size={10} className="text-[var(--color-accent)]" />
                     {tile.location}
                   </span>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-[10px] font-bold text-[var(--color-ink)] shadow-sm">
-                    <Star
-                      size={10}
-                      className="fill-[var(--color-accent)] text-[var(--color-accent)]"
-                    />
-                    {tile.score}
-                  </span>
+                  {tile.disclosure && (
+                    <span className="inline-flex shrink-0 items-center rounded-full bg-[var(--color-ink)]/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
+                      {tile.disclosure}
+                    </span>
+                  )}
                 </div>
 
                 {tile.isFeatured && (
@@ -166,13 +175,28 @@ export default function CleanFeaturedGrid() {
               </div>
 
               <div className="flex flex-1 flex-col justify-between p-5">
-                <p className="text-xs leading-relaxed text-[var(--color-muted-fg)]">
+                <p className="line-clamp-3 text-xs leading-relaxed text-[var(--color-muted-fg)]">
                   {tile.description}
                 </p>
-                <div className="mt-4 flex items-center justify-between border-t border-[var(--color-border)] pt-3 text-xs font-semibold">
-                  <span className="text-[var(--color-ink)]">{tile.price}</span>
-                  <span className="text-[var(--color-accent-text)] group-hover:translate-x-1 transition-transform">
-                    Scopri di più &rarr;
+                <div className="mt-4 border-t border-[var(--color-border)] pt-3">
+                  {/* Prezzo e mese sono i due dati che decidono se vale la pena
+                      aprire la scheda. Quando mancano, la riga sparisce invece
+                      di riempirsi. */}
+                  {(tile.price || tile.visited) && (
+                    <p className="text-xs font-semibold text-[var(--color-ink)]">
+                      {tile.price}
+                      {tile.price && tile.visited ? (
+                        <span className="font-normal text-[var(--color-muted-fg)]"> · </span>
+                      ) : null}
+                      {tile.visited && (
+                        <span className="font-normal text-[var(--color-muted-fg)]">
+                          ci siamo stati {tile.visited}
+                        </span>
+                      )}
+                    </p>
+                  )}
+                  <span className="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-[var(--color-accent-text)] transition-transform group-hover:translate-x-1">
+                    Apri la scheda &rarr;
                   </span>
                 </div>
               </div>

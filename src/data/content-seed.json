@@ -2,9 +2,9 @@
   {
     "id": "emilia-granduca-di-campigna",
     "source": "instagram",
-    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DTkfltMDGVo/",
     "mediaType": "reel",
-    "cover": "",
+    "cover": "/images/reels/emilia-granduca-di-campigna-cover.webp",
     "hook": "Il posto perfetto per un weekend romantico?",
     "title": "Granduca di Campigna",
     "description": "Un wellness hotel immerso nelle foreste casentinesi (patrimonio UNESCO): appartamenti spaziosi, alcuni con jacuzzi in camera, spa con aperitivo nella grotta e cena di prodotti locali servita in camera. Vale la pena per chi cerca un weekend romantico vero, lontano dal caos.",
@@ -29,7 +29,11 @@
       "budget": "Medio"
     },
     "featured": true,
-    "isPlaceholder": true
+    "isPlaceholder": false,
+    "coverFocusY": 64,
+    "coverAlt": "Piscina interna illuminata di blu nella spa ricavata in una grotta di pietra del Granduca wellness hotel a Campigna.",
+    "videoSrc": "/video/emilia-granduca-di-campigna.mp4",
+    "publishedAt": "2026-01-16"
   },
   {
     "id": "toscana-mirror-house-spinofiorito",
@@ -117,9 +121,9 @@
   {
     "id": "campania-burton-juice",
     "source": "instagram",
-    "permalink": "https://www.instagram.com/travelliniwithus/reel/DUSu96pDH_n/",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/C6gJr_noB_i/",
     "mediaType": "reel",
-    "cover": "",
+    "cover": "/images/reels/campania-burton-juice-cover.webp",
     "hook": "Il primo ristorante a tema Tim Burton in Italia?",
     "title": "The Burton Juice",
     "description": "Il primo ristorante a tema Tim Burton in Italia: location iper-tematizzata tra Jack Skeleton, Beetlejuice e Alice, menù dedicato ai personaggi e spettacoli durante la serata. Da prenotare con anticipo. Per gli amanti dell'insolito.",
@@ -144,7 +148,11 @@
       "notForWho": "Chi cerca una cena tranquilla e silenziosa: la scena è ovunque e gli attori arrivano al tavolo."
     },
     "featured": true,
-    "isPlaceholder": true
+    "isPlaceholder": false,
+    "coverFocusY": 64,
+    "coverAlt": "Poltrona bianca fra scacchi giganti e specchi fioriti nella sala a tema Alice del The Burton Juice a Somma Vesuviana.",
+    "videoSrc": "/video/campania-burton-juice.mp4",
+    "publishedAt": "2024-05-03"
   },
   {
     "id": "altoadige-plose-looping",
@@ -497,12 +505,12 @@
   {
     "id": "verona-bbq-magi",
     "source": "instagram",
-    "permalink": "https://www.instagram.com/travelliniwithus/",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DSM14K0jV5r/",
     "mediaType": "reel",
-    "cover": "",
+    "cover": "/images/reels/verona-bbq-magi-cover.webp",
     "hook": "Un BBQ coreano illimitato a Verona?",
     "title": "BBQ Magi a Verona",
-    "description": "Barbecue coreano illimitato a 19,90€: carni da grigliare al tavolo e contorni senza limite. Per chi vuole mangiare molto e bene spendendo poco.",
+    "description": "BBQ coreano all you can eat con la griglia nel tavolo: tagli di qualità, dolce compreso nel prezzo. Pranzo da 19,90€, cena da 35,90€. Sala grande e scenografica, servizio veloce.",
     "place": {
       "name": "BBQ Magi",
       "city": "Verona",
@@ -511,7 +519,8 @@
       "coordinates": {
         "lat": 45.438591,
         "lng": 10.991622
-      }
+      },
+      "googlePlaceQuery": "Magi BBQ, Verona"
     },
     "zone": "Italia",
     "types": ["Food & Ristoranti"],
@@ -519,11 +528,15 @@
       "kind": "organic",
       "partner": "@bbqmagi"
     },
-    "isPlaceholder": true,
+    "isPlaceholder": false,
     "value": {
-      "price": "19,90€",
-      "budget": "Basso"
-    }
+      "price": "Pranzo da 19,90€ · Cena da 35,90€",
+      "budget": "Medio"
+    },
+    "coverFocusY": 64,
+    "coverAlt": "Tavolo con griglia integrata e vassoi di carne cruda avvolti dal fumo, nella sala di Magi BBQ a Verona.",
+    "videoSrc": "/video/verona-bbq-magi.mp4",
+    "publishedAt": "2025-12-13"
   },
   {
     "id": "verona-dari-degustazione",
@@ -1885,6 +1898,1480 @@
     "types": ["Hotel con carattere", "Relax, terme e spa"],
     "partnership": {
       "kind": "invited"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "shanghai-disneyland",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/Db2nDlaM11X/",
+    "mediaType": "reel",
+    "cover": "/images/reels/shanghai-disneyland-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Betta a braccia alzate davanti al castello di Shanghai Disneyland, sotto il cielo azzurro.",
+    "videoSrc": "/video/shanghai-disneyland.mp4",
+    "publishedAt": "2026-08-10",
+    "hook": "L'attrazione più emozionante di sempre?",
+    "title": "Shanghai Disneyland",
+    "description": "Non è il parco Disney con più attrazioni adrenaliniche, ma è quello che ti fa tornare bambino: principesse, personaggi e scenari da fiaba. L'attrazione in barca è stata la nostra preferita. Per chi cerca atmosfera più che velocità.",
+    "place": {
+      "name": "Shanghai Disneyland",
+      "city": "Shanghai",
+      "country": "Cina",
+      "coordinates": {
+        "lat": 31.146252,
+        "lng": 121.656283
+      }
+    },
+    "zone": "Asia",
+    "types": ["Posti particolari"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "madrid-churreria-1902",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DbaXDLrMSeS/",
+    "mediaType": "reel",
+    "cover": "/images/reels/madrid-churreria-1902-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Piatto di churros e tazza di cioccolata calda sotto l’insegna della Churrería Chocolatería 1902 a Madrid.",
+    "videoSrc": "/video/madrid-churreria-1902.mp4",
+    "publishedAt": "2026-07-30",
+    "hook": "La miglior churrería di Madrid?",
+    "title": "Churrería Chocolatería 1902",
+    "description": "A Madrid i churros si mangiano ovunque, ma qui li vedi fare dal bancone. Abbiamo preso una porzione normale, una di churros giganti e una cioccolata: 8€ in due. Per una colazione o una merenda senza cerimonie.",
+    "place": {
+      "name": "Churrería Chocolatería 1902",
+      "city": "Madrid",
+      "country": "Spagna"
+    },
+    "zone": "Europa",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "value": {
+      "price": "8€ in due (due porzioni + cioccolata)",
+      "budget": "Basso"
+    },
+    "isPlaceholder": true
+  },
+  {
+    "id": "san-donato-yoi-sushi",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DbVLl7gMo7R/",
+    "mediaType": "reel",
+    "cover": "/images/reels/san-donato-yoi-sushi-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Ruota panoramica dorata con vaschette di sushi da Yoi Sushi, con piatti di salmone e tartare sul tavolo.",
+    "videoSrc": "/video/san-donato-yoi-sushi.mp4",
+    "publishedAt": "2026-07-28",
+    "hook": "Il lunapark del sushi?",
+    "title": "Yoi Sushi",
+    "description": "Sushi servito su una ruota panoramica, roll con Wagyu e creazioni al tartufo: la presentazione è la metà del piatto. All you can eat a pranzo da 17,90€, la cena 32,90€ più 3€ di coperto, bevande e dolci esclusi.",
+    "place": {
+      "name": "Yoi Sushi",
+      "city": "San Donato Milanese",
+      "region": "Lombardia",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 45.426517,
+        "lng": 9.265481
+      }
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "invited"
+    },
+    "value": {
+      "price": "Pranzo da 17,90€ · Cena 32,90€ + 3€ coperto",
+      "budget": "Medio"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "milano-wagyu-oh",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DbX0AI-Mqjn/",
+    "mediaType": "reel",
+    "cover": "/images/reels/milano-wagyu-oh-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Sala di Wagyu Oh a Milano con maxischermi, luci al neon rosse e lanterne cinesi.",
+    "videoSrc": "/video/milano-wagyu-oh.mp4",
+    "publishedAt": "2026-07-29",
+    "hook": "BBQ coreano con Wagyu all you can eat?",
+    "title": "Wagyu Oh",
+    "description": "Griglia al centro del tavolo e la carne la cuoci tu: tagli di Wagyu, manzo, pesce e verdure, in una sala di maxischermi e neon. All you can eat a pranzo da 24€, cena da 36€. In via Bramante 35 a Milano.",
+    "place": {
+      "name": "Wagyu Oh",
+      "city": "Milano",
+      "region": "Lombardia",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 45.482127,
+        "lng": 9.178698
+      }
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "adv"
+    },
+    "value": {
+      "price": "Pranzo da 24€ · Cena da 36€",
+      "budget": "Medio"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "bled-garden-village",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DJoQoqUIRh3/",
+    "mediaType": "reel",
+    "cover": "/images/reels/bled-garden-village-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Tenda glamping su palafitta accanto a un torrente con piccola cascata, nel bosco del Garden Village a Bled.",
+    "videoSrc": "/video/bled-garden-village.mp4",
+    "publishedAt": "2025-05-14",
+    "hook": "Dormiresti in una casa sull’albero a Bled?",
+    "title": "Garden Village Bled",
+    "description": "Glamping a due passi dal lago di Bled e dalle gole di Vintgar: si sceglie fra case sull’albero, tende con tinozza calda e tende sull’acqua. Ristorante interno e colazione inclusa. Per famiglie, coppie e gruppi di amici.",
+    "place": {
+      "name": "Garden Village Bled",
+      "city": "Bled",
+      "country": "Slovenia",
+      "coordinates": {
+        "lat": 46.357518,
+        "lng": 14.097473
+      }
+    },
+    "zone": "Europa",
+    "types": ["Hotel con carattere"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "kuala-lumpur-ceylonz",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DNdews7ooto/",
+    "mediaType": "reel",
+    "cover": "/images/reels/kuala-lumpur-ceylonz-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Piscina a sfioro notturna del Ceylonz Suites con lo skyline di Kuala Lumpur, la KL Tower illuminata di rosso e le Petronas sullo sfondo.",
+    "videoSrc": "/video/kuala-lumpur-ceylonz.mp4",
+    "publishedAt": "2025-08-17",
+    "hook": "Una delle città più economiche del mondo?",
+    "title": "Ceylonz Suites",
+    "description": "A Kuala Lumpur abbiamo dormito in un appartamento con piscina a sfioro vista skyline a 25€ a notte a persona. Intorno: street food da 4€, mercati notturni, e attrazioni come Batu Caves e Chinatown in gran parte gratuite.",
+    "place": {
+      "name": "Ceylonz Suites",
+      "city": "Kuala Lumpur",
+      "country": "Malesia",
+      "coordinates": {
+        "lat": 3.148488,
+        "lng": 101.702049
+      }
+    },
+    "zone": "Asia",
+    "types": ["Hotel con carattere"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "value": {
+      "price": "25€ a notte a persona",
+      "budget": "Basso"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "roma-pasta-eat",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DU5eO2SDKKA/",
+    "mediaType": "reel",
+    "cover": "/images/reels/roma-pasta-eat-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Vaschetta di pasta fresca PastaEat tenuta in mano davanti alla fontana della Barcaccia e alla scalinata di Trinità dei Monti a Roma.",
+    "videoSrc": "/video/roma-pasta-eat.mp4",
+    "publishedAt": "2026-02-18",
+    "hook": "Pasta fresca in Piazza di Spagna?",
+    "title": "PastaEat",
+    "description": "Poke di pasta fresca a due passi da Piazza di Spagna: scegli formato e sugo al bancone e te la preparano al momento. Amatriciana, gricia e cacio e pepe da 8€, 9,50€ le versioni al tartufo. Da mangiare in piedi guardando la città.",
+    "place": {
+      "name": "PastaEat",
+      "city": "Roma",
+      "region": "Lazio",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 41.89332,
+        "lng": 12.482932
+      },
+      "googlePlaceQuery": "PastaEat, Roma"
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "collaboration"
+    },
+    "value": {
+      "price": "Da 8€ (9,50€ al tartufo)",
+      "budget": "Basso"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "barcellona-boba-gelati",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DXq36b4DHwI/",
+    "mediaType": "reel",
+    "cover": "/images/reels/barcellona-boba-gelati-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Due coni gelato a forma di rana e di leone del gelato Boba, tenuti in mano su una via di Barcellona.",
+    "videoSrc": "/video/barcellona-boba-gelati.mp4",
+    "publishedAt": "2026-04-28",
+    "hook": "Gelati che dispiace mangiare?",
+    "title": "Boba",
+    "description": "Coni gelato a forma di animale — rana, leone — a 3,50€, più le wheelcake fatte al momento con vari ripieni. Il tipo di posto in cui si fa la fila per la foto e poi si resta per il gelato.",
+    "place": {
+      "name": "Boba",
+      "city": "Barcellona",
+      "country": "Spagna",
+      "coordinates": {
+        "lat": 41.38258,
+        "lng": 2.177073
+      },
+      "googlePlaceQuery": "Boba, Barcellona"
+    },
+    "zone": "Europa",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "value": {
+      "price": "Coni animaletto 3,50€",
+      "budget": "Basso"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "milano-lievita-sottocorno",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DVQabhFDKw3/",
+    "mediaType": "reel",
+    "cover": "/images/reels/milano-lievita-sottocorno-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Due pizze napoletane appena portate al tavolo della pizzeria Lievità Sottocorno a Milano.",
+    "videoSrc": "/video/milano-lievita-sottocorno.mp4",
+    "publishedAt": "2026-02-27",
+    "hook": "La pizza migliore di Milano?",
+    "title": "Lievità Sottocorno",
+    "description": "Pizzeria pluripremiata in via Sottocorno 17, pizze gourmet dalle combinazioni tradizionali a quelle più insolite. Ci siamo andati con una prenotazione TheFork, che su alcuni ristoranti sconta fino al 50%.",
+    "place": {
+      "name": "Lievità Sottocorno",
+      "city": "Milano",
+      "region": "Lombardia",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 45.464194,
+        "lng": 9.189635
+      },
+      "googlePlaceQuery": "Lievità Sottocorno, Milano"
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "adv",
+      "partner": "@thefork_it"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "bruhl-phantasialand",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DVGF2bEDBVj/",
+    "mediaType": "reel",
+    "cover": "/images/reels/bruhl-phantasialand-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Veicolo steampunk arrugginito davanti a un arco di mattoni, alla scenografia di ingresso di un’attrazione di Phantasialand a Brühl.",
+    "videoSrc": "/video/bruhl-phantasialand.mp4",
+    "publishedAt": "2026-02-23",
+    "hook": "Avresti il coraggio di salirci?",
+    "title": "Phantasialand",
+    "description": "Parco tedesco a sud di Colonia, tematizzato fino all'ultimo bullone. Nell'area Mexico c'è una delle attrazioni più adrenaliniche che abbiamo provato: due minuti e basta, ma si ricordano.",
+    "place": {
+      "name": "Phantasialand",
+      "city": "Brühl",
+      "country": "Germania",
+      "coordinates": {
+        "lat": 50.800508,
+        "lng": 6.879255
+      }
+    },
+    "zone": "Europa",
+    "types": ["Posti particolari", "Insolito"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "frosinone-ora-ristorante",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DUp5VIDjDuZ/",
+    "mediaType": "reel",
+    "cover": "/images/reels/frosinone-ora-ristorante-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Tavolo apparecchiato con tovaglia bianca e un grande orsacchiotto seduto a fianco, nella sala di Ora Ristorante a Frosinone.",
+    "videoSrc": "/video/frosinone-ora-ristorante.mp4",
+    "publishedAt": "2026-02-12",
+    "hook": "Una cena che va oltre le candele?",
+    "title": "Ora Ristorante",
+    "description": "Tre menù degustazione e una sala piccola e curata. Abbiamo scelto il \"Santa Pazienza\", sette portate: piatti particolari, servizio attento dall’inizio alla fine. Da prenotare, non è un posto da passaggio.",
+    "place": {
+      "name": "Ora Ristorante",
+      "city": "Frosinone",
+      "region": "Lazio",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 41.628547,
+        "lng": 13.57585
+      },
+      "googlePlaceQuery": "Ora Ristorante, Frosinone"
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "collaboration"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "milano-jazz-cafe",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DUkt_gEjGuW/",
+    "mediaType": "reel",
+    "cover": "/images/reels/milano-jazz-cafe-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Sala del Jazz Café di Milano con pavimento a scacchi bianco e nero, tende rosse di velluto e tavoli apparecchiati.",
+    "videoSrc": "/video/milano-jazz-cafe.mp4",
+    "publishedAt": "2026-02-10",
+    "hook": "Una serata al \"Moulin Rouge\"?",
+    "title": "Jazz Café",
+    "description": "Cena con spettacolo: si mangia, poi il locale si accende e arrivano musica live e ballerine. Sala elegante, pavimento a scacchi e tende rosse. Serata lunga: non è la cena di chi vuole parlare.",
+    "place": {
+      "name": "Jazz Café",
+      "city": "Milano",
+      "region": "Lombardia",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 45.477287,
+        "lng": 9.170728
+      }
+    },
+    "zone": "Italia",
+    "types": ["Insolito", "Food & Ristoranti"],
+    "partnership": {
+      "kind": "invited"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "mantova-ramen-ramen",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DTsrXx1DMf1/",
+    "mediaType": "reel",
+    "cover": "/images/reels/mantova-ramen-ramen-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Ingresso di Ramen Ramen a Mantova con lanterne giapponesi arancioni accese e una grande stampa ukiyo-e alle pareti.",
+    "videoSrc": "/video/mantova-ramen-ramen.mp4",
+    "publishedAt": "2026-01-19",
+    "hook": "Formaggio fuso dentro il ramen?",
+    "title": "Ramen Ramen",
+    "description": "Ramen con la raclette colata sopra, noodle freschi e brodi da scegliere, in una sala scura con lanterne e roccia a vista. Buoni anche i takoyaki e i bao.",
+    "place": {
+      "name": "Ramen Ramen",
+      "city": "Mantova",
+      "region": "Lombardia",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 45.169263,
+        "lng": 10.670837
+      },
+      "googlePlaceQuery": "Ramen Ramen, Mantova"
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "collaboration"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "volterra-antica-velathri",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DTPz9hJDN9G/",
+    "mediaType": "reel",
+    "cover": "/images/reels/volterra-antica-velathri-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Cocktail nero con guarnizione dorata e una fiamma azzurra accesa sul tagliere, al bancone dell’Antica Velathri Cafe a Volterra.",
+    "videoSrc": "/video/volterra-antica-velathri.mp4",
+    "publishedAt": "2026-01-08",
+    "hook": "Un aperitivo che prende fuoco?",
+    "title": "Antica Velathri Cafe",
+    "description": "Menù ispirato all'alchimia dentro uno dei borghi più belli d'Italia: drink serviti con fiamme e alambicchi, prodotti toscani. È da anni il nostro posto del cuore a Volterra, e cambia ogni volta che torniamo.",
+    "place": {
+      "name": "Antica Velathri Cafe",
+      "city": "Volterra",
+      "region": "Toscana",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 43.400337,
+        "lng": 10.860019
+      },
+      "googlePlaceQuery": "Antica Velathri Cafe, Volterra"
+    },
+    "zone": "Italia",
+    "types": ["Insolito", "Food & Ristoranti"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "praga-cinnamood",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DS5WO47jNI5/",
+    "mediaType": "reel",
+    "cover": "/images/reels/praga-cinnamood-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Vetrina della pasticceria Cinnamood a Praga con l’insegna sopra la porta e la lavagna dei cinnamon roll sul marciapiede.",
+    "videoSrc": "/video/praga-cinnamood.mp4",
+    "publishedAt": "2025-12-30",
+    "hook": "I cinnamon roll più virali del web?",
+    "title": "Cinnamood",
+    "description": "Pasticceria diventata virale sui social, e per una volta il posto regge la fama: cinnamon roll enormi, farciture diverse ogni giorno, caffetteria di specialità. Coda quasi sempre.",
+    "place": {
+      "name": "Cinnamood",
+      "city": "Praga",
+      "country": "Repubblica Ceca",
+      "coordinates": {
+        "lat": 50.087465,
+        "lng": 14.421254
+      },
+      "googlePlaceQuery": "Cinnamood, Praga"
+    },
+    "zone": "Europa",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "firenze-villa-tolomei",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DSJxfijDO-V/",
+    "mediaType": "reel",
+    "cover": "/images/reels/firenze-villa-tolomei-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Viale di cipressi che scende verso la collina con Firenze sullo sfondo, davanti a Villa Tolomei.",
+    "videoSrc": "/video/firenze-villa-tolomei.mp4",
+    "publishedAt": "2025-12-12",
+    "hook": "Un weekend con Firenze davanti?",
+    "title": "Villa Tolomei Hotel",
+    "description": "Villa del 1200 sulle colline sopra Firenze: due ore di spa privata con sauna e bagno turco, massaggio di coppia, piscina panoramica esterna con la città sullo sfondo. Un viale di cipressi porta all’ingresso.",
+    "place": {
+      "name": "Villa Tolomei Hotel",
+      "city": "Firenze",
+      "region": "Toscana",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 43.75988,
+        "lng": 11.225984
+      }
+    },
+    "zone": "Italia",
+    "types": ["Hotel con carattere"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "prato-taverna-orco",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DRufmWEjPjf/",
+    "mediaType": "reel",
+    "cover": "/images/reels/prato-taverna-orco-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Statua di un orco a grandezza naturale dietro il bancone della Taverna dell’Orco a Prato, con un piatto di grigliata in primo piano.",
+    "videoSrc": "/video/prato-taverna-orco.mp4",
+    "publishedAt": "2025-12-01",
+    "hook": "Un pub dove comanda un orco?",
+    "title": "La Taverna dell'Orco",
+    "description": "Locale fantasy curato in ogni angolo, con un orco a grandezza naturale dietro al bancone e un menù scritto come un manuale di gioco. Porzioni grandi, da condividere, e bevande colorate a tema.",
+    "place": {
+      "name": "La Taverna dell'Orco",
+      "city": "Prato",
+      "region": "Toscana",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 43.876414,
+        "lng": 11.093466
+      }
+    },
+    "zone": "Italia",
+    "types": ["Insolito", "Food & Ristoranti"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "lubiana-wonderland",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DRBtFeWDOdJ/",
+    "mediaType": "reel",
+    "cover": "/images/reels/lubiana-wonderland-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Sala di Wonderland a Lubiana con pareti interamente coperte di fiori, un albero scolpito bianco e un’insegna al neon.",
+    "videoSrc": "/video/lubiana-wonderland.mp4",
+    "publishedAt": "2025-11-14",
+    "hook": "Il paese delle meraviglie esiste?",
+    "title": "Wonderland",
+    "description": "Sale coperte di fiori, un albero scolpito che attraversa il soffitto e luci basse: a Lubiana è il posto in cui si va per il brunch e si resta per i dolci scenografici e i drink.",
+    "place": {
+      "name": "Wonderland",
+      "city": "Lubiana",
+      "country": "Slovenia",
+      "coordinates": {
+        "lat": 46.050027,
+        "lng": 14.506929
+      },
+      "googlePlaceQuery": "Wonderland, Lubiana"
+    },
+    "zone": "Europa",
+    "types": ["Insolito", "Food & Ristoranti"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "torino-choco-story",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DQ8hTM_DK_Y/",
+    "mediaType": "reel",
+    "cover": "/images/reels/torino-choco-story-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Sculture di cioccolato a forma di Topolino e di altri personaggi dentro una teca del museo Choco Story a Torino.",
+    "videoSrc": "/video/torino-choco-story.mp4",
+    "publishedAt": "2025-11-12",
+    "hook": "La fabbrica del cioccolato esiste?",
+    "title": "Choco Story Torino",
+    "description": "Museo del cioccolato e del gianduja: percorso con audioguida inclusa, postazioni interattive e degustazione finale. 12€ per gli adulti, 10€ fino ai 26 anni. Si visita in autonomia, senza orari di gruppo.",
+    "place": {
+      "name": "Choco Story Torino",
+      "city": "Torino",
+      "region": "Piemonte",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 45.058178,
+        "lng": 7.673924
+      }
+    },
+    "zone": "Italia",
+    "types": ["Posti particolari"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "value": {
+      "price": "12€ · 10€ under 26",
+      "budget": "Basso"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "torino-panda-q",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DQW4hVejK_A/",
+    "mediaType": "reel",
+    "cover": "/images/reels/torino-panda-q-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Sala del ristorante Panda Q a Torino con peluche di panda sui mobili e un ventaglio decorato sul tavolo.",
+    "videoSrc": "/video/torino-panda-q.mp4",
+    "publishedAt": "2025-10-28",
+    "hook": "Un ristorante invaso dai panda?",
+    "title": "Panda Q",
+    "description": "Peluche di panda ovunque e decorazioni a tema, ma la cucina è cinese vera: i ravioli si preparano al momento. L'aspetto kawaii inganna — si mangia sul serio.",
+    "place": {
+      "name": "Panda Q",
+      "city": "Torino",
+      "region": "Piemonte",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 45.073219,
+        "lng": 7.647356
+      }
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti", "Insolito"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "rust-europa-park",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DW-3Lu4jCUg/",
+    "mediaType": "reel",
+    "cover": "/images/reels/rust-europa-park-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Selfie di gruppo nella piscina del bar acquatico di Rulantica, dentro Europa-Park a Rust, con un bicchiere di birra in primo piano.",
+    "videoSrc": "/video/rust-europa-park.mp4",
+    "publishedAt": "2026-04-11",
+    "hook": "Il parco più bello d’Europa?",
+    "title": "Europa-Park",
+    "description": "Oltre cento attrazioni e code che restano sui 40-50 minuti, con pass gratuiti per saltare la fila sulle principali. Le nostre preferite: Voltron e Wodan, il colosso in legno. Dentro c’è anche Rulantica, il parco acquatico coperto.",
+    "place": {
+      "name": "Europa-Park",
+      "city": "Rust",
+      "country": "Germania",
+      "coordinates": {
+        "lat": 48.264986,
+        "lng": 7.720728
+      }
+    },
+    "zone": "Europa",
+    "types": ["Posti particolari", "Insolito"],
+    "partnership": {
+      "kind": "invited"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "penang-bao-teck",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DP284FmjHlB/",
+    "mediaType": "reel",
+    "cover": "/images/reels/penang-bao-teck-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Sala della Bao Teck Tea House a Penang con tavoli rotondi, lampadari dorati e piante pendenti da un tronco.",
+    "videoSrc": "/video/penang-bao-teck.mp4",
+    "publishedAt": "2025-10-16",
+    "hook": "Una vera tea house asiatica?",
+    "title": "Bao Teck Tea House",
+    "description": "Sala coloniale con lampadari dorati e piante pendenti, nel cuore di George Town. Si sceglie fra tanti tipi di tè, dolcetti tipici e piccoli piatti in stile dim sum. Pausa tranquilla fra un giro e l’altro.",
+    "place": {
+      "name": "Bao Teck Tea House",
+      "city": "George Town",
+      "country": "Malesia",
+      "coordinates": {
+        "lat": 5.414162,
+        "lng": 100.328735
+      },
+      "googlePlaceQuery": "Bao Teck Tea House, George Town"
+    },
+    "zone": "Asia",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "padova-la-pot",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DP0y9-6DJ0j/",
+    "mediaType": "reel",
+    "cover": "/images/reels/padova-la-pot-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Quattro vassoi di carne cruda marinata tenuti in mano da LaPot a Padova, davanti alla griglia incassata nel tavolo.",
+    "videoSrc": "/video/padova-la-pot.mp4",
+    "publishedAt": "2025-10-15",
+    "hook": "Hai mai provato il BBQ coreano?",
+    "title": "LaPot",
+    "description": "All you can eat con la griglia al centro del tavolo: tanti tagli di carne, spiedini cinesi, pesce, verdure e wagyu. Le salse te le componi tu. Serata lunga e conviviale, non una cena veloce.",
+    "place": {
+      "name": "LaPot",
+      "city": "Padova",
+      "region": "Veneto",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 45.391408,
+        "lng": 11.805849
+      },
+      "googlePlaceQuery": "LaPot, Padova"
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "casola-spino-fiorito",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DPmpX6cDGVZ/",
+    "mediaType": "reel",
+    "cover": "/images/reels/casola-spino-fiorito-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Sauna con vetrata sul bosco e sulle montagne della Lunigiana, nella mirror house Spino Fiorito a Casola.",
+    "videoSrc": "/video/casola-spino-fiorito.mp4",
+    "publishedAt": "2025-10-09",
+    "hook": "Dormiresti in una mirror house?",
+    "title": "Spino Fiorito Stay",
+    "description": "Alloggio rivestito di specchi che riflettono il bosco intorno e cambiano colore con la luce del giorno, in Lunigiana. Dentro c’è la sauna con vetrata sulle montagne. Si arriva in auto, poi si sta.",
+    "place": {
+      "name": "Spino Fiorito Stay",
+      "city": "Casola in Lunigiana",
+      "region": "Toscana",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 44.199961,
+        "lng": 10.17546
+      },
+      "googlePlaceQuery": "Spino Fiorito Stay, Casola in Lunigiana"
+    },
+    "zone": "Italia",
+    "types": ["Hotel con carattere", "Insolito"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "treviso-nonno-andrea",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DPfs_FgDDwM/",
+    "mediaType": "reel",
+    "cover": "/images/reels/treviso-nonno-andrea-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Campo di zucche con una piramide di zucche colorate e uno spaventapasseri gigante al villaggio di Nonno Andrea a Villorba.",
+    "videoSrc": "/video/treviso-nonno-andrea.mp4",
+    "publishedAt": "2025-10-07",
+    "hook": "Il villaggio delle zucche?",
+    "title": "Nonno Andrea",
+    "description": "Uno dei villaggi delle zucche più grandi del Nord Italia: sculture di zucca, casette in stile americano, aree tematiche e spettacoli. Ingresso 10€ infrasettimanale, 12€ nel weekend. Da provare il risotto e il cappuccino alla zucca.",
+    "place": {
+      "name": "Nonno Andrea",
+      "city": "Villorba",
+      "region": "Veneto",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 45.762202,
+        "lng": 12.230322
+      }
+    },
+    "zone": "Italia",
+    "types": ["Posti particolari"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "value": {
+      "price": "10€ infrasettimanale · 12€ weekend",
+      "budget": "Basso"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "bracciano-enjoy-house",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DPUlZIZDJ6D/",
+    "mediaType": "reel",
+    "cover": "/images/reels/bracciano-enjoy-house-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Jacuzzi piena di schiuma con luci azzurre e un tagliere di salumi e fritti sul bordo, in una suite di Enjoy House a Bracciano.",
+    "videoSrc": "/video/bracciano-enjoy-house.mp4",
+    "publishedAt": "2025-10-02",
+    "hook": "Aperitivo dentro la jacuzzi?",
+    "title": "Enjoy House Bracciano",
+    "description": "Suite con jacuzzi privata in camera e aperitivo servito a bordo vasca, dentro un borgo medievale affacciato sul lago di Bracciano. Il borgo si gira a piedi, con calma.",
+    "place": {
+      "name": "Enjoy House Bracciano",
+      "city": "Bracciano",
+      "region": "Lazio",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 42.101095,
+        "lng": 12.173857
+      },
+      "googlePlaceQuery": "Enjoy House Bracciano, Bracciano"
+    },
+    "zone": "Italia",
+    "types": ["Hotel con carattere", "Relax, terme e spa"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "novellara-mamma-mia",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DPQkvGxDNL8/",
+    "mediaType": "reel",
+    "cover": "/images/reels/novellara-mamma-mia-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Due coni di pizza fritta in cestelli di metallo, tenuti in mano davanti a una parete di verde con insegne al neon da Mamma Mia a Novellara.",
+    "videoSrc": "/video/novellara-mamma-mia.mp4",
+    "publishedAt": "2025-10-01",
+    "hook": "Coni di pizza fritta?",
+    "title": "Mamma Mia",
+    "description": "Pizza fritta servita a cono, con ripieni che vanno dal guanciale e gamberi al pulled pork. Si mangia in piedi, con le mani, davanti a una parete di verde e neon.",
+    "place": {
+      "name": "Mamma Mia",
+      "city": "Novellara",
+      "region": "Emilia-Romagna",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 44.844982,
+        "lng": 10.731647
+      },
+      "googlePlaceQuery": "Mamma Mia, Novellara"
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "pomigliano-the-sign",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DPA2fwZDMzz/",
+    "mediaType": "reel",
+    "cover": "/images/reels/pomigliano-the-sign-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Bancone in legno intagliato con motivi celtici e lampadari a corona nella sala del pub The Sign a Pomigliano d’Arco.",
+    "videoSrc": "/video/pomigliano-the-sign.mp4",
+    "publishedAt": "2025-09-25",
+    "hook": "La Terra di Mezzo esiste?",
+    "title": "The Sign",
+    "description": "Pub fantasy dove ogni sala porta in un mondo diverso, fra intagli celtici, roccia finta e lampadari a corona. Organizzano serate a tema e sessioni di giochi di ruolo.",
+    "place": {
+      "name": "The Sign",
+      "city": "Pomigliano d'Arco",
+      "region": "Campania",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 40.9088,
+        "lng": 14.395555
+      }
+    },
+    "zone": "Italia",
+    "types": ["Insolito", "Food & Ristoranti"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "the-sense-resort",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DO0b3-DDPSh/",
+    "mediaType": "reel",
+    "cover": "/images/reels/the-sense-resort-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Tavolo apparecchiato in riva al mare al tramonto, con una coppia affacciata alla ringhiera, al The Sense Resort di Follonica.",
+    "videoSrc": "/video/the-sense-resort.mp4",
+    "publishedAt": "2025-09-20",
+    "hook": "Il tramonto più bello della Maremma?",
+    "title": "The Sense Experience Resort",
+    "description": "Resort sulla spiaggia di Follonica: cabana privata per l’aperitivo al tramonto, camere con vista mare e il ristorante Eaté proprio in riva. La sera si cena col rumore dell’acqua.",
+    "place": {
+      "name": "The Sense Experience Resort",
+      "city": "Follonica",
+      "region": "Toscana",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 42.940775,
+        "lng": 10.711896
+      }
+    },
+    "zone": "Italia",
+    "types": ["Hotel con carattere", "Relax, terme e spa"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "poppi-fattorie-di-celli",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DOoHsTmjCQw/",
+    "mediaType": "reel",
+    "cover": "/images/reels/poppi-fattorie-di-celli-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Coppia sdraiata su cuscini sopra una rete sospesa fra gli alberi del bosco, alle Fattorie di Celli a Poppi.",
+    "videoSrc": "/video/poppi-fattorie-di-celli.mp4",
+    "publishedAt": "2025-09-15",
+    "hook": "Dormiresti su una rete sospesa fra gli alberi?",
+    "title": "Fattorie di Celli",
+    "description": "Reti sospese fra i tronchi, con cuscini, dentro il bosco del Casentino: ci si sdraia sopra e sotto c’è il vuoto. Alloggi immersi nella natura, a due passi da Poppi.",
+    "place": {
+      "name": "Fattorie di Celli",
+      "city": "Poppi",
+      "region": "Toscana",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 43.733365,
+        "lng": 11.723586
+      }
+    },
+    "zone": "Italia",
+    "types": ["Hotel con carattere", "Insolito"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "penang-iconic-marjorie",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DOEM45XDMaO/",
+    "mediaType": "reel",
+    "cover": "/images/reels/penang-iconic-marjorie-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Poltrona sospesa in vimini davanti alla vetrata sulla terrazza con ombrelloni e palme dell’Iconic Marjorie Hotel a Penang.",
+    "videoSrc": "/video/penang-iconic-marjorie.mp4",
+    "publishedAt": "2025-09-01",
+    "hook": "Com’è un 5 stelle in Malesia?",
+    "title": "Iconic Marjorie Hotel",
+    "description": "Hotel nuovo a Penang, con colazione abbondante e piscina panoramica sulla città. Base comoda per girare George Town senza spendere quanto costerebbe altrove.",
+    "place": {
+      "name": "Iconic Marjorie Hotel",
+      "city": "George Town",
+      "country": "Malesia",
+      "coordinates": {
+        "lat": 5.337723,
+        "lng": 100.299305
+      }
+    },
+    "zone": "Asia",
+    "types": ["Hotel con carattere"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "kuala-lumpur-raito-izakaya",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DNN0nl9Izu9/",
+    "mediaType": "reel",
+    "cover": "/images/reels/kuala-lumpur-raito-izakaya-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Scala rossa illuminata fra pareti di bottiglie retroilluminate nel locale Raito Izakaya a Kuala Lumpur.",
+    "videoSrc": "/video/kuala-lumpur-raito-izakaya.mp4",
+    "publishedAt": "2025-08-11",
+    "hook": "Cenare in un izakaya giapponese?",
+    "title": "Raito Izakaya",
+    "description": "Izakaya a Kuala Lumpur costruito attorno a una scala fra pareti di bottiglie rosse illuminate. Cocktail dai gusti insoliti e carta lunga: si va per l’atmosfera quanto per il cibo.",
+    "place": {
+      "name": "Raito Izakaya",
+      "city": "Kuala Lumpur",
+      "country": "Malesia",
+      "coordinates": {
+        "lat": 3.151696,
+        "lng": 101.694237
+      },
+      "googlePlaceQuery": "Raito Izakaya, Kuala Lumpur"
+    },
+    "zone": "Asia",
+    "types": ["Food & Ristoranti", "Insolito"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "massa-lubrense-relais-freedom",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DNDONt4IXuR/",
+    "mediaType": "reel",
+    "cover": "/images/reels/massa-lubrense-relais-freedom-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Due persone sedute su un lettino su una terrazza affacciata sul mare della costiera sorrentina, con Capri all’orizzonte, al Relais Freedom Club.",
+    "videoSrc": "/video/massa-lubrense-relais-freedom.mp4",
+    "publishedAt": "2025-08-07",
+    "hook": "La piscina più panoramica della costiera?",
+    "title": "Relais Freedom Club",
+    "description": "Terrazza sulla costiera sorrentina con Capri davanti: piscina, jacuzzi vista mare, lettini e bar a bordo vasca. Si sta lì tutto il giorno, è quello il punto.",
+    "place": {
+      "name": "Relais Freedom Club",
+      "city": "Massa Lubrense",
+      "region": "Campania",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 40.611738,
+        "lng": 14.343424
+      },
+      "googlePlaceQuery": "Relais Freedom Club, Massa Lubrense"
+    },
+    "zone": "Italia",
+    "types": ["Relax, terme e spa", "Hotel con carattere"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "seriate-impero-sushi",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DM0OWpIoaKN/",
+    "mediaType": "reel",
+    "cover": "/images/reels/seriate-impero-sushi-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Sala di Impero Sushi a Seriate con pavimento di marmo scuro, colonne dorate, felci sospese e fumo basso sulla scalinata.",
+    "videoSrc": "/video/seriate-impero-sushi.mp4",
+    "publishedAt": "2025-08-01",
+    "hook": "Sushi con proposte italiane?",
+    "title": "Impero Sushi",
+    "description": "Sala di marmo scuro, ottone e felci sospese alle porte di Bergamo, con piatti creativi che mescolano tecnica giapponese e ingredienti italiani. Più ristorante che all you can eat.",
+    "place": {
+      "name": "Impero Sushi",
+      "city": "Seriate",
+      "region": "Lombardia",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 45.686808,
+        "lng": 9.737957
+      }
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "negrar-giardino-pojega",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DMfqJ_iIgC7/",
+    "mediaType": "reel",
+    "cover": "/images/reels/negrar-giardino-pojega-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Coppia che si abbraccia davanti al ninfeo in pietra e alle siepi geometriche del Giardino di Pojega a Negrar di Valpolicella.",
+    "videoSrc": "/video/negrar-giardino-pojega.mp4",
+    "publishedAt": "2025-07-24",
+    "hook": "Un giardino segreto in Valpolicella?",
+    "title": "Giardino di Pojega",
+    "description": "Giardino all’italiana disegnato a fine Settecento da Luigi Trezza, con siepi geometriche, ninfeo e teatro di verzura. Poco conosciuto anche da chi vive in zona.",
+    "place": {
+      "name": "Giardino di Pojega",
+      "city": "Negrar di Valpolicella",
+      "region": "Veneto",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 45.534236,
+        "lng": 10.945498
+      }
+    },
+    "zone": "Italia",
+    "types": ["Posti particolari"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "value": {
+      "price": "Da 10€",
+      "budget": "Basso"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "riquewihr-alsazia",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DWuD9O6DHgZ/",
+    "mediaType": "reel",
+    "cover": "/images/reels/riquewihr-alsazia-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Tavolini di un caffè in un vicolo di Riquewihr, fra una winstub dalla facciata blu e la bottega gialla di un caveau di vini d’Alsazia.",
+    "publishedAt": "2026-04-04",
+    "hook": "Il paese della Bella e la Bestia?",
+    "title": "Riquewihr",
+    "description": "Borgo alsaziano di case a graticcio dipinte, fiori alle finestre e winstub nei vicoli. Si gira a piedi in un paio d’ore, ed è uno di quei posti dove la cartolina è la realtà.",
+    "place": {
+      "name": "Riquewihr",
+      "city": "Riquewihr",
+      "country": "Francia",
+      "coordinates": {
+        "lat": 48.166077,
+        "lng": 7.298014
+      }
+    },
+    "zone": "Europa",
+    "types": ["Borghi e città d'arte"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "bellano-orrido",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DRglfO_jEzd/",
+    "mediaType": "reel",
+    "cover": "/images/reels/bellano-orrido-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Passerella metallica sospesa nella gola dell’Orrido di Bellano, con luci di Natale appese alla ringhiera e roccia coperta d’edera.",
+    "publishedAt": "2025-11-26",
+    "hook": "Un orrido spettacolare?",
+    "title": "Orrido di Bellano",
+    "description": "Gola scavata dal torrente Pioverna sul lago di Como, percorsa da passerelle sospese sopra l’acqua. Da inizio dicembre si accende con le luci di Natale. Ingresso 8€.",
+    "place": {
+      "name": "Orrido di Bellano",
+      "city": "Bellano",
+      "region": "Lombardia",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 46.042387,
+        "lng": 9.305244
+      }
+    },
+    "zone": "Italia",
+    "types": ["Posti particolari"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "value": {
+      "price": "8€",
+      "budget": "Basso"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "milano-shoo-loong-kan",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DL13ey_I0bS/",
+    "mediaType": "reel",
+    "cover": "/images/reels/milano-shoo-loong-kan-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Sala di Shoo Loong Kan a Milano con lanterne rosse, paraventi in legno intagliato e pentole per hotpot incassate nei tavoli.",
+    "publishedAt": "2025-07-08",
+    "hook": "Cenare dentro un tempio cinese?",
+    "title": "Shoo Loong Kan",
+    "description": "Hotpot in una sala costruita come un tempio, fra lanterne rosse, legni intagliati e pentole incassate nel tavolo. Ingredienti di qualità alta e scelta molto ampia.",
+    "place": {
+      "name": "Shoo Loong Kan",
+      "city": "Milano",
+      "region": "Lombardia",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 45.485454,
+        "lng": 9.18227
+      }
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti", "Insolito"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "zurigo-chinagarten",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DMk8lsaojLr/",
+    "mediaType": "reel",
+    "cover": "/images/reels/zurigo-chinagarten-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Porta della luna in pietra e tetti dorati di pagoda del Chinagarten di Zurigo, con una magnolia in fiore a destra.",
+    "publishedAt": "2025-07-26",
+    "hook": "Un giardino cinese in Svizzera?",
+    "title": "Chinagarten Zürich",
+    "description": "Pagode, laghetti e ponticelli affacciati sul lago di Zurigo: un giardino cinese vero, regalo della città di Kunming. Si attraversa una porta della luna e sembra di essere altrove.",
+    "place": {
+      "name": "Chinagarten Zürich",
+      "city": "Zurigo",
+      "country": "Svizzera",
+      "coordinates": {
+        "lat": 47.35496,
+        "lng": 8.551998
+      }
+    },
+    "zone": "Europa",
+    "types": ["Posti particolari"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "treviolo-caverna-pub",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DXJChP7jMqr/",
+    "mediaType": "reel",
+    "cover": "/images/reels/treviolo-caverna-pub-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Porta rotonda verde da casa hobbit all’ingresso del Caverna Pub a Treviolo, con un manichino di hobbit seduto su una botte accanto.",
+    "publishedAt": "2026-04-15",
+    "hook": "Cenare nella Terra di Mezzo?",
+    "title": "Caverna Pub",
+    "description": "Pub a tema fantasy con la porta rotonda da casa hobbit all’ingresso: si passa la Contea, la foresta e il regno dei nani. Piatti abbondanti, da tavolata.",
+    "place": {
+      "name": "Caverna Pub",
+      "city": "Treviolo",
+      "region": "Lombardia",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 45.672927,
+        "lng": 9.606771
+      },
+      "googlePlaceQuery": "Caverna Pub, Treviolo"
+    },
+    "zone": "Italia",
+    "types": ["Insolito", "Food & Ristoranti"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "concesio-la-barriera",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DLmcMF3IR-Z/",
+    "mediaType": "reel",
+    "cover": "/images/reels/concesio-la-barriera-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Trono di spade a grandezza reale, coperto da una pelliccia, nella sala del pub La Barriera a Concesio.",
+    "publishedAt": "2025-07-02",
+    "hook": "Ti siederesti sul Trono di Spade?",
+    "title": "La Barriera Pub",
+    "description": "Pub a tema Trono di Spade con il trono di spade a grandezza reale su cui ci si siede davvero, cocktail intitolati ai personaggi e panini da banchetto. Durante l’anno organizzano serate a tema.",
+    "place": {
+      "name": "La Barriera Pub",
+      "city": "Concesio",
+      "region": "Lombardia",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 45.611301,
+        "lng": 10.210266
+      },
+      "googlePlaceQuery": "La Barriera Pub, Concesio"
+    },
+    "zone": "Italia",
+    "types": ["Insolito", "Food & Ristoranti"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "bossico-placat",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DMsEsHZIDfy/",
+    "mediaType": "reel",
+    "cover": "/images/reels/bossico-placat-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Struttura geodetica in tela con vetrata, fra gli abeti del bosco di Bossico, raggiunta da una passerella di legno.",
+    "publishedAt": "2025-07-29",
+    "hook": "Dormiresti in una bolla nel bosco?",
+    "title": "Placat",
+    "description": "Campeggio nuovo dentro il bosco sopra il lago d’Iseo: si dorme in strutture geodetiche con vetrata sugli alberi, senza internet. Si arriva in auto e poi si cammina su passerelle di legno.",
+    "place": {
+      "name": "Placat",
+      "city": "Bossico",
+      "region": "Lombardia",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 45.842547,
+        "lng": 10.050156
+      }
+    },
+    "zone": "Italia",
+    "types": ["Hotel con carattere", "Insolito"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "parma-la-forchetta",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DWEaRr6DCfM/",
+    "mediaType": "reel",
+    "cover": "/images/reels/parma-la-forchetta-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Tavolo rotondo apparecchiato con tovaglia bianca e fiori rosa nella sala del ristorante La Forchetta a Parma, sotto una grande stampa in bianco e nero.",
+    "publishedAt": "2026-03-19",
+    "hook": "Uno dei migliori ristoranti di Parma?",
+    "title": "La Forchetta",
+    "description": "In centro a Parma, dove la tradizione emiliana incontra il pesce: dalla torta fritta col prosciutto ai tortelli. Sala piccola e apparecchiata bene, servizio classico.",
+    "place": {
+      "name": "La Forchetta",
+      "city": "Parma",
+      "region": "Emilia-Romagna",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 44.80273,
+        "lng": 10.329889
+      }
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "adv"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "shanghai-yangtze-hotel",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DOQa9YtDCWr/",
+    "mediaType": "reel",
+    "cover": "/images/reels/shanghai-yangtze-hotel-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Porta della luna in pietra scolpita con battenti in legno rosso, fra la vegetazione, davanti al The Yangtze Boutique Hotel a Shanghai.",
+    "publishedAt": "2025-09-06",
+    "hook": "Dormire in un palazzo Art Déco del 1933?",
+    "title": "The Yangtze Boutique",
+    "description": "Hotel dentro un edificio Art Déco del 1933, elegante e spazioso, con vista sulla Oriental Pearl. In una città di grattacieli è la scelta opposta: si dorme dentro la Shanghai di cent’anni fa.",
+    "place": {
+      "name": "The Yangtze Boutique Shanghai",
+      "city": "Shanghai",
+      "country": "Cina",
+      "coordinates": {
+        "lat": 31.231271,
+        "lng": 121.470015
+      },
+      "googlePlaceQuery": "The Yangtze Boutique Shanghai, Shanghai"
+    },
+    "zone": "Asia",
+    "types": ["Hotel con carattere"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "onore-fattoria-felicita",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DMpfRUhoG05/",
+    "mediaType": "reel",
+    "cover": "/images/reels/onore-fattoria-felicita-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Rodrigo e Betta si baciano seduti su due cavalli affiancati, davanti alle montagne sopra Onore.",
+    "publishedAt": "2025-07-28",
+    "hook": "Passeggiata a cavallo e pranzo in fattoria?",
+    "title": "Fattoria della Felicità",
+    "description": "Un’ora e mezza a cavallo fra boschi e prati sopra la Val Seriana, e al ritorno pranzo casereccio in fattoria. Adatto anche a chi non è mai salito in sella.",
+    "place": {
+      "name": "Fattoria della Felicità",
+      "city": "Onore",
+      "region": "Lombardia",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 45.893028,
+        "lng": 10.025778
+      },
+      "googlePlaceQuery": "Fattoria della Felicità, Onore"
+    },
+    "zone": "Italia",
+    "types": ["Posti particolari"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "salvirola-il-cascinetto",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DWTnwM6DGrM/",
+    "mediaType": "reel",
+    "cover": "/images/reels/salvirola-il-cascinetto-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Telo da proiezione e balle di paglia con coperte allestiti fra i meli del frutteto del Cascinetto, a Salvirola.",
+    "publishedAt": "2026-03-25",
+    "hook": "Un film in mezzo al frutteto?",
+    "title": "Il Cascinetto",
+    "description": "Cinema all’aperto allestito dentro i loro frutteti: telo, balle di paglia come sedute e un film diverso ogni settimana. Riprende a giugno e conviene prenotare appena aprono.",
+    "place": {
+      "name": "Il Cascinetto",
+      "city": "Salvirola",
+      "region": "Lombardia",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 45.354255,
+        "lng": 9.774322
+      }
+    },
+    "zone": "Italia",
+    "types": ["Posti particolari", "Insolito"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "verona-mare-blu",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DRjmEZujGe2/",
+    "mediaType": "reel",
+    "cover": "/images/reels/verona-mare-blu-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Grande piatto di insalata di mare con cozze, gamberi, capesante e verdure, tenuto in mano davanti a un muro di mattoni al Mare Blu di Verona.",
+    "publishedAt": "2025-11-27",
+    "hook": "Pranzo di pesce senza spendere un patrimonio?",
+    "title": "Ristorante Mare Blu",
+    "description": "Pesce fresco con porzioni abbondanti e menù di lavoro dal lunedì al venerdì: si esce sazi senza il conto delle pescherie del centro.",
+    "place": {
+      "name": "Ristorante Mare Blu",
+      "city": "Verona",
+      "region": "Veneto",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 45.442498,
+        "lng": 10.985738
+      },
+      "googlePlaceQuery": "Ristorante Mare Blu, Verona"
+    },
+    "zone": "Italia",
+    "types": ["Food & Ristoranti"],
+    "partnership": {
+      "kind": "organic"
+    },
+    "value": {
+      "price": "Menù di lavoro da 24€",
+      "budget": "Medio"
+    },
+    "isPlaceholder": false
+  },
+  {
+    "id": "bollate-exess",
+    "source": "instagram",
+    "permalink": "https://www.instagram.com/travelliniwithus/reel/DMLLFSFIsF2/",
+    "mediaType": "reel",
+    "cover": "/images/reels/bollate-exess-cover.webp",
+    "coverFocusY": 64,
+    "coverAlt": "Sabbia, poltrone bianche e altalene sotto le luci di un beach club all’aperto: l’Exess di Bollate, alle porte di Milano.",
+    "publishedAt": "2025-07-16",
+    "hook": "Una spiaggia alle porte di Milano?",
+    "title": "Exess",
+    "description": "Sabbia vera, palme, amache e luci basse a mezz’ora da Milano: si entra gratis e si beve con i piedi nella sabbia. D’estate è pieno la sera.",
+    "place": {
+      "name": "Exess",
+      "city": "Bollate",
+      "region": "Lombardia",
+      "country": "Italia",
+      "coordinates": {
+        "lat": 45.549688,
+        "lng": 9.118687
+      },
+      "googlePlaceQuery": "Exess, Bollate"
+    },
+    "zone": "Italia",
+    "types": ["Insolito"],
+    "partnership": {
+      "kind": "organic"
     },
     "isPlaceholder": false
   }

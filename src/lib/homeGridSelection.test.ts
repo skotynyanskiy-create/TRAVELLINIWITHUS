@@ -119,8 +119,37 @@ describe('selectHomeGridItems — pool reale', () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it('nessun item verificato ha featured: true oggi, quindi featuredId è null', () => {
-    const { featuredId } = selectHomeGridItems(CONTENT_ITEMS, 9);
+  // Era «nessun item verificato ha featured: true oggi»: una fotografia dei
+  // dati, non una regola. Appena `campania-burton-juice` è passato da scheda in
+  // arrivo a scheda verificata, il test è diventato rosso senza che niente si
+  // fosse rotto — e la regola vera, quella che conta, non era scritta da
+  // nessuna parte.
+  it("l'evidenza non tocca mai un posto con una collaborazione dichiarata", () => {
+    const { items, featuredId } = selectHomeGridItems(CONTENT_ITEMS, 9);
+    if (featuredId === null) {
+      expect(items.every((item) => !item.featured || item.partnership.kind !== 'organic')).toBe(
+        true
+      );
+      return;
+    }
+    const featured = items.find((item) => item.id === featuredId);
+    expect(featured?.featured).toBe(true);
+    expect(featured?.partnership.kind).toBe('organic');
+  });
+
+  it('un posto featured ma sponsorizzato resta in griglia senza prendersi la copertina', () => {
+    const pool = [
+      makeItem({
+        id: 'adv-featured',
+        types: ['Food & Ristoranti'],
+        publishedAt: '2026-03-01',
+        featured: true,
+        partnership: { kind: 'adv' },
+      }),
+      makeItem({ id: 'organico', types: ['Hotel con carattere'], publishedAt: '2026-02-01' }),
+    ];
+    const { items, featuredId } = selectHomeGridItems(pool, 9);
+    expect(items.map((item) => item.id)).toContain('adv-featured');
     expect(featuredId).toBeNull();
   });
 });

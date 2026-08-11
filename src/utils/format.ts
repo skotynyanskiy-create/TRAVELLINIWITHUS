@@ -47,3 +47,16 @@ export function meseAnno(iso?: string): string | null {
   if (!nome || !/^\d{4}$/.test(anno ?? '')) return null;
   return `${nome} ${anno}`;
 }
+
+/**
+ * «ad aprile 2026», «a giugno 2026»: la d eufonica davanti a vocale.
+ *
+ * Tre mesi su dodici iniziano per vocale — aprile, agosto, ottobre — quindi un
+ * «a» fisso stona su un quarto delle schede. Sta qui e non nei componenti
+ * perché la stessa riga la scrivono la home, la griglia e la scheda.
+ */
+export function aMeseAnno(iso?: string): string | null {
+  const quando = meseAnno(iso);
+  if (!quando) return null;
+  return `${/^[aeiou]/i.test(quando) ? 'ad' : 'a'} ${quando.toLowerCase()}`;
+}

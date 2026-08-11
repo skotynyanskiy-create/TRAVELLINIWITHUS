@@ -343,67 +343,6 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* TRIPLE AUDIENCE SEGMENTED SWITCHER (VIAGGIATORI · FAMILY · COLLABORAZIONI) */}
-          <div className="hidden lg:flex shrink-0 items-center rounded-full bg-[var(--color-ink)]/5 p-0.5 border border-[var(--color-ink)]/8">
-            <button
-              type="button"
-              onClick={() => handleModeSwitch('viaggiatori')}
-              aria-label="Passa alla modalità Viaggiatori"
-              className={`flex items-center gap-1 rounded-full px-2 py-0.5 xl:px-2.5 xl:py-1 text-[9.5px] xl:text-[10.5px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
-                audience === 'viaggiatori'
-                  ? 'bg-white text-[var(--color-ink)] shadow-2xs font-semibold'
-                  : 'text-[var(--color-ink)]/75 hover:text-[var(--color-ink)]'
-              }`}
-            >
-              <Compass
-                size={11}
-                className={audience === 'viaggiatori' ? 'text-[var(--color-accent)]' : 'opacity-60'}
-              />
-              <span>Viaggiatori</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleModeSwitch('family')}
-              aria-label="Passa alla modalità Family"
-              className={`flex items-center gap-1 rounded-full px-2 py-0.5 xl:px-2.5 xl:py-1 text-[9.5px] xl:text-[10.5px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
-                audience === 'family'
-                  ? 'bg-white text-[var(--color-ink)] shadow-2xs font-semibold'
-                  : 'text-[var(--color-ink)]/75 hover:text-[var(--color-ink)]'
-              }`}
-            >
-              <Baby
-                size={11}
-                className={audience === 'family' ? 'text-[var(--color-accent)]' : 'opacity-60'}
-              />
-              <span>{navigation.familyLabel}</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => handleModeSwitch('brand')}
-              aria-label="Passa alla modalità Collaborazioni"
-              className={`flex items-center gap-1 rounded-full px-2 py-0.5 xl:px-2.5 xl:py-1 text-[9.5px] xl:text-[10.5px] font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
-                audience === 'brand'
-                  ? 'bg-[var(--color-ink-deep)] text-white shadow-2xs font-semibold'
-                  : 'text-[var(--color-ink)]/75 hover:text-[var(--color-ink)]'
-              }`}
-            >
-              <BriefcaseBusiness
-                size={11}
-                className={
-                  audience === 'brand' ? 'text-[var(--color-accent-on-dark)]' : 'opacity-60'
-                }
-              />
-              <span>Collaborazioni</span>
-            </button>
-          </div>
-
-          <Link
-            to={`${getAudienceHomePath(audience)}#personalizza-esperienza`}
-            className="hidden xl:inline-flex shrink-0 items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--color-muted-fg)] transition-colors hover:text-[var(--color-accent-text)]"
-          >
-            <SlidersHorizontal size={13} aria-hidden /> Personalizza
-          </Link>
-
           {/* DYNAMIC NAV MENU */}
           <AnimatePresence mode="wait">
             {audience === 'viaggiatori' ? (
@@ -413,7 +352,7 @@ export default function Navbar() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 10 }}
                 transition={{ duration: 0.2 }}
-                className="hidden lg:flex flex-1 items-center justify-center space-x-0.5 xl:space-x-2 px-0.5 xl:px-1"
+                className="hidden lg:flex min-w-0 flex-1 items-center justify-center space-x-0.5 xl:space-x-2 px-0.5 xl:px-1"
               >
                 {navItems.map((item) => {
                   const active = isItemActive(item);
@@ -569,7 +508,7 @@ export default function Navbar() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 10 }}
                 transition={{ duration: 0.2 }}
-                className="hidden lg:flex flex-1 items-center justify-center space-x-1.5 xl:space-x-2 px-1 xl:px-2"
+                className="hidden lg:flex min-w-0 flex-1 items-center justify-center space-x-1.5 xl:space-x-2 px-1 xl:px-2"
               >
                 <Link
                   to="/family"
@@ -623,7 +562,7 @@ export default function Navbar() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -10 }}
                 transition={{ duration: 0.2 }}
-                className="hidden lg:flex flex-1 items-center justify-center space-x-1.5 xl:space-x-2 px-1 xl:px-2"
+                className="hidden lg:flex min-w-0 flex-1 items-center justify-center space-x-1.5 xl:space-x-2 px-1 xl:px-2"
               >
                 <Link
                   to="/collaborazioni"
@@ -713,7 +652,7 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => setIsUserMenuOpen((prev) => !prev)}
-                aria-label="Menu utente e impostazioni"
+                aria-label="Menu utente, modalità e impostazioni"
                 aria-expanded={isUserMenuOpen}
                 className="relative flex h-8 w-8 items-center justify-center rounded-full border border-[var(--color-ink)]/15 bg-white text-[var(--color-ink)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] shadow-2xs cursor-pointer"
               >
@@ -755,6 +694,61 @@ export default function Navbar() {
                         </p>
                       </div>
                     )}
+
+                    {/* Modalità — era una barra segmentata a tre nel corpo della
+                        navbar. Con brand, menu, ricerca, CTA e account nella
+                        stessa riga la pillola serviva 1.476px di contenuto in
+                        1.182 disponibili a 1280: il CTA e questo stesso bottone
+                        finivano fuori schermo a *ogni* larghezza desktop. Qui
+                        la scelta resta a un clic e sta accanto alle altre
+                        preferenze (preferiti, lingua), che è il suo posto:
+                        cambia il percorso, non il marchio. */}
+                    <div className="border-b border-[var(--color-border)] px-4 pt-1 pb-2">
+                      <p className="mb-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-muted-fg)]">
+                        Modalità
+                      </p>
+                      <div role="group" aria-label="Scegli la tua modalità" className="space-y-0.5">
+                        {(
+                          [
+                            { key: 'viaggiatori', label: 'Viaggiatori', icon: Compass },
+                            { key: 'family', label: navigation.familyLabel, icon: Baby },
+                            { key: 'brand', label: 'Collaborazioni', icon: BriefcaseBusiness },
+                          ] as const
+                        ).map(({ key, label, icon: ModeIcon }) => (
+                          <button
+                            key={key}
+                            type="button"
+                            aria-label={`Passa alla modalità ${label}`}
+                            aria-current={audience === key ? 'true' : undefined}
+                            onClick={() => {
+                              handleModeSwitch(key);
+                              setIsUserMenuOpen(false);
+                            }}
+                            className={`flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-xs font-medium transition-colors cursor-pointer ${
+                              audience === key
+                                ? 'bg-[var(--color-sand)] text-[var(--color-ink)] font-semibold'
+                                : 'text-[var(--color-ink-2)] hover:bg-[var(--color-sand)]/60'
+                            }`}
+                          >
+                            <ModeIcon
+                              size={14}
+                              className={
+                                audience === key ? 'text-[var(--color-accent)]' : 'opacity-60'
+                              }
+                            />
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                      <Link
+                        to={`${getAudienceHomePath(audience)}#personalizza-esperienza`}
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="mt-1.5 flex items-center gap-2 rounded-lg px-2.5 py-2 text-xs font-medium text-[var(--color-ink-2)] transition-colors hover:bg-[var(--color-sand)]/60"
+                      >
+                        <SlidersHorizontal size={14} className="opacity-60" aria-hidden />
+                        Personalizza esperienza
+                      </Link>
+                    </div>
 
                     {/* Favorites link */}
                     <Link

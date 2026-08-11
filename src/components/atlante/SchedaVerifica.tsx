@@ -25,7 +25,11 @@ export default function SchedaVerifica({ item }: { item: ContentItem }) {
   const cosaE = (item.types ?? []).join(' · ');
   // La data del reel e' la data della visita: e' l'unica cronologia che il
   // progetto ha, ed e' popolata su tutte le schede reali.
-  const quando = meseAnno(getReelForPosto(item.id)?.publishedAt);
+  // La data della visita viveva solo nel manifest dei reel: i posti importati
+  // senza il video in locale non avevano entry lì, e la riga «ci siamo stati»
+  // spariva pur essendo il dato presente sull'item. Il reel resta la fonte
+  // preferita — è la sua data di pubblicazione — con l'item come ripiego.
+  const quando = meseAnno(getReelForPosto(item.id)?.publishedAt ?? item.publishedAt);
 
   return (
     <dl className="atlante-scheda">

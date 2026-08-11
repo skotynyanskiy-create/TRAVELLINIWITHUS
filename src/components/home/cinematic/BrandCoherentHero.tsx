@@ -6,9 +6,34 @@ import SchedaVerifica from '@/src/components/atlante/SchedaVerifica';
 import MagneticWrapper from '@/src/components/MagneticWrapper';
 import OptimizedImage from '@/src/components/OptimizedImage';
 import TiltCard from '@/src/components/TiltCard';
-import { getContentById } from '@/src/config/contentLibrary';
+import { CONTENT_ITEMS, getContentById } from '@/src/config/contentLibrary';
+import { getReelForPosto } from '@/src/config/reels';
+import { PARTNERSHIP_LABEL } from '@/src/types/content';
+import { aMeseAnno } from '@/src/utils/format';
 
-const FEATURED_POSTO_ID = 'campania-burton-juice';
+/**
+ * Il posto in copertina — e la sua fotografia.
+ *
+ * Era `campania-burton-juice` sopra `home-journal/hero-impossible.png`. Nessuno
+ * dei due reggeva la parola «Provato» stampata sul timbro qui sotto: quel posto
+ * è `isPlaceholder`, è `adv`, non ha cover né prezzo, e quell'immagine è fra i
+ * quattro asset a provenienza **non certificata** di
+ * `DECISION_IMAGERY_TRUTH_RULE_2026-07-22` — che vieta esplicitamente di
+ * adottarli come prova su una nuova superficie. La rivendicazione più visibile
+ * del sito era la meno verificata.
+ *
+ * Ora la copertina è un posto reale, senza collaborazione, con prezzo pubblico
+ * e con il frame del reel che ci abbiamo girato: la foto, la didascalia, il
+ * timbro e la scheda parlano della stessa cosa vera.
+ * `BrandCoherentHero.prova.test.tsx` blocca la regressione, preload incluso.
+ */
+const FEATURED_POSTO_ID = 'jesolo-caribe-bay';
+
+/** Registro alla mano: i numeri della barra prove non si scrivono, si contano. */
+const POSTI_PROVATI = CONTENT_ITEMS.filter((item) => !item.isPlaceholder);
+const CON_COLLABORAZIONE = POSTI_PROVATI.filter(
+  (item) => item.partnership.kind !== 'organic'
+).length;
 
 const containerVariants: Variants = {
   // Il contenitore deve restare visibile al primo paint: ospita l'H1 LCP.
@@ -39,6 +64,24 @@ export default function BrandCoherentHero() {
   const [schedaOpen, setSchedaOpen] = useState(false);
   const featured = getContentById(FEATURED_POSTO_ID);
   const shouldReduceMotion = useReducedMotion();
+  const featuredDisclosure = featured ? PARTNERSHIP_LABEL[featured.partnership.kind] : '';
+  const featuredCaption = featured
+    ? [featured.place.name, featured.place.city ?? featured.place.region]
+        .filter(Boolean)
+        .join(' · ')
+    : '';
+  // La data del reel è la data della visita: è l'unica cronologia che il
+  // progetto ha, ed è popolata su tutte e 29 le schede reali (stessa regola di
+  // SchedaVerifica).
+  const featuredQuando = aMeseAnno(
+    featured ? (getReelForPosto(featured.id)?.publishedAt ?? featured.publishedAt) : undefined
+  );
+  const featuredNota = [
+    featured?.value?.price,
+    featuredQuando ? `ci siamo stati ${featuredQuando}` : null,
+  ]
+    .filter(Boolean)
+    .join(' · ');
 
   return (
     <section className="relative w-full bg-[var(--color-sand,#faf7f2)] pt-24 pb-12 md:pt-20 md:pb-20 text-[var(--color-ink,#1a2b3c)] overflow-hidden border-b border-[var(--color-border)]">
@@ -88,12 +131,16 @@ export default function BrandCoherentHero() {
               animate="visible"
               className="order-3 lg:order-none"
             >
+              {/* «Periodo giusto» prometteva un dato che nessuna scheda ha: il
+                  modello non porta un periodo consigliato. Al suo posto le tre
+                  cose che una scheda dà davvero — il reel girato lì, il costo
+                  quando lo conosciamo, e sempre a che titolo ci siamo andati. */}
               <motion.p
                 variants={itemVariants}
                 className="mt-5 max-w-xl text-base leading-relaxed text-[var(--color-muted-fg)] sm:text-lg"
               >
-                Siamo Rodrigo e Betta. Li proviamo prima di persona, poi vi diciamo se valgono
-                davvero il viaggio — con prezzi reali, periodo giusto ed atmosfera.
+                Siamo Rodrigo e Betta. Prima ci andiamo, poi qui trovate il reel girato sul posto,
+                il costo quando lo conosciamo e sempre a che titolo ci siamo andati.
               </motion.p>
 
               {/* Actions with Magnetic CTAs */}
@@ -121,20 +168,28 @@ export default function BrandCoherentHero() {
               </motion.div>
 
               {/* Proof Signals */}
-              {/* Le tre prove vanno a capo come unità intere: senza `flex-wrap`
-                si incolonnavano strette e spezzavano «Esperienze / reali». */}
+              {/* Erano tre aggettivi — «Esperienze reali · Costi trasparenti ·
+                  Periodo consigliato» — e il terzo prometteva un dato che il
+                  modello non ha: nessun posto porta un periodo. Ora sono due
+                  numeri contati sul registro e una riga che spiega perché il
+                  prezzo a volte manca. I numeri non possono invecchiare male:
+                  li conta il codice, non la copy.
+                  Le prove vanno a capo come unità intere: senza `flex-wrap` si
+                  incolonnavano strette e spezzavano le etichette a metà. */}
               <motion.div
                 variants={itemVariants}
                 className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-[var(--color-border)] pt-5 text-xs font-semibold text-[var(--color-muted-fg)] sm:gap-x-6"
               >
                 <span className="flex items-center gap-1.5 whitespace-nowrap">
                   <CheckCircle2 size={14} className="text-[var(--color-accent)]" />
-                  Esperienze reali
+                  {POSTI_PROVATI.length} posti provati di persona
                 </span>
                 <span aria-hidden>·</span>
-                <span className="whitespace-nowrap">Costi trasparenti</span>
+                <span className="whitespace-nowrap">
+                  {CON_COLLABORAZIONE} collaborazioni dichiarate
+                </span>
                 <span aria-hidden>·</span>
-                <span className="whitespace-nowrap">Periodo consigliato</span>
+                <span className="whitespace-nowrap">Costi in chiaro dove li abbiamo pagati</span>
               </motion.div>
 
               {/* Verification Stamp Button & Drawer */}
@@ -190,8 +245,8 @@ export default function BrandCoherentHero() {
               <div className="relative overflow-hidden rounded-[var(--radius-lg,20px)] border border-[var(--color-border)] bg-white p-3 shadow-xl">
                 <div className="aspect-[4/5] w-full overflow-hidden rounded-xl">
                   <OptimizedImage
-                    src="/images/home-journal/hero-impossible.png"
-                    alt="Betta seduta su una poltrona bianca al Burton Juice, fra scacchi giganti e specchi fioriti"
+                    src={featured?.cover}
+                    alt={featured?.coverAlt ?? ''}
                     priority
                     responsiveWidths={[320, 480, 768]}
                     baseWidth={1080}
@@ -200,36 +255,54 @@ export default function BrandCoherentHero() {
                     // meno i padding (24+12 per lato); fra sm e lg il tetto
                     // `max-w-sm` la fissa a 360px; da lg vale la colonna.
                     sizes="(max-width: 639px) calc(100vw - 72px), (max-width: 1023px) 360px, 37vw"
-                    // La sorgente è una copertina da reel 9:16 con il titolo
-                    // stampato sopra. In un riquadro 4:5 il centro esatto
-                    // tranciava quella scritta a metà («IM BURTON?»): l'ancora
-                    // in basso la esclude e lascia la fotografia. Il titolo è
-                    // già scritto sotto, in Fraunces, come didascalia.
-                    className="h-full w-full object-cover [object-position:50%_88%] transition-transform duration-700 hover:scale-105"
+                    // La sorgente è il frame del reel, 9:16, con la title-card
+                    // in alto. In un riquadro 4:5 il centro esatto la taglia a
+                    // metà: `coverFocusY` del posto è l'ancora che la esclude e
+                    // lascia la fotografia. Il nome del posto è scritto sotto,
+                    // in Fraunces, come didascalia.
+                    style={{ objectPosition: `50% ${featured?.coverFocusY ?? 50}%` }}
+                    className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                   />
                 </div>
                 <p className="mt-3 text-center text-xs font-serif italic text-[var(--color-muted-fg)]">
-                  The Burton Juice · Somma Vesuviana
+                  {featuredCaption}
                 </p>
+                {/* Oggi il posto in copertina è organico e questa riga non
+                    compare. Resta perché la prossima copertina potrebbe non
+                    esserlo, e una collaborazione non può stare dietro un
+                    pannello da aprire mentre la foto fa da prova. */}
+                {featuredDisclosure && (
+                  <p className="mt-1 text-center text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-muted-fg)]">
+                    {featuredDisclosure}
+                    {featured?.partnership.partner ? ` · ${featured.partnership.partner}` : ''}
+                  </p>
+                )}
               </div>
             </TiltCard>
 
-            {/* Handwritten Note Sticker with pop reveal */}
-            <motion.div
-              initial={
-                shouldReduceMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8, y: 15 }
-              }
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ delay: 0.55, duration: 0.6, ease: 'easeOut' }}
-              className="absolute bottom-12 -left-6 max-w-xs rotate-[-3deg] rounded-2xl border border-[var(--color-border)] bg-[var(--color-sand,#faf7f2)] p-4 shadow-lg"
-            >
-              <p className="font-serif text-sm italic leading-snug text-[var(--color-ink)]">
-                "La strada giusta non è quella più breve."
-              </p>
-              <span className="mt-1 block text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)]">
-                — Rodrigo &amp; Betta
-              </span>
-            </motion.div>
+            {/* Il post-it sulla foto. Portava un aforisma — «La strada giusta
+                non è quella più breve» — cioè l'unico elemento decorativo puro
+                di un'apertura che per il resto prova quello che dice. Ora porta
+                i due dati che il lettore cerca guardando quella foto: quanto
+                costa e quando ci siamo stati. Se il posto non li ha, il
+                foglietto non compare: meglio niente che una frase di riempimento. */}
+            {featuredNota && (
+              <motion.div
+                initial={
+                  shouldReduceMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8, y: 15 }
+                }
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ delay: 0.55, duration: 0.6, ease: 'easeOut' }}
+                className="absolute bottom-12 -left-6 max-w-xs rotate-[-3deg] rounded-2xl border border-[var(--color-border)] bg-[var(--color-sand,#faf7f2)] p-4 shadow-lg"
+              >
+                <p className="font-serif text-base leading-snug text-[var(--color-ink)]">
+                  {featuredNota}
+                </p>
+                <span className="mt-1 block text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)]">
+                  — Rodrigo &amp; Betta
+                </span>
+              </motion.div>
+            )}
           </motion.div>
         </div>
       </div>

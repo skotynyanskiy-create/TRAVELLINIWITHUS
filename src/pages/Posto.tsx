@@ -12,6 +12,7 @@ import PostNavigation from '../components/PostNavigation';
 import PostiVicini from '../components/posto/PostiVicini';
 import ReelDelPosto from '../components/posto/ReelDelPosto';
 import { Link } from '@/src/components/TransitionLink';
+import { PROVENANCE_LABEL, isCertifiedReal, provenanceOf } from '../config/assetProvenance';
 import { getContentById } from '../config/contentLibrary';
 import { findDestinationByRegionName, getDestinationUrl } from '../config/destinations';
 import { SITE_URL } from '../config/site';
@@ -55,7 +56,14 @@ export default function Posto() {
   const placeLabel = [item.place.city, item.place.region, item.place.country]
     .filter(Boolean)
     .join(', ');
-  const placeDetailLabel = [item.place.name, placeLabel].filter(Boolean).join(' — ');
+  // Per un borgo il nome del posto È la città: senza questo controllo la riga
+  // «Dove si trova» stampava «Riquewihr — Riquewihr, Francia».
+  const placeDetailLabel = [
+    item.place.name === item.place.city ? null : item.place.name,
+    placeLabel,
+  ]
+    .filter(Boolean)
+    .join(' — ');
 
   const schemaType = TYPE_SCHEMA[item.types[0]] ?? TYPE_SCHEMA._default;
 
@@ -206,6 +214,17 @@ export default function Posto() {
         {/* La carta del posto — fronte "Sembra inventato", retro "Esiste davvero" */}
         <PostoStamp item={item} />
 
+        {/* Da dove viene l'immagine. Il sito chiede fiducia sulla foto ancora
+            prima che sul testo: dirlo in una riga costa nulla e vale piu' di un
+            aggettivo. Compare solo quando la provenienza e' certificata — un
+            asset "da certificare" o generato non si etichetta come prova
+            (DECISION_IMAGERY_TRUTH_RULE_2026-07-22). */}
+        {isCertifiedReal(item.cover) && (
+          <p className="mt-3 text-center font-serif text-xs italic text-[var(--color-muted-fg)]">
+            {PROVENANCE_LABEL[provenanceOf(item.cover)!]}
+          </p>
+        )}
+
         {/* Corpo editoriale */}
         <div className="mt-10 grid gap-10 md:grid-cols-[1fr_auto]">
           <div className="min-w-0">
@@ -255,7 +274,7 @@ export default function Posto() {
                   }`}
                 >
                   <Heart size={14} className={saved ? 'fill-current' : ''} aria-hidden />
-                  {saved ? 'Salvato' : 'Salva'}
+                  {saved ? 'Salvato per il viaggio' : 'Salva per il viaggio'}
                 </button>
                 <button
                   type="button"
@@ -291,21 +310,30 @@ export default function Posto() {
                     <MapPin size={14} className="mt-0.5 shrink-0" aria-hidden />
                     {placeDetailLabel}
                   </p>
-                  <a
-                    href={directionsUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    onClick={handleDirectionsClick}
-                    className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] px-6 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 md:w-auto"
-                  >
-                    <Navigation size={14} aria-hidden /> Indicazioni
-                  </a>
+                  {/* Senza coordinate `directionsUrl` vale '#': il bottone
+                      restava, e portava da nessuna parte. Finora non era mai
+                      successo perché tutte le schede reali erano geocodificate,
+                      ma la churrería di Madrid non esiste su OpenStreetMap e
+                      darle un pin inventato sarebbe stato peggio. Se non
+                      sappiamo dov'è con precisione, non promettiamo di
+                      accompagnarci nessuno. */}
+                  {coordinates && (
+                    <a
+                      href={directionsUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={handleDirectionsClick}
+                      className="mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] px-6 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 md:w-auto"
+                    >
+                      <Navigation size={14} aria-hidden /> Indicazioni
+                    </a>
+                  )}
                   {mapPinUrl && (
                     <Link
                       to={mapPinUrl}
                       className="mt-3 inline-flex items-center gap-1.5 text-sm text-[var(--color-ink-2)] underline-offset-4 transition-colors hover:text-[var(--color-accent-text)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
                     >
-                      <MapPin size={14} aria-hidden /> Apri sulla mappa
+                      <MapPin size={14} aria-hidden /> Vedi sulla mappa
                     </Link>
                   )}
                 </div>

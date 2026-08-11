@@ -2,6 +2,19 @@ import type { Zone } from './contentTaxonomy';
 import type { ContentItem } from '../types/content';
 import { CONTENT_ITEMS } from './contentLibrary';
 
+/**
+ * Copertine: se la destinazione ha un posto provato, la copertina è il frame di
+ * quel reel.
+ *
+ * Sette nodi mostravano un'immagine generata — e in quattro casi generata di un
+ * *altro* posto: il Veneto aveva una foto della Toscana, la Spagna e la Calabria
+ * una della Sardegna, la Lombardia e la Germania la coppia AI di
+ * `brand/collab-work`. Dove esiste un frame reale della regione lo si usa: è
+ * nostro, raffigura davvero quel posto, ed è l'unica provenienza che
+ * `DECISION_IMAGERY_TRUTH_RULE_2026-07-22` ammette come referenziale. I nodi
+ * senza posti provati restano com'erano, in attesa delle foto dell'owner
+ * (`npm run audit:provenance` li tiene contati).
+ */
 export interface DestinationNode {
   /** Segmento URL: 'italia', 'toscana', 'egitto'. */
   slug: string;
@@ -46,7 +59,7 @@ export const DESTINATIONS: DestinationNode[] = [
     intro:
       'Oltre Firenze e Siena: i borghi, le cene di famiglia e i posti insoliti che ci hanno fatto tornare.',
     coordinates: { lat: 43.7711, lng: 11.2486 },
-    cover: '/images/destinations/toscana.webp',
+    cover: '/images/reels/asciano-casa-lavanda-podere-fossaccio-cover.webp',
   },
   {
     slug: 'puglia',
@@ -130,7 +143,7 @@ export const DESTINATIONS: DestinationNode[] = [
     matchRegion: 'Lombardia',
     intro: 'Tra città, laghi e valli: i posti che ci hanno incuriosito in Lombardia.',
     coordinates: { lat: 45.6, lng: 9.7 },
-    cover: '/images/brand/collab-work.webp',
+    cover: '/images/reels/sirmione-hotel-lugana-parco-cover.webp',
   },
   {
     slug: 'veneto',
@@ -142,7 +155,7 @@ export const DESTINATIONS: DestinationNode[] = [
     matchRegion: 'Veneto',
     intro: 'Dalle città d’acqua all’entroterra, i posti del Veneto che abbiamo segnato.',
     coordinates: { lat: 45.6, lng: 11.8 },
-    cover: '/images/destinations/toscana.webp',
+    cover: '/images/reels/verona-vigna-benini-cover.webp',
   },
   {
     slug: 'emilia-romagna',
@@ -166,7 +179,7 @@ export const DESTINATIONS: DestinationNode[] = [
     matchRegion: 'Piemonte',
     intro: 'Langhe, colline del vino e residenze storiche tra le nebbie buone.',
     coordinates: { lat: 45.07, lng: 7.68 },
-    cover: '/images/destinations/dolomiti.webp',
+    cover: '/images/reels/novara-emotional-grand-motel-cover.webp',
   },
   {
     slug: 'liguria',
@@ -226,7 +239,7 @@ export const DESTINATIONS: DestinationNode[] = [
     matchRegion: 'Calabria',
     intro: 'Sila, Costa degli Dei e alloggi autentici dove riscoprire il ritmo lento.',
     coordinates: { lat: 38.9, lng: 16.59 },
-    cover: '/images/destinations/sardegna.webp',
+    cover: '/images/reels/capovaticano-tonicello-resort-cover.webp',
   },
   {
     slug: 'basilicata',
@@ -318,7 +331,7 @@ export const DESTINATIONS: DestinationNode[] = [
     matchCountry: 'Germania',
     intro: 'La Germania dei nostri giri, tra città e soste insolite.',
     coordinates: { lat: 51.1, lng: 10.4 },
-    cover: '/images/brand/collab-work.webp',
+    cover: '/images/reels/rust-rulantica-waterpark-cover.webp',
   },
   {
     slug: 'spagna',
@@ -329,7 +342,7 @@ export const DESTINATIONS: DestinationNode[] = [
     matchCountry: 'Spagna',
     intro: 'I posti spagnoli che ci hanno colpito, lontano dalle solite liste.',
     coordinates: { lat: 40.4, lng: -3.7 },
-    cover: '/images/destinations/sardegna.webp',
+    cover: '/images/reels/madrid-la-santoria-cover.webp',
   },
   {
     slug: 'svizzera',
@@ -375,6 +388,17 @@ export const DESTINATIONS: DestinationNode[] = [
     coordinates: { lat: 49.8, lng: 15.5 },
     cover: '/images/brand/collab-work.webp',
   },
+  {
+    slug: 'slovenia',
+    name: 'Slovenia',
+    level: 'country',
+    parentSlug: 'europa',
+    zone: 'Europa',
+    matchCountry: 'Slovenia',
+    intro: 'Il lago di Bled e quello che gli sta intorno: la Slovenia a poche ore da casa.',
+    coordinates: { lat: 46.15, lng: 14.99 },
+    cover: '/images/reels/bled-garden-village-cover.webp',
+  },
 
   // ─── AFRICA ──────────────────────────────────────────────────────────────
   {
@@ -417,6 +441,45 @@ export const DESTINATIONS: DestinationNode[] = [
     coordinates: { lat: 4.2, lng: 101.9 },
     cover: '/images/destinations/giappone.webp',
   },
+  // Cina e Messico avevano un posto REALE ciascuno — Shanghai e Cancún, con
+  // frame, coordinate e scheda completa — e nessun nodo dove atterrare: due
+  // schede verificate senza pagina destinazione e senza breadcrumb.
+  // Le copertine sono i frame dei rispettivi reel, non un'immagine di
+  // repertorio: sono gli unici asset certificati che raffigurano quei posti
+  // (DECISION_IMAGERY_TRUTH_RULE_2026-07-22).
+  {
+    slug: 'cina',
+    name: 'Cina',
+    level: 'country',
+    parentSlug: 'asia',
+    zone: 'Asia',
+    matchCountry: 'Cina',
+    intro: 'Per ora la Cina è Shanghai, e il posto più insolito che ci abbiamo trovato.',
+    coordinates: { lat: 35.9, lng: 104.2 },
+    cover: '/images/reels/shanghai-capyland-capibara-cover.webp',
+  },
+
+  // ─── AMERICHE ────────────────────────────────────────────────────────────
+  {
+    slug: 'americhe',
+    name: 'Americhe',
+    level: 'zone',
+    zone: 'Americhe',
+    intro:
+      'I viaggi lunghi, dall’altra parte dell’oceano. Per ora ci siamo spinti fino al Messico.',
+    coordinates: { lat: 15.0, lng: -90.0 },
+  },
+  {
+    slug: 'messico',
+    name: 'Messico',
+    level: 'country',
+    parentSlug: 'americhe',
+    zone: 'Americhe',
+    matchCountry: 'Messico',
+    intro: 'Due settimane a Cancún ad agosto: mare, cenote, e cosa abbiamo trovato davvero.',
+    coordinates: { lat: 23.6, lng: -102.5 },
+    cover: '/images/reels/cancun-riu-messico-cover.webp',
+  },
 ];
 
 const DESTINATIONS_INDEX = new Map(DESTINATIONS.map((node) => [node.slug, node]));
@@ -442,18 +505,54 @@ export function getChildren(slug: string): DestinationNode[] {
 }
 
 /**
+ * Confronto fra il nome di un luogo nel seed e quello dichiarato da un nodo.
+ *
+ * Serve perché i due nomi arrivano da due mani diverse: il nodo è scritto qui,
+ * la regione dell'item arriva dall'import dei reel. Un trattino di differenza
+ * bastava a far sparire un posto: `ravenna-better-sushi` dice
+ * «Emilia-Romagna», il nodo dice «Emilia Romagna», e la pagina della regione
+ * mostrava quattro schede in lavorazione **nascondendo l'unica completa**.
+ *
+ * Normalizza minuscole, accenti, trattini e spazi doppi, e tollera il prefisso
+ * «Trentino» in entrambe le direzioni (il seed scrive «Alto Adige», il nodo
+ * «Trentino Alto Adige»). Ogni import futuro porta nuove varianti di scrittura:
+ * il confronto va tenuto tollerante qui, non corretto a mano nel seed ogni
+ * volta.
+ */
+function samePlaceName(a?: string, b?: string): boolean {
+  if (!a || !b) return false;
+  const norm = (value: string) =>
+    value
+      .trim()
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '')
+      .replace(/[-\s]+/g, ' ')
+      .replace(/^trentino /, '');
+  return norm(a) === norm(b);
+}
+
+/**
  * ContentItem di un nodo:
  *  - region  → stessa zona + place.region === matchRegion
  *  - country → stessa zona + place.country === matchCountry
  *  - zone    → tutti gli item della zona
  */
 export function getContentForDestination(node: DestinationNode): ContentItem[] {
-  return CONTENT_ITEMS.filter((item) => {
+  const items = CONTENT_ITEMS.filter((item) => {
     if (item.zone !== node.zone) return false;
-    if (node.level === 'region') return item.place.region === node.matchRegion;
-    if (node.level === 'country') return item.place.country === node.matchCountry;
+    if (node.level === 'region') return samePlaceName(item.place.region, node.matchRegion);
+    if (node.level === 'country') return samePlaceName(item.place.country, node.matchCountry);
     return true;
   });
+  // Prima i posti verificati, poi le schede in lavorazione — stessa regola di
+  // getMapPinItems e getRegistroItems. Il seed non è ordinato: senza,
+  // l'Emilia Romagna apriva con quattro schede in lavorazione e teneva per
+  // ultima l'unica completa.
+  return [
+    ...items.filter((item) => !item.isPlaceholder),
+    ...items.filter((item) => item.isPlaceholder),
+  ];
 }
 
 /** Numero di ContentItem reali collegati al nodo. */
@@ -467,14 +566,14 @@ export function countForDestination(node: DestinationNode): number {
  * regione (display name).
  */
 export function findDestinationByRegionName(region: string): DestinationNode | undefined {
-  const needle = region
-    .trim()
-    .toLowerCase()
-    .replace(/^trentino[-\s]+/, '');
   return DESTINATIONS.find((node) => {
     if (node.level === 'zone') return false;
-    if (node.name.toLowerCase() === needle) return true;
-    if (node.matchRegion?.toLowerCase() === needle) return true;
+    // Stesso confronto tollerante di getContentForDestination: se un posto
+    // compare nella pagina di una regione, il suo breadcrumb deve poterci
+    // tornare. Prima le due regole erano scritte due volte e divergevano.
+    if (samePlaceName(node.name, region)) return true;
+    if (samePlaceName(node.matchRegion, region)) return true;
+    if (samePlaceName(node.matchCountry, region)) return true;
     return false;
   });
 }

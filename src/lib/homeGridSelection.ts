@@ -2,7 +2,20 @@ import { CONTENT_ITEMS } from '@/src/config/contentLibrary';
 import { TYPES } from '@/src/config/contentTaxonomy';
 import type { ContentItem } from '@/src/types/content';
 
-const GRID_SIZE = 9;
+/**
+ * Sei, non nove.
+ *
+ * Con nove card la sezione era il blocco piu' alto della home — 2.358px su
+ * desktop, 5.991px su telefono, quasi la meta' di tutta la pagina — e cinque di
+ * quei posti tornavano poco sotto nel registro, sulla stessa schermata. Una
+ * copertina che mostra ventuno link a ventinove schede non e' una selezione:
+ * e' l'archivio con una foto piu' grande.
+ *
+ * Sei riempie una griglia 3x2 piena su desktop, tiene il criterio "il migliore
+ * di ogni categoria" (il ciclo sotto ne copre sei su otto) e lascia
+ * all'archivio il mestiere dell'archivio.
+ */
+const GRID_SIZE = 6;
 
 function isEligible(item: ContentItem, excluded: Set<string>): boolean {
   return !item.isPlaceholder && Boolean(item.cover?.trim()) && !excluded.has(item.id);
@@ -71,7 +84,14 @@ export function selectHomeGridItems(
   }
 
   const items = winners.slice(0, size).sort(compareItems);
-  const featuredId = items.find((item) => item.featured)?.id ?? null;
+  // La tile grande dice «In evidenza»: è una scelta editoriale, e una scelta
+  // editoriale non si vende. `campania-burton-juice` è `featured: true` dai
+  // tempi in cui era una scheda in arrivo; ora che è verificata sarebbe finita
+  // in copertina con sopra il badge dell'evidenza e, accanto, la dicitura ADV.
+  // Il flag dell'owner resta buono per l'ordinamento: è la corona che non spetta
+  // a un posto che ci ha pagati o ospitati.
+  const featuredId =
+    items.find((item) => item.featured && item.partnership.kind === 'organic')?.id ?? null;
 
   return { items, featuredId };
 }

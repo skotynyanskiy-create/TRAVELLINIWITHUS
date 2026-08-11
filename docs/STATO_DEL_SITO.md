@@ -49,8 +49,8 @@ Due rischi noti, aperti, non risolti:
 
 <!-- CONSEGNA:START — generato da `npm run stato`, non modificare a mano -->
 
-- Branch corrente: `chore/config-hardening-2026-07-26` — 35 commit avanti su `main`, 0 dietro.
-- File non committati: **2**.
+- Branch corrente: `chore/config-hardening-2026-07-26` — 59 commit avanti su `main`, 0 dietro.
+- File non committati: **541**.
 - `functions/` su `origin/main`: **assente**.
 - Rewrite `/api/**` in `firebase.json`: presente.
 
@@ -121,14 +121,14 @@ Ogni superficie non-live dichiara cosa le manca.
 
 ### Contenuti
 
-- **Registro** (`src/data/content-seed.json`): 62 item — **29 reali**, 33 placeholder, 2 featured.
+- **Registro** (`src/data/content-seed.json`): 110 item — **79 reali**, 31 placeholder, 2 featured.
 - **Family** (`src/data/family-content-seed.json`): 8 item — 8 reali, 0 placeholder. Deal attivi: **0**.
-- **Articoli** (`src/data/articles/*.seed.ts`): 6 seed — **0 con `published: true`**, 1 con excerpt ancora `PLACEHOLDER`.
-- **Reel** (`src/config/reels.ts`): 29 visibili — 29 compilati, 0 placeholder.
+- **Articoli** (`src/data/articles/*.seed.ts`): 6 seed — **0 con `published: true`**, 0 con excerpt ancora `PLACEHOLDER`.
+- **Reel** (`src/config/reels.ts`): 67 visibili — 67 compilati, 0 placeholder.
 
 ### Integrazioni
 
-**42 variabili dichiarate** in `.env.example`. "Letta da": `app` = `src/`, `server.ts`, `functions/src/`; `tooling` = `.mcp.json`, `scripts/`, workflow CI.
+**43 variabili dichiarate** in `.env.example`. "Letta da": `app` = `src/`, `server.ts`, `functions/src/`; `tooling` = `.mcp.json`, `scripts/`, workflow CI.
 La colonna locale dice solo se la chiave ha un valore su questa macchina — mai quale.
 
 | Variabile                            | Letta da | `.env` locale |
@@ -142,6 +142,7 @@ La colonna locale dice solo se la chiave ha un valore su questa macchina — mai
 | `BREVO_LIST_ID`                      | app      | EMPTY         |
 | `FIREBASE_SERVICE_ACCOUNT`           | app      | EMPTY         |
 | `FIREBASE_SERVICE_ACCOUNT_JSON`      | app      | EMPTY         |
+| `FIRESTORE_DATABASE_ID`              | app      | EMPTY         |
 | `GEMINI_API_KEY`                     | app      | EMPTY         |
 | `GITHUB_PERSONAL_ACCESS_TOKEN`       | tooling  | SET           |
 | `IG_GRAPH_TOKEN`                     | tooling  | EMPTY         |

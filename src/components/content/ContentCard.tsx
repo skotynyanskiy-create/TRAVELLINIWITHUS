@@ -121,8 +121,13 @@ export default function ContentCard({ item }: { item: ContentItem }) {
               <span className="text-xs font-bold text-[var(--color-ink)]">{item.value.price}</span>
             )}
             {canWatchReel ? (
+              // Diceva «Guarda il reel», ma il link porta alla scheda del
+              // posto: il reel si riproduce li' dentro, insieme a dove,
+              // quando, quanto e a che titolo. Un'etichetta che promette una
+              // cosa e ne apre un'altra e' un piccolo tradimento ripetuto su
+              // ogni card dell'archivio.
               <span className="ml-auto inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-transform group-hover:translate-x-0.5">
-                Guarda il reel <ArrowUpRight size={12} />
+                Apri la scheda <ArrowUpRight size={12} />
               </span>
             ) : (
               // Niente CTA "guarda il reel" quando il permalink e' solo il

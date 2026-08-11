@@ -34,7 +34,7 @@ function renderCard(item: ContentItem) {
 }
 
 describe("ContentCard — trattamento onesto dei placeholder (no promesse su contenuto che non c'è)", () => {
-  it('un posto reale con cover mostra la CTA "Guarda il reel"', () => {
+  it('un posto reale con cover mostra la CTA "Apri la scheda"', () => {
     const item = makeItem({
       id: 'real',
       isPlaceholder: false,
@@ -42,11 +42,11 @@ describe("ContentCard — trattamento onesto dei placeholder (no promesse su con
       permalink: 'https://www.instagram.com/reel/DZWo5OTM_Cw/',
     });
     renderCard(item);
-    expect(screen.getByText('Guarda il reel')).toBeInTheDocument();
+    expect(screen.getByText('Apri la scheda')).toBeInTheDocument();
     expect(screen.queryByText('In arrivo')).not.toBeInTheDocument();
   });
 
-  it('un placeholder col permalink ridotto al profilo mostra "In arrivo" e "Scheda in arrivo", mai "Guarda il reel"', () => {
+  it('un placeholder col permalink ridotto al profilo mostra "In arrivo" e "Scheda in arrivo", mai "Apri la scheda"', () => {
     const item = makeItem({
       id: 'placeholder-senza-reel',
       isPlaceholder: true,
@@ -56,10 +56,10 @@ describe("ContentCard — trattamento onesto dei placeholder (no promesse su con
     renderCard(item);
     expect(screen.getByText('In arrivo')).toBeInTheDocument();
     expect(screen.getByText('Scheda in arrivo')).toBeInTheDocument();
-    expect(screen.queryByText('Guarda il reel')).not.toBeInTheDocument();
+    expect(screen.queryByText('Apri la scheda')).not.toBeInTheDocument();
   });
 
-  it('un placeholder che ha già un reel specifico collegato (manca solo la cover) mantiene "Guarda il reel"', () => {
+  it('un placeholder che ha già un reel specifico collegato (manca solo la cover) mantiene "Apri la scheda"', () => {
     const item = makeItem({
       id: 'placeholder-con-reel',
       isPlaceholder: true,
@@ -68,7 +68,7 @@ describe("ContentCard — trattamento onesto dei placeholder (no promesse su con
     });
     renderCard(item);
     expect(screen.getByText('In arrivo')).toBeInTheDocument();
-    expect(screen.getByText('Guarda il reel')).toBeInTheDocument();
+    expect(screen.getByText('Apri la scheda')).toBeInTheDocument();
     expect(screen.queryByText('Scheda in arrivo')).not.toBeInTheDocument();
   });
 

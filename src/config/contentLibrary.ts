@@ -55,11 +55,15 @@ export function getContentById(id: string): ContentItem | undefined {
 
 /** Item per il registro in home: prima i posti REALI (scheda completa), poi i
  *  `featured` ancora placeholder, poi il resto. Così l'indice apre con ciò che
- *  è davvero verificato e cliccabile, non con schede in lavorazione. */
-export function getRegistroItems(limit = 6): ContentItem[] {
-  const real = CONTENT_ITEMS.filter((item) => !item.isPlaceholder);
-  const featuredPlaceholder = CONTENT_ITEMS.filter((item) => item.isPlaceholder && item.featured);
-  const rest = CONTENT_ITEMS.filter((item) => item.isPlaceholder && !item.featured);
+ *  è davvero verificato e cliccabile, non con schede in lavorazione.
+ *
+ *  `exclude` serve a chi ha già stampato quei posti più in alto nella stessa
+ *  pagina: il registro non è un secondo catalogo della copertina. */
+export function getRegistroItems(limit = 6, exclude?: ReadonlySet<string>): ContentItem[] {
+  const pool = exclude ? CONTENT_ITEMS.filter((item) => !exclude.has(item.id)) : CONTENT_ITEMS;
+  const real = pool.filter((item) => !item.isPlaceholder);
+  const featuredPlaceholder = pool.filter((item) => item.isPlaceholder && item.featured);
+  const rest = pool.filter((item) => item.isPlaceholder && !item.featured);
   return [...real, ...featuredPlaceholder, ...rest].slice(0, limit);
 }
 
