@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch server.ts",
-    "start": "node server.ts",
+    "start": "node scripts/start-prod.mjs",
     "generate:media-kit": "tsx scripts/generate-media-kit.tsx",
     "generate:lead-magnet": "tsx scripts/generate-lead-magnet.tsx",
     "generate:og": "tsx scripts/generate-og-images.mjs",
