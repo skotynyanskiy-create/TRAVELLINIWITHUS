@@ -21,6 +21,7 @@ import path from 'node:path';
 const ROOT = process.cwd();
 const SEED = path.join(ROOT, 'src/data/content-seed.json');
 const OUT = path.join(ROOT, 'public/llms.txt');
+const OUT_FULL = path.join(ROOT, 'public/llms-full.txt');
 const SITE = 'https://www.travelliniwithus.it';
 
 const raw = JSON.parse(fs.readFileSync(SEED, 'utf8'));
@@ -49,7 +50,7 @@ const regions = count(
 
 const withPrice = real.filter((item) => item.value?.price).length;
 const withVideo = real.filter((item) => item.videoSrc).length;
-const withVerdict = real.filter((item) => item.review?.forWho?.length).length;
+const withVerdict = real.filter((item) => item.review?.forWho).length;
 
 const list = (pairs) => pairs.map(([name, n]) => `${name} (${n})`).join(', ');
 
@@ -107,20 +108,80 @@ Regioni italiane: ${list(regions)}.
 - Collaborazioni: ${SITE}/collaborazioni
 `;
 
+/* `llms-full.txt` conteneva itinerari dettagliati di Dolomiti, Puglia,
+   Sardegna, Costiera Amalfitana, Giappone e Islanda — passi panoramici, JR
+   Pass, aurora boreale. Nessuno di quei luoghi e' nel registro: era un
+   inventario di contenuti inventato, presentato agli assistenti AI come se
+   fosse il catalogo del sito.
+   La versione "full" di un indice deve essere il dato esteso, non la prosa
+   promozionale: qui e' il registro riga per riga, con quello che c'e' e senza
+   riempire i buchi. Una scheda senza prezzo lo dice; non lo stima. */
+const DISCLOSURE = {
+  organic: 'nessun accordo',
+  adv: 'pubblicita a pagamento',
+  invited: 'ospiti della struttura',
+  gifted: 'prodotto ricevuto in regalo',
+  collaboration: 'collaborazione',
+  affiliate: 'link di affiliazione',
+};
+
+const row = (item) => {
+  const dove = [item.place?.name, item.place?.city, item.place?.region, item.place?.country]
+    .filter(Boolean)
+    .join(', ');
+  const parti = [`- ${item.title} — ${dove}`];
+  parti.push(`  url: ${SITE}/posto/${item.id}`);
+  if (item.place?.coordinates?.lat != null) {
+    parti.push(`  coordinate: ${item.place.coordinates.lat}, ${item.place.coordinates.lng}`);
+  }
+  parti.push(
+    item.value?.price
+      ? `  prezzo rilevato: ${item.value.price}`
+      : '  prezzo: non rilevato, non stimato'
+  );
+  if (item.publishedAt) parti.push(`  video girato sul posto, pubblicato il ${item.publishedAt.slice(0, 10)}`);
+  parti.push(`  rapporto commerciale: ${DISCLOSURE[item.partnership?.kind] ?? 'non dichiarato'}`);
+  /* `forWho`/`notForWho` sono stringhe in prosa, non liste: verificato sul
+     seed invece di assumerlo. L'array e' tollerato per import futuri. */
+  const frase = (value) => (Array.isArray(value) ? value.join('; ') : value)?.trim();
+  if (frase(item.review?.forWho)) parti.push(`  per chi si': ${frase(item.review.forWho)}`);
+  if (frase(item.review?.notForWho)) parti.push(`  per chi no: ${frase(item.review.notForWho)}`);
+  return parti.join('\n');
+};
+
+const outFull = `# Travelliniwithus — registro esteso
+
+Generato da \`src/data/content-seed.json\` con
+\`node scripts/generate-llms-index.mjs\`. Indice sintetico: ${SITE}/llms.txt
+
+Ogni voce e' un posto visitato di persona. Dove un dato manca, e' scritto che
+manca: nessun prezzo stimato, nessun giudizio dedotto. La data e' quella del
+video girato sul posto.
+
+${real.map(row).join('\n\n')}
+`;
+
 const check = process.argv.includes('--check');
-const current = fs.existsSync(OUT) ? fs.readFileSync(OUT, 'utf8') : '';
+const files = [
+  [OUT, out, 'public/llms.txt'],
+  [OUT_FULL, outFull, 'public/llms-full.txt'],
+];
 
 if (check) {
-  if (current !== out) {
+  const stale = files.filter(([file, expected]) => {
+    const current = fs.existsSync(file) ? fs.readFileSync(file, 'utf8') : '';
+    return current !== expected;
+  });
+  if (stale.length > 0) {
     console.error(
-      'FAIL public/llms.txt e\' indietro rispetto al registro. Esegui: node scripts/generate-llms-index.mjs'
+      `FAIL ${stale.map(([, , label]) => label).join(' e ')} indietro rispetto al registro. Esegui: node scripts/generate-llms-index.mjs`
     );
     process.exit(1);
   }
-  console.log('PASS public/llms.txt e\' allineato al registro.');
+  console.log("PASS llms.txt e llms-full.txt sono allineati al registro.");
 } else {
-  fs.writeFileSync(OUT, out);
+  for (const [file, content] of files) fs.writeFileSync(file, content);
   console.log(
-    `public/llms.txt rigenerato: ${real.length} posti, ${countries.length} paesi, ${withPrice} con prezzo, ${withVerdict} con verdetto.`
+    `Rigenerati llms.txt e llms-full.txt: ${real.length} posti, ${countries.length} paesi, ${withPrice} con prezzo, ${withVerdict} con verdetto.`
   );
 }
