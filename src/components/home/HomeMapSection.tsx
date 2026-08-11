@@ -1,20 +1,36 @@
-import { lazy, Suspense, useRef } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { ArrowRight, Compass, CheckCircle2, ShieldCheck, Sparkles, MapPin } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import { useInViewOnce } from '@/src/hooks/useInViewOnce';
+import { canLoad, getConsent, onConsentChange, setConsent } from '@/src/lib/consent';
 
 const HomeMapLibreBackground = lazy(() => import('./HomeMapLibreBackground'));
 
 export default function HomeMapSection() {
   const mapHostRef = useRef<HTMLDivElement>(null);
   const mapInView = useInViewOnce(mapHostRef, '280px 0px');
+  // La mappa carica le tessere da tiles.openfreemap.org, che riceve l'IP di
+  // chi guarda: parte solo col consenso marketing, come i pixel Meta/TikTok
+  // che già usano questa categoria in services/analytics.ts.
+  const [mapConsentGranted, setMapConsentGranted] = useState(() => canLoad('marketing'));
+
+  useEffect(() => onConsentChange((consent) => setMapConsentGranted(consent.marketing)), []);
+
+  const activateMap = () => {
+    const current = getConsent();
+    setConsent({
+      analytics: current.analytics,
+      marketing: true,
+      personalization: current.personalization,
+    });
+  };
 
   return (
     <section className="relative border-b border-[var(--color-border,#e7e5e4)] bg-[var(--color-sand,#faf8f4)] py-24 text-[var(--color-ink,#0a0a0a)] md:py-32">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="group relative flex min-h-[460px] items-center overflow-hidden rounded-3xl border border-white/10 bg-[var(--color-ink-deep,#111111)] p-8 text-white shadow-[0_20px_50px_rgba(0,0,0,0.5)] transition-all duration-700 hover:border-[var(--color-accent-on-dark,#e8834e)]/40 md:p-16">
           <div ref={mapHostRef} className="absolute inset-0 z-0 overflow-hidden">
-            {mapInView ? (
+            {mapConsentGranted && mapInView ? (
               <Suspense
                 fallback={<div className="h-full w-full bg-[var(--color-ink-deep,#111111)]" />}
               >
@@ -69,6 +85,23 @@ export default function HomeMapSection() {
                   <span>Costi e collaborazioni dichiarate</span>
                 </div>
               </div>
+
+              {/* Senza consenso marketing l'anteprima resta ferma: la mappa
+                  carica tessere da un servizio esterno che riceve l'IP di chi
+                  guarda, e non deve partire dopo un "rifiuta tutto". */}
+              {!mapConsentGranted && (
+                <p className="mt-4 max-w-xl text-xs leading-relaxed text-[var(--color-sand)]/70">
+                  L&apos;anteprima è ferma: la mappa carica le tessere da un servizio esterno e
+                  parte solo con il consenso ai cookie di marketing.{' '}
+                  <button
+                    type="button"
+                    onClick={activateMap}
+                    className="font-semibold text-[var(--color-accent-on-dark,#e8834e)] underline underline-offset-2 hover:text-white cursor-pointer"
+                  >
+                    Attivala
+                  </button>
+                </p>
+              )}
             </div>
 
             {/* Anche la CTA sforava: `whitespace-nowrap` su «Apri la Mappa
