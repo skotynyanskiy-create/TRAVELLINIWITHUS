@@ -80,18 +80,23 @@ export default function HomeAudienceVoice() {
                   </Link>
 
                   {/* Il gesto di svago accanto alla CTA seria: chi non sa da
-                      dove cominciare non deve leggere, deve premere. */}
-                  <button
-                    type="button"
-                    onClick={() => setSorpresaAperta(true)}
-                    className="group inline-flex w-fit items-center gap-2 rounded-full border border-[var(--color-border)] px-6 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
-                  >
-                    <Shuffle
-                      size={14}
-                      className="text-[var(--color-accent-text)] transition-transform group-hover:rotate-180"
-                    />
-                    Portami in un posto a caso
-                  </button>
+                      dove cominciare non deve leggere, deve premere. Per il
+                      brand la CTA e' l'unica cosa che deve restare: qui non
+                      c'e' spazio per un gesto da lettore annoiato accanto a
+                      una richiesta commerciale. */}
+                  {audience !== 'brand' && (
+                    <button
+                      type="button"
+                      onClick={() => setSorpresaAperta(true)}
+                      className="group inline-flex w-fit items-center gap-2 rounded-full border border-[var(--color-border)] px-6 py-3.5 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+                    >
+                      <Shuffle
+                        size={14}
+                        className="text-[var(--color-accent-text)] transition-transform group-hover:rotate-180"
+                      />
+                      Portami in un posto a caso
+                    </button>
+                  )}
                 </div>
               </motion.div>
 
