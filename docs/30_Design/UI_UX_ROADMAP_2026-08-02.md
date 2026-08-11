@@ -1,3 +1,14 @@
+---
+type: plan
+area: design
+status: active
+created: 2026-08-02
+tags:
+  - ui
+  - ux
+  - accessibility
+---
+
 # Roadmap UI/UX — 2026-08-02
 
 Seguito operativo di `UI_UX_AUDIT_2026-08-02.md`. Ordinata per rapporto
@@ -17,8 +28,14 @@ impatto/rischio, non per gusto.
 | **R1** — barra di ricerca senza focus                        | `Esplora.tsx:498`            | ring sul contenitore, 2px accento |
 | **R2** — guard sui token inesistenti                         | `scripts/check-ui.mjs`       | reintroducendo il bug: exit 1     |
 | **R2** — marchio del PageLoader ad AA + `--color-gold` morto | `App.tsx:84,89`              | 0 token mai definiti              |
+| **R3** — contrasto dei token contro ogni tema                | `scripts/check-ui.mjs`       | base, family e brand ≥ 4,5:1      |
+| **R6** — target tattili del drawer mobile                    | `Navbar.tsx`                 | controlli ≥ 44×44px               |
+| **R7** — preload hero verificato in produzione               | `index.html` + hero          | usato; LCP = titolo H1             |
+| **R8** — audit axe ripetibile via Playwright                 | `check-a11y.mjs`             | 4 rotte, 0 violazioni              |
+| **R9** — artefatti Functions esclusi dal lint                | `eslint.config.js`           | `npm run lint` verde               |
+| **R10** — H1 hero visibile al primo paint                    | hero cinematic               | LCP locale 7,4 → 6,5 s             |
 
-Regressione: `typecheck` OK · `test:unit` 154/154 · `audit:ui` exit 0 · axe **8 → 0** ·
+Regressione: `typecheck` OK · `test:unit` 179/179 · `audit:ui` exit 0 · axe **8 → 0** ·
 focus: **0 controlli senza affordance** su 554.
 
 ---
@@ -67,20 +84,21 @@ allineato a `--color-accent-text`.
 
 **Token mai definiti nel repo: 0.**
 
-### R3. Chiudere la checklist dei token — **P2**
+### ~~R3. Chiudere la checklist dei token~~ — **FATTA**
 
-`DESIGN.md` ora include `muted-fg` fra i contrasti da verificare. Renderlo
-**eseguibile**: uno script che calcola ogni token di testo contro ogni
-`--color-sand` di tema e fallisce sotto 4,5. Un tema nuovo non deve poter entrare
-con un contrasto non verificato — è esattamente come è passato questo.
+`audit:ui` ora legge il blocco `@theme` e ogni override audience, risolve il
+valore effettivo di `--color-sand` e calcola il contrasto dei token di testo.
+Fallisce sotto 4,5:1 oppure se un colore non è verificabile. Un tema nuovo non
+può quindi introdurre testo poco leggibile confidando nei commenti CSS.
 
-Aggancio naturale: `scripts/check-ui.mjs`, già in `audit:quality`.
+Il guard resta dentro `scripts/check-ui.mjs`, quindi è già incluso in
+`audit:quality`.
 
 ---
 
 ## Da decidere — richiede l'owner
 
-### R4. La home ripete se stessa — **P2**
+### ~~R4. La home ripete se stessa~~ — **fatta il 2026-08-02**
 
 10,8 schermate, quattro collezioni di posti, otto `h2` che riaffermano la stessa
 promessa. Non è un bug: è una scelta di composizione, e va cambiata solo se
@@ -106,20 +124,44 @@ Tre opzioni, in ordine di coraggio:
 **Raccomandazione:** opzione 1 + 2. La 1 costa una riga e toglie la ridondanza
 più visibile; la 2 recupera valore dalle sezioni che restano.
 
-**Da verificare prima:** scroll-depth e tasso di arrivo all'`indice-vivo`. Se
-quasi nessuno arriva in fondo, la discussione cambia — e il dato è
-`travellini-data-analyst`, non un'opinione di design.
+Scelta applicata: rimosso `featured` da Viaggiatori, promossi nella griglia i
+contenuti curati e differenziate le intestazioni di selezione, mappa, reel e
+archivio. Il contenuto resta completo, senza doppie collezioni consecutive.
 
-### R5. Il gate d'ingresso come interstiziale — **P2**
+### R5. Il gate d'ingresso come interstiziale — **P2, misurazione in corso**
 
 Il sito apre con una modale bloccante prima di qualsiasi contenuto. Ora è
 accessibile da tastiera, ma resta una domanda di prodotto: **è il primo
 ostacolo fra il visitatore e la prima riga di testo.**
 
 Il gate serve l'architettura dei temi ed è una scelta deliberata, quindi non è
-stato toccato. Vale però misurare quanti lo chiudono con «Decido dopo» e quanti
-abbandonano: se la maggioranza rimbalza, la personalizzazione sta costando più
-di quanto rende.
+stato toccato. Il codice è pronto a inviare a GA4, solo dopo consenso analytics,
+una vista del gate, una scelta audience oppure una chiusura con metodo button/Esc.
+I tre eventi non vengono inoltrati a Meta o TikTok e non contengono dati
+personali. L'ambiente locale non ha `VITE_GA_ID`, quindi la ricezione nella
+proprietà GA4 va confermata nell'ambiente di produzione prima del conteggio.
+
+**Protocollo di misura (owner):**
+
+1. Verificare che `VITE_GA_ID` sia impostato nell'ambiente di produzione, poi
+   validare in GA4 DebugView un opt-in analytics seguito da una vista, una
+   scelta e una chiusura del gate.
+2. Registrare come dimensioni personalizzate event-scoped i tre parametri
+   `entry_path`, `audience` e `method`; servono per leggere i valori nei report
+   e diventano disponibili dopo l'elaborazione GA4.
+3. Annotare la data del primo evento confermato; da quel punto attendere almeno
+   14 giorni **e** 300 `audience_gate_view` prima di modificare il prodotto.
+
+| Lettura | Formula | Risposta alla domanda di prodotto |
+| --- | --- | --- |
+| Scelta audience | `audience_gate_select / audience_gate_view` | Il gate orienta davvero? |
+| Decido dopo | `audience_gate_dismiss / audience_gate_view` | Il gate viene soprattutto evitato? |
+| Ripartizione scelte | `audience` su `audience_gate_select` | Family e B2B meritano un ingresso dedicato? |
+| Modalità di chiusura | `method` su `audience_gate_dismiss` | Il tasto è sufficiente o il gate è troppo intrusivo? |
+
+Se le chiusure superano stabilmente le scelte, il passo successivo è un pilot
+senza gate: audience inferita dalla rotta di ingresso e switcher in navbar. È
+una modifica di prodotto, quindi richiede approvazione owner dopo la lettura.
 
 **Alternativa se il dato è brutto:** inferire l'audience dalla rotta d'ingresso
 (`audienceFromPath` esiste già) e offrire lo switch in navbar senza bloccare.
@@ -128,17 +170,28 @@ di quanto rende.
 
 ## Rifiniture — quando c'è tempo
 
-- **R6.** Target tattili del drawer mobile da 31-32px a 44px. Sopra il minimo
-  WCAG 2.2, sotto il comfort. Tocca il ritmo verticale: da valutare con
-  `ui-designer`.
-- **R7.** Preload hero: confermare con Lighthouse reale prima di intervenire.
-  L'invariante dichiarata dal codice risulta rispettata.
-- **R8.** Ripristinare `npm run audit:a11y` (ChromeDriver 151 vs Chrome 150), o
-  sostituirlo con l'iniezione axe-core via Playwright, che qui ha funzionato e
-  non dipende dalla versione di Chrome installata.
-- **R9.** Escludere `functions/lib/` dal lint per togliere il falso rosso locale.
-  Attenzione: `eslint.config.js` è protetto da `config_protection.py` — serve
-  passaggio esplicito dall'owner.
+- **~~R6. Target tattili del drawer mobile~~ — FATTA (2026-08-02).** Voci di
+  navigazione, chip audience, chiusura, ricerca, CTA compatta, link B2B,
+  azioni social e accesso hanno ora un'area di almeno 44×44px. Il contenuto e
+  la gerarchia del drawer restano invariati.
+- **~~R7. Preload hero~~ — FATTA (2026-08-02).** La build Vite isolata e la
+  preview di produzione confermano che il preload AVIF della hero viene usato;
+  Lighthouse non segnala preload inutilizzati. L'LCP locale rilevato è il
+  titolo H1 (non l'immagine), quindi non è giustificata una modifica alla hero.
+- **~~R8. Audit accessibilita' ripetibile~~ — FATTA (2026-08-02).**
+  `npm run audit:a11y` inietta l'axe-core gia' disponibile nel progetto in un
+  browser Playwright e conserva le quattro rotte e i tag WCAG del controllo
+  precedente. Non usa ChromeDriver, quindi non dipende piu' dalla versione di
+  Chrome installata sul computer.
+- **~~R9. Escludere `functions/lib/` dal lint~~ — FATTA (2026-08-02).** La
+  configurazione corrente esclude gli artefatti compilati `functions/lib/` e
+  `functions/node_modules/`; `npm run lint` torna verde senza nascondere il
+  codice sorgente di `functions/src/`.
+- **~~R10. H1 hero senza doppia animazione~~ — FATTA (2026-08-02).** L'H1
+  LCP non viene piu' nascosto dalle animazioni iniziali del wrapper e della
+  hero. Nella stessa preview di produzione locale, LCP passa da 7,4 a 6,5 s e
+  il ritardo di rendering dell'H1 da 1,22 a 0,59 s; e' una misura diagnostica
+  locale, non sostituisce i Core Web Vitals reali.
 
 ## Non fare
 

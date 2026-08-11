@@ -15,7 +15,28 @@ tags:
 
 # Gli 8 endpoint `/api/*` non hanno un backend in produzione
 
+## Stato 2026-08-02 — fix locale pronto, produzione ancora da verificare
+
+Il testo storico sotto descriveva il deploy del 2026-07-26. Nel branch di
+lavoro attuale sono ora presenti:
+
+- Function HTTP api e rewrite Hosting /api/\*\* → europe-west1;
+- hook Firebase che costruisce functions/lib/index.js prima del deploy;
+- dipendenza runtime esplicita firebase-admin;
+- parametri obbligatori APP_URL e FIRESTORE_DATABASE_ID, più binding dei
+  segreti Stripe, Resend, Brevo, OpenAI, Anthropic e Gemini;
+- gate CI/predeploy: install, build e smoke test del bundle.
+
+Lo smoke locale verifica che /api/health restituisca **503** senza la
+configurazione obbligatoria e **200 JSON** quando è presente. Non è stato
+eseguito alcun deploy né impostato un segreto reale: il bug resta aperto finché
+un owner non valida sulla revisione Firebase effettivamente pubblicata
+Hosting → Function, Firestore e le integrazioni abilitate.
+
 ## Sintesi
+
+> Nota storica: questa sintesi era corretta al 2026-07-26; non descrive più
+> l'albero locale corrente.
 
 Il client chiama 8 endpoint `/api/*`. In produzione **nessuno di questi esiste**:
 `firebase.json` dichiara solo `hosting` e `firestore`, senza `functions` e senza

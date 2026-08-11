@@ -15,6 +15,27 @@ tags:
 
 # PROJECT_RELEASE_READINESS
 
+## Gate Firebase Functions e API — 2026-08-02
+
+**Stato: in corso.** Il contratto di release è stato reso verificabile in locale,
+ma non è stato eseguito alcun deploy né configurato un segreto reale.
+
+- firebase.json costruisce la codebase api con un hook predeploy;
+- functions/package.json dichiara firebase-admin, richiesto dal bundle
+  esternalizzato;
+- APP_URL e FIRESTORE_DATABASE_ID sono parametri Firebase obbligatori;
+  i segreti server-side sono vincolati alla sola Function API;
+- CI e npm run predeploy installano/costruiscono il bundle e ne verificano
+  il comportamento: /api/health è 503 senza configurazione e 200 JSON con
+  configurazione;
+- functions/.env.example documenta solo configurazione non sensibile;
+  i file di progetto e i segreti restano ignorati.
+
+Per chiudere il gate serve un owner con accesso Firebase: configurare il
+database nominato e i segreti necessari, eseguire il deploy mirato e fare uno
+smoke test sul dominio/revisione realmente serviti. Il riferimento operativo è
+[[14_Bugs/BUG_API_ENDPOINTS_SENZA_BACKEND_IN_PROD_2026-07-26]].
+
 ## Mappa delle tracce — gate locale 2026-07-21
 
 Scope: redesign della route `/mappa` come continuazione del `Diario delle

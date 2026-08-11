@@ -1,3 +1,14 @@
+---
+type: audit
+area: design
+status: active
+created: 2026-08-02
+tags:
+  - ui
+  - ux
+  - accessibility
+---
+
 # Audit UI/UX — 2026-08-02
 
 Audit su browser reale (Playwright + axe-core 4.11.1), non su lettura del JSX.
@@ -267,6 +278,11 @@ decisione di design, non un fix. La strada, se si vuole, è un
 ---
 
 ## Aperti / non risolti
+
+- **Contrasto dei token reso eseguibile (2026-08-02).** `audit:ui` ora calcola il
+  contrasto AA dei token di testo sul valore effettivo di `--color-sand` per il
+  tema base, family e brand. Un nuovo tema con testo sotto 4,5:1 ferma il gate;
+  non resta più una checklist affidata ai commenti CSS.
 
 - **Preload dell'hero.** Console: `hero-impossible-320.avif` preloadato e non
   usato. L'invariante che il codice si impone (`imagesizes` del preload identico

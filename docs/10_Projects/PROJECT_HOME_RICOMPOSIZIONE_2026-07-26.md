@@ -369,3 +369,77 @@ sezione `atlante3d` nella lista.
 > perimetro concordato per questa sessione. Vedi anche il punto 3,
 > `homeComposition.ts`, non ancora scritto: è probabilmente il posto giusto
 > dove far vivere questa fonte unica quando si arriverà a quella fase.
+
+## 12. Esperienza dinamica per interessi — implementazione locale, 2026-08-02
+
+L'audience non decide più solo tema e navigazione. Ogni pubblico può scegliere
+un interesse, modificabile dal pannello **Cosa cerchi oggi?** presente nei
+suoi hub e raggiungibile dalla navbar. La scelta viene ricordata localmente
+solo con il consenso **Personalizzazione**; senza, resta valida per la sola
+sessione e l'interfaccia lo dichiara esplicitamente.
+
+- Viaggiatori: weekend in coppia, fuori rotta, mangiare e dormire bene;
+- Family: gravidanza, partire col pancione, essenziali pratici;
+- Brand: capire il fit, vedere i format, richiedere il media kit.
+
+La scelta riordina i moduli della home, le selezioni delle card, Family,
+Esplora e la mappa. URL e filtri espliciti dell'utente restano prioritari; le
+schede editoriali e i metadata restano canonici e non vengono riscritti.
+
+Il comportamento è un affinamento opzionale: filtri per tipo e letture
+alimentano segnali solo dopo consenso **Personalizzazione**. Alla prima
+autorizzazione o alla revoca, gli eventuali dati locali precedenti vengono
+rimossi: non possono essere riutilizzati profili creati senza opt-in e la
+revoca svuota interesse, segnali e cronologia di lettura. Il controllo
+"Azzera preferenze" rimuove interesse e segnali locali. Non vengono creati
+account, cookie di marketing, API o varianti SEO.
+
+La selezione continua a escludere `isPlaceholder`; nessuna scelta può
+riempire la home con contenuto non verificato. Per Family, dove alcuni filoni
+hanno una sola risorsa reale, il ranking può portarla in testa ma non inventa
+card aggiuntive.
+
+**Correzione 2026-08-03.** `HomeFamilyPicks` ora applica realmente quel
+ranking ai consigli mostrati nella home: prima l'interesse Family cambiava
+l'ordine dei moduli, ma non le tre card. Il test dedicato verifica che una
+scelta come «Essenziali pratici» porti davanti il consiglio corrispondente.
+
+Nella stessa correzione, un interesse Brand rende specifica la CTA della fascia
+audience: «Capire il fit» porta al fit partner, «Vedere i format» ai format e
+«Richiedere il media kit» al media kit. L'ordine dei moduli resta coerente con
+lo stesso bisogno; un interesse di un pubblico diverso viene ignorato.
+
+Dal 2026-08-02 la composizione **Viaggiatori** ha una sola collezione di
+posti: la griglia sostituisce la sequenza `featured` + griglia, che ripeteva
+lo stesso gesto poco più sotto. I tre posti che avrebbero occupato la sezione
+rimossa entrano con priorità nella griglia, anche nelle varianti per interesse,
+così la riduzione non nasconde contenuto. Le intestazioni rimanenti distinguono
+la funzione di ogni passaggio: selezione iniziale, mappa, prove video e
+archivio completo.
+
+Il teaser MapLibre della home, e la mappa completa che usa lo stesso stile
+OpenFreeMap, gestiscono inoltre il riferimento remoto mancante `circle-11`
+con un fallback trasparente locale. Restano visibili le etichette delle citta,
+senza errori in console o modifiche a marker, dati e interazioni.
+
+## 13. UX e accessibilita: overlay e discovery — implementazione locale, 2026-08-02
+
+Le interfacce temporanee ora mantengono la navigazione da tastiera nel loro
+perimetro e restituiscono il focus al controllo di origine quando si chiudono:
+ricerca, anteprima rapida, popup di uscita e menu mobile. Il menu mobile
+espone semantica di dialogo solo mentre e aperto.
+
+Un unico stack decide quale overlay e in primo piano e mantiene il blocco dello
+scroll finché l'ultimo non si chiude. Il popup di uscita rispetta inoltre ogni
+dialogo preesistente, incluso il consenso cookie, così non vengono mai proposte
+due richieste concorrenti alla stessa persona.
+
+Quando non e possibile aggiornare i dati remoti, Ricerca conserva un archivio
+minimo utile per navigare il sito e mostra un messaggio con **Riprova**;
+Esplora mantiene i contenuti disponibili, comunica l'errore e permette un
+nuovo caricamento. Gli skeleton di Esplora sono ora annunciati ai lettori di
+schermo come stato di caricamento.
+
+Verifica locale: focus desktop e mobile, chiusure concorrenti, blocco exit
+intent, test unitari di stack e ricerca (32 file, 162 test), typecheck e lint
+mirato: PASS. Nessun commit, push o deploy eseguito.
