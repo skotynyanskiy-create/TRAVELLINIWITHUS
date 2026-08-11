@@ -165,6 +165,22 @@ if (!apiRewrite) {
   deliveryError(firebaseJsonPath, 'Hosting must rewrite /api/** to the europe-west1 api Function.');
 }
 
+// La CSP dell'header `**` e' l'unica che raggiunge un browser: Hosting serve le
+// pagine, la Function risponde solo su /api/**. Dal 2026-08-11 anche server.ts
+// la legge da qui invece di tenerne una copia, quindi toglierla spegnerebbe la
+// policy in produzione e fermerebbe l'avvio del self-host.
+const hostingCspHeader = (firebaseJson.hosting?.headers ?? [])
+  .filter((rule) => rule?.source === '**')
+  .flatMap((rule) => (Array.isArray(rule.headers) ? rule.headers : []))
+  .find((header) => header?.key === 'Content-Security-Policy');
+
+if (!hostingCspHeader?.value) {
+  deliveryError(
+    firebaseJsonPath,
+    'Hosting must declare a Content-Security-Policy header for source "**" (server.ts reads it from here).'
+  );
+}
+
 const functionsPackage = JSON.parse(fs.readFileSync(functionsPackagePath, 'utf8'));
 if (functionsPackage.main !== 'lib/index.js') {
   deliveryError(functionsPackagePath, 'Functions package entrypoint must be lib/index.js.');

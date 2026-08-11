@@ -729,6 +729,45 @@ function injectSentieroPrerender(html: string): string {
   return html.replace('<div id="root"></div>', `<div id="root">${container}</div>`);
 }
 
+interface HostingHeaderRule {
+  source?: string;
+  headers?: Array<{ key?: string; value?: string }>;
+}
+
+/**
+ * La CSP di produzione vive in `firebase.json`: e' Firebase Hosting a servire le
+ * pagine (`dist/`), mentre questo file in produzione gira solo come Cloud
+ * Function montata su `/api/**`, che non restituisce mai HTML. Copiare la policy
+ * anche qui l'ha fatta divergere: il commit b587061 aggiunse
+ * `tiles.openfreemap.org` a firebase.json e qui restarono autorizzati host
+ * Mapbox non piu' usati da nessun file di `src/`. Una sola lista, letta da dove
+ * conta davvero, invece di due che si allontanano a ogni modifica.
+ *
+ * Serve ancora perche' in self-host (`NODE_ENV=production` su questo processo,
+ * DEPLOYMENT_RUNBOOK §2 opzione C) e' il ramo qui sotto a servire `dist/` e
+ * l'HTML: li' la CSP e' l'unica protezione, quindi non si puo' togliere.
+ */
+function readHostingCsp(): string | null {
+  try {
+    const raw = fs.readFileSync(path.join(process.cwd(), 'firebase.json'), 'utf-8');
+    const config = JSON.parse(raw) as { hosting?: { headers?: HostingHeaderRule[] } };
+
+    for (const rule of config.hosting?.headers ?? []) {
+      if (rule.source !== '**') continue;
+      const header = rule.headers?.find((entry) => entry.key === 'Content-Security-Policy');
+      if (header?.value) return header.value;
+    }
+
+    return null;
+  } catch (error: unknown) {
+    console.warn(
+      '[startup] firebase.json non leggibile: ' +
+        (error instanceof Error ? error.message : String(error))
+    );
+    return null;
+  }
+}
+
 async function startServer() {
   const app = express();
   const PORT = Number(process.env.PORT) || 3000;
@@ -760,16 +799,16 @@ async function startServer() {
     process.exit(1);
   }
 
-  const cspProd =
-    "default-src 'self'; " +
-    "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://js.stripe.com https://m.stripe.network https://connect.facebook.net https://www.facebook.com https://apis.google.com https://www.googletagmanager.com https://www.google-analytics.com; " +
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://api.mapbox.com; " +
-    "font-src 'self' data: https://fonts.gstatic.com; " +
-    "img-src 'self' data: blob: https:; " +
-    "media-src 'self' https: blob:; " +
-    "connect-src 'self' https://*.googleapis.com wss://*.firebaseio.com https://*.firebaseio.com https://*.firebasestorage.app https://identitytoolkit.googleapis.com https://api.stripe.com https://m.stripe.network https://api.mapbox.com https://events.mapbox.com https://www.facebook.com https://www.google-analytics.com; " +
-    "frame-src 'self' https://js.stripe.com https://hooks.stripe.com https://www.facebook.com; " +
-    "worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests";
+  // Unica fonte: l'header `**` di firebase.json. Se manca, in produzione le
+  // pagine servite da qui uscirebbero senza CSP: si ferma l'avvio invece di
+  // degradare in silenzio, come per APP_URL e STRIPE_WEBHOOK_SECRET.
+  const cspProd = readHostingCsp();
+  if (isProd && !cspProd) {
+    console.error(
+      '[startup] Content-Security-Policy assente da firebase.json (hosting.headers, source "**"). Le pagine servite da questo processo resterebbero senza CSP. Avvio interrotto.'
+    );
+    process.exit(1);
+  }
 
   app.use((_req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -782,7 +821,7 @@ async function startServer() {
     res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
     if (isProd) {
       res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
-      res.setHeader('Content-Security-Policy', cspProd);
+      if (cspProd) res.setHeader('Content-Security-Policy', cspProd);
     }
     next();
   });
