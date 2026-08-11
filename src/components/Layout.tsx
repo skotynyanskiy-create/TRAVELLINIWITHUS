@@ -6,7 +6,6 @@ import AudienceGate, { AUDIENCE_GATE_ENABLED, wasGateDismissedThisSession } from
 import { useAudience } from '../context/AudienceContext';
 import ConsentBanner from './ConsentBanner';
 import ExitIntentPopup from './ExitIntentPopup';
-import AiAssistant from './AiAssistant';
 import ScrollProgressBar from './ScrollProgressBar';
 import SmoothScrollProvider from './SmoothScrollProvider';
 import QuickViewDrawer from './QuickViewDrawer';
@@ -58,7 +57,13 @@ export default function Layout() {
             !hasChosen &&
             !wasGateDismissedThisSession() && <AudienceGate />}
           {!suppressFloatingOverlays && <ExitIntentPopup />}
-          {!suppressFloatingOverlays && <AiAssistant />}
+          {/* AiAssistant smontato dal 2026-08-11. L'endpoint /api/ai-companion
+              risponde 503 per progetto (manca il corpus), quindi il widget
+              cadeva SEMPRE sul fallback a keyword: prometteva agli utenti
+              itinerari e una guida PDF che non esistono, su /itinerari che e'
+              dichiarata `preview` proprio perche' i due itinerari sono demo.
+              Componente, endpoint e config restano: rimontare qui quando il
+              RAG avra' un corpus di articoli pubblicati da citare. */}
           <QuickViewDrawer />
         </div>
       </QuickViewProvider>
