@@ -6,7 +6,7 @@ import { useAuth } from '../../context/AuthContext';
 import { handleFirestoreError, OperationType } from '../../utils/firestoreErrorHandler';
 import FormSkeleton from '../../components/FormSkeleton';
 import { verifyWithSearch, verifyWithMaps } from '../../services/aiVerificationService';
-import { Search, MapPin, Loader2, AlertTriangle, RotateCcw } from 'lucide-react';
+import { Search, MapPin, Loader2, AlertTriangle, RotateCcw, Undo2, X } from 'lucide-react';
 import PageLayout from '../../components/PageLayout';
 import Section from '../../components/Section';
 import SEOPreview from '../../components/SEOPreview';
@@ -16,6 +16,11 @@ import MarkdownArticleEditor from '../../components/admin/MarkdownArticleEditor'
  * rimedio diverso (id sbagliato nell'indirizzo vs. rete/permessi), quindi
  * il messaggio in pagina li distingue invece di limitarsi a un errore generico. */
 type LoadError = 'not-found' | 'network' | null;
+
+interface VerifyMessage {
+  type: 'success' | 'error';
+  text: string;
+}
 
 const splitLines = (value: string) =>
   value
@@ -57,6 +62,8 @@ export default function ArticleEditor() {
 
   const [isVerifyingSearch, setIsVerifyingSearch] = useState(false);
   const [isVerifyingMaps, setIsVerifyingMaps] = useState(false);
+  const [previousContent, setPreviousContent] = useState<string | null>(null);
+  const [verifyMessage, setVerifyMessage] = useState<VerifyMessage | null>(null);
 
   const fetchArticle = useCallback(async () => {
     if (!id) return;
@@ -117,13 +124,22 @@ export default function ArticleEditor() {
   const handleVerifySearch = async () => {
     if (!content) return;
     setIsVerifyingSearch(true);
+    setVerifyMessage(null);
+    const contentBeforeVerify = content;
     try {
       const verifiedContent = await verifyWithSearch(content, title);
+      setPreviousContent(contentBeforeVerify);
       setContent(verifiedContent);
-      alert('Verifica dei fatti completata con successo! Il contenuto è stato aggiornato.');
+      setVerifyMessage({
+        type: 'success',
+        text: 'Verifica dei fatti completata. Controlla i blocchi editoriali (:::verdetto, :::dati…) prima di salvare: il modello può averli modificati.',
+      });
     } catch (error) {
       console.error('Errore durante la verifica con Search:', error);
-      alert('Si è verificato un errore durante la verifica dei fatti.');
+      setVerifyMessage({
+        type: 'error',
+        text: 'Si è verificato un errore durante la verifica dei fatti. Il contenuto non è stato modificato.',
+      });
     } finally {
       setIsVerifyingSearch(false);
     }
@@ -132,16 +148,35 @@ export default function ArticleEditor() {
   const handleVerifyMaps = async () => {
     if (!content) return;
     setIsVerifyingMaps(true);
+    setVerifyMessage(null);
+    const contentBeforeVerify = content;
     try {
       const verifiedContent = await verifyWithMaps(content, title);
+      setPreviousContent(contentBeforeVerify);
       setContent(verifiedContent);
-      alert('Verifica geografica completata con successo! Il contenuto è stato aggiornato.');
+      setVerifyMessage({
+        type: 'success',
+        text: 'Verifica geografica completata. Controlla i blocchi editoriali (:::posto, :::mappa…) prima di salvare: il modello può averli modificati.',
+      });
     } catch (error) {
       console.error('Errore durante la verifica con Maps:', error);
-      alert('Si è verificato un errore durante la verifica geografica.');
+      setVerifyMessage({
+        type: 'error',
+        text: 'Si è verificato un errore durante la verifica geografica. Il contenuto non è stato modificato.',
+      });
     } finally {
       setIsVerifyingMaps(false);
     }
+  };
+
+  const handleUndoVerify = () => {
+    if (previousContent === null) return;
+    setContent(previousContent);
+    setPreviousContent(null);
+    setVerifyMessage({
+      type: 'success',
+      text: 'Ripristinata la versione precedente del contenuto.',
+    });
   };
 
   const handleSave = async (e: React.FormEvent) => {
@@ -527,6 +562,37 @@ export default function ArticleEditor() {
                 </button>
               </div>
             </div>
+            {verifyMessage && (
+              <div
+                className={`mb-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-lg border p-3 text-sm ${
+                  verifyMessage.type === 'success'
+                    ? 'border-[var(--color-accent)]/30 bg-[var(--color-accent-soft)] text-[var(--color-accent-text)]'
+                    : 'border-[var(--color-error)]/30 bg-[var(--color-error-soft)] text-[var(--color-error-text)]'
+                }`}
+              >
+                <span>{verifyMessage.text}</span>
+                <div className="flex items-center gap-3 shrink-0">
+                  {previousContent !== null && verifyMessage.type === 'success' && (
+                    <button
+                      type="button"
+                      onClick={handleUndoVerify}
+                      className="flex items-center gap-1.5 font-medium underline underline-offset-2"
+                    >
+                      <Undo2 size={14} />
+                      Torna alla versione precedente
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setVerifyMessage(null)}
+                    aria-label="Chiudi messaggio"
+                    className="opacity-70 hover:opacity-100"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              </div>
+            )}
             <MarkdownArticleEditor
               id="content"
               value={content}

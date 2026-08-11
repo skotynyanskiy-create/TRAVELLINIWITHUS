@@ -3,11 +3,16 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import ArticleEditor from './ArticleEditor';
 import { AuthProvider } from '../../context/AuthContext';
+import { verifyWithSearch } from '../../services/aiVerificationService';
 
 /**
- * Copre il bug confermato in revisione: un caricamento fallito (documento
- * inesistente o errore di rete) non deve mai mostrare il form vuoto con `id`
- * valorizzato — premere Salva azzererebbe l'articolo reale su Firestore.
+ * Copre due bug confermati in revisione:
+ * 1. Un caricamento fallito (documento inesistente o errore di rete) non deve
+ *    mai mostrare il form vuoto con `id` valorizzato: premere Salva
+ *    azzererebbe l'articolo reale su Firestore.
+ * 2. "Verifica Fatti/Luoghi" sostituisce tutto il contenuto: deve restare
+ *    un modo per tornare alla versione precedente, e l'esito non passa più
+ *    da un `alert()` che si chiude senza leggerlo.
  */
 
 vi.mock('../../lib/firebaseDb', () => ({ db: {} }));
@@ -19,6 +24,11 @@ vi.mock('firebase/firestore', () => ({
   getDoc: (...args: unknown[]) => mockGetDoc(...args),
   setDoc: (...args: unknown[]) => mockSetDoc(...args),
   serverTimestamp: vi.fn(() => 'SERVER_TIMESTAMP'),
+}));
+
+vi.mock('../../services/aiVerificationService', () => ({
+  verifyWithSearch: vi.fn(),
+  verifyWithMaps: vi.fn(),
 }));
 
 // `handleFirestoreError` importa `../lib/firebaseAuth` in modo dinamico per la
@@ -80,5 +90,51 @@ describe('ArticleEditor — un caricamento fallito non mostra mai il form vuoto 
     fireEvent.click(await screen.findByRole('button', { name: /riprova/i }));
 
     expect(await screen.findByLabelText('Titolo')).toHaveValue('Articolo vero');
+  });
+});
+
+describe('ArticleEditor — Verifica AI: annulla disponibile, niente alert()', () => {
+  beforeEach(() => {
+    vi.mocked(verifyWithSearch).mockReset();
+  });
+
+  it('applica il risultato, mostra il messaggio in pagina (non un alert) e permette di tornare indietro', async () => {
+    const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
+    vi.mocked(verifyWithSearch).mockResolvedValue('CONTENUTO VERIFICATO DAL MODELLO');
+
+    renderEditor();
+
+    const textarea = screen.getByLabelText('Contenuto') as HTMLTextAreaElement;
+    fireEvent.change(textarea, { target: { value: 'Il contenuto originale scritto a mano.' } });
+
+    fireEvent.click(screen.getByRole('button', { name: /verifica fatti/i }));
+
+    expect(await screen.findByText(/verifica dei fatti completata/i)).toBeInTheDocument();
+    expect(textarea).toHaveValue('CONTENUTO VERIFICATO DAL MODELLO');
+    expect(alertSpy).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole('button', { name: /torna alla versione precedente/i }));
+
+    expect(textarea).toHaveValue('Il contenuto originale scritto a mano.');
+    alertSpy.mockRestore();
+  });
+
+  it('se la verifica fallisce, il contenuto resta intatto e l’errore compare in pagina', async () => {
+    const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
+    vi.mocked(verifyWithSearch).mockRejectedValue(new Error('AI verify failed'));
+
+    renderEditor();
+
+    const textarea = screen.getByLabelText('Contenuto') as HTMLTextAreaElement;
+    fireEvent.change(textarea, { target: { value: 'Testo che deve restare invariato.' } });
+
+    fireEvent.click(screen.getByRole('button', { name: /verifica fatti/i }));
+
+    expect(
+      await screen.findByText(/si è verificato un errore durante la verifica/i)
+    ).toBeInTheDocument();
+    expect(textarea).toHaveValue('Testo che deve restare invariato.');
+    expect(alertSpy).not.toHaveBeenCalled();
+    alertSpy.mockRestore();
   });
 });
