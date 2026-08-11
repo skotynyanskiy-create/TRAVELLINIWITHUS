@@ -1,5 +1,11 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import {
+  getAudienceInterest,
+  isInterestForAudience,
+  type InterestId,
+} from '../config/audienceInterests';
+import { canLoad, onConsentChange } from '../lib/consent';
 
 /**
  * Audience layer a 3 pubblici (decision 2026-07-24):
@@ -16,6 +22,7 @@ export type Audience = 'viaggiatori' | 'family' | 'brand';
 
 const STORAGE_KEY = 'travellini_audience';
 const LEGACY_KEY = 'travellini_nav_mode';
+const INTEREST_STORAGE_KEY = 'travellini_interest_profile';
 
 function isAudience(value: unknown): value is Audience {
   return value === 'viaggiatori' || value === 'family' || value === 'brand';
@@ -48,6 +55,38 @@ function readStoredAudience(): Audience | null {
   return null;
 }
 
+type InterestSelections = Partial<Record<Audience, InterestId>>;
+
+function readStoredInterests(): InterestSelections {
+  if (typeof window === 'undefined' || !canLoad('personalization')) return {};
+  try {
+    const raw = localStorage.getItem(INTEREST_STORAGE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw) as Partial<Record<Audience, unknown>>;
+    const selections: InterestSelections = {};
+    for (const audience of ['viaggiatori', 'family', 'brand'] as const) {
+      const candidate = parsed[audience];
+      if (typeof candidate === 'string' && getAudienceInterest(candidate as InterestId)) {
+        if (isInterestForAudience(candidate as InterestId, audience)) {
+          selections[audience] = candidate as InterestId;
+        }
+      }
+    }
+    return selections;
+  } catch {
+    return {};
+  }
+}
+
+function persistInterests(selections: InterestSelections) {
+  if (!canLoad('personalization')) return;
+  try {
+    localStorage.setItem(INTEREST_STORAGE_KEY, JSON.stringify(selections));
+  } catch {
+    // Storage non disponibile: la scelta resta valida fino al refresh.
+  }
+}
+
 /** Rotte che appartengono a un'audience: chi ci atterra vede quella modalità. */
 export function audienceFromPath(pathname: string): Audience | null {
   if (pathname.startsWith('/family')) return 'family';
@@ -66,6 +105,10 @@ interface AudienceContextType {
   hasChosen: boolean;
   /** Registra una scelta esplicita (switcher o gate) e la persiste. */
   setAudience: (audience: Audience) => void;
+  /** Interesse esplicito per il pubblico risolto dalla rotta. */
+  interest: InterestId | null;
+  setInterest: (interest: InterestId) => void;
+  clearInterest: () => void;
 }
 
 const AudienceContext = createContext<AudienceContextType | undefined>(undefined);
@@ -73,6 +116,7 @@ const AudienceContext = createContext<AudienceContextType | undefined>(undefined
 export function AudienceProvider({ children }: { children: React.ReactNode }) {
   const location = useLocation();
   const [userAudience, setUserAudience] = useState<Audience | null>(readStoredAudience);
+  const [interests, setInterests] = useState<InterestSelections>(readStoredInterests);
 
   const setAudience = (next: Audience) => {
     setUserAudience(next);
@@ -93,15 +137,52 @@ export function AudienceProvider({ children }: { children: React.ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const value = useMemo<AudienceContextType>(() => {
-    const routeAudience = audienceFromPath(location.pathname);
-    return {
-      audience: routeAudience ?? userAudience ?? 'viaggiatori',
-      userAudience,
-      hasChosen: userAudience !== null,
-      setAudience,
-    };
-  }, [location.pathname, userAudience]);
+  useEffect(
+    () =>
+      onConsentChange((consent) => {
+        if (consent.personalization) {
+          setInterests((current) => {
+            persistInterests(current);
+            return current;
+          });
+          return;
+        }
+
+        setInterests({});
+      }),
+    []
+  );
+
+  const routeAudience = audienceFromPath(location.pathname);
+  const resolvedAudience = routeAudience ?? userAudience ?? 'viaggiatori';
+
+  const setInterest = (next: InterestId) => {
+    if (!isInterestForAudience(next, resolvedAudience)) return;
+    setInterests((current) => {
+      const nextSelections = { ...current, [resolvedAudience]: next };
+      persistInterests(nextSelections);
+      return nextSelections;
+    });
+  };
+
+  const clearInterest = () => {
+    setInterests((current) => {
+      const remaining = { ...current };
+      delete remaining[resolvedAudience];
+      persistInterests(remaining);
+      return remaining;
+    });
+  };
+
+  const value: AudienceContextType = {
+    audience: resolvedAudience,
+    userAudience,
+    hasChosen: userAudience !== null,
+    setAudience,
+    interest: interests[resolvedAudience] ?? null,
+    setInterest,
+    clearInterest,
+  };
 
   // Il tema per audience vive nei token CSS: `index.css` ridefinisce i colori
   // sotto :root[data-audience=...]. Qui l'audience risolta (route override

@@ -4,6 +4,8 @@ import { ArrowRight, Calendar, Plus } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import OptimizedImage from '../OptimizedImage';
 import { trackEvent } from '../../services/analytics';
+import { rankByInterest } from '../../config/audienceInterests';
+import { usePersonalizedInterest } from '../../hooks/usePersonalizedInterest';
 import { scoreArticles } from '../../utils/recommendations';
 import type { ArticleData, RelatedArticleSummary } from './types';
 
@@ -60,8 +62,12 @@ export default function RelatedArticles({
   demoRelatedArticles,
 }: RelatedArticlesProps) {
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
+  const { interest } = usePersonalizedInterest();
 
-  const personalizedArticles = useMemo(() => scoreArticles(relatedArticles), [relatedArticles]);
+  const personalizedArticles = useMemo(
+    () => rankByInterest(scoreArticles(relatedArticles), interest, (article) => [article.category]),
+    [interest, relatedArticles]
+  );
 
   const hasRelated = personalizedArticles.length > 0;
   const totalCount = hasRelated ? personalizedArticles.length : demoRelatedArticles.length;

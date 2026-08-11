@@ -30,9 +30,12 @@ import {
 } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import { CONTENT_ITEMS } from '@/src/config/contentLibrary';
+import { getMapTypeForInterest, rankByInterest } from '@/src/config/audienceInterests';
+import { usePersonalizedInterest } from '@/src/hooks/usePersonalizedInterest';
 import { PARTNERSHIP_LABEL } from '@/src/types/content';
 import type { ContentItem } from '@/src/types/content';
 import { getUserLocation, sortPlacesByDistance, type UserLocation } from '@/src/utils/geo';
+import { installOpenFreeMapStyleFallback } from '@/src/lib/openFreeMap';
 import OptimizedImage from '../OptimizedImage';
 import PlaceBusinessActions from '../PlaceBusinessActions';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -103,7 +106,12 @@ const FALLBACK_COORDINATES: Record<string, { lat: number; lng: number }> = {
 };
 
 export default function FullScreenMapExperience() {
+  const { interest } = usePersonalizedInterest();
   const mapRef = useRef<MapRef>(null);
+  const setMapRef = useCallback((instance: MapRef | null) => {
+    mapRef.current = instance;
+    if (instance) installOpenFreeMapStyleFallback(instance.getMap());
+  }, []);
   const [mapReady, setMapReady] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedZone, setSelectedZone] = useState<string>('all');
@@ -114,6 +122,13 @@ export default function FullScreenMapExperience() {
   const [mapStyleKey, setMapStyleKey] = useState<'dark' | 'liberty' | 'bright'>('dark');
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+  const initializedInterestRef = useRef<string | null | undefined>(undefined);
+
+  useEffect(() => {
+    if (initializedInterestRef.current === interest) return;
+    initializedInterestRef.current = interest;
+    setSelectedType(getMapTypeForInterest(interest));
+  }, [interest]);
 
   // La sfumatura in fondo alla descrizione va mostrata SOLO se sotto il taglio
   // c'e' davvero altro testo: se la descrizione entra tutta, smorzare l'ultima
@@ -124,7 +139,7 @@ export default function FullScreenMapExperience() {
   // 100% Full Content Coverage: tutti i 40 item, ognuno con coordinate reali.
   // Se per qualsiasi motivo un item non avesse coordinate, usiamo fallback.
   const allItems = useMemo(() => {
-    return CONTENT_ITEMS.map((item) => {
+    const withCoordinates = CONTENT_ITEMS.map((item) => {
       if (item.place.coordinates) return item;
       const key = (item.place.region || item.place.country || '').toLowerCase();
       const coords = FALLBACK_COORDINATES[key] || { lat: 42.5, lng: 12.5 };
@@ -133,7 +148,8 @@ export default function FullScreenMapExperience() {
         place: { ...item.place, coordinates: coords },
       };
     });
-  }, []);
+    return rankByInterest(withCoordinates, interest, (item) => item.types);
+  }, [interest]);
 
   const [userLoc, setUserLoc] = useState<UserLocation | null>(null);
   const [locLoading, setLocLoading] = useState<boolean>(false);
@@ -662,7 +678,7 @@ export default function FullScreenMapExperience() {
 
         {/* 3. Map Canvas */}
         <Map
-          ref={mapRef}
+          ref={setMapRef}
           style={{ width: '100%', height: '100%' }}
           initialViewState={{ longitude: 12.5, latitude: 42.0, zoom: 5.2, pitch: 35 }}
           mapStyle={MAP_STYLES[mapStyleKey].url}
@@ -784,7 +800,7 @@ export default function FullScreenMapExperience() {
             di `DESKTOP_QUERY`): con il solo `lg:` una finestra 1440x620 prendeva
             la misura da desktop e il bottone finiva fuori schermo. */}
         {selectedItem && (
-          <div className="absolute bottom-16 left-4 right-14 z-50 mx-auto flex max-h-[min(68svh,calc(100%-4rem))] max-w-lg flex-col overflow-hidden rounded-[var(--radius-lg,24px)] border border-white/20 bg-black/90 p-6 text-white shadow-2xl backdrop-blur-2xl sm:bottom-10 sm:left-auto sm:right-20 sm:w-[460px] [@media(min-width:1024px)and(min-height:800px)]:max-h-[calc(100%-11rem)]">
+          <div className="absolute bottom-16 left-4 right-14 z-50 mx-auto flex max-h-[min(68svh,calc(100%-4rem))] max-w-lg flex-col overflow-hidden rounded-[var(--radius-lg,24px)] border border-white/20 bg-black/90 p-6 text-white shadow-2xl backdrop-blur-2xl sm:bottom-10 sm:left-auto sm:right-20 sm:w-[460px] [@media(min-width:1024px)_and_(min-height:800px)]:max-h-[calc(100%-11rem)]">
             {/* Drawer Header */}
             <div className="flex shrink-0 items-start justify-between">
               <div>

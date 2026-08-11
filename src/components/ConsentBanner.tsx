@@ -12,11 +12,14 @@ import {
 export default function ConsentBanner() {
   const [visible, setVisible] = useState(false);
   const [mode, setMode] = useState<'banner' | 'customize'>('banner');
-  const [prefs, setPrefs] = useState<Pick<ConsentState, 'analytics' | 'marketing'>>(() => {
+  const [prefs, setPrefs] = useState<
+    Pick<ConsentState, 'analytics' | 'marketing' | 'personalization'>
+  >(() => {
     if (typeof window === 'undefined') {
       return {
         analytics: false,
         marketing: false,
+        personalization: false,
       };
     }
 
@@ -24,6 +27,7 @@ export default function ConsentBanner() {
     return {
       analytics: current.analytics,
       marketing: current.marketing,
+      personalization: current.personalization,
     };
   });
 
@@ -70,11 +74,12 @@ export default function ConsentBanner() {
             <p className="text-sm leading-relaxed text-white/80 sm:mt-2">
               <span className="sm:hidden">
                 Usiamo cookie per far funzionare il sito e, col tuo ok, per capire come viene
-                usato.{' '}
+                usato e ricordare le preferenze che scegli.{' '}
               </span>
               <span className="hidden sm:inline">
                 Usiamo cookie tecnici necessari al funzionamento del sito e, con il tuo consenso,
-                cookie analitici e di marketing per migliorare l&apos;esperienza.{' '}
+                cookie analitici, marketing e preferenze di personalizzazione per migliorare
+                l&apos;esperienza.{' '}
               </span>
               <Link
                 to="/cookie"
@@ -132,6 +137,12 @@ export default function ConsentBanner() {
               description="Pixel per campagne pubblicitarie e retargeting (Meta, TikTok)."
               checked={prefs.marketing}
               onChange={(v) => setPrefs((p) => ({ ...p, marketing: v }))}
+            />
+            <ConsentRow
+              title="Personalizzazione"
+              description="Ricorda localmente gli interessi per ordinare contenuti e suggerimenti pertinenti."
+              checked={prefs.personalization}
+              onChange={(v) => setPrefs((p) => ({ ...p, personalization: v }))}
             />
           </div>
           <div className="flex flex-col gap-2 sm:flex-row-reverse">

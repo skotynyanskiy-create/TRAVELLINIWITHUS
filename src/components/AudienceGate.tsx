@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Baby, BriefcaseBusiness, Compass } from 'lucide-react';
 import { useAudience, type Audience } from '../context/AudienceContext';
+import { canLoad, hasRespondedToConsent, onConsentChange } from '../lib/consent';
+import { trackAnalyticsEvent } from '../services/analytics';
 
 /**
  * Porta d'ingresso a 3 vie (decision 2026-07-24): al primo accesso sulla home
@@ -11,6 +13,11 @@ import { useAudience, type Audience } from '../context/AudienceContext';
  *  - solo tipografia, zero immagini
  *  - overlay `fixed` → zero CLS
  * «Decido dopo» sopprime il gate per la sessione (sessionStorage).
+ *
+ * Il gate attende che il consenso sia stato deciso (2026-08-03). Prima si
+ * aprivano insieme e la prima schermata del sito erano due dialoghi
+ * sovrapposti: una sola richiesta alla volta, e prima quella che governa il
+ * tracciamento dell'altra — `audience_gate_view` non può precedere l'opt-in.
  */
 
 /** Kill-switch: se il CWV audit segnala regressioni, spegnere da qui. */
@@ -58,11 +65,33 @@ const CHOICES: Array<{
 
 export default function AudienceGate() {
   const { setAudience } = useAudience();
+  const location = useLocation();
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
+  const [consentSettled, setConsentSettled] = useState(hasRespondedToConsent);
   const dialogRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
+  const viewTrackedRef = useRef(false);
+  const interactionTrackedRef = useRef(false);
+
+  const trackView = useCallback(() => {
+    if (viewTrackedRef.current || !canLoad('analytics')) return;
+    viewTrackedRef.current = true;
+    trackAnalyticsEvent('audience_gate_view', { entry_path: location.pathname });
+  }, [location.pathname]);
+
+  const trackInteraction = useCallback(
+    (
+      eventName: 'audience_gate_select' | 'audience_gate_dismiss',
+      params: Record<string, string>
+    ) => {
+      if (interactionTrackedRef.current) return;
+      interactionTrackedRef.current = true;
+      trackAnalyticsEvent(eventName, { entry_path: location.pathname, ...params });
+    },
+    [location.pathname]
+  );
 
   // Montaggio deferito: mai in competizione col primo paint / LCP.
   useEffect(() => {
@@ -86,9 +115,26 @@ export default function AudienceGate() {
     };
   }, []);
 
+  // Una richiesta alla volta: finché il banner cookie è sullo schermo il gate
+  // resta chiuso, e si apre appena il visitatore ha deciso.
+  useEffect(() => {
+    if (consentSettled) return;
+    return onConsentChange(() => setConsentSettled(true));
+  }, [consentSettled]);
+
+  // Il consenso può arrivare dopo il montaggio del gate: conta la vista solo
+  // quando il visitatore ha autorizzato analytics, senza registrare nulla prima.
+  useEffect(() => {
+    if (!visible || dismissed || !consentSettled) return;
+    trackView();
+    return onConsentChange((consent) => {
+      if (consent.analytics) trackView();
+    });
+  }, [consentSettled, dismissed, trackView, visible]);
+
   // Focus management: sposta il focus nel dialog, ESC = decido dopo, trap Tab.
   useEffect(() => {
-    if (!visible || dismissed) return;
+    if (!visible || dismissed || !consentSettled) return;
     previousFocusRef.current = document.activeElement as HTMLElement | null;
     const dialog = dialogRef.current;
     dialog?.querySelector<HTMLElement>('button, a')?.focus();
@@ -96,7 +142,7 @@ export default function AudienceGate() {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.stopPropagation();
-        dismissForSession();
+        dismissForSession('escape');
         return;
       }
       if (e.key !== 'Tab' || !dialog) return;
@@ -118,11 +164,12 @@ export default function AudienceGate() {
     window.addEventListener('keydown', onKeyDown, true);
     return () => window.removeEventListener('keydown', onKeyDown, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visible, dismissed]);
+  }, [visible, dismissed, consentSettled]);
 
   const restoreFocus = () => previousFocusRef.current?.focus?.();
 
-  const dismissForSession = () => {
+  const dismissForSession = (method: 'button' | 'escape') => {
+    trackInteraction('audience_gate_dismiss', { method });
     try {
       sessionStorage.setItem(SESSION_DISMISS_KEY, '1');
     } catch {
@@ -133,6 +180,7 @@ export default function AudienceGate() {
   };
 
   const choose = (choice: (typeof CHOICES)[number]) => {
+    trackInteraction('audience_gate_select', { audience: choice.key });
     setAudience(choice.key);
     setDismissed(true);
     if (choice.to) {
@@ -142,7 +190,7 @@ export default function AudienceGate() {
     }
   };
 
-  if (!visible || dismissed) return null;
+  if (!visible || dismissed || !consentSettled) return null;
 
   return (
     <div className="fixed inset-0 z-[130] flex items-end justify-center bg-[var(--color-ink)]/45 backdrop-blur-[2px] p-4 sm:items-center motion-safe:animate-[fadeIn_220ms_var(--ease-out,ease-out)]">
@@ -195,7 +243,7 @@ export default function AudienceGate() {
 
         <button
           type="button"
-          onClick={dismissForSession}
+          onClick={() => dismissForSession('button')}
           className="mt-5 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-muted-fg)] transition-colors hover:text-[var(--color-ink)] cursor-pointer"
         >
           Decido dopo

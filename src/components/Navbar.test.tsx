@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { AudienceProvider } from '../context/AudienceContext';
 import Navbar from './Navbar';
@@ -56,5 +56,21 @@ describe('Navbar Component', () => {
       (el.getAttribute('href') || '').includes('/guida-in-regalo')
     );
     expect(guideLinks.length).toBeGreaterThan(0);
+  });
+
+  it('keeps every mobile-drawer entry point at a comfortable touch target', () => {
+    const { getAllByRole, getByRole } = renderNavbar();
+
+    fireEvent.click(getByRole('button', { name: 'Menu' }));
+
+    expect(getByRole('button', { name: 'Chiudi Menu' })).toHaveClass('min-h-[44px]');
+    expect(
+      getAllByRole('button', { name: 'Passa alla modalità Viaggiatori' }).some((button) =>
+        button.classList.contains('min-h-[44px]')
+      )
+    ).toBe(true);
+    expect(getByRole('link', { name: 'Apri Instagram Travelliniwithus' })).toHaveClass(
+      'min-w-[44px]'
+    );
   });
 });

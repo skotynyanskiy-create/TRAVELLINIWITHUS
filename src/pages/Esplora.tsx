@@ -44,12 +44,14 @@ import {
   slugifyFormat,
   slugifyType,
   type Budget,
+  type ContentType,
   type ContentFormat,
   type Duration,
   type Period,
   type Zone,
 } from '../config/contentTaxonomy';
 import { CONTENT_ITEMS } from '../config/contentLibrary';
+import { rankByInterest } from '../config/audienceInterests';
 import {
   DEMO_ARCHIVE_ITEMS,
   DEMO_ARCHIVE_MAP_MARKERS,
@@ -58,6 +60,8 @@ import {
 import { SITE_URL } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
+import { usePersonalizedInterest } from '../hooks/usePersonalizedInterest';
+import { recordInterestForContentType } from '../lib/personalization';
 import { trackEvent } from '../services/analytics';
 import { fetchArticles } from '../services/firebaseService';
 import { mapArticleToArchiveItem, type ArchiveItem } from '../utils/contentArchive';
@@ -162,6 +166,7 @@ export function partitionRealFirst<T extends { isPlaceholder: boolean }>(
 }
 
 export default function Esplora() {
+  const { interest } = usePersonalizedInterest();
   const { data: demoContent } = useSiteContent('demo');
   const demoSettings = demoContent ?? siteContentDefaults.demo;
   const [searchParams, setSearchParams] = useSearchParams();
@@ -174,7 +179,13 @@ export default function Esplora() {
   const viewLoggedRef = useRef(false);
   const searchFormRef = useRef<HTMLFormElement>(null);
 
-  const { data: articles = [], isLoading } = useQuery({
+  const {
+    data: articles = [],
+    isLoading,
+    isError,
+    isFetching,
+    refetch,
+  } = useQuery({
     queryKey: ['explore-archive', demoSettings.showEditorialDemo, demoSettings.showDestinationDemo],
     queryFn: fetchArticles,
   });
@@ -211,8 +222,8 @@ export default function Esplora() {
       const nearby = { latitude: userLocation.lat, longitude: userLocation.lng };
       return [...sortPlacesByDistance(real, nearby), ...sortPlacesByDistance(placeholder, nearby)];
     }
-    return [...real, ...placeholder];
-  }, [filters.zone, filters.type, userLocation]);
+    return rankByInterest([...real, ...placeholder], interest, (item) => item.types);
+  }, [filters.zone, filters.type, interest, userLocation]);
 
   const realContentItemsCount = useMemo(
     () => filteredContentItems.filter((item) => !item.isPlaceholder).length,
@@ -224,9 +235,15 @@ export default function Esplora() {
   }, [filters.search]);
 
   const filteredItems = useMemo(
-    () => filterByScope(archiveItems, filters),
-    [archiveItems, filters]
+    () =>
+      rankByInterest(
+        filterByScope(archiveItems, filters),
+        interest,
+        (item) => item.experienceTypes
+      ),
+    [archiveItems, filters, interest]
   );
+  const isRetryingArchive = isError && isFetching;
 
   useEffect(() => {
     if (viewLoggedRef.current) return;
@@ -289,6 +306,9 @@ export default function Esplora() {
     const next = sanitizeDiscoveryFilters({ ...filters, ...updates });
     Object.entries(updates).forEach(([key, value]) => {
       if (!value) return;
+      if (key === 'type') {
+        recordInterestForContentType(value as ContentType);
+      }
       trackEvent('explore_filter_apply', {
         source_page: '/esplora',
         filter_type: key,
@@ -464,7 +484,12 @@ export default function Esplora() {
       />
 
       {/* HEADER COMPATTO — banda carta atlante, ricerca inline. */}
-      <section className="bg-[var(--color-sand,#faf7f2)] border-b border-[var(--color-border)] pt-28 pb-10 md:pt-32 md:pb-12 text-[var(--color-ink,#1a2b3c)]">
+      {/* `PageLayout` riserva già lo spazio della navbar fissa (`pt-24`, 96px,
+          per una navbar alta 74). Qui c'era un secondo `pt-28`: i due si
+          sommavano a 208px e lasciavano 134px di vuoto sopra il primo testo.
+          Resta solo il respiro editoriale, allineato alle altre pagine
+          pubbliche — 54px sotto la navbar, come `/chi-siamo`. */}
+      <section className="bg-[var(--color-sand,#faf7f2)] border-b border-[var(--color-border)] pt-8 pb-10 md:pt-10 md:pb-12 text-[var(--color-ink,#1a2b3c)]">
         {/* Il contenitore passa da 5xl a 7xl: a 1440px l'apertura stava in
             1024px e il fianco destro restava vuoto. Lo spazio ora lo occupa la
             vetrina dei posti veri, perche' la pagina della scoperta apriva
@@ -809,11 +834,45 @@ export default function Esplora() {
             </h2>
           </div>
         )}
+        {isError && (
+          <div
+            role="alert"
+            className="mb-8 flex flex-col gap-3 rounded-[var(--radius-lg)] border border-[var(--color-error)]/20 bg-[var(--color-error-soft)] p-5 text-[var(--color-ink)] sm:flex-row sm:items-center sm:justify-between"
+          >
+            <p aria-live="polite" className="text-sm leading-relaxed">
+              {isRetryingArchive
+                ? "Stiamo riprovando ad aggiornare l'archivio."
+                : "Non riusciamo ad aggiornare l'archivio in questo momento. Riprova tra poco."}
+            </p>
+            <button
+              type="button"
+              onClick={() => void refetch()}
+              disabled={isRetryingArchive}
+              className="shrink-0 font-semibold text-[var(--color-accent-text)] underline underline-offset-2 disabled:cursor-wait disabled:opacity-60"
+            >
+              {isRetryingArchive ? 'Riprovo…' : 'Riprova'}
+            </button>
+          </div>
+        )}
         {isLoading ? (
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div
+            role="status"
+            aria-live="polite"
+            aria-busy="true"
+            className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
+          >
+            <span className="sr-only">Caricamento dell'archivio in corso.</span>
             {Array.from({ length: 6 }).map((_, index) => (
               <ArticleSkeleton key={index} />
             ))}
+          </div>
+        ) : isError && archiveItems.length === 0 ? (
+          <div
+            role="status"
+            aria-live="polite"
+            className="rounded-[var(--radius-lg)] border border-black/10 bg-white p-6 text-sm leading-relaxed text-[var(--color-muted-fg)]"
+          >
+            L'archivio non e disponibile al momento. Riprova piu tardi per visualizzare i contenuti.
           </div>
         ) : filteredItems.length === 0 ? (
           archiveItems.length === 0 ? (

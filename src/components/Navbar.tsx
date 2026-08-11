@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useEffectEvent, useMemo, useState } from 'react';
+import { lazy, Suspense, useEffect, useEffectEvent, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import {
   type LucideIcon,
@@ -18,6 +18,7 @@ import {
   Search,
   Send,
   ShieldCheck,
+  SlidersHorizontal,
   Sparkles,
   Tag,
   User as UserIcon,
@@ -26,6 +27,7 @@ import {
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Link } from '@/src/components/TransitionLink';
 import { CONTACTS } from '../config/site';
+import { getAudienceHomePath } from '../config/audienceInterests';
 import { siteContentDefaults } from '../config/siteContent';
 import { useAudience } from '../context/AudienceContext';
 import { useAuth } from '../context/AuthContext';
@@ -33,6 +35,8 @@ import { useFavorites } from '../context/FavoritesContext';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { getLocale, setLocale } from '../i18n';
 import SurfaceBadge from './SurfaceBadge';
+import { useFocusTrap } from '../hooks/useFocusTrap';
+import { useOverlayLayer } from '../hooks/useOverlayLayer';
 
 const SearchModal = lazy(() => import('./SearchModal'));
 
@@ -66,6 +70,11 @@ export default function Navbar() {
   const [openMobileSection, setOpenMobileSection] = useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+  const mobileMenuCloseButtonRef = useRef<HTMLButtonElement>(null);
+  const isMobileMenuTopLayer = useOverlayLayer(isMobileMenuOpen);
+
+  useFocusTrap(isMobileMenuOpen, mobileMenuRef, mobileMenuCloseButtonRef, isMobileMenuTopLayer);
 
   // Rileva OS per mostrare shortcut corretto (⌘K su Mac, Ctrl+K su Windows/Linux)
   const isMac = useMemo(
@@ -99,13 +108,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : 'unset';
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isMobileMenuOpen]);
-
   const handleMobileMenuToggle = () => {
     // Collassa tutti i sottomenu al primo open per evitare 14+ link visibili
     // su mobile 375px (era 'Esplora' default-open).
@@ -127,14 +129,25 @@ export default function Navbar() {
       }
       if (e.key === 'Escape') {
         setIsUserMenuOpen(false);
-        setIsMobileMenuOpen(false);
-        setOpenMobileSection(null);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen || !isMobileMenuTopLayer) return;
+
+    const handleMobileMenuEscape = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      setIsMobileMenuOpen(false);
+      setOpenMobileSection(null);
+    };
+
+    window.addEventListener('keydown', handleMobileMenuEscape);
+    return () => window.removeEventListener('keydown', handleMobileMenuEscape);
+  }, [isMobileMenuOpen, isMobileMenuTopLayer]);
 
   // Due assi ortogonali: DOVE (Mete) × COSA (Guide e racconti).
   const destinazioniLinks = useMemo<NavSubLink[]>(
@@ -383,6 +396,13 @@ export default function Navbar() {
               <span>Collaborazioni</span>
             </button>
           </div>
+
+          <Link
+            to={`${getAudienceHomePath(audience)}#personalizza-esperienza`}
+            className="hidden xl:inline-flex shrink-0 items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-[var(--color-muted-fg)] transition-colors hover:text-[var(--color-accent-text)]"
+          >
+            <SlidersHorizontal size={13} aria-hidden /> Personalizza
+          </Link>
 
           {/* DYNAMIC NAV MENU */}
           <AnimatePresence mode="wait">
@@ -839,9 +859,13 @@ export default function Navbar() {
       />
 
       <div
+        ref={mobileMenuRef}
         id="mobile-navigation"
         inert={!isMobileMenuOpen}
         aria-hidden={!isMobileMenuOpen}
+        role={isMobileMenuOpen ? 'dialog' : undefined}
+        aria-modal={isMobileMenuOpen ? true : undefined}
+        aria-label={isMobileMenuOpen ? 'Menu di navigazione' : undefined}
         className={`fixed inset-y-0 right-0 z-[120] flex w-full transform-gpu flex-col bg-white shadow-2xl transition-transform duration-300 ease-out md:w-96 lg:hidden ${
           isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
@@ -855,7 +879,8 @@ export default function Navbar() {
             Travellini<span className="font-bold text-[var(--color-accent)]">with</span>us
           </Link>
           <button
-            className="rounded-full p-2.5 text-[var(--color-ink)] transition-colors hover:bg-[var(--color-muted-bg)] hover:text-[var(--color-accent)] cursor-pointer"
+            ref={mobileMenuCloseButtonRef}
+            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full p-2.5 text-[var(--color-ink)] transition-colors hover:bg-[var(--color-muted-bg)] hover:text-[var(--color-accent)] cursor-pointer"
             onClick={() => setIsMobileMenuOpen(false)}
             aria-label="Chiudi Menu"
           >
@@ -871,7 +896,7 @@ export default function Navbar() {
               setIsMobileMenuOpen(false);
               setIsSearchOpen(true);
             }}
-            className="flex w-full items-center justify-between gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-sand)]/60 px-4 py-3 text-xs text-[var(--color-muted-fg)] transition-all hover:border-[var(--color-accent)] cursor-pointer shadow-2xs"
+            className="flex min-h-[44px] w-full items-center justify-between gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-sand)]/60 px-4 py-3 text-xs text-[var(--color-muted-fg)] transition-all hover:border-[var(--color-accent)] cursor-pointer shadow-2xs"
           >
             <span className="flex items-center gap-2 font-medium">
               <Search size={15} className="text-[var(--color-accent)]" />
@@ -905,7 +930,7 @@ export default function Navbar() {
                   setIsMobileMenuOpen(false);
                 }}
                 aria-label={`Passa alla modalità ${label}`}
-                className={`flex flex-1 items-center justify-center gap-1 rounded-full px-2 py-2 text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                className={`flex min-h-[44px] flex-1 items-center justify-center gap-1 rounded-full px-2 py-2 text-[10px] font-bold uppercase tracking-wider transition-all cursor-pointer ${
                   audience === key
                     ? key === 'brand'
                       ? 'bg-[var(--color-ink-deep)] text-white shadow-2xs'
@@ -927,6 +952,13 @@ export default function Navbar() {
               </button>
             ))}
           </div>
+          <Link
+            to={`${getAudienceHomePath(audience)}#personalizza-esperienza`}
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="mt-3 flex min-h-[44px] items-center justify-center gap-2 rounded-xl border border-[var(--color-border)] bg-white px-4 text-xs font-bold uppercase tracking-wider text-[var(--color-ink)]"
+          >
+            <SlidersHorizontal size={14} aria-hidden /> Personalizza esperienza
+          </Link>
         </div>
 
         <div className="flex flex-1 flex-col space-y-6 overflow-y-auto px-6 py-6">
@@ -944,7 +976,7 @@ export default function Navbar() {
                   key={item.href}
                   to={item.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 text-2xl font-serif transition-colors ${
+                  className={`flex min-h-[44px] items-center gap-3 text-2xl font-serif transition-colors ${
                     location.pathname === item.href
                       ? 'text-[var(--color-accent)] font-medium'
                       : 'text-[var(--color-ink)]'
@@ -968,7 +1000,7 @@ export default function Navbar() {
                         <Link
                           to={item.href || '/'}
                           onClick={() => setIsMobileMenuOpen(false)}
-                          className={`flex items-center gap-3 text-2xl font-serif transition-colors ${
+                          className={`flex min-h-[44px] items-center gap-3 text-2xl font-serif transition-colors ${
                             isItemActive(item)
                               ? 'text-[var(--color-accent)] font-medium'
                               : 'text-[var(--color-ink)]'
@@ -1015,7 +1047,7 @@ export default function Navbar() {
                                     key={subLink.name}
                                     to={subLink.href}
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className="block py-1"
+                                    className="flex min-h-[44px] flex-col justify-center py-1"
                                   >
                                     <span className="block font-serif text-lg text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]">
                                       {subLink.name}
@@ -1033,7 +1065,7 @@ export default function Navbar() {
                                     key={subLink.name}
                                     to={subLink.href}
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className="block py-1 text-lg text-[var(--color-ink)]/70 transition-colors hover:text-[var(--color-accent)]"
+                                    className="flex min-h-[44px] items-center py-1 text-lg text-[var(--color-ink)]/70 transition-colors hover:text-[var(--color-accent)]"
                                   >
                                     {subLink.name}
                                     <SurfaceBadge path={subLink.href.split('?')[0]} />
@@ -1047,7 +1079,7 @@ export default function Navbar() {
                     <Link
                       to={item.href || '/'}
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className={`flex items-center gap-3 text-2xl font-serif transition-colors ${
+                      className={`flex min-h-[44px] items-center gap-3 text-2xl font-serif transition-colors ${
                         isItemActive(item)
                           ? 'text-[var(--color-accent)] font-medium'
                           : 'text-[var(--color-ink)]'
@@ -1078,7 +1110,7 @@ export default function Navbar() {
               <Link
                 to="/collaborazioni"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] font-serif text-white/90 transition-colors hover:bg-white/10"
+                className="flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] font-serif text-white/90 transition-colors hover:bg-white/10"
               >
                 <Building2 size={16} className="text-[var(--color-accent-on-dark)] shrink-0" />
                 Come Lavoriamo
@@ -1086,7 +1118,7 @@ export default function Navbar() {
               <Link
                 to="/chi-siamo"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] font-serif text-white/90 transition-colors hover:bg-white/10"
+                className="flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] font-serif text-white/90 transition-colors hover:bg-white/10"
               >
                 <UserIcon size={16} className="text-[var(--color-accent-on-dark)] shrink-0" />
                 Chi Siamo
@@ -1094,7 +1126,7 @@ export default function Navbar() {
               <Link
                 to="/contatti"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] font-serif text-white/90 transition-colors hover:bg-white/10"
+                className="flex min-h-[44px] items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] font-serif text-white/90 transition-colors hover:bg-white/10"
               >
                 <Send size={16} className="text-[var(--color-accent-on-dark)] shrink-0" />
                 Contatti
@@ -1104,7 +1136,7 @@ export default function Navbar() {
               <Link
                 to="/media-kit"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="inline-flex w-full items-center justify-center gap-1.5 rounded-full bg-[var(--color-accent)] px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink)] transition-all hover:brightness-110"
+                className="inline-flex min-h-[44px] w-full items-center justify-center gap-1.5 rounded-full bg-[var(--color-accent)] px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-ink)] transition-all hover:brightness-110"
               >
                 Richiedi Media Kit
                 <ArrowRight size={12} />
@@ -1148,7 +1180,7 @@ export default function Navbar() {
                 to="/preferiti"
                 aria-label={navigation.favoritesLabel}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="relative text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+                className="relative flex min-h-[44px] min-w-[44px] items-center justify-center text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
               >
                 <Heart size={24} />
                 {favorites.length > 0 && (
@@ -1163,7 +1195,7 @@ export default function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+                className="flex min-h-[44px] min-w-[44px] items-center justify-center text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
               >
                 <Instagram size={24} />
               </a>
@@ -1173,7 +1205,7 @@ export default function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+                className="flex min-h-[44px] min-w-[44px] items-center justify-center text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
               >
                 <svg viewBox="0 0 24 24" className="h-6 w-6 fill-current" aria-hidden="true">
                   <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.2 8.2 0 0 0 4.77 1.52V6.78a4.85 4.85 0 0 1-1-.09z" />
@@ -1185,7 +1217,7 @@ export default function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+                className="flex min-h-[44px] min-w-[44px] items-center justify-center text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
               >
                 <MessageCircle size={24} />
               </a>
@@ -1193,7 +1225,7 @@ export default function Navbar() {
                 href={CONTACTS.mailto}
                 aria-label={`Scrivi a ${CONTACTS.email}`}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+                className="flex min-h-[44px] min-w-[44px] items-center justify-center text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
               >
                 <Mail size={24} />
               </a>
@@ -1202,14 +1234,14 @@ export default function Navbar() {
               {user ? (
                 <button
                   onClick={signOut}
-                  className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[var(--color-error)]"
+                  className="flex min-h-[44px] items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[var(--color-error)]"
                 >
                   <LogOut size={20} /> Esci
                 </button>
               ) : (
                 <button
                   onClick={signIn}
-                  className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[var(--color-ink)]"
+                  className="flex min-h-[44px] items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[var(--color-ink)]"
                 >
                   <UserIcon size={20} /> Accedi
                 </button>
