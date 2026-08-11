@@ -108,10 +108,14 @@ describe('MarkdownArticleEditor', () => {
     expect(screen.getByText('In linea')).toBeInTheDocument();
   });
 
-  it('scrittura e anteprima si affiancano da 48rem di larghezza reale (container query)', () => {
+  /* 80rem e non 48rem: misurato in browser il 2026-08-11. A 48rem, dentro il
+     contenitore reale, le due colonne scendevano a ~400px e l'anteprima a 40
+     caratteri per riga — piu' lontana dai 65-75 della pagina vera di quanto lo
+     fosse prima di affiancare. */
+  it('scrittura e anteprima si affiancano da 80rem di larghezza reale (container query)', () => {
     const { container } = render(<Wrapper />);
     expect(container.innerHTML).toContain('@container');
-    expect(container.innerHTML).toContain('@min-[48rem]:grid-cols-2');
+    expect(container.innerHTML).toContain('@min-[80rem]:grid-cols-2');
   });
 
   it("l'anteprima rispetta la stessa misura di riga della pagina pubblica (720px, come Articolo.tsx)", () => {

@@ -1,21 +1,36 @@
-import { describe, expect, it, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import ArticleEditor from './ArticleEditor';
 import { AuthProvider } from '../../context/AuthContext';
 import { verifyWithSearch } from '../../services/aiVerificationService';
 
 /**
- * Copre due bug confermati in revisione:
+ * Copre otto bug confermati in revisione:
  * 1. Un caricamento fallito (documento inesistente o errore di rete) non deve
  *    mai mostrare il form vuoto con `id` valorizzato: premere Salva
  *    azzererebbe l'articolo reale su Firestore.
  * 2. "Verifica Fatti/Luoghi" sostituisce tutto il contenuto: deve restare
  *    un modo per tornare alla versione precedente, e l'esito non passa più
  *    da un `alert()` che si chiude senza leggerlo.
+ * 3. Uno slug duplicato in creazione non deve sovrascrivere l'articolo esistente.
+ * 4. Un salvataggio fallito deve comparire in pagina, non fallire in silenzio.
+ * 5. Un salvataggio che non risponde deve smettere di dire "sto salvando".
+ * 6. Chiudere la scheda o navigare via con modifiche pendenti deve avvisare.
+ * 7. Una bozza locale più recente dell'ultimo salvataggio deve poter tornare.
+ * 8. La barra di stato deve riflettere bozza/salvataggio/errori, e gli errori
+ *    di sintassi devono bloccare solo la pubblicazione, mai il salvataggio.
  */
 
 vi.mock('../../lib/firebaseDb', () => ({ db: {} }));
+
+// Senza VITE_FIREBASE_API_KEY (assente in questo ambiente di test) il vero
+// AuthProvider lascia `user` a null per sempre: handleSave uscirebbe subito
+// (`if (!user) return`) prima di poter esercitare i bug #3-#8 qui sotto.
+vi.mock('../../context/AuthContext', () => ({
+  AuthProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  useAuth: () => ({ user: { uid: 'test-admin-uid' } }),
+}));
 
 const mockGetDoc = vi.fn();
 const mockSetDoc = vi.fn();
@@ -136,5 +151,208 @@ describe('ArticleEditor — Verifica AI: annulla disponibile, niente alert()', (
     expect(textarea).toHaveValue('Testo che deve restare invariato.');
     expect(alertSpy).not.toHaveBeenCalled();
     alertSpy.mockRestore();
+  });
+});
+
+afterEach(() => {
+  window.localStorage.clear();
+  vi.useRealTimers();
+});
+
+describe('ArticleEditor — bug #3: uno slug duplicato in creazione non sovrascrive l’articolo esistente', () => {
+  beforeEach(() => {
+    mockGetDoc.mockReset();
+    mockSetDoc.mockReset();
+  });
+
+  it('non scrive, avvisa in italiano e offre uno slug alternativo', async () => {
+    mockGetDoc.mockResolvedValue({ exists: () => true });
+
+    renderEditor();
+
+    fireEvent.change(screen.getByLabelText('Titolo'), { target: { value: 'Prova' } });
+    fireEvent.change(screen.getByLabelText('Slug (URL)'), {
+      target: { value: 'articolo-esistente' },
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /salva articolo/i }));
+
+    expect(await screen.findByText(/esiste già un articolo con lo slug/i)).toBeInTheDocument();
+    expect(mockSetDoc).not.toHaveBeenCalled();
+    expect(screen.getByRole('button', { name: /usa "articolo-esistente-2"/i })).toBeInTheDocument();
+  });
+
+  it('in modifica (id già presente) non fa nessun controllo di unicità sullo slug', async () => {
+    mockGetDoc.mockResolvedValueOnce({
+      exists: () => true,
+      data: () => ({ title: 'Articolo vero', slug: 'articolo-vero', content: 'x' }),
+    });
+    mockSetDoc.mockResolvedValue(undefined);
+
+    renderEditor('/admin/articoli/id-vero');
+    await screen.findByLabelText('Titolo');
+
+    fireEvent.click(screen.getByRole('button', { name: /salva articolo/i }));
+
+    await waitFor(() => expect(mockSetDoc).toHaveBeenCalled());
+    // un solo getDoc: quello del caricamento iniziale, nessun controllo aggiuntivo sullo slug
+    expect(mockGetDoc).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('ArticleEditor — bug #4: un salvataggio fallito non è più silenzioso', () => {
+  beforeEach(() => {
+    mockGetDoc.mockReset();
+    mockSetDoc.mockReset();
+  });
+
+  it('mostra un messaggio di errore in pagina e il testo resta compilabile', async () => {
+    mockGetDoc.mockResolvedValue({ exists: () => false });
+    mockSetDoc.mockRejectedValue(new Error('Firestore unavailable: network error'));
+
+    renderEditor();
+    fireEvent.change(screen.getByLabelText('Titolo'), { target: { value: 'Prova' } });
+    fireEvent.change(screen.getByLabelText('Slug (URL)'), { target: { value: 'nuovo-slug' } });
+
+    fireEvent.click(screen.getByRole('button', { name: /salva articolo/i }));
+
+    expect(await screen.findByText(/salvataggio non riuscito/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /salva articolo/i })).toBeInTheDocument();
+    expect(screen.getByLabelText('Titolo')).toHaveValue('Prova');
+  });
+});
+
+describe('ArticleEditor — bug #5: un salvataggio appeso smette di dire "sto salvando"', () => {
+  beforeEach(() => {
+    mockGetDoc.mockReset();
+    mockSetDoc.mockReset();
+  });
+
+  it('oltre la soglia avvisa di non chiudere la pagina, invece di restare appeso in silenzio', async () => {
+    vi.useFakeTimers();
+    mockGetDoc.mockResolvedValue({ exists: () => false });
+    mockSetDoc.mockImplementation(() => new Promise(() => {}));
+
+    renderEditor();
+    fireEvent.change(screen.getByLabelText('Titolo'), { target: { value: 'Prova' } });
+    fireEvent.change(screen.getByLabelText('Slug (URL)'), { target: { value: 'slug-offline' } });
+
+    fireEvent.click(screen.getByRole('button', { name: /salva articolo/i }));
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(0); // lascia risolvere il controllo slug (getDoc)
+    });
+
+    expect(screen.getByText(/^salvataggio\.\.\.$/i)).toBeInTheDocument();
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(10000);
+    });
+
+    expect(screen.getByText(/non chiudere questa pagina/i)).toBeInTheDocument();
+  });
+});
+
+describe('ArticleEditor — bug #6: chiudere la scheda o navigare via non butta più il lavoro', () => {
+  it('con modifiche pendenti, "Torna all\'elenco" chiede conferma prima di uscire', async () => {
+    renderEditor();
+
+    fireEvent.change(screen.getByLabelText('Titolo'), {
+      target: { value: 'Testo scritto ma non salvato' },
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /torna all.elenco/i }));
+
+    expect(await screen.findByText(/uscendo andranno perse/i)).toBeInTheDocument();
+    // resta montato finché non si conferma: nessuna navigazione silenziosa
+    expect(screen.getByLabelText('Titolo')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /sì, esci senza salvare/i }));
+
+    await waitFor(() => expect(screen.queryByLabelText('Titolo')).not.toBeInTheDocument());
+  });
+
+  it('senza modifiche pendenti, naviga via subito senza chiedere conferma', async () => {
+    renderEditor();
+
+    fireEvent.click(screen.getByRole('button', { name: /torna all.elenco/i }));
+
+    await waitFor(() => expect(screen.queryByLabelText('Titolo')).not.toBeInTheDocument());
+  });
+
+  it('avvisa il browser alla chiusura quando ci sono modifiche non salvate', async () => {
+    renderEditor();
+    fireEvent.change(screen.getByLabelText('Titolo'), { target: { value: 'Testo non salvato' } });
+    await screen.findByDisplayValue('Testo non salvato');
+
+    const event = new Event('beforeunload', { cancelable: true });
+    const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
+    window.dispatchEvent(event);
+
+    expect(preventDefaultSpy).toHaveBeenCalled();
+  });
+});
+
+describe('ArticleEditor — bug #7: una bozza locale più recente può tornare', () => {
+  it('offre di riprendere un testo scritto e mai salvato dopo la riapertura', async () => {
+    vi.useFakeTimers();
+
+    const { unmount } = renderEditor();
+    fireEvent.change(screen.getByLabelText('Titolo'), {
+      target: { value: 'Testo scritto e mai salvato' },
+    });
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(2100); // supera il debounce di ~2s
+    });
+
+    unmount(); // simula la chiusura della scheda senza salvare
+    vi.useRealTimers();
+
+    renderEditor(); // riapertura dello stesso editor (stessa chiave "nuovo")
+
+    expect(await screen.findByText(/hai del testo non salvato/i)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /riprendi/i }));
+
+    expect(screen.getByLabelText('Titolo')).toHaveValue('Testo scritto e mai salvato');
+  });
+});
+
+describe('ArticleEditor — bug #8: la barra di stato blocca la pubblicazione, mai il salvataggio della bozza', () => {
+  beforeEach(() => {
+    mockGetDoc.mockReset();
+    mockSetDoc.mockReset();
+  });
+
+  it('mostra bozza/salvataggio/errori di sintassi, e lascia sempre libero il salvataggio come bozza', async () => {
+    renderEditor();
+
+    expect(screen.getByText('Bozza')).toBeInTheDocument();
+    expect(screen.getByText(/non ancora salvato/i)).toBeInTheDocument();
+    expect(screen.getByText(/nessun problema di sintassi/i)).toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText('Contenuto'), {
+      target: { value: ':::postox{id="x"}\n:::' },
+    });
+
+    expect(await screen.findByText(/1 cosa da correggere/i)).toBeInTheDocument();
+
+    fireEvent.change(screen.getByLabelText('Titolo'), { target: { value: 'Prova' } });
+    fireEvent.change(screen.getByLabelText('Slug (URL)'), { target: { value: 'prova-slug' } });
+    fireEvent.click(screen.getByLabelText('Pubblica immediatamente'));
+
+    mockGetDoc.mockResolvedValue({ exists: () => false });
+
+    fireEvent.click(screen.getByRole('button', { name: /salva articolo/i }));
+
+    expect(await screen.findByText(/non puoi pubblicare/i)).toBeInTheDocument();
+    expect(mockSetDoc).not.toHaveBeenCalled();
+
+    // disattivando "Pubblica immediatamente" il salvataggio come bozza resta libero
+    fireEvent.click(screen.getByLabelText('Pubblica immediatamente'));
+    fireEvent.click(screen.getByRole('button', { name: /salva articolo/i }));
+
+    await waitFor(() => expect(mockSetDoc).toHaveBeenCalled());
   });
 });

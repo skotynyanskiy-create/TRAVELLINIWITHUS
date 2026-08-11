@@ -196,7 +196,18 @@ export default function MarkdownArticleEditor({
           circa 800px per il tetto del genitore descritto sopra — restano due
           colonne con ~370px l'una, sufficienti per scrivere e leggere insieme,
           ciascuna con lo scorrimento suo. */}
-      <div className="mt-3 @min-[48rem]:grid @min-[48rem]:grid-cols-2 @min-[48rem]:items-start @min-[48rem]:gap-6">
+      {/* Soglia alzata da 48rem a 88rem dopo misurazione in browser: dentro il
+          contenitore reale (896px) l'affiancamento a 48rem dava colonne da 436
+          e 362px, e l'anteprima scendeva a 40 caratteri per riga — piu' bugiarda
+          dei 101 di prima, in direzione opposta. Il tetto di 720px non poteva
+          applicarsi perche' la colonna era larga la meta'.
+          Si affianca solo quando entrambe le meta' stanno larghe: ~700px per
+          l'anteprima (la misura vera della pagina) piu' altrettanto per la
+          scrittura. Sotto, impilate: meglio scorrere che leggere una colonna
+          che mente sul ritmo dei paragrafi. Soglia 80rem: e' quella che il
+          contenitore `maxWidth="wide"` supera lasciando ~660px per colonna,
+          cioe' ~73 caratteri per riga, dentro la misura della pagina vera. */}
+      <div className="mt-3 @min-[80rem]:grid @min-[80rem]:grid-cols-2 @min-[80rem]:items-start @min-[80rem]:gap-6">
         <div>
           <textarea
             ref={textareaRef}
