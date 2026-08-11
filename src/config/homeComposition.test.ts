@@ -35,7 +35,21 @@ describe('home composition for Viaggiatori', () => {
 });
 
 describe('home composition for Brand', () => {
+  it('usa una sola collezione di posti, senza sezione featured separata', () => {
+    expect(compositionFor('brand').sections).toEqual(['reels', 'method', 'grid', 'index']);
+  });
+
   it("la CTA parla della lingua della pagina d'arrivo, non promette un download", () => {
     expect(compositionFor('brand').voice.cta.label).toBe('Richiedi il media kit');
   });
+
+  it.each(['capire-il-fit', 'vedere-i-format', 'richiedere-il-media-kit'] as const)(
+    "mantiene la stessa regola per l'interesse %s",
+    (interest) => {
+      const sections = compositionFor('brand', interest).sections;
+
+      expect(sections).not.toContain('featured');
+      expect(sections).toContain('grid');
+    }
+  );
 });

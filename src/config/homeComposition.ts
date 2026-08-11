@@ -197,7 +197,7 @@ export const HOME_COMPOSITIONS: Record<Audience, HomeComposition> = {
       showcase: showcaseBrand,
       cta: { label: 'Richiedi il media kit', to: '/media-kit' },
     },
-    sections: ['reels', 'method', 'featured', 'grid', 'index'],
+    sections: ['reels', 'method', 'grid', 'index'],
   },
 };
 
@@ -208,9 +208,9 @@ const INTEREST_SECTION_ORDER: Partial<Record<InterestId, SectionKey[]>> = {
   gravidanza: ['family', 'method', 'featured', 'map', 'index'],
   'viaggiare-in-gravidanza': ['family', 'map', 'featured', 'method', 'index'],
   'essenziali-family': ['family', 'method', 'index', 'map', 'featured'],
-  'capire-il-fit': ['method', 'reels', 'featured', 'grid', 'index'],
-  'vedere-i-format': ['reels', 'featured', 'method', 'grid', 'index'],
-  'richiedere-il-media-kit': ['method', 'reels', 'featured', 'grid', 'index'],
+  'capire-il-fit': ['method', 'reels', 'grid', 'index'],
+  'vedere-i-format': ['reels', 'method', 'grid', 'index'],
+  'richiedere-il-media-kit': ['method', 'reels', 'grid', 'index'],
 };
 
 export function compositionFor(audience: Audience, interest?: InterestId | null): HomeComposition {
