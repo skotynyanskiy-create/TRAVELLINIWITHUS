@@ -123,4 +123,37 @@ Seconda risposta reale.
       warnSpy.mock.calls.some((call) => String(call[0]).includes('intervallo consigliato'))
     ).toBe(true);
   });
+
+  /* Due blocchi domande nella stessa pagina dichiarerebbero a Google due
+     FAQPage. Il motore passa l'occorrenza a `toProps`: dalla seconda in poi lo
+     schema non si emette, ma il blocco resta visibile. */
+  describe('schema non duplicato', () => {
+    const directive = () =>
+      ({
+        type: 'containerDirective',
+        name: 'domande',
+        children: [
+          { type: 'heading', children: [{ type: 'text', value: 'Una domanda?' }] },
+          { type: 'paragraph', children: [{ type: 'text', value: 'Una risposta reale.' }] },
+        ],
+      }) as unknown as DirectiveNode;
+
+    it('la prima occorrenza non porta il flag di soppressione', () => {
+      expect(domandeDirective.toProps(directive(), 0)['data-skip-schema']).toBeUndefined();
+    });
+
+    it("dalla seconda occorrenza il flag c'è", () => {
+      expect(domandeDirective.toProps(directive(), 1)['data-skip-schema']).toBe('true');
+    });
+
+    it('col flag il blocco si vede ma non emette JSON-LD', () => {
+      const Component = domandeDirective.component;
+      const items = JSON.stringify([{ q: 'Una domanda?', a: 'Una risposta reale.' }]);
+      const { container } = render(
+        <Component {...{ 'data-items': items, 'data-skip-schema': 'true' }} />
+      );
+      expect(container.querySelector('script[type="application/ld+json"]')).toBeNull();
+      expect(container.textContent).toContain('Una domanda?');
+    });
+  });
 });

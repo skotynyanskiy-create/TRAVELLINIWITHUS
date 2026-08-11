@@ -108,4 +108,58 @@ describe(':::verdetto::: — direttiva editoriale', () => {
       )
     ).toBe(true);
   });
+
+  /* L'avviso qui sopra e' dev-only e non ferma il render: in produzione due
+     verdetti incollati dichiaravano comunque due Review per la stessa pagina.
+     Il motore passa l'occorrenza a `toProps`, e dalla seconda lo schema tace. */
+  describe('schema non duplicato', () => {
+    const directive = () =>
+      ({
+        type: 'containerDirective',
+        name: 'verdetto',
+        attributes: { quando: 'da settembre' },
+        children: [
+          {
+            type: 'list',
+            children: [
+              {
+                type: 'listItem',
+                children: [
+                  { type: 'paragraph', children: [{ type: 'text', value: 'sì · Un motivo vero' }] },
+                ],
+              },
+              {
+                type: 'listItem',
+                children: [
+                  { type: 'paragraph', children: [{ type: 'text', value: 'no · Un motivo vero' }] },
+                ],
+              },
+            ],
+          },
+        ],
+      }) as unknown as DirectiveNode;
+
+    it('la prima occorrenza non porta il flag di soppressione', () => {
+      expect(verdettoDirective.toProps(directive(), 0)['data-skip-schema']).toBeUndefined();
+    });
+
+    it("dalla seconda occorrenza il flag c'è", () => {
+      expect(verdettoDirective.toProps(directive(), 1)['data-skip-schema']).toBe('true');
+    });
+
+    it('col flag il blocco si vede ma non emette JSON-LD', () => {
+      const Component = verdettoDirective.component;
+      const { container } = render(
+        <Component
+          {...{
+            'data-si': JSON.stringify(['Un motivo vero']),
+            'data-no': JSON.stringify(['Un motivo vero']),
+            'data-skip-schema': 'true',
+          }}
+        />
+      );
+      expect(container.querySelector('script[type="application/ld+json"]')).toBeNull();
+      expect(container.textContent).toContain('Un motivo vero');
+    });
+  });
 });

@@ -34,10 +34,17 @@ function splitVerdictLines(directive: DirectiveNode): { si: string[]; no: string
   return { si, no };
 }
 
-function toProps(directive: DirectiveNode): Record<string, unknown> {
+/* `index` e' l'occorrenza di questa direttiva nel documento, passata dal motore
+   in `index.ts`. Serve a una cosa sola ma importante: solo la prima emette il
+   JSON-LD. Un secondo blocco incollato per sbaglio (sono direttive markdown,
+   si copiano) dichiarerebbe a Google due Review per la stessa pagina — uno
+   schema duplicato vale meno di nessuno schema. Il blocco visivo resta, e
+   l'avviso dev sul doppio verdetto continua a segnalarlo a chi scrive. */
+function toProps(directive: DirectiveNode, index?: number): Record<string, unknown> {
   const props: Record<string, unknown> = {};
   const attrs = directive.attributes || {};
   if (attrs.quando) props['data-quando'] = attrs.quando;
+  if ((index ?? 0) > 0) props['data-skip-schema'] = 'true';
 
   const { si, no } = splitVerdictLines(directive);
   if (import.meta.env?.DEV && (si.length < 2 || si.length > 4 || no.length < 2 || no.length > 4)) {
@@ -91,15 +98,17 @@ function VerdettoDirective({
   'data-quando': quando,
   'data-si': siJson,
   'data-no': noJson,
+  'data-skip-schema': skipSchema,
 }: {
   'data-quando'?: string;
   'data-si'?: string;
   'data-no'?: string;
+  'data-skip-schema'?: string;
 }) {
   const asideRef = useRef<HTMLElement | null>(null);
   const si = parseList(siJson);
   const no = parseList(noJson);
-  const reviewJsonLd = buildVerdettoReviewJsonLd(si, no);
+  const reviewJsonLd = skipSchema === 'true' ? null : buildVerdettoReviewJsonLd(si, no);
 
   // È l'unico blocco scuro dell'articolo, uno solo per pagina: se il markup
   // ne trova un secondo nello stesso DOM, avvisa (dev-only, mai a runtime prod).

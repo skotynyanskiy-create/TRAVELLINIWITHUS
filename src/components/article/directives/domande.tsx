@@ -34,8 +34,14 @@ function extractQaItems(children: NonNullable<DirectiveNode['children']>): QaIte
   return items;
 }
 
-function toProps(directive: DirectiveNode): Record<string, unknown> {
+/* `index` e' l'occorrenza nel documento, passata dal motore: solo la prima
+   emette il JSON-LD. Due blocchi domande nella stessa pagina dichiarerebbero a
+   Google due FAQPage — uno schema duplicato vale meno di nessuno schema. Il
+   secondo blocco resta visibile e leggibile, semplicemente non parla ai
+   crawler. */
+function toProps(directive: DirectiveNode, index?: number): Record<string, unknown> {
   const props: Record<string, unknown> = {};
+  if ((index ?? 0) > 0) props['data-skip-schema'] = 'true';
   const items = extractQaItems(directive.children || []).filter((item) => item.q);
 
   if (import.meta.env?.DEV && (items.length < 3 || items.length > 6)) {
@@ -61,13 +67,20 @@ function parseItems(json?: string): QaItem[] {
   }
 }
 
-function DomandeDirective({ 'data-items': itemsJson }: { 'data-items'?: string }) {
+function DomandeDirective({
+  'data-items': itemsJson,
+  'data-skip-schema': skipSchema,
+}: {
+  'data-items'?: string;
+  'data-skip-schema'?: string;
+}) {
   const items = parseItems(itemsJson);
   if (items.length === 0) return null;
 
-  const faqJsonLd = buildFaqPageJsonLd(
-    items.map((item): FaqQaItem => ({ question: item.q, answer: item.a }))
-  );
+  const faqJsonLd =
+    skipSchema === 'true'
+      ? null
+      : buildFaqPageJsonLd(items.map((item): FaqQaItem => ({ question: item.q, answer: item.a })));
 
   return (
     <section
