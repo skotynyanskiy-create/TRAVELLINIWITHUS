@@ -60,3 +60,26 @@ export function aMeseAnno(iso?: string): string | null {
   if (!quando) return null;
   return `${/^[aeiou]/i.test(quando) ? 'ad' : 'a'} ${quando.toLowerCase()}`;
 }
+
+/** I soli campi che `etichettaPrezzo` legge — non l'intero `ContentItem`, per
+ *  restare disaccoppiata da `types/content`. */
+export interface ElementoConPrezzo {
+  value?: { price?: string; budget?: string };
+  isPlaceholder?: boolean;
+}
+
+/**
+ * Etichetta di prezzo per una scheda "posto particolare": il prezzo reale se
+ * c'è, altrimenti la fascia di budget, altrimenti — solo se la scheda è
+ * ancora in lavorazione — lo dice apertamente.
+ *
+ * Regola non negoziabile: mai dedurre una verifica dall'assenza di un dato.
+ * L'81/110 dei posti senza `value.price` non sono "verificati sul posto" —
+ * per 24 di loro la scheda non è nemmeno pronta.
+ */
+export function etichettaPrezzo(item: ElementoConPrezzo): string {
+  if (item.value?.price) return item.value.price;
+  if (item.value?.budget) return `Budget ${item.value.budget.toLowerCase()}`;
+  if (item.isPlaceholder) return 'Scheda in lavorazione';
+  return 'Prezzo non dichiarato';
+}

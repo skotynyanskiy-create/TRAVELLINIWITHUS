@@ -35,6 +35,7 @@ import { usePersonalizedInterest } from '@/src/hooks/usePersonalizedInterest';
 import { PARTNERSHIP_LABEL } from '@/src/types/content';
 import type { ContentItem } from '@/src/types/content';
 import { getUserLocation, sortPlacesByDistance, type UserLocation } from '@/src/utils/geo';
+import { etichettaPrezzo } from '@/src/utils/format';
 import { installOpenFreeMapStyleFallback } from '@/src/lib/openFreeMap';
 import OptimizedImage from '../OptimizedImage';
 import PlaceBusinessActions from '../PlaceBusinessActions';
@@ -667,7 +668,7 @@ export default function FullScreenMapExperience() {
                     </div>
                     <h4 className="mt-1 font-serif text-sm font-normal text-white">{item.title}</h4>
                     <span className="mt-2 block text-[10px] text-stone-400">
-                      {item.value?.price || 'Verificato sul posto'}
+                      {etichettaPrezzo(item)}
                     </span>
                   </button>
                 ))}
