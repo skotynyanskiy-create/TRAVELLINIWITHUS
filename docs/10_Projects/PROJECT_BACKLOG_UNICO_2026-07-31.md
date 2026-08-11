@@ -439,3 +439,33 @@ che entrano Francia e Svizzera con un posto provato.
 Restano ~185 candidati enumerati. Due della tranche corrente sono rimasti fuori
 perché non ho guardato la copertina: **Nip Burger** (Bologna) e **BattleKart**
 (Massy). Caption e geocodifica ci sono già.
+
+## 9. Sessione 2026-08-11 (sera) — l'editor articoli non poteva scrivere i 6 blocchi
+
+Non presente in nessuna nota. `ArticleEditor.tsx` usava ancora ReactQuill (WYSIWYG,
+salva HTML), ma `Articolo.tsx` renderizza il `content` con `react-markdown` e
+**non esiste `rehype-raw` nel repo**: qualunque HTML salvato dall'editor sarebbe
+finito a schermo come testo letterale, e i 6 blocchi editoriali
+(`:::posto` `:::verdetto` `:::reel` `:::dati` `:::mappa` `:::domande` +
+`:affiliato` in linea, vedi `HANDOFF_editorial-blocks-v2_ui-designer_to_frontend-builder.md`)
+non erano scrivibili da lì in nessun modo. Passato inosservato perché nessun
+articolo è mai stato pubblicato passando da quell'editor.
+
+**Chiuso**: `ReactQuill` sostituito da un editor markdown puro
+(`src/components/admin/MarkdownArticleEditor.tsx`) con: barra dei sei blocchi
+che inserisce ogni template già chiuso col `:::` finale (il punto che conta di
+più — un blocco aperto e mai chiuso cancella in silenzio tutto quello che segue,
+titolo della sezione dopo compreso) e col segnaposto obbligatorio preselezionato
+per scrivere subito sopra; tab che indenta invece di spostare il focus; un
+linter (`markdownEditorTools.ts`) che avvisa in italiano, sopra l'anteprima, su
+blocco aperto-non-chiuso e nome di direttiva inesistente; anteprima dal vivo che
+usa `ArticleBody`, lo stesso motore della pagina pubblica, non una riproduzione.
+
+`react-quill-new` resta in `package.json`: è ora orfano (nessun altro import nel
+repo), ma non è stato rimosso — verificare prima se serve altrove.
+
+**Non verificato in questa sessione**: se esistono bozze salvate in HTML dal
+vecchio editor su Firestore. Lettura bloccata (nessuna credenziale service
+account disponibile, `.env` non leggibile, ADC non accessibile): non convertito
+nulla alla cieca. Se ci sono bozze HTML pre-esistenti, vanno riscritte a mano in
+markdown — non è un caso automatizzabile senza guardare ogni bozza.

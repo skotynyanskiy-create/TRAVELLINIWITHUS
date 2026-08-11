@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import ReactQuill from 'react-quill-new';
-import 'react-quill-new/dist/quill.snow.css';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../lib/firebaseDb';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -12,6 +10,7 @@ import { Search, MapPin, Loader2 } from 'lucide-react';
 import PageLayout from '../../components/PageLayout';
 import Section from '../../components/Section';
 import SEOPreview from '../../components/SEOPreview';
+import MarkdownArticleEditor from '../../components/admin/MarkdownArticleEditor';
 
 const splitLines = (value: string) =>
   value
@@ -474,7 +473,20 @@ export default function ArticleEditor() {
                 </button>
               </div>
             </div>
-            <ReactQuill theme="snow" value={content} onChange={setContent} className="h-96 mb-12" />
+            <MarkdownArticleEditor
+              id="content"
+              value={content}
+              onChange={setContent}
+              previewMeta={{
+                title,
+                description: excerpt,
+                image: coverImage,
+                category,
+                location,
+                period,
+                budget,
+              }}
+            />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
