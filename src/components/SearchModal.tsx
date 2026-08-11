@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, X, MapPin, BookOpen, Compass, Mail, Clock, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +13,8 @@ import { useSiteContent } from '../hooks/useSiteContent';
 import { trackEvent } from '../services/analytics';
 import { TYPES, ZONES, slugifyType } from '../config/contentTaxonomy';
 import { buildExploreUrl } from '../utils/discoveryQuery';
+import { useFocusTrap } from '../hooks/useFocusTrap';
+import { useOverlayLayer } from '../hooks/useOverlayLayer';
 
 const RECENT_SEARCHES_KEY = 'twu_recent_searches';
 const POPULAR_TAGS = ['Sicilia', 'Andalusia', 'Dolomiti', 'Weekend', 'Boutique hotel', 'Food'];
@@ -153,7 +155,9 @@ const DISCOVERY_RESULTS: SearchResult[] = [
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [query, setQuery] = useState('');
   const [allData, setAllData] = useState<SearchResult[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loadState, setLoadState] = useState<'idle' | 'loading' | 'ready' | 'error' | 'retrying'>(
+    'idle'
+  );
   const [recentSearches, setRecentSearches] = useState<string[]>(() => {
     if (typeof window === 'undefined') return [];
     try {
@@ -163,9 +167,17 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     }
   });
   const inputRef = useRef<HTMLInputElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const requestIdRef = useRef(0);
+  const loadedDemoModeRef = useRef<boolean | null>(null);
   const navigate = useNavigate();
   const { data: demoContent } = useSiteContent('demo');
   const demoSettings = demoContent ?? siteContentDefaults.demo;
+  const loading = loadState === 'loading' || loadState === 'retrying';
+  const loadError = loadState === 'error';
+  const isTopLayer = useOverlayLayer(isOpen);
+
+  useFocusTrap(isOpen, modalRef, inputRef, isTopLayer);
 
   const fuse = useMemo(
     () =>
@@ -182,13 +194,10 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     [allData]
   );
 
-  useEffect(() => {
-    setAllData([]);
-  }, [demoSettings.showEditorialDemo]);
-
-  useEffect(() => {
-    const fetchSearchData = async () => {
-      setLoading(true);
+  const loadSearchData = useCallback(
+    async (isRetry = false) => {
+      const requestId = ++requestIdRef.current;
+      setLoadState(isRetry ? 'retrying' : 'loading');
       try {
         const articles = await fetchArticles();
 
@@ -259,32 +268,46 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
           }
         }
 
-        setAllData(fetchedData);
+        if (requestId === requestIdRef.current) {
+          setAllData(fetchedData);
+          loadedDemoModeRef.current = demoSettings.showEditorialDemo;
+          setLoadState('ready');
+        }
       } catch (error) {
         console.error('Error fetching search data:', error);
-      } finally {
-        setLoading(false);
+        if (requestId === requestIdRef.current) {
+          setAllData([...STATIC_PAGE_RESULTS, ...DISCOVERY_RESULTS]);
+          loadedDemoModeRef.current = demoSettings.showEditorialDemo;
+          setLoadState('error');
+        }
       }
-    };
+    },
+    [demoSettings.showEditorialDemo]
+  );
 
-    if (isOpen && allData.length === 0) {
-      fetchSearchData();
-    }
-  }, [isOpen, allData.length, demoSettings.showEditorialDemo]);
+  useEffect(() => {
+    const demoModeChanged = loadedDemoModeRef.current !== demoSettings.showEditorialDemo;
+    const needsLoad = loadState === 'idle' || demoModeChanged;
+    if (!isOpen || loading || !needsLoad) return;
+
+    const loadTimer = window.setTimeout(() => {
+      void loadSearchData();
+    }, 0);
+    return () => window.clearTimeout(loadTimer);
+  }, [demoSettings.showEditorialDemo, isOpen, loadSearchData, loadState, loading]);
 
   useEffect(() => {
     if (isOpen) {
       trackEvent('search_open', { source_page: window.location.pathname });
-      setTimeout(() => inputRef.current?.focus(), 100);
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-      setQuery('');
     }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
   }, [isOpen]);
+
+  const closeSearch = useCallback(() => {
+    requestIdRef.current += 1;
+    setQuery('');
+    setLoadState('idle');
+    onClose();
+  }, [onClose]);
 
   // Handle Cmd+K / Ctrl+K to open
   useEffect(() => {
@@ -296,13 +319,13 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
           // but we assume the parent handles the shortcut too, or we just rely on the button.
         }
       }
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
+      if (e.key === 'Escape' && isOpen && isTopLayer) {
+        closeSearch();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [closeSearch, isOpen, isTopLayer]);
 
   const filteredResults = useMemo(() => {
     const trimmed = query.trim();
@@ -405,7 +428,11 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
       position,
     });
     navigate(link);
-    onClose();
+    closeSearch();
+  };
+
+  const retrySearchData = () => {
+    if (!loading) void loadSearchData(true);
   };
 
   return (
@@ -416,10 +443,11 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={onClose}
+            onClick={closeSearch}
             className="fixed inset-0 bg-black/80 backdrop-blur-md z-[110]"
           />
           <motion.div
+            ref={modalRef}
             initial={{ opacity: 0, scale: 0.95, y: -20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
@@ -441,7 +469,8 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 className="flex-grow text-xl bg-transparent border-none focus:outline-none placeholder:text-black/30 text-black"
               />
               <button
-                onClick={onClose}
+                type="button"
+                onClick={closeSearch}
                 aria-label="Chiudi ricerca"
                 className="p-2 hover:bg-black/5 rounded-full transition-colors text-black/60 hover:text-black"
               >
@@ -450,6 +479,25 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             </div>
 
             <div className="overflow-y-auto p-4 flex-grow">
+              {loadError && (
+                <div
+                  role="alert"
+                  className="mb-4 flex flex-col gap-3 rounded-xl border border-[var(--color-error)]/20 bg-[var(--color-error-soft)] px-4 py-3 text-sm text-[var(--color-ink)] sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <span>
+                    Non riusciamo ad aggiornare l'archivio. Puoi comunque cercare le sezioni del
+                    sito.
+                  </span>
+                  <button
+                    type="button"
+                    onClick={retrySearchData}
+                    disabled={loading}
+                    className="shrink-0 font-semibold text-[var(--color-accent-text)] underline underline-offset-2"
+                  >
+                    Riprova
+                  </button>
+                </div>
+              )}
               {loading ? (
                 <div className="space-y-2">
                   {[1, 2, 3, 4].map((i) => (

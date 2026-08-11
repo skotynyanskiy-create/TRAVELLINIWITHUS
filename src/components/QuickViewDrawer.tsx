@@ -4,6 +4,8 @@ import { ArrowUpRight, MapPin, Tag, X } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import OptimizedImage from './OptimizedImage';
 import { useQuickView } from '../context/QuickViewContext';
+import { useFocusTrap } from '../hooks/useFocusTrap';
+import { useOverlayLayer } from '../hooks/useOverlayLayer';
 import type { PartnershipKind } from '../types/content';
 
 /**
@@ -26,28 +28,23 @@ export default function QuickViewDrawer() {
   const { item, close } = useQuickView();
   const reduceMotion = useReducedMotion();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const lastFocused = useRef<HTMLElement | null>(null);
+  const drawerRef = useRef<HTMLElement>(null);
+  const isTopLayer = useOverlayLayer(Boolean(item));
+
+  useFocusTrap(Boolean(item), drawerRef, closeButtonRef, isTopLayer);
 
   useEffect(() => {
-    if (!item) return;
-
-    lastFocused.current = document.activeElement as HTMLElement | null;
+    if (!item || !isTopLayer) return;
 
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') close();
     };
     window.addEventListener('keydown', onKey);
-    document.body.style.overflow = 'hidden';
-
-    const focusTimer = window.setTimeout(() => closeButtonRef.current?.focus(), 60);
 
     return () => {
       window.removeEventListener('keydown', onKey);
-      document.body.style.overflow = 'unset';
-      window.clearTimeout(focusTimer);
-      lastFocused.current?.focus?.();
     };
-  }, [item, close]);
+  }, [item, close, isTopLayer]);
 
   const partnerLabel = item ? PARTNERSHIP_LABEL[item.partnership.kind] : '';
   const locality = item
@@ -67,6 +64,7 @@ export default function QuickViewDrawer() {
             className="fixed inset-0 z-[200] bg-black/60 backdrop-blur-sm"
           />
           <motion.aside
+            ref={drawerRef}
             role="dialog"
             aria-modal="true"
             aria-label={`Anteprima rapida: ${item.title}`}
