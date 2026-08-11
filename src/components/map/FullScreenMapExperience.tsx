@@ -5,6 +5,7 @@ import Map, {
   NavigationControl,
   FullscreenControl,
   type MapRef,
+  type MarkerInstance,
 } from 'react-map-gl/maplibre';
 import {
   X,
@@ -65,6 +66,19 @@ const TYPE_FILTERS = [
   { id: 'insolito', label: 'Insolito', icon: Gem },
   { id: 'relax', label: 'Relax & Spa', icon: Trees },
 ];
+
+/** Titolo italiano del canvas/regione mappa: senza questo maplibre-gl usa il
+ *  default inglese "Map" — un audit lo aveva rilevato su un sito italiano. */
+const MAP_LOCALE = { 'Map.Title': 'Mappa dei posti particolari' };
+
+/** Nome accessibile di un marcatore: titolo + luogo, cosi' 104 pin non
+ *  condividono tutti il default di maplibre-gl "Map marker". Va applicato
+ *  imperativamente su `marker.getElement()` perche' quell'elemento e' creato
+ *  da maplibre-gl stesso, fuori dall'albero React che rendiamo dentro di lui. */
+function markerAccessibleName(item: ContentItem): string {
+  const luogo = item.place.city || item.place.region || item.place.country;
+  return luogo ? `${item.title}, ${luogo}` : item.title;
+}
 
 const BUDGET_FILTERS = [
   { id: 'all', label: 'Qualsiasi budget' },
@@ -661,6 +675,7 @@ export default function FullScreenMapExperience() {
           initialViewState={{ longitude: 12.5, latitude: 42.0, zoom: 5.2, pitch: 35 }}
           mapStyle={MAP_STYLES[mapStyleKey].url}
           projection="globe"
+          locale={MAP_LOCALE}
           onLoad={() => setMapReady(true)}
         >
           <NavigationControl position="bottom-right" />
@@ -678,6 +693,12 @@ export default function FullScreenMapExperience() {
                 longitude={item.place.coordinates.lng}
                 latitude={item.place.coordinates.lat}
                 anchor="bottom"
+                ref={(instance: MarkerInstance | null) => {
+                  // maplibre-gl assegna "Map marker" solo se l'elemento non ha
+                  // gia' un aria-label: questo corre prima, in fase di commit,
+                  // e vince sul default.
+                  instance?.getElement().setAttribute('aria-label', markerAccessibleName(item));
+                }}
                 onClick={(e) => {
                   e.originalEvent.stopPropagation();
                   handlePinClick(item);

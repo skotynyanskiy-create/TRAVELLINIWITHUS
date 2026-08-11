@@ -52,7 +52,16 @@ export default function HomeMapLibreBackground() {
   }, [reduceMotion, tabVisible]);
 
   return (
-    <div className="pointer-events-none relative h-full w-full overflow-hidden opacity-70">
+    // Decorativa: aria-hidden toglie canvas e marcatori dall'albero di
+    // accessibilita' invece di lasciarli con i nomi di default di maplibre-gl
+    // ("Map", "Map marker", in inglese su un sito italiano). Nessun
+    // discendente e' focalizzabile (canvas non interattivo -> tabindex="-1",
+    // marcatori senza onClick ne' tabindex), quindi non viola la regola che
+    // vieta elementi focalizzabili dentro un contenitore aria-hidden.
+    <div
+      className="pointer-events-none relative h-full w-full overflow-hidden opacity-70"
+      aria-hidden="true"
+    >
       <Map
         ref={setMapRef}
         initialViewState={{
@@ -66,6 +75,7 @@ export default function HomeMapLibreBackground() {
         mapStyle="https://tiles.openfreemap.org/styles/dark"
         interactive={false}
         attributionControl={false}
+        locale={{ 'Map.Title': 'Mappa' }}
         reuseMaps
       >
         {geocodedItems.map((item) => {
