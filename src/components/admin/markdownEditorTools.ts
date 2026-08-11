@@ -99,11 +99,19 @@ export interface SnippetInsertion {
 }
 
 /**
- * Inserisce un template nel testo a partire dalla selezione corrente,
- * sostituendo l'eventuale testo selezionato. Se il template ha un segmento
- * `«...»`, i marcatori vengono rimossi e il testo tra di essi resta
- * selezionato nel risultato: scrivere subito sovrascrive il segnaposto senza
- * dover cercare dove cliccare.
+ * Inserisce un template nel testo a partire dalla selezione corrente. Il
+ * testo eventualmente selezionato NON diventa mai il contenuto del blocco:
+ * i segnaposto (l'id di un posto, la data di "quando", gli slug di una
+ * mappa) non hanno alcuna relazione col paragrafo che l'autore aveva
+ * selezionato, quindi sovrascriverlo con quello sarebbe sbagliato tanto
+ * quanto perderlo — e il campo e' controllato, l'annulla nativo della
+ * textarea non lo riporterebbe indietro. Il blocco viene percio' inserito
+ * SUBITO DOPO la selezione, che resta intatta nel testo: cliccare un
+ * pulsante non cancella mai un paragrafo gia' scritto.
+ *
+ * Se il template ha un segmento `«...»`, i marcatori vengono rimossi e il
+ * testo tra di essi resta selezionato nel risultato: scrivere subito
+ * sovrascrive il segnaposto senza dover cercare dove cliccare.
  */
 export function buildSnippetInsertion(
   value: string,
@@ -112,13 +120,15 @@ export function buildSnippetInsertion(
   snippet: DirectiveSnippet
 ): SnippetInsertion {
   const before = value.slice(0, cursorStart);
+  const selected = value.slice(cursorStart, cursorEnd);
   const after = value.slice(cursorEnd);
+  const beforeInsertion = before + selected;
 
   let prefix = '';
   let suffix = '';
   if (snippet.blockSpacing) {
-    if (before.length > 0 && !before.endsWith('\n\n')) {
-      prefix = before.endsWith('\n') ? '\n' : '\n\n';
+    if (beforeInsertion.length > 0 && !beforeInsertion.endsWith('\n\n')) {
+      prefix = beforeInsertion.endsWith('\n') ? '\n' : '\n\n';
     }
     if (after.length > 0 && !after.startsWith('\n\n')) {
       suffix = after.startsWith('\n') ? '\n' : '\n\n';
@@ -141,8 +151,8 @@ export function buildSnippetInsertion(
   }
 
   const insertion = prefix + cleanTemplate + suffix;
-  const nextValue = before + insertion + after;
-  const base = cursorStart + prefix.length;
+  const nextValue = beforeInsertion + insertion + after;
+  const base = beforeInsertion.length + prefix.length;
 
   return {
     nextValue,

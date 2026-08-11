@@ -60,17 +60,37 @@ describe('buildSnippetInsertion', () => {
     expect(selected).toBe('slug-del-posto');
   });
 
-  it('sostituisce il testo selezionato invece di limitarsi ad affiancarlo', () => {
+  it('non perde mai il testo selezionato: il blocco si inserisce subito dopo, la selezione resta intatta', () => {
     const posto = BLOCK_SNIPPETS.find((s) => s.key === 'posto')!;
     const text = 'AAAABBBBCCCC';
     const result = buildSnippetInsertion(text, 4, 8, posto);
-    expect(result.nextValue).toBe('AAAA\n\n:::posto{id="slug-del-posto"}\n:::\n\nCCCC');
+    expect(result.nextValue).toBe('AAAABBBB\n\n:::posto{id="slug-del-posto"}\n:::\n\nCCCC');
+    expect(result.nextValue).toContain('BBBB');
+  });
+
+  it('preserva la selezione anche quando comincia a inizio testo', () => {
+    const verdetto = BLOCK_SNIPPETS.find((s) => s.key === 'verdetto')!;
+    const text = 'Paragrafo selezionato intero.';
+    const result = buildSnippetInsertion(text, 0, text.length, verdetto);
+    expect(result.nextValue.startsWith(text)).toBe(true);
+    expect(result.nextValue).toContain(':::verdetto{');
   });
 
   it(':affiliato non forza righe vuote intorno', () => {
     const text = 'Prenota su ';
     const result = buildSnippetInsertion(text, text.length, text.length, INLINE_SNIPPET);
     expect(result.nextValue.startsWith('Prenota su :affiliato[')).toBe(true);
+  });
+
+  it(':affiliato con selezione attiva mantiene il testo selezionato e lo antepone al link', () => {
+    const text = 'Prenota qui subito';
+    // seleziona "qui" (indici 8-11)
+    const result = buildSnippetInsertion(text, 8, 11, INLINE_SNIPPET);
+    expect(result.nextValue).toBe(
+      'Prenota qui:affiliato[testo del link]{partner="booking" path="/percorso-struttura" campagna="nome-campagna"} subito'
+    );
+    const selected = result.nextValue.slice(result.selectionStart, result.selectionEnd);
+    expect(selected).toBe('testo del link');
   });
 });
 
