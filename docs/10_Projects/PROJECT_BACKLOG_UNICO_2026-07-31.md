@@ -59,12 +59,14 @@ Effort: **S** < 2h · **M** 2-6h · **L** > 6h. `[OWNER]` = non lo posso fare io
 
 ### P0 — sbloccano la catena critica
 
-| #   | Voce                                                                                                                                                                                                        | Effort | Impatto                                              | Chi                 |
-| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ | ---------------------------------------------------- | ------------------- |
-| 1   | **Pubblicare i 6 articoli seed**: togliere `published: false`, verificare uscita da noindex. Corpo e excerpt sono già scritti in 5 casi su 6 — manca solo l'excerpt di `burton-juice-ristorante-tim-burton` | S      | Sblocca l'intera catena §1. Massimo ROI del repo     | seo-strategist      |
-| 2   | **Far atterrare il WIP e deployare le functions**: 21 file non committati contengono il backend `/api/**` (`functions/` + rewrite in `firebase.json`) mai deployato                                         | M      | Chiude il p0 "8 endpoint senza backend in prod"      | backend-engineer    |
-| 3   | **`/posto/:slug` → 200**: verificato oggi, risponde ancora **404**. La fix (`scripts/generate-route-html.js` che genera `dist/posto/<id>/index.html`) è nel WIP non committato                              | S      | 40 posti già linkati in home sono soft-404 per i bot | backend-engineer    |
-| 4   | **[OWNER] Restrizione Firebase Web API key su dominio**                                                                                                                                                     | S      | È dichiarato blocker deploy in 2 doc dal 14/05       | Skott (console GCP) |
+| #   | Voce                                                                                                                                                                                     | Effort    | Impatto                                          | Chi                 |
+| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ------------------------------------------------ | ------------------- |
+| 1   | **Pubblicare `burton-juice`**: restano 2 blocker, entrambi tuoi — cover reale e verdetto R+B (`[SEZIONE RECENSIONE]` nel corpo). Excerpt, tag e percorso di pubblicazione sono pronti    | S + asset | Sblocca la catena §1. Massimo ROI del repo       | Skott + R+B         |
+| 1b  | **Scrivere gli altri 5 articoli**, oggi abbozzi da 89-214 parole (vedi §7)                                                                                                              | L         | Volume editoriale                                | editorial-writer    |
+| 2   | **[OWNER] Deploy delle functions**: il codice è pronto e con gate, mancano piano Blaze, 5 segreti in Secret Manager e i parametri `APP_URL`/`FIRESTORE_DATABASE_ID`/`BREVO_LIST_ID`     | M         | Chiude il p0 "8 endpoint senza backend in prod"  | Skott (console)     |
+| 3   | ~~`/posto/:slug` → 404~~ — **chiusa**: `scripts/generate-route-html.js` è committato dal `000d847` e cablato in `npm run build`                                                         | —         | —                                                | —                   |
+| 3b  | **[OWNER] Ripuntare il dominio**: `travelliniwithus.it` risponde da `aruba-proxy` con marker WordPress — non serve il progetto Firebase (verificato 2026-08-11 da `audit:api-live`)     | S         | Senza questo nessun deploy è osservabile         | Skott (DNS/hosting) |
+| 4   | **[OWNER] Restrizione Firebase Web API key su dominio**                                                                                                                                  | S         | È dichiarato blocker deploy in 2 doc dal 14/05   | Skott (console GCP) |
 
 ### P1 — direzione e fiducia
 
@@ -95,10 +97,15 @@ Effort: **S** < 2h · **M** 2-6h · **L** > 6h. `[OWNER]` = non lo posso fare io
 
 ## 3. Sequenza consigliata
 
-1. **#2 + #3 insieme** — stesso branch, stesso deploy. Il WIP è fermo da 5 giorni e blocca tutto il resto.
-2. **#1** — è la voce con più leva del repo.
-3. **#4 + #5** in parallelo: sono tue, non mie, e #5 tiene ferma la home.
-4. Poi P1 residuo, poi P2.
+Aggiornata il 2026-08-11: #3 è chiusa e il lavoro di codice di #1 e #2 è fatto.
+Quello che resta in P0 è **quasi tutto tuo**, non mio.
+
+1. **#3b + #4** — finché il dominio sta su Aruba e la API key è aperta, deployare
+   non produce niente di osservabile. Sono il vero primo passo.
+2. **#2** — Blaze + 5 segreti + 3 parametri, poi `firebase deploy --only functions:api,hosting`.
+3. **#1** — cover reale e verdetto R+B. Lo script si rifiuta di pubblicare finché mancano.
+4. **#5** in parallelo: tiene ferma la home.
+5. Poi #1b, poi P1 residuo, poi P2.
 
 Non toccare P2/P3 prima che #1 e #2 siano in produzione: sono ottimizzazioni di
 un funnel che oggi non ha ingresso.
@@ -156,3 +163,41 @@ piani assorbiti, `icebox_reason:` per quelli congelati.
 | `PROJECT_FAMILY_AREA_2026-07-24`                               | spec area famiglia                 |
 | `PROJECT_EDITORIAL_SYSTEM_V1_1`                                | primitive editoriali               |
 | `MAP_CUSTOM_STYLE_INSTRUCTIONS`, `RUNBOOK_INSTAGRAM_GRAPH_API` | runbook operativi                  |
+
+## 7. Revisione 2026-08-11 — cosa diceva questa nota e cosa dice il codice
+
+Sei affermazioni di §2 sono state ricontrollate sul repo. Quattro erano sbagliate.
+Le correzioni sono già riportate sopra; qui resta la prova, perché è il motivo
+per cui la regola «una voce si chiude quando il codice lo dimostra» esiste.
+
+| Diceva                                                                 | Dice il codice                                                                                                                             |
+| ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| «corpo e excerpt già scritti in 5 casi su 6»                           | Invertito. Parole nel `content`: burton **1563**, malesia 214, slovenia 141, jesolo 116, madrid 96, romagna 89. Cinque su sei sono abbozzi |
+| «manca solo l'excerpt di burton»                                       | L'excerpt mancava solo a burton, vero — ma è l'unico articolo con un corpo. Gli altri cinque hanno l'excerpt e non hanno l'articolo        |
+| «togliere `published: false`» come lavoro da 2h                        | I seed non erano importati da nessun modulo runtime: il sito legge Firestore. Il flag da solo non produceva nessun effetto                 |
+| «la fix di `/posto/:slug` è nel WIP non committato»                    | `scripts/generate-route-html.js` è committato dal `000d847` e cablato in `npm run build`                                                  |
+| «21 file non committati»                                              | 78 al 2026-08-11                                                                                                                           |
+| il dominio è un dettaglio di deploy                                    | `travelliniwithus.it` risponde da `aruba-proxy` con marker WordPress: non è il progetto Firebase                                          |
+
+### Quattro difetti trovati durante la revisione, non presenti in nessuna nota
+
+1. **La disclosure ADV non era scrivibile.** `partnership` è letto da
+   `normalizeFirestoreArticle` e renderizzato da `ArticleHero`, ma non è fra i
+   campi ammessi da `isValidArticle()` in `firestore.rules`, e `ArticleEditor`
+   non lo invia. Nessuna scrittura client poteva pubblicare un articolo con la
+   dicitura ADV — e `burton-juice` è `kind: 'adv'`. Risolto con
+   `scripts/publish-article-seed.mjs`, che scrive via Admin SDK.
+2. **La sitemap interrogava il database sbagliato.** `getFirestore()` senza id
+   punta a `(default)`; il database reale è quello nominato in `firebase.json`.
+   Zero URL `/articolo` anche dopo aver pubblicato, in silenzio.
+3. **`BREVO_LIST_ID` non era dichiarato** fra i parametri della Cloud Function:
+   la newsletter sarebbe degradata a save-lead-only senza dirlo a nessuno.
+4. **`og:image` era relativo** per gli articoli (`coverImage` da Firestore):
+   ogni link condiviso sarebbe uscito senza immagine.
+
+### Decisione registrata
+
+`AiAssistant` è stato smontato da `Layout.tsx`. L'endpoint `/api/ai-companion`
+risponde 503 per progetto, quindi il widget cadeva sempre sul fallback a
+keyword e prometteva itinerari e una guida PDF che non esistono. Componente,
+endpoint e config restano in repo: si rimonta quando il RAG avrà un corpus.
