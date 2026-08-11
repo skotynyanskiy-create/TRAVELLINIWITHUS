@@ -3,6 +3,7 @@ import {
   BLOCK_SNIPPETS,
   INLINE_SNIPPET,
   buildSnippetInsertion,
+  countDirectiveUsage,
   lintEditorialMarkdown,
 } from './markdownEditorTools';
 
@@ -29,6 +30,30 @@ describe('BLOCK_SNIPPETS — sintassi dei sei blocchi editoriali', () => {
   it(':affiliato non ha blockSpacing: è testo in linea, non un blocco', () => {
     expect(INLINE_SNIPPET.blockSpacing).toBe(false);
     expect(INLINE_SNIPPET.template.startsWith(':affiliato[')).toBe(true);
+  });
+
+  it('le quote editoriali riflettono le regole decise: posto 3, dati 2, verdetto/mappa/domande 1, reel senza quota', () => {
+    const maxCountByKey = Object.fromEntries(BLOCK_SNIPPETS.map((s) => [s.key, s.maxCount]));
+    expect(maxCountByKey).toEqual({
+      posto: 3,
+      verdetto: 1,
+      reel: undefined,
+      dati: 2,
+      mappa: 1,
+      domande: 1,
+    });
+  });
+});
+
+describe('countDirectiveUsage', () => {
+  it('conta zero blocchi su un testo senza direttive', () => {
+    expect(countDirectiveUsage('Solo testo normale.')).toEqual({});
+  });
+
+  it('conta ogni apertura di blocco, non le righe di chiusura', () => {
+    const md =
+      ':::posto{id="a"}\n:::\n\n:::posto{id="b"}\n:::\n\n:::posto{id="c"}\n:::\n\n:::verdetto{quando="ora"}\n:::';
+    expect(countDirectiveUsage(md)).toEqual({ posto: 3, verdetto: 1 });
   });
 });
 
@@ -132,5 +157,79 @@ describe('lintEditorialMarkdown', () => {
     const md = 'Testo.\n:::\nAltro testo.';
     const issues = lintEditorialMarkdown(md);
     expect(issues.some((i) => i.includes('chiusura'))).toBe(true);
+  });
+});
+
+describe('lintEditorialMarkdown — segnaposto dei template rimasti intatti', () => {
+  it('segnala "Scrivi qui" lasciato nel blocco domande (il bug reale di extractQaItems)', () => {
+    const md =
+      ':::domande\n### Scrivi qui la seconda domanda?\nScrivi qui la seconda risposta.\n:::';
+    const issues = lintEditorialMarkdown(md);
+    expect(issues.some((i) => i.includes('Riga 2') && i.includes('Domande'))).toBe(true);
+    expect(issues.some((i) => i.includes('Riga 3') && i.includes('Domande'))).toBe(true);
+  });
+
+  it('non segnala "Scrivi qui" se la domanda è stata scritta davvero', () => {
+    const md = ':::domande\n### Quando conviene andare a Bled?\nDa maggio a settembre.\n:::';
+    expect(lintEditorialMarkdown(md)).toEqual([]);
+  });
+
+  it('segnala "slug-del-posto" lasciato in :::posto e in :::reel', () => {
+    const md = ':::posto{id="slug-del-posto"}\n:::\n\n:::reel{posto="slug-del-posto"}\n:::';
+    const issues = lintEditorialMarkdown(md);
+    expect(issues.some((i) => i.includes('Posto') && i.includes('slug-del-posto'))).toBe(true);
+    expect(issues.some((i) => i.includes('Reel') && i.includes('slug-del-posto'))).toBe(true);
+  });
+
+  it('segnala gli slug segnaposto lasciati in :::mappa', () => {
+    const md = ':::mappa{posti="slug-posto-1, slug-posto-2" zoom="7"}\n:::';
+    const issues = lintEditorialMarkdown(md);
+    expect(issues.some((i) => i.includes('Mappa') && i.includes('slug-posto'))).toBe(true);
+  });
+
+  it('segnala il valore "es. " lasciato negli attributi di :::verdetto e :::dati', () => {
+    const verdetto = ':::verdetto{quando="es. da settembre a ottobre"}\n- sì · buono\n:::';
+    const dati =
+      ':::dati{tipo="costi" titolo="Quanto" quando="es. settembre 2025" perQuante="es. 2 persone"}\n- Alloggio · 100€\n:::';
+    expect(
+      lintEditorialMarkdown(verdetto).some((i) => i.includes('Verdetto') && i.includes('es. '))
+    ).toBe(true);
+    expect(lintEditorialMarkdown(dati).some((i) => i.includes('Dati') && i.includes('es. '))).toBe(
+      true
+    );
+  });
+
+  it('segnala le righe di esempio "Etichetta · Valore" / "Totale · Valore" lasciate in :::dati', () => {
+    const md =
+      ':::dati{tipo="costi" titolo="Quanto" quando="settembre 2025" perQuante="2 persone"}\n- Etichetta · Valore\n- Totale · Valore\n:::';
+    const issues = lintEditorialMarkdown(md);
+    expect(issues.filter((i) => i.includes('Dati')).length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('segnala una riga "- sì ·" / "- no ·" senza testo dopo il separatore (il bug della review vuota)', () => {
+    const md =
+      ':::verdetto{quando="ora"}\n- sì · buono\n- sì · \n- no · vero problema\n- no ·\n:::';
+    const issues = lintEditorialMarkdown(md);
+    expect(issues.filter((i) => i.includes('punto vuoto')).length).toBe(2);
+  });
+
+  it('non segnala righe "- sì ·" / "- no ·" con testo reale dopo il separatore', () => {
+    const md = ':::verdetto{quando="ora"}\n- sì · buono\n- no · caro\n:::';
+    expect(lintEditorialMarkdown(md)).toEqual([]);
+  });
+
+  it('segnala i tre segnaposto del link affiliato non sostituiti', () => {
+    const md =
+      'Prenota qui: :affiliato[testo del link]{partner="booking" path="/percorso-struttura" campagna="nome-campagna"}';
+    const issues = lintEditorialMarkdown(md);
+    expect(issues.some((i) => i.includes('testo del link'))).toBe(true);
+    expect(issues.some((i) => i.includes('/percorso-struttura'))).toBe(true);
+    expect(issues.some((i) => i.includes('nome-campagna'))).toBe(true);
+  });
+
+  it('non segnala un link affiliato compilato con dati veri', () => {
+    const md =
+      'Prenota qui: :affiliato[questo B&B]{partner="booking" path="/it/hotel/vero" campagna="guida-bled"}';
+    expect(lintEditorialMarkdown(md)).toEqual([]);
   });
 });
