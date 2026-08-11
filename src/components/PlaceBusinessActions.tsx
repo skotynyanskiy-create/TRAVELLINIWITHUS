@@ -20,6 +20,7 @@ import { trackAffiliateClick } from '../utils/affiliate';
 import { buildGoogleMapsListingUrl, getBookingProviderFromUrl } from '../utils/placeLinks';
 import { SITE_URL } from '../config/site';
 import { trackEvent } from '../services/analytics';
+import { AFFILIATE_ANCHOR_ATTRS } from '../lib/affiliateLink';
 
 export interface PlaceBusinessActionsProps {
   item: ContentItem;
@@ -182,8 +183,7 @@ export const PlaceBusinessActions: React.FC<PlaceBusinessActionsProps> = ({
         {trackedBookingUrl && (
           <a
             href={trackedBookingUrl}
-            target="_blank"
-            rel="sponsored noopener noreferrer"
+            {...AFFILIATE_ANCHOR_ATTRS}
             onClick={handleBookingClick}
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-6 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
           >

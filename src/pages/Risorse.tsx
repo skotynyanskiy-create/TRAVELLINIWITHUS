@@ -25,6 +25,7 @@ import StickyMobileCTA from '../components/StickyMobileCTA';
 import { SITE_URL } from '../config/site';
 import { fetchResources } from '../services/firebaseService';
 import { trackEvent } from '../services/analytics';
+import { AFFILIATE_ANCHOR_ATTRS } from '../lib/affiliateLink';
 
 interface ResourceItem {
   name: string;
@@ -329,7 +330,7 @@ export default function Risorse() {
                     target="_blank"
                     rel={
                       isCommercialResource(item)
-                        ? 'nofollow sponsored noopener noreferrer'
+                        ? AFFILIATE_ANCHOR_ATTRS.rel
                         : 'noopener noreferrer'
                     }
                     onClick={() =>
@@ -415,7 +416,7 @@ export default function Risorse() {
               <Button
                 href="https://heymondo.it/?utm_medium=Afiliado&utm_source=TRAVELLINIWITHUS&utm_campaign=PRINCIPAL&cod_descuento=TRAVELLINIWITHUS&ag_campaign=TRAVELLINI&agencia=JG4Tepc5b47oLeK3xGDmbAX9I25ExoDeoc8cbPFt"
                 variant="outline-light"
-                rel="nofollow sponsored noopener noreferrer"
+                rel={AFFILIATE_ANCHOR_ATTRS.rel}
                 className="w-full"
               >
                 Heymondo -10%

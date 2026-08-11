@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, Check, ChevronDown, Copy, Tag } from 'lucide-react';
 import type { ContentItem } from '../types/content';
+import { AFFILIATE_ANCHOR_ATTRS } from '../lib/affiliateLink';
 
 /** Formatta una data ISO nel formato italiano dd/mm/yyyy. */
 function formatItalianDate(iso: string): string {
@@ -94,8 +95,7 @@ export default function DealCard({ deal }: { deal?: ContentItem['deal'] }) {
 
       <a
         href={deal.url}
-        target="_blank"
-        rel="nofollow sponsored noopener"
+        {...AFFILIATE_ANCHOR_ATTRS}
         className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)]"
       >
         Vai all'offerta
