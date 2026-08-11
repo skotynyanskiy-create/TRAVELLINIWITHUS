@@ -508,3 +508,25 @@ Verifiche: browser a 375 / 768 / 1152 / 1280 / 1440 (overflow, clipping, console
 menu da tastiera), typecheck, lint, 193 test su 41 file, build, `audit:ui`
 (0 errori, 210 warning contro i 231 di baseline), `audit:size` (237,6 KB gzip su
 250), `audit:provenance`. Nessun commit, push o deploy.
+
+## 13. Correzioni composizione brand, 2026-08-12
+
+Tre difetti su `homeComposition.ts` e `HomeAudienceVoice.tsx`, pubblico brand:
+
+- La CTA della fascia audience diceva «Scarica il media kit» ma portava a un
+  modulo di otto campi obbligatori (azienda, email, focus, budget, periodo,
+  contesto), non a un file. Etichetta cambiata in «Richiedi il media kit», la
+  stessa lingua già usata da `/media-kit` e dall'interesse
+  `richiedere-il-media-kit`.
+- `brand.sections` ripeteva lo stesso gesto già chiuso per i viaggiatori il
+  2026-08-02 (§12): `featured` e `grid` mostravano entrambi schede di posti
+  dal registro. Tolto `featured` dalla composizione base e dai tre ordini per
+  interesse Brand (`capire-il-fit`, `vedere-i-format`,
+  `richiedere-il-media-kit`); resta solo `grid`.
+- `HomeAudienceVoice` mostrava «Portami in un posto a caso» accanto all'unica
+  CTA commerciale anche in modalità brand. Il pulsante ora compare solo per
+  viaggiatori e family.
+
+Verifiche: typecheck, lint, 353 test su 58 file (nuovi: composizione Brand
+in `homeComposition.test.ts`, `HomeAudienceVoice.test.tsx`), `audit:ui`
+(0 errori). Tre commit distinti, uno per correzione.
