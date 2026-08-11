@@ -29,7 +29,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
-import { CONTENT_ITEMS } from '@/src/config/contentLibrary';
+import { getGeocodedContentItems } from '@/src/config/contentLibrary';
 import { getMapTypeForInterest, rankByInterest } from '@/src/config/audienceInterests';
 import { usePersonalizedInterest } from '@/src/hooks/usePersonalizedInterest';
 import { PARTNERSHIP_LABEL } from '@/src/types/content';
@@ -90,22 +90,6 @@ const subscribeDesktop = (onChange: () => void) => {
 const getDesktopSnapshot = () =>
   typeof window !== 'undefined' && window.matchMedia(DESKTOP_QUERY).matches;
 
-const FALLBACK_COORDINATES: Record<string, { lat: number; lng: number }> = {
-  toscana: { lat: 43.46, lng: 11.86 },
-  'emilia romagna': { lat: 44.49, lng: 11.34 },
-  puglia: { lat: 40.78, lng: 17.24 },
-  lombardia: { lat: 45.46, lng: 9.19 },
-  veneto: { lat: 45.43, lng: 12.31 },
-  trentino: { lat: 46.06, lng: 11.12 },
-  lazio: { lat: 41.9, lng: 12.49 },
-  sicilia: { lat: 37.5, lng: 15.08 },
-  sardegna: { lat: 39.22, lng: 9.12 },
-  egitto: { lat: 27.25, lng: 33.81 },
-  norvegia: { lat: 68.23, lng: 14.56 },
-  'repubblica ceca': { lat: 50.07, lng: 14.43 },
-  svizzera: { lat: 46.81, lng: 8.22 },
-};
-
 export default function FullScreenMapExperience() {
   const { interest } = usePersonalizedInterest();
   const mapRef = useRef<MapRef>(null);
@@ -137,20 +121,13 @@ export default function FullScreenMapExperience() {
   const descrizioneRef = useRef<HTMLDivElement>(null);
   const [descrizioneScorre, setDescrizioneScorre] = useState(false);
 
-  // 100% Full Content Coverage: tutti i 40 item, ognuno con coordinate reali.
-  // Se per qualsiasi motivo un item non avesse coordinate, usiamo fallback.
-  const allItems = useMemo(() => {
-    const withCoordinates = CONTENT_ITEMS.map((item) => {
-      if (item.place.coordinates) return item;
-      const key = (item.place.region || item.place.country || '').toLowerCase();
-      const coords = FALLBACK_COORDINATES[key] || { lat: 42.5, lng: 12.5 };
-      return {
-        ...item,
-        place: { ...item.place, coordinates: coords },
-      };
-    });
-    return rankByInterest(withCoordinates, interest, (item) => item.types);
-  }, [interest]);
+  // Solo posti con coordinate reali: un fallback regionale (rimosso) faceva
+  // atterrare una churrería di Madrid in mezzo all'Italia. Meglio un posto
+  // assente dalla mappa che uno nel posto sbagliato.
+  const allItems = useMemo(
+    () => rankByInterest(getGeocodedContentItems(), interest, (item) => item.types),
+    [interest]
+  );
 
   const [userLoc, setUserLoc] = useState<UserLocation | null>(null);
   const [locLoading, setLocLoading] = useState<boolean>(false);
