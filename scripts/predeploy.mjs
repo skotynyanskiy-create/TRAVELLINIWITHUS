@@ -8,6 +8,8 @@ const steps = [
   ['typecheck', ['run', 'typecheck']],
   ['lint', ['run', 'lint']],
   ['test', ['run', 'test']],
+  ['functions:build', ['run', 'functions:build']],
+  ['functions:smoke', ['run', 'functions:smoke']],
   ['build', ['run', 'build']],
   ['audit:ui', ['run', 'audit:ui']],
   ['audit:firebase', ['run', 'audit:firebase']],
@@ -21,6 +23,10 @@ const steps = [
   ['audit:size', ['run', 'audit:size']],
   ['audit:obsidian', ['run', 'audit:obsidian']],
   ['audit:env', ['run', 'audit:env']],
+  // Ultimo perche' e' l'unico che guarda fuori dal repo: con PROD_URL impostata
+  // verifica che /api/** risponda JSON e non lo shell della SPA. Senza, si
+  // dichiara saltato. Vedi BUG_API_ENDPOINTS_SENZA_BACKEND_IN_PROD.
+  ['audit:api-live', ['run', 'audit:api-live']],
 ];
 
 let failed = false;

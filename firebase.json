@@ -4,7 +4,8 @@
       "source": "functions",
       "codebase": "api",
       "runtime": "nodejs22",
-      "ignore": ["node_modules", ".git", "*.local", "*.log"]
+      "ignore": ["node_modules", ".git", "*.local", "*.log"],
+      "predeploy": ["npm --prefix \"$RESOURCE_DIR\" run build"]
     }
   ],
   "emulators": {

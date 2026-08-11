@@ -1,9 +1,11 @@
 import { Timestamp } from 'firebase/firestore';
+import type { ArticleSeed } from './types';
 
-export const articleSeed = {
+export const articleSeed: ArticleSeed = {
   title: 'The Burton Juice: il ristorante a tema Tim Burton in Italia',
   slug: 'burton-juice-ristorante-tim-burton',
-  excerpt: 'PLACEHOLDER — sarà scritto da seo-strategist (max 160 char)',
+  excerpt:
+    "Il primo locale d'Europa dedicato a Tim Burton è a Somma Vesuviana, vicino Napoli: cocktail bar, ristorante, teatro e bakery. Dove si trova e come prenotare.",
   content: `
 Il primo gesto, al The Burton Juice, non è sederti a tavola. È attraversare uno specchio. Sei nella sala di Alice, la luce è quella storta dei film di Tim Burton, e in quel passaggio capisci che non sei venuto qui per cenare e basta: sei entrato dentro una scenografia che ha deciso di darti da mangiare. Succede a Somma Vesuviana, alle porte di Napoli, dentro il primo ristorante d'Europa interamente dedicato all'universo del regista di Edward mani di forbice e Beetlejuice.
 
@@ -68,7 +70,7 @@ Se mentre leggevi hai già pensato a chi ci porteresti, hai la risposta: salva q
   category: 'esperienze',
   destination: 'Somma Vesuviana (Napoli), Campania',
   partnership: { kind: 'adv', partner: '@theburtonjuice' },
-  tags: [],
+  tags: ['campania', 'napoli', 'ristoranti', 'tim-burton', 'esperienze'],
   author: { name: 'Rodrigo & Betta', bio: 'Viaggiatori e creatori di @travelliniwithus' },
   coverImage: '/hero-adventure.jpg', // PLACEHOLDER — sarà scelto da asset-curator
   published: false,

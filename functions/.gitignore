@@ -2,3 +2,5 @@ node_modules/
 lib/
 *.local
 .env
+.env.*
+!.env.example

@@ -91,9 +91,52 @@ function urlEntry(route, { changefreq = 'weekly', priority = '0.8', lastmod } = 
       `;
 }
 
+/**
+ * Il Firestore di questo progetto NON e' `(default)`: e' un database con nome
+ * (vedi `firestore.database` in firebase.json). `getFirestore()` senza id
+ * interroga il database sbagliato e torna zero documenti in silenzio — cioe'
+ * una sitemap senza nessun /articolo anche dopo aver pubblicato. Stessa
+ * risoluzione usata da src/server/data.ts e src/lib/firebaseDb.ts.
+ */
+function resolveDatabaseId() {
+  if (process.env.FIRESTORE_DATABASE_ID) return process.env.FIRESTORE_DATABASE_ID;
+
+  for (const [file, read] of [
+    ['firebase-applet-config.json', (c) => c.firestoreDatabaseId],
+    ['firebase.json', (c) => c.firestore?.database],
+  ]) {
+    try {
+      const parsed = JSON.parse(fs.readFileSync(path.join(process.cwd(), file), 'utf8'));
+      const id = read(parsed);
+      if (id) return id;
+    } catch {
+      // file assente o illeggibile: si prova la fonte successiva
+    }
+  }
+
+  return null;
+}
+
 async function fetchDynamicRoutes() {
-  const raw = process.env.FIREBASE_SERVICE_ACCOUNT;
-  if (!raw) return null;
+  const raw = process.env.FIREBASE_SERVICE_ACCOUNT_JSON || process.env.FIREBASE_SERVICE_ACCOUNT;
+  if (!raw) {
+    console.warn(
+      '[sitemap] Nessuna credenziale Firestore (FIREBASE_SERVICE_ACCOUNT_JSON / ' +
+        'FIREBASE_SERVICE_ACCOUNT): la sitemap NON conterra\' nessun /articolo ne\' /shop. ' +
+        'Atteso in locale, da correggere prima di un deploy con contenuti pubblicati.'
+    );
+    return null;
+  }
+
+  const databaseId = resolveDatabaseId();
+  if (!databaseId) {
+    console.warn(
+      '[sitemap] Database Firestore non risolto: ne FIRESTORE_DATABASE_ID, ne ' +
+        'firebase-applet-config.json, ne firebase.json lo dichiarano. Salto le rotte dinamiche ' +
+        'invece di interrogare il database (default), che e\' vuoto.'
+    );
+    return null;
+  }
 
   try {
     const credentialJson = raw.trim().startsWith('{')
@@ -107,7 +150,7 @@ async function fetchDynamicRoutes() {
       initializeApp({ credential: cert(credentialJson) });
     }
 
-    const db = getFirestore();
+    const db = getFirestore(databaseId);
     const articlesSnap = await db.collection('articles').where('published', '==', true).get();
     const productsSnap = await db.collection('products').where('published', '==', true).get();
 

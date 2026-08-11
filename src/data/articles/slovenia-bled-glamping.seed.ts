@@ -1,6 +1,7 @@
 import { Timestamp } from 'firebase/firestore';
+import type { ArticleSeed } from './types';
 
-export const articleSeed = {
+export const articleSeed: ArticleSeed = {
   title: 'Glamping a Bled: natura e silenzio in Slovenia',
   slug: 'slovenia-bled-glamping',
   excerpt:
@@ -28,7 +29,7 @@ Perfetto per coppie che cercano slow e natura senza campeggio duro.
 `.trim(),
   category: 'destinazioni',
   destination: 'Bled, Slovenia',
-  partnership: { kind: 'none' },
+  partnership: { kind: 'organic' },
   tags: ['slovenia', 'glamping', 'natura', 'lago'],
   author: { name: 'Rodrigo & Betta', bio: 'Viaggiatori e creatori di @travelliniwithus' },
   coverImage: '/images/reels/reel-placeholder.webp',

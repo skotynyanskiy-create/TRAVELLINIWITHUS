@@ -44,6 +44,9 @@ import type {
  */
 export interface ApiRouterDeps {
   stripe: Stripe | null;
+  /** Consente ai runtime serverless di leggere il secret Stripe solo durante
+   * l'esecuzione della richiesta, mantenendo compatibile il server locale. */
+  getStripe?: () => Stripe | null;
   firebaseConfig: Record<string, string | undefined>;
   OWNER_EMAIL: string;
   LEAD_MAGNET_URL: string;
@@ -69,7 +72,8 @@ export interface ApiRouterDeps {
 
 export function createApiRouter(deps: ApiRouterDeps): Router {
   const {
-    stripe,
+    stripe: configuredStripe,
+    getStripe: getStripeFromDeps,
     firebaseConfig,
     OWNER_EMAIL,
     LEAD_MAGNET_URL,
@@ -81,6 +85,7 @@ export function createApiRouter(deps: ApiRouterDeps): Router {
     fetchCouponByCode,
     isCheckoutRequestItem,
   } = deps;
+  const getStripe = getStripeFromDeps ?? (() => configuredStripe);
 
   const router = Router();
 
@@ -134,6 +139,7 @@ export function createApiRouter(deps: ApiRouterDeps): Router {
   });
 
   router.post('/api/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+    const stripe = getStripe();
     const rawBody = req.body;
     const sig = req.headers['stripe-signature'];
     const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -548,6 +554,7 @@ export function createApiRouter(deps: ApiRouterDeps): Router {
 
   router.post('/api/create-checkout-session', async (req, res) => {
     try {
+      const stripe = getStripe();
       const body = req.body as {
         items?: unknown;
         couponCode?: string;

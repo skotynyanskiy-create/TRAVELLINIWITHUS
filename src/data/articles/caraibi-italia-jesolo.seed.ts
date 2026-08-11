@@ -1,6 +1,7 @@
 import { Timestamp } from 'firebase/firestore';
+import type { ArticleSeed } from './types';
 
-export const articleSeed = {
+export const articleSeed: ArticleSeed = {
   title: 'I Caraibi in Italia: la versione veneta',
   slug: 'caraibi-italia-jesolo',
   excerpt:
@@ -28,7 +29,7 @@ Dettagli pratici e consigli su quando andare in arrivo.
 `.trim(),
   category: 'destinazioni',
   destination: 'Jesolo e litorale Veneto',
-  partnership: { kind: 'none' },
+  partnership: { kind: 'organic' },
   tags: ['italia', 'mare', 'veneto', 'spiaggia'],
   author: { name: 'Rodrigo & Betta', bio: 'Viaggiatori e creatori di @travelliniwithus' },
   coverImage: '/images/reels/reel-placeholder.webp',

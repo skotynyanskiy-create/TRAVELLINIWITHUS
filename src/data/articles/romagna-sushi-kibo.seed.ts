@@ -1,6 +1,7 @@
 import { Timestamp } from 'firebase/firestore';
+import type { ArticleSeed } from './types';
 
-export const articleSeed = {
+export const articleSeed: ArticleSeed = {
   title: 'Sushi Kibo: sushi in Romagna che sorprende',
   slug: 'romagna-sushi-kibo',
   excerpt:
@@ -26,7 +27,7 @@ Per chi ama il sushi di qualità in Emilia-Romagna senza andare in grandi città
 `.trim(),
   category: 'esperienze',
   destination: 'Romagna, Italia',
-  partnership: { kind: 'none' },
+  partnership: { kind: 'organic' },
   tags: ['romagna', 'sushi', 'cibo', 'italia'],
   author: { name: 'Rodrigo & Betta', bio: 'Viaggiatori e creatori di @travelliniwithus' },
   coverImage: '/images/reels/reel-placeholder.webp',
