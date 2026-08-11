@@ -149,6 +149,139 @@ function collectDefinedTokens() {
 
 const definedTokens = collectDefinedTokens();
 
+const themeCssPath = path.join(srcDir, 'index.css');
+const textTokensOnSand = [
+  '--color-ink',
+  '--color-ink-2',
+  '--color-muted',
+  '--color-muted-fg',
+  '--color-muted-fg-2',
+  '--color-accent-text',
+  '--color-error-text',
+  '--color-success-text',
+  '--color-warning-text',
+  '--color-info-text',
+];
+const textContrastMinimum = 4.5;
+
+function extractColorTokens(content, offset = 0) {
+  const tokens = new Map();
+
+  for (const match of content.matchAll(/(--color-[a-zA-Z0-9_-]+)\s*:\s*([^;]+);/g)) {
+    tokens.set(match[1], {
+      value: match[2].trim(),
+      index: offset + match.index,
+    });
+  }
+
+  return tokens;
+}
+
+function parseHexColor(value) {
+  const hex = value.match(/^#([\da-f]{3}|[\da-f]{6})$/i)?.[1];
+  if (!hex) return null;
+
+  const normalized = hex.length === 3 ? [...hex].map((part) => part + part).join('') : hex;
+  return [0, 2, 4].map((offset) => Number.parseInt(normalized.slice(offset, offset + 2), 16));
+}
+
+function relativeLuminance([red, green, blue]) {
+  const linear = [red, green, blue].map((channel) => {
+    const normalized = channel / 255;
+    return normalized <= 0.04045 ? normalized / 12.92 : ((normalized + 0.055) / 1.055) ** 2.4;
+  });
+
+  return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
+}
+
+function contrastRatio(foreground, background) {
+  const foregroundLuminance = relativeLuminance(foreground);
+  const backgroundLuminance = relativeLuminance(background);
+  return (
+    (Math.max(foregroundLuminance, backgroundLuminance) + 0.05) /
+    (Math.min(foregroundLuminance, backgroundLuminance) + 0.05)
+  );
+}
+
+/**
+ * Ogni tema puo' cambiare --color-sand. I token di testo devono quindi essere
+ * testati contro il fondo realmente ereditato dal tema, non solo contro il
+ * sand di default. Il parser e' volutamente ristretto ai token esadecimali:
+ * un valore non misurabile deve fermare il gate invece di fingere una verifica.
+ */
+function checkTextContrastAcrossThemes(issues) {
+  let checkedPairs = 0;
+  const css = fs.readFileSync(themeCssPath, 'utf8');
+  const baseMatch = /@theme\s*\{([\s\S]*?)\n\}/.exec(css);
+
+  if (!baseMatch || baseMatch.index === undefined) {
+    pushIssue(issues, 'error', themeCssPath, 1, 'Unable to find the base @theme token block.');
+    return checkedPairs;
+  }
+
+  const baseOffset = baseMatch.index + baseMatch[0].indexOf(baseMatch[1]);
+  const baseTokens = extractColorTokens(baseMatch[1], baseOffset);
+  const themes = [{ name: 'default', tokens: new Map() }];
+  const themePattern = /:root\[data-audience=['"]([^'"]+)['"]\]\s*\{([\s\S]*?)\n\}/g;
+
+  for (const match of css.matchAll(themePattern)) {
+    const [, name, block] = match;
+    themes.push({
+      name,
+      tokens: extractColorTokens(block, match.index + match[0].indexOf(block)),
+    });
+  }
+
+  for (const theme of themes) {
+    const resolvedTokens = new Map(baseTokens);
+    for (const [token, definition] of theme.tokens) {
+      resolvedTokens.set(token, definition);
+    }
+
+    const sand = resolvedTokens.get('--color-sand');
+    const sandColor = sand && parseHexColor(sand.value);
+    if (!sandColor) {
+      pushIssue(
+        issues,
+        'error',
+        themeCssPath,
+        sand ? getLineNumber(css, sand.index) : 1,
+        `Theme "${theme.name}" must define --color-sand as a hex color so text contrast can be verified.`
+      );
+      continue;
+    }
+
+    for (const token of textTokensOnSand) {
+      const definition = resolvedTokens.get(token);
+      const color = definition && parseHexColor(definition.value);
+      if (!color) {
+        pushIssue(
+          issues,
+          'error',
+          themeCssPath,
+          definition ? getLineNumber(css, definition.index) : 1,
+          `Theme "${theme.name}" must provide ${token} as a hex color so text contrast can be verified.`
+        );
+        continue;
+      }
+
+      const ratio = contrastRatio(color, sandColor);
+      checkedPairs += 1;
+      if (ratio < textContrastMinimum) {
+        pushIssue(
+          issues,
+          'error',
+          themeCssPath,
+          getLineNumber(css, definition.index),
+          `Theme "${theme.name}" has insufficient contrast for ${token} on --color-sand: ${ratio.toFixed(2)}:1 (minimum ${textContrastMinimum}:1).`
+        );
+      }
+    }
+  }
+
+  return checkedPairs;
+}
+
 /**
  * Una `var(--x)` che punta a un token inesistente non fa rumore: la CSS resta
  * valida, typecheck non entra nelle stringhe di classe e axe non se ne accorge.
@@ -176,6 +309,7 @@ function checkTokenReferences(issues, filePath, content) {
 
 const files = walk(srcDir);
 const issues = [];
+const textContrastPairsChecked = checkTextContrastAcrossThemes(issues);
 
 for (const filePath of files) {
   if (ignoredFiles.has(filePath)) {
@@ -187,19 +321,37 @@ for (const filePath of files) {
   if (!isAllowlisted(filePath, inlineStyleAllowlist)) {
     const inlineStyleMatches = [...content.matchAll(/style=\{\{/g)];
     for (const match of inlineStyleMatches) {
-      pushIssue(issues, 'warn', filePath, getLineNumber(content, match.index), 'Inline style found in JSX. Confirm it is required for animation, transforms or third-party APIs.');
+      pushIssue(
+        issues,
+        'warn',
+        filePath,
+        getLineNumber(content, match.index),
+        'Inline style found in JSX. Confirm it is required for animation, transforms or third-party APIs.'
+      );
     }
   }
 
   if (!isAllowlisted(filePath, rawColorAllowlist)) {
-    const rawColorMatches = [...content.matchAll(/#[0-9a-fA-F]{3,8}\b|rgba?\([^)]*\)|hsla?\([^)]*\)/g)];
+    const rawColorMatches = [
+      ...content.matchAll(/#[0-9a-fA-F]{3,8}\b|rgba?\([^)]*\)|hsla?\([^)]*\)/g),
+    ];
     for (const match of rawColorMatches) {
-      pushIssue(issues, 'warn', filePath, getLineNumber(content, match.index), `Raw color token "${match[0]}" found. Confirm it is intentional and not a missed brand token.`);
+      pushIssue(
+        issues,
+        'warn',
+        filePath,
+        getLineNumber(content, match.index),
+        `Raw color token "${match[0]}" found. Confirm it is intentional and not a missed brand token.`
+      );
     }
   }
 
   if (!isAllowlisted(filePath, semanticPaletteAllowlist)) {
-    const paletteMatches = [...content.matchAll(/\b(?:bg|text|border|fill|stroke|from|via|to|ring)-(red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-\d{2,3}\b/g)];
+    const paletteMatches = [
+      ...content.matchAll(
+        /\b(?:bg|text|border|fill|stroke|from|via|to|ring)-(red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-\d{2,3}\b/g
+      ),
+    ];
     for (const match of paletteMatches) {
       pushIssue(
         issues,
@@ -215,7 +367,13 @@ for (const filePath of files) {
 
   const imgMatches = [...content.matchAll(/<img\b(?![^>]*\balt=)[^>]*>/g)];
   for (const match of imgMatches) {
-    pushIssue(issues, 'error', filePath, getLineNumber(content, match.index), '<img> without alt attribute found.');
+    pushIssue(
+      issues,
+      'error',
+      filePath,
+      getLineNumber(content, match.index),
+      '<img> without alt attribute found.'
+    );
   }
 
   const iconLibraryMatches = [...content.matchAll(/from ['"]([^'"]+)['"]/g)];
@@ -225,7 +383,11 @@ for (const filePath of files) {
       continue;
     }
 
-    if (source.includes('react-icons') || source.includes('heroicons') || source.includes('phosphor')) {
+    if (
+      source.includes('react-icons') ||
+      source.includes('heroicons') ||
+      source.includes('phosphor')
+    ) {
       pushIssue(
         issues,
         'warn',
@@ -243,10 +405,13 @@ const maxPrintedIssues = 80;
 
 console.log('UI audit');
 console.log(`Files scanned: ${files.length}`);
+console.log(`Text contrast checks: ${textContrastPairsChecked} (${textContrastMinimum}:1 minimum)`);
 console.log(`Errors: ${errorCount}`);
 console.log(`Warnings: ${warnCount}`);
 
-const printedIssues = [...issues].sort((a, b) => Number(b.level === 'error') - Number(a.level === 'error'));
+const printedIssues = [...issues].sort(
+  (a, b) => Number(b.level === 'error') - Number(a.level === 'error')
+);
 
 for (const issue of printedIssues.slice(0, maxPrintedIssues)) {
   const prefix = issue.level.toUpperCase().padEnd(5, ' ');
@@ -254,7 +419,9 @@ for (const issue of printedIssues.slice(0, maxPrintedIssues)) {
 }
 
 if (issues.length > maxPrintedIssues) {
-  console.log(`WARN  ${issues.length - maxPrintedIssues} additional findings omitted from console output.`);
+  console.log(
+    `WARN  ${issues.length - maxPrintedIssues} additional findings omitted from console output.`
+  );
 }
 
 if (issues.length === 0) {

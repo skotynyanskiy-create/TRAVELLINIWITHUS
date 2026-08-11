@@ -14,6 +14,8 @@ export default tseslint.config(
       '.obsidian',
       'docs/.obsidian',
       'dist',
+      'functions/lib',
+      'functions/node_modules',
       'playwright-report',
       'test-results',
       'storybook-static',
@@ -31,7 +33,11 @@ export default tseslint.config(
     ],
   },
   {
-    extends: [js.configs.recommended, ...tseslint.configs.recommended, jsxA11y.flatConfigs.recommended],
+    extends: [
+      js.configs.recommended,
+      ...tseslint.configs.recommended,
+      jsxA11y.flatConfigs.recommended,
+    ],
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2020,
