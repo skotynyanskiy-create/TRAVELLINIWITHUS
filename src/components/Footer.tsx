@@ -85,9 +85,9 @@ export default function Footer() {
               </div>
 
               <div>
-                <h3 className="mb-6 text-sm font-bold uppercase tracking-[0.3em] text-white">
+                <h2 className="mb-6 text-sm font-bold uppercase tracking-[0.3em] text-white">
                   {footer.discoverTitle}
-                </h3>
+                </h2>
                 <ul className="space-y-5">
                   <li>
                     <Link
@@ -143,9 +143,9 @@ export default function Footer() {
               </div>
 
               <div>
-                <h3 className="mb-6 text-sm font-bold uppercase tracking-[0.3em] text-white">
+                <h2 className="mb-6 text-sm font-bold uppercase tracking-[0.3em] text-white">
                   {footer.resourcesTitle}
-                </h3>
+                </h2>
                 <ul className="space-y-5">
                   <li>
                     <Link
@@ -175,9 +175,9 @@ export default function Footer() {
               </div>
 
               <div className="md:col-span-4 lg:col-span-1">
-                <h3 className="mb-6 text-sm font-bold uppercase tracking-[0.3em] text-white">
+                <h2 className="mb-6 text-sm font-bold uppercase tracking-[0.3em] text-white">
                   {footer.projectTitle}
-                </h3>
+                </h2>
                 <ul className="mb-10 space-y-5">
                   <li>
                     <Link
