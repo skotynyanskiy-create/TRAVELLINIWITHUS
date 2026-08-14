@@ -253,6 +253,17 @@
           }
         ]
       }
+    ],
+    "SubagentStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/hooks/subagent_brief.mjs\""
+          }
+        ]
+      }
     ]
   }
 }

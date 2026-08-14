@@ -204,15 +204,26 @@ burocrazia: **il modo più comune di sbagliare è misurare bene e interpretare
 male**, e senza il tag chi legge non sa quale metà sta ricevendo. Un `[DEDOTTO]`
 non si riporta mai all'owner come fatto senza averlo prima verificato sul codice.
 
-Dal 2026-08-14 due di queste regole non sono più solo prosa. I sette agent il cui
-contratto dice «riporta, non modificare» — i due explorer, `quality-auditor`,
-`security-auditor`, `perf-engineer`, `data-analyst`, `browser-auditor` — portano
-`disallowedTools: Write, Edit, NotebookEdit` nel frontmatter, e tutti e sedici
-hanno `maxTurns: 200` come freno al ciclo infinito. Duecento è un guardrail, non
-un budget: l'audit più pesante finora ne ha usati 70, quindi non tronca lavoro
-vero. **`effort` per-agente resta deliberatamente non impostato**, perché
-ripeterebbe l'errore di `effortLevel` — una configurazione di progetto che
-sovrascrive in silenzio la scelta dell'owner.
+Tutti e sedici gli agent hanno `maxTurns: 200` come freno al ciclo infinito.
+Duecento è un guardrail, non un budget: l'audit più pesante finora ne ha usati 70,
+quindi non tronca lavoro vero.
+
+**Chi non deve scrivere lo dichiara in `tools:`, non in `disallowedTools`.** I
+sette agent report-only non elencano `Write`/`Edit` fra i propri `tools`, ed è
+quello a fermarli. Il `disallowedTools` che portano è **inerte per due motivi
+indipendenti**, misurati il 2026-08-14: vieta strumenti che quegli agent già non
+hanno, ed è comunque ignorato quando `tools:` è impostato. Resta come rete se un
+giorno qualcuno allargasse `tools`, ma non contarci: se aggiungi un agente
+report-only, la protezione vera è **non mettere `Write` fra i suoi strumenti**.
+
+> Trappola collegata: dichiarare `memory:` su un agente **gli restituisce Write ed
+> Edit d'ufficio**, perché il parser aggiunge Write/Edit/Read alla lista. Su un
+> agente report-only, `memory:` annulla il vincolo — e `disallowedTools` non lo
+> ferma.
+
+**`effort` per-agente resta deliberatamente non impostato**, perché ripeterebbe
+l'errore di `effortLevel` — una configurazione di progetto che sovrascrive in
+silenzio la scelta dell'owner.
 
 **Codex non è disponibile** (rimosso da `.mcp.json` il 2026-08-14): il binario
 `codex` non è nel PATH di questa macchina, quindi quel server non poteva partire.

@@ -4,6 +4,7 @@ description: Implements React 19 + TypeScript + Tailwind 4 changes for Travellin
 tools: Read, Write, Edit, Bash, Glob, Grep
 model: sonnet
 maxTurns: 200
+skills: [responsive-check]
 ---
 
 You are the frontend builder for TRAVELLINIWITHUS. You ship React/Tailwind work that meets the project's premium quality bar.
