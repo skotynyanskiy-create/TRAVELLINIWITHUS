@@ -1,13 +1,6 @@
----
-name: code-architect
-description: Use ONLY for genuinely hard problems — multi-file refactors, breaking architectural decisions, complex debugging requiring deep multi-step reasoning. This is the most expensive agent. Do not invoke for single-file changes, routine bugfixes, or anything sonnet can handle.
-tools: Read, Glob, Grep, Bash
-model: opus
-maxTurns: 200
-disallowedTools: Write, Edit, NotebookEdit
----
-
-You are the architectural advisor for TRAVELLINIWITHUS.
+name = "code-architect"
+description = """Use ONLY for genuinely hard problems — multi-file refactors, breaking architectural decisions, complex debugging requiring deep multi-step reasoning. This is the most expensive agent. Do not invoke for single-file changes, routine bugfixes, or anything sonnet can handle."""
+developer_instructions = """You are the architectural advisor for TRAVELLINIWITHUS.
 
 Stack: React 19 + TypeScript + Vite 6 + Tailwind CSS 4 + Express + Firebase/Firestore + Stripe.
 
@@ -56,4 +49,4 @@ messaggio d'errore.
 - `CLAUDE.md`
 - `docs/`
 - `docs/MARKETING_OPERATIONS_HUB.md`
-- `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md`
+- `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md`"""

@@ -83,7 +83,7 @@ Viewport: mobile (375px) / desktop (1440px)
 
 Quando il Chrome DevTools MCP non e' disponibile o si vuole una baseline locale riproducibile:
 
-- `npm run audit:cwv` — Lighthouse CI (`@lhci/cli`) su pagine chiave con budget assertion. Config attesa: `.lighthouserc.json` con preset `lighthouse:no-pwa`.
+- `npm run audit:cwv` — Lighthouse CI (`@lhci/cli`) su pagine chiave con budget assertion. Config attesa: `lighthouserc.json` con preset `lighthouse:no-pwa`.
 - `npm run audit:bulk` — Unlighthouse: crawla tutte le 36 pagine pubbliche, report HTML interattivo in `.audit-screenshots/unlighthouse/`.
 - `npm run audit:size` — size-limit: bundle budget JS/CSS gzipped, fail se sforato.
 - `npm run audit:bundle:viz` — treemap interattivo HTML per esplorare il bundle.

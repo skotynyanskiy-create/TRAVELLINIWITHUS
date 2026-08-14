@@ -17,7 +17,7 @@ Read these first:
 3. `DESIGN.md`
 4. `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md`
 5. `docs/MARKETING_OPERATIONS_HUB.md`
-6. `docs/10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT.md`
+6. `docs/10_Projects/PROJECT_HOME_RICOMPOSIZIONE_2026-07-26.md`
 7. relevant notes under `docs/`
 
 ## Policy

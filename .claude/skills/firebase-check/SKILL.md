@@ -35,7 +35,7 @@ Report findings with file paths, line numbers, and severity. Group by category.
 
 Per diagnosticare problemi di rules / permissions senza toccare prod:
 
-- `npm run emulators` — avvia Firestore + Auth emulator locali. Setup richiesto: `firebase.json` con sezione `emulators` + `connectFirestoreEmulator(db, 'localhost', 8080)` in `src/services/firebaseInit.ts` quando `VITE_USE_FIREBASE_EMULATOR=true`.
+- `npm run emulators` — avvia Firestore + Auth emulator locali. Setup richiesto: `firebase.json` con sezione `emulators` + `connectFirestoreEmulator(db, 'localhost', 8080)` in `src/lib/firebaseApp.ts` quando `VITE_USE_FIREBASE_EMULATOR=true`.
 - `firebase emulators:exec "npm test"` — esegue test isolati contro emulator.
 - `npm run audit:secrets` — gitleaks scan per leak di `FIREBASE_SERVICE_ACCOUNT_JSON`, `FIREBASE_ADMIN_*` in repo o staged files.
 

@@ -19,7 +19,9 @@ Aggiungere motion seguendo il DNA "cinematic ma trattenuto" definito in `DESIGN.
 - **lenis** — smooth scroll globale (`SmoothScrollProvider` wrappa app)
 - **GSAP** + `@gsap/react` — timeline complesse, ScrollTrigger, pin/parallax
 - **motion** (Framer Motion v12) — micro-interazioni componenti, variants
-- **embla-carousel-react** — carousel performante (gia usato in `LatestArticlesCarousel`)
+- **embla-carousel-react** — dichiarato in `package.json` ma **importato da zero file**:
+  prima di usarlo, sappi che nessun carousel del sito ci gira sopra. Quello vero e'
+  `HiggsfieldReelCarousel.tsx`, che non lo usa.
 
 ## Wrapper pronti
 

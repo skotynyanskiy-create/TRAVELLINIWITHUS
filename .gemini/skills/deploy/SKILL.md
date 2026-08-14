@@ -1,6 +1,10 @@
 ---
 name: deploy
 description: Deploy the TRAVELLINIWITHUS site after mandatory preflight checks, build validation, Firebase Hosting checks, and release documentation updates.
+# Solo l'owner puo' lanciarla, digitando /deploy. Senza questo campo il modello
+# poteva invocarla da se, contro la regola di CLAUDE.md «deploy in produzione solo
+# su richiesta esplicita»: la prosa lo vietava, niente lo impediva.
+disable-model-invocation: true
 ---
 
 # /deploy

@@ -35,7 +35,7 @@ Check `src/components/SEO.tsx`:
 
 ### 3. Structured Data (JSON-LD)
 
-Check `src/pages/Home.tsx` and `src/pages/Articolo.tsx`:
+Check `src/pages/AtlanteHome.tsx` and `src/pages/Articolo.tsx`:
 
 - Homepage: `WebSite` schema with `name`, `url`, `description`
 - Article pages: `Article` schema with `headline`, `author`, `datePublished`, `image`

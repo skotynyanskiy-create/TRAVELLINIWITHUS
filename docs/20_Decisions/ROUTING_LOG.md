@@ -142,3 +142,9 @@ rejected and redone). Rules live in `CLAUDE.md` > Model routing.
 | 2026-08-14 | Explore                              | Percorso di rendering dei media                   | 3304 ch  |
 | 2026-08-14 | travellini-quality-auditor           | Audit completo delle 16 definizioni agent         | 3120 ch  |
 | 2026-08-14 | code-explorer                        | Audit delle 53 skill di progetto                  | 2619 ch  |
+| 2026-08-14 | travellini-quality-auditor | Audit hook, husky e CI | 3332 ch |
+| 2026-08-14 | code-architect | Audit build e tooling | 3334 ch |
+| 2026-08-14 | travellini-security-auditor | Audit del livello AI e permessi | 3898 ch |
+| 2026-08-14 | travellini-security-auditor | Audit sicurezza configurazione AI | 2755 ch |
+| 2026-08-14 | travellini-quality-auditor | Coerenza di skill e agent | 2570 ch |
+| 2026-08-14 | code-architect | Architettura dei file di istruzione | 3649 ch |

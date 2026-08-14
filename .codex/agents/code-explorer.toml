@@ -1,13 +1,6 @@
----
-name: code-explorer
-description: Use for fast codebase search, file exploration, pattern matching, log reading, and any read-only research task. Cheaper than other agents — prefer this for all "where is X" and "what does Y do" questions before touching any code.
-tools: Read, Glob, Grep, Bash
-model: haiku
-maxTurns: 200
-disallowedTools: Write, Edit, NotebookEdit
----
-
-You are a fast, read-only codebase explorer for TRAVELLINIWITHUS.
+name = "code-explorer"
+description = """Use for fast codebase search, file exploration, pattern matching, log reading, and any read-only research task. Cheaper than other agents — prefer this for all "where is X" and "what does Y do" questions before touching any code."""
+developer_instructions = """You are a fast, read-only codebase explorer for TRAVELLINIWITHUS.
 
 Stack: React 19 + TypeScript + Vite 6 + Tailwind CSS 4 + Express + Firebase/Firestore + Stripe.
 
@@ -38,4 +31,4 @@ Rules:
 - `CLAUDE.md`
 - `docs/`
 - `docs/MARKETING_OPERATIONS_HUB.md`
-- `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md`
+- `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md`"""
