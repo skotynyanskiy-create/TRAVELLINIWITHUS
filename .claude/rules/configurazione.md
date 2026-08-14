@@ -21,17 +21,26 @@ paths:
 Si carica quando apri la configurazione. Prima stava in coda a `CLAUDE.md` e si
 pagava a ogni sessione anche quando nessuno la toccava.
 
-I conteggi erano esatti il 2026-08-14, **e non c'è niente che li tenga tali**:
-nessun comando li verifica. Quelli che decadono da soli sono i file in `docs/`, le
-skill e i server MCP — trattali come ordine di grandezza e ricontrolla prima di
-citarli. Le regole `allow`/`deny`, gli hook e `defaultMode` cambiano solo se
-qualcuno modifica `.claude/settings.json`, quindi reggono di più. Non riscrivere
-«verificato oggi» senza aver rieseguito il conteggio.
+**I conteggi qui sotto sono verificati da una macchina**: `npm run audit:config`
+li confronta con `.claude/settings.json` e fallisce se divergono. Gira in CI, in
+`predeploy` e in `audit:quality`.
+
+Non è sempre stato così, e la storia vale più della regola. Questo paragrafo
+diceva: «i conteggi erano esatti oggi, **e non c'è niente che li tenga tali**».
+Scritto il 2026-08-14 — e nelle sei ore successive cinque di quei numeri sono
+scaduti, tutti per modifiche fatte nella stessa sessione che aveva scritto
+l'avvertimento. Un documento che descrive la configurazione o è verificato, o
+mente; l'unica cosa che il cancello toglie è la terza possibilità, cioè che menta
+senza che nessuno se ne accorga.
+
+Se cambi un conteggio qui, **aggiorna la prosa, non lo script**: la
+configurazione è la verità, questo file la descrive. Restano non verificati i
+file in `docs/`, che decadono da soli: trattali come ordine di grandezza.
 
 ## Come è fatta
 
 - **`.claude/settings.json` è la configurazione di progetto effettiva**: dichiara
-  i 12 server di `.mcp.json`, 97 regole `allow`, 45 `deny`, 5 comandi hook su 3
+  i 10 server di `.mcp.json`, 97 regole `allow`, 76 `deny`, 6 comandi hook su 4
   eventi, e `permissions.defaultMode: auto`. L'harness vince comunque: un flag
   come `--dangerously-skip-permissions` sovrascrive `defaultMode`.
 - **`effortLevel` non sta qui** (rimosso il 2026-08-02). Le settings caricano
@@ -84,7 +93,7 @@ supplemento, non il livello primario.
 (`Remove-Item -Recurse`, `rd /s`, `del /f`, `format`), `git add -A`,
 `git push origin +refspec`, `git branch -D`, `git rebase`, `git checkout .`,
 `dd if=`, `firebase deploy`, `npm run deploy` — vivevano **solo** nel livello che
-si spegne senza Python. Ora sono 31 regole `Bash` su 45 `deny` totali.
+si spegne senza Python. Ora sono 44 regole `Bash` su 76 `deny` totali.
 
 Resta nell'hook e solo lì il `curl | bash`: la sintassi delle `deny` non esprime
 bene una pipe, e ogni sottocomando viene già valutato a sé. Se lo sposti, misura
@@ -112,9 +121,9 @@ vero, in tre modi:
   `create_database`, `create_index`…), che scavalca `firestore.rules` come fa la
   Cloud Function.
 
-Chiusi il 2026-08-14 portando in `deny` i sette strumenti Firebase di scrittura,
+Chiusi il 2026-08-14 portando in `deny` gli strumenti Firebase di scrittura,
 cinque GitHub, `sentry__update_issue` e i due Obsidian di scrittura. **Le `deny`
-sono passate da 45 a 74.**
+sono passate da 24 a 76 in una giornata**, senza togliere nemmeno una `allow`.
 
 **Controprova che vale come metodo**: `mcp__firebase__auth_update_user` era in
 `deny`, ma il gruppo `auth` non viene mai caricato sotto `--only core,firestore`.
@@ -168,9 +177,12 @@ seguito fino a `data.ts`.
 
 ## Trappole misurate
 
-- **`VITE_MAPBOX_TOKEN`** è passato come secret da tre job della CI, ma **nessun
-  file sotto `src/` lo referenzia**: prima di considerarlo un requisito di build,
-  verifica se serve ancora.
+- **`VITE_MAPBOX_TOKEN` non serve alla mappa.** `/mappa` usa `maplibre-gl` con i
+  tile di `tiles.openfreemap.org`, e la CSP in `firebase.json` non ammette nemmeno
+  il dominio Mapbox. L'unico consumatore è `scripts/geocode-content.mjs`, che si
+  lancia a mano. Fino al 2026-08-14 tre job della CI lo passavano come secret per
+  niente, e il README diceva che senza «la mappa appare nera»: falso in entrambi i
+  posti, ora corretti.
 - **Le tre pipeline «controlla tutto» sono allineate dal 2026-08-14.** Erano tre
   composizioni diverse, nessuna sottoinsieme dell'altra: `audit:provenance` — la
   regola imagery-truth — girava solo dentro `audit:quality`, quindi nessuna

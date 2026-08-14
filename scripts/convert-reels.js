@@ -4,7 +4,7 @@
  *
  * Pipeline asset per i 5 reel Instagram/TikTok di Rodrigo & Betta.
  *
- * Input  : C:\Users\ccocu\Desktop\TRAVELLINIWITHUS\video\WhatsApp Video 2026-05-14*.mp4
+ * Input  : `public/video/` del repo, oppure la cartella indicata da REELS_SOURCE_DIR.
  * Output : public/video/reel-{1-5}.webm + public/images/reels/reel-{1-5}-cover.webp
  *
  * - Se ffmpeg è installato (PATH): full pipeline VP9 ~400KB + cover WebP ~80-120KB.
@@ -23,7 +23,11 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(__dirname, '..');
 
-const SOURCE_DIR = 'C:\\Users\\ccocu\\Desktop\\TRAVELLINIWITHUS\\video';
+// Era cablato sul percorso assoluto della macchina di un'altra persona
+// (`C:\Users\ccocu\…`), quindi su questo computer non ha mai potuto trovare
+// niente: lo script è citato da package.json, cioè vivo e sempre a vuoto.
+// Default relativo al repo, sovrascrivibile per una cartella esterna.
+const SOURCE_DIR = process.env.REELS_SOURCE_DIR || join(repoRoot, 'public', 'video');
 const OUT_VIDEO_DIR = join(repoRoot, 'public', 'video');
 const OUT_COVER_DIR = join(repoRoot, 'public', 'images', 'reels');
 

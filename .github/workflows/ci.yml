@@ -68,6 +68,11 @@ jobs:
       - name: Audit agent stack
         run: npm run audit:agents
 
+      # I conteggi scritti in .claude/rules/configurazione.md devono corrispondere
+      # a settings.json: la prosa che descrive la configurazione scade in ore.
+      - name: Audit conteggi di configurazione
+        run: npm run audit:config
+
       - name: Audit Obsidian vault
         run: npm run audit:obsidian
 

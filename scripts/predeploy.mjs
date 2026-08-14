@@ -24,6 +24,7 @@ const steps = [
   ['audit:firebase', ['run', 'audit:firebase']],
   ['audit:stripe', ['run', 'audit:stripe']],
   ['audit:agents', ['run', 'audit:agents']],
+  ['audit:config', ['run', 'audit:config']],
   ['eval:skills', ['run', 'eval:skills']],
   ['audit:ai-seo', ['run', 'audit:ai-seo']],
   ['check:graphify', ['run', 'check:graphify']],

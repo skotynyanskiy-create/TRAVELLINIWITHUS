@@ -51,7 +51,7 @@
     "audit:env": "node scripts/check-env-safety.mjs",
     "audit:visual": "playwright test e2e/visual-quality.spec.ts",
     "audit:public-footprint": "node scripts/check-public-footprint.mjs",
-    "audit:quality": "npm run typecheck && npm run lint && npm run format:check && npm run lint:md:core && npm run test && npm run build && npm run audit:seed && npm run audit:ui && npm run audit:provenance && npm run audit:llms && npm run audit:env && npm run audit:public-footprint && npm run audit:firebase && npm run audit:stripe && npm run audit:revenue && npm run audit:agents && npm run audit:obsidian && npm run stato:check && npm run audit:visual && npm run audit:size",
+    "audit:quality": "npm run typecheck && npm run lint && npm run format:check && npm run lint:md:core && npm run test && npm run build && npm run audit:seed && npm run audit:ui && npm run audit:provenance && npm run audit:llms && npm run audit:env && npm run audit:public-footprint && npm run audit:firebase && npm run audit:stripe && npm run audit:revenue && npm run audit:agents && npm run audit:config && npm run audit:obsidian && npm run stato:check && npm run audit:visual && npm run audit:size",
     "audit:all": "npm run audit:ui && npm run audit:firebase && npm run audit:stripe",
     "audit:cwv": "npm run build && npx --yes @lhci/cli@0.14.x autorun --config=./lighthouserc.json",
     "audit:bulk": "npx --yes unlighthouse@0 --site http://localhost:3000 --output-path .audit-screenshots/unlighthouse",
@@ -89,7 +89,8 @@
     "verdetti:scheda": "node scripts/generate-verdetti-sheet.mjs",
     "verdetti:applica": "node scripts/apply-verdetti-sheet.mjs",
     "audit:seed": "node scripts/check-content-seed.mjs",
-    "lint:md:core": "npx --yes markdownlint-cli2@0 \"CLAUDE.md\" \"AGENTS.md\" \"README.md\" \".claude/rules/*.md\""
+    "lint:md:core": "npx --yes markdownlint-cli2@0 \"CLAUDE.md\" \"AGENTS.md\" \"README.md\" \".claude/rules/*.md\"",
+    "audit:config": "node scripts/check-config-facts.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",

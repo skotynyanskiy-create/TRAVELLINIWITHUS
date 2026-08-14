@@ -49,8 +49,8 @@ Due rischi noti, aperti, non risolti:
 
 <!-- CONSEGNA:START — generato da `npm run stato`, non modificare a mano -->
 
-- Branch corrente: `chore/config-hardening-2026-07-26` — 59 commit avanti su `main`, 0 dietro.
-- File non committati: **541**.
+- Branch corrente: `chore/config-hardening-2026-07-26` — 119 commit avanti su `main`, 1 dietro.
+- File non committati: **10**.
 - `functions/` su `origin/main`: **assente**.
 - Rewrite `/api/**` in `firebase.json`: presente.
 
