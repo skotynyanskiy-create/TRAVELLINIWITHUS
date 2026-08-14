@@ -40,7 +40,7 @@ file in `docs/`, che decadono da soli: trattali come ordine di grandezza.
 ## Come è fatta
 
 - **`.claude/settings.json` è la configurazione di progetto effettiva**: dichiara
-  i 10 server di `.mcp.json`, 97 regole `allow`, 76 `deny`, 6 comandi hook su 4
+  i 10 server di `.mcp.json`, 97 regole `allow`, 76 `deny`, 7 comandi hook su 4
   eventi, e `permissions.defaultMode: auto`. L'harness vince comunque: un flag
   come `--dangerously-skip-permissions` sovrascrive `defaultMode`.
 - **`effortLevel` non sta qui** (rimosso il 2026-08-02). Le settings caricano

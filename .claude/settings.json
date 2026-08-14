@@ -252,6 +252,15 @@
             "command": "node \"$CLAUDE_PROJECT_DIR/scripts/hooks/run-hook.mjs\" loop_detector.py"
           }
         ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/hooks/format_on_edit.mjs\""
+          }
+        ]
       }
     ],
     "SubagentStart": [
