@@ -22,7 +22,7 @@ import path from 'node:path';
 const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 const SCRIPT_NPM = new Set(Object.keys(pkg.scripts));
 
-/** File da analizzare: le definizioni che il modello legge davvero. */
+/** File da analizzare: tutto ciò che il modello legge come istruzione. */
 function raccogli() {
   const out = [];
   for (const f of fs.readdirSync('.claude/agents').filter((x) => x.endsWith('.md'))) {
@@ -31,6 +31,18 @@ function raccogli() {
   for (const d of fs.readdirSync('.agents/skills')) {
     const p = path.join('.agents/skills', d, 'SKILL.md');
     if (fs.existsSync(p)) out.push(p);
+  }
+  // I file di istruzione veri e propri erano fuori copertura fino al
+  // 2026-08-14, ed è il buco peggiore: `CLAUDE.md` è l'unico file garantito in
+  // contesto a ogni sessione, e le regole path-scoped arrivano proprio quando
+  // si apre l'area che descrivono. Un percorso morto lì costa più che altrove.
+  for (const f of ['CLAUDE.md', 'AGENTS.md']) {
+    if (fs.existsSync(f)) out.push(f);
+  }
+  if (fs.existsSync('.claude/rules')) {
+    for (const f of fs.readdirSync('.claude/rules').filter((x) => x.endsWith('.md'))) {
+      out.push(path.join('.claude/rules', f));
+    }
   }
   return out;
 }

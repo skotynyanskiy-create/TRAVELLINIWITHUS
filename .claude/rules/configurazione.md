@@ -92,7 +92,7 @@ supplemento, non il livello primario.
 22 dell'hook, e quattordici famiglie distruttive — le varianti Windows
 (`Remove-Item -Recurse`, `rd /s`, `del /f`, `format`), `git add -A`,
 `git push origin +refspec`, `git branch -D`, `git rebase`, `git checkout .`,
-`dd if=`, `firebase deploy`, `npm run deploy` — vivevano **solo** nel livello che
+`dd if=`, `firebase deploy` — vivevano **solo** nel livello che
 si spegne senza Python. Ora sono 44 regole `Bash` su 76 `deny` totali.
 
 Resta nell'hook e solo lì il `curl | bash`: la sintassi delle `deny` non esprime
