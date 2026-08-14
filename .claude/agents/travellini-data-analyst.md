@@ -1,7 +1,7 @@
 ---
 name: travellini-data-analyst
 description: Read and interpret Travelliniwithus analytics, Sentry errors, Stripe events, and Firestore data to extract decisions. Use for weekly/monthly insights, funnel analysis, A/B test interpretation, conversion attribution, bug-impact assessment, and "what is the data telling us?" questions. Defines what to investigate, not what to track (use growth-operator for event contracts).
-tools: Read, Bash, Glob, Grep, mcp__firebase__firestore_query_collection, mcp__stripe__stripe_api_read, mcp__stripe__stripe_api_search, mcp__stripe__get_stripe_account_info, mcp__sentry__search_issues, mcp__sentry__search_events, mcp__sentry__find_projects, mcp__sentry__find_organizations, mcp__sentry__analyze_issue_with_seer
+tools: Read, Bash, Glob, Grep, mcp__firebase__firestore_query_collection, mcp__firebase__firestore_get_document, mcp__firebase__firestore_list_documents, mcp__firebase__firestore_list_collections, mcp__stripe__stripe_api_read, mcp__stripe__stripe_api_search, mcp__stripe__get_stripe_account_info, mcp__sentry__search_issues, mcp__sentry__search_events, mcp__sentry__find_projects, mcp__sentry__find_organizations, mcp__sentry__analyze_issue_with_seer
 model: sonnet
 maxTurns: 200
 disallowedTools: Write, Edit, NotebookEdit
@@ -46,7 +46,7 @@ You do NOT own:
 
 | Source        | Tool                         | What's there                                        |
 | ------------- | ---------------------------- | --------------------------------------------------- |
-| Firestore     | `mcp__firebase__firestore_query_collection` | leads, orders, articles, users, logs, products. **È l'unico tool Firestore che il server MCP espone** con `--only core,firestore`: non esistono `list_documents` né `get_document`. Per leggere un singolo documento si interroga la collection e si filtra. |
+| Firestore     | `mcp__firebase__firestore_query_collection` | leads, orders, articles, users, logs, products. Per un documento singolo usa `mcp__firebase__firestore_get_document`, per elencare senza filtrare `mcp__firebase__firestore_list_documents`: **esistono entrambi** ed erano già permessi in `settings.json`. Fino al 2026-08-14 questa riga diceva il contrario, e l'agente si era tolto da solo due strumenti che aveva — verificato con un probe JSON-RPC sul server reale. |
 | Stripe        | `mcp__stripe__*`             | payments, subscriptions, refunds, disputes, balance |
 | Sentry        | `mcp__sentry__*`             | errors, issues by frequency/severity, replay info   |
 | Code grep     | Grep                         | confirm an event/property is actually being fired   |

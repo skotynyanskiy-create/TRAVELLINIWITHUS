@@ -120,7 +120,23 @@ sono passate da 45 a 74.**
 `deny`, ma il gruppo `auth` non viene mai caricato sotto `--only core,firestore`.
 Si stava negando uno strumento irraggiungibile mentre quelli raggiungibili
 restavano scoperti. **Prima di scrivere una regola, verifica che il nome esista
-davvero** — `firebase mcp --generate-tool-list` lo dice.
+davvero.**
+
+Ma attenzione a _come_ lo verifichi, perché le due domande sono diverse:
+
+- **«Il nome esiste?»** → `firebase mcp --generate-tool-list`. Misurato il
+  2026-08-14: **ignora `--only`** e stampa 64 righe identiche con e senza filtro.
+  Serve a scoprire che il nome vero è `firebase_init` e non `init`, che è
+  l'errore che ha reso inerte una `deny` scritta poche ore prima.
+- **«È raggiungibile con la nostra configurazione?»** → serve un probe JSON-RPC
+  sul server come lo lancia `.mcp.json`, e chiedergli `tools/list`. È l'unico
+  modo di sapere che sotto `--only core,firestore` il gruppo `auth` non c'è.
+
+Confondere le due porta a due errori opposti: negare uno strumento che non esiste
+(inutile) o dare per assente uno strumento che c'è. Il secondo è successo
+davvero: `travellini-data-analyst` dichiarava che `firestore_get_document` e
+`firestore_list_documents` non esistevano, **e si era tolto da solo due strumenti
+già permessi in `settings.json`**.
 
 ## Il blocco Edit/Write era aggirabile da shell
 
