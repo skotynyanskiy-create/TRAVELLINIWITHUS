@@ -73,6 +73,12 @@ jobs:
       - name: Audit conteggi di configurazione
         run: npm run audit:config
 
+      # Ogni percorso e comando npm citato da agent e skill deve esistere.
+      # Sette riferimenti morti trovati a mano il 2026-08-14: un agente che
+      # legge un percorso inesistente non fallisce, fa altro e va avanti.
+      - name: Audit riferimenti di agent e skill
+        run: npm run audit:refs
+
       - name: Audit Obsidian vault
         run: npm run audit:obsidian
 

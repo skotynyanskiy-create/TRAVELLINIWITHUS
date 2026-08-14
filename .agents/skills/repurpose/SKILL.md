@@ -215,4 +215,7 @@ Test: leggi il pacchetto e chiediti "se Betta vedesse questo, lo pubblicherebbe?
 - `docs/MARKETING_OPERATIONS_HUB.md` — funnel + canali attivi
 - `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md` — audience + tono
 - `src/data/articles/` — seed ts files
-- `src/pages/Quiz.tsx` — quiz route esistente
+- **Il quiz non è più una pagina.** Non esiste nessun src/pages/Quiz.tsx: la rotta
+  `/quiz` è un redirect a `/esplora` (`src/App.tsx:156`), e la domanda-guida vive
+  inline dentro `src/pages/Esplora.tsx` — quattro scelte, risultato immediato,
+  niente modale.

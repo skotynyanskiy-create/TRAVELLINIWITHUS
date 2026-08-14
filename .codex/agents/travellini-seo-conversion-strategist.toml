@@ -50,7 +50,7 @@ When the change is structural, also verify:
 - Twitter card metadata
 - Breadcrumb schema if nested
 - `lang="it"` on root, hreflang only if EN versions exist
-- Sitemap entry (check `src/lib/sitemap.ts` or `public/sitemap.xml`)
+- Sitemap entry: la sitemap è **generata al build** da `scripts/generate-sitemap.js`, e il risultato è `public/sitemap.xml`. Non esiste nessun src/lib/sitemap.ts — fino al 2026-08-14 questa riga lo citava: una rotta nuova si aggiunge al generatore, non al file prodotto
 - Robots directive correct (no `noindex` on public pages)
 - Redirects (301) configured if URL changed
 
