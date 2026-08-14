@@ -1,14 +1,17 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { caricaSeed, leggiSchedaConLegacy, schedaPath } from './lib/verdetti.mjs';
 
 const root = process.cwd();
-const seedPath = path.join(root, 'src', 'data', 'content-seed.json');
-const outPath = path.join(root, 'docs', '50_Scratch', 'VERDETTI_29_DA_COMPILARE.md');
+const outPath = schedaPath(root);
 
-const seed = JSON.parse(fs.readFileSync(seedPath, 'utf8'));
-const items = (Array.isArray(seed) ? seed : seed.items || Object.values(seed).find(Array.isArray) || []).filter(
-  (item) => item.isPlaceholder !== true,
-);
+// Rigenerare NON deve cancellare quello che l'owner ha gia' scritto: prima di
+// riscrivere si rilegge la scheda esistente (e quella col nome vecchio) e i
+// campi compilati vengono riportati dentro. Senza questo, aggiungere schede al
+// seed distruggeva il lavoro fatto sulle precedenti.
+const giaScritti = leggiSchedaConLegacy(root);
+
+const items = (caricaSeed(root).items ?? []).filter((item) => item.isPlaceholder !== true);
 
 // I posti senza relazione commerciale vengono per primi: sono i più liberi da
 // scrivere e servono a calibrare la voce prima di affrontare quelli ospitati.
@@ -47,8 +50,10 @@ items.sort((a, b) => {
 
 const blocks = items.map((item, index) => {
   const n = String(index + 1).padStart(2, '0');
-  const price = item.value?.price;
-  const budget = item.value?.budget;
+  const scritto = giaScritti[item.id] ?? {};
+  // Quello che l'owner ha scritto batte il seed; il seed batte il vuoto.
+  const price = scritto.price ?? item.value?.price;
+  const budget = scritto.budget ?? item.value?.budget;
 
   const facts = [
     `- **Dove:** ${whereLine(item.place)}`,
@@ -66,15 +71,22 @@ const blocks = items.map((item, index) => {
     ? `**Fascia:** ${budget}\n*(già nota — correggila solo se sbagliata)*`
     : '**Fascia:** Economico / Medio / Alto → *lascia solo quella giusta*';
 
+  const verdetto = scritto.verdict ?? item.review?.verdict ?? '';
+  const nonFaPerTe = scritto.notForWho ?? item.review?.notForWho ?? '';
+  const perChi =
+    scritto.forWho ??
+    item.review?.forWho ??
+    'coppia / famiglia / gruppo / da-soli → *lascia solo quelli giusti*';
+
   return `### ${n} · ${item.title ?? item.id}
 
 ${facts}
 
-**Verdetto:**
+**Verdetto:** ${verdetto}
 
-**Non fa per te se:**
+**Non fa per te se:** ${nonFaPerTe}
 
-**Per chi:** coppia / famiglia / gruppo / da-soli → *lascia solo quelli giusti*
+**Per chi:** ${perChi}
 
 ${priceField}
 
@@ -82,6 +94,11 @@ ${budgetField}
 
 ---`;
 });
+
+const compilati = items.filter((item) => {
+  const s = giaScritti[item.id] ?? {};
+  return (s.forWho ?? item.review?.forWho) && (s.notForWho ?? item.review?.notForWho);
+}).length;
 
 const counts = items.reduce((acc, item) => {
   const kind = item.partnership?.kind ?? 'organic';
@@ -145,6 +162,12 @@ taglio giusti:
 
 `;
 
+fs.mkdirSync(path.dirname(outPath), { recursive: true });
 fs.writeFileSync(outPath, header + blocks.join('\n\n') + '\n', 'utf8');
 console.log(`Scheda generata: ${path.relative(root, outPath)}`);
 console.log(`Posti: ${items.length} (${countLine})`);
+console.log(`Gia' compilati (per-chi + non-fa-per-te): ${compilati} su ${items.length}`);
+if (Object.keys(giaScritti).length > 0) {
+  console.log(`Conservati dalla scheda precedente: ${Object.keys(giaScritti).length} posti`);
+}
+console.log('Per riportarli nel seed: npm run verdetti:applica -- --commit');
