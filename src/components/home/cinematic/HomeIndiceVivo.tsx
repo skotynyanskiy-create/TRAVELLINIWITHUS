@@ -59,8 +59,11 @@ export default function HomeIndiceVivo() {
       </ol>
 
       <div className="journal-registry-actions">
+        {/* Senza numero: il paragrafo sopra dichiara già complete e in
+            lavorazione, e un totale qui faceva a pugni con le altre cifre che
+            il visitatore incontra sullo stesso percorso — home, mappa, esplora. */}
         <Link to="/esplora" className="journal-button journal-button--ink">
-          Sfoglia tutte le {CONTENT_ITEMS.length} voci
+          Sfoglia il registro completo
         </Link>
         <Link to="/mappa" className="journal-button journal-button--text">
           Vedile sulla mappa <Map size={17} aria-hidden="true" />

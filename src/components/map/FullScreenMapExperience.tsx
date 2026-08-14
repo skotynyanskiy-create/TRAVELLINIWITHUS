@@ -143,6 +143,11 @@ export default function FullScreenMapExperience() {
     [interest]
   );
 
+  const completeCount = useMemo(
+    () => allItems.filter((item) => !item.isPlaceholder).length,
+    [allItems]
+  );
+
   const [userLoc, setUserLoc] = useState<UserLocation | null>(null);
   const [locLoading, setLocLoading] = useState<boolean>(false);
 
@@ -379,10 +384,15 @@ export default function FullScreenMapExperience() {
         </h1>
         {/* Il deck dichiara anche lo stato delle schede: promettere 40 posti
             provati e aprirne uno vuoto e' la stessa frattura che il resto del
-            lavoro sta chiudendo. */}
+            lavoro sta chiudendo. Le due cifre separate usano lo stesso
+            vocabolario dell'indice in home — «complete» / «in lavorazione» —
+            perche' un visitatore che passa da home, indice, mappa ed esplora
+            incontrava quattro numeri diversi per lo stesso archivio. */}
         <p className="mt-1.5 hidden text-sm text-white/60 sm:block">
-          {allItems.length} posti che abbiamo visitato di persona. Le schede si riempiono una alla
-          volta.
+          {allItems.length} posti che abbiamo visitato di persona
+          {completeCount < allItems.length
+            ? `, ${completeCount} con la scheda completa. Le altre si riempiono una alla volta.`
+            : '.'}
         </p>
       </header>
 

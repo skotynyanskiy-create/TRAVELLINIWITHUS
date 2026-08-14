@@ -149,11 +149,16 @@ export default function BrandCoherentHero() {
                 className="mt-8 flex flex-wrap items-center gap-4"
               >
                 <MagneticWrapper strength={6}>
+                  {/* Scorre all'indice piu' in basso, NON apre /esplora: si
+                      chiamava «Apri il registro» come il pulsante della sezione
+                      sotto, che invece porta all'archivio. Due etichette
+                      identiche verso due destinazioni diverse nella stessa
+                      pagina. */}
                   <a
                     href="#indice-vivo"
                     className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-md transition-all hover:bg-[var(--color-accent-hover)] cursor-pointer"
                   >
-                    Apri il registro <ArrowDown size={16} />
+                    Guarda l&apos;indice <ArrowDown size={16} />
                   </a>
                 </MagneticWrapper>
 

@@ -240,15 +240,18 @@ export default function Navbar() {
     if (item.href === '/destinazione') {
       return path.startsWith('/destinazione');
     }
+    // La voce editoriale copre tutto ciò che si legge, non solo l'archivio:
+    // articolo, guida e itinerario stanno sotto di lei. Prima erano due rami —
+    // questo usciva subito con un return su `=== '/esplora'`, e quello sotto
+    // confrontava `'/esplora?format=storia'`, un href che nessuna delle quattro
+    // voci di menu possiede. Risultato: aprendo un articolo non si accendeva
+    // niente, e non si capiva dove si era finiti.
     if (item.href === '/esplora') {
-      return path === '/esplora';
-    }
-    if (item.href === '/esplora?format=storia') {
       return (
+        path === '/esplora' ||
         path.startsWith('/articolo') ||
         path.startsWith('/guide') ||
-        path === '/itinerari' ||
-        path.startsWith('/itinerari/')
+        path.startsWith('/itinerari')
       );
     }
 
