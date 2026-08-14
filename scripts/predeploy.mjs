@@ -8,6 +8,7 @@ const steps = [
   ['typecheck', ['run', 'typecheck']],
   ['lint', ['run', 'lint']],
   ['format:check', ['run', 'format:check']],
+  ['lint:md:core', ['run', 'lint:md:core']],
   ['test', ['run', 'test']],
   ['functions:build', ['run', 'functions:build']],
   ['functions:smoke', ['run', 'functions:smoke']],

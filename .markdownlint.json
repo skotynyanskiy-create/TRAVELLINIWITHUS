@@ -1,0 +1,28 @@
+{
+  "$schema": "https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json",
+
+  "//": "Config creata il 2026-08-14. `scripts/hooks/config_protection.py` la elencava fra i file protetti da mesi, ma non esisteva: una guardia che non guardava niente. E `npm run lint:md` girava sulle regole di default, con 9.327 errori di larghezza riga su ~10.000 totali — cioe' rumore, non segnale.",
+
+  "default": true,
+
+  "//width": "Prettier possiede la formattazione (printWidth 100) e non riflette la prosa nei .md. Tenere MD013 significherebbe litigare con lo strumento che formatta davvero.",
+  "MD013": false,
+
+  "//prosa": "Regole di stile che confliggono con la scrittura editoriale italiana del progetto: enfasi usata come sottotitolo, titoli ripetuti in doc strutturati per sezioni uguali, piu' di un H1 in file con frontmatter.",
+  "MD024": false,
+  "MD025": false,
+  "MD036": false,
+  "MD041": false,
+
+  "//html": "I commenti HTML a blocco sono deliberati: vengono rimossi prima che il file entri nel contesto del modello, quindi sono note per chi mantiene che non costano token.",
+  "MD033": false,
+
+  "//tabelle": "Le tabelle sono allineate a mano in piu' doc; imporre uno stile qui produrrebbe diff enormi senza guadagno.",
+  "MD060": false,
+  "MD029": false,
+
+  "//url": "219 URL nudi nei doc. Da sistemare a lotti quando si tocca il file, non con un gate che blocca tutto oggi.",
+  "MD034": false,
+
+  "//": "Restano attive le regole che intercettano difetti di RENDERING veri: blocco di codice senza linguaggio (evidenziazione sbagliata), righe con spazi in coda (a-capo involontario), fence senza riga vuota attorno (blocco non riconosciuto)."
+}

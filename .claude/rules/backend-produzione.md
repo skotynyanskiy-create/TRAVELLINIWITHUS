@@ -51,7 +51,7 @@ della function si rompe per una causa che nessuno collegherà.
 
 Qualunque modifica a `server.ts`, `src/server/apiRoutes.ts` o `functions/`:
 
-```
+```bash
 npm run typecheck && npm run e2e
 ```
 

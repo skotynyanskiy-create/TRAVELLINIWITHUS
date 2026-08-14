@@ -64,7 +64,7 @@ entrata. Il lavoro su quei file passa da `travellini-backend-engineer`.
 > toccava `tsconfig.json` o `firebase.json` li faceva riscrivere da un hook, senza
 > che la guardia se ne accorgesse. Ora c'è `.prettierignore` a coprirli — se
 > aggiungi un file protetto, aggiungilo anche lì.
-
+>
 > **Gli hook falliscono aperti.** `scripts/hooks/run-hook.mjs:36-44` esce con 0
 > se non trova un interprete Python funzionante — su Windows cerca `py`, poi
 > `python3`, poi `python`, e gli ultimi due qui sono stub rotti. È deliberato:

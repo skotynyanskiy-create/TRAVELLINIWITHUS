@@ -43,6 +43,11 @@ jobs:
       - name: Prettier
         run: npm run format:check
 
+      # Solo i file che il modello legge a ogni sessione. `lint:md` sull'intero
+      # docs/ lascia 205 errori: e' una lista di lavori, non un cancello.
+      - name: Markdown dei file di istruzione
+        run: npm run lint:md:core
+
       # Il progetto vitest `storybook` gira in browser mode
       # (`vitest.config.ts:41-52`: provider playwright, chromium): senza questo
       # passo `npm run test` fallisce in CI, dove i browser non ci sono. In
