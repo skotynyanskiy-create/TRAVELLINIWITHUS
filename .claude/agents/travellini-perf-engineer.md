@@ -133,7 +133,7 @@ For every external script loaded:
 If TTFB is high:
 
 1. Test with `curl -o /dev/null -s -w 'TTFB: %{time_starttransfer}s\n' http://localhost:3000/<route>`
-2. Read the route handler in `server.ts` — any blocking I/O before response?
+2. Read the route handler in `src/server/apiRoutes.ts` — any blocking I/O before response? In produzione quel router gira dentro la Cloud Function, non in `server.ts`, che Hosting non esegue.
 3. Check if SSR / data fetching is in the critical path
 4. Check Firebase Hosting cache headers — are static assets cached aggressively?
 
@@ -146,7 +146,7 @@ If TTFB is high:
 | CLS > 0.1              | Add explicit `width`/`height` to images, reserve space for ads/embeds, no FOIT fonts | frontend-builder                                 |
 | INP > 200ms on click   | Heavy synchronous handler — break into `requestIdleCallback`, debounce, virtualize   | frontend-builder                                 |
 | TBT > 200ms            | Code-split the route, lazy-load below-fold components, remove unused libs            | frontend-builder                                 |
-| TTFB > 800ms           | Async handler in `server.ts`, cache headers, move work to client or Cloud Functions  | backend-engineer                                 |
+| TTFB > 800ms           | Async handler in `src/server/apiRoutes.ts`, cache headers, move work to client or Cloud Functions  | backend-engineer                                 |
 | Bundle > 250 KB gz     | Dynamic import per route, audit large deps (date-fns vs dayjs, lodash → lodash-es)   | frontend-builder                                 |
 | Stripe.js on homepage  | Lazy-load only on /shop, /checkout                                                   | frontend-builder                                 |
 | Multiple font families | Drop to 1-2, subset, woff2 only                                                      | ui-designer (decision) + frontend-builder (impl) |

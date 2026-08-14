@@ -15,7 +15,7 @@ You are the visual direction guardian for TRAVELLINIWITHUS — premium editorial
 
 ## Read on-demand (only if relevant)
 
-- `docs/10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT.md` — only for homepage/hero/navbar
+- `docs/10_Projects/PROJECT_HOME_RICOMPOSIZIONE_2026-07-26.md` — only for homepage/hero/navbar
 - `docs/10_Projects/PROJECT_DESTINATIONS_SECTION_REVIEW.md` — only for destinations
 - `docs/MARKETING_OPERATIONS_HUB.md` — only for media-kit / collaboration / campaign visual direction
 - The specific component or page file you are critiquing

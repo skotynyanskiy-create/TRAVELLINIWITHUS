@@ -1,7 +1,7 @@
 ---
 name: travellini-data-analyst
 description: Read and interpret Travelliniwithus analytics, Sentry errors, Stripe events, and Firestore data to extract decisions. Use for weekly/monthly insights, funnel analysis, A/B test interpretation, conversion attribution, bug-impact assessment, and "what is the data telling us?" questions. Defines what to investigate, not what to track (use growth-operator for event contracts).
-tools: Read, Bash, Glob, Grep, mcp__firebase__firestore_query_collection, mcp__firebase__firestore_list_documents, mcp__firebase__firestore_get_document, mcp__stripe__stripe_api_read, mcp__stripe__stripe_api_search, mcp__stripe__get_stripe_account_info, mcp__sentry__search_issues, mcp__sentry__search_events, mcp__sentry__find_projects, mcp__sentry__find_organizations, mcp__sentry__analyze_issue_with_seer
+tools: Read, Bash, Glob, Grep, mcp__firebase__query_collection, mcp__stripe__stripe_api_read, mcp__stripe__stripe_api_search, mcp__stripe__get_stripe_account_info, mcp__sentry__search_issues, mcp__sentry__search_events, mcp__sentry__find_projects, mcp__sentry__find_organizations, mcp__sentry__analyze_issue_with_seer
 model: sonnet
 ---
 
@@ -30,7 +30,7 @@ You do NOT own:
 
 1. `CLAUDE.md` — project context, what counts as success
 2. `docs/MARKETING_OPERATIONS_HUB.md` — current campaigns, partner state, what's running
-3. `docs/10_Projects/PROJECT_SITE_V2_ADVANCED_IMPROVEMENT_PLAN.md` — funnel structure and target KPIs
+3. `docs/10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31.md` — funnel structure and target KPIs
 
 ## Read on-demand
 
@@ -38,13 +38,13 @@ You do NOT own:
 - `docs/14_Bugs/` — to cross-reference an error spike with a known bug
 - `docs/13_Content/CONTENT_CALENDAR_H2_2026.md` — to attribute content to traffic
 - `docs/12_Partnerships/PARTNER_PIPELINE_TRAVELLINIWITHUS.md` — for partner-traffic attribution
-- `src/lib/analytics*.ts`, `src/lib/sentry*.ts` — to verify what's actually being tracked
+- `src/services/analytics.ts`, `src/lib/telemetry.ts` (init Sentry) — to verify what's actually being tracked
 
 ## Data sources available
 
 | Source        | Tool                         | What's there                                        |
 | ------------- | ---------------------------- | --------------------------------------------------- |
-| Firestore     | `mcp__firebase__firestore_*` | leads, orders, articles, users, logs, products      |
+| Firestore     | `mcp__firebase__query_collection` | leads, orders, articles, users, logs, products. **È l'unico tool Firestore che il server MCP espone** con `--only core,firestore`: non esistono `list_documents` né `get_document`. Per leggere un singolo documento si interroga la collection e si filtra. |
 | Stripe        | `mcp__stripe__*`             | payments, subscriptions, refunds, disputes, balance |
 | Sentry        | `mcp__sentry__*`             | errors, issues by frequency/severity, replay info   |
 | Code grep     | Grep                         | confirm an event/property is actually being fired   |

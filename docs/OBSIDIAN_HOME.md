@@ -13,7 +13,7 @@ tags:
 # Obsidian Home — Travellini
 
 Questo vault è il sistema operativo editoriale e strategico di Travellini.
-Apri `C:\Users\ccocu\Desktop\TRAVELLINIWITHUS\docs` con **Open folder as
+Apri la cartella `docs/` di questo repository con **Open folder as
 vault**. La home è `OBSIDIAN_HOME`; codice e dipendenze restano nella root del
 repository e sono indicizzati separatamente da Graphify.
 

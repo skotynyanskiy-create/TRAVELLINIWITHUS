@@ -10,7 +10,7 @@ Read these before changing important UI:
 2. `CLAUDE.md`
 3. `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md`
 4. `docs/MARKETING_OPERATIONS_HUB.md`
-5. `docs/10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT.md`
+5. `docs/10_Projects/PROJECT_HOME_RICOMPOSIZIONE_2026-07-26.md`
 6. relevant notes under `docs/`
 
 ## Brand
@@ -172,15 +172,14 @@ sulla UI corrente. I display type usano pesi variabili espliciti, non gli assi
 ### Map provider — MapLibre + OpenFreeMap
 
 The `/mappa` page uses MapLibre GL through `react-map-gl/maplibre`
-(`src/components/map/MapboxWorldMap.tsx`) with the OpenFreeMap dark style. The
-public map does not require a Mapbox token.
+(`src/components/map/FullScreenMapExperience.tsx`) with the OpenFreeMap dark
+style. The public map does not require a Mapbox token.
 
 Google Maps and a return to Mapbox are intentionally not adopted:
 
 - MapLibre preserves the existing markers, clusters, popups, filters and deep links;
 - OpenFreeMap keeps the dark editorial canvas without adding a public API key;
-- changing provider would add cost and migration risk without improving the current discovery flow;
-- the filename `MapboxWorldMap.tsx` is retained only to avoid a broad rename during the route redesign.
+- changing provider would add cost and migration risk without improving the current discovery flow.
 
 ### Page layout pattern — `<PageLayout>` is the public default
 
@@ -196,7 +195,7 @@ Custom-flat pages (no PageLayout) are reserved for full-bleed experiences only: 
 
 - TikTok logo — `src/components/Navbar.tsx`, `src/components/Footer.tsx`, `src/components/article/SocialFollowCTA.tsx`
 - Pinterest logo — `src/components/article/PinterestIcon.tsx`
-- Custom map pin — `src/components/map/MapboxWorldMap.tsx`
+- Custom map pin — `src/components/map/FullScreenMapExperience.tsx`
 - Brand mark variants — `src/pages/Collaborazioni.tsx`
 
 `/audit-ui` and `audit-ui` skill should treat these as documented exceptions, not regressions.

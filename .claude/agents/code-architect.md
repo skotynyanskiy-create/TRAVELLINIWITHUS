@@ -17,7 +17,7 @@ Rules:
 
 - Produce a concrete recommendation with explicit trade-offs.
 - Return an implementation plan: exactly which files change, what changes, and why.
-- Flag all touches to `server.ts`, `firestore.rules`, `src/config/admin.ts` as high-risk.
+- Flag all touches to `src/server/apiRoutes.ts`, `functions/`, `server.ts`, `firestore.rules`, `src/config/admin.ts` as high-risk.
 - Do not implement changes yourself — return the plan for the implementer to execute.
 - If the problem is actually simple, say so and name which agent should handle it instead.
 

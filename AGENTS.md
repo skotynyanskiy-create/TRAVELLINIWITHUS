@@ -6,7 +6,7 @@ This repository is the website and marketing operating system for the travel cre
 
 - Code truth: repo root
 - Documentation and operational truth: `docs/`
-- Obsidian vault: `docs/` (`C:\Users\ccocu\Desktop\TRAVELLINIWITHUS\docs`)
+- Obsidian vault: `docs/`, relativo alla radice del repo — mai un percorso assoluto di macchina
 - Operational Obsidian notes: `docs/`
 - Design-system truth for agents and design tools: `DESIGN.md`
 - Agent stack truth: `docs/AI_AGENT_STACK.md`
@@ -16,14 +16,16 @@ This repository is the website and marketing operating system for the travel cre
 - Editorial rules: `docs/EDITORIAL_GUIDE.md`
 - Vault taxonomy and naming: `docs/OBSIDIAN_TAXONOMY.md`
 
-## Read this order first
+## Cosa leggere, e quando
 
-1. `README.md`
-2. `CLAUDE.md`
-3. `docs/OBSIDIAN_HOME.md`
-4. `docs/OBSIDIAN_DASHBOARD.md`
-5. `docs/MARKETING_OPERATIONS_HUB.md`
-6. `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md`
+`CLAUDE.md` è il contratto operativo e **vince su questo file** ovunque i due si
+sovrappongano: precedenza, limiti, routing, barra di qualità. Questo file esiste
+per gli strumenti che leggono `AGENTS.md` e non `CLAUDE.md` — leggi comunque
+`CLAUDE.md` per primo se puoi.
+
+**Non precaricare `docs/`**: sono 318 file. Apri solo la nota che il compito
+richiede, dall'elenco qui sopra. Gli hub Obsidian (`OBSIDIAN_HOME`,
+`OBSIDIAN_DASHBOARD`) si aprono quando si lavora sul vault, non a ogni sessione.
 
 ## Project context
 
@@ -51,12 +53,15 @@ This repository is the website and marketing operating system for the travel cre
 - If a change introduces or resolves a bug, create or update a bug note.
 - If a new campaign, partner lead or content plan appears, use the marketing templates in `docs/90_Templates/`.
 
-## Default operational notes
+## Note operative di riferimento
 
-- Homepage/UI work: `docs/10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT.md`
-- Destinations section: `docs/10_Projects/PROJECT_DESTINATIONS_SECTION_REVIEW.md`
-- Release tracking: `docs/10_Projects/PROJECT_RELEASE_READINESS.md`
-- Campaigns hub: `docs/MARKETING_OPERATIONS_HUB.md`
+- Homepage / UI: `docs/10_Projects/PROJECT_HOME_RICOMPOSIZIONE_2026-07-26.md`
+  — il vecchio `docs/10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT.md` è
+  archiviato, non usarlo
+- Sezione destinazioni: `docs/10_Projects/PROJECT_DESTINATIONS_SECTION_REVIEW.md`
+- Stato della release: `docs/10_Projects/PROJECT_RELEASE_READINESS.md`
+- Cosa fare adesso: `docs/10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31.md`
+- Hub campagne: `docs/MARKETING_OPERATIONS_HUB.md`
 
 ## Code conventions
 
@@ -65,36 +70,49 @@ This repository is the website and marketing operating system for the travel cre
 - Prefer typed props and explicit interfaces
 - Keep Firestore operations centralized unless there is a clear reason not to
 - Preserve the existing visual language unless a redesign is explicitly requested
-- High-risk files:
-  - `server.ts`
-  - `firestore.rules`
-  - `src/config/admin.ts`
 
-## Must-run checks when relevant
+## File ad alto rischio
 
-```bash
-npm run typecheck
-npm run build
-npm run audit:ui
-npm run audit:firebase
-npm run audit:stripe
-npm run audit:agents
-npm run audit:obsidian
-npm run predeploy
-```
+**Bloccati da un hook**, modificabili solo con conferma esplicita dell'owner:
+`firestore.rules`, `src/config/admin.ts`. Vedi `CLAUDE.md` per la procedura di
+sblocco, che va seguita alla lettera.
+
+**Non bloccati da niente ma altrettanto delicati**, perché sono il codice che
+serve davvero la produzione:
+
+- `src/server/apiRoutes.ts` — qui vive il webhook Stripe
+- `functions/src/index.ts` — la Cloud Function reale, con Admin SDK che scavalca
+  `firestore.rules`
+- `firebase.json`, `.firebaserc` — header, rewrite, e dove finisce un deploy
+
+`server.ts` è il server di sviluppo e del self-host: **non viene eseguito su
+Firebase Hosting**, che serve `dist/` come file statici. Toccarlo non cambia la
+produzione; toccare `src/server/apiRoutes.ts` sì.
+
+## Controlli da eseguire
+
+I comandi stanno in `package.json` e il gate di ogni regola è dichiarato in
+`CLAUDE.md`, accanto alla regola stessa. Due avvertenze che non si deducono dai
+nomi: `npm run predeploy` **non** esegue performance né browser — quello è il
+gate della skill `/predeploy`; e `npm run stato` rigenera `docs/STATO_DEL_SITO.md`,
+che non va scritto a mano.
 
 ## Marketing-specific operating model
 
-- Use `MARKETING_OPERATIONS_HUB.md` as the top marketing dashboard
-- Track campaigns with `TPL_Campaign.md`
-- Track partnerships with `TPL_Partner.md` or `TPL_Collaboration.md` (extended)
-- Track content planning with `TPL_Content_Brief.md`
-- Track articles and guides with `TPL_Article.md`, `TPL_Destination_Guide.md`, `TPL_Itinerary.md`
-- Track places/hotels with `TPL_Place.md`
-- Track SEO page audits with `TPL_SEO_Page.md`
-- Track products with `TPL_Product.md`
-- Track release checkpoints with `TPL_Release_Note.md`
-- Web clips and design references: `TPL_Web_Clip.md`, `TPL_Design_Reference.md`
+`docs/MARKETING_OPERATIONS_HUB.md` è la dashboard di marketing. I modelli vivono
+tutti in `docs/90_Templates/`, un file per tipo di lavoro:
+
+| Cosa stai tracciando | Modello in `docs/90_Templates/` |
+| --- | --- |
+| Campagna | `TPL_Campaign` |
+| Partner o collaborazione | `TPL_Partner`, `TPL_Collaboration` (esteso) |
+| Piano editoriale | `TPL_Content_Brief` |
+| Articolo, guida, itinerario | `TPL_Article`, `TPL_Destination_Guide`, `TPL_Itinerary` |
+| Posto o hotel | `TPL_Place` |
+| Audit SEO di pagina | `TPL_SEO_Page` |
+| Prodotto | `TPL_Product` |
+| Checkpoint di release | `TPL_Release_Note` |
+| Ritaglio web, riferimento di design | `TPL_Web_Clip`, `TPL_Design_Reference` |
 
 ## Public brand references
 

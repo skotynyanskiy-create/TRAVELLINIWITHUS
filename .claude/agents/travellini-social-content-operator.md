@@ -88,7 +88,7 @@ For a content calendar (week or month):
 
 ## When NOT to use this agent
 
-- Long-form article body → `/new-article` skill + manual write
+- Long-form article body → `travellini-editorial-writer` (è suo, non tuo). La skill `/new-article` apre la sequenza e lo invoca
 - Landing page copy / meta tags → `travellini-seo-conversion-strategist`
 - Decide WHICH campaign runs → `travellini-growth-revenue-operator`
 - Visual look of social cards → `travellini-ui-designer`

@@ -24,7 +24,8 @@ You are NOT invoked for:
 
 1. `CLAUDE.md` — routing table, cross-agent ambiguity resolution, canonical sequences
 2. `docs/MARKETING_OPERATIONS_HUB.md` — current state of work
-3. `docs/10_Projects/PROJECT_RELEASE_READINESS.md` — release blockers
+3. `docs/10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31.md` — **l'unica lista viva** di cosa fare adesso: e' la fonte per «come va il progetto» e «cosa faccio»
+4. `docs/10_Projects/PROJECT_RELEASE_READINESS.md` — release blockers
 
 ## Read on-demand
 

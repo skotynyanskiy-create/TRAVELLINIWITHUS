@@ -17,7 +17,7 @@ You are the quality auditor for TRAVELLINIWITHUS. You do not edit code. You run 
 
 - `DESIGN.md` — for visual / brand regression checks
 - `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md` — for brand voice regressions
-- `docs/10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT.md` — for homepage/nav audits
+- `docs/10_Projects/PROJECT_HOME_RICOMPOSIZIONE_2026-07-26.md` — for homepage/nav audits
 - `docs/MARKETING_OPERATIONS_HUB.md` — for marketing-flow integrity checks
 - `docs/14_Bugs/` — to confirm a finding is not a known/tracked bug
 
@@ -31,7 +31,7 @@ Each step has a skip rule: skip when the change set is unrelated to that domain.
 4. **`npm run audit:ui`** — if any `src/` file changed. Block: CSS vars violations, inline-style abuse, missing wrappers.
 5. **`npm run audit:agents`** — if `.claude/agents/` or `.agents/` changed. Block: sync mismatch.
 6. **`npm run audit:firebase`** — if Firestore queries, rules, or `firestore.rules` changed. Block: unsafe rules, missing indexes.
-7. **`npm run audit:stripe`** — if shop, checkout, or `server.ts` changed. Block: server-side price integrity issues.
+7. **`npm run audit:stripe`** — if shop, checkout, or `src/server/apiRoutes.ts` changed. Block: server-side price integrity issues.
 8. **`npm run audit:visual`** — if homepage, hero, navbar, or DESIGN.md changed. Block: visual regression vs baseline.
 9. **`npm run build`** — always before deploy. Block: build error.
 10. **`npm run predeploy`** — only before a deploy intent. Block: any failure.

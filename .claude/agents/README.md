@@ -2,11 +2,10 @@
 
 Single source of truth for which agent does what. All agents below are project-scoped (live in this directory). For routing rules and ambiguity resolution, see `CLAUDE.md`.
 
-**Default thread**: Opus 4.7 (1M context). **Default subagent for code work**: sonnet. Per-agent models (the `model:` frontmatter in each file is the source of truth):
-
-- **opus** — `travellini-orchestrator`, `travellini-growth-revenue-operator`, `travellini-seo-conversion-strategist`, `travellini-editorial-writer`, `travellini-social-content-operator`, `travellini-ui-designer`, `travellini-backend-engineer`, `code-architect` (rare)
-- **sonnet** — `travellini-data-analyst`, `travellini-asset-curator`, `travellini-frontend-builder`, `travellini-quality-auditor`, `travellini-security-auditor`, `travellini-perf-engineer`, `browser-auditor`
-- **haiku** — `code-explorer`
+**Il modello di ciascun agente sta nel `model:` del suo frontmatter, che è ciò
+che gira davvero.** Non è elencato qui: una copia in prosa diverge dal file al
+primo cambio, e il modello del thread principale lo decide comunque l'harness,
+non il repo. Instrada per _agente_, mai asserendo un tier.
 
 ---
 
@@ -52,8 +51,8 @@ If unsure where to start: invoke orchestrator first.
 
 | Agent                             | Owns                                                                                                                            | Does NOT own                                                                                                                              |
 | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| **`travellini-frontend-builder`** | React/Tailwind for pages and components, route wiring, motion integration, responsive fixes, visible UI bugs                    | `server.ts`/`firestore.rules`/`admin.ts` (→ backend-engineer), open-ended exploration (→ code-explorer), visual direction (→ ui-designer) |
-| **`travellini-backend-engineer`** | `server.ts`, `firestore.rules`, `src/config/admin.ts`, API endpoints, Stripe webhooks, Firebase config, security rules, indexes | Client React components (→ frontend-builder), copy (→ seo-strategist), visual work (→ ui-designer)                                        |
+| **`travellini-frontend-builder`** | React/Tailwind for pages and components, route wiring, motion integration, responsive fixes, visible UI bugs                    | `src/server/apiRoutes.ts`/`functions/`/`firestore.rules`/`src/config/admin.ts` (→ backend-engineer), open-ended exploration (→ code-explorer), visual direction (→ ui-designer) |
+| **`travellini-backend-engineer`** | `src/server/apiRoutes.ts` (webhook Stripe), `functions/`, `server.ts`, `firestore.rules`, `src/config/admin.ts`, Firebase config, security rules, indexes | Client React components (→ frontend-builder), copy (→ seo-strategist), visual work (→ ui-designer)                                        |
 
 ---
 
@@ -72,22 +71,33 @@ If unsure where to start: invoke orchestrator first.
 
 | Agent                             | Owns                                                                                | Use when                                                                                                        |
 | --------------------------------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| **`code-explorer`** (haiku)       | Fast read-only search, file exploration, pattern matching, log reading              | Any "where is X" / "what does Y do" / "show me Z" question. **First choice for anything before touching code.** |
-| **`code-architect`** (opus, rare) | Multi-file refactor, breaking architectural decisions, complex multi-step debugging | Only when the problem is genuinely hard. Most work doesn't need it.                                             |
+| **`code-explorer`**       | Fast read-only search, file exploration, pattern matching, log reading              | Any "where is X" / "what does Y do" / "show me Z" question. **First choice for anything before touching code.** |
+| **`code-architect`** | Multi-file refactor, breaking architectural decisions, complex multi-step debugging | Only when the problem is genuinely hard. Most work doesn't need it.                                             |
 
 ---
 
 ## Quality model
 
-Every public-facing piece of work must clear three gates before being declared done:
+I gate crescono con quello che è in gioco. Una barra uguale per tutto non viene
+rispettata: il `ROUTING_LOG` mostra `quality-auditor` e `browser-auditor` invocati
+7 volte su 135 dispatch, cioè la regola «tre gate sempre» non è mai stata la
+pratica reale.
 
-1. **Domain specialist gate** — the specialist agent that owns the work signs off.
-2. **Static gate** — `travellini-quality-auditor` runs scripts + spot-checks.
-3. **Real-browser gate** — `browser-auditor` verifies the user-perceived result.
+**Una singola modifica** — il gate è quello dichiarato accanto alla regola nella
+tabella «Cosa significa fatto» di `CLAUDE.md`: typecheck, lint, `audit:ui`,
+`audit:visual`, e per qualunque cosa visibile **guardarla in un browser vero**.
+Nessun agente di revisione obbligatorio.
 
-For shop / lead-capture / checkout / auth changes, add: 4. **Security gate** — `travellini-security-auditor`.
+**Prima di un rilascio o di un deploy** — i gate completi, che è quello che la
+skill `/predeploy` orchestra:
 
-For performance-sensitive routes (homepage, top-traffic articles), add: 5. **Performance gate** — `travellini-perf-engineer`.
+1. **Specialista di dominio** — l'agente che possiede il lavoro firma.
+2. **Statico** — `travellini-quality-auditor` esegue gli script e controlla a campione.
+3. **Browser reale** — `browser-auditor` verifica il risultato percepito.
+
+Aggiungi **`travellini-security-auditor`** quando la modifica tocca shop, cattura
+lead, checkout o autenticazione; **`travellini-perf-engineer`** sulle rotte
+sensibili alla performance (home, articoli ad alto traffico).
 
 ---
 

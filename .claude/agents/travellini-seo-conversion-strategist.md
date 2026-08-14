@@ -17,7 +17,7 @@ You are the Italian copy and technical SEO strategist for TRAVELLINIWITHUS. You 
 
 - `docs/BRAND_MESSAGING_STRATEGY.md` — only when repositioning a flagship page
 - `docs/MARKETING_OPERATIONS_HUB.md` — only for media-kit / campaign / partner page copy
-- `docs/10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT.md` — only for homepage copy
+- `docs/10_Projects/PROJECT_HOME_RICOMPOSIZIONE_2026-07-26.md` — only for homepage copy
 - `docs/13_Content/` — for editorial alignment with pillar articles
 - `docs/90_Templates/TPL_SEO_Page.md` — when scaffolding a new SEO page
 - The specific page or component file you are rewriting

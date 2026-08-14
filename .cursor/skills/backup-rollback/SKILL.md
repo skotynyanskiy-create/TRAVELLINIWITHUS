@@ -1,6 +1,6 @@
 ---
 name: backup-rollback
-description: Prepare backup, restore, and rollback plans before sensitive TRAVELLINIWITHUS work, especially AI/dev configuration changes, MCP or plugin adoption, hooks, deploy, Firebase, Stripe, server.ts, firestore.rules, src/config/admin.ts, generated assets, or large refactors.
+description: Prepare backup, restore, and rollback plans before sensitive TRAVELLINIWITHUS work, especially AI/dev configuration changes, MCP or plugin adoption, hooks, deploy, Firebase, Stripe, src/server/apiRoutes.ts, functions/, server.ts, firestore.rules, src/config/admin.ts, generated assets, or large refactors.
 ---
 
 # /backup-rollback
