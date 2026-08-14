@@ -39,7 +39,7 @@ You do NOT own:
 
 | Source        | Tool                         | What's there                                        |
 | ------------- | ---------------------------- | --------------------------------------------------- |
-| Firestore     | `mcp__firebase__query_collection` | leads, orders, articles, users, logs, products. **È l'unico tool Firestore che il server MCP espone** con `--only core,firestore`: non esistono `list_documents` né `get_document`. Per leggere un singolo documento si interroga la collection e si filtra. |
+| Firestore     | `mcp__firebase__firestore_query_collection` | leads, orders, articles, users, logs, products. **È l'unico tool Firestore che il server MCP espone** con `--only core,firestore`: non esistono `list_documents` né `get_document`. Per leggere un singolo documento si interroga la collection e si filtra. |
 | Stripe        | `mcp__stripe__*`             | payments, subscriptions, refunds, disputes, balance |
 | Sentry        | `mcp__sentry__*`             | errors, issues by frequency/severity, replay info   |
 | Code grep     | Grep                         | confirm an event/property is actually being fired   |

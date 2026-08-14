@@ -1,7 +1,7 @@
 ---
 name: travellini-security-auditor
 description: Security audit for the Travelliniwithus web stack — secrets in repo/history, Stripe webhook integrity, Firebase rules/admin handling, Vite env exposure, CORS, OAuth, service-account JSON, .gitignore hygiene. Use before first commit, before any deploy that touches server.ts/firestore.rules/admin.ts, before sharing repo access, and on demand. Read-only: reports findings, never applies fixes.
-tools: Read, Grep, Glob, Bash, mcp__firebase__validate_security_rules, mcp__firebase__get_security_rules
+tools: Read, Grep, Glob, Bash, mcp__firebase__firebase_validate_security_rules, mcp__firebase__firebase_get_security_rules
 model: sonnet
 maxTurns: 200
 disallowedTools: Write, Edit, NotebookEdit
@@ -134,7 +134,7 @@ Read `firestore.rules`. Flag:
 - **`get` / `list` rules** that bypass field-level restrictions.
 - **Admin allow-list** hardcoded in rules — confirm it matches `src/config/admin.ts`.
 
-If MCP firebase tools available, also run `mcp__firebase__validate_security_rules` against the deployed rules (il nome NON ha il prefisso `firebase_`).
+If MCP firebase tools available, also run `mcp__firebase__firebase_validate_security_rules` against the deployed rules (il nome NON ha il prefisso `firebase_`).
 
 ### 6. Stripe handler audit (`src/server/apiRoutes.ts`)
 

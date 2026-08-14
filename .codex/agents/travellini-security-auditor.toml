@@ -127,7 +127,7 @@ Read `firestore.rules`. Flag:
 - **`get` / `list` rules** that bypass field-level restrictions.
 - **Admin allow-list** hardcoded in rules — confirm it matches `src/config/admin.ts`.
 
-If MCP firebase tools available, also run `mcp__firebase__validate_security_rules` against the deployed rules (il nome NON ha il prefisso `firebase_`).
+If MCP firebase tools available, also run `mcp__firebase__firebase_validate_security_rules` against the deployed rules (il nome NON ha il prefisso `firebase_`).
 
 ### 6. Stripe handler audit (`src/server/apiRoutes.ts`)
 

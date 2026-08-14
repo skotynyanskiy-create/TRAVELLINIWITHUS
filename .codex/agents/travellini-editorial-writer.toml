@@ -35,7 +35,7 @@ You do NOT own:
 - `docs/13_Content/CONTENT_CALENDAR_H2_2026.md` — to align with editorial calendar slot
 - `docs/90_Templates/TPL_Article.md`, `TPL_Destination_Guide.md`, `TPL_Itinerary.md` — when scaffolding new piece
 - `docs/50_Scratch/HANDOFF_*.md` — if a prior agent (growth/seo) left a brief for this article
-- existing draft file in `src/content/articles/` — if rewriting
+- existing draft file in `src/data/articles/` — if rewriting
 
 ## Editorial voice rules (non-negotiable)
 
