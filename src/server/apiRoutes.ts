@@ -89,6 +89,27 @@ export function createApiRouter(deps: ApiRouterDeps): Router {
 
   const router = Router();
 
+  /**
+   * `sendEmail` non rigetta quando salta l'invio: risolve con `ok: false`.
+   * Quindi un `.catch` non scatta e `Promise.allSettled` lo conta come riuscito.
+   * Questo wrapper guarda l'esito vero, cosi' un'email mai partita lascia una
+   * riga di log invece di sparire.
+   */
+  const inviaEmail = async (etichetta: string, input: Parameters<typeof sendEmail>[0]) => {
+    try {
+      const esito = await sendEmail(input);
+      if (!esito.ok) {
+        console.error(
+          `[email:${etichetta}] NON inviata — ${esito.reason ?? 'motivo non riportato'}`
+        );
+      }
+      return esito.ok;
+    } catch (err) {
+      console.error(`[email:${etichetta}] errore durante l'invio:`, err);
+      return false;
+    }
+  };
+
   // Rate limiting — protegge da abuse e spam
   const newsletterLimiter = rateLimit({
     windowMs: 60 * 1000, // 1 minuto
@@ -261,12 +282,10 @@ export function createApiRouter(deps: ApiRouterDeps): Router {
           })),
           isDigital: hasDigital,
         });
-        void sendEmail({
+        void inviaEmail('stripe:conferma-ordine', {
           to: order.email,
           ...confirmation,
           tags: [{ name: 'type', value: 'order_confirmation' }],
-        }).catch((err) => {
-          console.error('[stripe-webhook] order confirmation email failed:', err);
         });
       }
     }
@@ -300,9 +319,18 @@ export function createApiRouter(deps: ApiRouterDeps): Router {
     message?: string;
     budget?: string;
     period?: string;
-  }) => {
+  }): Promise<boolean> => {
+    // Ritorna un booleano invece di void: chi chiama deve poter distinguere
+    // "salvato" da "uscito senza fare niente". Prima questo ramo era un return
+    // muto, e il chiamante lo leggeva come successo.
     if (!firebaseConfig.projectId || !firebaseConfig.firestoreDatabaseId) {
-      return;
+      console.error(
+        `[lead:${type}] configurazione Firestore incompleta ` +
+          `(projectId: ${firebaseConfig.projectId ? 'ok' : 'mancante'}, ` +
+          `databaseId: ${firebaseConfig.firestoreDatabaseId ? 'ok' : 'mancante'}) — ` +
+          'lead NON salvato.'
+      );
+      return false;
     }
 
     const fields: Record<string, FirestoreValue> = {
@@ -332,6 +360,8 @@ export function createApiRouter(deps: ApiRouterDeps): Router {
     if (!response.ok) {
       throw new Error(`Lead save failed: ${response.status} ${await response.text()}`);
     }
+
+    return true;
   };
 
   router.post('/api/newsletter-subscribe', async (req, res) => {
@@ -385,7 +415,16 @@ export function createApiRouter(deps: ApiRouterDeps): Router {
       } catch (err) {
         console.error('Brevo request failed:', err);
       }
-    } else if (brevoApiKey && process.env.NODE_ENV !== 'production') {
+    } else if (!brevoApiKey) {
+      // Il caso piu' frequente e prima il piu' silenzioso: senza chiave il ramo
+      // di avviso precedente non partiva, perche' richiedeva a sua volta la
+      // chiave. Vale anche in produzione: un degrado muto e' indistinguibile da
+      // un sistema che funziona.
+      console.warn(
+        '[newsletter] BREVO_API_KEY assente: nessuna iscrizione alla lista, ' +
+          'solo salvataggio del lead.'
+      );
+    } else {
       console.warn(
         '[newsletter] BREVO_API_KEY presente ma BREVO_LIST_ID mancante o non valido. ' +
           'Newsletter in save-lead-only mode.'
@@ -393,12 +432,12 @@ export function createApiRouter(deps: ApiRouterDeps): Router {
     }
 
     try {
-      await saveLeadBackup({
+      const salvato = await saveLeadBackup({
         email,
         type: 'newsletter',
         source,
       });
-      savedSubscription = true;
+      if (salvato) savedSubscription = true;
     } catch (err) {
       console.error('Firestore newsletter save failed:', err);
     }
@@ -411,11 +450,8 @@ export function createApiRouter(deps: ApiRouterDeps): Router {
     }
 
     // Welcome email: fire-and-forget, non bloccare la response.
-    // sendEmail e gia no-op se RESEND_API_KEY manca (predisposizione mode).
     const welcome = renderWelcomeEmail({ source, leadMagnetUrl: LEAD_MAGNET_URL });
-    void sendEmail({ to: email, ...welcome }).catch((err) => {
-      console.error('[newsletter] welcome email failed:', err);
-    });
+    void inviaEmail('newsletter:benvenuto', { to: email, ...welcome });
 
     res.json({ success: true });
   });
@@ -452,11 +488,15 @@ export function createApiRouter(deps: ApiRouterDeps): Router {
     };
 
     try {
-      await saveLeadBackup({
+      const salvato = await saveLeadBackup({
         type: 'contact',
         source: 'contact-form',
         ...lead,
       });
+      if (!salvato) {
+        res.status(503).json({ error: 'Invio temporaneamente non disponibile. Riprova tra poco.' });
+        return;
+      }
     } catch (error) {
       console.error('Contact lead save failed:', error);
       res.status(500).json({ error: 'Impossibile salvare la richiesta.' });
@@ -466,14 +506,10 @@ export function createApiRouter(deps: ApiRouterDeps): Router {
     const notification = renderContactNotification(lead);
     const autoReply = renderContactAutoReply({ name: lead.name });
 
-    void Promise.allSettled([
-      sendEmail({ to: OWNER_EMAIL, replyTo: lead.email, ...notification }),
-      sendEmail({ to: lead.email, ...autoReply }),
-    ]).then((results) => {
-      results.forEach((r) => {
-        if (r.status === 'rejected') console.error('Contact email failed:', r.reason);
-      });
-    });
+    void Promise.all([
+      inviaEmail('contatti:notifica', { to: OWNER_EMAIL, replyTo: lead.email, ...notification }),
+      inviaEmail('contatti:risposta-automatica', { to: lead.email, ...autoReply }),
+    ]);
 
     res.json({ success: true });
   });
@@ -517,7 +553,7 @@ export function createApiRouter(deps: ApiRouterDeps): Router {
     };
 
     try {
-      await saveLeadBackup({
+      const salvato = await saveLeadBackup({
         type: 'media-kit',
         source: 'media-kit-page',
         email: lead.email,
@@ -528,6 +564,10 @@ export function createApiRouter(deps: ApiRouterDeps): Router {
         budget: lead.budget,
         period: lead.period,
       });
+      if (!salvato) {
+        res.status(503).json({ error: 'Invio temporaneamente non disponibile. Riprova tra poco.' });
+        return;
+      }
     } catch (error) {
       console.error('Media kit lead save failed:', error);
       res.status(500).json({ error: 'Impossibile salvare la richiesta.' });
@@ -540,14 +580,10 @@ export function createApiRouter(deps: ApiRouterDeps): Router {
       mediaKitUrl: MEDIA_KIT_URL,
     });
 
-    void Promise.allSettled([
-      sendEmail({ to: OWNER_EMAIL, replyTo: lead.email, ...notification }),
-      sendEmail({ to: lead.email, ...autoReply }),
-    ]).then((results) => {
-      results.forEach((r) => {
-        if (r.status === 'rejected') console.error('Media kit email failed:', r.reason);
-      });
-    });
+    void Promise.all([
+      inviaEmail('media-kit:notifica', { to: OWNER_EMAIL, replyTo: lead.email, ...notification }),
+      inviaEmail('media-kit:risposta-automatica', { to: lead.email, ...autoReply }),
+    ]);
 
     res.json({ success: true });
   });

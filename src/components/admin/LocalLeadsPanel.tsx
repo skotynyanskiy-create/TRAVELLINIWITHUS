@@ -1,34 +1,77 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Download, HardDriveDownload, Trash2 } from 'lucide-react';
 import { clearLeadFallback, readLeadFallback } from '../../lib/leadFallback';
 
-interface ContactLead extends Record<string, unknown> {
-  name: string;
+interface LeadBase extends Record<string, unknown> {
   email: string;
-  topic: string;
-  message: string;
   date: string;
 }
 
-interface NewsletterLead extends Record<string, unknown> {
-  email: string;
-  source: string;
-  date: string;
+/**
+ * I quattro form che salvano in locale quando l'API non risponde. Prima questo
+ * pannello ne leggeva due: i lead media kit e la waitlist Club finivano in
+ * localStorage e non li guardava nessuno. Tenerli in una tabella evita che il
+ * quinto form nasca gia' invisibile.
+ */
+interface TipoLead {
+  chiave: string;
+  etichetta: string;
+  vuoto: string;
+  /** Etichetta a destra dell'email: cambia significato per tipo. */
+  badge: (lead: LeadBase) => string;
+  /** Righe sotto l'email, se il tipo ne ha. */
+  corpo?: (lead: LeadBase) => ReactNode;
 }
 
-interface LeadsBundle {
-  contact: ContactLead[];
-  newsletter: NewsletterLead[];
-}
+const TIPI_LEAD: TipoLead[] = [
+  {
+    chiave: 'twu_contact_leads',
+    etichetta: 'Contatti',
+    vuoto: 'Nessun contatto salvato.',
+    badge: (l) => String(l.topic || '—'),
+    corpo: (l) => (
+      <>
+        <p className="mt-1 text-xs text-zinc-500">{String(l.name ?? '')}</p>
+        <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-zinc-600">
+          {String(l.message ?? '')}
+        </p>
+      </>
+    ),
+  },
+  {
+    chiave: 'twu_newsletter_leads',
+    etichetta: 'Newsletter',
+    vuoto: 'Nessuna iscrizione salvata.',
+    badge: (l) => String(l.source || 'web'),
+  },
+  {
+    chiave: 'twu_media_kit_leads',
+    etichetta: 'Media kit',
+    vuoto: 'Nessuna richiesta media kit salvata.',
+    badge: (l) => String(l.budget || 'budget n.d.'),
+    corpo: (l) => (
+      <>
+        <p className="mt-1 text-xs text-zinc-500">{String(l.company ?? '')}</p>
+        <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-zinc-600">
+          {String(l.message ?? l.brief ?? '')}
+        </p>
+      </>
+    ),
+  },
+  {
+    chiave: 'twu_club_waitlist',
+    etichetta: 'Waitlist Club',
+    vuoto: 'Nessuna iscrizione alla waitlist salvata.',
+    badge: (l) => String(l.plan || l.source || 'club'),
+  },
+];
 
-const CONTACT_KEY = 'twu_contact_leads';
-const NEWSLETTER_KEY = 'twu_newsletter_leads';
+type Registro = Record<string, LeadBase[]>;
 
-function readLeads(): LeadsBundle {
-  return {
-    contact: readLeadFallback<ContactLead>(CONTACT_KEY),
-    newsletter: readLeadFallback<NewsletterLead>(NEWSLETTER_KEY),
-  };
+function readLeads(): Registro {
+  return Object.fromEntries(
+    TIPI_LEAD.map((tipo) => [tipo.chiave, readLeadFallback<LeadBase>(tipo.chiave)])
+  );
 }
 
 function toCsv(rows: Record<string, unknown>[]): string {
@@ -63,41 +106,27 @@ function downloadCsv(filename: string, csv: string) {
 }
 
 export default function LocalLeadsPanel() {
-  const [leads, setLeads] = useState<LeadsBundle>(() => readLeads());
+  const [leads, setLeads] = useState<Registro>(() => readLeads());
 
   const refresh = () => setLeads(readLeads());
 
-  const exportContact = () => {
-    downloadCsv(
-      `twu-contact-leads-${new Date().toISOString().slice(0, 10)}.csv`,
-      toCsv(leads.contact)
-    );
+  const esporta = (tipo: TipoLead) => {
+    const oggi = new Date().toISOString().slice(0, 10);
+    downloadCsv(`${tipo.chiave.replace(/_/g, '-')}-${oggi}.csv`, toCsv(leads[tipo.chiave] ?? []));
   };
 
-  const exportNewsletter = () => {
-    downloadCsv(
-      `twu-newsletter-leads-${new Date().toISOString().slice(0, 10)}.csv`,
-      toCsv(leads.newsletter)
-    );
-  };
-
-  const clearContact = () => {
-    if (!window.confirm('Confermi di voler cancellare i lead contatti salvati su questo browser?'))
-      return;
-    clearLeadFallback(CONTACT_KEY);
-    refresh();
-  };
-
-  const clearNewsletter = () => {
+  const svuota = (tipo: TipoLead) => {
     if (
-      !window.confirm('Confermi di voler cancellare i lead newsletter salvati su questo browser?')
+      !window.confirm(
+        `Confermi di voler cancellare i lead "${tipo.etichetta}" salvati su questo browser?`
+      )
     )
       return;
-    clearLeadFallback(NEWSLETTER_KEY);
+    clearLeadFallback(tipo.chiave);
     refresh();
   };
 
-  const total = leads.contact.length + leads.newsletter.length;
+  const total = TIPI_LEAD.reduce((somma, tipo) => somma + (leads[tipo.chiave]?.length ?? 0), 0);
 
   return (
     <div className="mt-12 rounded-[var(--radius-lg)] border border-zinc-100 bg-white p-6 shadow-sm md:p-8">
@@ -127,107 +156,61 @@ export default function LocalLeadsPanel() {
         </p>
       ) : (
         <div className="grid gap-6 md:grid-cols-2">
-          <div>
-            <div className="mb-3 flex items-center justify-between">
-              <h4 className="text-xs font-bold uppercase tracking-widest text-zinc-700">
-                Contatti ({leads.contact.length})
-              </h4>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={exportContact}
-                  disabled={leads.contact.length === 0}
-                  className="inline-flex items-center gap-1 rounded-full bg-[var(--color-ink)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)] disabled:opacity-40"
-                >
-                  <Download size={12} /> CSV
-                </button>
-                <button
-                  type="button"
-                  onClick={clearContact}
-                  disabled={leads.contact.length === 0}
-                  className="inline-flex items-center gap-1 rounded-full border border-zinc-200 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-zinc-600 transition-colors hover:border-[var(--color-error)] hover:text-[var(--color-error-text)] disabled:opacity-40"
-                >
-                  <Trash2 size={12} />
-                </button>
-              </div>
-            </div>
-            <ul className="max-h-80 space-y-2 overflow-y-auto pr-1">
-              {leads.contact.length === 0 && (
-                <li className="rounded-xl bg-zinc-50 px-4 py-3 text-xs text-zinc-400">
-                  Nessun contatto salvato.
-                </li>
-              )}
-              {leads.contact.map((lead, idx) => (
-                <li
-                  key={`contact-${idx}-${lead.email}-${lead.date}`}
-                  className="rounded-xl border border-zinc-100 bg-zinc-50 px-4 py-3"
-                >
-                  <div className="flex items-start justify-between gap-2">
-                    <p className="text-sm font-medium text-zinc-800">{lead.email}</p>
-                    <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)]">
-                      {lead.topic || '—'}
-                    </span>
+          {TIPI_LEAD.map((tipo) => {
+            const voci = leads[tipo.chiave] ?? [];
+            return (
+              <div key={tipo.chiave}>
+                <div className="mb-3 flex items-center justify-between">
+                  <h4 className="text-xs font-bold uppercase tracking-widest text-zinc-700">
+                    {tipo.etichetta} ({voci.length})
+                  </h4>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => esporta(tipo)}
+                      disabled={voci.length === 0}
+                      className="inline-flex items-center gap-1 rounded-full bg-[var(--color-ink)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)] disabled:opacity-40"
+                    >
+                      <Download size={12} /> CSV
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => svuota(tipo)}
+                      disabled={voci.length === 0}
+                      aria-label={`Cancella i lead ${tipo.etichetta}`}
+                      className="inline-flex items-center gap-1 rounded-full border border-zinc-200 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-zinc-600 transition-colors hover:border-[var(--color-error)] hover:text-[var(--color-error-text)] disabled:opacity-40"
+                    >
+                      <Trash2 size={12} />
+                    </button>
                   </div>
-                  <p className="mt-1 text-xs text-zinc-500">{lead.name}</p>
-                  <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-zinc-600">
-                    {lead.message}
-                  </p>
-                  <p className="mt-2 text-[10px] uppercase tracking-widest text-zinc-400">
-                    {new Date(lead.date).toLocaleString('it-IT')}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <div className="mb-3 flex items-center justify-between">
-              <h4 className="text-xs font-bold uppercase tracking-widest text-zinc-700">
-                Newsletter ({leads.newsletter.length})
-              </h4>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={exportNewsletter}
-                  disabled={leads.newsletter.length === 0}
-                  className="inline-flex items-center gap-1 rounded-full bg-[var(--color-ink)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)] disabled:opacity-40"
-                >
-                  <Download size={12} /> CSV
-                </button>
-                <button
-                  type="button"
-                  onClick={clearNewsletter}
-                  disabled={leads.newsletter.length === 0}
-                  className="inline-flex items-center gap-1 rounded-full border border-zinc-200 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-zinc-600 transition-colors hover:border-[var(--color-error)] hover:text-[var(--color-error-text)] disabled:opacity-40"
-                >
-                  <Trash2 size={12} />
-                </button>
+                </div>
+                <ul className="max-h-80 space-y-2 overflow-y-auto pr-1">
+                  {voci.length === 0 && (
+                    <li className="rounded-xl bg-zinc-50 px-4 py-3 text-xs text-zinc-400">
+                      {tipo.vuoto}
+                    </li>
+                  )}
+                  {voci.map((lead, idx) => (
+                    <li
+                      key={`${tipo.chiave}-${idx}-${lead.email}-${lead.date}`}
+                      className="rounded-xl border border-zinc-100 bg-zinc-50 px-4 py-3"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="text-sm font-medium text-zinc-800">{lead.email}</p>
+                        <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)]">
+                          {tipo.badge(lead)}
+                        </span>
+                      </div>
+                      {tipo.corpo?.(lead)}
+                      <p className="mt-2 text-[10px] uppercase tracking-widest text-zinc-400">
+                        {new Date(lead.date).toLocaleString('it-IT')}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
-            <ul className="max-h-80 space-y-2 overflow-y-auto pr-1">
-              {leads.newsletter.length === 0 && (
-                <li className="rounded-xl bg-zinc-50 px-4 py-3 text-xs text-zinc-400">
-                  Nessuna iscrizione salvata.
-                </li>
-              )}
-              {leads.newsletter.map((lead, idx) => (
-                <li
-                  key={`news-${idx}-${lead.email}-${lead.date}`}
-                  className="rounded-xl border border-zinc-100 bg-zinc-50 px-4 py-3"
-                >
-                  <div className="flex items-start justify-between gap-2">
-                    <p className="text-sm font-medium text-zinc-800">{lead.email}</p>
-                    <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)]">
-                      {lead.source || 'web'}
-                    </span>
-                  </div>
-                  <p className="mt-2 text-[10px] uppercase tracking-widest text-zinc-400">
-                    {new Date(lead.date).toLocaleString('it-IT')}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </div>
+            );
+          })}
         </div>
       )}
     </div>
