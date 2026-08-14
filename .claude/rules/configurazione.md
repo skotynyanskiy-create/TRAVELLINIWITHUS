@@ -137,9 +137,22 @@ Ma attenzione a _come_ lo verifichi, perché le due domande sono diverse:
   2026-08-14: **ignora `--only`** e stampa 64 righe identiche con e senza filtro.
   Serve a scoprire che il nome vero è `firebase_init` e non `init`, che è
   l'errore che ha reso inerte una `deny` scritta poche ore prima.
-- **«È raggiungibile con la nostra configurazione?»** → serve un probe JSON-RPC
-  sul server come lo lancia `.mcp.json`, e chiedergli `tools/list`. È l'unico
-  modo di sapere che sotto `--only core,firestore` il gruppo `auth` non c'è.
+- **«È raggiungibile con la nostra configurazione?»** → questa è quella che conta
+  quando scrivi una regola, e ora ha un comando:
+
+```bash
+npm run mcp:tools           # elenca gli strumenti reali di ogni server
+npm run mcp:tools -- --check  # confronta allow, deny e i tools: dei 16 agent
+```
+
+`scripts/mcp-tools.mjs` fa l'handshake JSON-RPC vero, come Claude Code: lancia
+ogni server come lo dichiara `.mcp.json` e gli chiede `tools/list`. Stampa i nomi
+già nella forma `mcp__server__strumento`, da incollare in una regola.
+
+Misurato il 2026-08-14: **170 strumenti su 9 server**, e un solo nome citato dalla
+configurazione che il server non dichiara — `auth_update_user`, quello
+deliberato. Non è un cancello di CI: richiede credenziali e ~25 secondi. È il
+controllo da fare **prima** di scrivere una regola, non dopo.
 
 Confondere le due porta a due errori opposti: negare uno strumento che non esiste
 (inutile) o dare per assente uno strumento che c'è. Il secondo è successo

@@ -26,7 +26,21 @@ if (existsSync(join(root, '.git'))) {
     const git = (args) => execFileSync('git', ['-C', root, ...args], { encoding: 'utf8' });
     const branch = git(['rev-parse', '--abbrev-ref', 'HEAD']).trim();
     const dirty = git(['status', '--porcelain']).split('\n').filter(Boolean).length;
-    line(`branch: ${branch} | file modificati: ${dirty}`);
+
+    // I commit non pushati sono lavoro che esiste solo su questo disco. Vale una
+    // riga a ogni avvio: il 2026-08-14 una giornata intera è rimasta scoperta
+    // per ore senza che nessuno lo dicesse.
+    let daPushare = '';
+    try {
+      const n = git(['log', '--oneline', `origin/${branch}..HEAD`])
+        .split('\n')
+        .filter(Boolean).length;
+      if (n > 0) daPushare = ` | ${n} commit NON pushati`;
+    } catch {
+      daPushare = ' | branch mai pushato su origin';
+    }
+
+    line(`branch: ${branch} | file modificati: ${dirty}${daPushare}`);
   } catch {
     line('git: presente ma non interrogabile');
   }
