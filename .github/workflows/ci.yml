@@ -38,8 +38,16 @@ jobs:
       - name: ESLint
         run: npm run lint
 
-      - name: Unit tests
-        run: npm run test:unit
+      # Non girava da nessuna parte: il formato era garantito solo da lint-staged
+      # sui file in stage, e 12 file erano entrati non formattati.
+      - name: Prettier
+        run: npm run format:check
+
+      # `test:unit` gira solo il progetto vitest `unit`. Il progetto `storybook`
+      # (3 file, 13 test) esisteva ma nessuna pipeline lo eseguiva: `npm run test`
+      # li copre entrambi e costa due secondi.
+      - name: Unit + storybook tests
+        run: npm run test
 
       - name: Production build
         run: npm run build
@@ -54,6 +62,22 @@ jobs:
 
       - name: Audit UI
         run: npm run audit:ui
+
+      # I quattro controlli sotto giravano solo in `audit:quality`, cioè solo se
+      # qualcuno lo lanciava a mano. audit:provenance è la regola imagery-truth:
+      # era l'unica norma dichiarata non negoziabile che nessuna macchina
+      # verificava prima del merge.
+      - name: Audit provenienza immagini
+        run: npm run audit:provenance
+
+      - name: Audit seed contenuti
+        run: npm run audit:seed
+
+      - name: Audit indice llms
+        run: npm run audit:llms
+
+      - name: Verifica STATO_DEL_SITO allineato al codice
+        run: npm run stato:check
 
       - name: Audit Firebase
         run: npm run audit:firebase

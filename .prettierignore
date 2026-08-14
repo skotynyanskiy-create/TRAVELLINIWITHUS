@@ -1,0 +1,56 @@
+# lint-staged fa girare `prettier --write` su ogni *.{ts,tsx,css,md,json} in
+# stage (package.json → lint-staged). Senza questo file, un git hook riscrive
+# in silenzio cose che nessuno gli ha chiesto di toccare — comprese quelle che
+# scripts/hooks/config_protection.py esiste per difendere, che intercetta le
+# Edit/Write degli agent ma non ciò che fa git.
+
+# ---------------------------------------------------------------------------
+# I file guardati da config_protection.py (PROTECTED + HIGH_RISK).
+# Sono le manopole che, allentate, fanno passare una build verde falsa.
+# ---------------------------------------------------------------------------
+tsconfig.json
+tsconfig.app.json
+tsconfig.node.json
+eslint.config.js
+firestore.rules
+firestore.indexes.json
+
+# Dove finisce un deploy e con che header: un riformato qui non è mai innocuo.
+firebase.json
+.firebaserc
+
+# Configurazione di progetto di Claude Code.
+.claude/settings.json
+.claude/settings.local.json
+
+# ---------------------------------------------------------------------------
+# File generati: riformattarli produce diff enormi e illeggibili, e in due casi
+# rischia di invalidare ciò che li ha prodotti.
+# ---------------------------------------------------------------------------
+package-lock.json
+functions/package-lock.json
+src/data/instagram-corpus.json
+src/data/content-seed.json
+src/data/asset-provenance.json
+public/sitemap.xml
+dist/
+coverage/
+storybook-static/
+playwright-report/
+test-results/
+
+# ---------------------------------------------------------------------------
+# Vault Obsidian: callout, wikilink e tabelle allineate a mano sopravvivono male
+# a un riformato automatico, e sono 318 file che nessuno rilegge dopo un commit.
+# ---------------------------------------------------------------------------
+docs/
+.remember/
+
+# Skill e agent: il mirror è validato da `npm run audit:agents` confrontando i
+# file. Un prettier che tocca solo la copia in stage rompe il confronto.
+.agents/
+.claude/skills/
+.claude/agents/
+.cursor/
+.gemini/
+.github/skills/

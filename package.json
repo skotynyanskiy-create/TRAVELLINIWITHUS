@@ -52,7 +52,7 @@
     "audit:env": "node scripts/check-env-safety.mjs",
     "audit:visual": "playwright test e2e/visual-quality.spec.ts",
     "audit:public-footprint": "node scripts/check-public-footprint.mjs",
-    "audit:quality": "npm run typecheck && npm run lint && npm run test && npm run build && npm run audit:seed && npm run audit:ui && npm run audit:provenance && npm run audit:llms && npm run audit:firebase && npm run audit:stripe && npm run audit:revenue && npm run audit:agents && npm run audit:obsidian && npm run stato:check && npm run audit:visual && npm run audit:size",
+    "audit:quality": "npm run typecheck && npm run lint && npm run format:check && npm run test && npm run build && npm run audit:seed && npm run audit:ui && npm run audit:provenance && npm run audit:llms && npm run audit:env && npm run audit:public-footprint && npm run audit:firebase && npm run audit:stripe && npm run audit:revenue && npm run audit:agents && npm run audit:obsidian && npm run stato:check && npm run audit:visual && npm run audit:size",
     "audit:all": "npm run audit:ui && npm run audit:firebase && npm run audit:stripe",
     "audit:cwv": "npm run build && npx --yes @lhci/cli@0.14.x autorun --config=./lighthouserc.json",
     "audit:bulk": "npx --yes unlighthouse@0 --site http://localhost:3000 --output-path .audit-screenshots/unlighthouse",
@@ -154,8 +154,11 @@
     "zod": "^4.4.3"
   },
   "lint-staged": {
-    "*.{ts,tsx}": "eslint --max-warnings=0",
-    "*.{ts,tsx,css,md,json}": "prettier --write"
+    "*.{ts,tsx}": [
+      "prettier --write",
+      "eslint --max-warnings=0"
+    ],
+    "*.{css,md,json}": "prettier --write"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.2.1",
