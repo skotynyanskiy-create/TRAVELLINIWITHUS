@@ -84,3 +84,61 @@ rejected and redone). Rules live in `CLAUDE.md` > Model routing.
 | 2026-08-02 | Explore                              | Explore home hero and reel cards                  | 16378 ch |
 | 2026-08-02 | Explore                              | Explore esplora and mappa layout                  | 16902 ch |
 | 2026-08-02 | Explore                              | Explore SEO meta and OG image                     | 16038 ch |
+| 2026-08-11 | travellini-ui-designer               | Forma visiva del momento globo                    | 4253 ch  |
+| 2026-08-11 | travellini-perf-engineer             | Costo prestazionale del globo in home             | 2755 ch  |
+| 2026-08-11 | travellini-seo-conversion-strategist | Copy e costo SEO del momento globo                | 3159 ch  |
+| 2026-08-11 | travellini-asset-curator             | Cosa si vede davvero sul globo                    | 2510 ch  |
+| 2026-08-11 | travellini-backend-engineer          | Alleggerire i tile della mappa                    | 3229 ch  |
+| 2026-08-11 | travellini-growth-revenue-operator   | Il globo merita l'unico momento?                  | 3347 ch  |
+| 2026-08-11 | browser-auditor                      | RealtÃ  su telefono vero                          | 2843 ch  |
+| 2026-08-11 | code-architect                       | Due mappe, una sola dovrebbe esistere             | 3648 ch  |
+| 2026-08-11 | travellini-social-content-operator   | Il reel come momento alternativo                  | 3251 ch  |
+| 2026-08-11 | general-purpose                      | Demolire il consenso emerso                       | 4133 ch  |
+| 2026-08-11 | travellini-security-auditor          | Tile di terze parti, CSP e consenso               | 3833 ch  |
+| 2026-08-11 | travellini-quality-auditor           | AccessibilitÃ  e raggio di rottura                | 3612 ch  |
+| 2026-08-11 | travellini-editorial-writer          | Le parole della scheda-prova                      | 3856 ch  |
+| 2026-08-11 | travellini-data-analyst              | Cosa sappiamo davvero, e cosa no                  | 3614 ch  |
+| 2026-08-11 | travellini-frontend-builder          | Correggere le quattro bugie del sito              | 5863 ch  |
+| 2026-08-11 | travellini-backend-engineer          | Le due policy di sicurezza divergenti             | 3624 ch  |
+| 2026-08-11 | travellini-frontend-builder          | Aprire la strada agli otto componenti             | 4042 ch  |
+| 2026-08-11 | travellini-ui-designer               | Progettare gli otto componenti                    | 3959 ch  |
+| 2026-08-11 | travellini-seo-conversion-strategist | Struttura dati e copy dei componenti              | 3677 ch  |
+| 2026-08-11 | travellini-frontend-builder          | Costruire i blocchi posto e reel                  | 4086 ch  |
+| 2026-08-11 | travellini-frontend-builder          | Costruire i blocchi mappa e dati                  | 3682 ch  |
+| 2026-08-11 | travellini-frontend-builder          | Costruire verdetto e domande                      | 4298 ch  |
+| 2026-08-11 | travellini-frontend-builder          | Il link affiliato e i rel incoerenti              | 4590 ch  |
+| 2026-08-11 | travellini-frontend-builder          | Editor markdown con i sei blocchi                 | 4697 ch  |
+| 2026-08-11 | feature-dev:code-reviewer            | Revisione delle sette direttive                   | 3215 ch  |
+| 2026-08-11 | general-purpose                      | Attaccare CSP e link affiliati                    | 3252 ch  |
+| 2026-08-11 | general-purpose                      | Perdite di dato nel nuovo editor                  | 3240 ch  |
+| 2026-08-11 | general-purpose                      | Distruggere un articolo usando solo l'editor      | 3409 ch  |
+| 2026-08-11 | travellini-ui-designer               | Cosa deve garantire chi scrive                    | 3818 ch  |
+| 2026-08-11 | travellini-frontend-builder          | Chiudere i tre percorsi distruttivi               | 3924 ch  |
+| 2026-08-11 | travellini-frontend-builder          | Chiudere le altre sei perdite di lavoro           | 5200 ch  |
+| 2026-08-11 | travellini-frontend-builder          | Affiancare scrittura e anteprima                  | 5302 ch  |
+| 2026-08-11 | general-purpose                      | Demolire la tesi della verificabilitÃ             | 3742 ch  |
+| 2026-08-11 | travellini-growth-revenue-operator   | Innovare serve, o serve altro?                    | 3083 ch  |
+| 2026-08-11 | travellini-ui-designer               | Rendere visibile la provenienza                   | 3233 ch  |
+| 2026-08-11 | travellini-seo-conversion-strategist | Essere la citazione, non la fonte                 | 2986 ch  |
+| 2026-08-11 | code-architect                       | Il registro che risponde a domande                | 3120 ch  |
+| 2026-08-11 | travellini-frontend-builder          | Lo schema che dice di essere il ristorante        | 4687 ch  |
+| 2026-08-12 | travellini-growth-revenue-operator   | Cosa serve a un brand per scrivervi               | 3176 ch  |
+| 2026-08-12 | general-purpose                      | La home brand serve a qualcosa?                   | 2736 ch  |
+| 2026-08-12 | travellini-seo-conversion-strategist | Le parole che fanno scrivere un brand             | 2458 ch  |
+| 2026-08-12 | travellini-ui-designer               | La composizione della home brand                  | 3192 ch  |
+| 2026-08-12 | travellini-frontend-builder          | Il contatto che si perde in silenzio              | 4014 ch  |
+| 2026-08-12 | travellini-frontend-builder          | La promessa rotta e il doppione brand             | 3517 ch  |
+| 2026-08-12 | browser-auditor                      | La scheda posto su un telefono vero               | 2880 ch  |
+| 2026-08-12 | travellini-ui-designer               | La scheda posto fa il suo lavoro?                 | 3214 ch  |
+| 2026-08-12 | general-purpose                      | Attaccare la scheda posto                         | 2723 ch  |
+| 2026-08-12 | travellini-perf-engineer             | La rotta articolo sfora il tetto                  | 3440 ch  |
+| 2026-08-12 | travellini-frontend-builder          | Un confine solo attorno al corpo articolo         | 3967 ch  |
+| 2026-08-14 | travellini-quality-auditor           | Audit veritÃ  CLAUDE.md                           | 3220 ch  |
+| 2026-08-14 | code-architect                       | Critica architettura CLAUDE.md                    | 3008 ch  |
+| 2026-08-14 | travellini-security-auditor          | Verifica sezione sicurezza                        | 2974 ch  |
+| 2026-08-14 | travellini-quality-auditor           | Coerenza fra i file di regole                     | 3431 ch  |
+| 2026-08-14 | Explore                              | Flusso cattura lead end-to-end                    | 2718 ch  |
+| 2026-08-14 | Explore                              | Pipeline import schede e verdetti                 | 3075 ch  |
+| 2026-08-14 | Explore                              | Percorso di rendering dei media                   | 3304 ch  |
+| 2026-08-14 | travellini-quality-auditor           | Audit completo delle 16 definizioni agent         | 3120 ch  |
+| 2026-08-14 | code-explorer                        | Audit delle 53 skill di progetto                  | 2619 ch  |
