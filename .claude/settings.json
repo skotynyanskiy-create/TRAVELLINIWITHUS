@@ -9,10 +9,8 @@
     "context7",
     "github",
     "obsidian",
-    "codex",
     "higgsfield",
-    "firecrawl",
-    "analytics"
+    "firecrawl"
   ],
   "skillOverrides": {
     "higgsfield-generate": "user-invocable-only",
@@ -138,7 +136,6 @@
       "Bash(git stash drop:*)",
       "Bash(git push * +*)",
       "Bash(git branch -D:*)",
-      "Bash(git rebase:*)",
       "Bash(git checkout .)",
       "Bash(git checkout -- .)",
       "Bash(git restore .)",

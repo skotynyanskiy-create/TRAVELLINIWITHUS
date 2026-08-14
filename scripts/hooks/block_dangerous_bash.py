@@ -46,7 +46,6 @@ RULES: list[tuple[str, str]] = [
         r"\bgit\s+add\s+[^|;&]*\.(env|mcp\.json)\b(?!\.(?:example|sample|template)\b)",
         "would stage a secrets file",
     ),
-    (r"\bgit\s+rebase\b", "rewrites local history mid-branch"),
     (r"\bgit\s+filter-branch\b", "rewrites entire history"),
     (r"\bgit\s+stash\s+(clear|drop)\b", "discards stashed work permanently"),
     (r"\bdd\s+if=", "raw disk write"),

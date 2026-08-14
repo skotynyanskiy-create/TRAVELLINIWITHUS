@@ -82,17 +82,17 @@ lista è tutto ciò che resta**.
   `git clean`, `rm -rf` e le sue varianti Windows, installare pacchetti,
   abilitare plugin o server MCP, committare `.env`/`.mcp.json`, deployare in
   produzione. Dal 2026-08-14 la lista imposta dalle `deny` include anche
-  `git rebase`, `git branch -D`, `git checkout .` e `git restore .` sull'intero
-  albero, `git filter-branch`, `git stash clear` e `git stash drop`. Sono
-  elencate qui perché una regola che la macchina applica e il testo non dichiara
-  fa perdere fiducia nel testo.
+  `git branch -D`, `git checkout .` e `git restore .` sull'intero albero,
+  `git filter-branch`, `git stash clear` e `git stash drop`. Sono elencate qui
+  perché una regola che la macchina applica e il testo non dichiara fa perdere
+  fiducia nel testo.
 
-  > **Falso positivo noto, misurato**: la `deny` su `git rebase` prende anche
-  > `--abort` e `--continue`, che sono operazioni di _recupero_ e non riscrivono
-  > niente. Bloccano entrambi i livelli, quindi allentare solo l'hook non
-  > basterebbe. Restringere la regola è una decisione dell'owner, non una svista
-  > da correggere: finché resta così, un rebase interrotto va sbloccato dal
-  > terminale dell'owner.
+  > **`git rebase` è stato sbloccato** su decisione dell'owner, dopo che si è
+  > misurato che la regola prendeva anche `--abort` e `--continue` — operazioni
+  > di _recupero_, che non riscrivono niente. Il ragionamento: su un branch di
+  > lavoro un rebase è recuperabile da reflog, mentre il danno irreversibile è il
+  > push forzato, che resta bloccato a parte su entrambi i livelli. **Non
+  > rimetterlo senza chiedere**: la rimozione è deliberata, non una svista.
 
 - Mai `git add -A` su questo albero: si stagia per percorso.
 - Push del branch su origin prima di qualunque operazione distruttiva.
@@ -214,9 +214,13 @@ vero. **`effort` per-agente resta deliberatamente non impostato**, perché
 ripeterebbe l'errore di `effortLevel` — una configurazione di progetto che
 sovrascrive in silenzio la scelta dell'owner.
 
-**Codex** (`codex` MCP) è un secondo parere su un diff non banale o su logica
-backend, mai un sostituto silenzioso e mai per copy o design italiano: dichiara
-sempre quando un output viene da lì.
+**Codex non è disponibile** (rimosso da `.mcp.json` il 2026-08-14): il binario
+`codex` non è nel PATH di questa macchina, quindi quel server non poteva partire.
+Fino a oggi questa riga lo dichiarava come secondo parere sui diff backend — una
+policy scritta sopra una capacità inesistente. Se lo reinstalli, il ruolo era:
+secondo parere su un diff non banale o su logica backend, mai un sostituto
+silenzioso e mai per copy o design italiano, dichiarando sempre da dove viene
+l'output.
 
 **I workflow dinamici** servono solo al fan-out su tutto il repo. Un dominio = un
 agente, non uno sciame. I loro subagenti girano in `acceptEdits`, quindi non
