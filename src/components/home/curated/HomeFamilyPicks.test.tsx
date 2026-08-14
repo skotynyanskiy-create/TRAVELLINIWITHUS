@@ -49,7 +49,9 @@ vi.mock('@/src/components/TransitionLink', () => ({
 }));
 
 vi.mock('@/src/components/family/FamilyEntryCard', () => ({
-  default: ({ entry }: { entry: FamilyEntry }) => <article data-testid="family-entry">{entry.id}</article>,
+  default: ({ entry }: { entry: FamilyEntry }) => (
+    <article data-testid="family-entry">{entry.id}</article>
+  ),
 }));
 
 afterEach(() => {

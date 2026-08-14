@@ -11,6 +11,10 @@ export function usePersonalizedInterest() {
   const inferredInterest = explicitInterest ? null : getInferredInterest(audience);
   return {
     interest: explicitInterest ?? inferredInterest,
-    source: explicitInterest ? ('explicit' as const) : inferredInterest ? ('inferred' as const) : null,
+    source: explicitInterest
+      ? ('explicit' as const)
+      : inferredInterest
+        ? ('inferred' as const)
+        : null,
   };
 }

@@ -21,11 +21,12 @@ function readSignals(): Signals {
     if (!raw) return {};
     const parsed = JSON.parse(raw) as Signals;
     return Object.fromEntries(
-      Object.entries(parsed).filter(([interest, score]) =>
-        Boolean(getAudienceInterest(interest as InterestId)) &&
-        typeof score === 'number' &&
-        Number.isFinite(score) &&
-        score > 0
+      Object.entries(parsed).filter(
+        ([interest, score]) =>
+          Boolean(getAudienceInterest(interest as InterestId)) &&
+          typeof score === 'number' &&
+          Number.isFinite(score) &&
+          score > 0
       )
     ) as Signals;
   } catch {

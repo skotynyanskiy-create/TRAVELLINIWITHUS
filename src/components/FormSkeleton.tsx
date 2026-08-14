@@ -7,7 +7,7 @@ export default function FormSkeleton() {
         <Skeleton className="w-1/3 h-10" />
         <Skeleton className="w-24 h-10 rounded-full" />
       </div>
-      
+
       <div className="space-y-6">
         <div className="space-y-2">
           <Skeleton className="w-1/4 h-5" />

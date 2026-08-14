@@ -22,10 +22,7 @@ const HOME_LIMIT = 3;
 
 export default function HomeFamilyPicks() {
   const { interest } = usePersonalizedInterest();
-  const allEntries = useMemo(
-    () => rankFamilyByInterest(getFamilyEntries(), interest),
-    [interest]
-  );
+  const allEntries = useMemo(() => rankFamilyByInterest(getFamilyEntries(), interest), [interest]);
   const entries = allEntries.slice(0, HOME_LIMIT);
   if (entries.length === 0) return null;
 

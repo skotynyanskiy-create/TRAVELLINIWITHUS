@@ -73,8 +73,8 @@ export default function ConsentBanner() {
             </h2>
             <p className="text-sm leading-relaxed text-white/80 sm:mt-2">
               <span className="sm:hidden">
-                Usiamo cookie per far funzionare il sito e, col tuo ok, per capire come viene
-                usato e ricordare le preferenze che scegli.{' '}
+                Usiamo cookie per far funzionare il sito e, col tuo ok, per capire come viene usato
+                e ricordare le preferenze che scegli.{' '}
               </span>
               <span className="hidden sm:inline">
                 Usiamo cookie tecnici necessari al funzionamento del sito e, con il tuo consenso,

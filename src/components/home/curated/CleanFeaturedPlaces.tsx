@@ -27,20 +27,22 @@ interface PlaceItem {
  */
 export { CURATED_IDS };
 
-function toPlaceItem(item: NonNullable<ReturnType<typeof selectHomeFeaturedItems>[number]>): PlaceItem {
-    const disclosure = PARTNERSHIP_LABEL[item.partnership.kind];
-    return {
-      id: item.id,
-      title: item.title,
-      location: item.place.city ?? item.place.region ?? item.place.country,
-      category: item.types[0],
-      price: item.value?.price ?? 'Scheda dal viaggio',
-      score: disclosure || 'Provato di persona',
-      image: item.cover,
-      focusY: item.coverFocusY ?? 50,
-      link: `/posto/${item.id}`,
-      description: item.description,
-    };
+function toPlaceItem(
+  item: NonNullable<ReturnType<typeof selectHomeFeaturedItems>[number]>
+): PlaceItem {
+  const disclosure = PARTNERSHIP_LABEL[item.partnership.kind];
+  return {
+    id: item.id,
+    title: item.title,
+    location: item.place.city ?? item.place.region ?? item.place.country,
+    category: item.types[0],
+    price: item.value?.price ?? 'Scheda dal viaggio',
+    score: disclosure || 'Provato di persona',
+    image: item.cover,
+    focusY: item.coverFocusY ?? 50,
+    link: `/posto/${item.id}`,
+    description: item.description,
+  };
 }
 
 export default function CleanFeaturedPlaces() {

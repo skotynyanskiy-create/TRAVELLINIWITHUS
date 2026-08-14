@@ -723,7 +723,10 @@ export default function Collaborazioni() {
         </div>
       </Section>
 
-      <Section id="collaboration-formats" className="relative scroll-mt-28 overflow-hidden rounded-[var(--radius-xl)] bg-[var(--color-ink)] px-0 py-16 text-white md:p-20">
+      <Section
+        id="collaboration-formats"
+        className="relative scroll-mt-28 overflow-hidden rounded-[var(--radius-xl)] bg-[var(--color-ink)] px-0 py-16 text-white md:p-20"
+      >
         <div className="relative z-20">
           <div className="mx-auto mb-16 max-w-3xl text-center">
             <h2 className="mb-6 text-4xl font-serif md:text-5xl">{pageContent.formatsTitle}</h2>

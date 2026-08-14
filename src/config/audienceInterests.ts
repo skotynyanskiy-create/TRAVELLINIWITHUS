@@ -111,7 +111,9 @@ export function getAudienceInterests(audience: Audience): readonly AudienceInter
   return AUDIENCE_INTERESTS[audience];
 }
 
-export function getAudienceInterest(interest: InterestId | null | undefined): AudienceInterest | null {
+export function getAudienceInterest(
+  interest: InterestId | null | undefined
+): AudienceInterest | null {
   if (!interest) return null;
   for (const interests of Object.values(AUDIENCE_INTERESTS)) {
     const match = interests.find((candidate) => candidate.id === interest);
