@@ -23,7 +23,6 @@
  */
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
-import path from 'node:path';
 
 const ROOT = process.env.CLAUDE_PROJECT_DIR || process.cwd();
 
@@ -69,16 +68,26 @@ const righe = [
   `Misurare bene e interpretare male è il modo più comune di sbagliare qui.`,
 ];
 
-// Riga di dispatch, scritta ORA e non al ritorno.
-try {
-  const logPath = path.join(ROOT, 'docs', '20_Decisions', 'ROUTING_LOG.md');
-  if (fs.existsSync(logPath)) {
-    const ts = git('log', '-1', '--format=%cI') || '';
-    fs.appendFileSync(logPath, `| ${ts} | ${tipo} | dispatch | ${branch} |\n`);
-  }
-} catch {
-  /* il log non è mai un motivo per bloccare un agente */
-}
+// Nota deliberata: qui NON si scrive nel ROUTING_LOG.
+//
+// La prima versione di questo hook lo faceva, per chiudere un buco vero:
+// `routing_log.py` sta su `PostToolUse`, che scatta solo dopo un tool
+// **riuscito**, quindi un agente interrotto non lascia traccia nel registro che
+// `CLAUDE.md` indica come la prova da portare quando si cambiano le regole di
+// routing.
+//
+// Ma il rimedio era peggiore del male, misurato poche ore dopo:
+//   - non toglieva la scrittura al ritorno, quindi ogni agente riuscito
+//     produceva DUE righe;
+//   - il payload di `SubagentStart` non contiene la descrizione del compito,
+//     quindi la riga di dispatch poteva dire solo «avviato» — rumore in cambio
+//     di niente su ogni run riuscito;
+//   - e usava la data dell'ultimo commit al posto dell'ora vera, quindi tutte le
+//     righe di una sessione avrebbero avuto lo stesso timestamp.
+//
+// Il buco resta aperto e dichiarato: **un agente interrotto non compare nel
+// ROUTING_LOG.** Chi legge quel file per decidere una regola di routing lo sappia.
+// Non vale due righe di rumore per ogni agente che invece finisce bene.
 
 process.stdout.write(
   JSON.stringify({
