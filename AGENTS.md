@@ -23,7 +23,7 @@ sovrappongano: precedenza, limiti, routing, barra di qualità. Questo file esist
 per gli strumenti che leggono `AGENTS.md` e non `CLAUDE.md` — leggi comunque
 `CLAUDE.md` per primo se puoi.
 
-**Non precaricare `docs/`**: sono 318 file. Apri solo la nota che il compito
+**Non precaricare `docs/`**: sono 319 note `.md` su 401 file. Apri solo la nota che il compito
 richiede, dall'elenco qui sopra. Gli hub Obsidian (`OBSIDIAN_HOME`,
 `OBSIDIAN_DASHBOARD`) si aprono quando si lavora sul vault, non a ogni sessione.
 
