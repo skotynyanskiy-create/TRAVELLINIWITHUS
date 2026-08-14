@@ -1,20 +1,35 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render, fireEvent } from '@testing-library/react';
 import { reelDirective } from './reel';
+import { REELS } from '../../../config/reels';
 
 /**
- * `:::reel` non e' ancora registrata in `directives/index.ts` (la
- * registrazione finale spetta a chi coordina le direttive in parallelo),
- * quindi qui si testa direttamente `reelDirective.component`. Fixture: id
- * reali da `src/config/reels.ts`, non inventati. Nessun `Link`/router qui
- * (solo `<a>`/`<button>`/`<video>`), quindi il render di testing-library base
- * basta, senza wrapper Router.
+ * Fixture: id reali da `src/config/reels.ts`, non inventati. Nessun
+ * `Link`/router qui (solo `<a>`/`<button>`/`<video>`), quindi basta il render
+ * di testing-library senza wrapper.
+ *
+ * Il comportamento normale e' l'anteprima che porta su Instagram; il video in
+ * pagina e' l'eccezione, accesa da `videoInPagina` sulla `ReelEntry`. Nessuna
+ * voce reale del manifest ha il flag, quindi per quel ramo si clona la entry
+ * vera e le si accende sopra: cosi' il test non chiede di alterare i dati di
+ * produzione per farsi passare.
  */
 
 const Reel = reelDirective.component as React.ComponentType<{
   'data-id'?: string;
   'data-posto'?: string;
 }>;
+
+const BURTON_ID = 'reel-campania-burton-juice';
+const BURTON_HOOK = 'Il primo ristorante a tema Tim Burton in Italia?';
+const BURTON_URL = 'https://www.instagram.com/travelliniwithus/reel/C6gJr_noB_i/';
+
+/** La entry reale, con il video in pagina acceso: serve ai due test del ramo video. */
+function conVideoInPagina() {
+  const vera = REELS.find((r) => r.id === BURTON_ID);
+  if (!vera) throw new Error(`Fixture mancante nel manifest: ${BURTON_ID}`);
+  return { ...vera, videoInPagina: true };
+}
 
 describe(':::reel — reelDirective', () => {
   it('toProps legge id/posto dagli attributes e scarta i children', () => {
@@ -29,51 +44,80 @@ describe(':::reel — reelDirective', () => {
     expect(directive.children).toEqual([]);
   });
 
-  it('mostra il poster con bottone play (mai autoplay) e monta il video solo al tap', () => {
-    const { container, getByRole } = render(<Reel data-id="reel-campania-burton-juice" />);
-    const aside = container.querySelector(
-      'aside[aria-label="Reel: Il primo ristorante a tema Tim Burton in Italia?"]'
-    );
-    expect(aside).not.toBeNull();
+  it('per default l’anteprima porta su Instagram in un tocco solo, senza montare video', () => {
+    const { container, getByRole } = render(<Reel data-id={BURTON_ID} />);
+    expect(container.querySelector(`aside[aria-label="Reel: ${BURTON_HOOK}"]`)).not.toBeNull();
     expect(container.querySelector('video')).toBeNull();
 
-    const playButton = getByRole('button', {
-      name: 'Guarda il reel: Il primo ristorante a tema Tim Burton in Italia?',
-    });
-    fireEvent.click(playButton);
+    const link = getByRole('link', { name: `Guarda il reel su Instagram: ${BURTON_HOOK}` });
+    expect(link).toHaveAttribute('href', BURTON_URL);
+    expect(link).toHaveAttribute('target', '_blank');
+    expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+  });
 
-    const video = container.querySelector('video');
-    expect(video).not.toBeNull();
-    expect(video).toHaveAttribute('src', '/video/campania-burton-juice.mp4');
-    expect(video).toHaveAttribute('preload', 'none');
-    expect(video).toHaveAttribute('controls');
-    expect(video).not.toHaveAttribute('autoplay');
-    expect(video).not.toHaveAttribute('loop');
+  it('l’anteprima mostra la copertina con il suo alt, non un’immagine decorativa', () => {
+    const { container } = render(<Reel data-id={BURTON_ID} />);
+    const img = container.querySelector('img');
+    expect(img).not.toBeNull();
+    expect(img).not.toHaveAttribute('aria-hidden');
+    expect(img?.getAttribute('alt')).toBeTruthy();
   });
 
   it('risolve il reel anche via posto (getReelForPosto)', () => {
     const { getByRole } = render(<Reel data-posto="campania-burton-juice" />);
     expect(
-      getByRole('button', {
-        name: 'Guarda il reel: Il primo ristorante a tema Tim Burton in Italia?',
-      })
+      getByRole('link', { name: `Guarda il reel su Instagram: ${BURTON_HOOK}` })
     ).toBeInTheDocument();
   });
 
-  it('se il video fallisce a caricare, ripiega sul link Instagram con label esplicita', () => {
-    const { container, getByRole } = render(<Reel data-id="reel-campania-burton-juice" />);
+  it('con videoInPagina mostra il poster e monta il video solo al tap, mai in autoplay', async () => {
+    vi.resetModules();
+    const vera = conVideoInPagina();
+    vi.doMock('../../../config/reels', async () => {
+      const actual =
+        await vi.importActual<typeof import('../../../config/reels')>('../../../config/reels');
+      return { ...actual, REELS: [vera], getReelForPosto: () => vera };
+    });
+    const { reelDirective: diretta } = await import('./reel');
+    const Isolato = diretta.component as typeof Reel;
+
+    const { container, getByRole } = render(<Isolato data-id={BURTON_ID} />);
+    expect(container.querySelector('video')).toBeNull();
+
+    fireEvent.click(getByRole('button', { name: `Guarda il reel: ${BURTON_HOOK}` }));
+
+    const video = container.querySelector('video');
+    expect(video).not.toBeNull();
+    expect(video).toHaveAttribute('preload', 'none');
+    expect(video).toHaveAttribute('controls');
+    expect(video).not.toHaveAttribute('autoplay');
+    expect(video).not.toHaveAttribute('loop');
+
+    // Il permalink resta raggiungibile anche quando il video sta in pagina.
+    expect(getByRole('link', { name: /Apri su Instagram/ })).toHaveAttribute('href', BURTON_URL);
+    vi.doUnmock('../../../config/reels');
+  });
+
+  it('con videoInPagina, se il video non carica ripiega sul link Instagram', async () => {
+    vi.resetModules();
+    const vera = conVideoInPagina();
+    vi.doMock('../../../config/reels', async () => {
+      const actual =
+        await vi.importActual<typeof import('../../../config/reels')>('../../../config/reels');
+      return { ...actual, REELS: [vera], getReelForPosto: () => vera };
+    });
+    const { reelDirective: diretta } = await import('./reel');
+    const Isolato = diretta.component as typeof Reel;
+
+    const { container, getByRole } = render(<Isolato data-id={BURTON_ID} />);
     fireEvent.click(getByRole('button', { name: /Guarda il reel/ }));
-    const video = container.querySelector('video') as HTMLVideoElement;
-    fireEvent.error(video);
+    fireEvent.error(container.querySelector('video') as HTMLVideoElement);
 
     expect(container.querySelector('video')).toBeNull();
-    const link = getByRole('link', { name: 'Guarda su Instagram ↗' });
-    expect(link).toHaveAttribute(
-      'href',
-      'https://www.instagram.com/travelliniwithus/reel/C6gJr_noB_i/'
-    );
-    expect(link).toHaveAttribute('target', '_blank');
-    expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(
+      getByRole('link', { name: `Guarda il reel su Instagram: ${BURTON_HOOK}` })
+    ).toHaveAttribute('href', BURTON_URL);
+    vi.doUnmock('../../../config/reels');
   });
 
   it('non renderizza nulla per un id assente dal manifest', () => {

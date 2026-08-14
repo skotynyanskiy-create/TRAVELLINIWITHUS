@@ -17,6 +17,12 @@ import { meseAnno } from '@/src/utils/format';
  * - **Copertina prima, video su tap.** I reel pesano 9,5 MB di media: qui
  *   sarebbero scaricati da chiunque apra la scheda, anche da chi e' venuto solo
  *   per l'indirizzo.
+ * - **Il video in pagina e' l'eccezione.** Per default l'anteprima porta al reel
+ *   su Instagram: `public/video/` e' gitignored, quindi in produzione quei file
+ *   non esistono, e i posti in arrivo un video locale non ce l'hanno. Si monta
+ *   il `<video>` solo dove `videoInPagina` lo chiede, e comunque mai da solo:
+ *   prima questo componente aveva `autoPlay loop`, senza `preload` e senza
+ *   ripiego, sulla pagina piu' importante del sito.
  * - **Il 9:16 non si forza.** Un solo lato comanda: la larghezza del riquadro,
  *   che resta stretto perche' la scheda e' una pagina di lettura, non un feed.
  * - **Nessun testo del reel.** Verificato su tutte e 29 le schede: `hook` e
@@ -29,10 +35,30 @@ import { meseAnno } from '@/src/utils/format';
 export default function ReelDelPosto({ postoId, luogo }: { postoId: string; luogo?: string }) {
   const reel = getReelForPosto(postoId);
   const [inRiproduzione, setInRiproduzione] = useState(false);
+  const [videoRotto, setVideoRotto] = useState(false);
 
   if (!reel) return null;
 
   const girato = meseAnno(reel.publishedAt);
+  const apreIlVideo = reel.videoInPagina === true || !reel.instagramUrl;
+  const mostraVideo = apreIlVideo && inRiproduzione && !videoRotto;
+
+  const copertina = (
+    <>
+      <OptimizedImage
+        src={reel.cover}
+        alt={reel.alt}
+        sizes="240px"
+        responsiveWidths={[320, 480]}
+        className="h-full w-full object-cover"
+      />
+      <span className="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/10">
+        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-[var(--color-ink)] shadow-xl transition-transform group-hover:scale-110">
+          <Play size={22} className="ml-1 fill-current" aria-hidden />
+        </span>
+      </span>
+    </>
+  );
 
   return (
     <section aria-labelledby="reel-del-posto" className="mt-10">
@@ -47,39 +73,38 @@ export default function ReelDelPosto({ postoId, luogo }: { postoId: string; luog
           alto 430px lasciava mezza colonna di vuoto. */}
       <div className="mt-4 flex flex-col gap-3">
         <div className="relative aspect-[9/16] w-full max-w-[15rem] shrink-0 overflow-hidden rounded-[var(--radius-md)] border border-[var(--color-border)] bg-black shadow-[var(--shadow-md)]">
-          {inRiproduzione ? (
+          {mostraVideo ? (
             <video
               src={reel.localPath}
               poster={reel.cover}
-              autoPlay
-              loop
               muted
               playsInline
               controls
+              preload="none"
+              onError={() => setVideoRotto(true)}
               className="h-full w-full object-cover"
             >
               <track kind="captions" />
             </video>
-          ) : (
+          ) : apreIlVideo ? (
             <button
               type="button"
               onClick={() => setInRiproduzione(true)}
               aria-label={`Riproduci il reel: ${reel.hook}`}
               className="group relative block h-full w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
             >
-              <OptimizedImage
-                src={reel.cover}
-                alt={reel.alt}
-                sizes="240px"
-                responsiveWidths={[320, 480]}
-                className="h-full w-full object-cover"
-              />
-              <span className="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/10">
-                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-[var(--color-ink)] shadow-xl transition-transform group-hover:scale-110">
-                  <Play size={22} className="ml-1 fill-current" aria-hidden />
-                </span>
-              </span>
+              {copertina}
             </button>
+          ) : (
+            <a
+              href={reel.instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Guarda il reel su Instagram: ${reel.hook}`}
+              className="group relative block h-full w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+            >
+              {copertina}
+            </a>
           )}
         </div>
 
@@ -90,6 +115,19 @@ export default function ReelDelPosto({ postoId, luogo }: { postoId: string; luog
             {[luogo, girato].filter(Boolean).join(', ')}
             {luogo || girato ? '. ' : ''}
             Il video è quello pubblicato su Instagram, non un montaggio per il sito.
+            {mostraVideo && reel.instagramUrl && (
+              <>
+                {' '}
+                <a
+                  href={reel.instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-[var(--color-accent-text)] underline-offset-4 hover:underline"
+                >
+                  Aprilo su Instagram ↗
+                </a>
+              </>
+            )}
           </p>
         </div>
       </div>

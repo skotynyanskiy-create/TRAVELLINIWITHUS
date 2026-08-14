@@ -51,13 +51,20 @@ function ReelDirective({
     return null;
   }
 
-  const stato: 'video' | 'link' | 'assente' | 'poster' = playing
-    ? nonDisponibile
-      ? reel.instagramUrl
-        ? 'link'
-        : 'assente'
-      : 'video'
-    : 'poster';
+  // Il video in pagina e' l'eccezione, non la regola: si monta solo dove
+  // `videoInPagina` lo chiede, o dove non c'e' un permalink a cui mandare.
+  // Altrimenti l'anteprima E' il link — un tocco solo, non due.
+  const apreIlVideo = reel.videoInPagina === true || !reel.instagramUrl;
+
+  const stato: 'video' | 'link' | 'assente' | 'poster' = apreIlVideo
+    ? playing
+      ? nonDisponibile
+        ? reel.instagramUrl
+          ? 'link'
+          : 'assente'
+        : 'video'
+      : 'poster'
+    : 'link';
 
   return (
     <aside aria-label={`Reel: ${reel.hook}`} className="my-10 md:my-12 -mx-5 md:mx-0">
@@ -82,20 +89,19 @@ function ReelDirective({
               href={reel.instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Guarda su Instagram ↗"
+              aria-label={`Guarda il reel su Instagram: ${reel.hook}`}
               className="group relative block h-full w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
             >
               <OptimizedImage
                 src={reel.cover}
-                alt=""
-                aria-hidden="true"
+                alt={reel.alt}
                 sizes="380px"
                 responsiveWidths={[320, 480, 768]}
                 className="h-full w-full object-cover"
               />
-              <span className="absolute inset-0 flex items-center justify-center bg-black/45">
-                <span className="text-[13px] font-bold uppercase tracking-[0.18em] text-white">
-                  Guarda su Instagram ↗
+              <span className="absolute inset-0 flex items-center justify-center bg-black/20 transition-colors group-hover:bg-black/10">
+                <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/95 text-[var(--color-ink)] shadow-xl transition-transform group-hover:scale-110">
+                  <Play size={22} className="ml-1 fill-current" aria-hidden="true" />
                 </span>
               </span>
             </a>
@@ -129,9 +135,23 @@ function ReelDirective({
             </button>
           )}
         </div>
-        <p className="px-4 py-3 font-serif text-[14px] italic leading-[1.5] text-[var(--color-ink-2)] md:text-[15px]">
-          {reel.location}
-        </p>
+        <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-4 py-3">
+          <p className="font-serif text-[14px] italic leading-[1.5] text-[var(--color-ink-2)] md:text-[15px]">
+            {reel.location}
+          </p>
+          {/* Quando il video sta in pagina, il permalink resta comunque
+              raggiungibile: il reel e' pubblicato li', il sito lo ospita. */}
+          {stato === 'video' && reel.instagramUrl && (
+            <a
+              href={reel.instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-accent-text)] underline-offset-4 hover:underline"
+            >
+              Apri su Instagram ↗
+            </a>
+          )}
+        </div>
       </div>
     </aside>
   );

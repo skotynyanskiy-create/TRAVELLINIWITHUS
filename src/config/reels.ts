@@ -43,6 +43,20 @@ export interface ReelEntry {
   hashtags: string[];
   /** URL pubblico del post Instagram (https://instagram.com/p/...). */
   instagramUrl?: string;
+  /**
+   * Mostra il video dentro il sito invece di mandare su Instagram.
+   *
+   * Il comportamento normale e' l'anteprima: copertina verticale con il play,
+   * il tocco apre il reel su Instagram. Serve perche' i 533 posti in arrivo un
+   * video locale non ce l'hanno e non lo avranno, e perche' `public/video/` e'
+   * gitignored: quei file non entrano nel build della CI.
+   *
+   * Con questo acceso il tocco monta il `<video>` in pagina — sempre al tocco,
+   * mai da solo — e il link a Instagram resta sotto. Ha senso solo dove
+   * `localPath` punta a un file davvero raggiungibile: in produzione significa
+   * `VITE_VIDEO_BASE_URL` configurata.
+   */
+  videoInPagina?: boolean;
   /** URL pubblico del post TikTok (https://tiktok.com/@.../video/...). */
   tiktokUrl?: string;
   /** Id del posto corrispondente in content-seed (per il deep link
