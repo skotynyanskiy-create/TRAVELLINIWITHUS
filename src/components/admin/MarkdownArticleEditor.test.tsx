@@ -55,11 +55,14 @@ describe('MarkdownArticleEditor', () => {
     expect(textarea.value).toContain(':affiliato[testo del link]{partner="booking"');
   });
 
-  it('l’anteprima usa il motore vero: un :::posto reale mostra la scheda del registro', () => {
+  it('l’anteprima usa il motore vero: un :::posto reale mostra la scheda del registro', async () => {
     render(
       <Wrapper initial={'Testo prima.\n\n:::posto{id="emilia-granduca-di-campigna"}\n:::\n'} />
     );
-    expect(screen.getByText('Dal registro')).toBeInTheDocument();
+    // L'anteprima monta ArticleBody, che porta il motore markdown dietro un
+    // confine lazy/Suspense (vedi Articolo.tsx): il registro arriva dopo il
+    // resolve del dynamic import, quindi query async invece di sincrone.
+    expect(await screen.findByText('Dal registro')).toBeInTheDocument();
     expect(screen.getByText('Granduca di Campigna')).toBeInTheDocument();
   });
 
@@ -118,11 +121,12 @@ describe('MarkdownArticleEditor', () => {
     expect(container.innerHTML).toContain('@min-[80rem]:grid-cols-2');
   });
 
-  it("l'anteprima rispetta la stessa misura di riga della pagina pubblica (720px, come Articolo.tsx)", () => {
+  it("l'anteprima rispetta la stessa misura di riga della pagina pubblica (720px, come Articolo.tsx)", async () => {
     render(
       <Wrapper initial={'Testo prima.\n\n:::posto{id="emilia-granduca-di-campigna"}\n:::\n'} />
     );
-    expect(screen.getByText('Dal registro').closest('.max-w-\\[720px\\]')).not.toBeNull();
+    const registro = await screen.findByText('Dal registro');
+    expect(registro.closest('.max-w-\\[720px\\]')).not.toBeNull();
   });
 
   it("chiama onIssuesChange a ogni cambio con l'elenco corrente degli errori", () => {

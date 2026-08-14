@@ -4,11 +4,6 @@ import { ArrowRight, CheckCircle2, Clock, Info, MapPin, Route, WalletCards } fro
 import { useParams } from 'react-router-dom';
 import { Link } from '@/src/components/TransitionLink';
 import { Helmet } from 'react-helmet-async';
-import ReactMarkdown, { type Components } from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import remarkDirective from 'remark-directive';
-import remarkUnwrapImages from 'remark-unwrap-images';
-import type { Root } from 'mdast';
 import { fetchArticleBySlug, fetchArticles } from '../services/firebaseService';
 import { useFavorites } from '../context/FavoritesContext';
 import { useArticleAnalytics } from '../hooks/useArticleAnalytics';
@@ -19,6 +14,7 @@ import Newsletter from '../components/Newsletter';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import ArticlePageSkeleton from '../components/ArticlePageSkeleton';
+import Skeleton from '../components/Skeleton';
 import DemoContentNotice from '../components/DemoContentNotice';
 import NotFound from './NotFound';
 import ReviewBlock from '../components/ReviewBlock';
@@ -33,21 +29,18 @@ import {
   Diary,
   MobileBottomBar,
   MobileTocOverlay,
-  ReadingMode,
   RelatedArticles,
   TableOfContents,
 } from '../components/article';
 import type { ArticleData, RelatedArticleSummary, TocItem } from '../components/article';
-import DropCap from '../components/article/editorial/DropCap';
-import InlineFigure from '../components/article/editorial/InlineFigure';
-import {
-  directiveComponents,
-  parseImageTitle,
-  remarkEditorialDirectives,
-  type DirectiveNode,
-} from '../components/article/directives';
 
 const InteractiveMap = lazy(() => import('../components/InteractiveMap'));
+const ArticleMarkdownBody = lazy(() => import('../components/article/ArticleMarkdownBody'));
+/* Anche ReadingMode importa react-markdown: lasciarlo statico terrebbe il chunk
+   `markdown` (~46 KB gzip) nel download iniziale di /articolo, annullando il
+   confine lazy qui sopra. E' una modale dietro un bottone, quindi si monta solo
+   dopo la prima apertura. */
+const ReadingMode = lazy(() => import('../components/article/ReadingMode'));
 
 const BRAND_AUTHOR = 'Rodrigo & Betta';
 
@@ -232,65 +225,23 @@ function getReadingTime(article: ArticleData) {
 }
 
 /**
- * Marca il primo paragrafo top-level del documento con
- * `data-first-paragraph="true"`. Esegue dopo remarkEditorialDirectives,
- * quindi i paragrafi dentro directive (pullquote/source) hanno gia' hName
- * = "directive-p" e vengono saltati: il DropCap si applica solo al primo
- * paragrafo body vero (e mai a quelli dentro le directive).
+ * Scheletro dimensionato per il corpo articolo mentre il chunk lazy di
+ * `ArticleMarkdownBody` scarica react-markdown, remark-directive e le undici
+ * direttive editoriali (~29 KB, vedi budget `article-route` in
+ * `check-size.mjs`). Righe di testo, non un fallback vuoto: il corpo che
+ * sparisce e rimonta e' esattamente lo spostamento di layout da evitare.
  */
-function markFirstBodyParagraph() {
-  return (tree: Root) => {
-    const children = (tree as Root & { children?: Array<DirectiveNode> }).children || [];
-    for (const child of children) {
-      if (child.type === 'paragraph') {
-        const data = child.data || (child.data = {});
-        const props = (data.hProperties || (data.hProperties = {})) as Record<string, unknown>;
-        props['data-first-paragraph'] = 'true';
-        return;
-      }
-    }
-  };
-}
-
-const QUOTE_OPEN_CHARS = new Set(['"', '«', "'", '‘', '“']);
-
-function extractText(node: unknown): string {
-  if (node == null || typeof node === 'boolean') return '';
-  if (typeof node === 'string' || typeof node === 'number') return String(node);
-  if (Array.isArray(node)) return node.map(extractText).join('');
-  if (typeof node === 'object' && 'props' in node) {
-    const props = (node as { props?: { children?: unknown } }).props;
-    return extractText(props?.children);
-  }
-  return '';
-}
-
-/**
- * Splitta i children React del primo paragrafo per estrarre la prima lettera
- * "stampabile" (saltando virgolette di apertura) e il resto.
- */
-function splitFirstLetter(children: unknown): { firstChar: string; rest: unknown } | null {
-  const flat = Array.isArray(children) ? [...children] : [children];
-
-  for (let i = 0; i < flat.length; i++) {
-    const item = flat[i];
-    if (typeof item !== 'string') continue;
-
-    let idx = 0;
-    while (idx < item.length && QUOTE_OPEN_CHARS.has(item[idx])) idx++;
-    if (idx >= item.length) continue; /* solo virgolette: cerca nel pezzo dopo */
-
-    const firstChar = item[idx];
-    const prefix = item.slice(0, idx);
-    const tail = item.slice(idx + 1);
-    const restArr: unknown[] = [];
-    if (prefix) restArr.push(prefix);
-    if (tail) restArr.push(tail);
-    restArr.push(...flat.slice(i + 1));
-    return { firstChar, rest: restArr };
-  }
-
-  return null;
+function ArticleBodySkeleton() {
+  return (
+    <div aria-busy="true" className="space-y-4">
+      <Skeleton className="h-7 w-2/3" />
+      <Skeleton className="h-5 w-full" />
+      <Skeleton className="h-5 w-full" />
+      <Skeleton className="h-5 w-11/12" />
+      <Skeleton className="h-5 w-full" />
+      <Skeleton className="h-5 w-4/5" />
+    </div>
+  );
 }
 
 export function ArticleBody({ article }: { article: ArticleData }) {
@@ -298,86 +249,10 @@ export function ArticleBody({ article }: { article: ArticleData }) {
     return <>{article.content}</>;
   }
 
-  const components = {
-    h2: ({ children }) => (
-      <h2 className="mt-10 md:mt-14 scroll-mt-32 text-3xl md:text-4xl font-serif leading-tight text-[var(--color-ink)]">
-        {children}
-      </h2>
-    ),
-    h3: ({ children }) => (
-      <h3 className="mt-8 md:mt-10 text-2xl font-serif leading-tight text-[var(--color-ink)]">
-        {children}
-      </h3>
-    ),
-    p: ({
-      children,
-      'data-first-paragraph': isFirstParagraph,
-    }: {
-      children?: React.ReactNode;
-      'data-first-paragraph'?: string;
-    }) => {
-      if (isFirstParagraph === 'true') {
-        const text = extractText(children).trim();
-        if (text.length >= 280) {
-          const split = splitFirstLetter(children);
-          if (split) {
-            return <DropCap firstChar={split.firstChar} rest={split.rest as React.ReactNode} />;
-          }
-        }
-      }
-      return (
-        <p className="mt-5 text-[17px] md:text-lg leading-[1.65] md:leading-[1.7] text-[var(--color-ink-2)]">
-          {children}
-        </p>
-      );
-    },
-    ul: ({ children }) => (
-      <ul className="mt-6 space-y-3 pl-0 text-base leading-relaxed text-[var(--color-ink-2)]">
-        {children}
-      </ul>
-    ),
-    li: ({ children }) => (
-      <li className="flex gap-2.5 md:gap-3">
-        <CheckCircle2 className="mt-1 shrink-0 text-[var(--color-accent)]" size={16} />
-        <span>{children}</span>
-      </li>
-    ),
-    strong: ({ children }) => (
-      <strong className="font-semibold text-[var(--color-ink)]">{children}</strong>
-    ),
-    img: ({ src, alt, title }: { src?: string; alt?: string; title?: string }) => {
-      const { caption, credit } = parseImageTitle(title);
-      return <InlineFigure src={src || ''} alt={alt || ''} caption={caption} credit={credit} />;
-    },
-    ...directiveComponents,
-  } as unknown as Components;
-
-  /* La dichiarazione affiliati non la scrive l'autore: compare da sola appena
-     l'articolo contiene un `:affiliato`. Lasciarla a mano significa che prima o
-     poi manca, e manca proprio sull'articolo che rende di piu'. */
-  const hasAffiliateLinks = article.content.includes(':affiliato[');
-
   return (
-    <>
-      {hasAffiliateLinks && (
-        <p className="mb-8 border-l-2 border-[var(--color-border)] pl-4 text-sm italic leading-relaxed text-[var(--color-muted-fg)]">
-          Alcuni link qui sotto sono affiliati: se prenoti, a noi arriva una piccola commissione. Il
-          prezzo per te non cambia, e non cambia cosa scriviamo.
-        </p>
-      )}
-      <ReactMarkdown
-        remarkPlugins={[
-          remarkGfm,
-          remarkDirective,
-          remarkEditorialDirectives,
-          markFirstBodyParagraph,
-          remarkUnwrapImages,
-        ]}
-        components={components}
-      >
-        {article.content}
-      </ReactMarkdown>
-    </>
+    <Suspense fallback={<ArticleBodySkeleton />}>
+      <ArticleMarkdownBody content={article.content} />
+    </Suspense>
   );
 }
 
@@ -394,6 +269,9 @@ export default function Articolo() {
   const [copied, setCopied] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isReadingMode, setIsReadingMode] = useState(false);
+  /* Resta true dopo la prima apertura: smontare la modale alla chiusura
+     taglierebbe l'animazione di uscita di AnimatePresence. */
+  const [readingModeMounted, setReadingModeMounted] = useState(false);
 
   const prefersReducedMotion = useReducedMotion();
   const { scrollYProgress, scrollY } = useScroll();
@@ -680,7 +558,10 @@ export default function Articolo() {
                 articleDescription={articleDescription}
                 articleImage={articleImage}
                 onCopyLink={handleShare}
-                onOpenReadingMode={() => setIsReadingMode(true)}
+                onOpenReadingMode={() => {
+                  setReadingModeMounted(true);
+                  setIsReadingMode(true);
+                }}
                 readingProgress={readingProgress}
               />
             </div>
@@ -1016,13 +897,17 @@ export default function Articolo() {
           readingProgress={readingProgress}
         />
 
-        <ReadingMode
-          article={article}
-          authorName={authorName}
-          readingTime={readingTime}
-          open={isReadingMode}
-          onClose={() => setIsReadingMode(false)}
-        />
+        {readingModeMounted && (
+          <Suspense fallback={null}>
+            <ReadingMode
+              article={article}
+              authorName={authorName}
+              readingTime={readingTime}
+              open={isReadingMode}
+              onClose={() => setIsReadingMode(false)}
+            />
+          </Suspense>
+        )}
       </>
     </PageLayout>
   );
