@@ -28,6 +28,11 @@ RULES: list[tuple[str, str]] = [
     (r"\bgit\s+clean\s+-\w*f", "deletes untracked files permanently"),
     (r"\bgit\s+push\s+.*(--force(?!-with-lease)|(?<![\w-])-f\b)",
      "force push rewrites remote history"),
+    # `git push origin +main` forza senza mai scrivere --force: il `+` davanti al
+    # refspec fa lo stesso danno. Era un buco che il repo documentava su se stesso
+    # in test_hooks.py e che nessuno aveva chiuso.
+    (r"\bgit\s+push\b[^|;&]*\s\+[\w./*-]+(:[\w./*-]+)?(\s|$)",
+     "force push via refspec + rewrites remote history"),
     (r"\bgit\s+checkout\s+(--\s+)?\.(\s|$)", "discards uncommitted changes in the tree"),
     (r"\bgit\s+restore\s+(--\s+)?\.(\s|$)", "discards uncommitted changes in the tree"),
     (r"\bgit\s+branch\s+-D\b", "force-deletes a branch that may not be merged"),
