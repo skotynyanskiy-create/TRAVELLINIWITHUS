@@ -99,8 +99,15 @@ export default function AudienceGate() {
     const show = () => {
       if (!cancelled) setVisible(true);
     };
+    // `Window & { requestIdleCallback?: ... }` non rende opzionale niente: in
+    // `lib.dom.d.ts` la proprieta' e' gia' dichiarata obbligatoria, e
+    // l'intersezione la tiene tale — da cui TS2774 sul controllo qui sotto.
+    // Passare da `unknown` rompe l'intersezione e lascia sopravvivere l'opzionale,
+    // che e' la verita': su Safari `requestIdleCallback` non esiste.
     const idle = (
-      window as Window & { requestIdleCallback?: (cb: () => void, opts?: object) => number }
+      window as unknown as {
+        requestIdleCallback?: (cb: () => void, opts?: object) => number;
+      }
     ).requestIdleCallback;
     const handle = idle ? idle(show, { timeout: 1800 }) : window.setTimeout(show, 1200);
     return () => {

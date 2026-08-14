@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import ReactMarkdown, { type Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -85,12 +86,12 @@ function splitFirstLetter(children: unknown): { firstChar: string; rest: unknown
 
 export default function ArticleMarkdownBody({ content }: { content: string }) {
   const components = {
-    h2: ({ children }) => (
+    h2: ({ children }: { children?: ReactNode }) => (
       <h2 className="mt-10 md:mt-14 scroll-mt-32 text-3xl md:text-4xl font-serif leading-tight text-[var(--color-ink)]">
         {children}
       </h2>
     ),
-    h3: ({ children }) => (
+    h3: ({ children }: { children?: ReactNode }) => (
       <h3 className="mt-8 md:mt-10 text-2xl font-serif leading-tight text-[var(--color-ink)]">
         {children}
       </h3>
@@ -117,18 +118,18 @@ export default function ArticleMarkdownBody({ content }: { content: string }) {
         </p>
       );
     },
-    ul: ({ children }) => (
+    ul: ({ children }: { children?: ReactNode }) => (
       <ul className="mt-6 space-y-3 pl-0 text-base leading-relaxed text-[var(--color-ink-2)]">
         {children}
       </ul>
     ),
-    li: ({ children }) => (
+    li: ({ children }: { children?: ReactNode }) => (
       <li className="flex gap-2.5 md:gap-3">
         <CheckCircle2 className="mt-1 shrink-0 text-[var(--color-accent)]" size={16} />
         <span>{children}</span>
       </li>
     ),
-    strong: ({ children }) => (
+    strong: ({ children }: { children?: ReactNode }) => (
       <strong className="font-semibold text-[var(--color-ink)]">{children}</strong>
     ),
     img: ({ src, alt, title }: { src?: string; alt?: string; title?: string }) => {

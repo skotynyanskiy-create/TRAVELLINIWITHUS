@@ -23,8 +23,13 @@ import { resolveVideoUrl } from '../utils/mediaUrl';
 export interface ReelEntry {
   /** ID stabile per analytics e routing (es. "salento-agosto-2025"). */
   id: string;
-  /** Path locale relativo a `/public/`. */
-  localPath: string;
+  /**
+   * URL del video, risolto da `resolveVideoUrl`. **Opzionale apposta**: in
+   * produzione `public/video/` e' gitignorato e `VITE_VIDEO_BASE_URL` non e'
+   * dichiarata, quindi qui `undefined` non e' un caso limite ma lo stato
+   * corrente. Chi lo consuma deve gestire l'assenza, non presumerla.
+   */
+  localPath?: string;
   /** Cover statica per browser preview / lazy load (webp consigliato). */
   cover: string;
   /** Alt text IT della cover: descrive la scena visibile, non l'hook. */

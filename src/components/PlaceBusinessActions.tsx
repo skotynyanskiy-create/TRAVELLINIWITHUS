@@ -92,7 +92,13 @@ export const PlaceBusinessActions: React.FC<PlaceBusinessActionsProps> = ({
     const url = `${SITE_URL}/posto/${item.id}`;
     trackEvent('place_share_click', {
       place_id: item.id,
-      method: typeof navigator !== 'undefined' && navigator.share ? 'native' : 'clipboard',
+      // `lib.dom.d.ts` dichiara `share()` come sempre presente, ma a runtime manca
+      // su quasi tutti i desktop: il ramo clipboard gira davvero. `typeof` esprime
+      // la feature detection senza che il compilatore la creda inutile (TS2774).
+      method:
+        typeof navigator !== 'undefined' && typeof navigator.share === 'function'
+          ? 'native'
+          : 'clipboard',
     });
 
     const success = await shareContent({

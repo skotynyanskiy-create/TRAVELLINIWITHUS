@@ -703,25 +703,25 @@ export default function Esplora() {
                   <AdvancedFilterRow
                     label="Formato"
                     values={FORMATS}
-                    activeValue={filters.format}
+                    activeValue={filters.format ?? null}
                     onSelect={(value) => updateFilter({ format: value as ContentFormat | null })}
                   />
                   <AdvancedFilterRow
                     label="Periodo"
                     values={PERIODS}
-                    activeValue={filters.period}
+                    activeValue={filters.period ?? null}
                     onSelect={(value) => updateFilter({ period: value as Period | null })}
                   />
                   <AdvancedFilterRow
                     label="Budget"
                     values={BUDGETS}
-                    activeValue={filters.budget}
+                    activeValue={filters.budget ?? null}
                     onSelect={(value) => updateFilter({ budget: value as Budget | null })}
                   />
                   <AdvancedFilterRow
                     label="Durata"
                     values={DURATIONS}
-                    activeValue={filters.duration}
+                    activeValue={filters.duration ?? null}
                     onSelect={(value) => updateFilter({ duration: value as Duration | null })}
                   />
                   {/* Unica superficie zona oltre alla domanda-guida: lo switch
@@ -730,7 +730,7 @@ export default function Esplora() {
                     <AdvancedFilterRow
                       label="Zona specifica"
                       values={ZONES}
-                      activeValue={filters.zone}
+                      activeValue={filters.zone ?? null}
                       onSelect={(value) => updateFilter({ zone: value as Zone | null })}
                     />
                   </div>

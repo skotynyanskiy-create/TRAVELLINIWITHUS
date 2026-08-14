@@ -213,16 +213,23 @@ export default function Risorse() {
     () =>
       resourceCategories.map((category) => ({
         ...category,
+        // Il tipo di ritorno esplicito evita che questo letterale diventi un
+        // secondo tipo di `items`: senza, `category.items` era l'unione fra
+        // `ResourceItem` e questo oggetto — che non ha `avoid` — e ogni uso a
+        // valle vedeva un campo mancante o un `commercialLabel` allargato a
+        // `string`.
         items:
-          firestoreByCategory?.[category.id]?.map((resource) => ({
-            name: resource.name,
-            description: resource.description,
-            link: resource.link,
-            tags: resource.tags ?? [],
-            badge: resource.badge,
-            commercialLabel: resource.badge ? 'Affiliato' : 'Non affiliato',
-            fit: 'Aggiunta di recente: la stiamo ancora raccontando per bene.',
-          })) ?? category.items,
+          firestoreByCategory?.[category.id]?.map(
+            (resource): ResourceItem => ({
+              name: resource.name,
+              description: resource.description,
+              link: resource.link,
+              tags: resource.tags ?? [],
+              badge: resource.badge,
+              commercialLabel: resource.badge ? 'Affiliato' : 'Non affiliato',
+              fit: 'Aggiunta di recente: la stiamo ancora raccontando per bene.',
+            })
+          ) ?? category.items,
       })),
     [firestoreByCategory]
   );

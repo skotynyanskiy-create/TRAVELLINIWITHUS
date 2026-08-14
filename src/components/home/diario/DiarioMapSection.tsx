@@ -7,18 +7,21 @@ import type { ContentType } from '@/src/config/contentTaxonomy';
 
 type MapFilter = 'all' | ContentType;
 
+// Un campo solo invece di due opzionali. `value?` e `type?` codificavano
+// «esattamente uno dei due», che il tipo non sa esprimere: `filter.type ??
+// filter.value` restava `| undefined` anche se nessuna voce lascia entrambi
+// vuoti. Cosi' il caso impossibile non esiste, invece di essere gestito.
 interface MoodFilterOption {
   label: string;
-  value?: 'all';
-  type?: ContentType;
+  filter: MapFilter;
 }
 
 const MOOD_FILTERS: MoodFilterOption[] = [
-  { label: 'Tutti i posti', value: 'all' },
-  { label: 'Cena insolita', type: 'Food & Ristoranti' },
-  { label: 'Alloggi di charme', type: 'Hotel con carattere' },
-  { label: 'Esperienze e relax', type: 'Relax, terme e spa' },
-  { label: 'Posti particolari', type: 'Insolito' },
+  { label: 'Tutti i posti', filter: 'all' },
+  { label: 'Cena insolita', filter: 'Food & Ristoranti' },
+  { label: 'Alloggi di charme', filter: 'Hotel con carattere' },
+  { label: 'Esperienze e relax', filter: 'Relax, terme e spa' },
+  { label: 'Posti particolari', filter: 'Insolito' },
 ];
 
 export default function DiarioMapSection() {
@@ -70,7 +73,7 @@ export default function DiarioMapSection() {
         {/* Filter Mood Chips */}
         <div className="mb-8 flex flex-wrap items-center gap-2.5">
           {MOOD_FILTERS.map((filter) => {
-            const filterValue = filter.type ?? filter.value;
+            const filterValue = filter.filter;
             const isActive = activeFilter === filterValue;
             return (
               <button

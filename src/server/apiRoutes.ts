@@ -227,7 +227,11 @@ export function createApiRouter(deps: ApiRouterDeps): Router {
 
         enrichedItems = lineItems.map((item) => ({
           id: String(item.price?.product || item.description || 'unknown'),
-          name: item.description,
+          // `description` di Stripe e' `string | null`. Prima finiva `null` nel
+          // record dell'ordine e nella mail di conferma; il fallback segue lo
+          // stesso schema della riga sopra. Ramo raro: gira solo se
+          // l'arricchimento dai prodotti non ha prodotto nulla.
+          name: item.description || 'Articolo',
           price: (item.amount_total || 0) / Math.max(item.quantity || 1, 1) / 100,
           quantity: item.quantity || 1,
           downloadUrl: null,

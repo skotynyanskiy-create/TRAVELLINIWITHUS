@@ -117,7 +117,9 @@ export default function OptimizedImage({
 
   const sharedProps = {
     ...props,
-    alt,
+    // `alt` non sta qui: ogni tag immagine lo passa esplicito prima dello
+    // spread, e averlo in entrambi i posti lo faceva riscrivere con lo stesso
+    // valore. E' destrutturato dalle props a :71, quindi `...props` non lo porta.
     className: imgClassName,
     loading: priority ? ('eager' as const) : ('lazy' as const),
     decoding: 'async' as const,

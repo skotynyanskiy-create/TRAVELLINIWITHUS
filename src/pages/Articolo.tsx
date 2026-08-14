@@ -414,7 +414,7 @@ export default function Articolo() {
   const dateModified = toIsoDateString(article.updatedAt) || datePublished;
   const handleShare = async () => {
     const url = window.location.href;
-    const channel = navigator.share ? 'native' : 'clipboard';
+    const channel = typeof navigator.share === 'function' ? 'native' : 'clipboard';
     trackEvent('article_share_click', { slug: currentSlug, channel });
 
     if (navigator.share) {
@@ -472,7 +472,10 @@ export default function Articolo() {
         />
         <Helmet>
           {!isPreviewArticle && <meta property="article:published_time" content={datePublished} />}
-          {!isPreviewArticle && article.updatedAt && (
+          {/* `updatedAt` e' `unknown` (types.ts:16): puo' arrivare come Timestamp
+              Firestore o come stringa. Senza `Boolean()` il ramo falso propaga
+              `unknown` fra i figli di Helmet, che accetta solo ReactNode. */}
+          {!isPreviewArticle && Boolean(article.updatedAt) && (
             <meta property="article:modified_time" content={dateModified} />
           )}
           <meta name="author" content={authorName} />

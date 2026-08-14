@@ -93,7 +93,10 @@ export default function Posto() {
   const handleShare = async () => {
     trackEvent('place_share_click', {
       place_id: item.id,
-      method: typeof navigator !== 'undefined' && navigator.share ? 'native' : 'copy',
+      method:
+        typeof navigator !== 'undefined' && typeof navigator.share === 'function'
+          ? 'native'
+          : 'copy',
     });
 
     const success = await shareContent({
