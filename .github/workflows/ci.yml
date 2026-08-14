@@ -43,9 +43,17 @@ jobs:
       - name: Prettier
         run: npm run format:check
 
+      # Il progetto vitest `storybook` gira in browser mode
+      # (`vitest.config.ts:41-52`: provider playwright, chromium): senza questo
+      # passo `npm run test` fallisce in CI, dove i browser non ci sono. In
+      # locale funziona perche' Playwright e' gia' installato, ed e' esattamente
+      # il modo in cui una CI si rompe solo dopo il push.
+      - name: Install Chromium for the storybook test project
+        run: npx playwright install --with-deps chromium
+
       # `test:unit` gira solo il progetto vitest `unit`. Il progetto `storybook`
       # (3 file, 13 test) esisteva ma nessuna pipeline lo eseguiva: `npm run test`
-      # li copre entrambi e costa due secondi.
+      # li copre entrambi.
       - name: Unit + storybook tests
         run: npm run test
 
