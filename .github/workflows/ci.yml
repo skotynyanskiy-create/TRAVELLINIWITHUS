@@ -64,8 +64,6 @@ jobs:
 
       - name: Production build
         run: npm run build
-        env:
-          VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
 
       - name: Audit agent stack
         run: npm run audit:agents
@@ -128,8 +126,6 @@ jobs:
 
       - name: Lighthouse CI (perf · a11y · CLS budgets)
         run: npm run audit:cwv
-        env:
-          VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
 
   e2e:
     name: Playwright e2e + visual quality
@@ -152,8 +148,6 @@ jobs:
 
       - name: Run e2e + visual quality
         run: npm run e2e
-        env:
-          VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}
