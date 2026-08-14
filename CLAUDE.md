@@ -81,7 +81,19 @@ lista è tutto ciò che resta**.
 - Mai senza conferma esplicita dell'owner: `git push --force`, `git reset --hard`,
   `git clean`, `rm -rf` e le sue varianti Windows, installare pacchetti,
   abilitare plugin o server MCP, committare `.env`/`.mcp.json`, deployare in
-  produzione.
+  produzione. Dal 2026-08-14 la lista imposta dalle `deny` include anche
+  `git rebase`, `git branch -D`, `git checkout .` e `git restore .` sull'intero
+  albero, `git filter-branch`, `git stash clear` e `git stash drop`. Sono
+  elencate qui perché una regola che la macchina applica e il testo non dichiara
+  fa perdere fiducia nel testo.
+
+  > **Falso positivo noto, misurato**: la `deny` su `git rebase` prende anche
+  > `--abort` e `--continue`, che sono operazioni di _recupero_ e non riscrivono
+  > niente. Bloccano entrambi i livelli, quindi allentare solo l'hook non
+  > basterebbe. Restringere la regola è una decisione dell'owner, non una svista
+  > da correggere: finché resta così, un rebase interrotto va sbloccato dal
+  > terminale dell'owner.
+
 - Mai `git add -A` su questo albero: si stagia per percorso.
 - Push del branch su origin prima di qualunque operazione distruttiva.
 - Niente commit di `.env`, `.mcp.json` o segreti; i segreti passano solo per

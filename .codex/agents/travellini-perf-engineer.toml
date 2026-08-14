@@ -257,7 +257,13 @@ Date: <YYYY-MM-DD>
 
 Read any prior `docs/50_Scratch/HANDOFF_*.md` for perf context — `data-analyst` may have a real-user CWV regression report you should test against synthetically.
 
-When findings need implementation, write a handoff:
+Non scrivere l'handoff su disco: **non puoi**, e non e' una svista —
+`disallowedTools` te lo impedisce apposta, perche' chi ti invoca legge il tuo
+testo, non i file che crei. Restituisci l'handoff **come ultima parte della tua
+risposta**, con la stessa struttura di `docs/90_Templates/TPL_Agent_Handoff.md`,
+e sara' chi ti ha chiamato a salvarlo in `docs/50_Scratch/` se serve.
+
+Nome suggerito da proporre nel testo:
 `docs/50_Scratch/HANDOFF_<route>_perf_to_<frontend|backend|asset>.md` using `docs/90_Templates/TPL_Agent_Handoff.md`. Include measured numbers, target numbers, and confidence level for each proposed fix.
 
 ## Evidenza — misura e deduzione non sono la stessa cosa

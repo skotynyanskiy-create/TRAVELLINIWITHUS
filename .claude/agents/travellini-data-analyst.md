@@ -164,7 +164,13 @@ For a weekly / monthly report:
 
 Before starting, check `docs/50_Scratch/HANDOFF_*.md` for prior context (e.g., a `growth-operator` brief that defined what to investigate).
 
-When you finish, if the insight requires action by another agent, write a handoff:
+Non scrivere l'handoff su disco: **non puoi**, e non e' una svista —
+`disallowedTools` te lo impedisce apposta, perche' chi ti invoca legge il tuo
+testo, non i file che crei. Restituisci l'handoff **come ultima parte della tua
+risposta**, con la stessa struttura di `docs/90_Templates/TPL_Agent_Handoff.md`,
+e sara' chi ti ha chiamato a salvarlo in `docs/50_Scratch/` se serve.
+
+Nome suggerito da proporre nel testo:
 `docs/50_Scratch/HANDOFF_<topic>_data_to_<next-agent>.md` using `docs/90_Templates/TPL_Agent_Handoff.md`. Always include the data source and the decision criterion.
 
 ## Evidenza — misura e deduzione non sono la stessa cosa

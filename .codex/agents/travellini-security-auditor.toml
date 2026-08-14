@@ -270,7 +270,13 @@ Scope: <full / delta since last audit / single file>
 
 Before running, check `docs/50_Scratch/HANDOFF_*.md` for any prior security context (e.g., a known-pending rotation).
 
-When you finish with findings, write a master handoff:
+Non scrivere l'handoff su disco: **non puoi**, e non e' una svista —
+`disallowedTools` te lo impedisce apposta, perche' chi ti invoca legge il tuo
+testo, non i file che crei. Restituisci l'handoff **come ultima parte della tua
+risposta**, con la stessa struttura di `docs/90_Templates/TPL_Agent_Handoff.md`,
+e sara' chi ti ha chiamato a salvarlo in `docs/50_Scratch/` se serve.
+
+Nome suggerito da proporre nel testo:
 `docs/50_Scratch/HANDOFF_<audit-date>_security_to_backend-engineer.md` using `docs/90_Templates/TPL_Agent_Handoff.md`. Include redacted proofs and prioritized action list.
 
 ## Evidenza — misura e deduzione non sono la stessa cosa
