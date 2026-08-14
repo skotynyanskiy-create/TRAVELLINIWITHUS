@@ -102,17 +102,17 @@ che non va scritto a mano.
 `docs/MARKETING_OPERATIONS_HUB.md` è la dashboard di marketing. I modelli vivono
 tutti in `docs/90_Templates/`, un file per tipo di lavoro:
 
-| Cosa stai tracciando | Modello in `docs/90_Templates/` |
-| --- | --- |
-| Campagna | `TPL_Campaign` |
-| Partner o collaborazione | `TPL_Partner`, `TPL_Collaboration` (esteso) |
-| Piano editoriale | `TPL_Content_Brief` |
-| Articolo, guida, itinerario | `TPL_Article`, `TPL_Destination_Guide`, `TPL_Itinerary` |
-| Posto o hotel | `TPL_Place` |
-| Audit SEO di pagina | `TPL_SEO_Page` |
-| Prodotto | `TPL_Product` |
-| Checkpoint di release | `TPL_Release_Note` |
-| Ritaglio web, riferimento di design | `TPL_Web_Clip`, `TPL_Design_Reference` |
+| Cosa stai tracciando                | Modello in `docs/90_Templates/`                         |
+| ----------------------------------- | ------------------------------------------------------- |
+| Campagna                            | `TPL_Campaign`                                          |
+| Partner o collaborazione            | `TPL_Partner`, `TPL_Collaboration` (esteso)             |
+| Piano editoriale                    | `TPL_Content_Brief`                                     |
+| Articolo, guida, itinerario         | `TPL_Article`, `TPL_Destination_Guide`, `TPL_Itinerary` |
+| Posto o hotel                       | `TPL_Place`                                             |
+| Audit SEO di pagina                 | `TPL_SEO_Page`                                          |
+| Prodotto                            | `TPL_Product`                                           |
+| Checkpoint di release               | `TPL_Release_Note`                                      |
+| Ritaglio web, riferimento di design | `TPL_Web_Clip`, `TPL_Design_Reference`                  |
 
 ## Public brand references
 

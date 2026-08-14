@@ -84,13 +84,13 @@ lista è tutto ciò che resta**.
 Vanno trattati come se fossero bloccati, perché il codice che serve la produzione
 è questo:
 
-| File | Perché conta |
-| --- | --- |
-| `src/server/apiRoutes.ts` | il webhook Stripe vive qui (`/api/webhook`), non in `server.ts`. **Non cambiare mai il mount del webhook, il CORS o il rate limiter senza dichiararlo esplicitamente** |
-| `functions/src/index.ts` | la Cloud Function reale, con Admin SDK che scavalca `firestore.rules` |
-| `firebase.json` · `.firebaserc` | header, rewrite, e **dove** finisce un deploy |
-| `.claude/settings.local.json` | contiene l'interruttore di sblocco degli hook |
-| `.github/workflows/*` | decidono chi può far girare cosa con permessi di scrittura |
+| File                            | Perché conta                                                                                                                                                           |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/server/apiRoutes.ts`       | il webhook Stripe vive qui (`/api/webhook`), non in `server.ts`. **Non cambiare mai il mount del webhook, il CORS o il rate limiter senza dichiararlo esplicitamente** |
+| `functions/src/index.ts`        | la Cloud Function reale, con Admin SDK che scavalca `firestore.rules`                                                                                                  |
+| `firebase.json` · `.firebaserc` | header, rewrite, e **dove** finisce un deploy                                                                                                                          |
+| `.claude/settings.local.json`   | contiene l'interruttore di sblocco degli hook                                                                                                                          |
+| `.github/workflows/*`           | decidono chi può far girare cosa con permessi di scrittura                                                                                                             |
 
 ### Come gira davvero la produzione
 
@@ -110,24 +110,24 @@ Sapere questo evita di proteggere il file sbagliato:
 
 ## Chi fa il lavoro
 
-| Dominio | Agente |
-| --- | --- |
-| Richiesta multi-dominio, pianificazione, disegno di sequenze | `travellini-orchestrator` |
-| Ricerca, grep, log, «dove sta X», riassunti | `code-explorer` o `Explore` |
-| Critica UI, direzione visiva, coerenza di brand | `travellini-ui-designer` |
-| Copy italiano (landing/CTA/meta), SEO tecnica, schema.org | `travellini-seo-conversion-strategist` |
-| Corpo lungo italiano (pillar / destinazione / itinerario) | `travellini-editorial-writer` |
-| Calendari social, Reels/TikTok, newsletter, repurposing | `travellini-social-content-operator` |
-| Strategia di crescita, offerta, partner, contratti analytics | `travellini-growth-revenue-operator` |
-| Leggere e interpretare analytics / Stripe / Sentry / Firestore | `travellini-data-analyst` |
-| Scelta foto, crop, alt text, peso immagini, card OG | `travellini-asset-curator` |
-| Implementazione React/Tailwind di un piano già chiaro | `travellini-frontend-builder` |
-| `src/server/apiRoutes.ts`, `functions/`, `firestore.rules`, `src/config/admin.ts`, Stripe, API | `travellini-backend-engineer` |
-| Audit di sicurezza dello stack web | `travellini-security-auditor` |
-| Core Web Vitals, bundle, font, code-split | `travellini-perf-engineer` |
-| Audit UX/responsive/console in browser reale | `browser-auditor` |
-| QA di release, controlli statici, regressioni | `travellini-quality-auditor` |
-| Refactor multi-file, architettura, debug difficile | `code-architect` — raro |
+| Dominio                                                                                        | Agente                                 |
+| ---------------------------------------------------------------------------------------------- | -------------------------------------- |
+| Richiesta multi-dominio, pianificazione, disegno di sequenze                                   | `travellini-orchestrator`              |
+| Ricerca, grep, log, «dove sta X», riassunti                                                    | `code-explorer` o `Explore`            |
+| Critica UI, direzione visiva, coerenza di brand                                                | `travellini-ui-designer`               |
+| Copy italiano (landing/CTA/meta), SEO tecnica, schema.org                                      | `travellini-seo-conversion-strategist` |
+| Corpo lungo italiano (pillar / destinazione / itinerario)                                      | `travellini-editorial-writer`          |
+| Calendari social, Reels/TikTok, newsletter, repurposing                                        | `travellini-social-content-operator`   |
+| Strategia di crescita, offerta, partner, contratti analytics                                   | `travellini-growth-revenue-operator`   |
+| Leggere e interpretare analytics / Stripe / Sentry / Firestore                                 | `travellini-data-analyst`              |
+| Scelta foto, crop, alt text, peso immagini, card OG                                            | `travellini-asset-curator`             |
+| Implementazione React/Tailwind di un piano già chiaro                                          | `travellini-frontend-builder`          |
+| `src/server/apiRoutes.ts`, `functions/`, `firestore.rules`, `src/config/admin.ts`, Stripe, API | `travellini-backend-engineer`          |
+| Audit di sicurezza dello stack web                                                             | `travellini-security-auditor`          |
+| Core Web Vitals, bundle, font, code-split                                                      | `travellini-perf-engineer`             |
+| Audit UX/responsive/console in browser reale                                                   | `browser-auditor`                      |
+| QA di release, controlli statici, regressioni                                                  | `travellini-quality-auditor`           |
+| Refactor multi-file, architettura, debug difficile                                             | `code-architect` — raro                |
 
 Fuori tabella restano legittimi `Plan` per la pianificazione e `general-purpose`
 per lavoro che nessuna casella copre. **Nessun agente generico prende la
@@ -174,17 +174,17 @@ puntarli mai a `firestore.rules` o `src/config/admin.ts`.
 
 Regole con un cancello, con accanto il comando che le verifica:
 
-| Regola | Verifica |
-| --- | --- |
-| Ogni pagina pubblica: un solo `h1` forte, copy italiano, CTA specifica, zero overflow orizzontale su mobile | `npm run audit:ui` + gate a11y di Lighthouse |
-| Token CSS e componenti esistenti (`PageLayout`, `Section`, lucide-react), niente stile inline | `npm run audit:ui` |
-| Qualunque modifica TypeScript | `npm run typecheck` |
-| Nessun `any` nuovo — `no-explicit-any` è **errore**, ereditato da `tseslint.configs.recommended` | `npm run lint` |
-| Tocco a `server.ts`, `src/server/apiRoutes.ts` o `functions/` | `npm run typecheck` + `npm run e2e` |
-| Modifica visibile in browser | `npm run audit:visual`, e guarda la pagina davvero |
-| `docs/STATO_DEL_SITO.md` | non si scrive, si rigenera con `npm run stato`; `npm run stato:check` gira dentro `audit:quality`. Il target di una superficie si dichiara in `missing:` dentro `src/config/surfaces.ts`, non in prosa |
-| Mirror delle skill | `npm run audit:agents` |
-| Segreti | `npm run audit:secrets` |
+| Regola                                                                                                      | Verifica                                                                                                                                                                                               |
+| ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Ogni pagina pubblica: un solo `h1` forte, copy italiano, CTA specifica, zero overflow orizzontale su mobile | `npm run audit:ui` + gate a11y di Lighthouse                                                                                                                                                           |
+| Token CSS e componenti esistenti (`PageLayout`, `Section`, lucide-react), niente stile inline               | `npm run audit:ui`                                                                                                                                                                                     |
+| Qualunque modifica TypeScript                                                                               | `npm run typecheck`                                                                                                                                                                                    |
+| Nessun `any` nuovo — `no-explicit-any` è **errore**, ereditato da `tseslint.configs.recommended`            | `npm run lint`                                                                                                                                                                                         |
+| Tocco a `server.ts`, `src/server/apiRoutes.ts` o `functions/`                                               | `npm run typecheck` + `npm run e2e`                                                                                                                                                                    |
+| Modifica visibile in browser                                                                                | `npm run audit:visual`, e guarda la pagina davvero                                                                                                                                                     |
+| `docs/STATO_DEL_SITO.md`                                                                                    | non si scrive, si rigenera con `npm run stato`; `npm run stato:check` gira dentro `audit:quality`. Il target di una superficie si dichiara in `missing:` dentro `src/config/surfaces.ts`, non in prosa |
+| Mirror delle skill                                                                                          | `npm run audit:agents`                                                                                                                                                                                 |
+| Segreti                                                                                                     | `npm run audit:secrets`                                                                                                                                                                                |
 
 **La CI blocca la PR.** `.github/workflows/ci.yml` ha quattro job: `quality`
 (typecheck, lint, test, build, audit statici), `lighthouse` — dove **a11y ≥ 0,95 e
