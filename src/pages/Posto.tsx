@@ -1,6 +1,15 @@
 import { useState } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
-import { MapPin, Play, Navigation, Clock, Phone, Heart, Share2, CheckCircle } from 'lucide-react';
+import {
+  MapPin,
+  Navigation,
+  Clock,
+  Phone,
+  Heart,
+  Share2,
+  CheckCircle,
+  ExternalLink,
+} from 'lucide-react';
 import PostoStamp from '../components/atlante/PostoStamp';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
@@ -18,10 +27,15 @@ import { findDestinationByRegionName, getDestinationUrl } from '../config/destin
 import { SITE_URL } from '../config/site';
 import { useFavorites } from '../context/FavoritesContext';
 import { trackEvent } from '../services/analytics';
-import { getUserLocation, getGoogleMapsDirectionsUrl, type UserLocation } from '../utils/geo';
-import { hasSpecificReelLink } from '../utils/mediaUrl';
+import {
+  getUserLocation,
+  getGoogleMapsDirectionsUrl,
+  calculateHaversineDistance,
+  formatGeoDistance,
+  type UserLocation,
+} from '../utils/geo';
+import { buildGoogleMapsListingUrl } from '../utils/placeLinks';
 import { shareContent } from '../utils/share';
-import PlaceBusinessActions from '../components/PlaceBusinessActions';
 import { buildReviewJsonLd } from '../lib/placeReviewSchema';
 
 export default function Posto() {
@@ -62,12 +76,35 @@ export default function Posto() {
       })
     : '#';
   const mapPinUrl = coordinates ? `/mappa?place=${encodeURIComponent(item.id)}` : undefined;
+  const listingUrl = buildGoogleMapsListingUrl({
+    name: item.place.name,
+    city: item.place.city,
+    googlePlaceQuery: item.place.googlePlaceQuery,
+  });
+  // Un titolo «Orari e contatti» senza ne' orari ne' telefono e' una sezione
+  // che promette un servizio che non stiamo offrendo — il gate copre l'intera
+  // colonna (eyebrow, righe, bottone distanza, disclaimer), non solo le due
+  // righe di testo.
+  const hasOrariData = Boolean(item.place.hours || item.place.phone);
+  const distanceKm =
+    coordinates && userLocation
+      ? calculateHaversineDistance(
+          userLocation.latitude,
+          userLocation.longitude,
+          coordinates.lat,
+          coordinates.lng
+        )
+      : null;
 
   const handleDirectionsClick = () => {
     trackEvent('place_directions_click', {
       place_id: item.id,
       has_coordinates: Boolean(coordinates),
     });
+  };
+
+  const handleListingClick = () => {
+    trackEvent('place_google_listing_click', { place_id: item.id });
   };
 
   const handlePhoneClick = () => {
@@ -240,12 +277,17 @@ export default function Posto() {
               </span>
             </div>
 
-            {/* Card "Info pratiche" — Dove + Orari e contatti */}
+            {/* Card "Info pratiche" — Dove [+ Orari e contatti solo se esistono].
+                La colonna Orari appare SOLO con almeno un dato reale (hours o
+                phone): senza gate un titolo «Orari e contatti» sopra il nulla
+                fa sembrare la scheda incompleta invece che essenziale. Con la
+                colonna assente la card torna a una sola colonna, senza
+                divisorio orfano. */}
             <section
               aria-label="Info pratiche"
               className="mt-8 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-[var(--shadow-sm)] md:p-8"
             >
-              <div className="grid gap-6 md:grid-cols-2 md:gap-8">
+              <div className={hasOrariData ? 'grid gap-6 md:grid-cols-2 md:gap-8' : ''}>
                 {/* DOVE */}
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
@@ -276,20 +318,35 @@ export default function Posto() {
                   {mapPinUrl && (
                     <Link
                       to={mapPinUrl}
-                      className="mt-3 inline-flex items-center gap-1.5 text-sm text-[var(--color-ink-2)] underline-offset-4 transition-colors hover:text-[var(--color-accent-text)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+                      className="mt-3 inline-flex items-center gap-1.5 py-1.5 text-sm text-[var(--color-ink-2)] underline-offset-4 transition-colors hover:text-[var(--color-accent-text)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
                     >
                       <MapPin size={14} aria-hidden /> Vedi sulla mappa
                     </Link>
                   )}
+                  {/* Sostituisce l'ex `PlaceBusinessActions` (variant="full"):
+                      quel blocco duplicava "Indicazioni" e "Condividi" con un
+                      secondo fascio di bottoni identici. Resta un solo link
+                      quieto verso la scheda Google, sempre disponibile — non
+                      dipende da hours/phone perché la ricerca Google funziona
+                      solo con nome + città. */}
+                  <a
+                    href={listingUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={handleListingClick}
+                    className="mt-3 inline-flex items-center gap-1.5 py-1.5 text-sm text-[var(--color-ink-2)] underline-offset-4 transition-colors hover:text-[var(--color-accent-text)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+                  >
+                    <ExternalLink size={14} aria-hidden /> Orari e contatti su Google
+                  </a>
                 </div>
 
-                {/* ORARI E CONTATTI */}
-                <div className="border-t border-[var(--color-border)] pt-6 md:border-t-0 md:border-l md:pt-0 md:pl-8">
-                  <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
-                    <Clock size={13} aria-hidden /> Orari e contatti
-                  </p>
+                {/* ORARI E CONTATTI — solo con almeno un dato reale */}
+                {hasOrariData && (
+                  <div className="border-t border-[var(--color-border)] pt-6 md:border-t-0 md:border-l md:pt-0 md:pl-8">
+                    <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
+                      <Clock size={13} aria-hidden /> Orari e contatti
+                    </p>
 
-                  {(item.place.hours || item.place.phone) && (
                     <div className="mt-3 space-y-2.5">
                       {item.place.hours && (
                         <p className="flex items-center gap-2 text-sm text-[var(--color-ink-2)]">
@@ -300,33 +357,35 @@ export default function Posto() {
                         <a
                           href={`tel:${item.place.phone.replace(/\s+/g, '')}`}
                           onClick={handlePhoneClick}
-                          className="flex items-center gap-2 text-sm text-[var(--color-ink-2)] underline-offset-4 transition-colors hover:text-[var(--color-accent-text)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+                          className="flex items-center gap-2 py-1.5 text-sm text-[var(--color-ink-2)] underline-offset-4 transition-colors hover:text-[var(--color-accent-text)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
                         >
                           <Phone size={14} className="shrink-0" aria-hidden /> Chiama ·{' '}
                           {item.place.phone}
                         </a>
                       )}
                     </div>
-                  )}
 
-                  <div className="mt-4">
-                    <PlaceBusinessActions item={item} userLocation={userLocation} />
+                    {userLocation && distanceKm !== null ? (
+                      <p className="mt-3 flex items-center gap-1.5 text-xs text-[var(--color-ink-2)]">
+                        <Navigation size={13} aria-hidden /> Sei a {formatGeoDistance(distanceKm)}
+                      </p>
+                    ) : (
+                      !userLocation && (
+                        <button
+                          type="button"
+                          onClick={handleDetectLocation}
+                          className="mt-3 inline-flex items-center gap-1.5 py-2 text-xs text-[var(--color-ink-2)] underline-offset-4 transition-colors hover:text-[var(--color-accent-text)] hover:underline"
+                        >
+                          <Navigation size={13} aria-hidden /> Calcola quanto dista da me
+                        </button>
+                      )
+                    )}
+
+                    <p className="mt-4 text-[11px] text-[var(--color-muted-fg)]">
+                      Orari, telefono e prenotazione sono aggiornati direttamente da Google.
+                    </p>
                   </div>
-
-                  {!userLocation && (
-                    <button
-                      type="button"
-                      onClick={handleDetectLocation}
-                      className="mt-3 inline-flex items-center gap-1.5 text-xs text-[var(--color-ink-2)] underline-offset-4 transition-colors hover:text-[var(--color-accent-text)] hover:underline"
-                    >
-                      <Navigation size={13} aria-hidden /> Calcola quanto dista da me
-                    </button>
-                  )}
-
-                  <p className="mt-4 text-[11px] text-[var(--color-muted-fg)]">
-                    Orari, telefono e prenotazione sono aggiornati direttamente da Google.
-                  </p>
-                </div>
+                )}
               </div>
             </section>
 
@@ -341,28 +400,14 @@ export default function Posto() {
                 prima si capisce cos'e' il posto, poi come ci si va. */}
             <PrimaDiAndare item={item} />
 
-            {/* Il reel girato qui — la prova in movimento, prima solo su IG */}
+            {/* Il reel girato qui — la prova in movimento, prima solo su IG.
+                Il link verso Instagram vive dentro il componente stesso (sotto
+                la copertina): qui sopra restava una terza pill identica per
+                funzione a "Indicazioni", la stessa azione ripetuta due volte. */}
             <ReelDelPosto
               postoId={item.id}
               luogo={item.place.city ?? item.place.region ?? item.place.country}
             />
-
-            {/* CTA Instagram. Diceva "Guarda il reel", ma da quando il reel si
-                riproduce qui sopra sarebbe una promessa gia' mantenuta: ora
-                dichiara dove porta. Sui permalink ridotti al solo profilo
-                (alcuni placeholder) resta l'invito a seguire, perche' promettere
-                un video che non c'è è peggio che non avere la CTA. */}
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a
-                href={item.permalink}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)]"
-              >
-                <Play size={14} fill="currentColor" />
-                {hasSpecificReelLink(item.permalink) ? 'Apri su Instagram' : 'Segui su Instagram'}
-              </a>
-            </div>
           </div>
 
           {/* Colonna destra — valore + offerta, solo se c'è almeno un dato reale.
@@ -408,8 +453,6 @@ export default function Posto() {
             stacked
           />
         </div>
-
-        <div className="mt-24" />
       </div>
     </PageLayout>
   );

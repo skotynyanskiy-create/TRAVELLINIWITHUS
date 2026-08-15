@@ -132,7 +132,7 @@ export const PlaceBusinessActions: React.FC<PlaceBusinessActionsProps> = ({
     return (
       <div className={`flex flex-wrap items-center gap-2 ${className}`}>
         {distanceKm !== null && (
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/10 px-3 py-1 text-xs font-semibold text-[var(--color-accent-text)] dark:bg-amber-500/20">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-accent-soft)] px-3 py-1 text-xs font-semibold text-[var(--color-accent-text)]">
             <MapPin size={13} aria-hidden />
             {formatGeoDistance(distanceKm)}
           </span>
@@ -169,7 +169,7 @@ export const PlaceBusinessActions: React.FC<PlaceBusinessActionsProps> = ({
   return (
     <div className={`space-y-4 ${className}`}>
       {distanceKm !== null && (
-        <div className="inline-flex items-center gap-2 rounded-full bg-amber-500/10 px-3.5 py-1.5 text-xs font-bold text-[var(--color-accent-text)]">
+        <div className="inline-flex items-center gap-2 rounded-full bg-[var(--color-accent-soft)] px-3.5 py-1.5 text-xs font-bold text-[var(--color-accent-text)]">
           <MapPin size={14} className="shrink-0" aria-hidden />
           <span>Posto a {formatGeoDistance(distanceKm)}</span>
         </div>

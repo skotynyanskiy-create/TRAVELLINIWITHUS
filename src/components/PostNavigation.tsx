@@ -46,7 +46,7 @@ export default function PostNavigation({ currentId }: { currentId: string }) {
       <div className="mt-8 text-center">
         <Link
           to="/esplora"
-          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-muted-fg-2)] transition-colors hover:text-[var(--color-accent-text)]"
+          className="inline-flex items-center gap-2 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-muted-fg-2)] transition-colors hover:text-[var(--color-accent-text)]"
         >
           <Compass size={14} aria-hidden />
           Torna a Esplora

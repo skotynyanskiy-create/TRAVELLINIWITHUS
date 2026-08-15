@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Play } from 'lucide-react';
 import OptimizedImage from '@/src/components/OptimizedImage';
 import { getReelForPosto } from '@/src/config/reels';
+import { hasSpecificReelLink } from '@/src/utils/mediaUrl';
 import { meseAnno } from '@/src/utils/format';
 
 /**
@@ -42,6 +43,7 @@ export default function ReelDelPosto({ postoId, luogo }: { postoId: string; luog
   const girato = meseAnno(reel.publishedAt);
   const apreIlVideo = reel.videoInPagina === true || !reel.instagramUrl;
   const mostraVideo = apreIlVideo && inRiproduzione && !videoRotto;
+  const specifico = hasSpecificReelLink(reel.instagramUrl);
 
   const copertina = (
     <>
@@ -64,15 +66,17 @@ export default function ReelDelPosto({ postoId, luogo }: { postoId: string; luog
     <section aria-labelledby="reel-del-posto" className="mt-10">
       <h2
         id="reel-del-posto"
-        className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-accent-text)]"
+        className="font-serif text-xl font-normal text-[var(--color-ink)] md:text-2xl"
       >
-        Il posto in movimento
+        Il reel girato qui
       </h2>
 
       {/* La riga sotto, non di fianco: e' una riga sola, e accanto a un 9:16
-          alto 430px lasciava mezza colonna di vuoto. */}
+          alto 430px lasciava mezza colonna di vuoto. Media piu' stretto sotto
+          768px (200px invece di 240px): e' un fermo immagine, non serve la
+          stessa larghezza che avrebbe un video in riproduzione. */}
       <div className="mt-4 flex flex-col gap-3">
-        <div className="relative aspect-[9/16] w-full max-w-[15rem] shrink-0 overflow-hidden rounded-[var(--radius-md)] border border-[var(--color-border)] bg-black shadow-[var(--shadow-md)]">
+        <div className="relative aspect-[9/16] w-full max-w-[12.5rem] shrink-0 overflow-hidden rounded-[var(--radius-md)] border border-[var(--color-border)] bg-black shadow-[var(--shadow-md)] md:max-w-[15rem]">
           {mostraVideo ? (
             <video
               src={reel.localPath}
@@ -129,6 +133,22 @@ export default function ReelDelPosto({ postoId, luogo }: { postoId: string; luog
               </>
             )}
           </p>
+
+          {/* La copertina qui sopra e' gia' un link a Instagram con badge
+              play: questa riga rende visibile l'affordance anche a chi non
+              nota il badge, senza aggiungere una seconda pill piena come
+              prima (era la CTA finale in Posto.tsx, in peso primario, per la
+              stessa identica azione). */}
+          {!mostraVideo && reel.instagramUrl && (
+            <a
+              href={reel.instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 inline-flex items-center gap-1 py-1.5 text-sm font-medium text-[var(--color-accent-text)] underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+            >
+              {specifico ? 'Guardalo su Instagram' : 'Segui su Instagram'} ↗
+            </a>
+          )}
         </div>
       </div>
     </section>

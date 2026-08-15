@@ -267,7 +267,7 @@ export default function Footer() {
                   <Link
                     key={link.label}
                     to={link.to}
-                    className="text-xs font-medium uppercase tracking-[0.2em] text-white/55 transition-colors hover:text-white"
+                    className="inline-block py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-white/55 transition-colors hover:text-white"
                   >
                     {link.label}
                   </Link>

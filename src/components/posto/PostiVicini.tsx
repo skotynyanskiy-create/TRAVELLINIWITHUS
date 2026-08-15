@@ -25,7 +25,7 @@ export default function PostiVicini({ posto }: { posto: ContentItem }) {
       <div className="flex items-baseline justify-between gap-4 border-b border-[var(--color-border)] pb-4">
         <h2
           id="nei-dintorni"
-          className="font-serif text-2xl font-normal text-[var(--color-ink)] md:text-3xl"
+          className="font-serif text-xl font-normal text-[var(--color-ink)] md:text-2xl"
         >
           Nei dintorni
         </h2>

@@ -64,11 +64,12 @@ export interface ContentPlace {
  * letto questo blocco deve poter decidere da solo.
  *
  * **Ogni campo è opzionale, e vuoto è uno stato legittimo.** Il repo ha già
- * dimostrato il modo in cui un modello del genere fallisce: `place.hours`,
- * `place.phone` e `place.bookingUrl` esistono da sempre e al 2026-08-15 sono
- * compilati su 0 schede su 79. Un campo in più che nessuno riempie non è
- * neutro — fa sembrare la scheda incompleta invece che essenziale. Meglio
- * niente che un dato stimato.
+ * dimostrato il modo in cui un modello del genere fallisce, e lo dimostra di
+ * nuovo con l'import del 2026-08-15: sul seed di 110 voci, `practical.duration`
+ * è compilato **1 volta su 110** e `practical.when` **4 volte su 110** — due
+ * campi che quasi non si accendono mai, nonostante siano sempre stati lì. Un
+ * campo in più che nessuno riempie non è neutro — fa sembrare la scheda
+ * incompleta invece che essenziale. Meglio niente che un dato stimato.
  *
  * **Due provenienze, tenute distinte apposta.** Ciò che si trova online cambia
  * — orari, prezzi, aperture — quindi porta sempre `checked` con fonte e data

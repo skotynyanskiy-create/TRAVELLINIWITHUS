@@ -36,7 +36,7 @@ export default function PrimaDiAndare({ item }: { item: ContentItem }) {
     >
       <h2
         id="prima-di-andare"
-        className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]"
+        className="font-serif text-xl font-normal text-[var(--color-ink)] md:text-2xl"
       >
         Prima di andare
       </h2>

@@ -64,7 +64,7 @@ export default function Breadcrumbs({ items, className, schema = true }: Breadcr
           <li className="shrink-0">
             <Link
               to="/"
-              className="hover:text-[var(--color-accent)] transition-colors flex items-center gap-1"
+              className="hover:text-[var(--color-accent)] transition-colors flex items-center gap-1 py-1.5"
             >
               <Home size={14} />
               <span className="sr-only">Home</span>
@@ -88,7 +88,7 @@ export default function Breadcrumbs({ items, className, schema = true }: Breadcr
                 ) : (
                   <Link
                     to={item.href}
-                    className="hover:text-[var(--color-accent)] transition-colors"
+                    className="inline-block py-1.5 hover:text-[var(--color-accent)] transition-colors"
                   >
                     {item.label}
                   </Link>
