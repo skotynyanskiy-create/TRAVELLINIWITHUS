@@ -118,6 +118,12 @@ export default function FullScreenMapExperience() {
   const [selectedBudget, setSelectedBudget] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedItem, setSelectedItem] = useState<ContentItem | null>(null);
+  /* Un solo posto alla volta puo' essere sotto il puntatore, quindi
+     l'anteprima e' una sola. Prima ogni marcatore portava la propria, nascosta
+     da `group-hover:block`: misurato il 2026-08-15, 17 nodi DOM per marcatore
+     — 1.882 su 2.476 dell'intera pagina, il 76% — di cui ~8 erano l'anteprima
+     che nessuno stava guardando, con 160 fra `img` e `picture` montate. */
+  const [hoveredItem, setHoveredItem] = useState<ContentItem | null>(null);
   const [mapStyleKey, setMapStyleKey] = useState<'dark' | 'liberty' | 'bright'>('dark');
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
@@ -199,6 +205,16 @@ export default function FullScreenMapExperience() {
     }
     return items;
   }, [allItems, selectedZone, selectedType, selectedBudget, searchQuery, userLoc]);
+
+  /* Stesso insieme di `filteredItems`, altro ordine: il selezionato in fondo.
+     Serve solo al disegno dei marcatori — l'elenco laterale, il contatore e
+     «Sorprendimi» continuano a leggere `filteredItems`, che resta ordinato per
+     distanza quando la posizione dell'utente c'e'. */
+  const markersInPaintOrder = useMemo(() => {
+    if (!selectedItem) return filteredItems;
+    const others = filteredItems.filter((item) => item.id !== selectedItem.id);
+    return others.length === filteredItems.length ? filteredItems : [...others, selectedItem];
+  }, [filteredItems, selectedItem]);
 
   // Web Audio API Synthetic Chime Feedback
   const playChime = useCallback(() => {
@@ -691,8 +707,16 @@ export default function FullScreenMapExperience() {
           <NavigationControl position="bottom-right" />
           <FullscreenControl position="bottom-right" />
 
-          {/* Map Pins with Pulsing Rings & Hover Tooltips */}
-          {filteredItems.map((item) => {
+          {/* Map Pins with Pulsing Rings.
+              `markersInPaintOrder`: il pin selezionato va disegnato per ultimo.
+              `.maplibregl-marker` porta un `transform`, che apre un contesto di
+              impilamento: le classi `z-10`/`z-30` interne non possono uscire dal
+              proprio marcatore, e maplibre non assegna nessuno `z-index` inline
+              (verificato in browser il 2026-08-15). A decidere chi sta sopra —
+              e quindi chi riceve il click — resta l'ordine nel DOM. Dove i pin
+              si sovrappongono, come i sette del centro di Milano, il pin appena
+              scelto poteva finire dietro a un vicino. */}
+          {markersInPaintOrder.map((item) => {
             if (!item.place.coordinates) return null;
             const isSelected = selectedItem?.id === item.id;
             const IconComp = getItemIcon(item.types);
@@ -714,7 +738,13 @@ export default function FullScreenMapExperience() {
                   handlePinClick(item);
                 }}
               >
-                <div className="group relative cursor-pointer">
+                <div
+                  className="group relative cursor-pointer"
+                  onMouseEnter={() => setHoveredItem(item)}
+                  onMouseLeave={() =>
+                    setHoveredItem((current) => (current?.id === item.id ? null : current))
+                  }
+                >
                   {/* Glowing Pulse Ring */}
                   <div
                     className={`absolute -inset-2 rounded-full opacity-75 blur-sm transition-all ${
@@ -738,49 +768,61 @@ export default function FullScreenMapExperience() {
                     />
                     <span className="max-w-[120px] truncate">{item.title}</span>
                   </div>
-
-                  {/* Hover Preview Tooltip */}
-                  <div className="absolute left-1/2 bottom-full mb-2 hidden -translate-x-1/2 rounded-xl border border-white/20 bg-black/90 p-2.5 shadow-2xl backdrop-blur-md group-hover:block z-40 w-48">
-                    {item.cover ? (
-                      <div className="aspect-[4/3] w-full overflow-hidden rounded-lg bg-black/20">
-                        {/* `OptimizedImage` e non un tag immagine grezzo: questa
-                            anteprima e' nascosta finche' non ci passi sopra, ma
-                            il browser scaricava lo stesso la copertina a piena
-                            risoluzione per OGNI marcatore — copertine da 400-470
-                            KB l'una, 62 marcatori, 14 MB di pagina e LCP a 5,9s.
-                            Qui il riquadro e' largo 192px: servono le varianti
-                            piccole, avif/webp, e il caricamento differito che il
-                            componente applica di suo. Misurato dopo: la pagina
-                            passa da 13,5 a 5,8 MB e le immagini da ~4 MB a
-                            0,17. */}
-                        <OptimizedImage
-                          src={item.cover}
-                          alt={item.title}
-                          sizes="192px"
-                          responsiveWidths={[320]}
-                          className="h-full w-full object-cover"
-                        />
-                      </div>
-                    ) : (
-                      <div className="aspect-[4/3] w-full overflow-hidden rounded-lg bg-gradient-to-br from-stone-800 to-stone-900 flex items-center justify-center">
-                        <MapPin
-                          size={24}
-                          className="text-[var(--color-accent,#c85a32)] opacity-60"
-                        />
-                      </div>
-                    )}
-                    <p className="mt-1.5 text-[10px] font-bold text-white truncate">{item.title}</p>
-                    <span className="text-[9px] text-[var(--color-accent-text)] font-semibold">
-                      {item.place.region || item.place.country} · {item.zone}
-                    </span>
-                    {item.value?.price && (
-                      <span className="ml-1.5 text-[9px] text-white/60">— {item.value.price}</span>
-                    )}
-                  </div>
                 </div>
               </Marker>
             );
           })}
+
+          {/* L'anteprima, una sola per tutta la mappa.
+              Sta in un `Marker` suo cosi' che a posizionarla resti maplibre,
+              come prima; `pointer-events: none` perche' non rubi il puntatore
+              al pin sotto, che farebbe lampeggiare l'hover. Su touch non
+              compare mai — esattamente come il `group-hover` che sostituisce. */}
+          {hoveredItem?.place.coordinates && (
+            <Marker
+              key="hover-preview"
+              longitude={hoveredItem.place.coordinates.lng}
+              latitude={hoveredItem.place.coordinates.lat}
+              anchor="bottom"
+              style={{ pointerEvents: 'none' }}
+            >
+              <div className="pointer-events-none mb-10 w-48 rounded-xl border border-white/20 bg-black/90 p-2.5 shadow-2xl backdrop-blur-md">
+                {hoveredItem.cover ? (
+                  <div className="aspect-[4/3] w-full overflow-hidden rounded-lg bg-black/20">
+                    {/* `OptimizedImage` e non un tag immagine grezzo: il riquadro
+                        e' largo 192px, servono le varianti piccole in avif/webp.
+                        Quando l'anteprima viveva dentro OGNI marcatore il browser
+                        scaricava la copertina a piena risoluzione per tutti —
+                        400-470 KB l'una, 14 MB di pagina, LCP a 5,9s — e il
+                        componente aveva risolto quello. Ora ne esiste una sola e
+                        solo mentre ci passi sopra: il problema non puo' tornare. */}
+                    <OptimizedImage
+                      src={hoveredItem.cover}
+                      alt={hoveredItem.title}
+                      sizes="192px"
+                      responsiveWidths={[320]}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-stone-800 to-stone-900">
+                    <MapPin size={24} className="text-[var(--color-accent,#c85a32)] opacity-60" />
+                  </div>
+                )}
+                <p className="mt-1.5 truncate text-[10px] font-bold text-white">
+                  {hoveredItem.title}
+                </p>
+                <span className="text-[9px] font-semibold text-[var(--color-accent-text)]">
+                  {hoveredItem.place.region || hoveredItem.place.country} · {hoveredItem.zone}
+                </span>
+                {hoveredItem.value?.price && (
+                  <span className="ml-1.5 text-[9px] text-white/60">
+                    — {hoveredItem.value.price}
+                  </span>
+                )}
+              </div>
+            </Marker>
+          )}
         </Map>
 
         {/* 4. Advanced Multi-Tab Glassmorphism Drawer — right-14/right-20 lasciano libera
