@@ -18,11 +18,13 @@ import { meseAnno } from '../../utils/format';
  * ovunque.
  *
  * **Cosa NON va qui: le informazioni per pianificare** — come ci arrivi, quanto
- * ci stai, quando andarci, cosa sapere prima. Stanno in `PrimaDiAndare`
- * (`src/components/posto/PrimaDiAndare.tsx`), nel corpo della pagina. Qui erano
- * arrivate per un'ora il 2026-08-15 e la faccia della carta, che ha altezza
- * fissa, e' passata a scrollare per il doppio di se stessa su mobile. Questa
- * carta risponde a una domanda sola: «esiste davvero?».
+ * ci stai, quando andarci (`PrimaDiAndare`,
+ * `src/components/posto/PrimaDiAndare.tsx`) e cosa sapere prima
+ * (`CosaSaperePrima`, `src/components/posto/CosaSaperePrima.tsx`), nel corpo
+ * della pagina. Qui erano arrivate per un'ora il 2026-08-15 e la faccia della
+ * carta, che ha altezza fissa, e' passata a scrollare per il doppio di se
+ * stessa su mobile. Questa carta risponde a una domanda sola: «esiste
+ * davvero?».
  */
 export default function SchedaVerifica({ item }: { item: ContentItem }) {
   const dove = [item.place.name, [item.place.city, item.place.region].filter(Boolean).join(', ')]

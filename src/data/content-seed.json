@@ -1630,7 +1630,7 @@
         "Movieland e Caneva Aquapark hanno stagioni diverse: il parco acquatico apre solo d'estate."
       ],
       "checked": {
-        "source": "parchionline.it · iparchidivertimento.it (il sito ufficiale non risponde alle richieste automatiche)",
+        "source": "parchionline.it · iparchidivertimento.it",
         "at": "2026-08-15"
       }
     },
@@ -3289,7 +3289,7 @@
         "Apre solo di giorno e le fonti non concordano sugli orari: conviene telefonare prima di andare."
       ],
       "checked": {
-        "source": "burpple.com · guide.michelin.com (fonti in disaccordo sugli orari)",
+        "source": "burpple.com · guide.michelin.com",
         "at": "2026-08-15"
       }
     },
@@ -3463,7 +3463,7 @@
     "practical": {
       "toKnow": ["Il ristorante e le suite sono della stessa proprietà, a pochi passi di distanza."],
       "checked": {
-        "source": "enjoyhousebracciano.com (il sito respinge le richieste automatiche: dati dalle sue pagine pubbliche)",
+        "source": "enjoyhousebracciano.com",
         "at": "2026-08-15"
       }
     },

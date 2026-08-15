@@ -18,6 +18,7 @@ import Newsletter from '../components/Newsletter';
 import DealCard from '../components/DealCard';
 import PostNavigation from '../components/PostNavigation';
 import PostiVicini from '../components/posto/PostiVicini';
+import CosaSaperePrima from '../components/posto/CosaSaperePrima';
 import PrimaDiAndare from '../components/posto/PrimaDiAndare';
 import ReelDelPosto from '../components/posto/ReelDelPosto';
 import { Link } from '@/src/components/TransitionLink';
@@ -86,6 +87,18 @@ export default function Posto() {
   // colonna (eyebrow, righe, bottone distanza, disclaimer), non solo le due
   // righe di testo.
   const hasOrariData = Boolean(item.place.hours || item.place.phone);
+  // Due domande diverse del blocco pratico — "cosa devo sapere prima" e "come
+  // mi organizzo" — ognuna nel suo componente. La riga «Dati cercati su...»
+  // vive sotto l'ultimo dei due che renderizza, mai da sola: se «Prima di
+  // andare» c'e' la riga sta li' (anche quando c'e' anche «Cosa sapere
+  // prima», che nell'ordine di pagina viene prima); altrimenti tocca a «Cosa
+  // sapere prima», se c'e'.
+  const haCosaSaperePrima = Boolean(item.practical?.toKnow && item.practical.toKnow.length > 0);
+  const haPrimaDiAndare = Boolean(
+    item.practical?.gettingThere || item.practical?.duration || item.practical?.when
+  );
+  const provenienzaSuPrimaDiAndare = haPrimaDiAndare;
+  const provenienzaSuCosaSaperePrima = !haPrimaDiAndare && haCosaSaperePrima;
   const distanceKm =
     coordinates && userLocation
       ? calculateHaversineDistance(
@@ -396,9 +409,15 @@ export default function Posto() {
               </p>
             )}
 
-            {/* Le informazioni per organizzarsi. Dopo la descrizione perche'
-                prima si capisce cos'e' il posto, poi come ci si va. */}
-            <PrimaDiAndare item={item} />
+            {/* Cosa sapere prima — i limiti scritti da Rodrigo e Betta:
+                chiusure, prenotazione obbligatoria, omonimie. Subito dopo la
+                descrizione perche' e' l'informazione che puo' far cambiare
+                programma a chi legge. */}
+            <CosaSaperePrima item={item} mostraProvenienza={provenienzaSuCosaSaperePrima} />
+
+            {/* Le informazioni per organizzarsi: come ci arrivi, quanto ci
+                stai, quando andarci. */}
+            <PrimaDiAndare item={item} mostraProvenienza={provenienzaSuPrimaDiAndare} />
 
             {/* Il reel girato qui — la prova in movimento, prima solo su IG.
                 Il link verso Instagram vive dentro il componente stesso (sotto
