@@ -1,0 +1,4994 @@
+{
+  "Chalet i Poggetti": {
+    "citta": "Fauglia",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 301392
+  },
+  "Ospedale Carlo Poma": {
+    "citta": "Mantova",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 239300
+  },
+  "Bienno": {
+    "citta": "Prestine",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 3,
+    "plays": 213971
+  },
+  "Italia": {
+    "citta": "Po' Bandino",
+    "regione": "Umbria",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 89,
+    "plays": 10850682
+  },
+  "Zizania Piero della Francesca": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 41907
+  },
+  "Tonicello resort & SPA": {
+    "citta": "San Nicolò",
+    "regione": "Calabria",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 144441
+  },
+  "Wagyu Oh": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 17620
+  },
+  "Yoi Sushi San Donato": {
+    "citta": "San Donato Milanese",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 376317
+  },
+  "Valle Dei Re  Luxor": {
+    "citta": null,
+    "regione": "Governatorato del Mar Rosso",
+    "paese": "Egitto",
+    "amministrativo": false,
+    "reel": 3,
+    "plays": 809933
+  },
+  "Hotel Lugana Parco Al Lago": {
+    "citta": "Sirmione",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 32628
+  },
+  "X beach pisogne": {
+    "citta": "Toline",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 63656
+  },
+  "Como": {
+    "citta": "Como",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 187384
+  },
+  "Fiabilandia, Rimini": {
+    "citta": "Rimini",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 251573
+  },
+  "Movieland Park": {
+    "citta": "Lazise",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 8,
+    "plays": 2894192
+  },
+  "Ristorante L'Altro Cantuccio Montepulciano": {
+    "citta": "Montepulciano",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 3,
+    "plays": 202316
+  },
+  "Ravenna": {
+    "citta": "Ravenna",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 938523
+  },
+  "Chiostro Cennini": {
+    "citta": "Sarteano",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 71467
+  },
+  "Warner Bros. Studio Tour London": {
+    "citta": "Three Rivers",
+    "regione": "Inghilterra",
+    "paese": "Regno Unito",
+    "amministrativo": false,
+    "reel": 4,
+    "plays": 795368
+  },
+  "La Santoria Madrid": {
+    "citta": "Madrid",
+    "regione": "Comunidad de Madrid",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 3,
+    "plays": 2351224
+  },
+  "Asciano- Crete Senesi": {
+    "citta": "Asciano",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 19848
+  },
+  "Verona": {
+    "citta": "Verona",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 17,
+    "plays": 2030268
+  },
+  "Sirmione Lake Garda": {
+    "citta": "Sirmione",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 29752
+  },
+  "Parco Acquatico Cavour": {
+    "citta": "Valeggio sul Mincio",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 3,
+    "plays": 95417
+  },
+  "Custoza": {
+    "citta": "Sommacampagna",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 37355
+  },
+  "Riu Cancun": {
+    "citta": "Cancún",
+    "regione": "Quintana Roo",
+    "paese": "Messico",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 107743
+  },
+  "Follonica": {
+    "citta": "Follonica",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 2,
+    "plays": 154906
+  },
+  "Agriturismo La Contea Del Vignolo Fiorito": {
+    "citta": "Graffignana",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 73904
+  },
+  "Chioggia": {
+    "citta": "Chioggia",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 48994
+  },
+  "Ristorante al Mago": {
+    "citta": "Albairate",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 6,
+    "plays": 1813648
+  },
+  "Capo Vaticano": {
+    "citta": "San Nicolò",
+    "regione": "Calabria",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 28214
+  },
+  "Spiaggia Costa degli Dei - Capo Vaticano": {
+    "citta": "San Nicolò",
+    "regione": "Calabria",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 30921
+  },
+  "San Giovanni Lupatoto Verona": {
+    "citta": "San Giovanni Lupatoto",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 26692
+  },
+  "Agriturismo Il Campagnino": {
+    "citta": "Villarocca",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 46650
+  },
+  "Narciso Home": {
+    "citta": "San Fermo",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 98846
+  },
+  "Lucca Rafting": {
+    "citta": "Lucca",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 41968
+  },
+  "Shanghai,china": {
+    "citta": "Distretto di Minhang",
+    "regione": "Shanghai",
+    "paese": "Cina",
+    "amministrativo": true,
+    "reel": 5,
+    "plays": 526364
+  },
+  "Pizzeria D'Asporto Little Italy Verona": {
+    "citta": "Verona",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 41224
+  },
+  "Agriturismo Cornali": {
+    "citta": "Fabbriche di Vallico",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 33415
+  },
+  "Mirabilandia": {
+    "citta": "Chioggia",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 3,
+    "plays": 396062
+  },
+  "Pisa, Italy": {
+    "citta": "Hamilton Township",
+    "regione": "New Jersey",
+    "paese": "Stati Uniti d'America",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 183794
+  },
+  "Milano": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 42,
+    "plays": 12888614
+  },
+  "La Tana del Drago Fumante": {
+    "citta": "San Giuliano Terme",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 104739
+  },
+  "Antica Velathri Cafè": {
+    "citta": "Volterra",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 4,
+    "plays": 694939
+  },
+  "Black Moon Firenze": {
+    "citta": "Firenze",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 24804
+  },
+  "Abbiategrasso": {
+    "citta": "Abbiategrasso",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 451854
+  },
+  "Madrid, Spain": {
+    "citta": "Madrid",
+    "regione": "Comunidad de Madrid",
+    "paese": "Spagna",
+    "amministrativo": true,
+    "reel": 5,
+    "plays": 440218
+  },
+  "Europa Park, Rust Germany.": {
+    "citta": "Rust",
+    "regione": "Baden-Württemberg",
+    "paese": "Germania",
+    "amministrativo": false,
+    "reel": 5,
+    "plays": 405962
+  },
+  "Kuala Lumpur": {
+    "citta": "Kuala Lumpur",
+    "regione": null,
+    "paese": "Malesia",
+    "amministrativo": true,
+    "reel": 6,
+    "plays": 592439
+  },
+  "Mantova, Italy": {
+    "citta": "Porto Mantovano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 8,
+    "plays": 721590
+  },
+  "Colmar, Alsace, France": {
+    "citta": "Colmar",
+    "regione": "Grande Est",
+    "paese": "Francia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 18204
+  },
+  "Alsazia": {
+    "citta": "Parma",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 221823
+  },
+  "La Caverna": {
+    "citta": "Bovolone",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 84837
+  },
+  "Château du Haut-Koenigsbourg": {
+    "citta": "Orschwiller",
+    "regione": "Grande Est",
+    "paese": "Francia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 346287
+  },
+  "Onore (Italia)": {
+    "citta": "Onore",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 301588
+  },
+  "Y-40 Montegrotto Terme": {
+    "citta": "Montegrotto Terme",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 22775
+  },
+  "Riquewihr, Alsace, France": {
+    "citta": "Riquewihr",
+    "regione": "Grande Est",
+    "paese": "Francia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 29346
+  },
+  "TAKO SUSHI ROMA": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 711226
+  },
+  "Inhala Hotel Garden": {
+    "citta": "Madrid",
+    "regione": "Comunidad de Madrid",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 37660
+  },
+  "Plose": {
+    "citta": "Bressanone",
+    "regione": "Trentino-Alto Adige",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 264752
+  },
+  "Il Cascinetto": {
+    "citta": "Salvirola",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 3,
+    "plays": 440218
+  },
+  "Churreria Chocolateria 1902": {
+    "citta": "Madrid",
+    "regione": "Comunidad de Madrid",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 197167
+  },
+  "Ristorante La Forchetta Parma": {
+    "citta": "Parma",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 29290
+  },
+  "King Cole Club": {
+    "citta": "Bologna",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 42458
+  },
+  "Palazzo Colleoni": {
+    "citta": "Cortenuova",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 84139
+  },
+  "Madrid": {
+    "citta": "Madrid",
+    "regione": "Comunidad de Madrid",
+    "paese": "Spagna",
+    "amministrativo": true,
+    "reel": 10,
+    "plays": 3159366
+  },
+  "Garden Village Bled - Slovenia": {
+    "citta": "Bled",
+    "regione": null,
+    "paese": "Slovenia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 2147062
+  },
+  "Via Don Minzoni": {
+    "citta": "Bologna",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 22364
+  },
+  "Azabu 10 by Andrea Arcieri": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 21795
+  },
+  "Calle De Marques De Santa Ana": {
+    "citta": "Madrid",
+    "regione": "Comunidad de Madrid",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 295740
+  },
+  "giardino di Pojega": {
+    "citta": "Negrar di Valpolicella",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 196338
+  },
+  "Phantasialand": {
+    "citta": "Colonia",
+    "regione": "Renania Settentrionale-Vestfalia",
+    "paese": "Germania",
+    "amministrativo": false,
+    "reel": 4,
+    "plays": 2959862
+  },
+  "Sleppa Pizzeria Milano": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 14389
+  },
+  "Roma - Piazza Di Spagna": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 349958
+  },
+  "Splash e Spa Tamaro": {
+    "citta": "Monteceneri",
+    "regione": "Ticino",
+    "paese": "Svizzera",
+    "amministrativo": false,
+    "reel": 3,
+    "plays": 97266
+  },
+  "Cineplex Moderno - Due Carrare": {
+    "citta": "Due Carrare",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 228709
+  },
+  "Splash And Paint Roma": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 145750
+  },
+  "Ristorante ORA": {
+    "citta": "Frosinone",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 21460
+  },
+  "Jazz Cafè Milano": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 30128
+  },
+  "Armani / Silos": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 33835
+  },
+  "Darì Ristorante & Enoteca": {
+    "citta": "Verona",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 86694
+  },
+  "Lugano Swirzerland": {
+    "citta": "Lugano",
+    "regione": "Ticino",
+    "paese": "Svizzera",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 19670
+  },
+  "The Burton Juice": {
+    "citta": "Somma Vesuviana",
+    "regione": "Campania",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 760066
+  },
+  "Val Brembana (BG)": {
+    "citta": "Zogno",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 90051
+  },
+  "Parma": {
+    "citta": "Parma",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 3,
+    "plays": 196117
+  },
+  "Cascina Caremma": {
+    "citta": "Besate",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 28802
+  },
+  "Holidays Toscana Lunigiana - Spino Fiorito": {
+    "citta": "Castiglioncello",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 64194
+  },
+  "GranducaCampigna": {
+    "citta": "Santa Sofia",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 103244
+  },
+  "Chinatown Milano": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 40239
+  },
+  "Sagami": {
+    "citta": "Bologna",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 27873
+  },
+  "Dream Lagoon Marsa Alam": {
+    "citta": "Marsa Alam",
+    "regione": "Governatorato del Mar Rosso",
+    "paese": "Egitto",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 612702
+  },
+  "Le Stelle di Elisa - Wine & Truffle Glamping": {
+    "citta": "Suvereto",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 92842
+  },
+  "Treviolo": {
+    "citta": "Treviolo",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 272950
+  },
+  "Praga": {
+    "citta": "Praga",
+    "regione": null,
+    "paese": "Repubblica Ceca",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 29243
+  },
+  "Posthotel Lamm Sterzing - Vipiteno": {
+    "citta": "Vipiteno",
+    "regione": "Trentino-Alto Adige",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 24888
+  },
+  "Beer Spa Bernard Prague - Pivní lázně Bernard Praha": {
+    "citta": "Praga",
+    "regione": null,
+    "paese": "Repubblica Ceca",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 48272
+  },
+  "San Vigilio di Marebbe": {
+    "citta": "Marebbe",
+    "regione": "Trentino-Alto Adige",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 25639
+  },
+  "Revelton Hotels & Apartments": {
+    "citta": "Praga",
+    "regione": null,
+    "paese": "Repubblica Ceca",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 28938
+  },
+  "Ponte Carlo / Praga": {
+    "citta": "Curitiba",
+    "regione": "Paraná",
+    "paese": "Brasile",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 55954
+  },
+  "Vipiteno, Trentino-Alto Adige, Italy": {
+    "citta": "Vipiteno",
+    "regione": "Trentino-Alto Adige",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 18489
+  },
+  "Praga, Republica Ceca": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 15453
+  },
+  "Praga, Czech Republic": {
+    "citta": "Gurabo",
+    "regione": "Porto Rico",
+    "paese": "Stati Uniti d'America",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 206235
+  },
+  "Magi BBQ": {
+    "citta": "Verona",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 244481
+  },
+  "Villa Tolomei - Hotel & Resort Firenze": {
+    "citta": "Firenze",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 389758
+  },
+  "Krčma U Krále Brabantského": {
+    "citta": "Praga",
+    "regione": null,
+    "paese": "Repubblica Ceca",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 94791
+  },
+  "ImpactFood_it": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 860114
+  },
+  "Prato": {
+    "citta": "Prato",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 79281
+  },
+  "Falkensteiner Hotel Antholz": {
+    "citta": "Rasun-Anterselva",
+    "regione": "Trentino-Alto Adige",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 348243
+  },
+  "La Taverna dell'Orco - Durbghash": {
+    "citta": "Prato",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 935107
+  },
+  "Ristorante Mare Blu Verona": {
+    "citta": "Verona",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 35570
+  },
+  "Orrido di Bellano": {
+    "citta": "Bellano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 3597120
+  },
+  "The Lucky Pot": {
+    "citta": "Santa Maria Capua Vetere",
+    "regione": "Campania",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 111076
+  },
+  "Viale Monza": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 799093
+  },
+  "Milano, Italia": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 4,
+    "plays": 499427
+  },
+  "Wonderland Ljubljana": {
+    "citta": "Lubiana",
+    "regione": null,
+    "paese": "Slovenia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 26282
+  },
+  "Choco-Story Torino": {
+    "citta": "Torino",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 869227
+  },
+  "Luxor, Egypt": {
+    "citta": "Luxor",
+    "regione": "Governatorato di Luxor",
+    "paese": "Egitto",
+    "amministrativo": true,
+    "reel": 3,
+    "plays": 150465
+  },
+  "Food Loop": {
+    "citta": "Rust",
+    "regione": "Baden-Württemberg",
+    "paese": "Germania",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 77754
+  },
+  "Emotional Grand Motel": {
+    "citta": "Fontaneto d'Agogna",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 6,
+    "plays": 4822408
+  },
+  "RISTO·panda-Q": {
+    "citta": "Torino",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 14930
+  },
+  "Copenaghen, Denmark": {
+    "citta": "Copenaghen",
+    "regione": "Region Hovedstaden",
+    "paese": "Danimarca",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 19395
+  },
+  "MZMTR Milano": {
+    "citta": "Pero",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 95697
+  },
+  "Traumatica": {
+    "citta": "Rust",
+    "regione": "Baden-Württemberg",
+    "paese": "Germania",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 61036
+  },
+  "Lin Tasting Emotion": {
+    "citta": "Legnano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 61825
+  },
+  "Phobos Group Verona": {
+    "citta": "Bussolengo",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 9,
+    "plays": 1967186
+  },
+  "Bao Teck Tea House 包德馆": {
+    "citta": "George Town",
+    "regione": "Penang",
+    "paese": "Malesia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 23083
+  },
+  "La Pot Hot Pot": {
+    "citta": "Padova",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 16929
+  },
+  "Nonno Andrea": {
+    "citta": "Villorba",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 449800
+  },
+  "Perhentian Island": {
+    "citta": "Kuala Lumpur",
+    "regione": null,
+    "paese": "Malesia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 26150
+  },
+  "Shanghai 上海 外灘": {
+    "citta": "Shanghai",
+    "regione": "Shanghai",
+    "paese": "Cina",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 43901
+  },
+  "Bracciano": {
+    "citta": "Bracciano",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 2,
+    "plays": 74319
+  },
+  "Mamma Mia - Pizzeria e Cucina 9llara": {
+    "citta": "Novellara",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 17603
+  },
+  "Shanghai Disneyland Park": {
+    "citta": "Pudong",
+    "regione": "Shanghai",
+    "paese": "Cina",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 168923
+  },
+  "Harry Potter - the Exhibition - Milano": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 560962
+  },
+  "Escape Room Roma": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 51603
+  },
+  "The Sign 2.0 - Pomigliano d’Arco": {
+    "citta": "Pomigliano d'Arco",
+    "regione": "Campania",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 23805
+  },
+  "The Sense Resort": {
+    "citta": "Follonica",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 16706
+  },
+  "Barcellona,Spagna": {
+    "citta": "Seregno",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 494729
+  },
+  "Perhentian Island Resort": {
+    "citta": "Kampung Pasir Hantu",
+    "regione": "Terengganu",
+    "paese": "Malesia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 153170
+  },
+  "poppi - Fattoria Di Celli": {
+    "citta": "Poppi",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 34104
+  },
+  "Perhentian Island, Malaysia": {
+    "citta": null,
+    "regione": "Terengganu",
+    "paese": "Malesia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 74637
+  },
+  "The Yangzte Boutique Shanghai": {
+    "citta": "Shanghai",
+    "regione": "Shanghai",
+    "paese": "Cina",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 24730
+  },
+  "Padova": {
+    "citta": "Padova",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 3,
+    "plays": 737733
+  },
+  "Coco Bongo": {
+    "citta": "Cancún",
+    "regione": "Quintana Roo",
+    "paese": "Messico",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 43401
+  },
+  "Iconic Marjorie Penang, a Tribute Portfolio Hotel": {
+    "citta": "George Town",
+    "regione": "Penang",
+    "paese": "Malesia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 27252
+  },
+  "Cancún, México": {
+    "citta": "Cancún",
+    "regione": "Quintana Roo",
+    "paese": "Messico",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 19287
+  },
+  "Shanghai": {
+    "citta": "Pudong",
+    "regione": "Shanghai",
+    "paese": "Cina",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 34445
+  },
+  "Piacenza": {
+    "citta": "Piacenza",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 294588
+  },
+  "Ceylonz Suites by Mykey Global": {
+    "citta": "Kuala Lumpur",
+    "regione": null,
+    "paese": "Malesia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 2399487
+  },
+  "Relais Freedom Club": {
+    "citta": "Massa Lubrense",
+    "regione": "Campania",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 30263
+  },
+  "Cheval d'Or Esthétique": {
+    "citta": "San Biagio",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 25567
+  },
+  "Bergamo": {
+    "citta": "Bergamo",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 15,
+    "plays": 862862
+  },
+  "China Garten": {
+    "citta": "Zurigo",
+    "regione": "Zurigo",
+    "paese": "Svizzera",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 313220
+  },
+  "Valdobbiadene, Veneto, Italia": {
+    "citta": "Valdobbiadene",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 37850
+  },
+  "exphera": {
+    "citta": "Gromlongo",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 68429
+  },
+  "Gardaland": {
+    "citta": "Verona",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 26113
+  },
+  "Exess Bollate": {
+    "citta": "Bollate",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 50893
+  },
+  "Novara": {
+    "citta": "Novara",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 3,
+    "plays": 227063
+  },
+  "Club Canoa e Kayak Cervia": {
+    "citta": "Cervia",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 65818
+  },
+  "Shoo Loong Kan Milano": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 31418
+  },
+  "La Barriera Pub": {
+    "citta": "Concesio",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 24655
+  },
+  "BattleKart Paris Sud Massy": {
+    "citta": "Champlan",
+    "regione": "Isola di Francia",
+    "paese": "Francia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 22856
+  },
+  "Sharm El Sheikh South Sinai Egypt": {
+    "citta": "شرم الشيخ",
+    "regione": "Governatorato del Sinai del Sud",
+    "paese": "Egitto",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 25931
+  },
+  "Mumac - Museo della Macchina per Caffè": {
+    "citta": "Binasco",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 12227
+  },
+  "Patanegra Bistrot Ristorante Paratico": {
+    "citta": "Paratico",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 28096
+  },
+  "Pirates' Bay": {
+    "citta": "Olgiate Olona",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 184053
+  },
+  "Alessandrobenini_wines": {
+    "citta": "Vago",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 49105
+  },
+  "Köln": {
+    "citta": "Pfullingen",
+    "regione": "Baden-Württemberg",
+    "paese": "Germania",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 41463
+  },
+  "Skuirt": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 32094
+  },
+  "Campovolo Reggio Emilia": {
+    "citta": "Reggio Emilia",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 227256
+  },
+  "Villa Adele Canneto sull'Oglio": {
+    "citta": "Canneto sull'Oglio",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 3,
+    "plays": 92977
+  },
+  "Milano Marittima, Emilia-Romagna, Italy": {
+    "citta": "Cervia",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 24288
+  },
+  "Egitto": {
+    "citta": null,
+    "regione": "Governatorato del Mar Rosso",
+    "paese": "Egitto",
+    "amministrativo": true,
+    "reel": 2,
+    "plays": 68323
+  },
+  "Dublino": {
+    "citta": "Dublino",
+    "regione": null,
+    "paese": "Irlanda",
+    "amministrativo": true,
+    "reel": 2,
+    "plays": 116468
+  },
+  "Uci Cinemas Verona": {
+    "citta": "San Giovanni Lupatoto",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 105944
+  },
+  "A'DAM Lookout": {
+    "citta": "Amsterdam",
+    "regione": "Noord-Holland",
+    "paese": "Paesi Bassi",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 235261
+  },
+  "Gola di Vintgar": {
+    "citta": "Zgornje Gorje",
+    "regione": null,
+    "paese": "Slovenia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 22063
+  },
+  "MIC Ramen Verona": {
+    "citta": "Verona",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 23295
+  },
+  "Game of Thrones Studio Tour": {
+    "citta": "Armagh City, Banbridge and Craigavon District Council",
+    "regione": "Irlanda del Nord",
+    "paese": "Regno Unito",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 19405
+  },
+  "Alegria by Cirque du Soleil": {
+    "citta": "Alicante",
+    "regione": "Comunità Valenzana",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 22032
+  },
+  "Baščaršija Etno Hiša": {
+    "citta": "Lubiana",
+    "regione": null,
+    "paese": "Slovenia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 34843
+  },
+  "Christiania": {
+    "citta": "Copenaghen",
+    "regione": "Region Hovedstaden",
+    "paese": "Danimarca",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 1165102
+  },
+  "Vintage Tea Trips": {
+    "citta": "Dublino",
+    "regione": null,
+    "paese": "Irlanda",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 26013
+  },
+  "Molly Malone": {
+    "citta": "Dublino",
+    "regione": null,
+    "paese": "Irlanda",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 48973
+  },
+  "Tivoli Copenaghen": {
+    "citta": "Copenaghen",
+    "regione": "Region Hovedstaden",
+    "paese": "Danimarca",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 27595
+  },
+  "La Sirenetta - Baia Del Porto Copenaghen": {
+    "citta": "Copenaghen",
+    "regione": "Region Hovedstaden",
+    "paese": "Danimarca",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 124453
+  },
+  "Ristorante I 5 Sensi": {
+    "citta": "Cuneo",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 20388
+  },
+  "Eco-Lodge Langhe": {
+    "citta": "Cherasco",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 44445
+  },
+  "Steam City Cocktail Bar": {
+    "citta": "Barcellona",
+    "regione": "Catalogna",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 38959
+  },
+  "JAZ Sharm Dreams": {
+    "citta": "شرم الشيخ",
+    "regione": "Governatorato del Sinai del Sud",
+    "paese": "Egitto",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 35034
+  },
+  "Marsa Alam, Egypt": {
+    "citta": "Ostrava",
+    "regione": "Moravskoslezský kraj",
+    "paese": "Repubblica Ceca",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 78035
+  },
+  "Rulantica": {
+    "citta": "Rust",
+    "regione": "Baden-Württemberg",
+    "paese": "Germania",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 125814
+  },
+  "Seriate - Bergamo": {
+    "citta": "Seriate",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 725538
+  },
+  "Montepulciano - Toscana, IT": {
+    "citta": "Montepulciano",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 29753
+  },
+  "Imperio Gaucho Churrascaria": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 33993
+  },
+  "Relais & Spa Castello di Casiglio": {
+    "citta": "Erba",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 3,
+    "plays": 98519
+  },
+  "Volterra": {
+    "citta": "Volterra",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 5,
+    "plays": 244435
+  },
+  "Borgo La Chiaracia Resort & Spa": {
+    "citta": "Castel Giorgio",
+    "regione": "Umbria",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 67910
+  },
+  "Il Rifugio Degli Artisti": {
+    "citta": "Roversetto",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 4,
+    "plays": 1278483
+  },
+  "Parco Rossi": {
+    "citta": "Santorso",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 440011
+  },
+  "Budapest, Hangary": {
+    "citta": "Budapest",
+    "regione": "Budapest",
+    "paese": "Ungheria",
+    "amministrativo": true,
+    "reel": 2,
+    "plays": 50280
+  },
+  "Rezzato": {
+    "citta": "Rezzato",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 231299
+  },
+  "Sir Lancelot Medieval Restaurant": {
+    "citta": "Budapest",
+    "regione": "Budapest",
+    "paese": "Ungheria",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 47472
+  },
+  "Antwerp Axe Throwing": {
+    "citta": "Anversa",
+    "regione": "Anversa",
+    "paese": "Belgio",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 80078
+  },
+  "The Magic Budapest II": {
+    "citta": "Budapest",
+    "regione": "Budapest",
+    "paese": "Ungheria",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 24901
+  },
+  "Toki": {
+    "citta": "Verona",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 100091
+  },
+  "Thermal Beer Spa Budapest": {
+    "citta": "Budapest",
+    "regione": "Budapest",
+    "paese": "Ungheria",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 38996
+  },
+  "La Tana Cameri": {
+    "citta": "Cameri",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 428365
+  },
+  "Mandala Day Spa": {
+    "citta": "Budapest",
+    "regione": "Budapest",
+    "paese": "Ungheria",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 39621
+  },
+  "Repubblica Dominicana": {
+    "citta": "Tireo",
+    "regione": "La Vega",
+    "paese": "Repubblica Dominicana",
+    "amministrativo": true,
+    "reel": 2,
+    "plays": 531072
+  },
+  "Maharajah - Indian Restaurant": {
+    "citta": "Verona",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 17585
+  },
+  "Monza": {
+    "citta": "Monza",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 2,
+    "plays": 61057
+  },
+  "Zizania": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 247998
+  },
+  "Porto Alegre Cremona": {
+    "citta": "Cremona",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 57526
+  },
+  "Chinatown, Milan": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 39965
+  },
+  "ElDogo Bistrot": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 41110
+  },
+  "Relais Forte Benedek - Agriturismo di Charme - Lake Garda": {
+    "citta": "Pastrengo",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 125852
+  },
+  "L'alchimista": {
+    "citta": "Verona",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 32165
+  },
+  "Ristorante Caffe' Kuerc": {
+    "citta": "Bormio",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 32975
+  },
+  "Nira Mountain Resort": {
+    "citta": "Valdidentro",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 362101
+  },
+  "InKa": {
+    "citta": "Verona",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 62123
+  },
+  "Grosio": {
+    "citta": "Ravoledo",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 1036357
+  },
+  "Valdidentro": {
+    "citta": "Valdidentro",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 1502649
+  },
+  "Egypt": {
+    "citta": "الهضبة",
+    "regione": "Governatorato del Mar Rosso",
+    "paese": "Egitto",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 40067
+  },
+  "NIKS&co": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 36578
+  },
+  "Enrico Rizzi Milano": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 62095
+  },
+  "Torino, Italy": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 7,
+    "plays": 2577176
+  },
+  "Torino,Italy": {
+    "citta": "Piacenza",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 4,
+    "plays": 151806
+  },
+  "Piranha Hotel & Motel": {
+    "citta": "Casalino",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 329095
+  },
+  "Shoreditch, London": {
+    "citta": "Londra",
+    "regione": "Inghilterra",
+    "paese": "Regno Unito",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 151155
+  },
+  "Binario Magic Pub": {
+    "citta": "Gromlongo",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 3,
+    "plays": 886998
+  },
+  "Lecco": {
+    "citta": "Lecco",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 2,
+    "plays": 43331
+  },
+  "Domobianca 365": {
+    "citta": "Domodossola",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 301602
+  },
+  "Fabbrica del Vapore": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 1173105
+  },
+  "La Fabbrica Del Vapore Milano": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 241517
+  },
+  "Mantova": {
+    "citta": "Mantova",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 4,
+    "plays": 130618
+  },
+  "Bussolengo": {
+    "citta": "Bussolengo",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 1001218
+  },
+  "Linea Verde Bergamo": {
+    "citta": "Orio al Serio",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 30913
+  },
+  "Warner Bros Studio London": {
+    "citta": "Söderhamn",
+    "regione": null,
+    "paese": "Svezia",
+    "amministrativo": false,
+    "reel": 3,
+    "plays": 954362
+  },
+  "Acquario di Genova": {
+    "citta": "Genova",
+    "regione": "Liguria",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 702124
+  },
+  "Flight Club Bloomsbury": {
+    "citta": "Londra",
+    "regione": "Inghilterra",
+    "paese": "Regno Unito",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 25889
+  },
+  "Mogliano Veneto": {
+    "citta": "Mogliano Veneto",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 32549
+  },
+  "UCI Cinemas": {
+    "citta": "Vicenza",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 131687
+  },
+  "Milano Porta Genova": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 121219
+  },
+  "Amsterdam": {
+    "citta": "Amsterdam",
+    "regione": "Noord-Holland",
+    "paese": "Paesi Bassi",
+    "amministrativo": true,
+    "reel": 4,
+    "plays": 194479
+  },
+  "Moko's Matcha Milano": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 63075
+  },
+  "Flover": {
+    "citta": "Bussolengo",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 398640
+  },
+  "Garden Steflor Vimodrone": {
+    "citta": "Vimodrone",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 219704
+  },
+  "Lindt Home of Chocolate": {
+    "citta": "Kilchberg (ZH)",
+    "regione": "Zurigo",
+    "paese": "Svizzera",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 560232
+  },
+  "MIC Ramen Firenze Sud": {
+    "citta": "Firenze",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 1233911
+  },
+  "Reggio nell'Emilia": {
+    "citta": "Reggio Emilia",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 35715
+  },
+  "Arezzo": {
+    "citta": "Arezzo",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 2,
+    "plays": 60989
+  },
+  "Outernet-London": {
+    "citta": "Londra",
+    "regione": "Inghilterra",
+    "paese": "Regno Unito",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 307993
+  },
+  "Fattorie Di Celli - Identity Resort in Casentino": {
+    "citta": "Poppi",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 51568
+  },
+  "Rabbit Hole Cafe": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 87604
+  },
+  "Seriate": {
+    "citta": "Seriate",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 709968
+  },
+  "Elk Bakery": {
+    "citta": "Verona",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 31262
+  },
+  "La Collina di Matilde": {
+    "citta": "Desenzano del Garda",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 186844
+  },
+  "Ferrara": {
+    "citta": "Coli",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 87258
+  },
+  "Retrò Osteria Veneta": {
+    "citta": "Marcon",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 30614
+  },
+  "Viterbo": {
+    "citta": "Viterbo",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 36807
+  },
+  "Milano, Italy": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 147412
+  },
+  "Guidonia Montecelio": {
+    "citta": "Colle Fiorito",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 39145
+  },
+  "Cuneo": {
+    "citta": "Cuneo",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 4,
+    "plays": 473892
+  },
+  "Brescia": {
+    "citta": "Brescia",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 8,
+    "plays": 1395834
+  },
+  "Parc del Gulliver": {
+    "citta": "Valencia",
+    "regione": "Comunità Valenzana",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 45738
+  },
+  "Venezia, Italia": {
+    "citta": "Venezia",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 26818
+  },
+  "Egitto-Cairo": {
+    "citta": "Lazise",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 571756
+  },
+  "Santa Maria Capua Vetere": {
+    "citta": "Santa Maria Capua Vetere",
+    "regione": "Campania",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 52553
+  },
+  "Sharm el Sheik": {
+    "citta": "شرم الشيخ",
+    "regione": "Governatorato del Sinai del Sud",
+    "paese": "Egitto",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 48458
+  },
+  "Lazise, Italia": {
+    "citta": "Rosenheim",
+    "regione": "Baviera",
+    "paese": "Germania",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 36232
+  },
+  "Roma": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 3,
+    "plays": 269904
+  },
+  "Barcellona,Spain": {
+    "citta": "Barberà del Vallès",
+    "regione": "Catalogna",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 108154
+  },
+  "Firenze": {
+    "citta": "Firenze",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 2,
+    "plays": 161518
+  },
+  "Barcellona": {
+    "citta": "Barcellona",
+    "regione": "Catalogna",
+    "paese": "Spagna",
+    "amministrativo": true,
+    "reel": 5,
+    "plays": 514143
+  },
+  "Milano italy": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 8,
+    "plays": 1134380
+  },
+  "Unreal Vilapicina": {
+    "citta": "Barcellona",
+    "regione": "Catalogna",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 15739
+  },
+  "Abu-Dhabi": {
+    "citta": "Abu Dhabi",
+    "regione": "Emirato di Abu Dhabi",
+    "paese": "Emirati Arabi Uniti",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 164817
+  },
+  "Bologna": {
+    "citta": "Bologna",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 21274
+  },
+  "Portogruaro": {
+    "citta": "Portogruaro",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 26341
+  },
+  "Gardone Riviera, Lago di Garda": {
+    "citta": "Gardone Riviera",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 2,
+    "plays": 54138
+  },
+  "Caribe Bay": {
+    "citta": "Jesolo",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 518506
+  },
+  "Barcelo Bavaro Beach - Adults Only": {
+    "citta": "Higüey",
+    "regione": "La Altagracia",
+    "paese": "Repubblica Dominicana",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 21943
+  },
+  "Somma Vesuviana": {
+    "citta": "Somma Vesuviana",
+    "regione": "Campania",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 2,
+    "plays": 2629252
+  },
+  "Piemonte, Italy": {
+    "citta": "Domodossola",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 36614
+  },
+  "Castello San Lorenzo de' Picenardi": {
+    "citta": "San Lorenzo de' Picenardi",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 31242
+  },
+  "Torino": {
+    "citta": "Torino",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 4,
+    "plays": 669767
+  },
+  "AdventureRooms Pavia": {
+    "citta": "Pavia",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 35149
+  },
+  "Firenze, Italy": {
+    "citta": "Firenze",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 10,
+    "plays": 1683085
+  },
+  "Toscana": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 134780
+  },
+  "Campania": {
+    "citta": "Baronissi",
+    "regione": "Campania",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 2,
+    "plays": 423643
+  },
+  "Trento": {
+    "citta": "Trento",
+    "regione": "Trentino-Alto Adige",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 486082
+  },
+  "CUBE Challenges - Roma": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 3,
+    "plays": 3517908
+  },
+  "Benessere Luthien": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 50443
+  },
+  "DOMUS  Suite • Spa • Eventi": {
+    "citta": "Acerra",
+    "regione": "Campania",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 64894
+  },
+  "Caserta": {
+    "citta": "Caserta",
+    "regione": "Campania",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 2,
+    "plays": 617144
+  },
+  "Hi Hotels": {
+    "citta": "Trento",
+    "regione": "Trentino-Alto Adige",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 4054168
+  },
+  "Chinagarten Zürich": {
+    "citta": "Zurigo",
+    "regione": "Zurigo",
+    "paese": "Svizzera",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 901435
+  },
+  "Europa-Park": {
+    "citta": "Rust",
+    "regione": "Baden-Württemberg",
+    "paese": "Germania",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 1648635
+  },
+  "Zurigo": {
+    "citta": "Zurigo",
+    "regione": "Zurigo",
+    "paese": "Svizzera",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 23173
+  },
+  "Lindt Chocolatier Factory, Zurich, Switzerland": {
+    "citta": "Zurigo",
+    "regione": "Zurigo",
+    "paese": "Svizzera",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 254419
+  },
+  "Parco Giardino Sigurtà": {
+    "citta": "Valeggio sul Mincio",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 93019
+  },
+  "Birichin": {
+    "citta": "Torino",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 254912
+  },
+  "Stellar Paris": {
+    "citta": "Parigi",
+    "regione": "Isola di Francia",
+    "paese": "Francia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 21449
+  },
+  "La Reina Lagarta": {
+    "citta": "Madrid",
+    "regione": "Comunidad de Madrid",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 31277
+  },
+  "MEININGER Hotels": {
+    "citta": "Parigi",
+    "regione": "Isola di Francia",
+    "paese": "Francia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 1736997
+  },
+  "Rifugio Degli Artisti": {
+    "citta": "Roversetto",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 3,
+    "plays": 94080
+  },
+  "BattleKart Paris Nord Villepinte": {
+    "citta": "Villepinte",
+    "regione": "Isola di Francia",
+    "paese": "Francia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 44690
+  },
+  "MISA sushi": {
+    "citta": "Mestrino",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 33921
+  },
+  "Disneyland Paris": {
+    "citta": "Parigi",
+    "regione": "Isola di Francia",
+    "paese": "Francia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 53895
+  },
+  "Brunch Republic": {
+    "citta": "Vicenza",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 702470
+  },
+  "MetaEscape Room Verona": {
+    "citta": "Verona",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 23423
+  },
+  "Age Project Escape Room": {
+    "citta": "Rosate",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 33580
+  },
+  "Under The Sea Restaurant - Ephemera": {
+    "citta": "Issy-les-Moulineaux",
+    "regione": "Isola di Francia",
+    "paese": "Francia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 41398
+  },
+  "Gattolandia": {
+    "citta": "Monza",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 121825
+  },
+  "Parigi": {
+    "citta": "Parigi",
+    "regione": "Isola di Francia",
+    "paese": "Francia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 41404
+  },
+  "Paolo Sarpi 新开原": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 38218
+  },
+  "25hours Hotel Gare Du Nord": {
+    "citta": "Parigi",
+    "regione": "Isola di Francia",
+    "paese": "Francia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 26189
+  },
+  "Torino Loft": {
+    "citta": "Torino",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 38698
+  },
+  "Castello San Martino della Vaneza": {
+    "citta": "Cervarese Santa Croce",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 19738
+  },
+  "Mauritius": {
+    "citta": "Port Louis",
+    "regione": "Distretto di Port Louis",
+    "paese": "Mauritius",
+    "amministrativo": true,
+    "reel": 4,
+    "plays": 122864
+  },
+  "Memorabilia": {
+    "citta": "Agrate Brianza",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 3,
+    "plays": 667030
+  },
+  "Giethoorn, Nederlands": {
+    "citta": "Giethoorn",
+    "regione": "Overijssel",
+    "paese": "Paesi Bassi",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 32066
+  },
+  "The Iceberg Lounge at Park Row": {
+    "citta": "City of Westminster",
+    "regione": "Inghilterra",
+    "paese": "Regno Unito",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 75701
+  },
+  "Kandoo Nippon Restaurant Milano": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 52622
+  },
+  "Cloud shop": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 81569
+  },
+  "Yas Bay": {
+    "citta": "Abu Dhabi",
+    "regione": "Emirato di Abu Dhabi",
+    "paese": "Emirati Arabi Uniti",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 27466
+  },
+  "Kudafushi Resort & Spa": {
+    "citta": null,
+    "regione": "މާޅޮސްމަޑުލު އުތުރުބުރި",
+    "paese": "Maldive",
+    "amministrativo": false,
+    "reel": 3,
+    "plays": 1089697
+  },
+  "Mitú - Spirit Of Colombia": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 33051
+  },
+  "Londra": {
+    "citta": "City of London",
+    "regione": "Inghilterra",
+    "paese": "Regno Unito",
+    "amministrativo": false,
+    "reel": 5,
+    "plays": 214786
+  },
+  "Soho, London UK": {
+    "citta": "City of Westminster",
+    "regione": "Inghilterra",
+    "paese": "Regno Unito",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 24998
+  },
+  "Victoria Station London": {
+    "citta": "Londra",
+    "regione": "Inghilterra",
+    "paese": "Regno Unito",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 36575
+  },
+  "Villaggio delle Meraviglie": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 59707
+  },
+  "Warner Brothers Harry Potter Studio Tour": {
+    "citta": "Three Rivers",
+    "regione": "Inghilterra",
+    "paese": "Regno Unito",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 30935
+  },
+  "Dialogue Lounge": {
+    "citta": "Brescia",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 43556
+  },
+  "Bergamo Città Alta": {
+    "citta": "Bergamo",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 54467
+  },
+  "Asia Asia Abu Dhabi": {
+    "citta": "Abu Dhabi",
+    "regione": "Emirato di Abu Dhabi",
+    "paese": "Emirati Arabi Uniti",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 20321
+  },
+  "MO.OM Motel": {
+    "citta": "Olgiate Olona",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 78822
+  },
+  "Adrenark Adventure": {
+    "citta": "Abu Dhabi",
+    "regione": "Emirato di Abu Dhabi",
+    "paese": "Emirati Arabi Uniti",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 222844
+  },
+  "Mukbang Shows Restaurant Korean BBQ & Seafood - Abu Dhabi": {
+    "citta": "Abu Dhabi",
+    "regione": "Emirato di Abu Dhabi",
+    "paese": "Emirati Arabi Uniti",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 28021
+  },
+  "Ferrari World, Abu Dhabi, UAE": {
+    "citta": "Abu Dhabi",
+    "regione": "Emirato di Abu Dhabi",
+    "paese": "Emirati Arabi Uniti",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 48314
+  },
+  "Desert Rose Tourism": {
+    "citta": "Abu Dhabi",
+    "regione": "Emirato di Abu Dhabi",
+    "paese": "Emirati Arabi Uniti",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 14029
+  },
+  "Jubail Mangrove Park": {
+    "citta": "Abu Dhabi",
+    "regione": "Emirato di Abu Dhabi",
+    "paese": "Emirati Arabi Uniti",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 10899
+  },
+  "Fairmont Bab Al Bahr": {
+    "citta": "Abu Dhabi",
+    "regione": "Emirato di Abu Dhabi",
+    "paese": "Emirati Arabi Uniti",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 32013
+  },
+  "Abu Dhabi": {
+    "citta": "Abu Dhabi",
+    "regione": "Emirato di Abu Dhabi",
+    "paese": "Emirati Arabi Uniti",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 35400
+  },
+  "Elfde Gebod, Antwerpen, Belgium": {
+    "citta": "Anversa",
+    "regione": "Anversa",
+    "paese": "Belgio",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 19057
+  },
+  "MEININGER Hotel Amsterdam City West": {
+    "citta": "Amsterdam",
+    "regione": "Noord-Holland",
+    "paese": "Paesi Bassi",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 29140
+  },
+  "Heineken Experience": {
+    "citta": "Amsterdam",
+    "regione": "Noord-Holland",
+    "paese": "Paesi Bassi",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 20426
+  },
+  "Xtracold Icebar Amsterdam": {
+    "citta": "Amsterdam",
+    "regione": "Noord-Holland",
+    "paese": "Paesi Bassi",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 52958
+  },
+  "Kujira Restaurant": {
+    "citta": "Segrate",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 82810
+  },
+  "In TIME -La prima Escape Room di Bergamo-": {
+    "citta": "Suisio",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 157524
+  },
+  "Comix Pub": {
+    "citta": "Fiorano Modenese",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 239356
+  },
+  "Hyperspace Trampoline Parks Verona": {
+    "citta": "San Giovanni Lupatoto",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 4169167
+  },
+  "Kensho": {
+    "citta": "Torino",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 19385
+  },
+  "Pecetto Torinese": {
+    "citta": "Pecetto Torinese",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 46802
+  },
+  "Centro Benessere Luce": {
+    "citta": "Torino",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 56638
+  },
+  "HOT POT 芦香火锅 Thai Restaurant": {
+    "citta": "Torino",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 49378
+  },
+  "Museo Nazionale del Cinema di Torino": {
+    "citta": "Torino",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 853258
+  },
+  "Apokas Paintball": {
+    "citta": "Merate",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 25648
+  },
+  "Sky Team Cremona (Drop_Zone)": {
+    "citta": "Cremona",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 25491
+  },
+  "Goki": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 128712
+  },
+  "Bali bar&restaurant Roma": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 32350
+  },
+  "Gummerer Hof": {
+    "citta": "Bressanone",
+    "regione": "Trentino-Alto Adige",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 160420
+  },
+  "FLY X": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 285682
+  },
+  "Löwenhof": {
+    "citta": "Varna",
+    "regione": "Trentino-Alto Adige",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 1702821
+  },
+  "Augurio Ristorante": {
+    "citta": "Trento",
+    "regione": "Trentino-Alto Adige",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 30076
+  },
+  "Kraken Mule Navigli": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 99229
+  },
+  "Ponte San Vigilio": {
+    "citta": "Motella",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 64832
+  },
+  "Ramen Shifu Milano": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 429400
+  },
+  "Leon's place, Roma": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 90418
+  },
+  "IKONO Roma": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 33213
+  },
+  "Cinecittà World": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 21842
+  },
+  "Barceló Bávaro Beach Resort": {
+    "citta": "Higüey",
+    "regione": "La Altagracia",
+    "paese": "Repubblica Dominicana",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 18281
+  },
+  "Incantum Roma": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 773891
+  },
+  "This is Wonderland": {
+    "citta": null,
+    "regione": null,
+    "paese": null,
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 51777
+  },
+  "Palazzo Ducale, Mantova": {
+    "citta": "Mantova",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 16280
+  },
+  "República Dominicana": {
+    "citta": "Santo Domingo",
+    "regione": "Distrito Nacional",
+    "paese": "Repubblica Dominicana",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 22037
+  },
+  "Tenuta Maddalena": {
+    "citta": "Volta Mantovana",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 22707
+  },
+  "Cru caviar experience and shop- società agricola naviglio": {
+    "citta": "Goito",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 18270
+  },
+  "Locanda Perbellini al Lago": {
+    "citta": "Garda",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 304779
+  },
+  "Lombardia": {
+    "citta": "Cavernago",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 3,
+    "plays": 847314
+  },
+  "Valdobbiadene": {
+    "citta": "Valdobbiadene",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 29028
+  },
+  "supperclub.tube": {
+    "citta": "Londra",
+    "regione": "Inghilterra",
+    "paese": "Regno Unito",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 37551
+  },
+  "Pirati Poeti": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 27456
+  },
+  "Boa Beach Valencia": {
+    "citta": "Valencia",
+    "regione": "Comunità Valenzana",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 31663
+  },
+  "Lago Maggiore": {
+    "citta": "Binda",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 24029
+  },
+  "Bianco Cafè": {
+    "citta": "Governolo",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 36381
+  },
+  "Cattedrale Di Valencia": {
+    "citta": "Valencia",
+    "regione": "Comunità Valenzana",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 16464
+  },
+  "Moiola": {
+    "citta": "Moiola",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 22279
+  },
+  "Monticello SPA": {
+    "citta": "Monticello Brianza",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 23821
+  },
+  "Sushi Maison Boltiere": {
+    "citta": "Boltiere",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 27620
+  },
+  "Modena": {
+    "citta": "Modena",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 2,
+    "plays": 1453965
+  },
+  "Bungee Center Veglio": {
+    "citta": "Veglio",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 27282
+  },
+  "Flower Burger": {
+    "citta": "Verona",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 23262
+  },
+  "The Cauldron, London, England": {
+    "citta": "Londra",
+    "regione": "Inghilterra",
+    "paese": "Regno Unito",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 12753
+  },
+  "Funicular": {
+    "citta": "Londra",
+    "regione": "Inghilterra",
+    "paese": "Regno Unito",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 17985
+  },
+  "La Baia Casalmaggiore": {
+    "citta": "Casalmaggiore",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 77947
+  },
+  "Forever ink Tattoo shop": {
+    "citta": "Pachino",
+    "regione": "Sicilia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 22710
+  },
+  "The Bletchley": {
+    "citta": "Londra",
+    "regione": "Inghilterra",
+    "paese": "Regno Unito",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 16724
+  },
+  "Point A Hotel London Shoreditch": {
+    "citta": "Londra",
+    "regione": "Inghilterra",
+    "paese": "Regno Unito",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 21493
+  },
+  "Portobello Food & Drink": {
+    "citta": "Porto Mantovano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 19891
+  },
+  "ABQ London": {
+    "citta": "Londra",
+    "regione": "Inghilterra",
+    "paese": "Regno Unito",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 18381
+  },
+  "Cyberdog": {
+    "citta": "Londra",
+    "regione": "Inghilterra",
+    "paese": "Regno Unito",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 119332
+  },
+  "Londra Inghilterra": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 26770
+  },
+  "AMO Bistrot": {
+    "citta": "Verona",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 24140
+  },
+  "Valencia, España": {
+    "citta": "Valencia",
+    "regione": "Comunità Valenzana",
+    "paese": "Spagna",
+    "amministrativo": true,
+    "reel": 2,
+    "plays": 47056
+  },
+  "Castello di Brianza": {
+    "citta": "Castello di Brianza",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 28456
+  },
+  "Shake Club Cocktail Bar": {
+    "citta": "Rovellasca",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 35206
+  },
+  "Inari Sushi Restaurant Carugate": {
+    "citta": "Carugate",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 26399
+  },
+  "Roma Movie": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 578219
+  },
+  "Da Alberto Gastronomia Gluten Free": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 29418
+  },
+  "Borghetto Sul Mincio": {
+    "citta": "Valeggio sul Mincio",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 0,
+    "plays": 0
+  },
+  "Y-40 The Deep Joy": {
+    "citta": "Battaglia Terme",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 54984
+  },
+  "K Kaiseki Restaurant - Ambivere": {
+    "citta": "Ambivere",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 445822
+  },
+  "Valeggio Sul Mincio e Borghetto": {
+    "citta": "Valeggio sul Mincio",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 28096
+  },
+  "Pataton Cremona": {
+    "citta": "Cremona",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 37107
+  },
+  "Parque Gulliver Valencia": {
+    "citta": "Valencia",
+    "regione": "Comunità Valenzana",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 114572
+  },
+  "Spagna": {
+    "citta": "Tarancón",
+    "regione": "Castiglia-La Mancia",
+    "paese": "Spagna",
+    "amministrativo": true,
+    "reel": 0,
+    "plays": 0
+  },
+  "Convento Dei Neveri": {
+    "citta": "Bariano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 30173
+  },
+  "Reggio Emilia, Italy": {
+    "citta": "Reggio Emilia",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 236689
+  },
+  "Mr Martini": {
+    "citta": "Verona",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 1915204
+  },
+  "Oceanografic-Valencia": {
+    "citta": "Siviglia",
+    "regione": "Andalusia",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 49150
+  },
+  "Acquaworld": {
+    "citta": "Concorezzo",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 1346538
+  },
+  "Il Cavallo Scosso": {
+    "citta": "Asti",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 28487
+  },
+  "IKONO Global": {
+    "citta": "Madrid",
+    "regione": "Comunidad de Madrid",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 23049
+  },
+  "Living Bakkali": {
+    "citta": "Valencia",
+    "regione": "Comunità Valenzana",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 19601
+  },
+  "Lilelo - Little Leisure Lodge": {
+    "citta": "Cascine Napoli",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 484141
+  },
+  "InClan Brutal Bar": {
+    "citta": "Madrid",
+    "regione": "Comunidad de Madrid",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 24423
+  },
+  "CandyWorld Experience": {
+    "citta": "Arese",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 387609
+  },
+  "Secretos de Lola": {
+    "citta": "Madrid",
+    "regione": "Comunidad de Madrid",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 731208
+  },
+  "Calle 365": {
+    "citta": "Madrid",
+    "regione": "Comunidad de Madrid",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 104659
+  },
+  "Veneto": {
+    "citta": "Bessica",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 2,
+    "plays": 152980
+  },
+  "Urban Safari": {
+    "citta": "Madrid",
+    "regione": "Comunidad de Madrid",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 32473
+  },
+  "Serendipia": {
+    "citta": "Madrid",
+    "regione": "Comunidad de Madrid",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 32887
+  },
+  "Essential Flamenco Madrid": {
+    "citta": "Madrid",
+    "regione": "Comunidad de Madrid",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 15958
+  },
+  "Borgo Machetto Country Club Piramis": {
+    "citta": "Desenzano del Garda",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 42044
+  },
+  "Espacio Delicias": {
+    "citta": "Madrid",
+    "regione": "Comunidad de Madrid",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 831414
+  },
+  "Rosi la Loca": {
+    "citta": "Madrid",
+    "regione": "Comunidad de Madrid",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 28063
+  },
+  "Parque Warner Madrid": {
+    "citta": "San Martín de la Vega",
+    "regione": "Comunidad de Madrid",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 247191
+  },
+  "Enigma Modena - Escape Room": {
+    "citta": "Modena",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 3,
+    "plays": 475334
+  },
+  "Encio's Tiki Bar": {
+    "citta": "Ferrara",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 21029
+  },
+  "Borgo Medioevale  Votigno di Canossa RE": {
+    "citta": "Canossa",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 41711
+  },
+  "Fuorimano OTBP": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 230704
+  },
+  "YoshiBergamo": {
+    "citta": "Bergamo",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 26215
+  },
+  "San Miniato": {
+    "citta": "San Miniato",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 29732
+  },
+  "Calenzano (FI)": {
+    "citta": "Calenzano",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 2644881
+  },
+  "Mistertea Monza": {
+    "citta": "Monza",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 28925
+  },
+  "Provincia di Mantova": {
+    "citta": "Mantova",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 58141
+  },
+  "Residence Felice": {
+    "citta": "Celle Ligure",
+    "regione": "Liguria",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 181080
+  },
+  "Genova, Italia": {
+    "citta": "Genova",
+    "regione": "Liguria",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 41009
+  },
+  "Casa Mia": {
+    "citta": "Napoli",
+    "regione": "Campania",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 22173
+  },
+  "Robata 21 Sushi & Grill": {
+    "citta": "Celle Ligure",
+    "regione": "Liguria",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 27488
+  },
+  "Borgio Verezzi": {
+    "citta": "Borgio Verezzi",
+    "regione": "Liguria",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 26851
+  },
+  "Nel Mondo": {
+    "citta": "Chianchitta",
+    "regione": "Sicilia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 0,
+    "plays": 0
+  },
+  "MAKAI Surf & Tiki Bar": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 36815
+  },
+  "Emilia-Romagna": {
+    "citta": "Bomporto",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 3,
+    "plays": 1044577
+  },
+  "Vinovo": {
+    "citta": "Torino",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 39834
+  },
+  "SPAB Funny Wellness": {
+    "citta": "Alba",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 68320
+  },
+  "Red Beef Dormelletto": {
+    "citta": "Dormelletto",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 28619
+  },
+  "Arizona 66 Palazzo Pignano Cremona": {
+    "citta": "Palazzo Pignano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 30381
+  },
+  "NENI München": {
+    "citta": "Monaco di Baviera",
+    "regione": "Baviera",
+    "paese": "Germania",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 31980
+  },
+  "La Botega 1927": {
+    "citta": "Lazise",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 86805
+  },
+  "Magnolia Napoli": {
+    "citta": "Napoli",
+    "regione": "Campania",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 55770
+  },
+  "Sushi Zero": {
+    "citta": "Buguggiate",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 670315
+  },
+  "Bar Mirò Granozzo": {
+    "citta": "Granozzo",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 246604
+  },
+  "Borgo Ticino": {
+    "citta": "Borgo Ticino",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 27489
+  },
+  "Kubrik American Bar": {
+    "citta": "Peschiera del Garda",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 66765
+  },
+  "Cicero Ristorante Messicano a Soncino": {
+    "citta": "Soncino",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 42781
+  },
+  "Drinc.different": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 60707
+  },
+  "Il Villaggio Di Natale Flover": {
+    "citta": "Bussolengo",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 14932
+  },
+  "Dou Asian Passion - restaurant lounge": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 22955
+  },
+  "Willy's Burger": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 77645
+  },
+  "Avatar Virtual Reality": {
+    "citta": "Vimodrone",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 32638
+  },
+  "TimeGate - Escape Room Game Verona": {
+    "citta": "Verona",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 37902
+  },
+  "Hama Sushi Bussolengo": {
+    "citta": "Bussolengo",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 28738
+  },
+  "Castello di Gropparello": {
+    "citta": "Gropparello",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 72149
+  },
+  "Chacarero": {
+    "citta": "Verona",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 50471
+  },
+  "Velvet craftcocktailbar": {
+    "citta": "Monza",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 47527
+  },
+  "Gourmet gira mondo": {
+    "citta": "Torino",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 31299
+  },
+  "Escape Room Mantova": {
+    "citta": "Mantova",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 224667
+  },
+  "Japan House Peschiera": {
+    "citta": "Peschiera del Garda",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 147709
+  },
+  "Mutonia - Mutoid Waste Company": {
+    "citta": "Santarcangelo di Romagna",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 28539
+  },
+  "Il Labirinto di Adriano": {
+    "citta": "Orvieto",
+    "regione": "Umbria",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 41140
+  },
+  "ITV Caserta": {
+    "citta": "San Nicola La Strada",
+    "regione": "Campania",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 64880
+  },
+  "Manyi Reggio Emilia": {
+    "citta": "Reggio Emilia",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 26028
+  },
+  "The World of Banksy Verona": {
+    "citta": "Mambasa",
+    "regione": "Ituri",
+    "paese": "Repubblica Democratica del Congo",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 17708
+  },
+  "L'Acciuga Osteria": {
+    "citta": "Ravenna",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 30430
+  },
+  "Museo Lavazza": {
+    "citta": "Torino",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 27815
+  },
+  "Bounty Rimini": {
+    "citta": "Rimini",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 61198
+  },
+  "Il Cappellaio Matto": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 444662
+  },
+  "Italia in Miniatura": {
+    "citta": "Rimini",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 18777
+  },
+  "DEMO design emotion": {
+    "citta": "Rimini",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 57951
+  },
+  "MAMÌ.bistrot": {
+    "citta": "Rimini",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 24053
+  },
+  "Arbitroom - Escape Room Reggio Emilia": {
+    "citta": "Reggio Emilia",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 100384
+  },
+  "Ba Hot Pot": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 139700
+  },
+  "Il Guerrino Trattoria Storico": {
+    "citta": "Greve in Chianti",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 93009
+  },
+  "Pirelli HangarBicocca": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 275452
+  },
+  "MOOD Sushi Restaurant Verona": {
+    "citta": "Verona",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 3036433
+  },
+  "Museum of Dreamers": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 56862
+  },
+  "Unseen Bar": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 48129
+  },
+  "Sacro Bosco Bomarzo, parco dei Mostri, Viterbo": {
+    "citta": "Bomarzo",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 45726
+  },
+  "C-Rooms": {
+    "citta": "Cremella",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 443736
+  },
+  "Aero Gravity": {
+    "citta": "Pero",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 29824
+  },
+  "Anger Games": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 36995
+  },
+  "Museo Canova Tadolini": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 25742
+  },
+  "Parco Sculture del Chianti": {
+    "citta": "Castelnuovo Berardenga",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 47649
+  },
+  "Amy Sushi": {
+    "citta": "Reggio Emilia",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 1772356
+  },
+  "La Mulata Reggio Emilia": {
+    "citta": "Reggio Emilia",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 84977
+  },
+  "Museo Radiotv Rai": {
+    "citta": "Torino",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 16793
+  },
+  "Osteria Contrasto": {
+    "citta": "Guastalla",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 25808
+  },
+  "Terme Preistoriche": {
+    "citta": "Montegrotto Terme",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 41459
+  },
+  "Sant'angelo Il Paese Delle Fiabe": {
+    "citta": "Mondragone",
+    "regione": "Campania",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 26683
+  },
+  "Vigamus Academy": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 50732
+  },
+  "Hotate Sushi Novara": {
+    "citta": "Casalino",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 146960
+  },
+  "Urbani ristorante": {
+    "citta": "Torino",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 48585
+  },
+  "Napoli": {
+    "citta": "Napoli",
+    "regione": "Campania",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 37711
+  },
+  "Ossario di Custoza": {
+    "citta": "Sommacampagna",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 22427
+  },
+  "Roma, Italia": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 29701
+  },
+  "Giardino dei Tarocchi": {
+    "citta": "Pescia Fiorentina",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 56664
+  },
+  "Il Poggio dell'Artilla": {
+    "citta": "Castiglione in Teverina",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 1166843
+  },
+  "Movie Restaurant": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 94076
+  },
+  "Adrenaline X-Treme Adventures Dolomites": {
+    "citta": "Marebbe",
+    "regione": "Trentino-Alto Adige",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 58430
+  },
+  "Pepperone Restaurant & Sports Cafè": {
+    "citta": "San Giovanni Lupatoto",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 220763
+  },
+  "La casa delle farfalle Roma": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 26900
+  },
+  "iRooms": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 42628
+  },
+  "Zero-Gravity": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 369076
+  },
+  "Pine&Apple": {
+    "citta": "Firenze",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 35129
+  },
+  "Escape Room Perugia": {
+    "citta": "Perugia",
+    "regione": "Umbria",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 112866
+  },
+  "Chianti Glamping Resort": {
+    "citta": "Castelnuovo dei Sabbioni",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 33809
+  },
+  "Romeow Cat Bistrot Roma": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 40913
+  },
+  "Terre Dell'Amore": {
+    "citta": "Grosseto",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 39515
+  },
+  "POP’S Roma": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 111458
+  },
+  "Casina Delle Civette - Villa Torlonia": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 57809
+  },
+  "The Race Club Roma Speakeasy": {
+    "citta": "Roma",
+    "regione": "Lazio",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 1435582
+  },
+  "Ospedale delle Bambole": {
+    "citta": "Napoli",
+    "regione": "Campania",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 13954
+  },
+  "Bar Leodamia": {
+    "citta": "Salerno",
+    "regione": "Campania",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 141283
+  },
+  "Castellabate": {
+    "citta": "Castellabate",
+    "regione": "Campania",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 131412
+  },
+  "Victoria Beachcomber Resort & Spa": {
+    "citta": "Pointe aux Piments VCA",
+    "regione": "Pamplemousses",
+    "paese": "Mauritius",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 25602
+  },
+  "Shape Cocktail Bar": {
+    "citta": "Cerea",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 27036
+  },
+  "Clanezzo, Lombardia, Italy": {
+    "citta": "Almenno San Salvatore",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 282329
+  },
+  "Forever Rose Cafe": {
+    "citta": "Dubai",
+    "regione": "Emirato di Dubai",
+    "paese": "Emirati Arabi Uniti",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 22599
+  },
+  "Agriturismo Scuderia della Valle": {
+    "citta": "Valsecca",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 33907
+  },
+  "L'Officina del Panino Mantova": {
+    "citta": null,
+    "regione": null,
+    "paese": null,
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 71085
+  },
+  "Cantina Caleffi": {
+    "citta": "Spineda",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 24386
+  },
+  "Tenno": {
+    "citta": "Tenno",
+    "regione": "Trentino-Alto Adige",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 407327
+  },
+  "Dubai Mall, Dubai UAE": {
+    "citta": "Dubai",
+    "regione": "Emirato di Dubai",
+    "paese": "Emirati Arabi Uniti",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 37852
+  },
+  "Concesio": {
+    "citta": "Concesio",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 24922
+  },
+  "Sky Views Observatory": {
+    "citta": "Dubai",
+    "regione": "Emirato di Dubai",
+    "paese": "Emirati Arabi Uniti",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 307786
+  },
+  "Merate": {
+    "citta": "Merate",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 34062
+  },
+  "Maldives": {
+    "citta": "Alor Gajah",
+    "regione": "Malacca",
+    "paese": "Malesia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 641427
+  },
+  "City walk ,Dubai": {
+    "citta": "Dubai",
+    "regione": "Emirato di Dubai",
+    "paese": "Emirati Arabi Uniti",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 33781
+  },
+  "Consonno \" La città fantasma\"": {
+    "citta": "Olginate",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 72055
+  },
+  "Dubái": {
+    "citta": "Dubai",
+    "regione": "Emirato di Dubai",
+    "paese": "Emirati Arabi Uniti",
+    "amministrativo": true,
+    "reel": 0,
+    "plays": 0
+  },
+  "Pescara": {
+    "citta": "Pescara",
+    "regione": "Abruzzo",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 125428
+  },
+  "Bologna Centro Storico": {
+    "citta": "Bologna",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 20823
+  },
+  "Azzano San Paolo": {
+    "citta": "Azzano San Paolo",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 17073
+  },
+  "Bologna, Italy": {
+    "citta": "Bologna",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 6,
+    "plays": 1401473
+  },
+  "Grotte di Labante": {
+    "citta": "Castel d'Aiano",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 47526
+  },
+  "Gazebo di Nottingham": {
+    "citta": "Parma",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 108049
+  },
+  "Mr. Sushi": {
+    "citta": "Firenze",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 36081
+  },
+  "Toscana, Italy": {
+    "citta": "Collemontanino",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 16840
+  },
+  "Cafe1926  Bistrot - Cucina - Rum": {
+    "citta": "Firenze",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 26713
+  },
+  "Clet": {
+    "citta": "Firenze",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 340629
+  },
+  "Borgo Machiavelli": {
+    "citta": "San Casciano in Val di Pesa",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 30728
+  },
+  "Scandicci": {
+    "citta": "Scandicci",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 0,
+    "plays": 0
+  },
+  "MOVE ON": {
+    "citta": "Firenze",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 20168
+  },
+  "Trattoria Zà Zà Firenze": {
+    "citta": "Firenze",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 39902
+  },
+  "Pistoia": {
+    "citta": "Pistoia",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 27630
+  },
+  "Lucca": {
+    "citta": "Lucca",
+    "regione": "Toscana",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 198139
+  },
+  "Inverigo": {
+    "citta": "Romanò Brianza",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 16611
+  },
+  "Il Vittoriale degli Italiani": {
+    "citta": "Gardone Riviera",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 53906
+  },
+  "Rovellasca": {
+    "citta": "Rovellasca",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 1125598
+  },
+  "Soncino": {
+    "citta": "Soncino",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 379734
+  },
+  "Pero": {
+    "citta": "Pero",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 229526
+  },
+  "The Meatball Family": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 31096
+  },
+  "Andre Heller Garden": {
+    "citta": "Marrakech",
+    "regione": "Marrakech-Safi ⵎⵕⵕⴰⴽⵛ-ⴰⵙⴼⵉ مراكش-أسفي",
+    "paese": "Marocco",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 291267
+  },
+  "Padenghe sul Garda": {
+    "citta": "Padenghe sul Garda",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 30696
+  },
+  "Vicenza": {
+    "citta": "Vicenza",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 23707
+  },
+  "Abruzzo": {
+    "citta": "Pescosansonesco",
+    "regione": "Abruzzo",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 2,
+    "plays": 124200
+  },
+  "Borghetto Sul Mincio Vallegio": {
+    "citta": "Lazise",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 53597
+  },
+  "Castellaro Lagusello": {
+    "citta": "Castellaro Lagusello",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 0,
+    "plays": 0
+  },
+  "Colorno": {
+    "citta": "Colorno",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 0,
+    "plays": 0
+  },
+  "Guastalla": {
+    "citta": "Guastalla",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 12765
+  },
+  "Paghera Green Events": {
+    "citta": "Lonato del Garda",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 0,
+    "plays": 0
+  },
+  "Cremona": {
+    "citta": "Cremona",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 2,
+    "plays": 39676
+  },
+  "Andalo": {
+    "citta": "Andalo",
+    "regione": "Trentino-Alto Adige",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 32640
+  },
+  "Dr Cat Pet Lounge Bistrot": {
+    "citta": "Brescia",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 75597
+  },
+  "Cento - Ferrara": {
+    "citta": "Modena",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 80340
+  },
+  "Piazzetta Betlemme": {
+    "citta": "San Giovanni in Persiceto",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 93190
+  },
+  "Ferrara Centro": {
+    "citta": "Ferrara",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 99812
+  },
+  "Limbiate": {
+    "citta": "Limbiate",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 44845
+  },
+  "Dosso, Emilia-Romagna, Italy": {
+    "citta": "Roversetto",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 171452
+  },
+  "Biella": {
+    "citta": "Biella",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 2,
+    "plays": 335078
+  },
+  "Viverone": {
+    "citta": "Viverone",
+    "regione": "Piemonte",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 4,
+    "plays": 696094
+  },
+  "Governolo, Mantova": {
+    "citta": "Bagnolo San Vito",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 75584
+  },
+  "Forte di Bard": {
+    "citta": "Bard",
+    "regione": "Valle d'Aosta",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 60192
+  },
+  "Rivarolo Mantovano": {
+    "citta": "Rivarolo Mantovano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 63622
+  },
+  "Parco Delle Cascate Di Molina": {
+    "citta": "Fumane",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 285412
+  },
+  "MUDEC - Museo delle Culture": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 88506
+  },
+  "Ichiban Ramen Verona": {
+    "citta": "Verona",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 343548
+  },
+  "Santo Gusto": {
+    "citta": "Montinelle",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 28993
+  },
+  "Bussolengo Flover Garden": {
+    "citta": "Bussolengo",
+    "regione": "Veneto",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 2,
+    "plays": 24877
+  },
+  "Calabria": {
+    "citta": "Gimigliano",
+    "regione": "Calabria",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 6519
+  },
+  "Antica Masseria Scagnito": {
+    "citta": "Corigliano d'Otranto",
+    "regione": "Puglia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 0,
+    "plays": 0
+  },
+  "Gole Di Fara San Martino": {
+    "citta": "Fara San Martino",
+    "regione": "Abruzzo",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 1,
+    "plays": 11296
+  },
+  "Solferino": {
+    "citta": "Solferino",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 1,
+    "plays": 53551
+  },
+  "Parco Lavino": {
+    "citta": "Scafa",
+    "regione": "Abruzzo",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 0,
+    "plays": 0
+  },
+  "Padernello": {
+    "citta": "Motella",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 0,
+    "plays": 0
+  },
+  "Cairo Piramidi D'egitto": {
+    "citta": "شرم الشيخ",
+    "regione": "Governatorato del Sinai del Sud",
+    "paese": "Egitto",
+    "amministrativo": false,
+    "reel": 0,
+    "plays": 0
+  },
+  "Labirinto Della Masone": {
+    "citta": "Priorato",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 0,
+    "plays": 0
+  },
+  "Andalo-Trentino Alto Adige": {
+    "citta": "Spormaggiore",
+    "regione": "Trentino-Alto Adige",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 0,
+    "plays": 0
+  },
+  "Corona Dolomites Hotel": {
+    "citta": "Andalo",
+    "regione": "Trentino-Alto Adige",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 0,
+    "plays": 0
+  },
+  "Teatro alla Scala": {
+    "citta": "Milano",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 0,
+    "plays": 0
+  },
+  "Matera - Citta dei Sassi": {
+    "citta": "Matera",
+    "regione": "Basilicata",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 0,
+    "plays": 0
+  },
+  "Motel K": {
+    "citta": "Casei Gerola",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 0,
+    "plays": 0
+  },
+  "Alberobello": {
+    "citta": "Alberobello",
+    "regione": "Puglia",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 0,
+    "plays": 0
+  },
+  "Cuba": {
+    "citta": "Varadero",
+    "regione": "Matanzas",
+    "paese": "Cuba",
+    "amministrativo": true,
+    "reel": 0,
+    "plays": 0
+  },
+  "La Boqueria Mercat": {
+    "citta": "Barcellona",
+    "regione": "Catalogna",
+    "paese": "Spagna",
+    "amministrativo": false,
+    "reel": 0,
+    "plays": 0
+  },
+  "Savoia Hotel Rimini": {
+    "citta": "Rimini",
+    "regione": "Emilia-Romagna",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 0,
+    "plays": 0
+  },
+  "Cascate Del Campanaro Sersale": {
+    "citta": "Catanzaro",
+    "regione": "Calabria",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 0,
+    "plays": 0
+  },
+  "Le Castella, Calabria, Italy": {
+    "citta": "Isola di Capo Rizzuto",
+    "regione": "Calabria",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 0,
+    "plays": 0
+  },
+  "Assisi": {
+    "citta": "Assisi",
+    "regione": "Umbria",
+    "paese": "Italia",
+    "amministrativo": true,
+    "reel": 0,
+    "plays": 0
+  },
+  "Notizie Top": {
+    "citta": "Vico Equense",
+    "regione": "Campania",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 0,
+    "plays": 0
+  },
+  "JAZ Elite Palace": {
+    "citta": "شرم الشيخ",
+    "regione": "Governatorato del Sinai del Sud",
+    "paese": "Egitto",
+    "amministrativo": false,
+    "reel": 0,
+    "plays": 0
+  },
+  "Bögn - Anfiteatro Naturale": {
+    "citta": "Zorzino",
+    "regione": "Lombardia",
+    "paese": "Italia",
+    "amministrativo": false,
+    "reel": 0,
+    "plays": 0
+  }
+}

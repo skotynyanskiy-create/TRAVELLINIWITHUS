@@ -57,6 +57,44 @@ l'owner loggato nel browser dell'app. Metodo e trappole in
   post da attribuire a mano, restano **545 luoghi con indirizzo preciso**:
   399 in Italia, 144 in 26 altri paesi, 2 senza paese risolto.
 
+### Deny-list: i luoghi che non diventano mai una scheda
+
+**Regola aggiunta il 2026-08-15, prima che l'importatore esista.** Il filtro dei
+545 esclude solo le etichette generiche, cioè scarta i luoghi **troppo vaghi** —
+e non guarda affatto quelli **troppo privati**. Sono due criteri diversi, e il
+secondo mancava.
+
+Il caso che lo ha reso evidente: il post che annuncia la nascita è geotaggato
+**«Ospedale Carlo Poma»** con coordinate a sei decimali, `classe: "candidato"`.
+Ha un indirizzo preciso, quindi rientra nei 545 e la pipeline lo proporrebbe come
+scheda-posto: una pagina indicizzata su un indirizzo sanitario associato alla
+nascita di un minore.
+
+Nessuno strumento oggi lo farebbe — `scripts/import-instagram.ts` non chiede
+nemmeno il campo location all'API e scrive su un file di review. Ma l'importatore
+del corpus non è ancora scritto, ed è **l'unico momento in cui questa regola
+costa una riga** invece di una bonifica.
+
+L'importatore deve **scartare, mai proporre**:
+
+1. **Il post `Db72ZqegfYf`** in modo esplicito, per id.
+2. **Strutture sanitarie**: ospedali, cliniche, poliambulatori, studi medici,
+   case di cura, consultori. Il match va fatto sul nome del luogo, non sulla
+   categoria — la categoria Nominatim non è affidabile su questi.
+3. **Indirizzi residenziali privati** e ogni luogo che sia riconoscibilmente
+   un'abitazione.
+4. **Scuole, asili e nidi.**
+
+Il criterio non è «è un posto brutto da mostrare»: è che un luogo **ricorrente e
+riconducibile a una persona** non va pubblicato su una superficie indicizzata,
+e questo vale a prescindere dal fatto che il post di origine sia pubblico su
+Instagram. Un post è un momento; una scheda-posto è una voce permanente in un
+registro con coordinate.
+
+> Attenzione al falso amico: «Ospedale delle Bambole» a Napoli **è** un luogo
+> visitabile ed è nel corpus. Una deny-list che matcha la sola parola «ospedale»
+> lo scarterebbe. Serve il controllo umano sul dubbio, non solo la stringa.
+
 ### Il quadro geografico
 
 Quattro posti italiani su cinque sono al Nord: Lombardia 147, Veneto 62,
