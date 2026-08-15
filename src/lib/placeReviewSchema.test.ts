@@ -78,7 +78,11 @@ describe('buildItemReviewedJsonLd — l’attività recensita, mai noi', () => {
     expect(noCoords.address.addressRegion).toBe('');
   });
 
-  it('offers dichiara sempre il seller reale dal provider, mai il nostro dominio come venditore', () => {
+  /* Il caso opposto di prima: fino al 2026-08-15 questi due test verificavano
+     che `offers` ci fosse e dichiarasse il venditore. Ora verificano che non ci
+     sia affatto — l'offerta commerciale non entra nell'`itemReviewed` di un
+     `Review` di prima parte, nemmeno dichiarata bene. */
+  it('con un deal collegato, offers NON entra nello schema editoriale', () => {
     const withDeal = buildItemReviewedJsonLd({
       ...BASE_ITEM,
       deal: {
@@ -86,10 +90,10 @@ describe('buildItemReviewedJsonLd — l’attività recensita, mai noi', () => {
         url: 'https://trattoriadamario.example/promo',
         code: 'TRAVELLINI',
         provider: 'Trattoria da Mario',
+        validUntil: '2027-01-31',
       },
-    }) as { offers: { seller?: { name: string }; url: string } };
-    expect(withDeal.offers.seller).toEqual({ '@type': 'Organization', name: 'Trattoria da Mario' });
-    expect(withDeal.offers.url).toBe('https://trattoriadamario.example/promo');
+    });
+    expect(withDeal.offers).toBeUndefined();
   });
 
   it('senza deal, nessun campo offers viene inventato', () => {
@@ -138,7 +142,7 @@ describe('buildReviewJsonLd — sanity check su un posto reale del registro', ()
     if (!item) return;
     expect(item.title).not.toBe(item.place.name);
 
-    const jsonLd = buildReviewJsonLd(item, item.review?.summary || item.description) as {
+    const jsonLd = buildReviewJsonLd(item, item.description) as {
       itemReviewed: { name: string };
     };
     expect(jsonLd.itemReviewed.name).toBe(item.place.name);

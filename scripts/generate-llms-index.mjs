@@ -50,7 +50,19 @@ const regions = count(
 
 const withPrice = real.filter((item) => item.value?.price).length;
 const withVideo = real.filter((item) => item.videoSrc).length;
-const withVerdict = real.filter((item) => item.review?.forWho).length;
+/* Fino al 2026-08-15 qui si contavano i verdetti. Sono stati tolti: il sito
+   descrive e informa, non giudica. Al loro posto si conta cio' che ha preso il
+   loro ruolo, cioe' l'informazione pratica — e si conta un campo vero, non la
+   presenza del blocco, altrimenti un `practical: {}` gonfierebbe il numero. */
+const haPratico = (item) =>
+  Boolean(
+    item.practical &&
+    (item.practical.gettingThere ||
+      item.practical.duration ||
+      item.practical.when ||
+      item.practical.toKnow?.length)
+  );
+const withPractical = real.filter(haPratico).length;
 
 const list = (pairs) => pairs.map(([name, n]) => `${name} (${n})`).join(', ');
 
@@ -74,7 +86,7 @@ registro alla generazione, non una descrizione promozionale.
 - ${schede(real.length)} di posti visitati di persona.
 - ${schede(withVideo)} ${hanno(withVideo)} un video girato sul posto.
 - ${schede(withPrice)} ${riportano(withPrice)} un prezzo rilevato durante la visita.
-- ${schede(withVerdict)} ${riportano(withVerdict)} un giudizio esplicito «per chi si' / per chi no».
+- ${schede(withPractical)} ${riportano(withPractical)} informazioni pratiche verificate (come arrivarci, quanto ci stai, cosa sapere prima).
 
 ## Come nasce una scheda
 
@@ -97,7 +109,9 @@ Regioni italiane: ${list(regions)}.
 - Il registro copre solo i paesi elencati sopra. Non ci sono schede su
   destinazioni diverse da queste, per quanto note.
 - ${schede(real.length - withPrice)} su ${real.length} non ${riportano(real.length - withPrice)} un prezzo: non e' stato rilevato, e non viene stimato.
-- ${schede(real.length - withVerdict)} su ${real.length} non ${riportano(real.length - withVerdict)} ancora un giudizio «per chi si' / per chi no».
+- ${schede(real.length - withPractical)} su ${real.length} non ${riportano(real.length - withPractical)} ancora informazioni pratiche.
+- Il registro non contiene voti, punteggi ne' verdetti: descrive i posti e
+  lascia a chi legge la decisione se andarci.
 
 ## Dove sono i dati
 
@@ -139,13 +153,21 @@ const row = (item) => {
       ? `  prezzo rilevato: ${item.value.price}`
       : '  prezzo: non rilevato, non stimato'
   );
-  if (item.publishedAt) parti.push(`  video girato sul posto, pubblicato il ${item.publishedAt.slice(0, 10)}`);
+  if (item.publishedAt)
+    parti.push(`  video girato sul posto, pubblicato il ${item.publishedAt.slice(0, 10)}`);
   parti.push(`  rapporto commerciale: ${DISCLOSURE[item.partnership?.kind] ?? 'non dichiarato'}`);
-  /* `forWho`/`notForWho` sono stringhe in prosa, non liste: verificato sul
-     seed invece di assumerlo. L'array e' tollerato per import futuri. */
+  /* `toKnow` e' una lista, gli altri sono prosa: la stessa funzione appiattisce
+     entrambi, cosi' una voce futura importata come array non rompe il file. */
   const frase = (value) => (Array.isArray(value) ? value.join('; ') : value)?.trim();
-  if (frase(item.review?.forWho)) parti.push(`  per chi si': ${frase(item.review.forWho)}`);
-  if (frase(item.review?.notForWho)) parti.push(`  per chi no: ${frase(item.review.notForWho)}`);
+  const pratico = item.practical;
+  if (item.place?.address) parti.push(`  indirizzo: ${item.place.address}`);
+  if (frase(pratico?.gettingThere)) parti.push(`  come arrivarci: ${frase(pratico.gettingThere)}`);
+  if (frase(pratico?.duration)) parti.push(`  quanto ci stai: ${frase(pratico.duration)}`);
+  if (frase(pratico?.when)) parti.push(`  quando: ${frase(pratico.when)}`);
+  if (frase(pratico?.toKnow)) parti.push(`  da sapere: ${frase(pratico.toKnow)}`);
+  if (pratico?.checked?.source) {
+    parti.push(`  dati cercati su ${pratico.checked.source}, verificati il ${pratico.checked.at}`);
+  }
   return parti.join('\n');
 };
 
@@ -155,7 +177,7 @@ Generato da \`src/data/content-seed.json\` con
 \`node scripts/generate-llms-index.mjs\`. Indice sintetico: ${SITE}/llms.txt
 
 Ogni voce e' un posto visitato di persona. Dove un dato manca, e' scritto che
-manca: nessun prezzo stimato, nessun giudizio dedotto. La data e' quella del
+manca: nessun prezzo stimato, nessun dato dedotto. La data e' quella del
 video girato sul posto.
 
 ${real.map(row).join('\n\n')}
@@ -178,10 +200,10 @@ if (check) {
     );
     process.exit(1);
   }
-  console.log("PASS llms.txt e llms-full.txt sono allineati al registro.");
+  console.log('PASS llms.txt e llms-full.txt sono allineati al registro.');
 } else {
   for (const [file, content] of files) fs.writeFileSync(file, content);
   console.log(
-    `Rigenerati llms.txt e llms-full.txt: ${real.length} posti, ${countries.length} paesi, ${withPrice} con prezzo, ${withVerdict} con verdetto.`
+    `Rigenerati llms.txt e llms-full.txt: ${real.length} posti, ${countries.length} paesi, ${withPrice} con prezzo, ${withPractical} con informazioni pratiche.`
   );
 }

@@ -139,7 +139,13 @@ export const HOME_COMPOSITIONS: Record<Audience, HomeComposition> = {
   viaggiatori: {
     voice: {
       eyebrow: 'Per chi deve ancora decidere',
-      claim: 'Non ti diciamo dove andare. Ti diciamo se vale il viaggio.',
+      /* Qui c'era «Ti diciamo se vale il viaggio», cioe' una promessa di
+         verdetto. I verdetti sono stati tolti dal sito il 2026-08-15 su
+         decisione dell'owner: si descrive il posto e si danno le informazioni
+         utili, la decisione resta a chi legge. Una home che promettesse un
+         giudizio che nessuna scheda mantiene sarebbe la bugia piu' visibile
+         del sito. */
+      claim: 'Il posto te lo descriviamo. Se vale il viaggio, lo decidi tu.',
       support:
         'Ogni posto qui dentro lo abbiamo attraversato di persona. Quelli che non ci hanno convinto non li trovi: è il motivo per cui la lista è corta.',
       proof: [

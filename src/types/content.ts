@@ -30,30 +30,12 @@ export const PARTNERSHIP_LABEL: Record<PartnershipKind, string> = {
   affiliate: 'Affiliato',
 };
 
-/**
- * Scheda redazionale R+B di un posto. Renderizzata SOLO se presente — mai
- * inventata: nessun ContentItem reale va popolato con dati fittizi.
- *
- * Il giudizio non ha voti. Nessun punteggio, nessuna media, nessun criterio
- * numerico: un numero comprime in una cifra la sola cosa che qui conta davvero,
- * cioè *per chi* un posto vale e *quando*. Il verdetto si scrive a parole.
- */
-export interface ContentReview {
-  /** Etichetta breve del verdetto (es. "Ci torneremmo"). */
-  verdict?: string;
-  /** Una riga di giudizio. */
-  summary?: string;
-  pros?: string[];
-  cons?: string[];
-  /** Una riga "per chi è" — solo dal materiale editoriale reale. */
-  forWho?: string;
-  /** Una riga "per chi no" — il limite onesto, mai inventato. */
-  notForWho?: string;
-}
-
 export interface ContentPlace {
   /** Nome del posto/locale (es. "Granduca di Campigna"). */
   name: string;
+  /** Indirizzo con via e civico, quando è più preciso della sola città.
+   *  Renderizzato SOLO se presente — mai ricostruito dalle coordinate. */
+  address?: string;
   /** Città (es. "Praga"). */
   city?: string;
   /** Regione — usata per le destinazioni italiane (es. "Emilia Romagna"). */
@@ -72,6 +54,45 @@ export interface ContentPlace {
   bookingUrl?: string;
   /** Override della query di ricerca Google Maps (es. nome esatto scheda Business). */
   googlePlaceQuery?: string;
+}
+
+/**
+ * Informazioni pratiche: quello che serve per decidere se e come andarci.
+ *
+ * Il sito descrive e informa, non giudica. Qui non va nessuna valutazione —
+ * niente voti, niente "vale la pena", niente "per chi è". Un lettore che ha
+ * letto questo blocco deve poter decidere da solo.
+ *
+ * **Ogni campo è opzionale, e vuoto è uno stato legittimo.** Il repo ha già
+ * dimostrato il modo in cui un modello del genere fallisce: `place.hours`,
+ * `place.phone` e `place.bookingUrl` esistono da sempre e al 2026-08-15 sono
+ * compilati su 0 schede su 79. Un campo in più che nessuno riempie non è
+ * neutro — fa sembrare la scheda incompleta invece che essenziale. Meglio
+ * niente che un dato stimato.
+ *
+ * **Due provenienze, tenute distinte apposta.** Ciò che si trova online cambia
+ * — orari, prezzi, aperture — quindi porta sempre `checked` con fonte e data
+ * del controllo. Ciò che si sa per esserci stati porta `visitedAt`, e non si
+ * ricava dalla data del reel: `publishedAt` dice quando è uscito il video, non
+ * quando ci si è andati.
+ */
+export interface ContentPractical {
+  /** Come ci si arriva: distanze, mezzi, l'ultimo tratto. Prosa breve. */
+  gettingThere?: string;
+  /** Quanto ci si sta (es. "una notte", "2-3 ore"). */
+  duration?: string;
+  /** Quando andarci: stagionalità, giorni di chiusura, quando è pieno. */
+  when?: string;
+  /**
+   * Vincoli da sapere prima: gradini, accessibilità, rumore, animali, bambini.
+   * È il campo che rende una scheda leggibile da un genitore senza bisogno di
+   * una sezione family separata — un vincolo non è un giudizio, è un fatto.
+   */
+  toKnow?: string[];
+  /** Quando ci siamo stati (ISO). Non un verdetto: una data verificabile. */
+  visitedAt?: string;
+  /** Provenienza dei dati cercati online. Obbligatoria quando il dato non è nostro. */
+  checked?: { source: string; at: string };
 }
 
 export interface ContentItem {
@@ -104,10 +125,13 @@ export interface ContentItem {
   hook: string;
   /** Titolo editoriale breve. */
   title: string;
-  /** Descrizione voce R+B: cos'è + dato di valore + "vale la pena? per chi". */
+  /** Descrizione voce R+B: cos'è il posto e cosa ci trovi. Descrive, non giudica:
+   *  niente "vale la pena", niente "per chi è" — quello lo decide chi legge. */
   description: string;
   /** Luogo strutturato (per destinazioni + mappa). */
   place: ContentPlace;
+  /** Informazioni pratiche verificate. Renderizzato SOLO se presente. */
+  practical?: ContentPractical;
   /** Zona canonical (tassonomia esistente). */
   zone: Zone;
   /** 1-3 tipi canonical (tassonomia esistente). */
@@ -116,8 +140,6 @@ export interface ContentItem {
   partnership: { kind: PartnershipKind; partner?: string };
   /** Dato di valore: prezzo testuale (es. "98€/notte") + fascia budget. */
   value?: { price?: string; budget?: Budget };
-  /** Scheda redazionale R+B. Renderizzata SOLO se presente — mai inventata. */
-  review?: ContentReview;
   /** Offerta/deal affiliato collegato al posto. Rendered SOLO se presente — mai inventato. */
   deal?: {
     kind: 'code' | 'sale'; // codice promo vs sconto/offerta
@@ -125,7 +147,11 @@ export interface ContentItem {
     code?: string; // codice promo (se kind==='code')
     label?: string; // es. "-15% sulla prima notte"
     provider?: string; // es. "Booking", "GetYourGuide"
-    validUntil?: string; // ISO date opzionale
+    /** Data di morte del codice (ISO). **Obbligatoria**: un'offerta senza
+     *  scadenza non e' creabile, ed e' la clausola che risolve il problema al
+     *  momento della creazione invece che a quello della pulizia. `DealCard`
+     *  non renderizza nulla quando e' passata. */
+    validUntil: string;
     terms?: string; // termini/condizioni (accordion)
   };
   /** In evidenza in home/destinazione. */

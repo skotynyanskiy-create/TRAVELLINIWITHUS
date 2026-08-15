@@ -963,7 +963,7 @@ const RAW_REELS: ReelEntry[] = [
     zone: 'Italia',
     type: 'Relax, terme e spa',
     caption:
-      'Un wellness hotel immerso nelle foreste casentinesi (patrimonio UNESCO): appartamenti spaziosi, alcuni con jacuzzi in camera, spa con aperitivo nella grotta e cena di prodotti locali servita in camera. Vale la pena per chi cerca un weekend romantico vero, lontano dal caos.',
+      'Un wellness hotel immerso nelle foreste casentinesi (patrimonio UNESCO): appartamenti spaziosi, alcuni con jacuzzi in camera, spa con aperitivo nella grotta e cena di prodotti locali servita in camera.',
     hook: 'Il posto perfetto per un weekend romantico?',
     hashtags: ['foresteCasentinesi', 'weekendromantico', 'spa'],
     instagramUrl: 'https://www.instagram.com/travelliniwithus/reel/DTkfltMDGVo/',

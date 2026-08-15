@@ -430,7 +430,7 @@ export default function ArticleEditor() {
       setContent(verifiedContent);
       setVerifyMessage({
         type: 'success',
-        text: 'Verifica dei fatti completata. Controlla i blocchi editoriali (:::verdetto, :::dati…) prima di salvare: il modello può averli modificati.',
+        text: 'Verifica dei fatti completata. Controlla i blocchi editoriali (:::posto, :::dati…) prima di salvare: il modello può averli modificati.',
       });
     } catch (error) {
       console.error('Errore durante la verifica con Search:', error);

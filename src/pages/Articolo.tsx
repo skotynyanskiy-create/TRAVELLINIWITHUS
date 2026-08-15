@@ -17,7 +17,6 @@ import ArticlePageSkeleton from '../components/ArticlePageSkeleton';
 import Skeleton from '../components/Skeleton';
 import DemoContentNotice from '../components/DemoContentNotice';
 import NotFound from './NotFound';
-import ReviewBlock from '../components/ReviewBlock';
 import { SITE_URL } from '../config/site';
 import { PREVIEW_ARTICLES } from '../config/previewContent';
 import { buildArticleJsonLd } from '../lib/seo';
@@ -137,14 +136,13 @@ function ensureArticleData(
     mapZoom: article.mapZoom,
     videoUrl: article.videoUrl,
     updatedAt: article.updatedAt,
-    review: article.review,
     partnership: article.partnership,
   };
 }
 
 function buildTocItems(article: ArticleData): TocItem[] {
   return [
-    { id: 'overview', label: 'Vale davvero?', show: true },
+    { id: 'overview', label: 'Cos’è', show: true },
     { id: 'pratico', label: 'Quando?', show: true },
     { id: 'diario', label: 'Diario', show: !!article.diary?.length },
     { id: 'itinerario', label: 'Itinerario', show: !!article.itinerary?.length },
@@ -514,6 +512,7 @@ export default function Articolo() {
 
           <div className="mx-auto mt-12 max-w-6xl px-5 md:px-8">
             <Breadcrumbs
+              schema={false}
               items={[
                 { label: article.category, href: categoryPath || undefined },
                 {
@@ -627,10 +626,6 @@ export default function Articolo() {
                 <section className="prose-reset article-body mt-14">
                   <ArticleBody article={article} />
                 </section>
-
-                {article.review && (
-                  <ReviewBlock review={article.review} placeName={article.title} />
-                )}
 
                 {article.diary && article.diary.length > 0 && <Diary beats={article.diary} />}
 

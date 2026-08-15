@@ -6,30 +6,39 @@ import { meseAnno } from '../../utils/format';
 /**
  * Le righe della "scheda di verifica" di un posto — il retro della carta.
  *
- * Ogni riga mostra solo dati reali. **Nessun verdetto**: qui c'era una riga
- * «Verdetto» che su tutte e 29 le schede diceva «In arrivo», perche' il voto e'
- * vuoto ovunque e per scelta editoriale resta vuoto — il mestiere e' spiegare
- * il posto, non dargli un numero. Una riga che promette un giudizio che non
- * arrivera' mai occupa il posto di un'informazione vera, e questa scheda sta
- * anche in cima a ogni pagina-posto e nell'hero della home.
+ * **Qui non si giudica: si descrive.** Il sito dice cos'e' un posto e cosa serve
+ * sapere per andarci; se valga il viaggio lo decide chi legge. Per questo la
+ * scheda non ha voti, non ha una riga «Verdetto» e non ha «per chi si' / per chi
+ * no»: tutte e tre sono passate di qui e tutte e tre sono state tolte, l'ultima
+ * il 2026-08-15 su decisione dell'owner.
  *
- * Al suo posto ci sono i dati che esistono davvero su 29 schede su 29: che
- * tipo di posto e', quando ci siamo stati, e a che titolo ci siamo andati.
+ * Ogni riga mostra solo dati reali, e una riga assente e' uno stato legittimo:
+ * meglio niente che un dato stimato. Questa scheda sta in cima a ogni
+ * pagina-posto e nell'hero della home, quindi un campo inventato qui si vede
+ * ovunque.
+ *
+ * **Cosa NON va qui: le informazioni per pianificare** — come ci arrivi, quanto
+ * ci stai, quando andarci, cosa sapere prima. Stanno in `PrimaDiAndare`
+ * (`src/components/posto/PrimaDiAndare.tsx`), nel corpo della pagina. Qui erano
+ * arrivate per un'ora il 2026-08-15 e la faccia della carta, che ha altezza
+ * fissa, e' passata a scrollare per il doppio di se stessa su mobile. Questa
+ * carta risponde a una domanda sola: «esiste davvero?».
  */
 export default function SchedaVerifica({ item }: { item: ContentItem }) {
   const dove = [item.place.name, [item.place.city, item.place.region].filter(Boolean).join(', ')]
     .filter(Boolean)
     .join(' — ');
   const partnerLabel = PARTNERSHIP_LABEL[item.partnership.kind];
-  const review = item.review;
+  const pratico = item.practical;
   const cosaE = (item.types ?? []).join(' · ');
-  // La data del reel e' la data della visita: e' l'unica cronologia che il
-  // progetto ha, ed e' popolata su tutte le schede reali.
-  // La data della visita viveva solo nel manifest dei reel: i posti importati
-  // senza il video in locale non avevano entry lì, e la riga «ci siamo stati»
-  // spariva pur essendo il dato presente sull'item. Il reel resta la fonte
-  // preferita — è la sua data di pubblicazione — con l'item come ripiego.
-  const quando = meseAnno(getReelForPosto(item.id)?.publishedAt ?? item.publishedAt);
+  // Quando ci siamo stati. `practical.visitedAt` e' il dato vero e vince su
+  // tutto; senza, si ripiega sulla data del reel, che e' un'approssimazione —
+  // dice quando e' uscito il video, non quando ci si e' andati. Il manifest dei
+  // reel viene prima dell'item perche' i posti importati senza video in locale
+  // non hanno entry li' e la riga sparirebbe pur essendo il dato sull'item.
+  const quando = meseAnno(
+    pratico?.visitedAt ?? getReelForPosto(item.id)?.publishedAt ?? item.publishedAt
+  );
 
   return (
     <dl className="atlante-scheda">
@@ -37,6 +46,13 @@ export default function SchedaVerifica({ item }: { item: ContentItem }) {
         <dt className="atlante-scheda__label">Dove</dt>
         <dd className="atlante-scheda__value">{dove}</dd>
       </div>
+
+      {item.place.address && (
+        <div className="atlante-scheda__row">
+          <dt className="atlante-scheda__label">Indirizzo</dt>
+          <dd className="atlante-scheda__value">{item.place.address}</dd>
+        </div>
+      )}
 
       {cosaE && (
         <div className="atlante-scheda__row">
@@ -72,20 +88,6 @@ export default function SchedaVerifica({ item }: { item: ContentItem }) {
           )}
         </dd>
       </div>
-
-      {review?.forWho && (
-        <div className="atlante-scheda__row">
-          <dt className="atlante-scheda__label">Per chi è</dt>
-          <dd className="atlante-scheda__value">{review.forWho}</dd>
-        </div>
-      )}
-
-      {review?.notForWho && (
-        <div className="atlante-scheda__row">
-          <dt className="atlante-scheda__label">Per chi no</dt>
-          <dd className="atlante-scheda__value">{review.notForWho}</dd>
-        </div>
-      )}
 
       {partnerLabel && (
         <div className="atlante-scheda__row">

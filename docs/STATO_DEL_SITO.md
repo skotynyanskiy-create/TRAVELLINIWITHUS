@@ -49,8 +49,8 @@ Due rischi noti, aperti, non risolti:
 
 <!-- CONSEGNA:START — generato da `npm run stato`, non modificare a mano -->
 
-- Branch corrente: `chore/config-hardening-2026-07-26` — 119 commit avanti su `main`, 1 dietro.
-- File non committati: **10**.
+- Branch corrente: `chore/config-hardening-2026-07-26` — 125 commit avanti su `main`, 1 dietro.
+- File non committati: **67**.
 - `functions/` su `origin/main`: **assente**.
 - Rewrite `/api/**` in `firebase.json`: presente.
 
@@ -64,7 +64,7 @@ _Blocco volatile: rigenerato da `npm run stato`, escluso da `stato:check`._
 
 ### Superfici pubbliche
 
-**33 superfici registrate** — live 26 · preview 5 · soon 2 · private 5.
+**32 superfici registrate** — live 25 · preview 5 · soon 2 · private 5.
 
 Registro: `src/config/surfaces.ts`. È la fonte unica di `noindex` e sitemap:
 indicizzabile solo se `state: live` e non `private`.
@@ -80,7 +80,6 @@ indicizzabile solo se `state: live` e non `private`.
 | `/chi-siamo`                       | live    | —       | —                                             |
 | `/collaborazioni`                  | live    | —       | —                                             |
 | `/media-kit`                       | live    | —       | —                                             |
-| `/press`                           | live    | —       | —                                             |
 | `/contatti`                        | live    | —       | —                                             |
 | `/risorse`                         | live    | —       | —                                             |
 | `/club`                            | live    | —       | —                                             |

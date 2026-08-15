@@ -36,7 +36,7 @@ export default function DiarioHeroCinematic() {
 
           <p className="mt-8 max-w-2xl text-lg leading-relaxed text-neutral-600 sm:text-xl font-light">
             Proviamo di persona hotel di charme, trattorie segrete e borghi fuori rotta. Vi diciamo
-            quanto costa, per chi è e se vale davvero la pena partire.
+            quanto costa, come ci si arriva e cosa sapere prima di partire.
           </p>
 
           {/* Minimalist Action Buttons */}

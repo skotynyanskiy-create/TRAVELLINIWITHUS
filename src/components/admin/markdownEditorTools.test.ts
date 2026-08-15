@@ -7,16 +7,16 @@ import {
   lintEditorialMarkdown,
 } from './markdownEditorTools';
 
-describe('BLOCK_SNIPPETS — sintassi dei sei blocchi editoriali', () => {
+describe('BLOCK_SNIPPETS — sintassi dei cinque blocchi editoriali', () => {
   it('ogni template blocco è già chiuso con ":::"', () => {
     for (const snippet of BLOCK_SNIPPETS) {
       expect(snippet.template.trim().endsWith(':::')).toBe(true);
     }
   });
 
-  it('copre esattamente i sei blocchi: posto, verdetto, reel, dati, mappa, domande', () => {
+  it('copre esattamente i cinque blocchi: posto, reel, dati, mappa, domande', () => {
     expect(BLOCK_SNIPPETS.map((s) => s.key).sort()).toEqual(
-      ['dati', 'domande', 'mappa', 'posto', 'reel', 'verdetto'].sort()
+      ['dati', 'domande', 'mappa', 'posto', 'reel'].sort()
     );
   });
 
@@ -32,11 +32,10 @@ describe('BLOCK_SNIPPETS — sintassi dei sei blocchi editoriali', () => {
     expect(INLINE_SNIPPET.template.startsWith(':affiliato[')).toBe(true);
   });
 
-  it('le quote editoriali riflettono le regole decise: posto 3, dati 2, verdetto/mappa/domande 1, reel senza quota', () => {
+  it('le quote editoriali riflettono le regole decise: posto 3, dati 2, mappa/domande 1, reel senza quota', () => {
     const maxCountByKey = Object.fromEntries(BLOCK_SNIPPETS.map((s) => [s.key, s.maxCount]));
     expect(maxCountByKey).toEqual({
       posto: 3,
-      verdetto: 1,
       reel: undefined,
       dati: 2,
       mappa: 1,
@@ -52,8 +51,8 @@ describe('countDirectiveUsage', () => {
 
   it('conta ogni apertura di blocco, non le righe di chiusura', () => {
     const md =
-      ':::posto{id="a"}\n:::\n\n:::posto{id="b"}\n:::\n\n:::posto{id="c"}\n:::\n\n:::verdetto{quando="ora"}\n:::';
-    expect(countDirectiveUsage(md)).toEqual({ posto: 3, verdetto: 1 });
+      ':::posto{id="a"}\n:::\n\n:::posto{id="b"}\n:::\n\n:::posto{id="c"}\n:::\n\n:::mappa{posti="a"}\n:::';
+    expect(countDirectiveUsage(md)).toEqual({ posto: 3, mappa: 1 });
   });
 });
 
@@ -94,11 +93,11 @@ describe('buildSnippetInsertion', () => {
   });
 
   it('preserva la selezione anche quando comincia a inizio testo', () => {
-    const verdetto = BLOCK_SNIPPETS.find((s) => s.key === 'verdetto')!;
+    const mappa = BLOCK_SNIPPETS.find((s) => s.key === 'mappa')!;
     const text = 'Paragrafo selezionato intero.';
-    const result = buildSnippetInsertion(text, 0, text.length, verdetto);
+    const result = buildSnippetInsertion(text, 0, text.length, mappa);
     expect(result.nextValue.startsWith(text)).toBe(true);
-    expect(result.nextValue).toContain(':::verdetto{');
+    expect(result.nextValue).toContain(':::mappa{');
   });
 
   it(':affiliato non forza righe vuote intorno', () => {
@@ -130,10 +129,9 @@ describe('lintEditorialMarkdown', () => {
   });
 
   it('segnala un blocco aperto e mai chiuso', () => {
-    const md =
-      '## Titolo\n\n:::verdetto{quando="ora"}\n- sì · test\n\n## Sezione successiva\nTesto.';
+    const md = '## Titolo\n\n:::domande\n- Domanda?\n\n## Sezione successiva\nTesto.';
     const issues = lintEditorialMarkdown(md);
-    expect(issues.some((i) => i.includes('verdetto') && i.includes('aperto'))).toBe(true);
+    expect(issues.some((i) => i.includes('domande') && i.includes('aperto'))).toBe(true);
   });
 
   it('segnala un nome di direttiva che non esiste nel registro', () => {
@@ -187,13 +185,9 @@ describe('lintEditorialMarkdown — segnaposto dei template rimasti intatti', ()
     expect(issues.some((i) => i.includes('Mappa') && i.includes('slug-posto'))).toBe(true);
   });
 
-  it('segnala il valore "es. " lasciato negli attributi di :::verdetto e :::dati', () => {
-    const verdetto = ':::verdetto{quando="es. da settembre a ottobre"}\n- sì · buono\n:::';
+  it('segnala il valore "es. " lasciato negli attributi di :::dati', () => {
     const dati =
       ':::dati{tipo="costi" titolo="Quanto" quando="es. settembre 2025" perQuante="es. 2 persone"}\n- Alloggio · 100€\n:::';
-    expect(
-      lintEditorialMarkdown(verdetto).some((i) => i.includes('Verdetto') && i.includes('es. '))
-    ).toBe(true);
     expect(lintEditorialMarkdown(dati).some((i) => i.includes('Dati') && i.includes('es. '))).toBe(
       true
     );
@@ -204,18 +198,6 @@ describe('lintEditorialMarkdown — segnaposto dei template rimasti intatti', ()
       ':::dati{tipo="costi" titolo="Quanto" quando="settembre 2025" perQuante="2 persone"}\n- Etichetta · Valore\n- Totale · Valore\n:::';
     const issues = lintEditorialMarkdown(md);
     expect(issues.filter((i) => i.includes('Dati')).length).toBeGreaterThanOrEqual(2);
-  });
-
-  it('segnala una riga "- sì ·" / "- no ·" senza testo dopo il separatore (il bug della review vuota)', () => {
-    const md =
-      ':::verdetto{quando="ora"}\n- sì · buono\n- sì · \n- no · vero problema\n- no ·\n:::';
-    const issues = lintEditorialMarkdown(md);
-    expect(issues.filter((i) => i.includes('punto vuoto')).length).toBe(2);
-  });
-
-  it('non segnala righe "- sì ·" / "- no ·" con testo reale dopo il separatore', () => {
-    const md = ':::verdetto{quando="ora"}\n- sì · buono\n- no · caro\n:::';
-    expect(lintEditorialMarkdown(md)).toEqual([]);
   });
 
   it('segnala i tre segnaposto del link affiliato non sostituiti', () => {

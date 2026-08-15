@@ -11,8 +11,8 @@ registro alla generazione, non una descrizione promozionale.
 
 - 79 schede di posti visitati di persona.
 - 66 schede hanno un video girato sul posto.
-- 22 schede riportano un prezzo rilevato durante la visita.
-- 1 scheda riporta un giudizio esplicito «per chi si' / per chi no».
+- 23 schede riportano un prezzo rilevato durante la visita.
+- 68 schede riportano informazioni pratiche verificate (come arrivarci, quanto ci stai, cosa sapere prima).
 
 ## Come nasce una scheda
 
@@ -34,8 +34,10 @@ Regioni italiane: Lombardia (21), Toscana (12), Veneto (12), Emilia Romagna (4),
 
 - Il registro copre solo i paesi elencati sopra. Non ci sono schede su
   destinazioni diverse da queste, per quanto note.
-- 57 schede su 79 non riportano un prezzo: non e' stato rilevato, e non viene stimato.
-- 78 schede su 79 non riportano ancora un giudizio «per chi si' / per chi no».
+- 56 schede su 79 non riportano un prezzo: non e' stato rilevato, e non viene stimato.
+- 11 schede su 79 non riportano ancora informazioni pratiche.
+- Il registro non contiene voti, punteggi ne' verdetti: descrive i posti e
+  lascia a chi legge la decisione se andarci.
 
 ## Dove sono i dati
 

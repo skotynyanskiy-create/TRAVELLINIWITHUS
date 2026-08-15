@@ -55,12 +55,6 @@ Per chi no, e lo diciamo senza giri: se vuoi una cena tranquilla e silenziosa, d
 
 E le famiglie? Funziona, con un asterisco onesto. La sala di Alice e la bakery sono la parte più adatta ai più piccoli, e per un ragazzino un po' cresciuto l'immaginario di Burton è oro puro. Ma resta un locale serale, con cocktail bar e temi che virano sul dark — Beetlejuice ed Edward non sono cartoni per l'asilo. Con bambini molto piccoli valuta bene orario e tipo di serata, e verifica prima le condizioni.
 
-## Il voto: la nostra recensione
-
-E qui arriva la parte che ci interessa di più: il voto onesto, con pro, contro e i punteggi su scenografia, cucina, servizio e attori in sala, rapporto qualità-prezzo e atmosfera. La stiamo chiudendo con i numeri veri della nostra serata — niente stelline buttate lì per riempire, niente entusiasmo di default. Quando è pronta la trovi proprio qui, ed è la ragione per cui vale la pena salvare la pagina e tornarci.
-
-[SEZIONE RECENSIONE: in attesa di voto/pro/contro reali di R+B]
-
 ## Prima di andare
 
 The Burton Juice è una di quelle idee che in Italia non ti aspetti: un intero locale attorno all'immaginario di un solo regista, alle porte di Napoli, dove attraversi uno specchio prima ancora di ordinare. Che ti conquisti o ti lasci con qualche riserva, è esattamente il tipo di posto particolare che andiamo a cercare in giro per il mondo — e questo ce l'avevamo quasi sotto casa, in Campania.

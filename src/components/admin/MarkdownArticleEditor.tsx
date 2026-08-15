@@ -1,14 +1,5 @@
 import { useEffect, useMemo, useRef } from 'react';
-import {
-  AlertTriangle,
-  Clapperboard,
-  HelpCircle,
-  Link2,
-  Map,
-  MapPin,
-  Receipt,
-  Scale,
-} from 'lucide-react';
+import { AlertTriangle, Clapperboard, HelpCircle, Link2, Map, MapPin, Receipt } from 'lucide-react';
 import { ArticleBody } from '../../pages/Articolo';
 import type { ArticleData } from '../article';
 import {
@@ -22,7 +13,6 @@ import {
 
 const BLOCK_ICONS: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
   posto: MapPin,
-  verdetto: Scale,
   reel: Clapperboard,
   dati: Receipt,
   mappa: Map,

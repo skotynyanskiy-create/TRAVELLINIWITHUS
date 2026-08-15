@@ -107,7 +107,33 @@ for (const [i, item] of items.entries()) {
     if (!item?.place?.coordinates?.lat) err('scheda pubblicata senza coordinate');
     if (!item?.cover?.trim()) err('scheda pubblicata senza copertina');
     if (!item?.coverAlt?.trim()) avv('scheda pubblicata senza coverAlt: l’alt ripiega sul titolo');
-    if (!item?.review?.forWho) avv('scheda pubblicata senza verdetto "per chi e\'"');
+    /* Qui c'era un avviso per la scheda «senza verdetto». I verdetti sono stati
+       tolti il 2026-08-15: non si avvisa sull'assenza di informazioni pratiche
+       perche' un campo vuoto e' uno stato legittimo — meglio niente che stimato
+       — e un avviso su 78 schede su 79 e' rumore che nasconde gli errori veri. */
+  }
+
+  /* Offerte: una scadenza obbligatoria alla creazione, non una pulizia dopo.
+     `DealCard` nasconde un'offerta scaduta a runtime, ma l'hosting e' statico e
+     l'HTML pre-renderizzato non deve consegnare un codice morto a un crawler:
+     il controllo va fatto anche qui, al build.
+     Orizzonte massimo 12 mesi — una scadenza a tre anni e' un modo di scrivere
+     «nessuna scadenza» superando il controllo. Un accordo pluriennale reale e'
+     un'eccezione da dichiarare, non un motivo per allargare la regola. */
+  if (item?.deal) {
+    const { validUntil, kind: dealKind, code } = item.deal;
+    if (!validUntil) {
+      err('"deal" senza "validUntil": un codice senza data di morte non e\' pubblicabile');
+    } else {
+      const fine = new Date(validUntil);
+      if (Number.isNaN(fine.getTime())) err(`"deal.validUntil" non e' una data ISO: ${validUntil}`);
+      else {
+        const dodiciMesi = new Date();
+        dodiciMesi.setFullYear(dodiciMesi.getFullYear() + 1);
+        if (fine > dodiciMesi) err(`"deal.validUntil" oltre 12 mesi (${validUntil})`);
+      }
+    }
+    if (dealKind === 'code' && !code?.trim()) err('"deal" di tipo "code" senza il codice');
   }
 }
 

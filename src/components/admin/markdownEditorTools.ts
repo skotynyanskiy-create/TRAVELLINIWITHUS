@@ -44,16 +44,6 @@ export const BLOCK_SNIPPETS: DirectiveSnippet[] = [
     maxCount: 3,
   },
   {
-    key: 'verdetto',
-    label: 'Verdetto',
-    description: 'Il blocco scuro sì/no. Uno solo per articolo.',
-    blockSpacing: true,
-    template:
-      `:::verdetto{quando="${PLACEHOLDER_OPEN}es. da settembre a ottobre${PLACEHOLDER_CLOSE}"}\n` +
-      `- sì · \n- sì · \n- no · \n- no · \n:::`,
-    maxCount: 1,
-  },
-  {
     key: 'reel',
     label: 'Reel',
     description: 'Il reel collegato a un posto. Parte solo se lo tocchi.',
@@ -196,10 +186,6 @@ export function countDirectiveUsage(markdown: string): Record<string, number> {
   return counts;
 }
 
-/* Una riga "- sì · " o "- no · " senza nulla dopo il separatore: il
-   parser reale (verdetto.tsx → YES_PREFIX/NO_PREFIX) non controlla che resti
-   testo, quindi una riga cosi' pubblica un punto vuoto nel verdetto. */
-const EMPTY_VERDICT_LINE = /^-\s*(?:s[iì]|no)\s*·\s*$/iu;
 /* Le due righe di esempio del corpo di :::dati, mai sovrascritte dal
    segnaposto «»: solo il "titolo" e' auto-selezionato all'inserimento. */
 const DATI_PLACEHOLDER_LINE = /^-\s*(?:Etichetta|Totale)\s*·\s*Valore\s*$/iu;
@@ -235,19 +221,14 @@ function checkPlaceholderSentinels(
       `Riga ${lineNumber}: il blocco "${BLOCK_LABELS.mappa}" ha ancora gli slug segnaposto ("slug-posto-1", "slug-posto-2"). Sostituiscili con gli slug veri dei posti citati.`
     );
   }
-  if ((blockName === 'verdetto' || blockName === 'dati') && /="es\. /.test(line)) {
+  if (blockName === 'dati' && /="es\. /.test(line)) {
     issues.push(
-      `Riga ${lineNumber}: il blocco "${BLOCK_LABELS[blockName]}" ha ancora un valore segnaposto che inizia con "es. ". Sostituiscilo con il dato vero.`
+      `Riga ${lineNumber}: il blocco "${BLOCK_LABELS.dati}" ha ancora un valore segnaposto che inizia con "es. ". Sostituiscilo con il dato vero.`
     );
   }
   if (blockName === 'dati' && DATI_PLACEHOLDER_LINE.test(line)) {
     issues.push(
       `Riga ${lineNumber}: "${line}" è ancora la riga di esempio del blocco "${BLOCK_LABELS.dati}". Sostituiscila con l'etichetta e il valore veri.`
-    );
-  }
-  if (blockName === 'verdetto' && EMPTY_VERDICT_LINE.test(line)) {
-    issues.push(
-      `Riga ${lineNumber}: "${line}" non ha testo dopo "sì ·" o "no ·". Il verdetto pubblicato mostrerebbe un punto vuoto.`
     );
   }
   if (line.includes('testo del link')) {

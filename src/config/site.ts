@@ -35,9 +35,16 @@ export const BRAND_STATS = {
   totalFollowers: '260K+',
 } as const;
 
+/**
+ * Attenzione: `observedAt` vale per il **solo** dato verificabile senza login,
+ * cioe' i follower Instagram — letti sul profilo pubblico il 2026-08-15
+ * (172.680, da cui `172K`). `monthlyReach` ed `engagementRate` stanno in
+ * Insights e non li ha misurati nessuno: restano dichiarati, non verificati.
+ * Vedi `docs/20_Decisions/DECISION_PUBLIC_METRICS_SOURCE_TRAVELLINIWITHUS_2026-06-07.md`.
+ */
 export const BRAND_STATS_SOURCE = {
   label: 'Snapshot pubblico IG (nascita del brand 2018; Family sub-brand separato)',
-  observedAt: '2026-07-23',
+  observedAt: '2026-08-15',
   nextVerification: 'Aggiornare con export Meta Business Suite e TikTok Analytics',
 } as const;
 
@@ -56,10 +63,10 @@ export const BRAND_PROMISE = {
   heroTagline: 'Nessun posto consigliato da desk.',
   heroHighlight: 'Solo viaggi provati di persona.',
   heroSubhead:
-    'Siamo Rodrigo e Betta. Viaggiamo in coppia per scovare borghi conservati, dimore di charme e trattorie locali. Ti diciamo quanto si spende davvero, quali sono i limiti e se vale la pena partire.',
+    'Siamo Rodrigo e Betta. Viaggiamo in coppia per scovare borghi conservati, dimore di charme e trattorie locali. Ti diciamo quanto si spende davvero, cosa sapere prima di andarci e quali sono i limiti.',
   editorialManifestoTitle: 'Raccomandarne meno. Ma raccomandarli davvero.',
   editorialManifestoSubhead:
-    'Non siamo un aggregatore e non prendiamo compensi per cambiare giudizio. Ogni scheda nasce da un viaggio fatto insieme.',
+    'Non siamo un aggregatore e non prendiamo compensi per cambiare quello che scriviamo. Ogni scheda nasce da un viaggio fatto insieme.',
 } as const;
 
 export const PUBLIC_PROOF_SIGNALS = [

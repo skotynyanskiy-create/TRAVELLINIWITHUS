@@ -444,7 +444,7 @@ La prima regola è la stagione. Maggio, giugno, fine settembre: l'acqua è calda
 Costa adriatica e Valle d'Itria visitate dal 12 al 19 settembre 2025 — 3 cene testate, 4 masserie verificate, noleggio auto da Bari.
 :::
 
-## Vale davvero il viaggio?
+## Perché questo posto
 
 La Puglia funziona perché tiene insieme cose che altrove sono separate. Hai la pietra bianca di Ostuni e gli ulivi millenari, hai la costa adriatica con il blu serio e quella ionica con il blu turchese, hai i trulli che da fuori sembrano cartolina e da dentro sono case fresche d'estate e pulite d'inverno. E hai il cibo — non i piatti instagrammabili, ma il pranzo lungo a 18 euro che cambia la giornata.
 
@@ -525,7 +525,7 @@ function generateBody(seed: Seed): string {
   return `
 ${seed.excerpt}
 
-## Vale davvero il viaggio?
+## Perché questo posto
 
 ${why}
 
@@ -645,17 +645,6 @@ Due regole valgono per tutti.
 
 Si scrive con l'identificativo del posto, quello che compare nell'indirizzo della sua scheda. Se il posto è ancora in lavorazione il blocco non compare affatto, così non si promette una verifica che non c'è.
 
-## Il verdetto
-
-:::verdetto{quando="da fine settembre a ottobre"}
-- sì · Cerchi un weekend fermo, e il silenzio non ti mette a disagio
-- sì · Guidi volentieri: le ultime curve nella foresta sono strette
-- no · Ti aspetti vita fuori dall'hotel, perché intorno non c'è niente
-- no · Vai in agosto senza prenotare con settimane di anticipo
-:::
-
-È l'unico blocco scuro, e ne va **uno solo per articolo**. Le righe iniziano con "sì ·" o "no ·". Il lato negativo deve poter far rinunciare qualcuno: se nessun "no" scoraggia nessuno, il verdetto non serve a niente.
-
 ## Il reel
 
 :::reel{posto="emilia-granduca-di-campigna"}
@@ -731,20 +720,6 @@ Da tre a sei domande. La domanda è quella che uno digita davvero, la risposta s
     date: '17 marzo 2026',
     author: 'Rodrigo & Betta',
     continent: 'Europa',
-    review: {
-      verdict: 'Consigliatissimo',
-      summary:
-        "Le Dolomiti offrono un'esperienza in quota unica, tra panorami verticali e rifugi di design contemporaneo che ridefiniscono l'ospitalità alpina.",
-      pros: [
-        'Viste spettacolari a 360 gradi sulla roccia rosa',
-        'Architettura contemporanea ed eco-sostenibile dei nuovi rifugi',
-        'Rete sentieristica estremamente curata e sicura',
-      ],
-      cons: [
-        'Affollamento intenso nei weekend di luglio e agosto',
-        'Prezzi medio-alti per rifugi premium e cabinovie',
-      ],
-    },
     content: `
 Questa preview mostra la direzione editoriale del sito: non un diario generico, ma una guida costruita per capire se un posto merita davvero il viaggio.
 

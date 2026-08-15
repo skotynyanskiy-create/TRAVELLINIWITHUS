@@ -86,8 +86,6 @@
     "stato:check": "tsx scripts/stato.mjs --check",
     "generate:llms": "node scripts/generate-llms-index.mjs",
     "audit:llms": "node scripts/generate-llms-index.mjs --check",
-    "verdetti:scheda": "node scripts/generate-verdetti-sheet.mjs",
-    "verdetti:applica": "node scripts/apply-verdetti-sheet.mjs",
     "audit:seed": "node scripts/check-content-seed.mjs",
     "lint:md:core": "npx --yes markdownlint-cli2@0 \"CLAUDE.md\" \"AGENTS.md\" \"README.md\" \".claude/rules/*.md\"",
     "audit:config": "node scripts/check-config-facts.mjs",

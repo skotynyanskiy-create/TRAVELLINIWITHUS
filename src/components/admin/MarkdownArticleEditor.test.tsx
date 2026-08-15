@@ -67,7 +67,7 @@ describe('MarkdownArticleEditor', () => {
   });
 
   it('avvisa quando un blocco resta aperto senza ":::" di chiusura', () => {
-    render(<Wrapper initial={'## Titolo\n\n:::verdetto{quando="ora"}\n- sì · test\n'} />);
+    render(<Wrapper initial={'## Titolo\n\n:::domande\n- Domanda?\n'} />);
     expect(screen.getByText(/aperto ma non è mai chiuso/i)).toBeInTheDocument();
   });
 

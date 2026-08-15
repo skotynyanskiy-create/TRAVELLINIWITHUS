@@ -6,10 +6,10 @@ import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Newsletter from '../components/Newsletter';
-import ReviewBlock from '../components/ReviewBlock';
 import DealCard from '../components/DealCard';
 import PostNavigation from '../components/PostNavigation';
 import PostiVicini from '../components/posto/PostiVicini';
+import PrimaDiAndare from '../components/posto/PrimaDiAndare';
 import ReelDelPosto from '../components/posto/ReelDelPosto';
 import { Link } from '@/src/components/TransitionLink';
 import { PROVENANCE_LABEL, isCertifiedReal, provenanceOf } from '../config/assetProvenance';
@@ -118,14 +118,13 @@ export default function Posto() {
     findDestinationByRegionName(item.place.country ?? '');
   const destUrl = destNode ? getDestinationUrl(destNode) : undefined;
 
-  // `Review`, non `Restaurant`: questa pagina recensisce l'attività, non è
-  // l'attività. `item.review.summary` è quasi sempre assente sui dati reali
-  // di oggi (un solo posto lo ha popolato): `item.description` è comunque
-  // testo editoriale vero di Rodrigo & Betta — "cos'è + vale la pena? per
-  // chi" per definizione del campo (src/types/content.ts) — non un
-  // ripiego generico, quindi resta un reviewBody onesto.
-  const reviewBody = item.review?.summary || item.description;
-  const placeJsonLd = reviewBody ? buildReviewJsonLd(item, reviewBody) : undefined;
+  // `Review`, non `Restaurant`: questa pagina descrive l'attività, non è
+  // l'attività. Il corpo è `item.description`, cioè il testo di Rodrigo &
+  // Betta su cos'è il posto: da quando i verdetti sono stati tolti
+  // (2026-08-15) non c'è più un `summary` da preferirgli. Resta un
+  // `reviewBody` onesto — schema.org non richiede un voto, e qui non ce n'è
+  // mai stato uno.
+  const placeJsonLd = item.description ? buildReviewJsonLd(item, item.description) : undefined;
 
   return (
     <PageLayout>
@@ -152,6 +151,7 @@ export default function Posto() {
 
       <div className="mx-auto max-w-4xl px-6 md:px-12">
         <Breadcrumbs
+          schema={false}
           items={[
             { label: 'Esplora', href: '/esplora' },
             ...(destNode && destUrl ? [{ label: destNode.name, href: destUrl }] : []),
@@ -181,14 +181,11 @@ export default function Posto() {
               {item.hook}
             </h1>
 
-            {/* Cluster verdetto — verdetto editoriale + luogo */}
+            {/* Luogo: il link alla destinazione, o il testo semplice se il nodo
+                non esiste nell'albero. Qui sopra c'era l'etichetta di verdetto,
+                tolta il 2026-08-15 con tutto il resto del giudizio. */}
             <div className="mt-4 flex items-center gap-4">
               <div className="min-w-0">
-                {item.review?.verdict && (
-                  <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--color-accent-text)]">
-                    {item.review.verdict}
-                  </p>
-                )}
                 {destUrl ? (
                   <Link
                     to={destUrl}
@@ -340,14 +337,15 @@ export default function Posto() {
               </p>
             )}
 
+            {/* Le informazioni per organizzarsi. Dopo la descrizione perche'
+                prima si capisce cos'e' il posto, poi come ci si va. */}
+            <PrimaDiAndare item={item} />
+
             {/* Il reel girato qui — la prova in movimento, prima solo su IG */}
             <ReelDelPosto
               postoId={item.id}
               luogo={item.place.city ?? item.place.region ?? item.place.country}
             />
-
-            {/* Scheda redazionale — solo se ci sono dati reali */}
-            <ReviewBlock review={item.review} placeName={item.place?.name} />
 
             {/* CTA Instagram. Diceva "Guarda il reel", ma da quando il reel si
                 riproduce qui sopra sarebbe una promessa gia' mantenuta: ora

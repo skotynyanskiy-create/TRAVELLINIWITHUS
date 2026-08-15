@@ -4,63 +4,15 @@ import dotenv from 'dotenv';
 import { renderToFile } from '@react-pdf/renderer';
 import { CONTACTS, BRAND_STATS, SITE_URL } from '../src/config/site';
 import { siteContentDefaults } from '../src/config/siteContent';
-import { MediaKitDocument, type MediaKitFormat, type MediaKitStat } from '../src/pdf/MediaKitDocument';
+import {
+  MediaKitDocument,
+  type MediaKitFormat,
+  type MediaKitStat,
+} from '../src/pdf/MediaKitDocument';
 
 dotenv.config();
 
-interface FirestoreValue {
-  stringValue?: string;
-}
-
-interface FirestoreDocument {
-  fields?: Record<string, FirestoreValue>;
-}
-
 const outputPath = path.join(process.cwd(), 'public', 'media-kit.pdf');
-const firebaseConfigPath = path.join(process.cwd(), 'firebase-applet-config.json');
-
-function getString(fields: Record<string, FirestoreValue> | undefined, key: string) {
-  return fields?.[key]?.stringValue?.trim() || '';
-}
-
-async function fetchLiveAudienceStats(): Promise<MediaKitStat[] | null> {
-  if (!fs.existsSync(firebaseConfigPath)) {
-    return null;
-  }
-
-  try {
-    const firebaseConfig = JSON.parse(fs.readFileSync(firebaseConfigPath, 'utf8')) as {
-      projectId?: string;
-      firestoreDatabaseId?: string;
-    };
-
-    if (!firebaseConfig.projectId || !firebaseConfig.firestoreDatabaseId) {
-      return null;
-    }
-
-    const response = await fetch(
-      `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/${firebaseConfig.firestoreDatabaseId}/documents/settings/stats`,
-    );
-
-    if (!response.ok) {
-      return null;
-    }
-
-    const doc = (await response.json()) as FirestoreDocument;
-    const fields = doc.fields;
-    const stats = [
-      { label: 'Follower Instagram', value: getString(fields, 'igFollowers') },
-      { label: 'Reach mensile', value: getString(fields, 'monthlyReach') },
-      { label: 'Audience totale', value: getString(fields, 'uniqueUsers') },
-      { label: 'Engagement rate', value: getString(fields, 'engagementRate') },
-    ].filter((item) => item.value);
-
-    return stats.length > 0 ? stats : null;
-  } catch (error) {
-    console.warn('[generate-media-kit] Impossibile leggere stats live, uso fallback locale.', error);
-    return null;
-  }
-}
 
 function getFallbackAudienceStats(): MediaKitStat[] {
   return [
@@ -83,7 +35,18 @@ function getFormats(): MediaKitFormat[] {
 async function main() {
   fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 
-  const audienceStats = (await fetchLiveAudienceStats()) ?? getFallbackAudienceStats();
+  /* I numeri del PDF vengono SOLO da `BRAND_STATS`, costante di build.
+   *
+   * Qui c'era `fetchLiveAudienceStats()`, che leggeva il documento Firestore
+   * `settings/stats` — lo stesso che la tab «stats» del pannello admin apre
+   * pre-compilata con valori mai misurati. Il PDF parte via email a un partner:
+   * e' l'ultimo posto in cui un numero puo' essere il residuo di un form
+   * salvato per sbaglio. Stessa recisione fatta su `/collaborazioni` il
+   * 2026-08-15, per lo stesso motivo.
+   *
+   * Quando ci saranno numeri veri da export Meta/TikTok, la strada e'
+   * aggiornare `BRAND_STATS` con una modifica che si vede in un diff. */
+  const audienceStats = getFallbackAudienceStats();
   const formats = getFormats();
   const services = siteContentDefaults.collaborations.services.map((service) => service.title);
   const downloadUrl =
@@ -109,11 +72,13 @@ async function main() {
         whatsapp: CONTACTS.whatsappDisplay,
       }}
     />,
-    outputPath,
+    outputPath
   );
 
   const stat = fs.statSync(outputPath);
-  console.log(`[generate-media-kit] PDF generated: ${outputPath} (${Math.round(stat.size / 1024)} KB)`);
+  console.log(
+    `[generate-media-kit] PDF generated: ${outputPath} (${Math.round(stat.size / 1024)} KB)`
+  );
 }
 
 void main().catch((error) => {
