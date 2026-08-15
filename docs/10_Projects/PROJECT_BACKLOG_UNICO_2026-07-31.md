@@ -61,7 +61,7 @@ Effort: **S** < 2h · **M** 2-6h · **L** > 6h. `[OWNER]` = non lo posso fare io
 
 | #   | Voce                                                                                                                                                                                  | Effort    | Impatto                                         | Chi                 |
 | --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ----------------------------------------------- | ------------------- |
-| 1   | **Pubblicare `burton-juice`**: restano 2 blocker, entrambi tuoi — cover reale e verdetto R+B (`[SEZIONE RECENSIONE]` nel corpo). Excerpt, tag e percorso di pubblicazione sono pronti | S + asset | Sblocca la catena §1. Massimo ROI del repo      | Skott + R+B         |
+| 1   | ~~**Pubblicare `burton-juice`**: 2 blocker, cover reale e verdetto R+B~~ — **i blocker sono caduti il 2026-08-15**, `npm run publish:article -- burton-juice-ristorante-tim-burton` passa in dry-run (157 car. excerpt, 1.475 parole, cover `real-frame`, disclosure adv). Resta **solo** la decisione di pubblicare, e le credenziali Admin | S | Sblocca la catena §1. Massimo ROI del repo | Skott (decisione + credenziali) |
 | 1b  | **Scrivere gli altri 5 articoli**, oggi abbozzi da 89-214 parole (vedi §7)                                                                                                            | L         | Volume editoriale                               | editorial-writer    |
 | 2   | **[OWNER] Deploy delle functions**: il codice è pronto e con gate, mancano piano Blaze, 5 segreti in Secret Manager e i parametri `APP_URL`/`FIRESTORE_DATABASE_ID`/`BREVO_LIST_ID`   | M         | Chiude il p0 "8 endpoint senza backend in prod" | Skott (console)     |
 | 3   | ~~`/posto/:slug` → 404~~ — **chiusa**: `scripts/generate-route-html.js` è committato dal `000d847` e cablato in `npm run build`                                                       | —         | —                                               | —                   |
@@ -103,7 +103,14 @@ Quello che resta in P0 è **quasi tutto tuo**, non mio.
 1. **#3b + #4** — finché il dominio sta su Aruba e la API key è aperta, deployare
    non produce niente di osservabile. Sono il vero primo passo.
 2. **#2** — Blaze + 5 segreti + 3 parametri, poi `firebase deploy --only functions:api,hosting`.
-3. **#1** — cover reale e verdetto R+B. Lo script si rifiuta di pubblicare finché mancano.
+3. ~~**#1**~~ — **pronto dal 2026-08-15.** Il blocker «verdetto» è caduto da solo:
+   lo script rifiuta i `[SEZIONE` e la rimozione del giudizio ha portato via
+   l'ultimo placeholder editoriale (zero occorrenze in tutti e sei i seed). Il
+   blocker «cover» è stato chiuso sostituendo `/hero-adventure.jpg` — che non
+   aveva **nessuna** regola in `asset-provenance.json`, la condizione di errore
+   non negoziabile — col fotogramma di reel già usato dalla scheda posto,
+   coperto dalla regola `real-frame`. Non serve più un asset nuovo: serve che tu
+   decida di pubblicare, con le credenziali Admin.
 4. ~~#5~~ — chiusa: le decisioni sulla home erano già applicate.
 5. Poi #1b, poi P1 residuo, poi P2.
 
