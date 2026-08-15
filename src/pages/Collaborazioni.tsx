@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   ArrowRight,
   BarChart,
@@ -34,7 +34,6 @@ import { BRAND_STATS, BRAND_STATS_SOURCE, PUBLIC_PROOF_SIGNALS } from '../config
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { usePersonalizedInterest } from '../hooks/usePersonalizedInterest';
-import { fetchStats, type SiteStats } from '../services/firebaseService';
 import CaseStudiesSection from '../components/collaborazioni/CaseStudiesSection';
 import PressProofSection from '../components/collaborazioni/PressProofSection';
 
@@ -188,7 +187,6 @@ export default function Collaborazioni() {
   const { interest } = usePersonalizedInterest();
   const collabReels = COLLAB_REELS;
   const breadcrumbItems = [{ label: 'Collaborazioni' }];
-  const [stats, setStats] = useState<SiteStats | null>(null);
   const { data: content } = useSiteContent('collaborations');
   const pageContent = {
     ...siteContentDefaults.collaborations,
@@ -313,36 +311,26 @@ export default function Collaborazioni() {
   };
   const serviceIcons = [PenTool, Globe, Clapperboard, Camera];
 
-  useEffect(() => {
-    const loadStats = async () => {
-      const fetchedStats = await fetchStats();
-      if (fetchedStats) {
-        setStats(fetchedStats);
-      }
-    };
-
-    void loadStats();
-  }, []);
-
-  const isUsableStat = (v?: string) => !!v && !/^0(\D|$)/.test(v);
-  const resolvedStats = {
-    igFollowers: isUsableStat(stats?.igFollowers)
-      ? stats!.igFollowers
-      : BRAND_STATS.instagramFollowers,
-    monthlyReach: isUsableStat(stats?.monthlyReach)
-      ? stats!.monthlyReach
-      : BRAND_STATS.monthlyReach,
-    uniqueUsers: isUsableStat(stats?.uniqueUsers) ? stats!.uniqueUsers : BRAND_STATS.totalFollowers,
-    engagementRate: isUsableStat(stats?.engagementRate)
-      ? stats!.engagementRate
-      : BRAND_STATS.engagementRate,
-  };
-
+  /* I numeri pubblici vengono SOLO da `BRAND_STATS`, costante di build.
+   *
+   * Fino al 2026-08-15 questa pagina preferiva a quella costante il documento
+   * Firestore letto da `fetchStats()`, e quel documento e' scrivibile dalla tab
+   * «stats» del pannello admin — che si apriva pre-compilata con `250K+`
+   * follower, `500K+` reach e `8.5%` di engagement, valori che nessuno aveva
+   * misurato. Bastava aprire e salvare senza toccare niente per pubblicarli
+   * sotto la didascalia «Snapshot pubblico osservato il 2026-07-23», che e' una
+   * costante e non si aggiorna mai.
+   *
+   * Finche' i numeri sono decorativi un errore e' un'esagerazione; su una
+   * pagina che apre una trattativa commerciale e' una dichiarazione sbagliata.
+   * Un numero pubblico deve stare in un file che passa da una code review, non
+   * in un campo di testo. Il documento Firestore resta per la dashboard interna
+   * (`AdminDashboard`), dove serve a leggere, non a pubblicare. */
   const statsCards = [
-    { icon: Instagram, rawValue: resolvedStats.igFollowers, label: 'Follower Instagram' },
+    { icon: Instagram, rawValue: BRAND_STATS.instagramFollowers, label: 'Follower Instagram' },
     { icon: TikTokIcon, rawValue: BRAND_STATS.tiktokFollowers, label: 'Follower TikTok' },
-    { icon: Users, rawValue: resolvedStats.monthlyReach, label: 'Reach mensile stimata' },
-    { icon: BarChart, rawValue: resolvedStats.engagementRate, label: 'Engagement rate' },
+    { icon: Users, rawValue: BRAND_STATS.monthlyReach, label: 'Reach mensile stimata' },
+    { icon: BarChart, rawValue: BRAND_STATS.engagementRate, label: 'Engagement rate' },
   ];
   const trackPartnerCta = (ctaId: string) => {
     trackEvent('partner_cta_click', {

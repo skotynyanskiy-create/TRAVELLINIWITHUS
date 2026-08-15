@@ -118,11 +118,23 @@ export default function AdminDashboard() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [users, setUsers] = useState<UserDoc[]>([]);
   const [leads, setLeads] = useState<Lead[]>([]);
+  /* Campi vuoti, non pre-compilati.
+   *
+   * Fino al 2026-08-15 questo stato partiva con `250K+` follower, `500K+`
+   * reach, `50K+` utenti e `8.5%` di engagement: quattro cifre che nessuno
+   * aveva misurato, pronte a essere salvate da chiunque aprisse la tab e
+   * premesse «salva» senza toccare niente. Da lì finivano su `/collaborazioni`
+   * e dentro il PDF del media kit.
+   *
+   * Le due letture pubbliche sono state recise nella stessa giornata, quindi
+   * oggi questo documento serve solo alla dashboard interna. Il segnaposto
+   * resta comunque vuoto: un form che si apre con un numero plausibile invita
+   * a confermarlo, ed e' il modo in cui un dato inventato diventa un dato. */
   const [stats, setStats] = useState<SiteStats>({
-    igFollowers: '250K+',
-    monthlyReach: '500K+',
-    uniqueUsers: '50K+',
-    engagementRate: '8.5%',
+    igFollowers: '',
+    monthlyReach: '',
+    uniqueUsers: '',
+    engagementRate: '',
   });
   const [loading, setLoading] = useState(true);
   const [savingStats, setSavingStats] = useState(false);
