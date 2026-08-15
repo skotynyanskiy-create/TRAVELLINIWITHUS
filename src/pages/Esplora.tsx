@@ -574,28 +574,40 @@ export default function Esplora() {
               {/* DOMANDA-GUIDA INLINE — 4 scelte, risultato immediato. */}
               <div className="mt-8 border-t border-black/10 pt-6">
                 <p className="text-sm font-medium text-[var(--color-ink)]">Cosa cerchi adesso?</p>
-                <div className="-mx-6 mt-3 flex gap-2 overflow-x-auto px-6 pb-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:px-0 [&::-webkit-scrollbar]:hidden">
-                  {GUIDE_INTENTS.map((intent) => {
-                    const isActive =
-                      intent.apply !== 'reset' &&
-                      ((intent.apply.zone && filters.zone === intent.apply.zone) ||
-                        (intent.apply.type && filters.type === intent.apply.type));
-                    return (
-                      <button
-                        key={intent.label}
-                        type="button"
-                        aria-pressed={Boolean(isActive)}
-                        onClick={() => handleGuideIntent(intent)}
-                        className={`min-h-11 shrink-0 whitespace-nowrap rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-300 ease-out hover:scale-[1.03] active:scale-[0.98] cursor-pointer ${
-                          isActive
-                            ? 'border-[var(--color-ink)] bg-[var(--color-ink)] text-white shadow-[var(--shadow-premium)]'
-                            : 'border-black/10 bg-white text-black/65 hover:border-[var(--color-ink)]/40 hover:text-[var(--color-ink)]'
-                        }`}
-                      >
-                        {intent.label}
-                      </button>
-                    );
-                  })}
+                {/* La striscia scorre in orizzontale e nasconde la barra di
+                    scorrimento, quindi sotto i 768px l'ultimo chip finiva oltre
+                    il bordo senza che niente dicesse che si poteva scorrere:
+                    misurato il 2026-08-15 a 375px, «Mostrami tutto» arrivava a
+                    492px, 117px fuori. La velatura sul bordo destro e' l'unico
+                    indizio, e sparisce da `md` in su dove i chip vanno a capo. */}
+                <div className="relative -mx-6 md:mx-0">
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-[var(--color-sand)] to-transparent md:hidden"
+                  />
+                  <div className="mt-3 flex gap-2 overflow-x-auto px-6 pb-1 [scrollbar-width:none] md:flex-wrap md:px-0 [&::-webkit-scrollbar]:hidden">
+                    {GUIDE_INTENTS.map((intent) => {
+                      const isActive =
+                        intent.apply !== 'reset' &&
+                        ((intent.apply.zone && filters.zone === intent.apply.zone) ||
+                          (intent.apply.type && filters.type === intent.apply.type));
+                      return (
+                        <button
+                          key={intent.label}
+                          type="button"
+                          aria-pressed={Boolean(isActive)}
+                          onClick={() => handleGuideIntent(intent)}
+                          className={`min-h-11 shrink-0 whitespace-nowrap rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-300 ease-out hover:scale-[1.03] active:scale-[0.98] cursor-pointer ${
+                            isActive
+                              ? 'border-[var(--color-ink)] bg-[var(--color-ink)] text-white shadow-[var(--shadow-premium)]'
+                              : 'border-black/10 bg-white text-black/65 hover:border-[var(--color-ink)]/40 hover:text-[var(--color-ink)]'
+                          }`}
+                        >
+                          {intent.label}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             </div>

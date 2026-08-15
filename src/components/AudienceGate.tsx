@@ -251,7 +251,11 @@ export default function AudienceGate() {
         <button
           type="button"
           onClick={() => dismissForSession('button')}
-          className="mt-5 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-muted-fg)] transition-colors hover:text-[var(--color-ink)] cursor-pointer"
+          /* `py-2`: e' l'unica uscita da un interstiziale a schermo pieno che si
+             apre da solo alla prima visita, e senza padding misurava 16px di
+             altezza — sotto il minimo WCAG 2.5.8 AA di 24x24. Il testo resta
+             `text-xs`: e' l'area toccabile a dover crescere, non la scritta. */
+          className="mt-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--color-muted-fg)] transition-colors hover:text-[var(--color-ink)] cursor-pointer"
         >
           Decido dopo
         </button>
