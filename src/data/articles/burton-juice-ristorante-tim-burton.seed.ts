@@ -66,7 +66,13 @@ Se mentre leggevi hai già pensato a chi ci porteresti, hai la risposta: salva q
   partnership: { kind: 'adv', partner: '@theburtonjuice' },
   tags: ['campania', 'napoli', 'ristoranti', 'tim-burton', 'esperienze'],
   author: { name: 'Rodrigo & Betta', bio: 'Viaggiatori e creatori di @travelliniwithus' },
-  coverImage: '/hero-adventure.jpg', // PLACEHOLDER — sarà scelto da asset-curator
+  /* Il fotogramma del reel girato sul posto, gia' usato dalla scheda
+     `campania-burton-juice`. Prima qui c'era `/hero-adventure.jpg`, che non ha
+     nessuna regola in `asset-provenance.json` — la condizione di errore non
+     negoziabile dell'audit — mentre `/images/reels/` e' coperto da una regola
+     `real-frame` che DECISION_IMAGERY_TRUTH_RULE_2026-07-22 indica come
+     sostituzione certificata degli asset AI. */
+  coverImage: '/images/reels/campania-burton-juice-cover.webp',
   published: false,
   featured: false,
   createdAt: Timestamp.now(),
