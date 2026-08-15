@@ -84,13 +84,6 @@ export const STATIC_ROUTE_META: RouteMeta[] = [
     ogCategory: 'Media kit',
   },
   {
-    path: '/press',
-    title: 'Press: media kit e contatti per redazioni',
-    description:
-      'Risorse stampa Travelliniwithus per redazioni e media: brand snapshot, media kit, contatti diretti e materiali aggiornati.',
-    ogCategory: 'Press',
-  },
-  {
     path: '/contatti',
     title: 'Contatti Travelliniwithus',
     description:

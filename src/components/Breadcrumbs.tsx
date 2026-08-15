@@ -11,9 +11,25 @@ export interface BreadcrumbItem {
 interface BreadcrumbsProps {
   items: BreadcrumbItem[];
   className?: string;
+  /**
+   * Se emettere il JSON-LD `BreadcrumbList`. Default `true`.
+   *
+   * **Va messo a `false` sulle pagine che passano gia' `breadcrumbs` a `SEO`**,
+   * perche' quello e' un secondo emettitore: misurato il 2026-08-15, sette
+   * template ne dichiaravano due per pagina — e le due liste non coincidevano
+   * nemmeno (questa parte da Home, quella di `SEO` dipende dalla prop). Fra
+   * quei sette c'erano `/posto/:slug` e `/articolo/:slug`, cioe' i template che
+   * generano quasi tutte le pagine del sito: un albero di breadcrumb
+   * contraddittorio, moltiplicato per 79 schede.
+   *
+   * Il flag e' esplicito e non automatico apposta: il componente non puo'
+   * sapere cosa ha dichiarato `SEO`, e indovinarlo con un contesto globale
+   * costerebbe piu' della riga che si scrive qui.
+   */
+  schema?: boolean;
 }
 
-export default function Breadcrumbs({ items, className }: BreadcrumbsProps) {
+export default function Breadcrumbs({ items, className, schema = true }: BreadcrumbsProps) {
   const location = useLocation();
   const origin =
     typeof window !== 'undefined' ? window.location.origin : 'https://travelliniwithus.it';
@@ -39,7 +55,7 @@ export default function Breadcrumbs({ items, className }: BreadcrumbsProps) {
 
   return (
     <>
-      <JsonLd data={breadcrumbSchema} />
+      {schema && <JsonLd data={breadcrumbSchema} />}
       <nav
         aria-label="Breadcrumb"
         className={`flex items-center text-[11px] uppercase tracking-[0.18em] font-semibold text-black/65 mb-8 whitespace-nowrap overflow-hidden pb-2 ${className ?? ''}`}

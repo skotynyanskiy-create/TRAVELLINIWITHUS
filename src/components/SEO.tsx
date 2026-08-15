@@ -131,12 +131,12 @@ export default function SEO({
       <meta name="twitter:site" content={CONTACTS.instagramHandle} />
       <meta name="twitter:creator" content={CONTACTS.instagramHandle} />
       <link rel="canonical" href={resolvedCanonical} />
+      {/* Solo `it` e `x-default`, entrambi sul canonical. Fino al 2026-08-15 qui
+          c'era anche un `hrefLang="en"` verso `${SITE_URL}/en...`: ogni pagina
+          del sito dichiarava ai motori una versione inglese che risponde 404,
+          perche' la rotta `/en` non esiste in `App.tsx` e non e' mai esistita.
+          Si rimette quando c'e' davvero una traduzione, non prima. */}
       <link rel="alternate" hrefLang="it" href={resolvedCanonical} />
-      <link
-        rel="alternate"
-        hrefLang="en"
-        href={`${SITE_URL}/en${pathname === '/' ? '' : pathname}`}
-      />
       <link rel="alternate" hrefLang="x-default" href={resolvedCanonical} />
       <link rel="author" href={`${SITE_URL}/llms.txt`} type="text/plain" />
 

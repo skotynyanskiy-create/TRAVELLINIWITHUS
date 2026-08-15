@@ -129,7 +129,7 @@ function Shop() {
         />
 
         <Section className="pt-8" spacing="tight">
-          <Breadcrumbs items={[{ label: 'Shop' }]} />
+          <Breadcrumbs schema={false} items={[{ label: 'Shop' }]} />
 
           <div className="mt-8 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
             <div>

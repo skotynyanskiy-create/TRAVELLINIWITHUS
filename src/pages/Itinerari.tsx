@@ -47,7 +47,7 @@ export default function Itinerari() {
       />
 
       <Section className="pt-8">
-        <Breadcrumbs items={[{ label: 'Itinerari' }]} />
+        <Breadcrumbs schema={false} items={[{ label: 'Itinerari' }]} />
 
         <div className="mt-8 max-w-3xl">
           <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">

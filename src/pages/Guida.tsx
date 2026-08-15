@@ -86,7 +86,12 @@ export default function Guida() {
       )}
 
       <Section className="pt-8">
-        <Breadcrumbs items={[{ label: 'Guide', href: '/guide' }, { label: guide.title }]} />
+        {/* `schema={false}`: il `BreadcrumbList` di questa pagina lo emette gia'
+            il blocco `JsonLd` qui sopra, con URL assoluti e il guard sul demo. */}
+        <Breadcrumbs
+          schema={false}
+          items={[{ label: 'Guide', href: '/guide' }, { label: guide.title }]}
+        />
 
         <div className="mt-10 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20">
           <motion.div

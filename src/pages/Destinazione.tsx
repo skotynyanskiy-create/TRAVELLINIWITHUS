@@ -98,6 +98,7 @@ function DestinationsHub() {
       <div className="mx-auto max-w-6xl px-6 md:px-12">
         <div className="mt-6">
           <Breadcrumbs
+            schema={false}
             items={[{ label: 'Esplora', href: '/esplora' }, { label: 'Destinazioni' }]}
           />
         </div>
@@ -378,6 +379,7 @@ function DestinationWorld({ node }: { node: DestinationNode }) {
       <div className="mx-auto max-w-6xl px-6 md:px-12">
         <div className="mt-10">
           <Breadcrumbs
+            schema={false}
             items={[
               { label: 'Esplora', href: '/esplora' },
               ...(zoneNode
@@ -639,7 +641,10 @@ function LegacyRegionLanding({ region }: { region: RegionMeta }) {
 
       <div className="mx-auto max-w-6xl px-6 md:px-12">
         <div className="mt-10">
-          <Breadcrumbs items={[{ label: 'Esplora', href: '/esplora' }, { label: region.name }]} />
+          <Breadcrumbs
+            schema={false}
+            items={[{ label: 'Esplora', href: '/esplora' }, { label: region.name }]}
+          />
         </div>
 
         {/* Intro autoriale */}
