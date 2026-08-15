@@ -13,9 +13,27 @@ function formatItalianDate(iso: string): string {
 }
 
 /**
+ * Un'offerta è scaduta quando `validUntil` è passato. Il confronto sta a fine
+ * giornata (`23:59:59` locale) perché una promo «valida fino al 31 dicembre»
+ * vale per tutto il 31, non fino alla sua mezzanotte iniziale.
+ */
+function isScaduta(validUntil: string): boolean {
+  const fine = new Date(validUntil);
+  if (Number.isNaN(fine.getTime())) return false; // data illeggibile: non si nasconde nulla
+  fine.setHours(23, 59, 59, 999);
+  return fine.getTime() < Date.now();
+}
+
+/**
  * Offerta/deal collegata a un posto — codice promo o sconto affiliato.
  * Renderizzata SOLO quando `deal` è presente: nessuna offerta è mai inventata.
  * Superficie calma e premium, non un banner spammoso.
+ *
+ * **Un'offerta scaduta non si renderizza affatto** — niente badge «scaduto»,
+ * che sarebbe comunque pubblicità di un codice morto e farebbe sembrare
+ * l'archivio fermo. La pagina del posto resta identica, senza il blocco. Fino
+ * al 2026-08-15 `validUntil` era opzionale e non veniva mai confrontato con
+ * oggi: due codici vivi erano pubblicati a scadenza indefinita.
  */
 export default function DealCard({ deal }: { deal?: ContentItem['deal'] }) {
   const [copied, setCopied] = useState(false);
@@ -25,6 +43,7 @@ export default function DealCard({ deal }: { deal?: ContentItem['deal'] }) {
   useEffect(() => () => clearTimeout(timeoutRef.current), []);
 
   if (!deal) return null;
+  if (deal.validUntil && isScaduta(deal.validUntil)) return null;
 
   const hasCode = deal.kind === 'code' && Boolean(deal.code);
 
