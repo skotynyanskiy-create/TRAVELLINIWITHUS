@@ -1,5 +1,40 @@
 import fs from 'fs';
 import path from 'path';
+
+/**
+ * Scrittura atomica: file temporaneo, poi `rename`.
+ *
+ * Su Windows `writeFileSync` sul file finale fallisce a intermittenza con
+ * `UNKNOWN` (errno -4094) quando qualcun altro tiene aperto il descrittore —
+ * tipicamente lo scanner antivirus, che si sveglia proprio dopo una raffica di
+ * I/O. Nel build succede: `optimize:images` scrive decine di file e 46 MB di
+ * immagini, e la sitemap parte subito dopo. Misurato il 2026-08-16: lo script
+ * da solo gira 5 volte su 5, dentro `npm run build` fallisce 2 volte su 3, e
+ * porta giu' l'intera passata di qualita'.
+ *
+ * `rename` sostituisce la voce di directory invece di aprire il file esistente,
+ * quindi non tocca il descrittore che l'antivirus tiene. Il ritentativo copre il
+ * caso in cui sia il temporaneo a essere intercettato.
+ */
+function writeFileAtomic(destination, contents, attempts = 3) {
+  const temporary = `${destination}.${process.pid}.tmp`;
+  for (let attempt = 1; ; attempt++) {
+    try {
+      fs.writeFileSync(temporary, contents);
+      fs.renameSync(temporary, destination);
+      return;
+    } catch (error) {
+      try {
+        fs.rmSync(temporary, { force: true });
+      } catch {
+        /* il temporaneo puo' non esistere: non e' un errore */
+      }
+      if (attempt >= attempts) throw error;
+      /* Attesa breve e crescente: allo scanner basta finire il file. */
+      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, attempt * 150);
+    }
+  }
+}
 import { isIndexable, sitemapPaths } from '../src/config/surfaces.ts';
 import { DESTINATIONS, getDestinationUrl } from '../src/config/destinations.ts';
 import { DEMO_GUIDES } from '../src/config/demoGuides.ts';
@@ -122,7 +157,7 @@ async function fetchDynamicRoutes() {
   if (!raw) {
     console.warn(
       '[sitemap] Nessuna credenziale Firestore (FIREBASE_SERVICE_ACCOUNT_JSON / ' +
-        'FIREBASE_SERVICE_ACCOUNT): la sitemap NON conterra\' nessun /articolo ne\' /shop. ' +
+        "FIREBASE_SERVICE_ACCOUNT): la sitemap NON conterra' nessun /articolo ne' /shop. " +
         'Atteso in locale, da correggere prima di un deploy con contenuti pubblicati.'
     );
     return null;
@@ -133,7 +168,7 @@ async function fetchDynamicRoutes() {
     console.warn(
       '[sitemap] Database Firestore non risolto: ne FIRESTORE_DATABASE_ID, ne ' +
         'firebase-applet-config.json, ne firebase.json lo dichiarano. Salto le rotte dinamiche ' +
-        'invece di interrogare il database (default), che e\' vuoto.'
+        "invece di interrogare il database (default), che e' vuoto."
     );
     return null;
   }
@@ -229,9 +264,7 @@ async function buildSitemap() {
   // e' la stessa funzione che il componente usa per il proprio canonical: niente
   // URL alternativi (es. /destinazione/toscana a un segmento) fuori sync col
   // canonical dichiarato dalla pagina.
-  const indexableDestinations = DESTINATIONS.filter((node) =>
-    isIndexable(getDestinationUrl(node))
-  );
+  const indexableDestinations = DESTINATIONS.filter((node) => isIndexable(getDestinationUrl(node)));
   const destinationEntries = indexableDestinations
     .map((node) =>
       urlEntry(getDestinationUrl(node), {
@@ -252,7 +285,9 @@ async function buildSitemap() {
     (guide) => !guide.isDemo && isIndexable(`/guide/${guide.slug}`)
   );
   const guideEntries = indexableGuides
-    .map((guide) => urlEntry(`/guide/${guide.slug}`, { changefreq: 'monthly', priority: '0.6', lastmod: now }))
+    .map((guide) =>
+      urlEntry(`/guide/${guide.slug}`, { changefreq: 'monthly', priority: '0.6', lastmod: now })
+    )
     .join('');
 
   const articleEntries = (dynamic?.articleRoutes || [])
@@ -295,9 +330,7 @@ async function buildSitemap() {
     seen.add(loc);
   }
   if (duplicates.size > 0) {
-    throw new Error(
-      `[sitemap] URL duplicati in sitemap.xml:\n  ${[...duplicates].join('\n  ')}`
-    );
+    throw new Error(`[sitemap] URL duplicati in sitemap.xml:\n  ${[...duplicates].join('\n  ')}`);
   }
   const malformed = locs.filter((loc) => {
     if (!loc.startsWith(BASE_URL)) return true;
@@ -317,7 +350,7 @@ async function buildSitemap() {
     fs.mkdirSync(publicDir);
   }
 
-  fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), sitemap);
+  writeFileAtomic(path.join(publicDir, 'sitemap.xml'), sitemap);
   const dynamicCount = (dynamic?.articleRoutes.length || 0) + (dynamic?.productRoutes.length || 0);
   console.log(
     `Sitemap generated. Static: ${staticRoutes.length + discoveryRoutes.length}, regions: ${regionLandingSlugs.length}, filters: ${filterRoutes.length}, destinazioni: ${indexableDestinations.length}/${DESTINATIONS.length}, guide: ${indexableGuides.length}/${DEMO_GUIDES.length} reali, posto: ${indexablePosti.length}/${contentSeed.length} reali, dynamic: ${dynamicCount}, url totali: ${locs.length}.`
@@ -337,7 +370,7 @@ Disallow: /*?type=
 Sitemap: ${BASE_URL}/sitemap.xml
 `;
 
-  fs.writeFileSync(path.join(publicDir, 'robots.txt'), robotsTxt);
+  writeFileAtomic(path.join(publicDir, 'robots.txt'), robotsTxt);
   console.log('robots.txt generated successfully.');
 }
 
