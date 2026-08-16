@@ -162,7 +162,7 @@ video girato sul posto.
   indirizzo: Via Fossalta 58, 37017 Lazise (VR)
   come arrivarci: Uscita Peschiera del Garda dalla A4, o Affi dalla A22.
   da sapere: Movieland e Caneva Aquapark hanno stagioni diverse: il parco acquatico apre solo d'estate.
-  dati cercati su parchionline.it · iparchidivertimento.it (il sito ufficiale non risponde alle richieste automatiche), verificati il 2026-08-15
+  dati cercati su parchionline.it · iparchidivertimento.it, verificati il 2026-08-15
 
 - L'Altro Cantuccio — L'Altro Cantuccio, Montepulciano, Toscana, Italia
   url: https://www.travelliniwithus.it/posto/montepulciano-altro-cantuccio
@@ -553,7 +553,7 @@ video girato sul posto.
   indirizzo: 25 Lebuh Melayu, 10100 George Town, Penang, Malesia
   come arrivarci: In una casa storica restaurata di Lebuh Melayu, nel centro di George Town.
   da sapere: Apre solo di giorno e le fonti non concordano sugli orari: conviene telefonare prima di andare.
-  dati cercati su burpple.com · guide.michelin.com (fonti in disaccordo sugli orari), verificati il 2026-08-15
+  dati cercati su burpple.com · guide.michelin.com, verificati il 2026-08-15
 
 - LaPot — LaPot, Padova, Veneto, Italia
   url: https://www.travelliniwithus.it/posto/padova-la-pot
@@ -593,7 +593,7 @@ video girato sul posto.
   rapporto commerciale: nessun accordo
   indirizzo: Via dell'Arazzeria 18, 00062 Bracciano (RM)
   da sapere: Il ristorante e le suite sono della stessa proprietà, a pochi passi di distanza.
-  dati cercati su enjoyhousebracciano.com (il sito respinge le richieste automatiche: dati dalle sue pagine pubbliche), verificati il 2026-08-15
+  dati cercati su enjoyhousebracciano.com, verificati il 2026-08-15
 
 - Mamma Mia — Mamma Mia, Novellara, Emilia-Romagna, Italia
   url: https://www.travelliniwithus.it/posto/novellara-mamma-mia
