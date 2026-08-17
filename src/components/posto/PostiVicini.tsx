@@ -76,7 +76,11 @@ export default function PostiVicini({ posto }: { posto: ContentItem }) {
                     src={item.cover}
                     alt={item.coverAlt ?? item.title}
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 45vw, 300px"
-                    responsiveWidths={[320, 480, 640]}
+                    /* 768, non 640: le varianti generate sono 320/480/768 e una
+                       640 non e' mai esistita. Chiedendola, ogni scheda posto
+                       sparava due 404 — solo a densita' alta, cioe' su ogni
+                       telefono vero e su nessuno dei miei controlli a DPR 1. */
+                    responsiveWidths={[320, 480, 768]}
                     style={{ objectPosition: `50% ${item.coverFocusY ?? 50}%` }}
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
