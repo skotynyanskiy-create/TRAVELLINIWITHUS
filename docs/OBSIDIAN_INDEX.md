@@ -144,6 +144,7 @@ Indice generato automaticamente delle note operative versionate. Rigenerare con
 - [[14_Bugs/BUG_2026-08-02_openfreemap_missing_sprite]]
 - [[14_Bugs/BUG_2026-08-02_overlay_focus_and_discovery_errors]]
 - [[14_Bugs/BUG_2026-08-02_personalization_consent_storage]]
+- [[14_Bugs/BUG_2026-08-17_corpus_dati_privati_su_repo_pubblico]]
 - [[14_Bugs/BUG_API_ENDPOINTS_SENZA_BACKEND_IN_PROD_2026-07-26]]
 - [[14_Bugs/BUG_DEMO_UNSPLASH_IMAGES_BROKEN]]
 - [[14_Bugs/BUG_FIRESTORE_ARTICLES_PERMISSIONS]]
