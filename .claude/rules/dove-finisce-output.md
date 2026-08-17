@@ -24,6 +24,18 @@ Gli handoff vanno in `docs/50_Scratch/HANDOFF_<slug>_<da>_a_<a>.md` sul modello 
 `docs/90_Templates/TPL_Agent_Handoff.md`; si marcano `status: consumed` dopo
 averli letti.
 
+**`type` e `status` non si inventano.** Il vocabolario ammesso è quello di
+`allowedStatuses` in `scripts/audit-obsidian.mjs`, e `npm run audit:obsidian` —
+che gira in `audit:quality`, in CI e in `predeploy` — respinge ogni valore fuori
+elenco. Non è pedanteria: un `type` nuovo crea una categoria che nessuna vista
+di Obsidian raccoglie, quindi la nota sparisce invece di sistemarsi. Prima di
+scrivere il frontmatter **leggi l'elenco**, che è corto e sta in cima allo
+script; una nota di lavoro in `50_Scratch` è quasi sempre `type: scratch` con
+`status: active`. Si allarga il vocabolario solo quando dire la verità
+richiederebbe una parola che non c'è — è il caso di `resolved-local` e
+`proposed`, documentati nello script — e allora si aggiunge lì, spiegando
+perché. Inventarla nella nota e basta rende soltanto rosso il cancello.
+
 `docs/STATO_DEL_SITO.md` **non si scrive a mano**: si rigenera con `npm run stato`.
 `npm run stato:check` gira dentro `audit:quality`, la CI e `predeploy`. Il target
 di una superficie si dichiara in `missing:` dentro `src/config/surfaces.ts`, non
