@@ -476,7 +476,13 @@ export const siteContentDefaults: SiteContentMap = {
   },
   navigation: {
     familyLabel: 'Family',
-    familyHomeLabel: 'Gravidanza',
+    /* «Gravidanza» nominava un tema e portava all'indice della sezione, che
+       apre con «Il viaggio più grande inizia adesso» e rimanda a consigli,
+       codici e collaborazioni: il contenuto sulla gravidanza sta un clic più in
+       là, sotto «Consigli». Le altre voci accanto — Consigli, Codici sconto,
+       Chi siamo — nominano tutte una pagina, e il tema lo dichiara già il
+       commutatore sopra. Questa etichetta non scade il giorno della nascita. */
+    familyHomeLabel: 'Da dove iniziare',
     familyAdviceLabel: 'Consigli',
     familyShopLabel: 'Codici sconto',
     destinationsLabel: 'Mete',

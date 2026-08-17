@@ -17,9 +17,17 @@ import type { InterestId } from './audienceInterests';
  *
  * Due vincoli tengono la ricomposizione onesta:
  *
- * - **L'apertura e' costante.** `BrandCoherentHero` non cambia mai: Google vede
- *   una sola `/` con una sola promessa, e l'elemento LCP resta identico a ogni
- *   visita, quindi ricomporre non puo' generare layout shift sopra la piega.
+ * - **L'apertura cambia solo di parole.** Dal 2026-08-17 `BrandCoherentHero`
+ *   legge l'edizione e scambia titolo, sommario e le due azioni
+ *   (`src/config/heroEditions.ts`); struttura, fotografia, chip, post-it e barra
+ *   delle prove restano identici. I due motivi per cui il vincolo regge lo
+ *   stesso: **Google continua a vedere una sola `/` con una sola promessa**,
+ *   perche' `generate-route-html.js` inietta solo `<head>` e il corpo lo rende
+ *   il client, che senza `localStorage` cade sempre su `viaggiatori` — l'unica
+ *   variante rimasta invariata; e **l'elemento LCP resta identico**, perche'
+ *   l'edizione e' risolta sincrona al primo paint e il titolo sta su due righe
+ *   in tutte e tre, entro il tetto di caratteri dichiarato in `heroEditions.ts`.
+ *   Chi aggiunge una variante lo rimisura: sforarlo sposta la piega.
  * - **Nessun numero scritto a mano.** Le prove di ciascuna voce si contano dai
  *   dati veri a ogni build. Un claim che si scrive a mano e' un claim che
  *   invecchia senza che nessuno se ne accorga — il difetto che ha prodotto

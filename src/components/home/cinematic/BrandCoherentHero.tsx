@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { motion, useReducedMotion, type Variants } from 'motion/react';
-import { ArrowDown, ArrowRight, Map, Stamp, Sparkles, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Stamp, Sparkles, CheckCircle2 } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
+import { useAudience } from '@/src/context/AudienceContext';
+import { HERO_PER_EDIZIONE } from '@/src/config/heroEditions';
 import SchedaVerifica from '@/src/components/atlante/SchedaVerifica';
 import MagneticWrapper from '@/src/components/MagneticWrapper';
 import OptimizedImage from '@/src/components/OptimizedImage';
@@ -28,6 +30,14 @@ import { aMeseAnno } from '@/src/utils/format';
  * `BrandCoherentHero.prova.test.tsx` blocca la regressione, preload incluso.
  */
 const FEATURED_POSTO_ID = 'jesolo-caribe-bay';
+
+/* Le due azioni cambiano etichetta, destinazione e icona con l'edizione, ma non
+   aspetto: la classe sta qui una volta sola perche' la primaria si renda come
+   ancora o come `Link` senza che le due forme possano divergere. */
+const CLASSE_PRIMARIA =
+  'inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-md transition-all hover:bg-[var(--color-accent-hover)] cursor-pointer';
+const CLASSE_SECONDARIA =
+  'inline-flex items-center gap-2 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-ink)] hover:text-[var(--color-accent-text)]';
 
 /** Registro alla mano: i numeri della barra prove non si scrivono, si contano. */
 const POSTI_PROVATI = CONTENT_ITEMS.filter((item) => !item.isPlaceholder);
@@ -64,6 +74,14 @@ export default function BrandCoherentHero() {
   const [schedaOpen, setSchedaOpen] = useState(false);
   const featured = getContentById(FEATURED_POSTO_ID);
   const shouldReduceMotion = useReducedMotion();
+  /* L'edizione e' risolta sincrona nell'inizializzatore di stato del context,
+     non in un effetto: il primo paint ha gia' il titolo giusto, quindi non c'e'
+     scambio sopra la piega. Chi sposta quella lettura in un `useEffect` apre un
+     layout shift proprio sull'elemento LCP. */
+  const { audience } = useAudience();
+  const hero = HERO_PER_EDIZIONE[audience];
+  const IconaPrimaria = hero.primaria.icona;
+  const IconaSecondaria = hero.secondaria.icona;
   const featuredDisclosure = featured ? PARTNERSHIP_LABEL[featured.partnership.kind] : '';
   const featuredCaption = featured
     ? [featured.place.name, featured.place.city ?? featured.place.region]
@@ -115,10 +133,15 @@ export default function BrandCoherentHero() {
                 Rodrigo &amp; Betta<span className="hidden sm:inline"> · Travelliniwithus</span>
               </motion.div>
 
-              <h1 className="font-serif text-4xl font-normal leading-[1.06] text-[var(--color-ink)] sm:text-5xl lg:text-6xl">
-                Posti che sembrano inventati. <br />
+              {/* `text-balance`: senza, le due righe si spezzano dove capita e
+                  lasciano orfane le parole corte — «può.» e «più.» finivano da
+                  sole su una riga quasi vuota, due volte nella stessa apertura.
+                  Il bilanciamento pareggia le righe di ciascun segmento e vale
+                  per tutte e tre le edizioni, non solo per quelle nuove. */}
+              <h1 className="text-balance font-serif text-4xl font-normal leading-[1.06] text-[var(--color-ink)] sm:text-5xl lg:text-6xl">
+                {hero.titoloTondo} <br />
                 <span className="italic text-[var(--color-accent,#c85a32)]">
-                  Ma esistono davvero.
+                  {hero.titoloCorsivo}
                 </span>
               </h1>
             </motion.div>
@@ -131,16 +154,16 @@ export default function BrandCoherentHero() {
               animate="visible"
               className="order-3 lg:order-none"
             >
-              {/* «Periodo giusto» prometteva un dato che nessuna scheda ha: il
-                  modello non porta un periodo consigliato. Al suo posto le tre
-                  cose che una scheda dà davvero — il reel girato lì, il costo
-                  quando lo conosciamo, e sempre a che titolo ci siamo andati. */}
+              {/* Il sommario di `viaggiatori` dice le tre cose che una scheda dà
+                  davvero — il reel girato lì, il costo quando lo conosciamo, e
+                  sempre a che titolo ci siamo andati. Prima prometteva un
+                  «periodo giusto» che il modello non porta. Le altre due
+                  edizioni hanno il proprio, in `heroEditions.ts`. */}
               <motion.p
                 variants={itemVariants}
                 className="mt-5 max-w-xl text-base leading-relaxed text-[var(--color-muted-fg)] sm:text-lg"
               >
-                Siamo Rodrigo e Betta. Prima ci andiamo, poi qui trovate il reel girato sul posto,
-                il costo quando lo conosciamo e sempre a che titolo ci siamo andati.
+                {hero.sommario}
               </motion.p>
 
               {/* Actions with Magnetic CTAs */}
@@ -149,25 +172,27 @@ export default function BrandCoherentHero() {
                 className="mt-8 flex flex-wrap items-center gap-4"
               >
                 <MagneticWrapper strength={6}>
-                  {/* Scorre all'indice piu' in basso, NON apre /esplora: si
-                      chiamava «Apri il registro» come il pulsante della sezione
-                      sotto, che invece porta all'archivio. Due etichette
-                      identiche verso due destinazioni diverse nella stessa
-                      pagina. */}
-                  <a
-                    href="#indice-vivo"
-                    className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-md transition-all hover:bg-[var(--color-accent-hover)] cursor-pointer"
-                  >
-                    Guarda l&apos;indice <ArrowDown size={16} />
-                  </a>
+                  {/* Su `viaggiatori` la primaria scorre all'indice piu' in
+                      basso e NON apre /esplora: si chiamava «Apri il registro»
+                      come il pulsante della sezione sotto, che invece porta
+                      all'archivio — due etichette identiche verso due
+                      destinazioni diverse nella stessa pagina. Le altre due
+                      edizioni puntano a una rotta, quindi passano da `Link`:
+                      un `<a>` verso una rotta interna ricaricherebbe l'app. */}
+                  {hero.primaria.ancora ? (
+                    <a href={hero.primaria.href} className={CLASSE_PRIMARIA}>
+                      {hero.primaria.testo} <IconaPrimaria size={16} />
+                    </a>
+                  ) : (
+                    <Link to={hero.primaria.href} className={CLASSE_PRIMARIA}>
+                      {hero.primaria.testo} <IconaPrimaria size={16} />
+                    </Link>
+                  )}
                 </MagneticWrapper>
 
                 <MagneticWrapper strength={4}>
-                  <Link
-                    to="/mappa"
-                    className="inline-flex items-center gap-2 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-ink)] hover:text-[var(--color-accent-text)]"
-                  >
-                    Vai alla mappa <Map size={16} />
+                  <Link to={hero.secondaria.href} className={CLASSE_SECONDARIA}>
+                    {hero.secondaria.testo} <IconaSecondaria size={16} />
                   </Link>
                 </MagneticWrapper>
               </motion.div>
