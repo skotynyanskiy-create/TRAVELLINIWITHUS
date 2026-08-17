@@ -48,10 +48,14 @@ file in `docs/`, che decadono da soli: trattali come ordine di grandezza.
   silenzio la scelta dell'owner nel picker. Non rimetterlo.
 - **I plugin sono abilitati globalmente**, non per progetto:
   `.claude/settings.local.json` non ha `enabledPlugins`.
-- **Le skill vivono in 5 posizioni** da 53 voci: `.agents/skills` è la canonica,
+- **Le skill vivono in 5 posizioni** da 46 voci: `.agents/skills` è la canonica,
   `.claude`, `.github`, `.cursor`, `.gemini` sono target di sincronizzazione
   validati da `npm run audit:agents`. Solo `.claude/skills` arriva al modello.
   Per togliere un mirror va tolta anche la sua voce in `scripts/audit-agent-stack.mjs`.
+  **Sono 46 tracciate, non le 53 che vedi con `ls`**: `.gitignore` esclude le
+  cartelle Higgsfield, che stanno sul disco di chi le ha installate e non nel
+  repo. Il cancello conta le tracciate apposta — quando contava il filesystem
+  era verde in locale e rosso in CI a ogni giro, per mesi.
 - **Gli agent invece hanno `.claude/agents` come canonica**, non `.agents`:
   `npm run sync:codex-agents` legge da lì e scrive i 16 TOML di `.codex/agents`.
 - **Sette delle otto skill Higgsfield** e `travellini-stitch-figma-bridge` sono
@@ -61,8 +65,8 @@ file in `docs/`, che decadono da soli: trattali come ordine di grandezza.
 ## Skill che il modello non può invocare
 
 `disable-model-invocation: true` tiene una skill a una slash di distanza: la lancia
-solo l'owner. Dal 2026-08-14 ce l'hanno `deploy` e `commit`. Prima nessuna delle
-53 lo usava, quindi il modello poteva invocare da sé la skill che deploya in
+solo l'owner. Dal 2026-08-14 ce l'hanno `deploy` e `commit`. Prima non lo usava
+nessuna, quindi il modello poteva invocare da sé la skill che deploya in
 produzione — mentre `CLAUDE.md` scriveva «deploy solo su richiesta esplicita».
 Era di nuovo una regola senza cancello.
 

@@ -13,6 +13,28 @@
  * script toglie la terza possibilità, cioè che menta senza che nessuno lo sappia.
  */
 import fs from 'node:fs';
+import { execFileSync } from 'node:child_process';
+
+/**
+ * Le skill che il repo contiene, non quelle che stanno su questo disco.
+ *
+ * `.gitignore` esclude le cartelle Higgsfield sotto `.claude/skills`: chi ne ha
+ * i corpi installati ne conta 53, un checkout pulito ne conta 46. Finché questo
+ * fatto leggeva il filesystem, il cancello era verde in locale e rosso in CI a
+ * ogni giro — e nessun numero scritto nella regola poteva accontentare entrambi.
+ * Contare quello che è tracciato dà la stessa risposta ovunque, e resta un
+ * cancello: aggiungere o togliere una skill committata lo fa ancora fallire.
+ */
+function skillTracciate() {
+  return new Set(
+    execFileSync('git', ['ls-files', '.claude/skills'], { encoding: 'utf8' })
+      .split('\n')
+      .filter(Boolean)
+      .map((percorso) => percorso.split('/'))
+      .filter((parti) => parti.length > 3)
+      .map((parti) => parti[2])
+  ).size;
+}
 
 const REGOLA = '.claude/rules/configurazione.md';
 const testo = fs.readFileSync(REGOLA, 'utf8');
@@ -39,7 +61,9 @@ const FATTI = [
   },
   {
     nome: 'comandi hook',
-    reale: Object.values(hooks).flat().reduce((n, g) => n + (g.hooks || []).length, 0),
+    reale: Object.values(hooks)
+      .flat()
+      .reduce((n, g) => n + (g.hooks || []).length, 0),
     re: /(\d+) comandi hook/,
   },
   {
@@ -49,7 +73,7 @@ const FATTI = [
   },
   {
     nome: 'skill sincronizzate',
-    reale: fs.readdirSync('.claude/skills').length,
+    reale: skillTracciate(),
     re: /da (\d+) voci/,
   },
   {
