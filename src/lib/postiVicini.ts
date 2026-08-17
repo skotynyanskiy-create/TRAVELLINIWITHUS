@@ -19,8 +19,20 @@ import type { ContentItem } from '@/src/types/content';
  * «dintorni».
  */
 
-/** Raggio entro cui due posti si considerano parte dello stesso giro. */
+/**
+ * **Il raggio si stringe dove c'e' densita'** (2026-08-17). I 100 km sono
+ * tarati su un archivio sparso; con il corpus diventano una rete che pesca
+ * sempre gli stessi posti. Misurato iniettando 533 schede nella pagina viva
+ * (`.audit-screenshots/collaudo-533.mjs`): i tre slot si riempivano di posti
+ * della stessa citta' e della stessa categoria entro pochi chilometri, perche'
+ * l'ordinamento per sola distanza non ha nessun motivo di diversificare.
+ *
+ * Regola: se entro 25 km ci sono abbastanza candidati si usa quello, altrimenti
+ * si torna ai 100. Sul seed di oggi la stringe su 19 schede su 79 — le altre
+ * restano com'erano, quindi la ragione originale dei 100 km resta rispettata.
+ */
 export const RAGGIO_DINTORNI_KM = 100;
+export const RAGGIO_DENSO_KM = 25;
 
 export interface PostoVicino {
   item: ContentItem;
@@ -43,13 +55,30 @@ export function postiVicini(posto: ContentItem, quanti = 3): PostoVicino[] {
     (altro) => altro.id !== posto.id && !altro.isPlaceholder && getCoordinates(altro)
   );
 
-  return getPlacesNearby(
+  const entroIlMassimo = getPlacesNearby(
     candidati,
     { latitude: centro.lat, longitude: centro.lng },
     RAGGIO_DINTORNI_KM
-  )
-    .slice(0, quanti)
-    .map((vicino) => ({ item: vicino, distanzaKm: vicino.distanceKm }));
+  );
+
+  /* Raggio adattivo: si stringe solo se il cerchio piccolo basta da solo. */
+  const entroIlDenso = entroIlMassimo.filter((v) => v.distanceKm <= RAGGIO_DENSO_KM);
+  const bacino = entroIlDenso.length >= quanti ? entroIlDenso : entroIlMassimo;
+
+  /* Una categoria per slot. Non si completa con un doppione quando le
+     categorie finiscono: due card diverse dicono piu' di tre uguali, e il
+     modello di questo sito considera l'assenza uno stato legittimo. */
+  const scelti: typeof bacino = [];
+  const categorieUsate = new Set<string>();
+  for (const vicino of bacino) {
+    const categoria = vicino.types?.[0] ?? '';
+    if (categorieUsate.has(categoria)) continue;
+    categorieUsate.add(categoria);
+    scelti.push(vicino);
+    if (scelti.length >= quanti) break;
+  }
+
+  return scelti.map((vicino) => ({ item: vicino, distanzaKm: vicino.distanceKm }));
 }
 
 /** «11,8 km» — virgola decimale, e metri sotto il chilometro. */

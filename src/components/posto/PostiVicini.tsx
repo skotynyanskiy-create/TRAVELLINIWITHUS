@@ -37,17 +37,41 @@ export default function PostiVicini({ posto }: { posto: ContentItem }) {
         </Link>
       </div>
 
-      <ul className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {vicini.map(({ item, distanzaKm }) => {
+      {/* Le colonne seguono quante card ci sono davvero. Da quando la selezione
+          impone una categoria per slot il numero e' variabile — 1, 2 o 3 — e una
+          griglia fissa da tre lasciava un buco a destra che faceva sembrare la
+          sezione incompleta invece che essenziale. E' lo stesso difetto della
+          colonna «Orari e contatti» che si intitolava a vuoto, spostato di un
+          livello: qui non manca il titolo, manca la composizione. */}
+      <ul
+        className={`mt-6 grid gap-5 ${
+          vicini.length === 1
+            ? 'sm:grid-cols-1 lg:grid-cols-2'
+            : vicini.length === 2
+              ? 'sm:grid-cols-2'
+              : 'sm:grid-cols-2 lg:grid-cols-3'
+        }`}
+      >
+        {vicini.map(({ item, distanzaKm }, indice) => {
           const disclosure = PARTNERSHIP_LABEL[item.partnership.kind];
+          /* La selezione garantisce una categoria diversa per slot, quindi la
+             categoria e' l'informazione che distingue una card dall'altra —
+             prima qui c'era la citta', che in una sezione intitolata «nei
+             dintorni» ripete quello che la distanza dice gia'. Resta
+             nell'`aria-label`, dove non costa altezza. */
+          const categoria = item.types?.[0];
           return (
-            <li key={item.id}>
+            /* Il terzo slot non compare sotto i 640px: tre card impilate sono
+               tre schermate su una pagina che stiamo accorciando. */
+            <li key={item.id} className={indice === 2 ? 'hidden sm:block' : undefined}>
               <Link
                 to={`/posto/${item.id}`}
                 className="group block focus-visible:outline-none"
-                aria-label={`${item.title}, a ${formattaDistanza(distanzaKm)} da qui`}
+                aria-label={`${item.title}${categoria ? `, ${categoria}` : ''}${
+                  item.place.city ? `, ${item.place.city}` : ''
+                }, a ${formattaDistanza(distanzaKm)} da qui`}
               >
-                <div className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-ink-deep)] shadow-[var(--shadow-md)] transition-shadow group-hover:shadow-[var(--shadow-lg)] group-focus-visible:ring-2 group-focus-visible:ring-[var(--color-accent)]">
+                <div className="relative aspect-[3/2] overflow-hidden rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-ink-deep)] shadow-[var(--shadow-md)] transition-shadow group-hover:shadow-[var(--shadow-lg)] group-focus-visible:ring-2 group-focus-visible:ring-[var(--color-accent)] sm:aspect-[4/3]">
                   <OptimizedImage
                     src={item.cover}
                     alt={item.coverAlt ?? item.title}
@@ -71,8 +95,8 @@ export default function PostiVicini({ posto }: { posto: ContentItem }) {
                   )}
 
                   <span className="absolute inset-x-4 bottom-3">
-                    <span className="block text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--color-accent-on-dark)]">
-                      {item.place.city ?? item.place.country}
+                    <span className="block truncate text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--color-accent-on-dark)]">
+                      {categoria ?? item.place.city ?? item.place.country}
                     </span>
                     <span className="mt-1 flex items-start gap-1 font-serif text-base leading-tight text-white">
                       <span className="line-clamp-2">{item.title}</span>
