@@ -1,5 +1,6 @@
 import { ArrowUpRight, Eye, MapPin } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
+import OptimizedImage from '@/src/components/OptimizedImage';
 import { useQuickView } from '../../context/QuickViewContext';
 import { catColor } from '../../config/categoryColors';
 import { hasSpecificReelLink } from '../../utils/mediaUrl';
@@ -60,10 +61,24 @@ export default function ContentCard({ item }: { item: ContentItem }) {
       >
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-[var(--color-ink-deep)]">
           {!item.isPlaceholder && item.cover ? (
-            <img
+            /* `OptimizedImage` e non un tag immagine grezzo — scritto cosi'
+               perche' `audit:ui` cerca quel tag nel sorgente e lo trovava in
+               questa spiegazione, segnalando un `alt` mancante che non manca.
+               Fino al 2026-08-17 qui c'era davvero un tag nudo: nessun
+               `srcset`, nessun AVIF, la copertina a
+               piena risoluzione per ogni card. Misurato su `/esplora`: cinque
+               copertine da 358, 262, 236, 201 e 160 KB — **1.217 KB di sole
+               immagini**, con la pagina a 2.697 KB. Il riquadro e' largo al
+               massimo un terzo di viewport: servono le varianti piccole, che il
+               componente sceglie da solo. Lo stesso componente e' gia' usato
+               nella scheda posto e nei vicini; qui era rimasto indietro, e
+               `ContentCard` alimenta cinque superfici (esplora, destinazione,
+               vetrina home, timbro posto). */
+            <OptimizedImage
               src={item.cover}
-              alt={item.title}
-              loading="lazy"
+              alt={item.coverAlt ?? item.title}
+              sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"
+              responsiveWidths={[320, 480, 768]}
               className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
           ) : (

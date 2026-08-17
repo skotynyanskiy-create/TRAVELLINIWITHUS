@@ -100,7 +100,9 @@ function postoMeta(route) {
 
   const place = item.place || {};
   const where = [place.city, place.region, place.country].filter(Boolean).join(', ');
-  const title = item.hook ? `${item.hook} — ${item.title || place.name}` : item.title || place.name || id;
+  const title = item.hook
+    ? `${item.hook} — ${item.title || place.name}`
+    : item.title || place.name || id;
   const description = clamp(
     item.description || `${item.title || place.name}${where ? ` — ${where}` : ''}.`
   );
@@ -250,16 +252,37 @@ function sanitizeTemplate(html) {
   // Tag og:*/twitter:* statici di index.html: stessa logica, tolti prima
   // dell'iniezione route-specific. `[\s\S]*?` regge sia la forma su una riga
   // sia quella multi-riga con attributi impaginati.
-  out = out.replace(/[ \t]*<meta\s+(?:property="og:[^"]*"|name="twitter:[^"]*")[\s\S]*?\/>\s*\n?/gi, '');
+  out = out.replace(
+    /[ \t]*<meta\s+(?:property="og:[^"]*"|name="twitter:[^"]*")[\s\S]*?\/>\s*\n?/gi,
+    ''
+  );
   return out;
+}
+
+/**
+ * Toglie i `<link rel="preload">` dell'immagine LCP, che valgono solo per la
+ * home.
+ *
+ * `index.html` preloada la copertina del poster della home con
+ * `fetchpriority="high"`: sulla home e' giusto ed e' documentato li' sopra. Ma
+ * `sanitizeTemplate()` rimuove i blocchi meta e i tag `og:`/`twitter:`, non i
+ * preload — quindi ogni rotta emessa ereditava quel preload. Verificato con un
+ * build completo il 2026-08-17: **133 file su 133**, `/privacy` compresa,
+ * scaricavano 173 KB di una foto che non renderizzano mai — fra il 13% e il 21%
+ * del peso pagina su `/mappa`, `/posto/*` e `/collaborazioni`.
+ *
+ * Si toglie per rotta invece che nel template perche' la home passa da qui come
+ * tutte le altre (`outputPathFor('/')` riscrive proprio `dist/index.html`):
+ * ripulire il template a monte spegnerebbe il preload dove serve davvero.
+ */
+function rimuoviPreloadDiRotta(html) {
+  return html.replace(/[ \t]*<link\s+rel="preload"[\s\S]*?\/?>\s*\n?/gi, '');
 }
 
 function renderHtml(template, route, meta) {
   const { title, tags } = buildHead(route, meta);
-  const html = template.replace(
-    /<title>[\s\S]*?<\/title>/i,
-    `<title>${escapeAttr(title)}</title>`
-  );
+  const base = route === '/' ? template : rimuoviPreloadDiRotta(template);
+  const html = base.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeAttr(title)}</title>`);
 
   const block = `\n    ${BLOCK_START}\n    ${tags.join('\n    ')}\n    ${BLOCK_END}\n  `;
   return html.replace(/<\/head>/i, `${block}</head>`);
