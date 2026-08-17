@@ -82,7 +82,7 @@ export default function EditionBand({
       <div
         role="group"
         aria-label="Scegli l'edizione"
-        className="flex w-full items-stretch gap-1 rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-[var(--color-sand)] p-1 shadow-[var(--shadow-sm)] sm:w-auto"
+        className="flex max-w-full items-stretch gap-1 rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-[var(--color-sand)] p-1 shadow-[var(--shadow-sm)]"
       >
         {AUDIENCE_EDITIONS.map((edition) => {
           const active = edition.key === audience;
@@ -92,7 +92,7 @@ export default function EditionBand({
               type="button"
               onClick={() => onSwitch(edition.key)}
               aria-current={active ? 'true' : undefined}
-              className={`flex min-h-[52px] min-w-0 flex-1 items-center justify-center gap-1.5 rounded-[var(--radius-lg)] px-2 text-center font-serif text-[13px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] sm:flex-none sm:px-7 sm:text-[18px] ${
+              className={`flex min-h-[52px] shrink-0 items-center justify-center gap-1.5 rounded-[var(--radius-lg)] px-2.5 text-center font-serif text-[13px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] sm:px-7 sm:text-[18px] ${
                 active
                   ? 'bg-[var(--color-accent-soft)] text-[var(--color-accent-text)] shadow-[inset_0_-2px_0_var(--color-accent)]'
                   : 'text-[var(--color-muted-fg)] hover:text-[var(--color-ink)]'
@@ -104,13 +104,14 @@ export default function EditionBand({
                   className={`h-[7px] w-[7px] shrink-0 rounded-full ${EDITION_DOT_CLASS[edition.key]}`}
                 />
               )}
-              {/* `break-words`: sotto 640px i tre segmenti sono a parti uguali
-                  (flex-1) su una riga stretta a 320/375 — "Collaborazioni" è
-                  una parola sola, senza `break-words` il suo contenuto minimo
-                  non scende mai sotto la sua larghezza intera e la riga
-                  sborda. Da `sm` in su il segmento è largo quanto il suo
-                  contenuto (flex-none): lì il nome sta su una riga sola. */}
-              <span className="min-w-0 break-words sm:whitespace-nowrap">{edition.title}</span>
+              {/* I segmenti si dimensionano sul contenuto, a ogni larghezza.
+                  Con `flex-1` erano tre terzi uguali — 90px a 320px — e due
+                  nomi su tre si spezzavano a meta' parola: «Collaborazio / ni»
+                  ovunque, piu' «Viaggia / tori» a 320. Nessun cancello lo
+                  vedeva, perche' `break-words` teneva l'overflow a zero: era
+                  brutto, non rotto. Dando a ciascuno la sua larghezza il
+                  surplus di «Family» va dove serve e nessuno va a capo. */}
+              <span className="whitespace-nowrap">{edition.title}</span>
             </button>
           );
         })}
