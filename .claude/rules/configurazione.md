@@ -215,6 +215,40 @@ seguito fino a `data.ts`.
   `prettier --write` su ogni `.json` in stage, e `config_protection.py` intercetta
   gli agent ma non git. Se aggiungi un file protetto, aggiungilo anche lì.
 
+## Un cancello verde in locale non e' un cancello verde
+
+La classe di difetto piu' costosa misurata finora, sei occorrenze in una sera
+(2026-08-17): **una prova che misura l'ambiente invece del repo**. Verde su
+questo disco, rossa in CI, e ogni giro di scoperta costa un'ora.
+
+Le sei, per forma:
+
+| Cancello                        | Cosa leggeva di locale                                                       |
+| ------------------------------- | ---------------------------------------------------------------------------- |
+| `audit:config`                  | `readdirSync('.claude/skills')` — 53 qui, 46 tracciate                       |
+| `audit:refs`                    | `existsSync` su `.claude/settings.local.json` e `graphify-out/`, gitignorati |
+| `stato:check`                   | la colonna `.env` locale, dentro la regione verificata                       |
+| `rotte-target-e-overflow`       | errori console di Firestore, irraggiungibile senza credenziali               |
+| `map-camera-vs-markers`         | 40s di attese in un budget di 30: passa solo su una macchina veloce          |
+| `PostiVicini` (non un cancello) | variante immagine vista solo a DPR alto                                      |
+
+La correzione ha sempre la stessa forma: **si guarda cosa il repo dichiara, non
+cosa c'e' su questo disco.** `git ls-files` invece di `readdirSync`,
+`git check-ignore` prima di dire «manca», il fatto volatile fuori dalla regione
+verificata.
+
+E il modo per trovarle senza passare dalla CI:
+
+```bash
+git clone -q --branch <branch> . /tmp/pulito
+# junction/symlink di node_modules verso quello vero, poi i quindici audit statici
+```
+
+Quel clone non ha `.env`, non ha `.claude/settings.local.json`, ha 46 skill.
+Sono le condizioni del runner. Tre minuti invece di un'ora — e ha trovato
+`stato:check` prima che la CI ci arrivasse. **Non e' ancora uno script**: se
+diventa abitudine, merita un `npm run` suo, ed e' decisione dell'owner.
+
 Prima di aggiungere una regola qui, controlla che sia applicabile e vera. Una
 regola che descrive un file inesistente costa contesto a ogni sessione e non
 previene niente.
