@@ -49,8 +49,9 @@ Due rischi noti, aperti, non risolti:
 
 <!-- CONSEGNA:START — generato da `npm run stato`, non modificare a mano -->
 
-- Branch corrente: `chore/config-hardening-2026-07-26` — 125 commit avanti su `main`, 1 dietro.
-- File non committati: **67**.
+- Branch corrente: `chore/config-hardening-2026-07-26` — 164 commit avanti su `main`, 1 dietro.
+- File non committati: **16**.
+- Variabili con un valore in `.env` **su questa macchina**: 12 su 43.
 - `functions/` su `origin/main`: **assente**.
 - Rewrite `/api/**` in `firebase.json`: presente.
 
@@ -128,53 +129,53 @@ Ogni superficie non-live dichiara cosa le manca.
 ### Integrazioni
 
 **43 variabili dichiarate** in `.env.example`. "Letta da": `app` = `src/`, `server.ts`, `functions/src/`; `tooling` = `.mcp.json`, `scripts/`, workflow CI.
-La colonna locale dice solo se la chiave ha un valore su questa macchina — mai quale.
+Quali abbiano un valore **su questa macchina** sta nel blocco Consegna: dipende dal disco, non dal codice.
 
-| Variabile                            | Letta da | `.env` locale |
-| ------------------------------------ | -------- | ------------- |
-| `ADMIN_EMAIL`                        | app      | EMPTY         |
-| `AI_COMPANION_CORPUS_READY`          | app      | SET           |
-| `ALLOW_MOCK_CHECKOUT`                | app      | SET           |
-| `ANTHROPIC_API_KEY`                  | app      | EMPTY         |
-| `APP_URL`                            | app      | SET           |
-| `BREVO_API_KEY`                      | app      | EMPTY         |
-| `BREVO_LIST_ID`                      | app      | EMPTY         |
-| `FIREBASE_SERVICE_ACCOUNT`           | app      | EMPTY         |
-| `FIREBASE_SERVICE_ACCOUNT_JSON`      | app      | EMPTY         |
-| `FIRESTORE_DATABASE_ID`              | app      | EMPTY         |
-| `GEMINI_API_KEY`                     | app      | EMPTY         |
-| `GITHUB_PERSONAL_ACCESS_TOKEN`       | tooling  | SET           |
-| `IG_GRAPH_TOKEN`                     | tooling  | EMPTY         |
-| `LEAD_MAGNET_URL`                    | app      | EMPTY         |
-| `MAIL_FROM`                          | app      | SET           |
-| `MAIL_TO_OWNER`                      | app      | SET           |
-| `MEDIA_KIT_URL`                      | app      | EMPTY         |
-| `OBSIDIAN_API_KEY`                   | tooling  | SET           |
-| `OPENAI_API_KEY`                     | app      | EMPTY         |
-| `RESEND_API_KEY`                     | app      | EMPTY         |
-| `SENTRY_ACCESS_TOKEN`                | tooling  | SET           |
-| `SENTRY_AUTH_TOKEN`                  | tooling  | EMPTY         |
-| `SENTRY_DSN`                         | app      | EMPTY         |
-| `SENTRY_ORG`                         | tooling  | EMPTY         |
-| `STRIPE_CLUB_PRICE_ID`               | tooling  | EMPTY         |
-| `STRIPE_SECRET_KEY`                  | app      | SET           |
-| `STRIPE_WEBHOOK_SECRET`              | app      | EMPTY         |
-| `VITE_AFFILIATE_AIRALO_ID`           | app      | EMPTY         |
-| `VITE_AFFILIATE_BOOKING_ID`          | app      | EMPTY         |
-| `VITE_AFFILIATE_REVOLUT_ID`          | app      | EMPTY         |
-| `VITE_AFFILIATE_SKYSCANNER_ID`       | app      | EMPTY         |
-| `VITE_APP_VERSION`                   | app      | EMPTY         |
-| `VITE_FIREBASE_API_KEY`              | app      | EMPTY         |
-| `VITE_GA_ID`                         | app      | EMPTY         |
-| `VITE_LITE_MODE`                     | app      | SET           |
-| `VITE_MAPBOX_TOKEN`                  | tooling  | EMPTY         |
-| `VITE_META_PIXEL_ID`                 | app      | EMPTY         |
-| `VITE_RECAPTCHA_ENTERPRISE_SITE_KEY` | tooling  | EMPTY         |
-| `VITE_SENTRY_DSN`                    | app      | EMPTY         |
-| `VITE_TIKTOK_PIXEL_ID`               | app      | EMPTY         |
-| `VITE_TWU_AUDIT_MODE`                | app      | SET           |
-| `VITE_USE_FIREBASE_EMULATOR`         | tooling  | SET           |
-| `VITE_VIDEO_BASE_URL`                | app      | EMPTY         |
+| Variabile                            | Letta da |
+| ------------------------------------ | -------- |
+| `ADMIN_EMAIL`                        | app      |
+| `AI_COMPANION_CORPUS_READY`          | app      |
+| `ALLOW_MOCK_CHECKOUT`                | app      |
+| `ANTHROPIC_API_KEY`                  | app      |
+| `APP_URL`                            | app      |
+| `BREVO_API_KEY`                      | app      |
+| `BREVO_LIST_ID`                      | app      |
+| `FIREBASE_SERVICE_ACCOUNT`           | app      |
+| `FIREBASE_SERVICE_ACCOUNT_JSON`      | app      |
+| `FIRESTORE_DATABASE_ID`              | app      |
+| `GEMINI_API_KEY`                     | app      |
+| `GITHUB_PERSONAL_ACCESS_TOKEN`       | tooling  |
+| `IG_GRAPH_TOKEN`                     | tooling  |
+| `LEAD_MAGNET_URL`                    | app      |
+| `MAIL_FROM`                          | app      |
+| `MAIL_TO_OWNER`                      | app      |
+| `MEDIA_KIT_URL`                      | app      |
+| `OBSIDIAN_API_KEY`                   | tooling  |
+| `OPENAI_API_KEY`                     | app      |
+| `RESEND_API_KEY`                     | app      |
+| `SENTRY_ACCESS_TOKEN`                | tooling  |
+| `SENTRY_AUTH_TOKEN`                  | tooling  |
+| `SENTRY_DSN`                         | app      |
+| `SENTRY_ORG`                         | tooling  |
+| `STRIPE_CLUB_PRICE_ID`               | tooling  |
+| `STRIPE_SECRET_KEY`                  | app      |
+| `STRIPE_WEBHOOK_SECRET`              | app      |
+| `VITE_AFFILIATE_AIRALO_ID`           | app      |
+| `VITE_AFFILIATE_BOOKING_ID`          | app      |
+| `VITE_AFFILIATE_REVOLUT_ID`          | app      |
+| `VITE_AFFILIATE_SKYSCANNER_ID`       | app      |
+| `VITE_APP_VERSION`                   | app      |
+| `VITE_FIREBASE_API_KEY`              | app      |
+| `VITE_GA_ID`                         | app      |
+| `VITE_LITE_MODE`                     | app      |
+| `VITE_MAPBOX_TOKEN`                  | tooling  |
+| `VITE_META_PIXEL_ID`                 | app      |
+| `VITE_RECAPTCHA_ENTERPRISE_SITE_KEY` | tooling  |
+| `VITE_SENTRY_DSN`                    | app      |
+| `VITE_TIKTOK_PIXEL_ID`               | app      |
+| `VITE_TWU_AUDIT_MODE`                | app      |
+| `VITE_USE_FIREBASE_EMULATOR`         | tooling  |
+| `VITE_VIDEO_BASE_URL`                | app      |
 
 Ogni variabile dichiarata è letta da qualche parte.
 

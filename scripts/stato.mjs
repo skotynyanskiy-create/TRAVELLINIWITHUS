@@ -48,8 +48,7 @@ async function blockSurfaces() {
 
   const count = (state) => SURFACES.filter((s) => s.state === state).length;
   const rows = SURFACES.map(
-    (s) =>
-      `| \`${s.path}\` | ${s.state} | ${s.private ? 'sì' : '—'} | ${s.missing ?? '—'} |`
+    (s) => `| \`${s.path}\` | ${s.state} | ${s.private ? 'sì' : '—'} | ${s.missing ?? '—'} |`
   );
 
   const noMissing = SURFACES.filter((s) => s.state !== 'live' && !s.missing);
@@ -108,9 +107,13 @@ async function blockContent() {
   // Articoli: i seed importano firebase/firestore, quindi si leggono a testo.
   try {
     const dir = 'src/data/articles';
-    const files = exists(dir) ? fs.readdirSync(path.join(root, dir)).filter((f) => f.endsWith('.seed.ts')) : [];
+    const files = exists(dir)
+      ? fs.readdirSync(path.join(root, dir)).filter((f) => f.endsWith('.seed.ts'))
+      : [];
     const published = files.filter((f) => /published:\s*true/.test(read(`${dir}/${f}`)));
-    const placeholderExcerpt = files.filter((f) => /excerpt:\s*['"`]PLACEHOLDER/i.test(read(`${dir}/${f}`)));
+    const placeholderExcerpt = files.filter((f) =>
+      /excerpt:\s*['"`]PLACEHOLDER/i.test(read(`${dir}/${f}`))
+    );
     lines.push(
       `- **Articoli** (\`${dir}/*.seed.ts\`): ${files.length} seed — **${published.length} con \`published: true\`**, ${placeholderExcerpt.length} con excerpt ancora \`PLACEHOLDER\`.`
     );
@@ -126,7 +129,9 @@ async function blockContent() {
       `- **Reel** (\`src/config/reels.ts\`): ${REELS.length} visibili — ${real} compilati, ${REELS.length - real} placeholder.`
     );
   } catch (error) {
-    lines.push(`- **Reel**: ${unavailable(`import di src/config/reels.ts fallito (${error.message})`)}`);
+    lines.push(
+      `- **Reel**: ${unavailable(`import di src/config/reels.ts fallito (${error.message})`)}`
+    );
   }
 
   return lines.join('\n');
@@ -134,13 +139,19 @@ async function blockContent() {
 
 // ------------------------------------------------------------ integrazioni
 
+/** Le chiavi dichiarate in `.env.example`, ordinate. Usata da due blocchi. */
+function envKeys() {
+  if (!exists('.env.example')) return [];
+  const declared = [...read('.env.example').matchAll(/^\s*#?\s*([A-Z][A-Z0-9_]+)=/gm)].map(
+    (m) => m[1]
+  );
+  return [...new Set(declared)].sort();
+}
+
 function blockEnv() {
   if (!exists('.env.example')) return unavailable('.env.example assente');
 
-  const declared = [
-    ...read('.env.example').matchAll(/^\s*#?\s*([A-Z][A-Z0-9_]+)=/gm),
-  ].map((m) => m[1]);
-  const keys = [...new Set(declared)].sort();
+  const keys = envKeys();
 
   // Tre livelli, perché "mai letta" da sola mente: le chiavi degli MCP e della
   // CI non compaiono nel runtime applicativo pur essendo in uso.
@@ -164,29 +175,35 @@ function blockEnv() {
       .join('\n');
 
   const app = gather(['src', 'server.ts', 'functions/src'], /\.(ts|tsx|js|mjs)$/);
-  const tooling = gather(['.mcp.json', 'scripts', '.github/workflows'], /\.(mjs|js|ts|yml|yaml|json)$/);
+  const tooling = gather(
+    ['.mcp.json', 'scripts', '.github/workflows'],
+    /\.(mjs|js|ts|yml|yaml|json)$/
+  );
 
   const tier = (key) => (app.includes(key) ? 'app' : tooling.includes(key) ? 'tooling' : null);
 
-  // Presenza locale: solo SET/EMPTY, il valore non lascia mai questo script.
-  const localSet = new Set();
-  if (exists('.env')) {
-    for (const m of read('.env').matchAll(/^\s*([A-Z][A-Z0-9_]+)=(.*)$/gm)) {
-      if (m[2].trim().replace(/^['"]|['"]$/g, '')) localSet.add(m[1]);
-    }
-  }
-
-  const rows = keys.map(
-    (k) => `| \`${k}\` | ${tier(k) ?? '**mai**'} | ${localSet.has(k) ? 'SET' : 'EMPTY'} |`
-  );
+  /*
+   * Qui c'era una terza colonna, `.env` locale, con SET/EMPTY per ogni chiave.
+   * Era **machine-local dentro la regione che --check verifica**: sul disco di
+   * chi lavora dice SET, in un checkout senza `.env` dice EMPTY, quindi
+   * `stato:check` non poteva essere verde in CI — e non lo era, restava
+   * nascosto dietro un altro cancello che falliva prima (misurato il
+   * 2026-08-17 in un clone pulito, prima che la CI ci arrivasse).
+   *
+   * Il conteggio aggregato resta, ma va nel blocco CONSEGNA, che e' volatile
+   * per costruzione e che --check non guarda apposta. Quello che si perde e' il
+   * SET/EMPTY per singola chiave; chi deve saperlo guarda il proprio `.env`,
+   * che e' l'unico posto dove quell'informazione e' vera.
+   */
+  const rows = keys.map((k) => `| \`${k}\` | ${tier(k) ?? '**mai**'} |`);
   const orphan = keys.filter((k) => !tier(k));
 
   return [
     `**${keys.length} variabili dichiarate** in \`.env.example\`. "Letta da": \`app\` = \`src/\`, \`server.ts\`, \`functions/src/\`; \`tooling\` = \`.mcp.json\`, \`scripts/\`, workflow CI.`,
-    'La colonna locale dice solo se la chiave ha un valore su questa macchina — mai quale.',
+    'Quali abbiano un valore **su questa macchina** sta nel blocco Consegna: dipende dal disco, non dal codice.',
     '',
-    '| Variabile | Letta da | `.env` locale |',
-    '| --- | --- | --- |',
+    '| Variabile | Letta da |',
+    '| --- | --- |',
     ...rows,
     '',
     orphan.length
@@ -202,9 +219,9 @@ function blockEndpoints() {
   if (!exists(file)) return unavailable(`${file} assente`);
 
   const src = read(file);
-  const routes = [...src.matchAll(/router\.(get|post|put|patch|delete)\(\s*['"`]([^'"`]+)['"`]/g)].map(
-    (m) => `| ${m[1].toUpperCase()} | \`${m[2]}\` |`
-  );
+  const routes = [
+    ...src.matchAll(/router\.(get|post|put|patch|delete)\(\s*['"`]([^'"`]+)['"`]/g),
+  ].map((m) => `| ${m[1].toUpperCase()} | \`${m[2]}\` |`);
 
   return [
     `**${routes.length} endpoint** definiti in \`${file}\`, montati sia da \`server.ts\` (dev) sia da \`functions/src/index.ts\` (prod).`,
@@ -226,16 +243,29 @@ function blockDelivery() {
 
   let apiRewrite = '?';
   try {
-    apiRewrite = (readJson('firebase.json').hosting?.rewrites ?? []).some((r) => r.source === '/api/**')
+    apiRewrite = (readJson('firebase.json').hosting?.rewrites ?? []).some(
+      (r) => r.source === '/api/**'
+    )
       ? 'presente'
       : 'assente';
   } catch {
     apiRewrite = 'firebase.json non leggibile';
   }
 
+  /* Presenza locale delle variabili: solo il conteggio, mai i nomi e mai i
+     valori. Sta qui e non nella tabella sopra perche' dipende dal disco: nella
+     regione verificata rendeva `stato:check` impossibile da tenere verde in CI. */
+  const dichiarate = envKeys();
+  const conValore = exists('.env')
+    ? [...read('.env').matchAll(/^\s*([A-Z][A-Z0-9_]+)=(.*)$/gm)].filter(
+        (m) => m[2].trim().replace(/^['"]|['"]$/g, '') && dichiarate.includes(m[1])
+      ).length
+    : 0;
+
   return [
     `- Branch corrente: \`${branch}\` — ${ahead} commit avanti su \`main\`, ${behind} dietro.`,
     `- File non committati: **${dirty}**.`,
+    `- Variabili con un valore in \`.env\` **su questa macchina**: ${conValore} su ${dichiarate.length}.`,
     `- \`functions/\` su \`origin/main\`: **${funcsOnMain === null ? 'non verificabile' : funcsOnMain ? 'presente' : 'assente'}**.`,
     `- Rewrite \`/api/**\` in \`firebase.json\`: ${apiRewrite}.`,
     '',
