@@ -18,6 +18,32 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
+
+/**
+ * Un percorso che il repo ignora **di proposito** non e' un riferimento rotto.
+ *
+ * `.claude/settings.local.json` e' gitignorato per costruzione — e' il file dove
+ * l'owner mette l'interruttore di sblocco degli hook — e `graphify-out/` e' un
+ * output generato. Sul disco di chi lavora esistono, in un checkout pulito no:
+ * questo cancello era quindi verde in locale e rosso in CI, che e' la terza
+ * volta stasera che una prova misura l'ambiente invece del repo.
+ *
+ * Documentarli resta giusto: sono file veri, che il lettore deve sapere che
+ * esistono. Il gate non deve pretendere che siano tracciati.
+ *
+ * La differenza con un riferimento davvero morto e' netta e verificata:
+ * `src/pages/Home.tsx` — il file rinominato che ha fatto nascere questa prova —
+ * non e' ignorato da nessuna regola, quindi continua a far fallire.
+ */
+function ignoratoDiProposito(percorso) {
+  try {
+    execFileSync('git', ['check-ignore', '-q', percorso], { stdio: 'ignore' });
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 const SCRIPT_NPM = new Set(Object.keys(pkg.scripts));
@@ -73,7 +99,10 @@ for (const file of raccogli()) {
       // Un percorso può essere relativo alla root del repo oppure alla cartella
       // che contiene la definizione, come fanno le skill con un proprio bundle.
       const candidati = [p, path.normalize(path.join(path.dirname(file), p))];
-      if (!candidati.some((c) => fs.existsSync(c))) {
+      if (
+        !candidati.some((c) => fs.existsSync(c)) &&
+        !candidati.some((c) => ignoratoDiProposito(c))
+      ) {
         problemi.push({ file, tipo: 'percorso', valore: p });
       }
     }
