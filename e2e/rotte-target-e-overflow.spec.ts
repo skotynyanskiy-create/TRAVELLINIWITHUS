@@ -19,6 +19,26 @@ import { expect, test } from '@playwright/test';
  * «rotto» su una scelta deliberata.
  */
 
+/**
+ * Il rumore che dipende dall'ambiente, non dalla pagina.
+ *
+ * In CI non ci sono credenziali Firebase, quindi l'SDK non raggiunge il backend
+ * e logga in console su ogni rotta che legge Firestore. In locale il `.env` c'e'
+ * e Firestore risponde: **lo stesso identico codice dava zero errori sul mio
+ * disco e nove rotte rosse in CI**, misurato il 2026-08-17 sul run 32062717417.
+ * Un'asserzione che non puo' essere verde in due ambienti non e' un cancello,
+ * e' un allarme che si impara a ignorare.
+ *
+ * Il filtro e' volutamente stretto: intercetta **solo** l'irraggiungibilita' del
+ * backend, non «tutto cio' che dice firebase». Un errore di permessi, una regola
+ * che nega una lettura, un `undefined` dentro un componente che legge Firestore
+ * continuano a far fallire la prova. Quello che si perde e' la capacita' di
+ * accorgersi da qui che Firestore e' giu' — che non e' il mestiere di questa
+ * prova, ed e' comunque invisibile in CI dove e' giu' per costruzione.
+ */
+const RUMORE_DI_AMBIENTE =
+  /Could not reach Cloud Firestore backend|WebChannelConnection .* transport errored/i;
+
 const ROTTE = [
   '/',
   '/esplora',
@@ -68,7 +88,8 @@ test.describe('Rotte pubbliche — overflow, controlli, titoli', () => {
       for (const rotta of ROTTE) {
         const errori: string[] = [];
         const onErr = (m: import('@playwright/test').ConsoleMessage) => {
-          if (m.type() === 'error') errori.push(m.text().slice(0, 100));
+          if (m.type() === 'error' && !RUMORE_DI_AMBIENTE.test(m.text()))
+            errori.push(m.text().slice(0, 100));
         };
         page.on('console', onErr);
 
