@@ -164,7 +164,7 @@ export default function VieniConNoi() {
         noindex
       />
 
-      <div className="min-h-screen overflow-x-clip bg-[var(--color-sand)] pt-28 text-[var(--color-ink)]">
+      <div className="min-h-screen overflow-x-clip bg-[var(--color-sand)] pt-8 md:pt-10 text-[var(--color-ink)]">
         <section className="border-b border-[var(--color-border)]">
           <div className="mx-auto grid max-w-[1360px] gap-8 px-6 py-10 md:px-10 md:py-14 lg:grid-cols-[1.12fr_0.88fr] lg:grid-rows-[auto_auto] lg:gap-x-16 lg:gap-y-10 lg:py-20">
             <div className="max-w-3xl lg:col-start-1 lg:row-start-1">

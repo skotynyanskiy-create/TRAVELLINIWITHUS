@@ -115,7 +115,18 @@ const AudienceContext = createContext<AudienceContextType | undefined>(undefined
 
 export function AudienceProvider({ children }: { children: React.ReactNode }) {
   const location = useLocation();
-  const [userAudience, setUserAudience] = useState<Audience | null>(readStoredAudience);
+  // Deep-link al primo caricamento (es. bio IG → /family): se l'utente non ha
+  // mai scelto, la rotta d'atterraggio diventa la sua audience. Risolto qui,
+  // nell'inizializzatore lazy — non in un useEffect post-mount — perché la
+  // testata ora usa `hasChosen` per decidere la propria altezza (estesa alla
+  // prima visita, compatta altrimenti - vedi Navbar.tsx/EditionBand.tsx): un
+  // effetto che aggiorna lo stato dopo il primo render avrebbe fatto vedere
+  // per un frame la testata estesa anche su un atterraggio diretto su
+  // /family, per poi ricollassarla — uno spostamento di layout evitabile.
+  const [userAudience, setUserAudience] = useState<Audience | null>(() => {
+    const stored = readStoredAudience();
+    return stored ?? audienceFromPath(location.pathname);
+  });
   const [interests, setInterests] = useState<InterestSelections>(readStoredInterests);
 
   const setAudience = (next: Audience) => {
@@ -123,17 +134,15 @@ export function AudienceProvider({ children }: { children: React.ReactNode }) {
     persist(next);
   };
 
-  // Deep-link al primo caricamento (es. bio IG → /family): se l'utente non ha
-  // mai scelto, la rotta d'atterraggio diventa la sua audience — il gate non
-  // apparirà mai. Le navigazioni interne successive NON sovrascrivono la scelta.
+  // La scrittura su storage resta un effetto (side effect, non stato): lo
+  // stato è già corretto dal primo render qui sopra, questo effetto persiste
+  // solo l'audience dedotta dalla rotta, così le visite successive la trovano
+  // in localStorage. Le navigazioni interne successive NON sovrascrivono la
+  // scelta (gira solo al mount, dipendenze vuote per costruzione).
   useEffect(() => {
-    if (userAudience !== null) return;
-    const fromPath = audienceFromPath(location.pathname);
-    if (fromPath) {
-      setUserAudience(fromPath);
-      persist(fromPath);
+    if (userAudience !== null && readStoredAudience() === null) {
+      persist(userAudience);
     }
-    // Solo al mount: le navigazioni successive sono override temporanei.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

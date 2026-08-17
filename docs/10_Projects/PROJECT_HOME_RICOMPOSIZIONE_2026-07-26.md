@@ -677,3 +677,115 @@ doc): il controllo segmentato del drawer mobile (solo i due `aria-label`,
 `[VERIFY]` aperto: se la testata sabbia opaca sia la cornice giusta di
 `/mappa` (scura, a tutto schermo) o vada resa `--color-ink-deep` su quella
 sola rotta — non risolto qui, solo la riserva di spazio è stata aggiornata.
+
+## 17. La testata definitiva — pillola + commutatore, il gate si spegne — 2026-08-17
+
+Consolidamento owner di tre giorni di decisioni (`docs/50_Scratch/IDEE_testata-esaltata.md`,
+`docs/50_Scratch/DESIGN_commutatore-pubblico.md`), eseguito da
+`travellini-frontend-builder`. **Sostituisce §16 sulla forma del contenitore**:
+la testata a filo con fascia interna torna a due oggetti separati.
+
+- **La pillola torna.** `<header>` non è più a filo dei bordi: è di nuovo
+  contenuta, con margine dallo schermo (`px-3 pt-3` / `md:px-6 md:pt-4`),
+  angoli e bordo dai token, ombra ristretta (`--shadow-sm`). Niente blur,
+  niente doppia ombra, niente animazione d'ingresso — quel vocabolario resta
+  fuori (CLAUDE.md, niente glassmorphism sulle pagine pubbliche). Contenuto
+  della riga 1 invariato (marchio, voci, ricerca, CTA).
+- **Il commutatore diventa un secondo oggetto contenuto, non più una fascia a
+  tutta larghezza.** `EditionBand.tsx` riscritto: tre segmenti coi soli nomi
+  (niente descrizione, niente occhiello «Edizione» a vista — resta come
+  `aria-label`), Fraunces 18px, segmenti `min-h-[52px]`. Il segmento attivo è
+  una velatura (`--color-accent-soft` + `--color-accent-text` + un filo 2px
+  `--color-accent` sotto via `box-shadow: inset`), mai un riempimento pieno, e
+  usa i token dell'edizione ATTIVA (l'ambiente coincide col tema). I due
+  segmenti spenti portano un pallino 7px nel token STATICO della propria
+  edizione (nuovi `--edition-<key>-accent-text` in `index.css`, mai
+  ridefiniti per tema) — si vede il colore che si sta scegliendo prima di
+  leggerlo. Radius dai token (`--radius-lg`), mai `rounded-full`: non chiude
+  la porta a una futura animazione che cambi il raggio con la meta. Sotto
+  640px il commutatore è a tutta larghezza, tre parti uguali, nome a 13px
+  (a 18px sborda: fix separato sotto).
+- **Il commutatore non è più `fixed`.** Appartiene al flusso del documento,
+  sotto la pillola, e scorre via con la pagina allo scroll — nessun collasso
+  animato, nessuna dipendenza da `isScrolled` (rimosso da `Navbar.tsx`, non
+  serviva più a nulla). Riserva da solo lo spazio della pillola fissa qui
+  sopra nel proprio `pt-`: `PageLayout.tsx`, `BrandCoherentHero.tsx` e
+  `VieniConNoi.tsx` non riservano più `pt-28`/`mt-28` per la testata, solo un
+  piccolo respiro editoriale (`pt-8 md:pt-10`). `Mappa.tsx` e
+  `FullScreenMapExperience.tsx` restano a calc esplicito (canvas edge-to-edge,
+  non può affidarsi al flusso) ma con due misure — compatta/estesa — invece
+  di una, selezionate da `hasChosen`.
+- **Il gate a schermo intero si spegne** (`AUDIENCE_GATE_ENABLED = false` in
+  `AudienceGate.tsx`, kill-switch già esistente — componente non toccato,
+  riaccendibile in una riga). Alla prima visita (`hasChosen === false`) la
+  testa nasce **estesa**: tre porte pari, nomi + descrizioni verbatim da
+  `AUDIENCE_EDITIONS`, nessuna velatura, nessun filo — il filo lo disegna la
+  prima scelta. Le descrizioni si spostano, non si riscrivono. La scelta da
+  una porta chiama lo stesso `handleModeSwitch` del commutatore compatto, con
+  `surface: 'testa-estesa'` per restare distinguibile in `audience_switch`
+  (l'evento del gate `audience_gate_*` non esiste più).
+- **Il difetto di CLS evitabile, risolto alla radice.** Il sito è CSR puro
+  (nessuna SSR del contenuto in produzione): la testata non esiste nell'HTML
+  statico, quindi il primo render React è anche il primo paint — non c'è uno
+  stato precedente da cui "spostarsi". L'unico rischio reale era che
+  `AudienceContext.tsx` risolvesse l'audience da deep-link (`/family` da bio
+  IG) in un `useEffect` **dopo** il primo commit, il che avrebbe potuto far
+  vedere per un frame la testata estesa anche su un atterraggio diretto,
+  prima di ricollassarla. Corretto spostando quella risoluzione
+  nell'inizializzatore lazy di `useState` (sincrono, stesso render):
+  `AudienceContext.tsx` non è più "zero modifiche" come nei due giri
+  precedenti, ma la logica è identica, solo il momento in cui gira è cambiato.
+- **Tre difetti corretti**: (1) `theme-color` era `#f7f0e5`, un colore che il
+  sito non usa da nessuna parte — ora `#faf8f4` di default, riscritto per
+  edizione dallo stesso script inline che scrive `data-audience`; (2) il CSS
+  del preloader era morto (`className` in HTML puro, un attributo React
+  inerte lì, e `.twu-preloader-line` mai applicata) — corretto in `class`, e
+  il filo del preloader ora parte col colore dell'edizione ricordata, prima
+  del CSS; (3) cambiare edizione da una rotta condivisa fra le tre
+  (`/chi-siamo` è nei tre menu) teletrasportava sempre — `handleModeSwitch`
+  ora naviga solo se la rotta corrente non esiste nel menu dell'edizione di
+  destinazione (`routeExistsInEdition`, riusa `isItemActive` con un pathname
+  esplicito).
+- **Overflow a 320/375 corretto in corsa**: i tre segmenti a `flex-1` con
+  "Collaborazioni" (parola sola, 14 caratteri) sborda vano di 5px senza
+  `break-words` — un flex item non scende mai sotto il contenuto minimo del
+  suo unico figlio senza permesso esplicito di spezzare la parola. Aggiunto
+  `min-w-0` sul bottone e `break-words` sull'etichetta.
+
+**Misurato in browser (Playwright headless, non stimato)**, 320/375/768/1024/
+1280/1440 × 3 edizioni (`/`, `/family`, `/collaborazioni`) × prima
+visita/ritorno:
+
+| | pillola (riga 1) | commutatore compatto | commutatore esteso |
+| --- | ---: | ---: | ---: |
+| <768 | 68px | 158px totali | 393px totali |
+| ≥768 | 72px | 162px totali | 219–237px totali |
+
+"Totali" = dal bordo superiore del documento al punto in cui inizia il
+contenuto di pagina (riserva pillola inclusa nel proprio `pt-` del
+commutatore). Invariante confermato: l'altezza **non cambia con l'edizione**,
+a nessuna delle due larghezze o stati — varia solo fra prima visita e ritorno
+(atteso: la testa estesa porta le descrizioni). `theme-color` e
+`data-audience` verificati corretti nelle 36 combinazioni. Overflow
+orizzontale: 0 su tutte. Il filo del preloader verificato in browser (non
+dedotto): `background` calcolato risulta `rgb(244,63,119) → rgb(194,32,90) →
+rgb(244,63,119)` con `travellini_audience=family` in storage, prima che React
+monti; `animation-name` risulta `twuLineGlow` (era `none`, il bug del
+`className`).
+
+Verifiche: typecheck, lint (0 warning su tutto il repo), 367 test su 62 file
+(2 nuovi: no-teleport da `/chi-siamo` e navigazione vera da `/` in
+`Navbar.test.tsx`), `audit:ui` (0 errori, 214 warning invariati),
+`e2e/rotte-target-e-overflow.spec.ts` (4 larghezze × 20 rotte: overflow 0,
+controlli <24px 0, gerarchia titoli invariata, 0 errori console — inclusa
+`/mappa` col caso limite prima-visita-estesa) ed
+`e2e/tastiera-e-focus.spec.ts` (5/5; il test del gate è stato **aggiornato,
+non cancellato**: verifica ora che la testa estesa sia raggiungibile da
+tastiera e che la scelta la collassi e persista l'edizione).
+
+Non costruito qui per scelta esplicita dell'owner: la coreografia di
+transizione fra edizioni (filo che viaggia, velatura che cambia raggio,
+dissolvenza di pagina) — resta un lavoro successivo su una forma ora stabile;
+i token di raggio sulla velatura sono già pronti a riceverla.
+
+Nessun commit, push o deploy eseguito.

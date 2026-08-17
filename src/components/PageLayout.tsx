@@ -7,11 +7,11 @@ interface PageLayoutProps {
 export default function PageLayout({ children }: PageLayoutProps) {
   return (
     <div className="min-h-screen overflow-x-clip bg-[var(--color-sand)]">
-      {/* La testata a filo con fascia (2026-08-17) e' alta 101px a riposo
-          (mobile) / 97px (desktop), contro i 74-85px della pillola che
-          sostituisce: pt-28 (112px) riserva lo spazio a ogni larghezza senza
-          gradini per breakpoint (DESIGN_navbar-premium §4). */}
-      <div className="pt-28 pb-32">{children}</div>
+      {/* La testata torna a pillola galleggiante (2026-08-17): il commutatore
+          sotto di lei (`EditionBand.tsx`) non è più fisso, quindi riserva da
+          solo il proprio spazio nel flusso — incluso quello della pillola,
+          nel proprio `pt-`. Qui non serve più nessuna riserva verticale. */}
+      <div className="pb-32">{children}</div>
     </div>
   );
 }

@@ -20,8 +20,13 @@ import { trackAnalyticsEvent } from '../services/analytics';
  * tracciamento dell'altra — `audience_gate_view` non può precedere l'opt-in.
  */
 
-/** Kill-switch: se il CWV audit segnala regressioni, spegnere da qui. */
-export const AUDIENCE_GATE_ENABLED = true;
+/**
+ * Kill-switch. Spento dall'owner il 2026-08-17: la prima scelta si fa nella
+ * testata, che alla prima visita nasce estesa con le tre porte (vedi
+ * `EditionBand.tsx`) — non più in un secondo dialogo a schermo intero dopo il
+ * banner cookie. Il componente resta, per riaccenderlo basta questa riga.
+ */
+export const AUDIENCE_GATE_ENABLED = false;
 
 const SESSION_DISMISS_KEY = 'twu_gate_dismissed';
 

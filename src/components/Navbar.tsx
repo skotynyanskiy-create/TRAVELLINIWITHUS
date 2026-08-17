@@ -66,7 +66,6 @@ interface NavItem {
 }
 
 export default function Navbar() {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openMobileSection, setOpenMobileSection] = useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -100,23 +99,6 @@ export default function Navbar() {
     setLocale(next);
     setLocaleState(next);
   };
-
-  // La testata è `fixed`: la fascia collassa senza spostare mai il documento
-  // (nessun CLS). Isteresi (chiude >24, riapre <8) perché Lenis è montato e
-  // uno scroll con inerzia intorno a una soglia unica sfarfalla.
-  useEffect(() => {
-    const handleScroll = () => {
-      const y = window.scrollY;
-      setIsScrolled((prev) => {
-        if (y > 24) return true;
-        if (y < 8) return false;
-        return prev;
-      });
-    };
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const handleMobileMenuToggle = () => {
     // Collassa tutti i sottomenu al primo open per evitare 14+ link visibili
@@ -187,40 +169,11 @@ export default function Navbar() {
   );
 
   const navigate = useNavigate();
-  const { audience, userAudience, setAudience } = useAudience();
+  const { audience, userAudience, hasChosen, setAudience } = useAudience();
 
   const isFamilyRoute = location.pathname.startsWith('/family');
   const isBrandRoute =
     location.pathname.startsWith('/collaborazioni') || location.pathname.startsWith('/media-kit');
-
-  // Il gate del primo accesso traccia già `audience_gate_*`; il cambio da
-  // fascia/drawer non emetteva nulla, quindi non si poteva sapere quale dei
-  // due controlli venisse usato davvero. Stessa forma dell'evento del gate,
-  // cambia solo la sorgente (`surface`).
-  const handleModeSwitch = (
-    next: 'viaggiatori' | 'family' | 'brand',
-    surface: 'fascia' | 'drawer'
-  ) => {
-    trackAnalyticsEvent('audience_switch', {
-      from: audience,
-      to: next,
-      surface,
-      path: location.pathname,
-    });
-    setAudience(next);
-    if (next === 'brand') {
-      if (!location.pathname.startsWith('/collaborazioni')) {
-        navigate('/collaborazioni');
-      }
-      return;
-    }
-    if (next === 'family') {
-      if (!isFamilyRoute) navigate('/family');
-      return;
-    }
-    // viaggiatori: se siamo su una rotta di un'altra audience, torna alla home
-    if (isBrandRoute || isFamilyRoute) navigate('/');
-  };
 
   // Le tre edizioni: 3-4 voci, un sostantivo ciascuna, `whitespace-nowrap` su
   // tutte — mai un pannello oltre a "Mete" (DESIGN §2, §5; COPY §3).
@@ -286,9 +239,7 @@ export default function Navbar() {
       </Link>
     );
 
-  const isItemActive = (item: NavItem) => {
-    const path = location.pathname;
-
+  const isItemActive = (item: NavItem, path: string = location.pathname) => {
     if (item.href === '/destinazione') {
       return path.startsWith('/destinazione');
     }
@@ -314,16 +265,61 @@ export default function Navbar() {
     return false;
   };
 
+  // Cambiare edizione da una rotta che esiste anche in quella di destinazione
+  // (`/chi-siamo` è nei tre menu) non deve teletrasportare: naviga solo se la
+  // rotta corrente non c'è nel menu dell'edizione scelta.
+  const routeExistsInEdition = (items: NavItem[], path: string) =>
+    items.some((item) => isItemActive(item, path));
+
+  // Il gate del primo accesso è spento (2026-08-17): la prima scelta si fa
+  // nella testata estesa, che passa qui `surface: 'testa-estesa'` così
+  // l'evento resta distinguibile dal cambio ordinario in fascia/drawer.
+  const handleModeSwitch = (
+    next: 'viaggiatori' | 'family' | 'brand',
+    surface: 'fascia' | 'drawer' | 'testa-estesa'
+  ) => {
+    trackAnalyticsEvent('audience_switch', {
+      from: audience,
+      to: next,
+      surface,
+      path: location.pathname,
+    });
+    setAudience(next);
+
+    const alreadyThere =
+      next === 'brand'
+        ? isBrandRoute
+        : next === 'family'
+          ? isFamilyRoute
+          : !isBrandRoute && !isFamilyRoute;
+    if (alreadyThere) return;
+
+    const targetItems =
+      next === 'brand' ? brandItems : next === 'family' ? familyItems : viaggiatoriItems;
+    if (routeExistsInEdition(targetItems, location.pathname)) return;
+
+    if (next === 'brand') navigate('/collaborazioni');
+    else if (next === 'family') navigate('/family');
+    else navigate('/');
+  };
+
   return (
     <>
       <Suspense fallback={null}>
         <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
       </Suspense>
 
-      <header className="fixed top-0 right-0 left-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-sand)] text-[var(--color-ink)]">
-        {/* RIGA 1 — la testata. Altezza fissa: la decide solo lo slot marchio,
-            mai il contenuto delle voci (DESIGN §1, §2 invariante 1). */}
-        <div className="mx-auto flex h-14 max-w-[1360px] items-center justify-between gap-3 px-4 md:px-6">
+      {/* La pillola galleggiante — un oggetto contenuto, non più una barra a
+          filo dei bordi. Margine dallo schermo (px-3 pt-3 / md:px-6 md:pt-4),
+          angoli e bordo dai token, ombra ristretta: niente blur, niente
+          doppia ombra, niente animazione d'ingresso — quel vocabolario resta
+          fuori (CLAUDE.md, niente glassmorphism sulle pagine pubbliche).
+          Altezza totale: 68px mobile (pt-3 12 + h-14 56) / 72px desktop
+          (pt-4 16 + h-14 56) — invariante di edizione, la decide solo lo
+          slot marchio (DESIGN §1, §2 invariante 1). Il commutatore sotto
+          conosce questo numero (EditionBand.tsx: pt-[76px] / md:pt-20). */}
+      <header className="fixed top-0 right-0 left-0 z-50 px-3 pt-3 md:px-6 md:pt-4">
+        <div className="mx-auto flex h-14 max-w-[1360px] items-center justify-between gap-3 rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-[var(--color-sand)] px-4 text-[var(--color-ink)] shadow-[var(--shadow-sm)] md:px-6">
           {/* SLOT A — MARCHIO. Solo il lockup + il pallino accent: nient'altro si attacca mai. */}
           <div className="flex shrink-0 items-center gap-2">
             <Link
@@ -496,16 +492,21 @@ export default function Navbar() {
             </button>
           </div>
         </div>
-
-        {/* RIGA 2 — la fascia dell'edizione. Sempre 3 segmenti, mai a capo,
-            scorre via al primo scroll e non torna finché non si risale in cima. */}
-        <EditionBand
-          audience={audience}
-          userAudience={userAudience}
-          isScrolled={isScrolled}
-          onSwitch={(next) => handleModeSwitch(next, 'fascia')}
-        />
       </header>
+
+      {/* Il commutatore — secondo oggetto contenuto, sotto la pillola. NON è
+          `fixed`: appartiene al flusso del documento e scorre via con la
+          pagina quando si scrolla (la pillola resta appiccicata da sola).
+          Riserva anche lo spazio della pillola fissa qui sopra (il proprio
+          `pt-`) — nessun'altra pagina deve più farlo (PageLayout.tsx e le
+          pagine "flat" non hanno più bisogno di `pt-28`/`mt-28`: lo spazio è
+          già reale, non riservato a mano). */}
+      <EditionBand
+        audience={audience}
+        userAudience={userAudience}
+        hasChosen={hasChosen}
+        onSwitch={(next) => handleModeSwitch(next, hasChosen ? 'fascia' : 'testa-estesa')}
+      />
 
       <div
         aria-hidden="true"

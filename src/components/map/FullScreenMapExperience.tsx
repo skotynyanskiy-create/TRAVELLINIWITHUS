@@ -30,6 +30,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
+import { useAudience } from '@/src/context/AudienceContext';
 import { getGeocodedContentItems } from '@/src/config/contentLibrary';
 import { getMapTypeForInterest, rankByInterest } from '@/src/config/audienceInterests';
 import { usePersonalizedInterest } from '@/src/hooks/usePersonalizedInterest';
@@ -430,6 +431,7 @@ const getDesktopSnapshot = () =>
   typeof window !== 'undefined' && window.matchMedia(DESKTOP_QUERY).matches;
 
 export default function FullScreenMapExperience() {
+  const { hasChosen } = useAudience();
   const { interest } = usePersonalizedInterest();
   const mapRef = useRef<MapRef>(null);
   const setMapRef = useCallback((instance: MapRef | null) => {
@@ -875,10 +877,17 @@ export default function FullScreenMapExperience() {
   );
   const paintedPins = tier === 'posto' ? paintedPostoPins : paintedSingles;
 
-  // La navbar e' fixed (z-50) e alta 67-77px a seconda del breakpoint: senza il margine
-  // la barra dei filtri (z-40, top-6) finisce sepolta sotto di lei.
+  // La pillola del marchio e' fixed (z-50, ~68-72px); il commutatore sotto di
+  // lei non lo e' piu' e riserva da solo il proprio spazio nel flusso — ma e'
+  // piu' alto alla primissima visita (tre porte con descrizione) che dopo la
+  // prima scelta (tre nomi). Senza il margine giusto la barra dei filtri
+  // (z-40, top-6) finisce sepolta sotto la pillola. `[MISURATO]`, stessa
+  // fonte di `MAP_TOP_RESERVE_CLASS` in `src/pages/Mappa.tsx`.
+  const mapReserveClass = hasChosen
+    ? 'mt-[162px] h-[calc(100dvh-162px)]'
+    : 'mt-[393px] h-[calc(100dvh-393px)] sm:mt-[237px] sm:h-[calc(100dvh-237px)]';
   return (
-    <div className="mt-28 flex h-[calc(100dvh-112px)] w-full flex-col overflow-hidden bg-[#0a0705]">
+    <div className={`${mapReserveClass} flex w-full flex-col overflow-hidden bg-[#0a0705]`}>
       <header className="shrink-0 px-4 pb-3 pt-5 sm:px-8 sm:pb-4 sm:pt-6">
         <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
           Mappa dei posti particolari

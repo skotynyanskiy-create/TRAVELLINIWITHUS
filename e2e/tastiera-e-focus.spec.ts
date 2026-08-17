@@ -55,40 +55,61 @@ function descriviAttivo(page: import('@playwright/test').Page) {
 }
 
 test.describe('Tastiera e focus', () => {
-  test('il gate del pubblico si chiude con Escape e restituisce il focus', async ({ page }) => {
+  // Il gate a schermo intero e' spento dal 2026-08-17 (kill-switch in
+  // AudienceGate.tsx): la prima scelta si fa nella testata, che alla prima
+  // visita nasce estesa con le tre porte (EditionBand.tsx). Questo test
+  // sostituisce quello del gate — non lo cancella: verifica che la nuova
+  // prima visita sia raggiungibile da tastiera e che scegliere una porta
+  // collassi la testata e persista la scelta.
+  test('la testata nasce estesa alla prima visita, si sceglie da tastiera e si richiude', async ({
+    page,
+  }) => {
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     await page.evaluate(
       (c) => localStorage.setItem('tw:consent', JSON.stringify(c)),
       SOLO_NECESSARI
     );
-    await page.evaluate(() => sessionStorage.clear());
+    await page.evaluate(() => {
+      localStorage.removeItem('travellini_audience');
+      sessionStorage.clear();
+    });
     await page.reload({ waitUntil: 'domcontentloaded' });
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(700);
 
-    const gate = page.getByRole('button', { name: /decido dopo/i });
-    if ((await gate.count()) === 0) {
-      test.skip(true, 'il gate non compare in questa sessione: niente da verificare');
-      return;
-    }
+    // Tre porte pari: nomi + descrizioni verbatim, nessuna scelta ancora.
+    const switcher = page.getByRole('group', { name: "Scegli l'edizione" });
+    await expect(switcher).toBeVisible();
+    const portaFamily = switcher.getByRole('button', { name: /family/i });
+    await expect(
+      portaFamily,
+      'la porta Family non porta la sua descrizione verbatim da audienceEditions.ts'
+    ).toContainText('Gravidanza');
 
     /* Raggiungibile da tastiera: il focus deve poterci arrivare senza mouse. */
     let trovato = false;
-    for (let i = 0; i < 25 && !trovato; i++) {
+    for (let i = 0; i < 30 && !trovato; i++) {
       await page.keyboard.press('Tab');
-      trovato = await page.evaluate(() =>
-        /decido dopo/i.test(document.activeElement?.textContent ?? '')
+      trovato = await page.evaluate(
+        () => /^family/i.test((document.activeElement?.textContent ?? '').trim()) ?? false
       );
     }
     expect(
       trovato,
-      `«Decido dopo» non raggiungibile in 25 Tab (focus su ${await descriviAttivo(page)})`
+      `la porta Family non raggiungibile in 30 Tab (focus su ${await descriviAttivo(page)})`
     ).toBe(true);
 
-    await page.keyboard.press('Escape');
-    await page.waitForTimeout(700);
-    const ancoraAperto = await page.getByRole('button', { name: /decido dopo/i }).count();
-    console.log(`[gate] Escape chiude: ${ancoraAperto === 0 ? 'si' : 'NO'}`);
-    expect(ancoraAperto, 'Escape non chiude il gate del pubblico').toBe(0);
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(500);
+
+    // La scelta collassa la testata: la descrizione sparisce (resta solo il
+    // nome nel segmento) e l'edizione persiste per la prossima visita.
+    await expect(
+      page.getByText('Gravidanza, viaggi col pancione', { exact: false }),
+      'la testata e’ rimasta estesa dopo aver scelto una porta'
+    ).toHaveCount(0);
+    const audienceScelta = await page.evaluate(() => localStorage.getItem('travellini_audience'));
+    console.log(`[testata] edizione persistita dopo la scelta da tastiera: ${audienceScelta}`);
+    expect(audienceScelta, 'la scelta da tastiera non ha persistito l’edizione').toBe('family');
   });
 
   test('il menu mobile trattiene il focus e si chiude con Escape', async ({ page }) => {

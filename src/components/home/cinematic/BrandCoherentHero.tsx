@@ -84,7 +84,7 @@ export default function BrandCoherentHero() {
     .join(' · ');
 
   return (
-    <section className="relative w-full bg-[var(--color-sand,#faf7f2)] pt-28 pb-12 md:pb-20 text-[var(--color-ink,#1a2b3c)] overflow-hidden border-b border-[var(--color-border)]">
+    <section className="relative w-full bg-[var(--color-sand,#faf7f2)] pt-8 pb-12 md:pt-10 md:pb-20 text-[var(--color-ink,#1a2b3c)] overflow-hidden border-b border-[var(--color-border)]">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         {/* Su mobile la fotografia sale subito sotto il titolo: apertura da
             rivista (titolo → immagine → sommario) invece di 797px di testo

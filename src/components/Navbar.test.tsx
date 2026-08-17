@@ -1,8 +1,15 @@
 import { describe, it, expect, vi } from 'vitest';
 import { fireEvent, render } from '@testing-library/react';
-import { BrowserRouter, MemoryRouter } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter, useLocation } from 'react-router-dom';
 import { AudienceProvider } from '../context/AudienceContext';
 import Navbar from './Navbar';
+
+/** Mostra il pathname corrente: MemoryRouter non tocca `window.location`,
+ *  quindi è l'unico modo di verificare se un click ha navigato oppure no. */
+function SondaPercorso() {
+  const location = useLocation();
+  return <output data-testid="percorso-corrente">{location.pathname}</output>;
+}
 
 vi.mock('../context/AuthContext', () => ({
   useAuth: () => ({
@@ -140,5 +147,40 @@ describe('Navbar Component', () => {
     expect(queryAllByText(/^Mete$/).length).toBe(0);
     expect(queryAllByText(/^Mappa$/).length).toBe(0);
     expect(queryAllByText(/Collaborazioni/i).length).toBeGreaterThan(0);
+  });
+
+  // Difetto 3 del task testata: /chi-siamo è nei tre menu (viaggiatori,
+  // family, brand). Cambiare edizione stando lì non deve teletrasportare —
+  // solo su una rotta che l'edizione di destinazione non possiede si naviga.
+  it('cambiare edizione da /chi-siamo non naviga: la rotta esiste anche in family', () => {
+    const { getAllByRole, getByTestId } = render(
+      <MemoryRouter initialEntries={['/chi-siamo']}>
+        <AudienceProvider>
+          <Navbar />
+          <SondaPercorso />
+        </AudienceProvider>
+      </MemoryRouter>
+    );
+
+    const family = getAllByRole('button', { name: /family/i })[0];
+    fireEvent.click(family);
+
+    expect(getByTestId('percorso-corrente').textContent).toBe('/chi-siamo');
+  });
+
+  it('cambiare edizione da / naviga davvero: la rotta non esiste in family', () => {
+    const { getAllByRole, getByTestId } = render(
+      <MemoryRouter initialEntries={['/']}>
+        <AudienceProvider>
+          <Navbar />
+          <SondaPercorso />
+        </AudienceProvider>
+      </MemoryRouter>
+    );
+
+    const family = getAllByRole('button', { name: /family/i })[0];
+    fireEvent.click(family);
+
+    expect(getByTestId('percorso-corrente').textContent).toBe('/family');
   });
 });

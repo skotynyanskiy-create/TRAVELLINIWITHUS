@@ -45,6 +45,17 @@
   --color-accent-soft: #fff7ed; /* Sezioni soft — orange-50 */
   --color-footer: #0a0a0a; /* Footer — allineato a ink */
 
+  /* Token statici per edizione — MAI ridefiniti sotto :root[data-audience=...],
+     a differenza di --color-accent-text qui sopra. Servono al commutatore per
+     mostrare il colore di un'edizione che non è quella attiva (es. il pallino
+     della porta "Family" mentre il tema attivo è viaggiatori): l'edizione
+     attiva usa già i token ambiente (--color-accent-text ecc.), che sono
+     corretti perché coincidono col tema. Valori identici a quelli sotto i tre
+     blocchi `:root[data-audience=...]`. */
+  --edition-viaggiatori-accent-text: #c2410c;
+  --edition-family-accent-text: #c2205a;
+  --edition-brand-accent-text: #7d6426;
+
   /* Category colors — vivono SOLO nel contenuto (tag, bordi, hover tint).
      Introdotti con la home "Atlante Vivo" (2026-07-04). La cornice resta
      sand/ink; il colore entra per tipo di contenuto. Mai testo load-bearing
