@@ -73,63 +73,58 @@ export default function EditionBand({
           })}
         </div>
 
-        {/* >=1024: testata di giornale — eyebrow + i tre nomi su una riga. */}
-        <div className="hidden shrink-0 items-center gap-4 lg:flex">
-          <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
+        {/* >=1024 — **una riga di prosa, non una barra di controlli.**
+            Prima i tre nomi stavano qui tipograficamente uguali, distinti da un
+            pallino da 6px, con la descrizione relegata a destra e troncata: la
+            fascia leggeva come una riga di impostazioni, e l'unica cosa che
+            riconfigura il sito intero sembrava una preferenza fra tre.
+            Qui l'edizione corrente si **afferma** — nome in serif, descrizione
+            attaccata da un trattino, una frase sola — e le altre due stanno a
+            destra come uscite quiete. Una testata non si annuncia «EDIZIONE»:
+            dichiara quale. */}
+        <p className="hidden min-w-0 flex-1 items-baseline gap-2 font-serif text-[13px] lg:flex">
+          <span className="shrink-0 text-[10px] font-sans font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
             Edizione
           </span>
-          <div className="flex items-center gap-2.5 font-serif text-[13px]">
-            {AUDIENCE_EDITIONS.map((choice, index) => {
-              const active = choice.key === audience;
-              return (
-                <span key={choice.key} className="flex items-center gap-2.5">
-                  {index > 0 && (
-                    <span aria-hidden="true" className="text-[var(--color-border)]">
-                      ·
-                    </span>
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => onSwitch(choice.key)}
-                    aria-current={active ? 'true' : undefined}
-                    className={`flex min-h-6 cursor-pointer items-center gap-1.5 whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] ${
-                      active
-                        ? 'text-[var(--color-ink)]'
-                        : 'text-[var(--color-muted-fg-2)] hover:text-[var(--color-ink)]'
-                    }`}
-                  >
-                    {active && (
-                      <span
-                        aria-hidden="true"
-                        className={
-                          isForced
-                            ? 'h-1.5 w-1.5 rounded-full border border-[var(--color-accent)]'
-                            : 'h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]'
-                        }
-                      />
-                    )}
-                    {choice.title}
-                  </button>
-                </span>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* >=1280: metà destra — nota di stato temporaneo o descrizione dell'edizione, mai entrambe. */}
-        <div className="hidden min-w-0 flex-1 justify-end xl:flex">
+          <span className="shrink-0 text-[15px] leading-none text-[var(--color-ink)]">
+            {current.title}
+          </span>
           {isForced && ownEdition ? (
-            <Link
-              to="/"
-              className="flex min-h-6 max-w-md items-center truncate text-[13px] font-serif text-[var(--color-muted-fg-2)] underline decoration-[var(--color-border)] underline-offset-4 transition-colors hover:text-[var(--color-ink)]"
-            >
-              La tua edizione resta {ownEdition.title}
-            </Link>
+            <span className="min-w-0 truncate text-[var(--color-muted-fg-2)]">
+              — solo su questa pagina.{' '}
+              <Link
+                to="/"
+                className="underline decoration-[var(--color-border)] underline-offset-4 transition-colors hover:text-[var(--color-ink)]"
+              >
+                La tua resta {ownEdition.title}
+              </Link>
+            </span>
           ) : (
-            <p className="flex min-h-6 max-w-md items-center truncate text-[13px] font-serif text-[var(--color-muted-fg)]">
-              {current.description}
-            </p>
+            <span className="hidden min-w-0 truncate text-[var(--color-muted-fg)] xl:inline">
+              — {current.description}
+            </span>
           )}
+        </p>
+
+        {/* Le altre due edizioni: raggiungibili, mai in competizione con quella
+            dichiarata. Sono l'uscita, non tre pari grado. */}
+        <div className="hidden shrink-0 items-center gap-3 font-serif text-[13px] lg:flex">
+          {AUDIENCE_EDITIONS.filter((choice) => choice.key !== audience).map((choice, index) => (
+            <span key={choice.key} className="flex items-center gap-3">
+              {index > 0 && (
+                <span aria-hidden="true" className="text-[var(--color-border)]">
+                  ·
+                </span>
+              )}
+              <button
+                type="button"
+                onClick={() => onSwitch(choice.key)}
+                className="flex min-h-6 cursor-pointer items-center whitespace-nowrap text-[var(--color-muted-fg-2)] underline decoration-transparent underline-offset-4 transition-colors hover:text-[var(--color-ink)] hover:decoration-[var(--color-border)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+              >
+                {choice.title}
+              </button>
+            </span>
+          ))}
         </div>
       </div>
     </div>
