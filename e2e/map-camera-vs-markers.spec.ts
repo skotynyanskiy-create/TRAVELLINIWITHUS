@@ -135,11 +135,19 @@ test.describe('Mappa — la camera si muove e i marcatori la seguono', () => {
     erroriConsole.forEach((e) => console.log(`  - ${e}`));
     console.log(`VERDETTO: ${verdetto}\n`);
 
-    /* Il canvas che si ridisegna da solo rende l'impronta inutilizzabile come
-       prova: in quel caso il test riporta e non giudica. */
-    test.skip(disegnaDaSolo, 'canvas instabile a riposo: impronta non probante');
+    /* **Si sospende solo l'assertion che dipende dal segnale rumoroso.**
+       Se il canvas si ridisegna da solo (`projection="globe"` puo' farlo)
+       l'impronta dei pixel non prova piu' che sia stata la camera a muoversi —
+       ma la posizione a schermo di un marcatore seguito per `aria-label` resta
+       attendibile lo stesso. Saltare l'intero test, come faceva prima, spegneva
+       anche la prova buona: su una macchina dove il canvas e' sempre instabile
+       il cancello non avrebbe mai verificato niente, restando verde. */
+    if (disegnaDaSolo) {
+      console.log('canvas instabile a riposo: salto la sola prova sull’impronta');
+    } else {
+      expect(cambiCanvas, 'la camera non risponde allo zoom').toBeGreaterThan(0);
+    }
 
-    expect(cambiCanvas, 'la camera non risponde allo zoom').toBeGreaterThan(0);
     expect(spostamentiSonda, 'i marcatori non seguono la camera').toBeGreaterThan(0);
     expect(erroriConsole, 'errori console durante lo zoom').toEqual([]);
   });
@@ -186,6 +194,67 @@ test.describe('Mappa — la camera si muove e i marcatori la seguono', () => {
       expect(stato.pinNominati, `budget nomi a ${larghezza}px superato`).toBeLessThanOrEqual(max);
     });
   }
+
+  /**
+   * Il CLS della mappa **caricata davvero**, che nessun altro cancello vede.
+   *
+   * `lighthouserc.json` misura `/mappa` col preset desktop e con un profilo
+   * pulito a ogni giro: `src/pages/Mappa.tsx` monta `FullScreenMapExperience`
+   * solo se il consenso marketing c'e' gia' (`canLoad('marketing')` letto
+   * nell'inizializzatore di stato), quindi in CI **maplibre non si carica mai**
+   * e il CLS misurato e' quello del segnaposto. Misurato forzando il consenso il
+   * 2026-08-17: **0,0976** contro un tetto bloccante di 0,1 — passa per tre
+   * millesimi, e nessuno lo stava guardando.
+   *
+   * Qui il consenso si concede perche' e' esattamente l'esperienza da misurare:
+   * quella di chi accetta i cookie e vede la mappa.
+   */
+  test('il CLS della mappa caricata resta sotto il tetto bloccante', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/mappa', { waitUntil: 'domcontentloaded' });
+    await page.evaluate(() => {
+      localStorage.setItem(
+        'tw:consent',
+        JSON.stringify({
+          necessary: true,
+          analytics: false,
+          marketing: true,
+          personalization: false,
+          timestamp: 1755300000000,
+          version: 1,
+        })
+      );
+      sessionStorage.setItem('twu_gate_dismissed', '1');
+    });
+
+    await page.addInitScript(() => {
+      (window as unknown as { __cls: number }).__cls = 0;
+      new PerformanceObserver((lista) => {
+        for (const voce of lista.getEntries() as unknown as {
+          value: number;
+          hadRecentInput: boolean;
+        }[]) {
+          if (!voce.hadRecentInput) (window as unknown as { __cls: number }).__cls += voce.value;
+        }
+      }).observe({ type: 'layout-shift', buffered: true });
+    });
+
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.locator('.maplibregl-canvas').waitFor({ state: 'visible', timeout: 25000 });
+    await page.waitForTimeout(5000);
+
+    const cls = await page.evaluate(() => (window as unknown as { __cls: number }).__cls ?? 0);
+    const marcatori = await page.locator('.maplibregl-marker').count();
+    console.log(`[cls mappa] ${cls.toFixed(4)} · marcatori montati: ${marcatori}`);
+
+    /* Se la mappa non si e' caricata la misura non vale niente: senza questo il
+       test resterebbe verde proprio nel caso che deve sorvegliare. */
+    expect(
+      marcatori,
+      'la mappa non si e caricata: il CLS misurato non e quello vero'
+    ).toBeGreaterThan(0);
+    expect(cls, 'CLS della mappa oltre il tetto bloccante di CI').toBeLessThanOrEqual(0.1);
+  });
 
   /**
    * Il deep-link e' l'unico modo in cui un link condiviso arriva a destinazione.
