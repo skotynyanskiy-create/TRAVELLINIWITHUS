@@ -50,7 +50,21 @@ function impronta(buffer: Buffer): string {
   return createHash('sha1').update(buffer).digest('hex').slice(0, 12);
 }
 
+/**
+ * Il tetto di default di Playwright e' 30s per test, e qui **non basta**.
+ *
+ * Ogni prova di questo blocco aspetta 20-25s il solo canvas di maplibre, e il
+ * deep-link ne aspetta altri 20 per la scheda: 40s di attese dentro un budget
+ * di 30. In locale non si vede, perche' entrambe rispondono in poche centinaia
+ * di millisecondi; in CI, con `workers: 1` e la contesa che ne segue, il tetto
+ * scade davvero — e' il motivo per cui il deep-link falliva su entrambi i
+ * progetti (`Test timeout of 30000ms exceeded`, run del 2026-08-16) mentre in
+ * locale era verde. Il tetto va alzato dove le attese sono dichiarate, non
+ * ridotte le attese: la mappa in CI e' lenta per davvero.
+ */
 test.describe('Mappa — la camera si muove e i marcatori la seguono', () => {
+  test.describe.configure({ timeout: 90000 });
+
   test('zoom ripetuto: canvas e marcatori restano d’accordo', async ({ page }) => {
     const erroriConsole: string[] = [];
     page.on('console', (m) => {
