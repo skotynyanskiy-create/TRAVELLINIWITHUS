@@ -313,6 +313,38 @@ function withSelectedLast(items: ContentItem[], selectedId?: string): ContentIte
 /** Riquadro min/max di un insieme di coordinate, formato `LngLatBoundsLike`
  *  di maplibre-gl (sw poi ne). Usato sia dal bounds iniziale dell'archivio
  *  (D3) sia dal fly-to di un disco che si apre (§5). */
+/**
+ * Riquadro che copre il **grosso** dell'archivio, non i suoi estremi.
+ *
+ * `boundsFromCoords` prende min e max, ed e' giusto per volare su un gruppo.
+ * Per la vista d'apertura no: l'archivio ha 81 posti in Italia e 28 sparsi in
+ * dieci paesi — Norvegia, Malesia, Shanghai, Cancun — quindi «tutto» significa
+ * quasi l'intero pianeta, e la mappa si apriva su un mappamondo dove i posti
+ * erano un grumo illeggibile. Misurato il 2026-08-17.
+ *
+ * Qui si scartano le code (10% per lato su ciascun asse) e si inquadra dove
+ * l'archivio e' denso. **Non e' «apri sull'Italia»**: e' una regola sulla
+ * distribuzione, non sulla geografia, e resta vera se domani il corpus diventa
+ * per meta' asiatico. I posti fuori inquadratura non spariscono — sono a una
+ * gesto di distanza, e il conteggio in testata li nomina comunque.
+ */
+function boundsDelNucleo(
+  coordsList: GeoPoint[],
+  codaScartata = 0.1
+): [[number, number], [number, number]] {
+  if (coordsList.length < 5) return boundsFromCoords(coordsList);
+  const percentile = (valori: number[], p: number) => {
+    const ordinati = [...valori].sort((a, b) => a - b);
+    return ordinati[Math.min(ordinati.length - 1, Math.floor(ordinati.length * p))];
+  };
+  const lng = coordsList.map((c) => c.lng);
+  const lat = coordsList.map((c) => c.lat);
+  return [
+    [percentile(lng, codaScartata), percentile(lat, codaScartata)],
+    [percentile(lng, 1 - codaScartata), percentile(lat, 1 - codaScartata)],
+  ];
+}
+
 function boundsFromCoords(coordsList: GeoPoint[]): [[number, number], [number, number]] {
   let west = coordsList[0].lng;
   let east = coordsList[0].lng;
@@ -453,7 +485,7 @@ export default function FullScreenMapExperience() {
      mentre il baricentro reale del corpus e' al Nord (§1.3). */
   const homeBounds = useMemo(() => {
     const coords = allItems.filter(hasCoordinates).map((item) => item.place.coordinates);
-    return coords.length > 0 ? boundsFromCoords(coords) : null;
+    return coords.length > 0 ? boundsDelNucleo(coords) : null;
   }, [allItems]);
 
   const [userLoc, setUserLoc] = useState<UserLocation | null>(null);
