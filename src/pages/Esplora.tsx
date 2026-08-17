@@ -565,7 +565,7 @@ export default function Esplora() {
                   type="button"
                   onClick={() => setShowMap((prev) => !prev)}
                   aria-expanded={showMap}
-                  className="mt-3 inline-flex items-center gap-2 text-sm text-black/55 transition-colors hover:text-[var(--color-ink)]"
+                  className="mt-3 inline-flex items-center gap-2 py-1.5 text-sm text-black/55 transition-colors hover:text-[var(--color-ink)]"
                 >
                   <MapIcon size={14} /> {showMap ? 'Nascondi anteprima mappa' : 'Anteprima mappa'}
                 </button>

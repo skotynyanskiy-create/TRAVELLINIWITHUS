@@ -114,7 +114,7 @@ export default function ProductCard({
 
         <Link
           to={productPath}
-          className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] font-bold text-[var(--color-muted-fg)] group-hover:text-ink transition-colors mt-auto"
+          className="inline-flex items-center gap-2 py-1.5 text-[10px] uppercase tracking-[0.3em] font-bold text-[var(--color-muted-fg)] group-hover:text-ink transition-colors mt-auto"
         >
           Dettagli{' '}
           <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />

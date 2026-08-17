@@ -105,7 +105,7 @@ export default function CleanFeaturedGrid() {
           </div>
           <Link
             to="/esplora"
-            className="mt-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-ink)] hover:text-[var(--color-accent-text)] md:mt-0"
+            className="mt-4 inline-flex items-center gap-2 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-ink)] hover:text-[var(--color-accent-text)] md:mt-0"
           >
             Vedi tutte le destinazioni
             <ArrowUpRight size={16} />

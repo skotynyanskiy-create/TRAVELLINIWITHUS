@@ -293,7 +293,7 @@ export default function CaseStudiesSection() {
           </p>
           <a
             href="/media-kit"
-            className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[var(--color-accent-text)] hover:underline"
+            className="inline-flex items-center gap-1.5 py-1.5 text-xs font-bold uppercase tracking-wider text-[var(--color-accent-text)] hover:underline"
             onClick={() => trackEvent('case_study_mediakit_link', { route: '/collaborazioni' })}
           >
             Sfoglia il Media Kit <ArrowUpRight size={14} />

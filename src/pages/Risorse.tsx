@@ -453,7 +453,7 @@ export default function Risorse() {
           <FinalCtaSection intent="discovery" />
         </div>
 
-        <div className="mt-12 rounded-[var(--radius-lg)] border border-black/5 bg-white p-7 text-sm leading-relaxed text-black/55">
+        <p className="mt-12 rounded-[var(--radius-lg)] border border-black/5 bg-white p-7 text-sm leading-relaxed text-black/55">
           Per dettagli completi sulla natura dei link affiliati, consulta la{' '}
           <Link
             to="/disclaimer"
@@ -462,7 +462,7 @@ export default function Risorse() {
             pagina disclaimer
           </Link>
           .
-        </div>
+        </p>
       </Section>
 
       <StickyMobileCTA

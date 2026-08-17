@@ -293,26 +293,26 @@ export default function Contatti() {
 
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-5">
           <div className="space-y-8 lg:col-span-2">
-            <h3 className="mb-6 text-2xl font-serif">I nostri recapiti</h3>
+            <h2 className="mb-6 text-2xl font-serif">I nostri recapiti</h2>
 
             <div className="group flex items-start gap-4 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-6 transition-all duration-300 hover:border-[var(--color-accent)]/25 hover:shadow-[var(--shadow-sm)]">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-accent-soft)] text-[var(--color-accent)] transition-transform duration-300 group-hover:scale-105">
                 <Mail size={20} />
               </div>
               <div>
-                <h4 className="mb-1 font-serif text-xl">{pageContent.emailCardTitle}</h4>
+                <h3 className="mb-1 font-serif text-xl">{pageContent.emailCardTitle}</h3>
                 <p className="mb-2 text-sm font-normal text-black/70">
                   {pageContent.emailCardDescription}
                 </p>
                 <a
                   href={CONTACTS.mailto}
-                  className="block text-sm font-medium transition-colors group-hover:text-[var(--color-accent-text)]"
+                  className="block py-1.5 text-sm font-medium transition-colors group-hover:text-[var(--color-accent-text)]"
                 >
                   {CONTACTS.email}
                 </a>
                 <Link
                   to="/media-kit"
-                  className="mt-4 block text-xs font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-colors hover:text-black"
+                  className="mt-4 block py-1.5 text-xs font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-colors hover:text-black"
                 >
                   {pageContent.emailCardLinkLabel}
                 </Link>
@@ -329,7 +329,7 @@ export default function Contatti() {
                 <MessageCircle size={20} />
               </div>
               <div>
-                <h4 className="mb-1 font-serif text-xl">{pageContent.whatsappCardTitle}</h4>
+                <h3 className="mb-1 font-serif text-xl">{pageContent.whatsappCardTitle}</h3>
                 <p className="mb-2 text-sm font-normal text-black/70">
                   {pageContent.whatsappCardDescription}
                 </p>
@@ -370,7 +370,7 @@ export default function Contatti() {
             </div>
 
             <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-6 shadow-sm">
-              <h4 className="mb-3 text-xl font-serif">{pageContent.helperTitle}</h4>
+              <h3 className="mb-3 text-xl font-serif">{pageContent.helperTitle}</h3>
               <ul className="space-y-3 text-sm font-normal leading-relaxed text-black/70">
                 {pageContent.helperItems.map((item) => (
                   <li key={item} className="flex items-start gap-2">
@@ -398,7 +398,7 @@ export default function Contatti() {
                   {/* B2C vs B2B Audience Switcher Tab */}
                   <div className="mb-8 flex items-center justify-between border-b border-[var(--color-border)] pb-6">
                     <div>
-                      <h3 className="text-2xl md:text-3xl font-serif">{pageContent.formTitle}</h3>
+                      <h2 className="text-2xl md:text-3xl font-serif">{pageContent.formTitle}</h2>
                       <p className="text-xs text-black/60 mt-1">
                         Seleziona la tua tipologia per fornirti una risposta personalizzata.
                       </p>
@@ -623,7 +623,7 @@ export default function Contatti() {
                   <div className="mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-[var(--color-sand)] text-[var(--color-accent)] shadow-inner">
                     <CheckCircle size={48} />
                   </div>
-                  <h3 className="mb-4 text-4xl font-serif">Messaggio inviato</h3>
+                  <h2 className="mb-4 text-4xl font-serif">Messaggio inviato</h2>
                   <p className="mx-auto mb-10 max-w-md text-lg font-normal leading-relaxed text-black/70">
                     Grazie per averci contattato. Abbiamo ricevuto il tuo messaggio e ti
                     risponderemo appena possibile, in genere entro 24-48 ore lavorative.
@@ -658,7 +658,7 @@ export default function Contatti() {
                   <div className="mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-[var(--color-warning-soft)] text-[var(--color-warning-text)] shadow-inner">
                     <MailWarning size={40} />
                   </div>
-                  <h3 className="mb-4 text-4xl font-serif">Il messaggio non è partito</h3>
+                  <h2 className="mb-4 text-4xl font-serif">Il messaggio non è partito</h2>
                   <p className="mx-auto mb-8 max-w-md text-lg font-normal leading-relaxed text-black/70">
                     Non è colpa tua: il nostro sistema di invio non era raggiungibile in questo
                     momento. Per essere sicuro/a che lo vediamo, scrivici direttamente.

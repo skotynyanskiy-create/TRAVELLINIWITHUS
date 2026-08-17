@@ -165,7 +165,7 @@ export default function BrandCoherentHero() {
                 <MagneticWrapper strength={4}>
                   <Link
                     to="/mappa"
-                    className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-ink)] hover:text-[var(--color-accent-text)]"
+                    className="inline-flex items-center gap-2 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-ink)] hover:text-[var(--color-accent-text)]"
                   >
                     Vai alla mappa <Map size={16} />
                   </Link>

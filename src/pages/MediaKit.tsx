@@ -272,9 +272,9 @@ export default function MediaKit() {
             <p className="font-serif italic text-2xl text-[var(--color-accent)] leading-none">
               Rodrigo &amp; Betta
             </p>
-            <h4 className="font-serif text-3xl leading-tight font-bold tracking-tight">
+            <h3 className="font-serif text-3xl leading-tight font-bold tracking-tight">
               Raccontare con <span className="italic">criterio</span>.
-            </h4>
+            </h3>
             <p className="text-xs max-w-md leading-relaxed text-black/60">
               Selezioniamo luoghi, soggiorni e strumenti che hanno un motivo reale per essere
               raccontati. Il contenuto resta utile prima di essere promozionale.

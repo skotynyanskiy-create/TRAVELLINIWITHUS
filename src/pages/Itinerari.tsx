@@ -113,6 +113,7 @@ export default function Itinerari() {
       </Section>
 
       <Section>
+        <h2 className="sr-only">Itinerari disponibili</h2>
         {filteredItineraries.length === 0 ? (
           <div className="rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-sand)] p-10 text-center">
             <p className="text-sm font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
@@ -173,7 +174,7 @@ export default function Itinerari() {
                   <div className="mt-4 border-t border-black/5 pt-4">
                     <Link
                       to={`/itinerari/${item.slug}`}
-                      className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent-text)]"
+                      className="inline-flex items-center gap-2 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent-text)]"
                     >
                       Apri itinerario{' '}
                       <ArrowRight

@@ -200,7 +200,7 @@ export default function ArchiveCard({
           <Link
             to={item.link}
             state={linkState}
-            className="group/btn relative inline-flex w-full items-center justify-between text-[10px] font-bold uppercase tracking-[0.22em] text-black/60 transition-colors hover:text-[var(--color-accent-text)]"
+            className="group/btn relative inline-flex w-full items-center justify-between py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-black/60 transition-colors hover:text-[var(--color-accent-text)]"
           >
             <span>Leggi</span>
             <ArrowRight

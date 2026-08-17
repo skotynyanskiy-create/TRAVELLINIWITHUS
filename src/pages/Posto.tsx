@@ -239,7 +239,7 @@ export default function Posto() {
                 {destUrl ? (
                   <Link
                     to={destUrl}
-                    className="mt-1 inline-flex items-center gap-2 rounded text-sm font-semibold uppercase tracking-[0.16em] text-[var(--color-accent-text)] underline-offset-4 transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+                    className="mt-1 inline-flex items-center gap-2 rounded py-1.5 text-sm font-semibold uppercase tracking-[0.16em] text-[var(--color-accent-text)] underline-offset-4 transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
                   >
                     <MapPin size={14} /> {placeLabel}
                   </Link>

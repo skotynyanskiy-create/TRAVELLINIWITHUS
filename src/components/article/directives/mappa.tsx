@@ -132,7 +132,7 @@ function MappaDirective({
             <button
               type="button"
               onClick={activateMap}
-              className="font-semibold text-[var(--color-accent-on-dark,#e8834e)] underline underline-offset-2 hover:text-white cursor-pointer"
+              className="py-1 font-semibold text-[var(--color-accent-on-dark,#e8834e)] underline underline-offset-2 hover:text-white cursor-pointer"
             >
               Attivala
             </button>

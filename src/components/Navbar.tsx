@@ -332,7 +332,7 @@ export default function Navbar() {
           <div className="flex shrink-0 items-center pl-1">
             <Link
               to="/"
-              className="group whitespace-nowrap font-serif text-base font-medium tracking-tight text-[var(--color-ink)] transition-all duration-300 md:text-lg xl:text-[1.35rem]"
+              className="group whitespace-nowrap py-1 font-serif text-base font-medium tracking-tight text-[var(--color-ink)] transition-all duration-300 md:text-lg xl:text-[1.35rem]"
             >
               Travellini
               {/* Testo su chiaro: --color-accent è il riempimento (3,13:1), non

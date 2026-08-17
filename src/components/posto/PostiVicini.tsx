@@ -31,7 +31,7 @@ export default function PostiVicini({ posto }: { posto: ContentItem }) {
         </h2>
         <Link
           to="/mappa"
-          className="shrink-0 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-accent-text)] underline-offset-4 transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
+          className="shrink-0 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-accent-text)] underline-offset-4 transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2"
         >
           Tutti sulla mappa
         </Link>

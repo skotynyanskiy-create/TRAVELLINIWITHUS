@@ -97,7 +97,7 @@ export default function EditorialCollections({
                       destination_url: collection.ctaHref,
                     })
                   }
-                  className="inline-flex shrink-0 items-center gap-1.5 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent-text)]"
+                  className="inline-flex shrink-0 items-center gap-1.5 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent-text)]"
                 >
                   {collection.ctaLabel} <ArrowRight size={13} />
                 </Link>

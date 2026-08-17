@@ -26,7 +26,7 @@ export default function Footer() {
               <div className="md:col-span-2 lg:col-span-2">
                 <Link
                   to="/"
-                  className="mb-3 inline-block text-3xl font-serif font-medium tracking-tight text-white"
+                  className="mb-3 inline-block py-1 text-3xl font-serif font-medium tracking-tight text-white"
                 >
                   Travellini<span className="font-bold text-[var(--color-accent)]">with</span>us
                 </Link>
@@ -38,7 +38,7 @@ export default function Footer() {
                 </p>
                 <a
                   href={CONTACTS.mailto}
-                  className="mb-8 block text-sm font-light text-white/55 transition-colors hover:text-white"
+                  className="mb-8 block py-1.5 text-sm font-light text-white/55 transition-colors hover:text-white"
                 >
                   {CONTACTS.email}
                 </a>

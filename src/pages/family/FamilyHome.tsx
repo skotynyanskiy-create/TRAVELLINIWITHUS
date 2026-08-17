@@ -96,7 +96,7 @@ export default function FamilyHome() {
         <div className="mt-8">
           <Link
             to="/family/consigli"
-            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-accent-text)] transition-colors hover:text-[var(--color-accent-text)]"
+            className="inline-flex items-center gap-2 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-accent-text)] transition-colors hover:text-[var(--color-accent-text)]"
           >
             Tutti i consigli
             <ArrowRight size={14} aria-hidden />
@@ -114,7 +114,7 @@ export default function FamilyHome() {
             </p>
             <Link
               to="/family/shop"
-              className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-accent-text)] transition-colors hover:text-[var(--color-accent-text)]"
+              className="mt-6 inline-flex items-center gap-2 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-accent-text)] transition-colors hover:text-[var(--color-accent-text)]"
             >
               {dealsCount > 0 ? `${dealsCount} codici attivi` : 'Apri la vetrina'}
               <ArrowRight size={14} aria-hidden />
