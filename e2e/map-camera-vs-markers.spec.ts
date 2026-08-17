@@ -269,10 +269,16 @@ test.describe('Mappa — la camera si muove e i marcatori la seguono', () => {
     const attiva = page.getByRole('button', { name: /attiva la mappa/i });
     if (await attiva.count()) await attiva.first().click();
     await page.locator('.maplibregl-canvas').waitFor({ state: 'visible', timeout: 20000 });
-    await page.waitForTimeout(3000);
 
-    const testo = (await page.locator('body').innerText()).toLowerCase();
-    console.log(`[deep-link] burton trovato in pagina: ${testo.includes('burton')}`);
-    expect(testo, 'il deep-link non ha aperto il posto richiesto').toContain('burton');
+    /* Si aspetta **la cosa che si verifica**, non un tempo indovinato.
+       Con `waitForTimeout(3000)` questa prova passava 5 volte su 5 da sola e
+       cadeva dentro la suite completa, dove la contesa di risorse allunga il
+       volo della camera oltre i tre secondi: un cancello che sfarfalla e' peggio
+       di nessun cancello, perche' insegna a ignorarlo. */
+    await expect(
+      page.locator('body'),
+      'il deep-link non ha aperto il posto richiesto'
+    ).toContainText(/burton/i, { timeout: 20000 });
+    console.log('[deep-link] scheda del posto aperta');
   });
 });
