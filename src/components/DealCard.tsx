@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, Check, ChevronDown, Copy, Tag } from 'lucide-react';
 import type { ContentItem } from '../types/content';
 import { AFFILIATE_ANCHOR_ATTRS } from '../lib/affiliateLink';
+import { offertaScaduta } from '../lib/offerta';
 
 /** Formatta una data ISO nel formato italiano dd/mm/yyyy. */
 function formatItalianDate(iso: string): string {
@@ -12,17 +13,11 @@ function formatItalianDate(iso: string): string {
   return `${dd}/${mm}/${date.getFullYear()}`;
 }
 
-/**
- * Un'offerta è scaduta quando `validUntil` è passato. Il confronto sta a fine
- * giornata (`23:59:59` locale) perché una promo «valida fino al 31 dicembre»
- * vale per tutto il 31, non fino alla sua mezzanotte iniziale.
- */
-function isScaduta(validUntil: string): boolean {
-  const fine = new Date(validUntil);
-  if (Number.isNaN(fine.getTime())) return false; // data illeggibile: non si nasconde nulla
-  fine.setHours(23, 59, 59, 999);
-  return fine.getTime() < Date.now();
-}
+/* La regola della scadenza vive in `src/lib/offerta.ts`, condivisa con
+   `getFamilyDeals()`: quando stava solo qui, il conteggio delle offerte family
+   contava anche le scadute e prometteva codici sopra uno scaffale vuoto. Una
+   regola in due copie e' una regola che prima o poi diverge. */
+const isScaduta = (validUntil: string) => offertaScaduta(validUntil);
 
 /**
  * Offerta/deal collegata a un posto — codice promo o sconto affiliato.
