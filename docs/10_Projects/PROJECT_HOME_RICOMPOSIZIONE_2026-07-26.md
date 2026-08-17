@@ -530,3 +530,49 @@ Tre difetti su `homeComposition.ts` e `HomeAudienceVoice.tsx`, pubblico brand:
 Verifiche: typecheck, lint, 353 test su 58 file (nuovi: composizione Brand
 in `homeComposition.test.ts`, `HomeAudienceVoice.test.tsx`), `audit:ui`
 (0 errori). Tre commit distinti, uno per correzione.
+
+## 15. Il commutatore di pubblico entra in navbar — 2026-08-17
+
+Direzione in `docs/50_Scratch/DESIGN_commutatore-pubblico.md`, implementata con
+le misure prese in browser (le stime aritmetiche del documento erano sbagliate
+di ~80px; lo spazio libero reale in barra è 66px a 1024/1280/1440, non 150-165).
+
+- **Chip di edizione attaccato al marchio**, non più bottone account isolato:
+  `Travelliniwithus │ ● <edizione> ⌄` in Fraunces 13px, apre un popover a tre
+  righe con le descrizioni dei tre pubblici. Nuovo componente
+  `src/components/AudienceEditionChip.tsx`, tre gradini per breakpoint (solo
+  pallino `aria-hidden` <768, pallino+parola passivi 768–1023, chip
+  interattivo ≥1024).
+- **Terza audience: un nome solo, «Brand»** (prima: «Brand & aziende»,
+  «Collaborazioni», «Modalità Partner Attiva», «Hub B2B»). È anche il valore
+  più corto (78px contro 130 di «Collaborazioni»), condizione che permette al
+  chip di entrare nel budget reale. Sorgente unica delle tre edizioni:
+  `src/config/audienceEditions.ts`, condivisa da `AudienceGate.tsx` (prima
+  duplicava le stesse descrizioni a mano).
+- **L'icona account sparisce dalla barra desktop.** Le sue voci non-cambiate
+  di posto (Preferiti, Personalizza esperienza, Accedi/Disconnetti) restano
+  dove già esistevano nel drawer mobile; Lingua (owner: resta com'è, non
+  toccata né commentata) si sposta nel drawer, non ha più sede desktop;
+  Admin resta raggiungibile solo da `Footer.tsx` (che già lo esponeva).
+  Rimosso anche il toast «Modalità Partner Attiva — Hub B2B», ridondante con
+  un'edizione ora sempre visibile in testata.
+- **Strumentato `handleModeSwitch`**: emette `audience_switch { from, to,
+  surface: 'chip' | 'drawer', path }` — prima il cambio da navbar/drawer non
+  tracciava nulla, mentre il gate del primo accesso emette tre eventi propri
+  da anni. Il gate resta attivo (nessuna modifica), la decisione se
+  spegnerlo aspetta questo dato.
+
+Verifiche: typecheck, lint, 356 test su 61 file, `audit:ui` (0 errori),
+`e2e/rotte-target-e-overflow.spec.ts` (4 larghezze, 20 rotte — overflow 0,
+nessun controllo sotto 24px, gerarchia titoli invariata) ed
+`e2e/tastiera-e-focus.spec.ts` (5/5, incluso il nuovo chip: Escape chiude il
+popover e restituisce il focus al trigger). Sonda ad-hoc su 320/375/768/
+1024/1280/1440 × 3 audience: overflow 0 ovunque, altezza barra 62px mobile /
+58-69px desktop (varia con `isScrolled`, mai oltre l'80px storico), nessun
+a-capo.
+
+Trovato ma **non corretto qui, fuori perimetro**: `docs/14_Bugs/BUG_HOME_FAMILY_OVERFLOW_320.md`
+— overflow di 10px a 320px quando l'audience risolta è `family` sulla rotta
+`/` (non su `/family`, che resta pulita). Preesistente, non causato da questo
+lavoro (riproducibile anche disattivando il nuovo chip), causa in un
+componente della home, non della navbar.

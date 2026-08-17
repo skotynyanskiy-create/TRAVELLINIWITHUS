@@ -17,7 +17,6 @@ import {
   MessageCircle,
   Search,
   Send,
-  ShieldCheck,
   SlidersHorizontal,
   Sparkles,
   Tag,
@@ -34,6 +33,8 @@ import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { getLocale, setLocale } from '../i18n';
+import { trackAnalyticsEvent } from '../services/analytics';
+import AudienceEditionChip from './AudienceEditionChip';
 import SurfaceBadge from './SurfaceBadge';
 import { useFocusTrap } from '../hooks/useFocusTrap';
 import { useOverlayLayer } from '../hooks/useOverlayLayer';
@@ -69,7 +70,6 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openMobileSection, setOpenMobileSection] = useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const mobileMenuCloseButtonRef = useRef<HTMLButtonElement>(null);
   const isMobileMenuTopLayer = useOverlayLayer(isMobileMenuOpen);
@@ -84,14 +84,13 @@ export default function Navbar() {
 
   const location = useLocation();
   const { favorites } = useFavorites();
-  const { user, isAdmin, signIn, signOut } = useAuth();
+  const { user, signIn, signOut } = useAuth();
   const { data: navigationContent } = useSiteContent('navigation');
   const navigation = navigationContent ?? siteContentDefaults.navigation;
 
   const resetNavigationUi = useEffectEvent(() => {
     setIsMobileMenuOpen(false);
     setOpenMobileSection(null);
-    setIsUserMenuOpen(false);
   });
 
   const [locale, setLocaleState] = useState(getLocale());
@@ -126,9 +125,6 @@ export default function Navbar() {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         setIsSearchOpen(true);
-      }
-      if (e.key === 'Escape') {
-        setIsUserMenuOpen(false);
       }
     };
 
@@ -193,23 +189,31 @@ export default function Navbar() {
   const navigate = useNavigate();
   const { audience, setAudience } = useAudience();
 
-  const [showB2bToast, setShowB2bToast] = useState(false);
-
   const isFamilyRoute = location.pathname.startsWith('/family');
   const isBrandRoute =
     location.pathname.startsWith('/collaborazioni') || location.pathname.startsWith('/media-kit');
 
-  const handleModeSwitch = (next: 'viaggiatori' | 'family' | 'brand') => {
+  // Il gate del primo accesso traccia già `audience_gate_*`; il cambio da
+  // navbar/drawer non emetteva nulla, quindi non si poteva sapere quale dei
+  // due controlli venisse usato davvero. Stessa forma dell'evento del gate,
+  // cambia solo la sorgente (`surface`).
+  const handleModeSwitch = (
+    next: 'viaggiatori' | 'family' | 'brand',
+    surface: 'chip' | 'drawer'
+  ) => {
+    trackAnalyticsEvent('audience_switch', {
+      from: audience,
+      to: next,
+      surface,
+      path: location.pathname,
+    });
     setAudience(next);
     if (next === 'brand') {
-      setShowB2bToast(true);
-      setTimeout(() => setShowB2bToast(false), 4500);
       if (!location.pathname.startsWith('/collaborazioni')) {
         navigate('/collaborazioni');
       }
       return;
     }
-    setShowB2bToast(false);
     if (next === 'family') {
       if (!isFamilyRoute) navigate('/family');
       return;
@@ -284,37 +288,6 @@ export default function Navbar() {
         <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
       </Suspense>
 
-      {/* B2B WELCOME TOAST */}
-      <AnimatePresence>
-        {showB2bToast && (
-          <motion.div
-            initial={{ opacity: 0, y: -20, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.9 }}
-            className="fixed top-20 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-3 rounded-full border border-[var(--color-accent-on-dark)]/40 bg-[var(--color-ink-deep)]/95 px-5 py-2.5 text-xs text-white shadow-2xl backdrop-blur-xl"
-          >
-            <BriefcaseBusiness size={14} className="text-[var(--color-accent-on-dark)] shrink-0" />
-            <span>
-              <strong>Modalità Partner Attiva</strong> — Hub B2B Travelliniwithus
-            </span>
-            <Link
-              to="/media-kit"
-              onClick={() => setShowB2bToast(false)}
-              className="ml-2 rounded-full bg-[var(--color-accent-on-dark)] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-black transition-transform hover:scale-105"
-            >
-              Media Kit
-            </Link>
-            <button
-              onClick={() => setShowB2bToast(false)}
-              className="ml-1 text-white/50 hover:text-white cursor-pointer"
-              aria-label="Chiudi"
-            >
-              <X size={14} />
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       <motion.nav
         initial={{ y: -100 }}
         animate={{ y: 0 }}
@@ -344,6 +317,7 @@ export default function Navbar() {
               </span>
               us
             </Link>
+            <AudienceEditionChip onSwitch={(next) => handleModeSwitch(next, 'chip')} />
           </div>
 
           {/* DYNAMIC NAV MENU */}
@@ -649,181 +623,6 @@ export default function Navbar() {
                 <ArrowRight size={11} />
               </Link>
             )}
-
-            {/* Compact Quick Utility Menu (Profile + Favorites + Language) */}
-            <div className="relative pl-1">
-              <button
-                type="button"
-                onClick={() => setIsUserMenuOpen((prev) => !prev)}
-                aria-label="Menu utente, modalità e impostazioni"
-                aria-expanded={isUserMenuOpen}
-                className="relative flex h-8 w-8 items-center justify-center rounded-full border border-[var(--color-ink)]/15 bg-white text-[var(--color-ink)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] shadow-2xs cursor-pointer"
-              >
-                {user?.photoURL ? (
-                  <img
-                    src={user.photoURL}
-                    alt={user.displayName || 'User'}
-                    className="h-full w-full rounded-full object-cover"
-                    referrerPolicy="no-referrer"
-                  />
-                ) : (
-                  <UserIcon size={16} strokeWidth={1.5} />
-                )}
-
-                {/* Saved favorites badge indicator */}
-                {favorites.length > 0 && (
-                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--color-accent)] text-[9px] font-bold text-[var(--color-ink)] shadow-xs">
-                    {favorites.length}
-                  </span>
-                )}
-              </button>
-
-              <AnimatePresence>
-                {isUserMenuOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute right-0 z-50 mt-3 w-56 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white py-2 text-[var(--color-ink)] shadow-2xl backdrop-blur-xl"
-                  >
-                    {user && (
-                      <div className="mb-2 border-b border-[var(--color-border)] px-4 py-2">
-                        <p className="truncate text-[11px] font-bold text-[var(--color-ink)]">
-                          {user.displayName || 'Utente'}
-                        </p>
-                        <p className="truncate text-[11px] text-[var(--color-muted-fg)]">
-                          {user.email}
-                        </p>
-                      </div>
-                    )}
-
-                    {/* Modalità — era una barra segmentata a tre nel corpo della
-                        navbar. Con brand, menu, ricerca, CTA e account nella
-                        stessa riga la pillola serviva 1.476px di contenuto in
-                        1.182 disponibili a 1280: il CTA e questo stesso bottone
-                        finivano fuori schermo a *ogni* larghezza desktop. Qui
-                        la scelta resta a un clic e sta accanto alle altre
-                        preferenze (preferiti, lingua), che è il suo posto:
-                        cambia il percorso, non il marchio. */}
-                    <div className="border-b border-[var(--color-border)] px-4 pt-1 pb-2">
-                      <p className="mb-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-muted-fg)]">
-                        Modalità
-                      </p>
-                      <div role="group" aria-label="Scegli la tua modalità" className="space-y-0.5">
-                        {(
-                          [
-                            { key: 'viaggiatori', label: 'Viaggiatori', icon: Compass },
-                            { key: 'family', label: navigation.familyLabel, icon: Baby },
-                            { key: 'brand', label: 'Collaborazioni', icon: BriefcaseBusiness },
-                          ] as const
-                        ).map(({ key, label, icon: ModeIcon }) => (
-                          <button
-                            key={key}
-                            type="button"
-                            aria-label={`Passa alla modalità ${label}`}
-                            aria-current={audience === key ? 'true' : undefined}
-                            onClick={() => {
-                              handleModeSwitch(key);
-                              setIsUserMenuOpen(false);
-                            }}
-                            className={`flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-xs font-medium transition-colors cursor-pointer ${
-                              audience === key
-                                ? 'bg-[var(--color-sand)] text-[var(--color-ink)] font-semibold'
-                                : 'text-[var(--color-ink-2)] hover:bg-[var(--color-sand)]/60'
-                            }`}
-                          >
-                            <ModeIcon
-                              size={14}
-                              className={
-                                audience === key ? 'text-[var(--color-accent)]' : 'opacity-60'
-                              }
-                            />
-                            {label}
-                          </button>
-                        ))}
-                      </div>
-                      <Link
-                        to={`${getAudienceHomePath(audience)}#personalizza-esperienza`}
-                        onClick={() => setIsUserMenuOpen(false)}
-                        className="mt-1.5 flex items-center gap-2 rounded-lg px-2.5 py-2 text-xs font-medium text-[var(--color-ink-2)] transition-colors hover:bg-[var(--color-sand)]/60"
-                      >
-                        <SlidersHorizontal size={14} className="opacity-60" aria-hidden />
-                        Personalizza esperienza
-                      </Link>
-                    </div>
-
-                    {/* Favorites link */}
-                    <Link
-                      to="/preferiti"
-                      onClick={() => setIsUserMenuOpen(false)}
-                      className="flex items-center justify-between px-4 py-2.5 text-xs font-medium text-[var(--color-ink)] transition-colors hover:bg-[var(--color-sand)]"
-                    >
-                      <span className="flex items-center gap-2">
-                        <Heart size={14} className="text-[var(--color-accent)]" />I miei preferiti
-                      </span>
-                      {favorites.length > 0 && (
-                        <span className="rounded-full bg-[var(--color-accent)]/10 px-2 py-0.5 text-[10px] font-bold text-[var(--color-accent-text)]">
-                          {favorites.length}
-                        </span>
-                      )}
-                    </Link>
-
-                    {/* Language toggle */}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        toggleLocale();
-                        setIsUserMenuOpen(false);
-                      }}
-                      className="flex w-full items-center justify-between px-4 py-2.5 text-xs font-medium text-[var(--color-ink)] transition-colors hover:bg-[var(--color-sand)] cursor-pointer"
-                    >
-                      <span className="flex items-center gap-2">
-                        <Compass size={14} className="text-[var(--color-accent)]" />
-                        Lingua
-                      </span>
-                      <span className="rounded-md border border-[var(--color-border)] bg-[var(--color-sand)] px-2 py-0.5 text-[10px] font-bold uppercase">
-                        {locale.toUpperCase()}
-                      </span>
-                    </button>
-
-                    {isAdmin && (
-                      <Link
-                        to="/admin"
-                        onClick={() => setIsUserMenuOpen(false)}
-                        className="flex w-full items-center gap-2 px-4 py-2.5 text-xs font-medium text-[var(--color-accent-text)] transition-colors hover:bg-[var(--color-muted-bg)]"
-                      >
-                        <ShieldCheck size={14} /> Pannello Admin
-                      </Link>
-                    )}
-
-                    <div className="mt-1 border-t border-[var(--color-border)] pt-1">
-                      {user ? (
-                        <button
-                          onClick={() => {
-                            signOut();
-                            setIsUserMenuOpen(false);
-                          }}
-                          className="flex w-full items-center gap-2 px-4 py-2.5 text-xs font-medium text-[var(--color-error)] transition-colors hover:bg-[var(--color-error-soft)] cursor-pointer"
-                        >
-                          <LogOut size={14} /> Disconnetti
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => {
-                            signIn();
-                            setIsUserMenuOpen(false);
-                          }}
-                          className="flex w-full items-center gap-2 px-4 py-2.5 text-xs font-medium text-[var(--color-accent-text)] transition-colors hover:bg-[var(--color-sand)] cursor-pointer"
-                        >
-                          <UserIcon size={14} /> Accedi
-                        </button>
-                      )}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
           </div>
 
           <div className="flex items-center gap-1 text-[var(--color-ink)] lg:hidden">
@@ -916,14 +715,14 @@ export default function Navbar() {
               [
                 { key: 'viaggiatori', label: 'Viaggiatori', icon: Compass },
                 { key: 'family', label: navigation.familyLabel, icon: Baby },
-                { key: 'brand', label: 'Collaborazioni', icon: BriefcaseBusiness },
+                { key: 'brand', label: 'Brand', icon: BriefcaseBusiness },
               ] as const
             ).map(({ key, label, icon: SwitchIcon }) => (
               <button
                 key={key}
                 type="button"
                 onClick={() => {
-                  handleModeSwitch(key);
+                  handleModeSwitch(key, 'drawer');
                   setIsMobileMenuOpen(false);
                 }}
                 aria-label={`Passa alla modalità ${label}`}
@@ -1227,6 +1026,17 @@ export default function Navbar() {
                 <Mail size={24} />
               </a>
             </div>
+            <button
+              type="button"
+              onClick={toggleLocale}
+              className="flex min-h-[44px] w-fit items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[var(--color-ink)]"
+            >
+              <Compass size={20} className="text-[var(--color-accent)]" />
+              Lingua
+              <span className="rounded-md border border-[var(--color-border)] bg-[var(--color-sand)] px-2 py-0.5 text-[10px] font-bold uppercase">
+                {locale.toUpperCase()}
+              </span>
+            </button>
             <div>
               {user ? (
                 <button

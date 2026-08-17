@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Baby, BriefcaseBusiness, Compass } from 'lucide-react';
-import { useAudience, type Audience } from '../context/AudienceContext';
+import { useAudience } from '../context/AudienceContext';
+import { AUDIENCE_EDITIONS } from '../config/audienceEditions';
 import { canLoad, hasRespondedToConsent, onConsentChange } from '../lib/consent';
 import { trackAnalyticsEvent } from '../services/analytics';
 
@@ -33,35 +33,9 @@ export function wasGateDismissedThisSession(): boolean {
   }
 }
 
-const CHOICES: Array<{
-  key: Audience;
-  icon: typeof Compass;
-  title: string;
-  description: string;
-  to: string | null;
-}> = [
-  {
-    key: 'viaggiatori',
-    icon: Compass,
-    title: 'Viaggiatori',
-    description: 'Posti particolari provati di persona: atlante, mappa e come ci siamo andati.',
-    to: null, // resta sulla home
-  },
-  {
-    key: 'family',
-    icon: Baby,
-    title: 'Family',
-    description: 'Gravidanza, viaggi col pancione e — presto — col piccolo.',
-    to: '/family',
-  },
-  {
-    key: 'brand',
-    icon: BriefcaseBusiness,
-    title: 'Brand & aziende',
-    description: 'Collaborazioni, media kit e come lavoriamo con i partner.',
-    to: '/collaborazioni',
-  },
-];
+// Le tre edizioni (icona, titolo, descrizione) vivono in `config/audienceEditions.ts`,
+// condivise col chip di edizione della navbar — una sola fonte, non due copie.
+const CHOICES = AUDIENCE_EDITIONS;
 
 export default function AudienceGate() {
   const { setAudience } = useAudience();
