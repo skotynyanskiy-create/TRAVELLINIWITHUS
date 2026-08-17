@@ -13,20 +13,22 @@ export interface AudienceEditionChoice {
 
 /**
  * Fonte unica delle tre edizioni del sito — usata dal gate del primo accesso
- * (`AudienceGate.tsx`) e dal chip di edizione in navbar
- * (`AudienceEditionChip.tsx`). Prima le descrizioni vivevano solo nel gate ed
+ * (`AudienceGate.tsx`), dalla fascia di edizione in navbar e dal segmented
+ * control del drawer mobile. Prima le descrizioni vivevano solo nel gate ed
  * erano duplicate a mano ovunque servisse lo stesso testo.
  *
- * «Brand» è l'unico nome per il terzo pubblico: prima ne aveva quattro
- * («Brand & aziende», «Collaborazioni», «Modalità Partner Attiva», «Hub
- * B2B»), ed è anche il valore del tipo `Audience`.
+ * Il terzo pubblico si chiama «Collaborazioni» ovunque nel sito pubblico —
+ * chip/fascia, voce di menu, footer — per decisione esplicita dell'owner
+ * (2026-08-17), che si è scostato dalla raccomandazione di tenere «Brand» nel
+ * commutatore e «Collaborazioni» solo come voce di menu. Il valore del tipo
+ * `Audience` resta `'brand'`: è una chiave interna, non testo pubblico.
  */
 export const AUDIENCE_EDITIONS: AudienceEditionChoice[] = [
   {
     key: 'viaggiatori',
     icon: Compass,
     title: 'Viaggiatori',
-    description: 'Posti particolari provati di persona: atlante, mappa e come ci siamo andati.',
+    description: 'Posti particolari provati di persona: mete, mappa e come ci siamo andati.',
     to: null,
   },
   {
@@ -39,7 +41,7 @@ export const AUDIENCE_EDITIONS: AudienceEditionChoice[] = [
   {
     key: 'brand',
     icon: BriefcaseBusiness,
-    title: 'Brand',
+    title: 'Collaborazioni',
     description: 'Collaborazioni, media kit e come lavoriamo con i partner.',
     to: '/collaborazioni',
   },

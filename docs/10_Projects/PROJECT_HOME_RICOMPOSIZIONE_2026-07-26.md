@@ -576,3 +576,104 @@ Trovato ma **non corretto qui, fuori perimetro**: `docs/14_Bugs/BUG_HOME_FAMILY_
 `/` (non su `/family`, che resta pulita). Preesistente, non causato da questo
 lavoro (riproducibile anche disattivando il nuovo chip), causa in un
 componente della home, non della navbar.
+
+## 16. La testata perde la pillola, guadagna una fascia — 2026-08-17
+
+Redesign eseguito da `travellini-frontend-builder` su handoff di
+`docs/50_Scratch/DESIGN_navbar-premium.md` (ui-designer) e
+`docs/50_Scratch/COPY_navbar-edizioni.md` (seo-conversion-strategist).
+**Sostituisce §15**: il chip con popover (`AudienceEditionChip`, ramo ≥lg) si
+ritira, la sua descrizione dei tre gradini per breakpoint non vale più.
+
+**Il blocker che ha aperto il lavoro**: a parità di larghezza la barra cambiava
+altezza con l'edizione (74/80/74px a 1024) perché `whitespace-nowrap` c'era
+sulle voci viaggiatori e mancava su family/brand. Causa nel codice, non
+un'illusione: una voce family andava a capo.
+
+- **Testata a filo, non più pillola.** Via `rounded-full`, `backdrop-blur-2xl`,
+  doppia ombra, `transition-all duration-500`, ingresso animato `y:-100`,
+  `hover:scale-[1.02]` sulla CTA. Ora: fondo sabbia opaco a tutta larghezza,
+  chiuso da un filetto 1px `--color-border`, un `<header>` fisso invece di un
+  `motion.nav`.
+- **5 slot, geometria congelata.** Riga 1 (`h-14`, 56px, fisso su ogni
+  edizione — decide l'altezza solo il contenitore, non il contenuto): marchio
+  + pallino accent permanente · voci (3-4, un sostantivo ciascuna,
+  `whitespace-nowrap`, ≤16 caratteri, al massimo una con pannello) · ricerca
+  (icona sola, via il badge ⌘K dalla barra) · azione (1 CTA o dichiaratamente
+  nessuna). Riga 2 — la fascia di edizione, nuovo componente
+  `src/components/EditionBand.tsx` — sempre 3 segmenti uguali nelle tre
+  edizioni: eyebrow «Edizione» + tre nomi (Fraunces 13px, attivo = pallino
+  accent 6px) da ≥1024; ricetta del segmented control mobile (icona 12 +
+  etichetta 10 maiuscolo, già validata a 320) sotto `lg`; descrizione
+  dell'edizione attiva (verbatim da `AUDIENCE_EDITIONS`) da ≥1280. Scorre via
+  al primo scroll (isteresi: chiude >24px, riapre <8px — Lenis è montato) e non
+  torna finché non si risale in cima; `AudienceEditionChip.tsx` resta solo
+  come pallino permanente accanto al marchio.
+- **«Guide e racconti» perde il pannello.** Tre dei suoi quattro link
+  puntavano a `/esplora` (due duplicavano un filtro che la pagina espone già
+  come chip), il quarto (`/itinerari`) è `preview`. Diventa un link semplice.
+  Resta pannello solo «Mete», che apre una tassonomia vera. Regola generale:
+  un pannello apre una tassonomia, mai dei filtri.
+- **Terza audience: «Collaborazioni» ovunque** — chip/fascia, voce di menu,
+  footer — non più «Brand» nel commutatore e «Collaborazioni» come voce
+  separata. Decisione owner 2026-08-17, che si scosta dalla raccomandazione di
+  entrambi i documenti di handoff (tenere i due nomi distinti). Costa ~52px in
+  più nella fascia; misurato senza overflow a ogni larghezza (vedi sotto).
+  `Audience` resta `'brand'` internamente: solo il testo pubblico cambia.
+- **Family: nessuna CTA in barra finché non esiste un `deal` reale.**
+  `getFamilyDeals()` filtra su un campo `deal` che non compare nemmeno una
+  volta in `src/data/family-content-seed.json` (0 occorrenze, verificato) —
+  «Codici e sconti» prometteva uno sconto inesistente. La condizione di
+  riaccensione è nel codice come commento in `Navbar.tsx`, non in un doc.
+- **Bug di struttura corretto**: in edizione brand il drawer mobile mostrava
+  il menu viaggiatori (Mete/Guide e racconti/Mappa) *insieme* alla card
+  Collaborazioni — causa del doppione «Chi Siamo»/«Chi siamo» segnalato
+  dall'owner. Ora ogni edizione mostra solo le proprie voci nel drawer; la
+  card Collaborazioni resta solo come cross-sell in edizione viaggiatori.
+- **Grafia unica** per «Chi siamo» (era Title Case a mano in due punti di
+  `Navbar.tsx`) e per la voce `/collaborazioni` (era «Come Lavoriamo» in barra,
+  «Collaborazioni» in footer). Entrambe leggono `navigation.aboutLabel` /
+  `navigation.collaborationsLabel`. `audienceEditions.ts` non nomina più
+  `atlante` (rotta morta, redirect a `/`) nella descrizione viaggiatori.
+- **Riserva navbar**: `PageLayout.tsx` (`pt-24` → `pt-28`, 112px),
+  `BrandCoherentHero.tsx`, `VieniConNoi.tsx` allineati alla stessa cifra;
+  `Mappa.tsx` e `FullScreenMapExperience.tsx` (`mt-20`/`h-[calc(100dvh-80px)]`
+  → `mt-28`/`h-[calc(100dvh-112px)]`), non wrappati da `PageLayout`.
+
+**Misurato in browser (Playwright headless, non stimato)**, 320/375/768/1024/
+1280/1440 × 3 edizioni (`/`, `/family`, `/collaborazioni`), prima e dopo
+scroll:
+
+| | mobile (320-375) | tablet/desktop (768-1440) |
+| --- | ---: | ---: |
+| riga 1 | 56px | 56px |
+| fascia a riposo | 44px | 40px |
+| **testata a riposo** | **101px** | **97px** |
+| **testata dopo scroll** | **57px** | **57px** |
+
+Identico byte-per-byte su viaggiatori/family/collaborazioni ad ogni
+larghezza: l'invariante che chiudeva il blocker (l'altezza non dipende più
+dall'edizione) è dimostrata, non dichiarata. Overflow orizzontale: 0 su 18
+combinazioni larghezza×edizione. Console: 0 errori. Stato forzato (rotta che
+impone un'edizione diversa dalla scelta salvata, es. `userAudience:
+'viaggiatori'` su `/collaborazioni`): pallino ad anello vuoto invece che
+pieno, nota «La tua edizione resta Viaggiatori» a destra da ≥1280, link a `/`
+— verificato in browser.
+
+Un gate ha fallito alla prima passata e è stato corretto prima di considerare
+il lavoro chiuso: a 1280px i tre nomi della fascia (`button` di solo testo,
+~20px di altezza) stavano sotto la soglia AA 24×24; portati a `min-h-6`.
+
+Verifiche: typecheck, lint, 371 test su 64 file (inclusi 2 nuovi: grafia unica
+di «Chi siamo» nelle tre edizioni, drawer brand senza voci viaggiatori),
+`audit:ui` (0 errori, invariato), `audit:visual` (14/14),
+`e2e/rotte-target-e-overflow.spec.ts` (4 larghezze × 20 rotte: overflow 0,
+controlli <24px 0, gerarchia titoli invariata, 0 errori console) ed
+`e2e/tastiera-e-focus.spec.ts` (5/5).
+
+Non toccato per decisione esplicita (perimetro dei cancelli, §9 del design
+doc): il controllo segmentato del drawer mobile (solo i due `aria-label`,
+"modalità" → "edizione"), `AudienceContext.tsx`, i tre temi CSS.
+`[VERIFY]` aperto: se la testata sabbia opaca sia la cornice giusta di
+`/mappa` (scura, a tutto schermo) o vada resa `--color-ink-deep` su quella
+sola rotta — non risolto qui, solo la riserva di spazio è stata aggiornata.

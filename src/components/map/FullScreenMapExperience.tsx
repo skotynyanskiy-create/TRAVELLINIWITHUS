@@ -846,7 +846,7 @@ export default function FullScreenMapExperience() {
   // La navbar e' fixed (z-50) e alta 67-77px a seconda del breakpoint: senza il margine
   // la barra dei filtri (z-40, top-6) finisce sepolta sotto di lei.
   return (
-    <div className="mt-20 flex h-[calc(100dvh-80px)] w-full flex-col overflow-hidden bg-[#0a0705]">
+    <div className="mt-28 flex h-[calc(100dvh-112px)] w-full flex-col overflow-hidden bg-[#0a0705]">
       <header className="shrink-0 px-4 pb-3 pt-5 sm:px-8 sm:pb-4 sm:pt-6">
         <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
           Mappa dei posti particolari

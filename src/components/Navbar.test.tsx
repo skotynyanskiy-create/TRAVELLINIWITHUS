@@ -81,7 +81,7 @@ describe('Navbar Component', () => {
 
     expect(getByRole('button', { name: 'Chiudi Menu' })).toHaveClass('min-h-[44px]');
     expect(
-      getAllByRole('button', { name: 'Passa alla modalità Viaggiatori' }).some((button) =>
+      getAllByRole('button', { name: "Passa all'edizione Viaggiatori" }).some((button) =>
         button.classList.contains('min-h-[44px]')
       )
     ).toBe(true);
@@ -113,5 +113,32 @@ describe('Navbar Component', () => {
   it('non accende niente su una rotta che nessuna voce copre', () => {
     const { container } = renderNavbarSu('/contatti');
     expect(voceAttiva(container)).toBeNull();
+  });
+
+  // Prima della ricomposizione la grafia di "Chi siamo" divergeva per
+  // edizione (Title Case scritto a mano in due punti di Navbar.tsx). Ora le
+  // tre edizioni leggono lo stesso token `navigation.aboutLabel`.
+  it('mostra «Chi siamo» con una sola grafia in tutte le edizioni', () => {
+    for (const percorso of ['/', '/family', '/collaborazioni']) {
+      const { unmount, getAllByText } = renderNavbarSu(percorso);
+      const varianti = getAllByText(/chi siamo/i).map((el) => el.textContent?.trim());
+      expect(varianti.length).toBeGreaterThan(0);
+      for (const testo of varianti) {
+        expect(testo).toBe('Chi siamo');
+      }
+      unmount();
+    }
+  });
+
+  // Regressione: il drawer mobile mostrava sempre il menu viaggiatori
+  // (Mete/Guide e racconti/Mappa) tranne che in family, quindi in edizione
+  // brand comparivano insieme il menu sbagliato e la card Collaborazioni.
+  it('in edizione brand il drawer mostra le voci di collaborazione, non quelle di viaggiatori', () => {
+    const { getByRole, queryAllByText } = renderNavbarSu('/collaborazioni');
+    fireEvent.click(getByRole('button', { name: 'Menu' }));
+
+    expect(queryAllByText(/^Mete$/).length).toBe(0);
+    expect(queryAllByText(/^Mappa$/).length).toBe(0);
+    expect(queryAllByText(/Collaborazioni/i).length).toBeGreaterThan(0);
   });
 });

@@ -183,7 +183,7 @@ Google Maps and a return to Mapbox are intentionally not adopted:
 
 ### Page layout pattern — `<PageLayout>` is the public default
 
-All public routes wrap their content in `<PageLayout>` (`src/components/PageLayout.tsx`). PageLayout applies the page-level padding (`pt-32 md:pt-24 pb-32`), the sand background, and `overflow-x-clip`. Navbar and Footer are mounted globally by `<Layout>` in `src/App.tsx`; pages must not remount them.
+All public routes wrap their content in `<PageLayout>` (`src/components/PageLayout.tsx`). PageLayout applies the page-level padding (`pt-28 pb-32`, flat — no breakpoint variant, reserving space for the fixed edge-to-edge header + edition band, 101px mobile / 97px desktop at rest), the sand background, and `overflow-x-clip`. Navbar and Footer are mounted globally by `<Layout>` in `src/App.tsx`; pages must not remount them.
 
 Canonical example: `src/pages/Shop.tsx`.
 

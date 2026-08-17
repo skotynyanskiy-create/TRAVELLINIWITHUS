@@ -484,11 +484,12 @@ export default function Esplora() {
       />
 
       {/* HEADER COMPATTO — banda carta atlante, ricerca inline. */}
-      {/* `PageLayout` riserva già lo spazio della navbar fissa (`pt-24`, 96px,
-          per una navbar alta 74). Qui c'era un secondo `pt-28`: i due si
-          sommavano a 208px e lasciavano 134px di vuoto sopra il primo testo.
-          Resta solo il respiro editoriale, allineato alle altre pagine
-          pubbliche — 54px sotto la navbar, come `/chi-siamo`. */}
+      {/* `PageLayout` riserva già lo spazio della testata fissa (`pt-28`,
+          112px, per una testata a filo alta 101/97px con fascia d'edizione
+          aperta). Qui c'era un secondo `pt-28`: i due si sommavano e
+          lasciavano un vuoto enorme sopra il primo testo. Resta solo il
+          respiro editoriale, allineato alle altre pagine pubbliche — come
+          `/chi-siamo`. */}
       <section className="bg-[var(--color-sand,#faf7f2)] border-b border-[var(--color-border)] pt-8 pb-10 md:pt-10 md:pb-12 text-[var(--color-ink,#1a2b3c)]">
         {/* Il contenitore passa da 5xl a 7xl: a 1440px l'apertura stava in
             1024px e il fianco destro restava vuoto. Lo spazio ora lo occupa la

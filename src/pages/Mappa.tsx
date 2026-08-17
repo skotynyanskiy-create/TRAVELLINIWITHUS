@@ -8,7 +8,7 @@ const FullScreenMapExperience = lazy(() => import('../components/map/FullScreenM
 
 function MapLoaderFallback() {
   return (
-    <div className="mt-20 h-[calc(100dvh-80px)] w-full bg-[#0b0805] flex flex-col items-center justify-center gap-4 text-white">
+    <div className="mt-28 h-[calc(100dvh-112px)] w-full bg-[#0b0805] flex flex-col items-center justify-center gap-4 text-white">
       <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/20 border-t-[var(--color-accent,#c85a32)]" />
       <p className="font-serif italic text-sm text-white/70">Caricamento della Mappa...</p>
     </div>
@@ -22,7 +22,7 @@ function MapLoaderFallback() {
  */
 function MapConsentPlaceholder({ onActivate }: { onActivate: () => void }) {
   return (
-    <div className="mt-20 flex h-[calc(100dvh-80px)] w-full flex-col items-center justify-center gap-4 bg-[#0a0705] px-6 text-center text-white">
+    <div className="mt-28 flex h-[calc(100dvh-112px)] w-full flex-col items-center justify-center gap-4 bg-[#0a0705] px-6 text-center text-white">
       {/* `--color-accent-on-dark`, non `--color-accent-text`: quest'ultimo e'
           l'accento leggibile su fondo CHIARO e qui dava 3,56:1 su #0a0705,
           sotto la soglia AA di 4,5 per testo piccolo — ha fatto scendere
