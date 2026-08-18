@@ -755,7 +755,7 @@ export default function Collaborazioni() {
                   </div>
                   {'output' in format && (
                     <div className="mb-4 rounded-2xl border border-white/10 bg-white/6 px-4 py-3">
-                      <div className="mb-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent-text)]">
+                      <div className="mb-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent-text)]">
                         Output indicativo
                       </div>
                       <p className="text-sm leading-relaxed text-white/78">{format.output}</p>

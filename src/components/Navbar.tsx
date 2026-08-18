@@ -232,7 +232,7 @@ export default function Navbar() {
     ) : audience === 'family' ? null : (
       <Link
         to="/guida-in-regalo"
-        className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-accent)] px-4 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--color-ink)] transition-colors hover:bg-[var(--color-accent-hover,#b34d28)]"
+        className="inline-flex items-center gap-1.5 rounded-full bg-[var(--color-accent)] px-4 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--color-ink)] transition-colors hover:bg-[var(--color-accent-hover)]"
       >
         La guida in regalo
         <ArrowRight size={13} />
@@ -356,7 +356,7 @@ export default function Navbar() {
                       to={item.href}
                       aria-current={active ? 'page' : undefined}
                       aria-haspopup={hasPanel ? 'menu' : undefined}
-                      className={`relative flex items-center gap-1 whitespace-nowrap border-b pb-[6px] font-serif text-sm transition-colors ${
+                      className={`relative flex items-center gap-1 whitespace-nowrap border-b pb-[6px] font-serif text-sm transition-colors after:absolute after:-inset-x-2 after:-inset-y-3 after:content-[''] ${
                         active
                           ? 'border-[var(--color-accent)] text-[var(--color-ink)]'
                           : 'border-transparent text-[var(--color-ink)] hover:text-[var(--color-accent-text)]'

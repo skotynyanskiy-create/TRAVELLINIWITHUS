@@ -144,11 +144,11 @@ export default function Itinerari() {
                     className="h-full w-full object-cover transition-transform duration-[1500ms] ease-out group-hover:scale-105"
                   />
                   <div className="absolute left-5 top-5 flex flex-wrap gap-2">
-                    <span className="rounded-full border border-white/20 bg-white/80 px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] backdrop-blur-md shadow-sm">
+                    <span className="rounded-full border border-white/20 bg-white/80 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] backdrop-blur-md shadow-sm">
                       {item.style}
                     </span>
                     {item.isDemo && (
-                      <span className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] shadow-sm animate-pulse">
+                      <span className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] shadow-sm animate-pulse">
                         Anteprima
                       </span>
                     )}

@@ -307,7 +307,7 @@ function SpecPill({
 }) {
   return (
     <div className="rounded-[var(--radius-md)] border border-black/5 bg-white px-4 py-3">
-      <p className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-[0.22em] text-black/60">
+      <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-black/60">
         {icon} {label}
       </p>
       <p className="mt-2 text-sm font-medium text-[var(--color-ink)]">{value}</p>

@@ -163,7 +163,7 @@ export default function SorprendimiOverlay({
                   {luogo}
                 </span>
                 {disclosure && (
-                  <span className="-rotate-3 shrink-0 whitespace-nowrap rounded-sm border border-[var(--color-accent-on-dark)]/80 bg-black/50 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--color-accent-on-dark)] backdrop-blur-sm">
+                  <span className="-rotate-3 shrink-0 whitespace-nowrap rounded-sm border border-[var(--color-accent-on-dark)]/80 bg-black/50 px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--color-accent-on-dark)] backdrop-blur-sm">
                     {disclosure}
                   </span>
                 )}

@@ -304,7 +304,7 @@ export default function MediaKit() {
           </div>
           <div className="my-auto grid grid-cols-2 gap-4 md:gap-6">
             <div className="space-y-0.5">
-              <span className="text-[9px] font-semibold tracking-wider text-white/50 uppercase">
+              <span className="text-[11px] font-semibold tracking-wider text-white/50 uppercase">
                 Instagram
               </span>
               <p className="text-2xl md:text-3xl font-serif font-bold text-[var(--color-accent)]">
@@ -313,7 +313,7 @@ export default function MediaKit() {
               <p className="text-[10px] text-white/60">Community pubblica</p>
             </div>
             <div className="space-y-0.5">
-              <span className="text-[9px] font-semibold tracking-wider text-white/50 uppercase">
+              <span className="text-[11px] font-semibold tracking-wider text-white/50 uppercase">
                 TikTok
               </span>
               <p className="text-2xl md:text-3xl font-serif font-bold text-[var(--color-accent)]">
@@ -322,14 +322,14 @@ export default function MediaKit() {
               <p className="text-[10px] text-white/60">Canale short-form</p>
             </div>
             <div className="space-y-0.5">
-              <span className="text-[9px] font-semibold tracking-wider text-white/50 uppercase">
+              <span className="text-[11px] font-semibold tracking-wider text-white/50 uppercase">
                 Reach
               </span>
               <p className="text-lg md:text-xl font-serif font-bold">In call</p>
               <p className="text-[10px] text-white/60">Dai dati nativi Meta</p>
             </div>
             <div className="space-y-0.5">
-              <span className="text-[9px] font-semibold tracking-wider text-white/50 uppercase">
+              <span className="text-[11px] font-semibold tracking-wider text-white/50 uppercase">
                 Sito
               </span>
               <p className="text-lg md:text-xl font-serif font-bold">Owned media</p>
@@ -500,7 +500,7 @@ export default function MediaKit() {
                 className="group flex min-h-[220px] flex-col rounded-[var(--radius-lg)] border border-black/5 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:border-[var(--color-accent)]/35 hover:shadow-md"
               >
                 <div className="mb-5 flex items-center justify-between gap-4">
-                  <span className="rounded-full bg-[var(--color-accent-soft)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent-text)]">
+                  <span className="rounded-full bg-[var(--color-accent-soft)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent-text)]">
                     {item.label}
                   </span>
                   <ExternalLink

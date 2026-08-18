@@ -439,7 +439,7 @@ export default function Posto() {
             <div className="w-full shrink-0 space-y-6 md:w-64">
               {item.value?.price && (
                 <aside className="w-full rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-surface)] p-6">
-                  <p className="mb-1 text-[9px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
+                  <p className="mb-1 text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
                     Prezzo indicativo
                   </p>
                   <p className="font-serif text-2xl font-medium text-[var(--color-ink)]">

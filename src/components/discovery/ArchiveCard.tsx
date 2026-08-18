@@ -22,6 +22,10 @@ interface ArchiveCardProps {
   className?: string;
   showExperience?: boolean;
   showLocation?: boolean;
+  /** Il default copre le griglie standard. La feature card di Esplora
+   *  (col-span-2, ~66vw) DEVE passare il suo: con 33vw dichiarato il browser
+   *  serviva una -480 stirata a 773px — sfocata su desktop. */
+  sizes?: string;
   /** Stato passato via React Router per preservare contesto (es. URL di partenza). */
   linkState?: Record<string, unknown>;
   /** Callback opzionale per tracking analytics al click della card.
@@ -37,6 +41,7 @@ export default function ArchiveCard({
   className = '',
   showExperience = true,
   showLocation = true,
+  sizes = '(max-width: 768px) 92vw, (max-width: 1024px) 46vw, 33vw',
   linkState,
   onCardClick,
 }: ArchiveCardProps) {
@@ -45,9 +50,14 @@ export default function ArchiveCard({
   const slug = extractSlug(item.link);
   const { isFavorite, toggleFavorite } = useFavorites();
   const saved = isFavorite(slug);
-  const responsiveWidths = item.image.startsWith('/images/destinations/')
-    ? [320, 480, 768]
-    : undefined;
+  /* Le varianti -320/-480/-768 esistono per le dir elencate in
+     RESPONSIVE_DIRS (scripts/optimize-images.mjs) e per le immagini alla
+     radice di /images: senza srcset la card scarica la cover base intera. */
+  const hasResponsiveVariants =
+    /^\/images\/(destinations|reels|atlante|family|experiences|brand|home-journal)\//.test(
+      item.image
+    ) || /^\/images\/[^/]+\.(png|jpe?g|webp)$/.test(item.image);
+  const responsiveWidths = hasResponsiveVariants ? [320, 480, 768] : undefined;
 
   const handleFavoriteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -110,13 +120,13 @@ export default function ArchiveCard({
                 alt={item.title}
                 className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.06]"
                 responsiveWidths={responsiveWidths}
-                sizes="(max-width: 768px) 92vw, (max-width: 1024px) 46vw, 33vw"
+                sizes={sizes}
               />
               {warmWash}
               <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
               <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-8">
                 {showExperience && label && (
-                  <span className="mb-3 w-fit rounded-full bg-white px-3 py-1 text-[9px] font-bold uppercase tracking-[0.24em] text-[var(--color-ink)] shadow-sm">
+                  <span className="mb-3 w-fit rounded-full bg-white px-3 py-1 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-ink)] shadow-sm">
                     {label}
                   </span>
                 )}
@@ -159,12 +169,12 @@ export default function ArchiveCard({
           alt={item.title}
           className="h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
           responsiveWidths={responsiveWidths}
-          sizes="(max-width: 768px) 92vw, (max-width: 1024px) 46vw, 33vw"
+          sizes={sizes}
         />
         {warmWash}
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
         {label && (
-          <span className="absolute top-5 left-5 rounded-full bg-white px-3.5 py-1 text-[9px] font-bold uppercase tracking-[0.22em] text-[var(--color-ink)] shadow-sm">
+          <span className="absolute top-5 left-5 rounded-full bg-white px-3.5 py-1 text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-ink)] shadow-sm">
             {label}
           </span>
         )}
@@ -189,7 +199,7 @@ export default function ArchiveCard({
             {item.experienceTypes.slice(0, 2).map((exp) => (
               <span
                 key={exp}
-                className="rounded-full bg-[var(--color-accent-soft)] px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.2em] text-[var(--color-accent-text)]"
+                className="rounded-full bg-[var(--color-accent-soft)] px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--color-accent-text)]"
               >
                 {exp}
               </span>

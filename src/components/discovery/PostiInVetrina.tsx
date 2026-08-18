@@ -43,7 +43,7 @@ export default function PostiInVetrina({
             <li key={item.id}>
               <Link
                 to={`/posto/${item.id}`}
-                className="group block focus-visible:outline-none"
+                className="group block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
                 aria-label={`${item.title}, ${item.place.city ?? item.place.country}`}
               >
                 <div className="relative aspect-[4/5] overflow-hidden rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-ink-deep)] shadow-[var(--shadow-md)] transition-shadow group-hover:shadow-[var(--shadow-lg)] group-focus-visible:ring-2 group-focus-visible:ring-[var(--color-accent)]">
@@ -63,7 +63,7 @@ export default function PostiInVetrina({
                   <span className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/90 via-black/55 to-transparent" />
 
                   {disclosure && (
-                    <span className="absolute right-2 top-2 -rotate-3 whitespace-nowrap rounded-sm border border-[var(--color-accent-on-dark)]/80 bg-black/50 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--color-accent-on-dark)] backdrop-blur-sm">
+                    <span className="absolute right-2 top-2 -rotate-3 whitespace-nowrap rounded-sm border border-[var(--color-accent-on-dark)]/80 bg-black/50 px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--color-accent-on-dark)] backdrop-blur-sm">
                       {disclosure}
                     </span>
                   )}

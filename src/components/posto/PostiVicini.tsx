@@ -66,7 +66,7 @@ export default function PostiVicini({ posto }: { posto: ContentItem }) {
             <li key={item.id} className={indice === 2 ? 'hidden sm:block' : undefined}>
               <Link
                 to={`/posto/${item.id}`}
-                className="group block focus-visible:outline-none"
+                className="group block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
                 aria-label={`${item.title}${categoria ? `, ${categoria}` : ''}${
                   item.place.city ? `, ${item.place.city}` : ''
                 }, a ${formattaDistanza(distanzaKm)} da qui`}
@@ -93,7 +93,7 @@ export default function PostiVicini({ posto }: { posto: ContentItem }) {
                   </span>
 
                   {disclosure && (
-                    <span className="absolute right-3 top-3 -rotate-3 whitespace-nowrap rounded-sm border border-[var(--color-accent-on-dark)]/80 bg-black/50 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--color-accent-on-dark)] backdrop-blur-sm">
+                    <span className="absolute right-3 top-3 -rotate-3 whitespace-nowrap rounded-sm border border-[var(--color-accent-on-dark)]/80 bg-black/50 px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--color-accent-on-dark)] backdrop-blur-sm">
                       {disclosure}
                     </span>
                   )}

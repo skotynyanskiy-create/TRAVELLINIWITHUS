@@ -25,7 +25,16 @@ const PARTNERSHIP_LABEL: Record<PartnershipKind, string> = {
   affiliate: 'Affiliato',
 };
 
-export default function ContentCard({ item }: { item: ContentItem }) {
+export default function ContentCard({
+  item,
+  /* Il default copre le griglie a 3 colonne (Destinazione). La griglia
+     xl:grid-cols-4 di Esplora passa il suo valore: con 33vw dichiarato su un
+     render da 25vw il browser scaricava la -480 dove basta la -320. */
+  sizes = '(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw',
+}: {
+  item: ContentItem;
+  sizes?: string;
+}) {
   const { open } = useQuickView();
   const partnerLabel = PARTNERSHIP_LABEL[item.partnership.kind];
   const place = item.place.city ?? item.place.region ?? item.place.country;
@@ -77,7 +86,7 @@ export default function ContentCard({ item }: { item: ContentItem }) {
             <OptimizedImage
               src={item.cover}
               alt={item.coverAlt ?? item.title}
-              sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw"
+              sizes={sizes}
               responsiveWidths={[320, 480, 768]}
               className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
@@ -113,7 +122,7 @@ export default function ContentCard({ item }: { item: ContentItem }) {
             {item.types[0]}
           </span>
           {partnerLabel && (
-            <span className="absolute right-3 top-3 rounded-full bg-[var(--color-ink)]/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
+            <span className="absolute right-3 top-3 rounded-full bg-[var(--color-ink)]/80 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
               {partnerLabel}
             </span>
           )}

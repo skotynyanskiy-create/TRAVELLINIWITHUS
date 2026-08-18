@@ -356,18 +356,18 @@ export default function Risorse() {
                     <div className="mb-5 flex items-start justify-between gap-4">
                       <div>
                         <div className="mb-3 flex flex-wrap gap-2">
-                          <span className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)]">
+                          <span className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)]">
                             {item.commercialLabel}
                           </span>
                           {item.badge && item.badge !== item.commercialLabel && (
-                            <span className="rounded-full bg-[var(--color-ink)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
+                            <span className="rounded-full bg-[var(--color-ink)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
                               {item.badge}
                             </span>
                           )}
                           {item.tags.map((tag) => (
                             <span
                               key={tag}
-                              className="rounded-full bg-white px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-black/42"
+                              className="rounded-full bg-white px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-black/42"
                             >
                               {tag}
                             </span>

@@ -152,7 +152,9 @@ export default function ClubMembershipHero() {
         <div className="mt-12 grid gap-4 md:grid-cols-3">
           {CLUB_DELIVERABLES.map((item) => (
             <div key={item.label} className="border-t border-white/12 pt-5">
-              <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
+              {/* accent-on-dark: la sezione e' su fondo ink — accent-text qui
+                  misurava 3,8:1 a 10px, sotto il minimo AA di 4,5. */}
+              <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-on-dark)]">
                 {item.label}
               </p>
               <p className="mt-3 text-sm leading-relaxed text-white/68">{item.text}</p>
@@ -190,7 +192,7 @@ export default function ClubMembershipHero() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="relative border-t border-[var(--color-accent)]/45 pt-8 md:pt-10"
           >
-            <div className="absolute right-8 top-8 inline-flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.24em] text-[var(--color-ink)]">
+            <div className="absolute right-8 top-8 inline-flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-ink)]">
               <Sparkles size={11} /> Consigliato
             </div>
             <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
@@ -223,7 +225,7 @@ export default function ClubMembershipHero() {
                   }`}
                 >
                   {tier.badge && (
-                    <span className="absolute right-4 top-4 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)]">
+                    <span className="absolute right-4 top-4 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)]">
                       {tier.badge}
                     </span>
                   )}

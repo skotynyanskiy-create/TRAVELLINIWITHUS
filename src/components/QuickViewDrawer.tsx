@@ -93,11 +93,11 @@ export default function QuickViewDrawer() {
                   alt={item.title}
                   className="h-full w-full object-cover"
                 />
-                <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-[9px] font-bold uppercase tracking-widest text-[var(--color-ink)] backdrop-blur-md">
+                <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-[var(--color-ink)] backdrop-blur-md">
                   {item.types[0]}
                 </span>
                 {partnerLabel && (
-                  <span className="absolute left-4 top-12 rounded-full bg-[var(--color-ink)]/80 px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
+                  <span className="absolute left-4 top-12 rounded-full bg-[var(--color-ink)]/80 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
                     {partnerLabel}
                   </span>
                 )}

@@ -113,7 +113,7 @@ export default function HomeAudienceVoice() {
                   >
                     <Link
                       to={scatto.to}
-                      className="group block focus-visible:outline-none"
+                      className="group block focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent)]"
                       aria-label={`${scatto.title} — ${scatto.meta}`}
                     >
                       <div className="relative aspect-[3/4] overflow-hidden rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-ink-deep)] shadow-[var(--shadow-md)] transition-shadow group-hover:shadow-[var(--shadow-lg)] group-focus-visible:ring-2 group-focus-visible:ring-[var(--color-accent)]">
