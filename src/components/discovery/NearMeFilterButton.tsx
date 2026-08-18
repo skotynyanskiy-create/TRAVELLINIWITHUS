@@ -59,18 +59,21 @@ export const NearMeFilterButton: React.FC<NearMeFilterButtonProps> = ({
 
   return (
     <div className={`inline-flex flex-col gap-1 ${className}`}>
+      {/* Token brand, non amber/stone: era l'unico controllo del sito con
+          una palette propria — e le varianti dark: scattavano col tema OS
+          scuro, su un sito che il dark mode non ce l'ha. */}
       <button
         type="button"
         onClick={handleRequestLocation}
         disabled={loading}
         className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-all shadow-sm ${
           activeCoords
-            ? 'bg-amber-700 text-white hover:bg-amber-800 dark:bg-amber-600'
-            : 'bg-stone-100 text-stone-800 hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-200 dark:hover:bg-stone-700 border border-stone-200 dark:border-stone-700'
+            ? 'bg-[var(--color-ink)] text-white hover:bg-[var(--color-accent-hover)]'
+            : 'border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-ink)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)]'
         }`}
       >
         {loading ? (
-          <Loader2 size={14} className="animate-spin text-amber-600" />
+          <Loader2 size={14} className="animate-spin text-[var(--color-accent-text)]" />
         ) : (
           <Navigation size={14} className={activeCoords ? 'fill-current' : ''} />
         )}
@@ -79,7 +82,7 @@ export const NearMeFilterButton: React.FC<NearMeFilterButtonProps> = ({
       </button>
 
       {errorMsg && (
-        <span className="text-[11px] font-medium text-red-600 dark:text-red-400">{errorMsg}</span>
+        <span className="text-[11px] font-medium text-[var(--color-error)]">{errorMsg}</span>
       )}
     </div>
   );

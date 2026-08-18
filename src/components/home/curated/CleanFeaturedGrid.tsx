@@ -86,7 +86,7 @@ export default function CleanFeaturedGrid() {
   if (gridTiles.length === 0) return null;
 
   return (
-    <section className="bg-white py-20 md:py-28 text-[var(--color-ink,#1a2b3c)] border-b border-[var(--color-border)]">
+    <section className="bg-white py-20 md:py-28 text-[var(--color-ink)] border-b border-[var(--color-border)]">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         {/* Section Header */}
         <div className="mb-14 flex flex-col justify-between md:flex-row md:items-end">
@@ -148,20 +148,23 @@ export default function CleanFeaturedGrid() {
                     {tile.location}
                   </span>
                   {tile.disclosure && (
-                    <span className="inline-flex shrink-0 items-center rounded-full bg-[var(--color-ink)]/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
+                    <span className="inline-flex shrink-0 items-center rounded-full bg-[var(--color-ink)]/80 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-white backdrop-blur-md">
                       {tile.disclosure}
                     </span>
                   )}
                 </div>
 
                 {tile.isFeatured && (
-                  <span className="absolute left-3 bottom-[4.75rem] inline-flex items-center gap-1 rounded-full bg-[var(--color-ink,#0a0a0a)] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white">
+                  <span className="absolute left-3 bottom-[4.75rem] inline-flex items-center gap-1 rounded-full bg-[var(--color-ink)] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white">
                     In evidenza
                   </span>
                 )}
 
                 <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)]">
+                  {/* accent-on-dark, non accent-text: questo eyebrow sta SULLA
+                      foto — accent-text (#c2410c) e' il token per fondo chiaro
+                      e sul gradiente scuro sparisce (index.css:44). */}
+                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-on-dark)]">
                     {tile.category}
                   </span>
                   <h3

@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import { trackEvent } from '@/src/services/analytics';
+import { BRAND_STATS } from '@/src/config/site';
 import {
   appendLeadFallback,
   buildLeadFallbackMailto,
@@ -90,11 +91,11 @@ export default function DiarioConversionSection() {
   );
 
   return (
-    <section className="bg-white py-20 text-[var(--color-ink,#1a2b3c)] md:py-28">
+    <section className="bg-white py-20 text-[var(--color-ink)] md:py-28">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
           {/* Box 1: B2C Lead Magnet Download */}
-          <div className="flex flex-col justify-between rounded-[var(--radius-xl,24px)] border border-[var(--color-border,#e5dcd0)] bg-[var(--color-sand,#faf7f2)] p-8 shadow-md md:p-12">
+          <div className="flex flex-col justify-between rounded-[var(--radius-xl,24px)] border border-[var(--color-border)] bg-[var(--color-sand)] p-8 shadow-md md:p-12">
             <div>
               <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
                 <Sparkles size={14} /> Per la Community
@@ -105,7 +106,7 @@ export default function DiarioConversionSection() {
                   "10 posti italiani da salvare"
                 </span>
               </h3>
-              <p className="mt-4 text-sm leading-relaxed text-[var(--color-muted-fg,#546274)] md:text-base">
+              <p className="mt-4 text-sm leading-relaxed text-[var(--color-muted-fg)] md:text-base">
                 Una selezione curata dal brand nato nel 2018: percorsi fuori rotte principali,
                 periodo ideale e consigli pratici.
               </p>
@@ -144,7 +145,7 @@ export default function DiarioConversionSection() {
                       </>
                     )}
                   </button>
-                  {error && <p className="text-xs text-red-600">{error}</p>}
+                  {error && <p className="text-xs text-[var(--color-error)]">{error}</p>}
                 </form>
               ) : isSuccess ? (
                 <div className="rounded-2xl border border-[var(--color-accent)]/30 bg-white p-6 text-center">
@@ -195,7 +196,7 @@ export default function DiarioConversionSection() {
           </div>
 
           {/* Box 2: B2B Commercial Partnerships / Media Kit */}
-          <div className="flex flex-col justify-between rounded-[var(--radius-xl,24px)] border border-white/10 bg-[var(--color-ink-deep,#0b0805)] p-8 text-white shadow-xl md:p-12">
+          <div className="flex flex-col justify-between rounded-[var(--radius-xl,24px)] border border-white/10 bg-[var(--color-ink-deep)] p-8 text-white shadow-xl md:p-12">
             <div>
               <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
                 <Sparkles size={14} /> Per Aziende ed Enti Turismo
@@ -212,7 +213,11 @@ export default function DiarioConversionSection() {
             <div className="mt-8 border-t border-white/10 pt-8">
               <div className="mb-6 grid grid-cols-2 gap-4 text-xs font-medium text-white/80">
                 <div>
-                  <span className="block font-serif text-2xl font-normal text-white">172K+</span>
+                  {/* Da BRAND_STATS, mai inline: un numero pubblico duplicato
+                      a mano diverge al primo aggiornamento di site.ts. */}
+                  <span className="block font-serif text-2xl font-normal text-white">
+                    {BRAND_STATS.instagramFollowers}
+                  </span>
                   <span className="text-[10px] uppercase tracking-wider text-white/50">
                     Follower IG Verificati
                   </span>

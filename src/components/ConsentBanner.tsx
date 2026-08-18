@@ -63,7 +63,7 @@ export default function ConsentBanner() {
       role="dialog"
       aria-live="polite"
       aria-label="Informativa cookie"
-      className="fixed inset-x-3 bottom-3 z-[1000] mx-auto max-w-3xl rounded-[var(--radius-md)] border border-white/10 bg-[#0b0805]/85 p-4 text-white shadow-premium backdrop-blur-md sm:inset-x-4 sm:bottom-4 sm:p-5"
+      className="fixed inset-x-3 bottom-3 z-[1000] mx-auto max-w-3xl rounded-[var(--radius-md)] border border-white/10 bg-[var(--color-ink-deep)]/85 p-4 text-white shadow-premium backdrop-blur-md sm:inset-x-4 sm:bottom-4 sm:p-5"
     >
       {mode === 'banner' ? (
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-6">

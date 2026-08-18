@@ -79,13 +79,13 @@ const Disclaimer = lazy(() => import('./pages/legal/Disclaimer'));
 
 // Branded loading fallback
 const PageLoader = () => (
-  <div className="min-h-screen bg-[var(--color-sand,#faf7f2)] flex flex-col items-center justify-center gap-4">
-    <div className="text-3xl font-serif font-medium tracking-tight text-[var(--color-ink,#1a2b3c)] animate-pulse">
+  <div className="min-h-screen bg-[var(--color-sand)] flex flex-col items-center justify-center gap-4">
+    <div className="text-3xl font-serif font-medium tracking-tight text-[var(--color-ink)] animate-pulse">
       {/* Stesso marchio della navbar, stessa legge: su chiaro il "with" e'
           --color-accent-text, non --color-accent (3,13:1, sotto AA). */}
       Travellini<span className="font-bold text-[var(--color-accent-text)]">with</span>us
     </div>
-    <div className="text-[10px] font-bold uppercase tracking-[0.26em] text-[var(--color-muted-fg,#6b7280)]">
+    <div className="text-[10px] font-bold uppercase tracking-[0.26em] text-[var(--color-muted-fg)]">
       Rodrigo &amp; Betta
     </div>
     {/* Il gradiente finiva su --color-gold, token mai definito: rendeva sempre

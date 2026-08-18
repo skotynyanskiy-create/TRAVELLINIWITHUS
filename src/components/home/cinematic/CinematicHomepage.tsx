@@ -17,7 +17,7 @@ const HomeIndiceVivo = lazy(() => import('./HomeIndiceVivo'));
 function SectionFallback({ minHeight = '24rem' }: { minHeight?: string }) {
   return (
     <div
-      className="w-full animate-pulse bg-[var(--color-sand,#faf7f2)]"
+      className="w-full animate-pulse bg-[var(--color-sand)]"
       style={{ minHeight }}
       aria-hidden="true"
     />
@@ -80,7 +80,7 @@ export default function CinematicHomepage() {
   const { sections } = compositionFor(audience, interest);
 
   return (
-    <div className="clean-homepage w-full bg-[var(--color-sand,#faf7f2)] text-[var(--color-ink,#1a2b3c)]">
+    <div className="clean-homepage w-full bg-[var(--color-sand)] text-[var(--color-ink)]">
       <div>
         <section id="hero">
           <BrandCoherentHero />

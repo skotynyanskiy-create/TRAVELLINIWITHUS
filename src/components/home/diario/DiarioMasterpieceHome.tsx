@@ -7,7 +7,7 @@ import DiarioWeekendGenerator from './DiarioWeekendGenerator';
 
 export default function DiarioMasterpieceHome() {
   return (
-    <div className="w-full bg-[var(--color-sand,#faf7f2)] text-[var(--color-ink,#1a2b3c)]">
+    <div className="w-full bg-[var(--color-sand)] text-[var(--color-ink)]">
       <div>
         {/* Sezione 1: Hero Cinematica & Trust Strip */}
         <section id="diario-hero">

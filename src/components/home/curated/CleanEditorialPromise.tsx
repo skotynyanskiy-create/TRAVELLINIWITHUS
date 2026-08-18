@@ -3,7 +3,7 @@ import { BRAND_PROMISE } from '@/src/config/site';
 
 export default function CleanEditorialPromise() {
   return (
-    <section className="bg-[var(--color-sand,#faf7f2)] py-20 md:py-28 text-[var(--color-ink,#1a2b3c)] border-b border-[var(--color-border)]">
+    <section className="bg-[var(--color-sand)] py-20 md:py-28 text-[var(--color-ink)] border-b border-[var(--color-border)]">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="mb-14 text-center max-w-2xl mx-auto">
           <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
@@ -20,7 +20,7 @@ export default function CleanEditorialPromise() {
 
         <div className="grid gap-8 md:grid-cols-3">
           <div className="rounded-[var(--radius-lg,16px)] border border-[var(--color-border)] bg-white p-8 shadow-sm">
-            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--color-sand)] text-[var(--color-accent,#c85a32)]">
+            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--color-sand)] text-[var(--color-accent)]">
               <CheckCircle2 size={24} />
             </div>
             <h3 className="font-serif text-xl font-normal text-[var(--color-ink)]">
@@ -33,7 +33,7 @@ export default function CleanEditorialPromise() {
           </div>
 
           <div className="rounded-[var(--radius-lg,16px)] border border-[var(--color-border)] bg-white p-8 shadow-sm">
-            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--color-sand)] text-[var(--color-accent,#c85a32)]">
+            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--color-sand)] text-[var(--color-accent)]">
               <DollarSign size={24} />
             </div>
             <h3 className="font-serif text-xl font-normal text-[var(--color-ink)]">
@@ -46,7 +46,7 @@ export default function CleanEditorialPromise() {
           </div>
 
           <div className="rounded-[var(--radius-lg,16px)] border border-[var(--color-border)] bg-white p-8 shadow-sm">
-            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--color-sand)] text-[var(--color-accent,#c85a32)]">
+            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--color-sand)] text-[var(--color-accent)]">
               <HeartHandshake size={24} />
             </div>
             <h3 className="font-serif text-xl font-normal text-[var(--color-ink)]">

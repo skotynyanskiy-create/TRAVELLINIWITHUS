@@ -102,7 +102,7 @@ export default function BrandCoherentHero() {
     .join(' · ');
 
   return (
-    <section className="relative w-full bg-[var(--color-sand,#faf7f2)] pt-8 pb-12 md:pt-10 md:pb-20 text-[var(--color-ink,#1a2b3c)] overflow-hidden border-b border-[var(--color-border)]">
+    <section className="relative w-full bg-[var(--color-sand)] pt-8 pb-12 md:pt-10 md:pb-20 text-[var(--color-ink)] overflow-hidden border-b border-[var(--color-border)]">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         {/* Su mobile la fotografia sale subito sotto il titolo: apertura da
             rivista (titolo → immagine → sommario) invece di 797px di testo
@@ -125,7 +125,7 @@ export default function BrandCoherentHero() {
                 variants={itemVariants}
                 // Tinta al 5%, non al 10: con l'accento elettrico il fondo del
                 // chip si scalda quel tanto che porta il terracotta sotto 4,5.
-                className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--color-accent,#c85a32)]/30 bg-[var(--color-accent,#c85a32)]/5 px-3.5 py-1 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]"
+                className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--color-accent)]/30 bg-[var(--color-accent)]/5 px-3.5 py-1 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]"
               >
                 <Sparkles size={13} />
                 {/* Sotto sm il nome del sito manda il chip a capo su due righe e
@@ -140,9 +140,7 @@ export default function BrandCoherentHero() {
                   per tutte e tre le edizioni, non solo per quelle nuove. */}
               <h1 className="text-balance font-serif text-4xl font-normal leading-[1.06] text-[var(--color-ink)] sm:text-5xl lg:text-6xl">
                 {hero.titoloTondo} <br />
-                <span className="italic text-[var(--color-accent,#c85a32)]">
-                  {hero.titoloCorsivo}
-                </span>
+                <span className="italic text-[var(--color-accent)]">{hero.titoloCorsivo}</span>
               </h1>
             </motion.div>
 
@@ -229,7 +227,7 @@ export default function BrandCoherentHero() {
                     type="button"
                     aria-expanded={schedaOpen}
                     onClick={() => setSchedaOpen((open) => !open)}
-                    className="inline-flex items-center gap-2 rounded-full border border-[var(--color-accent,#c85a32)] bg-[var(--color-sand)] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)] shadow-sm transition-all hover:bg-[var(--color-accent)] hover:text-[var(--color-ink)] cursor-pointer"
+                    className="inline-flex items-center gap-2 rounded-full border border-[var(--color-accent)] bg-[var(--color-sand)] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)] shadow-sm transition-all hover:bg-[var(--color-accent)] hover:text-[var(--color-ink)] cursor-pointer"
                   >
                     <Stamp size={14} />
                     {schedaOpen ? 'Chiudi la scheda' : 'Provato — apri la scheda'}
@@ -323,7 +321,7 @@ export default function BrandCoherentHero() {
                 }
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ delay: 0.55, duration: 0.6, ease: 'easeOut' }}
-                className="absolute bottom-12 -left-6 max-w-xs rotate-[-3deg] rounded-2xl border border-[var(--color-border)] bg-[var(--color-sand,#faf7f2)] p-4 shadow-lg"
+                className="absolute bottom-12 -left-6 max-w-xs rotate-[-3deg] rounded-2xl border border-[var(--color-border)] bg-[var(--color-sand)] p-4 shadow-lg"
               >
                 <p className="font-serif text-base leading-snug text-[var(--color-ink)]">
                   {featuredNota}

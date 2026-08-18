@@ -7,16 +7,16 @@ import { BRAND_CREDENTIALS, BRAND_STATS } from '@/src/config/site';
 
 export default function DiarioHeroCinematic() {
   return (
-    <section className="relative w-full border-b border-neutral-200/80 bg-[#FAF8F5] py-20 text-neutral-900 md:py-32">
+    <section className="relative w-full border-b border-[var(--color-border)] bg-[var(--color-sand)] py-20 text-[var(--color-ink)] md:py-32">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         {/* Top Minimalist Tag */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-8 inline-flex items-center gap-2.5 rounded-full border border-neutral-300 bg-white px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.24em] text-neutral-700 shadow-xs"
+          className="mb-8 inline-flex items-center gap-2.5 rounded-full border border-[var(--color-border)] bg-white px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.24em] text-[var(--color-ink-2)] shadow-xs"
         >
-          <Sparkles size={13} className="text-amber-600" />
+          <Sparkles size={13} className="text-[var(--color-accent-text)]" />
           <span>Rodrigo &amp; Betta · Travelliniwithus</span>
         </motion.div>
 
@@ -27,14 +27,14 @@ export default function DiarioHeroCinematic() {
           transition={{ duration: 0.7, delay: 0.1 }}
           className="max-w-4xl"
         >
-          <h1 className="font-serif text-5xl font-normal leading-[1.04] tracking-tight text-neutral-900 sm:text-7xl lg:text-8xl">
+          <h1 className="font-serif text-5xl font-normal leading-[1.04] tracking-tight text-[var(--color-ink)] sm:text-7xl lg:text-8xl">
             Posti che sembrano inventati.{' '}
-            <span className="block font-serif italic text-amber-700">
+            <span className="block font-serif italic text-[var(--color-accent-text)]">
               Ma ci siamo stati davvero.
             </span>
           </h1>
 
-          <p className="mt-8 max-w-2xl text-lg leading-relaxed text-neutral-600 sm:text-xl font-light">
+          <p className="mt-8 max-w-2xl text-lg leading-relaxed text-[var(--color-muted-fg)] sm:text-xl font-light">
             Proviamo di persona hotel di charme, trattorie segrete e borghi fuori rotta. Vi diciamo
             quanto costa, come ci si arriva e cosa sapere prima di partire.
           </p>
@@ -47,7 +47,7 @@ export default function DiarioHeroCinematic() {
                 size="lg"
                 to="/esplora"
                 trackingId="diario_clean_hero_esplora"
-                className="bg-neutral-900 text-white font-bold uppercase tracking-widest hover:bg-neutral-800 border-none shadow-lg px-8 py-4 text-xs"
+                className="bg-[var(--color-ink)] text-white font-bold uppercase tracking-widest hover:bg-neutral-800 border-none shadow-lg px-8 py-4 text-xs"
               >
                 <Compass size={18} className="mr-2" />
                 Esplora l’Atlante
@@ -60,7 +60,7 @@ export default function DiarioHeroCinematic() {
                 size="lg"
                 to="/guida-in-regalo"
                 trackingId="diario_clean_hero_biohub"
-                className="border-neutral-300 bg-white text-neutral-900 hover:border-neutral-900 px-8 py-4 text-xs font-bold uppercase tracking-widest"
+                className="border-[var(--color-border)] bg-white text-[var(--color-ink)] hover:border-[var(--color-ink)] px-8 py-4 text-xs font-bold uppercase tracking-widest"
               >
                 Guida in regalo
                 <ArrowRight size={16} className="ml-2" />
@@ -74,9 +74,9 @@ export default function DiarioHeroCinematic() {
           initial={{ opacity: 0, y: 32 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="mt-16 relative overflow-hidden rounded-3xl border border-neutral-200 bg-white p-3 shadow-2xl"
+          className="mt-16 relative overflow-hidden rounded-3xl border border-[var(--color-border)] bg-white p-3 shadow-2xl"
         >
-          <div className="relative aspect-[21/9] w-full overflow-hidden rounded-2xl bg-neutral-900 min-h-[320px]">
+          <div className="relative aspect-[21/9] w-full overflow-hidden rounded-2xl bg-[var(--color-ink)] min-h-[320px]">
             <OptimizedImage
               src="/images/home-journal/hero-impossible.png"
               alt="Rodrigo e Betta sul campo"
@@ -90,7 +90,7 @@ export default function DiarioHeroCinematic() {
 
             {/* Floating Top Label */}
             <div className="absolute left-6 top-6 flex items-center gap-2">
-              <span className="rounded-full bg-white/90 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-neutral-900 backdrop-blur-md shadow-sm">
+              <span className="rounded-full bg-white/90 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[var(--color-ink)] backdrop-blur-md shadow-sm">
                 Somma Vesuviana · Italia
               </span>
             </div>
@@ -98,7 +98,7 @@ export default function DiarioHeroCinematic() {
             {/* Bottom Caption Overlay */}
             <div className="absolute bottom-6 left-6 right-6 flex flex-col justify-between gap-4 md:flex-row md:items-end text-white">
               <div>
-                <span className="text-xs font-bold uppercase tracking-[0.2em] text-amber-300">
+                <span className="text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-accent-on-dark)]">
                   Ristorante a Tema Burton
                 </span>
                 <h3 className="mt-1 font-serif text-2xl font-normal leading-snug md:text-3xl">
@@ -107,29 +107,37 @@ export default function DiarioHeroCinematic() {
               </div>
               <div className="flex items-center gap-4 text-xs font-medium">
                 <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-3 py-1 backdrop-blur-md">
-                  <Star size={12} className="fill-amber-400 text-amber-400" /> 10/10 Esperienza
+                  <Star
+                    size={12}
+                    className="fill-[var(--color-accent-on-dark)] text-[var(--color-accent-on-dark)]"
+                  />{' '}
+                  10/10 Esperienza
                 </span>
-                <span className="font-semibold text-amber-300">Verificato sul campo</span>
+                <span className="font-semibold text-[var(--color-accent-on-dark)]">
+                  Verificato sul campo
+                </span>
               </div>
             </div>
           </div>
         </motion.div>
 
         {/* Official Credentials Bar */}
-        <div className="mt-12 flex flex-wrap items-center justify-between gap-6 border-t border-neutral-200 pt-8 text-xs font-medium text-neutral-500">
-          <div className="flex items-center gap-2 text-neutral-900 font-semibold">
-            <ShieldCheck size={16} className="text-amber-700" />
+        <div className="mt-12 flex flex-wrap items-center justify-between gap-6 border-t border-[var(--color-border)] pt-8 text-xs font-medium text-neutral-500">
+          <div className="flex items-center gap-2 text-[var(--color-ink)] font-semibold">
+            <ShieldCheck size={16} className="text-[var(--color-accent-text)]" />
             <span>Posti verificati sul campo</span>
           </div>
           <span className="hidden md:inline text-neutral-300">·</span>
-          <span className="inline-flex items-center gap-1.5 font-bold text-neutral-900">
+          <span className="inline-flex items-center gap-1.5 font-bold text-[var(--color-ink)]">
             <CheckCircle size={14} className="text-blue-600" />{' '}
             {BRAND_CREDENTIALS.metaVerifiedLabel}
           </span>
           <span className="hidden md:inline text-neutral-300">·</span>
           <span>{BRAND_CREDENTIALS.agcomLabel}</span>
           <span className="hidden md:inline text-neutral-300">·</span>
-          <span className="font-bold text-amber-800">{BRAND_STATS.totalFollowers} Community</span>
+          <span className="font-bold text-[var(--color-accent-text)]">
+            {BRAND_STATS.totalFollowers} Community
+          </span>
         </div>
       </div>
     </section>

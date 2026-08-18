@@ -84,16 +84,16 @@ export default function HomeMapLibreBackground() {
             <Marker key={item.id} longitude={lng} latitude={lat} anchor="center">
               <div className="relative flex items-center justify-center">
                 {!reduceMotion && (
-                  <span className="absolute h-6 w-6 animate-ping rounded-full bg-[var(--color-accent,#c2410c)]/50" />
+                  <span className="absolute h-6 w-6 animate-ping rounded-full bg-[var(--color-accent)]/50" />
                 )}
-                <span className="relative h-3.5 w-3.5 rounded-full border-2 border-white bg-[var(--color-accent,#c2410c)] shadow-md" />
+                <span className="relative h-3.5 w-3.5 rounded-full border-2 border-white bg-[var(--color-accent)] shadow-md" />
               </div>
             </Marker>
           );
         })}
       </Map>
 
-      <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-ink-deep,#111111)] via-[var(--color-ink-deep,#111111)]/75 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-ink-deep)] via-[var(--color-ink-deep)]/75 to-transparent" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,rgba(194,65,12,0.12)_0%,transparent_60%)]" />
     </div>
   );

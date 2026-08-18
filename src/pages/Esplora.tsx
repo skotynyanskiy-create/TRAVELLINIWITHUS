@@ -490,7 +490,7 @@ export default function Esplora() {
           lasciavano un vuoto enorme sopra il primo testo. Resta solo il
           respiro editoriale, allineato alle altre pagine pubbliche — come
           `/chi-siamo`. */}
-      <section className="bg-[var(--color-sand,#faf7f2)] border-b border-[var(--color-border)] pt-8 pb-10 md:pt-10 md:pb-12 text-[var(--color-ink,#1a2b3c)]">
+      <section className="bg-[var(--color-sand)] border-b border-[var(--color-border)] pt-8 pb-10 md:pt-10 md:pb-12 text-[var(--color-ink)]">
         {/* Il contenitore passa da 5xl a 7xl: a 1440px l'apertura stava in
             1024px e il fianco destro restava vuoto. Lo spazio ora lo occupa la
             vetrina dei posti veri, perche' la pagina della scoperta apriva
@@ -803,7 +803,10 @@ export default function Esplora() {
                     <span className="h-px flex-1 bg-black/10" />
                   </div>
                 )}
-                <ContentCard item={item} />
+                <ContentCard
+                  item={item}
+                  sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, (max-width: 1279px) 33vw, 25vw"
+                />
               </Fragment>
             ))}
           </div>
@@ -957,6 +960,7 @@ export default function Esplora() {
                         item={item}
                         variant={isFeatureCard ? 'mood' : 'editorial'}
                         className={isFeatureCard ? 'h-full min-h-[480px]' : 'h-full'}
+                        sizes={isFeatureCard ? '(max-width: 767px) 92vw, 66vw' : undefined}
                         linkState={linkState}
                       />
                     </motion.div>

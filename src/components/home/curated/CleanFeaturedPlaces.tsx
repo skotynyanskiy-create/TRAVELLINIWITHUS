@@ -55,7 +55,7 @@ export default function CleanFeaturedPlaces() {
   if (featuredPlaces.length === 0) return null;
 
   return (
-    <section className="bg-white py-20 md:py-28 text-[var(--color-ink,#1a2b3c)] border-b border-[var(--color-border)]">
+    <section className="bg-white py-20 md:py-28 text-[var(--color-ink)] border-b border-[var(--color-border)]">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         {/* Section Header */}
         <div className="mb-14 flex flex-col justify-between md:flex-row md:items-end">
@@ -111,7 +111,8 @@ export default function CleanFeaturedPlaces() {
                 </div>
 
                 <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)]">
+                  {/* accent-on-dark: eyebrow sulla foto, vedi CleanFeaturedGrid. */}
+                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-on-dark)]">
                     {place.category}
                   </span>
                   <h3 className="mt-1 font-serif text-xl font-normal leading-snug text-white">

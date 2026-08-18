@@ -44,19 +44,19 @@ export default function DiarioMapSection() {
   }));
 
   return (
-    <section className="relative border-b border-neutral-200 bg-[#FAF8F5] py-24 text-neutral-900 md:py-32">
+    <section className="relative border-b border-[var(--color-border)] bg-[var(--color-sand)] py-24 text-[var(--color-ink)] md:py-32">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         {/* Section Header */}
         <div className="mb-12 flex flex-col justify-between md:flex-row md:items-end">
           <div>
-            <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-amber-700">
+            <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
               <Sparkles size={14} />
               Geolocalizzazione Reale
             </span>
-            <h2 className="mt-3 font-serif text-3xl font-normal leading-tight text-neutral-900 md:text-5xl lg:text-6xl">
+            <h2 className="mt-3 font-serif text-3xl font-normal leading-tight text-[var(--color-ink)] md:text-5xl lg:text-6xl">
               Esplora la Mappa dell’Atlante.
             </h2>
-            <p className="mt-4 max-w-xl text-base leading-relaxed text-neutral-600 font-light">
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-[var(--color-muted-fg)] font-light">
               Ogni pin sulla mappa è un posto provato sul campo da Rodrigo e Betta con coordinate
               GPS verificate e scheda completa.
             </p>
@@ -64,7 +64,7 @@ export default function DiarioMapSection() {
 
           <Link
             to="/mappa"
-            className="mt-6 inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-white px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-neutral-900 transition-all hover:border-neutral-900 md:mt-0 shadow-xs"
+            className="mt-6 inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-white px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] transition-all hover:border-[var(--color-ink)] md:mt-0 shadow-xs"
           >
             Mappa Full Screen <Compass size={16} />
           </Link>
@@ -82,11 +82,14 @@ export default function DiarioMapSection() {
                 onClick={() => setActiveFilter(filterValue)}
                 className={`inline-flex items-center gap-1.5 rounded-full px-4.5 py-2 text-xs font-semibold uppercase tracking-wider transition-all duration-300 ${
                   isActive
-                    ? 'bg-neutral-900 text-white shadow-md'
-                    : 'border border-neutral-300 bg-white text-neutral-700 hover:border-neutral-900'
+                    ? 'bg-[var(--color-ink)] text-white shadow-md'
+                    : 'border border-[var(--color-border)] bg-white text-[var(--color-ink-2)] hover:border-[var(--color-ink)]'
                 }`}
               >
-                <MapPin size={12} className={isActive ? 'text-amber-400' : 'text-neutral-500'} />
+                <MapPin
+                  size={12}
+                  className={isActive ? 'text-[var(--color-accent-on-dark)]' : 'text-neutral-500'}
+                />
                 {filter.label}
               </button>
             );
@@ -94,20 +97,20 @@ export default function DiarioMapSection() {
         </div>
 
         {/* Map Interactive Frame */}
-        <div className="relative overflow-hidden rounded-3xl border border-neutral-200 bg-white p-3 shadow-2xl">
+        <div className="relative overflow-hidden rounded-3xl border border-[var(--color-border)] bg-white p-3 shadow-2xl">
           <div className="h-[460px] w-full overflow-hidden rounded-2xl md:h-[560px]">
             <InteractiveMap markers={mapMarkers} className="h-full w-full" />
           </div>
 
           {/* Bottom Bar Info Overlay */}
-          <div className="flex flex-wrap items-center justify-between gap-4 border-t border-neutral-200 bg-white px-6 py-4 rounded-b-2xl">
-            <span className="text-xs font-medium text-neutral-600">
-              Mostrando <strong className="text-neutral-900">{filteredItems.length}</strong> posti
-              verificati sulla mappa
+          <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[var(--color-border)] bg-white px-6 py-4 rounded-b-2xl">
+            <span className="text-xs font-medium text-[var(--color-muted-fg)]">
+              Mostrando <strong className="text-[var(--color-ink)]">{filteredItems.length}</strong>{' '}
+              posti verificati sulla mappa
             </span>
             <Link
               to="/esplora"
-              className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-amber-800 hover:underline"
+              className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[var(--color-accent-text)] hover:underline"
             >
               Filtra per Regione o Tipologia &rarr;
             </Link>
