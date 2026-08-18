@@ -26,6 +26,14 @@ export interface ArticleSeed {
   tags: string[];
   author: { name: string; bio: string };
   coverImage: string;
+  /** Alt descrittivo della cover/hero. Fuori dal contratto di firestore.rules
+   *  (come `partnership`): la scrive solo `scripts/publish-article-seed.mjs`
+   *  via Admin SDK. Senza, `ArticleHero` ricade sul fallback "luogo — categoria". */
+  imageAlt?: string;
+  /** Card OG fotografica dedicata (1200x630), se diversa da `coverImage`.
+   *  Stesso fuori-contratto di `imageAlt`. Senza, l'unfurl social usa la
+   *  coverImage grezza invece della card composta con testo/wordmark. */
+  ogImage?: string;
   published: boolean;
   featured: boolean;
   createdAt: Timestamp;

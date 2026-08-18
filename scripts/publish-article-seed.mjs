@@ -33,10 +33,32 @@ const EXCERPT_MAX = 160;
 
 /** Campi ammessi da isValidArticle() in firestore.rules. */
 const RULES_ALLOWED_FIELDS = new Set([
-  'title', 'slug', 'excerpt', 'content', 'coverImage', 'category', 'author', 'location',
-  'country', 'region', 'city', 'continent', 'experienceTypes', 'period', 'budget', 'readTime',
-  'tips', 'packingList', 'highlights', 'mapUrl', 'duration', 'videoUrl', 'published',
-  'authorId', 'createdAt', 'updatedAt',
+  'title',
+  'slug',
+  'excerpt',
+  'content',
+  'coverImage',
+  'category',
+  'author',
+  'location',
+  'country',
+  'region',
+  'city',
+  'continent',
+  'experienceTypes',
+  'period',
+  'budget',
+  'readTime',
+  'tips',
+  'packingList',
+  'highlights',
+  'mapUrl',
+  'duration',
+  'videoUrl',
+  'published',
+  'authorId',
+  'createdAt',
+  'updatedAt',
 ]);
 
 function parseArgs(argv) {
@@ -76,6 +98,8 @@ function toFirestoreDocument(seed, { authorId, publish, now }) {
     updatedAt: now,
     // Fuori dal contratto delle rules — vedi intestazione del file.
     partnership: seed.partnership,
+    ...(seed.imageAlt ? { imageAlt: seed.imageAlt } : {}),
+    ...(seed.ogImage ? { ogImage: seed.ogImage } : {}),
   };
 }
 
@@ -133,7 +157,7 @@ async function main() {
   const authorId = process.env.ARTICLE_AUTHOR_UID;
   if (commit && !authorId) {
     fail(
-      'ARTICLE_AUTHOR_UID non impostata. E\' lo UID Firebase Auth dell\'owner: le rules ' +
+      "ARTICLE_AUTHOR_UID non impostata. E' lo UID Firebase Auth dell'owner: le rules " +
         'richiedono authorId == request.auth.uid, e va rispettato anche scrivendo da Admin SDK.'
     );
   }
@@ -153,12 +177,16 @@ async function main() {
   console.log(`  excerpt   : ${doc.excerpt.length} caratteri`);
   console.log(`  content   : ${doc.content.split(/\s+/).length} parole`);
   console.log(`  cover     : ${doc.coverImage}`);
-  console.log(`  disclosure: ${doc.partnership.kind}${doc.partnership.partner ? ` — ${doc.partnership.partner}` : ''}`);
+  if (doc.imageAlt) console.log(`  cover alt : ${doc.imageAlt}`);
+  if (doc.ogImage) console.log(`  og image  : ${doc.ogImage}`);
+  console.log(
+    `  disclosure: ${doc.partnership.kind}${doc.partnership.partner ? ` — ${doc.partnership.partner}` : ''}`
+  );
 
   if (outsideRules.length > 0) {
     console.log(
       `\n  Nota: ${outsideRules.join(', ')} non e' fra i campi ammessi da firestore.rules.\n` +
-        '  Passa solo perche l\'Admin SDK non e\' soggetto alle rules.'
+        "  Passa solo perche l'Admin SDK non e' soggetto alle rules."
     );
   }
 
@@ -206,7 +234,9 @@ async function main() {
     { merge: true }
   );
 
-  console.log(`\n  Scritto su ${databaseId}/articles/${slug} (${existing.exists ? 'aggiornato' : 'creato'}).`);
+  console.log(
+    `\n  Scritto su ${databaseId}/articles/${slug} (${existing.exists ? 'aggiornato' : 'creato'}).`
+  );
   console.log('  Ricorda: `npm run build` per rigenerare sitemap e pre-render.\n');
 }
 

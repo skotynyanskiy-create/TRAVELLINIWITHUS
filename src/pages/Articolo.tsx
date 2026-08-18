@@ -109,6 +109,8 @@ function ensureArticleData(
     title: article.title,
     description: article.description || 'Guida e racconto di viaggio firmato Travelliniwithus.',
     image: article.image,
+    imageAlt: article.imageAlt,
+    ogImage: article.ogImage,
     category: article.category || 'Guide',
     date: article.date || 'In aggiornamento',
     author: article.author || BRAND_AUTHOR,
@@ -242,14 +244,14 @@ function ArticleBodySkeleton() {
   );
 }
 
-export function ArticleBody({ article }: { article: ArticleData }) {
+export function ArticleBody({ article, slug = '' }: { article: ArticleData; slug?: string }) {
   if (typeof article.content !== 'string') {
     return <>{article.content}</>;
   }
 
   return (
     <Suspense fallback={<ArticleBodySkeleton />}>
-      <ArticleMarkdownBody content={article.content} />
+      <ArticleMarkdownBody content={article.content} slug={slug} title={article.title} />
     </Suspense>
   );
 }
@@ -406,8 +408,11 @@ export default function Articolo() {
   const articleDescription = article.description;
   const articleImage = article.image;
   const articleUrl = `${SITE_URL}/articolo/${currentSlug}`;
-  // Branded OG image generated at build time for preview slugs; falls back to hero image otherwise.
-  const ogImage = isPreviewArticle ? `${SITE_URL}/og/${currentSlug}.jpg` : articleImage;
+  // Branded OG image generated at build time for preview slugs, o quella dichiarata
+  // dal seed articolo (`article.ogImage`, per una card fotografica composta invece
+  // della coverImage grezza); fallback sull'hero image altrimenti.
+  const ogImage =
+    article.ogImage || (isPreviewArticle ? `${SITE_URL}/og/${currentSlug}.jpg` : articleImage);
   const datePublished = toIsoDateString(article.date) || new Date().toISOString();
   const dateModified = toIsoDateString(article.updatedAt) || datePublished;
   const handleShare = async () => {
@@ -624,7 +629,7 @@ export default function Articolo() {
                 )}
 
                 <section className="prose-reset article-body mt-14">
-                  <ArticleBody article={article} />
+                  <ArticleBody article={article} slug={currentSlug} />
                 </section>
 
                 {article.diary && article.diary.length > 0 && <Diary beats={article.diary} />}

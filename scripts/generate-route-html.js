@@ -25,6 +25,7 @@ import path from 'path';
 import { STATIC_ROUTE_META, ogSlugForPath, findRouteMeta } from '../src/config/routeMeta.ts';
 import { getDestination } from '../src/config/destinations.ts';
 import { buildReviewJsonLd } from '../src/lib/placeReviewSchema.ts';
+import { buildArticleJsonLd } from '../src/lib/seo.ts';
 import { createRequire } from 'module';
 
 const require = createRequire(import.meta.url);
@@ -171,9 +172,62 @@ function destinazioneMeta(route) {
   return { title, description, ogSlug: 'default', ogType: 'website', jsonLd };
 }
 
-function metaForRoute(route) {
+/**
+ * Meta per una pagina-articolo, letta dal seed in repo
+ * (`src/data/articles/<slug>.seed.ts`), non da Firestore: il build non ha
+ * credenziali garantite (stessa ragione di `generate-sitemap.js`, righe
+ * 156-199). Se il seed non esiste (articolo non ancora scritto, o pubblicato
+ * da /admin senza un seed corrispondente) la rotta resta fra gli `skipped`
+ * "owned" ma non bloccanti — vedi il filtro `/articolo/` in fondo a `main()`.
+ *
+ * `title`/`description` replicano <SEO> di Articolo.tsx (title = H1 = H1
+ * dell'articolo, description = excerpt). Il JSON-LD e' un'approssimazione
+ * best-effort per i crawler che non eseguono JS: usa `createdAt`/`updatedAt`
+ * del seed, che al momento della pubblicazione reale diventano
+ * `serverTimestamp()` — qui, prima del `--commit`, sono solo la data del
+ * build. E' una degradazione nota (stesso principio gia' documentato sopra
+ * per l'og:image dei posti), non una data falsa spacciata per reale: il
+ * render idratato (che Google esegue) legge sempre il valore vero da
+ * Firestore.
+ */
+async function articoloMeta(route) {
+  const slug = route.replace(/^\/articolo\//, '');
+  const seedPath = path.join(process.cwd(), 'src', 'data', 'articles', `${slug}.seed.ts`);
+  if (!fs.existsSync(seedPath)) return null;
+
+  const { articleSeed } = await import(`file://${seedPath.replace(/\\/g, '/')}`);
+
+  // Ogni card OG generata per un articolo vive in public/og/<slug>.jpg: se non
+  // c'e' (la maggioranza dei seed oggi non ne ha una dedicata), stessa ricaduta
+  // su 'default' gia' usata da destinazioneMeta() per non produrre un'immagine
+  // 404 nell'unfurl social.
+  const hasOgCard = fs.existsSync(path.join(process.cwd(), 'public', 'og', `${slug}.jpg`));
+  const publishedAt = articleSeed.createdAt?.toDate?.()?.toISOString() ?? new Date().toISOString();
+  const updatedAt = articleSeed.updatedAt?.toDate?.()?.toISOString() ?? publishedAt;
+
+  const jsonLd = buildArticleJsonLd({
+    slug,
+    title: articleSeed.title,
+    excerpt: articleSeed.excerpt,
+    coverImage: articleSeed.coverImage,
+    publishedAt,
+    updatedAt,
+    category: articleSeed.category,
+  });
+
+  return {
+    title: articleSeed.title,
+    description: clamp(articleSeed.excerpt),
+    ogSlug: hasOgCard ? slug : 'default',
+    ogType: 'article',
+    jsonLd,
+  };
+}
+
+async function metaForRoute(route) {
   if (route.startsWith('/posto/')) return postoMeta(route);
   if (route.startsWith('/destinazione/')) return destinazioneMeta(route);
+  if (route.startsWith('/articolo/')) return articoloMeta(route);
   return staticMeta(route);
 }
 
@@ -293,7 +347,7 @@ function outputPathFor(route) {
   return path.join(DIST, route.replace(/^\//, ''), 'index.html');
 }
 
-function main() {
+async function main() {
   const templatePath = path.join(DIST, 'index.html');
   if (!fs.existsSync(templatePath)) {
     throw new Error('dist/index.html assente. Eseguire `vite build` prima di questo script.');
@@ -320,7 +374,7 @@ function main() {
   const skipped = [];
 
   for (const route of routes) {
-    const meta = metaForRoute(route);
+    const meta = await metaForRoute(route);
     if (!meta) {
       skipped.push(route);
       continue;
@@ -361,11 +415,9 @@ function main() {
   }
 }
 
-try {
-  main();
-} catch (error) {
+main().catch((error) => {
   // Messaggio, non stack: in un log di build lo stack e' rumore che nasconde la
   // riga che dice cosa fare.
   console.error(`[route-html] ${error.message}`);
   process.exit(1);
-}
+});

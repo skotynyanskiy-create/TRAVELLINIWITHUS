@@ -2,6 +2,8 @@ import { Link } from '../../TransitionLink';
 import OptimizedImage from '../../OptimizedImage';
 import { getContentById } from '../../../config/contentLibrary';
 import { PARTNERSHIP_LABEL } from '../../../types/content';
+import { trackAnalyticsEvent } from '../../../services/analytics';
+import { useArticlePlaceTracking } from '../ArticlePlaceTrackingContext';
 import type { DirectiveConfig, DirectiveNode } from './types';
 
 /**
@@ -22,6 +24,8 @@ function toProps(directive: DirectiveNode): Record<string, unknown> {
 }
 
 function PostoDirective({ 'data-id': id }: { 'data-id'?: string }) {
+  const { slug, positions } = useArticlePlaceTracking();
+
   if (!id) {
     if (import.meta.env?.DEV) {
       console.warn('[:::posto] manca l\'attributo id, es. :::posto{id="praga-dog-cafe"}.');
@@ -49,6 +53,15 @@ function PostoDirective({ 'data-id': id }: { 'data-id'?: string }) {
 
   const luogo = item.place.city ?? item.place.region ?? item.place.country;
   const partnerLabel = PARTNERSHIP_LABEL[item.partnership.kind];
+
+  const handleCardClick = () => {
+    trackAnalyticsEvent('article_place_click', {
+      slug,
+      place_id: item.id,
+      position: positions.get(item.id),
+      partnership_kind: item.partnership.kind,
+    });
+  };
 
   return (
     <aside
@@ -88,6 +101,7 @@ function PostoDirective({ 'data-id': id }: { 'data-id'?: string }) {
           )}
           <Link
             to={`/posto/${item.id}`}
+            onClick={handleCardClick}
             className="mt-4 inline-flex items-center text-[13px] font-bold uppercase tracking-[0.14em] text-[var(--color-accent-text)] transition-colors hover:text-[var(--color-accent)]"
           >
             Scheda del posto →
