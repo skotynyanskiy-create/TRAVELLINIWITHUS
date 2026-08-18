@@ -109,6 +109,15 @@ test.describe('Rotte pubbliche — overflow, controlli, titoli', () => {
           sessionStorage.setItem('twu_gate_dismissed', '1');
         });
         await page.reload({ waitUntil: 'domcontentloaded' });
+        /* Attesa a condizione, non a tempo: coi 900ms fissi la sonda a volte
+           fotografava /esplora ancora in skeleton (0 h1) quando la suite gira
+           con tutti i worker sul dev server. Il catch lascia che sia
+           l'assertion sotto a raccontare un h1 davvero assente. */
+        await page
+          .locator('h1')
+          .first()
+          .waitFor({ state: 'attached', timeout: 15000 })
+          .catch(() => {});
         await page.waitForTimeout(900);
 
         const esito = await page.evaluate((soglia) => {
