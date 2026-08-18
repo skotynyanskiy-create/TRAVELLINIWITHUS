@@ -27,7 +27,7 @@ export default function NotFound() {
           </div>
 
           <span className="font-serif italic text-2xl text-[var(--color-accent)] mb-4 block">
-            Ops, ci siamo persi!
+            Questo posto sembra inventato. E stavolta lo è davvero.
           </span>
           <h1 className="text-display-1 mb-6">
             Pagina <span className="italic opacity-60">non trovata</span>
