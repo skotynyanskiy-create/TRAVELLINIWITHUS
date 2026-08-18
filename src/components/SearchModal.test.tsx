@@ -59,7 +59,7 @@ describe('SearchModal', () => {
     await waitFor(() => {
       expect(screen.getByRole('alert')).toHaveTextContent(/Non riusciamo ad aggiornare/i);
     });
-    expect(screen.getByRole('button', { name: 'Sicilia' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Sushi' })).toBeInTheDocument();
 
     fetchArticlesMock.mockResolvedValueOnce([]);
     fireEvent.click(screen.getByRole('button', { name: 'Chiudi ricerca' }));

@@ -12,12 +12,15 @@ import { INTERNAL_PREVIEW_SLUGS, PREVIEW_ARTICLES } from '../config/previewConte
 import { useSiteContent } from '../hooks/useSiteContent';
 import { trackEvent } from '../services/analytics';
 import { TYPES, ZONES, slugifyType } from '../config/contentTaxonomy';
+import { CONTENT_ITEMS } from '../config/contentLibrary';
 import { buildExploreUrl } from '../utils/discoveryQuery';
 import { useFocusTrap } from '../hooks/useFocusTrap';
 import { useOverlayLayer } from '../hooks/useOverlayLayer';
 
 const RECENT_SEARCHES_KEY = 'twu_recent_searches';
-const POPULAR_TAGS = ['Sicilia', 'Andalusia', 'Dolomiti', 'Weekend', 'Boutique hotel', 'Food'];
+/* Solo termini che l'indice trova davvero: «Andalusia» suggeriva una meta
+   che il sito non copre. */
+const POPULAR_TAGS = ['Sushi', 'Verona', 'Dolomiti', 'Weekend', 'Boutique hotel', 'Spa'];
 const MAX_RECENT = 5;
 
 interface SearchResult {
@@ -100,6 +103,22 @@ const STATIC_PAGE_RESULTS: SearchResult[] = [
     keywords: 'contatti email whatsapp instagram',
   },
 ];
+
+/* I 79 posti reali sono il cuore del sito e la ricerca non li conosceva:
+   «sushi» dava zero risultati con tre sushi nel registro. Costante di build,
+   niente async — entrano nell'indice sempre, anche a Firestore vuoto. */
+const POSTO_RESULTS: SearchResult[] = CONTENT_ITEMS.filter(
+  (item) => !item.isPlaceholder && item.cover
+).map((item) => ({
+  id: `posto-${item.id}`,
+  title: item.title,
+  category: item.types[0] ?? 'Posto provato',
+  link: `/posto/${item.id}`,
+  icon: MapPin,
+  keywords: [item.place.city, item.place.region, item.place.country, item.hook, ...item.types]
+    .filter((value): value is string => typeof value === 'string' && value.length > 0)
+    .join(' '),
+}));
 
 const DISCOVERY_RESULTS: SearchResult[] = [
   ...ZONES.map((zone) => ({
@@ -201,7 +220,11 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
       try {
         const articles = await fetchArticles();
 
-        const fetchedData: SearchResult[] = [...STATIC_PAGE_RESULTS, ...DISCOVERY_RESULTS];
+        const fetchedData: SearchResult[] = [
+          ...STATIC_PAGE_RESULTS,
+          ...DISCOVERY_RESULTS,
+          ...POSTO_RESULTS,
+        ];
         const seenSlugs = new Set<string>();
 
         articles.forEach((data) => {
@@ -340,6 +363,18 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
       .map((result) => result.item);
   }, [fuse, query]);
 
+  /* Selezione da tastiera: il modale si apre con ⌘K ma si completava solo col
+     mouse. L'indice segue l'ordine VISIVO (gruppi editoriali), non il rank
+     Fuse — le frecce devono muoversi come l'occhio legge. */
+  const [activeIndex, setActiveIndex] = useState(0);
+  /* Reset a render-time (pattern «adjust state during render» dei docs
+     React): a ogni query nuova la selezione riparte dal primo risultato. */
+  const [prevQuery, setPrevQuery] = useState(query);
+  if (prevQuery !== query) {
+    setPrevQuery(query);
+    setActiveIndex(0);
+  }
+
   // Raggruppa risultati per categoria con ordine editoriale: prima i luoghi
   // e le esperienze (decisioni di viaggio), poi articoli/guide, poi pagine
   // di servizio. Mantiene il rank Fuse all'interno di ogni gruppo.
@@ -384,6 +419,10 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
     return groups;
   }, [filteredResults]);
+
+  /* L'elenco piatto nell'ordine in cui i gruppi vengono mostrati: è la
+     mappa su cui camminano ArrowUp/ArrowDown. */
+  const flatResults = useMemo(() => groupedResults.flatMap((g) => g.items), [groupedResults]);
 
   useEffect(() => {
     const trimmed = query.trim();
@@ -466,9 +505,32 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
               <input
                 ref={inputRef}
                 aria-label="Cerca nel sito"
+                aria-activedescendant={
+                  flatResults[activeIndex] ? `search-opt-${flatResults[activeIndex].id}` : undefined
+                }
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (flatResults.length === 0) return;
+                  if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    setActiveIndex((i) => (i + 1) % flatResults.length);
+                  } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    setActiveIndex((i) => (i - 1 + flatResults.length) % flatResults.length);
+                  } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const item = flatResults[activeIndex] ?? flatResults[0];
+                    if (item) {
+                      handleSelect(
+                        item.link,
+                        item,
+                        filteredResults.findIndex((c) => c.id === item.id)
+                      );
+                    }
+                  }
+                }}
                 placeholder="Cerca pagine, destinazioni, esperienze e sezioni utili..."
                 className="flex-grow text-xl bg-transparent border-none focus:outline-none placeholder:text-black/30 text-black"
               />
@@ -591,11 +653,25 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                           const positionInAll = filteredResults.findIndex(
                             (candidate) => candidate.id === item.id
                           );
+                          const isActive = flatResults[activeIndex]?.id === item.id;
                           return (
                             <li key={item.id}>
                               <button
+                                id={`search-opt-${item.id}`}
                                 onClick={() => handleSelect(item.link, item, positionInAll)}
-                                className="w-full flex items-center text-left px-4 py-3 hover:bg-[var(--color-sand)] rounded-xl transition-colors group"
+                                onMouseEnter={() => {
+                                  const idx = flatResults.findIndex((c) => c.id === item.id);
+                                  if (idx >= 0) setActiveIndex(idx);
+                                }}
+                                ref={(el) => {
+                                  if (isActive && el)
+                                    el.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+                                }}
+                                className={`w-full flex items-center text-left px-4 py-3 rounded-xl transition-colors group ${
+                                  isActive
+                                    ? 'bg-[var(--color-sand)]'
+                                    : 'hover:bg-[var(--color-sand)]'
+                                }`}
                               >
                                 <div className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center mr-4 group-hover:bg-white group-hover:shadow-sm transition-all text-black/60 group-hover:text-[var(--color-accent)]">
                                   <Icon size={18} />
@@ -620,14 +696,14 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 <div className="text-center py-12 text-black/60">
                   <p className="text-sm">Nessun risultato per "{query}".</p>
                   <p className="mt-3 text-xs text-black/60">
-                    Prova con: Sicilia, Andalusia, Dolomiti, Bali, Marocco.
+                    Prova con: sushi, spa, Verona, Toscana, agriturismo.
                   </p>
                 </div>
               )}
             </div>
 
             <div className="bg-[var(--color-sand)] px-6 py-3 text-xs text-black/60 flex justify-between items-center border-t border-black/5">
-              <span>Scrivi e seleziona un risultato</span>
+              <span>Frecce per scorrere, Invio per aprire</span>
               <span className="flex items-center gap-1">
                 Premi{' '}
                 <kbd className="bg-white px-2 py-1 rounded border border-black/10 shadow-sm font-sans">
