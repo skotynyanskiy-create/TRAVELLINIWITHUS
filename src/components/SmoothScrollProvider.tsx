@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useRef, type ReactNode } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigationType } from 'react-router-dom';
 import type Lenis from 'lenis';
 import { useReducedMotion } from '../hooks/useReducedMotion';
 
@@ -37,6 +37,7 @@ export default function SmoothScrollProvider({ children }: SmoothScrollProviderP
   const reducedMotion = useReducedMotion();
   const lenisRef = useRef<Lenis | null>(null);
   const location = useLocation();
+  const navigationType = useNavigationType();
 
   useEffect(() => {
     if (reducedMotion) return;
@@ -91,13 +92,17 @@ export default function SmoothScrollProvider({ children }: SmoothScrollProviderP
   }, [reducedMotion, location.pathname]);
 
   useEffect(() => {
+    /* POP (back/forward): il ripristino della posizione lo gestisce
+       ScrollToTop — azzerare qui vinceva la corsa e riportava l'utente
+       in cima alla lista da cui era partito. */
+    if (navigationType === 'POP') return;
     const lenis = lenisRef.current;
     if (lenis) {
       lenis.scrollTo(0, { immediate: true });
     } else if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'auto' });
+      window.scrollTo({ top: 0, behavior: 'instant' });
     }
-  }, [location.pathname]);
+  }, [location.pathname, navigationType]);
 
   const scrollTo: SmoothScrollContextValue['scrollTo'] = (target, options) => {
     const lenis = lenisRef.current;
