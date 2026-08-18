@@ -554,3 +554,60 @@ Eseguita la parte statica del gate prescritto da
    blindato, decisione owner.
 3. La pubblicazione resta un'azione dell'owner:
    `npm run publish:article -- dormire-posti-sembrano-inventati --commit --publish`.
+
+---
+
+## 15. Round 8 — «ciò che l'utente si aspetterebbe»: audit dei flussi reali
+
+Cambio d'angolo su mandato owner: non più «com'è fatto» ma «fa quello che un
+visitatore si aspetta?». Sei percorsi utente eseguiti con eventi reali
+(Playwright): ricerca, preferiti, roulette, condivisione, back, azioni scheda.
+
+### 15.1 Cosa reggeva già
+
+Preferiti end-to-end (cuore → /preferiti → elemento presente, `aria-pressed`),
+condivisione presente sulla scheda, «Indicazioni» con href Google Maps
+corretto, «Portami in un posto a caso» (apre l'overlay Sorprendimi: è il
+design, non un difetto), doppio link reel → Instagram.
+
+### 15.2 La ricerca non conosceva il sito (CORRETTO)
+
+Il colpo più serio del round: **«sushi» → zero risultati** con tre sushi nel
+registro, e i suggerimenti proponevano Bali, Marocco e Andalusia — mete che il
+sito non copre. L'indice includeva pagine statiche, percorsi, articoli
+Firestore (tutti `published:false` → vuoto) e preview — **mai i 79 posti**.
+
+- `POSTO_RESULTS`: i posti reali entrano nell'indice come costante di build
+  (titolo, città/regione, tipi e HOOK come keywords — «gabbia» trova
+  l'Emotional Grand Motel).
+- Suggerimenti e tag popolari solo su contenuto che l'indice trova davvero.
+- **Selezione da tastiera**: il modale si apriva con ⌘K ma si completava solo
+  col mouse. Ora frecce (ordine visivo dei gruppi), Invio, highlight della
+  riga attiva, `aria-activedescendant`, hint aggiornato.
+
+Verificato end-to-end: «gabbia»+Invio → `/posto/novara-emotional-grand-motel`;
+«sushi»+frecce×2 → Better Sushi → Invio → la sua scheda.
+
+### 15.3 Scroll al back: indagine completa, fix parziale deliberato
+
+Il back da una scheda NON riporta dove l'utente era nella lista (atterra a
+~753px da 1500). Otto sonde strumentate hanno mappato l'intero meccanismo:
+
+1. `scroll-behavior: smooth` globale nel CSS trasforma ogni `scrollTo` in
+   animazione;
+2. Lenis si inizializza **3,2s dopo il mount** e congela qualunque ease in
+   corso al valore raggiunto;
+3. allo swap di rotta la pagina nuova monta corta e il clamp del browser
+   (1500→753) genera un evento di scroll che corrompe il salvataggio della
+   posizione, con attribuzione alla pagina vecchia;
+4. la navigazione passa da `startViewTransition`, che riordina render e swap.
+
+Tre architetture di ripristino tentate e misurate: tutte pareggiano il
+baseline. **Scelta deliberata: non spedire macchinari a metà.** Consegnato il
+minimo provato e sicuro — azzeramento `instant` sul PUSH (sparisce il «volo»
+animato verso la cima a ogni cambio pagina) e nessuna lotta sul POP in
+entrambi i contendenti (`ScrollToTop`, `SmoothScrollProvider`). Il ripristino
+pieno richiede una decisione di design: o la restituzione della proprietà
+dello scroll a un solo sistema (togliere lo smooth CSS globale o integrare il
+ripristino dentro Lenis post-init), non un cerotto. Registrato qui perché chi
+riapre il tema riparta dalla mappa, non da zero.
