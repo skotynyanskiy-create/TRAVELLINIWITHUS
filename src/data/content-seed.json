@@ -273,7 +273,10 @@
         "La prenotazione è caldamente consigliata.",
         "Quasi tutte le sere, tranne il sabato, le principesse passano ai tavoli durante la cena."
       ],
-      "checked": { "source": "timeout.es · quehacerconlosninos.es", "at": "2026-08-15" }
+      "checked": {
+        "source": "timeout.es · quehacerconlosninos.es",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Europa",
     "types": [
@@ -675,8 +678,13 @@
       "website": "https://beninialessandro.it/"
     },
     "practical": {
-      "toKnow": ["Si entra solo su prenotazione: non è una cantina con visita libera."],
-      "checked": { "source": "beninialessandro.it", "at": "2026-08-15" }
+      "toKnow": [
+        "Si entra solo su prenotazione: non è una cantina con visita libera."
+      ],
+      "checked": {
+        "source": "beninialessandro.it",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Italia",
     "types": [
@@ -740,7 +748,7 @@
       "price": "Da 39€",
       "budget": "Medio"
     },
-    "coverFocusY": 64,
+    "coverFocusY": 78,
     "coverAlt": "Sabbia bianca, palme e lagune del parco acquatico Caribe Bay a Jesolo.",
     "videoSrc": "/video/jesolo-caribe-bay.mp4",
     "publishedAt": "2026-06-10"
@@ -1377,7 +1385,7 @@
     "permalink": "https://www.instagram.com/reel/C_-a3IUoNL4/",
     "mediaType": "reel",
     "cover": "/images/reels/novara-emotional-grand-motel-cover.webp",
-    "coverFocusY": 64,
+    "coverFocusY": 74,
     "coverAlt": "Camera a tema con letto rotondo dentro una gabbia dorata e pareti rosse dell'Emotional Grand Motel.",
     "videoSrc": "/video/novara-emotional-grand-motel.mp4",
     "publishedAt": "2024-09-16",
@@ -1399,8 +1407,13 @@
     },
     "practical": {
       "gettingThere": "A 100 metri dal casello di Borgomanero sulla A26.",
-      "toKnow": ["Oltre al pernottamento offre soggiorni a ore."],
-      "checked": { "source": "emotionalgrandmotel.it", "at": "2026-08-15" }
+      "toKnow": [
+        "Oltre al pernottamento offre soggiorni a ore."
+      ],
+      "checked": {
+        "source": "emotionalgrandmotel.it",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Italia",
     "types": [
@@ -1444,8 +1457,13 @@
     },
     "practical": {
       "gettingThere": "Accanto a Europa-Park, a Rust.",
-      "toKnow": ["Il biglietto è separato da quello di Europa-Park: sono due ingressi distinti."],
-      "checked": { "source": "europapark.de/de/rulantica", "at": "2026-08-15" }
+      "toKnow": [
+        "Il biglietto è separato da quello di Europa-Park: sono due ingressi distinti."
+      ],
+      "checked": {
+        "source": "europapark.de/de/rulantica",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Europa",
     "types": [
@@ -1718,8 +1736,13 @@
       "website": "https://bettersushi.it/ravenna/"
     },
     "practical": {
-      "toKnow": ["Better Sushi è una catena: questa è la sede di Ravenna."],
-      "checked": { "source": "bettersushi.it", "at": "2026-08-15" }
+      "toKnow": [
+        "Better Sushi è una catena: questa è la sede di Ravenna."
+      ],
+      "checked": {
+        "source": "bettersushi.it",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Italia",
     "types": [
@@ -1806,8 +1829,13 @@
     },
     "practical": {
       "gettingThere": "A Leavesden, circa 32 km a nord-ovest di Londra. Ci sono autobus diretti da Victoria, Baker Street e King's Cross; in treno la fermata più vicina è Watford High Street, a venti minuti a piedi. Chi arriva in auto ha un parcheggio gratuito.",
-      "toKnow": ["Conviene prenotare con anticipo."],
-      "checked": { "source": "wbstudiotour.co.uk", "at": "2026-08-15" }
+      "toKnow": [
+        "Conviene prenotare con anticipo."
+      ],
+      "checked": {
+        "source": "wbstudiotour.co.uk",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Europa",
     "types": [
@@ -1850,7 +1878,10 @@
         "Chiuso lunedì e martedì.",
         "Non accetta prenotazioni: si entra e basta."
       ],
-      "checked": { "source": "timeout.es · guiadelocio.es", "at": "2026-08-15" }
+      "checked": {
+        "source": "timeout.es · guiadelocio.es",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Europa",
     "types": [
@@ -1889,7 +1920,10 @@
     },
     "practical": {
       "gettingThere": "Circa 5 km dal borgo di Asciano, in mezzo alle Crete Senesi.",
-      "checked": { "source": "poderefossaccio.com", "at": "2026-08-15" }
+      "checked": {
+        "source": "poderefossaccio.com",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Italia",
     "types": [
@@ -1929,7 +1963,10 @@
     },
     "practical": {
       "gettingThere": "Nel centro di Verona, dietro il Listone.",
-      "checked": { "source": "instagram.com/casabarcaofficial", "at": "2026-08-15" }
+      "checked": {
+        "source": "instagram.com/casabarcaofficial",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Italia",
     "types": [
@@ -2013,7 +2050,10 @@
       "toKnow": [
         "A Cancún ci sono più hotel Riu: questo è l'Hotel Riu Cancún, da non confondere con i Riu Palace."
       ],
-      "checked": { "source": "riu.com", "at": "2026-08-15" }
+      "checked": {
+        "source": "riu.com",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Americhe",
     "types": [
@@ -2102,8 +2142,13 @@
       "website": "https://www.tonicello.it/"
     },
     "practical": {
-      "toKnow": ["Ha una spiaggia privata attrezzata."],
-      "checked": { "source": "tonicello.it", "at": "2026-08-15" }
+      "toKnow": [
+        "Ha una spiaggia privata attrezzata."
+      ],
+      "checked": {
+        "source": "tonicello.it",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Italia",
     "types": [
@@ -2236,7 +2281,10 @@
       "toKnow": [
         "L'indirizzo è quello della sede a Lucca: le discese si fanno sul torrente Lima, altrove. Il punto di ritrovo va concordato."
       ],
-      "checked": { "source": "luccarafting.it", "at": "2026-08-15" }
+      "checked": {
+        "source": "luccarafting.it",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Italia",
     "types": [
@@ -2273,8 +2321,13 @@
     },
     "practical": {
       "gettingThere": "Al terzo piano, su per le scale a destra del Haohao Coffee: dalla strada non si vede.",
-      "toKnow": ["Chiude a metà giornata, fra le 12:30 e le 13:30."],
-      "checked": { "source": "instagram.com/p/DMIi71YxSu9 · lemon8-app.com", "at": "2026-08-15" }
+      "toKnow": [
+        "Chiude a metà giornata, fra le 12:30 e le 13:30."
+      ],
+      "checked": {
+        "source": "instagram.com/p/DMIi71YxSu9 · lemon8-app.com",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Asia",
     "types": [
@@ -2315,7 +2368,10 @@
     },
     "practical": {
       "gettingThere": "Nel centro storico, a pochi passi dalla casa di Giulietta.",
-      "checked": { "source": "pizzerialittleitaly.com", "at": "2026-08-15" }
+      "checked": {
+        "source": "pizzerialittleitaly.com",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Italia",
     "types": [
@@ -2356,7 +2412,10 @@
       "website": "https://www.agriturismocornali.com/"
     },
     "practical": {
-      "checked": { "source": "agriturismocornali.com", "at": "2026-08-15" }
+      "checked": {
+        "source": "agriturismocornali.com",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Italia",
     "types": [
@@ -2398,7 +2457,10 @@
         "Gli orari cambiano di giorno in giorno: vanno controllati sulla data esatta.",
         "I biglietti si comprano solo dai canali ufficiali — sito, app o account WeChat del resort."
       ],
-      "checked": { "source": "shanghaidisneyresort.com · topchinatravel.com", "at": "2026-08-15" }
+      "checked": {
+        "source": "shanghaidisneyresort.com · topchinatravel.com",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Asia",
     "types": [
@@ -2565,7 +2627,10 @@
     },
     "practical": {
       "gettingThere": "Sul lato sud del lago di Bled, circa 400 metri dalla riva.",
-      "checked": { "source": "gardenvillagebled.com", "at": "2026-08-15" }
+      "checked": {
+        "source": "gardenvillagebled.com",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Europa",
     "types": [
@@ -2604,7 +2669,10 @@
       "toKnow": [
         "Le suite sono gestite da operatori diversi con nomi simili: conviene verificare quale si sta prenotando."
       ],
-      "checked": { "source": "tripadvisor.com · agoda.com", "at": "2026-08-15" }
+      "checked": {
+        "source": "tripadvisor.com · agoda.com",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Asia",
     "types": [
@@ -2651,7 +2719,10 @@
       "toKnow": [
         "PastaEat ha tre sedi a Roma — corso Vittorio Emanuele II, via della Mercede e viale Ippocrate: questa è la prima."
       ],
-      "checked": { "source": "pastaeat.it", "at": "2026-08-15" }
+      "checked": {
+        "source": "pastaeat.it",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Italia",
     "types": [
@@ -2692,8 +2763,13 @@
       "googlePlaceQuery": "Boba, Barcellona"
     },
     "practical": {
-      "toKnow": ["Chiuso il mercoledì."],
-      "checked": { "source": "instagram.com/boba_barcelona", "at": "2026-08-15" }
+      "toKnow": [
+        "Chiuso il mercoledì."
+      ],
+      "checked": {
+        "source": "instagram.com/boba_barcelona",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Europa",
     "types": [
@@ -2783,7 +2859,10 @@
       "toKnow": [
         "Il calendario è giorno per giorno: l'orario va controllato sulla data esatta, non sulla stagione."
       ],
-      "checked": { "source": "parchionline.it · iparchidivertimento.it", "at": "2026-08-15" }
+      "checked": {
+        "source": "parchionline.it · iparchidivertimento.it",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Europa",
     "types": [
@@ -2824,8 +2903,13 @@
       "googlePlaceQuery": "Ora Ristorante, Frosinone"
     },
     "practical": {
-      "toKnow": ["Accessibile in sedia a rotelle, con parcheggio gratuito."],
-      "checked": { "source": "paginegialle.it · thefork.it", "at": "2026-08-15" }
+      "toKnow": [
+        "Accessibile in sedia a rotelle, con parcheggio gratuito."
+      ],
+      "checked": {
+        "source": "paginegialle.it · thefork.it",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Italia",
     "types": [
@@ -2996,7 +3080,10 @@
       "toKnow": [
         "Cinnamood ha tre sedi a Praga: questa è quella di Jungmannova, in centro. Quella di Vinohradská ha posti a sedere."
       ],
-      "checked": { "source": "cinnamoodrolls.com", "at": "2026-08-15" }
+      "checked": {
+        "source": "cinnamoodrolls.com",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Europa",
     "types": [
@@ -3122,8 +3209,13 @@
     },
     "practical": {
       "gettingThere": "Sulla Slovenska cesta, nel centro di Lubiana.",
-      "toKnow": ["La domenica e nei festivi chiude alle 15:00."],
-      "checked": { "source": "visitljubljana.com · gremojest.si", "at": "2026-08-15" }
+      "toKnow": [
+        "La domenica e nei festivi chiude alle 15:00."
+      ],
+      "checked": {
+        "source": "visitljubljana.com · gremojest.si",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Europa",
     "types": [
@@ -3166,7 +3258,10 @@
       "toKnow": [
         "Gli orari cambiano in alcune giornate: conviene controllare il sito prima di andare."
       ],
-      "checked": { "source": "choco-story-torino.it", "at": "2026-08-15" }
+      "checked": {
+        "source": "choco-story-torino.it",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Italia",
     "types": [
@@ -3207,7 +3302,10 @@
       "phone": "+39 327 4833580"
     },
     "practical": {
-      "checked": { "source": "localshop24.com · tripadvisor.com", "at": "2026-08-15" }
+      "checked": {
+        "source": "localshop24.com · tripadvisor.com",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Italia",
     "types": [
@@ -3246,7 +3344,10 @@
     "practical": {
       "gettingThere": "Nella Foresta Nera, fra Friburgo e Strasburgo, vicino al confine francese.",
       "when": "Aperto quasi tutto l'anno con stagioni diverse — estiva, Halloween e invernale — e orari che cambiano di conseguenza.",
-      "checked": { "source": "parchionline.it · schwarzwaldportal.com", "at": "2026-08-15" }
+      "checked": {
+        "source": "parchionline.it · schwarzwaldportal.com",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Europa",
     "types": [
@@ -3331,7 +3432,10 @@
     },
     "practical": {
       "gettingThere": "Vicino alla stazione di Padova.",
-      "checked": { "source": "la-pot-hot-pot-lashangyin.eatbu.com", "at": "2026-08-15" }
+      "checked": {
+        "source": "la-pot-hot-pot-lashangyin.eatbu.com",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Italia",
     "types": [
@@ -3371,7 +3475,10 @@
     },
     "practical": {
       "gettingThere": "In località Padula, fuori dal centro di Casola in Lunigiana.",
-      "checked": { "source": "spinofiorito.it", "at": "2026-08-15" }
+      "checked": {
+        "source": "spinofiorito.it",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Italia",
     "types": [
@@ -3461,7 +3568,9 @@
       "googlePlaceQuery": "Enjoy House Bracciano, Bracciano"
     },
     "practical": {
-      "toKnow": ["Il ristorante e le suite sono della stessa proprietà, a pochi passi di distanza."],
+      "toKnow": [
+        "Il ristorante e le suite sono della stessa proprietà, a pochi passi di distanza."
+      ],
       "checked": {
         "source": "enjoyhousebracciano.com",
         "at": "2026-08-15"
@@ -3504,7 +3613,10 @@
       "googlePlaceQuery": "Mamma Mia, Novellara"
     },
     "practical": {
-      "checked": { "source": "paginegialle.it · oraridiapertura24.it", "at": "2026-08-15" }
+      "checked": {
+        "source": "paginegialle.it · oraridiapertura24.it",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Italia",
     "types": [
@@ -3547,7 +3659,10 @@
         "Chiuso il lunedì e apre solo dal pomeriggio.",
         "The Sign ha due locali: questo è «Il Drago» a Pomigliano, l'altro è «Il Kraken» a Pozzuoli."
       ],
-      "checked": { "source": "thesign.pub", "at": "2026-08-15" }
+      "checked": {
+        "source": "thesign.pub",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Italia",
     "types": [
@@ -3671,7 +3786,10 @@
     },
     "practical": {
       "gettingThere": "A Bayan Lepas, undici minuti d'auto dall'aeroporto di Penang — non nel centro di George Town.",
-      "checked": { "source": "iconicmarjorie.com", "at": "2026-08-15" }
+      "checked": {
+        "source": "iconicmarjorie.com",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Asia",
     "types": [
@@ -3710,8 +3828,13 @@
     },
     "practical": {
       "gettingThere": "Dentro la Menara TCM, su Jalan Tun Razak.",
-      "toKnow": ["Apre solo la sera, dalle 17:00."],
-      "checked": { "source": "tripadvisor.com · eatdrinkkl.com", "at": "2026-08-15" }
+      "toKnow": [
+        "Apre solo la sera, dalle 17:00."
+      ],
+      "checked": {
+        "source": "tripadvisor.com · eatdrinkkl.com",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Asia",
     "types": [
@@ -3752,7 +3875,10 @@
     },
     "practical": {
       "gettingThere": "In penisola sorrentina, fra Sorrento e la costiera.",
-      "checked": { "source": "relaisfreedom.com", "at": "2026-08-15" }
+      "checked": {
+        "source": "relaisfreedom.com",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Italia",
     "types": [
@@ -3885,7 +4011,10 @@
     "practical": {
       "gettingThere": "Non ha stazione: la più vicina è Colmar, a 15 km, da cui partono autobus. In auto si parcheggia fuori dalle mura e si entra a piedi.",
       "duration": "Un paio d'ore a piedi",
-      "checked": { "source": "it.wikivoyage.org · siviaggia.it", "at": "2026-08-15" }
+      "checked": {
+        "source": "it.wikivoyage.org · siviaggia.it",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Europa",
     "types": [
@@ -4009,7 +4138,10 @@
     "practical": {
       "gettingThere": "Dentro il parco Zürichhorn, sulla riva del lago.",
       "when": "Apre solo da metà marzo a metà ottobre: nei mesi freddi è chiuso.",
-      "checked": { "source": "yelp.com · wikipedia.org", "at": "2026-08-15" }
+      "checked": {
+        "source": "yelp.com · wikipedia.org",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Europa",
     "types": [
@@ -4174,8 +4306,13 @@
     },
     "practical": {
       "gettingThere": "Nel centro storico, vicino al Duomo e al Battistero.",
-      "toKnow": ["Chiuso il martedì. La domenica apre solo a pranzo."],
-      "checked": { "source": "laforchettaparma.it", "at": "2026-08-15" }
+      "toKnow": [
+        "Chiuso il martedì. La domenica apre solo a pranzo."
+      ],
+      "checked": {
+        "source": "laforchettaparma.it",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Italia",
     "types": [
@@ -4213,7 +4350,10 @@
     },
     "practical": {
       "gettingThere": "A 50 metri dalla stazione People's Square, sulle linee 1, 2 e 8 della metro. Il Bund è a 1,5 km a piedi.",
-      "checked": { "source": "theyangtzehotel.com", "at": "2026-08-15" }
+      "checked": {
+        "source": "theyangtzehotel.com",
+        "at": "2026-08-15"
+      }
     },
     "zone": "Asia",
     "types": [

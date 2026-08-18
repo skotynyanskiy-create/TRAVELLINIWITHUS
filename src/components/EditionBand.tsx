@@ -49,13 +49,40 @@ export default function EditionBand({
 
   // Prima visita: tre porte pari, nessuno stato attivo — la scelta non è
   // ancora stata fatta, quindi non c'è ancora niente da dichiarare attivo.
+  //
+  // Sotto `sm` le tre porte con descrizione impilate mangiavano metà del
+  // primo schermo su OGNI rotta: la prima schermata del sito era wayfinding,
+  // non la promessa del brand. La variante mobile riusa il pattern della
+  // forma compatta (segmenti a misura di contenuto, mai a capo, provato a
+  // 320px) con i pallini-colore su tutte e tre le porte; le descrizioni
+  // restano da `sm` in su, dove lo spazio non le fa pagare al hero.
   if (!hasChosen) {
     return (
       <div className="px-4 pt-[76px] pb-5 md:px-6 md:pt-20">
         <div
           role="group"
           aria-label="Scegli l'edizione"
-          className="mx-auto grid max-w-[1360px] grid-cols-1 gap-2 rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-[var(--color-sand)] p-3 shadow-[var(--shadow-sm)] sm:grid-cols-3 sm:gap-3 sm:p-4"
+          className="mx-auto flex max-w-full items-stretch justify-center gap-1 rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-[var(--color-sand)] p-1 shadow-[var(--shadow-sm)] sm:hidden"
+        >
+          {AUDIENCE_EDITIONS.map((edition) => (
+            <button
+              key={edition.key}
+              type="button"
+              onClick={() => onSwitch(edition.key)}
+              className="flex min-h-[48px] shrink-0 items-center justify-center gap-1.5 rounded-[var(--radius-lg)] px-1.5 text-center font-serif text-[13px] text-[var(--color-ink)] transition-colors hover:bg-[var(--color-muted-bg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+            >
+              <span
+                aria-hidden="true"
+                className={`h-[7px] w-[7px] shrink-0 rounded-full ${EDITION_DOT_CLASS[edition.key]}`}
+              />
+              <span className="whitespace-nowrap">{edition.title}</span>
+            </button>
+          ))}
+        </div>
+        <div
+          role="group"
+          aria-label="Scegli l'edizione"
+          className="mx-auto hidden max-w-[1360px] grid-cols-1 gap-2 rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-[var(--color-sand)] p-3 shadow-[var(--shadow-sm)] sm:grid sm:grid-cols-3 sm:gap-3 sm:p-4"
         >
           {AUDIENCE_EDITIONS.map((edition) => (
             <button
