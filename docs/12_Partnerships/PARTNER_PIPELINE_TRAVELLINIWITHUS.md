@@ -138,7 +138,7 @@ Oggetto: Collaborazione editoriale Travelliniwithus — [nome brand]
 Ciao [Nome contatto],
 
 sono Rodrigo, insieme a mia moglie Betta gestiamo Travelliniwithus
-(167K Instagram, 90K TikTok, sito editoriale). Lavoriamo solo su
+(172K Instagram, 90K TikTok, sito editoriale). Lavoriamo solo su
 collaborazioni allineate con il brand e con piena libertà
 editoriale.
 

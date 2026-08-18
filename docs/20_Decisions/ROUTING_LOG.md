@@ -148,3 +148,51 @@ rejected and redone). Rules live in `CLAUDE.md` > Model routing.
 | 2026-08-14 | travellini-security-auditor | Audit sicurezza configurazione AI | 2755 ch |
 | 2026-08-14 | travellini-quality-auditor | Coerenza di skill e agent | 2570 ch |
 | 2026-08-14 | code-architect | Architettura dei file di istruzione | 3649 ch |
+| 2026-08-14 | travellini-quality-auditor | CapacitÃ  dichiarate ma non funzionanti | 2422 ch |
+| 2026-08-14 | travellini-security-auditor | Cosa ci limitiamo da soli | 2896 ch |
+| 2026-08-14 | code-architect | CapacitÃ  esistenti mai sfruttate | 3756 ch |
+| 2026-08-15 | travellini-data-analyst | Cosa dicono i numeri di engagement | 2635 ch |
+| 2026-08-15 | travellini-editorial-writer | Voce e unitÃ  editoriale | 3058 ch |
+| 2026-08-15 | travellini-ui-designer | Come si vede e si struttura | 3022 ch |
+| 2026-08-15 | travellini-seo-conversion-strategist | Scoperta e trappole SEO | 2831 ch |
+| 2026-08-15 | travellini-growth-revenue-operator | Cosa rende possibile commercialmente | 3216 ch |
+| 2026-08-15 | travellini-ui-designer | Il selettore di pubblico Ã¨ giusto? | 3303 ch |
+| 2026-08-15 | travellini-growth-revenue-operator | Cosa va sulla superficie brand | 3592 ch |
+| 2026-08-15 | travellini-seo-conversion-strategist | Tre pubblici e la scoperta | 2996 ch |
+| 2026-08-15 | travellini-social-content-operator | La linea family con un figlio | 3310 ch |
+| 2026-08-15 | travellini-orchestrator | Plan the design work sequence | 4862 ch |
+| 2026-08-15 | browser-auditor | Real-browser UX audit | 3018 ch |
+| 2026-08-15 | travellini-ui-designer | Design the scheda posto template | 5511 ch |
+| 2026-08-15 | travellini-frontend-builder | Fix scheda posto blockers | 6009 ch |
+| 2026-08-15 | travellini-seo-conversion-strategist | Copy for the limite block | 3741 ch |
+| 2026-08-15 | travellini-frontend-builder | Promote toKnow into its own block | 4329 ch |
+| 2026-08-15 | travellini-ui-designer | Map density visual direction | 4522 ch |
+| 2026-08-15 | travellini-frontend-builder | Implement map density direction | 4588 ch |
+| 2026-08-17 | browser-auditor | Real-browser audit all routes | 3658 ch |
+| 2026-08-17 | travellini-perf-engineer | Core Web Vitals per route | 2930 ch |
+| 2026-08-17 | travellini-security-auditor | Security audit | 3189 ch |
+| 2026-08-17 | travellini-quality-auditor | Static release-readiness audit | 3262 ch |
+| 2026-08-17 | travellini-frontend-builder | Fix all sub-24px targets | 3664 ch |
+| 2026-08-17 | travellini-perf-engineer | Diagnose the fixed 2.86s cost | 3625 ch |
+| 2026-08-17 | travellini-ui-designer | Design the audience switcher | 4498 ch |
+| 2026-08-17 | travellini-frontend-builder | Build the audience edition chip | 4953 ch |
+| 2026-08-17 | travellini-ui-designer | Redesign the navbar premium | 4692 ch |
+| 2026-08-17 | travellini-seo-conversion-strategist | Navbar copy across editions | 4163 ch |
+| 2026-08-17 | travellini-frontend-builder | Build the flush masthead | 5257 ch |
+| 2026-08-17 | travellini-ui-designer | Ideate the memorable version | 3539 ch |
+| 2026-08-17 | travellini-growth-revenue-operator | What each edition should ask for | 3039 ch |
+| 2026-08-17 | travellini-editorial-writer | What the three editions promise | 3974 ch |
+| 2026-08-17 | travellini-frontend-builder | Build the finished header | 4962 ch |
+| 2026-08-17 | travellini-seo-conversion-strategist | Hero copy per edizione | 4283 ch |
+| 2026-08-18 | travellini-ui-designer | Visitatore: direzione visiva | 3099 ch |
+| 2026-08-18 | travellini-growth-revenue-operator | Visitatore: cosa possiamo offrire | 3224 ch |
+| 2026-08-18 | travellini-seo-conversion-strategist | Visitatore: percorso e parole | 3651 ch |
+| 2026-08-18 | travellini-orchestrator | Piano S1 pillar alloggi | 13309 ch |
+| 2026-08-18 | travellini-growth-revenue-operator | Brief growth pillar alloggi | 1014 ch |
+| 2026-08-18 | travellini-seo-conversion-strategist | SEO pillar alloggi | 2453 ch |
+| 2026-08-18 | travellini-editorial-writer | Corpo pillar alloggi | 3722 ch |
+| 2026-08-18 | travellini-asset-curator | Foto pillar alloggi | 2348 ch |
+| 2026-08-18 | travellini-frontend-builder | Seed e tracking pillar | 3090 ch |
+| 2026-08-18 | travellini-quality-auditor | Gate qualitÃ  pillar | 2181 ch |
+| 2026-08-18 | browser-auditor | Gate browser pillar | 1971 ch |
+| 2026-08-18 | travellini-social-content-operator | Piano social pillar | 1888 ch |
