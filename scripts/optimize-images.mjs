@@ -21,6 +21,10 @@ const RESPONSIVE_DIRS = new Set([
   'atlante',
   // Cover reali dei contenuti Travellini Family (frame reel).
   'family',
+  // Immagini alla radice di /images (hero-amalfi & co.): usate come cover
+  // fallback da ArchiveCard/regions/articleData — senza varianti scaricavano
+  // la base intera (~253 KB webp) in card da ~430px.
+  '',
 ]);
 // Directories whose .webp files are ORIGINAL sources (not PNG-derived variants).
 // For them we generate the .avif + responsive derivatives; the base .webp IS the
@@ -101,7 +105,11 @@ async function convertOne(file, { force }) {
           .toFormat(ext, options)
           .toBuffer();
         await fs.writeFile(dest, buf);
-        summary.generated.push({ ext: `${width}.${ext}`, sizeKB: buf.length / 1024, skipped: false });
+        summary.generated.push({
+          ext: `${width}.${ext}`,
+          sizeKB: buf.length / 1024,
+          skipped: false,
+        });
       }
     }
   }
