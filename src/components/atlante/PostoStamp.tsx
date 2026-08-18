@@ -109,8 +109,15 @@ export default function PostoStamp({ item }: { item: ContentItem }) {
         </div>
       </div>
 
-      {/* Badge sempre visibili sopra entrambe le facce (tipo + disclosure) */}
-      <span className="absolute left-4 top-4 z-10 rounded-full bg-white/90 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-[var(--color-ink)] backdrop-blur-md">
+      {/* Badge sempre visibili sopra entrambe le facce (tipo + disclosure).
+          max-w + truncate sul tipo: a 375px «Hotel con carattere» e
+          «In collaborazione» non ci stanno entrambi interi — la disclosure
+          non si tocca, il tipo degrada con l'ellissi. */}
+      <span
+        className={`absolute left-4 top-4 z-10 rounded-full bg-white/90 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-[var(--color-ink)] backdrop-blur-md ${
+          partnerLabel ? 'max-w-[40%] truncate' : ''
+        }`}
+      >
         {item.types[0]}
       </span>
       {partnerLabel && (

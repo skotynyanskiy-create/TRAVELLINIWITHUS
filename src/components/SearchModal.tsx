@@ -382,6 +382,10 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     if (filteredResults.length === 0) return [];
 
     const GROUP_ORDER: Array<{ label: string; matches: (cat: string) => boolean }> = [
+      /* I posti hanno come categoria il loro tipo canonical: senza questo
+         gruppo finivano sotto «Articoli e guide», che e' il contrario di
+         quello che sono. Primo gruppo perche' sono il cuore del sito. */
+      { label: 'Posti provati', matches: (cat) => (TYPES as readonly string[]).includes(cat) },
       { label: 'Luoghi', matches: (cat) => cat === 'Luogo' || cat === 'Destinazioni' },
       { label: 'Esperienze', matches: (cat) => cat === 'Esperienza' || cat === 'Esperienze' },
       { label: 'Percorsi consigliati', matches: (cat) => cat === 'Percorso' || cat === 'Finder' },
@@ -391,10 +395,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
           cat === 'Articolo' ||
           cat === 'Guide' ||
           cat === 'Itinerari completi' ||
-          cat === 'Weekend & Day trips' ||
-          cat === 'Food & Ristoranti' ||
-          cat === 'Hotel con carattere' ||
-          cat === 'Posti particolari',
+          cat === 'Weekend & Day trips',
       },
       { label: 'Pagine', matches: (cat) => cat === 'Pagina' },
     ];
