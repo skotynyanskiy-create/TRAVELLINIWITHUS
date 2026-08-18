@@ -151,7 +151,7 @@ export default function HiggsfieldReelCarousel() {
                     {reel.location.split('·')[0].trim()}
                   </span>
                   {disclosure && (
-                    <span className="-rotate-3 shrink-0 whitespace-nowrap rounded-sm border border-[var(--color-accent-on-dark)]/80 bg-black/45 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--color-accent-on-dark)] backdrop-blur-sm">
+                    <span className="-rotate-3 shrink-0 whitespace-nowrap rounded-sm border border-[var(--color-accent-on-dark)]/80 bg-black/45 px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--color-accent-on-dark)] backdrop-blur-sm">
                       {disclosure}
                     </span>
                   )}
@@ -167,11 +167,25 @@ export default function HiggsfieldReelCarousel() {
                   <span className="block text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-on-dark)]">
                     {reel.type}
                   </span>
+                  {/* Titolo dichiarativo primario, hook come riga secondaria:
+                      venticinque card di fila tutte con l'hook interrogativo
+                      dell'opener IG erano un tic da caption, non una voce
+                      editoriale. La domanda resta — sotto, dove incuriosisce
+                      senza dare il ritmo. (67/67 reel hanno postoId; il
+                      fallback copre un futuro reel slegato.) */}
                   <span className="mt-1 line-clamp-2 block font-serif text-base font-normal leading-snug text-white">
-                    {reel.hook}
+                    {item?.title ?? reel.hook}
                   </span>
+                  {item?.title && (
+                    <span className="mt-0.5 line-clamp-1 block text-xs leading-snug text-white/70">
+                      {reel.hook}
+                    </span>
+                  )}
 
-                  <span className="mt-3 flex items-center gap-2 whitespace-nowrap">
+                  {/* flex-wrap, non truncate: il prezzo e' il dato che
+                      differenzia il brand — ellipsis a meta' cifra
+                      («Cena da 28,9…») e' peggio di una seconda riga. */}
+                  <span className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-0.5">
                     {hasScheda ? (
                       <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white/75">
                         Scheda <ArrowUpRight size={11} />
@@ -186,7 +200,7 @@ export default function HiggsfieldReelCarousel() {
                         <span aria-hidden="true" className="text-white/25">
                           ·
                         </span>
-                        <span className="truncate text-[10px] font-bold text-white/75">
+                        <span className="whitespace-nowrap text-[11px] font-bold text-white/85">
                           {item.value.price}
                         </span>
                       </>
@@ -318,7 +332,7 @@ function ReelDetails({ reel, onNavigate }: { reel: ReelEntry; onNavigate: () => 
           {reel.location}
         </p>
         {disclosure && (
-          <span className="-rotate-3 shrink-0 rounded-sm border border-[var(--color-accent-on-dark)]/70 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--color-accent-on-dark)]">
+          <span className="-rotate-3 shrink-0 rounded-sm border border-[var(--color-accent-on-dark)]/70 px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--color-accent-on-dark)]">
             {disclosure}
           </span>
         )}
