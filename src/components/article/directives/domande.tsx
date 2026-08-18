@@ -2,6 +2,7 @@ import { Minus, Plus } from 'lucide-react';
 import type { DirectiveConfig, DirectiveNode } from './types';
 import { getNodeText } from './utils';
 import { buildFaqPageJsonLd, type FaqQaItem } from '../../../lib/seo';
+import JsonLd from '../../JsonLd';
 
 /**
  * `:::domande` — sequenza `### Domanda` + paragrafo di risposta, resa come
@@ -105,12 +106,10 @@ function DomandeDirective({
           </details>
         ))}
       </div>
-      {faqJsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
-      )}
+      {/* JsonLd e non JSON.stringify inline: il testo delle FAQ arriva
+          dall'editor articoli, e un `</script>` in una risposta chiuderebbe
+          il tag. JsonLd escapa `<` prima dell'iniezione. */}
+      {faqJsonLd && <JsonLd data={faqJsonLd} />}
     </section>
   );
 }
