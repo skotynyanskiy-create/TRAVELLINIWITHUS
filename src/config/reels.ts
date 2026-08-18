@@ -691,7 +691,7 @@ const RAW_REELS: ReelEntry[] = [
     zone: 'Italia',
     type: 'Insolito',
     caption:
-      "Il primo ristorante a tema Tim Burton in Italia: location iper-tematizzata tra Jack Skeleton, Beetlejuice e Alice, menù dedicato ai personaggi e spettacoli durante la serata. Da prenotare con anticipo. Per gli amanti dell'insolito.",
+      "Il primo ristorante a tema Tim Burton in Italia: location iper-tematizzata tra Jack Skeletron, Beetlejuice e Alice, menù dedicato ai personaggi e spettacoli durante la serata. Da prenotare con anticipo. Per gli amanti dell'insolito.",
     hook: 'Il primo ristorante a tema Tim Burton in Italia?',
     hashtags: ['timburton', 'sommavesuviana', 'ristorantitematici'],
     instagramUrl: 'https://www.instagram.com/travelliniwithus/reel/C6gJr_noB_i/',
@@ -878,7 +878,7 @@ const RAW_REELS: ReelEntry[] = [
     zone: 'Italia',
     type: 'Hotel con carattere',
     caption:
-      'Villa del 1200 sulle colline sopra Firenze: due ore di spa privata con sauna e bagno turco, massaggio di coppia, piscina panoramica esterna con la città sullo sfondo. Un viale di cipressi porta all’ingresso.',
+      'Villa trecentesca sulle colline sopra Firenze: due ore di spa privata con sauna e bagno turco, massaggio di coppia, piscina panoramica esterna con la città sullo sfondo. Un viale di cipressi porta all’ingresso.',
     hook: 'Un weekend con Firenze davanti?',
     hashtags: ['firenze', 'toscana', 'weekendromantico'],
     instagramUrl: 'https://www.instagram.com/travelliniwithus/reel/DSJxfijDO-V/',
