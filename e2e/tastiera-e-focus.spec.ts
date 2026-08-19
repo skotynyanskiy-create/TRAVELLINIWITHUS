@@ -76,14 +76,28 @@ test.describe('Tastiera e focus', () => {
     await page.reload({ waitUntil: 'domcontentloaded' });
     await page.waitForTimeout(700);
 
-    // Tre porte pari: nomi + descrizioni verbatim, nessuna scelta ancora.
+    // Tre porte pari, nessuna scelta ancora. Dal 2026-08-19 la forma estesa
+    // ha due varianti (EditionBand.tsx): sotto `sm` solo nomi + pallino
+    // colore — le descrizioni impilate mangiavano meta' del primo schermo —
+    // da `sm` in su nomi + descrizioni verbatim come prima.
     const switcher = page.getByRole('group', { name: "Scegli l'edizione" });
     await expect(switcher).toBeVisible();
     const portaFamily = switcher.getByRole('button', { name: /family/i });
-    await expect(
-      portaFamily,
-      'la porta Family non porta la sua descrizione verbatim da audienceEditions.ts'
-    ).toContainText('Gravidanza');
+    const viewport = page.viewportSize();
+    if (viewport && viewport.width >= 640) {
+      await expect(
+        portaFamily,
+        'la porta Family non porta la sua descrizione verbatim da audienceEditions.ts'
+      ).toContainText('Gravidanza');
+    } else {
+      await expect(portaFamily, 'la porta Family compatta non porta il nome').toContainText(
+        /family/i
+      );
+      await expect(
+        portaFamily,
+        'sotto sm la porta non deve pagare la descrizione al primo schermo'
+      ).not.toContainText('Gravidanza');
+    }
 
     /* Raggiungibile da tastiera: il focus deve poterci arrivare senza mouse. */
     let trovato = false;
