@@ -7,6 +7,7 @@ import {
   Globe,
   Loader2,
   Mail,
+  MailWarning,
   ShieldCheck,
   Target,
   Wallet,
@@ -17,6 +18,7 @@ import {
 } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import Breadcrumbs from '../components/Breadcrumbs';
+import LeadFallbackNotice from '../components/LeadFallbackNotice';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import Section from '../components/Section';
@@ -26,7 +28,12 @@ import Input from '../components/Input';
 import Select from '../components/Select';
 import Textarea from '../components/Textarea';
 import { BRAND_STATS, BRAND_STATS_SOURCE, CONTACTS, PUBLIC_PROOF_SIGNALS } from '../config/site';
-import { appendLeadFallback } from '../lib/leadFallback';
+import {
+  appendLeadFallback,
+  buildLeadFallbackMailto,
+  buildLeadFallbackWhatsAppText,
+  buildLeadFallbackWhatsAppUrl,
+} from '../lib/leadFallback';
 import { trackEvent } from '../services/analytics';
 
 const QUALIFYING_POINTS = [
@@ -107,6 +114,7 @@ export default function MediaKit() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
+  const [fallbackNotice, setFallbackNotice] = useState<{ saved: boolean } | null>(null);
   const [activeSlide, setActiveSlide] = useState(0);
 
   const breadcrumbItems = [{ label: 'Media Kit' }];
@@ -198,29 +206,51 @@ export default function MediaKit() {
         message: normalizedBrief,
         date: new Date().toISOString(),
       });
-      if (saved) {
-        const submitParams = {
-          route: '/media-kit',
-          source: 'media_kit_form',
-          cta_id: 'media_kit_submit',
-          content_id: 'media_kit_partner_lead',
-          topic: projectFocus,
-          budget_range: budget,
-          campaign_period: campaignPeriod,
-          fallback: 'localStorage',
-        };
-        trackEvent('media_kit_request_success', submitParams);
-        trackEvent('media_kit_submit', submitParams);
-        setIsSuccess(true);
-      } else {
-        setSubmitError(
-          `Non siamo riusciti a registrare la richiesta. Puoi scriverci direttamente a ${CONTACTS.email}.`
-        );
-      }
+      // Evento distinto da 'media_kit_request_success': se lo lasciassimo uguale,
+      // un pixel ads che ottimizza su quel nome conterebbe come lead un contatto
+      // che non e' mai arrivato al team. Non fermo qui anche media_kit_submit:
+      // era il duplicato pensato per l'attribuzione conversion, stessa ragione.
+      trackEvent('media_kit_request_fallback', {
+        route: '/media-kit',
+        source: 'media_kit_form',
+        cta_id: 'media_kit_submit',
+        topic: projectFocus,
+        budget_range: budget,
+        campaign_period: campaignPeriod,
+        saved_locally: saved,
+      });
+      setFallbackNotice({ saved });
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  const mediaKitFallbackMailto = buildLeadFallbackMailto(
+    CONTACTS.email,
+    `Richiesta media kit — ${company.trim() || 'nuova richiesta'}`,
+    'Il modulo del sito non è riuscito a inviare questa richiesta di media kit. La incollo qui sotto:',
+    [
+      { label: 'Azienda', value: company },
+      { label: 'Email', value: email },
+      { label: 'Sito', value: website },
+      { label: 'Focus', value: projectFocus },
+      { label: 'Budget', value: budget },
+      { label: 'Periodo', value: campaignPeriod },
+      { label: 'Contesto', value: brief },
+    ]
+  );
+  const mediaKitFallbackWhatsAppUrl = buildLeadFallbackWhatsAppUrl(
+    CONTACTS.whatsappUrl,
+    buildLeadFallbackWhatsAppText(
+      'Vorrei richiedere il media kit, il modulo del sito non è riuscito a inviarlo:',
+      [
+        { label: 'Azienda', value: company },
+        { label: 'Email', value: email },
+        { label: 'Focus', value: projectFocus },
+        { label: 'Budget', value: budget },
+      ]
+    )
+  );
 
   const pdfSlides = [
     {
@@ -242,9 +272,9 @@ export default function MediaKit() {
             <p className="font-serif italic text-2xl text-[var(--color-accent)] leading-none">
               Rodrigo &amp; Betta
             </p>
-            <h4 className="font-serif text-3xl leading-tight font-bold tracking-tight">
+            <h3 className="font-serif text-3xl leading-tight font-bold tracking-tight">
               Raccontare con <span className="italic">criterio</span>.
-            </h4>
+            </h3>
             <p className="text-xs max-w-md leading-relaxed text-black/60">
               Selezioniamo luoghi, soggiorni e strumenti che hanno un motivo reale per essere
               raccontati. Il contenuto resta utile prima di essere promozionale.
@@ -265,7 +295,7 @@ export default function MediaKit() {
       content: (
         <div className="flex h-full flex-col justify-between p-6 md:p-8 bg-[var(--color-ink-deep)] text-white rounded-xl border border-white/10 select-none">
           <div className="flex justify-between items-start">
-            <span className="text-[10px] font-bold tracking-widest text-[var(--color-accent)]">
+            <span className="text-[10px] font-bold tracking-widest text-[var(--color-accent-text)]">
               INSIGHTS & COMMUNITY
             </span>
             <span className="font-mono text-xs px-2 py-0.5 bg-white/15 text-white rounded-full">
@@ -274,7 +304,7 @@ export default function MediaKit() {
           </div>
           <div className="my-auto grid grid-cols-2 gap-4 md:gap-6">
             <div className="space-y-0.5">
-              <span className="text-[9px] font-semibold tracking-wider text-white/50 uppercase">
+              <span className="text-[11px] font-semibold tracking-wider text-white/50 uppercase">
                 Instagram
               </span>
               <p className="text-2xl md:text-3xl font-serif font-bold text-[var(--color-accent)]">
@@ -283,7 +313,7 @@ export default function MediaKit() {
               <p className="text-[10px] text-white/60">Community pubblica</p>
             </div>
             <div className="space-y-0.5">
-              <span className="text-[9px] font-semibold tracking-wider text-white/50 uppercase">
+              <span className="text-[11px] font-semibold tracking-wider text-white/50 uppercase">
                 TikTok
               </span>
               <p className="text-2xl md:text-3xl font-serif font-bold text-[var(--color-accent)]">
@@ -292,14 +322,14 @@ export default function MediaKit() {
               <p className="text-[10px] text-white/60">Canale short-form</p>
             </div>
             <div className="space-y-0.5">
-              <span className="text-[9px] font-semibold tracking-wider text-white/50 uppercase">
+              <span className="text-[11px] font-semibold tracking-wider text-white/50 uppercase">
                 Reach
               </span>
               <p className="text-lg md:text-xl font-serif font-bold">In call</p>
               <p className="text-[10px] text-white/60">Dai dati nativi Meta</p>
             </div>
             <div className="space-y-0.5">
-              <span className="text-[9px] font-semibold tracking-wider text-white/50 uppercase">
+              <span className="text-[11px] font-semibold tracking-wider text-white/50 uppercase">
                 Sito
               </span>
               <p className="text-lg md:text-xl font-serif font-bold">Owned media</p>
@@ -330,7 +360,7 @@ export default function MediaKit() {
           </div>
           <div className="my-auto space-y-2 md:space-y-3">
             <div className="flex items-start gap-2">
-              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[10px] font-bold text-[var(--color-accent)] mt-0.5">
+              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[10px] font-bold text-[var(--color-accent-text)] mt-0.5">
                 1
               </span>
               <div>
@@ -341,7 +371,7 @@ export default function MediaKit() {
               </div>
             </div>
             <div className="flex items-start gap-2">
-              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[10px] font-bold text-[var(--color-accent)] mt-0.5">
+              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[10px] font-bold text-[var(--color-accent-text)] mt-0.5">
                 2
               </span>
               <div>
@@ -352,7 +382,7 @@ export default function MediaKit() {
               </div>
             </div>
             <div className="flex items-start gap-2">
-              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[10px] font-bold text-[var(--color-accent)] mt-0.5">
+              <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent-soft)] text-[10px] font-bold text-[var(--color-accent-text)] mt-0.5">
                 3
               </span>
               <div>
@@ -387,14 +417,14 @@ export default function MediaKit() {
             <div className="mb-4">
               <Link
                 to="/collaborazioni"
-                className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-accent)]/30 bg-[var(--color-sand)] px-4 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-[var(--color-accent)] transition-all hover:bg-[var(--color-accent)] hover:text-white"
+                className="inline-flex items-center gap-1.5 rounded-full border border-[var(--color-accent)]/30 bg-[var(--color-sand)] px-4 py-1.5 text-[10.5px] font-bold uppercase tracking-wider text-[var(--color-accent-text)] transition-all hover:bg-[var(--color-accent-hover)] hover:text-white"
               >
                 ← Hub Collaborazioni B2B (Case Study &amp; Calcolatore ROI)
               </Link>
             </div>
             <div className="mb-6 flex items-center justify-center gap-4">
               <div className="h-px w-12 bg-[var(--color-accent)]" />
-              <span className="font-script text-xl text-[var(--color-accent)]">Media kit</span>
+              <span className="font-script text-xl text-[var(--color-accent-text)]">Media kit</span>
               <div className="h-px w-12 bg-[var(--color-accent)]" />
             </div>
             <h1 className="mb-8 text-5xl font-serif md:text-7xl">
@@ -406,14 +436,14 @@ export default function MediaKit() {
               Il media kit raccoglie pubblico, posizionamento, format e criteri editoriali. Serve a
               capire se una collaborazione ha basi reali prima di parlare di deliverable e budget.
             </p>
-            <div className="mt-8 inline-flex flex-wrap items-center justify-center gap-4 rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent-soft)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] md:gap-6 md:px-8">
+            <div className="mt-8 inline-flex flex-wrap items-center justify-center gap-4 rounded-full border border-[var(--color-accent)]/20 bg-[var(--color-accent-soft)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-accent-text)] md:gap-6 md:px-8">
               <span>{BRAND_STATS.instagramFollowers} Instagram</span>
               <span className="h-4 w-px bg-[var(--color-accent)]/20" />
               <span>{BRAND_STATS.tiktokFollowers} TikTok</span>
               <span className="h-4 w-px bg-[var(--color-accent)]/20" />
               <span>{BRAND_STATS.monthlyReach} reach</span>
             </div>
-            <p className="mx-auto mt-3 max-w-2xl text-xs leading-relaxed text-black/45">
+            <p className="mx-auto mt-3 max-w-2xl text-xs leading-relaxed text-black/60">
               {BRAND_STATS_SOURCE.label}. Snapshot pubblico osservato il{' '}
               {BRAND_STATS_SOURCE.observedAt}; i dati completi vengono aggiornati con Insights prima
               di ogni proposta.
@@ -421,13 +451,13 @@ export default function MediaKit() {
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <a
                 href="#media-kit-form"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] px-6 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] px-6 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)]"
               >
                 Richiedi il media kit <ArrowRight size={14} />
               </a>
               <a
                 href="#media-kit-preview"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-black/10 px-6 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-black/10 px-6 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)]"
               >
                 Sfoglia l'anteprima
               </a>
@@ -470,7 +500,7 @@ export default function MediaKit() {
                 className="group flex min-h-[220px] flex-col rounded-[var(--radius-lg)] border border-black/5 bg-white p-6 shadow-sm transition-all hover:-translate-y-0.5 hover:border-[var(--color-accent)]/35 hover:shadow-md"
               >
                 <div className="mb-5 flex items-center justify-between gap-4">
-                  <span className="rounded-full bg-[var(--color-accent-soft)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent-text)]">
+                  <span className="rounded-full bg-[var(--color-accent-soft)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent-text)]">
                     {item.label}
                   </span>
                   <ExternalLink
@@ -507,7 +537,7 @@ export default function MediaKit() {
               <div className="mb-4 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="flex h-2 w-2 rounded-full bg-[var(--color-accent)] animate-pulse" />
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-black/50">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-black/60">
                     Sfoglia Anteprima del PDF
                   </span>
                 </div>
@@ -522,7 +552,7 @@ export default function MediaKit() {
                   >
                     <ChevronLeft size={16} />
                   </button>
-                  <span className="text-xs font-mono font-medium text-black/50 px-1 select-none">
+                  <span className="text-xs font-mono font-medium text-black/60 px-1 select-none">
                     {activeSlide + 1} / {pdfSlides.length}
                   </span>
                   <button
@@ -579,7 +609,7 @@ export default function MediaKit() {
                     key={item.title}
                     className="rounded-2xl border border-black/6 bg-[var(--color-sand)]/45 p-5"
                   >
-                    <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent)]">
+                    <div className="mb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)]">
                       {item.eyebrow}
                     </div>
                     <h4 className="font-serif text-xl text-[var(--color-ink)]">{item.title}</h4>
@@ -608,7 +638,7 @@ export default function MediaKit() {
             </div>
           </div>
 
-          {!isSuccess ? (
+          {!isSuccess && !fallbackNotice ? (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -766,7 +796,7 @@ export default function MediaKit() {
                   </p>
                 )}
 
-                <p className="text-center text-xs font-medium text-[var(--color-accent)]">
+                <p className="text-center text-xs font-medium text-[var(--color-accent-text)]">
                   Se il contatto è coerente, ricevi il link al media kit e un riscontro entro 48 ore
                   lavorative.
                 </p>
@@ -784,7 +814,7 @@ export default function MediaKit() {
                 </p>
               </form>
             </motion.div>
-          ) : (
+          ) : isSuccess ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -831,10 +861,35 @@ export default function MediaKit() {
                 </Link>
                 <a
                   href={CONTACTS.mailto}
-                  className="inline-flex h-12 items-center justify-center rounded-xl border border-black/10 px-6 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+                  className="inline-flex h-12 items-center justify-center rounded-xl border border-black/10 px-6 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)]"
                 >
                   Scrivi a {CONTACTS.email}
                 </a>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="order-1 h-fit rounded-[var(--radius-lg)] border border-[var(--color-warning)]/25 bg-[var(--color-warning-soft)] p-8 shadow-sm md:p-10 lg:order-2"
+            >
+              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--color-warning)]/15 text-[var(--color-warning-text)]">
+                <MailWarning size={32} />
+              </div>
+              <h2 className="mb-4 text-center text-2xl font-serif text-[var(--color-ink)]">
+                Il modulo non è riuscito a inviare la richiesta
+              </h2>
+              <p className="text-center leading-relaxed text-[var(--color-warning-text)]">
+                Non è colpa tua: il nostro sistema di invio non era raggiungibile in questo momento.
+                Per essere sicuro/a che la vediamo, scrivici direttamente.
+              </p>
+              <div className="mt-8 rounded-[1.5rem] border border-[var(--color-warning)]/20 bg-white/70 p-6">
+                <LeadFallbackNotice
+                  savedLocally={Boolean(fallbackNotice?.saved)}
+                  mailtoHref={mediaKitFallbackMailto}
+                  whatsappHref={mediaKitFallbackWhatsAppUrl}
+                  onRetry={() => setFallbackNotice(null)}
+                />
               </div>
             </motion.div>
           )}
@@ -877,7 +932,7 @@ export default function MediaKit() {
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <a
               href={CONTACTS.mailto}
-              className="inline-flex h-12 items-center justify-center rounded-xl bg-[var(--color-accent)] px-8 text-xs font-bold uppercase tracking-widest text-white transition-all hover:brightness-110"
+              className="inline-flex h-12 items-center justify-center rounded-xl bg-[var(--color-accent)] px-8 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-all hover:brightness-110"
             >
               Scrivi a {CONTACTS.email}
             </a>
@@ -893,7 +948,7 @@ export default function MediaKit() {
         </div>
       </Section>
 
-      {!isSuccess && (
+      {!isSuccess && !fallbackNotice && (
         <StickyMobileCTA
           label="Richiedi il media kit"
           onClick={() => {

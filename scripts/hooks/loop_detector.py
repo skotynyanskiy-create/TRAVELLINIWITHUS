@@ -72,7 +72,7 @@ def main() -> int:
                 "hookEventName": "PostToolUse",
                 "additionalContext": (
                     f"LOOP DETECTED: {tool} called {count}x with identical args "
-                    f"this session. Stop repeating it — diagnose the root cause "
+                    f"this session. Stop repeating it - diagnose the root cause "
                     f"or change approach before trying again."
                 ),
             }

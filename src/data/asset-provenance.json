@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "decision": "docs/20_Decisions/DECISION_IMAGERY_TRUTH_RULE_2026-07-22.md",
+  "note": "Registro di provenienza degli asset immagine. La regola vince per prefisso piu' lungo. Ogni riga cita la fonte che autorizza l'etichetta: nessuna provenienza si dichiara a memoria. Un asset senza regola e' un errore di audit, non un'omissione tollerata.",
+  "rules": [
+    {
+      "prefix": "/images/reels/",
+      "provenance": "real-frame",
+      "source": "Cover dei reel pubblicati da Rodrigo & Betta, censiti in src/config/reels.ts. DECISION_IMAGERY_TRUTH_RULE_2026-07-22 le indica come sostituzione certificata degli asset AI."
+    },
+    {
+      "prefix": "/images/family/reels/",
+      "provenance": "real-frame",
+      "source": "Stessi reel del brand, ritaglio family. DECISION_TRAVELLINI_FAMILY_PUBLIC_2026-07-24."
+    },
+    {
+      "prefix": "/images/atlante/carta-tile",
+      "provenance": "craft",
+      "source": "Texture di carta: non afferma alcun fatto. Ammessa dalla regola 2 della DECISION."
+    },
+    {
+      "prefix": "/images/atlante/",
+      "provenance": "da-certificare",
+      "source": "Nessun documento dichiara la provenienza di questi asset."
+    },
+    {
+      "prefix": "/images/home-journal/",
+      "provenance": "da-certificare",
+      "source": "DECISION_IMAGERY_TRUTH_RULE_2026-07-22, sezione «Certificazione pendente (owner)»: i quattro asset del journal restano in attesa. Nessuna nuova superficie referenziale puo' adottarli come prova."
+    },
+    {
+      "prefix": "/images/brand/",
+      "provenance": "ai-generated",
+      "source": "AUDIT_SENIOR_IG_ECOSYSTEM_2026-05-29 §1: couple-travel, about-editorial e collab-work sono generati (JPEG-in-PNG 1024px, 300 DPI). DECISION §3: la coppia AI e' rimossa dalle superfici live."
+    },
+    {
+      "prefix": "/images/destinations/",
+      "provenance": "ai-generated",
+      "source": "AUDIT_SENIOR_IG_ECOSYSTEM_2026-05-29 §1: «tutte destinations/* ed experiences/*» hanno la firma dei generatori. Nessuna e' reale."
+    },
+    {
+      "prefix": "/images/experiences/",
+      "provenance": "ai-generated",
+      "source": "AUDIT_SENIOR_IG_ECOSYSTEM_2026-05-29 §1, stessa riga di destinations/*."
+    },
+    {
+      "prefix": "/images/hero-amalfi",
+      "provenance": "ai-generated",
+      "source": "AUDIT_SENIOR_IG_ECOSYSTEM_2026-05-29 §1: hero-amalfi.png e' nella stessa libreria generata."
+    },
+    {
+      "prefix": "/images/home-cinematic/",
+      "provenance": "da-certificare",
+      "source": "Nessun documento dichiara la provenienza di batu-hero, batu-departure e tavernal-stained-glass."
+    },
+    {
+      "prefix": "/images/placeholders/",
+      "provenance": "placeholder",
+      "source": "SVG segnaposto delle bozze editoriali. Non e' una fotografia e non puo' rappresentare un luogo."
+    },
+    {
+      "prefix": "/images/lead-magnets/",
+      "provenance": "craft",
+      "source": "Copertine tipografiche generate da scripts/generate-lead-magnet.tsx: composizione grafica, nessun luogo raffigurato."
+    },
+    {
+      "prefix": "/images/articles/",
+      "provenance": "da-certificare",
+      "source": "Cartella alimentata dagli articoli: la provenienza dipende dal singolo articolo e va dichiarata quando ne entra uno."
+    },
+    {
+      "prefix": "/images/articles/dormire-posti-sembrano-inventati/",
+      "provenance": "real-frame",
+      "source": "Ricadrature di travellini-asset-curator (2026-08-18) delle cover reali dei reel gia' censite in src/config/reels.ts (novara-emotional-grand-motel, bossico-placat, poppi-fattorie-di-celli, bracciano-enjoy-house, toscana-suite-spa-civico-4, massa-lubrense-relais-freedom): stesso fotogramma reale, solo ritagliato per togliere il title-card del template reel (testo non ammesso su hero/immagini di sezione) e adattato a ruolo hero/sezione/sorgente OG. Nessuna generazione, nessun elemento nuovo composto."
+    },
+    {
+      "prefix": "/og/",
+      "provenance": "craft",
+      "source": "Card social 1200x630 generate da scripts/generate-og-images.mjs: composizione tipografica."
+    }
+  ]
+}

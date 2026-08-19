@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Link } from '@/src/components/TransitionLink';
 import { useQuery } from '@tanstack/react-query';
@@ -27,6 +27,7 @@ import InteractiveMap from '../components/InteractiveMap';
 import JsonLd from '../components/JsonLd';
 import Newsletter from '../components/Newsletter';
 import PageLayout from '../components/PageLayout';
+import PostiInVetrina from '../components/discovery/PostiInVetrina';
 import Pagination from '../components/Pagination';
 import Section from '../components/Section';
 import SEO from '../components/SEO';
@@ -43,12 +44,14 @@ import {
   slugifyFormat,
   slugifyType,
   type Budget,
+  type ContentType,
   type ContentFormat,
   type Duration,
   type Period,
   type Zone,
 } from '../config/contentTaxonomy';
 import { CONTENT_ITEMS } from '../config/contentLibrary';
+import { rankByInterest } from '../config/audienceInterests';
 import {
   DEMO_ARCHIVE_ITEMS,
   DEMO_ARCHIVE_MAP_MARKERS,
@@ -57,6 +60,8 @@ import {
 import { SITE_URL } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
+import { usePersonalizedInterest } from '../hooks/usePersonalizedInterest';
+import { recordInterestForContentType } from '../lib/personalization';
 import { trackEvent } from '../services/analytics';
 import { fetchArticles } from '../services/firebaseService';
 import { mapArticleToArchiveItem, type ArchiveItem } from '../utils/contentArchive';
@@ -149,7 +154,19 @@ function AdvancedFilterRow({
   );
 }
 
+/** Reali prima, poi placeholder — stessa regola di getMapPinItems/getRegistroItems
+ *  in contentLibrary.ts. Esportata per essere testata senza montare la pagina. */
+export function partitionRealFirst<T extends { isPlaceholder: boolean }>(
+  items: T[]
+): { real: T[]; placeholder: T[] } {
+  return {
+    real: items.filter((item) => !item.isPlaceholder),
+    placeholder: items.filter((item) => item.isPlaceholder),
+  };
+}
+
 export default function Esplora() {
+  const { interest } = usePersonalizedInterest();
   const { data: demoContent } = useSiteContent('demo');
   const demoSettings = demoContent ?? siteContentDefaults.demo;
   const [searchParams, setSearchParams] = useSearchParams();
@@ -162,7 +179,13 @@ export default function Esplora() {
   const viewLoggedRef = useRef(false);
   const searchFormRef = useRef<HTMLFormElement>(null);
 
-  const { data: articles = [], isLoading } = useQuery({
+  const {
+    data: articles = [],
+    isLoading,
+    isError,
+    isFetching,
+    refetch,
+  } = useQuery({
     queryKey: ['explore-archive', demoSettings.showEditorialDemo, demoSettings.showDestinationDemo],
     queryFn: fetchArticles,
   });
@@ -183,31 +206,44 @@ export default function Esplora() {
 
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
 
-  // Posti particolari reali — filtrati per zona e tipo attivi, ordinati per distanza se Vicino a me è attivo.
+  // Posti particolari reali — filtrati per zona e tipo attivi, ordinati per
+  // distanza se Vicino a me è attivo. Reali prima, poi placeholder: stessa
+  // regola di getMapPinItems/getRegistroItems in contentLibrary.ts — altrimenti
+  // l'ordine del seed mescola schede verificate e in lavorazione senza criterio.
   const filteredContentItems = useMemo(() => {
     const items = CONTENT_ITEMS.filter((item) => {
       if (filters.zone && item.zone !== filters.zone) return false;
       if (filters.type && !item.types.includes(filters.type)) return false;
       return true;
     });
+    const { real, placeholder } = partitionRealFirst(items);
 
     if (userLocation) {
-      return sortPlacesByDistance(items, {
-        latitude: userLocation.lat,
-        longitude: userLocation.lng,
-      });
+      const nearby = { latitude: userLocation.lat, longitude: userLocation.lng };
+      return [...sortPlacesByDistance(real, nearby), ...sortPlacesByDistance(placeholder, nearby)];
     }
-    return items;
-  }, [filters.zone, filters.type, userLocation]);
+    return rankByInterest([...real, ...placeholder], interest, (item) => item.types);
+  }, [filters.zone, filters.type, interest, userLocation]);
+
+  const realContentItemsCount = useMemo(
+    () => filteredContentItems.filter((item) => !item.isPlaceholder).length,
+    [filteredContentItems]
+  );
 
   useEffect(() => {
     setSearchInput(filters.search ?? '');
   }, [filters.search]);
 
   const filteredItems = useMemo(
-    () => filterByScope(archiveItems, filters),
-    [archiveItems, filters]
+    () =>
+      rankByInterest(
+        filterByScope(archiveItems, filters),
+        interest,
+        (item) => item.experienceTypes
+      ),
+    [archiveItems, filters, interest]
   );
+  const isRetryingArchive = isError && isFetching;
 
   useEffect(() => {
     if (viewLoggedRef.current) return;
@@ -270,6 +306,9 @@ export default function Esplora() {
     const next = sanitizeDiscoveryFilters({ ...filters, ...updates });
     Object.entries(updates).forEach(([key, value]) => {
       if (!value) return;
+      if (key === 'type') {
+        recordInterestForContentType(value as ContentType);
+      }
       trackEvent('explore_filter_apply', {
         source_page: '/esplora',
         filter_type: key,
@@ -445,102 +484,138 @@ export default function Esplora() {
       />
 
       {/* HEADER COMPATTO — banda carta atlante, ricerca inline. */}
-      <section className="bg-[var(--color-sand,#faf7f2)] border-b border-[var(--color-border)] pt-28 pb-10 md:pt-32 md:pb-12 text-[var(--color-ink,#1a2b3c)]">
-        <div className="mx-auto max-w-5xl px-6 md:px-12">
+      {/* `PageLayout` riserva già lo spazio della testata fissa (`pt-28`,
+          112px, per una testata a filo alta 101/97px con fascia d'edizione
+          aperta). Qui c'era un secondo `pt-28`: i due si sommavano e
+          lasciavano un vuoto enorme sopra il primo testo. Resta solo il
+          respiro editoriale, allineato alle altre pagine pubbliche — come
+          `/chi-siamo`. */}
+      <section className="bg-[var(--color-sand)] border-b border-[var(--color-border)] pt-8 pb-10 md:pt-10 md:pb-12 text-[var(--color-ink)]">
+        {/* Il contenitore passa da 5xl a 7xl: a 1440px l'apertura stava in
+            1024px e il fianco destro restava vuoto. Lo spazio ora lo occupa la
+            vetrina dei posti veri, perche' la pagina della scoperta apriva
+            senza niente da scoprire — la prima scheda arrivava a 2481px. */}
+        <div className="mx-auto max-w-7xl px-6 md:px-12">
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent,#c85a32)]">
+            <p className="text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
               Esplora &amp; Archivio
             </p>
             <AtlanteViews current="archivio" />
           </div>
-          <h1 className="mt-4 font-serif text-[clamp(2.25rem,4vw+1rem,3.75rem)] leading-[1.02] text-[var(--color-ink)]">
-            Il prossimo posto, prima ancora di sapere dove.
-          </h1>
-          <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/62 md:text-lg">
-            Inizia dalle collezioni che scegliamo a mano, poi stringi per zona, tipo di posto e
-            periodo.
-          </p>
 
-          <div className="relative mt-8 max-w-2xl">
-            <form
-              ref={searchFormRef}
-              role="search"
-              onSubmit={(event) => {
-                event.preventDefault();
-                submitSearch(searchInput);
-              }}
-              className="relative flex items-center gap-2 rounded-full border border-black/10 bg-white px-2 py-1.5 shadow-sm"
-            >
-              <Search
-                size={18}
-                className="ml-3 shrink-0 text-black/40 md:ml-4"
-                aria-hidden="true"
-              />
-              <input
-                aria-label="Cerca nei posti, nelle esperienze e nelle guide"
-                aria-autocomplete="list"
-                type="search"
-                value={searchInput}
-                onChange={(event) => {
-                  setSearchInput(event.target.value);
-                  setShowAutocomplete(event.target.value.trim().length >= 2);
-                }}
-                onFocus={() => {
-                  if (searchInput.trim().length >= 2) setShowAutocomplete(true);
-                }}
-                placeholder="es. Puglia, hotel con vista, weekend in Toscana…"
-                className="min-w-0 flex-1 bg-transparent py-3 text-base text-[var(--color-ink)] placeholder:text-black/35 focus:outline-none"
-              />
-              <button
-                type="submit"
-                className="min-h-11 rounded-full bg-[var(--color-ink)] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[var(--color-accent)] sm:px-6"
-              >
-                Cerca
-              </button>
-              {showAutocomplete && (
-                <AutocompleteResults
-                  query={searchInput}
-                  archiveItems={archiveItems}
-                  onSelect={handleAutocompleteSelect}
-                />
-              )}
-            </form>
-            <button
-              type="button"
-              onClick={() => setShowMap((prev) => !prev)}
-              aria-expanded={showMap}
-              className="mt-3 inline-flex items-center gap-2 text-sm text-black/55 transition-colors hover:text-[var(--color-ink)]"
-            >
-              <MapIcon size={14} /> {showMap ? 'Nascondi anteprima mappa' : 'Anteprima mappa'}
-            </button>
-          </div>
+          <div className="mt-4 grid gap-10 lg:grid-cols-[minmax(0,1fr)_23rem] lg:items-start lg:gap-14">
+            <div className="min-w-0">
+              <h1 className="font-serif text-[clamp(2.25rem,4vw+1rem,3.75rem)] leading-[1.02] text-[var(--color-ink)]">
+                Il prossimo posto, prima ancora di sapere dove.
+              </h1>
+              <p className="mt-4 max-w-2xl text-base leading-relaxed text-black/62 md:text-lg">
+                Inizia dalle collezioni che scegliamo a mano, poi stringi per zona, tipo di posto e
+                periodo.
+              </p>
 
-          {/* DOMANDA-GUIDA INLINE — 4 scelte, risultato immediato. */}
-          <div className="mt-8 border-t border-black/10 pt-6">
-            <p className="text-sm font-medium text-[var(--color-ink)]">Cosa cerchi adesso?</p>
-            <div className="-mx-6 mt-3 flex gap-2 overflow-x-auto px-6 pb-1 [scrollbar-width:none] md:mx-0 md:flex-wrap md:px-0 [&::-webkit-scrollbar]:hidden">
-              {GUIDE_INTENTS.map((intent) => {
-                const isActive =
-                  intent.apply !== 'reset' &&
-                  ((intent.apply.zone && filters.zone === intent.apply.zone) ||
-                    (intent.apply.type && filters.type === intent.apply.type));
-                return (
+              <div className="relative mt-8 max-w-2xl">
+                <form
+                  ref={searchFormRef}
+                  role="search"
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    submitSearch(searchInput);
+                  }}
+                  /* L'indicatore di focus sta qui e non sull'<input>: dentro un
+                     pill composito (icona + campo + bottone) un outline sul solo
+                     campo disegna un rettangolo in mezzo alla pillola. Col ring
+                     sul contenitore segue il rounded-full. L'input tiene il suo
+                     `focus:outline-none` proprio per questo. */
+                  className="relative flex items-center gap-2 rounded-full border border-black/10 bg-white px-2 py-1.5 shadow-sm focus-within:ring-2 focus-within:ring-[var(--color-accent)]"
+                >
+                  <Search
+                    size={18}
+                    className="ml-3 shrink-0 text-black/60 md:ml-4"
+                    aria-hidden="true"
+                  />
+                  <input
+                    aria-label="Cerca nei posti, nelle esperienze e nelle guide"
+                    aria-autocomplete="list"
+                    type="search"
+                    value={searchInput}
+                    onChange={(event) => {
+                      setSearchInput(event.target.value);
+                      setShowAutocomplete(event.target.value.trim().length >= 2);
+                    }}
+                    onFocus={() => {
+                      if (searchInput.trim().length >= 2) setShowAutocomplete(true);
+                    }}
+                    placeholder="es. Puglia, hotel con vista, weekend in Toscana…"
+                    className="min-w-0 flex-1 bg-transparent py-3 text-base text-[var(--color-ink)] placeholder:text-black/60 focus:outline-none"
+                  />
                   <button
-                    key={intent.label}
-                    type="button"
-                    aria-pressed={Boolean(isActive)}
-                    onClick={() => handleGuideIntent(intent)}
-                    className={`min-h-11 shrink-0 whitespace-nowrap rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-300 ease-out hover:scale-[1.03] active:scale-[0.98] cursor-pointer ${
-                      isActive
-                        ? 'border-[var(--color-ink)] bg-[var(--color-ink)] text-white shadow-[var(--shadow-premium)]'
-                        : 'border-black/10 bg-white text-black/65 hover:border-[var(--color-ink)]/40 hover:text-[var(--color-ink)]'
-                    }`}
+                    type="submit"
+                    className="min-h-11 rounded-full bg-[var(--color-ink)] px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-[var(--color-accent-hover)] sm:px-6"
                   >
-                    {intent.label}
+                    Cerca
                   </button>
-                );
-              })}
+                  {showAutocomplete && (
+                    <AutocompleteResults
+                      query={searchInput}
+                      archiveItems={archiveItems}
+                      onSelect={handleAutocompleteSelect}
+                    />
+                  )}
+                </form>
+                <button
+                  type="button"
+                  onClick={() => setShowMap((prev) => !prev)}
+                  aria-expanded={showMap}
+                  className="mt-3 inline-flex items-center gap-2 py-1.5 text-sm text-black/55 transition-colors hover:text-[var(--color-ink)]"
+                >
+                  <MapIcon size={14} /> {showMap ? 'Nascondi anteprima mappa' : 'Anteprima mappa'}
+                </button>
+              </div>
+
+              {/* DOMANDA-GUIDA INLINE — 4 scelte, risultato immediato. */}
+              <div className="mt-8 border-t border-black/10 pt-6">
+                <p className="text-sm font-medium text-[var(--color-ink)]">Cosa cerchi adesso?</p>
+                {/* La striscia scorre in orizzontale e nasconde la barra di
+                    scorrimento, quindi sotto i 768px l'ultimo chip finiva oltre
+                    il bordo senza che niente dicesse che si poteva scorrere:
+                    misurato il 2026-08-15 a 375px, «Mostrami tutto» arrivava a
+                    492px, 117px fuori. La velatura sul bordo destro e' l'unico
+                    indizio, e sparisce da `md` in su dove i chip vanno a capo. */}
+                <div className="relative -mx-6 md:mx-0">
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 bg-gradient-to-l from-[var(--color-sand)] to-transparent md:hidden"
+                  />
+                  <div className="mt-3 flex gap-2 overflow-x-auto px-6 pb-1 [scrollbar-width:none] md:flex-wrap md:px-0 [&::-webkit-scrollbar]:hidden">
+                    {GUIDE_INTENTS.map((intent) => {
+                      const isActive =
+                        intent.apply !== 'reset' &&
+                        ((intent.apply.zone && filters.zone === intent.apply.zone) ||
+                          (intent.apply.type && filters.type === intent.apply.type));
+                      return (
+                        <button
+                          key={intent.label}
+                          type="button"
+                          aria-pressed={Boolean(isActive)}
+                          onClick={() => handleGuideIntent(intent)}
+                          className={`min-h-11 shrink-0 whitespace-nowrap rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-300 ease-out hover:scale-[1.03] active:scale-[0.98] cursor-pointer ${
+                            isActive
+                              ? 'border-[var(--color-ink)] bg-[var(--color-ink)] text-white shadow-[var(--shadow-premium)]'
+                              : 'border-black/10 bg-white text-black/65 hover:border-[var(--color-ink)]/40 hover:text-[var(--color-ink)]'
+                          }`}
+                        >
+                          {intent.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
             </div>
+
+            {/* Riceve la stessa lista filtrata della griglia sotto: stringendo
+                per zona o tipo cambia anche la vetrina. */}
+            <PostiInVetrina items={filteredContentItems} />
           </div>
         </div>
       </section>
@@ -561,7 +636,7 @@ export default function Esplora() {
       </AnimatePresence>
 
       {/* CHIP TYPE + filtri avanzati progressivi */}
-      <Section id="esplora-archivio" spacing="tight" className="!pt-4">
+      <Section id="esplora-archivio" spacing="tight" className="scroll-mt-28 !pt-4">
         {usingPreview && (
           <div className="mb-6 rounded-[var(--radius-md)] border border-[var(--color-accent)]/25 bg-[var(--color-accent-soft)] px-5 py-4 text-sm leading-relaxed text-[var(--color-accent-text)]">
             Stai vedendo l'archivio in anteprima editoriale. I contenuti vengono aggiornati man mano
@@ -589,11 +664,11 @@ export default function Esplora() {
                 type="button"
                 onClick={() => setShowAdvanced((prev) => !prev)}
                 aria-expanded={showAdvanced}
-                className="inline-flex min-h-10 items-center gap-2 rounded-full px-3 py-2 text-sm text-black/50 transition-colors hover:text-[var(--color-ink)]"
+                className="inline-flex min-h-10 items-center gap-2 rounded-full px-3 py-2 text-sm text-black/60 transition-colors hover:text-[var(--color-ink)]"
               >
                 <SlidersHorizontal size={14} /> Filtri avanzati
                 {advancedActiveCount > 0 && (
-                  <span className="text-black/45">({advancedActiveCount} attivi)</span>
+                  <span className="text-black/60">({advancedActiveCount} attivi)</span>
                 )}
                 <ChevronDown
                   size={14}
@@ -615,7 +690,7 @@ export default function Esplora() {
                   onClick={() => updateFilter({ type: filters.type === type ? null : type })}
                 >
                   {type}{' '}
-                  <span className={filters.type === type ? 'text-white/65' : 'text-black/35'}>
+                  <span className={filters.type === type ? 'text-white/65' : 'text-black/60'}>
                     ({count})
                   </span>
                 </TypeChip>
@@ -641,25 +716,25 @@ export default function Esplora() {
                   <AdvancedFilterRow
                     label="Formato"
                     values={FORMATS}
-                    activeValue={filters.format}
+                    activeValue={filters.format ?? null}
                     onSelect={(value) => updateFilter({ format: value as ContentFormat | null })}
                   />
                   <AdvancedFilterRow
                     label="Periodo"
                     values={PERIODS}
-                    activeValue={filters.period}
+                    activeValue={filters.period ?? null}
                     onSelect={(value) => updateFilter({ period: value as Period | null })}
                   />
                   <AdvancedFilterRow
                     label="Budget"
                     values={BUDGETS}
-                    activeValue={filters.budget}
+                    activeValue={filters.budget ?? null}
                     onSelect={(value) => updateFilter({ budget: value as Budget | null })}
                   />
                   <AdvancedFilterRow
                     label="Durata"
                     values={DURATIONS}
-                    activeValue={filters.duration}
+                    activeValue={filters.duration ?? null}
                     onSelect={(value) => updateFilter({ duration: value as Duration | null })}
                   />
                   {/* Unica superficie zona oltre alla domanda-guida: lo switch
@@ -668,7 +743,7 @@ export default function Esplora() {
                     <AdvancedFilterRow
                       label="Zona specifica"
                       values={ZONES}
-                      activeValue={filters.zone}
+                      activeValue={filters.zone ?? null}
                       onSelect={(value) => updateFilter({ zone: value as Zone | null })}
                     />
                   </div>
@@ -708,15 +783,31 @@ export default function Esplora() {
               </h2>
             </div>
             {(filters.zone || filters.type) && (
-              <p className="shrink-0 text-xs text-black/45">
+              <p className="shrink-0 text-xs text-black/60">
                 {filteredContentItems.length}{' '}
                 {filteredContentItems.length === 1 ? 'posto' : 'posti'}
               </p>
             )}
           </div>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {filteredContentItems.map((item) => (
-              <ContentCard key={item.id} item={item} />
+            {filteredContentItems.map((item, index) => (
+              <Fragment key={item.id}>
+                {index === realContentItemsCount && realContentItemsCount > 0 && (
+                  <div
+                    className="col-span-full mt-2 flex items-center gap-3 pt-2"
+                    aria-hidden="true"
+                  >
+                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-black/60">
+                      In lavorazione
+                    </span>
+                    <span className="h-px flex-1 bg-black/10" />
+                  </div>
+                )}
+                <ContentCard
+                  item={item}
+                  sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, (max-width: 1279px) 33vw, 25vw"
+                />
+              </Fragment>
             ))}
           </div>
         </Section>
@@ -751,7 +842,7 @@ export default function Esplora() {
         )}
         {!active && !isLoading && filteredItems.length > 0 && (
           <div className="mb-8">
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-black/45">
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-black/60">
               Archivio completo
             </span>
             <h2 className="mt-2 font-serif text-3xl leading-tight text-[var(--color-ink)] md:text-4xl">
@@ -759,11 +850,45 @@ export default function Esplora() {
             </h2>
           </div>
         )}
+        {isError && (
+          <div
+            role="alert"
+            className="mb-8 flex flex-col gap-3 rounded-[var(--radius-lg)] border border-[var(--color-error)]/20 bg-[var(--color-error-soft)] p-5 text-[var(--color-ink)] sm:flex-row sm:items-center sm:justify-between"
+          >
+            <p aria-live="polite" className="text-sm leading-relaxed">
+              {isRetryingArchive
+                ? "Stiamo riprovando ad aggiornare l'archivio."
+                : "Non riusciamo ad aggiornare l'archivio in questo momento. Riprova tra poco."}
+            </p>
+            <button
+              type="button"
+              onClick={() => void refetch()}
+              disabled={isRetryingArchive}
+              className="shrink-0 font-semibold text-[var(--color-accent-text)] underline underline-offset-2 disabled:cursor-wait disabled:opacity-60"
+            >
+              {isRetryingArchive ? 'Riprovo…' : 'Riprova'}
+            </button>
+          </div>
+        )}
         {isLoading ? (
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div
+            role="status"
+            aria-live="polite"
+            aria-busy="true"
+            className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3"
+          >
+            <span className="sr-only">Caricamento dell'archivio in corso.</span>
             {Array.from({ length: 6 }).map((_, index) => (
               <ArticleSkeleton key={index} />
             ))}
+          </div>
+        ) : isError && archiveItems.length === 0 ? (
+          <div
+            role="status"
+            aria-live="polite"
+            className="rounded-[var(--radius-lg)] border border-black/10 bg-white p-6 text-sm leading-relaxed text-[var(--color-muted-fg)]"
+          >
+            L'archivio non e disponibile al momento. Riprova piu tardi per visualizzare i contenuti.
           </div>
         ) : filteredItems.length === 0 ? (
           archiveItems.length === 0 ? (
@@ -788,7 +913,7 @@ export default function Esplora() {
           ) : (
             <>
               <EmptyState variant="no-results" onReset={resetFilters} />
-              <p className="mt-12 text-sm text-black/50">
+              <p className="mt-12 text-sm text-black/60">
                 Intanto, parti da quello che abbiamo scelto noi:
               </p>
             </>
@@ -835,6 +960,7 @@ export default function Esplora() {
                         item={item}
                         variant={isFeatureCard ? 'mood' : 'editorial'}
                         className={isFeatureCard ? 'h-full min-h-[480px]' : 'h-full'}
+                        sizes={isFeatureCard ? '(max-width: 767px) 92vw, 66vw' : undefined}
                         linkState={linkState}
                       />
                     </motion.div>
@@ -868,7 +994,7 @@ export default function Esplora() {
       <Section className="!py-16">
         <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="rounded-[var(--radius-xl)] border border-black/5 bg-white p-6 shadow-sm md:p-8">
-            <p className="text-xs font-medium uppercase tracking-[0.28em] text-black/45">
+            <p className="text-xs font-medium uppercase tracking-[0.28em] text-black/60">
               <Mail size={14} className="-mt-1 mr-1.5 inline" /> Newsletter
             </p>
             <h2 className="mt-3 font-serif text-3xl leading-tight text-[var(--color-ink)]">
@@ -901,7 +1027,7 @@ export default function Esplora() {
             className="flex flex-col justify-between gap-6 rounded-[var(--radius-xl)] border border-black/5 bg-[var(--color-ink)] p-6 text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md md:p-8"
           >
             <div>
-              <p className="text-xs font-medium uppercase tracking-[0.28em] text-[var(--color-accent)]">
+              <p className="text-xs font-medium uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
                 Per destinazioni e strutture
               </p>
               <h3 className="mt-3 font-serif text-2xl leading-tight">
@@ -912,7 +1038,7 @@ export default function Esplora() {
                 il nostro modo di viaggiare.
               </p>
             </div>
-            <span className="inline-flex items-center gap-1.5 text-sm text-[var(--color-accent)]">
+            <span className="inline-flex items-center gap-1.5 text-sm text-[var(--color-accent-text)]">
               Come lavoriamo <ArrowRight size={14} />
             </span>
           </Link>

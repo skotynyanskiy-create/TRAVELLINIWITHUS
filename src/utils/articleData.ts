@@ -1,5 +1,5 @@
 import type { Timestamp } from 'firebase/firestore';
-import type { ContentReview, PartnershipKind } from '@/src/types/content';
+import type { PartnershipKind } from '@/src/types/content';
 
 // .webp e non .png: 253 KB invece di 1,19 MB per lo stesso pixel. Non .avif
 // perche questo valore finisce anche in og:image, e i crawler social non lo
@@ -100,7 +100,6 @@ export interface NormalizedArticle {
   slug: string;
   excerpt: string;
   description: string;
-  review?: ContentReview;
   /** Trasparenza partnership (AGCOM/IAP) — assente/'organic' = nessun badge mostrato. */
   partnership?: { kind: PartnershipKind; partner?: string };
   content: string;
@@ -187,7 +186,6 @@ export function normalizeFirestoreArticle(
     imageVerified: data.imageVerified === true ? true : undefined,
     category,
     published: data.published === true,
-    review: data.review ? (data.review as ContentReview) : undefined,
     partnership:
       data.partnership && typeof data.partnership === 'object'
         ? (data.partnership as { kind: PartnershipKind; partner?: string })

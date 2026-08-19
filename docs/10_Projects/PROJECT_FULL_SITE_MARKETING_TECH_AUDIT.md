@@ -1,7 +1,7 @@
 ---
 type: project
 area: site
-status: in-progress
+status: archived
 owner: skotxx
 created: 2026-05-14
 updated: 2026-06-07
@@ -21,7 +21,12 @@ related-projects:
   - [[PROJECT_DESTINATIONS_SECTION_REVIEW]]
   - [[MARKETING_OPERATIONS_HUB]]
   - [[AI_AGENT_STACK]]
+superseded_by: PROJECT_BACKLOG_UNICO_2026-07-31
 ---
+
+> **Superato il 2026-07-31.** Questo piano non è più "cosa fare".
+> Il lavoro ancora vivo è confluito in [[10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31]]; la direzione è in `PROJECT_BACKLOG_UNICO_2026-07-31`.
+> Resta leggibile come storico — non aggiungerci voci nuove.
 
 # PROJECT — Full site / marketing / tech / agent-stack audit
 

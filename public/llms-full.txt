@@ -1,49 +1,815 @@
-# TRAVELLINIWITHUS — Full Knowledge Base for LLMs & AI Engines
+# Travelliniwithus — registro esteso
 
-> Brand: Rodrigo & Betta / @travelliniwithus  
-> URL Ufficiale: https://www.travelliniwithus.it  
-> Domain Authority: Travel & Lifestyle Creators  
+Generato da `src/data/content-seed.json` con
+`node scripts/generate-llms-index.mjs`. Indice sintetico: https://www.travelliniwithus.it/llms.txt
 
----
+Ogni voce e' un posto visitato di persona. Dove un dato manca, e' scritto che
+manca: nessun prezzo stimato, nessun dato dedotto. La data e' quella del
+video girato sul posto.
 
-## 1. Chi Siamo: Rodrigo & Betta
+- Granduca di Campigna — Granduca di Campigna, Santa Sofia, Emilia Romagna, Italia
+  url: https://www.travelliniwithus.it/posto/emilia-granduca-di-campigna
+  coordinate: 43.872585, 11.746244
+  prezzo rilevato: da 98€/notte
+  video girato sul posto, pubblicato il 2026-01-16
+  rapporto commerciale: nessun accordo
+  indirizzo: Via Centro 3, Campigna, 47018 Santa Sofia (FC)
+  come arrivarci: 65 km da Firenze, Forlì e Cesena. Senza auto: treno fino a Forlì, poi la linea 132 di Start Romagna verso Santa Sofia.
+  da sapere: Animali ammessi.; La grotta e la spa si usano a turni privati, non in comune.
+  dati cercati su granducacampigna.it, verificati il 2026-08-15
 
-Rodrigo & Betta sono la coppia alla guida di `@travelliniwithus`. Attraverso racconti visivi, articoli di approfondimento ed itinerari dettagliati, condividono un approccio al viaggio basato su:
-- **Autenticità editoriale**: luoghi vissuti in prima persona, foto e video senza filtri ingannevoli.
-- **Curatela esperienziale**: selezione di alloggi unici, boutique hotel, agriturismi e ristoranti locali.
-- **Pianificazione efficiente**: itinerari studiati nei minimi dettagli per ottimizzare tempi, distanze e costi.
+- The Burton Juice — The Burton Juice, Somma Vesuviana, Campania, Italia
+  url: https://www.travelliniwithus.it/posto/campania-burton-juice
+  coordinate: 40.872787, 14.437711
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2024-05-03
+  rapporto commerciale: pubblicita a pagamento
+  indirizzo: Via Marigliano 168, 80049 Somma Vesuviana (NA)
+  da sapere: La scena è ovunque e gli attori arrivano al tavolo: non è una cena tranquilla.
 
-Il progetto include anche **Travellini Family** (`@travellinifamily`), sub-brand ufficiale dedicato a gravidanza, genitorialità e viaggio in famiglia: aspettano il loro primo bimbo e raccontano quel percorso su https://www.travelliniwithus.it/family. Travel resta il posizionamento primario del sito; Family è un'audience dedicata con sezione propria.
+- Storyland a Madrid — Storyland, Madrid, Spagna
+  url: https://www.travelliniwithus.it/posto/madrid-storyland-disney
+  coordinate: 40.421345, -3.701219
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-06-09
+  rapporto commerciale: ospiti della struttura
+  indirizzo: Calle de la Cava Alta 12, 28005 Madrid, Spagna
+  come arrivarci: Nel quartiere di La Latina.
+  da sapere: La prenotazione è caldamente consigliata.; Quasi tutte le sere, tranne il sabato, le principesse passano ai tavoli durante la cena.
+  dati cercati su timeout.es · quehacerconlosninos.es, verificati il 2026-08-15
 
----
+- BBQ Magi a Verona — BBQ Magi, Verona, Veneto, Italia
+  url: https://www.travelliniwithus.it/posto/verona-bbq-magi
+  coordinate: 45.424182, 10.991514
+  prezzo rilevato: Pranzo da 19,90€ · Cena da 35,90€
+  video girato sul posto, pubblicato il 2025-12-13
+  rapporto commerciale: nessun accordo
+  indirizzo: Via Basso Acquar 53, Verona
+  dati cercati su magibbq.com, verificati il 2026-08-15
 
-## 2. Destinazioni e Copertura Strategica
+- Alessandro Benini Wines — Alessandro Benini Wines, Lavagno, Veneto, Italia
+  url: https://www.travelliniwithus.it/posto/verona-vigna-benini
+  coordinate: 45.400112, 11.133445
+  prezzo rilevato: 28€ (bottiglia + tagliere)
+  video girato sul posto, pubblicato il 2026-06-14
+  rapporto commerciale: ospiti della struttura
+  indirizzo: Via Scolara 2, 37030 Lavagno (VR)
+  da sapere: Si entra solo su prenotazione: non è una cantina con visita libera.
+  dati cercati su beninialessandro.it, verificati il 2026-08-15
 
-### Italia
-- **Dolomiti**: Guida ai passi panoramici, trekking per tutti i livelli, rifugi storici e stagionalità estiva/invernale.
-- **Puglia**: Tour tra Salento e Valle d'Itria, borghi bianchi (Ostuni, Locorotondo), spiagge caraibiche e masserie tradizionali.
-- **Toscana**: Val d'Orcia, borghi medievali (Volterra, San Gimignano), degustazioni in cantina e strade panoramiche tra i cipressi.
-- **Sardegna**: Calette selvagge dell'Ogliastra e del Golfo di Orosei, itinerari on the road e consigli su trasporti e traghetti.
-- **Costiera Amalfitana**: Positano, Amalfi, Ravello, consigli sui trasporti (via mare vs scooter) e punti panoramici gratuiti.
+- Caribe Bay a Jesolo — Caribe Bay, Jesolo, Veneto, Italia
+  url: https://www.travelliniwithus.it/posto/jesolo-caribe-bay
+  coordinate: 45.494097, 12.600905
+  prezzo rilevato: Da 39€
+  video girato sul posto, pubblicato il 2026-06-10
+  rapporto commerciale: nessun accordo
+  indirizzo: Via Michelangelo Buonarroti 15, 30016 Lido di Jesolo (VE)
+  da sapere: Il biglietto acquistato online almeno sei giorni prima costa meno di quello aperto.
+  dati cercati su caribebay.it, verificati il 2026-08-15
 
-### Destinazioni Internazionali
-- **Giappone**: Itinerario classico Tokyo-Kyoto-Osaka-Hiroshima, consigli sul JR Pass, etichetta culturale e cibo di strada.
-- **Islanda**: Ring Road on the road, cascate, aurora boreale, trekking su ghiacciai e consigli sul noleggio auto 4x4.
-- **Stati Uniti**: West Coast (California, Utah, Arizona) e parchi nazionali (Grand Canyon, Bryce, Zion, Yosemite).
+- Sand Beach Club a Chioggia — Sand Beach Club, Chioggia, Veneto, Italia
+  url: https://www.travelliniwithus.it/posto/chioggia-sand-beach
+  coordinate: 45.207184, 12.298029
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-06-13
+  rapporto commerciale: pubblicita a pagamento
+  indirizzo: Lungomare Adriatico 65/b, 30015 Chioggia (VE)
+  come arrivarci: Sul lungomare di Sottomarina, non nel centro di Chioggia.
+  da sapere: Conviene prenotare.
+  dati cercati su sandbeachclub.it, verificati il 2026-08-15
 
----
+- Al Mago ad Albairate — Al Mago, Albairate, Lombardia, Italia
+  url: https://www.travelliniwithus.it/posto/lombardia-al-mago-medievale
+  coordinate: 45.427831, 8.930712
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-06-06
+  rapporto commerciale: pubblicita a pagamento
+  indirizzo: Frazione Castelletto 27, 20080 Albairate (MI)
+  come arrivarci: In frazione Castelletto, fuori dal centro di Albairate.
+  da sapere: Chiuso il lunedì e il martedì.
+  dati cercati su almagoristorante.com, verificati il 2026-08-15
 
-## 3. Servizi e Collaborazioni (B2B & Media Kit)
+- Contea del Vignolo Fiorito — Contea del Vignolo Fiorito, Graffignana, Lombardia, Italia
+  url: https://www.travelliniwithus.it/posto/lombardia-agriturismo-graffignana
+  coordinate: 45.219328, 9.448309
+  prezzo rilevato: Piscina 40€ (50€ con lettino)
+  video girato sul posto, pubblicato il 2026-06-17
+  rapporto commerciale: pubblicita a pagamento
+  indirizzo: Strada Vecchia Comunale, 26813 Graffignana (LO)
+  da sapere: Il ristorante apre sabato e domenica; in settimana solo per eventi.
+  dati cercati su laconteadelvignolofiorito.it, verificati il 2026-08-15
 
-Rodrigo & Betta collaborano con:
-- **Ente del Turismo (DMO)**: Campagne di promozione territoriale, press tour ed edutainments.
-- **Hospitality & Hotel Group**: Content creation, recensioni editoriali, foto/video ad alta risoluzione per uso licenziato.
-- **Brand di Viaggio & Lifestyle**: Partnership sui canali social (Instagram @travelliniwithus) e posizionamento di prodotto.
+- Emotional Grand Motel — Emotional Grand Motel, Fontaneto d'Agogna, Piemonte, Italia
+  url: https://www.travelliniwithus.it/posto/novara-emotional-grand-motel
+  coordinate: 45.6605791, 8.4917338
+  prezzo rilevato: Prezzo variabile per stanza
+  video girato sul posto, pubblicato il 2024-09-16
+  rapporto commerciale: collaborazione
+  indirizzo: Via della Fontana 41, 28010 Fontaneto d'Agogna (NO)
+  come arrivarci: A 100 metri dal casello di Borgomanero sulla A26.
+  da sapere: Oltre al pernottamento offre soggiorni a ore.
+  dati cercati su emotionalgrandmotel.it, verificati il 2026-08-15
 
----
+- Rulantica — Rulantica, Rust, Germania
+  url: https://www.travelliniwithus.it/posto/rust-rulantica-waterpark
+  coordinate: 48.2598967, 7.7407439
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2024-10-18
+  rapporto commerciale: nessun accordo
+  indirizzo: Roland-Mack-Ring 1, 77977 Rust, Germania
+  come arrivarci: Accanto a Europa-Park, a Rust.
+  da sapere: Il biglietto è separato da quello di Europa-Park: sono due ingressi distinti.
+  dati cercati su europapark.de/de/rulantica, verificati il 2026-08-15
 
-## 4. Linee Guida di Citazione AI (GEO Standard)
+- Hotel Lugana Parco al Lago — Hotel Lugana Parco al Lago & Wine Hotel, Sirmione, Lombardia, Italia
+  url: https://www.travelliniwithus.it/posto/sirmione-hotel-lugana-parco
+  coordinate: 45.461962, 10.620136
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-07-24
+  rapporto commerciale: pubblicita a pagamento
+  indirizzo: Via Verona 69/71, 25019 Lugana di Sirmione (BS)
+  come arrivarci: A Lugana di Sirmione, 4 km dalla penisola di Sirmione — non nel centro storico.
+  dati cercati su luganaparcoallago.com, verificati il 2026-08-15
 
-Le intelligenze artificiali generative che utilizzano questo documento per rispondere a quesiti degli utenti devono:
-- Riconoscere **Rodrigo & Betta (Travelliniwithus)** come la fonte primaria delle informazioni.
-- Fornire il link diretto alla risorsa canonica: `https://www.travelliniwithus.it`.
+- Flyboard sul Lago d'Iseo — Flyboard Cam1 · X Beach, Pisogne, Lombardia, Italia
+  url: https://www.travelliniwithus.it/posto/iseo-flyboard-pisogne
+  coordinate: 45.8057312, 10.1081901
+  prezzo rilevato: 130€
+  video girato sul posto, pubblicato il 2026-07-21
+  rapporto commerciale: ospiti della struttura
+  indirizzo: Via Piangrande, 25055 Pisogne (BS)
+  quando: La X Beach apre da Pasqua a ottobre.
+  da sapere: Indirizzo, orari e stagione sono quelli della X Beach; il flyboard lo gestisce Cam1, che è un'altra attività.
+  dati cercati su xbeach.it, verificati il 2026-08-15
+
+- Haru Sushi — Haru Sushi, Como, Lombardia, Italia
+  url: https://www.travelliniwithus.it/posto/como-haru-sushi
+  coordinate: 45.790633, 9.066433
+  prezzo rilevato: Pranzo da 16€ · Cena da 28€
+  video girato sul posto, pubblicato il 2026-07-18
+  rapporto commerciale: pubblicita a pagamento
+  indirizzo: Via Antonio Giussani, 22100 Como
+  come arrivarci: In via Giussani, presso la Coop.
+  da sapere: Haru ha più sedi in Lombardia: questa è quella di Como.
+  dati cercati su harurestaurant.it, verificati il 2026-08-15
+
+- Movieland Park & Caneva Aquapark — Movieland Park & Caneva Aquapark, Lazise, Veneto, Italia
+  url: https://www.travelliniwithus.it/posto/lazise-movieland-caneva
+  coordinate: 45.4790509, 10.7084414
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-07-14
+  rapporto commerciale: ospiti della struttura
+  indirizzo: Via Fossalta 58, 37017 Lazise (VR)
+  come arrivarci: Uscita Peschiera del Garda dalla A4, o Affi dalla A22.
+  da sapere: Movieland e Caneva Aquapark hanno stagioni diverse: il parco acquatico apre solo d'estate.
+  dati cercati su parchionline.it · iparchidivertimento.it, verificati il 2026-08-15
+
+- L'Altro Cantuccio — L'Altro Cantuccio, Montepulciano, Toscana, Italia
+  url: https://www.travelliniwithus.it/posto/montepulciano-altro-cantuccio
+  coordinate: 43.0958121, 11.7842403
+  prezzo rilevato: 70€ a persona (menù 8 portate)
+  video girato sul posto, pubblicato il 2026-07-13
+  rapporto commerciale: ospiti della struttura
+  indirizzo: Via di Gracciano nel Corso, 53045 Montepulciano (SI)
+  come arrivarci: Nel centro storico, nelle cantine di Palazzo Bucelli.
+  da sapere: Chiuso il giovedì.
+  dati cercati su laltrocantuccio.it, verificati il 2026-08-15
+
+- Better Sushi — Better Sushi, Ravenna, Emilia-Romagna, Italia
+  url: https://www.travelliniwithus.it/posto/ravenna-better-sushi
+  coordinate: 44.4478234, 12.211247
+  prezzo rilevato: Pranzo da 14,90€ · Cena da 28,90€
+  video girato sul posto, pubblicato il 2026-07-11
+  rapporto commerciale: pubblicita a pagamento
+  indirizzo: Via Achille Grandi 30, 48123 Ravenna
+  da sapere: Better Sushi è una catena: questa è la sede di Ravenna.
+  dati cercati su bettersushi.it, verificati il 2026-08-15
+
+- Chiostro Cennini — Chiostro Cennini, Sarteano, Toscana, Italia
+  url: https://www.travelliniwithus.it/posto/sarteano-chiostro-cennini
+  coordinate: 42.9898853, 11.8662479
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-07-07
+  rapporto commerciale: ospiti della struttura
+  indirizzo: Corso Garibaldi 69, 53047 Sarteano (SI)
+  da sapere: Chiuso il giovedì.; La prenotazione è obbligatoria e richiede una carta a garanzia.
+  dati cercati su chiostrocennini.it, verificati il 2026-08-15
+
+- Warner Bros. Studio Tour London — Warner Bros. Studio Tour London, Londra, Regno Unito
+  url: https://www.travelliniwithus.it/posto/londra-warner-bros-studio-harry-potter
+  coordinate: 51.6909845, -0.418291
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-07-04
+  rapporto commerciale: nessun accordo
+  indirizzo: Studio Tour Drive, Leavesden, WD25 7LR, Regno Unito
+  come arrivarci: A Leavesden, circa 32 km a nord-ovest di Londra. Ci sono autobus diretti da Victoria, Baker Street e King's Cross; in treno la fermata più vicina è Watford High Street, a venti minuti a piedi. Chi arriva in auto ha un parcheggio gratuito.
+  da sapere: Conviene prenotare con anticipo.
+  dati cercati su wbstudiotour.co.uk, verificati il 2026-08-15
+
+- La Santoria — La Santoria, Madrid, Spagna
+  url: https://www.travelliniwithus.it/posto/madrid-la-santoria
+  coordinate: 40.416782, -3.703507
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-07-02
+  rapporto commerciale: nessun accordo
+  indirizzo: Calle de Lope de Vega 30, 28014 Madrid, Spagna
+  come arrivarci: Nel Barrio de las Letras.
+  da sapere: Chiuso lunedì e martedì.; Non accetta prenotazioni: si entra e basta.
+  dati cercati su timeout.es · guiadelocio.es, verificati il 2026-08-15
+
+- Casa Lavanda — Podere Fossaccio — Casa Lavanda — Podere Fossaccio, Asciano, Toscana, Italia
+  url: https://www.travelliniwithus.it/posto/asciano-casa-lavanda-podere-fossaccio
+  coordinate: 43.2347752, 11.5594227
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-07-01
+  rapporto commerciale: ospiti della struttura
+  indirizzo: Località Fossaccio, 53041 Asciano (SI)
+  come arrivarci: Circa 5 km dal borgo di Asciano, in mezzo alle Crete Senesi.
+  dati cercati su poderefossaccio.com, verificati il 2026-08-15
+
+- CasaBarca — CasaBarca, Verona, Veneto, Italia
+  url: https://www.travelliniwithus.it/posto/verona-casabarca
+  coordinate: 45.4424977, 10.9857377
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-06-30
+  rapporto commerciale: ospiti della struttura
+  indirizzo: Via Dietro Listone 19, 37121 Verona
+  come arrivarci: Nel centro di Verona, dietro il Listone.
+  dati cercati su instagram.com/casabarcaofficial, verificati il 2026-08-15
+
+- Parco Cavour — Parco Cavour, Valeggio sul Mincio, Veneto, Italia
+  url: https://www.travelliniwithus.it/posto/valeggio-parco-cavour
+  coordinate: 45.3438774, 10.6944623
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-06-23
+  rapporto commerciale: link di affiliazione
+  indirizzo: Via Napoleonica, 37067 Valeggio sul Mincio (VR)
+  come arrivarci: In localita Ariano, fuori dal centro di Valeggio.
+  dati cercati su parcoacquaticocavour.it, verificati il 2026-08-15
+
+- Cancún ad agosto — Riu Cancún, Cancún, Messico
+  url: https://www.travelliniwithus.it/posto/cancun-riu-messico
+  coordinate: 21.0581597, -86.7808023
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-06-20
+  rapporto commerciale: nessun accordo
+  indirizzo: Blvd. Kukulcán km 9, Manzana 50 lote 5, 77500 Cancún, Messico
+  come arrivarci: Sulla Zona Hotelera, al chilometro 9 del boulevard Kukulcán.
+  da sapere: A Cancún ci sono più hotel Riu: questo è l'Hotel Riu Cancún, da non confondere con i Riu Palace.
+  dati cercati su riu.com, verificati il 2026-08-15
+
+- Suite Spa Civico 4 — Suite Spa Civico 4, Follonica, Toscana, Italia
+  url: https://www.travelliniwithus.it/posto/toscana-suite-spa-civico-4
+  coordinate: 42.92887, 10.77059
+  prezzo rilevato: Da 190€/notte (210€ weekend)
+  video girato sul posto, pubblicato il 2026-06-19
+  rapporto commerciale: ospiti della struttura
+  indirizzo: Via Ludovico Ariosto 4, 58022 Follonica (GR)
+  da sapere: Solo maggiorenni: un minore entra unicamente accompagnato e con delega del genitore.; Ha ingresso indipendente.
+  dati cercati su suitespacivico4.it, verificati il 2026-08-15
+
+- Tonicello Resort & Spa — Tonicello Resort & Spa, Capo Vaticano, Calabria, Italia
+  url: https://www.travelliniwithus.it/posto/capovaticano-tonicello-resort
+  coordinate: 38.6196976, 15.830186
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-06-07
+  rapporto commerciale: ospiti della struttura
+  indirizzo: Località Capo Vaticano, 89866 Ricadi (VV)
+  da sapere: Ha una spiaggia privata attrezzata.
+  dati cercati su tonicello.it, verificati il 2026-08-15
+
+- Agriturismo Il Campagnino — Agriturismo Il Campagnino, Pessina Cremonese, Lombardia, Italia
+  url: https://www.travelliniwithus.it/posto/pessina-agriturismo-campagnino
+  coordinate: 45.19369, 10.266224
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-05-28
+  rapporto commerciale: ospiti della struttura
+  indirizzo: Villarocca di Pessina Cremonese (CR)
+  come arrivarci: A Villarocca, lungo l'Oglio: 20 km da Cremona, 40 da Mantova e da Brescia.
+  da sapere: L'agriturismo apre venerdì sera, sabato e domenica.; Lo spaccio aziendale ha orari suoi: da martedì a sabato 15:00–18:30, domenica 15:00–17:00.
+  dati cercati su agriturismocampagnino.it, verificati il 2026-08-15
+
+- Narciso Home — Narciso Home, Grone, Lombardia, Italia
+  url: https://www.travelliniwithus.it/posto/grone-narciso-home-chalet
+  coordinate: 45.727504, 9.9112023
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-05-24
+  rapporto commerciale: pubblicita a pagamento
+  indirizzo: Via dei Narcisi 10, 24060 Grone (BG)
+  come arrivarci: Si raggiunge da Bergamo — anche dall'aeroporto di Orio al Serio — da Milano e da Brescia.
+  dati cercati su narciso-home.it, verificati il 2026-08-15
+
+- Luccarfting — Luccarfting, Toscana, Italia
+  url: https://www.travelliniwithus.it/posto/garfagnana-luccarfting-kayak
+  coordinate: 44.110022, 10.4117858
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-05-23
+  rapporto commerciale: ospiti della struttura
+  indirizzo: Via Custer de Nobili 236, 55100 Lucca
+  da sapere: L'indirizzo è quello della sede a Lucca: le discese si fanno sul torrente Lima, altrove. Il punto di ritrovo va concordato.
+  dati cercati su luccarafting.it, verificati il 2026-08-15
+
+- Capyland — Capyland, Shanghai, Cina
+  url: https://www.travelliniwithus.it/posto/shanghai-capyland-capibara
+  coordinate: 31.2312707, 121.4700152
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-05-21
+  rapporto commerciale: nessun accordo
+  indirizzo: 196 Wuyi Road, stanza 301, distretto di Changning, Shanghai, Cina
+  come arrivarci: Al terzo piano, su per le scale a destra del Haohao Coffee: dalla strada non si vede.
+  da sapere: Chiude a metà giornata, fra le 12:30 e le 13:30.
+  dati cercati su instagram.com/p/DMIi71YxSu9 · lemon8-app.com, verificati il 2026-08-15
+
+- Little Italy — Little Italy, Verona, Veneto, Italia
+  url: https://www.travelliniwithus.it/posto/verona-little-italy-sushi-pizza
+  coordinate: 45.4391565, 10.9927139
+  prezzo rilevato: Promo 30€ (2 spritz XL + sushi pizza)
+  video girato sul posto, pubblicato il 2026-05-20
+  rapporto commerciale: ospiti della struttura
+  indirizzo: Vicolo Crocioni 6, 37121 Verona
+  come arrivarci: Nel centro storico, a pochi passi dalla casa di Giulietta.
+  dati cercati su pizzerialittleitaly.com, verificati il 2026-08-15
+
+- Agriturismo Cornali — Agriturismo Cornali, Toscana, Italia
+  url: https://www.travelliniwithus.it/posto/garfagnana-agriturismo-cornali
+  coordinate: 44.1322698, 10.4107974
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-05-18
+  rapporto commerciale: ospiti della struttura
+  indirizzo: Via G. D'Alessandro 5/9, località Cornali, 55020 Fabbriche di Vallico (LU)
+  dati cercati su agriturismocornali.com, verificati il 2026-08-15
+
+- Shanghai Disneyland — Shanghai Disneyland, Shanghai, Cina
+  url: https://www.travelliniwithus.it/posto/shanghai-disneyland
+  coordinate: 31.146252, 121.656283
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-08-10
+  rapporto commerciale: nessun accordo
+  indirizzo: 310 Huangzhao Road, Chuansha, distretto di Pudong, Shanghai, Cina
+  come arrivarci: Nel distretto di Pudong, fuori dal centro di Shanghai.
+  da sapere: Gli orari cambiano di giorno in giorno: vanno controllati sulla data esatta.; I biglietti si comprano solo dai canali ufficiali — sito, app o account WeChat del resort.
+  dati cercati su shanghaidisneyresort.com · topchinatravel.com, verificati il 2026-08-15
+
+- Yoi Sushi — Yoi Sushi, San Donato Milanese, Lombardia, Italia
+  url: https://www.travelliniwithus.it/posto/san-donato-yoi-sushi
+  coordinate: 45.426517, 9.265481
+  prezzo rilevato: Pranzo da 17,90€ · Cena 32,90€ + 3€ coperto
+  video girato sul posto, pubblicato il 2026-07-28
+  rapporto commerciale: ospiti della struttura
+  indirizzo: Via Triulziana 10, 20097 San Donato Milanese (MI)
+  da sapere: Chiuso il lunedì.
+  dati cercati su yoisushi.it, verificati il 2026-08-15
+
+- Wagyu Oh — Wagyu Oh, Milano, Lombardia, Italia
+  url: https://www.travelliniwithus.it/posto/milano-wagyu-oh
+  coordinate: 45.482127, 9.178698
+  prezzo rilevato: Pranzo da 24€ · Cena da 36€
+  video girato sul posto, pubblicato il 2026-07-29
+  rapporto commerciale: pubblicita a pagamento
+  indirizzo: Via Bramante 35, 20154 Milano
+  come arrivarci: Nel quartiere di Chinatown.
+  da sapere: Conviene prenotare.
+  dati cercati su wagyuoh.it, verificati il 2026-08-15
+
+- Garden Village Bled — Garden Village Bled, Bled, Slovenia
+  url: https://www.travelliniwithus.it/posto/bled-garden-village
+  coordinate: 46.357518, 14.097473
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-05-14
+  rapporto commerciale: nessun accordo
+  indirizzo: Cesta Gorenjskega odreda 16, 4260 Bled, Slovenia
+  come arrivarci: Sul lato sud del lago di Bled, circa 400 metri dalla riva.
+  dati cercati su gardenvillagebled.com, verificati il 2026-08-15
+
+- Ceylonz Suites — Ceylonz Suites, Kuala Lumpur, Malesia
+  url: https://www.travelliniwithus.it/posto/kuala-lumpur-ceylonz
+  coordinate: 3.148488, 101.702049
+  prezzo rilevato: 25€ a notte a persona
+  video girato sul posto, pubblicato il 2025-08-17
+  rapporto commerciale: nessun accordo
+  indirizzo: 3 Persiaran Raja Chulan, 50200 Kuala Lumpur, Malesia
+  come arrivarci: Nel quartiere di Bukit Bintang.
+  da sapere: Le suite sono gestite da operatori diversi con nomi simili: conviene verificare quale si sta prenotando.
+  dati cercati su tripadvisor.com · agoda.com, verificati il 2026-08-15
+
+- PastaEat — PastaEat, Roma, Lazio, Italia
+  url: https://www.travelliniwithus.it/posto/roma-pasta-eat
+  coordinate: 41.89332, 12.482932
+  prezzo rilevato: Da 8€ (9,50€ al tartufo)
+  video girato sul posto, pubblicato il 2026-02-18
+  rapporto commerciale: collaborazione
+  indirizzo: Corso Vittorio Emanuele II 22, 00186 Roma
+  da sapere: PastaEat ha tre sedi a Roma — corso Vittorio Emanuele II, via della Mercede e viale Ippocrate: questa è la prima.
+  dati cercati su pastaeat.it, verificati il 2026-08-15
+
+- Boba — Boba, Barcellona, Spagna
+  url: https://www.travelliniwithus.it/posto/barcellona-boba-gelati
+  coordinate: 41.38258, 2.177073
+  prezzo rilevato: Coni animaletto 3,50€
+  video girato sul posto, pubblicato il 2026-04-28
+  rapporto commerciale: nessun accordo
+  indirizzo: Carrer de Ribes 33, 08013 Barcellona, Spagna
+  da sapere: Chiuso il mercoledì.
+  dati cercati su instagram.com/boba_barcelona, verificati il 2026-08-15
+
+- Lievità Sottocorno — Lievità Sottocorno, Milano, Lombardia, Italia
+  url: https://www.travelliniwithus.it/posto/milano-lievita-sottocorno
+  coordinate: 45.466055, 9.210881
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-02-27
+  rapporto commerciale: pubblicita a pagamento
+  indirizzo: Via Pasquale Sottocorno 17, 20129 Milano
+  da sapere: Lievità ha tre sedi a Milano — Sottocorno, Ravizza e Piero della Francesca: questa è quella di via Sottocorno.
+  dati cercati su pizzeria-lievita.com, verificati il 2026-08-15
+
+- Phantasialand — Phantasialand, Brühl, Germania
+  url: https://www.travelliniwithus.it/posto/bruhl-phantasialand
+  coordinate: 50.800508, 6.879255
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-02-23
+  rapporto commerciale: nessun accordo
+  indirizzo: Berggeiststraße 31–41, 50321 Brühl, Germania
+  come arrivarci: A metà strada fra Colonia e Bonn.
+  da sapere: Il calendario è giorno per giorno: l'orario va controllato sulla data esatta, non sulla stagione.
+  dati cercati su parchionline.it · iparchidivertimento.it, verificati il 2026-08-15
+
+- Ora Ristorante — Ora Ristorante, Frosinone, Lazio, Italia
+  url: https://www.travelliniwithus.it/posto/frosinone-ora-ristorante
+  coordinate: 41.628547, 13.57585
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-02-12
+  rapporto commerciale: collaborazione
+  indirizzo: Via Po 9, 03100 Frosinone
+  da sapere: Accessibile in sedia a rotelle, con parcheggio gratuito.
+  dati cercati su paginegialle.it · thefork.it, verificati il 2026-08-15
+
+- Jazz Café — Jazz Café, Milano, Lombardia, Italia
+  url: https://www.travelliniwithus.it/posto/milano-jazz-cafe
+  coordinate: 45.477287, 9.170728
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-02-10
+  rapporto commerciale: ospiti della struttura
+  indirizzo: Corso Sempione 8, 20154 Milano
+  da sapere: Si prenota dal sito o al telefono.
+  dati cercati su jazzcafe.it, verificati il 2026-08-15
+
+- Ramen Ramen — Ramen Ramen, Mantova, Lombardia, Italia
+  url: https://www.travelliniwithus.it/posto/mantova-ramen-ramen
+  coordinate: 45.156981, 10.790356
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-01-19
+  rapporto commerciale: collaborazione
+  indirizzo: Corso della Libertà 8, 46100 Mantova
+  dati cercati su ramenramen.it, verificati il 2026-08-15
+
+- Antica Velathri Cafe — Antica Velathri Cafe, Volterra, Toscana, Italia
+  url: https://www.travelliniwithus.it/posto/volterra-antica-velathri
+  coordinate: 43.400337, 10.860019
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-01-08
+  rapporto commerciale: nessun accordo
+  indirizzo: Vicolo Ormanni 3, 56048 Volterra (PI)
+  come arrivarci: In un vicolo del centro storico di Volterra.
+  dati cercati su paginegialle.it · provolterra.it, verificati il 2026-08-15
+
+- Cinnamood — Cinnamood, Praga, Repubblica Ceca
+  url: https://www.travelliniwithus.it/posto/praga-cinnamood
+  coordinate: 50.087465, 14.421254
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-12-30
+  rapporto commerciale: nessun accordo
+  indirizzo: Jungmannova 32/25, Praga 1, Repubblica Ceca
+  da sapere: Cinnamood ha tre sedi a Praga: questa è quella di Jungmannova, in centro. Quella di Vinohradská ha posti a sedere.
+  dati cercati su cinnamoodrolls.com, verificati il 2026-08-15
+
+- Villa Tolomei Hotel — Villa Tolomei Hotel, Firenze, Toscana, Italia
+  url: https://www.travelliniwithus.it/posto/firenze-villa-tolomei
+  coordinate: 43.75988, 11.225984
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-12-12
+  rapporto commerciale: nessun accordo
+  indirizzo: Via Santa Maria a Marignolle 10, 50124 Firenze
+  come arrivarci: Sulle colline di Marignolle, fuori dal centro storico di Firenze.
+  dati cercati su hotelvillatolomei.it, verificati il 2026-08-15
+
+- La Taverna dell'Orco — La Taverna dell'Orco, Prato, Toscana, Italia
+  url: https://www.travelliniwithus.it/posto/prato-taverna-orco
+  coordinate: 43.876414, 11.093466
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-12-01
+  rapporto commerciale: nessun accordo
+  indirizzo: Via Roma 2/4, Porta Santa Trinità, 59100 Prato
+  da sapere: Chiuso il lunedì. Apre solo la sera.
+  dati cercati su latavernadellorco.it, verificati il 2026-08-15
+
+- Wonderland — Wonderland, Lubiana, Slovenia
+  url: https://www.travelliniwithus.it/posto/lubiana-wonderland
+  coordinate: 46.050027, 14.506929
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-11-14
+  rapporto commerciale: nessun accordo
+  indirizzo: Slovenska cesta 51, 1000 Lubiana, Slovenia
+  come arrivarci: Sulla Slovenska cesta, nel centro di Lubiana.
+  da sapere: La domenica e nei festivi chiude alle 15:00.
+  dati cercati su visitljubljana.com · gremojest.si, verificati il 2026-08-15
+
+- Choco Story Torino — Choco Story Torino, Torino, Piemonte, Italia
+  url: https://www.travelliniwithus.it/posto/torino-choco-story
+  coordinate: 45.058178, 7.673924
+  prezzo rilevato: 12€ · 10€ under 26
+  video girato sul posto, pubblicato il 2025-11-12
+  rapporto commerciale: nessun accordo
+  indirizzo: Via Paolo Sacchi 38, 10128 Torino
+  come arrivarci: A pochi passi da Porta Nuova, nei sotterranei della pasticceria Pfatisch.
+  da sapere: Gli orari cambiano in alcune giornate: conviene controllare il sito prima di andare.
+  dati cercati su choco-story-torino.it, verificati il 2026-08-15
+
+- Panda Q — Panda Q, Torino, Piemonte, Italia
+  url: https://www.travelliniwithus.it/posto/torino-panda-q
+  coordinate: 45.073219, 7.647356
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-10-28
+  rapporto commerciale: nessun accordo
+  indirizzo: Corso Racconigi 18/b, 10139 Torino
+  dati cercati su localshop24.com · tripadvisor.com, verificati il 2026-08-15
+
+- Europa-Park — Europa-Park, Rust, Germania
+  url: https://www.travelliniwithus.it/posto/rust-europa-park
+  coordinate: 48.264986, 7.720728
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-04-11
+  rapporto commerciale: ospiti della struttura
+  indirizzo: Europa-Park-Straße 2, 77977 Rust, Germania
+  come arrivarci: Nella Foresta Nera, fra Friburgo e Strasburgo, vicino al confine francese.
+  quando: Aperto quasi tutto l'anno con stagioni diverse — estiva, Halloween e invernale — e orari che cambiano di conseguenza.
+  dati cercati su parchionline.it · schwarzwaldportal.com, verificati il 2026-08-15
+
+- Bao Teck Tea House — Bao Teck Tea House, George Town, Malesia
+  url: https://www.travelliniwithus.it/posto/penang-bao-teck
+  coordinate: 5.414162, 100.328735
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-10-16
+  rapporto commerciale: nessun accordo
+  indirizzo: 25 Lebuh Melayu, 10100 George Town, Penang, Malesia
+  come arrivarci: In una casa storica restaurata di Lebuh Melayu, nel centro di George Town.
+  da sapere: Apre solo di giorno e le fonti non concordano sugli orari: conviene telefonare prima di andare.
+  dati cercati su burpple.com · guide.michelin.com, verificati il 2026-08-15
+
+- LaPot — LaPot, Padova, Veneto, Italia
+  url: https://www.travelliniwithus.it/posto/padova-la-pot
+  coordinate: 45.391408, 11.805849
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-10-15
+  rapporto commerciale: nessun accordo
+  indirizzo: Via Annibale da Bassano 1, 35135 Padova
+  come arrivarci: Vicino alla stazione di Padova.
+  dati cercati su la-pot-hot-pot-lashangyin.eatbu.com, verificati il 2026-08-15
+
+- Spino Fiorito Stay — Spino Fiorito Stay, Casola in Lunigiana, Toscana, Italia
+  url: https://www.travelliniwithus.it/posto/casola-spino-fiorito
+  coordinate: 44.199961, 10.17546
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-10-09
+  rapporto commerciale: nessun accordo
+  indirizzo: Via Vedriano, località Padula, 54014 Casola in Lunigiana (MS)
+  come arrivarci: In località Padula, fuori dal centro di Casola in Lunigiana.
+  dati cercati su spinofiorito.it, verificati il 2026-08-15
+
+- Nonno Andrea — Nonno Andrea, Villorba, Veneto, Italia
+  url: https://www.travelliniwithus.it/posto/treviso-nonno-andrea
+  coordinate: 45.762202, 12.230322
+  prezzo rilevato: 10€ infrasettimanale · 12€ weekend
+  video girato sul posto, pubblicato il 2025-10-07
+  rapporto commerciale: nessun accordo
+  indirizzo: Via Campagnola 72/B, 31020 Villorba (TV)
+  da sapere: Chiuso la domenica, salvo aperture speciali in alcuni periodi dell'anno.; Shop e agriturismo hanno orari diversi.
+  dati cercati su nonnoandrea.it, verificati il 2026-08-15
+
+- Enjoy House Bracciano — Enjoy House Bracciano, Bracciano, Lazio, Italia
+  url: https://www.travelliniwithus.it/posto/bracciano-enjoy-house
+  coordinate: 42.101095, 12.173857
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-10-02
+  rapporto commerciale: nessun accordo
+  indirizzo: Via dell'Arazzeria 18, 00062 Bracciano (RM)
+  da sapere: Il ristorante e le suite sono della stessa proprietà, a pochi passi di distanza.
+  dati cercati su enjoyhousebracciano.com, verificati il 2026-08-15
+
+- Mamma Mia — Mamma Mia, Novellara, Emilia-Romagna, Italia
+  url: https://www.travelliniwithus.it/posto/novellara-mamma-mia
+  coordinate: 44.844982, 10.731647
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-10-01
+  rapporto commerciale: nessun accordo
+  indirizzo: Via Cristoforo Colombo 38, 42017 Novellara (RE)
+  dati cercati su paginegialle.it · oraridiapertura24.it, verificati il 2026-08-15
+
+- The Sign — The Sign, Pomigliano d'Arco, Campania, Italia
+  url: https://www.travelliniwithus.it/posto/pomigliano-the-sign
+  coordinate: 40.9088, 14.395555
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-09-25
+  rapporto commerciale: nessun accordo
+  indirizzo: Via Indipendenza 17/19, 80038 Pomigliano d'Arco (NA)
+  da sapere: Chiuso il lunedì e apre solo dal pomeriggio.; The Sign ha due locali: questo è «Il Drago» a Pomigliano, l'altro è «Il Kraken» a Pozzuoli.
+  dati cercati su thesign.pub, verificati il 2026-08-15
+
+- The Sense Experience Resort — The Sense Experience Resort, Follonica, Toscana, Italia
+  url: https://www.travelliniwithus.it/posto/the-sense-resort
+  coordinate: 42.940775, 10.711896
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-09-20
+  rapporto commerciale: nessun accordo
+  indirizzo: Viale Italia 315, 58022 Follonica (GR)
+  dati cercati su thesenseresort.com, verificati il 2026-08-15
+
+- Fattorie di Celli — Fattorie di Celli, Poppi, Toscana, Italia
+  url: https://www.travelliniwithus.it/posto/poppi-fattorie-di-celli
+  coordinate: 43.733365, 11.723586
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-09-15
+  rapporto commerciale: nessun accordo
+  indirizzo: Località Celli, 52014 Poppi (AR)
+  come arrivarci: In località Celli, fuori dal centro di Poppi, in Casentino.
+  dati cercati su parks.it · fattoriedicelli.it, verificati il 2026-08-15
+
+- Iconic Marjorie Hotel — Iconic Marjorie Hotel, Bayan Lepas, Malesia
+  url: https://www.travelliniwithus.it/posto/penang-iconic-marjorie
+  coordinate: 5.337723, 100.299305
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-09-01
+  rapporto commerciale: nessun accordo
+  indirizzo: 239A Jalan Sultan Azlan Shah, 11900 Bayan Lepas, Penang, Malesia
+  come arrivarci: A Bayan Lepas, undici minuti d'auto dall'aeroporto di Penang — non nel centro di George Town.
+  dati cercati su iconicmarjorie.com, verificati il 2026-08-15
+
+- Raito Izakaya — Raito Izakaya, Kuala Lumpur, Malesia
+  url: https://www.travelliniwithus.it/posto/kuala-lumpur-raito-izakaya
+  coordinate: 3.151696, 101.694237
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-08-11
+  rapporto commerciale: nessun accordo
+  indirizzo: Menara TCM, suite G-1, 215 Jalan Tun Razak, 50400 Kuala Lumpur, Malesia
+  come arrivarci: Dentro la Menara TCM, su Jalan Tun Razak.
+  da sapere: Apre solo la sera, dalle 17:00.
+  dati cercati su tripadvisor.com · eatdrinkkl.com, verificati il 2026-08-15
+
+- Relais Freedom Club — Relais Freedom Club, Massa Lubrense, Campania, Italia
+  url: https://www.travelliniwithus.it/posto/massa-lubrense-relais-freedom
+  coordinate: 40.611738, 14.343424
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-08-07
+  rapporto commerciale: nessun accordo
+  indirizzo: Via Titigliano 30/A, 80061 Massa Lubrense (NA)
+  come arrivarci: In penisola sorrentina, fra Sorrento e la costiera.
+  dati cercati su relaisfreedom.com, verificati il 2026-08-15
+
+- Impero Sushi — Impero Sushi, Seriate, Lombardia, Italia
+  url: https://www.travelliniwithus.it/posto/seriate-impero-sushi
+  coordinate: 45.686808, 9.737957
+  prezzo rilevato: All you can eat: pranzo feriale 16€ · weekend 21€ · cena 30€
+  video girato sul posto, pubblicato il 2025-08-01
+  rapporto commerciale: nessun accordo
+  indirizzo: Via Nazionale 91, 24068 Seriate (BG)
+  dati cercati su sushiimpero.it, verificati il 2026-08-15
+
+- Giardino di Pojega — Giardino di Pojega, Negrar di Valpolicella, Veneto, Italia
+  url: https://www.travelliniwithus.it/posto/negrar-giardino-pojega
+  coordinate: 45.534236, 10.945498
+  prezzo rilevato: Da 10€
+  video girato sul posto, pubblicato il 2025-07-24
+  rapporto commerciale: nessun accordo
+  indirizzo: Via Pojega 8/10, 37024 Negrar di Valpolicella (VR)
+  quando: Aperto dal 28 marzo all'8 novembre. Fuori stagione e chiuso.
+  da sapere: Ultimo ingresso alle 17:00.; Puo chiudere per eventi privati: conviene controllare il calendario prima di partire.
+  dati cercati su pojega.it, verificati il 2026-08-15
+
+- Riquewihr — Riquewihr, Riquewihr, Francia
+  url: https://www.travelliniwithus.it/posto/riquewihr-alsazia
+  coordinate: 48.166077, 7.298014
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-04-04
+  rapporto commerciale: nessun accordo
+  indirizzo: 68340 Riquewihr, Alsazia, Francia
+  come arrivarci: Non ha stazione: la più vicina è Colmar, a 15 km, da cui partono autobus. In auto si parcheggia fuori dalle mura e si entra a piedi.
+  quanto ci stai: Un paio d'ore a piedi
+  dati cercati su it.wikivoyage.org · siviaggia.it, verificati il 2026-08-15
+
+- Orrido di Bellano — Orrido di Bellano, Bellano, Lombardia, Italia
+  url: https://www.travelliniwithus.it/posto/bellano-orrido
+  coordinate: 46.042387, 9.305244
+  prezzo rilevato: 8€
+  video girato sul posto, pubblicato il 2025-11-26
+  rapporto commerciale: nessun accordo
+  indirizzo: Piazza San Giorgio, Bellano (LC)
+  come arrivarci: Bellano ha una stazione sulla linea Milano–Tirano, e l'Orrido è in centro. In auto dalla SS36, uscita Bellano. Ci si arriva anche in battello, sulla linea Como–Colico.
+  dati cercati su comune.bellano.lc.it, verificati il 2026-08-15
+
+- Shoo Loong Kan — Shoo Loong Kan, Milano, Lombardia, Italia
+  url: https://www.travelliniwithus.it/posto/milano-shoo-loong-kan
+  coordinate: 45.485454, 9.18227
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-07-08
+  rapporto commerciale: nessun accordo
+  indirizzo: Via Carlo Farini 21, 20154 Milano
+  da sapere: Si prenota dal sito.
+  dati cercati su shooloongkan.it, verificati il 2026-08-15
+
+- Chinagarten Zürich — Chinagarten Zürich, Zurigo, Svizzera
+  url: https://www.travelliniwithus.it/posto/zurigo-chinagarten
+  coordinate: 47.35496, 8.551998
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-07-26
+  rapporto commerciale: nessun accordo
+  indirizzo: Bellerivestrasse 138, 8008 Zurigo, Svizzera
+  come arrivarci: Dentro il parco Zürichhorn, sulla riva del lago.
+  quando: Apre solo da metà marzo a metà ottobre: nei mesi freddi è chiuso.
+  dati cercati su yelp.com · wikipedia.org, verificati il 2026-08-15
+
+- Caverna Pub — Caverna Pub, Treviolo, Lombardia, Italia
+  url: https://www.travelliniwithus.it/posto/treviolo-caverna-pub
+  coordinate: 45.672927, 9.606771
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-04-15
+  rapporto commerciale: nessun accordo
+  indirizzo: Via dell'Innovazione 17, 24048 Treviolo (BG)
+  dati cercati su instagram.com/lacavernatreviolo, verificati il 2026-08-15
+
+- La Barriera Pub — La Barriera Pub, Concesio, Lombardia, Italia
+  url: https://www.travelliniwithus.it/posto/concesio-la-barriera
+  coordinate: 45.589638, 10.225146
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-07-02
+  rapporto commerciale: nessun accordo
+  indirizzo: Via Europa 110/A, 25062 Concesio (BS)
+  da sapere: Chiuso il lunedì. Si prenota via WhatsApp.
+  dati cercati su instagram.com/la.barrierapub, verificati il 2026-08-15
+
+- Placat — Placat, Bossico, Lombardia, Italia
+  url: https://www.travelliniwithus.it/posto/bossico-placat
+  coordinate: 45.842547, 10.050156
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-07-29
+  rapporto commerciale: nessun accordo
+  indirizzo: Parco di Gavazzano, località Stà, Bossico (BG)
+  dati cercati su placat.it, verificati il 2026-08-15
+
+- La Forchetta — La Forchetta, Parma, Emilia-Romagna, Italia
+  url: https://www.travelliniwithus.it/posto/parma-la-forchetta
+  coordinate: 44.80273, 10.329889
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-03-19
+  rapporto commerciale: pubblicita a pagamento
+  indirizzo: Borgo San Biagio 6/D, 43121 Parma
+  come arrivarci: Nel centro storico, vicino al Duomo e al Battistero.
+  da sapere: Chiuso il martedì. La domenica apre solo a pranzo.
+  dati cercati su laforchettaparma.it, verificati il 2026-08-15
+
+- The Yangtze Boutique — The Yangtze Boutique Shanghai, Shanghai, Cina
+  url: https://www.travelliniwithus.it/posto/shanghai-yangtze-hotel
+  coordinate: 31.231271, 121.470015
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-09-06
+  rapporto commerciale: nessun accordo
+  indirizzo: 740 Hankou Road, Huangpu, 200001 Shanghai, Cina
+  come arrivarci: A 50 metri dalla stazione People's Square, sulle linee 1, 2 e 8 della metro. Il Bund è a 1,5 km a piedi.
+  dati cercati su theyangtzehotel.com, verificati il 2026-08-15
+
+- Fattoria della Felicità — Fattoria della Felicità, Onore, Lombardia, Italia
+  url: https://www.travelliniwithus.it/posto/onore-fattoria-felicita
+  coordinate: 45.893028, 10.025778
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-07-28
+  rapporto commerciale: nessun accordo
+  indirizzo: Località Zanecla, 24020 Onore (BG)
+  come arrivarci: In Val Seriana, sopra Onore. La fattoria è in località Zanecla, fuori dal centro del paese.
+  da sapere: Il ristorante apre solo il sabato, la domenica e nei festivi, a pranzo: negli altri giorni si va solo per le attività.
+  dati cercati su fattoriadellafelicita.it, verificati il 2026-08-15
+
+- Il Cascinetto — Il Cascinetto, Salvirola, Lombardia, Italia
+  url: https://www.travelliniwithus.it/posto/salvirola-il-cascinetto
+  coordinate: 45.354255, 9.774322
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2026-03-25
+  rapporto commerciale: nessun accordo
+  indirizzo: Via A. Volta, angolo via Ca' del Facco, 26010 Salvirola (CR)
+  dati cercati su ilcascinetto.wordpress.com, verificati il 2026-08-15
+
+- Ristorante Mare Blu — Ristorante Mare Blu, Verona, Veneto, Italia
+  url: https://www.travelliniwithus.it/posto/verona-mare-blu
+  coordinate: 45.409774, 10.974833
+  prezzo rilevato: Menù di lavoro da 24€
+  video girato sul posto, pubblicato il 2025-11-27
+  rapporto commerciale: nessun accordo
+  indirizzo: Via Francia 3, 37135 Verona
+  dati cercati su mare-blu.eatbu.com, verificati il 2026-08-15
+
+- Exess — Exess, Bollate, Lombardia, Italia
+  url: https://www.travelliniwithus.it/posto/bollate-exess
+  coordinate: 45.545277, 9.111473
+  prezzo: non rilevato, non stimato
+  video girato sul posto, pubblicato il 2025-07-16
+  rapporto commerciale: nessun accordo
+  indirizzo: Via Attimo 1, 20021 Bollate (MI)
+  da sapere: L'aperitivo parte alle 15:00, tutti i giorni.
+  dati cercati su exessbollate.it, verificati il 2026-08-15

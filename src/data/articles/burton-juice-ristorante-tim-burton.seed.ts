@@ -1,9 +1,11 @@
 import { Timestamp } from 'firebase/firestore';
+import type { ArticleSeed } from './types';
 
-export const articleSeed = {
+export const articleSeed: ArticleSeed = {
   title: 'The Burton Juice: il ristorante a tema Tim Burton in Italia',
   slug: 'burton-juice-ristorante-tim-burton',
-  excerpt: 'PLACEHOLDER — sarà scritto da seo-strategist (max 160 char)',
+  excerpt:
+    "Il primo locale d'Europa dedicato a Tim Burton è a Somma Vesuviana, vicino Napoli: cocktail bar, ristorante, teatro e bakery. Dove si trova e come prenotare.",
   content: `
 Il primo gesto, al The Burton Juice, non è sederti a tavola. È attraversare uno specchio. Sei nella sala di Alice, la luce è quella storta dei film di Tim Burton, e in quel passaggio capisci che non sei venuto qui per cenare e basta: sei entrato dentro una scenografia che ha deciso di darti da mangiare. Succede a Somma Vesuviana, alle porte di Napoli, dentro il primo ristorante d'Europa interamente dedicato all'universo del regista di Edward mani di forbice e Beetlejuice.
 
@@ -27,7 +29,7 @@ Il numero aggiornato e tutti i dettagli stanno sul sito ufficiale, theburtonjuic
 
 Il cuore del locale sono le sue quattro anime, una per mondo. Le riconosci tutte anche se non sei un fan sfegatato, perché Burton è entrato nell'immaginario di chiunque abbia visto un film negli ultimi trent'anni.
 
-La sala di Alice è quella dell'ingresso-firma: attraversi lo specchio ed è il primo colpo, il pezzo che tutti fotografano e che apre la serata con il piede giusto — curioso, un po' straniante, esattamente come dev'essere. Beetlejuice riprende il bianco e nero a righe e l'umorismo nero del film, quello che ride della morte senza prenderla troppo sul serio. Jack Skeleton porta dentro Nightmare Before Christmas, l'unico posto al mondo dove Halloween e Natale convivono nella stessa stanza senza litigare. E poi Edward mani di forbice, il più malinconico e tenero dei mondi di Burton, quello che ti resta addosso anche a distanza di anni.
+La sala di Alice è quella dell'ingresso-firma: attraversi lo specchio ed è il primo colpo, il pezzo che tutti fotografano e che apre la serata con il piede giusto — curioso, un po' straniante, esattamente come dev'essere. Beetlejuice riprende il bianco e nero a righe e l'umorismo nero del film, quello che ride della morte senza prenderla troppo sul serio. Jack Skeletron porta dentro Nightmare Before Christmas, l'unico posto al mondo dove Halloween e Natale convivono nella stessa stanza senza litigare. E poi Edward mani di forbice, il più malinconico e tenero dei mondi di Burton, quello che ti resta addosso anche a distanza di anni.
 
 Non sono quattro pareti dipinte: sono ambienti costruiti perché tu ci stia dentro, e il salto da un mondo all'altro è parte di quello che paghi. Ma la differenza vera non è la scenografia — è che qui gli attori lavorano tra i tavoli. Non stanno su un palco lontano: entrano nella tua serata, coinvolgono i clienti in giochi a tema, e il confine tra chi mangia e chi recita si scioglie. È la parte che rende il posto un ristorante-teatro e non "un ristorante con le pareti a tema". Va detto chiaro, perché cambia tutto: se sei una persona timida, qui difficilmente resti a guardare da fuori.
 
@@ -53,12 +55,6 @@ Per chi no, e lo diciamo senza giri: se vuoi una cena tranquilla e silenziosa, d
 
 E le famiglie? Funziona, con un asterisco onesto. La sala di Alice e la bakery sono la parte più adatta ai più piccoli, e per un ragazzino un po' cresciuto l'immaginario di Burton è oro puro. Ma resta un locale serale, con cocktail bar e temi che virano sul dark — Beetlejuice ed Edward non sono cartoni per l'asilo. Con bambini molto piccoli valuta bene orario e tipo di serata, e verifica prima le condizioni.
 
-## Il voto: la nostra recensione
-
-E qui arriva la parte che ci interessa di più: il voto onesto, con pro, contro e i punteggi su scenografia, cucina, servizio e attori in sala, rapporto qualità-prezzo e atmosfera. La stiamo chiudendo con i numeri veri della nostra serata — niente stelline buttate lì per riempire, niente entusiasmo di default. Quando è pronta la trovi proprio qui, ed è la ragione per cui vale la pena salvare la pagina e tornarci.
-
-[SEZIONE RECENSIONE: in attesa di voto/pro/contro reali di R+B]
-
 ## Prima di andare
 
 The Burton Juice è una di quelle idee che in Italia non ti aspetti: un intero locale attorno all'immaginario di un solo regista, alle porte di Napoli, dove attraversi uno specchio prima ancora di ordinare. Che ti conquisti o ti lasci con qualche riserva, è esattamente il tipo di posto particolare che andiamo a cercare in giro per il mondo — e questo ce l'avevamo quasi sotto casa, in Campania.
@@ -68,9 +64,15 @@ Se mentre leggevi hai già pensato a chi ci porteresti, hai la risposta: salva q
   category: 'esperienze',
   destination: 'Somma Vesuviana (Napoli), Campania',
   partnership: { kind: 'adv', partner: '@theburtonjuice' },
-  tags: [],
+  tags: ['campania', 'napoli', 'ristoranti', 'tim-burton', 'esperienze'],
   author: { name: 'Rodrigo & Betta', bio: 'Viaggiatori e creatori di @travelliniwithus' },
-  coverImage: '/hero-adventure.jpg', // PLACEHOLDER — sarà scelto da asset-curator
+  /* Il fotogramma del reel girato sul posto, gia' usato dalla scheda
+     `campania-burton-juice`. Prima qui c'era `/hero-adventure.jpg`, che non ha
+     nessuna regola in `asset-provenance.json` — la condizione di errore non
+     negoziabile dell'audit — mentre `/images/reels/` e' coperto da una regola
+     `real-frame` che DECISION_IMAGERY_TRUTH_RULE_2026-07-22 indica come
+     sostituzione certificata degli asset AI. */
+  coverImage: '/images/reels/campania-burton-juice-cover.webp',
   published: false,
   featured: false,
   createdAt: Timestamp.now(),

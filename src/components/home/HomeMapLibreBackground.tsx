@@ -1,7 +1,8 @@
-import { useRef, useEffect, useMemo, useSyncExternalStore } from 'react';
+import { useRef, useEffect, useMemo, useCallback, useSyncExternalStore } from 'react';
 import Map, { Marker, type MapRef } from 'react-map-gl/maplibre';
 import { getMapPinItems } from '@/src/config/contentLibrary';
 import { useReducedMotion } from '@/src/hooks/useReducedMotion';
+import { installOpenFreeMapStyleFallback } from '@/src/lib/openFreeMap';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 /** Cap pin count on home teaser — full set lives on /mappa. */
@@ -23,6 +24,10 @@ export default function HomeMapLibreBackground() {
   const tabVisible = useSyncExternalStore(subscribeVisibility, getVisibilitySnapshot, () => true);
 
   const geocodedItems = useMemo(() => getMapPinItems(HOME_MAP_PIN_LIMIT), []);
+  const setMapRef = useCallback((instance: MapRef | null) => {
+    mapRef.current = instance;
+    if (instance) installOpenFreeMapStyleFallback(instance.getMap());
+  }, []);
 
   // Slow bearing spin only when motion allowed and tab visible
   useEffect(() => {
@@ -47,9 +52,18 @@ export default function HomeMapLibreBackground() {
   }, [reduceMotion, tabVisible]);
 
   return (
-    <div className="pointer-events-none relative h-full w-full overflow-hidden opacity-70">
+    // Decorativa: aria-hidden toglie canvas e marcatori dall'albero di
+    // accessibilita' invece di lasciarli con i nomi di default di maplibre-gl
+    // ("Map", "Map marker", in inglese su un sito italiano). Nessun
+    // discendente e' focalizzabile (canvas non interattivo -> tabindex="-1",
+    // marcatori senza onClick ne' tabindex), quindi non viola la regola che
+    // vieta elementi focalizzabili dentro un contenitore aria-hidden.
+    <div
+      className="pointer-events-none relative h-full w-full overflow-hidden opacity-70"
+      aria-hidden="true"
+    >
       <Map
-        ref={mapRef}
+        ref={setMapRef}
         initialViewState={{
           longitude: 12.0,
           latitude: 48.0,
@@ -61,6 +75,7 @@ export default function HomeMapLibreBackground() {
         mapStyle="https://tiles.openfreemap.org/styles/dark"
         interactive={false}
         attributionControl={false}
+        locale={{ 'Map.Title': 'Mappa' }}
         reuseMaps
       >
         {geocodedItems.map((item) => {
@@ -69,16 +84,16 @@ export default function HomeMapLibreBackground() {
             <Marker key={item.id} longitude={lng} latitude={lat} anchor="center">
               <div className="relative flex items-center justify-center">
                 {!reduceMotion && (
-                  <span className="absolute h-6 w-6 animate-ping rounded-full bg-[var(--color-accent,#c2410c)]/50" />
+                  <span className="absolute h-6 w-6 animate-ping rounded-full bg-[var(--color-accent)]/50" />
                 )}
-                <span className="relative h-3.5 w-3.5 rounded-full border-2 border-white bg-[var(--color-accent,#c2410c)] shadow-md" />
+                <span className="relative h-3.5 w-3.5 rounded-full border-2 border-white bg-[var(--color-accent)] shadow-md" />
               </div>
             </Marker>
           );
         })}
       </Map>
 
-      <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-ink-deep,#111111)] via-[var(--color-ink-deep,#111111)]/75 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-ink-deep)] via-[var(--color-ink-deep)]/75 to-transparent" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,rgba(194,65,12,0.12)_0%,transparent_60%)]" />
     </div>
   );

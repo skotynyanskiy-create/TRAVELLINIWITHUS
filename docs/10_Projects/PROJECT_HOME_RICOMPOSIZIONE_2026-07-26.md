@@ -23,7 +23,16 @@ tags:
 
 # PROJECT — La home che si ricompone (2026-07-26)
 
-**Stato: SPEC — in attesa di rilettura owner. Nessun codice modificato.**
+**Stato: ATTERRATA (verificato sul codice il 2026-08-11).** Le cinque decisioni
+di §3 non aspettano più nessun ok: sono nel codice.
+
+| Decisione        | Dove sta nel codice                                                 |
+| ---------------- | ------------------------------------------------------------------- |
+| Modello dinamico | `src/config/homeComposition.ts` — mappa audience → sezioni ordinate |
+| Prima audience   | `src/context/AudienceContext.tsx:12` — `viaggiatori` è il default   |
+| Accento          | `src/index.css:41` — `--color-accent: #ff4d1a` con la legge 3:1     |
+| Movimento        | `three` fra le dipendenze di `package.json`                         |
+| Identità         | Logo e nome invariati                                               |
 
 ## 1. Il difetto vero
 
@@ -108,18 +117,22 @@ vede il proprio sommario senza salti visibili.
 > elegante, ma tocca `server.ts` (file ad alto rischio → `backend-engineer` +
 > conferma owner). **Fuori perimetro per questa v1.**
 >
-> **Correzione 2026-07-26:** è fuori perimetro per un secondo motivo, più
-> definitivo. `firebase.json` ha `"public": "dist"` e un unico rewrite
-> `**` → `/index.html`, senza rewrite verso Cloud Run o Functions: **`server.ts`
-> non viene mai eseguito in produzione.** Qualunque strategia server-side per la
-> ricomposizione è irrealizzabile finché l'hosting resta statico.
+> **Correzione 2026-07-26 (verificata):** è fuori perimetro per un secondo
+> motivo, più definitivo. `firebase.json` ha `"public": "dist"` e due rewrite:
+> `/api/**` → Cloud Function `api` (europe-west1) e `**` → `/index.html`.
+> Esiste quindi un backend, **ma solo per `/api/**`**: ogni richiesta di pagina
+> è servita staticamente e **non c'è SSR\*\*. Nessuna strategia server-side di
+> ricomposizione è realizzabile finché l'hosting resta così.
+>
+> (Una versione precedente di questa nota diceva «senza rewrite verso Cloud Run
+> o Functions»: impreciso — il rewrite a Functions esiste, è limitato a `/api`.)
 
 ### Composizione viaggiatori
 
 ```
 hero (costante)
  1 featured    CleanFeaturedPlaces        riuso
- 2 grid        WowFeaturedGrid            già scritto, mai montato
+ 2 grid        (componente NUOVO)         da scrivere sull'inventario reale
  3 map         HomeMapSection             riuso (lazy)
  4 atlante3d   AtlanteExperience          già scritto, mai montato
  5 reels       HiggsfieldReelCarousel     riuso (lazy)
@@ -132,7 +145,19 @@ Due scelte editoriali dichiarate, entrambe reversibili:
 
 - **il metodo scende dal 3° al 6° posto.** Chi cerca dove andare vuole i posti;
   il metodo è la prova che serve _dopo_ aver desiderato qualcosa.
-- **entra `WowFeaturedGrid`**, che attacca direttamente il difetto densità.
+- **entra una griglia densa nuova**, che attacca direttamente il difetto densità.
+
+> **Correzione 2026-07-26 (verificata): `WowFeaturedGrid` non esiste più.**
+> Insieme a `WowHomeHero` e `WowTactileJournal` è stato rimosso da
+> `src/components/home/wow/` da una sessione parallela sullo stesso working
+> tree, e la rimozione è **committata** (`64b0406`). Erano prototipi mai
+> importati.
+>
+> **Impatto sulla spec: la sezione 2 passa da «riuso» a «componente nuovo».**
+> Non è una perdita — il file hardcodava posti inventati con prezzi e punteggi
+> finti, quindi violava comunque la regola di integrità del progetto e non era
+> riusabile. Il markup delle card resta consultabile con
+> `git show ca32a31:src/components/home/wow/WowFeaturedGrid.tsx`.
 
 Family e Brand restano **schizzi non progettati**. La struttura regge tre
 sommari, ma i loro contenuti si definiscono quando toccherà a loro.
@@ -189,7 +214,8 @@ Nel repo esistono già **62 schede contenuto** (`content-seed.json` — campi
 | entry reali (`isPlaceholder: false`) |    **29** | tutte valide        |
 | placeholder (`isPlaceholder: true`)  |    **33** | **32 vuote** (`""`) |
 
-- `WowFeaturedGrid` porta 12–16 posti al posto di 3 — **pescando dalle 29 reali**;
+- la **griglia nuova** (sezione 2) porta 12–16 posti al posto di 3 — **pescando
+  dalle 29 reali**;
 - `HomeIndiceVivo` diventa l'indice dei **29 verificati**, non dei 62;
 - il carosello pesca più dei 34 reel disponibili.
 
@@ -203,6 +229,14 @@ verificati`. Inoltre [SEO.tsx:42](../../src/components/SEO.tsx) contiene un
 
 Obiettivo: **~13.000px**, tra Monocle e Lando Norris. Tutto sotto la piega e in
 `lazy`: l'elemento LCP non cambia.
+
+> **Tetto onesto.** Con 29 posti verificati e 34 reel, ~13.000px è raggiungibile
+> ma è **il massimo dignitoso**: è il limite dell'inventario vero, non un
+> obiettivo prudente. Superarlo richiede una delle due, entrambe fuori da questa
+> spec: verificare parte dei 33 placeholder, o dichiararli «in verifica» come
+> stato editoriale esplicito. **Non si allunga la pagina ripetendo le stesse 29
+> schede in sezioni diverse** — sarebbe densità finta, l'esatto difetto che i
+> riferimenti misurati non hanno.
 
 ### 5.3 Movimento — `atlante`
 
@@ -271,7 +305,7 @@ type="image/avif" imagesrcset="…">` per quella scala: l'AVIF **viene scaricato
 > 26 file — con un test, `OptimizedImage.baseWidth.test.tsx`, che asserisce lo
 > srcset giusto **proprio per questa immagine**. I soli due componenti che lo
 > bypassano sono `BrandCoherentHero` e `DiarioHeroCinematic`.
-> | 2 | **Accento + densità** — due token, `WowFeaturedGrid`, indice 62 | contrasto AA su tutte le rotte; ~13.000px; LCP invariato |
+> | 2 | **Accento + densità** — due token, griglia nuova, indice dei 29 verificati, filtro `!isPlaceholder` | contrasto AA su tutte le rotte; ~13.000px; LCP invariato; zero placeholder pubblicati |
 > | 3 | **`homeComposition.ts`** — renderer + composizione viaggiatori | `/` invariata a prima pittura; nessun CLS sopra la piega |
 > | 4 | **`atlante` WebGL** — cuore interattivo sotto la piega | CLS ≤ 0.1; fallback mobile e reduced-motion verificati |
 
@@ -302,3 +336,456 @@ sezione `atlante3d` nella lista.
 - [ ] ok a far scendere «il metodo» al 6° posto nella home viaggiatori;
 - [ ] conferma che la fase 1 (perf) precede tutto, come conseguenza della
       scelta «Three.js subito».
+
+## 11. Stato implementazione — sezione 2 (griglia), 2026-07-29
+
+**Fatto.** `src/components/home/curated/CleanFeaturedGrid.tsx` è montato in
+`CinematicHomepage.tsx` (`#griglia-posti`, tra `featured-places` e
+`mappa-interattiva-reale`), con selezione in `src/lib/homeGridSelection.ts`:
+
+- 9 slot, 3×3 desktop → 2 colonne tablet → 1 colonna mobile;
+- selezione per **regola**, non ID hardcodati: filtra `!isPlaceholder` +
+  `cover` presente, un vincitore per ciascuna categoria di `TYPES` con
+  candidati (oggi 6 delle 8), poi riempimento con i più recenti — così la
+  griglia si auto-aggiorna quando i 33 placeholder diventano reali, senza
+  toccare codice;
+- esclude i 3 `CURATED_IDS` già mostrati sopra da `CleanFeaturedPlaces`, per
+  non ripetere lo stesso posto due volte in home;
+- tile "in evidenza" (badge + bordo accento + titolo maggiore) compare **solo**
+  se un item ha `featured: true` esplicito nel seed — oggi nessuna delle 29
+  entry verificate lo è, quindi tutte e 9 le card sono equivalenti. Il campo
+  esisteva già nel tipo `ContentItem` (usato anche da `getRegistroItems`); non
+  è stato impostato su nessuna entry — resta scelta editoriale di Rodrigo &
+  Betta;
+- copertura test in `src/lib/homeGridSelection.test.ts`: determinismo, zero
+  duplicati, esclusione, tiebreak `featured`, `featuredId` nullo in assenza di
+  featured, comportamento sul pool reale.
+- Verificato in browser reale (Playwright) a 375/768/1440: colonne corrette,
+  9/9 cover caricate, card uniformi, nessuno stacco con le sezioni sopra/sotto.
+
+> **Debito architetturale emerso, non chiuso in questa sessione.** In home
+> convivono due sistemi di selezione contenuti che si ignorano a vicenda:
+> `CleanFeaturedPlaces` sceglie 3 posti per `CURATED_IDS` hardcodati
+> (editoriale, manuale), `homeGridSelection` ne sceglie 9 per regola
+> (categoria + recency, automatico). Oggi il secondo esclude esplicitamente
+> gli ID del primo per evitare doppioni, ma è un cerotto: se in futuro
+> `CleanFeaturedPlaces` cambia i suoi ID, o se una terza sezione home avrà
+> bisogno di una propria selezione, la stessa toppa va ripetuta altrove e il
+> rischio di doppioni torna. La soluzione pulita a tendere è **un'unica fonte
+> di selezione condivisa** (una funzione/hook che tutte le sezioni home
+> consultano, con un pool di "già usati" passato esplicitamente, non
+> ricostruito sezione per sezione) — non implementata qui perché fuori dal
+> perimetro concordato per questa sessione. Vedi anche il punto 3,
+> `homeComposition.ts`, non ancora scritto: è probabilmente il posto giusto
+> dove far vivere questa fonte unica quando si arriverà a quella fase.
+
+## 12. Esperienza dinamica per interessi — implementazione locale, 2026-08-02
+
+L'audience non decide più solo tema e navigazione. Ogni pubblico può scegliere
+un interesse, modificabile dal pannello **Cosa cerchi oggi?** presente nei
+suoi hub e raggiungibile dalla navbar. La scelta viene ricordata localmente
+solo con il consenso **Personalizzazione**; senza, resta valida per la sola
+sessione e l'interfaccia lo dichiara esplicitamente.
+
+- Viaggiatori: weekend in coppia, fuori rotta, mangiare e dormire bene;
+- Family: gravidanza, partire col pancione, essenziali pratici;
+- Brand: capire il fit, vedere i format, richiedere il media kit.
+
+La scelta riordina i moduli della home, le selezioni delle card, Family,
+Esplora e la mappa. URL e filtri espliciti dell'utente restano prioritari; le
+schede editoriali e i metadata restano canonici e non vengono riscritti.
+
+Il comportamento è un affinamento opzionale: filtri per tipo e letture
+alimentano segnali solo dopo consenso **Personalizzazione**. Alla prima
+autorizzazione o alla revoca, gli eventuali dati locali precedenti vengono
+rimossi: non possono essere riutilizzati profili creati senza opt-in e la
+revoca svuota interesse, segnali e cronologia di lettura. Il controllo
+"Azzera preferenze" rimuove interesse e segnali locali. Non vengono creati
+account, cookie di marketing, API o varianti SEO.
+
+La selezione continua a escludere `isPlaceholder`; nessuna scelta può
+riempire la home con contenuto non verificato. Per Family, dove alcuni filoni
+hanno una sola risorsa reale, il ranking può portarla in testa ma non inventa
+card aggiuntive.
+
+**Correzione 2026-08-03.** `HomeFamilyPicks` ora applica realmente quel
+ranking ai consigli mostrati nella home: prima l'interesse Family cambiava
+l'ordine dei moduli, ma non le tre card. Il test dedicato verifica che una
+scelta come «Essenziali pratici» porti davanti il consiglio corrispondente.
+
+Nella stessa correzione, un interesse Brand rende specifica la CTA della fascia
+audience: «Capire il fit» porta al fit partner, «Vedere i format» ai format e
+«Richiedere il media kit» al media kit. L'ordine dei moduli resta coerente con
+lo stesso bisogno; un interesse di un pubblico diverso viene ignorato.
+
+Dal 2026-08-02 la composizione **Viaggiatori** ha una sola collezione di
+posti: la griglia sostituisce la sequenza `featured` + griglia, che ripeteva
+lo stesso gesto poco più sotto. I tre posti che avrebbero occupato la sezione
+rimossa entrano con priorità nella griglia, anche nelle varianti per interesse,
+così la riduzione non nasconde contenuto. Le intestazioni rimanenti distinguono
+la funzione di ogni passaggio: selezione iniziale, mappa, prove video e
+archivio completo.
+
+Il teaser MapLibre della home, e la mappa completa che usa lo stesso stile
+OpenFreeMap, gestiscono inoltre il riferimento remoto mancante `circle-11`
+con un fallback trasparente locale. Restano visibili le etichette delle citta,
+senza errori in console o modifiche a marker, dati e interazioni.
+
+## 13. UX e accessibilita: overlay e discovery — implementazione locale, 2026-08-02
+
+Le interfacce temporanee ora mantengono la navigazione da tastiera nel loro
+perimetro e restituiscono il focus al controllo di origine quando si chiudono:
+ricerca, anteprima rapida, popup di uscita e menu mobile. Il menu mobile
+espone semantica di dialogo solo mentre e aperto.
+
+Un unico stack decide quale overlay e in primo piano e mantiene il blocco dello
+scroll finché l'ultimo non si chiude. Il popup di uscita rispetta inoltre ogni
+dialogo preesistente, incluso il consenso cookie, così non vengono mai proposte
+due richieste concorrenti alla stessa persona.
+
+Quando non e possibile aggiornare i dati remoti, Ricerca conserva un archivio
+minimo utile per navigare il sito e mostra un messaggio con **Riprova**;
+Esplora mantiene i contenuti disponibili, comunica l'errore e permette un
+nuovo caricamento. Gli skeleton di Esplora sono ora annunciati ai lettori di
+schermo come stato di caricamento.
+
+Verifica locale: focus desktop e mobile, chiusure concorrenti, blocco exit
+intent, test unitari di stack e ricerca (32 file, 162 test), typecheck e lint
+mirato: PASS. Nessun commit, push o deploy eseguito.
+
+## 14. La copertina smette di essere un catalogo — 2026-08-11
+
+Quattro difetti misurati nel browser, non dedotti. Tutti sulla stessa pagina.
+
+**La barra non ci stava.** La pillola della navbar chiedeva 1.476px di contenuto
+in 1.182 disponibili a 1280px: il CTA «La guida in regalo» e il bottone
+dell'account finivano **fuori dallo schermo** — a ogni larghezza desktop, non a
+una in particolare, perché il tetto `max-w-[1360px]` è sempre più stretto della
+somma dei cinque gruppi. Il gruppo più largo era lo switcher a tre audience
+(327px): un controllo di _modalità_, non di navigazione, che duplica il gate
+d'ingresso e il drawer. È sceso nel menu utente, accanto a preferiti e lingua,
+insieme al link «Personalizza» che ripeteva un'ancora già in pagina. Overflow a
+1152 / 1280 / 1440: 0.
+
+**La prova più visibile era la meno verificata.** Vedi
+[[20_Decisions/DECISION_IMAGERY_TRUTH_RULE_2026-07-22]] §Applicazione.
+
+**La griglia era l'archivio con la foto più grande.** Nove card (2.358px su
+desktop, 5.991px su telefono) e sotto un registro di dodici righe di cui cinque
+ripetevano posti già stampati come fotografia nella stessa schermata: ventuno
+link a schede su una pagina sola. Ora la griglia ne seleziona sei — una 3×2
+piena, il criterio «il migliore di ogni categoria» resta — e il registro mostra
+**ciò che la copertina non ha mostrato**, tramite `useHomeGridSelection`, l'unica
+fonte per entrambe le sezioni. Sovrapposizione: 0. Home da 15.614 a 12.897px su
+375, da 8.528 a 7.944 su desktop.
+
+**Il titolo della mappa era tagliato a metà su telefono.** `justify-between`
+valeva a ogni larghezza, ma sotto `md` la griglia ha una sola colonna implicita:
+con `space-between` la traccia resta larga quanto il contenuto invece di seguire
+il contenitore. Il titolo diventava 348px dentro 263 e l'`overflow-hidden` della
+card ne tagliava 54 — si leggeva «Trovali sulla mapp». Stessa sorte per la CTA,
+`whitespace-nowrap` più larga della card. Il vincolo ora vale solo da `md`, la
+CTA su mobile occupa la riga intera.
+
+### Copy: due claim che il modello dati non regge
+
+- «Periodo consigliato» e «periodo giusto», nella barra prove e nel sommario
+  dell'hero: **nessuna scheda porta un periodo**. Il campo non esiste. Sostituiti
+  da numeri contati sul registro a ogni render (posti provati, collaborazioni
+  dichiarate) e da una riga che spiega perché il prezzo a volte manca.
+- La stella accent accanto a «ADV» / «Su invito» nelle card della home: una
+  pubblicità vestita da voto, su un sito che i voti li rifiuta per scelta
+  editoriale dichiarata (`types/content.ts`). Tolta. La disclosure ora è una
+  disclosure; la prova è il mese della visita, in chiaro sotto la foto. Sparito
+  anche «Scheda dal viaggio», che riempiva lo slot del prezzo quando il prezzo
+  non c'era.
+
+Lessico delle azioni allineato al percorso: «Apri la scheda» (era «Guarda il
+reel», ma il link apre la scheda — dove il reel poi si riproduce), «Vedi sulla
+mappa», «Salva per il viaggio».
+
+Verifiche: browser a 375 / 768 / 1152 / 1280 / 1440 (overflow, clipping, console,
+menu da tastiera), typecheck, lint, 193 test su 41 file, build, `audit:ui`
+(0 errori, 210 warning contro i 231 di baseline), `audit:size` (237,6 KB gzip su
+250), `audit:provenance`. Nessun commit, push o deploy.
+
+## 13. Correzioni composizione brand, 2026-08-12
+
+Tre difetti su `homeComposition.ts` e `HomeAudienceVoice.tsx`, pubblico brand:
+
+- La CTA della fascia audience diceva «Scarica il media kit» ma portava a un
+  modulo di otto campi obbligatori (azienda, email, focus, budget, periodo,
+  contesto), non a un file. Etichetta cambiata in «Richiedi il media kit», la
+  stessa lingua già usata da `/media-kit` e dall'interesse
+  `richiedere-il-media-kit`.
+- `brand.sections` ripeteva lo stesso gesto già chiuso per i viaggiatori il
+  2026-08-02 (§12): `featured` e `grid` mostravano entrambi schede di posti
+  dal registro. Tolto `featured` dalla composizione base e dai tre ordini per
+  interesse Brand (`capire-il-fit`, `vedere-i-format`,
+  `richiedere-il-media-kit`); resta solo `grid`.
+- `HomeAudienceVoice` mostrava «Portami in un posto a caso» accanto all'unica
+  CTA commerciale anche in modalità brand. Il pulsante ora compare solo per
+  viaggiatori e family.
+
+Verifiche: typecheck, lint, 353 test su 58 file (nuovi: composizione Brand
+in `homeComposition.test.ts`, `HomeAudienceVoice.test.tsx`), `audit:ui`
+(0 errori). Tre commit distinti, uno per correzione.
+
+## 15. Il commutatore di pubblico entra in navbar — 2026-08-17
+
+Direzione in `docs/50_Scratch/DESIGN_commutatore-pubblico.md`, implementata con
+le misure prese in browser (le stime aritmetiche del documento erano sbagliate
+di ~80px; lo spazio libero reale in barra è 66px a 1024/1280/1440, non 150-165).
+
+- **Chip di edizione attaccato al marchio**, non più bottone account isolato:
+  `Travelliniwithus │ ● <edizione> ⌄` in Fraunces 13px, apre un popover a tre
+  righe con le descrizioni dei tre pubblici. Nuovo componente
+  `src/components/AudienceEditionChip.tsx`, tre gradini per breakpoint (solo
+  pallino `aria-hidden` <768, pallino+parola passivi 768–1023, chip
+  interattivo ≥1024).
+- **Terza audience: un nome solo, «Brand»** (prima: «Brand & aziende»,
+  «Collaborazioni», «Modalità Partner Attiva», «Hub B2B»). È anche il valore
+  più corto (78px contro 130 di «Collaborazioni»), condizione che permette al
+  chip di entrare nel budget reale. Sorgente unica delle tre edizioni:
+  `src/config/audienceEditions.ts`, condivisa da `AudienceGate.tsx` (prima
+  duplicava le stesse descrizioni a mano).
+- **L'icona account sparisce dalla barra desktop.** Le sue voci non-cambiate
+  di posto (Preferiti, Personalizza esperienza, Accedi/Disconnetti) restano
+  dove già esistevano nel drawer mobile; Lingua (owner: resta com'è, non
+  toccata né commentata) si sposta nel drawer, non ha più sede desktop;
+  Admin resta raggiungibile solo da `Footer.tsx` (che già lo esponeva).
+  Rimosso anche il toast «Modalità Partner Attiva — Hub B2B», ridondante con
+  un'edizione ora sempre visibile in testata.
+- **Strumentato `handleModeSwitch`**: emette `audience_switch { from, to,
+  surface: 'chip' | 'drawer', path }` — prima il cambio da navbar/drawer non
+  tracciava nulla, mentre il gate del primo accesso emette tre eventi propri
+  da anni. Il gate resta attivo (nessuna modifica), la decisione se
+  spegnerlo aspetta questo dato.
+
+Verifiche: typecheck, lint, 356 test su 61 file, `audit:ui` (0 errori),
+`e2e/rotte-target-e-overflow.spec.ts` (4 larghezze, 20 rotte — overflow 0,
+nessun controllo sotto 24px, gerarchia titoli invariata) ed
+`e2e/tastiera-e-focus.spec.ts` (5/5, incluso il nuovo chip: Escape chiude il
+popover e restituisce il focus al trigger). Sonda ad-hoc su 320/375/768/
+1024/1280/1440 × 3 audience: overflow 0 ovunque, altezza barra 62px mobile /
+58-69px desktop (varia con `isScrolled`, mai oltre l'80px storico), nessun
+a-capo.
+
+Trovato ma **non corretto qui, fuori perimetro**: `docs/14_Bugs/BUG_HOME_FAMILY_OVERFLOW_320.md`
+— overflow di 10px a 320px quando l'audience risolta è `family` sulla rotta
+`/` (non su `/family`, che resta pulita). Preesistente, non causato da questo
+lavoro (riproducibile anche disattivando il nuovo chip), causa in un
+componente della home, non della navbar.
+
+## 16. La testata perde la pillola, guadagna una fascia — 2026-08-17
+
+Redesign eseguito da `travellini-frontend-builder` su handoff di
+`docs/50_Scratch/DESIGN_navbar-premium.md` (ui-designer) e
+`docs/50_Scratch/COPY_navbar-edizioni.md` (seo-conversion-strategist).
+**Sostituisce §15**: il chip con popover (`AudienceEditionChip`, ramo ≥lg) si
+ritira, la sua descrizione dei tre gradini per breakpoint non vale più.
+
+**Il blocker che ha aperto il lavoro**: a parità di larghezza la barra cambiava
+altezza con l'edizione (74/80/74px a 1024) perché `whitespace-nowrap` c'era
+sulle voci viaggiatori e mancava su family/brand. Causa nel codice, non
+un'illusione: una voce family andava a capo.
+
+- **Testata a filo, non più pillola.** Via `rounded-full`, `backdrop-blur-2xl`,
+  doppia ombra, `transition-all duration-500`, ingresso animato `y:-100`,
+  `hover:scale-[1.02]` sulla CTA. Ora: fondo sabbia opaco a tutta larghezza,
+  chiuso da un filetto 1px `--color-border`, un `<header>` fisso invece di un
+  `motion.nav`.
+- **5 slot, geometria congelata.** Riga 1 (`h-14`, 56px, fisso su ogni
+  edizione — decide l'altezza solo il contenitore, non il contenuto): marchio
+  + pallino accent permanente · voci (3-4, un sostantivo ciascuna,
+  `whitespace-nowrap`, ≤16 caratteri, al massimo una con pannello) · ricerca
+  (icona sola, via il badge ⌘K dalla barra) · azione (1 CTA o dichiaratamente
+  nessuna). Riga 2 — la fascia di edizione, nuovo componente
+  `src/components/EditionBand.tsx` — sempre 3 segmenti uguali nelle tre
+  edizioni: eyebrow «Edizione» + tre nomi (Fraunces 13px, attivo = pallino
+  accent 6px) da ≥1024; ricetta del segmented control mobile (icona 12 +
+  etichetta 10 maiuscolo, già validata a 320) sotto `lg`; descrizione
+  dell'edizione attiva (verbatim da `AUDIENCE_EDITIONS`) da ≥1280. Scorre via
+  al primo scroll (isteresi: chiude >24px, riapre <8px — Lenis è montato) e non
+  torna finché non si risale in cima; `AudienceEditionChip.tsx` resta solo
+  come pallino permanente accanto al marchio.
+- **«Guide e racconti» perde il pannello.** Tre dei suoi quattro link
+  puntavano a `/esplora` (due duplicavano un filtro che la pagina espone già
+  come chip), il quarto (`/itinerari`) è `preview`. Diventa un link semplice.
+  Resta pannello solo «Mete», che apre una tassonomia vera. Regola generale:
+  un pannello apre una tassonomia, mai dei filtri.
+- **Terza audience: «Collaborazioni» ovunque** — chip/fascia, voce di menu,
+  footer — non più «Brand» nel commutatore e «Collaborazioni» come voce
+  separata. Decisione owner 2026-08-17, che si scosta dalla raccomandazione di
+  entrambi i documenti di handoff (tenere i due nomi distinti). Costa ~52px in
+  più nella fascia; misurato senza overflow a ogni larghezza (vedi sotto).
+  `Audience` resta `'brand'` internamente: solo il testo pubblico cambia.
+- **Family: nessuna CTA in barra finché non esiste un `deal` reale.**
+  `getFamilyDeals()` filtra su un campo `deal` che non compare nemmeno una
+  volta in `src/data/family-content-seed.json` (0 occorrenze, verificato) —
+  «Codici e sconti» prometteva uno sconto inesistente. La condizione di
+  riaccensione è nel codice come commento in `Navbar.tsx`, non in un doc.
+- **Bug di struttura corretto**: in edizione brand il drawer mobile mostrava
+  il menu viaggiatori (Mete/Guide e racconti/Mappa) *insieme* alla card
+  Collaborazioni — causa del doppione «Chi Siamo»/«Chi siamo» segnalato
+  dall'owner. Ora ogni edizione mostra solo le proprie voci nel drawer; la
+  card Collaborazioni resta solo come cross-sell in edizione viaggiatori.
+- **Grafia unica** per «Chi siamo» (era Title Case a mano in due punti di
+  `Navbar.tsx`) e per la voce `/collaborazioni` (era «Come Lavoriamo» in barra,
+  «Collaborazioni» in footer). Entrambe leggono `navigation.aboutLabel` /
+  `navigation.collaborationsLabel`. `audienceEditions.ts` non nomina più
+  `atlante` (rotta morta, redirect a `/`) nella descrizione viaggiatori.
+- **Riserva navbar**: `PageLayout.tsx` (`pt-24` → `pt-28`, 112px),
+  `BrandCoherentHero.tsx`, `VieniConNoi.tsx` allineati alla stessa cifra;
+  `Mappa.tsx` e `FullScreenMapExperience.tsx` (`mt-20`/`h-[calc(100dvh-80px)]`
+  → `mt-28`/`h-[calc(100dvh-112px)]`), non wrappati da `PageLayout`.
+
+**Misurato in browser (Playwright headless, non stimato)**, 320/375/768/1024/
+1280/1440 × 3 edizioni (`/`, `/family`, `/collaborazioni`), prima e dopo
+scroll:
+
+| | mobile (320-375) | tablet/desktop (768-1440) |
+| --- | ---: | ---: |
+| riga 1 | 56px | 56px |
+| fascia a riposo | 44px | 40px |
+| **testata a riposo** | **101px** | **97px** |
+| **testata dopo scroll** | **57px** | **57px** |
+
+Identico byte-per-byte su viaggiatori/family/collaborazioni ad ogni
+larghezza: l'invariante che chiudeva il blocker (l'altezza non dipende più
+dall'edizione) è dimostrata, non dichiarata. Overflow orizzontale: 0 su 18
+combinazioni larghezza×edizione. Console: 0 errori. Stato forzato (rotta che
+impone un'edizione diversa dalla scelta salvata, es. `userAudience:
+'viaggiatori'` su `/collaborazioni`): pallino ad anello vuoto invece che
+pieno, nota «La tua edizione resta Viaggiatori» a destra da ≥1280, link a `/`
+— verificato in browser.
+
+Un gate ha fallito alla prima passata e è stato corretto prima di considerare
+il lavoro chiuso: a 1280px i tre nomi della fascia (`button` di solo testo,
+~20px di altezza) stavano sotto la soglia AA 24×24; portati a `min-h-6`.
+
+Verifiche: typecheck, lint, 371 test su 64 file (inclusi 2 nuovi: grafia unica
+di «Chi siamo» nelle tre edizioni, drawer brand senza voci viaggiatori),
+`audit:ui` (0 errori, invariato), `audit:visual` (14/14),
+`e2e/rotte-target-e-overflow.spec.ts` (4 larghezze × 20 rotte: overflow 0,
+controlli <24px 0, gerarchia titoli invariata, 0 errori console) ed
+`e2e/tastiera-e-focus.spec.ts` (5/5).
+
+Non toccato per decisione esplicita (perimetro dei cancelli, §9 del design
+doc): il controllo segmentato del drawer mobile (solo i due `aria-label`,
+"modalità" → "edizione"), `AudienceContext.tsx`, i tre temi CSS.
+`[VERIFY]` aperto: se la testata sabbia opaca sia la cornice giusta di
+`/mappa` (scura, a tutto schermo) o vada resa `--color-ink-deep` su quella
+sola rotta — non risolto qui, solo la riserva di spazio è stata aggiornata.
+
+## 17. La testata definitiva — pillola + commutatore, il gate si spegne — 2026-08-17
+
+Consolidamento owner di tre giorni di decisioni (`docs/50_Scratch/IDEE_testata-esaltata.md`,
+`docs/50_Scratch/DESIGN_commutatore-pubblico.md`), eseguito da
+`travellini-frontend-builder`. **Sostituisce §16 sulla forma del contenitore**:
+la testata a filo con fascia interna torna a due oggetti separati.
+
+- **La pillola torna.** `<header>` non è più a filo dei bordi: è di nuovo
+  contenuta, con margine dallo schermo (`px-3 pt-3` / `md:px-6 md:pt-4`),
+  angoli e bordo dai token, ombra ristretta (`--shadow-sm`). Niente blur,
+  niente doppia ombra, niente animazione d'ingresso — quel vocabolario resta
+  fuori (CLAUDE.md, niente glassmorphism sulle pagine pubbliche). Contenuto
+  della riga 1 invariato (marchio, voci, ricerca, CTA).
+- **Il commutatore diventa un secondo oggetto contenuto, non più una fascia a
+  tutta larghezza.** `EditionBand.tsx` riscritto: tre segmenti coi soli nomi
+  (niente descrizione, niente occhiello «Edizione» a vista — resta come
+  `aria-label`), Fraunces 18px, segmenti `min-h-[52px]`. Il segmento attivo è
+  una velatura (`--color-accent-soft` + `--color-accent-text` + un filo 2px
+  `--color-accent` sotto via `box-shadow: inset`), mai un riempimento pieno, e
+  usa i token dell'edizione ATTIVA (l'ambiente coincide col tema). I due
+  segmenti spenti portano un pallino 7px nel token STATICO della propria
+  edizione (nuovi `--edition-<key>-accent-text` in `index.css`, mai
+  ridefiniti per tema) — si vede il colore che si sta scegliendo prima di
+  leggerlo. Radius dai token (`--radius-lg`), mai `rounded-full`: non chiude
+  la porta a una futura animazione che cambi il raggio con la meta. Sotto
+  640px il commutatore è a tutta larghezza, tre parti uguali, nome a 13px
+  (a 18px sborda: fix separato sotto).
+- **Il commutatore non è più `fixed`.** Appartiene al flusso del documento,
+  sotto la pillola, e scorre via con la pagina allo scroll — nessun collasso
+  animato, nessuna dipendenza da `isScrolled` (rimosso da `Navbar.tsx`, non
+  serviva più a nulla). Riserva da solo lo spazio della pillola fissa qui
+  sopra nel proprio `pt-`: `PageLayout.tsx`, `BrandCoherentHero.tsx` e
+  `VieniConNoi.tsx` non riservano più `pt-28`/`mt-28` per la testata, solo un
+  piccolo respiro editoriale (`pt-8 md:pt-10`). `Mappa.tsx` e
+  `FullScreenMapExperience.tsx` restano a calc esplicito (canvas edge-to-edge,
+  non può affidarsi al flusso) ma con due misure — compatta/estesa — invece
+  di una, selezionate da `hasChosen`.
+- **Il gate a schermo intero si spegne** (`AUDIENCE_GATE_ENABLED = false` in
+  `AudienceGate.tsx`, kill-switch già esistente — componente non toccato,
+  riaccendibile in una riga). Alla prima visita (`hasChosen === false`) la
+  testa nasce **estesa**: tre porte pari, nomi + descrizioni verbatim da
+  `AUDIENCE_EDITIONS`, nessuna velatura, nessun filo — il filo lo disegna la
+  prima scelta. Le descrizioni si spostano, non si riscrivono. La scelta da
+  una porta chiama lo stesso `handleModeSwitch` del commutatore compatto, con
+  `surface: 'testa-estesa'` per restare distinguibile in `audience_switch`
+  (l'evento del gate `audience_gate_*` non esiste più).
+- **Il difetto di CLS evitabile, risolto alla radice.** Il sito è CSR puro
+  (nessuna SSR del contenuto in produzione): la testata non esiste nell'HTML
+  statico, quindi il primo render React è anche il primo paint — non c'è uno
+  stato precedente da cui "spostarsi". L'unico rischio reale era che
+  `AudienceContext.tsx` risolvesse l'audience da deep-link (`/family` da bio
+  IG) in un `useEffect` **dopo** il primo commit, il che avrebbe potuto far
+  vedere per un frame la testata estesa anche su un atterraggio diretto,
+  prima di ricollassarla. Corretto spostando quella risoluzione
+  nell'inizializzatore lazy di `useState` (sincrono, stesso render):
+  `AudienceContext.tsx` non è più "zero modifiche" come nei due giri
+  precedenti, ma la logica è identica, solo il momento in cui gira è cambiato.
+- **Tre difetti corretti**: (1) `theme-color` era `#f7f0e5`, un colore che il
+  sito non usa da nessuna parte — ora `#faf8f4` di default, riscritto per
+  edizione dallo stesso script inline che scrive `data-audience`; (2) il CSS
+  del preloader era morto (`className` in HTML puro, un attributo React
+  inerte lì, e `.twu-preloader-line` mai applicata) — corretto in `class`, e
+  il filo del preloader ora parte col colore dell'edizione ricordata, prima
+  del CSS; (3) cambiare edizione da una rotta condivisa fra le tre
+  (`/chi-siamo` è nei tre menu) teletrasportava sempre — `handleModeSwitch`
+  ora naviga solo se la rotta corrente non esiste nel menu dell'edizione di
+  destinazione (`routeExistsInEdition`, riusa `isItemActive` con un pathname
+  esplicito).
+- **Overflow a 320/375 corretto in corsa**: i tre segmenti a `flex-1` con
+  "Collaborazioni" (parola sola, 14 caratteri) sborda vano di 5px senza
+  `break-words` — un flex item non scende mai sotto il contenuto minimo del
+  suo unico figlio senza permesso esplicito di spezzare la parola. Aggiunto
+  `min-w-0` sul bottone e `break-words` sull'etichetta.
+
+**Misurato in browser (Playwright headless, non stimato)**, 320/375/768/1024/
+1280/1440 × 3 edizioni (`/`, `/family`, `/collaborazioni`) × prima
+visita/ritorno:
+
+| | pillola (riga 1) | commutatore compatto | commutatore esteso |
+| --- | ---: | ---: | ---: |
+| <768 | 68px | 158px totali | 393px totali |
+| ≥768 | 72px | 162px totali | 219–237px totali |
+
+"Totali" = dal bordo superiore del documento al punto in cui inizia il
+contenuto di pagina (riserva pillola inclusa nel proprio `pt-` del
+commutatore). Invariante confermato: l'altezza **non cambia con l'edizione**,
+a nessuna delle due larghezze o stati — varia solo fra prima visita e ritorno
+(atteso: la testa estesa porta le descrizioni). `theme-color` e
+`data-audience` verificati corretti nelle 36 combinazioni. Overflow
+orizzontale: 0 su tutte. Il filo del preloader verificato in browser (non
+dedotto): `background` calcolato risulta `rgb(244,63,119) → rgb(194,32,90) →
+rgb(244,63,119)` con `travellini_audience=family` in storage, prima che React
+monti; `animation-name` risulta `twuLineGlow` (era `none`, il bug del
+`className`).
+
+Verifiche: typecheck, lint (0 warning su tutto il repo), 367 test su 62 file
+(2 nuovi: no-teleport da `/chi-siamo` e navigazione vera da `/` in
+`Navbar.test.tsx`), `audit:ui` (0 errori, 214 warning invariati),
+`e2e/rotte-target-e-overflow.spec.ts` (4 larghezze × 20 rotte: overflow 0,
+controlli <24px 0, gerarchia titoli invariata, 0 errori console — inclusa
+`/mappa` col caso limite prima-visita-estesa) ed
+`e2e/tastiera-e-focus.spec.ts` (5/5; il test del gate è stato **aggiornato,
+non cancellato**: verifica ora che la testa estesa sia raggiungibile da
+tastiera e che la scelta la collassi e persista l'edizione).
+
+Non costruito qui per scelta esplicita dell'owner: la coreografia di
+transizione fra edizioni (filo che viaggia, velatura che cambia raggio,
+dissolvenza di pagina) — resta un lavoro successivo su una forma ora stabile;
+i token di raggio sulla velatura sono già pronti a riceverla.
+
+Nessun commit, push o deploy eseguito.

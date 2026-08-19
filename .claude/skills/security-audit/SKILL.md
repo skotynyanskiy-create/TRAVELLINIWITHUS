@@ -1,6 +1,6 @@
 ---
 name: security-audit
-description: Run a full web-stack security audit via travellini-security-auditor. Covers secrets in repo/history, Stripe webhook integrity, Firestore rules, Vite VITE_* env exposure, CORS, security headers, admin gate, rate limits. Use before first commit, before any deploy, before sharing repo access, after edits to server.ts/firestore.rules/admin.ts, or on a regular cadence (every 2-4 weeks).
+description: Run a full web-stack security audit via travellini-security-auditor. Covers secrets in repo/history, Stripe webhook integrity, Firestore rules, Vite VITE_* env exposure, CORS, security headers, admin gate, rate limits. Use before first commit, before any deploy, before sharing repo access, after edits to src/server/apiRoutes.ts, functions/, server.ts, firestore.rules or admin.ts, or on a regular cadence (every 2-4 weeks).
 ---
 
 # /security-audit
@@ -11,7 +11,7 @@ Read-only gate. Reports findings, never applies fixes.
 
 - Before first commit to a fresh branch
 - Before any deploy to production
-- After modifying `server.ts`, `firestore.rules`, `src/config/admin.ts`, Stripe handlers, or env files
+- After modifying `src/server/apiRoutes.ts`, `functions/`, `server.ts`, `firestore.rules`, `src/config/admin.ts`, Stripe handlers, or env files
 - Before sharing repo access with a new collaborator
 - On a 2-4 week cadence as drift check
 

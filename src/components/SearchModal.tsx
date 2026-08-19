@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, X, MapPin, BookOpen, Compass, Mail, Clock, TrendingUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -8,14 +8,19 @@ import Skeleton from './Skeleton';
 import { fetchArticles } from '../services/firebaseService';
 import { siteContentDefaults } from '../config/siteContent';
 import { DEMO_ARTICLE_PREVIEW, DEMO_ARTICLE_PATH } from '../config/demoContent';
-import { PREVIEW_ARTICLES } from '../config/previewContent';
+import { INTERNAL_PREVIEW_SLUGS, PREVIEW_ARTICLES } from '../config/previewContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { trackEvent } from '../services/analytics';
 import { TYPES, ZONES, slugifyType } from '../config/contentTaxonomy';
+import { CONTENT_ITEMS } from '../config/contentLibrary';
 import { buildExploreUrl } from '../utils/discoveryQuery';
+import { useFocusTrap } from '../hooks/useFocusTrap';
+import { useOverlayLayer } from '../hooks/useOverlayLayer';
 
 const RECENT_SEARCHES_KEY = 'twu_recent_searches';
-const POPULAR_TAGS = ['Sicilia', 'Andalusia', 'Dolomiti', 'Weekend', 'Boutique hotel', 'Food'];
+/* Solo termini che l'indice trova davvero: «Andalusia» suggeriva una meta
+   che il sito non copre. */
+const POPULAR_TAGS = ['Sushi', 'Verona', 'Dolomiti', 'Weekend', 'Boutique hotel', 'Spa'];
 const MAX_RECENT = 5;
 
 interface SearchResult {
@@ -99,6 +104,22 @@ const STATIC_PAGE_RESULTS: SearchResult[] = [
   },
 ];
 
+/* I 79 posti reali sono il cuore del sito e la ricerca non li conosceva:
+   «sushi» dava zero risultati con tre sushi nel registro. Costante di build,
+   niente async — entrano nell'indice sempre, anche a Firestore vuoto. */
+const POSTO_RESULTS: SearchResult[] = CONTENT_ITEMS.filter(
+  (item) => !item.isPlaceholder && item.cover
+).map((item) => ({
+  id: `posto-${item.id}`,
+  title: item.title,
+  category: item.types[0] ?? 'Posto provato',
+  link: `/posto/${item.id}`,
+  icon: MapPin,
+  keywords: [item.place.city, item.place.region, item.place.country, item.hook, ...item.types]
+    .filter((value): value is string => typeof value === 'string' && value.length > 0)
+    .join(' '),
+}));
+
 const DISCOVERY_RESULTS: SearchResult[] = [
   ...ZONES.map((zone) => ({
     id: `explore-zone-${zone}`,
@@ -153,7 +174,9 @@ const DISCOVERY_RESULTS: SearchResult[] = [
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [query, setQuery] = useState('');
   const [allData, setAllData] = useState<SearchResult[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loadState, setLoadState] = useState<'idle' | 'loading' | 'ready' | 'error' | 'retrying'>(
+    'idle'
+  );
   const [recentSearches, setRecentSearches] = useState<string[]>(() => {
     if (typeof window === 'undefined') return [];
     try {
@@ -163,9 +186,17 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     }
   });
   const inputRef = useRef<HTMLInputElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const requestIdRef = useRef(0);
+  const loadedDemoModeRef = useRef<boolean | null>(null);
   const navigate = useNavigate();
   const { data: demoContent } = useSiteContent('demo');
   const demoSettings = demoContent ?? siteContentDefaults.demo;
+  const loading = loadState === 'loading' || loadState === 'retrying';
+  const loadError = loadState === 'error';
+  const isTopLayer = useOverlayLayer(isOpen);
+
+  useFocusTrap(isOpen, modalRef, inputRef, isTopLayer);
 
   const fuse = useMemo(
     () =>
@@ -182,17 +213,18 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     [allData]
   );
 
-  useEffect(() => {
-    setAllData([]);
-  }, [demoSettings.showEditorialDemo]);
-
-  useEffect(() => {
-    const fetchSearchData = async () => {
-      setLoading(true);
+  const loadSearchData = useCallback(
+    async (isRetry = false) => {
+      const requestId = ++requestIdRef.current;
+      setLoadState(isRetry ? 'retrying' : 'loading');
       try {
         const articles = await fetchArticles();
 
-        const fetchedData: SearchResult[] = [...STATIC_PAGE_RESULTS, ...DISCOVERY_RESULTS];
+        const fetchedData: SearchResult[] = [
+          ...STATIC_PAGE_RESULTS,
+          ...DISCOVERY_RESULTS,
+          ...POSTO_RESULTS,
+        ];
         const seenSlugs = new Set<string>();
 
         articles.forEach((data) => {
@@ -219,6 +251,10 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
         if (demoSettings.showEditorialDemo) {
           Object.values(PREVIEW_ARTICLES).forEach((preview) => {
             if (seenSlugs.has(preview.slug)) return;
+            // La guida ai blocchi editoriali e' documentazione per chi scrive:
+            // resta raggiungibile per URL, ma fra i risultati di ricerca del
+            // sito non ci va.
+            if (INTERNAL_PREVIEW_SLUGS.has(preview.slug)) return;
             const keywords = [
               preview.location,
               preview.continent,
@@ -259,32 +295,46 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
           }
         }
 
-        setAllData(fetchedData);
+        if (requestId === requestIdRef.current) {
+          setAllData(fetchedData);
+          loadedDemoModeRef.current = demoSettings.showEditorialDemo;
+          setLoadState('ready');
+        }
       } catch (error) {
         console.error('Error fetching search data:', error);
-      } finally {
-        setLoading(false);
+        if (requestId === requestIdRef.current) {
+          setAllData([...STATIC_PAGE_RESULTS, ...DISCOVERY_RESULTS]);
+          loadedDemoModeRef.current = demoSettings.showEditorialDemo;
+          setLoadState('error');
+        }
       }
-    };
+    },
+    [demoSettings.showEditorialDemo]
+  );
 
-    if (isOpen && allData.length === 0) {
-      fetchSearchData();
-    }
-  }, [isOpen, allData.length, demoSettings.showEditorialDemo]);
+  useEffect(() => {
+    const demoModeChanged = loadedDemoModeRef.current !== demoSettings.showEditorialDemo;
+    const needsLoad = loadState === 'idle' || demoModeChanged;
+    if (!isOpen || loading || !needsLoad) return;
+
+    const loadTimer = window.setTimeout(() => {
+      void loadSearchData();
+    }, 0);
+    return () => window.clearTimeout(loadTimer);
+  }, [demoSettings.showEditorialDemo, isOpen, loadSearchData, loadState, loading]);
 
   useEffect(() => {
     if (isOpen) {
       trackEvent('search_open', { source_page: window.location.pathname });
-      setTimeout(() => inputRef.current?.focus(), 100);
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-      setQuery('');
     }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
   }, [isOpen]);
+
+  const closeSearch = useCallback(() => {
+    requestIdRef.current += 1;
+    setQuery('');
+    setLoadState('idle');
+    onClose();
+  }, [onClose]);
 
   // Handle Cmd+K / Ctrl+K to open
   useEffect(() => {
@@ -296,13 +346,13 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
           // but we assume the parent handles the shortcut too, or we just rely on the button.
         }
       }
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
+      if (e.key === 'Escape' && isOpen && isTopLayer) {
+        closeSearch();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [closeSearch, isOpen, isTopLayer]);
 
   const filteredResults = useMemo(() => {
     const trimmed = query.trim();
@@ -313,6 +363,18 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
       .map((result) => result.item);
   }, [fuse, query]);
 
+  /* Selezione da tastiera: il modale si apre con ⌘K ma si completava solo col
+     mouse. L'indice segue l'ordine VISIVO (gruppi editoriali), non il rank
+     Fuse — le frecce devono muoversi come l'occhio legge. */
+  const [activeIndex, setActiveIndex] = useState(0);
+  /* Reset a render-time (pattern «adjust state during render» dei docs
+     React): a ogni query nuova la selezione riparte dal primo risultato. */
+  const [prevQuery, setPrevQuery] = useState(query);
+  if (prevQuery !== query) {
+    setPrevQuery(query);
+    setActiveIndex(0);
+  }
+
   // Raggruppa risultati per categoria con ordine editoriale: prima i luoghi
   // e le esperienze (decisioni di viaggio), poi articoli/guide, poi pagine
   // di servizio. Mantiene il rank Fuse all'interno di ogni gruppo.
@@ -320,6 +382,10 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     if (filteredResults.length === 0) return [];
 
     const GROUP_ORDER: Array<{ label: string; matches: (cat: string) => boolean }> = [
+      /* I posti hanno come categoria il loro tipo canonical: senza questo
+         gruppo finivano sotto «Articoli e guide», che e' il contrario di
+         quello che sono. Primo gruppo perche' sono il cuore del sito. */
+      { label: 'Posti provati', matches: (cat) => (TYPES as readonly string[]).includes(cat) },
       { label: 'Luoghi', matches: (cat) => cat === 'Luogo' || cat === 'Destinazioni' },
       { label: 'Esperienze', matches: (cat) => cat === 'Esperienza' || cat === 'Esperienze' },
       { label: 'Percorsi consigliati', matches: (cat) => cat === 'Percorso' || cat === 'Finder' },
@@ -329,10 +395,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
           cat === 'Articolo' ||
           cat === 'Guide' ||
           cat === 'Itinerari completi' ||
-          cat === 'Weekend & Day trips' ||
-          cat === 'Food & Ristoranti' ||
-          cat === 'Hotel con carattere' ||
-          cat === 'Posti particolari',
+          cat === 'Weekend & Day trips',
       },
       { label: 'Pagine', matches: (cat) => cat === 'Pagina' },
     ];
@@ -357,6 +420,10 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
     return groups;
   }, [filteredResults]);
+
+  /* L'elenco piatto nell'ordine in cui i gruppi vengono mostrati: è la
+     mappa su cui camminano ArrowUp/ArrowDown. */
+  const flatResults = useMemo(() => groupedResults.flatMap((g) => g.items), [groupedResults]);
 
   useEffect(() => {
     const trimmed = query.trim();
@@ -405,7 +472,11 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
       position,
     });
     navigate(link);
-    onClose();
+    closeSearch();
+  };
+
+  const retrySearchData = () => {
+    if (!loading) void loadSearchData(true);
   };
 
   return (
@@ -416,10 +487,11 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={onClose}
+            onClick={closeSearch}
             className="fixed inset-0 bg-black/80 backdrop-blur-md z-[110]"
           />
           <motion.div
+            ref={modalRef}
             initial={{ opacity: 0, scale: 0.95, y: -20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
@@ -430,26 +502,69 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             className="fixed top-[10%] left-1/2 -translate-x-1/2 w-full max-w-2xl bg-white rounded-[var(--radius-md)] shadow-2xl z-[120] overflow-hidden flex flex-col max-h-[80vh]"
           >
             <div className="flex items-center px-6 py-4 border-b border-black/10">
-              <Search className="text-black/40 mr-4" size={24} />
+              <Search className="text-black/60 mr-4" size={24} />
               <input
                 ref={inputRef}
                 aria-label="Cerca nel sito"
+                aria-activedescendant={
+                  flatResults[activeIndex] ? `search-opt-${flatResults[activeIndex].id}` : undefined
+                }
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (flatResults.length === 0) return;
+                  if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    setActiveIndex((i) => (i + 1) % flatResults.length);
+                  } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    setActiveIndex((i) => (i - 1 + flatResults.length) % flatResults.length);
+                  } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const item = flatResults[activeIndex] ?? flatResults[0];
+                    if (item) {
+                      handleSelect(
+                        item.link,
+                        item,
+                        filteredResults.findIndex((c) => c.id === item.id)
+                      );
+                    }
+                  }
+                }}
                 placeholder="Cerca pagine, destinazioni, esperienze e sezioni utili..."
                 className="flex-grow text-xl bg-transparent border-none focus:outline-none placeholder:text-black/30 text-black"
               />
               <button
-                onClick={onClose}
+                type="button"
+                onClick={closeSearch}
                 aria-label="Chiudi ricerca"
-                className="p-2 hover:bg-black/5 rounded-full transition-colors text-black/50 hover:text-black"
+                className="p-2 hover:bg-black/5 rounded-full transition-colors text-black/60 hover:text-black"
               >
                 <X size={20} />
               </button>
             </div>
 
             <div className="overflow-y-auto p-4 flex-grow">
+              {loadError && (
+                <div
+                  role="alert"
+                  className="mb-4 flex flex-col gap-3 rounded-xl border border-[var(--color-error)]/20 bg-[var(--color-error-soft)] px-4 py-3 text-sm text-[var(--color-ink)] sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <span>
+                    Non riusciamo ad aggiornare l'archivio. Puoi comunque cercare le sezioni del
+                    sito.
+                  </span>
+                  <button
+                    type="button"
+                    onClick={retrySearchData}
+                    disabled={loading}
+                    className="shrink-0 font-semibold text-[var(--color-accent-text)] underline underline-offset-2"
+                  >
+                    Riprova
+                  </button>
+                </div>
+              )}
               {loading ? (
                 <div className="space-y-2">
                   {[1, 2, 3, 4].map((i) => (
@@ -466,7 +581,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 <div className="space-y-6 px-2 py-4">
                   {recentSearches.length > 0 && (
                     <div>
-                      <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/45">
+                      <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/60">
                         <Clock size={11} /> Ricerche recenti
                       </div>
                       <div className="flex flex-wrap gap-2">
@@ -485,7 +600,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   )}
 
                   <div>
-                    <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/45">
+                    <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/60">
                       <TrendingUp size={11} /> Ricerche popolari
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -503,7 +618,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   </div>
 
                   <div className="border-t border-black/5 pt-5">
-                    <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/45">
+                    <div className="mb-3 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-black/60">
                       <Compass size={11} /> Sezioni
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -530,7 +645,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 <div className="space-y-5">
                   {groupedResults.map((group) => (
                     <section key={group.label} aria-label={`Risultati ${group.label}`}>
-                      <h3 className="mb-2 px-4 text-[10px] font-bold uppercase tracking-[0.22em] text-black/45">
+                      <h3 className="mb-2 px-4 text-[10px] font-bold uppercase tracking-[0.22em] text-black/60">
                         {group.label}
                       </h3>
                       <ul className="space-y-1">
@@ -539,11 +654,25 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                           const positionInAll = filteredResults.findIndex(
                             (candidate) => candidate.id === item.id
                           );
+                          const isActive = flatResults[activeIndex]?.id === item.id;
                           return (
                             <li key={item.id}>
                               <button
+                                id={`search-opt-${item.id}`}
                                 onClick={() => handleSelect(item.link, item, positionInAll)}
-                                className="w-full flex items-center text-left px-4 py-3 hover:bg-[var(--color-sand)] rounded-xl transition-colors group"
+                                onMouseEnter={() => {
+                                  const idx = flatResults.findIndex((c) => c.id === item.id);
+                                  if (idx >= 0) setActiveIndex(idx);
+                                }}
+                                ref={(el) => {
+                                  if (isActive && el)
+                                    el.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+                                }}
+                                className={`w-full flex items-center text-left px-4 py-3 rounded-xl transition-colors group ${
+                                  isActive
+                                    ? 'bg-[var(--color-sand)]'
+                                    : 'hover:bg-[var(--color-sand)]'
+                                }`}
                               >
                                 <div className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center mr-4 group-hover:bg-white group-hover:shadow-sm transition-all text-black/60 group-hover:text-[var(--color-accent)]">
                                   <Icon size={18} />
@@ -552,7 +681,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                   <h4 className="font-medium text-black group-hover:text-[var(--color-accent)] transition-colors">
                                     {item.title}
                                   </h4>
-                                  <span className="text-xs uppercase tracking-widest text-black/50 font-semibold">
+                                  <span className="text-xs uppercase tracking-widest text-black/60 font-semibold">
                                     {item.category}
                                   </span>
                                 </div>
@@ -565,17 +694,17 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-12 text-black/50">
+                <div className="text-center py-12 text-black/60">
                   <p className="text-sm">Nessun risultato per "{query}".</p>
-                  <p className="mt-3 text-xs text-black/45">
-                    Prova con: Sicilia, Andalusia, Dolomiti, Bali, Marocco.
+                  <p className="mt-3 text-xs text-black/60">
+                    Prova con: sushi, spa, Verona, Toscana, agriturismo.
                   </p>
                 </div>
               )}
             </div>
 
-            <div className="bg-[var(--color-sand)] px-6 py-3 text-xs text-black/40 flex justify-between items-center border-t border-black/5">
-              <span>Scrivi e seleziona un risultato</span>
+            <div className="bg-[var(--color-sand)] px-6 py-3 text-xs text-black/60 flex justify-between items-center border-t border-black/5">
+              <span>Frecce per scorrere, Invio per aprire</span>
               <span className="flex items-center gap-1">
                 Premi{' '}
                 <kbd className="bg-white px-2 py-1 rounded border border-black/10 shadow-sm font-sans">

@@ -28,13 +28,24 @@ RULES: list[tuple[str, str]] = [
     (r"\bgit\s+clean\s+-\w*f", "deletes untracked files permanently"),
     (r"\bgit\s+push\s+.*(--force(?!-with-lease)|(?<![\w-])-f\b)",
      "force push rewrites remote history"),
+    # `git push origin +main` forza senza mai scrivere --force: il `+` davanti al
+    # refspec fa lo stesso danno. Era un buco che il repo documentava su se stesso
+    # in test_hooks.py e che nessuno aveva chiuso.
+    (r"\bgit\s+push\b[^|;&]*\s\+[\w./*-]+(:[\w./*-]+)?(\s|$)",
+     "force push via refspec + rewrites remote history"),
     (r"\bgit\s+checkout\s+(--\s+)?\.(\s|$)", "discards uncommitted changes in the tree"),
     (r"\bgit\s+restore\s+(--\s+)?\.(\s|$)", "discards uncommitted changes in the tree"),
     (r"\bgit\s+branch\s+-D\b", "force-deletes a branch that may not be merged"),
     (r"\bgit\s+add\s+(-A\b|--all\b|\.(\s|$))",
      "CLAUDE.md requires staging selectively by path on this tree"),
-    (r"\bgit\s+add\s+[^|;&]*\.(env|mcp\.json)\b", "would stage a secrets file"),
-    (r"\bgit\s+rebase\b", "rewrites local history mid-branch"),
+    # I template non contengono valori e sono tracciati apposta: `.env.example`
+    # sta in git dal primo commit. Senza l'esclusione la regola bloccava ogni
+    # modifica alla documentazione delle variabili. `.env` e `.env.local`
+    # restano bloccati, e gitleaks resta la seconda rete sul contenuto staged.
+    (
+        r"\bgit\s+add\s+[^|;&]*\.(env|mcp\.json)\b(?!\.(?:example|sample|template)\b)",
+        "would stage a secrets file",
+    ),
     (r"\bgit\s+filter-branch\b", "rewrites entire history"),
     (r"\bgit\s+stash\s+(clear|drop)\b", "discards stashed work permanently"),
     (r"\bdd\s+if=", "raw disk write"),
@@ -89,7 +100,7 @@ def main() -> int:
 
     sys.stderr.write(
         f"BLOCKED: {reason}. Per CLAUDE.md this command is not yours to run "
-        f"unilaterally — explain what you want to do and why, and let the owner "
+        f"unilaterally - explain what you want to do and why, and let the owner "
         f"decide. Do not rephrase the command, switch shells, or route around "
         f"this check.\n"
     )

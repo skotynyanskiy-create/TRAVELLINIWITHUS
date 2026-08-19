@@ -1,7 +1,9 @@
 import { ArrowUpRight, MapPin, Sparkles, Star } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import OptimizedImage from '@/src/components/OptimizedImage';
-import { getContentById } from '@/src/config/contentLibrary';
+import { useMemo } from 'react';
+import { usePersonalizedInterest } from '@/src/hooks/usePersonalizedInterest';
+import { CURATED_IDS, selectHomeFeaturedItems } from '@/src/lib/homeContentSelection';
 import { PARTNERSHIP_LABEL } from '@/src/types/content';
 
 interface PlaceItem {
@@ -23,38 +25,42 @@ interface PlaceItem {
  * volutamente diversi dall'hero e dai primi reel, per non ripetere gli stessi
  * posti in più sezioni della home.
  */
-const CURATED_IDS = [
-  'novara-emotional-grand-motel',
-  'ravenna-better-sushi',
-  'londra-warner-bros-studio-harry-potter',
-];
+export { CURATED_IDS };
 
-const FEATURED_PLACES: PlaceItem[] = CURATED_IDS.map((id) => getContentById(id))
-  .filter((item): item is NonNullable<typeof item> => Boolean(item))
-  .map((item) => {
-    const disclosure = PARTNERSHIP_LABEL[item.partnership.kind];
-    return {
-      id: item.id,
-      title: item.title,
-      location: item.place.city ?? item.place.region ?? item.place.country,
-      category: item.types[0],
-      price: item.value?.price ?? 'Scheda dal viaggio',
-      score: disclosure || 'Provato di persona',
-      image: item.cover,
-      focusY: item.coverFocusY ?? 50,
-      link: `/posto/${item.id}`,
-      description: item.description,
-    };
-  });
+function toPlaceItem(
+  item: NonNullable<ReturnType<typeof selectHomeFeaturedItems>[number]>
+): PlaceItem {
+  const disclosure = PARTNERSHIP_LABEL[item.partnership.kind];
+  return {
+    id: item.id,
+    title: item.title,
+    location: item.place.city ?? item.place.region ?? item.place.country,
+    category: item.types[0],
+    price: item.value?.price ?? 'Scheda dal viaggio',
+    score: disclosure || 'Provato di persona',
+    image: item.cover,
+    focusY: item.coverFocusY ?? 50,
+    link: `/posto/${item.id}`,
+    description: item.description,
+  };
+}
 
 export default function CleanFeaturedPlaces() {
+  const { interest } = usePersonalizedInterest();
+  const featuredPlaces = useMemo(
+    () => selectHomeFeaturedItems(interest).map(toPlaceItem),
+    [interest]
+  );
+
+  if (featuredPlaces.length === 0) return null;
+
   return (
-    <section className="bg-white py-20 md:py-28 text-[var(--color-ink,#1a2b3c)] border-b border-[var(--color-border)]">
+    <section className="bg-white py-20 md:py-28 text-[var(--color-ink)] border-b border-[var(--color-border)]">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         {/* Section Header */}
         <div className="mb-14 flex flex-col justify-between md:flex-row md:items-end">
           <div>
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent,#c85a32)]">
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]">
               <Sparkles size={14} />
               Selezione della Settimana
             </span>
@@ -64,7 +70,7 @@ export default function CleanFeaturedPlaces() {
           </div>
           <Link
             to="/esplora"
-            className="mt-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-ink)] hover:text-[var(--color-accent)] md:mt-0"
+            className="mt-4 inline-flex items-center gap-2 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-ink)] hover:text-[var(--color-accent-text)] md:mt-0"
           >
             Vedi tutte le destinazioni
             <ArrowUpRight size={16} />
@@ -73,7 +79,7 @@ export default function CleanFeaturedPlaces() {
 
         {/* 3 Clean Cards */}
         <div className="grid gap-8 md:grid-cols-3">
-          {FEATURED_PLACES.map((place) => (
+          {featuredPlaces.map((place) => (
             <Link
               key={place.id}
               to={place.link}
@@ -105,7 +111,8 @@ export default function CleanFeaturedPlaces() {
                 </div>
 
                 <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent,#c85a32)]">
+                  {/* accent-on-dark: eyebrow sulla foto, vedi CleanFeaturedGrid. */}
+                  <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-on-dark)]">
                     {place.category}
                   </span>
                   <h3 className="mt-1 font-serif text-xl font-normal leading-snug text-white">
@@ -120,7 +127,7 @@ export default function CleanFeaturedPlaces() {
                 </p>
                 <div className="mt-4 flex items-center justify-between border-t border-[var(--color-border)] pt-3 text-xs font-semibold">
                   <span className="text-[var(--color-ink)]">{place.price}</span>
-                  <span className="text-[var(--color-accent)] group-hover:translate-x-1 transition-transform">
+                  <span className="text-[var(--color-accent-text)] group-hover:translate-x-1 transition-transform">
                     Scopri di più &rarr;
                   </span>
                 </div>

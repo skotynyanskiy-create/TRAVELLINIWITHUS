@@ -1,6 +1,7 @@
 import { Timestamp } from 'firebase/firestore';
+import type { ArticleSeed } from './types';
 
-export const articleSeed = {
+export const articleSeed: ArticleSeed = {
   title: 'Batu Caves a Kuala Lumpur: vale la pena?',
   slug: 'malesia-batu-caves',
   excerpt:
@@ -30,12 +31,10 @@ Gratuito, veloce da raggiungere, fotogenico. Ideale per 1-2 ore. Non è un "post
 Prezzi: ingresso grotte 0 RM. Offerte e souvenir dentro.
 
 Meglio di mattina presto o tardo pomeriggio per luce e meno gente.
-
-[SEZIONE DETTAGLI PRATICI E VOTO: in lavorazione con dati reali]
 `.trim(),
   category: 'destinazioni',
   destination: 'Batu Caves, Kuala Lumpur, Malesia',
-  partnership: { kind: 'none' },
+  partnership: { kind: 'organic' },
   tags: ['asia', 'templi', 'gratis', 'kualalumpur'],
   author: { name: 'Rodrigo & Betta', bio: 'Viaggiatori e creatori di @travelliniwithus' },
   coverImage: '/images/reels/reel-4-cover.webp',

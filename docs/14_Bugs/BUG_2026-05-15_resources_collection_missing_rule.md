@@ -2,7 +2,7 @@
 type: bug
 area: backend
 severity: medium
-status: in-progress
+status: done
 priority: p1
 owner: travellini-backend-engineer
 opened: 2026-05-15
@@ -47,3 +47,9 @@ Definire `isValidResource()` validator allineato al modello (titolo, categoria, 
 ## Link
 
 - audit avanzato sezione §3 #5
+
+## Chiusura — 2026-07-31
+
+Verificato sul codice durante il consolidamento del backlog: `firestore.rules:285-288` → regola presente, read pubblico solo su `published == true`.
+
+Nessun lavoro residuo. Vedi [[10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31]] §4.

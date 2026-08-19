@@ -1,10 +1,15 @@
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigationType } from 'react-router-dom';
 
 export default function ScrollToTop() {
   const { pathname, hash } = useLocation();
+  const navigationType = useNavigationType();
 
   useEffect(() => {
+    /* Back/forward (POP): non azzerare — lascia lavorare il ripristino nativo
+       del browser; azzerare qui buttava via la posizione dell'utente. */
+    if (navigationType === 'POP') return;
+
     // Deep-link ad ancora (es. "/#storie" dalle CTA hero): scrolla all'elemento
     // con id === hash se esiste, altrimenti torna in cima.
     if (hash) {
@@ -14,8 +19,8 @@ export default function ScrollToTop() {
         return;
       }
     }
-    window.scrollTo(0, 0);
-  }, [pathname, hash]);
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [pathname, hash, navigationType]);
 
   return null;
 }

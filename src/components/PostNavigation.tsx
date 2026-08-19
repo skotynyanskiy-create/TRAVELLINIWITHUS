@@ -46,7 +46,7 @@ export default function PostNavigation({ currentId }: { currentId: string }) {
       <div className="mt-8 text-center">
         <Link
           to="/esplora"
-          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-muted-fg-2)] transition-colors hover:text-[var(--color-accent-text)]"
+          className="inline-flex items-center gap-2 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-muted-fg-2)] transition-colors hover:text-[var(--color-accent-text)]"
         >
           <Compass size={14} aria-hidden />
           Torna a Esplora
@@ -68,12 +68,17 @@ function NeighbourLink({ item, direction }: { item: ContentItem; direction: 'pre
         isPrev ? 'text-left' : 'flex-row-reverse text-right'
       }`}
     >
+      {/* responsiveWidths/sizes obbligatori: senza, OptimizedImage serve la
+          cover base intera (~340 KB) per un thumb da 64px. La variante -320
+          esiste per ogni cover (stesse immagini di PostiVicini). */}
       {item.cover ? (
         <OptimizedImage
           src={item.cover}
           alt={item.title}
           width={64}
           height={64}
+          responsiveWidths={[320]}
+          sizes="64px"
           className="h-16 w-16 shrink-0 rounded-[var(--radius-md)] object-cover"
         />
       ) : (

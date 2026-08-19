@@ -75,7 +75,10 @@ test.describe('POST /api/webhook — verifica firma Stripe', () => {
   });
 
   test('nessuna richiesta non firmata viene mai accettata', async ({ request }) => {
-    const attempts = [
+    // Annotato: il primo caso omette apposta `stripe-signature`, e senza il tipo
+    // esplicito l'inferenza lo marca `?: undefined` su tutta la lista, che
+    // Playwright non accetta come header.
+    const attempts: Record<string, string>[] = [
       { 'Content-Type': 'application/json' },
       { 'Content-Type': 'application/json', 'stripe-signature': '' },
       { 'Content-Type': 'application/json', 'stripe-signature': 't=0,v1=0' },

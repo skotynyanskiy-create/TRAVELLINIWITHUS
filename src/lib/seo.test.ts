@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildArticleJsonLd, buildBreadcrumbListJsonLd } from './seo';
+import { buildArticleJsonLd, buildBreadcrumbListJsonLd, buildFaqPageJsonLd } from './seo';
 import { SITE_URL } from '../config/site';
 
 const BASE_ARTICLE = {
@@ -76,5 +76,49 @@ describe('buildBreadcrumbListJsonLd', () => {
     const abs = [{ name: 'External', url: 'https://external.com/page' }];
     const ld = buildBreadcrumbListJsonLd(abs);
     expect(ld.itemListElement[0].item).toBe('https://external.com/page');
+  });
+});
+
+describe('buildFaqPageJsonLd', () => {
+  const items = [
+    { question: 'Quanto costa dormire nel Salento ad agosto?', answer: 'Tra 90 e 140€ a notte.' },
+    {
+      question: "Serve l'auto per girare il Salento?",
+      answer: 'Sì, i borghi sono lontani tra loro.',
+    },
+  ];
+
+  it('returns @type FAQPage with one Question/Answer per item', () => {
+    const ld = buildFaqPageJsonLd(items) as {
+      '@type': string;
+      mainEntity: Array<{
+        '@type': string;
+        name: string;
+        acceptedAnswer: { '@type': string; text: string };
+      }>;
+    };
+    expect(ld['@type']).toBe('FAQPage');
+    expect(ld.mainEntity).toHaveLength(2);
+    expect(ld.mainEntity[0]['@type']).toBe('Question');
+    expect(ld.mainEntity[0].name).toBe(items[0].question);
+    expect(ld.mainEntity[0].acceptedAnswer).toEqual({
+      '@type': 'Answer',
+      text: items[0].answer,
+    });
+  });
+
+  it('drops items with an empty answer but keeps the ones with real text', () => {
+    const withEmpty = [...items, { question: 'Domanda senza risposta?', answer: '   ' }];
+    const ld = buildFaqPageJsonLd(withEmpty) as { mainEntity: unknown[] };
+    expect(ld.mainEntity).toHaveLength(2);
+  });
+
+  it('returns null when no item has a real answer', () => {
+    const ld = buildFaqPageJsonLd([{ question: 'Domanda?', answer: '' }]);
+    expect(ld).toBeNull();
+  });
+
+  it('returns null for an empty list', () => {
+    expect(buildFaqPageJsonLd([])).toBeNull();
   });
 });

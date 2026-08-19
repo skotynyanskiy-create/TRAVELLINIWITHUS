@@ -13,7 +13,7 @@ export default function DiarioPreview() {
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 
-      <div className="bg-[var(--color-ink-deep,#0b0805)] py-2 text-center text-xs font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+      <div className="bg-[var(--color-ink-deep)] py-2 text-center text-xs font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
         ✦ Anteprima Dev — Nuova Homepage "Il Diario dell'Atlante Vivo"
       </div>
 

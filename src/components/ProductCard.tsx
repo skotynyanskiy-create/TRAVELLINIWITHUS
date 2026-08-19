@@ -71,7 +71,7 @@ export default function ProductCard({
 
         {badgeLabel && !isBestseller && (
           <div className="absolute top-5 right-5 z-20">
-            <span className="rounded-full bg-[var(--color-accent)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white shadow-sm">
+            <span className="rounded-full bg-[var(--color-accent)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] shadow-sm">
               {badgeLabel}
             </span>
           </div>
@@ -107,14 +107,14 @@ export default function ProductCard({
               {name}
             </h3>
           </Link>
-          <span className="text-sm font-bold text-[var(--color-accent)] whitespace-nowrap bg-[var(--color-sand)]/60 border border-black/5 px-3 py-1 rounded-xl">
+          <span className="text-sm font-bold text-[var(--color-accent-text)] whitespace-nowrap bg-[var(--color-sand)]/60 border border-black/5 px-3 py-1 rounded-xl">
             {formatPrice(price)}
           </span>
         </div>
 
         <Link
           to={productPath}
-          className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] font-bold text-[var(--color-muted-fg)] group-hover:text-ink transition-colors mt-auto"
+          className="inline-flex items-center gap-2 py-1.5 text-[10px] uppercase tracking-[0.3em] font-bold text-[var(--color-muted-fg)] group-hover:text-ink transition-colors mt-auto"
         >
           Dettagli{' '}
           <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />

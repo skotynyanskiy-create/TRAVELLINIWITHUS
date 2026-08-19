@@ -1,4 +1,4 @@
-import { useEffect, useState, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from '@/src/components/TransitionLink';
 import { ArrowRight } from 'lucide-react';
@@ -47,13 +47,32 @@ export default function StickyMobileCTA({
     return () => window.removeEventListener('scroll', handleScroll);
   }, [revealAfter]);
 
+  // La barra è `fixed`: non occupa spazio nel flusso, quindi copriva il fondo
+  // del documento. Su /esplora inghiottiva del tutto il link «Disclaimer» del
+  // footer, rendendo una pagina legale non raggiungibile da telefono. Lo
+  // spaziatore qui sotto restituisce al documento l'altezza che la barra gli
+  // toglie — misurata, non stimata, così resta giusta anche con la
+  // safe-area dei telefoni con notch.
+  const barRef = useRef<HTMLDivElement>(null);
+  const [barHeight, setBarHeight] = useState(0);
+
+  useEffect(() => {
+    const bar = barRef.current;
+    if (!bar || typeof ResizeObserver === 'undefined') return;
+    const measure = () => setBarHeight(bar.offsetHeight);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(bar);
+    return () => observer.disconnect();
+  }, [mounted]);
+
   const handleClick = () => {
     trackEvent('cta_sticky_click', { id: trackingId });
     onClick?.();
   };
 
   const baseClass =
-    'inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-6 text-sm font-bold uppercase tracking-widest text-white shadow-[var(--shadow-lg)]';
+    'inline-flex h-14 w-full items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-6 text-sm font-bold uppercase tracking-widest text-[var(--color-ink)] shadow-[var(--shadow-lg)]';
 
   const content = (
     <>
@@ -67,6 +86,7 @@ export default function StickyMobileCTA({
   // containing block that breaks fixed positioning otherwise).
   const node = (
     <div
+      ref={barRef}
       inert={!visible}
       aria-hidden={!visible}
       data-visible={visible ? 'true' : 'false'}
@@ -89,5 +109,13 @@ export default function StickyMobileCTA({
   );
 
   if (!mounted) return null;
-  return createPortal(node, document.body);
+  return createPortal(
+    <>
+      {node}
+      {/* Va in coda a `document.body`, quindi dopo il footer: allunga il
+          documento senza spostare nulla di visibile — zero layout shift. */}
+      <div aria-hidden className="md:hidden" style={{ height: visible ? barHeight : 0 }} />
+    </>,
+    document.body
+  );
 }

@@ -60,33 +60,33 @@ export default function DiarioWeekendGenerator() {
   const currentRecommendation = RECOMMENDATIONS[selectedMood] ?? RECOMMENDATIONS.insolito;
 
   return (
-    <section className="border-b border-[var(--color-border,#e5dcd0)] bg-[var(--color-sand,#faf7f2)] py-20 text-[var(--color-ink,#1a2b3c)] md:py-28">
+    <section className="border-b border-[var(--color-border)] bg-[var(--color-sand)] py-20 text-[var(--color-ink)] md:py-28">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-16">
           {/* Left Text */}
           <div>
-            <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-[var(--color-accent,#c85a32)]">
+            <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
               <Sparkles size={14} />
               Generatore Interattivo
             </span>
             <h2 className="mt-3 font-serif text-3xl font-normal leading-tight text-[var(--color-ink)] md:text-5xl">
               Trova la tua prossima fuga in 3 click.
             </h2>
-            <p className="mt-4 text-base leading-relaxed text-[var(--color-muted-fg,#546274)]">
+            <p className="mt-4 text-base leading-relaxed text-[var(--color-muted-fg)]">
               Seleziona il mood di coppia, la distanza desiderata e la fascia di budget: ti
               mostriamo subito il posto verificato più adatto provato da Rodrigo &amp; Betta.
             </p>
 
             <div className="mt-8 grid gap-4 sm:grid-cols-3 text-xs font-semibold text-[var(--color-ink)]">
-              <div className="rounded-xl border border-[var(--color-border,#e5dcd0)] bg-white p-4 shadow-xs">
+              <div className="rounded-xl border border-[var(--color-border)] bg-white p-4 shadow-xs">
                 <span className="text-[var(--color-accent)] font-bold">01. Mood</span>
                 <p className="mt-1 text-black/60">Atmosfera di coppia</p>
               </div>
-              <div className="rounded-xl border border-[var(--color-border,#e5dcd0)] bg-white p-4 shadow-xs">
+              <div className="rounded-xl border border-[var(--color-border)] bg-white p-4 shadow-xs">
                 <span className="text-[var(--color-accent)] font-bold">02. Distanza</span>
                 <p className="mt-1 text-black/60">Tempo di viaggio</p>
               </div>
-              <div className="rounded-xl border border-[var(--color-border,#e5dcd0)] bg-white p-4 shadow-xs">
+              <div className="rounded-xl border border-[var(--color-border)] bg-white p-4 shadow-xs">
                 <span className="text-[var(--color-accent)] font-bold">03. Budget</span>
                 <p className="mt-1 text-black/60">Costo reale stimato</p>
               </div>
@@ -94,12 +94,12 @@ export default function DiarioWeekendGenerator() {
           </div>
 
           {/* Right Widget Card */}
-          <div className="rounded-[var(--radius-xl,24px)] border border-[var(--color-border,#e5dcd0)] bg-white p-6 shadow-xl md:p-8">
+          <div className="rounded-[var(--radius-xl,24px)] border border-[var(--color-border)] bg-white p-6 shadow-xl md:p-8">
             <h3 className="mb-6 font-serif text-2xl">Configura la tua ricerca</h3>
 
             {/* Step 1: Mood */}
             <fieldset className="mb-6 border-0 p-0 m-0">
-              <legend className="mb-2 block text-xs font-bold uppercase tracking-wider text-[var(--color-muted-fg,#546274)]">
+              <legend className="mb-2 block text-xs font-bold uppercase tracking-wider text-[var(--color-muted-fg)]">
                 1. Qual è il vostro mood?
               </legend>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-2">
@@ -110,7 +110,7 @@ export default function DiarioWeekendGenerator() {
                     onClick={() => setSelectedMood(m.id)}
                     className={`flex items-center gap-2 rounded-xl border p-3 text-left text-xs font-semibold transition-all ${
                       selectedMood === m.id
-                        ? 'border-[var(--color-accent)] bg-[var(--color-accent-soft,#fdf0ec)] text-[var(--color-accent)] shadow-xs'
+                        ? 'border-[var(--color-accent)] bg-[var(--color-accent-soft)] text-[var(--color-accent)] shadow-xs'
                         : 'border-black/10 bg-white text-black/70 hover:border-black/20'
                     }`}
                   >
@@ -123,7 +123,7 @@ export default function DiarioWeekendGenerator() {
 
             {/* Step 2: Distance */}
             <fieldset className="mb-6 border-0 p-0 m-0">
-              <legend className="mb-2 block text-xs font-bold uppercase tracking-wider text-[var(--color-muted-fg,#546274)]">
+              <legend className="mb-2 block text-xs font-bold uppercase tracking-wider text-[var(--color-muted-fg)]">
                 2. Quanto volete spostarvi?
               </legend>
               <div className="flex flex-wrap gap-2">
@@ -146,7 +146,7 @@ export default function DiarioWeekendGenerator() {
 
             {/* Step 3: Budget */}
             <fieldset className="mb-8 border-0 p-0 m-0">
-              <legend className="mb-2 block text-xs font-bold uppercase tracking-wider text-[var(--color-muted-fg,#546274)]">
+              <legend className="mb-2 block text-xs font-bold uppercase tracking-wider text-[var(--color-muted-fg)]">
                 3. Fascia di budget indicativa
               </legend>
               <div className="flex flex-wrap gap-2">
@@ -157,7 +157,7 @@ export default function DiarioWeekendGenerator() {
                     onClick={() => setSelectedBudget(b.id)}
                     className={`rounded-full border px-3.5 py-1.5 text-xs font-medium transition-all ${
                       selectedBudget === b.id
-                        ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-white'
+                        ? 'border-[var(--color-accent)] bg-[var(--color-accent)] text-[var(--color-ink)]'
                         : 'border-black/10 bg-white text-black/70 hover:border-black/20'
                     }`}
                   >
@@ -173,13 +173,13 @@ export default function DiarioWeekendGenerator() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
-              className="rounded-2xl border border-[var(--color-accent,#c85a32)]/30 bg-[var(--color-accent-soft,#fdf0ec)] p-5 text-[var(--color-ink)]"
+              className="rounded-2xl border border-[var(--color-accent)]/30 bg-[var(--color-accent-soft)] p-5 text-[var(--color-ink)]"
             >
               <div className="flex items-center justify-between">
-                <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent)]">
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[var(--color-accent-text)]">
                   <Flame size={12} /> Posto Consigliato
                 </span>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-black/50">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-black/60">
                   {currentRecommendation.location}
                 </span>
               </div>
@@ -191,7 +191,7 @@ export default function DiarioWeekendGenerator() {
               </p>
               <Link
                 to={currentRecommendation.link}
-                className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] hover:underline"
+                className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-[var(--color-accent-text)] hover:underline"
               >
                 Vedi Scheda Completa <ArrowRight size={13} />
               </Link>

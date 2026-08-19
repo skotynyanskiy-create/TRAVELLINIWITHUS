@@ -31,12 +31,12 @@ export async function sendEmail(input: SendEmailInput): Promise<SendEmailResult>
   const apiKey = process.env.RESEND_API_KEY;
 
   if (!apiKey) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.warn(
-        '[email] RESEND_API_KEY mancante — email skipped (predisposizione mode). ' +
-          `Subject: "${input.subject}"`
-      );
-    }
+    // L'avviso vale anche in produzione. Prima era dietro NODE_ENV, e nel
+    // runtime delle Cloud Functions NODE_ENV e' 'production': ogni email
+    // saltata spariva senza lasciare traccia, indistinguibile da una inviata.
+    console.warn(
+      '[email] RESEND_API_KEY mancante — email NON inviata. ' + `Subject: "${input.subject}"`
+    );
     return { ok: false, skipped: true, reason: 'missing-api-key' };
   }
 

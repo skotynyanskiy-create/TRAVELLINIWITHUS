@@ -2,7 +2,14 @@ import { useState, type FormEvent } from 'react';
 import { motion } from 'motion/react';
 import { CheckCircle2, Loader2, Lock, Mail, Sparkles, Star } from 'lucide-react';
 import { trackEvent } from '../../services/analytics';
-import { appendLeadFallback } from '../../lib/leadFallback';
+import {
+  appendLeadFallback,
+  buildLeadFallbackMailto,
+  buildLeadFallbackWhatsAppText,
+  buildLeadFallbackWhatsAppUrl,
+} from '../../lib/leadFallback';
+import { CONTACTS } from '../../config/site';
+import LeadFallbackNotice from '../LeadFallbackNotice';
 
 const FREE_BENEFITS = [
   'Articoli editoriali pubblici',
@@ -56,6 +63,7 @@ export default function ClubMembershipHero() {
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [fallbackNotice, setFallbackNotice] = useState<{ saved: boolean } | null>(null);
 
   const handlePlanSelect = (planId: string) => {
     setSelectedPlan(planId);
@@ -96,22 +104,37 @@ export default function ClubMembershipHero() {
         plan: selectedPlan,
         date: new Date().toISOString(),
       });
-      if (saved) {
-        trackEvent('club_waitlist_success', { fallback: true, plan: selectedPlan });
-        setIsSubscribed(true);
-      } else {
-        setError('Iscrizione non riuscita. Riprova tra poco oppure scrivici via email.');
-      }
+      // Distinto da 'club_waitlist_success': nessuna iscrizione e' arrivata
+      // davvero alla waitlist, quindi non e' una conversione da contare come tale.
+      trackEvent('club_waitlist_fallback', { plan: selectedPlan, saved_locally: saved });
+      setFallbackNotice({ saved });
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const clubFallbackMailto = buildLeadFallbackMailto(
+    CONTACTS.email,
+    `Waitlist Travellini Club — piano ${selectedPlan === 'annual' ? 'annuale' : 'mensile'}`,
+    'Il modulo di iscrizione alla waitlist del Club non è riuscito a registrarmi. La mia email è qui sotto:',
+    [
+      { label: 'Email', value: email },
+      { label: 'Piano', value: selectedPlan === 'annual' ? 'Annuale' : 'Mensile' },
+    ]
+  );
+  const clubFallbackWhatsAppUrl = buildLeadFallbackWhatsAppUrl(
+    CONTACTS.whatsappUrl,
+    buildLeadFallbackWhatsAppText(
+      'Vorrei entrare nella waitlist del Travellini Club, il modulo del sito non ha funzionato:',
+      [{ label: 'Email', value: email }]
+    )
+  );
+
   return (
     <section id="club-pricing" className="bg-[var(--color-ink)] py-20 text-white md:py-28">
       <div className="mx-auto max-w-6xl px-6 md:px-12">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)]/15 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">
+          <span className="inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)]/15 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
             <Star size={12} /> Travellini Club
           </span>
           <h1 className="mt-6 text-5xl font-serif leading-[1.05] tracking-tight md:text-6xl">
@@ -129,7 +152,9 @@ export default function ClubMembershipHero() {
         <div className="mt-12 grid gap-4 md:grid-cols-3">
           {CLUB_DELIVERABLES.map((item) => (
             <div key={item.label} className="border-t border-white/12 pt-5">
-              <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+              {/* accent-on-dark: la sezione e' su fondo ink — accent-text qui
+                  misurava 3,8:1 a 10px, sotto il minimo AA di 4,5. */}
+              <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-on-dark)]">
                 {item.label}
               </p>
               <p className="mt-3 text-sm leading-relaxed text-white/68">{item.text}</p>
@@ -167,10 +192,10 @@ export default function ClubMembershipHero() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="relative border-t border-[var(--color-accent)]/45 pt-8 md:pt-10"
           >
-            <div className="absolute right-8 top-8 inline-flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.24em] text-[var(--color-ink)]">
+            <div className="absolute right-8 top-8 inline-flex items-center gap-1 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.24em] text-[var(--color-ink)]">
               <Sparkles size={11} /> Consigliato
             </div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">
+            <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
               Travellini Club — Premium
             </p>
             <p className="mt-4 font-serif text-4xl">Da €5,90 al mese</p>
@@ -200,7 +225,7 @@ export default function ClubMembershipHero() {
                   }`}
                 >
                   {tier.badge && (
-                    <span className="absolute right-4 top-4 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)]">
+                    <span className="absolute right-4 top-4 rounded-full bg-[var(--color-accent)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)]">
                       {tier.badge}
                     </span>
                   )}
@@ -221,11 +246,23 @@ export default function ClubMembershipHero() {
             </p>
 
             {isSubscribed ? (
-              <div className="mt-4 flex items-center gap-3 rounded-[var(--radius-md)] border border-[var(--color-accent)]/40 bg-[var(--color-accent)]/12 p-4 text-sm text-white">
+              <div className="mt-4 flex items-center gap-3 rounded-[var(--radius-md)] border border-[var(--color-accent)]/40 bg-[var(--color-accent)]/12 p-4 text-sm text-[var(--color-ink)]">
                 <CheckCircle2 size={18} className="shrink-0 text-[var(--color-accent)]" />
                 <span>
                   Sei in waitlist. Ti scriviamo appena il Club apre alle prime iscrizioni.
                 </span>
+              </div>
+            ) : fallbackNotice ? (
+              <div className="mt-4 rounded-[var(--radius-md)] border border-[var(--color-warning)]/35 bg-white/5 p-4">
+                <LeadFallbackNotice
+                  savedLocally={fallbackNotice.saved}
+                  title="Iscrizione alla waitlist non registrata"
+                  description="Il nostro sistema non era raggiungibile in questo momento. Scrivici direttamente e ti mettiamo in lista a mano."
+                  mailtoHref={clubFallbackMailto}
+                  whatsappHref={clubFallbackWhatsAppUrl}
+                  onRetry={() => setFallbackNotice(null)}
+                  tone="dark"
+                />
               </div>
             ) : (
               <form
@@ -260,8 +297,8 @@ export default function ClubMembershipHero() {
                 </button>
               </form>
             )}
-            {error && !isSubscribed && (
-              <p className="mt-2 text-xs text-[var(--color-accent)]" role="alert">
+            {error && !isSubscribed && !fallbackNotice && (
+              <p className="mt-2 text-xs text-[var(--color-accent-text)]" role="alert">
                 {error}
               </p>
             )}

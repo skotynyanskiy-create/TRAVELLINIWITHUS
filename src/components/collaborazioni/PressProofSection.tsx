@@ -80,7 +80,7 @@ export default function PressProofSection() {
           </div>
           <Link
             to="/media-kit"
-            className="mt-4 md:mt-0 shrink-0 inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white shadow-lg transition-all hover:bg-[var(--color-accent-hover)] hover:scale-105"
+            className="mt-4 md:mt-0 shrink-0 inline-flex items-center gap-2 rounded-full bg-[var(--color-accent)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] shadow-lg transition-all hover:brightness-95 hover:scale-105"
           >
             Richiedi il Media Kit
           </Link>

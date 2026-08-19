@@ -25,9 +25,14 @@ describe('buildAffiliateLink — disabled partner', () => {
 });
 
 describe('AFFILIATE_ANCHOR_ATTRS', () => {
-  it('includes "sponsored" and "noopener" in rel', () => {
+  it('includes "nofollow", "sponsored" and "noopener" in rel', () => {
+    expect(AFFILIATE_ANCHOR_ATTRS.rel).toContain('nofollow');
     expect(AFFILIATE_ANCHOR_ATTRS.rel).toContain('sponsored');
     expect(AFFILIATE_ANCHOR_ATTRS.rel).toContain('noopener');
+  });
+
+  it('is the single canonical rel string used across the codebase', () => {
+    expect(AFFILIATE_ANCHOR_ATTRS.rel).toBe('nofollow sponsored noopener noreferrer');
   });
 
   it('opens in a new tab', () => {

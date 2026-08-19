@@ -183,7 +183,7 @@ export default function AiAssistant() {
         aria-label={isOpen ? 'Chiudi assistente' : 'Apri assistente viaggio'}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="fixed bottom-8 right-8 z-[70] hidden h-16 w-16 items-center justify-center rounded-full bg-[var(--color-ink)] text-white shadow-[0_18px_44px_rgba(0,0,0,0.28)] transition-all hover:bg-[var(--color-accent)] md:flex"
+        className="fixed bottom-8 right-8 z-[70] hidden h-16 w-16 items-center justify-center rounded-full bg-[var(--color-ink)] text-white shadow-[0_18px_44px_rgba(0,0,0,0.28)] transition-all hover:bg-[var(--color-accent-hover)] md:flex"
       >
         {isOpen ? <X size={22} /> : <Bot size={22} />}
       </motion.button>
@@ -205,7 +205,7 @@ export default function AiAssistant() {
                   <Sparkles size={18} />
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
                     Assistente Travelliniwithus
                   </p>
                   <p className="mt-1 font-serif text-lg leading-tight">Domande veloci</p>
@@ -261,7 +261,7 @@ export default function AiAssistant() {
                     key={prompt}
                     type="button"
                     onClick={() => sendMessage(prompt)}
-                    className="rounded-full bg-[var(--color-accent-soft)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)] transition-colors hover:bg-[var(--color-accent)] hover:text-white"
+                    className="rounded-full bg-[var(--color-accent-soft)] px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)] transition-colors hover:bg-[var(--color-accent-hover)] hover:text-white"
                   >
                     {prompt}
                   </button>
@@ -284,7 +284,7 @@ export default function AiAssistant() {
                 type="submit"
                 aria-label="Invia"
                 disabled={!input.trim() || isThinking}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-ink)] text-white transition-colors hover:bg-[var(--color-accent)] disabled:opacity-50"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-ink)] text-white transition-colors hover:bg-[var(--color-accent-hover)] disabled:opacity-50"
               >
                 <Send size={14} />
               </button>

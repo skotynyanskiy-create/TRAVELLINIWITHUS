@@ -12,7 +12,21 @@ function assertCheck(name, condition, detail) {
   checks.push({ name, ok: Boolean(condition), detail });
 }
 
-const server = read('server.ts');
+/**
+ * Il webhook Stripe non vive piu' in `server.ts`: dallo stadio 2 del refactor
+ * sta nel router condiviso (`src/server/apiRoutes.ts`), che monta sia il server
+ * di sviluppo sia la Cloud Function, e la persistenza sta nel data layer
+ * (`src/server/data.ts`).
+ *
+ * Questo script leggeva solo `server.ts` e dava **quattro FAIL su codice
+ * corretto**. Un audit di sicurezza che guarda il file sbagliato e' peggio di
+ * nessun audit: o grida al lupo, o — se qualcuno lo "aggiusta" spostando il
+ * codice sotto il suo naso — rassicura a vuoto. Qui si concatenano i file che
+ * compongono davvero il percorso dei soldi, cosi' il controllo segue il codice
+ * anche se si sposta di nuovo.
+ */
+const PERCORSO_PAGAMENTI = ['server.ts', 'src/server/apiRoutes.ts', 'src/server/data.ts'];
+const server = PERCORSO_PAGAMENTI.map((file) => read(file)).join('\n');
 const rules = read('firestore.rules');
 const cart = read('src/context/CartContext.tsx');
 

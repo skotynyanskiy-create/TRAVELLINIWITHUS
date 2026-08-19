@@ -1,32 +1,27 @@
-# Claude Code Session Start
+# Avvio sessione — Claude Code
 
-For a new session on TRAVELLINIWITHUS, Claude already auto-loads `CLAUDE.md`. That covers stack, model routing, code discipline, quality bar, commands, and skill/agent routing.
+`CLAUDE.md` viene caricato da solo e contiene il contratto operativo: precedenza,
+limiti, routing, barra di qualità. **Questo file non lo ripete**: una seconda
+copia delle stesse regole diverge dalla prima e poi si contraddicono a vicenda —
+è già successo qui, con un «default model: sonnet» rimasto in piedi per mesi
+dopo che `CLAUDE.md` lo aveva dichiarato falso.
 
-If the session needs deeper project memory, read on demand (not preemptively):
+Qui resta solo ciò che non sta da nessun'altra parte.
 
-- `AGENTS.md` — expanded operating rules
-- `DESIGN.md` — design-system source (UI, Stitch/Figma prompts)
-- `docs/10_Projects/PROJECT_TRAVELLINIWITHUS_SITE.md` — current project hub
-- `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md` — brand snapshot
-- `docs/10_Projects/PROJECT_AI_STACK_SYNC_AUDIT_2026_05_12.md` — latest AI stack sync audit
+## Prima risposta a un compito nuovo
 
-Do not load the whole `docs/` tree. Open only what the task actually needs.
+Tre righe, prima di toccare qualunque cosa:
 
-## Non-negotiable rules (quick reference)
+1. qual è il compito
+2. quali file o rotte verranno probabilmente toccati
+3. quale nota di `docs/` (se ce n'è una) verrà aggiornata
 
-- Italian for public UI and copy.
-- Preserve premium editorial language unless the user asks for a redesign.
-- Smallest change that solves the problem. No refactor during bugfix.
-- `server.ts`, `firestore.rules`, `src/config/admin.ts` are high-risk — confirm before editing.
-- Default model: **sonnet**. Escalate to opus only for multi-file architecture / hard debugging.
-- Use `code-explorer` (haiku) for any "where is X / what does Y do" research before touching code.
-- Use `travellini-growth-revenue-operator` for partner, media kit, affiliate/shop, campaign prioritization and analytics work.
-- Use `travellini-social-content-operator` for Instagram, Reels/TikTok, newsletter and content calendar work.
+## Da leggere su richiesta, mai in anticipo
 
-## First response pattern
+- `AGENTS.md` — regole condivise con gli altri strumenti
+- `DESIGN.md` — fonte del design system
+- `docs/10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31.md` — l'unica lista viva di
+  cosa fare
+- `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md` — riferimento di brand
 
-On a new task, say in 3 lines:
-
-1. what the task is
-2. which files / routes are likely touched
-3. which `docs/` note (if any) will be updated
+L'albero `docs/` sono 318 file: si apre la singola nota che serve, mai l'insieme.

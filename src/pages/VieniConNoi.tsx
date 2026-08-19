@@ -8,14 +8,21 @@ import {
   Compass,
   Loader2,
   Mail,
+  MailWarning,
   Map,
   Sparkles,
 } from 'lucide-react';
 import SEO from '../components/SEO';
+import LeadFallbackNotice from '../components/LeadFallbackNotice';
 import LeadMagnetCover from '../components/LeadMagnetCover';
 import { Link } from '../components/TransitionLink';
-import { BRAND_CREDENTIALS, BRAND_STATS, SITE_URL } from '../config/site';
-import { appendLeadFallback } from '../lib/leadFallback';
+import { BRAND_CREDENTIALS, BRAND_STATS, CONTACTS, SITE_URL } from '../config/site';
+import {
+  appendLeadFallback,
+  buildLeadFallbackMailto,
+  buildLeadFallbackWhatsAppText,
+  buildLeadFallbackWhatsAppUrl,
+} from '../lib/leadFallback';
 import { trackEvent } from '../services/analytics';
 
 const DESTINATION_MARKS = Array.from({ length: 10 }, (_, index) => index + 1);
@@ -33,6 +40,7 @@ export default function VieniConNoi() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [fallbackNotice, setFallbackNotice] = useState<{ saved: boolean } | null>(null);
   const [searchParams] = useSearchParams();
 
   const utmSource = searchParams.get('utm_source') ?? 'direct';
@@ -76,7 +84,7 @@ export default function VieniConNoi() {
         throw new Error('Subscription failed');
       }
 
-      completeSignup(false);
+      completeSignup();
     } catch {
       const saved = appendLeadFallback('twu_newsletter_leads', {
         email: normalizedEmail,
@@ -84,24 +92,40 @@ export default function VieniConNoi() {
         date: new Date().toISOString(),
       });
 
+      // Distinti da 'newsletter_signup'/'lead_magnet_signup': l'iscrizione
+      // non e' arrivata alla lista, quindi non vanno contati come la stessa
+      // conversione (un pixel ads che ottimizza su quel nome altrimenti
+      // conterebbe un'iscrizione mai avvenuta).
+      const fallbackParams = {
+        route: '/guida-in-regalo',
+        source,
+        utm_source: utmSource,
+        saved_locally: saved,
+      };
+      trackEvent('newsletter_signup_fallback', fallbackParams);
+      trackEvent('lead_magnet_signup_fallback', fallbackParams);
+
       if (saved) {
-        completeSignup(true);
-      } else {
-        setError('Iscrizione non riuscita. Riprova tra poco.');
+        sessionStorage.setItem('twu_lead_magnet_unlocked', '1');
       }
+      setFallbackNotice({ saved });
+      requestAnimationFrame(() => {
+        document
+          .getElementById('lead-form')
+          ?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const completeSignup = (fallback: boolean) => {
+  const completeSignup = () => {
     const leadParams = {
       route: '/guida-in-regalo',
       source,
       utm_source: utmSource,
       cta_id: 'lead_magnet_landing_form',
       content_id: 'lead_magnet_guida',
-      ...(fallback ? { fallback: 'localStorage' } : {}),
     };
 
     trackEvent('newsletter_signup', leadParams);
@@ -116,6 +140,20 @@ export default function VieniConNoi() {
     });
   };
 
+  const guidaFallbackMailto = buildLeadFallbackMailto(
+    CONTACTS.email,
+    'Iscrizione guida "Italia nascosta" — richiesta',
+    'Il modulo del sito non è riuscito a registrare la mia iscrizione per ricevere la guida e i prossimi aggiornamenti. La mia email è qui sotto:',
+    [{ label: 'Email', value: email }]
+  );
+  const guidaFallbackWhatsAppUrl = buildLeadFallbackWhatsAppUrl(
+    CONTACTS.whatsappUrl,
+    buildLeadFallbackWhatsAppText(
+      'Vorrei ricevere la guida "Alla scoperta dell\'Italia nascosta", il modulo del sito non ha funzionato:',
+      [{ label: 'Email', value: email }]
+    )
+  );
+
   return (
     <>
       <SEO
@@ -126,7 +164,7 @@ export default function VieniConNoi() {
         noindex
       />
 
-      <div className="min-h-screen overflow-x-clip bg-[var(--color-sand)] pt-24 text-[var(--color-ink)] md:pt-28">
+      <div className="min-h-screen overflow-x-clip bg-[var(--color-sand)] pt-8 md:pt-10 text-[var(--color-ink)]">
         <section className="border-b border-[var(--color-border)]">
           <div className="mx-auto grid max-w-[1360px] gap-8 px-6 py-10 md:px-10 md:py-14 lg:grid-cols-[1.12fr_0.88fr] lg:grid-rows-[auto_auto] lg:gap-x-16 lg:gap-y-10 lg:py-20">
             <div className="max-w-3xl lg:col-start-1 lg:row-start-1">
@@ -165,9 +203,13 @@ export default function VieniConNoi() {
                 isSubmitting={isSubmitting}
                 isSuccess={isSuccess}
                 error={error}
+                fallbackNotice={fallbackNotice}
+                fallbackMailto={guidaFallbackMailto}
+                fallbackWhatsAppHref={guidaFallbackWhatsAppUrl}
                 onEmailChange={setEmail}
                 onWebsiteChange={setWebsite}
                 onSubmit={handleSubmit}
+                onFallbackRetry={() => setFallbackNotice(null)}
               />
 
               <p className="mt-7 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--color-muted-fg)]">
@@ -300,7 +342,7 @@ export default function VieniConNoi() {
                   <p className="mt-2 text-sm leading-relaxed text-[var(--color-muted-fg)]">
                     {item.text}
                   </p>
-                  <span className="mt-4 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)]">
+                  <span className="mt-4 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[var(--color-accent-text)]">
                     Vai <ArrowRight size={14} />
                   </span>
                 </Link>
@@ -319,9 +361,13 @@ interface LeadFormProps {
   isSubmitting: boolean;
   isSuccess: boolean;
   error: string;
+  fallbackNotice: { saved: boolean } | null;
+  fallbackMailto: string;
+  fallbackWhatsAppHref: string;
   onEmailChange: (value: string) => void;
   onWebsiteChange: (value: string) => void;
   onSubmit: (event: FormEvent) => void;
+  onFallbackRetry: () => void;
 }
 
 function LeadForm({
@@ -330,16 +376,20 @@ function LeadForm({
   isSubmitting,
   isSuccess,
   error,
+  fallbackNotice,
+  fallbackMailto,
+  fallbackWhatsAppHref,
   onEmailChange,
   onWebsiteChange,
   onSubmit,
+  onFallbackRetry,
 }: LeadFormProps) {
   const prefersReducedMotion = useReducedMotion();
 
   return (
     <div id="lead-form" className="max-w-2xl">
       <AnimatePresence mode="wait">
-        {!isSuccess ? (
+        {!isSuccess && !fallbackNotice ? (
           <motion.form
             key="form"
             initial={prefersReducedMotion ? false : { opacity: 0, y: 8 }}
@@ -374,7 +424,7 @@ function LeadForm({
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="inline-flex h-14 min-h-11 items-center justify-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] px-6 text-[11px] font-bold tracking-[0.14em] text-white uppercase shadow-xs transition-all hover:bg-[var(--color-accent-hover)] disabled:cursor-not-allowed disabled:opacity-70"
+                className="inline-flex h-14 min-h-11 items-center justify-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] px-6 text-[11px] font-bold tracking-[0.14em] text-[var(--color-ink)] uppercase shadow-xs transition-all hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {isSubmitting ? (
                   <>
@@ -419,7 +469,7 @@ function LeadForm({
               Esci quando vuoi.
             </p>
           </motion.form>
-        ) : (
+        ) : isSuccess ? (
           <motion.div
             key="success"
             role="status"
@@ -447,7 +497,7 @@ function LeadForm({
                 <div className="mt-4 flex flex-wrap gap-3">
                   <Link
                     to="/lead-magnet"
-                    className="inline-flex h-11 items-center justify-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] px-6 text-xs font-bold tracking-widest text-white uppercase shadow-xs transition-all hover:bg-[var(--color-accent-hover)]"
+                    className="inline-flex h-11 items-center justify-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] px-6 text-xs font-bold tracking-widest text-[var(--color-ink)] uppercase shadow-xs transition-all hover:brightness-95"
                   >
                     Apri e scarica <ArrowRight size={14} />
                   </Link>
@@ -457,6 +507,60 @@ function LeadForm({
                   >
                     Esplora il sito
                   </Link>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="fallback"
+            initial={prefersReducedMotion ? false : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="rounded-[var(--radius-md)] border border-[var(--color-warning)]/35 bg-[var(--color-warning-soft)] p-5"
+          >
+            {/* LeadFallbackNotice porta il proprio role="alert": qui non serve
+                un secondo live-region wrapper (a differenza del pannello di
+                vero successo sopra, che resta role="status"). */}
+            <div className="flex items-center gap-1.5 text-[var(--color-warning-text)]">
+              <MailWarning size={15} />
+              <span className="text-[10px] font-bold tracking-widest uppercase">
+                Iscrizione non confermata
+              </span>
+            </div>
+            <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
+              {fallbackNotice?.saved && (
+                <div className="aspect-[4/5] h-16 w-auto shrink-0 overflow-hidden rounded-[var(--radius-sm)] border border-[var(--color-border)] shadow-[var(--shadow-sm)] sm:h-20">
+                  <LeadMagnetCover variant="compact" />
+                </div>
+              )}
+              <div className="flex-1">
+                <h2 className="font-serif text-2xl">
+                  {fallbackNotice?.saved
+                    ? 'La guida resta disponibile. La lista, non ancora.'
+                    : 'Il modulo non è riuscito a registrarti.'}
+                </h2>
+                <p className="mt-1.5 text-sm leading-relaxed text-[var(--color-ink-2)]">
+                  {fallbackNotice?.saved
+                    ? 'Il sistema di iscrizione non ci ha confermato la ricezione. Puoi comunque aprire la guida qui sotto; per essere sicuro/a di ricevere anche i prossimi posti, scrivici direttamente.'
+                    : 'Il nostro sistema non era raggiungibile e non siamo riusciti a salvare nemmeno una copia locale. Scrivici direttamente per essere aggiunto/a alla lista.'}
+                </p>
+                {fallbackNotice?.saved && (
+                  <div className="mt-4">
+                    <Link
+                      to="/lead-magnet"
+                      className="inline-flex h-11 items-center justify-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-accent)] px-6 text-xs font-bold tracking-widest text-[var(--color-ink)] uppercase shadow-xs transition-all hover:brightness-95"
+                    >
+                      Apri e scarica <ArrowRight size={14} />
+                    </Link>
+                  </div>
+                )}
+                <div className="mt-4">
+                  <LeadFallbackNotice
+                    savedLocally={Boolean(fallbackNotice?.saved)}
+                    mailtoHref={fallbackMailto}
+                    whatsappHref={fallbackWhatsAppHref}
+                    onRetry={onFallbackRetry}
+                  />
                 </div>
               </div>
             </div>

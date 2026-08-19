@@ -129,7 +129,7 @@ function Shop() {
         />
 
         <Section className="pt-8" spacing="tight">
-          <Breadcrumbs items={[{ label: 'Shop' }]} />
+          <Breadcrumbs schema={false} items={[{ label: 'Shop' }]} />
 
           <div className="mt-8 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
             <div>
@@ -187,7 +187,11 @@ function Shop() {
                   <button
                     key={category}
                     onClick={() => setSelectedCategory(category)}
-                    className="relative whitespace-nowrap rounded-2xl px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] focus:outline-none transition-transform duration-200 active:scale-95 cursor-pointer"
+                    /* Senza `focus:outline-none`: qui non c'era nulla a
+                       sostituirlo (né ring né cambio di bordo), e i filtri
+                       erano invisibili al focus da tastiera. Così vale la
+                       regola globale di src/index.css. */
+                    className="relative whitespace-nowrap rounded-2xl px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] transition-transform duration-200 active:scale-95 cursor-pointer"
                   >
                     {isActive && (
                       <span className="absolute inset-0 rounded-2xl bg-[var(--color-ink)] shadow-md" />

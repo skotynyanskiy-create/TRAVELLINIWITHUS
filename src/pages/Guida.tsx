@@ -86,7 +86,12 @@ export default function Guida() {
       )}
 
       <Section className="pt-8">
-        <Breadcrumbs items={[{ label: 'Guide', href: '/guide' }, { label: guide.title }]} />
+        {/* `schema={false}`: il `BreadcrumbList` di questa pagina lo emette gia'
+            il blocco `JsonLd` qui sopra, con URL assoluti e il guard sul demo. */}
+        <Breadcrumbs
+          schema={false}
+          items={[{ label: 'Guide', href: '/guide' }, { label: guide.title }]}
+        />
 
         <div className="mt-10 grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20">
           <motion.div
@@ -105,7 +110,7 @@ export default function Guida() {
                 </span>
               )}
               {guide.isNew && (
-                <span className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white">
+                <span className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-ink)]">
                   Nuova
                 </span>
               )}
@@ -261,7 +266,7 @@ export default function Guida() {
       <Section className="my-16 rounded-[var(--radius-xl)] bg-[var(--color-ink)] p-12 text-white md:p-16">
         <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-[1.05fr_0.95fr]">
           <div>
-            <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">
+            <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
               Travellini Club
             </span>
             <h2 className="mt-4 text-4xl font-serif leading-tight md:text-5xl">
@@ -302,7 +307,7 @@ function SpecPill({
 }) {
   return (
     <div className="rounded-[var(--radius-md)] border border-black/5 bg-white px-4 py-3">
-      <p className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-[0.22em] text-black/40">
+      <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-black/60">
         {icon} {label}
       </p>
       <p className="mt-2 text-sm font-medium text-[var(--color-ink)]">{value}</p>

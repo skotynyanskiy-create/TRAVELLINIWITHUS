@@ -12,13 +12,13 @@ test-results/
 # ~7 MB di trace, zip e bundle rigenerabili a ogni run. Lo spec e la config
 # restano versionati.
 .audit-workbench/playwright-report-audit/
-qa-final/
-qa-shots/
-output/
+/qa-final/
+/qa-shots/
+/output/
 
 # Graphify local CLI/runtime and generated knowledge graph
 .tools/
-graphify-out/
+/graphify-out/
 
 # Superpowers visual brainstorming companion (temp mockups)
 .superpowers/
@@ -44,48 +44,51 @@ __pycache__/
 .mcp.json
 
 # Local config backups (audit snapshots) + stray dev-server logs
-backups/
+/backups/
 .audit/
 .codex-*.log
 .dev-server*.log
 .vite-dev.log
 
 # Nested third-party git clones (scouting artifacts, never commit)
-lighthouse/
-claude-plugins-official/
+/lighthouse/
+/claude-plugins-official/
 
-# Foreign project clones parked in the repo root (owner to relocate; never commit)
-Finance/
-RustQuant/
-abideify/
-agents/
-aws-generativeai-partner-samples/
-backhacker/
-backtesting.py/
-calendlex/
-cap_comp_openbb_example/
-commands/
-cookbook/
-eiten/
-financial-chat/
-financial-machine-learning/
-flowgre/
-ftcourse/
-get_all_tickers/
-ip_sniffer/
-maverick-mcp/
-mcp-trader/
-minimax-dgx-spark/
-nomad_nibbles/
-notebooks/
-pivot-peak/
-programming-collective-intelligence-code/
-python-cheatsheet/
-report-mAIstro/
-simple_chat/
-volatility-trading/
-wshobson/
-zipline_bundles/
+# Foreign project clones parked in the repo root (owner to relocate; never commit).
+# Tutte ancorate con `/`: senza, nomi generici come `agents/`, `commands/` o
+# `notebooks/` colpiscono ogni livello dell'albero — `agents/` teneva fuori
+# `.claude/agents/` e faceva fallire `git add` sulla cartella.
+/Finance/
+/RustQuant/
+/abideify/
+/agents/
+/aws-generativeai-partner-samples/
+/backhacker/
+/backtesting.py/
+/calendlex/
+/cap_comp_openbb_example/
+/commands/
+/cookbook/
+/eiten/
+/financial-chat/
+/financial-machine-learning/
+/flowgre/
+/ftcourse/
+/get_all_tickers/
+/ip_sniffer/
+/maverick-mcp/
+/mcp-trader/
+/minimax-dgx-spark/
+/nomad_nibbles/
+/notebooks/
+/pivot-peak/
+/programming-collective-intelligence-code/
+/python-cheatsheet/
+/report-mAIstro/
+/simple_chat/
+/volatility-trading/
+/wshobson/
+/zipline_bundles/
 
 # Stray root-level component drop (correct home is src/components/)
 /components/
@@ -97,74 +100,91 @@ zipline_bundles/
 .agents/skills/animation-vocabulary/
 .agents/skills/review-animations/
 
+# ---------------------------------------------------------------------------
+# Screenshot e artefatti di audit — TUTTI ancorati con `/`.
+#
+# Nascono sempre nella root, ma senza `/` git li applicava a ogni livello:
+# `*-mobile-*.png` mangiava `public/images/hero-mobile-1.png`, `home.png`
+# mangiava `public/home.png`, `guide-*.png` qualunque asset di quella sezione.
+# Su un sito costruito su fotografia reale è la classe di bug più cara: in
+# locale c'è, in produzione non arriva mai, e nessuno strumento segnala niente.
+# Se aggiungi una riga qui, ancorala.
+# ---------------------------------------------------------------------------
+
 # Sentiero audit screenshots
-sentiero-*.jpeg
+/sentiero-*.jpeg
+
+# Local audit screenshots (regenerated on demand)
+/audit-*.jpeg
+/audit-*.png
+/audit-reports/
+/homepage-check.png
+/smoke-*.png
+/sticky-*.png
+/refactor-*.png
+/redesign-*.png
+/polished-*.png
+/final-*.png
+/home-*.png
+/home-*.jpeg
+/itinerari*.png
+/itinerario*.png
+/club-*.png
+/cta-*.png
+/mappa-*.png
+/map-*.png
+/mappa.png
+/.audit-screenshots/
+
+# Browser-auditor + responsive-check ad-hoc screenshots (png + jpeg)
+/*-top.png
+/*-full.png
+/*-desktop-*.png
+/*-desktop-*.jpeg
+/*-mobile-*.png
+/*-mobile-*.jpeg
+/*-laptop-*.png
+/*-laptop-*.jpeg
+/*-tablet-*.png
+/*-tablet-*.jpeg
+/*-1280.png
+/*-1280.jpeg
+/*-1440.png
+/*-1440.jpeg
+/*-768.png
+/*-768.jpeg
+/*-375.png
+/*-375.jpeg
+/*-320.png
+/*-320.jpeg
+/Senza nome*
+/articolo-*.png
+/chi-siamo-*.png
+/collaborazioni-*.png
+/contatti-*.png
+/destinazioni-*.png
+/esperienze-*.png
+/guide-*.png
+/lead-magnet-*.png
+/media-kit-*.png
+/quiz-*.png
+/shop-*.png
+/guida-in-regalo-*.png
+/vienicons-*.png
 
 # Obsidian local user config + untitled canvas drafts
 .obsidian/
 docs/Senza nome*
 
-# Local audit screenshots (regenerated on demand)
-audit-*.jpeg
-audit-*.png
-audit-reports/
-homepage-check.png
-smoke-*.png
-sticky-*.png
-refactor-*.png
-redesign-*.png
-polished-*.png
-final-*.png
-home-*.png
-home-*.jpeg
-itinerari*.png
-itinerario*.png
-club-*.png
-cta-*.png
-mappa-*.png
-map-*.png
-mappa.png
-.audit-screenshots/
-
-# Browser-auditor + responsive-check ad-hoc screenshots (png + jpeg)
-*-desktop-*.png
-*-desktop-*.jpeg
-*-mobile-*.png
-*-mobile-*.jpeg
-*-laptop-*.png
-*-laptop-*.jpeg
-*-tablet-*.png
-*-tablet-*.jpeg
-*-1280.png
-*-1280.jpeg
-*-1440.png
-*-1440.jpeg
-*-768.png
-*-768.jpeg
-*-375.png
-*-375.jpeg
-*-320.png
-*-320.jpeg
-Senza nome*
-articolo-*.png
-chi-siamo-*.png
-collaborazioni-*.png
-contatti-*.png
-destinazioni-*.png
-esperienze-*.png
-guide-*.png
-lead-magnet-*.png
-media-kit-*.png
-quiz-*.png
-shop-*.png
-guida-in-regalo-*.png
-vienicons-*.png
-
-# WhatsApp / personal media not part of project
+# I 52 MP4 di `public/video/` (429 MB) sono contenuto di produzione, non media
+# personali: la regola è deliberata e NON va ancorata, altrimenti rientrano nel
+# repo. In produzione quei file non esistono; la via prevista per servirli è
+# VITE_VIDEO_BASE_URL (src/utils/mediaUrl.ts), oggi non dichiarata.
 video/
 video esempio/
 
-# Firebase admin service-account (NEVER commit)
+# Firebase admin service-account (NEVER commit).
+# Questi restano NON ancorati apposta: devono valere a ogni livello dell'albero.
 firebase-adminsdk-*.json
 service-account*.json
 serviceAccount*.json
@@ -174,38 +194,38 @@ serviceAccount*.json
 .firebaserc.local
 
 # Browser-auditor ad-hoc snapshots and screenshots (root-level temp)
-*-snapshot.md
-snapshot-*.md
-reaudit_*.png
-reaudit_*.md
-art-*.png
-puglia-*.png
-salento-*.png
-salento-*.md
-esplora-*.png
-esplora-*.md
-giappone-*.png
-destinazione-*.png
-chisiamo-*.png
-risorse-*.png
-strumenti-*.png
-mobile-menu-*.png
-esperienze-food.yml
-mappa-asia.yml
-home.yml
-shop.yml
-esplora-itinerario.yml
-home.png
+/*-snapshot.md
+/snapshot-*.md
+/reaudit_*.png
+/reaudit_*.md
+/art-*.png
+/puglia-*.png
+/salento-*.png
+/salento-*.md
+/esplora-*.png
+/esplora-*.md
+/giappone-*.png
+/destinazione-*.png
+/chisiamo-*.png
+/risorse-*.png
+/strumenti-*.png
+/mobile-menu-*.png
+/esperienze-food.yml
+/mappa-asia.yml
+/home.yml
+/shop.yml
+/esplora-itinerario.yml
+/home.png
 
 # Perf/quality audit artifacts (Lighthouse + ad-hoc full-page jpeg)
 .lighthouseci/
 .lh-*.json
-*-full.jpeg
-esplora-*.jpeg
-contatti-*.jpeg
+/*-full.jpeg
+/esplora-*.jpeg
+/contatti-*.jpeg
 
 *storybook.log
-storybook-static
+/storybook-static
 
 .codex-remote-attachments/
 
@@ -224,4 +244,4 @@ storybook-static
 !.github/skills/higgsfield-hub/
 
 # Higgsfield — staging asset generati (ASSET_STRATEGY §4).
-generated/
+/generated/

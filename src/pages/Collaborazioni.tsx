@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   ArrowRight,
   BarChart,
@@ -21,6 +21,7 @@ import { trackEvent } from '../services/analytics';
 import { AnimatePresence, motion } from 'motion/react';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Button from '../components/Button';
+import InterestPicker from '../components/InterestPicker';
 import JsonLd from '../components/JsonLd';
 import OptimizedImage from '../components/OptimizedImage';
 import PageLayout from '../components/PageLayout';
@@ -28,10 +29,11 @@ import SEO from '../components/SEO';
 import Section from '../components/Section';
 import StickyMobileCTA from '../components/StickyMobileCTA';
 import { getPublishedReels } from '../config/reels';
+import { getAudienceInterest } from '../config/audienceInterests';
 import { BRAND_STATS, BRAND_STATS_SOURCE, PUBLIC_PROOF_SIGNALS } from '../config/site';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
-import { fetchStats, type SiteStats } from '../services/firebaseService';
+import { usePersonalizedInterest } from '../hooks/usePersonalizedInterest';
 import CaseStudiesSection from '../components/collaborazioni/CaseStudiesSection';
 import PressProofSection from '../components/collaborazioni/PressProofSection';
 
@@ -123,7 +125,7 @@ function FaqSection() {
     <Section>
       <div className="mx-auto max-w-3xl">
         <div className="mb-12 text-center">
-          <span className="mb-2 block font-script text-xl text-[var(--color-accent)]">
+          <span className="mb-2 block font-script text-xl text-[var(--color-accent-text)]">
             FAQ per partner
           </span>
           <h2 className="text-4xl font-serif">Le domande che aiutano davvero a capire il fit</h2>
@@ -182,9 +184,9 @@ function TikTokIcon({ size = 20 }: { size?: number }) {
 const COLLAB_REELS = getPublishedReels().slice(0, 4);
 
 export default function Collaborazioni() {
+  const { interest } = usePersonalizedInterest();
   const collabReels = COLLAB_REELS;
   const breadcrumbItems = [{ label: 'Collaborazioni' }];
-  const [stats, setStats] = useState<SiteStats | null>(null);
   const { data: content } = useSiteContent('collaborations');
   const pageContent = {
     ...siteContentDefaults.collaborations,
@@ -302,38 +304,33 @@ export default function Collaborazioni() {
       },
     ],
   };
+  const brandInterest = getAudienceInterest(interest);
+  const primaryCta = brandInterest?.cta ?? {
+    label: pageContent.primaryCtaLabel,
+    to: pageContent.primaryCtaLink,
+  };
   const serviceIcons = [PenTool, Globe, Clapperboard, Camera];
 
-  useEffect(() => {
-    const loadStats = async () => {
-      const fetchedStats = await fetchStats();
-      if (fetchedStats) {
-        setStats(fetchedStats);
-      }
-    };
-
-    void loadStats();
-  }, []);
-
-  const isUsableStat = (v?: string) => !!v && !/^0(\D|$)/.test(v);
-  const resolvedStats = {
-    igFollowers: isUsableStat(stats?.igFollowers)
-      ? stats!.igFollowers
-      : BRAND_STATS.instagramFollowers,
-    monthlyReach: isUsableStat(stats?.monthlyReach)
-      ? stats!.monthlyReach
-      : BRAND_STATS.monthlyReach,
-    uniqueUsers: isUsableStat(stats?.uniqueUsers) ? stats!.uniqueUsers : BRAND_STATS.totalFollowers,
-    engagementRate: isUsableStat(stats?.engagementRate)
-      ? stats!.engagementRate
-      : BRAND_STATS.engagementRate,
-  };
-
+  /* I numeri pubblici vengono SOLO da `BRAND_STATS`, costante di build.
+   *
+   * Fino al 2026-08-15 questa pagina preferiva a quella costante il documento
+   * Firestore letto da `fetchStats()`, e quel documento e' scrivibile dalla tab
+   * «stats» del pannello admin — che si apriva pre-compilata con `250K+`
+   * follower, `500K+` reach e `8.5%` di engagement, valori che nessuno aveva
+   * misurato. Bastava aprire e salvare senza toccare niente per pubblicarli
+   * sotto la didascalia «Snapshot pubblico osservato il 2026-07-23», che e' una
+   * costante e non si aggiorna mai.
+   *
+   * Finche' i numeri sono decorativi un errore e' un'esagerazione; su una
+   * pagina che apre una trattativa commerciale e' una dichiarazione sbagliata.
+   * Un numero pubblico deve stare in un file che passa da una code review, non
+   * in un campo di testo. Il documento Firestore resta per la dashboard interna
+   * (`AdminDashboard`), dove serve a leggere, non a pubblicare. */
   const statsCards = [
-    { icon: Instagram, rawValue: resolvedStats.igFollowers, label: 'Follower Instagram' },
+    { icon: Instagram, rawValue: BRAND_STATS.instagramFollowers, label: 'Follower Instagram' },
     { icon: TikTokIcon, rawValue: BRAND_STATS.tiktokFollowers, label: 'Follower TikTok' },
-    { icon: Users, rawValue: resolvedStats.monthlyReach, label: 'Reach mensile stimata' },
-    { icon: BarChart, rawValue: resolvedStats.engagementRate, label: 'Engagement rate' },
+    { icon: Users, rawValue: BRAND_STATS.monthlyReach, label: 'Reach mensile stimata' },
+    { icon: BarChart, rawValue: BRAND_STATS.engagementRate, label: 'Engagement rate' },
   ];
   const trackPartnerCta = (ctaId: string) => {
     trackEvent('partner_cta_click', {
@@ -364,7 +361,7 @@ export default function Collaborazioni() {
           >
             <div className="mb-6 flex items-center gap-4">
               <div className="h-px w-12 bg-[var(--color-accent)]" />
-              <span className="text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)]">
+              <span className="text-sm font-semibold uppercase tracking-widest text-[var(--color-accent-text)]">
                 {pageContent.heroEyebrow}
               </span>
             </div>
@@ -396,7 +393,7 @@ export default function Collaborazioni() {
 
             <div className="flex flex-col gap-4 sm:flex-row">
               <Button
-                to={pageContent.primaryCtaLink}
+                to={primaryCta.to}
                 variant="primary"
                 size="lg"
                 className="px-8 py-4"
@@ -404,7 +401,7 @@ export default function Collaborazioni() {
                 onClick={() => trackPartnerCta('collaborazioni_hero_primary')}
                 magnetic={true}
               >
-                {pageContent.primaryCtaLabel} <ArrowRight size={18} />
+                {primaryCta.label} <ArrowRight size={18} />
               </Button>
               <Button
                 to={pageContent.secondaryCtaLink}
@@ -475,6 +472,8 @@ export default function Collaborazioni() {
         </div>
       </Section>
 
+      <InterestPicker />
+
       <Section className="my-20 border-y border-black/10 bg-[var(--color-accent-soft)]/45 py-16 md:py-20">
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <h2 className="mb-6 text-4xl font-serif">{pageContent.statsTitle}</h2>
@@ -510,10 +509,10 @@ export default function Collaborazioni() {
         </p>
       </Section>
 
-      <Section>
+      <Section id="partner-fit">
         <div className="mx-auto max-w-4xl">
           <div className="mb-10 text-center">
-            <span className="mb-2 block font-script text-xl text-[var(--color-accent)]">
+            <span className="mb-2 block font-script text-xl text-[var(--color-accent-text)]">
               Partner ideali
             </span>
             <h2 className="mb-4 text-4xl font-serif">Con chi lavoriamo meglio</h2>
@@ -554,7 +553,9 @@ export default function Collaborazioni() {
           <div>
             <div className="mb-4 flex items-center gap-2">
               <ShieldCheck size={14} className="text-[var(--color-accent)]" />
-              <span className="font-script text-xl text-[var(--color-accent)]">Proof sobria</span>
+              <span className="font-script text-xl text-[var(--color-accent-text)]">
+                Proof sobria
+              </span>
             </div>
             <h2 className="mb-6 text-4xl font-serif leading-tight">
               Segnali che contano più di un case study inventato.
@@ -586,7 +587,7 @@ export default function Collaborazioni() {
 
       <Section>
         <div className="mb-10 max-w-3xl">
-          <span className="mb-3 block font-script text-xl text-[var(--color-accent)]">
+          <span className="mb-3 block font-script text-xl text-[var(--color-accent-text)]">
             Proof pubbliche
           </span>
           <h2 className="text-4xl font-serif">Cosa si può già verificare online</h2>
@@ -668,7 +669,7 @@ export default function Collaborazioni() {
       <Section className="rounded-[var(--radius-xl)] bg-[var(--color-sand)] p-12 md:p-20">
         <div className="mx-auto max-w-4xl">
           <div className="mb-10 text-center">
-            <span className="mb-2 block font-script text-xl text-[var(--color-accent)]">
+            <span className="mb-2 block font-script text-xl text-[var(--color-accent-text)]">
               Limiti chiari
             </span>
             <h2 className="mb-4 text-4xl font-serif">Quello che non facciamo</h2>
@@ -710,7 +711,10 @@ export default function Collaborazioni() {
         </div>
       </Section>
 
-      <Section className="relative scroll-mt-28 overflow-hidden rounded-[var(--radius-xl)] bg-[var(--color-ink)] px-0 py-16 text-white md:p-20">
+      <Section
+        id="collaboration-formats"
+        className="relative scroll-mt-28 overflow-hidden rounded-[var(--radius-xl)] bg-[var(--color-ink)] px-0 py-16 text-white md:p-20"
+      >
         <div className="relative z-20">
           <div className="mx-auto mb-16 max-w-3xl text-center">
             <h2 className="mb-6 text-4xl font-serif md:text-5xl">{pageContent.formatsTitle}</h2>
@@ -741,7 +745,7 @@ export default function Collaborazioni() {
                   }`}
                 >
                   {isHighlighted && (
-                    <div className="mb-4 font-script text-lg text-[var(--color-accent)]">
+                    <div className="mb-4 font-script text-lg text-[var(--color-accent-text)]">
                       Il formato più completo
                     </div>
                   )}
@@ -751,7 +755,7 @@ export default function Collaborazioni() {
                   </div>
                   {'output' in format && (
                     <div className="mb-4 rounded-2xl border border-white/10 bg-white/6 px-4 py-3">
-                      <div className="mb-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
+                      <div className="mb-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent-text)]">
                         Output indicativo
                       </div>
                       <p className="text-sm leading-relaxed text-white/78">{format.output}</p>

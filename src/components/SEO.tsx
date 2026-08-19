@@ -26,6 +26,18 @@ function ogImageType(src: string): string {
   return 'image/webp';
 }
 
+/**
+ * og:image e twitter:image devono essere assoluti: gli unfurler di
+ * WhatsApp/LinkedIn/Slack non risolvono un path relativo contro la pagina.
+ * DEFAULT_OG_IMAGE lo era gia', ma le cover degli articoli e dei posti
+ * arrivano da Firestore come `/images/...`, quindi ogni link condiviso di un
+ * articolo sarebbe uscito senza immagine.
+ */
+function absoluteOgImage(src: string): string {
+  if (/^(https?:)?\/\//i.test(src) || src.startsWith('data:')) return src;
+  return `${SITE_URL}${src.startsWith('/') ? src : `/${src}`}`;
+}
+
 export default function SEO({
   title,
   description,
@@ -43,6 +55,7 @@ export default function SEO({
   // aggiungere noindex per ragioni per-contenuto (isDemo, isPlaceholder),
   // mai toglierlo.
   const resolvedNoindex = !isIndexable(pathname) || noindex === true;
+  const resolvedImage = absoluteOgImage(image);
   const finalTitle = title.toLowerCase().includes(DEFAULT_SITE_NAME.toLowerCase())
     ? title
     : `${title} | ${DEFAULT_SITE_NAME}`;
@@ -54,15 +67,36 @@ export default function SEO({
     typeof document !== 'undefined' &&
     document.querySelector('script[data-ssr-jsonld="article"]') !== null;
 
+  // In produzione l'hosting e' statico (vedi generate-route-html.js):
+  // `dist/posto/<id>/index.html` porta gia' un `<script data-prerender-jsonld>`
+  // per gli scraper che non eseguono JS. Quel nodo vive fuori dall'albero
+  // gestito da react-helmet-async, quindi l'idratazione non lo rimuove da
+  // sola: senza questo controllo un utente/crawler che ESEGUE JS vedrebbe due
+  // Review identiche per la stessa pagina — non due bugie, ma comunque un
+  // duplicato che i motori possono leggere come recensione gonfiata.
+  const prerenderedType = (() => {
+    if (typeof document === 'undefined') return undefined;
+    const node = document.querySelector('script[data-prerender-jsonld]');
+    if (!node?.textContent) return undefined;
+    try {
+      return (JSON.parse(node.textContent) as { '@type'?: string })['@type'];
+    } catch {
+      return undefined;
+    }
+  })();
+
   const schemas: object[] = [];
   if (breadcrumbs && breadcrumbs.length > 0) {
     schemas.push(buildBreadcrumbListJsonLd(breadcrumbs));
   }
   if (jsonLd) {
     const incoming = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
-    const filtered = ssrArticlePresent
-      ? incoming.filter((schema) => (schema as { '@type'?: string })['@type'] !== 'Article')
-      : incoming;
+    const filtered = incoming.filter((schema) => {
+      const type = (schema as { '@type'?: string })['@type'];
+      if (ssrArticlePresent && type === 'Article') return false;
+      if (prerenderedType && type === prerenderedType) return false;
+      return true;
+    });
     schemas.push(...filtered);
   }
 
@@ -80,8 +114,8 @@ export default function SEO({
       <meta property="og:type" content={type} />
       <meta property="og:title" content={finalTitle} />
       <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
-      <meta property="og:image:type" content={ogImageType(image)} />
+      <meta property="og:image" content={resolvedImage} />
+      <meta property="og:image:type" content={ogImageType(resolvedImage)} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
       <meta
@@ -93,16 +127,16 @@ export default function SEO({
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={finalTitle} />
       <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={image} />
+      <meta name="twitter:image" content={resolvedImage} />
       <meta name="twitter:site" content={CONTACTS.instagramHandle} />
       <meta name="twitter:creator" content={CONTACTS.instagramHandle} />
       <link rel="canonical" href={resolvedCanonical} />
+      {/* Solo `it` e `x-default`, entrambi sul canonical. Fino al 2026-08-15 qui
+          c'era anche un `hrefLang="en"` verso `${SITE_URL}/en...`: ogni pagina
+          del sito dichiarava ai motori una versione inglese che risponde 404,
+          perche' la rotta `/en` non esiste in `App.tsx` e non e' mai esistita.
+          Si rimette quando c'e' davvero una traduzione, non prima. */}
       <link rel="alternate" hrefLang="it" href={resolvedCanonical} />
-      <link
-        rel="alternate"
-        hrefLang="en"
-        href={`${SITE_URL}/en${pathname === '/' ? '' : pathname}`}
-      />
       <link rel="alternate" hrefLang="x-default" href={resolvedCanonical} />
       <link rel="author" href={`${SITE_URL}/llms.txt`} type="text/plain" />
 

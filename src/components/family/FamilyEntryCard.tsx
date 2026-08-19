@@ -72,7 +72,7 @@ export default function FamilyEntryCard({
             href={entry.sourceUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+            className="inline-flex items-center gap-2 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent-text)]"
           >
             <Instagram size={14} aria-hidden />
             Guarda il momento reale

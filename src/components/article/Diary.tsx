@@ -77,8 +77,12 @@ function DiaryBeatItem({ beat, index }: DiaryBeatItemProps) {
 
 /**
  * Variante "Diario": registro emotivo/narrativo del viaggio, in 3-4 beat
- * fotografici. Convive con l'Itinerario leggibile (logistica) e con
- * ReviewBlock/Il Timbro (verdetto) — non li sostituisce.
+ * fotografici. Convive con l'Itinerario leggibile (logistica) — non lo
+ * sostituisce.
+ *
+ * Qui si citava anche «ReviewBlock/Il Timbro (verdetto)»: quel componente e'
+ * stato cancellato il 2026-08-15 insieme al resto del giudizio, e il commento
+ * descriveva una relazione con qualcosa che non esiste piu'.
  *
  * Gate: renderizza solo se `beats` non e' vuoto. Il chiamante decide dove
  * posizionarla nel template (handoff: sopra "Itinerario leggibile").

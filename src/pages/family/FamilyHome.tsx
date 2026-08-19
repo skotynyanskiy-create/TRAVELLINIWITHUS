@@ -2,12 +2,15 @@ import { ArrowRight, Baby, Instagram, Tag } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import Breadcrumbs from '../../components/Breadcrumbs';
 import FamilyEntryCard from '../../components/family/FamilyEntryCard';
+import InterestPicker from '../../components/InterestPicker';
 import PageLayout from '../../components/PageLayout';
 import Section from '../../components/Section';
 import SEO from '../../components/SEO';
 import { getFamilyDeals, getFamilyEntries } from '../../config/familyLibrary';
 import { siteContentDefaults } from '../../config/siteContent';
 import { useSiteContent } from '../../hooks/useSiteContent';
+import { usePersonalizedInterest } from '../../hooks/usePersonalizedInterest';
+import { rankFamilyByInterest } from '../../config/audienceInterests';
 
 /**
  * Hub Travellini Family — la porta dell'audience family (decision 2026-07-24).
@@ -15,9 +18,10 @@ import { useSiteContent } from '../../hooks/useSiteContent';
  * conferma owner sui diritti asset). Contenuti SOLO da momenti reali.
  */
 export default function FamilyHome() {
+  const { interest } = usePersonalizedInterest();
   const { data: content } = useSiteContent('family');
   const family = content ?? siteContentDefaults.family;
-  const entries = getFamilyEntries().slice(0, 2);
+  const entries = rankFamilyByInterest(getFamilyEntries(), interest).slice(0, 2);
   const dealsCount = getFamilyDeals().length;
 
   return (
@@ -47,14 +51,14 @@ export default function FamilyHome() {
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Link
               to="/family/consigli"
-              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[var(--color-accent)] px-7 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)]"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[var(--color-accent)] px-7 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:brightness-95"
             >
               I consigli
               <ArrowRight size={14} aria-hidden />
             </Link>
             <Link
               to="/family/shop"
-              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[var(--color-border)] bg-white px-7 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-[var(--color-border)] bg-white px-7 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)]"
             >
               <Tag size={14} aria-hidden />
               Codici e sconti
@@ -63,7 +67,7 @@ export default function FamilyHome() {
               href="https://www.instagram.com/travellinifamily/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-11 items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent)]"
+              className="inline-flex min-h-11 items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent-text)]"
             >
               <Instagram size={15} aria-hidden />
               {family.instagramCtaLabel}
@@ -71,6 +75,8 @@ export default function FamilyHome() {
           </div>
         </div>
       </Section>
+
+      <InterestPicker />
 
       {/* Ultimi consigli reali */}
       <Section
@@ -90,7 +96,7 @@ export default function FamilyHome() {
         <div className="mt-8">
           <Link
             to="/family/consigli"
-            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-accent-text)] transition-colors hover:text-[var(--color-accent)]"
+            className="inline-flex items-center gap-2 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-accent-text)] transition-colors hover:text-[var(--color-accent-text)]"
           >
             Tutti i consigli
             <ArrowRight size={14} aria-hidden />
@@ -108,7 +114,7 @@ export default function FamilyHome() {
             </p>
             <Link
               to="/family/shop"
-              className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-accent-text)] transition-colors hover:text-[var(--color-accent)]"
+              className="mt-6 inline-flex items-center gap-2 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-accent-text)] transition-colors hover:text-[var(--color-accent-text)]"
             >
               {dealsCount > 0 ? `${dealsCount} codici attivi` : 'Apri la vetrina'}
               <ArrowRight size={14} aria-hidden />
@@ -119,7 +125,7 @@ export default function FamilyHome() {
             <p className="mt-3 text-sm leading-relaxed text-white/75">{family.collabDescription}</p>
             <Link
               to="/contatti?topic=collab"
-              className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:bg-[var(--color-accent)] hover:text-white"
+              className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--color-ink)] transition-colors hover:bg-[var(--color-accent-hover)] hover:text-white"
             >
               {family.collabCtaLabel}
               <ArrowRight size={14} aria-hidden />

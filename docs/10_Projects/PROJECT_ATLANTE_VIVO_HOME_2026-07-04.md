@@ -1,7 +1,7 @@
 ---
 type: project
 area: site-evolution
-status: in-progress
+status: archived
 priority: p1
 owner: team
 repo: TRAVELLINIWITHUS
@@ -12,7 +12,12 @@ tags:
   - project
   - site-evolution
   - atlante
+superseded_by: PROJECT_HOME_RICOMPOSIZIONE_2026-07-26
 ---
+
+> **Superato il 2026-07-31.** Questo piano non è più "cosa fare".
+> Il lavoro ancora vivo è confluito in [[10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31]]; la direzione è in `PROJECT_HOME_RICOMPOSIZIONE_2026-07-26`.
+> Resta leggibile come storico — non aggiungerci voci nuove.
 
 # PROJECT — Atlante Vivo · Nuova Home (Fetta 1)
 
@@ -66,7 +71,7 @@ A warm travel magazine printed on calm sand/ink paper, whose _cover_ is one cont
   - Primary CTA (`Button variant="cta"`, `magnetic`, `trackingId="hero_esplora"`): **"Scopri le destinazioni"** → `/esplora`
   - Ghost CTA (`variant="outline-light"`): **"Guarda gli ultimi reel"** → `#reel`
 - **Color/type/motion:** only dark surface on the page; trace draws in once (`animate={!reduced}`), terracotta on primary CTA + live pin glow. `MagneticWrapper` on primary CTA.
-- **Reuse:** [TraceSignature.tsx](../../src/experience/atlante/signature/TraceSignature.tsx) via `lazy`+`Suspense` mirroring `AtlanteLab.tsx`; [Button.tsx](../../src/components/Button.tsx); [MagneticWrapper.tsx](../../src/components/MagneticWrapper.tsx); [OptimizedImage.tsx](../../src/components/OptimizedImage.tsx) (poster). See §4 for fallback.
+- **Reuse:** `TraceSignature.tsx` via `lazy`+`Suspense` mirroring `AtlanteLab.tsx`; [Button.tsx](../../src/components/Button.tsx); [MagneticWrapper.tsx](../../src/components/MagneticWrapper.tsx); [OptimizedImage.tsx](../../src/components/OptimizedImage.tsx) (poster). See §4 for fallback.
 
 ### §2 — Category rail "Sfoglia per tipo" (the color reveal)
 
@@ -100,7 +105,7 @@ A warm travel magazine printed on calm sand/ink paper, whose _cover_ is one cont
   - Batu Caves — "Batu Caves: vale la pena?" — Posti particolari → **neutral ink** (no category color; honest — it maps to no vision category)
   - Volterra Volturi — "Aperitivo coi vampiri a Volterra." — Insolito `#c0afff`
 - **Color/type/motion:** category-color chip is the **only saturated element** on each sand card; `.card-editorial` (hover lift -2px) + `.twu-card-scrim` over cover. Fraunces hook (verbatim), Inter location meta. CTA under strip: **"Apri il profilo"** → `INSTAGRAM_URL` from [site.ts](../../src/config/site.ts).
-- **Reuse:** adapt [InstagramGrid.tsx](../../src/components/InstagramGrid.tsx) (already `getPublishedReels()` + click video lightbox) into an embla layout; `embla-carousel-react` (installed, currently zero imports — first use here); `type→color` map (§6).
+- **Reuse:** adapt `InstagramGrid.tsx` (already `getPublishedReels()` + click video lightbox) into an embla layout; `embla-carousel-react` (installed, currently zero imports — first use here); `type→color` map (§6).
 
 ### §5 — "Il metodo" (trust, LIGHT band — no second dark surface)
 
@@ -158,7 +163,7 @@ Add to the `@theme` block (after the accent block, ~line 40) so Tailwind auto-ge
 
 ## 4. WebGL hero behavior + static fallback + reduced-motion
 
-Follow the `AtlanteLab.tsx` reuse pattern exactly, **branch BEFORE the lazy import** (the [SentieroExperience](../../src/experience/sentiero/SentieroExperience.tsx) convention):
+Follow the `AtlanteLab.tsx` reuse pattern exactly, **branch BEFORE the lazy import** (the `SentieroExperience` convention):
 
 ```tsx
 const TraceSignature = lazy(() => import('../experience/atlante/signature/TraceSignature'));
@@ -197,7 +202,7 @@ if (reduced || isSmall) return <HeroStatic />; // poster + overlaid H1, bg #0b08
 - `animate={!reduced}` is the only reduced-motion signal `TraceSignature` honors (it does **not** read `matchMedia` internally — caller must pass it).
 - `lowPower={isSmall}` cuts particles 16000→6000 and drops the Noise pass.
 - **Poster `z-0` behind the canvas** gives `GLBoundary` resilience: on WebGL-init failure the boundary replaces the canvas and the poster shows through instead of bare gray text. On success the opaque canvas (`alpha:false`, bg `#0b0805`) covers it.
-- **`HeroStatic`** = `reel-3-cover.webp` via `OptimizedImage priority` + `.twu-hero-scrim` + the same overlaid H1/eyebrow/CTA on `#0b0805`, zero three.js. The **text H1 is the LCP**, never the canvas — model on [SentieroFallback.tsx](../../src/experience/sentiero/SentieroFallback.tsx).
+- **`HeroStatic`** = `reel-3-cover.webp` via `OptimizedImage priority` + `.twu-hero-scrim` + the same overlaid H1/eyebrow/CTA on `#0b0805`, zero three.js. The **text H1 is the LCP**, never the canvas — model on `SentieroFallback.tsx`.
 - **Do NOT** reuse `SentieroCanvas`/`AtlanteCanvas` (both need `ScrollControls` = full-viewport scroll hijack, incompatible with a page that scrolls past the hero). `TraceSignature` is the only correct reuse target.
 - **Do NOT** inject the chrome-hiding `<style>` block from `Home.tsx` / AtlanteLab (`html,body{overflow:hidden;100dvh}` + `nav/footer{display:none}`). Containment comes solely from the `position:relative h-[72svh]` wrapper; the navbar/footer stay visible and the page scrolls normally.
 
@@ -258,7 +263,7 @@ if (reduced || isSmall) return <HeroStatic />; // poster + overlaid H1, bg #0b08
 3. `.env.local` — add `VITE_ATLANTE_PREVIEW=true` (dev only).
 4. `src/config/categoryColors.ts` — export the `CAT_COLOR` `type→var()` map (single source for §2/§3/§4).
 
-**Leaf components (create):** 5. `src/components/home/atlante/CategoryPill.tsx` — props `{ label, type, to, icon }`; sand card, colored top-border + hover tint from `CAT_COLOR`. (§2) 6. `src/components/home/atlante/ReelStrip.tsx` — embla strip of `getPublishedReels()`, poster-first `OptimizedImage` + play icon → opens shared video lightbox; category-color chip. Adapt lightbox logic from [InstagramGrid.tsx](../../src/components/InstagramGrid.tsx). (§4) 7. `src/components/home/atlante/PezzoForte.tsx` — 60/40 cover-story for `reel-toscana-tavernal`; `TiltCard` + `.drop-cap`; opens the same lightbox. (§3) 8. `src/components/home/atlante/MetodoBand.tsx` — LIGHT (surface-2) 2-col method + 3 real credential chips. (§5) 9. `src/components/home/atlante/ZoneBand.tsx` — 3 image-cards Italia/Europa/Mondo → `/esplora?zone=…`, no counts. (§6) 10. `src/components/home/atlante/HeroCopertina.tsx` — the contained WebGL hero + `HeroStatic` fallback + reduced-motion branch + taxonomy entry row (§1, §4 behavior). Reuses `TraceSignature`, `Button`, `MagneticWrapper`, `OptimizedImage`, `.twu-pulse-ring`.
+**Leaf components (create):** 5. `src/components/home/atlante/CategoryPill.tsx` — props `{ label, type, to, icon }`; sand card, colored top-border + hover tint from `CAT_COLOR`. (§2) 6. `src/components/home/atlante/ReelStrip.tsx` — embla strip of `getPublishedReels()`, poster-first `OptimizedImage` + play icon → opens shared video lightbox; category-color chip. Adapt lightbox logic from `InstagramGrid.tsx`. (§4) 7. `src/components/home/atlante/PezzoForte.tsx` — 60/40 cover-story for `reel-toscana-tavernal`; `TiltCard` + `.drop-cap`; opens the same lightbox. (§3) 8. `src/components/home/atlante/MetodoBand.tsx` — LIGHT (surface-2) 2-col method + 3 real credential chips. (§5) 9. `src/components/home/atlante/ZoneBand.tsx` — 3 image-cards Italia/Europa/Mondo → `/esplora?zone=…`, no counts. (§6) 10. `src/components/home/atlante/HeroCopertina.tsx` — the contained WebGL hero + `HeroStatic` fallback + reduced-motion branch + taxonomy entry row (§1, §4 behavior). Reuses `TraceSignature`, `Button`, `MagneticWrapper`, `OptimizedImage`, `.twu-pulse-ring`.
 
 **Page (create):** 11. `src/pages/AtlanteHome.tsx` — composes §1–§8 inside `PageLayout`; `<SEO noindex title description jsonLd>`; imports the reused `Newsletter` (`variant="editorial"`, `id="newsletter"`) and `FinalCtaSection` (`intent="discovery"` + `/collaborazioni` secondary). Must **not** inject any chrome-hiding `<style>`.
 

@@ -78,6 +78,54 @@ nuova superficie referenziale li adotta come "prova"), e il posto
 ImageGen, vanno sostituiti con le cover reali dei reel (percorso di acquisizione
 già documentato) prima di dichiarare il posto "verificato".
 
+## Applicazione — l'etichetta esiste nel codice (2026-08-11)
+
+Per quindici giorni questa regola è stata solo prosa. L'etichetta obbligatoria
+del punto 1 non esisteva da nessuna parte: né come campo del modello, né come
+registro, né come controllo. Il risultato prevedibile: l'hero della home aveva
+adottato `home-journal/hero-impossible` come prova — la superficie referenziale
+più visibile del sito, sopra uno dei quattro asset che questa stessa nota
+dichiara non certificati — e nessuno se n'era accorto, perché non c'era niente
+che potesse accorgersene.
+
+Da oggi la provenienza è un dato:
+
+| Cosa                                  | Dove                                            |
+| ------------------------------------- | ----------------------------------------------- |
+| Registro prefisso → provenienza       | `src/data/asset-provenance.json`                |
+| API runtime (`isCertifiedReal`, ecc.) | `src/config/assetProvenance.ts`                 |
+| Audit statico                         | `scripts/check-image-provenance.mjs`            |
+| Comando                               | `npm run audit:provenance` (in `audit:quality`) |
+| Debito congelato                      | `src/data/asset-provenance-baseline.json`       |
+
+Ogni riga del registro **cita la fonte** che autorizza l'etichetta: nessuna
+provenienza si dichiara a memoria. Un asset usato dal codice e assente dal
+registro è un errore di audit, non un'omissione tollerata.
+
+Cosa ha trovato al primo giro: **54 usi di immagini generate su superfici che
+affermano un fatto** — `destinations/*`, `experiences/*`, `hero-amalfi`,
+`brand/collab-work` come cover di destinazione, archivio demo e itinerari demo
+(fonte dell'etichetta: `AUDIT_SENIOR_IG_ECOSYSTEM_2026-05-29` §1). Sono il
+debito che la fase 5 di questa decisione prevede di estinguere con le foto reali
+dell'owner: la baseline li congela così che l'audit possa entrare subito in CI e
+bloccare le violazioni **nuove**. La lista può solo accorciarsi —
+`--update-baseline` si esegue dopo una bonifica, mai per far passare una
+regressione.
+
+Superfici sanate nella stessa sessione:
+
+- **Hero della home**: il posto in copertina è passato da `campania-burton-juice`
+  (placeholder, ADV, senza cover né prezzo) a `jesolo-caribe-bay` — reale,
+  organico, con prezzo pubblico — e la fotografia è il frame certificato del suo
+  reel. `BrandCoherentHero.prova.test.tsx` blocca la regressione, preload LCP di
+  `index.html` incluso.
+- **Pagina posto**: sotto la copertina compare la riga di provenienza, ma solo
+  quando è certificata. Un asset `da-certificare` o generato non si etichetta
+  come prova: resta senza riga.
+
+Restano in attesa dell'owner i 6 usi `da-certificare` che l'audit elenca a ogni
+esecuzione (i quattro asset journal e `atlante/posto-volterra`).
+
 ## Conseguenze operative
 
 - `CLAUDE.md` riga 302 emendata per codificare la regola (stessa sessione).

@@ -137,11 +137,23 @@ const TIKTOK_STANDARD_EVENT_MAP: Record<string, string> = {
   lead_magnet_download: 'Download',
 };
 
-export const trackEvent = (eventName: string, eventParams?: Record<string, unknown>) => {
+/**
+ * Evento limitato a GA4: utile per misurazioni di prodotto che non devono
+ * alimentare i pixel pubblicitari, anche quando il consenso marketing esiste.
+ */
+export const trackAnalyticsEvent = (eventName: string, eventParams?: Record<string, unknown>) => {
   if (typeof window === 'undefined') return;
   if (canLoad('analytics') && window.gtag) {
     window.gtag('event', eventName, eventParams);
   }
+  if (import.meta.env.DEV) {
+    console.log(`[analytics] event "${eventName}"`, eventParams);
+  }
+};
+
+export const trackEvent = (eventName: string, eventParams?: Record<string, unknown>) => {
+  if (typeof window === 'undefined') return;
+  trackAnalyticsEvent(eventName, eventParams);
   if (canLoad('marketing')) {
     if (window.fbq) {
       const metaStandard = META_STANDARD_EVENT_MAP[eventName];
@@ -159,9 +171,6 @@ export const trackEvent = (eventName: string, eventParams?: Record<string, unkno
         window.ttq.track(eventName, eventParams);
       }
     }
-  }
-  if (import.meta.env.DEV) {
-    console.log(`[analytics] event "${eventName}"`, eventParams);
   }
 };
 

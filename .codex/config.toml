@@ -5,10 +5,6 @@ args = [
     "chrome-devtools-mcp@latest",
 ]
 
-[mcp_servers.codex]
-command = "codex"
-args = ["mcp-server"]
-
 [mcp_servers.context7]
 command = "npx"
 args = [
@@ -32,15 +28,6 @@ args = [
     "mcp-server-github",
 ]
 env_vars = ["GITHUB_PERSONAL_ACCESS_TOKEN"]
-
-[mcp_servers.obsidian]
-command = 'C:\Users\ccocu\AppData\Roaming\Python\Python314\Scripts\uvx.exe'
-args = ["mcp-obsidian"]
-env_vars = ["OBSIDIAN_API_KEY"]
-
-[mcp_servers.obsidian.env]
-OBSIDIAN_HOST = "127.0.0.1"
-OBSIDIAN_PORT = "27124"
 
 [mcp_servers.playwright]
 command = "npx"
@@ -66,3 +53,33 @@ args = [
     "--read-only",
 ]
 env_vars = ["STRIPE_SECRET_KEY"]
+
+[mcp_servers.analytics]
+command = "npx"
+args = [
+    "-y",
+    "@google-cloud/analytics-mcp@0.1.0",
+]
+
+[mcp_servers.codex]
+command = "codex"
+args = ["mcp-server"]
+
+[mcp_servers.firecrawl]
+command = "npx"
+args = [
+    "-y",
+    "firecrawl-mcp@latest",
+]
+
+[mcp_servers.higgsfield]
+url = "https://mcp.higgsfield.ai/mcp"
+
+[mcp_servers.obsidian]
+command = "uvx"
+args = ["mcp-obsidian@0.2.2"]
+env_vars = ["OBSIDIAN_API_KEY"]
+
+[mcp_servers.obsidian.env]
+OBSIDIAN_HOST = "127.0.0.1"
+OBSIDIAN_PORT = "27124"

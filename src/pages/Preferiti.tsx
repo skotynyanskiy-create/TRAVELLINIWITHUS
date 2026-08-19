@@ -103,7 +103,7 @@ export default function Preferiti() {
         <div className="mx-auto mt-8 mb-16 max-w-3xl text-center">
           <div className="mb-6 flex items-center justify-center gap-4">
             <div className="h-[1px] w-12 bg-[var(--color-accent)]"></div>
-            <span className="text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)]">
+            <span className="text-sm font-semibold uppercase tracking-widest text-[var(--color-accent-text)]">
               La tua collezione
             </span>
             <div className="h-[1px] w-12 bg-[var(--color-accent)]"></div>
@@ -127,7 +127,7 @@ export default function Preferiti() {
 
         {savedPlaces.length > 0 && (
           <div className="mb-12">
-            <h2 className="mb-6 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)]">
+            <h2 className="mb-6 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent-text)]">
               Posti salvati
             </h2>
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -148,7 +148,7 @@ export default function Preferiti() {
                       }));
                       toggleFavorite(place.id);
                     }}
-                    className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-[var(--color-accent)] shadow-sm transition-colors hover:bg-[var(--color-accent)] hover:text-white"
+                    className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-[var(--color-accent)] shadow-sm transition-colors hover:bg-[var(--color-accent-hover)] hover:text-white"
                     aria-label={`Rimuovi ${place.title} dai preferiti`}
                   >
                     <motion.span
@@ -170,7 +170,7 @@ export default function Preferiti() {
                       />
                     </div>
                     <div className="p-6">
-                      <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[var(--color-accent)]">
+                      <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[var(--color-accent-text)]">
                         <MapPin size={14} />
                         {place.types[0] ?? 'Posto particolare'}
                       </div>
@@ -239,7 +239,7 @@ export default function Preferiti() {
         ) : savedArticles.length > 0 ? (
           <>
             {savedPlaces.length > 0 && (
-              <h2 className="mb-6 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)]">
+              <h2 className="mb-6 text-sm font-semibold uppercase tracking-widest text-[var(--color-accent-text)]">
                 Guide e contenuti salvati
               </h2>
             )}
@@ -262,7 +262,7 @@ export default function Preferiti() {
                       }));
                       toggleFavorite(article.slug);
                     }}
-                    className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-[var(--color-accent)] shadow-sm transition-colors hover:bg-[var(--color-accent)] hover:text-white"
+                    className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-[var(--color-accent)] shadow-sm transition-colors hover:bg-[var(--color-accent-hover)] hover:text-white"
                     aria-label={`Rimuovi ${article.title} dai preferiti`}
                   >
                     <motion.span
@@ -284,7 +284,7 @@ export default function Preferiti() {
                       />
                     </div>
                     <div className="p-6">
-                      <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[var(--color-accent)]">
+                      <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[var(--color-accent-text)]">
                         <BookOpen size={14} />
                         {article.category}
                       </div>

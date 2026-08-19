@@ -23,8 +23,9 @@ Obsidian.
 
 ## Decisione
 
-- Vault Obsidian operativo:
-  `C:\Users\ccocu\Desktop\TRAVELLINIWITHUS\docs`.
+- Vault Obsidian operativo: la cartella `docs/` di questo repository.
+  _(In origine qui c'era un percorso assoluto sulla macchina di un'altra
+  persona: la decisione è la cartella, non il percorso.)_
 - Corpus Graphify: repository root, limitato al codice da `.graphifyignore`.
 - Obsidian (core Graph + Bases + wikilink) gestisce note, proprietà, campagne e
   progetti. **Extended Graph non è nel stack installato di default** (2026-07-23):

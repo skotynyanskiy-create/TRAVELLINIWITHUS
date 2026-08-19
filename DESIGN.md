@@ -10,7 +10,7 @@ Read these before changing important UI:
 2. `CLAUDE.md`
 3. `docs/BRAND_PUBLIC_SNAPSHOT_TRAVELLINIWITHUS.md`
 4. `docs/MARKETING_OPERATIONS_HUB.md`
-5. `docs/10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT.md`
+5. `docs/10_Projects/PROJECT_HOME_RICOMPOSIZIONE_2026-07-26.md`
 6. relevant notes under `docs/`
 
 ## Brand
@@ -87,6 +87,41 @@ Public-facing code MUST NOT use raw Tailwind palette utilities like `text-zinc-*
 
 Admin-only files under `src/pages/admin/**` and `src/components/admin/**` may still use Tailwind neutrals (`zinc-*`, etc.) — they are out of the brand surface. Third-party brand colors (Instagram gradient, WhatsApp green, etc.) live in `src/index.css` as `--color-social-*` and `--color-affiliate-*`.
 
+### Temi per audience (2026-08-01)
+
+Il sito cambia pelle in base all'audience. Il meccanismo è **solo** un override
+di token: `src/index.css` ridefinisce colori e radius sotto
+`:root[data-audience='family']` e `:root[data-audience='brand']`. L'attributo è
+scritto da `AudienceProvider` (e da uno script inline in `index.html` prima del
+CSS, per evitare il flash — le due mappe rotte→audience vanno tenute in sync).
+
+|             | viaggiatori (default) | family            | brand                |
+| ----------- | --------------------- | ----------------- | -------------------- |
+| Fondo       | sabbia `#faf8f4`      | azzurro `#eef6fb` | avorio `#f6f4ef`     |
+| Accento     | elettrico `#ff4d1a`   | rosa `#f43f77`    | oro antico `#a8842f` |
+| Accent-text | terracotta `#c2410c`  | `#c2205a`         | `#7d6426`            |
+| Radius      | base                  | +~30% (morbido)   | −~30% (asciutto)     |
+
+Regole non negoziabili:
+
+- **Un tema nuovo è un blocco di override, mai un fork di componenti** e mai
+  colori per-audience inline nei `.tsx`.
+- **La legge dell'accento vale per ogni tema**: sui riempimenti accent il testo
+  è scuro, mai bianco; il testo piccolo usa `--color-accent-text`.
+- Ogni valore entra solo dopo la verifica WCAG (accent/sand ≥3 ·
+  accent-text ≥4,5 su sand e bianco · bianco/accent-hover ≥4,5 ·
+  accent-on-dark/ink ≥4,5 · **muted e muted-fg ≥4,5 su sand**). Le rotte del gate
+  Lighthouse coprono i tre temi via `audienceFromPath` (`/family` → family,
+  `/collaborazioni` e `/media-kit` → brand).
+- **Se un tema ridefinisce `--color-sand`, deve rivedere anche i token di testo,
+  non solo gli accenti.** Family e brand erano nati senza override di
+  `--color-muted`/`--color-muted-fg`: il `#78716c` di default regge 4,52:1 sulla
+  sabbia ma scende a 4,36 su avorio e 4,39 su azzurro, cioè sotto AA su ogni
+  didascalia muted delle rotte a tema (audit 2026-08-02). Il token mancava dalla
+  checklist qui sopra, e per questo nessuno se ne era accorto.
+- Limite noto e accettato: `bg-white`, `text-black` e i `rounded-*` nativi non
+  seguono il tema. I fondi restano chiari in tutti e tre proprio per questo.
+
 ## Form Components
 
 Use the shared form components rather than reinventing inputs:
@@ -137,19 +172,18 @@ sulla UI corrente. I display type usano pesi variabili espliciti, non gli assi
 ### Map provider — MapLibre + OpenFreeMap
 
 The `/mappa` page uses MapLibre GL through `react-map-gl/maplibre`
-(`src/components/map/MapboxWorldMap.tsx`) with the OpenFreeMap dark style. The
-public map does not require a Mapbox token.
+(`src/components/map/FullScreenMapExperience.tsx`) with the OpenFreeMap dark
+style. The public map does not require a Mapbox token.
 
 Google Maps and a return to Mapbox are intentionally not adopted:
 
 - MapLibre preserves the existing markers, clusters, popups, filters and deep links;
 - OpenFreeMap keeps the dark editorial canvas without adding a public API key;
-- changing provider would add cost and migration risk without improving the current discovery flow;
-- the filename `MapboxWorldMap.tsx` is retained only to avoid a broad rename during the route redesign.
+- changing provider would add cost and migration risk without improving the current discovery flow.
 
 ### Page layout pattern — `<PageLayout>` is the public default
 
-All public routes wrap their content in `<PageLayout>` (`src/components/PageLayout.tsx`). PageLayout applies the page-level padding (`pt-32 md:pt-24 pb-32`), the sand background, and `overflow-x-clip`. Navbar and Footer are mounted globally by `<Layout>` in `src/App.tsx`; pages must not remount them.
+All public routes wrap their content in `<PageLayout>` (`src/components/PageLayout.tsx`). PageLayout applies the page-level padding (`pt-28 pb-32`, flat — no breakpoint variant, reserving space for the fixed edge-to-edge header + edition band, 101px mobile / 97px desktop at rest), the sand background, and `overflow-x-clip`. Navbar and Footer are mounted globally by `<Layout>` in `src/App.tsx`; pages must not remount them.
 
 Canonical example: `src/pages/Shop.tsx`.
 
@@ -161,7 +195,7 @@ Custom-flat pages (no PageLayout) are reserved for full-bleed experiences only: 
 
 - TikTok logo — `src/components/Navbar.tsx`, `src/components/Footer.tsx`, `src/components/article/SocialFollowCTA.tsx`
 - Pinterest logo — `src/components/article/PinterestIcon.tsx`
-- Custom map pin — `src/components/map/MapboxWorldMap.tsx`
+- Custom map pin — `src/components/map/FullScreenMapExperience.tsx`
 - Brand mark variants — `src/pages/Collaborazioni.tsx`
 
 `/audit-ui` and `audit-ui` skill should treat these as documented exceptions, not regressions.

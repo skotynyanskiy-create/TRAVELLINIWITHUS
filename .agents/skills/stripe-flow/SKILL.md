@@ -13,11 +13,11 @@ Audit and verify the Stripe checkout flow in the TRAVELLINIWITHUS project.
    - `CartContext` adds items to cart
    - Cart drawer shows items and total
    - Checkout button calls `/api/checkout` endpoint
-   - `server.ts` creates Stripe session
+   - `src/server/apiRoutes.ts` creates the Stripe session (`checkout.sessions.create`)
    - Stripe redirects back to success/cancel URL
    - Order is saved in Firestore `orders` collection
 
-2. **Server-Side Security** — In `server.ts`:
+2. **Server-Side Security** — In `src/server/apiRoutes.ts` (il webhook e la sessione vivono li', non in `server.ts`):
    - Stripe secret key loaded from env, never hardcoded
    - Webhook signature verification with `stripe.webhooks.constructEvent`
    - Rate limiting on checkout endpoint

@@ -7,11 +7,17 @@ import { sitemapPaths } from './surfaces';
  * 2026-07-23 (TASK-034): /strumenti rimosso — la pagina e il cluster itinerario
  * erano codice orfano dietro un redirect a /esplora; l'owner ha reso il redirect
  * definitivo, quindi l'URL esce dalla sitemap (restano 14).
+ * 2026-08-15: /press rimosso, stesso caso e su decisione dell'owner. Era
+ * dichiarato `live`, stava in sitemap e aveva meta proprie — quindi il build
+ * generava `dist/press/index.html` con un canonical su `/press` — ma
+ * `App.tsx` lo redirige a `/collaborazioni` e **nessuna pagina del sito ci
+ * linka**. Un crawler riceveva due segnali in conflitto sullo stesso fetch.
+ * Restano 13. Se un giorno serve una pagina stampa vera, va rifatta come
+ * pagina: le redazioni cercano «contatti stampa», non «collaborazioni».
  */
 const GIA_IN_SITEMAP = [
   '/',
   '/esplora',
-  '/press',
   '/mappa',
   '/chi-siamo',
   '/collaborazioni',

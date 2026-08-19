@@ -40,9 +40,14 @@ export default function Users() {
 
   const toggleRole = async (userId: string, currentRole: 'admin' | 'user') => {
     const newRole = currentRole === 'admin' ? 'user' : 'admin';
-    
+
     // Prevent self-demotion if needed, but for now we'll allow it with a warning
-    if (newRole === 'user' && window.confirm("Sei sicuro di voler rimuovere i privilegi di amministratore da questo utente?")) {
+    if (
+      newRole === 'user' &&
+      window.confirm(
+        'Sei sicuro di voler rimuovere i privilegi di amministratore da questo utente?'
+      )
+    ) {
       await performUpdate(userId, newRole);
     } else if (newRole === 'admin') {
       await performUpdate(userId, newRole);
@@ -53,7 +58,7 @@ export default function Users() {
     setUpdatingId(userId);
     try {
       await updateDoc(doc(db, 'users', userId), { role: newRole });
-      setUsers(users.map(u => u.uid === userId ? { ...u, role: newRole } : u));
+      setUsers(users.map((u) => (u.uid === userId ? { ...u, role: newRole } : u)));
     } catch (error) {
       handleFirestoreError(error, OperationType.UPDATE, `users/${userId}`);
     } finally {
@@ -70,11 +75,19 @@ export default function Users() {
         <div className="text-center py-12 text-zinc-500">Nessun utente registrato.</div>
       ) : (
         <div className="divide-y divide-zinc-100">
-          {users.map(user => (
-            <div key={user.uid} className="p-6 flex items-center justify-between hover:bg-zinc-50 transition-colors">
+          {users.map((user) => (
+            <div
+              key={user.uid}
+              className="p-6 flex items-center justify-between hover:bg-zinc-50 transition-colors"
+            >
               <div className="flex items-center gap-4">
                 {user.photoURL ? (
-                  <img src={user.photoURL} alt={user.displayName} className="w-12 h-12 rounded-full border border-zinc-100" referrerPolicy="no-referrer" />
+                  <img
+                    src={user.photoURL}
+                    alt={user.displayName}
+                    className="w-12 h-12 rounded-full border border-zinc-100"
+                    referrerPolicy="no-referrer"
+                  />
                 ) : (
                   <div className="w-12 h-12 rounded-full bg-zinc-100 flex items-center justify-center text-zinc-400">
                     <UserIcon size={24} />
@@ -85,28 +98,34 @@ export default function Users() {
                   <p className="text-sm text-zinc-500">{user.email}</p>
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-4">
-                <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider ${
-                  user.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-zinc-100 text-zinc-600'
-                }`}>
+                <div
+                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider ${
+                    user.role === 'admin'
+                      ? 'bg-purple-100 text-purple-700'
+                      : 'bg-zinc-100 text-zinc-600'
+                  }`}
+                >
                   {user.role === 'admin' ? <Shield size={14} /> : <UserIcon size={14} />}
                   {user.role}
                 </div>
-                
-                <button 
+
+                <button
                   onClick={() => toggleRole(user.uid, user.role)}
                   disabled={updatingId === user.uid}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    user.role === 'admin' 
-                      ? 'text-red-600 hover:bg-red-50' 
+                    user.role === 'admin'
+                      ? 'text-red-600 hover:bg-red-50'
                       : 'text-purple-600 hover:bg-purple-50'
                   } disabled:opacity-50`}
                 >
                   {updatingId === user.uid ? (
                     <Loader2 size={18} className="animate-spin" />
+                  ) : user.role === 'admin' ? (
+                    'Rimuovi Admin'
                   ) : (
-                    user.role === 'admin' ? 'Rimuovi Admin' : 'Rendi Admin'
+                    'Rendi Admin'
                   )}
                 </button>
               </div>

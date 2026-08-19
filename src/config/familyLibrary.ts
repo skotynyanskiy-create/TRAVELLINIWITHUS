@@ -1,4 +1,5 @@
 import type { FamilyCategory, FamilyEntry } from '../types/family';
+import { offertaAttiva } from '../lib/offerta';
 import seed from '../data/family-content-seed.json';
 
 /**
@@ -20,7 +21,13 @@ export function getFamilyByCategory(category: FamilyCategory): FamilyEntry[] {
   return getFamilyEntries().filter((item) => item.category === category);
 }
 
-/** Entry con offerta/codice reale — alimentano la vetrina /family/shop. */
+/**
+ * Entry con offerta/codice **attivo** — alimentano la vetrina /family/shop.
+ *
+ * Attivo, non solo presente: prima qui bastava `Boolean(item.deal)`, mentre
+ * `DealCard` non renderizza le scadute. Il giorno della prima scadenza il
+ * conteggio avrebbe promesso codici sopra uno scaffale vuoto.
+ */
 export function getFamilyDeals(): FamilyEntry[] {
-  return getFamilyEntries().filter((item) => Boolean(item.deal));
+  return getFamilyEntries().filter((item) => offertaAttiva(item.deal));
 }

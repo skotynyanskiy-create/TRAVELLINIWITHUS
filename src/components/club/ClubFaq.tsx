@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Plus, Minus } from 'lucide-react';
+import JsonLd from '../JsonLd';
 
 /**
  * FAQ Club — 6 voci basate su Marathon FASE 1.C 2026-05-17 (SEO/Conv strategist).
@@ -122,10 +123,7 @@ export default function ClubFaq() {
           })}
         </div>
 
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
+        <JsonLd data={faqJsonLd} />
       </div>
     </section>
   );

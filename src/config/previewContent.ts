@@ -444,7 +444,7 @@ La prima regola è la stagione. Maggio, giugno, fine settembre: l'acqua è calda
 Costa adriatica e Valle d'Itria visitate dal 12 al 19 settembre 2025 — 3 cene testate, 4 masserie verificate, noleggio auto da Bari.
 :::
 
-## Vale davvero il viaggio?
+## Perché questo posto
 
 La Puglia funziona perché tiene insieme cose che altrove sono separate. Hai la pietra bianca di Ostuni e gli ulivi millenari, hai la costa adriatica con il blu serio e quella ionica con il blu turchese, hai i trulli che da fuori sembrano cartolina e da dentro sono case fresche d'estate e pulite d'inverno. E hai il cibo — non i piatti instagrammabili, ma il pranzo lungo a 18 euro che cambia la giornata.
 
@@ -525,7 +525,7 @@ function generateBody(seed: Seed): string {
   return `
 ${seed.excerpt}
 
-## Vale davvero il viaggio?
+## Perché questo posto
 
 ${why}
 
@@ -605,6 +605,103 @@ const SEED_PREVIEWS: Record<string, PreviewArticle> = DEMO_ARCHIVE_SEEDS.reduce(
 
 const RAW_PREVIEW_ARTICLES: Record<string, PreviewArticle> = {
   ...SEED_PREVIEWS,
+  /* Pagina di riferimento dei blocchi editoriali. Serve a due cose: e' la prova
+     vivente che le direttive rendono davvero (i test coprono i componenti, non
+     la pagina), ed e' il posto dove chi scrive va a copiare la sintassi. Senza,
+     un `:::posto` sbagliato finisce a schermo come testo e nessuno se ne accorge
+     finche' non e' pubblicato. */
+  'guida-blocchi-editoriali': {
+    id: 'guida-blocchi-editoriali',
+    slug: 'guida-blocchi-editoriali',
+    title: 'I blocchi editoriali, visti in funzione',
+    category: 'Guide',
+    image: '/images/reels/emilia-granduca-di-campigna-cover.webp',
+    excerpt:
+      'Pagina di riferimento interna: ogni blocco disponibile in un articolo, con la sintassi esatta da copiare.',
+    description:
+      'Come si scrivono i sei blocchi editoriali dentro un articolo Travelliniwithus, con un esempio funzionante di ciascuno.',
+    location: 'Italia',
+    period: 'Sempre',
+    budget: 'Medio',
+    duration: 'Riferimento',
+    readTime: '4 min',
+    date: '11 agosto 2026',
+    author: 'Rodrigo & Betta',
+    continent: 'Europa',
+    isMarkdown: true,
+    content: `
+Questa pagina non è un articolo: è il posto dove si copia la sintassi. Ogni blocco qui sotto è scritto come va scritto, e sotto ognuno c'è la riga esatta da riusare.
+
+Due regole valgono per tutti.
+
+**I due punti non vogliono lo spazio.** Si scrive attaccato. Con lo spazio il blocco non viene riconosciuto e finisce a schermo come testo.
+
+**Un blocco si chiude sempre**, anche quando è vuoto dentro. Se manca il \`:::\` di chiusura, il blocco si mangia tutto quello che viene dopo — titolo della sezione successiva compreso — e quella parte dell'articolo sparisce senza dire niente.
+
+## Un posto dentro il testo
+
+:::posto{id="emilia-granduca-di-campigna"}
+:::
+
+Si scrive con l'identificativo del posto, quello che compare nell'indirizzo della sua scheda. Se il posto è ancora in lavorazione il blocco non compare affatto, così non si promette una verifica che non c'è.
+
+## Il reel
+
+:::reel{posto="emilia-granduca-di-campigna"}
+:::
+
+Si può indicare il posto, e il reel giusto viene trovato da solo. Parte solo se lo tocchi: niente parte da solo, mai.
+
+## I costi
+
+:::dati{tipo="costi" titolo="Quanto ci è costato" quando="settembre 2025" perQuante="2 persone, 2 notti"}
+- Camera con jacuzzi, 2 notti · 196€
+- Cena servita in camera · 70€
+- Ingresso spa con aperitivo · 60€
+- Totale · 326€
+:::
+
+I costi vogliono sempre il **quando**: un prezzo senza data invecchia e diventa una bugia. Il totale vuole il **per quante**: un numero senza denominatore non significa niente. Se mancano, il blocco si rifiuta di comparire.
+
+## Le informazioni pratiche
+
+:::dati{tipo="pratiche" titolo="Prima di partire"}
+- Come ci si arriva · Uscita Forlì, poi 40 minuti di strada nella foresta
+- Quando aprono la spa · Tutti i giorni, 15:00-20:00
+- Cosa portare · Scarpe chiuse, anche d'estate
+:::
+
+Stesso blocco dei costi, cambia solo il tipo.
+
+## Dove sono i posti
+
+:::mappa{posti="emilia-granduca-di-campigna, verona-bbq-magi, jesolo-caribe-bay" zoom="7"}
+:::
+
+Sotto la mappa l'elenco compare sempre, anche quando la mappa non si vede. Non è un ripiego: è il modo in cui questo blocco funziona per chi usa un lettore di schermo.
+
+## Un link affiliato
+
+Se prenoti la stessa camera, la trovi sulla :affiliato[pagina della struttura]{partner="booking" path="/hotel/it/granduca-campigna.it.html" campagna="riferimento-blocchi"} che usiamo noi.
+
+Si scrive dentro la frase, non in un riquadro. La dichiarazione in cima alla pagina compare da sola: non va scritta.
+
+## Le domande
+
+:::domande
+### Quanto costa dormire al Granduca di Campigna?
+Da 98€ a notte. A settembre 2025 abbiamo pagato 196€ per due notti in camera con jacuzzi, prenotando con tre settimane di anticipo.
+
+### Serve la macchina?
+Sì. L'ultimo tratto è strada di montagna dentro la foresta e non ci sono mezzi pubblici.
+
+### La spa è inclusa?
+No, si paga a parte: 60€ a persona con aperitivo nella grotta.
+:::
+
+Da tre a sei domande. La domanda è quella che uno digita davvero, la risposta sta nella prima frase. Servono a farsi citare da ChatGPT e dalle risposte AI di Google.
+`,
+  },
   [DEMO_ARTICLE_SLUG]: {
     id: DEMO_ARTICLE_SLUG,
     slug: DEMO_ARTICLE_SLUG,
@@ -623,27 +720,6 @@ const RAW_PREVIEW_ARTICLES: Record<string, PreviewArticle> = {
     date: '17 marzo 2026',
     author: 'Rodrigo & Betta',
     continent: 'Europa',
-    review: {
-      overall: 8.8,
-      verdict: 'Consigliatissimo',
-      summary:
-        "Le Dolomiti offrono un'esperienza in quota unica, tra panorami verticali e rifugi di design contemporaneo che ridefiniscono l'ospitalità alpina.",
-      criteria: [
-        { name: 'Atmosfera', score: 9.5 },
-        { name: 'Accoglienza', score: 8.5 },
-        { name: 'Cibo in rifugio', score: 8.2 },
-        { name: 'Sentieri', score: 9.0 },
-      ],
-      pros: [
-        'Viste spettacolari a 360 gradi sulla roccia rosa',
-        'Architettura contemporanea ed eco-sostenibile dei nuovi rifugi',
-        'Rete sentieristica estremamente curata e sicura',
-      ],
-      cons: [
-        'Affollamento intenso nei weekend di luglio e agosto',
-        'Prezzi medio-alti per rifugi premium e cabinovie',
-      ],
-    },
     content: `
 Questa preview mostra la direzione editoriale del sito: non un diario generico, ma una guida costruita per capire se un posto merita davvero il viaggio.
 
@@ -817,6 +893,13 @@ Prenotare solo per una foto, sottovalutare distanze, ignorare stagionalità e ac
 // quando SHOW_HIDDEN_PREVIEW_OVERRIDES = false. Restano in RAW_PREVIEW_ARTICLES
 // per ri-attivazione futura.
 const HIDDEN_OVERRIDE_SLUGS = new Set<string>(['weekend-borgo-lento', 'guida-prima-di-prenotare']);
+
+/**
+ * Pagine raggiungibili per URL ma fuori da ogni elenco pubblico: documentazione
+ * interna, non contenuto editoriale. Diverso da HIDDEN_OVERRIDE_SLUGS, che le
+ * toglie del tutto da PREVIEW_ARTICLES e quindi ne rompe anche la rotta.
+ */
+export const INTERNAL_PREVIEW_SLUGS = new Set<string>(['guida-blocchi-editoriali']);
 
 export const PREVIEW_ARTICLES: Record<string, PreviewArticle> = SHOW_HIDDEN_PREVIEW_OVERRIDES
   ? RAW_PREVIEW_ARTICLES

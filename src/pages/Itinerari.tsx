@@ -47,7 +47,7 @@ export default function Itinerari() {
       />
 
       <Section className="pt-8">
-        <Breadcrumbs items={[{ label: 'Itinerari' }]} />
+        <Breadcrumbs schema={false} items={[{ label: 'Itinerari' }]} />
 
         <div className="mt-8 max-w-3xl">
           <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
@@ -102,7 +102,7 @@ export default function Itinerari() {
               ]}
             />
           </div>
-          <p className="mt-5 text-xs text-black/45">
+          <p className="mt-5 text-xs text-black/60">
             {filteredItineraries.length}{' '}
             {filteredItineraries.length === 1
               ? 'itinerario corrispondente'
@@ -113,6 +113,7 @@ export default function Itinerari() {
       </Section>
 
       <Section>
+        <h2 className="sr-only">Itinerari disponibili</h2>
         {filteredItineraries.length === 0 ? (
           <div className="rounded-[var(--radius-lg)] border border-black/5 bg-[var(--color-sand)] p-10 text-center">
             <p className="text-sm font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
@@ -143,11 +144,11 @@ export default function Itinerari() {
                     className="h-full w-full object-cover transition-transform duration-[1500ms] ease-out group-hover:scale-105"
                   />
                   <div className="absolute left-5 top-5 flex flex-wrap gap-2">
-                    <span className="rounded-full border border-white/20 bg-white/80 px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] backdrop-blur-md shadow-sm">
+                    <span className="rounded-full border border-white/20 bg-white/80 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] backdrop-blur-md shadow-sm">
                       {item.style}
                     </span>
                     {item.isDemo && (
-                      <span className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-white shadow-sm animate-pulse">
+                      <span className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] shadow-sm animate-pulse">
                         Anteprima
                       </span>
                     )}
@@ -173,7 +174,7 @@ export default function Itinerari() {
                   <div className="mt-4 border-t border-black/5 pt-4">
                     <Link
                       to={`/itinerari/${item.slug}`}
-                      className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent-text)]"
+                      className="inline-flex items-center gap-2 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-ink)] transition-colors hover:text-[var(--color-accent-text)]"
                     >
                       Apri itinerario{' '}
                       <ArrowRight
@@ -204,7 +205,7 @@ export default function Itinerari() {
           </div>
           <Link
             to="/itinerari/compare"
-            className="mt-5 inline-flex items-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-ink)] px-5 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)] md:mt-0"
+            className="mt-5 inline-flex items-center gap-2 rounded-[var(--radius-md)] bg-[var(--color-ink)] px-5 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)] md:mt-0"
           >
             Apri il confronto <ArrowRight size={14} />
           </Link>
@@ -227,7 +228,7 @@ function FilterSelect({
 }) {
   return (
     <label className="block text-left">
-      <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.24em] text-black/45">
+      <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.24em] text-black/60">
         {label}
       </span>
       <div className="relative">
@@ -243,7 +244,7 @@ function FilterSelect({
           ))}
         </select>
         {/* Freccia custom */}
-        <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-black/45">
+        <div className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-black/60">
           <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"

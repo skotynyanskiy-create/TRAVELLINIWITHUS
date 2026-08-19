@@ -27,7 +27,7 @@ export default function LeadMagnetCover({
       >
         <span
           aria-hidden="true"
-          className="atlante-stamp-mark flex h-7 w-7 items-center justify-center rounded-full text-[9px]"
+          className="atlante-stamp-mark flex h-7 w-7 items-center justify-center rounded-full text-[11px]"
         >
           {stampNumber}
         </span>
@@ -40,7 +40,7 @@ export default function LeadMagnetCover({
       className={`atlante-carta-surface flex h-full w-full flex-col justify-between p-6 md:p-7 ${className}`}
     >
       <div className="flex items-start justify-between gap-3">
-        <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-[var(--color-atlante-inchiostro)]/70">
+        <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[var(--color-atlante-inchiostro)]/70">
           Travelliniwithus
         </span>
         <span

@@ -11,7 +11,7 @@ Use `code-architect` agent to plan before touching code.
 2. **Confirm** — Present the plan and wait for owner confirmation before writing anything.
 3. **One unit at a time** — Refactor in atomic logical steps. Run `npm run typecheck` between each step.
 4. **No mixed concerns** — Do not fix bugs, add features, or improve styles during a refactor. One goal only.
-5. **High-risk check** — Flag any change near `server.ts`, `firestore.rules`, `src/config/admin.ts` before proceeding.
+5. **High-risk check** — Flag any change near `src/server/apiRoutes.ts`, `functions/`, `server.ts`, `firestore.rules`, `src/config/admin.ts` before proceeding.
 6. **Verify** — After all steps: run `npm run typecheck` + `npm run build` + relevant audit scripts.
 
 Return: plan → confirmation received → step-by-step execution log → final typecheck/build result → remaining risks.

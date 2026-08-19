@@ -1,7 +1,7 @@
 ---
 title: Site Blueprint 2026 — il sito perfetto per travelliniwithus
 type: project
-status: in-progress
+status: archived
 created: 2026-06-22
 owner: Rodrigo & Betta
 objective: sito posseduto, a scala piena (1.251 post via IG API), che monetizza i 170K
@@ -11,7 +11,12 @@ related:
   - docs/AI_TOOLING_RADAR.md
 area: operations
 priority: p2
+icebox_reason: in attesa di funnel con traffico reale
 ---
+
+> **Icebox dal 2026-07-31.** Non superato: contiene feature reali mai decise.
+> Va ripescato _dopo_ che il funnel ha un ingresso — vedi [[10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31]] §1.
+> Non è il backlog corrente.
 
 # Site Blueprint 2026
 

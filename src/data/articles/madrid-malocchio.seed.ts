@@ -1,6 +1,7 @@
 import { Timestamp } from 'firebase/firestore';
+import type { ArticleSeed } from './types';
 
-export const articleSeed = {
+export const articleSeed: ArticleSeed = {
   title: 'Il locale del malocchio a Madrid: esperienza rituale',
   slug: 'madrid-malocchio',
   excerpt:
@@ -26,7 +27,7 @@ Dettagli, prezzi reali e verdetto completo in arrivo.
 `.trim(),
   category: 'esperienze',
   destination: 'Madrid, Spagna',
-  partnership: { kind: 'none' },
+  partnership: { kind: 'organic' },
   tags: ['madrid', 'esperienza', 'rituale', 'spagna'],
   author: { name: 'Rodrigo & Betta', bio: 'Viaggiatori e creatori di @travelliniwithus' },
   coverImage: '/images/reels/reel-placeholder.webp',

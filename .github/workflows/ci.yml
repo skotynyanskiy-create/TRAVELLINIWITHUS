@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main, 'codex/**', 'feat/**', 'fix/**', 'audit/**', 'chore/**', 'wip/**' ]
+    branches: [main, 'codex/**', 'feat/**', 'fix/**', 'audit/**', 'chore/**', 'wip/**']
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   quality:
@@ -23,28 +23,83 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install Functions dependencies
+        run: npm ci --prefix functions
+
+      - name: Build Firebase Functions
+        run: npm run functions:build
+
+      - name: Smoke-test Firebase Functions bundle
+        run: npm run functions:smoke
+
       - name: TypeScript check
         run: npm run typecheck
 
       - name: ESLint
         run: npm run lint
 
-      - name: Unit tests
-        run: npm run test:unit
+      # Non girava da nessuna parte: il formato era garantito solo da lint-staged
+      # sui file in stage, e 12 file erano entrati non formattati.
+      - name: Prettier
+        run: npm run format:check
+
+      # Solo i file che il modello legge a ogni sessione. `lint:md` sull'intero
+      # docs/ lascia 205 errori: e' una lista di lavori, non un cancello.
+      - name: Markdown dei file di istruzione
+        run: npm run lint:md:core
+
+      # Il progetto vitest `storybook` gira in browser mode
+      # (`vitest.config.ts:41-52`: provider playwright, chromium): senza questo
+      # passo `npm run test` fallisce in CI, dove i browser non ci sono. In
+      # locale funziona perche' Playwright e' gia' installato, ed e' esattamente
+      # il modo in cui una CI si rompe solo dopo il push.
+      - name: Install Chromium for the storybook test project
+        run: npx playwright install --with-deps chromium
+
+      # `test:unit` gira solo il progetto vitest `unit`. Il progetto `storybook`
+      # (3 file, 13 test) esisteva ma nessuna pipeline lo eseguiva: `npm run test`
+      # li copre entrambi.
+      - name: Unit + storybook tests
+        run: npm run test
 
       - name: Production build
         run: npm run build
-        env:
-          VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
 
       - name: Audit agent stack
         run: npm run audit:agents
+
+      # I conteggi scritti in .claude/rules/configurazione.md devono corrispondere
+      # a settings.json: la prosa che descrive la configurazione scade in ore.
+      - name: Audit conteggi di configurazione
+        run: npm run audit:config
+
+      # Ogni percorso e comando npm citato da agent e skill deve esistere.
+      # Sette riferimenti morti trovati a mano il 2026-08-14: un agente che
+      # legge un percorso inesistente non fallisce, fa altro e va avanti.
+      - name: Audit riferimenti di agent e skill
+        run: npm run audit:refs
 
       - name: Audit Obsidian vault
         run: npm run audit:obsidian
 
       - name: Audit UI
         run: npm run audit:ui
+
+      # I quattro controlli sotto giravano solo in `audit:quality`, cioè solo se
+      # qualcuno lo lanciava a mano. audit:provenance è la regola imagery-truth:
+      # era l'unica norma dichiarata non negoziabile che nessuna macchina
+      # verificava prima del merge.
+      - name: Audit provenienza immagini
+        run: npm run audit:provenance
+
+      - name: Audit seed contenuti
+        run: npm run audit:seed
+
+      - name: Audit indice llms
+        run: npm run audit:llms
+
+      - name: Verifica STATO_DEL_SITO allineato al codice
+        run: npm run stato:check
 
       - name: Audit Firebase
         run: npm run audit:firebase
@@ -82,8 +137,6 @@ jobs:
 
       - name: Lighthouse CI (perf · a11y · CLS budgets)
         run: npm run audit:cwv
-        env:
-          VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
 
   e2e:
     name: Playwright e2e + visual quality
@@ -106,8 +159,6 @@ jobs:
 
       - name: Run e2e + visual quality
         run: npm run e2e
-        env:
-          VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
 
       - name: Upload Playwright report
         if: ${{ !cancelled() }}

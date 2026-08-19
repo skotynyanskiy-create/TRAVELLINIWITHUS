@@ -11,6 +11,21 @@ export default defineConfig(({ mode }) => {
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
+        /* `script-defer` e non il default `auto`: quest'ultimo inietta
+           `<script src="/registerSW.js">` senza `defer`, cioe' uno script
+           classico che blocca il parser prima del primo paint. Misurato il
+           2026-08-17 con Lighthouse su mobile 4G simulata: **151 ms di FCP
+           sprecati, identici su tutte e cinque le rotte** — il file pesa 403
+           byte e registra un service worker, roba che non ha nessun motivo di
+           precedere il primo pixel.
+
+           Nota su come leggere quei 151 ms: vengono da una simulazione, non da
+           un cronometro. L'FCP osservato senza throttling su questa macchina e'
+           28-76 ms. La simulazione modella pero' un telefono di fascia media in
+           4G, che e' il pubblico vero di questo sito, e il difetto strutturale —
+           uno script classico in `<head>` blocca sempre il parser — resta tale a
+           qualunque velocita'. */
+        injectRegister: 'script-defer',
         includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'offline.html'],
         // Disable PWA service worker in dev so HMR-updated bundles never get
         // shadowed by a stale precache. Re-enabled automatically in build.

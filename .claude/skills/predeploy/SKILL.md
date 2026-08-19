@@ -11,7 +11,7 @@ Canonical sequence S6 — the only path to production.
 
 - Before every deploy to production (no exceptions)
 - After merging a feature branch into main
-- After any change to `server.ts`, `firestore.rules`, `src/config/admin.ts`, Stripe handlers, env files
+- After any change to `src/server/apiRoutes.ts`, `functions/`, `server.ts`, `firestore.rules`, `src/config/admin.ts`, Stripe handlers, env files
 - After a release candidate is staged
 
 ## Protocol — S6 gate

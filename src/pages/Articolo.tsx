@@ -4,12 +4,6 @@ import { ArrowRight, CheckCircle2, Clock, Info, MapPin, Route, WalletCards } fro
 import { useParams } from 'react-router-dom';
 import { Link } from '@/src/components/TransitionLink';
 import { Helmet } from 'react-helmet-async';
-import ReactMarkdown, { type Components } from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import remarkDirective from 'remark-directive';
-import remarkUnwrapImages from 'remark-unwrap-images';
-import { visit } from 'unist-util-visit';
-import type { Root } from 'mdast';
 import { fetchArticleBySlug, fetchArticles } from '../services/firebaseService';
 import { useFavorites } from '../context/FavoritesContext';
 import { useArticleAnalytics } from '../hooks/useArticleAnalytics';
@@ -20,9 +14,9 @@ import Newsletter from '../components/Newsletter';
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import ArticlePageSkeleton from '../components/ArticlePageSkeleton';
+import Skeleton from '../components/Skeleton';
 import DemoContentNotice from '../components/DemoContentNotice';
 import NotFound from './NotFound';
-import ReviewBlock from '../components/ReviewBlock';
 import { SITE_URL } from '../config/site';
 import { PREVIEW_ARTICLES } from '../config/previewContent';
 import { buildArticleJsonLd } from '../lib/seo';
@@ -34,19 +28,18 @@ import {
   Diary,
   MobileBottomBar,
   MobileTocOverlay,
-  ReadingMode,
   RelatedArticles,
   TableOfContents,
 } from '../components/article';
 import type { ArticleData, RelatedArticleSummary, TocItem } from '../components/article';
-import DropCap from '../components/article/editorial/DropCap';
-import FullBleedFigure from '../components/article/editorial/FullBleedFigure';
-import InlineFigure from '../components/article/editorial/InlineFigure';
-import PullQuote from '../components/article/editorial/PullQuote';
-import SourceBlock from '../components/article/editorial/SourceBlock';
-import VerifiedBox from '../components/article/editorial/VerifiedBox';
 
 const InteractiveMap = lazy(() => import('../components/InteractiveMap'));
+const ArticleMarkdownBody = lazy(() => import('../components/article/ArticleMarkdownBody'));
+/* Anche ReadingMode importa react-markdown: lasciarlo statico terrebbe il chunk
+   `markdown` (~46 KB gzip) nel download iniziale di /articolo, annullando il
+   confine lazy qui sopra. E' una modale dietro un bottone, quindi si monta solo
+   dopo la prima apertura. */
+const ReadingMode = lazy(() => import('../components/article/ReadingMode'));
 
 const BRAND_AUTHOR = 'Rodrigo & Betta';
 
@@ -116,6 +109,8 @@ function ensureArticleData(
     title: article.title,
     description: article.description || 'Guida e racconto di viaggio firmato Travelliniwithus.',
     image: article.image,
+    imageAlt: article.imageAlt,
+    ogImage: article.ogImage,
     category: article.category || 'Guide',
     date: article.date || 'In aggiornamento',
     author: article.author || BRAND_AUTHOR,
@@ -143,14 +138,13 @@ function ensureArticleData(
     mapZoom: article.mapZoom,
     videoUrl: article.videoUrl,
     updatedAt: article.updatedAt,
-    review: article.review,
     partnership: article.partnership,
   };
 }
 
 function buildTocItems(article: ArticleData): TocItem[] {
   return [
-    { id: 'overview', label: 'Vale davvero?', show: true },
+    { id: 'overview', label: 'Cos’è', show: true },
     { id: 'pratico', label: 'Quando?', show: true },
     { id: 'diario', label: 'Diario', show: !!article.diary?.length },
     { id: 'itinerario', label: 'Itinerario', show: !!article.itinerary?.length },
@@ -231,358 +225,34 @@ function getReadingTime(article: ArticleData) {
 }
 
 /**
- * Editorial primitives (handoff editorial-primitives-v1 — 2026-05-18).
- *
- * remark-directive supporta sintassi ::: name {attrs} ... :::. Convertiamo
- * i nodi container directive (`pullquote`, `fullbleed`, `source`) in tag
- * HAST custom (`pullquote-directive` etc.) cosi react-markdown li mappa
- * sui componenti React via la prop `components`.
- *
- * Per `pullquote` estraiamo l'eventuale attribuzione finale (paragrafo che
- * inizia con em-dash / en-dash / doppio hyphen) e la passiamo come prop,
- * rimuovendola dal body. Per `fullbleed` estraiamo src/alt/title della
- * prima image e li passiamo come prop, scartando i children.
+ * Scheletro dimensionato per il corpo articolo mentre il chunk lazy di
+ * `ArticleMarkdownBody` scarica react-markdown, remark-directive e le undici
+ * direttive editoriali (~29 KB, vedi budget `article-route` in
+ * `check-size.mjs`). Righe di testo, non un fallback vuoto: il corpo che
+ * sparisce e rimonta e' esattamente lo spostamento di layout da evitare.
  */
-
-type DirectiveNode = {
-  type: string;
-  name?: string;
-  attributes?: Record<string, string | null | undefined>;
-  children?: Array<{
-    type: string;
-    value?: string;
-    url?: string;
-    alt?: string;
-    title?: string | null;
-    children?: DirectiveNode['children'];
-  }>;
-  data?: { hName?: string; hProperties?: Record<string, unknown> };
-};
-
-function getNodeText(node: NonNullable<DirectiveNode['children']>[number]): string {
-  if (typeof node.value === 'string') return node.value;
-  if (!node.children) return '';
-  return node.children.map(getNodeText).join('');
+function ArticleBodySkeleton() {
+  return (
+    <div aria-busy="true" className="space-y-4">
+      <Skeleton className="h-7 w-2/3" />
+      <Skeleton className="h-5 w-full" />
+      <Skeleton className="h-5 w-full" />
+      <Skeleton className="h-5 w-11/12" />
+      <Skeleton className="h-5 w-full" />
+      <Skeleton className="h-5 w-4/5" />
+    </div>
+  );
 }
 
-const ATTRIBUTION_PREFIX = /^\s*[—–-]{1,2}\s*/u; /* em-dash, en-dash, hyphen(s) */
-
-function markParagraphsBare(children: NonNullable<DirectiveNode['children']>) {
-  for (const child of children) {
-    if (child.type === 'paragraph') {
-      const childNode = child as DirectiveNode;
-      const data = childNode.data || (childNode.data = {});
-      data.hName = 'directive-p';
-    }
-  }
-}
-
-function remarkEditorialDirectives() {
-  return (tree: Root) => {
-    visit(tree, (node) => {
-      const directive = node as DirectiveNode;
-      if (directive.type !== 'containerDirective') return;
-      const name = directive.name;
-      if (name !== 'pullquote' && name !== 'fullbleed' && name !== 'source' && name !== 'verified')
-        return;
-
-      const data = directive.data || (directive.data = {});
-      const props: Record<string, unknown> = {};
-
-      if (name === 'pullquote') {
-        const children = directive.children || [];
-        const last = children[children.length - 1];
-        if (last && last.type === 'paragraph') {
-          /* Caso A: ultima riga e' un paragrafo dedicato all'attribuzione
-             (autore ha inserito linea vuota prima del trattino). */
-          const text = getNodeText(last);
-          if (ATTRIBUTION_PREFIX.test(text)) {
-            props['data-attribution'] = text.replace(ATTRIBUTION_PREFIX, '').trim();
-            children.pop();
-          } else if (last.children && last.children.length >= 2) {
-            /* Caso B: attribuzione e' nello stesso paragrafo del corpo, separata
-               da soft-break / line-break. Trova l'ultimo break e, se il testo
-               che lo segue inizia con trattino, estrai. */
-            const inner = last.children;
-            let breakIdx = -1;
-            for (let i = inner.length - 1; i >= 0; i--) {
-              const t = inner[i].type;
-              if (t === 'break' || t === 'thematicBreak') {
-                breakIdx = i;
-                break;
-              }
-            }
-            if (breakIdx !== -1 && breakIdx < inner.length - 1) {
-              const tailNodes = inner.slice(breakIdx + 1);
-              const tailText = tailNodes.map((c) => getNodeText(c)).join('');
-              if (ATTRIBUTION_PREFIX.test(tailText)) {
-                props['data-attribution'] = tailText.replace(ATTRIBUTION_PREFIX, '').trim();
-                last.children = inner.slice(0, breakIdx);
-              }
-            }
-          }
-        }
-        markParagraphsBare(children);
-        data.hName = 'pullquote-directive';
-      } else if (name === 'fullbleed') {
-        const imageNode = findFirstImage(directive.children || []);
-        if (imageNode) {
-          if (imageNode.url) props['data-src'] = imageNode.url;
-          if (imageNode.alt) props['data-alt'] = imageNode.alt;
-          if (imageNode.title) props['data-title'] = imageNode.title;
-        }
-        const attrs = directive.attributes || {};
-        if (attrs.ratio) props['data-ratio'] = attrs.ratio;
-        directive.children = []; /* children scartati: la figure rendera' solo via props */
-        data.hName = 'fullbleed-directive';
-      } else if (name === 'source') {
-        const attrs = directive.attributes || {};
-        if (attrs.href) props['data-href'] = attrs.href;
-        if (attrs.author) props['data-author'] = attrs.author;
-        if (attrs.verified) props['data-verified'] = attrs.verified;
-        if (attrs.date) props['data-date'] = attrs.date;
-        markParagraphsBare(directive.children || []);
-        data.hName = 'source-directive';
-      } else if (name === 'verified') {
-        const attrs = directive.attributes || {};
-        if (attrs.visited) props['data-visited'] = attrs.visited;
-        if (attrs.pricesChecked) props['data-prices-checked'] = attrs.pricesChecked;
-        if (attrs.contacts) props['data-contacts'] = attrs.contacts;
-        markParagraphsBare(directive.children || []);
-        data.hName = 'verified-directive';
-      }
-
-      data.hProperties = props;
-    });
-  };
-}
-
-/**
- * Marca il primo paragrafo top-level del documento con
- * `data-first-paragraph="true"`. Esegue dopo remarkEditorialDirectives,
- * quindi i paragrafi dentro directive (pullquote/source) hanno gia' hName
- * = "directive-p" e vengono saltati: il DropCap si applica solo al primo
- * paragrafo body vero (e mai a quelli dentro le directive).
- */
-function markFirstBodyParagraph() {
-  return (tree: Root) => {
-    const children = (tree as Root & { children?: Array<DirectiveNode> }).children || [];
-    for (const child of children) {
-      if (child.type === 'paragraph') {
-        const data = child.data || (child.data = {});
-        const props = (data.hProperties || (data.hProperties = {})) as Record<string, unknown>;
-        props['data-first-paragraph'] = 'true';
-        return;
-      }
-    }
-  };
-}
-
-function findFirstImage(
-  children: NonNullable<DirectiveNode['children']>
-): { url?: string; alt?: string; title?: string | null } | null {
-  for (const child of children) {
-    if (child.type === 'image') return child;
-    if (child.children) {
-      const nested = findFirstImage(child.children);
-      if (nested) return nested;
-    }
-  }
-  return null;
-}
-
-/** Parsing del `title` markdown immagine: `Caption | Foto: Rodrigo` → split. */
-function parseImageTitle(title?: string | null): { caption?: string; credit?: string } {
-  if (!title) return {};
-  const trimmed = title.trim();
-  if (!trimmed) return {};
-  const pipeIdx = trimmed.indexOf(' | ');
-  if (pipeIdx === -1) return { caption: trimmed };
-  return {
-    caption: trimmed.slice(0, pipeIdx).trim() || undefined,
-    credit: trimmed.slice(pipeIdx + 3).trim() || undefined,
-  };
-}
-
-const QUOTE_OPEN_CHARS = new Set(['"', '«', "'", '‘', '“']);
-
-function extractText(node: unknown): string {
-  if (node == null || typeof node === 'boolean') return '';
-  if (typeof node === 'string' || typeof node === 'number') return String(node);
-  if (Array.isArray(node)) return node.map(extractText).join('');
-  if (typeof node === 'object' && 'props' in node) {
-    const props = (node as { props?: { children?: unknown } }).props;
-    return extractText(props?.children);
-  }
-  return '';
-}
-
-/**
- * Splitta i children React del primo paragrafo per estrarre la prima lettera
- * "stampabile" (saltando virgolette di apertura) e il resto.
- */
-function splitFirstLetter(children: unknown): { firstChar: string; rest: unknown } | null {
-  const flat = Array.isArray(children) ? [...children] : [children];
-
-  for (let i = 0; i < flat.length; i++) {
-    const item = flat[i];
-    if (typeof item !== 'string') continue;
-
-    let idx = 0;
-    while (idx < item.length && QUOTE_OPEN_CHARS.has(item[idx])) idx++;
-    if (idx >= item.length) continue; /* solo virgolette: cerca nel pezzo dopo */
-
-    const firstChar = item[idx];
-    const prefix = item.slice(0, idx);
-    const tail = item.slice(idx + 1);
-    const restArr: unknown[] = [];
-    if (prefix) restArr.push(prefix);
-    if (tail) restArr.push(tail);
-    restArr.push(...flat.slice(i + 1));
-    return { firstChar, rest: restArr };
-  }
-
-  return null;
-}
-
-function ArticleBody({ article }: { article: ArticleData }) {
+export function ArticleBody({ article, slug = '' }: { article: ArticleData; slug?: string }) {
   if (typeof article.content !== 'string') {
     return <>{article.content}</>;
   }
 
-  const components = {
-    h2: ({ children }) => (
-      <h2 className="mt-10 md:mt-14 scroll-mt-32 text-3xl md:text-4xl font-serif leading-tight text-[var(--color-ink)]">
-        {children}
-      </h2>
-    ),
-    h3: ({ children }) => (
-      <h3 className="mt-8 md:mt-10 text-2xl font-serif leading-tight text-[var(--color-ink)]">
-        {children}
-      </h3>
-    ),
-    p: ({
-      children,
-      'data-first-paragraph': isFirstParagraph,
-    }: {
-      children?: React.ReactNode;
-      'data-first-paragraph'?: string;
-    }) => {
-      if (isFirstParagraph === 'true') {
-        const text = extractText(children).trim();
-        if (text.length >= 280) {
-          const split = splitFirstLetter(children);
-          if (split) {
-            return <DropCap firstChar={split.firstChar} rest={split.rest as React.ReactNode} />;
-          }
-        }
-      }
-      return (
-        <p className="mt-5 text-[17px] md:text-lg leading-[1.65] md:leading-[1.7] text-[var(--color-ink-2)]">
-          {children}
-        </p>
-      );
-    },
-    ul: ({ children }) => (
-      <ul className="mt-6 space-y-3 pl-0 text-base leading-relaxed text-[var(--color-ink-2)]">
-        {children}
-      </ul>
-    ),
-    li: ({ children }) => (
-      <li className="flex gap-2.5 md:gap-3">
-        <CheckCircle2 className="mt-1 shrink-0 text-[var(--color-accent)]" size={16} />
-        <span>{children}</span>
-      </li>
-    ),
-    strong: ({ children }) => (
-      <strong className="font-semibold text-[var(--color-ink)]">{children}</strong>
-    ),
-    img: ({ src, alt, title }: { src?: string; alt?: string; title?: string }) => {
-      const { caption, credit } = parseImageTitle(title);
-      return <InlineFigure src={src || ''} alt={alt || ''} caption={caption} credit={credit} />;
-    },
-    /* Inner paragraphs delle directive (pullquote/source) — bare <p> senza
-       margin/font override del body, eredita lo styling dal wrapper directive. */
-    'directive-p': ({ children }: { children?: React.ReactNode }) => (
-      <p className="[&:not(:first-child)]:mt-3">{children}</p>
-    ),
-    /* Container directive overrides (custom tag names emessi da remarkEditorialDirectives) */
-    'pullquote-directive': ({
-      children,
-      'data-attribution': attribution,
-    }: {
-      children?: React.ReactNode;
-      'data-attribution'?: string;
-    }) => <PullQuote attribution={attribution}>{children}</PullQuote>,
-    'fullbleed-directive': ({
-      'data-src': src,
-      'data-alt': alt,
-      'data-title': title,
-      'data-ratio': ratio,
-    }: {
-      'data-src'?: string;
-      'data-alt'?: string;
-      'data-title'?: string;
-      'data-ratio'?: string;
-    }) => {
-      const { caption, credit } = parseImageTitle(title);
-      return (
-        <FullBleedFigure
-          src={src || ''}
-          alt={alt || ''}
-          ratio={ratio}
-          caption={caption}
-          credit={credit}
-        />
-      );
-    },
-    'source-directive': ({
-      children,
-      'data-href': href,
-      'data-author': author,
-      'data-verified': verified,
-      'data-date': date,
-    }: {
-      children?: React.ReactNode;
-      'data-href'?: string;
-      'data-author'?: string;
-      'data-verified'?: string;
-      'data-date'?: string;
-    }) => (
-      <SourceBlock href={href} author={author} verified={verified === 'true'} date={date}>
-        {children}
-      </SourceBlock>
-    ),
-    'verified-directive': ({
-      children,
-      'data-visited': visited,
-      'data-prices-checked': pricesChecked,
-      'data-contacts': contacts,
-    }: {
-      children?: React.ReactNode;
-      'data-visited'?: string;
-      'data-prices-checked'?: string;
-      'data-contacts'?: string;
-    }) => (
-      <VerifiedBox visited={visited} pricesChecked={pricesChecked} contacts={contacts === 'true'}>
-        {children}
-      </VerifiedBox>
-    ),
-  } as unknown as Components;
-
   return (
-    <ReactMarkdown
-      remarkPlugins={[
-        remarkGfm,
-        remarkDirective,
-        remarkEditorialDirectives,
-        markFirstBodyParagraph,
-        remarkUnwrapImages,
-      ]}
-      components={components}
-    >
-      {article.content}
-    </ReactMarkdown>
+    <Suspense fallback={<ArticleBodySkeleton />}>
+      <ArticleMarkdownBody content={article.content} slug={slug} title={article.title} />
+    </Suspense>
   );
 }
 
@@ -599,6 +269,9 @@ export default function Articolo() {
   const [copied, setCopied] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isReadingMode, setIsReadingMode] = useState(false);
+  /* Resta true dopo la prima apertura: smontare la modale alla chiusura
+     taglierebbe l'animazione di uscita di AnimatePresence. */
+  const [readingModeMounted, setReadingModeMounted] = useState(false);
 
   const prefersReducedMotion = useReducedMotion();
   const { scrollYProgress, scrollY } = useScroll();
@@ -735,13 +408,16 @@ export default function Articolo() {
   const articleDescription = article.description;
   const articleImage = article.image;
   const articleUrl = `${SITE_URL}/articolo/${currentSlug}`;
-  // Branded OG image generated at build time for preview slugs; falls back to hero image otherwise.
-  const ogImage = isPreviewArticle ? `${SITE_URL}/og/${currentSlug}.jpg` : articleImage;
+  // Branded OG image generated at build time for preview slugs, o quella dichiarata
+  // dal seed articolo (`article.ogImage`, per una card fotografica composta invece
+  // della coverImage grezza); fallback sull'hero image altrimenti.
+  const ogImage =
+    article.ogImage || (isPreviewArticle ? `${SITE_URL}/og/${currentSlug}.jpg` : articleImage);
   const datePublished = toIsoDateString(article.date) || new Date().toISOString();
   const dateModified = toIsoDateString(article.updatedAt) || datePublished;
   const handleShare = async () => {
     const url = window.location.href;
-    const channel = navigator.share ? 'native' : 'clipboard';
+    const channel = typeof navigator.share === 'function' ? 'native' : 'clipboard';
     trackEvent('article_share_click', { slug: currentSlug, channel });
 
     if (navigator.share) {
@@ -799,7 +475,10 @@ export default function Articolo() {
         />
         <Helmet>
           {!isPreviewArticle && <meta property="article:published_time" content={datePublished} />}
-          {!isPreviewArticle && article.updatedAt && (
+          {/* `updatedAt` e' `unknown` (types.ts:16): puo' arrivare come Timestamp
+              Firestore o come stringa. Senza `Boolean()` il ramo falso propaga
+              `unknown` fra i figli di Helmet, che accetta solo ReactNode. */}
+          {!isPreviewArticle && Boolean(article.updatedAt) && (
             <meta property="article:modified_time" content={dateModified} />
           )}
           <meta name="author" content={authorName} />
@@ -838,6 +517,7 @@ export default function Articolo() {
 
           <div className="mx-auto mt-12 max-w-6xl px-5 md:px-8">
             <Breadcrumbs
+              schema={false}
               items={[
                 { label: article.category, href: categoryPath || undefined },
                 {
@@ -885,7 +565,10 @@ export default function Articolo() {
                 articleDescription={articleDescription}
                 articleImage={articleImage}
                 onCopyLink={handleShare}
-                onOpenReadingMode={() => setIsReadingMode(true)}
+                onOpenReadingMode={() => {
+                  setReadingModeMounted(true);
+                  setIsReadingMode(true);
+                }}
                 readingProgress={readingProgress}
               />
             </div>
@@ -946,12 +629,8 @@ export default function Articolo() {
                 )}
 
                 <section className="prose-reset article-body mt-14">
-                  <ArticleBody article={article} />
+                  <ArticleBody article={article} slug={currentSlug} />
                 </section>
-
-                {article.review && (
-                  <ReviewBlock review={article.review} placeName={article.title} />
-                )}
 
                 {article.diary && article.diary.length > 0 && <Diary beats={article.diary} />}
 
@@ -1171,7 +850,7 @@ export default function Articolo() {
                   <div className="mt-8 flex flex-col md:flex-row md:flex-wrap gap-3">
                     <Link
                       to="/risorse"
-                      className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
+                      className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)]"
                     >
                       Vedi risorse selezionate
                       <ArrowRight size={15} />
@@ -1221,13 +900,17 @@ export default function Articolo() {
           readingProgress={readingProgress}
         />
 
-        <ReadingMode
-          article={article}
-          authorName={authorName}
-          readingTime={readingTime}
-          open={isReadingMode}
-          onClose={() => setIsReadingMode(false)}
-        />
+        {readingModeMounted && (
+          <Suspense fallback={null}>
+            <ReadingMode
+              article={article}
+              authorName={authorName}
+              readingTime={readingTime}
+              open={isReadingMode}
+              onClose={() => setIsReadingMode(false)}
+            />
+          </Suspense>
+        )}
       </>
     </PageLayout>
   );

@@ -1,7 +1,7 @@
 ---
 type: project
 area: tooling
-status: in-progress
+status: archived
 owner: skotxx
 created: 2026-05-14
 priority: P1
@@ -16,7 +16,12 @@ related-projects:
   - [[PROJECT_FULL_SITE_MARKETING_TECH_AUDIT]]
   - [[PROJECT_RELEASE_READINESS]]
   - [[AI_AGENT_STACK]]
+superseded_by: CLAUDE.md sezione Config truth
 ---
+
+> **Superato il 2026-07-31.** Questo piano non è più "cosa fare".
+> Il lavoro ancora vivo è confluito in [[10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31]]; la direzione è in `CLAUDE.md sezione Config truth`.
+> Resta leggibile come storico — non aggiungerci voci nuove.
 
 # PROJECT — CLI tooling integration
 
@@ -59,7 +64,7 @@ Suddivise per priorita (impatto sul progetto + chiusura gap audit). Tutti gli sc
   - `stripe trigger checkout.session.completed` — simulare eventi
   - `stripe events resend evt_xxx` — replay
 - **Script proposto:** `npm run webhook:listen` (vedi sezione "Script aggiunti").
-- **Lega a:** [src/components/CartDrawer.tsx](../../src/components/CartDrawer.tsx), [server.ts](../../server.ts) endpoint `/api/webhook`.
+- **Lega a:** `src/components/CartDrawer.tsx`, [server.ts](../../server.ts) endpoint `/api/webhook`.
 
 #### 2. Firebase Emulators (gia disponibile in firebase-tools)
 

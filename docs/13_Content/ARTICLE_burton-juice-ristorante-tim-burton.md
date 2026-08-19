@@ -21,7 +21,7 @@ Pillar validato dal contenuto reale: reel pinned di @travelliniwithus da
 Fatti verificati (web, 2026-07-15): The Burton Juice, Via Marigliano 168,
 Somma Vesuviana (NA), Campania. Primo ristorante d'Europa dedicato a Tim
 Burton: cocktail bar + ristorante + teatro + bakery, aree a tema (Alice,
-Beetlejuice, Jack Skeleton, Edward mani di forbice), attori in sala,
+Beetlejuice, Jack Skeletron, Edward mani di forbice), attori in sala,
 prenotazione WhatsApp obbligatoria (alta domanda). Sito:
 theburtonjuice.com. [VERIFY: prezzi menu correnti e orari prima della
 pubblicazione — /verify-facts]
@@ -94,7 +94,7 @@ harry potter/one piece + città", "posti particolari dove mangiare [città]",
    confermata dall'owner 2026-07-17). Disclosure obbligatoria applicata.
 2. **Registro → serata adulti/coppie/gruppi di amici (primario), nota famiglia
    secondaria:** il cuore del locale è cocktail bar + teatro + attori + temi
-   dark (Beetlejuice, Jack Skeleton, Edward) = esperienza serale che matcha il
+   dark (Beetlejuice, Jack Skeletron, Edward) = esperienza serale che matcha il
    fandom 25-40; la dimensione family (bakery + area Alice) è sotto-intento e
    vive in una sezione dedicata, non nel frame.
 3. **Metrica primaria → SEO organico puro, nessuna conversione forzata:**
@@ -121,7 +121,7 @@ recensione vissuta + risposte pratiche (dove, come prenoto, orari, sale).
   - _Brand (alta domanda, Google Suggest):_ `the burton juice` + `menu` / `menù prezzi` / `recensioni` / `prenotazioni online` / `parcheggio` / `foto` / `dove si trova`
   - _Luogo:_ `The Burton Juice Somma Vesuviana`, `ristorante particolare Napoli`, `posti particolari dove mangiare Campania`
   - _Pattern affine:_ `ristorante a tema [città]` (harry potter / one piece), `ristorante immersivo Italia`, `cena a tema dark / Halloween Napoli`
-  - _Quali entrano come H2 (mappate alle query):_ "Dove si trova e come arrivare" (parcheggio, Somma Vesuviana) · "Come si prenota" (prenotazioni online / WhatsApp) · "Le sale a tema" (Alice, Beetlejuice, Jack Skeleton, Edward) · "Il menu e i prezzi" (menu / menù prezzi / foto) · "Il voto: la nostra recensione" (recensioni).
+  - _Quali entrano come H2 (mappate alle query):_ "Dove si trova e come arrivare" (parcheggio, Somma Vesuviana) · "Come si prenota" (prenotazioni online / WhatsApp) · "Le sale a tema" (Alice, Beetlejuice, Jack Skeletron, Edward) · "Il menu e i prezzi" (menu / menù prezzi / foto) · "Il voto: la nostra recensione" (recensioni).
 - **Schema.org type:** `Review` con `itemReviewed: Restaurant` come schema primario, dentro/accanto a un wrapper `BlogPosting` (angolo GEO/AI-search: è una recensione con voto reale). Aggiungere `BreadcrumbList` (nesting `/esplora` → esperienze) e — forte — `FAQPage` che ricalca letteralmente le 918 domande del reel (dove si trova / come prenoto / orari / sale). Campi da popolare a valle:
   - `Restaurant`: `name` (The Burton Juice), `address` (Via Marigliano 168, Somma Vesuviana NA), `geo`, `url` (theburtonjuice.com), `servesCuisine`, `priceRange` `[VERIFY]`, `telephone`/`sameAs` WhatsApp.
   - `Review`: `reviewRating` (voto complessivo REALE — owner + editorial, altrimenti schema non pubblicabile), `reviewBody`, `datePublished`, `author` = TRAVELLINIWITHUS (@travelliniwithus).
@@ -162,7 +162,7 @@ Il numero aggiornato e tutti i dettagli stanno sul sito ufficiale, theburtonjuic
 
 Il cuore del locale sono le sue quattro anime, una per mondo. Le riconosci tutte anche se non sei un fan sfegatato, perché Burton è entrato nell'immaginario di chiunque abbia visto un film negli ultimi trent'anni.
 
-La sala di Alice è quella dell'ingresso-firma: attraversi lo specchio ed è il primo colpo, il pezzo che tutti fotografano e che apre la serata con il piede giusto — curioso, un po' straniante, esattamente come dev'essere. Beetlejuice riprende il bianco e nero a righe e l'umorismo nero del film, quello che ride della morte senza prenderla troppo sul serio. Jack Skeleton porta dentro Nightmare Before Christmas, l'unico posto al mondo dove Halloween e Natale convivono nella stessa stanza senza litigare. E poi Edward mani di forbice, il più malinconico e tenero dei mondi di Burton, quello che ti resta addosso anche a distanza di anni.
+La sala di Alice è quella dell'ingresso-firma: attraversi lo specchio ed è il primo colpo, il pezzo che tutti fotografano e che apre la serata con il piede giusto — curioso, un po' straniante, esattamente come dev'essere. Beetlejuice riprende il bianco e nero a righe e l'umorismo nero del film, quello che ride della morte senza prenderla troppo sul serio. Jack Skeletron porta dentro Nightmare Before Christmas, l'unico posto al mondo dove Halloween e Natale convivono nella stessa stanza senza litigare. E poi Edward mani di forbice, il più malinconico e tenero dei mondi di Burton, quello che ti resta addosso anche a distanza di anni.
 
 Non sono quattro pareti dipinte: sono ambienti costruiti perché tu ci stia dentro, e il salto da un mondo all'altro è parte di quello che paghi. Ma la differenza vera non è la scenografia — è che qui gli attori lavorano tra i tavoli. Non stanno su un palco lontano: entrano nella tua serata, coinvolgono i clienti in giochi a tema, e il confine tra chi mangia e chi recita si scioglie. È la parte che rende il posto un ristorante-teatro e non "un ristorante con le pareti a tema". Va detto chiaro, perché cambia tutto: se sei una persona timida, qui difficilmente resti a guardare da fuori.
 
@@ -264,7 +264,7 @@ ricevuto): `public/images/articles/burton-juice/` con varianti responsive
 | §"Le sale a tema" (1ª, ideale `:::fullbleed`) | `burton-juice-sale-tema.{avif,webp}`   | 16:9 o 3:2, mostra il salto tra due mondi (Alice + Beetlejuice/Jack/Edward) | Section feature | ≤150 KB     | No  |
 | §"Le sale a tema" (2ª)                        | `burton-juice-attori-sala.{avif,webp}` | 4:5 o 3:2, attori in costume che interagiscono al tavolo                    | Article inline  | ≤120 KB     | No  |
 | §"Il menu e i prezzi"                         | `burton-juice-drink-tema.{avif,webp}`  | 4:5 o 1:1, cocktail/piatto a tema (frame reale, ancora la scheda review)    | Article inline  | ≤120 KB     | No  |
-| §"Le sale a tema" (opz. 3ª)                   | `burton-juice-edward-jack.{avif,webp}` | 4:5, angolo Edward mani di forbice o Jack Skeleton                          | Gallery         | ≤100 KB     | No  |
+| §"Le sale a tema" (opz. 3ª)                   | `burton-juice-edward-jack.{avif,webp}` | 4:5, angolo Edward mani di forbice o Jack Skeletron                          | Gallery         | ≤100 KB     | No  |
 | OG / social card                              | `burton-juice-og.jpg`                  | 1200×630 esatto, orizzontale                                                | OG              | ≤300 KB     | —   |
 
 ### Alt text (IT, bozza — da confermare sul frame reale fornito)
@@ -301,7 +301,7 @@ Il pillar resta senza immagini finché non arriva almeno il set minimo. Serve:
 2. **1 foto** con **attori in sala / interazione al tavolo** → prova visiva del
    claim "ristorante-teatro".
 
-**IDEALE (set completo, una foto per area):** 3. Sala **Beetlejuice** (righe bianco/nero) — orizzontale o verticale. 4. Sala **Jack Skeleton** (Nightmare Before Christmas). 5. Angolo **Edward mani di forbice**. 6. **Cocktail bar** + un **drink/piatto a tema** in primo piano (ancora la review). 7. **Bakery** (per la sotto-sezione famiglie). 8. Opzionale ma forte: **R+B nel locale** (uno scatto ambientato) — le foto con
+**IDEALE (set completo, una foto per area):** 3. Sala **Beetlejuice** (righe bianco/nero) — orizzontale o verticale. 4. Sala **Jack Skeletron** (Nightmare Before Christmas). 5. Angolo **Edward mani di forbice**. 6. **Cocktail bar** + un **drink/piatto a tema** in primo piano (ancora la review). 7. **Bakery** (per la sotto-sezione famiglie). 8. Opzionale ma forte: **R+B nel locale** (uno scatto ambientato) — le foto con
 persone reali costruiscono fiducia più in fretta dei soli interni.
 
 **Requisiti tecnici per ogni scatto:**

@@ -2,7 +2,7 @@
 type: bug
 area: security
 severity: medium
-status: in-progress
+status: done
 priority: p1
 owner: travellini-backend-engineer
 opened: 2026-05-15
@@ -56,3 +56,9 @@ Dipendenza: [server.ts:670](../../server.ts) `fetchCouponByCode` usa Firestore R
 ## Link
 
 - audit avanzato sezione §13 M4
+
+## Chiusura — 2026-07-31
+
+Verificato sul codice durante il consolidamento del backlog: `firestore.rules:279` → `allow read: if isAdmin()`.
+
+Nessun lavoro residuo. Vedi [[10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31]] §4.

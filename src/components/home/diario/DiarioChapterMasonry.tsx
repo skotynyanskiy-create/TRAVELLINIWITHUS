@@ -82,20 +82,23 @@ const CHAPTER_ITEMS: ChapterItem[] = [
 
 export default function DiarioChapterMasonry() {
   return (
-    <section className="border-b border-neutral-200 bg-white py-24 text-neutral-900 md:py-32">
+    <section className="border-b border-[var(--color-border)] bg-white py-24 text-[var(--color-ink)] md:py-32">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         {/* Section Header */}
         <div className="mb-16 flex flex-col justify-between md:flex-row md:items-end">
           <div>
-            <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-amber-700">
+            <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
               <Sparkles size={14} />
               L'Atlante per Capitoli
             </span>
-            <h2 className="mt-3 font-serif text-3xl font-normal leading-tight text-neutral-900 md:text-5xl lg:text-6xl">
+            <h2 className="mt-3 font-serif text-3xl font-normal leading-tight text-[var(--color-ink)] md:text-5xl lg:text-6xl">
               I 4 Capitoli della{' '}
-              <span className="italic font-serif text-amber-800">Meraviglia Concreta</span>.
+              <span className="italic font-serif text-[var(--color-accent-text)]">
+                Meraviglia Concreta
+              </span>
+              .
             </h2>
-            <p className="mt-4 max-w-xl text-base leading-relaxed text-neutral-600 font-light">
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-[var(--color-muted-fg)] font-light">
               Non classifiche generiche: luoghi scelti per atmosfera, trasparenza sui costi e
               verdetto onesto sul campo.
             </p>
@@ -103,7 +106,7 @@ export default function DiarioChapterMasonry() {
 
           <Link
             to="/esplora"
-            className="mt-6 inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-white px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-neutral-900 transition-all hover:border-neutral-900 md:mt-0 shadow-xs"
+            className="mt-6 inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-white px-6 py-3 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] transition-all hover:border-[var(--color-ink)] md:mt-0 shadow-xs"
           >
             Vedi tutto l'Atlante <ArrowUpRight size={16} />
           </Link>
@@ -118,7 +121,7 @@ export default function DiarioChapterMasonry() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.08 }}
-              className={`group flex flex-col overflow-hidden rounded-3xl border border-neutral-200/90 bg-[#FAF8F5] shadow-sm transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl ${item.spanClass}`}
+              className={`group flex flex-col overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-sand)] shadow-sm transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl ${item.spanClass}`}
             >
               {/* Image Area */}
               <div className="relative aspect-[4/3] w-full overflow-hidden bg-neutral-100 lg:aspect-auto lg:h-[320px]">
@@ -132,13 +135,14 @@ export default function DiarioChapterMasonry() {
 
                 {/* Overlay Top Badges */}
                 <div className="absolute left-4 top-4 right-4 flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-neutral-900 backdrop-blur-md shadow-sm">
-                    <MapPin size={11} className="text-amber-700" />
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--color-ink)] backdrop-blur-md shadow-sm">
+                    <MapPin size={11} className="text-[var(--color-accent-text)]" />
                     {item.location}
                   </span>
                   {item.badge && (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-neutral-900 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white shadow-sm">
-                      <Flame size={11} className="text-amber-400" /> {item.badge}
+                    <span className="inline-flex items-center gap-1 rounded-full bg-[var(--color-ink)] px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white shadow-sm">
+                      <Flame size={11} className="text-[var(--color-accent-on-dark)]" />{' '}
+                      {item.badge}
                     </span>
                   )}
                 </div>
@@ -146,7 +150,7 @@ export default function DiarioChapterMasonry() {
                 {/* Bottom Overlay Title */}
                 <div className="absolute bottom-5 left-5 right-5 text-white">
                   <div className="flex items-center gap-2">
-                    <span className="font-serif italic text-lg text-amber-300">
+                    <span className="font-serif italic text-lg text-[var(--color-accent-on-dark)]">
                       {item.chapterNumber}
                     </span>
                     <span className="text-white/40">·</span>
@@ -162,24 +166,27 @@ export default function DiarioChapterMasonry() {
 
               {/* Details Body */}
               <div className="flex flex-1 flex-col justify-between p-7">
-                <p className="text-sm leading-relaxed text-neutral-600 font-light">
+                <p className="text-sm leading-relaxed text-[var(--color-muted-fg)] font-light">
                   {item.description}
                 </p>
 
-                <div className="mt-6 flex items-center justify-between border-t border-neutral-200/80 pt-4 text-xs font-semibold">
+                <div className="mt-6 flex items-center justify-between border-t border-[var(--color-border)] pt-4 text-xs font-semibold">
                   <div className="flex items-center gap-3">
-                    <span className="rounded-md bg-white border border-neutral-200 px-3 py-1 text-neutral-900 shadow-xs">
+                    <span className="rounded-md bg-white border border-[var(--color-border)] px-3 py-1 text-[var(--color-ink)] shadow-xs">
                       {item.price}
                     </span>
-                    <span className="inline-flex items-center gap-1 text-neutral-700">
-                      <Star size={12} className="fill-amber-500 text-amber-500" />
+                    <span className="inline-flex items-center gap-1 text-[var(--color-ink-2)]">
+                      <Star
+                        size={12}
+                        className="fill-[var(--color-accent)] text-[var(--color-accent)]"
+                      />
                       {item.score}
                     </span>
                   </div>
 
                   <Link
                     to={item.link}
-                    className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-amber-800 transition-transform group-hover:translate-x-1"
+                    className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-transform group-hover:translate-x-1"
                   >
                     Apri Scheda <ArrowUpRight size={14} />
                   </Link>

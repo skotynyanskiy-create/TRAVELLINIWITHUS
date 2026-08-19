@@ -26,7 +26,7 @@ Use `code-explorer` (haiku, cheap) for steps 1–3.
      - → Hand off to `travellini-frontend-builder`
 
    - **S4 — high-risk server / data bug** if the fix touches:
-     - `server.ts`, `firestore.rules`, `src/config/admin.ts`
+     - `src/server/apiRoutes.ts`, `functions/`, `server.ts`, `firestore.rules`, `src/config/admin.ts`
      - `firestore.indexes.json`, `firebase.json`, `.firebaserc`
      - Stripe handlers (webhook, checkout, refund)
      - Firestore data shape, queries with security implications, batched writes

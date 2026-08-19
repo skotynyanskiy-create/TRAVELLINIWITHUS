@@ -1,7 +1,7 @@
 ---
 type: project
 area: product
-status: in-progress
+status: archived
 priority: p1
 owner: codex
 repo: TRAVELLINIWITHUS
@@ -13,7 +13,12 @@ tags:
   - project
   - ui
   - product
+superseded_by: PROJECT_HOME_RICOMPOSIZIONE_2026-07-26
 ---
+
+> **Superato il 2026-07-31.** Questo piano non è più "cosa fare".
+> Il lavoro ancora vivo è confluito in [[10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31]]; la direzione è in `PROJECT_HOME_RICOMPOSIZIONE_2026-07-26`.
+> Resta leggibile come storico — non aggiungerci voci nuove.
 
 # PROJECT_HOME_HERO_NAV_REFINEMENT
 

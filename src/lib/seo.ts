@@ -155,6 +155,39 @@ export function buildArticleJsonLd(article: ArticleSchemaInput) {
   };
 }
 
+export interface FaqQaItem {
+  question: string;
+  answer: string;
+}
+
+/**
+ * Schema FAQPage condiviso. Prima di questa funzione ClubFaq.tsx e
+ * Collaborazioni.tsx costruivano lo stesso `mainEntity`/`Question`/`Answer`
+ * inline, ognuno per conto proprio: qui si centralizza la forma per il nuovo
+ * consumatore (`:::domande` in `src/components/article/directives/domande.tsx`)
+ * senza duplicarla una terza volta.
+ *
+ * Filtra le coppie senza domanda o senza risposta reale e ritorna `null` se
+ * non resta nulla da pubblicare: mai un `FAQPage` con `mainEntity` vuoto.
+ */
+export function buildFaqPageJsonLd(items: FaqQaItem[]): object | null {
+  const valid = items.filter((item) => item.question.trim() && item.answer.trim());
+  if (valid.length === 0) return null;
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: valid.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  };
+}
+
 export function buildBreadcrumbListJsonLd(items: BreadcrumbItem[]) {
   return {
     '@context': 'https://schema.org',

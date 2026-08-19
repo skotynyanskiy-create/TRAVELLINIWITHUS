@@ -17,7 +17,7 @@ Before invoking any agent, read:
 
 - `docs/MARKETING_OPERATIONS_HUB.md` — what was running last week
 - `docs/10_Projects/PROJECT_RELEASE_READINESS.md` — release blockers
-- `docs/10_Projects/PROJECT_30DAY_BACKLOG.md` — short-term priorities
+- `docs/10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31.md` — short-term priorities
 - the most recent `docs/40_Daily/WEEKLY_*.md` if any — last week's plan, to compare against
 
 ### 2. Invoke `travellini-data-analyst`

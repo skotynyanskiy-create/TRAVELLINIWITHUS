@@ -6,6 +6,9 @@
  * Consumed by RelatedArticles to bubble up articles aligned with the reader's
  * recent interests.
  */
+import type { ContentType } from '../config/contentTaxonomy';
+import { canLoad } from '../lib/consent';
+import { recordInterestForContentType } from '../lib/personalization';
 
 const STORAGE_KEY = 'twu_reading_history';
 const HISTORY_LIMIT = 20;
@@ -29,7 +32,7 @@ function isBrowser() {
 }
 
 export function getReadingHistory(): ReadingHistoryEntry[] {
-  if (!isBrowser()) return [];
+  if (!isBrowser() || !canLoad('personalization')) return [];
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return [];
@@ -42,12 +45,15 @@ export function getReadingHistory(): ReadingHistoryEntry[] {
 }
 
 export function recordArticleRead(entry: Omit<ReadingHistoryEntry, 'ts'>): void {
-  if (!isBrowser() || !entry.slug) return;
+  if (!isBrowser() || !entry.slug || !canLoad('personalization')) return;
   try {
     const history = getReadingHistory().filter((e) => e.slug !== entry.slug);
     history.unshift({ ...entry, ts: Date.now() });
     const truncated = history.slice(0, HISTORY_LIMIT);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(truncated));
+    if (entry.category) {
+      recordInterestForContentType(entry.category as ContentType);
+    }
   } catch {
     // silent: localStorage may be full or blocked
   }

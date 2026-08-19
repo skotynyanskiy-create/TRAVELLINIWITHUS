@@ -31,7 +31,6 @@ export const SURFACES: Surface[] = [
   { path: '/chi-siamo', state: 'live' },
   { path: '/collaborazioni', state: 'live' },
   { path: '/media-kit', state: 'live' },
-  { path: '/press', state: 'live' },
   { path: '/contatti', state: 'live' },
   { path: '/risorse', state: 'live' },
   { path: '/club', state: 'live' },

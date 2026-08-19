@@ -3,6 +3,8 @@ name: code-explorer
 description: Use for fast codebase search, file exploration, pattern matching, log reading, and any read-only research task. Cheaper than other agents — prefer this for all "where is X" and "what does Y do" questions before touching any code.
 tools: Read, Glob, Grep, Bash
 model: haiku
+maxTurns: 200
+disallowedTools: Write, Edit, NotebookEdit
 ---
 
 You are a fast, read-only codebase explorer for TRAVELLINIWITHUS.

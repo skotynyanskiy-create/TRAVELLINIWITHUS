@@ -1,12 +1,21 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Mail, Instagram, MessageCircle, ArrowRight, CheckCircle, Loader2 } from 'lucide-react';
+import {
+  Mail,
+  Instagram,
+  MessageCircle,
+  ArrowRight,
+  CheckCircle,
+  Loader2,
+  MailWarning,
+} from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import { Link } from '@/src/components/TransitionLink';
 import Breadcrumbs from '../components/Breadcrumbs';
 import Button from '../components/Button';
 import FormField from '../components/FormField';
 import Input from '../components/Input';
+import LeadFallbackNotice from '../components/LeadFallbackNotice';
 import PageLayout from '../components/PageLayout';
 import Section from '../components/Section';
 import Select from '../components/Select';
@@ -18,7 +27,12 @@ import { useAudience } from '../context/AudienceContext';
 import { siteContentDefaults } from '../config/siteContent';
 import { useSiteContent } from '../hooks/useSiteContent';
 import { trackEvent } from '../services/analytics';
-import { appendLeadFallback } from '../lib/leadFallback';
+import {
+  appendLeadFallback,
+  buildLeadFallbackMailto,
+  buildLeadFallbackWhatsAppText,
+  buildLeadFallbackWhatsAppUrl,
+} from '../lib/leadFallback';
 
 export default function Contatti() {
   const [searchParams] = useSearchParams();
@@ -61,6 +75,7 @@ export default function Contatti() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
+  const [fallbackNotice, setFallbackNotice] = useState<{ saved: boolean } | null>(null);
 
   const topicGuidance: Record<string, { hint: string; placeholder: string }> = {
     collab: {
@@ -90,6 +105,18 @@ export default function Contatti() {
   };
 
   const validateEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  // Estratta cosi' il pannello di fallback puo' ricostruire lo stesso testo
+  // per il mailto/WhatsApp senza duplicare la logica di handleSubmit.
+  const buildComposedMessage = () => {
+    const b2bContext = [
+      formData.company.trim() && `Azienda: ${formData.company.trim()}`,
+      formData.budget.trim() && `Budget indicativo: ${formData.budget.trim()}`,
+    ]
+      .filter(Boolean)
+      .join('\n');
+    return b2bContext ? `${b2bContext}\n\n${formData.message.trim()}` : formData.message.trim();
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -129,21 +156,14 @@ export default function Contatti() {
 
     setErrors({});
     setSubmitError('');
+    setFallbackNotice(null);
     setIsSubmitting(true);
 
     // Fix 2026-07-24 (bonifica 0.2): company/budget erano raccolti dalla UI B2B
     // ma mai inviati — l'endpoint accetta solo 5 campi (server.ts:1597), quindi
     // li incorporiamo in testa al messaggio in forma strutturata. Il campo
     // dedicato lato server resta un'estensione futura (file high-risk).
-    const b2bContext = [
-      formData.company.trim() && `Azienda: ${formData.company.trim()}`,
-      formData.budget.trim() && `Budget indicativo: ${formData.budget.trim()}`,
-    ]
-      .filter(Boolean)
-      .join('\n');
-    const composedMessage = b2bContext
-      ? `${b2bContext}\n\n${formData.message.trim()}`
-      : formData.message.trim();
+    const composedMessage = buildComposedMessage();
 
     try {
       const response = await fetch('/api/contact-lead', {
@@ -186,18 +206,38 @@ export default function Contatti() {
         message: composedMessage,
         date: new Date().toISOString(),
       });
-      if (saved) {
-        trackEvent('contact_submit_success', { topic: formData.topic, fallback: 'localStorage' });
-        setIsSubmitted(true);
-      } else {
-        setSubmitError(
-          `Non siamo riusciti a inviare il messaggio. Puoi scriverci direttamente a ${CONTACTS.email}.`
-        );
-      }
+      // Nome evento distinto da 'contact_submit_success': un messaggio mai
+      // arrivato al team non e' una conversione, e chiamarlo cosi' falsa anche
+      // il funnel in analytics, non solo lo schermo di chi scrive.
+      trackEvent('contact_submit_fallback', { topic: formData.topic, saved_locally: saved });
+      setFallbackNotice({ saved });
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  const contactFallbackMailto = buildLeadFallbackMailto(
+    CONTACTS.email,
+    `Messaggio dal sito — ${formData.name.trim() || 'nuovo contatto'}`,
+    'Il modulo contatti del sito non è riuscito a inviare questo messaggio. Lo incollo qui sotto:',
+    [
+      { label: 'Nome', value: formData.name },
+      { label: 'Email', value: formData.email },
+      { label: 'Motivo', value: formData.topic },
+      { label: 'Messaggio', value: buildComposedMessage() },
+    ]
+  );
+  const contactFallbackWhatsAppUrl = buildLeadFallbackWhatsAppUrl(
+    CONTACTS.whatsappUrl,
+    buildLeadFallbackWhatsAppText(
+      'Il modulo contatti del sito non è riuscito a inviare il mio messaggio:',
+      [
+        { label: 'Nome', value: formData.name },
+        { label: 'Email', value: formData.email },
+        { label: 'Motivo', value: formData.topic },
+      ]
+    )
+  );
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -234,7 +274,7 @@ export default function Contatti() {
           >
             <div className="mb-6 flex items-center justify-center gap-4">
               <div className="h-[1px] w-12 bg-[var(--color-accent)]"></div>
-              <span className="text-sm font-semibold uppercase tracking-widest text-[var(--color-accent)]">
+              <span className="text-sm font-semibold uppercase tracking-widest text-[var(--color-accent-text)]">
                 {pageContent.heroEyebrow}
               </span>
               <div className="h-[1px] w-12 bg-[var(--color-accent)]"></div>
@@ -253,26 +293,26 @@ export default function Contatti() {
 
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-5">
           <div className="space-y-8 lg:col-span-2">
-            <h3 className="mb-6 text-2xl font-serif">I nostri recapiti</h3>
+            <h2 className="mb-6 text-2xl font-serif">I nostri recapiti</h2>
 
             <div className="group flex items-start gap-4 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-6 transition-all duration-300 hover:border-[var(--color-accent)]/25 hover:shadow-[var(--shadow-sm)]">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-[var(--color-accent-soft)] text-[var(--color-accent)] transition-transform duration-300 group-hover:scale-105">
                 <Mail size={20} />
               </div>
               <div>
-                <h4 className="mb-1 font-serif text-xl">{pageContent.emailCardTitle}</h4>
+                <h3 className="mb-1 font-serif text-xl">{pageContent.emailCardTitle}</h3>
                 <p className="mb-2 text-sm font-normal text-black/70">
                   {pageContent.emailCardDescription}
                 </p>
                 <a
                   href={CONTACTS.mailto}
-                  className="block text-sm font-medium transition-colors group-hover:text-[var(--color-accent)]"
+                  className="block py-1.5 text-sm font-medium transition-colors group-hover:text-[var(--color-accent-text)]"
                 >
                   {CONTACTS.email}
                 </a>
                 <Link
                   to="/media-kit"
-                  className="mt-4 block text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] transition-colors hover:text-black"
+                  className="mt-4 block py-1.5 text-xs font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-colors hover:text-black"
                 >
                   {pageContent.emailCardLinkLabel}
                 </Link>
@@ -289,7 +329,7 @@ export default function Contatti() {
                 <MessageCircle size={20} />
               </div>
               <div>
-                <h4 className="mb-1 font-serif text-xl">{pageContent.whatsappCardTitle}</h4>
+                <h3 className="mb-1 font-serif text-xl">{pageContent.whatsappCardTitle}</h3>
                 <p className="mb-2 text-sm font-normal text-black/70">
                   {pageContent.whatsappCardDescription}
                 </p>
@@ -330,7 +370,7 @@ export default function Contatti() {
             </div>
 
             <div className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-6 shadow-sm">
-              <h4 className="mb-3 text-xl font-serif">{pageContent.helperTitle}</h4>
+              <h3 className="mb-3 text-xl font-serif">{pageContent.helperTitle}</h3>
               <ul className="space-y-3 text-sm font-normal leading-relaxed text-black/70">
                 {pageContent.helperItems.map((item) => (
                   <li key={item} className="flex items-start gap-2">
@@ -347,7 +387,7 @@ export default function Contatti() {
             className="relative scroll-mt-28 overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-white p-8 shadow-[var(--shadow-sm)] md:p-12 lg:col-span-3"
           >
             <AnimatePresence mode="wait">
-              {!isSubmitted ? (
+              {!isSubmitted && !fallbackNotice ? (
                 <motion.div
                   key="form"
                   initial={{ opacity: 0 }}
@@ -358,7 +398,7 @@ export default function Contatti() {
                   {/* B2C vs B2B Audience Switcher Tab */}
                   <div className="mb-8 flex items-center justify-between border-b border-[var(--color-border)] pb-6">
                     <div>
-                      <h3 className="text-2xl md:text-3xl font-serif">{pageContent.formTitle}</h3>
+                      <h2 className="text-2xl md:text-3xl font-serif">{pageContent.formTitle}</h2>
                       <p className="text-xs text-black/60 mt-1">
                         Seleziona la tua tipologia per fornirti una risposta personalizzata.
                       </p>
@@ -533,7 +573,7 @@ export default function Contatti() {
                     </FormField>
 
                     <div className="pt-6">
-                      <p className="mb-8 text-xs font-light leading-relaxed text-black/40">
+                      <p className="mb-8 text-xs font-light leading-relaxed text-black/60">
                         Inviando questo modulo accetti la nostra{' '}
                         <Link
                           to="/privacy"
@@ -572,7 +612,7 @@ export default function Contatti() {
                     </div>
                   </form>
                 </motion.div>
-              ) : (
+              ) : isSubmitted ? (
                 <motion.div
                   key="success"
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -583,7 +623,7 @@ export default function Contatti() {
                   <div className="mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-[var(--color-sand)] text-[var(--color-accent)] shadow-inner">
                     <CheckCircle size={48} />
                   </div>
-                  <h3 className="mb-4 text-4xl font-serif">Messaggio inviato</h3>
+                  <h2 className="mb-4 text-4xl font-serif">Messaggio inviato</h2>
                   <p className="mx-auto mb-10 max-w-md text-lg font-normal leading-relaxed text-black/70">
                     Grazie per averci contattato. Abbiamo ricevuto il tuo messaggio e ti
                     risponderemo appena possibile, in genere entro 24-48 ore lavorative.
@@ -602,10 +642,34 @@ export default function Contatti() {
                         website: '',
                       });
                     }}
-                    className="border-b border-[var(--color-accent)] pb-1 text-xs font-bold uppercase tracking-widest text-[var(--color-accent)] transition-colors hover:border-black hover:text-black"
+                    className="border-b border-[var(--color-accent)] pb-1 text-xs font-bold uppercase tracking-widest text-[var(--color-accent-text)] transition-colors hover:border-black hover:text-black"
                   >
                     Invia un altro messaggio
                   </button>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="fallback"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+                  className="flex flex-col items-center justify-center py-16 text-center"
+                >
+                  <div className="mb-8 flex h-24 w-24 items-center justify-center rounded-full bg-[var(--color-warning-soft)] text-[var(--color-warning-text)] shadow-inner">
+                    <MailWarning size={40} />
+                  </div>
+                  <h2 className="mb-4 text-4xl font-serif">Il messaggio non è partito</h2>
+                  <p className="mx-auto mb-8 max-w-md text-lg font-normal leading-relaxed text-black/70">
+                    Non è colpa tua: il nostro sistema di invio non era raggiungibile in questo
+                    momento. Per essere sicuro/a che lo vediamo, scrivici direttamente.
+                  </p>
+                  <LeadFallbackNotice
+                    className="mx-auto max-w-md"
+                    savedLocally={Boolean(fallbackNotice?.saved)}
+                    mailtoHref={contactFallbackMailto}
+                    whatsappHref={contactFallbackWhatsAppUrl}
+                    onRetry={() => setFallbackNotice(null)}
+                  />
                 </motion.div>
               )}
             </AnimatePresence>

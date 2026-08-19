@@ -1,16 +1,19 @@
 import React from 'react';
-import type { ContentReview, PartnershipKind } from '@/src/types/content';
+import type { PartnershipKind } from '@/src/types/content';
 
 export interface ArticleData {
   title: string;
   description: string;
   image: string;
-  review?: ContentReview;
   /** Trasparenza partnership (AGCOM/IAP) — assente = organico, nessun badge mostrato. */
   partnership?: { kind: PartnershipKind; partner?: string };
   /** Alt descrittivo dell'immagine di copertina. Se assente, fallback su luogo + categoria
       (evita di duplicare l'H1 per gli screen reader). */
   imageAlt?: string;
+  /** Card OG fotografica dedicata (1200x630), se diversa dalla coverImage —
+      vedi `Articolo.tsx` ogImage/SEO.tsx: senza, gli unfurl social userebbero
+      la coverImage grezza invece di una card composta con testo/wordmark. */
+  ogImage?: string;
   category: string;
   date: string;
   updatedAt?: unknown;

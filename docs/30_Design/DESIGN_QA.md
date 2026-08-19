@@ -46,7 +46,9 @@ tags:
 
 - Exactly one H1 at every tested viewport.
 - Document width equals viewport width at 320, 375, 768, 1024 and 1536 px.
-- Desktop primary CTA reaches `#pagina-02` and updates the live page indicator to 02/05.
+- Desktop primary CTA reaches `#indice-vivo` (the registro). The page indicator it
+  used to update no longer exists: it belonged to the `TurningPage` journal layout
+  removed in the home ricomposizione.
 - Mobile menu opens and exposes all four primary destinations.
 - Header and textile binding remain fixed across all five desktop chapters.
 - Images have explicit alt attributes; decorative instances use empty alt text.

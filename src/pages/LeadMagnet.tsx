@@ -66,7 +66,7 @@ export default function LeadMagnet() {
                 href={PDF_URL}
                 download
                 onClick={handleDownload}
-                className="inline-flex h-14 items-center justify-center gap-2 rounded-xl bg-[var(--color-ink)] px-8 text-sm font-bold uppercase tracking-widest text-white shadow-md transition-all hover:bg-[var(--color-accent)]"
+                className="inline-flex h-14 items-center justify-center gap-2 rounded-xl bg-[var(--color-ink)] px-8 text-sm font-bold uppercase tracking-widest text-white shadow-md transition-all hover:bg-[var(--color-accent-hover)]"
               >
                 <Download size={18} /> Scarica il PDF
               </a>
@@ -74,13 +74,13 @@ export default function LeadMagnet() {
                 href={CONTACTS.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-14 items-center justify-center gap-2 rounded-xl border border-black/10 px-8 text-sm font-bold uppercase tracking-widest text-[var(--color-ink)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+                className="inline-flex h-14 items-center justify-center gap-2 rounded-xl border border-black/10 px-8 text-sm font-bold uppercase tracking-widest text-[var(--color-ink)] transition-all hover:border-[var(--color-accent)] hover:text-[var(--color-accent-text)]"
               >
                 <Instagram size={18} /> Seguici su Instagram
               </a>
             </div>
 
-            <p className="mt-6 text-xs leading-relaxed text-black/50">
+            <p className="mt-6 text-xs leading-relaxed text-black/60">
               Il download è sul sito (questo PDF). Se hai lasciato l’email, ti avvisiamo quando esce
               un nuovo posto — non una sequenza di vendita. Per qualsiasi cosa:{' '}
               <a href={CONTACTS.mailto} className="underline underline-offset-2 hover:text-black">

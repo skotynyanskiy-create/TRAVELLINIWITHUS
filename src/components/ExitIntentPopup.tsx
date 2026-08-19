@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 import { X } from 'lucide-react';
 import Newsletter from './Newsletter';
 import LeadMagnetCover from './LeadMagnetCover';
+import { useFocusTrap } from '../hooks/useFocusTrap';
+import { hasActiveOverlayLayer, useOverlayLayer } from '../hooks/useOverlayLayer';
 
 const STORAGE_KEY = 'twu_exit_popup_dismissed_at';
 const SUBSCRIBED_KEY = 'twu_newsletter_subscribed';
@@ -48,6 +50,16 @@ function markDismissed(reason: 'closed' | 'subscribed') {
 
 export default function ExitIntentPopup() {
   const [visible, setVisible] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const isTopLayer = useOverlayLayer(visible);
+
+  const close = useCallback(() => {
+    setVisible(false);
+    markDismissed('closed');
+  }, []);
+
+  useFocusTrap(visible, dialogRef, closeButtonRef, isTopLayer);
 
   useEffect(() => {
     if (isStillInCooldown()) return;
@@ -59,7 +71,7 @@ export default function ExitIntentPopup() {
     }, DELAY_BEFORE_ELIGIBLE_MS);
 
     const trigger = () => {
-      if (alreadyTriggered) return;
+      if (alreadyTriggered || hasActiveOverlayLayer()) return;
       alreadyTriggered = true;
       setVisible(true);
     };
@@ -91,10 +103,18 @@ export default function ExitIntentPopup() {
     };
   }, []);
 
-  const close = () => {
-    setVisible(false);
-    markDismissed('closed');
-  };
+  useEffect(() => {
+    if (!visible || !isTopLayer) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') close();
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [close, isTopLayer, visible]);
 
   return (
     <AnimatePresence>
@@ -107,12 +127,13 @@ export default function ExitIntentPopup() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[200] bg-ink/72 backdrop-blur-sm"
+            className="fixed inset-0 z-[300] bg-ink/72 backdrop-blur-sm"
             onClick={close}
             aria-hidden="true"
           />
 
           <motion.div
+            ref={dialogRef}
             key="exit-card"
             initial={{ opacity: 0, scale: 0.94, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -121,9 +142,11 @@ export default function ExitIntentPopup() {
             role="dialog"
             aria-modal="true"
             aria-label="Ricevi la guida Alla scoperta dell’Italia nascosta"
-            className="fixed inset-x-4 top-1/2 z-[201] mx-auto flex max-w-lg -translate-y-1/2 flex-col overflow-hidden rounded-[var(--radius-lg)] border border-border bg-sand/98 p-6 shadow-[var(--shadow-premium)] sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 sm:p-8"
+            className="fixed inset-x-4 top-1/2 z-[310] mx-auto flex max-w-lg -translate-y-1/2 flex-col overflow-hidden rounded-[var(--radius-lg)] border border-border bg-sand/98 p-6 shadow-[var(--shadow-premium)] sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 sm:p-8"
           >
             <button
+              ref={closeButtonRef}
+              type="button"
               onClick={close}
               aria-label="Chiudi"
               className="absolute top-5 right-5 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-ink/5 text-ink/40 transition-all duration-300 hover:bg-ink/10 hover:text-ink"
@@ -135,7 +158,7 @@ export default function ExitIntentPopup() {
               <div className="aspect-[4/5] h-11 shrink-0 overflow-hidden rounded-[var(--radius-sm)] border border-black/10 shadow-xs">
                 <LeadMagnetCover variant="compact" />
               </div>
-              <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--color-accent)] sm:text-xs">
+              <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[var(--color-accent-text)] sm:text-xs">
                 Prima di uscire
               </span>
             </div>
@@ -158,6 +181,7 @@ export default function ExitIntentPopup() {
             </div>
 
             <button
+              type="button"
               onClick={close}
               className="mt-6 text-center text-xs font-semibold tracking-widest text-ink/40 uppercase transition-colors duration-300 hover:text-ink/80"
             >

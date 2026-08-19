@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatPrice } from './format';
+import { formatPrice, meseAnno, etichettaPrezzo } from './format';
 
 // Intl separa numero e simbolo con uno spazio non-breaking (NBSP/narrow):
 // normalizziamo a spazio normale così l'assert non dipende dal carattere ICU.
@@ -29,5 +29,50 @@ describe('formatPrice', () => {
     expect(result).toContain('9,99');
     // it-IT rende USD come "USD"; alcune ICU usano il simbolo "US$".
     expect(result).toMatch(/USD|US\$/);
+  });
+});
+
+describe('meseAnno', () => {
+  it('rende il mese in italiano', () => {
+    expect(meseAnno('2026-05-14')).toBe('maggio 2026');
+  });
+
+  it('regge il primo giorno del mese senza slittare indietro', () => {
+    // `new Date('2026-01-01')` è UTC: in fusi negativi tornava dicembre 2025.
+    expect(meseAnno('2026-01-01')).toBe('gennaio 2026');
+  });
+
+  it('copre dicembre, cioè l’ultimo indice', () => {
+    expect(meseAnno('2025-12-31')).toBe('dicembre 2025');
+  });
+
+  it('torna null invece di inventare, su input assente o rotto', () => {
+    expect(meseAnno(undefined)).toBeNull();
+    expect(meseAnno('')).toBeNull();
+    expect(meseAnno('2026-13-01')).toBeNull();
+    expect(meseAnno('non-una-data')).toBeNull();
+  });
+});
+
+describe('etichettaPrezzo', () => {
+  it('usa il prezzo reale quando c’è', () => {
+    expect(etichettaPrezzo({ value: { price: '98€/notte' } })).toBe('98€/notte');
+  });
+
+  it('scende sulla fascia di budget quando manca il prezzo', () => {
+    expect(etichettaPrezzo({ value: { budget: 'Medio' } })).toBe('Budget medio');
+  });
+
+  it('preferisce il prezzo alla fascia quando ci sono entrambi', () => {
+    expect(etichettaPrezzo({ value: { price: '8€ in due', budget: 'Basso' } })).toBe('8€ in due');
+  });
+
+  it('dice "Scheda in lavorazione" per un placeholder senza dati di valore — mai "Verificato"', () => {
+    expect(etichettaPrezzo({ isPlaceholder: true })).toBe('Scheda in lavorazione');
+  });
+
+  it('dice "Prezzo non dichiarato" per un posto reale senza dati di valore — non lo inventa', () => {
+    expect(etichettaPrezzo({ isPlaceholder: false })).toBe('Prezzo non dichiarato');
+    expect(etichettaPrezzo({})).toBe('Prezzo non dichiarato');
   });
 });

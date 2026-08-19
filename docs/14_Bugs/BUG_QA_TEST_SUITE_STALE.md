@@ -1,7 +1,7 @@
 ---
 type: bug
 area: quality
-status: in-progress
+status: done
 priority: p2
 owner: team
 severity: medium
@@ -71,3 +71,9 @@ Il prodotto e' stato aggiornato piu velocemente della suite e2e/visual/perf.
 ## Residuo
 
 - `audit:cwv` e `audit:size` restano da stabilizzare/configurare.
+
+## Chiusura — 2026-07-31
+
+Verificato sul codice durante il consolidamento del backlog: `npm run test` → 30 file, 146 test, tutti verdi in 5,8 s. Nessuna flakiness osservata.
+
+Nessun lavoro residuo. Vedi [[10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31]] §4.

@@ -3,6 +3,7 @@ import { spawnSync } from 'node:child_process';
 
 const envPath = '.env';
 const envExamplePath = '.env.example';
+const functionsEnvExamplePath = 'functions/.env.example';
 
 const requiredExampleKeys = [
   'APP_URL',
@@ -35,6 +36,7 @@ const requiredExampleKeys = [
   'VITE_RECAPTCHA_ENTERPRISE_SITE_KEY',
   'FIREBASE_SERVICE_ACCOUNT_JSON',
   'FIREBASE_SERVICE_ACCOUNT',
+  'FIRESTORE_DATABASE_ID',
   'GEMINI_API_KEY',
   'ALLOW_MOCK_CHECKOUT',
   'VITE_TWU_AUDIT_MODE',
@@ -106,7 +108,10 @@ function duplicateKeys(entries) {
 
 function status(value) {
   if (!value) return 'empty';
-  if (/^\$\{[^}]+\}$/.test(value) || /^(changeme|change_me|your_|example|placeholder|xxx|todo|replace)/i.test(value)) {
+  if (
+    /^\$\{[^}]+\}$/.test(value) ||
+    /^(changeme|change_me|your_|example|placeholder|xxx|todo|replace)/i.test(value)
+  ) {
     return 'placeholder';
   }
   return 'set';
@@ -140,6 +145,7 @@ function gitIgnored(filePath) {
 
 const example = parseEnvFile(envExamplePath);
 const local = parseEnvFile(envPath);
+const functionsExample = parseEnvFile(functionsEnvExamplePath);
 const results = [];
 
 console.log('Env safety audit');
@@ -153,7 +159,17 @@ if (!example.exists) {
 if (local.exists) {
   add(results, gitIgnored(envPath) ? 'PASS' : 'FAIL', '.env exists and is ignored by Git.');
 } else {
-  add(results, 'WARN', '.env is missing locally; this is acceptable for CI but local integrations may be disabled.');
+  add(
+    results,
+    'WARN',
+    '.env is missing locally; this is acceptable for CI but local integrations may be disabled.'
+  );
+}
+
+if (!functionsExample.exists) {
+  add(results, 'FAIL', 'functions/.env.example is missing.');
+} else {
+  add(results, 'PASS', 'functions/.env.example exists.');
 }
 
 for (const [label, parsed] of [
@@ -178,14 +194,30 @@ for (const key of requiredExampleKeys) {
   }
 }
 
+const functionsExampleKeys = new Set(functionsExample.entries.map(({ key }) => key));
+for (const key of ['APP_URL', 'FIRESTORE_DATABASE_ID']) {
+  if (!functionsExampleKeys.has(key)) {
+    add(results, 'FAIL', 'functions/.env.example is missing ' + key + '.');
+  }
+}
+
 for (const { key, value, line } of example.entries) {
   const valueStatus = status(value);
-  const sensitiveByName = /(SECRET|TOKEN|PASSWORD|PRIVATE|WEBHOOK|SENTRY|STRIPE|OPENAI|ANTHROPIC|GITHUB|BREVO|RESEND|OBSIDIAN|FIREBASE_SERVICE_ACCOUNT)/i.test(
-    key
-  );
+  const sensitiveByName =
+    /(SECRET|TOKEN|PASSWORD|PRIVATE|WEBHOOK|SENTRY|STRIPE|OPENAI|ANTHROPIC|GITHUB|BREVO|RESEND|OBSIDIAN|FIREBASE_SERVICE_ACCOUNT)/i.test(
+      key
+    );
 
-  if (sensitiveByName && valueStatus === 'set' && !['APP_URL', 'MAIL_FROM', 'MAIL_TO_OWNER'].includes(key)) {
-    add(results, 'FAIL', `.env.example has a non-empty sensitive-looking value for ${key} at line ${line}.`);
+  if (
+    sensitiveByName &&
+    valueStatus === 'set' &&
+    !['APP_URL', 'MAIL_FROM', 'MAIL_TO_OWNER'].includes(key)
+  ) {
+    add(
+      results,
+      'FAIL',
+      `.env.example has a non-empty sensitive-looking value for ${key} at line ${line}.`
+    );
   }
 }
 
@@ -202,7 +234,11 @@ if (local.exists) {
       /(SECRET|PRIVATE|PASSWORD|TOKEN|SERVICE_ACCOUNT|CREDENTIAL)/i.test(key) &&
       !publicViteKeyAllowlist.has(key)
     ) {
-      add(results, 'FAIL', `${key} looks like a private secret but would be exposed to the client bundle.`);
+      add(
+        results,
+        'FAIL',
+        `${key} looks like a private secret but would be exposed to the client bundle.`
+      );
     }
   }
 

@@ -109,7 +109,7 @@ export default function AutocompleteResults({
                   <span className="block truncate text-sm font-medium text-[var(--color-ink)]">
                     {suggestion.label}
                   </span>
-                  <span className="block text-[10px] font-medium uppercase tracking-[0.18em] text-black/45">
+                  <span className="block text-[10px] font-medium uppercase tracking-[0.18em] text-black/60">
                     {suggestion.category}
                   </span>
                 </span>

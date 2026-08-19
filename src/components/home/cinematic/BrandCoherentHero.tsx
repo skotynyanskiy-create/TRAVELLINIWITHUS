@@ -1,17 +1,54 @@
 import { useState } from 'react';
 import { motion, useReducedMotion, type Variants } from 'motion/react';
-import { ArrowDown, ArrowRight, Map, Stamp, Sparkles, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Stamp, Sparkles, CheckCircle2 } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
+import { useAudience } from '@/src/context/AudienceContext';
+import { HERO_PER_EDIZIONE } from '@/src/config/heroEditions';
 import SchedaVerifica from '@/src/components/atlante/SchedaVerifica';
 import MagneticWrapper from '@/src/components/MagneticWrapper';
 import OptimizedImage from '@/src/components/OptimizedImage';
 import TiltCard from '@/src/components/TiltCard';
-import { getContentById } from '@/src/config/contentLibrary';
+import { CONTENT_ITEMS, getContentById } from '@/src/config/contentLibrary';
+import { getReelForPosto } from '@/src/config/reels';
+import { PARTNERSHIP_LABEL } from '@/src/types/content';
+import { aMeseAnno } from '@/src/utils/format';
 
-const FEATURED_POSTO_ID = 'campania-burton-juice';
+/**
+ * Il posto in copertina — e la sua fotografia.
+ *
+ * Era `campania-burton-juice` sopra `home-journal/hero-impossible.png`. Nessuno
+ * dei due reggeva la parola «Provato» stampata sul timbro qui sotto: quel posto
+ * è `isPlaceholder`, è `adv`, non ha cover né prezzo, e quell'immagine è fra i
+ * quattro asset a provenienza **non certificata** di
+ * `DECISION_IMAGERY_TRUTH_RULE_2026-07-22` — che vieta esplicitamente di
+ * adottarli come prova su una nuova superficie. La rivendicazione più visibile
+ * del sito era la meno verificata.
+ *
+ * Ora la copertina è un posto reale, senza collaborazione, con prezzo pubblico
+ * e con il frame del reel che ci abbiamo girato: la foto, la didascalia, il
+ * timbro e la scheda parlano della stessa cosa vera.
+ * `BrandCoherentHero.prova.test.tsx` blocca la regressione, preload incluso.
+ */
+const FEATURED_POSTO_ID = 'jesolo-caribe-bay';
+
+/* Le due azioni cambiano etichetta, destinazione e icona con l'edizione, ma non
+   aspetto: la classe sta qui una volta sola perche' la primaria si renda come
+   ancora o come `Link` senza che le due forme possano divergere. */
+const CLASSE_PRIMARIA =
+  'inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-md transition-all hover:bg-[var(--color-accent-hover)] cursor-pointer';
+const CLASSE_SECONDARIA =
+  'inline-flex items-center gap-2 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-ink)] hover:text-[var(--color-accent-text)]';
+
+/** Registro alla mano: i numeri della barra prove non si scrivono, si contano. */
+const POSTI_PROVATI = CONTENT_ITEMS.filter((item) => !item.isPlaceholder);
+const CON_COLLABORAZIONE = POSTI_PROVATI.filter(
+  (item) => item.partnership.kind !== 'organic'
+).length;
 
 const containerVariants: Variants = {
-  hidden: { opacity: 0 },
+  // Il contenitore deve restare visibile al primo paint: ospita l'H1 LCP.
+  // Continua a propagare lo stato `hidden` ai figli animati e il loro stagger.
+  hidden: {},
   visible: {
     opacity: 1,
     transition: {
@@ -37,111 +74,185 @@ export default function BrandCoherentHero() {
   const [schedaOpen, setSchedaOpen] = useState(false);
   const featured = getContentById(FEATURED_POSTO_ID);
   const shouldReduceMotion = useReducedMotion();
+  /* L'edizione e' risolta sincrona nell'inizializzatore di stato del context,
+     non in un effetto: il primo paint ha gia' il titolo giusto, quindi non c'e'
+     scambio sopra la piega. Chi sposta quella lettura in un `useEffect` apre un
+     layout shift proprio sull'elemento LCP. */
+  const { audience } = useAudience();
+  const hero = HERO_PER_EDIZIONE[audience];
+  const IconaPrimaria = hero.primaria.icona;
+  const IconaSecondaria = hero.secondaria.icona;
+  const featuredDisclosure = featured ? PARTNERSHIP_LABEL[featured.partnership.kind] : '';
+  const featuredCaption = featured
+    ? [featured.place.name, featured.place.city ?? featured.place.region]
+        .filter(Boolean)
+        .join(' · ')
+    : '';
+  // La data del reel è la data della visita: è l'unica cronologia che il
+  // progetto ha, ed è popolata su tutte e 29 le schede reali (stessa regola di
+  // SchedaVerifica).
+  const featuredQuando = aMeseAnno(
+    featured ? (getReelForPosto(featured.id)?.publishedAt ?? featured.publishedAt) : undefined
+  );
+  const featuredNota = [
+    featured?.value?.price,
+    featuredQuando ? `ci siamo stati ${featuredQuando}` : null,
+  ]
+    .filter(Boolean)
+    .join(' · ');
 
   return (
-    <section className="relative w-full bg-[var(--color-sand,#faf7f2)] pt-24 pb-12 md:pt-20 md:pb-20 text-[var(--color-ink,#1a2b3c)] overflow-hidden border-b border-[var(--color-border)]">
+    <section className="relative w-full bg-[var(--color-sand)] pt-8 pb-12 md:pt-10 md:pb-20 text-[var(--color-ink)] overflow-hidden border-b border-[var(--color-border)]">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
-        <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_1fr]">
-          {/* Left Editorial Copy with Staggered Motion */}
-          <motion.div
-            variants={containerVariants}
-            initial={shouldReduceMotion ? 'visible' : 'hidden'}
-            animate="visible"
-          >
+        {/* Su mobile la fotografia sale subito sotto il titolo: apertura da
+            rivista (titolo → immagine → sommario) invece di 797px di testo
+            prima del primo scatto.
+            Il meccanismo è il `contents` qui sotto: sotto lg il wrapper della
+            colonna sinistra sparisce come box, titolo e sommario diventano
+            fratelli dell'immagine e `order` li dispone attorno. Da lg in su il
+            wrapper torna un blocco normale — quindi il desktop è la struttura
+            originale, non una sua imitazione. */}
+        <div className="flex flex-col gap-y-6 lg:grid lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-x-12 lg:gap-y-0">
+          <div className="contents lg:block">
+            {/* Left Editorial Copy with Staggered Motion */}
             <motion.div
-              variants={itemVariants}
-              className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--color-accent,#c85a32)]/30 bg-[var(--color-accent,#c85a32)]/10 px-3.5 py-1 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]"
+              variants={containerVariants}
+              initial={shouldReduceMotion ? 'visible' : 'hidden'}
+              animate="visible"
+              className="order-1 lg:order-none"
             >
-              <Sparkles size={13} />
-              Rodrigo &amp; Betta · Travelliniwithus
-            </motion.div>
-
-            <motion.h1
-              variants={itemVariants}
-              className="font-serif text-4xl font-normal leading-[1.06] text-[var(--color-ink)] sm:text-5xl lg:text-6xl"
-            >
-              Posti che sembrano inventati. <br />
-              <span className="italic text-[var(--color-accent,#c85a32)]">
-                Ma esistono davvero.
-              </span>
-            </motion.h1>
-
-            <motion.p
-              variants={itemVariants}
-              className="mt-5 max-w-xl text-base leading-relaxed text-[var(--color-muted-fg)] sm:text-lg"
-            >
-              Siamo Rodrigo e Betta. Li proviamo prima di persona, poi vi diciamo se valgono davvero
-              il viaggio — con prezzi reali, periodo giusto ed atmosfera.
-            </motion.p>
-
-            {/* Actions with Magnetic CTAs */}
-            <motion.div variants={itemVariants} className="mt-8 flex flex-wrap items-center gap-4">
-              <MagneticWrapper strength={6}>
-                <a
-                  href="#pagina-02"
-                  className="inline-flex items-center gap-2 rounded-full bg-[var(--color-ink)] px-7 py-3.5 text-xs font-bold uppercase tracking-[0.2em] text-white shadow-md transition-all hover:bg-[var(--color-accent,#c85a32)] cursor-pointer"
-                >
-                  Apri il registro <ArrowDown size={16} />
-                </a>
-              </MagneticWrapper>
-
-              <MagneticWrapper strength={4}>
-                <Link
-                  to="/mappa"
-                  className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-ink)] hover:text-[var(--color-accent)]"
-                >
-                  Vai alla mappa <Map size={16} />
-                </Link>
-              </MagneticWrapper>
-            </motion.div>
-
-            {/* Proof Signals */}
-            <motion.div
-              variants={itemVariants}
-              className="mt-8 flex items-center gap-6 border-t border-[var(--color-border)] pt-5 text-xs font-semibold text-[var(--color-muted-fg)]"
-            >
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 size={14} className="text-[var(--color-accent)]" />
-                Esperienze reali
-              </span>
-              <span>·</span>
-              <span>Costi trasparenti</span>
-              <span>·</span>
-              <span>Periodo consigliato</span>
-            </motion.div>
-
-            {/* Verification Stamp Button & Drawer */}
-            {featured && (
-              <motion.div variants={itemVariants} className="mt-8">
-                <button
-                  type="button"
-                  aria-expanded={schedaOpen}
-                  onClick={() => setSchedaOpen((open) => !open)}
-                  className="inline-flex items-center gap-2 rounded-full border border-[var(--color-accent,#c85a32)] bg-[var(--color-sand)] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-accent,#c85a32)] shadow-sm transition-all hover:bg-[var(--color-accent)] hover:text-white cursor-pointer"
-                >
-                  <Stamp size={14} />
-                  {schedaOpen ? 'Chiudi la scheda' : 'Provato — apri la scheda'}
-                </button>
-
-                {schedaOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="mt-4 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white p-6 shadow-xl"
-                  >
-                    <SchedaVerifica item={featured} />
-                    <Link
-                      to={`/posto/${featured.id}`}
-                      className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-accent)] hover:underline"
-                    >
-                      Apri la scheda completa <ArrowRight size={15} />
-                    </Link>
-                  </motion.div>
-                )}
+              <motion.div
+                variants={itemVariants}
+                // Tinta al 5%, non al 10: con l'accento elettrico il fondo del
+                // chip si scalda quel tanto che porta il terracotta sotto 4,5.
+                className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--color-accent)]/30 bg-[var(--color-accent)]/5 px-3.5 py-1 text-xs font-bold uppercase tracking-[0.22em] text-[var(--color-accent-text)]"
+              >
+                <Sparkles size={13} />
+                {/* Sotto sm il nome del sito manda il chip a capo su due righe e
+                  ripete quello che il marchio in navbar dice già. */}
+                Rodrigo &amp; Betta<span className="hidden sm:inline"> · Travelliniwithus</span>
               </motion.div>
-            )}
-          </motion.div>
+
+              {/* `text-balance`: senza, le due righe si spezzano dove capita e
+                  lasciano orfane le parole corte — «può.» e «più.» finivano da
+                  sole su una riga quasi vuota, due volte nella stessa apertura.
+                  Il bilanciamento pareggia le righe di ciascun segmento e vale
+                  per tutte e tre le edizioni, non solo per quelle nuove. */}
+              <h1 className="text-balance font-serif text-4xl font-normal leading-[1.06] text-[var(--color-ink)] sm:text-5xl lg:text-6xl">
+                {hero.titoloTondo} <br />
+                <span className="italic text-[var(--color-accent)]">{hero.titoloCorsivo}</span>
+              </h1>
+            </motion.div>
+
+            {/* Sommario, azioni e prove: sotto la fotografia su mobile, sotto
+                il titolo nella stessa colonna su desktop. */}
+            <motion.div
+              variants={containerVariants}
+              initial={shouldReduceMotion ? 'visible' : 'hidden'}
+              animate="visible"
+              className="order-3 lg:order-none"
+            >
+              {/* Il sommario di `viaggiatori` dice le tre cose che una scheda dà
+                  davvero — il reel girato lì, il costo quando lo conosciamo, e
+                  sempre a che titolo ci siamo andati. Prima prometteva un
+                  «periodo giusto» che il modello non porta. Le altre due
+                  edizioni hanno il proprio, in `heroEditions.ts`. */}
+              <motion.p
+                variants={itemVariants}
+                className="mt-5 max-w-xl text-base leading-relaxed text-[var(--color-muted-fg)] sm:text-lg"
+              >
+                {hero.sommario}
+              </motion.p>
+
+              {/* Actions with Magnetic CTAs */}
+              <motion.div
+                variants={itemVariants}
+                className="mt-8 flex flex-wrap items-center gap-4"
+              >
+                <MagneticWrapper strength={6}>
+                  {/* Su `viaggiatori` la primaria scorre all'indice piu' in
+                      basso e NON apre /esplora: si chiamava «Apri il registro»
+                      come il pulsante della sezione sotto, che invece porta
+                      all'archivio — due etichette identiche verso due
+                      destinazioni diverse nella stessa pagina. Le altre due
+                      edizioni puntano a una rotta, quindi passano da `Link`:
+                      un `<a>` verso una rotta interna ricaricherebbe l'app. */}
+                  {hero.primaria.ancora ? (
+                    <a href={hero.primaria.href} className={CLASSE_PRIMARIA}>
+                      {hero.primaria.testo} <IconaPrimaria size={16} />
+                    </a>
+                  ) : (
+                    <Link to={hero.primaria.href} className={CLASSE_PRIMARIA}>
+                      {hero.primaria.testo} <IconaPrimaria size={16} />
+                    </Link>
+                  )}
+                </MagneticWrapper>
+
+                <MagneticWrapper strength={4}>
+                  <Link to={hero.secondaria.href} className={CLASSE_SECONDARIA}>
+                    {hero.secondaria.testo} <IconaSecondaria size={16} />
+                  </Link>
+                </MagneticWrapper>
+              </motion.div>
+
+              {/* Proof Signals */}
+              {/* Erano tre aggettivi — «Esperienze reali · Costi trasparenti ·
+                  Periodo consigliato» — e il terzo prometteva un dato che il
+                  modello non ha: nessun posto porta un periodo. Ora sono due
+                  numeri contati sul registro e una riga che spiega perché il
+                  prezzo a volte manca. I numeri non possono invecchiare male:
+                  li conta il codice, non la copy.
+                  Le prove vanno a capo come unità intere: senza `flex-wrap` si
+                  incolonnavano strette e spezzavano le etichette a metà. */}
+              <motion.div
+                variants={itemVariants}
+                className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-[var(--color-border)] pt-5 text-xs font-semibold text-[var(--color-muted-fg)] sm:gap-x-6"
+              >
+                <span className="flex items-center gap-1.5 whitespace-nowrap">
+                  <CheckCircle2 size={14} className="text-[var(--color-accent)]" />
+                  {POSTI_PROVATI.length} posti provati di persona
+                </span>
+                <span aria-hidden>·</span>
+                <span className="whitespace-nowrap">
+                  {CON_COLLABORAZIONE} collaborazioni dichiarate
+                </span>
+                <span aria-hidden>·</span>
+                <span className="whitespace-nowrap">Costi in chiaro dove li abbiamo pagati</span>
+              </motion.div>
+
+              {/* Verification Stamp Button & Drawer */}
+              {featured && (
+                <motion.div variants={itemVariants} className="mt-8">
+                  <button
+                    type="button"
+                    aria-expanded={schedaOpen}
+                    onClick={() => setSchedaOpen((open) => !open)}
+                    className="inline-flex items-center gap-2 rounded-full border border-[var(--color-accent)] bg-[var(--color-sand)] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)] shadow-sm transition-all hover:bg-[var(--color-accent)] hover:text-[var(--color-ink)] cursor-pointer"
+                  >
+                    <Stamp size={14} />
+                    {schedaOpen ? 'Chiudi la scheda' : 'Provato — apri la scheda'}
+                  </button>
+
+                  {schedaOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="mt-4 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-white p-6 shadow-xl"
+                    >
+                      <SchedaVerifica item={featured} />
+                      <Link
+                        to={`/posto/${featured.id}`}
+                        className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.16em] text-[var(--color-accent-text)] hover:underline"
+                      >
+                        Apri la scheda completa <ArrowRight size={15} />
+                      </Link>
+                    </motion.div>
+                  )}
+                </motion.div>
+              )}
+            </motion.div>
+          </div>
 
           {/* Right Tactile Cover Image with 3D Tilt Card & Entrance Reveal */}
           <motion.div
@@ -152,43 +263,74 @@ export default function BrandCoherentHero() {
             }
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.25, ease: 'easeOut' }}
-            className="relative"
+            // Fra sm e lg la colonna è larga quanto la pagina: senza tetto la
+            // foto 4:5 riempirebbe da sola lo schermo del tablet e spingerebbe
+            // sommario e CTA sotto la piega. Su telefono resta a piena
+            // larghezza, su desktop torna a occupare la sua colonna.
+            className="relative order-2 sm:mx-auto sm:max-w-sm lg:order-none lg:mx-0 lg:max-w-none"
           >
             <TiltCard maxTilt={5}>
               <div className="relative overflow-hidden rounded-[var(--radius-lg,20px)] border border-[var(--color-border)] bg-white p-3 shadow-xl">
                 <div className="aspect-[4/5] w-full overflow-hidden rounded-xl">
                   <OptimizedImage
-                    src="/images/home-journal/hero-impossible.png"
-                    alt="Betta al Burton Juice"
+                    src={featured?.cover}
+                    alt={featured?.coverAlt ?? ''}
                     priority
                     responsiveWidths={[320, 480, 768]}
                     baseWidth={1080}
-                    sizes="(max-width: 1023px) 80vw, 37vw"
+                    // Deve restare IDENTICO a `imagesizes` del preload in
+                    // index.html. Sotto sm la foto è larga quanto il contenuto
+                    // meno i padding (24+12 per lato); fra sm e lg il tetto
+                    // `max-w-sm` la fissa a 360px; da lg vale la colonna.
+                    sizes="(max-width: 639px) calc(100vw - 72px), (max-width: 1023px) 360px, 37vw"
+                    // La sorgente è il frame del reel, 9:16, con la title-card
+                    // in alto. In un riquadro 4:5 il centro esatto la taglia a
+                    // metà: `coverFocusY` del posto è l'ancora che la esclude e
+                    // lascia la fotografia. Il nome del posto è scritto sotto,
+                    // in Fraunces, come didascalia.
+                    style={{ objectPosition: `50% ${featured?.coverFocusY ?? 50}%` }}
                     className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
                   />
                 </div>
                 <p className="mt-3 text-center text-xs font-serif italic text-[var(--color-muted-fg)]">
-                  The Burton Juice · Somma Vesuviana
+                  {featuredCaption}
                 </p>
+                {/* Oggi il posto in copertina è organico e questa riga non
+                    compare. Resta perché la prossima copertina potrebbe non
+                    esserlo, e una collaborazione non può stare dietro un
+                    pannello da aprire mentre la foto fa da prova. */}
+                {featuredDisclosure && (
+                  <p className="mt-1 text-center text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-muted-fg)]">
+                    {featuredDisclosure}
+                    {featured?.partnership.partner ? ` · ${featured.partnership.partner}` : ''}
+                  </p>
+                )}
               </div>
             </TiltCard>
 
-            {/* Handwritten Note Sticker with pop reveal */}
-            <motion.div
-              initial={
-                shouldReduceMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8, y: 15 }
-              }
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ delay: 0.55, duration: 0.6, ease: 'easeOut' }}
-              className="absolute -bottom-6 -left-6 max-w-xs rotate-[-3deg] rounded-2xl border border-[var(--color-border)] bg-[var(--color-sand,#faf7f2)] p-4 shadow-lg"
-            >
-              <p className="font-serif text-sm italic leading-snug text-[var(--color-ink)]">
-                "La strada giusta non è quella più breve."
-              </p>
-              <span className="mt-1 block text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent,#c85a32)]">
-                — Rodrigo &amp; Betta
-              </span>
-            </motion.div>
+            {/* Il post-it sulla foto. Portava un aforisma — «La strada giusta
+                non è quella più breve» — cioè l'unico elemento decorativo puro
+                di un'apertura che per il resto prova quello che dice. Ora porta
+                i due dati che il lettore cerca guardando quella foto: quanto
+                costa e quando ci siamo stati. Se il posto non li ha, il
+                foglietto non compare: meglio niente che una frase di riempimento. */}
+            {featuredNota && (
+              <motion.div
+                initial={
+                  shouldReduceMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8, y: 15 }
+                }
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ delay: 0.55, duration: 0.6, ease: 'easeOut' }}
+                className="absolute bottom-12 -left-6 max-w-xs rotate-[-3deg] rounded-2xl border border-[var(--color-border)] bg-[var(--color-sand)] p-4 shadow-lg"
+              >
+                <p className="font-serif text-base leading-snug text-[var(--color-ink)]">
+                  {featuredNota}
+                </p>
+                <span className="mt-1 block text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-text)]">
+                  — Rodrigo &amp; Betta
+                </span>
+              </motion.div>
+            )}
           </motion.div>
         </div>
       </div>

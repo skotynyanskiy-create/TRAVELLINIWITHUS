@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, Check, ChevronDown, Copy, Tag } from 'lucide-react';
 import type { ContentItem } from '../types/content';
+import { AFFILIATE_ANCHOR_ATTRS } from '../lib/affiliateLink';
+import { offertaScaduta } from '../lib/offerta';
 
 /** Formatta una data ISO nel formato italiano dd/mm/yyyy. */
 function formatItalianDate(iso: string): string {
@@ -11,10 +13,22 @@ function formatItalianDate(iso: string): string {
   return `${dd}/${mm}/${date.getFullYear()}`;
 }
 
+/* La regola della scadenza vive in `src/lib/offerta.ts`, condivisa con
+   `getFamilyDeals()`: quando stava solo qui, il conteggio delle offerte family
+   contava anche le scadute e prometteva codici sopra uno scaffale vuoto. Una
+   regola in due copie e' una regola che prima o poi diverge. */
+const isScaduta = (validUntil: string) => offertaScaduta(validUntil);
+
 /**
  * Offerta/deal collegata a un posto — codice promo o sconto affiliato.
  * Renderizzata SOLO quando `deal` è presente: nessuna offerta è mai inventata.
  * Superficie calma e premium, non un banner spammoso.
+ *
+ * **Un'offerta scaduta non si renderizza affatto** — niente badge «scaduto»,
+ * che sarebbe comunque pubblicità di un codice morto e farebbe sembrare
+ * l'archivio fermo. La pagina del posto resta identica, senza il blocco. Fino
+ * al 2026-08-15 `validUntil` era opzionale e non veniva mai confrontato con
+ * oggi: due codici vivi erano pubblicati a scadenza indefinita.
  */
 export default function DealCard({ deal }: { deal?: ContentItem['deal'] }) {
   const [copied, setCopied] = useState(false);
@@ -24,6 +38,7 @@ export default function DealCard({ deal }: { deal?: ContentItem['deal'] }) {
   useEffect(() => () => clearTimeout(timeoutRef.current), []);
 
   if (!deal) return null;
+  if (deal.validUntil && isScaduta(deal.validUntil)) return null;
 
   const hasCode = deal.kind === 'code' && Boolean(deal.code);
 
@@ -94,9 +109,8 @@ export default function DealCard({ deal }: { deal?: ContentItem['deal'] }) {
 
       <a
         href={deal.url}
-        target="_blank"
-        rel="nofollow sponsored noopener"
-        className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent)]"
+        {...AFFILIATE_ANCHOR_ATTRS}
+        className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-ink)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-white transition-colors hover:bg-[var(--color-accent-hover)]"
       >
         Vai all'offerta
         <ArrowUpRight size={14} aria-hidden />

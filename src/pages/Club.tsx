@@ -129,7 +129,7 @@ export default function Club() {
               <LogIn size={20} className="mr-3" />
               Accedi con Google
             </Button>
-            <p className="mt-6 text-xs text-black/40 font-light">
+            <p className="mt-6 text-xs text-black/60 font-light">
               Accesso rapido, nessun form noioso da compilare.
             </p>
           </motion.div>
@@ -162,7 +162,7 @@ export default function Club() {
               />
             </div>
             <div className="flex-1">
-              <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--color-accent)] mb-2">
+              <div className="text-[10px] uppercase tracking-[0.2em] font-bold text-[var(--color-accent-text)] mb-2">
                 Area personale
               </div>
               <h1 className="text-4xl md:text-5xl font-serif">
@@ -174,7 +174,7 @@ export default function Club() {
             </div>
             <button
               onClick={signOut}
-              className="mt-4 md:mt-0 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-white/50 hover:text-[var(--color-accent)] hover:scale-105 transition-all duration-300"
+              className="mt-4 md:mt-0 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-white/50 hover:text-[var(--color-accent-text)] hover:scale-105 transition-all duration-300"
             >
               <LogOut size={16} /> Esci
             </button>
@@ -241,7 +241,7 @@ export default function Club() {
                               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103"
                             />
                             <div className="absolute top-4 left-4">
-                              <span className="bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl text-[9px] font-bold uppercase tracking-widest text-[var(--color-ink)] border border-black/5 shadow-xs">
+                              <span className="bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl text-[11px] font-bold uppercase tracking-widest text-[var(--color-ink)] border border-black/5 shadow-xs">
                                 {article.category}
                               </span>
                             </div>
@@ -299,12 +299,12 @@ export default function Club() {
                                 Ordine #{order.id.slice(-6).toUpperCase()}
                               </span>
                               <span
-                                className={`px-2.5 py-0.5 rounded-xl text-[9px] uppercase tracking-widest font-bold ${order.status === 'completed' ? 'bg-[var(--color-accent-soft)] text-[var(--color-accent-text)]' : 'bg-[var(--color-warning-soft)] text-[var(--color-warning-text)]'}`}
+                                className={`px-2.5 py-0.5 rounded-xl text-[11px] uppercase tracking-widest font-bold ${order.status === 'completed' ? 'bg-[var(--color-accent-soft)] text-[var(--color-accent-text)]' : 'bg-[var(--color-warning-soft)] text-[var(--color-warning-text)]'}`}
                               >
                                 {order.status}
                               </span>
                             </div>
-                            <p className="font-light text-xs text-black/50">
+                            <p className="font-light text-xs text-black/60">
                               {(() => {
                                 const createdAt = order.createdAt as
                                   | { toDate?: () => Date; seconds?: number }

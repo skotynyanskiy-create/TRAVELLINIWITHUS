@@ -136,8 +136,12 @@ export function getPartnerName(partner: AffiliatePartner): string {
   return PARTNERS[partner].displayName;
 }
 
-/** Recommended anchor attributes for affiliate links (FTC + Google compliance). */
+/**
+ * Recommended anchor attributes for affiliate links (FTC + Google compliance).
+ * `rel` is the single source of truth: every affiliate/commercial anchor in the
+ * codebase must spread this rather than writing `rel` by hand.
+ */
 export const AFFILIATE_ANCHOR_ATTRS = {
   target: '_blank',
-  rel: 'sponsored noopener noreferrer',
+  rel: 'nofollow sponsored noopener noreferrer',
 } as const;

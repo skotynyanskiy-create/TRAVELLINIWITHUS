@@ -176,7 +176,7 @@ export default function CouponManager() {
               <button
                 type="submit"
                 disabled={adding}
-                className="w-full bg-[var(--color-ink)] text-white py-3 rounded-xl font-medium hover:bg-[var(--color-accent)] transition-colors disabled:opacity-50"
+                className="w-full bg-[var(--color-ink)] text-white py-3 rounded-xl font-medium hover:bg-[var(--color-accent-hover)] transition-colors disabled:opacity-50"
               >
                 {adding ? <Loader2 size={20} className="animate-spin mx-auto" /> : 'Crea Coupon'}
               </button>

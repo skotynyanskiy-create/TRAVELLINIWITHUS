@@ -10,8 +10,18 @@ const warnings = [];
 const allowedStatuses = {
   project: ["open", "in-progress", "blocked", "done", "archived"],
   task: ["open", "in-progress", "blocked", "done"],
-  bug: ["open", "in-progress", "blocked", "done"],
-  decision: ["active", "superseded", "archived"],
+  // `resolved-local`: corretto nel codice, mai verificato in produzione. Serve
+  // finché il dominio serve una Coming Soon: nessun fix è osservabile da fuori,
+  // quindi `done` prometterebbe una verifica che non è mai avvenuta. Stesso
+  // criterio di `proposed` qui sotto — si allarga il vocabolario, non si mente
+  // nella nota.
+  bug: ["open", "in-progress", "blocked", "resolved-local", "done"],
+  // `proposed`: una decisione scritta ma non ancora presa. Mancava, e i due
+  // documenti del 2026-07-26 che aspettano l'ok dell'owner usavano `proposto`,
+  // fuori vocabolario — tre errori che rendevano rossa la CI. L'alternativa era
+  // marcarli `active`, cioe' dichiarare in vigore decisioni che nessuno ha
+  // ancora preso: peggio di un errore di lint.
+  decision: ["proposed", "active", "superseded", "archived"],
   meeting: ["active", "archived"],
   daily: ["active", "archived"],
   release: ["draft", "blocked", "published", "archived"],

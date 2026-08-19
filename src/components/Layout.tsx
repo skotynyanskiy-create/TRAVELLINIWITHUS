@@ -6,7 +6,6 @@ import AudienceGate, { AUDIENCE_GATE_ENABLED, wasGateDismissedThisSession } from
 import { useAudience } from '../context/AudienceContext';
 import ConsentBanner from './ConsentBanner';
 import ExitIntentPopup from './ExitIntentPopup';
-import AiAssistant from './AiAssistant';
 import ScrollProgressBar from './ScrollProgressBar';
 import SmoothScrollProvider from './SmoothScrollProvider';
 import QuickViewDrawer from './QuickViewDrawer';
@@ -38,10 +37,10 @@ export default function Layout() {
   return (
     <SmoothScrollProvider>
       <QuickViewProvider>
-        <div className="min-h-screen bg-[var(--color-sand)] text-[var(--color-ink)] font-sans selection:bg-[var(--color-accent)] selection:text-white flex flex-col">
+        <div className="min-h-screen bg-[var(--color-sand)] text-[var(--color-ink)] font-sans selection:bg-[var(--color-accent)] selection:text-[var(--color-ink)] flex flex-col">
           <a
             href="#main-content"
-            className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[200] focus:rounded-lg focus:bg-[var(--color-accent)] focus:px-4 focus:py-2 focus:text-white"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[200] focus:rounded-lg focus:bg-[var(--color-accent)] focus:px-4 focus:py-2 focus:text-[var(--color-ink)]"
           >
             Vai al contenuto principale
           </a>
@@ -58,7 +57,13 @@ export default function Layout() {
             !hasChosen &&
             !wasGateDismissedThisSession() && <AudienceGate />}
           {!suppressFloatingOverlays && <ExitIntentPopup />}
-          {!suppressFloatingOverlays && <AiAssistant />}
+          {/* AiAssistant smontato dal 2026-08-11. L'endpoint /api/ai-companion
+              risponde 503 per progetto (manca il corpus), quindi il widget
+              cadeva SEMPRE sul fallback a keyword: prometteva agli utenti
+              itinerari e una guida PDF che non esistono, su /itinerari che e'
+              dichiarata `preview` proprio perche' i due itinerari sono demo.
+              Componente, endpoint e config restano: rimontare qui quando il
+              RAG avra' un corpus di articoli pubblicati da citare. */}
           <QuickViewDrawer />
         </div>
       </QuickViewProvider>

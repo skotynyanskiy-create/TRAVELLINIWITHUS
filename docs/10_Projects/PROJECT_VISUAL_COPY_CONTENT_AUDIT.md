@@ -1,7 +1,7 @@
 ---
 type: project
 area: product
-status: in-progress
+status: archived
 priority: p1
 owner: team
 repo: TRAVELLINIWITHUS
@@ -16,7 +16,12 @@ tags:
   - content
   - conversion
   - audit
+superseded_by: PROJECT_BACKLOG_UNICO_2026-07-31
 ---
+
+> **Superato il 2026-07-31.** Questo piano non è più "cosa fare".
+> Il lavoro ancora vivo è confluito in [[10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31]]; la direzione è in `PROJECT_BACKLOG_UNICO_2026-07-31`.
+> Resta leggibile come storico — non aggiungerci voci nuove.
 
 # PROJECT_VISUAL_COPY_CONTENT_AUDIT
 
@@ -235,7 +240,7 @@ browser 0 overflow / 0 errori console.
 
 ### Alt text (accessibilità immagini)
 
-- P1 · immagini · [InstagramGrid.tsx:21-64,171](../../src/components/InstagramGrid.tsx) · caption-as-alt su immagini brand generiche → campo `alt` dedicato con descrizione fedele dell'immagine (la caption resta sotto); reel live mantengono caption come alt · sì.
+- P1 · immagini · `InstagramGrid.tsx:21-64,171` · caption-as-alt su immagini brand generiche → campo `alt` dedicato con descrizione fedele dell'immagine (la caption resta sotto); reel live mantengono caption come alt · sì.
 - P2 · immagini · `HomeFeaturedDestinations.tsx:174` · alt "Puglia, Italia" → alt descrittivi per regione (campo `alt` dedicato) · sì.
 
 ### Tweak visivi / gerarchia (no redesign)
@@ -245,7 +250,7 @@ browser 0 overflow / 0 errori console.
 - P2 · grafica · `HomeEditorialPromise.tsx:33` · eyebrow tracking `0.36em` → `0.3em` · sì.
 - P2 · grafica · `HomeFeaturedDestinations.tsx:79` · eyebrow tracking `0.32em` → `0.3em` · sì.
 - P2 · grafica · `LatestArticles.tsx:66` · H2 `md:text-4xl` → `md:text-5xl` (coerenza scala sezioni) · sì.
-- P2 · grafica · [InstagramGrid.tsx:134](../../src/components/InstagramGrid.tsx) · H2 `md:text-4xl` → `md:text-5xl` · sì.
+- P2 · grafica · `InstagramGrid.tsx:134` · H2 `md:text-4xl` → `md:text-5xl` · sì.
 - P1 · grafica · `HomeLeadMagnet.tsx:106` · rimosso blob `blur-2xl` arancione (anti-DESIGN.md) · sì.
 - P2 · grafica · `NewsletterFeature.tsx:102-106` · rimossi hover-color/border su `<li>` non interattivi (falsa affordance) · sì.
 - P3 · grafica · [Footer.tsx:98,162,204](../../src/components/Footer.tsx) · gap header→lista `mb-10` → `mb-6` (ritmo verticale) · sì.
@@ -261,7 +266,7 @@ browser 0 overflow / 0 errori console.
 
 - **P1** · immagini/SEO · [SEO.tsx:19,61](../../src/components/SEO.tsx) + [public/og/](../../public/og/) · OG card in WebP (WhatsApp/LinkedIn renderizzano WebP in modo inaffidabile nelle preview) → generati JPG 1200×630 (22–29 KB, mozjpeg q82) per le 4 card generiche (`default`, `vieni-con-noi`, `lead-magnet`, `demo-articolo-dolomiti`); `DEFAULT_OG_IMAGE` → `.jpg`; aggiunto `<meta property="og:image:type">` derivato dall'estensione (vale per tutti i caller). Reindirizzati [LeadMagnet.tsx:40](../../src/pages/LeadMagnet.tsx), [VieniConNoi.tsx:185](../../src/pages/VieniConNoi.tsx), [Articolo.tsx:732](../../src/pages/Articolo.tsx) ai `.jpg`. I `.webp` restano per non rompere link già condivisi · **sì** · verificato browser: home `og:image=default.jpg` / `image/jpeg`, 4 file serviti 200.
 - **P1** · config · [destinationVisuals.ts] / [experienceContent.ts] (rimossi) · dead config (zero import in tutto il repo) che puntava a `.png` da ~1MB (trappola perf latente + fonte-di-verità immagini ambigua) → **rimossi** (`git rm`). Nessun runtime impatto · **sì** · typecheck/build PASS.
-- **P2** · testo/integrità · [Press.tsx:28](../../src/pages/Press.tsx) · claim "Pubblico **italiano** interessato a…" non ancorato a dato (geografia audience non documentata) → "Community interessata a posti curiosi, esperienze pratiche e viaggio lento" · **sì** · typecheck PASS.
+- **P2** · testo/integrità · `Press.tsx:28` · claim "Pubblico **italiano** interessato a…" non ancorato a dato (geografia audience non documentata) → "Community interessata a posti curiosi, esperienze pratiche e viaggio lento" · **sì** · typecheck PASS.
 - **P2** · testo · [siteContent.ts:426](../../src/config/siteContent.ts) · titolo colonna footer "Scopri" (ultimo residuo del verbo bannato nella chrome persistente) → "Naviga" · **sì** · typecheck PASS.
 
 ### Sessione 4 — densità lead magnet + ridondanza discovery (su delega "fai tutto")
@@ -323,7 +328,7 @@ Formato: Pri · Area · Dove · Problema → Soluzione.
 ### Copy (standardizzazione)
 
 - **P2** · testo · standardizzare CTA→`/esplora` su "Apri Esplora"; valutare "Scopri" residuo nel titolo colonna footer.
-- **P2** · testo · [Press.tsx:26](../../src/pages/Press.tsx) · claim "pubblico italiano" non ancorato a dato → versione neutra ancorata a `yearsOfTravel`, salvo export demografico Meta.
+- **P2** · testo · `Press.tsx:26` · claim "pubblico italiano" non ancorato a dato → versione neutra ancorata a `yearsOfTravel`, salvo export demografico Meta.
 - **P3** · testo · [Club.tsx:169](../../src/pages/Club.tsx) · "Benvenuto…/Viaggiatore" al maschile → registro neutro (es. "Ciao, {nome}").
 - **P3** · testo · [Collaborazioni.tsx:329](../../src/pages/Collaborazioni.tsx) · uniformare "Reach mensile stimata" sulle superfici partner.
 
@@ -372,7 +377,7 @@ con Lombardia quando ci sono scatti reali (TODO già in
 | `src/components/home/HomeLeadMagnet.tsx`                                               | rimosso blob                          |
 | `src/components/home/LatestArticles.tsx`                                               | H2 scale                              |
 | `src/components/home/NewsletterFeature.tsx`                                            | hover su non-interattivi              |
-| [src/components/InstagramGrid.tsx](../../src/components/InstagramGrid.tsx)             | alt fedeli + H2 scale                 |
+| `src/components/InstagramGrid.tsx`                                                     | alt fedeli + H2 scale                 |
 | [src/components/Footer.tsx](../../src/components/Footer.tsx)                           | spacing header colonne                |
 | `src/components/home/MonetizationTeaser.tsx`                                           | rimossa mappa finta + alt (S2)        |
 | [src/components/article/ArticleHero.tsx](../../src/components/article/ArticleHero.tsx) | alt + alleggerimento scurimento (S2)  |
@@ -381,7 +386,7 @@ con Lombardia quando ci sono scatti reali (TODO già in
 | [src/pages/Articolo.tsx](../../src/pages/Articolo.tsx)                                 | OG preview → .jpg (S3)                |
 | public/og/{default,vieni-con-noi,lead-magnet,demo-articolo-dolomiti}.jpg               | nuove card OG JPG (S3)                |
 | src/config/destinationVisuals.ts · experienceContent.ts                                | **rimossi** — dead config (S3)        |
-| [src/pages/Press.tsx](../../src/pages/Press.tsx)                                       | claim audience non verificabile (S3)  |
+| `src/pages/Press.tsx`                                                                  | claim audience non verificabile (S3)  |
 | [src/config/siteContent.ts](../../src/config/siteContent.ts)                           | footer "Scopri" → "Naviga" (S3)       |
 | `src/components/home/HomeDiscoveryFinder.tsx`                                          | eyebrow differenziato (S4)            |
 

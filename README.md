@@ -47,13 +47,13 @@ npm run dev
 
 Copy `.env.example` to `.env`. The site runs with zero keys configured (every integration self-disables silently), but the following keys unlock real behavior in dev:
 
-| Key                                                        | Purpose                                           | Without it                                                                                                              |
-| ---------------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `VITE_MAPBOX_TOKEN`                                        | Renders `/mappa` tiles                            | Map appears black, console errors. Get one at https://account.mapbox.com/access-tokens                                  |
-| `BREVO_API_KEY` + `BREVO_LIST_ID`                          | Forwards newsletter signups to Brevo              | Form still collects, falls back to localStorage `twu_newsletter_leads`. Keys at https://app.brevo.com/settings/keys/api |
-| `RESEND_API_KEY`                                           | Sends transactional email for `/api/contact-lead` | Lead saved server-side and to localStorage `twu_contact_leads`, no email sent. Keys at https://resend.com/api-keys      |
-| `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET`              | Real Stripe checkout & webhooks                   | Set `ALLOW_MOCK_CHECKOUT=true` to bypass with mock checkout in dev                                                      |
-| `VITE_GA_ID`, `VITE_META_PIXEL_ID`, `VITE_TIKTOK_PIXEL_ID` | Analytics & ad pixels (consent-gated)             | No tracking, banner still appears                                                                                       |
+| Key                                                        | Purpose                                           | Without it                                                                                                                                           |
+| ---------------------------------------------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `VITE_MAPBOX_TOKEN`                                        | Geocoding only, via `scripts/geocode-content.mjs` | `/mappa` works fine — it renders MapLibre tiles from `tiles.openfreemap.org` and never calls Mapbox. Only the manual geocoding script needs this key |
+| `BREVO_API_KEY` + `BREVO_LIST_ID`                          | Forwards newsletter signups to Brevo              | Form still collects, falls back to localStorage `twu_newsletter_leads`. Keys at https://app.brevo.com/settings/keys/api                              |
+| `RESEND_API_KEY`                                           | Sends transactional email for `/api/contact-lead` | Lead saved server-side and to localStorage `twu_contact_leads`, no email sent. Keys at https://resend.com/api-keys                                   |
+| `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET`              | Real Stripe checkout & webhooks                   | Set `ALLOW_MOCK_CHECKOUT=true` to bypass with mock checkout in dev                                                                                   |
+| `VITE_GA_ID`, `VITE_META_PIXEL_ID`, `VITE_TIKTOK_PIXEL_ID` | Analytics & ad pixels (consent-gated)             | No tracking, banner still appears                                                                                                                    |
 
 Never commit `.env`. `.env.example` is the only env file checked in.
 
@@ -71,7 +71,7 @@ npm run dev
 Then open the dedicated operational notes folder as the Obsidian vault:
 
 ```txt
-C:\Users\ccocu\Desktop\TRAVELLINIWITHUS\docs
+<cartella-del-repo>/docs
 ```
 
 The `docs/` folder contains the operational notes, project records, marketing
@@ -103,7 +103,7 @@ npm run build
 npm run audit:ui
 npm run audit:firebase
 npm run audit:stripe
-npm run audit:all
+npm run audit:quality
 npm run predeploy
 ```
 
@@ -133,7 +133,7 @@ For Codex sessions:
 
 Open this folder as vault:
 
-`C:\Users\ccocu\Desktop\TRAVELLINIWITHUS\docs`
+`<cartella-del-repo>/docs`
 
 Main notes:
 
@@ -144,7 +144,8 @@ Main notes:
 ## Main working notes
 
 - `docs/10_Projects/PROJECT_TRAVELLINIWITHUS_SITE.md`
-- `docs/10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT.md`
+- `docs/10_Projects/PROJECT_HOME_RICOMPOSIZIONE_2026-07-26.md`
+- `docs/10_Projects/PROJECT_BACKLOG_UNICO_2026-07-31.md` — l unica lista viva
 - `docs/10_Projects/PROJECT_DESTINATIONS_SECTION_REVIEW.md`
 - `docs/10_Projects/PROJECT_RELEASE_READINESS.md`
 

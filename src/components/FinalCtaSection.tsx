@@ -99,7 +99,7 @@ export default function FinalCtaSection({
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[var(--color-accent)]/8 via-transparent to-transparent" />
       <div className="relative z-10 grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
         <div className="max-w-3xl">
-          <span className="mb-5 block text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent)]">
+          <span className="mb-5 block text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-accent-text)]">
             {copy.eyebrow}
           </span>
           <h2 className="text-4xl font-serif leading-tight tracking-tight md:text-6xl">

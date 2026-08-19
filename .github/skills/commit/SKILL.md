@@ -1,6 +1,9 @@
 ---
 name: commit
 description: Create a well-formed TRAVELLINIWITHUS git commit by reviewing diffs, staging safe files, writing a conventional commit, and checking docs impact.
+# La skill stagia file: su questo albero lo staging e' per percorso e la decisione
+# e' dell'owner. Resta a una slash di distanza, non a discrezione del modello.
+disable-model-invocation: true
 ---
 
 # /commit
@@ -77,7 +80,7 @@ content(hero): update headline copy
 
 After the commit, ask: does this change affect an open project note?
 
-- UI change → check `docs/10_Projects/PROJECT_HOME_HERO_NAV_REFINEMENT.md`
+- UI change → check `docs/10_Projects/PROJECT_HOME_RICOMPOSIZIONE_2026-07-26.md`
 - Release work → check `docs/10_Projects/PROJECT_RELEASE_READINESS.md`
 - Marketing → check `docs/MARKETING_OPERATIONS_HUB.md`
 

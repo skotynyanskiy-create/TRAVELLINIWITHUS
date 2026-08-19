@@ -12,11 +12,14 @@ import {
 export default function ConsentBanner() {
   const [visible, setVisible] = useState(false);
   const [mode, setMode] = useState<'banner' | 'customize'>('banner');
-  const [prefs, setPrefs] = useState<Pick<ConsentState, 'analytics' | 'marketing'>>(() => {
+  const [prefs, setPrefs] = useState<
+    Pick<ConsentState, 'analytics' | 'marketing' | 'personalization'>
+  >(() => {
     if (typeof window === 'undefined') {
       return {
         analytics: false,
         marketing: false,
+        personalization: false,
       };
     }
 
@@ -24,6 +27,7 @@ export default function ConsentBanner() {
     return {
       analytics: current.analytics,
       marketing: current.marketing,
+      personalization: current.personalization,
     };
   });
 
@@ -59,7 +63,7 @@ export default function ConsentBanner() {
       role="dialog"
       aria-live="polite"
       aria-label="Informativa cookie"
-      className="fixed inset-x-3 bottom-3 z-[1000] mx-auto max-w-3xl rounded-[var(--radius-md)] border border-white/10 bg-[#0b0805]/85 p-4 text-white shadow-premium backdrop-blur-md sm:inset-x-4 sm:bottom-4 sm:p-5"
+      className="fixed inset-x-3 bottom-3 z-[1000] mx-auto max-w-3xl rounded-[var(--radius-md)] border border-white/10 bg-[var(--color-ink-deep)]/85 p-4 text-white shadow-premium backdrop-blur-md sm:inset-x-4 sm:bottom-4 sm:p-5"
     >
       {mode === 'banner' ? (
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-6">
@@ -69,12 +73,13 @@ export default function ConsentBanner() {
             </h2>
             <p className="text-sm leading-relaxed text-white/80 sm:mt-2">
               <span className="sm:hidden">
-                Usiamo cookie per far funzionare il sito e, col tuo ok, per capire come viene
-                usato.{' '}
+                Usiamo cookie per far funzionare il sito e, col tuo ok, per capire come viene usato
+                e ricordare le preferenze che scegli.{' '}
               </span>
               <span className="hidden sm:inline">
                 Usiamo cookie tecnici necessari al funzionamento del sito e, con il tuo consenso,
-                cookie analitici e di marketing per migliorare l&apos;esperienza.{' '}
+                cookie analitici, marketing e preferenze di personalizzazione per migliorare
+                l&apos;esperienza.{' '}
               </span>
               <Link
                 to="/cookie"
@@ -90,7 +95,7 @@ export default function ConsentBanner() {
               <button
                 type="button"
                 onClick={handleAcceptAll}
-                className="rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-[var(--color-ink)] transition-colors hover:bg-[var(--color-accent)] hover:text-white cursor-pointer"
+                className="rounded-full bg-white px-4 py-2.5 text-sm font-semibold text-[var(--color-ink)] transition-colors hover:bg-[var(--color-accent)] hover:text-[var(--color-ink)] cursor-pointer"
               >
                 Accetta
               </button>
@@ -133,12 +138,18 @@ export default function ConsentBanner() {
               checked={prefs.marketing}
               onChange={(v) => setPrefs((p) => ({ ...p, marketing: v }))}
             />
+            <ConsentRow
+              title="Personalizzazione"
+              description="Ricorda localmente gli interessi per ordinare contenuti e suggerimenti pertinenti."
+              checked={prefs.personalization}
+              onChange={(v) => setPrefs((p) => ({ ...p, personalization: v }))}
+            />
           </div>
           <div className="flex flex-col gap-2 sm:flex-row-reverse">
             <button
               type="button"
               onClick={handleSave}
-              className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-[var(--color-ink)] transition-colors hover:bg-[var(--color-accent)] hover:text-white cursor-pointer"
+              className="rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-[var(--color-ink)] transition-colors hover:bg-[var(--color-accent)] hover:text-[var(--color-ink)] cursor-pointer"
             >
               Salva preferenze
             </button>

@@ -25,6 +25,7 @@ import StickyMobileCTA from '../components/StickyMobileCTA';
 import { SITE_URL } from '../config/site';
 import { fetchResources } from '../services/firebaseService';
 import { trackEvent } from '../services/analytics';
+import { AFFILIATE_ANCHOR_ATTRS } from '../lib/affiliateLink';
 
 interface ResourceItem {
   name: string;
@@ -212,16 +213,23 @@ export default function Risorse() {
     () =>
       resourceCategories.map((category) => ({
         ...category,
+        // Il tipo di ritorno esplicito evita che questo letterale diventi un
+        // secondo tipo di `items`: senza, `category.items` era l'unione fra
+        // `ResourceItem` e questo oggetto — che non ha `avoid` — e ogni uso a
+        // valle vedeva un campo mancante o un `commercialLabel` allargato a
+        // `string`.
         items:
-          firestoreByCategory?.[category.id]?.map((resource) => ({
-            name: resource.name,
-            description: resource.description,
-            link: resource.link,
-            tags: resource.tags ?? [],
-            badge: resource.badge,
-            commercialLabel: resource.badge ? 'Affiliato' : 'Non affiliato',
-            fit: 'Aggiunta di recente: la stiamo ancora raccontando per bene.',
-          })) ?? category.items,
+          firestoreByCategory?.[category.id]?.map(
+            (resource): ResourceItem => ({
+              name: resource.name,
+              description: resource.description,
+              link: resource.link,
+              tags: resource.tags ?? [],
+              badge: resource.badge,
+              commercialLabel: resource.badge ? 'Affiliato' : 'Non affiliato',
+              fit: 'Aggiunta di recente: la stiamo ancora raccontando per bene.',
+            })
+          ) ?? category.items,
       })),
     [firestoreByCategory]
   );
@@ -329,7 +337,7 @@ export default function Risorse() {
                     target="_blank"
                     rel={
                       isCommercialResource(item)
-                        ? 'nofollow sponsored noopener noreferrer'
+                        ? AFFILIATE_ANCHOR_ATTRS.rel
                         : 'noopener noreferrer'
                     }
                     onClick={() =>
@@ -348,18 +356,18 @@ export default function Risorse() {
                     <div className="mb-5 flex items-start justify-between gap-4">
                       <div>
                         <div className="mb-3 flex flex-wrap gap-2">
-                          <span className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-white">
+                          <span className="rounded-full bg-[var(--color-accent)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)]">
                             {item.commercialLabel}
                           </span>
                           {item.badge && item.badge !== item.commercialLabel && (
-                            <span className="rounded-full bg-[var(--color-ink)] px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
+                            <span className="rounded-full bg-[var(--color-ink)] px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)]">
                               {item.badge}
                             </span>
                           )}
                           {item.tags.map((tag) => (
                             <span
                               key={tag}
-                              className="rounded-full bg-white px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em] text-black/42"
+                              className="rounded-full bg-white px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-black/42"
                             >
                               {tag}
                             </span>
@@ -379,7 +387,7 @@ export default function Risorse() {
 
                     <div className="mt-auto space-y-3 pt-7">
                       <div className="rounded-[var(--radius-md)] bg-white p-4">
-                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/35">
+                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-black/60">
                           Per chi ha senso
                         </p>
                         <p className="mt-2 text-sm leading-relaxed text-black/62">{item.fit}</p>
@@ -400,7 +408,7 @@ export default function Risorse() {
         <div className="mt-20 rounded-[var(--radius-lg)] bg-[var(--color-ink)] p-8 text-white md:p-12">
           <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
             <div>
-              <span className="mb-4 block text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent)]">
+              <span className="mb-4 block text-[10px] font-bold uppercase tracking-[0.24em] text-[var(--color-accent-text)]">
                 Vantaggi dichiarati
               </span>
               <h2 className="text-3xl font-serif md:text-5xl">
@@ -415,7 +423,7 @@ export default function Risorse() {
               <Button
                 href="https://heymondo.it/?utm_medium=Afiliado&utm_source=TRAVELLINIWITHUS&utm_campaign=PRINCIPAL&cod_descuento=TRAVELLINIWITHUS&ag_campaign=TRAVELLINI&agencia=JG4Tepc5b47oLeK3xGDmbAX9I25ExoDeoc8cbPFt"
                 variant="outline-light"
-                rel="nofollow sponsored noopener noreferrer"
+                rel={AFFILIATE_ANCHOR_ATTRS.rel}
                 className="w-full"
               >
                 Heymondo -10%
@@ -445,7 +453,7 @@ export default function Risorse() {
           <FinalCtaSection intent="discovery" />
         </div>
 
-        <div className="mt-12 rounded-[var(--radius-lg)] border border-black/5 bg-white p-7 text-sm leading-relaxed text-black/55">
+        <p className="mt-12 rounded-[var(--radius-lg)] border border-black/5 bg-white p-7 text-sm leading-relaxed text-black/55">
           Per dettagli completi sulla natura dei link affiliati, consulta la{' '}
           <Link
             to="/disclaimer"
@@ -454,7 +462,7 @@ export default function Risorse() {
             pagina disclaimer
           </Link>
           .
-        </div>
+        </p>
       </Section>
 
       <StickyMobileCTA

@@ -25,8 +25,12 @@ Il progetto aveva gia documentazione valida in `docs/`, ma mancava una struttura
 Usare la root del repository come vault Obsidian del progetto:
 
 ```txt
-C:\Users\ccocu\Desktop\TRAVELLINIWITHUS
+<radice del repository>
 ```
+
+_(Il percorso assoluto scritto qui in origine puntava alla macchina di un'altra
+persona. La decisione è «la root del repo», non un percorso: quella resta valida
+ovunque il repo sia clonato.)_
 
 Le note operative restano in `docs/`, che continua a essere la memoria versionata del progetto. La root viene usata come vault per permettere a Obsidian Local REST API, MCP e strumenti AI di vedere sia le note sia il codice dello stesso progetto.
 

@@ -30,7 +30,7 @@ export default function EmptyState({
             size={20}
             className="absolute -right-1 top-4 text-[var(--color-accent)] rotate-12"
           />
-          <span className="absolute -bottom-4 rounded-full border border-[var(--color-accent)]/20 bg-white px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent)] shadow-sm">
+          <span className="absolute -bottom-4 rounded-full border border-[var(--color-accent)]/20 bg-white px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-accent-text)] shadow-sm">
             Presto online
           </span>
         </div>

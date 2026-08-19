@@ -4,6 +4,8 @@ import { ArrowRight, Calendar, Plus } from 'lucide-react';
 import { Link } from '@/src/components/TransitionLink';
 import OptimizedImage from '../OptimizedImage';
 import { trackEvent } from '../../services/analytics';
+import { rankByInterest } from '../../config/audienceInterests';
+import { usePersonalizedInterest } from '../../hooks/usePersonalizedInterest';
 import { scoreArticles } from '../../utils/recommendations';
 import type { ArticleData, RelatedArticleSummary } from './types';
 
@@ -37,12 +39,12 @@ function RelatedCard({
           className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
         />
         <div className="absolute left-6 top-6">
-          <span className="rounded-full bg-white/90 px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] shadow-sm backdrop-blur-md">
+          <span className="rounded-full bg-white/90 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-ink)] shadow-sm backdrop-blur-md">
             {category}
           </span>
         </div>
       </div>
-      <div className="mb-4 flex items-center gap-4 text-[9px] font-bold uppercase tracking-[0.2em] text-black/30">
+      <div className="mb-4 flex items-center gap-4 text-[11px] font-bold uppercase tracking-[0.2em] text-black/30">
         <div className="flex items-center gap-1.5">
           <Calendar size={12} className="text-[var(--color-accent)]" />
           <span>{date || 'In evidenza'}</span>
@@ -60,8 +62,12 @@ export default function RelatedArticles({
   demoRelatedArticles,
 }: RelatedArticlesProps) {
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
+  const { interest } = usePersonalizedInterest();
 
-  const personalizedArticles = useMemo(() => scoreArticles(relatedArticles), [relatedArticles]);
+  const personalizedArticles = useMemo(
+    () => rankByInterest(scoreArticles(relatedArticles), interest, (article) => [article.category]),
+    [interest, relatedArticles]
+  );
 
   const hasRelated = personalizedArticles.length > 0;
   const totalCount = hasRelated ? personalizedArticles.length : demoRelatedArticles.length;

@@ -145,6 +145,7 @@ export interface FamilyContent {
 
 export interface NavigationContent {
   familyLabel: string;
+  familyHomeLabel: string;
   familyAdviceLabel: string;
   familyShopLabel: string;
   destinationsLabel: string;
@@ -475,8 +476,15 @@ export const siteContentDefaults: SiteContentMap = {
   },
   navigation: {
     familyLabel: 'Family',
+    /* «Gravidanza» nominava un tema e portava all'indice della sezione, che
+       apre con «Il viaggio più grande inizia adesso» e rimanda a consigli,
+       codici e collaborazioni: il contenuto sulla gravidanza sta un clic più in
+       là, sotto «Consigli». Le altre voci accanto — Consigli, Codici sconto,
+       Chi siamo — nominano tutte una pagina, e il tema lo dichiara già il
+       commutatore sopra. Questa etichetta non scade il giorno della nascita. */
+    familyHomeLabel: 'Da dove iniziare',
     familyAdviceLabel: 'Consigli',
-    familyShopLabel: 'Codici e sconti',
+    familyShopLabel: 'Codici sconto',
     destinationsLabel: 'Mete',
     destinationsAllLabel: 'Tutte le mete',
     guidesLabel: 'Guide',
@@ -767,6 +775,10 @@ export const siteContentDefinitions: SiteContentDefinition[] = [
       textField('experiencesLabel', 'Label esperienze'),
       textField('resourcesLabel', 'Label risorse'),
       textField('shopLabel', 'Label shop'),
+      textField('familyLabel', 'Label edizione family'),
+      textField('familyHomeLabel', 'Label prima voce family'),
+      textField('familyAdviceLabel', 'Label consigli family'),
+      textField('familyShopLabel', 'Label codici sconto family'),
       textField('collaborationsLabel', 'Label collaborazioni'),
       textField('mediaKitLabel', 'Label media kit'),
       textField('clubLabel', 'Label club'),

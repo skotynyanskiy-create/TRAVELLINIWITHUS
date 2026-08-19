@@ -67,7 +67,7 @@ export default function MediaManager() {
     <div className="p-8">
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-serif">Media Manager</h2>
-        <label className="bg-[var(--color-ink)] text-white px-6 py-3 rounded-full flex items-center gap-2 hover:bg-[var(--color-accent)] transition-colors cursor-pointer">
+        <label className="bg-[var(--color-ink)] text-white px-6 py-3 rounded-full flex items-center gap-2 hover:bg-[var(--color-accent-hover)] transition-colors cursor-pointer">
           {uploading ? <Loader2 size={20} className="animate-spin" /> : <Upload size={20} />}
           {uploading ? 'Caricamento...' : 'Carica File'}
           <input
