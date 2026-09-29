@@ -1,6 +1,6 @@
 ---
 title: HANDOFF_webapp-travelliniwithus_orchestrator_to_data-analyst
-status: open
+status: consumed
 created: 2026-09-29
 from: travellini-orchestrator
 to: travellini-data-analyst
@@ -52,7 +52,7 @@ Fatti già verificati (ricalcolali solo per riconciliarli):
 - Schede visibili: 79 su 110 nel registro (`BEST/src/data/content-seed.json`).
 
 Privacy (spec §1, obbligatoria anche per te):
-- Escludi il post `Db72ZqegfYf`, le strutture sanitarie, gli indirizzi residenziali e
+- Escludi il post il post indicato nella deny-list della spec, le strutture sanitarie, gli indirizzi residenziali e
   scuole, asili e nidi. Attenzione al falso amico «Ospedale delle Bambole» (Napoli), che
   è un luogo visitabile.
 - **Riporta solo conteggi per categoria, mai nomi o coordinate dei luoghi sensibili.**
