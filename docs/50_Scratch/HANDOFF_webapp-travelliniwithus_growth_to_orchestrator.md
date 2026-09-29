@@ -1,6 +1,6 @@
 ---
 title: HANDOFF_webapp-travelliniwithus_growth_to_orchestrator
-status: open
+status: consumed
 created: 2026-09-29
 from: travellini-growth-revenue-operator
 to: travellini-orchestrator

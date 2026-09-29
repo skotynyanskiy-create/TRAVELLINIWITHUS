@@ -1,6 +1,6 @@
 ---
 title: HANDOFF_webapp-travelliniwithus_asset-curator_to_orchestrator
-status: open
+status: consumed
 created: 2026-09-29
 from: travellini-asset-curator
 to: travellini-orchestrator

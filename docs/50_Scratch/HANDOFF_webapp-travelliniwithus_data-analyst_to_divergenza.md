@@ -1,6 +1,6 @@
 ---
 title: HANDOFF_webapp-travelliniwithus_data-analyst_to_divergenza
-status: open
+status: consumed
 created: 2026-09-29
 from: travellini-data-analyst
 to: travellini-ui-designer (direzione e architettura), travellini-growth-revenue-operator, travellini-social-content-operator, travellini-seo-conversion-strategist, travellini-asset-curator

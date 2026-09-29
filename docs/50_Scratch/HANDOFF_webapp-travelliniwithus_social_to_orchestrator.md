@@ -1,6 +1,6 @@
 ---
 title: HANDOFF_webapp-travelliniwithus_social_to_orchestrator
-status: open
+status: consumed
 created: 2026-09-29
 from: travellini-social-content-operator
 to: travellini-orchestrator
