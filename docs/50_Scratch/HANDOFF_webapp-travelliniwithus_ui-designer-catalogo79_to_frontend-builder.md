@@ -8,1219 +8,1235 @@ slug: webapp-travelliniwithus
 expires: 2026-10-13
 type: handoff
 area: delivery
-round: A3 (salto di livello dopo il giudizio dell'owner su A2: «è proprio una bozza semplice»)
+round: A3 (riscritto dopo la correzione dell'owner: l'archivio intero, non i soli 79 posti; la mappa vera è il cuore)
 consumes:
   - docs/50_Scratch/HANDOFF_webapp-travelliniwithus_ui-designer-raffinamento_to_frontend-builder.md (A2: sostituito dove qui è detto, valido altrove)
+  - docs/50_Scratch/HANDOFF_webapp-travelliniwithus_data-analyst_to_divergenza.md (fact pack: Esito in testa, §1, §2, §7, §12, §14, §15)
   - docs/50_Scratch/HANDOFF_webapp-travelliniwithus_orchestrator_to_owner_sintesi-R2.md
+  - BEST/src/components/map/FullScreenMapExperience.tsx (mappa del sito: livelli, tetto dei marcatori, stili)
 ---
 
-# Handoff: A3, l'Atlante tascabile con tutti i 79 posti. Idea, sistema, schermate, specifica
+# Handoff: A3, l'archivio intero. La carta come cuore, i 79 posti in inchiostro, tutto il resto a matita
 
-Documento in un repo pubblico. I nomi dei posti citati sono solo tra i 79 visibili del sito.
-Nessun id di post, nessuna coordinata, nessun indirizzo. I soli numeri di fatto sono quelli del
-brief del main thread (79 posti, conteggi per paese, zona, regione, categoria, dichiarazione,
-copertura dei campi) e quelli letti in `content-seed.json` di BEST (formati di `price`,
-`budget`, `hook`). Tutto il resto è misura di progetto (px, ms) oppure `[VERIFY]`.
-Contrasti calcolati a mano con la formula WCAG 2.x: da confermare con axe.
+Documento in un repo pubblico. **Nessun nome di locale che esista solo nel corpus**: le tracce
+compaiono qui solo come «Traccia · comune di {comune}» o con regioni e paesi aggregati del fact
+pack. I nomi citati sono solo tra i 79 posti visibili del sito. Nessun id di post, nessuna
+coordinata, nessuna struttura sanitaria. Numeri di fatto: quelli del fact pack
+(`HANDOFF_..._data-analyst_to_divergenza.md`) e del main thread; tutto il resto è misura di
+progetto (px, ms) o `[VERIFY]`. **Nell'app nessun numero si scrive a mano: si calcola dal dato
+mostrato.** Contrasti calcolati a mano (WCAG 2.x), da confermare con axe.
 
-Abbreviazioni per le catture: `A2/NN` = `SCRATCH/prototipi/A2/shots/NN-*-390.png` (o
-`-1440`), `B/NN` = `SCRATCH/prototipi/B/shots/`, `SITO/NN` = `SCRATCH/shots/`, `PROVINO` =
-`SCRATCH/confronto/catalogo-79.png`, `CARTIGLI` = `SCRATCH/confronto/cartigli.png`.
+Abbreviazioni: `A2/NN` = catture di A2 in `SCRATCH/prototipi/A2/shots/`; `PROVINO` =
+`SCRATCH/confronto/catalogo-79.png`; `CARTIGLI` = `SCRATCH/confronto/cartigli.png`; `FP §n` =
+sezione del fact pack; `MAPPA-SITO` = `BEST/src/components/map/FullScreenMapExperience.tsx`.
 `SCRATCH` = `/tmp/claude-0/-home-user-TRAVELLINIWITHUS/8c6b9c85-6fd1-5455-93cb-7a8ffe3e982f/scratchpad`.
 
 ---
 
 ## Per l'owner, in una pagina
 
-**In una frase.** A2 era un plastico con sei casette. A3 è la città intera: 79 posti veri e
-un'app costruita per reggerne il peso e farvelo sentire appena si apre.
+**Cosa cambia rispetto al prototipo di prima (A2), in parole semplici**
 
-**Cosa vedrete di diverso**
+A2 mostrava 6 posti su una carta disegnata con 5 punti. A3 mostra **tutto quello che avete
+pubblicato dal luglio 2021**, cioè più di mille post in 62 mesi, su **una carta vera**. I 79 posti
+con la scheda sono il 6% dell'archivio: diventano i punti d'inchiostro, quelli completi. Tutto il
+resto sono **tracce a matita**: un reel che sappiamo dov'è stato girato, ma di cui non abbiamo
+ancora scritto la scheda.
 
-1. **La Home fa una domanda e poi vi mostra tutto.** In alto c'è un vostro fotogramma a tutta
-   larghezza. Sopra, nel punto dove il reel stampa il titolo, c'è la sua domanda riscritta da noi
-   («Dormiresti in una gabbia?»). Sotto arriva la risposta: «Posti che sembrano inventati. Ma
-   esistono davvero.» Scendendo trovate il **provino**: tutti i fotogrammi dell'archivio in un
-   colpo d'occhio, dal più recente al primo. Sul computer il provino *è* la Home: circa 70
-   fotogrammi nel primo schermo, il titolo incastonato dentro e una **lente** che ingrandisce
-   quello su cui passate.
-2. **Il vostro cartiglio diventa la firma dell'app.** Il riquadro bianco con la domanda, che
-   su Instagram vi riconoscono, lo tagliamo dalla foto e lo ricomponiamo in pagina, pulito, nello
-   stesso punto. Chi arriva da un reel si sente a casa. Chi arriva da Google legge un testo vero.
-3. **Esplora ha porte colorate e pillole.** Ci sono sei porte con una foto e un colore (Food,
-   Insolito, Hotel con carattere, Posti particolari, Relax, Weekend romantici) e pillole per
-   zona, regione e budget. La griglia alterna foto piccole e foto grandi, e le grandi portano la
-   loro domanda.
-4. **La mappa regge 79 punti.** Raggruppa per regione («Lombardia 21»), si avvicina con un tocco
-   e ha tre tavole fuori d'Italia: Europa, Asia, Americhe. Resta una carta disegnata da noi, con
-   i punti al loro posto e senza confini inventati.
-5. **Nessuna scheda sembra vuota.** Tre prove ci sono sempre: la data del reel, il controllo e a
-   che titolo ci siete andati. Il prezzo, quando c'è, compare grande. Quando manca lo diciamo una
-   volta sola, in fondo, con il sito dove chiederlo. Addio al «non ancora» ripetuto.
-6. **«Vicino a questo».** Da ogni posto vedete i più vicini con i chilometri veri, in linea d'aria.
-7. **Il rullino dei mesi.** Da maggio 2024 ad agosto 2026, mese per mese, come un diario. Il
-   nome del mese è scritto enorme e in corsivo. I mesi senza schede restano bianchi, e lo diciamo.
-8. **Più scala e più coraggio.** Titoli molto più grandi, foto a filo schermo, fasce di colore
-   per le categorie, e una sola fascia scura dove si guarda un reel.
+1. **La Home si apre sulla carta.** Il primo schermo è una tavola d'atlante a tutta larghezza:
+   coste, confini, laghi, i nomi delle regioni, e sopra tutti i vostri luoghi. L'Italia del Nord
+   si riempie di quadretti a matita, i 79 posti sono punti d'inchiostro, e una fotografia (il posto
+   di oggi, con la sua domanda) è appuntata sulla tavola. Sopra, in un cartiglio da atlante: «Posti
+   che sembrano inventati. Ma esistono davvero.»
+2. **La Mappa è quella vera, portata nel vostro stile.** Si avvicina in tre passi, come quella del
+   sito: prima le regioni e i paesi con il loro numero («Lombardia»), poi i comuni, poi i singoli
+   luoghi. Il posto con la scheda è un punto d'inchiostro con un anello; la traccia è un cerchietto
+   a matita, vuoto e più piccolo. Ha una versione chiara (carta color crema) e una scura.
+3. **La trama dell'archivio.** Dove avete girato tanto, la carta si riempie di quadretti a matita,
+   come un taccuino a quadretti colorato a mano. Ogni quadretto è 5 km. È la firma della carta, e
+   nessun sito di viaggi può averla.
+4. **Tutto il mondo sulla stessa carta.** Europa, Asia, Americhe si raggiungono con un tocco (o
+   rimpicciolendo), con i loro numeri. I 20 posti fuori d'Italia non stanno più in un riquadrino.
+5. **Il rullino di 62 mesi.** Dal luglio 2021 ad agosto 2026 nessun mese è vuoto. Ogni mese ha il
+   suo nome scritto enorme in corsivo, i comuni da cui vengono i reel, e le foto quando c'è una
+   scheda.
+6. **Si sfoglia in quattro modi:** per posto (i 79 con foto, porte colorate per categoria), per
+   mese (il rullino), per luogo (un indice da atlante: regione, comune, luogo) e sulla carta.
+7. **Le schede dei 79 posti restano ricche.** Il vostro cartiglio con la domanda è ricomposto sulla
+   foto. Tre prove ci sono sempre (data del reel, controllo, a che titolo) e il prezzo compare
+   grande quando c'è. «Vicino a questo» ora conta anche le tracce.
+8. **Oggi le tracce sono solo testo.** Per le tracce non ci sono fotogrammi su disco. Oggi sono a
+   matita, senza foto. Se la scansione con i fotogrammi arriva, una traccia prende la sua foto
+   **solo dopo che l'avete approvata voi**.
 
 **Perché non sarà più una bozza**
-- Ogni schermata è piena di contenuto vero: nessuna griglia da 6, nessuna carta con 5 punti.
-- Ogni schermata ha un'idea e un momento grande, visibile anche da ferma in una cattura, non
-  solo nel movimento.
-- La scala tipografica ha contrasto: si passa da 12 a 96 px, non più da 13 a 38.
-- Cinque momenti-firma, e due nascono dall'archivio: la lente sul provino e il volo dalla carta
-  alla scheda.
-- Controlli automatici su tutti e 79 i posti, non su uno di esempio.
+- La prima cosa che si vede è la mole vera dell'archivio su una carta credibile, non 6 card.
+- Scala tipografica con contrasto (da 12 a 96 px), foto a filo schermo, un cartiglio riconoscibile
+  da Instagram, due materiali (inchiostro e matita) che dicono subito cosa è completo e cosa no.
+- Cinque momenti-firma, e due nascono dall'archivio: «l'atlante si apre» (dalla Home alla mappa) e
+  «dalla carta alla scheda».
+- Controlli automatici su tutti i luoghi, non su uno d'esempio.
 
-**Cosa non cambia.** Fraunces e Inter, la sabbia, la terracotta, le foto vere, le icone lucide,
-la barra a 5 voci. Niente feed, autoplay, storie o pop-up, e nessun contatore da dashboard.
+**Cosa non cambia.** Fraunces e Inter, la sabbia, la terracotta, le foto vere, le icone lucide, la
+barra a 5 voci. Niente feed, autoplay, storie, pop-up o dashboard. Niente visualizzazioni né like,
+niente testo delle caption, niente posizioni esatte delle tracce.
 
-**Cinque decisioni vostre** (nessuna blocca il primo giro; trovate la mia raccomandazione
-sotto, alla fine):
-1. i colori di tre categorie nuove (Hotel con carattere, Posti particolari, Weekend romantici);
-2. l'elenco delle copertine da tenere fuori dai posti in evidenza (sezione «Da far confermare
-   all'owner»);
-3. una fascia scura per pagina, solo dove si guarda un reel;
-4. un peso più leggero di Fraunces (360) per i titoli molto grandi;
-5. le diciture di «a che titolo» (per esempio «Nessuna collaborazione» per i posti organici).
+**Sei decisioni vostre** (nessuna blocca il primo giro; la mia raccomandazione è in fondo):
+1. copertina della Home **chiara** (crema) o **scura** (i punti come luci): le fotograferemo
+   entrambe;
+2. i quadretti della trama: se contarli per **luoghi** (raccomandato, per la privacy) o per reel;
+3. la zona di casa (FP §14): se volete che i quadretti vicino a casa restino al tono più chiaro;
+4. i colori di tre categorie nuove;
+5. l'elenco dei fotogrammi da non mettere in evidenza;
+6. le diciture di «a che titolo».
 
-**Il primo giro** costruisce: i 79 posti, la Home con provino e lente, il cartiglio ricomposto,
-Esplora con porte e pillole, la scheda nuova, la mappa a gruppi con le tavole estere, la
-ricerca e i tre momenti già approvati. **Il secondo giro** aggiunge il rullino dei mesi, la lente
-che filtra l'archivio, il volo dalla carta alla scheda, le raccolte condivisibili, Noi con le
-lenti e le tre idee avanzate.
+**Il primo giro** costruisce: la carta locale con i tre livelli e la trama, la Home-copertina, la
+Mappa, il foglio della traccia, le schede dei 79, Esplora per posti, la ricerca. **Il secondo giro**
+aggiunge il rullino dei 62 mesi, l'indice dei luoghi, la versione scura, i movimenti nuovi, «Il
+mese negli anni», le raccolte, Noi con «Come è fatto questo atlante».
 
 ---
 
 ## Why this work matters
 
-L'owner ha giudicato A2 corretto ma povero. La causa principale è la scala: sei posti su 79. Ma
-anche il mio sistema era prudente, e con sei posti la prudenza è diventata vuoto. A3 deve
-sembrare un prodotto finito e ambizioso con i dati veri, restando Travelliniwithus. Questa
-consegna dà al costruttore un'idea per ogni schermata, un sistema tipografico e cromatico alzato
-di livello e criteri verificabili con Playwright su tutti i 79 posti.
+L'owner ha giudicato A2 una bozza. La correzione chiarisce il perché più profondo: il prodotto non
+sono 79 schede, è **l'archivio di cinque anni di reel** con una mappa vera. A3 deve far sentire
+quella mole nel primo schermo, dare due materiali leggibili (inchiostro per ciò che è completo,
+matita per ciò che è traccia), e riusare nell'app vera la mappa MapLibre del sito portandola nel
+brand. Il prototipo pubblicato deve rendere la stessa esperienza senza rete, con una base
+cartografica locale da geometrie pubbliche.
 
 ## Decisions already made (bloccate: il builder non le rinegozia)
 
-1. **Direzione A, edizione completa.** Tutti i 79 posti visibili, sempre. Nessuna schermata
-   pensata per un sottoinsieme.
-2. **Il cartiglio ricomposto** (§3) è il dispositivo tipografico dell'app: la domanda del reel
-   (campo `hook`, alla lettera) in un riquadro sabbia, in cima al fotogramma, dove il reel stampa
-   il suo.
-3. **Il cartellino** (§4) sostituisce l'«ossatura fissa» di A2. Ha tre celle sempre piene
-   (Reel, Controllato, A che titolo) e la riga «Quanto» solo se c'è un dato. «Non ancora» resta
-   solo per l'unico posto senza controllo.
-4. **Home = una domanda, poi l'archivio intero** (§5.1). Il provino è il cuore della Home.
-5. **Pillole orizzontali e porte per immagini** in Esplora (§5.2). Correggo la mia regola «niente
-   chip-filtro» (§1.3).
-6. **Mappa a gruppi per regione** con ingrandimento e **quattro tavole** (Italia, Europa, Asia,
-   Americhe), senza contorni e senza tessere prima del consenso (§5.4).
-7. **Scheda desktop a colonna fotografica** (foto 5:7 alta tutto lo schermo a sinistra, testo a
-   destra). Via la copertina 16:9 e via il banco a tre riquadri in Esplora. Il banco resta solo
-   sulla Mappa (§1.3).
-8. **Una sola fascia scura per pagina**, solo dove il soggetto è un reel (locandina, blocco «Il
-   reel» in fondo alla scheda).
-9. **Evidenza vietata** per le copertine dell'elenco «Da far confermare all'owner» (§12): mai
-   come eroe, lente, porta, tessera grande o copertina di mese finché l'owner non conferma.
-10. **Date:** la data è sempre quella di pubblicazione del reel. Si scrive «reel del…», «reel
-    di…» o «reel usciti a…», mai «ci siamo stati», «visitato» o «a che mese andarci».
-11. **Hash a un solo token** per le rotte (§9.0). Niente librerie, rete, geolocalizzazione o
-    login.
-12. **Copy provvisorio.** Tutti i testi qui sono provvisori. La parola finale spetta a
-    seo-strategist; le diciture di «a che titolo» vanno verificate da seo e legale (B5).
+1. **Due strati, due materiali.** POSTO = uno dei 79 con scheda (foto, cartellino, indirizzo):
+   **inchiostro**. TRACCIA = reel o post geolocalizzato senza scheda: **matita**. Mai confondibili,
+   né per forma né per colore (§1).
+2. **La carta è il cuore e il primo «wow».** La Home si apre su una tavola d'atlante (§7.1). La
+   Mappa è la stessa carta resa interattiva (§6).
+3. **Contorni sì, da geometria pubblica vera.** Ribalto la regola del mio giro precedente, «niente
+   contorni di paese», che valeva per contorni disegnati a mano. Coste, confini e regioni vengono da
+   Natural Earth (pubblico dominio): è lo stesso dato di `world-atlas` che il sito usa in
+   `InteractiveMap.tsx`. Non si inventa nessun luogo: sono la base che rende la carta credibile.
+4. **Costante unica di privacy: `GRIGLIA_KM = 5`.** Ogni traccia si posa al centro della sua cella
+   di 5 km; niente coordinate più precise. La trama usa le stesse celle. Solo i 79 posti (attività
+   pubbliche con indirizzo) hanno la posizione esatta.
+5. **Le etichette generiche non sono punti.** Un geotag come «Italia» cade in Umbria (FP §7: 89
+   reel). Le etichette generiche di livello comune si posano sul comune. Quelle di livello regione
+   o paese non diventano segni: vivono nel rullino e nell'indice.
+6. **Tracce in due stati:** (a) oggi solo testo a matita; (b) domani, con un fotogramma
+   **certificato dall'owner**, la traccia mostra la foto ma resta traccia finché non ha la scheda
+   (§1.3). Nessuna foto senza certificazione. Nel prototipo lo stato (b) è solo impaginazione, con
+   un riquadro vuoto dichiarato.
+7. **Riuso nell'app vera:** `FullScreenMapExperience` (MapLibre, OpenFreeMap, livelli territorio,
+   area e posto, tetto di 60 marcatori, `?posto=<id>`, consenso prima delle tessere), portata nel
+   brand (§6.9). **Satellite solo nell'app vera.**
+8. **Il cartiglio ricomposto** resta il dispositivo dei 79 posti (§4). **Il cartellino** resta la
+   prova (§5).
+9. **Niente metriche e niente caption:** nessuna visualizzazione, like o commento, e nessun testo di
+   caption, in nessuna schermata.
+10. **Date di pubblicazione**, sempre: «reel del…», «reel di…». Mai «visitato», «ci siamo stati», o
+    «nessun reel» detto come «non ci siamo stati».
+11. **Evidenza vietata** per i fotogrammi in attesa (§13).
+12. **Hash a un solo token**, niente rete, librerie, geolocalizzazione o login. Copy provvisorio,
+    la parola finale spetta a seo.
 
 ---
 
 ## Context the receiver needs
 
-### 0. Diagnosi: dove quella del main thread regge, dove sbaglia, cosa mancava
+### 0. Diagnosi aggiornata
 
-**Verdetto su A2 come prodotto: Block. Vedi 1 blocker e 7 serious.** Come direzione, A resta
-confermata.
+**Verdetto su A2 come prodotto: Block. Vedi 1 blocker e 8 serious.** Direzione A confermata; la
+scala e il cuore del prodotto erano sbagliati.
 
-| # | Punto del main thread | Il mio giudizio |
-| --- | --- | --- |
-| 1 | 6 posti su 79 | **Giusto, ed è la causa principale.** Però non basta versare 79 posti nei layout di A2, perché ogni componente era dimensionato su 6: la carta senza gruppi, la griglia senza ritmo né filtri, la Home con un solo posto. Serve un sistema che cambia forma con la scala (§5). E «5 schede su 6 non scritte» non era vero dei dati: il controllo c'è su 78 posti su 79. Era la mia ossatura a mettere in vetrina ciò che mancava |
-| 2 | Sistema timido | **Giusto.** Le regole mie che l'hanno prodotta sono elencate al §1.3, con il motivo |
-| 3 | Firme invisibili nelle catture | **Giusto**, e aggiungo la causa: in A2 nessuna firma lasciava un segno a riposo. In A3 ogni firma ha uno stato fermo visibile (il cartiglio, l'angolo del retro, la lente) e le catture includono fotogrammi a metà transizione |
-| 4 | Nessuna profondità | **Giusto.** Adesso i dati per le relazioni esistono (i 4 più vicini con i km, le categorie multiple, le date). Mancava anche la profondità materiale: carta, inchiostro, timbro e sovrapposizioni |
-| 5 | La Home senza idea | **Giusto.** L'idea è al §5.1 |
-
-**Cosa la diagnosi non ha visto (e che cambia il progetto)**
-
-- **La «domanda di una parola» non è una domanda di una parola.** In `CARTIGLI` si vede che la
-  scritta stampata è un cartiglio su più righe: il nome in maiuscoletto, poi la domanda su 2-3
-  righe, un filetto e il luogo. Nel `PROVINO`, che taglia la parte alta, si legge solo l'ultima
-  riga: «ROMANTICO?» è la coda di «DOVE PASSARE UN WEEKEND ROMANTICO?», «TEMA?» di «SUITE A
-  TEMA?». Non tutte sono domande: «LA COSTA DEGLI DEI» non lo è. Inoltre il testo stampato **non
-  coincide sempre** con il campo `hook`. Per l'Emotional Grand Motel il reel stampa «SUITE A
-  TEMA?», mentre il dato dice «Dormiresti in una gabbia?». Se estraessimo «una parola» la
-  inventeremmo. Il dispositivo deve quindi usare l'`hook` intero, alla lettera, e ricomporre la
-  *forma* del cartiglio, non il suo testo (§3).
-- **I protagonisti sono nelle foto.** In quasi ogni copertina del `PROVINO` compaiono Betta o
-  Rodrigo. A2 le ha trattate come foto di luoghi. Il provino intero è già un ritratto della coppia
-  («provati di persona» dimostrato in un colpo d'occhio). È la prova di presenza più forte che il
-  sito abbia, e per questo diventa la Home.
-- **Il colore lo portano già le foto.** Il `PROVINO` è violento di colore: rossi, magenta, piscine
-  blu, verdi. Più coraggio non vuol dire interfaccia colorata attorno a foto colorate. Vuol dire
-  fasce piene e intenzionali (categorie, inchiostro, carta) in zone senza foto, e intorno alle
-  foto sabbia e inchiostro.
-- **I dati hanno forme irregolari.** `price` è testo libero: «8€», «da 98€/notte», «Pranzo da
-  19,90€ · Cena da 35,90€», «All you can eat: pranzo feriale 16€ · weekend 21€ · cena 30€» e
-  perfino «Prezzo variabile per stanza», che non è un prezzo. `budget` vale «Basso», «Medio» o
-  «Alto». Il layout deve reggere tutte le forme (§4).
-- **I mesi sono 28, non 27.** Dal 3 maggio 2024 al 10 agosto 2026 passano 27 mesi, ma i mesi di
-  calendario toccati sono 28 (da maggio 2024 ad agosto 2026 compresi). Nel copy pubblico non
-  si scrive nessun numero di mesi: si scrive l'intervallo, «da maggio 2024 ad agosto 2026».
-- **Probabile errore nei dati delle regioni.** Il Granduca ha `region: "Emilia Romagna"` senza
-  trattino, mentre gli altri hanno «Emilia-Romagna». Il conteggio «Emilia-Romagna 3» del brief
-  probabilmente ne perde uno. Nel `PROVINO` ne conto 4: Granduca, Better Sushi, Mamma Mia e La
-  Forchetta. `[VERIFY builder: normalizzare i nomi di regione in a3-data.js prima di raggruppare]`.
-  Altrimenti la carta mostra due gruppi per la stessa regione.
-- **«Qui non ci siamo stati» non vale sui 79.** L'idea della sintesi vive sul corpus intero
-  (1.192 reel). Sui 79 le regioni vuote sono molte di più, ma non vuol dire che la coppia non ci
-  sia stata. Sui 79 si scrive «Nessun posto con la scheda», mai «non ci siamo stati» (§8, bonus).
-
-**Rilievi su A2** (formato di revisione):
+**Dalla diagnosi del main thread restano validi:** la Home senza idea, la scala tipografica timida,
+i momenti-firma invisibili a riposo, la mancanza di profondità. **Si aggiunge:** la mappa è il cuore
+dell'app e deve essere il primo «wow».
 
 ```
 [blocker] tutta l'app — A2/09, A2/03, A2/05
-Problema: 6 posti su 79, 5 senza prezzo; la Home è testo più una card, Esplora è una griglia da
-  6, la carta ha 5 punti.
-Perché conta: l'app sembra vuota e il primo giudizio dell'owner è «bozza».
-Direzione: i 79 posti da a3-data.js in ogni schermata (P0-1); nessun layout pensato per un
-  sottoinsieme.
-```
-```
-[serious] Home 390 e 1440 — A2/09-390, A2/09-1440
-Problema: a 390 sotto «Tutti i posti» resta vuoto il 25% del primo schermo; a 1440 tre oggetti
-  galleggiano sulla sabbia con buchi tra l'uno e l'altro.
-Perché conta: non comunica né la scala né l'idea del brand in 5 secondi.
-Direzione: la Home del §5.1 (domanda, risposta, provino).
-```
-```
-[serious] scala tipografica — A2/01, A2/03
-Problema: la domanda del reel è in corsivo da 19 px sotto il nome, dove si legge come un
-  sottotitolo; l'h1 di Esplora è di 30 px; nessun elemento supera i 64 px su desktop.
-Perché conta: tutto è ordinato e nulla è memorabile.
-Direzione: scala del §2.2 (fino a 96 px su desktop, 64 px su mobile per i mesi) e il
-  cartiglio del §3.
-```
-```
-[serious] Esplora — A2/03, A2/20-1440
-Problema: griglia uniforme 2×n o 3×n, senza porte né filtri né variazioni.
-Perché conta: con 79 posti diventa un muro e non si scopre niente.
-Direzione: porte, pillole, ritmo S/L, fine elenco onesta (§5.2).
+Problema: 6 posti mostrati su un archivio di 1.283 post; la carta ha 5 punti su una griglia di
+  gradi senza costa.
+Perché conta: l'app nasconde proprio ciò che la rende unica, cinque anni di reel geolocalizzati.
+Direzione: i due strati (posti e tracce) in ogni schermata; la carta come Home (§6, §7.1).
 ```
 ```
 [serious] Mappa — A2/05, A2/22-1440
-Problema: la tavola da 350×380 con 5 punti non ha gruppi, livelli né tavole estere (Madrid in un
-  riquadro da 72 px); a 79 punti la Lombardia (21 posti in circa 60×40 px) diventa una macchia.
-Perché conta: la voce fissa della barra non regge la scala.
-Direzione: gruppi per regione, ingrandimento a livello di regione e tavole II-IV (§5.4).
+Problema: senza costa, confini e laghi la carta legge come un grafico; 5 punti in un riquadro.
+Perché conta: la regola «niente contorni» nata per non inventare luoghi ha tolto la credibilità.
+Direzione: base Natural Earth locale, tre livelli, trama, tutto il mondo (§6).
 ```
 ```
-[serious] scheda, ossatura fissa — A2/14 (Burton)
+[serious] Home — A2/09-390, A2/09-1440
+Problema: nessuna idea e nessuna scala nel primo schermo.
+Direzione: la copertina-atlante (§7.1).
+```
+```
+[serious] scala tipografica — A2/01, A2/03
+Problema: domanda del reel a 19 px, h1 a 30 px, niente oltre i 64 px.
+Direzione: §3.2 (fino a 96 px) e il cartiglio (§4).
+```
+```
+[serious] scheda con ossatura fissa — A2/14
 Problema: «Prezzo — non ancora» sul 71% delle schede (56 su 79).
-Perché conta: la scheda sembra rotta proprio dove il brand promette la prova.
-Direzione: il cartellino del §4.
+Direzione: il cartellino (§5).
 ```
 ```
-[serious] desktop, banco a tre e copertina 16:9 — confronto-desktop.png, A2/21-1440
-Problema: una copertina 16:9 da 432×243 presa da un fotogramma 9:16 mostra il 31% del
-  fotogramma; il banco con i separatori sembra uno strumento, non una rivista.
-Perché conta: su desktop la foto, cioè la cosa più forte, è la più piccola.
-Direzione: la colonna fotografica 5:7 alta tutto lo schermo (§5.3). Il banco resta solo sulla
-  Mappa.
+[serious] Esplora — A2/03
+Problema: griglia uniforme, niente modi per sfogliare un archivio.
+Direzione: quattro modi (posti, mesi, luoghi, carta), porte e pillole (§7.3).
 ```
 ```
-[serious] momenti-firma — A2/10, A2/11, A2/18
-Problema: retro e locandina esistono solo dopo un tocco e su un posto solo; a riposo non
-  lasciano segni.
-Perché conta: l'owner giudica dalle catture e dal primo sguardo.
-Direzione: ogni firma ha uno stato a riposo visibile (§6) e le catture a metà transizione.
+[serious] desktop — confronto-desktop.png
+Problema: copertina 16:9 da un 9:16 (31% del fotogramma) e banco a tre da strumento.
+Direzione: colonna fotografica 5:7 (§7.4); banco solo sulla Mappa.
 ```
 ```
-[minor] domanda del reel in Home — A2/09-390
-Problema: il posto del mese mostra nome e dichiarazione ma non la sua domanda, che è la cosa
-  più riconoscibile del reel.
-Direzione: cartiglio ricomposto sull'eroe (§3, §5.1).
+[serious] momenti-firma — A2/10, A2/11
+Problema: esistono solo dopo un tocco; a riposo non lasciano segni.
+Direzione: ogni firma ha uno stato a riposo visibile e catture a metà (§8).
 ```
 ```
-[minor] dati delle regioni — seed, Granduca
-Problema: «Emilia Romagna» e «Emilia-Romagna».
-Direzione: normalizzare in a3-data.js [VERIFY].
+[serious] mappa del sito da portare nel brand — MAPPA-SITO righe 47-49, 454, 919-1429
+Problema: stile predefinito «Cinema Dark»; pannelli `bg-stone-900/95 backdrop-blur-2xl` (vetro
+  pesante, palette grezza); l'etichetta «Satellite Hybrid» carica lo stile `bright` di
+  OpenFreeMap, che non è un satellite.
+Perché conta: sono tre violazioni del brand e una della verità (un nome che promette ciò che non c'è).
+Direzione: §6.9.
 ```
 
-### 1. Il sistema, alzato di livello
+**Cosa mancava anche nella correzione (e cambia il progetto)**
 
-#### 1.1 Superfici e materiali (quattro, ognuna con un ruolo)
+- **La qualità del geotag.** Nel controllo del FP §7, 10 etichette su 51 che nominano un paese
+  cadono in un altro paese (19,6%). L'etichetta «Italia» (89 reel) cade in Umbria: per questo la
+  riga «Umbria» conta 93 reel ma solo 3 luoghi veri. Senza una regola, la trama mostrerebbe un
+  «centro dell'archivio» falso in Umbria. Regola: decisione 5 più il flag `paeseIncerto` (§1.4).
+- **Puglia e Basilicata non sono vuote.** Hanno zero reel ma 3 luoghi con soli caroselli (FP §7).
+  «Nessun reel da qui» è vero; «qui non ci siamo stati» sarebbe falso. Senza alcun post, in tutto il
+  corpus, restano **quattro** regioni: Sardegna, Marche, Friuli-Venezia Giulia, Molise.
+- **Le schede sono tutte recenti.** I reel con scheda e coordinate sono tutti del 2024-2026 (FP
+  §15: 2 nel 2024, 31 nel 2025, 44 nel 2026). I mesi dal 2021 al 2023 del rullino saranno **solo
+  matita**, e vanno disegnati per esserlo, non come mesi «rotti».
+- **Paesi: 11 contro 26.** I 79 posti stanno in 11 paesi; l'archivio ha reel in 26 paesi (FP §7), ma
+  con il 19,6% di etichette che cadono nel paese sbagliato. Nel copy pubblico il numero dei paesi
+  dell'archivio si scrive solo dopo la pulizia `paeseIncerto` `[VERIFY data-analyst]`.
+- **La zona di casa.** La trama, contata per reel, farebbe da faro sulle zone dove si torna più
+  spesso. Il FP §14 non trova un'area dominante, ma la decisione è dell'owner. Regola: la trama conta
+  **luoghi distinti**, non reel, e ha solo 3 toni (§6.5).
+- **I preset della mappa del sito puntano al vuoto.** Tra le scorciatoie ci sono «Puglia» (zero
+  reel) e «Norvegia», mentre nel file non c'è nessun luogo norvegese (FP, incongruenze). In A3 i preset
+  si calcolano dai dati.
+- **Resta valido dal mio giro precedente:** la «domanda di una parola» del provino è l'ultima riga
+  di un cartiglio su più righe, e il testo stampato non coincide sempre con `hook` (Emotional Grand
+  Motel: stampato «SUITE A TEMA?», dato «Dormiresti in una gabbia?»). Il dispositivo usa l'`hook`
+  alla lettera e ricompone la forma del cartiglio (§4). Resta valido anche il probabile errore
+  «Emilia Romagna» contro «Emilia-Romagna»: la mappa del sito lo normalizza già (MAPPA-SITO, righe
+  129-149); A3 fa lo stesso.
+
+### 1. Vocabolario e dati: posti, tracce, reel senza luogo
+
+#### 1.1 Gli strati (dal FP §15, reel usabili 1.190, deny-list esclusa)
+
+| Strato | Cosa è | Quanti (fatto) | Sulla carta | Nelle liste |
+| --- | --- | --- | --- | --- |
+| **Posto** | una delle 79 schede visibili | 79 schede; 77 reel con scheda propria e coordinate (FP §15, colonna A) | punto d'inchiostro con anello, posizione esatta | foto 5:7, cartiglio, cartellino |
+| **Traccia su un posto** | reel che cade sulle coordinate di una scheda ma non è il suo reel | 86 reel (FP §15, colonna B) | niente segno proprio: si conta nel posto («e altri {n} reel da qui») | riga sotto il posto |
+| **Traccia locale** | reel su un luogo senza scheda | 484 reel su 409 coordinate (colonna C) | cerchietto a matita, sulla cella di 5 km | riga a matita |
+| **Traccia di comune** | etichetta generica di livello comune | parte dei 369 generici (colonna D) `[VERIFY data-analyst: suddividere i 369 per livello]` | cerchietto a matita sul comune, con il nome del comune | «Reel a {comune}» |
+| **Generico di regione o paese** | etichetta «Toscana», «Italia», … | resto dei 369 | **nessun segno**; conta solo nel rullino | «Reel · {regione}» |
+| **Senza coordinate / senza luogo** | etichetta senza coordinate, o nessun luogo | 25 + 149 (colonne F e G) | nessun segno | riga «Reel del {data}» |
+| **Caroselli e foto** | post non reel con luogo | 84 caroselli + 6 foto (+1 video) | come traccia, con la dicitura «post fotografico» | riga a matita |
+
+Nota sui due «86»: i post collegati a una scheda del registro sono 86 (79 visibili più 7
+segnaposto, FP §1 e §15); i reel che cadono su un posto con scheda senza esserne il reel sono altri
+86 (colonna B). Sono due insiemi diversi.
+
+Le classi `adv-prodotto` (19) e `non-posto` (2) **non sono luoghi**: non entrano né sulla carta né
+nell'indice dei luoghi. Nel rullino restano come righe «Reel del {data}» senza luogo. `listicle`
+(48) e `incerto` (8) seguono la loro etichetta di luogo. Deny-list (2 post, FP §12): **tolta dal
+dato** prima di tutto, anche dai conteggi.
+
+#### 1.2 La costante di privacy
+
+```js
+const GRIGLIA_KM = 5;                                   // unica; la usano tracce, trama, «Vicino a questo»
+const PASSO_LAT = GRIGLIA_KM / 111.2;                   // ≈ 0,045°
+const passoLng = (lat) => PASSO_LAT / Math.cos(lat * Math.PI / 180);
+// centro della cella di una traccia (calcolato in build, mai coordinate grezze nel file del prototipo)
+cella = { lat: (Math.floor(lat / PASSO_LAT) + 0.5) * PASSO_LAT,
+          lng: (Math.floor(lng / passoLng(latCella)) + 0.5) * passoLng(latCella) };
+```
+
+**Il file dati delle tracce contiene solo i centri di cella**, mai le coordinate originali.
+
+#### 1.3 Le due vite di una traccia
+
+| Stato | Quando | Carta | Foglio | Riga |
+| --- | --- | --- | --- | --- |
+| **(a) traccia a matita** | oggi, tutte | cerchietto 7 px vuoto, tratto 1,25 `--color-matita` | nome del geotag in Fraunces *italic* matita, «Traccia · comune di {comune}», i reel con la data, «Posizione dal geotag del reel, non ricontrollata.» | colonna vuota con l'anello tratteggiato, nome in corsivo matita |
+| **(b) traccia con fotogramma** | se arriva la scansione dei fotogrammi **e** l'owner certifica quel fotogramma | stesso cerchietto, più un punto pieno matita al centro | in cima il fotogramma 5:7 con cornice matita di 1 px, la didascalia «Fotogramma dal reel del {data} · scheda non ancora scritta»; niente cartiglio, niente cartellino | miniatura 5:7 con bordo matita |
+| **posto** | quando la scheda è scritta | punto d'inchiostro con anello | scheda completa | tessera con foto |
+
+Il passaggio da (a) o (b) a posto è la **ripassata a inchiostro** (firma di A2, qui P2 e solo se
+succede davvero). **Nel prototipo lo stato (b) non si mostra con foto**: non ci sono fotogrammi
+certificati di tracce, e usare la foto di un posto sarebbe falso. Si mostra solo come impaginazione
+dietro `?demo=traccia-b`, con un riquadro vuoto su carta e la scritta visibile «Esempio di
+impaginazione: qui andrà il fotogramma, dopo la vostra approvazione».
+
+#### 1.4 Flag del dato (per il costruttore dei dati)
+
+`generico: 'no' | 'comune' | 'regione' | 'paese'`, `paeseIncerto: bool` (etichetta che nomina un
+paese diverso da quello risolto: esclusa dalla carta finché non si verifica), `stato: 'a' | 'b' |
+'posto'`, `tipo: 'reel' | 'carosello' | 'foto' | 'video'`, `classe`, `data` (pubblicazione),
+`cella`, `comune`, `regione` (normalizzata), `paese`, `codice` (per il permalink; mai i codici in
+deny-list), `etichetta` (il nome del geotag, solo se `generico = 'no'`). **Mai** `caption`,
+`plays`, `likes` o `commenti` nel file del prototipo.
+
+### 2. Il sistema, alzato di livello
+
+#### 2.1 Superfici e materiali
 
 | Superficie | Token | Ruolo | Regola |
 | --- | --- | --- | --- |
-| Sabbia | `--color-sand` #faf8f4 | il tavolo | Fondo di tutto. Attorno alle foto c'è sempre sabbia o inchiostro, mai un colore di categoria |
-| Carta | `--color-atlante-carta` #f2ecdf + trama | i documenti | Cartellino, retro, tavole della carta, stati vuoti, blocco guida, cartiglio della Home desktop. **Ha la trama** (§1.4) |
-| Inchiostro | `--color-atlante-inchiostro` #1e1c18 | il buio dove si guarda un reel | **Una fascia per pagina al massimo**: locandina (livello) e blocco «Il reel» in fondo alla scheda |
-| Notte | `--color-atlante-notte` #17375a (esiste) | la categoria Hotel | Solo come fascia della porta e punto della lente «Hotel con carattere». Testo sabbia sopra (11,5:1) |
+| Sabbia | `--color-sand` #faf8f4 | il tavolo; **il mare** in Atlas Cream | fondo di tutto |
+| Carta | `--color-atlante-carta` #f2ecdf + trama | documenti; **la terra** in Atlas Cream | cartellino, retro, cartigli di tavola, stati vuoti |
+| Inchiostro | `--color-atlante-inchiostro` #1e1c18 | i posti; il buio del reel; **la terra** in Cinema Dark | fuori dalla mappa, una fascia per pagina al massimo |
+| Matita | `--color-matita` #6f6862 (A2) | le tracce e la trama | 5,2:1 su sabbia, 4,7:1 su carta: passa per il testo |
+| Notte | `--color-atlante-notte` #17375a | categoria Hotel | solo fascia della porta |
 
-#### 1.2 Colori delle categorie (7 categorie, 6 porte)
+**Inchiostro contro matita** è la regola che regge tutta l'app: ciò che è completo e verificato è
+pieno e nero, ciò che è traccia è grafite, vuoto e più piccolo. Vale su carta, in lista, nel
+rullino e nella ricerca.
 
-Le 7 categorie dei 79 si mappano così. Quattro token esistono già in `index.css` di BEST, uno è
-un alias di un token esistente e due sono **proposte** (decisione 1 dell'owner).
-`--color-cat-panoramiche` non ha posti tra i 79 e non si usa in A3.
+#### 2.2 Colori delle categorie (solo i 79 posti: le tracce non hanno categoria)
 
-| Categoria | Posti | Token | Valore | Testo sulla fascia | Contrasto (calcolato a mano) |
-| --- | --- | --- | --- | --- | --- |
-| Food & Ristoranti | 37 | `--color-cat-food` (esiste) | #fe6d73 | inchiostro | 7,2:1 |
-| Insolito | 28 | `--color-cat-insolito` (esiste) | #c0afff | inchiostro | 10,2:1 |
-| Hotel con carattere | 20 | `--color-cat-hotel` **nuovo alias** = `var(--color-atlante-notte)` | #17375a | sabbia | 11,5:1 |
-| Posti particolari | 17 | `--color-cat-particolari` **PROPOSTA** | #8cc084 (salvia) | inchiostro | 9,4:1 |
-| Relax, terme e spa | 13 | `--color-cat-relax` (esiste) | #4cb2be | inchiostro | 7,9:1 |
-| Weekend romantici | 5 | `--color-cat-romantici` **PROPOSTA** | #f2a7c3 (cipria) | inchiostro | 10,5:1 |
-| Borghi e città d'arte | 1 | `--color-cat-borghi` (esiste) | #fdaf40 | inchiostro | 10,8:1 |
+| Categoria | Posti | Token | Valore | Testo sulla fascia |
+| --- | --- | --- | --- | --- |
+| Food & Ristoranti | 37 | `--color-cat-food` (esiste) | #fe6d73 | inchiostro (7,2:1) |
+| Insolito | 28 | `--color-cat-insolito` (esiste) | #c0afff | inchiostro (10,2:1) |
+| Hotel con carattere | 20 | `--color-cat-hotel` = `var(--color-atlante-notte)` (alias nuovo) | #17375a | sabbia (11,5:1) |
+| Posti particolari | 17 | `--color-cat-particolari` **PROPOSTA** | #8cc084 | inchiostro (9,4:1) |
+| Relax, terme e spa | 13 | `--color-cat-relax` (esiste) | #4cb2be | inchiostro (7,9:1) |
+| Weekend romantici | 5 | `--color-cat-romantici` **PROPOSTA** | #f2a7c3 | inchiostro (10,5:1) |
+| Borghi e città d'arte | 1 | `--color-cat-borghi` (esiste) | #fdaf40 | inchiostro (10,8:1) |
 
-Perché Hotel è notte: è la sola categoria che vuol dire dormire, e tra sei fasce pastello ne
-serve una scura che dia peso alla fila. Perché salvia per i Posti particolari: nel `PROVINO` sono
-in gran parte parchi, giardini, fattorie e boschi. Il verde esistente #11884f non passa AA né con
-l'inchiostro (4,4:1) né con la sabbia (4,25:1).
+Uso: fascia delle porte, punto da 8 px nelle righe, pillola attiva. Sulla carta i posti restano
+d'inchiostro; il colore di categoria compare solo con la lente di categoria attiva (anello colorato
+attorno al punto). Mai testo in colore di categoria.
 
-**Regole d'uso** (mai testo in colore di categoria, su nessun fondo):
-- fascia piena della **porta** (§5.2), con il nome in inchiostro (sabbia sulla notte);
-- **punto da 8 px** prima del comune nelle tessere e nelle righe (fino a 3 punti se il posto ha
-  più categorie), con alone di 1 px sabbia;
-- **pillola di categoria attiva**: punto da 10 px più fondo `--color-atlante-carta-deep`;
-- **lente** sul provino e sulla carta: filetto di 3 px sotto le celle che corrispondono, e punti
-  della carta colorati;
-- mai come fondo di pagina, mai attorno a una foto, mai sui tasti.
+#### 2.3 Regole mie che cambiano, e perché
 
-#### 1.3 Regole mie che cambiano, e perché
-
-| Regola di A2 | Diventa | Motivo |
+| Regola precedente | Diventa | Motivo |
 | --- | --- | --- |
-| «Ossatura fissa a 4 campi, «—» e «non ancora»» (Decisione 5) | **Cartellino**: 3 celle sempre piene più la riga «Quanto» facoltativa (§4) | Con 79 posti avrebbe mostrato un buco sul 71% delle schede. La prova si mostra per ciò che c'è, e l'assenza si dice una volta, dove serve |
-| «Il corsivo ha tre usi soli» (Decisione 9) con la domanda a 19-20 px | Corsivo per **quattro** usi: domanda (fino a 40 px), provenienza, matita e stati vuoti, **nomi dei mesi** (fino a 96 px). Resta vietato su etichette, tasti e numeri | Il corsivo di Fraunces è la voce del brand («Ma esistono davvero.»). Tenerlo piccolo ha spento il dispositivo più forte |
-| Scala chiusa fino a 64 px su desktop e 36 su mobile | Fino a **96 px** su desktop e **64** su mobile (§2.2) | Senza un momento di scala ogni schermata ha lo stesso volume |
-| «Anti-SaaS: niente chip-filtro» (§8 di A2) | **Pillole ammesse** in una sola fila orizzontale, senza badge numerici, senza barra laterale | Con 79 posti filtrare è necessario. Una fila di pillole è un indice, non un pannello di controllo |
-| «Un solo riempimento pieno per schermata» esteso di fatto a ogni massa di colore | Resta per i **tasti** (uno solo in inchiostro). Sono ammesse **fasce** piene: porte di categoria, carta, inchiostro, notte | La regola nata per la gerarchia dei tasti aveva tolto ogni massa di colore |
-| «Home desktop: tutto in un solo schermo» (§5.4 di A2) | Home con **racconto in scorrimento**: domanda, poi provino, carta, guida | Un solo schermo con tre oggetti è una vetrina, non una casa |
-| Banco a tre riquadri con separatori in Esplora e I miei posti | **Solo sulla Mappa**. Esplora desktop è una griglia a tutta larghezza con la colonna «Carta» facoltativa | Sembrava uno strumento. Complesso da costruire e poco rilevante per lo stupore |
-| Copertina 16:9 nel riquadro desktop | **Colonna fotografica 5:7** alta tutto lo schermo (§5.3) | Il 16:9 da un 9:16 mostra il 31% del fotogramma |
-| Pesi Fraunces 400/440/460/520 | Aggiungo **360 e 380** solo sopra i 38 px (**PROPOSTA**, decisione 4 dell'owner) | A 64-96 px il 440 diventa pesante; il 360 ha l'eleganza da rivista. Stesso asse `wght`, nessun file nuovo `[VERIFY builder: il Fraunces variabile incorporato in A2 copre 360?]`; se no, 400 |
+| «Nessun contorno di paese» (A2, §6) | **Contorni da Natural Earth** | La regola era contro contorni disegnati a mano. Una geometria pubblica vera non inventa niente ed è ciò che rende la carta credibile |
+| Carta come tavola a gradi per 6-79 punti | **Carta interattiva a livelli** su tutto l'archivio | La scala vera è 1.087 post con coordinate |
+| Ossatura fissa con «non ancora» | **Cartellino** a 3 celle più «Quanto» facoltativo | Buco sul 71% delle schede |
+| Corsivo a 3 usi, domanda a 19 px | 4 usi (domanda fino a 40 px, provenienza, matita, **nomi dei mesi** fino a 96 px) | Il corsivo è la voce del brand |
+| Scala fino a 64 px | fino a **96 px** | serve un momento di scala |
+| «Niente chip-filtro» | pillole in una fila, senza badge | serve filtrare un archivio |
+| Un riempimento pieno per schermata esteso al colore | vale solo per i **tasti**; sono ammesse fasce e tavole | aveva tolto ogni massa di colore |
+| Banco a tre in Esplora; copertina 16:9 | banco solo sulla Mappa; colonna fotografica 5:7 | strumento, non rivista; il 16:9 mostra il 31% del fotogramma |
+| «Qui non ci siamo stati» sulle regioni a zero reel | «**Nessun reel da qui**» (6 regioni) e «**Nessun post da qui**» (4) | Puglia e Basilicata hanno post a caroselli |
+| Pesi Fraunces fino a 520 | aggiungo 360 e 380 sopra i 38 px (**PROPOSTA**) | eleganza da rivista a 64-96 px `[VERIFY: asse nel file incorporato]` |
 
-#### 1.4 Trama e timbro (craft, non referenziali)
+#### 2.4 Trama e timbro (craft, non referenziali)
 
-- **Trama della carta:** se `carta-tile.webp` del sito è tra i file pubblicati usabili
-  dall'artifact `[VERIFY builder]`, la si usa come in `atlante.css` (moltiplica, tile 420). In
-  alternativa: SVG inline `feTurbulence` (`baseFrequency 0.9`, `numOctaves 2`) come data-URI, in
-  `multiply` al 5%. È craft generato proceduralmente, etichettato `craft`, e non raffigura luoghi.
-- **Timbro:** bollo «Esiste davvero?» e timbro datario del retro con un filtro SVG
-  `feDisplacementMap` leggero (scala 1,2) sul bordo, per l'effetto inchiostro sulla gomma. È P2;
-  senza il filtro il timbro resta com'è in A2.
-- Niente grane, rumori o sfumature sulle foto: le foto non si toccano mai.
+Trama della carta: `carta-tile.webp` del sito se è tra i file pubblicati `[VERIFY]`, altrimenti
+SVG `feTurbulence` inline al 5% in `multiply`. Il filtro timbro è P2. Le foto non si toccano mai.
 
-### 2. Token A3 (in aggiunta a quelli di A2, che restano validi dove non sono citati)
+### 3. Token A3 (in aggiunta ad A2)
 
-#### 2.1 Colori nuovi
+#### 3.1 Colori
 
 ```css
 --color-cat-food:#fe6d73; --color-cat-insolito:#c0afff; --color-cat-relax:#4cb2be;
 --color-cat-borghi:#fdaf40; --color-cat-hotel:var(--color-atlante-notte);
 --color-cat-particolari:#8cc084; /* PROPOSTA */ --color-cat-romantici:#f2a7c3; /* PROPOSTA */
---color-atlante-notte:#17375a;
---color-lente-velo:rgb(250 248 244 / 82%); /* sabbia sopra le celle escluse dalla lente */
+--color-atlante-notte:#17375a; --color-matita:#6f6862;
+/* Carta — Atlas Cream */
+--mappa-mare:var(--color-sand); --mappa-terra:var(--color-atlante-carta);
+--mappa-costa:rgb(30 28 24 / 62%); --mappa-confine:rgb(30 28 24 / 38%); --mappa-regione:rgb(30 28 24 / 20%);
+--mappa-lago:#e9eef0; /* unico tono freddo: acqua dolce, per orientarsi tra Garda, Como, Maggiore */
+--trama-1:rgb(111 104 98 / 22%); --trama-2:rgb(111 104 98 / 42%); --trama-3:rgb(111 104 98 / 68%);
+/* Carta — Cinema Dark */
+--mappa-d-mare:#151411; --mappa-d-terra:var(--color-atlante-inchiostro);
+--mappa-d-costa:rgb(250 248 244 / 40%); --mappa-d-confine:rgb(250 248 244 / 22%); --mappa-d-regione:rgb(250 248 244 / 12%);
+--trama-d-1:rgb(232 131 78 / 28%); --trama-d-2:rgb(232 131 78 / 52%); --trama-d-3:rgb(232 131 78 / 82%); /* --color-accent-on-dark */
 ```
 
-#### 2.2 Tipografia (mobile, poi da 1024)
+Il lago è l'unico colore nuovo che non viene dal brand. Serve perché il 76% dei luoghi italiani sta
+al Nord (FP §7), tra i laghi, e senza acqua la Lombardia a livello area è una distesa crema senza
+riferimenti. **PROPOSTA**; in alternativa, il lago in `--color-sand` come il mare.
+
+#### 3.2 Tipografia (mobile, poi da 1024)
 
 | Token | 390 | ≥1024 | Uso |
 | --- | --- | --- | --- |
-| `--type-poster` | Fraunces 400 38/40, −0.02em | Fraunces 360 72/72, −0.025em | h1 di Home (a 1440 nel blocco: 56/58), Esplora, Mappa, Noi, I miei posti |
-| `--type-title-1` | Fraunces 400 38/40 | Fraunces 360 64/64 | h1 della scheda (nome) |
-| `--type-title-2` | Fraunces 440 28/32 | Fraunces 400 40/44 | h2 grandi: «Tutto l'archivio», «Dove siamo stati», «Vicino a questo» |
-| `--type-title-3` | Fraunces 460 20/26 | Fraunces 460 24/30 | h2 nella scheda: «Prima di andare», «Il racconto» |
-| `--type-month` | Fraunces *italic* 360 64/60, minuscolo | *italic* 360 96/88 | nome del mese nel rullino |
-| `--type-cartiglio-q` | Fraunces *italic* 380: eroe 30/32, copertina 28/30, tessera L 24/26 | eroe/colonna 40/42, lente 26/28, tessera L 28/30 | domanda nel cartiglio |
-| `--type-cartiglio-name` | Inter 600 12/16, maiuscolo, +0.2em | idem | prima riga del cartiglio (nome) |
-| `--type-cartiglio-place` | Fraunces 400 14/18 | Fraunces 400 16/20 | ultima riga (comune) |
-| `--type-numeral-xl` | Fraunces 460 26/30, `tabular-nums` | 460 32/36 | prezzo breve nella riga «Quanto» |
-| `--type-door` | Inter 600 14/18 | Inter 600 16/20 | nome sulla porta |
-| `--type-chip` | Inter 500 14/20 | idem | pillole |
-| `--type-cell-label` | Inter 600 12/16, maiuscolo, +0.12em | idem | etichette del cartellino |
-| `--type-cell-value` | Inter 600 15/20 | Inter 600 16/22 | valori del cartellino |
-| `--type-year` | Fraunces 460 20/24, `tabular-nums` | 460 24/28 | anno nel provino e nel rullino |
+| `--type-poster` | Fraunces 400 38/40, −0.02em | Fraunces 360 72/72 (nel cartiglio di tavola: 64/64) | h1 di Home, Esplora, Mappa, Noi |
+| `--type-title-1` | Fraunces 400 38/40 | 360 64/64 | nome del posto (h1 scheda) |
+| `--type-title-2` | Fraunces 440 28/32 | 400 40/44 | h2 grandi |
+| `--type-title-3` | Fraunces 460 20/26 | 460 24/30 | h2 nella scheda |
+| `--type-month` | Fraunces *italic* 360 64/60, minuscolo | *italic* 360 96/88 | mese nel rullino |
+| `--type-cartiglio-q` | *italic* 380: eroe 30/32, copertina 28/30, tessera L 24/26 | colonna 40/42, lente 26/28, L 28/30 | domanda nel cartiglio |
+| `--type-cartiglio-name` | Inter 600 12/16, maiuscolo +0.2em | idem | nome nel cartiglio |
+| `--type-cartiglio-place` | Fraunces 400 14/18 | 16/20 | comune nel cartiglio |
+| `--type-map-region` | Inter 600 12/16, maiuscolo +0.22em, `--color-muted-fg-2` | 13/16 | nomi di regione e paese sulla carta (tondo) |
+| `--type-map-place` | Fraunces 460 14/18 ink | 15/18 | nome di un posto sulla carta |
+| `--type-map-trace` | Fraunces *italic* 400 13/16 matita | 14/18 | comune o nome di una traccia sulla carta |
+| `--type-map-count` | Fraunces 460 13/16, `tabular-nums` | 14/16 | numero nei dischi |
+| `--type-numeral-xl` | Fraunces 460 26/30, `tabular-nums` | 32/36 | prezzo breve |
+| `--type-door` · `--type-chip` · `--type-cell-label` · `--type-cell-value` · `--type-year` | come nel mio giro precedente: Inter 600 14/18 · Inter 500 14/20 · Inter 600 12/16 maiuscolo · Inter 600 15/20 · Fraunces 460 20/24 | 16/20 · idem · idem · 16/22 · 24/28 | porte, pillole, cartellino, anni |
 
-Restano quelli di A2: `--type-name`, `--type-name-row`, `--type-caption`, `--type-body`,
-`--type-ui`, `--type-ui-strong`, `--type-label`, `--type-label-strong`, `--type-tab`,
-`--type-eyebrow`, `--type-kbd`, `--type-map`, `--type-trace`.
+Restano quelli di A2. **Insieme ammesso di `font-size`**: {12, 13, 14, 15, 16, 17, 18, 20, 22, 24,
+26, 28, 30, 32, 38, 40, 56, 64, 72, 96}.
 
-**Insieme ammesso di `font-size`** per il test P0-2: {12, 13, 14, 15, 16, 17, 18, 20, 22, 24,
-26, 28, 30, 32, 38, 40, 56, 64, 72, 96}. Se un cartiglio lungo scala (§3), scende di un gradino
-dentro lo stesso insieme.
-
-#### 2.3 Griglie e ritmo
+#### 3.3 Griglie, immagini, costanti della carta
 
 ```css
---sheet-gap-m:2px;  --sheet-cols-m:6;   /* provino a 390, a filo schermo */
---sheet-gap-t:4px;  --sheet-cols-t:10;  /* 768 */
---sheet-gap-d:6px;  --sheet-cols-d:12;  /* 1024 */  --sheet-cols-w:16; /* ≥1280 */  --sheet-cols-x:18; /* ≥1680, banco max 1600 */
---tile-gap-m:12px;  --tile-row-gap-m:24px;  --tile-gap-d:24px;  --tile-row-gap-d:32px;
---door-w-m:140px;   --door-h-m:196px;       /* porta mobile: foto 140×140 + fascia 56 */
---cover-h-m:clamp(320px, 47.4svh, 440px);   /* copertina scheda mobile: 400 a 844 */
---hero-h-m:clamp(360px, 52svh, 480px);      /* eroe Home mobile: 440 a 844 */
+--sheet-cols-m:6; --sheet-gap-m:2px; --sheet-cols-d:16; --sheet-gap-d:6px;  /* provino dei 79 */
+--door-w-m:140px; --door-h-m:196px;
+--cover-h-m:clamp(320px, 47.4svh, 440px);
+--mark-posto:8px;   --mark-posto-anello:14px;  --mark-traccia:7px;   /* segni sulla carta, costanti a ogni zoom */
+--disc-s:32px; --disc-m:40px; --disc-l:48px;   /* dischi: tre misure discrete come nel sito (<10, 10-49, ≥50) */
 ```
 
-#### 2.4 Tre livelli di immagine (per 79 foto)
+Tre livelli di immagine (solo per i 79): T0 eroe e copertina (`fetchpriority=high`, mai animata),
+T1 tessere e lente (lazy, anteprima sfocata), T2 provino (lazy, solo colore dominante).
 
-| Livello | Dove | Variante | Caricamento | Anteprima |
-| --- | --- | --- | --- | --- |
-| T0 | eroe Home, copertina/colonna della scheda | la più grande | `fetchpriority="high"`, non lazy, **mai animata** | colore dominante sotto |
-| T1 | tessere S/L, porte, lente, «Vicino a questo» | la media | `loading="lazy"` `decoding="async"` | colore dominante + anteprima sfocata (M7 di A2) |
-| T2 | celle del provino, miniature 40-67 px | la più piccola | `loading="lazy"` `fetchpriority="low"` | solo colore dominante (niente livello sfocato: risparmia 79 livelli di pittura) |
+### 4. Il cartiglio ricomposto (solo posti)
 
-Le tre varianti sono quelle che prepara il costruttore dei dati `[VERIFY: larghezze reali in
-a3-data.js]`. Ogni riquadro ha `aspect-ratio` fisso, quindi nessuna immagine sposta il layout.
+Invariato rispetto alla mia versione precedente: ogni reel stampa in cima un riquadro con nome,
+domanda, filetto e luogo (`CARTIGLI`). Il ritaglio 5:7 lo toglie e noi lo **ricomponiamo in HTML
+nello stesso punto**, come riquadro sabbia pieno (`--radius-paper`, niente trasparenza né ombra),
+centrato, largo `min(84%, 340px)` su mobile e `min(78%, 520px)` sulla colonna desktop, al 6%
+dell'altezza dal bordo alto. Righe: nome (`--type-cartiglio-name`, tolto sulla scheda perché c'è
+l'h1), domanda = `hook` **alla lettera** (al massimo 3 righe; se non ci sta scende di un gradino
+della scala), filetto di 1 px, comune. Senza `hook` il cartiglio non esiste. Nella locandina il
+nostro scompare prima che si veda quello stampato vero (F3).
 
-### 3. Il dispositivo: il cartiglio ricomposto
+**Doppio senso voluto:** in un atlante il *cartiglio* è il riquadro del titolo della tavola. La
+Home usa lo stesso oggetto per l'h1 sulla carta (§7.1): cartiglio del reel e cartiglio dell'atlante
+sono la stessa forma.
 
-**Cos'è.** Ogni reel stampa in cima un riquadro chiaro con quattro righe: nome in maiuscoletto,
-domanda grande, filetto e luogo (`CARTIGLI`). Il nostro ritaglio 5:7 lo toglie (regola del
-cartiglio di A2, §2.8). A3 lo **ricompone in HTML nello stesso punto**, con la stessa struttura
-e i font del brand. È riconoscibile da chi arriva da Instagram, leggibile da chi arriva da Google
-e sempre a contrasto pieno, perché è inchiostro su sabbia e non serve un velo scuro sulla foto.
+### 5. Il cartellino (la prova dei 79, anche senza prezzo)
 
-**Anatomia** (posizionato dentro il riquadro della foto, `position:absolute`):
-- riquadro `--color-sand` pieno (niente trasparenza né sfocatura), `--radius-paper` 2 px, nessuna
-  ombra; larghezza `min(84%, 340px)` su mobile e `min(78%, 520px)` sulla colonna desktop;
-  **centrato** in orizzontale come nel reel; distanza dal bordo alto della foto 6% dell'altezza
-  del riquadro (minimo 16 px); padding 12/16 (16/24 su desktop);
-- riga 1: **nome** `--type-cartiglio-name` ink, centrato (sulla scheda questa riga si toglie,
-  perché il nome è l'h1 subito sotto: niente doppioni);
-- riga 2: **domanda** `--type-cartiglio-q` ink, centrata, al massimo 3 righe, testo = `hook`
-  **alla lettera** (nessuna riscrittura, nessuna estrazione di «parola chiave»);
-- filetto: 1 px `--color-atlante-inchiostro`, a tutta larghezza interna, 8 px sopra e sotto;
-- riga 3: **comune** `--type-cartiglio-place` `--color-ink-2`, centrato.
-
-**Adattamento.** Se la domanda supera 3 righe alla misura del contesto, scende di un gradino
-della scala (30 → 28 → 26 → 24 → 22). Il riquadro ha altezza calcolata prima della pittura (le
-font sono incorporate), quindi non c'è CLS. Se `hook` manca `[VERIFY: quanti dei 79 lo hanno]`, il
-cartiglio non si disegna: niente domanda inventata.
-
-**Dove compare**
-
-| Contesto | Righe | Misura domanda |
-| --- | --- | --- |
-| Eroe della Home (390, 768) | nome, domanda, filetto, comune | 30/32 |
-| Lente della Home desktop | nome, domanda, filetto, comune | 26/28 |
-| Copertina della scheda mobile | domanda, filetto, comune | 28/30 |
-| Colonna fotografica della scheda desktop | domanda, filetto, comune | 40/42 |
-| Tessera grande (L) in Esplora | domanda, filetto, comune | 24/26 (390) · 28/30 (1440) |
-| Mese con un solo posto nel rullino | domanda, filetto, comune | 24/26 |
-| Tessere S, celle del provino, righe | **mai** (troppo piccolo) | — |
-
-**Regola che lo tiene onesto.** Il cartiglio contiene solo campi del dato (`title`, `hook`,
-`place.city`), alla lettera. Non imita la font del reel e non si sovrappone mai al cartiglio
-stampato (che è ritagliato via). Nella locandina, dove il cartiglio stampato si vede, il nostro
-scompare prima che il ritaglio si apra (F3).
-
-**Accessibilità.** La domanda è un `<p class="domanda">` che precede l'h1 nell'ordine di
-lettura solo nella scheda (`aria-describedby` dell'h1). Il nome nel cartiglio, dove duplica
-un h1, è `aria-hidden`.
-
-### 4. Il cartellino: la prova quando il prezzo manca
-
-**Principio.** La prova si mostra per ciò che c'è. Tre prove esistono su 78 schede su 79: la data
-del reel (79/79), la dichiarazione (79/79) e il controllo (78/79). Diventano tre celle fisse. Il
-prezzo (23/79) e la fascia (25/79) sono una riga in più, **sopra**, solo quando c'è un dato.
-Quando manca, lo si dice una volta sola, nella sezione pratica, insieme a dove chiederlo.
-
-#### 4.1 Riga «Quanto» (facoltativa)
-
-| Caso | Resa |
-| --- | --- |
-| `price` breve (≤ 18 caratteri, per esempio «8€», «da 98€/notte», «Da 39€») | `--type-numeral-xl` ink, alla lettera; a destra, sulla stessa linea di base, `--type-label` muted «Fascia media» se esiste `budget`; sotto, `--type-label` muted «Prezzo indicativo, segnato da noi» [VERIFY seo] |
-| `price` lungo o con «·» | etichetta «QUANTO» `--type-cell-label`, poi le parti separate da «·» una per riga, in `--type-ui` ink («Pranzo da 19,90€» / «Cena da 35,90€»); la fascia se c'è |
-| `price` che non è una cifra (nessuna cifra nel testo, come «Prezzo variabile per stanza») | niente numero grande; «QUANTO» e il testo in `--type-ui` ink-2 |
-| solo `budget` | «Fascia di spesa» `--type-cell-label` più la **scala di tre €** in Fraunces 460 26/30: pieni in ink quelli fino al livello (Basso = 1, Medio = 2, Alto = 3), gli altri in `--color-border`; a destra la parola «bassa/media/alta» in `--type-label` |
-| né `price` né `budget` | **la riga non esiste**: nessun trattino, nessun «non ancora» |
-
-#### 4.2 Le tre celle (sempre)
-
-Striscia carta con trama, `--radius-paper`, larghezza piena, 3 colonne uguali divise da filetti
-`--color-atlante-linea`, padding 12, altezza 76 (390) · 84 (desktop).
-
-| Cella | Etichetta | Valore (`--type-cell-value`) | Sotto (`--type-label` muted) | Link |
-| --- | --- | --- | --- | --- |
-| Reel | REEL | «16 gen 2026» | «Instagram ↗» | permalink del reel `[VERIFY: presente su 79/79?]`; se manca, niente link e «su Instagram» |
-| Controllo | CONTROLLATO | «15 ago 2026» | fonte («granducacampigna.it») | nessuno (la fonte è testo) |
-| Dichiarazione | A CHE TITOLO | vedi sotto | partner se c'è (`partnership.partner`) | nessuno |
-
-Diciture della dichiarazione [VERIFY seo e legale, B5]: organico → «Nessuna» con sotto
-«collaborazione»; invito → «Su invito»; ADV → «ADV» con sotto «pubblicità»; collaborazione →
-«In collaborazione»; affiliazione → «Affiliazione» con sotto «link affiliato».
-
-Unico caso vuoto: il posto senza controllo mostra «Non ancora» in `--type-cell-value` muted e
-nessuna fonte. È l'unica occorrenza di «non ancora» nell'app.
-
-#### 4.3 La frase dell'assenza
-
-Nella sezione «Prima di andare», come ultima voce, solo se mancano sia `price` sia `budget`:
-- con `place.website`: «Il prezzo non l'abbiamo segnato. Chiedilo sul sito: {dominio} ↗»;
-- senza: «Il prezzo non l'abbiamo segnato.»
-
-`data-prezzo-mancante` sull'elemento, per il test.
-
-#### 4.4 Sulle tessere (una riga di prova)
-
-Seconda riga della meta, `--type-label-strong`: il `price` breve se c'è, altrimenti «Fascia
-bassa/media/alta», altrimenti niente. Poi, se la dichiarazione non è organica, «· Su invito» /
-«· ADV» / «· In collaborazione» / «· Affiliazione». La dichiarazione non organica **compare
-sempre** su ogni tessera, riga e cella della lente: è trasparenza, non un'opzione.
+Invariato:
+- **Tre celle sempre piene**, su carta: REEL (data, «Instagram ↗»), CONTROLLATO (data, fonte), A
+  CHE TITOLO («Nessuna collaborazione» [VERIFY B5], «Su invito», «ADV», «In collaborazione»,
+  «Affiliazione», più il partner se c'è).
+- **Riga «Quanto»** sopra le celle, solo se c'è `price` (≤ 18 caratteri → Fraunces 26/30; più
+  lungo o con «·» → parti una per riga; senza cifre → testo) o `budget` (scala di tre € in ink e
+  `--color-border`).
+- **Frase dell'assenza**, una volta sola, in «Prima di andare»: «Il prezzo non l'abbiamo segnato.
+  Chiedilo sul sito: {dominio} ↗».
+- «Non ancora» solo per l'unico posto senza controllo.
+- Sulle tessere: il prezzo breve o la fascia, più la dichiarazione non organica, **sempre**.
 
 ---
 
 ## What the receiver should produce
 
-### 5. Le schermate
+### 6. La carta (il cuore)
 
-Misure a 390×844 (sicurezza 0) e 1440×900. La barra alta è di 52/64. Il piano in basso è di
-116 (con riga d'azione) o 56 (solo barra), come in A2. Le y sono dal bordo alto.
+#### 6.1 Due incarnazioni, un solo disegno
 
-#### 5.1 Home: «Una domanda, poi l'archivio intero»
+| | App vera | Prototipo pubblicato |
+| --- | --- | --- |
+| Motore | MapLibre (`FullScreenMapExperience`, riuso) | SVG locale, pan e zoom scritti a mano, niente librerie |
+| Base | tessere OpenFreeMap **dopo il consenso**; **prima del consenso la base locale del prototipo** (raccomandazione, §6.9) | base locale: geometrie Natural Earth incorporate |
+| Stili | Atlas Cream (predefinito), Cinema Dark, Satellite **solo se è un satellite vero** | Atlas Cream (predefinito), Cinema Dark |
+| Livelli | territorio < 8,5 ≤ area < 12 ≤ posto (MAPPA-SITO, righe 107-115) | **stessi numeri** con la stessa proiezione (Web Mercator), più un livello «mondo» sotto 4,5 |
+| Tetto | 60 marcatori DOM | 60 elementi interattivi; i segni non interattivi (trama, tracce lontane) in un solo livello SVG |
+| Collegamento | `?posto=<id>` | `#posto-<slug>`, `#traccia-<cella>`, `#mappa-<preset>` |
 
-**L'idea.** In cinque secondi chi arriva deve capire tre cose, in quest'ordine:
-1. un posto vero e improbabile gli fa una domanda (fotogramma e cartiglio);
-2. il brand risponde (h1: «Posti che sembrano inventati. Ma esistono davvero.»);
-3. non è un posto solo: c'è un archivio intero, di due persone, da maggio 2024 ad agosto 2026
-   (il provino).
+#### 6.2 La base locale (prototipo)
 
-Nessun contatore: la scala si vede dal numero di fotogrammi, non da una cifra.
+**Fonti** (tutte di pubblico dominio, da incorporare; nessuna rete in esecuzione):
+- mondo: `world-atlas` `countries-110m` (Natural Earth 1:110M), lo stesso dato che il sito carica
+  in `InteractiveMap.tsx` da unpkg;
+- Europa e Mediterraneo: Natural Earth 1:50M (`countries-50m`), ritagliato a 25° O-45° E, 25-72° N;
+- Italia e Alpi: Natural Earth 1:10M per costa e confini, **regioni italiane** da Natural Earth
+  admin-1 10M, dissolte per regione `[VERIFY builder: in NE admin-1 l'Italia è per province con
+  l'attributo regione; se no, fonte alternativa con licenza compatibile, mai disegnata a mano]`;
+- laghi: Natural Earth 1:10M `lakes`, ritagliato su Italia e Alpi.
 
-**Il posto di oggi (scelta deterministica).**
-```
-eleggibili = posti con evidenza=true && hook && (price || budget) && controllo
-oggi = data del giorno (nelle catture: ?oggi=2026-09-29)
-candidati = eleggibili con mese(reel) == mese(oggi) && reel < oggi
-se candidati ≠ ∅ → candidati[giornoDellAnno(oggi) mod n]; didascalia «Fotogramma dal reel di {mese anno}»
-altrimenti → il più recente degli eleggibili; didascalia «Fotogramma dal reel del {data}»
-```
-Con `?oggi=2026-09-29` il candidato atteso è un reel di settembre. A2 mostrava l'Emotional Grand
-Motel come «Reel di settembre 2024». `[VERIFY: ha price o budget? Se no, il criterio sceglie un
-altro reel di settembre, e va bene così]`.
+**Preparazione (in build, non in esecuzione):** proiezione Web Mercator pre-calcolata; coordinate
+intere su una griglia di 65.536 unità per lato del mondo; semplificazione (Visvalingam o
+Douglas-Peucker) con tolleranza adatta a ogni scala; una stringa `d` SVG per strato e livello di
+dettaglio. **Budget di peso:** tutte le geometrie ≤ 400 KB non compressi `[VERIFY builder: misura]`.
+Se non si riesce a procurarle offline: il prototipo usa la sola base a 110M con il riquadro Italia a
+50M, **mai** contorni disegnati a mano.
 
-**390×844, primo schermo**
-- 0-52: barra alta (marchio, ⌕).
-- 52-492: **eroe** a filo schermo 390×`--hero-h-m` (440), T0, `object-position` da
-  `coverFocusY` vincolato dalla regola del cartiglio (`visibleTop ≥ cartiglio + 0,01`), raggio 0.
-  Sopra: cartiglio completo (nome, domanda 30/32, filetto, comune), in alto al centro. Tutto
-  l'eroe è un link alla scheda (`aria-label` = nome).
-- 500-518: didascalia `--type-caption` muted: «Fotogramma dal reel di settembre 2024».
-- 534-654: **h1** `--type-poster` 38/40 su 3 righe: «Posti che sembrano inventati.» in ink e
-  «Ma esistono davvero.» in corsivo `--color-accent-text`.
-- 666-710: `--type-body` 15/22 ink-2: «Siamo Rodrigo e Betta. Prima ci andiamo, poi qui trovate
-  il reel girato sul posto.»
-- 722-770: campo di ricerca h 48: «Cerca un posto, una città, una domanda».
-- 788-844: barra a 5 voci (la Home non ha riga d'azione).
+**Strati, dall'alto in basso:** selezione e cartigli → etichette → segni interattivi (dischi,
+posti) → tracce → trama → confini regionali → confini di stato → costa → laghi → terra → mare.
+Tutti i tratti con `vector-effect: non-scaling-stroke`, così restano sottili a ogni zoom.
 
-**Scorrendo**
-1. **«Tutto l'archivio»** (`--type-title-2`), 48 px sopra; sotto, in `--type-label` muted:
-   «Dal reel più recente al primo: da agosto 2026 a maggio 2024.» Le date vengono dai dati, mai
-   scritte a mano.
-2. **Il provino** a filo schermo: 6 colonne, gap 2 sabbia, celle 63×88 (5:7), T2, ordine per
-   data del reel decrescente. **Tutti i 79**, compreso il posto di oggi. A ogni cambio d'anno
-   una riga di 40 px con l'anno `--type-year` a sinistra (x 20) e un filetto: «2026», «2025»,
-   «2024». Ogni cella è un link alla scheda con `aria-label` «{nome}, {comune}». Il fuoco è un
-   anello di 2 px dentro la cella. Le celle in evidenza vietata stanno al loro posto di data (non
-   sono in evidenza: sono una cella tra 79). Righe con `content-visibility:auto` e
-   `contain-intrinsic-size:auto 90px`. Altezza stimata circa 1.450 px.
-3. **«Dove siamo stati»** (`--type-title-2`) con la frase calcolata «{59} posti in Italia, {20}
-   fuori.»; **Tavola I** 350×432 su carta con i **79 punti da 4 px, senza gruppi e senza
-   etichette**: la forma dell'Italia la disegnano i posti. Sotto, tre riquadri 110×110 (Tavole
-   II, III e IV, §5.4) con titolo e numero. Tutto porta alla Mappa.
-4. **«La guida in regalo»**: blocco carta, tasto secondario «Ricevila».
-5. Colofone.
+| Strato | Atlas Cream | Cinema Dark |
+| --- | --- | --- |
+| mare | `--mappa-mare` (sabbia) | `--mappa-d-mare` |
+| terra | `--mappa-terra` (carta, con trama del foglio) | `--mappa-d-terra` |
+| costa | 0,75 px `--mappa-costa` | 0,75 px `--mappa-d-costa` |
+| confine di stato | 0,6 px `--mappa-confine`, tratteggio 3-2 | idem, `--mappa-d-confine` |
+| confine di regione (Italia) | 0,5 px `--mappa-regione`, punteggiato 1-2; solo da z 4,5 | idem, `--mappa-d-regione` |
+| laghi | `--mappa-lago` con costa 0,5 px | `--mappa-d-mare` |
+| reticolo | nessuno (è una carta vera, non un grafico) | nessuno |
+| cornice | nessuna a tutto schermo; **cornice graduata** solo sulle tavole ferme (copertina Home, tavole mini) | idem |
 
-**1440×900: il provino è la Home**
-- 0-64: barra alta.
-- Da y 72: il **foglio del provino**, larghezza 1392 (margini 24), 16 colonne con gap 6, celle
-  81×114 (5:7). Il foglio ha tre inquilini in una griglia CSS con posizioni esplicite, e i
-  fotogrammi scorrono in ordine di data nelle celle libere (`grid-auto-flow: row dense`):
-  - **Blocco titolo**, colonne 1-6 × righe 1-4 (518×474), su sabbia, senza bordo: occhiello
-    «Rodrigo e Betta · Travelliniwithus»; h1 `--type-poster` a 56/58 su 4 righe; testo
-    `--type-body`; campo di ricerca 48 con «⌘K»; link «Tutti i posti →».
-  - **Lente**, colonne 7-10 × righe 1-4 (344×474, 5:7): il posto di oggi, T1 (è sotto il
-    titolo, non è LCP), cartiglio completo 26/28; in basso sulla foto una pillola sabbia
-    `--type-label-strong` «Reel di settembre 2024». È un link alla scheda.
-  - **Fotogrammi:** colonne 11-16 delle righe 1-4, poi righe 5-7 intere, poi di seguito. Nel
-    primo schermo ce ne stanno circa 72; la riga 7 esce di poco dal bordo e invita a scendere.
-- **La lente si sposta.** Passando sopra una cella (o con il fuoco da tastiera) la lente mostra
-  quel posto: foto, cartiglio e data. Esce il posto precedente e non entra un posto a caso.
-  Uscendo dal foglio la lente torna al posto di oggi. Nessun cambio avviene da solo. Ritardo di 60
-  ms contro il passaggio veloce; la foto della lente usa T1, che si carica solo al primo passaggio.
-- Sotto il foglio: «Dove siamo stati» in una fascia carta a tutta larghezza, con la Tavola I
-  (520×640) a sinistra e le Tavole II-IV (200×200 ciascuna) a destra, più la frase calcolata;
-  poi la guida e il colofone.
+**Scritte della carta:** regioni e paesi in `--type-map-region` tondo maiuscolo spaziato, posati sul
+baricentro della geometria e spostati se coprono un segno; budget di nomi 3 fino a 375 px, 5 fino a
+1024, 8 oltre, come nel sito (MAPPA-SITO, righe 393-399). Niente nomi dei mari (il corsivo è
+riservato ad altro). Scala in km in basso a sinistra, ricalcolata a ogni zoom («0 · 50 km»), e «N»
+con `ArrowUp`. Attribuzione in basso a destra, `--type-label` muted: «Confini: Natural Earth,
+pubblico dominio». Nell'app vera: «© OpenStreetMap · OpenFreeMap».
 
-**768:** come 390, con margini 32, eroe 768×540, provino a 10 colonne (celle 67×94).
-**1024:** foglio a 12 colonne (celle 76×107); blocco titolo 5×4 e lente 4×4.
-**≥1680:** 18 colonne, foglio al massimo 1600 e centrato; blocco titolo 7×4.
+#### 6.3 I livelli di zoom
 
-**Ingresso (una volta per sessione):** vedi M-A al §6.2.
+| Livello | Zoom | Cosa si vede | Disco (cartiglio del gruppo) |
+| --- | --- | --- | --- |
+| **Mondo** | < 4,5 | un disco per paese, **Italia compresa come disco unico** | numero = luoghi del paese |
+| **Territorio** | 4,5 - 8,5 | Italia: un disco per regione; estero: un disco per paese; sotto, la **trama** | numero = luoghi della regione o del paese |
+| **Area** | 8,5 - 12 | un disco per comune; i posti soli e le tracce sole diventano segni | numero = luoghi del comune |
+| **Luoghi** | ≥ 12 | ogni posto e ogni cella di traccia | — |
 
-#### 5.2 Esplora a scala 79
+**Il disco:** fondo `--mappa-terra` (sulla scura `--mappa-d-terra`), numero `--type-map-count`, tre
+misure fisse (32/40/48 per <10, 10-49, ≥50 luoghi, come nel sito). Il cerchio proporzionale resta
+vietato, come stabilito dal sito («legge come data-viz», MAPPA-SITO, righe 385-391).
+- **anello pieno 1,5 px d'inchiostro** se il gruppo contiene almeno un posto;
+- **anello tratteggiato 1,25 px matita** se contiene solo tracce.
+- Etichetta: il nome della regione, del paese o del comune in `--type-map-region`, nel budget dei
+  nomi.
+- **Si legge così:** l'anello dice *che cosa* c'è (inchiostro: almeno una scheda; matita: solo
+  tracce), il numero *quanti luoghi*, il nome *dove*. Il numero dei posti con scheda non va nel disco
+  (due numeri in un disco non si leggono): sta nella riga del foglio.
 
-URL `#esplora` (vista Posti), `#esplora-mesi`, `#esplora-elenco`. Lo stato dei filtri è in
-`sessionStorage`, non nell'hash.
+**Un luogo** = un posto oppure una coordinata distinta di traccia, dopo le esclusioni (§1.1). Un
+gruppo con un solo membro non è un gruppo: diventa il suo segno (regola A del sito).
+
+#### 6.4 I segni: posto e traccia
+
+| Segno | Forma (Atlas Cream) | Forma (Cinema Dark) | Etichetta (al livello Luoghi, nel budget) |
+| --- | --- | --- | --- |
+| **Posto** | punto pieno ink 8 px, spazio carta di 1,5 px e **anello ink da 14 px**: il simbolo del capoluogo negli atlanti | punto sabbia 8 px con anello `--color-accent-on-dark` | nome in `--type-map-place` |
+| **Traccia (a)** | cerchietto **vuoto** 7 px, tratto 1,25 `--color-matita` | tratto sabbia al 60% | comune in `--type-map-trace` |
+| **Traccia (b)** | come (a) più un punto pieno matita di 3 px al centro | idem | idem |
+| **Più tracce nella stessa cella** | un cerchietto solo, con il numero in `--type-label` matita accanto («3») | idem | idem |
+| **Posto scelto** | punto 10 px `--color-accent-text`, anello 18 px, etichetta in Fraunces 520 | `--color-accent-on-dark` | sempre visibile |
+| **Salvato** | secondo anello ink da 18 px attorno | sabbia | — |
+| **Lente di categoria attiva** | l'anello del posto prende il colore della categoria (2 px) | idem | — |
+
+Area di tocco di ogni segno: 44×44 invisibile, centrata. Se due aree si sovrappongono vince il segno
+più vicino al dito; se non si separano nemmeno allo zoom massimo, il tocco apre l'elenco (regola del
+sito, MAPPA-SITO, righe 600 e 817).
+
+#### 6.5 La trama dell'archivio (la firma della carta)
+
+**Cosa:** a livello Mondo e Territorio, ogni cella di 5 km che contiene almeno una traccia si
+colora con un **quadretto** (quadrato che riempie il 78% della cella) in uno di **tre toni di
+matita**: 1 luogo → `--trama-1`, 2-4 → `--trama-2`, 5 o più → `--trama-3`. Sulla scura i toni sono
+`--trama-d-*` (luci calde). A zoom basso i quadretti sono di 1-2 px e diventano una grana. Verso
+zoom 8 diventano un mosaico leggibile, come un **taccuino a quadretti colorato a matita**. Da zoom
+8,5 la trama svanisce (opacità in 160 ms) e parlano i segni.
+
+**Perché così e non una «mappa di calore» sfumata:**
+1. Una macchia sfumata è un «gradient blob», vietato dal brand.
+2. Una sfumatura continua è data-viz, e il sito vieta già le aree proporzionali.
+3. Un picco di calore contato per reel farebbe da faro sui luoghi dove si torna più spesso, cioè
+   potenzialmente la zona di casa (FP §14).
+
+La trama a quadretti è discreta, conta i luoghi e non i reel, ha un tetto a 3 toni e usa la stessa
+griglia della privacy.
+
+**Regole:** contano solo le tracce con `generico ∈ {no, comune}` e `paeseIncerto = false`; i posti
+non entrano nella trama (sono inchiostro, sopra). Legenda: «Ogni quadretto è 5 km. Più scuro: più
+luoghi dai reel.» **Zona riservata** `[VERIFY owner, FP §14]`: se l'owner lo decide, le celle entro
+un raggio privato (configurazione fuori dal repo) restano al tono 1.
+
+#### 6.6 Il mondo sulla stessa carta
+
+- È una sola carta continua. **Preset** in una fila di pillole sopra la carta, **calcolati dai
+  dati** (solo zone con almeno un luogo): «Italia» (predefinito, estensione dei luoghi italiani),
+  «Europa», «Mondo», e un preset per ogni altra zona continentale con luoghi [calcolato: per esempio
+  Asia, Medio Oriente e Africa, Americhe]. Nessun preset su zone vuote.
+- A livello Mondo l'Italia è un disco unico, e la trama resta visibile fino a quel livello.
+- **Riquadri fuori quadro** (solo sulle tavole ferme: copertina Home e desktop): le zone lontane in
+  riquadri 160×160 con cornice graduata e i loro dischi, come gli atlanti. Il tocco porta la carta
+  interattiva su quel preset.
+- **«Nessun post da qui» / «Nessun reel da qui»:** a livello Territorio le regioni italiane senza
+  alcun luogo (calcolate; dal FP oggi: Sardegna, Marche, Friuli-Venezia Giulia, Molise) restano
+  **terra nuda**, senza trama né segni, e portano la scritta `--type-map-trace` «Nessun post da
+  qui» (una per vista, nel budget dei nomi). Puglia e Basilicata mostrano i loro segni di
+  carosello; nel loro foglio di regione c'è la riga «Nessun reel da qui: solo post fotografici».
+
+#### 6.7 Interazione
+
+**Gesti (prototipo):** trascinamento con un dito o con il mouse (pan); pizzico e rotella, con Ctrl
+su desktop (zoom attorno al punto); doppio tocco = zoom +1; tasti +/− 44×44 in colonna a destra;
+«Centra» (`LocateFixed` 20: centra sul preset attivo, **non** sulla posizione dell'utente, che è
+bloccata); da tastiera: frecce = pan di 80 px, + e − = zoom, Tab percorre i segni interattivi in
+ordine di distanza dal centro. `touch-action: none` sulla carta della Mappa. **Sulla Home la carta
+non cattura mai lo scroll** (niente pan né zoom): è una copertina.
+
+**Durante il gesto** si muove solo `transform` del gruppo SVG (compositore). Alla fine del gesto
+(120 ms di quiete): nuovo livello, ricalcolo di dischi, etichette e tetto dei 60, poi le etichette
+nuove entrano in opacità in 160 ms.
+
+**Tocchi:**
+- **disco** → lo zoom va sul rettangolo dei suoi membri più il 20% (M-C); se non si separerebbe
+  nemmeno allo zoom massimo, si apre l'elenco dei membri nel foglio;
+- **posto** → scelto (M11 di A2); il foglio, a livello spiata, mostra la miniatura 5:7 da 48×67, il
+  nome, il comune e il cartellino compatto (tre valori brevi), con il tasto secondario «Apri la
+  scheda». Un secondo tocco o «Apri la scheda» apre la scheda con **F5**;
+- **traccia** → scelta; il foglio mostra il foglio della traccia (§7.5);
+- **fondo della carta** → toglie la scelta.
+
+#### 6.8 La schermata Mappa
 
 **390×844**
 - 0-52: barra alta.
-- 64-144: h1 `--type-poster` «Posti provati di persona» (2 righe).
-- 152-170: `--type-label` muted, calcolato: «Da maggio 2024 ad agosto 2026, in Italia e in altri
-  10 paesi.»
-- 184-228: **selettore di vista** «Posti · Per mese · Elenco» (sottolineatura accento, A2).
-- 240-436: **Le porte**, una fila orizzontale con scroll-snap (l'**unico** scorrimento
-  orizzontale della schermata oltre alle pillole), padding sinistro 20 e gap 12:
-  - 6 porte, **solo per le categorie con almeno 5 posti** (Food, Insolito, Hotel, Particolari,
-    Relax, Romantici; Borghi, con 1 posto, è solo una pillola);
-  - porta 140×196: foto 140×140 (T1, ritaglio quadrato allineato in basso, che nasconde il 44%
-    in alto, quindi la regola del cartiglio è rispettata), sotto una **fascia piena** di 56 px
-    del colore della categoria, con il nome in `--type-door` (2 righe al massimo) e a destra il
-    numero di posti in Fraunces 460 14 `tabular-nums`;
-  - foto della porta: il posto più recente della categoria con `evidenza=true`;
-  - è un `button` con `aria-pressed`: il tocco attiva la pillola di categoria e scorre ai
-    risultati. La terza porta si vede per metà, così si capisce che la fila continua.
-- **Barra delle pillole**, fissa (`position:sticky; top:52px`), h 52, sabbia; il filetto basso
-  compare solo quando è attaccata. Pillole h 36 (area di tocco 44) in una fila orizzontale:
-  - se c'è una categoria attiva, per prima la pillola con il punto colore, il nome e ×;
-  - zona: «Italia», «Europa», «Asia», «Americhe». Toccando «Italia» la fila diventa **«‹ Italia»
-    più le regioni** con almeno 3 posti, calcolate dai dati (Lombardia, Veneto, Toscana,
-    Campania, Piemonte, Emilia-Romagna, Lazio [VERIFY dopo la normalizzazione]) e «Altre
-    regioni»;
-  - «Con il prezzo», «Budget basso», «Budget medio», «Budget alto»;
-  - **a destra, fisso fuori dalla fila che scorre**: «Ordina» (ArrowDownUp 16 più testo), che
-    apre un foglio con: «Reel più recente» (predefinito), «Reel meno recente», «Nome A-Z»,
-    «Budget, dal più basso» (chi non ha budget va in fondo, con la nota «senza fascia in fondo»).
-  - Nessun badge numerico sulle pillole.
-- **Riga del risultato**, `--type-label`: «{n} posti · {filtri attivi}», per esempio «37 posti ·
-  Food & Ristoranti», più il link «Azzera». Il numero è calcolato (`data-count`).
-- **Griglia a ritmo** (2 colonne da 169, gap 12, righe da 24). Schema a blocchi di 5: **S S / S S
-  / L**.
-  - **S**: foto 169×237 (5:7) r14 T1; nome `--type-name`; comune con i punti di categoria;
-    riga di prova (§4.4); cuore «salvato» 28×28 sabbia nell'angolo alto destro della foto,
-    solo se salvato.
-  - **L**: foto a tutta larghezza 350×438 (4:5, allineata in basso: nasconde il 30% in alto)
-    r14 T1, **con il cartiglio** (domanda 24/26); sotto il nome `--type-title-3`, la meta e la
-    riga di prova.
-  - La posizione L tocca al posto successivo nell'ordine. Se quel posto è in evidenza vietata,
-    resta S e lo schema scala di un posto. L'ordine non cambia mai per far posto a una L.
-- **Fine elenco:** «Hai visto tutti i {n} posti di {filtri}.» più «Prova anche:» e le due porte
-  più grandi non attive. Nessuno scorrimento infinito.
-- **Vuoto dei filtri** (su carta r2), per esempio con Borghi e città d'arte più Italia (l'unico
-  posto di Borghi è in Francia): «Nessun posto di Borghi e città d'arte in Italia.» Poi un tasto
-  secondario per ogni filtro attivo, con il numero calcolato di ciò che si ottiene togliendolo:
-  «Togli Italia ({n} posti)», «Togli Borghi e città d'arte ({n} posti)». Mai una schermata vuota
-  senza uscita.
+- 52-788: carta a tutto schermo (390×736).
+- **Cartiglio della tavola** in alto a sinistra (x 12, y 64), sabbia, `--radius-paper`, padding
+  12/16, largo al massimo 280: h1 `--type-title-2` 28/32 «Dove siamo stati», poi `--type-label`
+  «Inchiostro: con la scheda. Matita: tracce dai reel.» Dopo la prima interazione il cartiglio si
+  riduce al solo h1 su una riga (M6: opacità e translate, altezza fissa, niente CLS).
+- **Pillole dei preset** a y 64 a destra del cartiglio, poi sotto quando è ridotto: una fila
+  orizzontale scorrevole.
+- A destra, in colonna da y 200: `+`, `−`, «Centra», «Stile» (Sun/Moon 20: chiara o scura),
+  «Trama» (`Grid3x3` 20, `aria-pressed`), tutti tasti da 44×44 su sabbia con bordo
+  `--color-border`, **senza vetro né sfocatura**.
+- In basso: scala e «N» a sinistra, attribuzione a destra, sopra il foglio.
+- **Foglio** (M5 di A2), tre livelli:
+  - **spiata** (132): senza scelta mostra la vista («Lombardia · {n} luoghi, {k} con la scheda») e
+    la legenda (● posto · ○ traccia · ▦ trama 5 km); con una scelta mostra il posto o la traccia;
+  - **metà**: l'elenco di ciò che è nella vista, ordinato per distanza dal centro (come nel sito),
+    con i posti in righe con foto e le tracce in righe a matita;
+  - **pieno**: tutto l'elenco.
+- Riga d'azione del piano in basso solo con un posto scelto: «Apri la scheda» (secondario) e
+  «Salva».
 
-**1440×900**
-- Intestazione: h1 `--type-poster` 72/72 a x 40; a destra il selettore di vista e l'interruttore
-  «Carta» (Map 16, `aria-pressed`).
-- **Porte**: una fila di 6 senza scorrimento, 213×280 ciascuna (foto 213×213 più fascia 67), gap
-  16.
-- Barra delle pillole fissa sotto la barra alta (top 64).
-- **Griglia** a 5 colonne da 253 (foto 253×354), gap 24. Schema a coppie di righe: una **L 2×2**
-  (foto 530×742 con il cartiglio a 28/30) più 6 S, e nella coppia successiva la L passa a
-  destra. Stesse regole di evidenza.
-- **Con «Carta» attivo**: la griglia va a 3 colonne in 840 e a destra, fissa sotto le pillole,
-  c'è la Tavola I 480×620 con i punti del risultato. Passare sopra una tessera accende il suo
-  punto e viceversa. Solo il clic fa scorrere.
-- **768**: 3 colonne da 224, L = 2 colonne; porte in fila con scorrimento. **1024**: 4 colonne,
-  L 2×2.
+**1440×900: banco a due più uno**
+- A: registro della vista (x 24-384): h1 `--type-poster` 72/72 in testa, poi l'elenco raggruppato
+  (regione → comune) con i posti e le tracce.
+- B: carta (x 408-1416) con cartiglio, pillole e comandi come su mobile.
+- C: pannello da 480 che entra da destra sopra B quando c'è una scelta: per un posto, la foto 5:7
+  200×280 con il cartiglio senza nome, il nome, il cartellino, «Apri la scheda» e «Salva»; per una
+  traccia, il foglio della traccia.
+- Passare sopra una riga di A accende il segno, e viceversa.
 
-**Vista «Elenco»**: registro raggruppato per regione (e per paese fuori d'Italia), con
-intestazioni fisse «Lombardia · 21». Righe da 72: miniatura 40×56 T2, nome `--type-name-row`,
-comune con i punti di categoria, a destra la riga di prova.
+**Consenso (solo app vera):** la base locale non chiede nulla. Il comando «Dettaglio stradale»
+(`Map` 16) dentro la carta apre la striscia di consenso di A2 (P0-10 di A2). Nessuna richiesta
+esterna prima di «Attiva».
 
-**Vista «Per mese»**: §5.5.
+#### 6.9 Portare `FullScreenMapExperience` nel brand (per il dopo-prototipo; code-architect e frontend)
 
-#### 5.3 La scheda ricca
+| Oggi nel sito | Diventa | Motivo |
+| --- | --- | --- |
+| stile predefinito `dark` (riga 454) | **Atlas Cream** predefinito; «Cinema Dark» a scelta | il brand è sabbia |
+| «Satellite Hybrid» = OpenFreeMap `bright` (righe 47-49) | togliere l'etichetta, oppure un satellite vero con un fornitore scelto `[VERIFY costi e licenza]` | un nome che promette ciò che non c'è è un problema di verità |
+| pannelli `bg-stone-900/95 backdrop-blur-2xl`, `bg-black/90` (righe 919-1429) | superfici sabbia/carta (chiara) o inchiostro pieno (scura), niente sfocatura, token del brand | niente vetro oltre un velo leggero; niente palette grezza |
+| marcatori con icona di categoria e dischi | segni posto/traccia del §6.4, dischi del §6.3 (tre misure già uguali) | un solo linguaggio |
+| preset fissi (righe 60-70) con «Puglia» e «Norvegia» | preset calcolati dai luoghi | nessuna scorciatoia verso il vuoto |
+| tre livelli (8,5 / 12) | tenuti, più il livello «mondo» sotto 4,5 | l'Italia in 14 dischi a zoom mondiale diventa una macchia |
+| tessere solo dopo il consenso, prima nulla | **prima del consenso la base locale di A3**; le tessere diventano «Dettaglio stradale» | idea 6 della sintesi: la mappa che non chiede niente |
+| `?posto=<id>` | tenuto, più `?traccia=<cella>` | collegamento alle tracce |
 
-URL `#posto-<slug>`. Apertura con F1 (§6).
+### 7. Le schermate
+
+Misure a 390×844 e 1440×900. Barra alta 52/64; piano in basso 116 (riga d'azione più barra) o 56.
+
+#### 7.1 Home: «L'atlante si apre»
+
+**L'idea.** Chi arriva capisce in cinque secondi:
+1. che questa coppia ha girato **tantissimo**, perché la carta è coperta dei loro segni;
+2. che alcuni posti sono **completi e provati**: punti d'inchiostro, e una foto appuntata con la sua
+   domanda;
+3. la promessa: «Posti che sembrano inventati. Ma esistono davvero.»
+
+La carta è la prova, la foto è l'esempio, il cartiglio è la voce. Nessun contatore: la mole si vede.
 
 **390×844, primo schermo**
-- 0-52: barra alta «‹ Esplora» (o l'origine), Condividi, ⌕.
-- 52-452: **copertina** 390×`--cover-h-m` (400) T0 a filo, con il cartiglio (domanda 28/30,
-  filetto, comune). Bollo «Esiste davvero?» in basso a destra (A2). **Angolo del retro:** in
-  basso a sinistra un'orecchia di carta 20×20 (triangolo `--color-atlante-carta` con filetto),
-  che a riposo dice che la foto ha un retro. Toccarla fa lo stesso gesto del bollo.
-- 460-478: didascalia «Fotogramma dal reel del 16 gennaio 2026».
-- 490-506: occhiello `--color-accent-text` «Santa Sofia · Emilia-Romagna», a destra i punti di
-  categoria con il nome della prima («● Relax, terme e spa»).
-- 510-594: h1 `--type-title-1` 38/40 (2 righe al massimo; oltre, 32/36).
-- 606-650: riga «Quanto», se c'è (§4.1).
-- 660-736: **cartellino** (§4.2). Con un nome su una riga o senza «Quanto» tutto sale di 42/44 px.
-- Piano in basso: riga d'azione «Salva per il viaggio» (unico tasto pieno, ink) e «Guarda il
-  reel» (secondario).
+- 0-52: barra alta.
+- 64-184: **h1** `--type-poster` 38/40 su 3 righe: «Posti che sembrano inventati.» e in corsivo
+  `--color-accent-text` «Ma esistono davvero.»
+- 192-210: `--type-label` muted, con la data calcolata: «Ogni segno è un luogo dei nostri reel e
+  post, dal luglio 2021.»
+- 222-742: **tavola di copertina** a filo schermo 390×520, Atlas Cream, **ferma**:
+  - estensione calcolata per contenere i luoghi italiani (circa 6-19° E, 36-47,5° N), adattata al
+    riquadro;
+  - cornice graduata sottile di 4 px sui bordi sinistro e destro (la tavola è un oggetto);
+  - trama, tracce da 5 px e i **posti d'inchiostro** (79 meno quelli all'estero), senza dischi e
+    senza etichette tranne i nomi delle regioni con più luoghi (budget 3);
+  - **fotografia appuntata**: il posto di oggi (§7.1.1) in 5:7 da 116×162, con bordo sabbia di 4
+    px, ruotata di −1,5°, posata nell'angolo della tavola con meno segni (di norma in basso a
+    sinistra, sul mare); un filetto di 1 px `--color-accent-text` la collega al suo punto, che è
+    nello stato «scelto». Sotto la foto, un cartellino sabbia 150×40 con la domanda in Fraunces
+    *italic* 14/18 ink (2 righe al massimo; se è più lunga, il nome del posto al suo posto);
+  - legenda in basso a destra, `--type-label`: «● con la scheda ○ tracce».
+  - Tutta la tavola è un link a `#mappa` (F4). La foto è un link alla scheda (F1).
+- 788-844: barra a 5 voci.
 
-**Sotto, in quest'ordine** (ogni sezione esiste solo se ha contenuto; 48 px tra le sezioni):
-1. **Prima di andare** `--type-title-3`: le voci di `toKnow` come elenco numerato con numeri
-   Fraunces 460 20 `--color-accent-text`; poi «Come arrivare» (`gettingThere`) con il link «Apri
-   in Mappe ↗» (link esterno con le coordinate, aperto solo dall'utente); poi la frase
-   dell'assenza (§4.3).
-2. **Il racconto** `--type-title-3`: `description` in `--type-body` 17/28.
-3. **Vicino a questo** `--type-title-2`: tavola locale 350×220 su carta con il posto (punto da 12
-   `--color-accent-text`) e i suoi 4 vicini (punti da 7), uniti da **filetti tratteggiati** di 1 px
-   con i km a metà (`--type-label` `tabular-nums`, «{km} km»). Sotto, 4 righe: miniatura 48×67,
-   nome, «a {km} km in linea d'aria», ChevronRight. Titolo per distanza:
-   - vicino più vicino entro 30 km: «Nello stesso giro»;
-   - tra 30 e 150 km: «Vicino a questo»;
-   - oltre 150 km: «Il posto più vicino in archivio» con **una riga sola** («a {km} km in linea
-     d'aria»). Con il Riu Cancún, per esempio, la verità è la distanza.
-   - Nessun tempo di viaggio, nessuna strada, nessun «itinerario».
-4. **Altri: {categoria}**: intestazione con il punto e il nome della prima categoria del posto,
-   poi 4 tessere S in 2×2 (i più recenti della stessa categoria, escluso questo). Link «Tutti i
-   {n}» che apre Esplora con la pillola attiva.
-5. **Il reel**: **fascia inchiostro** a filo schermo (l'unica della pagina), alta 280: locandina
-   9:16 da 120×213 a sinistra con il badge «Reel · Instagram ↗», a destra in sabbia «Reel del 16
-   gennaio 2026», «A che titolo: …» e il tasto sabbia pieno «Guarda su Instagram ↗», che apre F3.
-6. Colofone.
+**Scorrendo (390)**
+1. **«I 79 con la scheda»** `--type-title-2`: il **provino** a filo schermo, 6 colonne con gap 2,
+   celle 63×88 5:7 (T2), ordine per data del reel decrescente, righe d'anno (2026, 2025, 2024).
+   Link «Tutti i posti con la scheda →».
+2. **«{Settembre}, negli anni»** (idea 1, §9): per ogni anno passato con reel nel mese corrente,
+   una riga con l'anno `--type-year`, i comuni in corsivo matita separati da « · » (i primi 8,
+   poi «e altri {n}»), le miniature dei posti con scheda di quel mese se ci sono.
+3. **Il righello dei 62 mesi**: una striscia larga 350 e alta 48, con 62 tacche verticali d'inchiostro
+   (1 px, una per mese, **tutte uguali**) e sotto gli anni. Sopra: «Nessun mese vuoto, da luglio
+   2021 ad agosto 2026.» Tutto è un link al rullino. Non è un grafico: tutte le tacche sono uguali, e
+   il fatto è proprio che nessuna manca.
+4. «La guida in regalo» (blocco carta, tasto secondario «Ricevila»), poi il colofone con il link
+   «Come è fatto questo atlante».
 
-**1440×900: colonna fotografica**
-- Barra alta 64.
-- **Colonna foto** x 0-620, y 64-900, `position:sticky; top:64px`, T0 a filo del bordo sinistro:
-  il fotogramma a 620 di larghezza misura 1102 di altezza e ne restano visibili 836, cioè il 75,8%
-  in basso. Nasconde il 24,2%, quindi serve lo zoom per ogni asset con cartiglio oltre 0,232
-  (Burton, regola di A2 §2.8). Cartiglio 40/42 largo fino a 520. Bollo in basso a destra,
-  orecchia in basso a sinistra, didascalia sulla foto in basso a sinistra, sopra l'orecchia,
-  come pillola sabbia `--type-caption`.
-- **Colonna testo** x 680-1360 (contenuto fino a 600): occhiello a y 112; h1 64/64; «Quanto»
-  32/36; cartellino 600×84; azioni in pagina (primario «Salva per il viaggio», secondari
-  «Guarda il reel» e «Condividi»); poi le sezioni 1-4 come su mobile (tavola «Vicino a questo»
-  600×360, tessere in 4 colonne); la fascia «Il reel» larga come la colonna testo.
-- **Link diretto e apertura dall'app** hanno la stessa veste (nessun banco). Il ritorno a
-  Esplora rimette lo scroll (M8 di A2).
-- **768**: copertina 768×520; corpo su una colonna di 560 centrata. **1024**: colonna foto 440,
-  testo 520.
+**1440×900, primo schermo: la tavola a tutta pagina**
+- 0-64: barra alta.
+- 64-900: **tavola di copertina** a filo schermo 1440×836, estensione Europa e Mediterraneo
+  (circa 11° O-33° E, 34-58° N, adattata), ferma, con trama, tracce, posti e i nomi dei paesi e
+  delle regioni principali (budget 8).
+- **Cartiglio della tavola** (x 40, y 104; spostato nell'angolo con meno segni se serve), sabbia
+  piena, `--radius-paper`, padding 32/40, largo 520: occhiello «Atlante di Rodrigo e Betta · dal
+  luglio 2021» (calcolato); h1 `--type-poster` 64/64; `--type-body`: «Ogni segno è un luogo dei
+  nostri reel e post. In inchiostro i {79} posti con la scheda.»; campo di ricerca h 48 con «⌘K»;
+  link «Apri la mappa →». Filetto doppio sul bordo (1 px ink, 3 px carta, 1 px ink): il cartiglio da
+  atlante.
+- **Fotografia appuntata**: 5:7 da 200×280, bordo sabbia 6, −1,5°, nel mare a ovest dell'Italia
+  (angolo calcolato); filetto al punto; cartellino con la domanda in Fraunces *italic* 18/24.
+- **Riquadri fuori quadro** in basso a destra: da 2 a 4 tavole 160×160 per le zone lontane con
+  luoghi (calcolate), ciascuna con cornice graduata, trama, segni e titolo.
+- Legenda e scala in basso a sinistra.
+- **Al passaggio del mouse** su un posto o su una traccia: etichetta del segno. **Al clic**:
+  `#mappa` con quel segno scelto (F4). La rotella scorre la pagina e non zooma mai.
 
-#### 5.4 La Mappa a 79 punti
+**Scorrendo (1440):** il **provino dei 79 con la lente** (foglio a 16 colonne; blocco titolo
+«I 79 con la scheda» 6×4; lente 4×4 che mostra il posto sotto il puntatore con cartiglio e data; i
+fotogrammi in ordine di data nelle celle libere); poi «{Settembre}, negli anni» su 5 colonne (una
+per anno); il righello dei 62 mesi a tutta larghezza (tacche ogni 20 px); guida; colofone.
 
-URL `#mappa`, `#mappa-<regione>`, `#mappa-europa`, `#mappa-asia`, `#mappa-americhe`.
+**768:** come 390, con margini 32; tavola 768×620 con la foto appuntata da 150×210. **1024:**
+come 1440, con la tavola 1024×704 e il cartiglio largo 440.
 
-**Quattro tavole** (SVG locale su carta con trama, cornice graduata, reticolo al 12%, scala in
-km e nord come in A2; **nessun contorno, nessuna tinta d'area, nessuna tessera prima del
-consenso**):
+##### 7.1.1 Il posto di oggi (scelta deterministica)
 
-| Tavola | Estensione | Contenuto |
-| --- | --- | --- |
-| I · Italia | 6,5-18,5° E, 36,5-47,5° N | 59 posti |
-| II · Europa | circa 5° O-21° E, 39-53° N [VERIFY: estensione dai punti con 10% di margine] | 12 posti, più l'Italia come **un solo gruppo** «ITALIA 59» sulla media dei punti italiani, che porta alla Tavola I |
-| III · Asia | dall'estensione dei punti con 10% di margine | 7 posti (Malesia e Shanghai, agli angoli opposti della tavola) |
-| IV · Americhe | dall'unico punto, con un margine di 6° | 1 posto e la frase «L'unico posto nelle Americhe, per ora.» |
+```
+eleggibili = posti con evidenza=true && hook && (price || budget) && controllo
+candidati  = eleggibili con mese(reel) == mese(oggi) && reel < oggi    // ?oggi=2026-09-29 nelle catture
+scelto     = candidati ≠ ∅ ? candidati[giornoDellAnno mod n] : il più recente degli eleggibili
+```
 
-Il titolo della tavola va in `--type-eyebrow` in alto a sinistra dentro la cornice («TAVOLA I ·
-ITALIA»). Non è un codice d'archivio: è il nome della tavola, come in un atlante.
+#### 7.2 Il rullino dei 62 mesi (Esplora → «Mesi»)
 
-**Livelli sulla Tavola I**
-- **Livello 0 (Italia):** un **gruppo per regione** sulla media delle coordinate dei suoi posti.
-  - regione con 1 posto: punto da 7 px ink, etichetta solo al passaggio o al fuoco;
-  - regione con 2 o più posti: anello di 1,5 px ink, diametro per fascia (2-4 → 24, 5-12 → 32,
-    13+ → 40), fondo carta, numero dentro in Fraunces 460 13/16 `tabular-nums`, e accanto il
-    nome della regione in `--type-eyebrow` spaziato 0.2em («LOMBARDIA»). Posizione del nome con
-    l'algoritmo avido di A2 (destra, sinistra, sopra, sotto).
-  - Le etichette sono al massimo una per regione: con 79 posti la tavola resta leggibile.
-- **Livello 1 (regione):** il tocco su un gruppo **avvicina** la tavola al rettangolo dei suoi
-  punti più il 20% (animazione M-C, §6.2). I punti diventano singoli (7 px); le etichette sono
-  i nomi dei posti (tondo, `--type-map`) con l'algoritmo avido; le regioni vicine restano come
-  punti al 30% di opacità, per contesto. In alto a sinistra «‹ Italia» per tornare. Scala in km
-  ricalcolata.
-- **Livello 2 (posto):** il tocco su un punto lo sceglie (M11 di A2): punto da 12 in
-  `--color-accent-text` con etichetta Fraunces 520, e la riga d'azione mobile mostra miniatura,
-  nome, comune e «Apri la scheda». Un secondo tocco sullo stesso punto, o «Apri la scheda», apre
-  la scheda con **F5** (§6.1).
+**Cosa racconta:** la storia della coppia per reel pubblicati, da agosto 2026 a luglio 2021, 62
+sezioni. Nessun mese è vuoto (FP §2). Sempre al livello del comune: mai punti, mai «siamo stati».
 
 **390×844**
-- 0-52 barra alta; 64-104 h1 `--type-poster` «Dove siamo stati» (1 riga); 112-130
-  `--type-label`: «In Italia e in altri 10 paesi. Tocca una regione per avvicinarti.» [numero
-  calcolato].
-- 142-590: **tavola corrente** 350×448.
-- 602-734: **«Fuori d'Italia»**, tre riquadri 110×110 (gap 10) con la tavola in miniatura (punti
-  da 3 px) e sotto «Europa · 12», «Asia · 7», «Americhe · 1». Sono pulsanti con `aria-pressed`:
-  il tocco mette quella tavola al posto della corrente; quando è attiva un'estera, il primo
-  riquadro diventa «Italia · 59».
-- Sotto: il registro per regione della tavola corrente (le righe della vista Elenco, §5.2).
-- Comando «Mappa» e consenso dentro la tavola, come in A2 (P0-10 di A2 resta valido).
-
-**1440×900: banco a due più uno.** A = registro per regione, 360 (x 24-384), con le
-intestazioni fisse. B = tavola corrente 1008×804 (x 408-1416), con le **Tavole II-IV come
-riquadri** 180×180 posati negli angoli senza punti. La posizione si calcola evitando i punti: a
-livello 0, per esempio, l'angolo in basso a sinistra della Tavola I è libero. C = il posto scelto
-come foglio da 496 che sostituisce la metà destra di B, con la foto 5:7 da 200×280, il cartiglio
-senza nome, il nome, il cartellino e «Apri la scheda». Niente separatori trascinabili.
-
-**Bonus P2, «Carta bianca»:** sotto il registro della Tavola I, la riga in corsivo matita «Nessun
-posto con la scheda, per ora:» seguita dalle regioni italiane senza posti tra i 79, calcolate
-dall'elenco ufficiale delle 20 regioni. **Mai** «non ci siamo stati».
-
-#### 5.5 Il rullino dei mesi (vista «Per mese» di Esplora)
-
-**Cosa racconta.** La storia di una coppia per reel pubblicati, da agosto 2026 a maggio 2024: 28
-sezioni, una per mese, dal più recente. Sempre al livello del comune. Mai un punto, mai «siamo
-stati», mai «visitato».
-
-**390×844**
-- Stessa testata di Esplora; il selettore di vista è su «Per mese». Niente porte, niente
-  pillole: il filtro qui è il tempo.
-- **Striscia del mese fissa** (`sticky; top:52px`), h 48: a sinistra il mese in lettura in
-  Fraunces *italic* 400 20/24 («settembre») più l'anno `--type-year` 16; a destra «Cambia mese»
-  (ChevronDown 16), che apre un foglio con la griglia dei 28 mesi (tre righe: 2024 da maggio a
-  dicembre, 2025 da gennaio a dicembre, 2026 da gennaio ad agosto). I mesi vuoti sono in matita
-  e non si possono premere.
+- Testata di Esplora, selettore su «Mesi».
+- **Striscia del mese fissa** (`sticky; top:52`), h 48: il mese in lettura in Fraunces *italic*
+  400 20/24 («novembre»), l'anno `--type-year` 16, e «Cambia mese» (ChevronDown 16), che apre il
+  foglio con la griglia dei 62 mesi. Nel foglio: **una riga per anno** (dal 2026 al 2021) con
+  l'anno in `--type-year`; sotto, i mesi di quell'anno in **due file da 6 celle** (gen-giu,
+  lug-dic), celle 52×44 con l'abbreviazione del mese («gen», «feb»…). Le celle fuori dal periodo
+  (prima di luglio 2021, dopo agosto 2026) sono vuote e non si premono. Nessun colore per quantità.
 - **Sezione del mese:**
-  - testata: il nome del mese `--type-month` 64/60 corsivo minuscolo in ink («settembre»),
-    accanto in alto l'anno `--type-year` e sotto una riga `--type-label` calcolata: «{n} posti ·
-    {comuni separati da virgola}»;
-  - fotogrammi in base al numero: **1** → una tessera grande 350×438 con il cartiglio; **2-4** →
-    2 colonne S; **5 o più** → 3 colonne da 109×153, con il nome sotto in `--type-label-strong`;
-  - 64 px tra i mesi.
-- **Mese vuoto** (`data-vuoto`): una sola riga di 72 px, con il nome del mese in Fraunces
-  *italic* 400 28/32 `--color-matita` più l'anno, e sotto `--type-label` muted: «Nessun posto con
-  la scheda da questo mese.» È la pagina bianca del diario: si vede ma non occupa spazio.
-- Il cambio del mese nella striscia fissa usa **M-B** (§6.2).
+  - testata: il mese `--type-month` 64/60 corsivo minuscolo ink, l'anno `--type-year` in alto a
+    destra, e una riga calcolata in `--type-label`: «{n} reel · {k} con la scheda» (con k = 0 la
+    parte «· 0 con la scheda» non si scrive);
+  - **i posti con scheda del mese** (se ci sono): 1 → tessera L 350×438 con il cartiglio; 2-4 → 2
+    colonne S; 5 o più → 3 colonne;
+  - **la riga dei comuni**, in Fraunces *italic* 17/26 matita: i comuni delle tracce del mese in
+    ordine di data, separati da « · », con le ripetizioni come «{comune} ×3»; se i comuni sono più di
+    12 la riga passa alle regioni e ai paesi («Lombardia · Veneto · Spagna…»). Ogni nome è un link che
+    apre il foglio delle tracce di quel comune o di quella regione in quel mese;
+  - **«Tutti i reel del mese ({n})»**: un espansore (`aria-expanded`) che apre le righe da 48: giorno
+    `tabular-nums`, cerchietto matita o punto ink, «{comune}» o «Reel senza luogo», ArrowUpRight
+    16 verso il reel;
+  - 64 px tra i mesi. Le sezioni hanno `content-visibility:auto` con `contain-intrinsic-size:auto
+    320px`.
+- **Mesi 2021-2023** (senza schede): testata, riga dei comuni ed espansore, niente foto. Sono pagine
+  a matita del diario, ed è giusto che lo sembrino.
 
-**1440×900**
-- In testa, fisso sotto la barra alta, l'**indice dei mesi** su 3 righe (anni) con celle
-  48×32 in `--type-label` («mag», «giu», …). I mesi con posti sono in ink e cliccabili, quelli
-  vuoti in matita e disattivi. Il mese in lettura ha la sottolineatura di 2 px in accento.
-  Nessuna intensità di colore, nessun numero nelle celle (niente mappa di calore).
-- Ogni mese è una **riga**: a sinistra (x 40-340), fissa dentro la riga, la testata con il mese a
-  96/88, l'anno e i comuni; a destra (x 380-1400) i fotogrammi 5:7 da 184×258 in fila che va a
-  capo (fino a 5), con nome e comune sotto. Un mese con un solo posto usa la tessera L (380×532)
-  con il cartiglio.
-- Mese vuoto: riga di 88 con il mese in matita a 40/44 e la frase.
+**1440×900:** in testa, fisso, l'**indice dei 62 mesi**: 6 righe (una per anno) × 12 celle 48×32
+con l'iniziale del mese; il mese in lettura è sottolineato in accento, le celle fuori periodo sono
+vuote. Poi ogni mese è una riga: a sinistra (x 40-340), fissa nella riga, il mese a 96/88, l'anno e
+il conteggio; a destra (x 380-1400) i posti con foto (fino a 5 per fila, 184×258), la riga dei
+comuni e l'espansore.
 
-#### 5.6 Ricerca ⌘K a scala 79
+#### 7.3 Esplora: quattro modi di sfogliare
 
-Resta la palette di A2 (pattern combobox più listbox, tastiera, `<mark>` sottolineato in accento).
-Cambia il contenuto:
-- ricerca senza accenti e senza maiuscole, per prefisso di parola, su: nome, comune,
-  regione, paese, categoria e **domanda** (`hook`);
-- **gruppi**, in quest'ordine, 5 righe al massimo per gruppo con «Mostra tutti ({n})»:
-  1. «Posti» (miniatura 40×56, nome, comune e punti di categoria);
-  2. «Domande»: la domanda in Fraunces *italic* 17/22 con la parte trovata segnata e sotto il
-     nome in `--type-label` («gabbia» → «Dormiresti in una gabbia?» · Emotional Grand Motel);
-  3. «Comuni e regioni» (MapPin 16, «Lombardia · 21 posti»), che porta alla Mappa su quel livello;
-  4. «Categorie» (punto colore, «Food & Ristoranti · 37»), che porta a Esplora con la pillola
-     attiva;
-- **senza testo:** «Prova con:» e quattro esempi presi dai dati, come pillole: «sushi»,
-  «Madrid», «Relax», «gabbia»; poi «Vai a» (voci);
-- **nessun risultato:** «Nessun posto per «{x}». Prova con il nome di una città o con una parola
-  della domanda.»;
-- 390: a tutto schermo, righe da 64. 1440: pannello 640, come in A2.
+URL `#esplora` (Posti), `#esplora-mesi`, `#esplora-luoghi`, e la voce Mappa. Selettore di vista in
+testa: **«Posti · Mesi · Luoghi»**. Stato dei filtri in `sessionStorage`.
 
-#### 5.7 I miei posti
+**(a) Posti: i 79 con foto** (invariato nel disegno)
+- h1 «Posti provati di persona»; riga calcolata «{79} posti con la scheda, da maggio 2024 ad agosto
+  2026, in {11} paesi.»
+- **Porte** (6: le categorie con almeno 5 posti), fila orizzontale da 140×196: foto 140×140 T1 più
+  fascia colore 56 con nome e numero. Borghi (1 posto) è solo una pillola.
+- **Pillole** fisse sotto la barra alta: categoria attiva, «Italia» (che apre le regioni),
+  «Europa», «Asia», «Americhe», «Con il prezzo», i budget; «Ordina» fisso a destra.
+- **Griglia a ritmo** S S / S S / L (L con cartiglio, mai un posto in attesa); fine elenco onesta;
+  vuoto con i tasti «Togli {filtro} ({n} posti)». Esempio di vuoto sicuro: Borghi + Italia (l'unico
+  posto Borghi è in Francia).
+- 1440: 5 colonne, L 2×2 alternata, porte in fila da 213×280, interruttore «Carta» (colonna di
+  480 con la tavola sincronizzata).
 
-- **390, vuoto:** h1 «I miei posti»; blocco carta con la frase in Fraunces *italic* 22/28 matita
-  «Qui finiscono i posti che salvi.» e il testo seo di A2; poi «Da dove cominciare» con 3 tessere
-  S (il posto di oggi e i suoi due vicini più prossimi). Nessuna casualità.
-- **390, con salvati:** h1; **«Il tuo atlante»**: tavola 350×220 inquadrata sui salvati (punti
-  con anello, come in A2), con la scala; poi la fila di pillole delle **raccolte**: «Tutti i
-  salvati» (sempre prima), le raccolte create e «+ Nuova raccolta» (un foglio con il campo nome e
-  «Crea»); poi le righe da 96 (miniatura 56×78, nome, comune, «Salvato il 29 set», cuore 44×44 che
-  toglie, con «Tolto · Annulla» per 5 s).
-- **Raccolta aperta:** copertina a **mosaico 2×2** con i primi 4 fotogrammi (T2), nome della
-  raccolta `--type-title-2`, frase calcolata «{n} posti, al massimo a {km} km l'uno dall'altro in
-  linea d'aria» (distanza massima tra coppie, dalle coordinate). Nella riga d'azione: primario
-  «Manda la raccolta» (condivisione nativa o copia del link `#lista-<codici>`), secondario
-  «Vedi sulla carta».
-- **Chi riceve il link** vede «Una raccolta da aggiungere»: il mosaico, le righe, il primario
-  «Aggiungi ai miei posti» (mai sovrascrive) e il secondario «Solo guardare».
-- **Senza rete e valigia:** nell'artifact non c'è service worker, quindi **nessuna promessa
-  offline**. La riga dice solo «Salvati in questo browser. Per ritrovarli altrove, manda la
-  raccolta.»
-- **1440:** a sinistra (x 40-400) le raccolte come registro con i mosaici 64×64; al centro le
-  righe; a destra (x 1000-1400) «Il tuo atlante» 400×520.
+**(b) Mesi:** §7.2.
 
-#### 5.8 Noi, con le lenti
+**(c) Luoghi: l'indice dell'atlante**
+- In testa, un campo «Cerca un comune o una regione» e le pillole di zona. Interruttore «Anche le
+  tracce» (predefinito: sì).
+- Registro a tre livelli:
+  - **regione o paese** (riga da 64): nome `--type-name-row`, a destra «{n} luoghi · {k} con la
+    scheda», ChevronDown;
+  - **comune** (riga da 56): nome, «{n}»;
+  - **luoghi** del comune: i posti come righe da 72 con miniatura 40×56, nome e punto di categoria;
+    le tracce come righe da 56 con l'anello matita, nome del geotag in corsivo matita e «{n} reel ·
+    ultimo {mese anno}».
+- Ordine: regioni per numero di luoghi decrescente, comuni e luoghi in ordine alfabetico. Le
+  regioni senza luoghi in fondo, in matita: «Sardegna: nessun post da qui» (calcolato).
+- Ogni riga porta sulla carta con `#mappa` e il segno scelto (F4) oppure, per un posto, alla scheda.
 
-- **390:** occhiello «Travelliniwithus»; h1 `--type-poster` 38/40 «Rodrigo e Betta»; sotto un
-  **cartiglio del brand su carta** (senza foto): nome «RODRIGO E BETTA», domanda «Posti che
-  sembrano inventati?», filetto, «Travelliniwithus». È l'unico cartiglio senza fotogramma, ed è
-  il nostro.
-- **«Come lo raccontiamo»**: tre principi numerati (1 Il reel, 2 Il controllo, 3 A che titolo),
-  ognuno con un **esempio vero** preso dai dati e mostrato come riga del cartellino («Controllato
-  il 15 ago 2026 su granducacampigna.it»).
-- **«Tutti i fotogrammi vengono dai nostri reel.»** e una fila di 12 celle del provino (T2),
-  escluse quelle in evidenza vietata, con il link «Tutto l'archivio».
-- **Le edizioni**, gruppo di scelta come in A2 (Viaggiatori, Family, Collaborazioni). La lente
-  **Collaborazioni** aggiunge sotto una frase di trasparenza calcolata, in `--type-body` (non una
-  striscia di cifre): «Su {79} posti, {33} hanno una collaborazione dichiarata: {17} su invito,
-  {11} ADV, {4} in collaborazione, {1} con affiliazione.» Più «Media kit e come lavoriamo ↗». La
-  lente **Family** mostra solo il rimando a @travellinifamily, senza copertine (sono in attesa per
-  default).
-- Guida in regalo, «Su questo dispositivo», colofone (A2).
-- **1440:** colonna di 640 a sinistra; a destra, fisso, il cartiglio del brand 400×300 su carta.
+#### 7.4 La scheda del posto (i 79)
 
-### 6. Movimento e drammaturgia
+Invariata rispetto al mio giro precedente, con una sezione più ricca.
 
-Regole comuni di A2 invariate: solo `transform`, `opacity` e istantanee delle View Transitions.
-C'è **una eccezione dichiarata**: `clip-path` in F5 (pittura di un solo elemento per 360 ms). Un
-gesto per transizione, l'uscita più corta dell'entrata, l'LCP mai animato, e nessuna animazione
-legata allo scroll (i cambi a soglia con IntersectionObserver sono ammessi).
+**390**, primo schermo:
+- 52-452: copertina 400 con il cartiglio, il bollo «Esiste davvero?» e l'orecchia del retro;
+- didascalia «Fotogramma dal reel del {data}»;
+- occhiello con comune, regione e punti di categoria;
+- h1 38/40;
+- riga «Quanto» se c'è;
+- cartellino.
 
-#### 6.1 Cinque momenti-firma (con lo stato a riposo che si vede nelle catture)
+Riga d'azione: «Salva per il viaggio» (unico pieno) e «Guarda il reel».
 
-| # | Firma | Stato a riposo (visibile senza toccare) | Gesto | Durata · easing | Reduced motion | Regola di onestà |
+**Sotto:**
+1. Prima di andare (voci di `toKnow`, «Come arrivare», frase dell'assenza).
+2. Il racconto.
+3. **Vicino a questo**: tavola locale 350×220 (**base Natural Earth**, costa e laghi, livello area)
+   con il posto, i suoi 4 posti vicini (punti ink con i km in linea d'aria) e **le tracce entro 30 km**
+   (cerchietti matita, senza km perché sono celle di 5 km). Sotto, le righe dei posti («a {km} km in
+   linea d'aria») e una riga di sintesi: «E {n} tracce dai reel entro 30 km →», che apre la carta
+   lì. Titoli: entro 30 km «Nello stesso giro»; 30-150 km «Vicino a questo»; oltre 150 km «Il posto
+   più vicino in archivio» con una riga sola.
+4. **Altri reel da qui** (solo se ci sono tracce sullo stesso posto): righe «Reel del {data} ↗».
+5. Altri: {categoria}.
+6. Il reel (fascia inchiostro con la locandina).
+7. Colofone.
+
+**1440:** colonna fotografica 620×836 fissa a sinistra, con il cartiglio 40/42; colonna di testo a
+destra (x 680-1360), h1 64/64.
+
+#### 7.5 Il foglio della traccia (nessuna pagina propria, `#traccia-<cella>`, mai indicizzato)
+
+**390, foglio a metà** (y 420-728, sopra il piano):
+- maniglia; occhiello `--color-atlante-timbro-text` con `PencilLine` 16 «Traccia a matita»;
+- nome del geotag in Fraunces *italic* 460 28/32 `--color-matita` (2 righe). Per una traccia di
+  comune: «Reel a {comune}»;
+- «Traccia · comune di {comune} · {regione}» `--type-ui` ink-2;
+- elenco dei reel della cella (fino a 4, poi «e altri {n}»): «Reel del {data}» con ArrowUpRight
+  verso il permalink; per un post fotografico: «Post fotografico del {data}»;
+- tra due filetti, `--type-label` muted: «**Posizione dal geotag del reel, non ricontrollata.**
+  Qui la scheda non l'abbiamo ancora scritta: niente prezzo, niente controllo.»;
+- carta mini 120×148 a destra con la cella (quadrato di 5 km tratteggiato), mai un punto preciso;
+- riga d'azione: «Guarda il reel ↗» (primario, il più recente) e «Salva».
+- **Stato (b)** `?demo=traccia-b`: in cima un riquadro 5:7 da 120×168 su carta, vuoto, con la
+  scritta «Esempio di impaginazione: qui andrà il fotogramma, dopo la vostra approvazione»; poi la
+  didascalia «Fotogramma dal reel del {data} · scheda non ancora scritta».
+
+**1440:** nel pannello C della Mappa, stessi contenuti; il nome a 40/44.
+
+**Mai** nel foglio: caption, visualizzazioni, like, commenti, coordinate numeriche.
+
+#### 7.6 Ricerca ⌘K sull'archivio
+
+Palette di A2 (combobox più listbox, tastiera, `<mark>` sottolineato). Indice in memoria: 79 posti,
+luoghi delle tracce (etichette non generiche), comuni, regioni e paesi, categorie, domande dei 79.
+Senza accenti né maiuscole, per prefisso di parola. **Gruppi** in quest'ordine, fino a 5 righe
+ciascuno con «Mostra tutti ({n})»:
+1. «Posti» (miniatura, ink);
+2. «Domande» (Fraunces *italic*, solo i 79);
+3. «Comuni e regioni» (MapPin, «{n} luoghi · {k} con la scheda») → carta su quel livello;
+4. «Tracce» (anello matita, nome in corsivo matita, comune) → foglio della traccia;
+5. «Categorie» → Esplora.
+
+Senza testo: «Prova con:» e quattro esempi dai dati. Senza risultati: «Nessun luogo per «{x}».
+Prova con il nome di un comune.»
+
+#### 7.7 I miei posti
+
+Come nel mio giro precedente (tavola «Il tuo atlante», raccolte, mosaico 2×2, `#lista-<codici>`,
+vista di chi riceve, nessuna promessa offline). **Novità:** si possono salvare anche le tracce.
+Nelle righe sono a matita, sulla tavola sono cerchietti, e il link della raccolta porta i codici di
+cella.
+
+#### 7.8 Noi e «Come è fatto questo atlante»
+
+- Noi: h1 «Rodrigo e Betta», cartiglio del brand su carta («RODRIGO E BETTA / Posti che sembrano
+  inventati? / Travelliniwithus»), «Come lo raccontiamo» (tre principi con esempi veri dai dati), le
+  edizioni come lenti (A2), la guida, il colofone.
+- **«Come è fatto questo atlante»** (`#noi-atlante`), il colofone dell'archivio. Tutto in frasi,
+  senza grafici né riquadri di numeri, con i numeri calcolati:
+  - «Ogni segno viene da un nostro post su Instagram, dal 25 luglio 2021 al 13 agosto 2026: {n}
+    post, {m} reel.»
+  - «Nessun mese è vuoto.»
+  - «In inchiostro i {79} posti con la scheda: li abbiamo ricontrollati e sappiamo a che titolo ci
+    siamo andati. A matita tutte le altre tracce: la posizione viene dal geotag del reel e non
+    l'abbiamo ricontrollata.»
+  - «Le tracce stanno su una griglia di 5 km, mai sul punto preciso.»
+  - «Le date sono di pubblicazione, non della visita.»
+  - «Alcuni geotag di Instagram cadono nel paese sbagliato: quelli li teniamo fuori dalla carta
+    finché non li controlliamo.»
+  - «Alcuni post non compaiono per rispetto della privacy.»
+  - «Confini: Natural Earth.»
+  - Nessuna visualizzazione, like o commento.
+
+### 8. Movimento e drammaturgia
+
+Regole di A2 invariate: solo `transform`, `opacity` e istantanee delle View Transitions. Due
+eccezioni dichiarate: `clip-path` in F5, e l'opacità degli strati SVG della carta. Un gesto per
+transizione; LCP mai animato; nessuna animazione legata allo scroll.
+
+| # | Firma | Stato a riposo (visibile nelle catture) | Gesto | Durata · easing | Reduced motion | Regola di onestà |
 | --- | --- | --- | --- | --- | --- | --- |
-| F1 | **Il volo del fotogramma** (evoluzione di M1) | il cartiglio sulle L, sull'eroe e sulla lente | tessera, cella o lente → scheda: la foto **con il suo cartiglio** vola nella copertina (lo stesso `view-transition-name`), poi salgono h1, «Quanto» e cartellino (12→0 px, a 40 ms l'uno dall'altro) | 320 · `--ease-out`; testo da 120 ms | cambio istantaneo, fuoco sull'h1 | il cartiglio che vola è lo stesso testo del dato |
-| F2 | **Il retro del fotogramma** (convalidato, più ricco) | orecchia di carta 20×20 nell'angolo in basso a sinistra della copertina | bollo o orecchia → la copertina ruota (M3 più M4 di A2) | 100 + 400 · `--ease-in-out`; il timbro atterra in 160 | facce scambiate subito | ogni riga del retro è un campo del dato; il timbro datario compare solo se c'è `checked.at` |
-| F3 | **Dalla foto alla locandina** (convalidato, ripensato) | badge «Reel · Instagram ↗» nella fascia «Il reel» | «Guarda il reel»: prima il **cartiglio ricomposto svanisce** (120 ms), poi il ritaglio si apre fino al 9:16 intero e compare **il cartiglio stampato vero** nello stesso punto; il fondo inchiostro sale | 120 + 320 · `--ease-out` | istantaneo | il cartiglio vero si vede solo qui, con il badge; il link porta al permalink |
-| F4 | **La lente sul provino** (nuova, dall'archivio) | le pillole sopra il provino della Home desktop e sopra la griglia | una categoria, una zona o un budget: nel **provino** le celle escluse si coprono di `--color-lente-velo`, mentre quelle incluse restano piene con un filetto di 3 px del colore; **le posizioni non cambiano**. Nella **griglia di Esplora** gli esclusi escono (opacità 1→0, 120 ms), i rimasti si ricompongono con FLIP (solo `transform`) | provino 180 · `--ease-out`, sfalsato per colonna, al massimo 240 in tutto; griglia 120 + 260 | velo e ricomposizione istantanei | l'ordine resta sempre quello della data: nessuna classifica nascosta; i numeri sono calcolati |
-| F5 | **Dalla carta alla scheda** (nuova, dall'archivio) | punto scelto da 12 px con l'etichetta in Fraunces 520 | secondo tocco o «Apri la scheda»: la copertina nuova si apre come un **cerchio che cresce dal punto** (`clip-path: circle(0 at x y)` → `circle(150%)` sull'istantanea nuova della View Transition), poi F1 per il testo | 360 · `--ease-out` | istantaneo | parte dalla posizione vera del punto sulla tavola: il gesto dice «dove», poi «cosa» |
+| F1 | **Il volo del fotogramma** | cartiglio su tessere L, provino e foto appuntata | tessera o foto → scheda: foto e cartiglio volano nella copertina, poi salgono h1, «Quanto» e cartellino | 320 · ease-out | istantaneo, fuoco sull'h1 | il cartiglio è il testo del dato |
+| F2 | **Il retro del fotogramma** | orecchia di carta nell'angolo della copertina | bollo o orecchia → la copertina ruota; sul retro il cartellino e il timbro datario | 100 + 400 · ease-in-out | facce scambiate subito | timbro solo con `checked.at` |
+| F3 | **Dalla foto alla locandina** | badge «Reel · Instagram ↗» | il cartiglio ricomposto svanisce (120), il ritaglio si apre al 9:16 con il cartiglio stampato vero, sale l'inchiostro | 120 + 320 · ease-out | istantaneo | il cartiglio vero si vede solo qui |
+| F4 | **L'atlante si apre** (nuova) | la tavola di copertina con la cornice graduata e il cartiglio | tocco sulla tavola della Home o su una riga dell'indice → la tavola (elemento condiviso `atlante`) cresce dal suo riquadro a tutto schermo; la cornice e il cartiglio grande escono (opacità 120); poi la trama si risolve nei dischi del livello Territorio (etichette in 160) | 420 · ease-out (gesto dell'utente, eccezione al tetto dei 320) | istantaneo | è la stessa geometria e la stessa proiezione: niente si sposta di luogo |
+| F5 | **Dalla carta alla scheda** (nuova) | posto scelto con anello e etichetta in Fraunces 520 | secondo tocco o «Apri la scheda» → la copertina nuova si apre come un cerchio che cresce dal punto (`clip-path: circle(0 at x y)` → `150%`), poi F1 per il testo | 360 · ease-out | istantaneo | parte dal punto vero |
 
-**Firme che stanno nelle catture:** per ciascuna, una cattura a riposo, una a metà (tempo
-congelato con `page.clock` o animazioni in pausa a 50%) e una finale.
+Movimenti di sistema: **M-A** ingresso (sulla Home la frase «Ma esistono davvero.» entra a 350
+ms, una volta per sessione); **M-B** cambio di mese (uscita 140, entrata 200, 8 px); **M-C** zoom
+della carta (320 ease-in-out, solo `transform` durante; etichette dopo, in 160); **M-D** lente del
+provino (dissolvenza incrociata 160); **M-E** trama che svanisce a z 8,5 (opacità 160).
 
-#### 6.2 Movimenti di sistema nuovi
+**Catture:** per ogni firma, a riposo, a metà (`page.clock` o animazioni in pausa al 50%) e alla
+fine.
 
-| # | Movimento | Dove | Durata | Cosa si muove | Reduced motion |
-| --- | --- | --- | --- | --- | --- |
-| M-A | **Ingresso: la risposta dopo la domanda** | Home, una volta per sessione (`sessionStorage`) | «Ma esistono davvero.» parte a 350 ms: 320 · `--ease-out` | solo la seconda frase dell'h1: opacità 0→1 e translateY 8→0. L'eroe (LCP) e il resto sono fermi. Lo spazio della frase è già riservato | tutto subito |
-| M-B | **Il cambio di mese** | striscia fissa del rullino | uscita 140 · `--ease-in`, entrata 200 · `--ease-out` | il mese vecchio sale di 8 px e svanisce, il nuovo entra da 8 px sotto, come una pagina di calendario. Soglia con IntersectionObserver sulle testate | cambio istantaneo |
-| M-C | **Avvicinare la tavola** | Mappa, livello 0 ↔ 1 | 320 · `--ease-in-out` | `transform: scale/translate` sul gruppo SVG dei punti; le etichette del livello nuovo compaiono **dopo** (opacità 160 ms), mai durante | salto istantaneo |
-| M-D | **La lente della Home si sposta** | Home desktop | 160 · `--ease-out` | dissolvenza incrociata tra due livelli sovrapposti della lente (foto più cartiglio); la foto nuova entra solo dopo `decode()` | cambio istantaneo |
-| M-E | **Porta → risultati** | Esplora | scorrimento nativo `smooth` (mai con reduced motion), poi F4 | — | salto più velo istantaneo |
+**Costi:**
+- carta mobile: SVG unico, geometrie pre-proiettate, 60 elementi interattivi al massimo, trama in un
+  solo `<path>` per tono (le celle concatenate in una `d`), tracce lontane in un solo `<path>`
+  (cerchi come archi);
+- durante il gesto solo `transform`; nessun long task > 50 ms durante un pan simulato;
+- provino T2 lazy; tutte le immagini con `aspect-ratio`; **CLS < 0,02** con le immagini ritardate
+  di 800 ms.
 
-#### 6.3 Costo su mobile con 79 foto (budget verificabili)
+### 9. Tre idee «avanzate» (con la regola che le tiene oneste)
 
-- Primo schermo della Home a 390: **al massimo 1 immagine T0** più le T2 che rientrano nel
-  viewport (nessuna nel primo schermo). Richieste di immagini prima dello scroll: ≤ 3.
-- Provino: T2 lazy; `content-visibility:auto` sulle righe; nessun livello sfocato.
-- Esplora: T1 lazy; con FLIP si animano solo gli elementi nel viewport più 1 schermo (gli altri
-  saltano alla posizione finale).
-- Lente e porte: le T1 si caricano al primo passaggio o quando entrano nel viewport.
-- Memoria: stima delle T2 decodificate intorno a 160×224×4 byte ciascuna, meno di 12 MB per
-  tutte e 79 `[VERIFY: misura con performance.memory in Chromium]`.
-- **CLS < 0,02** su Home, Esplora, Scheda e Mappa, con le immagini ritardate di 800 ms.
+1. **Il mese negli anni** (P1). La Home e il rullino, il primo del mese, mostrano quel mese in ogni
+   anno passato: «Settembre, negli anni: 2021 · 2022 · 2023 · 2024 · 2025», con i comuni da cui
+   venivano i reel e le foto dei posti. Con 62 mesi senza buchi, ogni mese ha sempre almeno 4 anni
+   di storia. *Regola:* «reel usciti a settembre», mai «settembre è il mese giusto per andarci»; mai
+   classifiche.
+2. **Nello stesso giro, con le tracce** (P1). «Vicino a questo» non conta più solo i 79 posti: conta
+   anche le tracce entro 30 km («e 12 tracce dai reel qui intorno»). «Salva il giro» crea una raccolta
+   «{Comune} e dintorni» con il posto, i posti vicini e le tracce della zona. *Regola:* distanze in
+   linea d'aria solo tra posti (posizioni esatte); le tracce non hanno km (sono celle di 5 km), mai
+   tempi o strade, mai «il nostro itinerario».
+3. **La trama dell'archivio e la terra nuda** (P0 la trama, P1 la terra nuda). I quadretti a matita
+   dicono dove si è girato; le regioni senza alcun post restano terra nuda con «Nessun post da qui».
+   Nessun altro sito può mostrare il proprio vuoto con la stessa onestà del proprio pieno. *Regola:*
+   conta i luoghi e non i reel, 3 toni, griglia di 5 km, niente etichette generiche; «nessun reel»
+   non vuol mai dire «non ci siamo stati» (Puglia e Basilicata hanno post fotografici).
 
-### 7. Stati dei componenti nuovi (gli altri restano quelli di A2 §2.9)
-
-| Componente | Default | Hover | Focus | Pressed | Attivo | Vuoto / errore |
-| --- | --- | --- | --- | --- | --- | --- |
-| Cartiglio | sabbia, righe §3 | n/a (è dentro un link) | l'anello va sul link che lo contiene | n/a | n/a | nessun `hook`: il cartiglio non esiste |
-| Cella del provino | foto T2 su colore dominante | anello interno 2 px ink e la lente si sposta (desktop) | anello 2 px `--color-accent-text` interno | scale .96 | lente: velo sugli esclusi, filetto 3 px sugli inclusi | immagine mancante: carta con il nome in Fraunces 12/14, mai l'icona rotta |
-| Porta | foto più fascia colore | foto scale 1.03 (300 ms) | anello attorno a tutta la porta | scale .97 | `aria-pressed=true`: filetto di 3 px ink sopra la fascia e Check 16 prima del nome | n/a |
-| Pillola | bordo `--color-border`, testo ink | bordo ink | anello | scale .97 | fondo `--color-atlante-carta-deep`, bordo 1,5 ink, Check 16 (o punto di categoria) | n/a |
-| Tessera L | foto 4:5 con cartiglio, nome, meta | foto scale 1.02 e nome sottolineato | anello sulla foto | scale .98 | aperta: anello interno ink | immagine mancante: carta con il cartiglio sopra (che c'è comunque) |
-| Cartellino | 3 celle su carta | n/a | la cella con il link ha l'anello sul link | n/a | n/a | «Non ancora» solo nella cella controllo del posto senza controllo |
-| Gruppo sulla carta | anello, numero e nome | anello 2 px | anello `--color-atlante-timbro-text` a 4 px | scale .92 | livello aperto: il gruppo sparisce e restano i punti | n/a |
-| Riquadro tavola estera | tavola mini con il titolo | bordo 1,5 ink | anello | scale .97 | `aria-pressed`: bordo 2 ink più la dicitura «Tavola aperta» | n/a |
-| Riga del mese vuoto | matita e frase | n/a | n/a | n/a | n/a | è essa stessa lo stato vuoto |
-| Riga di vicinanza | miniatura, nome, km | nome sottolineato | anello `--radius-md` | fondo carta | n/a | oltre 150 km: una riga sola con la distanza |
+**In riserva:** l'indice delle domande dei 79 (P2); la lente di categoria sul provino (P2);
+l'«Avvisami se ci andiamo» sulle regioni nude (serve il P0 degli endpoint, B1 della sintesi).
+**Scartate:** la mappa di calore sfumata (§6.5), la stagionalità come consiglio, i conteggi di
+visualizzazioni per luogo (metriche pubbliche vietate).
 
 ---
 
-### 8. Tre idee «avanzate» (con la regola che le tiene oneste)
+### 10. SPECIFICA per il costruttore
 
-1. **La lente sul provino** (F4; P1). L'archivio intero resta fermo, in ordine di data, e una
-   pillola ne accende una parte: le 13 celle di Relax, le 20 fuori d'Italia, le 25 con la fascia
-   di spesa. Si vede la *forma* di una categoria nel tempo, per esempio se i reel di Food si
-   addensano in certi mesi. Nessun sito generico ha un archivio personale da mostrare così.
-   *Regola:* niente ordini nascosti o classifiche, niente «più visti»; ordine sempre per data del
-   reel; conteggi calcolati; l'etichetta dice «reel usciti», non «stagione giusta».
-2. **Nello stesso giro** (§5.3 punto 3 e §5.7; P1). Dai 4 vicini con i km veri nasce il gesto
-   «Salva il giro», che crea una raccolta «{Comune} e dintorni» con il posto e i vicini entro 30
-   km `[VERIFY soglia con growth]`. La raccolta mostra la tavola con i filetti e la frase «al
-   massimo a {km} km l'uno dall'altro». *Regola:* sempre «in linea d'aria», mai tempi o strade,
-   mai «il nostro itinerario» (non l'hanno fatto in quel giro); solo i vicini precalcolati dal
-   dato.
-3. **L'indice delle domande** (P2). Nella vista Elenco, l'interruttore «Per domanda» elenca
-   tutte le domande dei reel, raggruppate per prima parola quando un gruppo ha almeno 3 domande
-   («Dormiresti…?», «Ceneresti…?») e poi «Altre domande». Ogni riga ha la domanda in Fraunces
-   *italic* 20/28 e sotto nome e comune. È il modo in cui il pubblico ricorda i reel, e nessun
-   sito di viaggi ha questo materiale. *Regola:* domande alla lettera dal campo `hook`, nessuna
-   riscritta; i gruppi si calcolano dalla prima parola e non si curano a mano; la domanda non è
-   una promessa, perché la risposta è la scheda.
+**Dove.** `SCRATCH/prototipi/A3/index.html`, pagina pubblicabile come artifact: HTML, CSS e JS
+senza librerie, font incorporate, nessuna rete, immagini dai file pubblicati. **A e A2 non si
+toccano.** Catture in `SCRATCH/prototipi/A3/shots/`.
 
-**Scartate in questo giro:** la stagionalità come consiglio («da fare a settembre»), perché la
-data è di pubblicazione e non di visita; il planisfero con 20 punti, che senza contorni è un
-vuoto con dei puntini; i codici di griglia nell'indice («Tav. I · C4»), perché la sintesi ha già
-scartato i codici d'archivio; l'autoplay del provino, perché è un'animazione decorativa.
+#### 10.0 Dati e rotte
 
----
+- `a3-data.js` (79 posti, già in preparazione) più **`a3-archivio.js`**: le tracce e i reel senza
+  luogo, dal corpus con i campi del §1.4. Il file **non contiene** caption, plays, like, commenti,
+  coordinate grezze delle tracce né codici in deny-list. Stima intorno a 150 KB `[VERIFY]`.
+  Dipende da data-analyst per la suddivisione dei generici per livello e per il flag
+  `paeseIncerto`.
+- **`a3-carta.js`**: le geometrie pre-proiettate (§6.2).
+- Normalizzazione dei nomi di regione come in MAPPA-SITO (minuscole, senza spazi e trattini, vince la
+  grafia più frequente).
+- **Rotte:** `#home`, `#esplora`, `#esplora-mesi`, `#esplora-luoghi`, `#mappa`,
+  `#mappa-<preset>`, `#posto-<slug>`, `#traccia-<cella>`, `#miei`, `#lista-<codici>`, `#noi`,
+  `#noi-atlante`. **Parametri:** `?oggi=AAAA-MM-GG`, `?stile=scuro`, `?demo=traccia-b`.
 
-### 9. SPECIFICA per il costruttore
+#### P0: primo giro, senza queste non è il prodotto
 
-**Dove.** Prototipo nuovo `SCRATCH/prototipi/A3/index.html`: una pagina pubblicabile come
-artifact, in HTML, CSS e JS senza librerie né rete, con le font incorporate come data-URI e le
-immagini dai file pubblicati. Dati da `SCRATCH/prototipi/A3/assets/a3-data.js`. **A e A2 non si
-modificano.** Catture in `SCRATCH/prototipi/A3/shots/`.
+**P0-1 · L'archivio nei dati**
+- Due strati caricati, deny-list assente, generici trattati come al §1.1.
+- PW:
+  - `window.__A3.posti.length === 79`;
+  - il numero di post nell'archivio è uguale a quello del file meno la deny-list;
+  - nessun oggetto dell'archivio ha le chiavi `caption`, `plays`, `likes` o `commenti`;
+  - per ogni traccia, `lat` e `lng` sono centri di cella della `GRIGLIA_KM` (tolleranza 1e-6);
+  - nessun segno sulla carta ha `generico ∈ {regione, paese}` o `paeseIncerto = true`.
 
-#### 9.0 Dati e rotte (prerequisiti)
+**P0-2 · Token, scala tipografica, materiali**
+- PW: l'insieme dei `font-size` visibili a 390, 768, 1024 e 1440 sta nell'insieme del §3.2; nessun
+  nodo di testo in `#ff4d1a` o in un colore di categoria; axe con 0 violazioni.
 
-- **Campi usati** (nomi semantici, da mappare sul formato di a3-data.js): `slug`, `nome`
-  (`title`), `comune`, `regione` (normalizzata), `paese`, `zona`, `coord`, `hook`, `descrizione`,
-  `price` (testo), `budget` (Basso/Medio/Alto), `controllo {fonte, data}`, `toKnow[]`,
-  `gettingThere`, `website`, `dichiarazione {tipo, partner}`, `permalink`, `dataReel`, `categorie[]`,
-  `vicini[4] {slug, km}`, `dominante`, `anteprima`, `varianti {s, m, l}`, `coverFocusY`,
-  **`cartiglio`** (frazione, default 0,22 finché asset-curator non misura) e **`evidenza`**
-  (booleano; `false` per l'elenco del §12 finché l'owner non conferma).
-- **Normalizzazione:** i nomi delle regioni (trattini, maiuscole) prima di ogni raggruppamento.
-- **Rotte hash a un solo token:** `#home`, `#esplora`, `#esplora-mesi`, `#esplora-elenco`,
-  `#mappa`, `#mappa-<regione>`, `#mappa-europa`, `#mappa-asia`, `#mappa-americhe`,
-  `#posto-<slug>`, `#miei`, `#lista-<codici>` (i codici sono gli indici dei posti in base 36, 2
-  caratteri ciascuno, concatenati), `#noi`. Parametri per le catture: `?oggi=AAAA-MM-GG`,
-  `?attesa=carta` (vedi §12).
+**P0-3 · La base cartografica locale**
+- PW:
+  - esistono `[data-strato="terra"]`, `[data-strato="costa"]`, `[data-strato="confini"]`,
+    `[data-strato="regioni"]` e `[data-strato="laghi"]`;
+  - il testo «Natural Earth» è presente;
+  - `page.on('request')` non registra host esterni, su tutte le rotte;
+  - a z 5,2 sull'Italia la costa ha un `getBBox()` non nullo;
+  - a zoom diversi `vector-effect` è `non-scaling-stroke` sui tratti.
 
-#### P0: primo giro, senza queste non è un prodotto
+**P0-4 · I livelli e i segni**
+- PW:
+  - a z < 4,5 esiste un solo `[data-disco="paese:italia"]`;
+  - a z 5,2 i dischi italiani sono tanti quante le regioni con almeno 2 luoghi, e ogni numero è
+    uguale al conteggio del dato;
+  - a z 9 su una regione i dischi sono per comune;
+  - a z 12,5 i segni `[data-segno="posto"]` visibili coincidono con i posti nella vista;
+  - i segni posto hanno un anello (2 cerchi) e i segni traccia hanno `fill: none`;
+  - gli elementi interattivi montati sono al massimo 60;
+  - nessuna coppia di etichette visibili si sovrappone;
+  - ogni disco ha l'anello pieno se e solo se contiene un posto.
 
-**P0-1 · 79 posti veri ovunque**
-- Home, Esplora, Mappa, ricerca e rullino leggono tutti i 79 posti. Nessuna nota «nel
-  prototipo», nessun numero scritto a mano.
-- PW: `document.querySelectorAll('.provino-cella').length === 79` su `#home` a 390;
-  `[data-count]` di Esplora senza filtri = 79; somma dei numeri dei gruppi della Tavola I più i
-  punti singoli = 59; Tavole II + III + IV = 20. Ogni `[data-count]` è uguale agli elementi
-  mostrati. Nessun nodo di testo contiene «nel prototipo».
+**P0-5 · La trama**
+- PW:
+  - a z 5,2 esiste `[data-strato="trama"]` con al massimo 3 `path` (un tono per `path`);
+  - il tono di ogni cella corrisponde a 1 / 2-4 / 5+ **luoghi distinti** del dato;
+  - i posti non sono nella trama;
+  - a z 9 la trama ha opacità 0;
+  - le regioni senza alcun luogo non hanno celle e mostrano «Nessun post da qui» quando sono in
+    vista a livello Territorio.
 
-**P0-2 · Token A3, scala tipografica, colori di categoria**
-- §1.1, §1.2, §2. Nessun esadecimale fuori da `:root`.
-- PW: l'insieme dei `font-size` calcolati dei nodi di testo visibili a 390, 768, 1024 e 1440 è
-  contenuto in {12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 26, 28, 30, 32, 38, 40, 56, 64, 72, 96};
-  nessun nodo di testo ha `color` uguale a un colore di categoria né a rgb(255, 77, 26); axe con
-  0 violazioni di contrasto su tutte le catture.
+**P0-6 · La Mappa (schermata)**
+- PW a 390:
+  - carta 390×736 ±2;
+  - il cartiglio contiene l'h1 «Dove siamo stati»;
+  - i tasti +, −, Centra, Stile e Trama misurano almeno 44×44;
+  - il tocco su un disco cambia lo zoom e porta i membri nella vista;
+  - il tocco su un posto apre il foglio con «Apri la scheda»;
+  - il tocco su una traccia apre il foglio con il testo «Posizione dal geotag del reel, non
+    ricontrollata»;
+  - `#mappa-europa` e i preset esistono solo per zone con luoghi.
+- PW a 1440: A 360 ±4 e B 1008 ±4; C 480 ±4 con una scelta.
+- PW: durante un trascinamento simulato di 300 px, `PerformanceObserver('longtask')` non registra
+  nulla oltre i 50 ms.
 
-**P0-3 · Cartiglio ricomposto**
-- §3, tutti i contesti della tabella.
-- PW: su ogni `.cartiglio`, il testo di `.domanda` è uguale al campo `hook` del suo posto
-  (confronto con i dati esposti in `window.__A3`); `.domanda` ha al massimo 3 righe
-  (`height / lineHeight ≤ 3,05`); il riquadro sta tutto dentro la foto; il `boundingBox` del
-  cartiglio non cambia tra il primo paint e dopo `document.fonts.ready` (±0,5). Sulla scheda la
-  riga del nome del cartiglio non esiste.
+**P0-7 · La Home-copertina**
+- PW a 390 con `?oggi=2026-09-29`:
+  - h1 entro y 184;
+  - tavola 390×520 ±2 da y 222;
+  - la foto appuntata è un posto con `evidenza=true` ed è collegata con un filetto al suo segno
+    scelto;
+  - la tavola non cambia `transform` a una rotella o a un trascinamento;
+  - il clic sulla tavola porta a `#mappa`.
+- PW a 1440:
+  - tavola 1440×836 ±2;
+  - il cartiglio (h1 incluso) copre al massimo 5 segni (intersezione dei `boundingBox`);
+  - esistono da 2 a 4 riquadri fuori quadro, tutti con almeno un luogo;
+  - più sotto esiste il provino con 79 celle e la lente, che cambia `data-slug` al passaggio.
 
-**P0-4 · Regola del cartiglio su tutti i 79 e su tutti i tagli**
-- Formula di A2 §2.8 estesa a 5:7, 4:5, 1:1 (porte), eroe, copertina e colonna.
-- PW: per ogni `img[data-slug]` visibile in Home, Esplora (S, L, porte), Scheda (le 79 schede,
-  in ciclo) e Rullino si calcola `visibleTop` da dimensioni, `object-position` e `transform`, e
-  deve valere almeno `data-cartiglio + 0,01`.
+**P0-8 · Cartiglio e regola del cartiglio (79)**
+- Come nel mio giro precedente: la `.domanda` è uguale all'`hook`, al massimo 3 righe; `visibleTop ≥
+  cartiglio + 0,01` su ogni immagine di posto e ogni taglio.
 
-**P0-5 · Home 390 e 1440 (§5.1)**
-- PW a 390×844 con `?oggi=2026-09-29`: l'eroe è 390×440 ±2 da y 52; l'h1 finisce entro y 788;
-  il campo di ricerca è visibile senza scroll; il posto dell'eroe ha `evidenza=true`, `hook` e
-  `price` o `budget`, e il mese del suo reel è settembre (se ne esiste uno eleggibile); le celle
-  del provino sono in ordine di `dataReel` decrescente; esistono 3 righe d'anno.
-- PW a 1440×900: esistono `.blocco-titolo` (518×474 ±4) e `.lente` (344×474 ±4, rapporto 0,726
-  ±0,01); le celle nel viewport sono almeno 60; `hover` su una cella cambia `data-slug` della
-  lente entro 300 ms; `mouseleave` dal foglio lo riporta al posto di oggi. La lente non usa mai
-  un posto con `evidenza=false`.
+**P0-9 · Scheda del posto con cartellino e «Vicino a questo»**
+- PW in ciclo sulle 79:
+  - 3 celle piene;
+  - «non ancora» in una sola scheda;
+  - `[data-quanto]` se e solo se c'è `price` o `budget`;
+  - `[data-prezzo-mancante]` se e solo se mancano entrambi;
+  - le tracce nella tavola locale non hanno etichette in km;
+  - la riga «E {n} tracce» ha n uguale al conteggio entro 30 km.
 
-**P0-6 · Scheda con cartellino (§4, §5.3)**
-- PW, in ciclo sulle 79 schede a 390: `.cartellino [data-cell]` è 3; ogni cella ha un valore
-  non vuoto; il testo «non ancora» compare in una sola scheda (quella senza controllo);
-  `[data-quanto]` esiste se e solo se c'è `price` o `budget`; `[data-prezzo-mancante]` esiste se
-  e solo se mancano entrambi; nelle schede con il nome su una riga il cartellino finisce entro
-  y 728. A 1440: `.colonna-foto` è 620 ±4 di larghezza e 836 ±4 di altezza, `position: sticky`.
-- «Vicino a questo»: le distanze mostrate sono uguali a `vicini[].km` (arrotondate come nel
-  dato); il titolo segue le soglie 30/150; oltre 150 km c'è una riga sola.
+**P0-10 · Foglio della traccia**
+- PW:
+  - nessun nodo di testo con «visualizzazioni», «plays», «like» o «commenti»;
+  - nessun testo di coordinate (regex `\d+[.,]\d{3,}°?`);
+  - il permalink porta a instagram.com (link, non richiesta);
+  - con `?demo=traccia-b` il riquadro è vuoto (nessun `img`) e la scritta «Esempio di impaginazione»
+    è visibile.
 
-**P0-7 · Esplora a scala (§5.2)**
-- Porte (6, solo le categorie con almeno 5 posti), pillole in fila fissa, riga del risultato,
-  ritmo S/L, fine elenco, vuoto dei filtri con i tasti «Togli …».
-- PW: `.porta` è 6; nessuna porta con meno di 5 posti; la pillola «Italia» porta alla fila delle
-  regioni; ogni combinazione porta–zona dà `[data-count]` uguale al conteggio dei dati; le
-  `.tessera--l` non hanno mai `evidenza=false`; l'ordine delle `data-slug` è uguale all'ordine
-  atteso (L compresa); Borghi e città d'arte più Italia dà lo stato vuoto (l'unico posto Borghi è
-  in Francia) con un tasto «Togli» per filtro e il numero corretto di ciascuno; a 390
-  `scrollWidth === clientWidth` (le file orizzontali scorrono dentro il loro contenitore).
-
-**P0-8 · Mappa a gruppi e quattro tavole (§5.4)**
-- PW: a livello 0 i `[data-cluster]` sono tanti quante le regioni con almeno 2 posti; nessuna
-  coppia di etichette visibili si sovrappone; il clic su «Lombardia» mostra 21 `[data-punto]`
-  [VERIFY dopo la normalizzazione] e `#mappa-lombardia`; i riquadri esteri hanno 12, 7 e 1 punti;
-  nella Tavola II esiste `[data-cluster="italia"]` con il testo 59; `page.on('request')` non
-  registra host esterni; nessun testo di grado dentro la cornice (A2 P0-13).
-
-**P0-9 · F1, F2, F3 portati a 79**
-- F1 con il cartiglio nel gruppo che vola; F2 con orecchia e retro più ricco (righe: Reel, Dove,
-  Quanto oppure «—», A che titolo, Il più vicino, cioè nome e km); F3 con l'uscita del
-  cartiglio ricomposto prima dell'apertura.
-- PW: `startViewTransition` viene chiamato al clic su una cella, su una L e sulla lente, e non
-  con `reducedMotion: 'reduce'`; dopo il clic sull'orecchia esiste `.cover[data-face="back"]`
-  con il `boundingBox` invariato; in F3, a 60 ms, `.cartiglio` ha opacità < 1 e la locandina ha
-  ancora il rapporto della copertina; alla fine il rapporto è 0,5625 ±0,01.
-
-**P0-10 · Ricerca a scala (§5.6)**
-- PW: «gabbia» dà un risultato nel gruppo «Domande» con `<mark>`; «madrid» dà almeno 2 posti;
-  «emilia romagna» (senza trattino) trova la regione normalizzata; ↑↓ cambiano
-  `aria-activedescendant`; Invio apre la scheda o il livello della Mappa.
-
-**P0-11 · Punti di rottura, overflow, CLS**
-- PW a 390, 768, 1024 e 1440: `scrollWidth === clientWidth`; CLS < 0,02 (PerformanceObserver
-  `layout-shift`) su Home, Esplora, Scheda e Mappa con le immagini ritardate di 800 ms via
-  `page.route`; prima dello scroll della Home a 390 partono al massimo 3 richieste di immagini.
+**P0-11 · Esplora «Posti»** (porte, pillole, ritmo, vuoti; mai tessere L con `evidenza=false`)
+**P0-12 · Ricerca sull'archivio** (i gruppi del §7.6; «madrid» dà almeno 2 posti; un comune dà
+il gruppo «Comuni e regioni»)
+**P0-13 · F1, F2 e F3 sui 79** (criteri del mio giro precedente)
+**P0-14 · Overflow e CLS** (`scrollWidth === clientWidth` a 390, 768, 1024 e 1440; CLS < 0,02 con
+le immagini ritardate)
 
 #### P1: la rende avanzata
 
-**P1-1 · Ingresso M-A** (primo giro)
-- PW: con `sessionStorage` vuoto, al tempo 0 la seconda frase dell'h1 ha opacità < 0,1 e
-  l'immagine dell'eroe ha opacità 1 e nessuna animazione; a 800 ms la frase ha opacità 1; al
-  secondo caricamento nella stessa sessione non c'è animazione.
-
-**P1-2 · Rullino dei mesi e M-B (§5.5)** (secondo giro, primo punto)
-- PW: `[data-mese]` è 28, dal 2026-08 al 2024-05 in ordine decrescente; i mesi senza posti hanno
-  `data-vuoto` e la frase; la somma dei posti nei mesi è 79; nessun nodo di testo contiene
-  «visitat», «ci siamo stati» o «siamo stati a»; la striscia fissa cambia testo dopo lo scroll
-  oltre una testata; a 1440 le celle vuote dell'indice sono `aria-disabled`.
-
-**P1-3 · F4 La lente** (secondo giro)
-- PW: sul provino della Home, attivando «Relax» ci sono 13 celle senza velo e le altre con velo
-  (o i numeri del dato); il `boundingBox` di ogni cella resta invariato ±0; nella griglia di
-  Esplora le animazioni attive (`document.getAnimations()`) toccano solo `transform` e
-  `opacity`.
-
-**P1-4 · F5 Dalla carta alla scheda e M-C** (secondo giro)
-- PW: il secondo tocco su un punto chiama `startViewTransition`; durante il passaggio l'istantanea
-  nuova ha `clip-path` con un centro entro ±8 px dal centro del punto; con reduced motion, nessuna
-  transizione.
-
-**P1-5 · Colonna «Carta» di Esplora desktop, con la sincronia** (secondo giro)
-**P1-6 · I miei posti v3 (§5.7):** raccolte, mosaico, `#lista-<codici>`, vista di chi riceve
-(secondo giro).
-- PW: la creazione di una raccolta con 3 posti genera un hash che, aperto in una pagina nuova,
-  mostra «Una raccolta da aggiungere» con le stesse 3 `data-slug`; «Aggiungi» non toglie mai i
-  salvati esistenti.
-
-**P1-7 · Nello stesso giro (idea 2)** (secondo giro)
-**P1-8 · Noi con le lenti e il cartiglio del brand (§5.8)** (secondo giro)
-- PW: la frase di trasparenza nella lente Collaborazioni ha numeri uguali ai conteggi dei dati.
+- **P1-1** Rullino dei 62 mesi con M-B (§7.2).
+  PW:
+  - `[data-mese]` è 62, dal 2026-08 al 2021-07;
+  - ogni mese ha almeno 1 reel;
+  - la somma dei reel è uguale al dato;
+  - nessun testo con «visitat», «ci siamo stati» o «siamo stati a»;
+  - i mesi del 2021-2023 senza schede non hanno `img`.
+- **P1-2** Esplora «Luoghi» (§7.3 c). PW: la somma dei luoghi delle regioni è uguale ai luoghi
+  sulla carta; le regioni nude sono in fondo con la frase.
+- **P1-3** Cinema Dark (`?stile=scuro`, e il tasto Stile). PW: `data-stile="scuro"`; i toni della
+  trama sono quelli `--trama-d-*`; axe senza violazioni sui testi della carta.
+- **P1-4** F4 «L'atlante si apre» e F5 «Dalla carta alla scheda». PW: `startViewTransition`
+  chiamato al tocco della tavola della Home e al secondo tocco su un posto; niente con reduced
+  motion; in F5 il centro del `clip-path` è entro ±8 px dal punto.
+- **P1-5** «Il mese negli anni» (idea 1) su Home e rullino. PW: con `?oggi=2026-09-29` le righe sono
+  gli anni con reel a settembre, in ordine decrescente.
+- **P1-6** Nello stesso giro con le tracce e «Salva il giro» (idea 2).
+- **P1-7** I miei posti con raccolte e tracce salvabili; `#lista-<codici>` con i codici di cella.
+- **P1-8** Noi e «Come è fatto questo atlante». PW: ogni numero della pagina è uguale a un calcolo
+  sul dato esposto.
+- **P1-9** Ingresso M-A.
 
 #### P2: rifiniture
 
-- P2-1 L'indice delle domande (idea 3).
-- P2-2 Carta bianca (§5.4 bonus).
-- P2-3 Filtro timbro (§1.4).
-- P2-4 Rifiniture a 768 e 1024 oltre ai criteri P0-11.
-- P2-5 `?attesa=carta`: le celle in evidenza vietata diventano carte tipografiche nel provino,
-  come alternativa da mostrare all'owner.
+P2-1 lo stato (b) della traccia oltre il segnaposto (quando arrivano i fotogrammi); P2-2 la ripassata
+a inchiostro; P2-3 l'indice delle domande; P2-4 il filtro timbro; P2-5 la lente di categoria sul
+provino; P2-6 i fiumi principali (Natural Earth 10M) come strato di orientamento; P2-7 la zona
+riservata della trama (dopo la decisione dell'owner).
 
 #### Ordine di costruzione in due passaggi
 
 **Primo giro: deve già stupire.**
-1. Dati: i 79 posti, la normalizzazione, `evidenza` e `cartiglio` (P0-1).
-2. `:root` A3, le superfici, la trama, i colori di categoria (P0-2).
-3. Il cartiglio ricomposto come componente unico (P0-3) e la regola del cartiglio (P0-4).
-4. **Home 390 e 1440 con provino e lente** (P0-5), più l'ingresso (P1-1).
-5. **Scheda** mobile e colonna desktop con cartellino, Prima di andare, Vicino a questo, Altri
-   della categoria e fascia «Il reel» (P0-6).
-6. **Esplora** Posti ed Elenco con porte, pillole, ritmo e vuoti (P0-7).
-7. **Mappa**: livelli 0 e 1 e le tavole II-IV (P0-8).
-8. F1, F2 e F3 portati sui 79 (P0-9).
-9. Ricerca (P0-10).
-10. Rottura, overflow e CLS (P0-11), poi le catture del primo giro.
+1. Dati: posti, archivio ed esclusioni (P0-1).
+2. `:root` A3 (P0-2).
+3. Geometrie pre-proiettate e motore della carta: pan, zoom, livelli, tetto dei 60 (P0-3, P0-4).
+4. La trama (P0-5).
+5. **La Home-copertina a 390 e a 1440** (P0-7).
+6. **La Mappa** con foglio e pannello (P0-6).
+7. Il foglio della traccia (P0-10).
+8. Cartiglio, scheda del posto e cartellino (P0-8, P0-9).
+9. Esplora «Posti» (P0-11).
+10. Ricerca (P0-12).
+11. F1, F2 e F3 (P0-13).
+12. Overflow e CLS (P0-14), poi le catture.
 
 **Secondo giro: profondità.**
-1. Rullino dei mesi con M-B (P1-2).
-2. F4 lente e FLIP (P1-3).
-3. F5 e M-C (P1-4).
-4. Colonna «Carta» (P1-5).
-5. I miei posti v3 (P1-6) e Nello stesso giro (P1-7).
-6. Noi (P1-8).
-7. P2.
-8. Catture finali e confronto A2/A3.
+1. Rullino dei 62 mesi (P1-1).
+2. Indice dei luoghi (P1-2).
+3. Cinema Dark (P1-3).
+4. F4 e F5 (P1-4).
+5. Il mese negli anni (P1-5).
+6. Nello stesso giro (P1-6).
+7. I miei posti (P1-7).
+8. Noi e l'atlante (P1-8), ingresso (P1-9).
+9. P2.
+10. Catture finali e confronto A2/A3.
 
-**Catture richieste** (a 390 e 1440 dove ha senso; a 768 e 1024 le principali):
-`01-home` (390, 1440), `01b-home-provino-390`, `01c-home-lente-hover-1440`, `02-scheda-granduca`
-(con prezzo), `02b-scheda-burton` (senza prezzo [VERIFY che non abbia budget; se ce l'ha, un
-altro posto senza nessuno dei due]), `02c-scheda-cancun` (vicino oltre 150 km), `02d-scheda-sotto`
-(Vicino a questo e fascia Il reel), `03-esplora` (con porte e pillole), `03b-esplora-food`
-(porta attiva), `03c-esplora-vuoto`, `03d-esplora-l` (tessera L), `04-mappa-italia`,
-`04b-mappa-lombardia`, `04c-mappa-europa`, `04d-mappa-punto`, `05-rullino`, `05b-mese-vuoto`,
-`06-ricerca-gabbia`, `07-miei-raccolta`, `08-noi-collaborazioni`, e per ogni firma F1-F5 tre
-catture (a riposo, a metà, alla fine). Poi `confronto-A2-A3-mobile.png` e
-`confronto-A2-A3-desktop.png` affiancati, con le stesse schermate.
+**Catture richieste** (390 e 1440 salvo nota):
+- Home: `01-home-copertina` (chiara), `01s-home-copertina-scura` (`?stile=scuro`, per la decisione
+  1 dell'owner), `01b-home-provino`, `01c-home-lente-1440`.
+- Mappa: `02-mappa-italia` (Territorio con trama), `02b-mappa-lombardia` (Area),
+  `02c-mappa-luoghi` (livello Luoghi, posti e tracce vicini), `02d-mappa-mondo`,
+  `02e-mappa-europa`, `02f-mappa-posto-scelto`, `02g-mappa-traccia-scelta`,
+  `02h-mappa-regione-nuda`, `02s-mappa-scura`.
+- Traccia: `03-traccia-foglio`, `03b-traccia-stato-b` (segnaposto).
+- Schede: `04-scheda-granduca` (con prezzo), `04b-scheda-senza-prezzo`, `04c-scheda-vicino`
+  (tavola locale con le tracce).
+- Esplora: `05-esplora-posti`, `05b-esplora-vuoto`, `06-rullino` (un mese del 2026 e uno del
+  2022), `07-luoghi-indice`.
+- Altro: `08-ricerca`, `09-noi-atlante`.
+- Firme F1-F5: a riposo, a metà, alla fine.
+- Poi `confronto-A2-A3-mobile.png` e `confronto-A2-A3-desktop.png`.
 
 ## Out of scope (do NOT touch)
 
-- Prototipi A, A2 e B; `src/`; i file ad alto rischio; commit e push (li fa il main thread).
-- Immagini nuove, generate, stock o esterne; contorni cartografici; tessere di mappa prima del
-  consenso; geolocalizzazione; service worker.
-- Copy definitivo (seo), diciture legali di «a che titolo» (seo e legale), soglie di growth.
-- Posti fuori dai 79, tracce a matita, reel senza scheda, caption: non entrano in A3.
-- Librerie JS, font nuovi, file `full` di Fraunces.
+- Prototipi A, A2, B; `src/`; i file ad alto rischio; commit e push.
+- Qualunque immagine per le tracce (nessun fotogramma esiste su disco); immagini generate, stock o
+  esterne; contorni disegnati a mano; tessere di mappa nel prototipo; geolocalizzazione; service
+  worker.
+- Caption, visualizzazioni, like e commenti in qualunque schermata o file del prototipo.
+- La modifica di `FullScreenMapExperience.tsx`: il §6.9 è per il giro React (code-architect e
+  frontend).
+- Copy definitivo (seo), diciture legali (seo e legale), zona riservata (owner).
 
 ## Open questions / decisions for the user
 
-1. **Colori delle tre categorie nuove:** Hotel = blu notte (token esistente), Posti particolari
-   = salvia #8cc084, Weekend romantici = cipria #f2a7c3. *Raccomandato: sì.*
-2. **Copertine da tenere fuori dall'evidenza:** l'elenco del §12, con due certe e le altre in
-   dubbio. *Raccomandato:* confermarle una per una nel provino dell'owner. Fino ad allora sono
-   `evidenza=false` (restano nella griglia al loro posto, mai grandi).
-3. **Una fascia scura per pagina**, solo dove si guarda un reel. *Raccomandato: sì.* È il «banco
-   luminoso» di B, ridotto a un momento.
-4. **Fraunces 360 e 380** per i titoli oltre i 38 px. *Raccomandato: sì*, se il file incorporato
-   ha l'asse; altrimenti 400.
-5. **Diciture di «a che titolo»**, in particolare «Nessuna collaborazione» per i 46 posti
-   organici (seo e legale, B5).
+1. **Copertina della Home chiara o scura.** *Raccomandato: chiara* (Atlas Cream: è il brand); la
+   scura resta come stile della Mappa. Decidete sulle due catture.
+2. **Trama per luoghi o per reel.** *Raccomandato: per luoghi*, 3 toni: niente fari sulle zone dove
+   si torna spesso.
+3. **Zona di casa** (FP §14). *Raccomandato:* decidere un raggio privato; le celle lì dentro restano
+   al tono più chiaro. La configurazione resta fuori dal repo.
+4. **Colori delle tre categorie nuove** (notte, salvia, cipria) e il **colore dei laghi**.
+   *Raccomandato: sì.*
+5. **Fotogrammi da non mettere in evidenza** (§13). *Raccomandato:* confermarli uno per uno.
+6. **«Satellite» nella mappa del sito:** togliere l'etichetta o comprare un satellite vero.
+   *Raccomandato: toglierla ora.*
+7. **Dove sta l'output della scansione con i fotogrammi delle tracce** (domanda del main thread):
+   finché non c'è, le tracce restano solo testo.
 
 ## Next hand-off
 
-- Next agent: browser-auditor (catture A3, axe, rete, CLS) → travellini-ui-designer (revisione
-  A3 con il §0 come griglia) → owner.
-- Trigger: `A3/index.html` esiste, il primo giro (P0 più P1-1) è completo e le catture del primo
-  giro sono in `A3/shots/`.
-- In parallelo, senza bloccare: asset-curator misura `cartiglio` sui 79 e controlla a piena
-  risoluzione l'elenco del §12; seo scrive le diciture del cartellino e le frasi dell'assenza;
-  growth fissa la soglia di «Nello stesso giro».
+- **Prima di costruire:** data-analyst produce `a3-archivio.js` (generici per livello,
+  `paeseIncerto`, celle, deny-list tolta, nessun campo vietato), dagli script del FP. Frontend-builder
+  procura le geometrie Natural Earth e le pre-proietta (`a3-carta.js`).
+- **Poi:** frontend-builder (primo giro) → browser-auditor (catture, axe, rete, long task, CLS) →
+  travellini-ui-designer (revisione con il §0) → owner.
+- **Trigger:** `A3/index.html` esiste con P0-1…P0-14 e le catture del primo giro.
+- **In parallelo:** asset-curator misura `cartiglio` sui 79 e controlla il §13 a piena risoluzione;
+  seo scrive diciture e frasi; code-architect prende il §6.9 per il giro React.
 
 ## Notes
 
-### 10. Da B e da A2 si riprende / si lascia
+### 11. Cosa si tiene e cosa si lascia
 
-- **Da A2 resta:** guscio e piano unico (116/56), barra a 5 voci, regola del cartiglio e sua
-  formula, M1-M11 dove non sostituiti, consenso dentro la tavola, palette ⌘K e stati di §2.9.
-- **Da B si riprende:** il fotogramma grande e verticale su desktop (colonna fotografica) e il
-  banco luminoso come unica fascia scura. **Non si riprende:** il fondo scuro del guscio e il
-  cartiglio stampato nelle miniature.
-- **Da A2 si lascia:** l'ossatura fissa con «non ancora», la copertina 16:9, il banco a tre in
-  Esplora e I miei posti, i separatori trascinabili e la Home «prima pagina» a tre oggetti.
+- **Da A2 resta:** guscio e piano unico, barra a 5 voci, regola del cartiglio, M1-M11 dove non
+  sostituiti, consenso dentro la carta (per le tessere dell'app vera), palette ⌘K, stati di §2.9.
+- **Dal sito si riusa:** la mappa MapLibre con i suoi livelli, il tetto dei 60, i dischi a tre
+  misure, il budget dei nomi, la normalizzazione delle regioni, il collegamento `?posto=`.
+- **Dalla mia prima versione di A3** (79 posti; questo file la sostituisce): il cartiglio, il
+  cartellino, il provino con la lente, le porte, le pillole, la colonna fotografica, i colori di
+  categoria. **Si lascia:** le «quattro tavole» a punti senza contorni, la Home con eroe fotografico,
+  il rullino di 28 mesi.
 
-### 11. Miglioria operativa riusabile
+### 12. Miglioria operativa riusabile
 
-**Regola «scala prima»:** quando il dataset è pubblico, i prototipi si fanno sul dataset intero,
-mai su un sottoinsieme «per cautela». Un layout disegnato su 6 elementi è un altro layout, non
-una versione ridotta, e giudicarlo porta a un giudizio sbagliato («bozza»). Da proporre per
-`DESIGN.md` (sezione Layout Principles) e per il brief dei prossimi prototipi, insieme alla
-regola «ogni firma di movimento ha uno stato a riposo visibile in cattura».
+Due regole da proporre per `DESIGN.md` (Layout Principles e sezione mappe):
+1. **«Scala prima»:** i prototipi si fanno sul dataset intero quando è pubblico, mai su un
+   sottoinsieme «per cautela». Un layout disegnato su 6 elementi è un altro layout.
+2. **«Inchiostro e matita»:** ciò che è verificato è pieno e scuro, ciò che è traccia è grafite,
+   vuoto e più piccolo, in ogni superficie. È una regola di verità visiva, e si può testare (stili
+   calcolati di posti e tracce).
 
-### 12. Da far confermare all'owner (copertine: numeri e nomi come nel `PROVINO`)
+Più una verifica da aggiungere al quality-auditor: **nessun nome di etichetta di mappa punta a una
+zona senza dati** (i preset «Puglia» e «Norvegia» di oggi).
 
-Le ho guardate nel provino a circa 100 px di larghezza: **non è un giudizio a piena
-risoluzione**. Tutte partono con `evidenza=false` finché l'owner o asset-curator non le guarda a
-piena misura.
+### 13. Da far confermare all'owner (fotogrammi dei 79; numeri come nel `PROVINO`)
 
-**Certe (segnalate dal main thread):**
-- 18 · Chiostro Cennini: gravidanza.
-- 28 · Narciso Home: gravidanza.
+Tutti partono con `evidenza=false`: restano nella griglia e nel provino al loro posto di data, ma mai
+come foto appuntata, lente, porta, tessera grande o copertina di mese.
 
-**Dubbio: possibile gravidanza** (figura intera in abito ampio o chiaro, in piedi o di profilo):
-- 5 · Alessandro Benini Wines
+**In attesa (indicati dal main thread):**
+- 18 · Chiostro Cennini
+- 28 · Narciso Home
+- 5 · Alessandro Benini Wines (la «Vigna Benini»)
 - 21 · Casa Lavanda, Podere Fossaccio
+- 32 · Agriturismo Cornali
+
+**Dubbio mio: possibile gravidanza** (guardati a circa 100 px: da ricontrollare a piena
+risoluzione):
 - 27 · Agriturismo Il Campagnino
 - 36 · Garden Village Bled
 - 56 · Nonno Andrea
 - 60 · The Sense Experience Resort
 - 62 · Iconic Marjorie Hotel
 
-**Dubbio: possibili minori sullo sfondo** (luoghi affollati per famiglie):
+**Contesti di parco e attrazione** (possibili minori sullo sfondo):
 - 3 · Storyland
 - 11 · Rulantica
 - 15 · Movieland Park & Caneva Aquapark
 - 23 · Parco Cavour
+- 30 · Capyland
 - 33 · Shanghai Disneyland
 - 41 · Phantasialand
 - 52 · Europa-Park
 
-**Non sensibili, ma con personaggi o marchi di terzi** (domanda aperta dell'asset-curator, n. 4).
-Non vanno come eroe o porta finché non si decide:
-- 3 · Storyland (personaggio in costume)
+**Personaggi o marchi di terzi** (domanda aperta dell'asset-curator):
+- 3 · Storyland
 - 19 · Warner Bros. Studio Tour London
 - 33 · Shanghai Disneyland
-- 50 · Choco Story Torino (statua di un personaggio)
+- 50 · Choco Story Torino
 
-Nessuna copertina con contesti di salute l'ho riconosciuta a questa misura `[VERIFY]`.
+Nessun contesto di salute riconosciuto a questa misura `[VERIFY]`.
