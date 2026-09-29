@@ -1,6 +1,6 @@
 ---
 title: HANDOFF_webapp-travelliniwithus_orchestrator_to_seo
-status: open
+status: consumed
 created: 2026-09-29
 from: travellini-orchestrator
 to: travellini-seo-conversion-strategist
