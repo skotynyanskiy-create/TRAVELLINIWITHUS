@@ -51,7 +51,7 @@ restano sulla carta. Sei anche l'unico che può dire quanto pesa l'app offline.
   generazioni da zero di persone, luoghi ed esperienze.
 - **Cover da guardare**: la regola della spec corpus §4 dice "nessuna cover entra senza
   che l'abbia vista un umano".
-- **Privacy**: deny-list della spec corpus (post `Db72ZqegfYf`, strutture sanitarie,
+- **Privacy**: deny-list della spec corpus (il post indicato nella deny-list della spec, strutture sanitarie,
   residenze private, scuole); contenuti con il bambino e con minori secondo
   `BEST/docs/20_Decisions/DECISION_TRAVELLINI_FAMILY_PUBLIC_2026-07-24.md`.
 - **Invariati**: brand, budget del bundle, file ad alto rischio fuori scope, **nessun
